@@ -1,0 +1,31 @@
+﻿@if (Model.TotalRecords>0)
+{
+    <govuk-pagination>
+        @if (Model.TotalPages > 1)
+        {
+            var controllerName = ViewContext.RouteData.Values["Controller"]?.ToString();
+            
+            if (Model.PageNumber > 1)
+            {
+                <govuk-pagination-previous href="@Url.Action("Index", @controllerName, new { pageIndex = @Model.PageNumber-1 })" />
+            }
+            for (var pageNumber = Model.StartPage; pageNumber <= Model.EndPage; pageNumber++)
+            {
+                if (pageNumber == Model.PageNumber)
+                {
+                    <govuk-pagination-item is-current="true" href="#">@pageNumber</govuk-pagination-item>
+                }
+                else
+                {
+                    <govuk-pagination-item href="@Url.Action("Index", @controllerName, new { pageIndex = @pageNumber })">@pageNumber</govuk-pagination-item>
+                }
+            }
+            if (Model.PageNumber < Model.TotalPages)
+            {
+                <govuk-pagination-next href="@Url.Action("Index", @controllerName, new { pageIndex = @Model.PageNumber + 1 })" />
+            }
+            
+
+        }
+    </govuk-pagination>
+}
