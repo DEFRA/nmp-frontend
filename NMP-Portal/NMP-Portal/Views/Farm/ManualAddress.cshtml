@@ -1,0 +1,43 @@
+﻿@using NMP.Portal.Resources
+@using NMP.Portal.Models
+@model FarmAddress
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        @* <h1 class="govuk-heading-l">
+            @(string.Format(Resource.lblEnterTheAddressFor, Model.Name))
+        </h1> *@
+        <h1 class="govuk-heading-l">Enter the address for</h1>
+        <form asp-action="ManualAddress" method="post" novalidate="" asp-controller="Farm">
+
+            <div class="govuk-form-group">
+                <govuk-input asp-for="@Model.Address1">@Resource.lblAddressLine1</govuk-input>
+            </div>
+
+            <div class="govuk-form-group">
+                <govuk-input asp-for="@Model.Address2">@Resource.lblAddressLine2</govuk-input>
+            </div>
+
+            <div class="govuk-form-group">
+                <govuk-input class="govuk-input--width-20" asp-for="@Model.Address3">@Resource.lblTownOrCity</govuk-input>
+            </div>
+
+            <div class="govuk-form-group">
+                <govuk-input class="govuk-input--width-20" asp-for="@Model.Address4">@Resource.lblCounty</govuk-input>
+            </div>
+
+            <div class="govuk-form-group">
+                <govuk-input class="govuk-input--width-10" asp-for="@Model.PostCode">@Resource.lblPostCode</govuk-input>
+            </div>
+
+            <div class="govuk-form-group">
+                <fieldset class="govuk-fieldset">
+                    <br>
+                    <button class="govuk-button" data-module="govuk-button">Continue</button>
+                </fieldset>
+            </div>
+
+        </form>
+    </div>
+</div>
