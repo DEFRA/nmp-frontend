@@ -1,8 +1,42 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using NMP.Portal.Resources;
+
+@{
+    ViewData["Title"] = Resource.lblHomePage;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="govuk-body">
+    <h1 class="govuk-heading-xl">
+    <strong>
+            @Resource.lblPlanAndRecordNutrientApplications
+    </strong>    
+    </h1>
+    <p>@Resource.lblUseThisServiceToPlan</p>
+    <p>@Resource.lblPlanningAndRecordingCan</p>
+    <ul>
+        <li>
+            @Resource.lblSaveYouMoney
+        </li>
+        <li>
+            @Resource.lblHelpYouComplyWithEnvironmentalRegulations
+        </li>
+        <li>
+            @Resource.lblHelpProtectTheEnvironment
+        </li>
+    </ul>
+    <p>@Resource.lblYourPlanWillBasedOn</p>
+    <ul>
+        <li>
+            @Resource.lblTheCropsYouGrow
+        </li>
+        <li>
+            @Resource.lblTheNutrientsInYourSoil
+        </li>
+        <li>
+            @Resource.lblTheManuresAndFertilisersYouUseAndHowYouApplyThem
+        </li>
+    </ul>
+</div>
+<div class="govuk-body">
+    <br />
+    <govuk-button-link asp-action="Index" asp-controller="Register">Start now</govuk-button-link>
 </div>
