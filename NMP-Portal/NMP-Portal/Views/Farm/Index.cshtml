@@ -1,0 +1,36 @@
+﻿@using NMP.Portal.Resources;
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="govuk-grid-row">
+    <div id="all-plans-table" class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">
+            @Resource.lblYourFarms
+        </h1>
+        @if (ViewBag.IsUserHaveAnyFarms != null && ViewBag.IsUserHaveAnyFarms)
+        {
+            <div>
+                <p>
+                    @* <a class="govuk-link" asp-action="AddEditFarm" asp-controller="Farm">@Resource.lblAddAFarm</a> *@
+                </p>
+            </div>
+
+            <hr class="seperator_five" />
+            <div>
+                <h2 class="govuk-heading-m">
+                @Resource.lblAddANewFarm
+            </h2>
+            <p class="govuk-body">
+                    <a class="govuk-link" asp-action="Name" asp-controller="Farm">@Resource.lblAddAFarm</a>
+            </p>
+            </div>
+        }
+        else
+        {
+            <p class="govuk-body">@Resource.lblYouHaveNotAddedAnyFarms</p>
+            <govuk-button-link asp-action="Name" asp-controller="Farm">@Resource.lblAddAFarm</govuk-button-link>
+        }
+    </div>
+</div>

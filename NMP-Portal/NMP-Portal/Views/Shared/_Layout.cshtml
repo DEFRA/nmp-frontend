@@ -23,9 +23,19 @@
                     </span>
                 </a>
             </div>
-            <partial name="_LoginPartial" />
+            <div class="govuk-header__content">
+                <a href="/" class="govuk-header__link govuk-header__service-name">
+                    Plan and record nutrient applications
+                </a>
+                </div>
+            @* <partial name="_LoginPartial" /> *@
         </div>
     </header>
+    <div class="govuk-width-container">
+    <div id="signed-in">
+        <p class="govuk-body-s">John Doe | <a href="/mvp/start">Sign out</a></p>
+    </div>
+    </div>
 }
 
 @RenderBody()

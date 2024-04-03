@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NMP.Portal.Models;
+using NMP.Portal.Resources;
+using NMP.Portal.ViewModels;
 
 namespace NMP.Portal.Controllers
 {
@@ -7,6 +9,9 @@ namespace NMP.Portal.Controllers
     {
         public IActionResult Index()
         {
+            FarmsViewModel model = new FarmsViewModel();
+            //need to fetch user farms 
+            ViewBag.IsUserHaveAnyFarms = model.Farms.Count > 0 ? true : false;            
             return View();
         }
         public IActionResult ManualAddress()
@@ -16,7 +21,11 @@ namespace NMP.Portal.Controllers
         [HttpPost]
         public IActionResult ManualAddress(FarmAddress farm)
         {
+            FarmsViewModel model = new FarmsViewModel();
+            //need to fetch user farms 
+            ViewBag.IsUserHaveAnyFarms = model.Farms.Count > 0 ? true : false;            
             return View();
         }
+
     }
 }
