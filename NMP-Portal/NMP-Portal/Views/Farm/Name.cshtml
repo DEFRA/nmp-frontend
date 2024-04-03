@@ -20,10 +20,10 @@
                 @* <span asp-validation-for="PostCode" class="text-danger"></span> *@
             </div>
 
-            <button type="submit" class="govuk-button margin-bottom-forty" data-module="govuk-button">
+            @* <button type="submit" class="govuk-button margin-bottom-forty" data-module="govuk-button">
                 @Resource.lblContinue
-            </button>
-
+            </button> *@
+            <a class="govuk-button margin-bottom-forty" asp-action="Address" asp-controller="Farm">@Resource.lblContinue</a>
         </form>
         <p class="govuk-body cancel-link"><a asp-action="Index" asp-controller="Farm">@Resource.lblCancel</a></p>
     </div>

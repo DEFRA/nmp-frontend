@@ -349,7 +349,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to PostCode.
+        ///   Looks up a localized string similar to Postcode.
         /// </summary>
         public static string lblPostCode {
             get {
