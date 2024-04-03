@@ -232,6 +232,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Farm List.
+        /// </summary>
+        public static string lblFarmList {
+            get {
+                return ResourceManager.GetString("lblFarmList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Farm Name.
         /// </summary>
         public static string lblFarmName {

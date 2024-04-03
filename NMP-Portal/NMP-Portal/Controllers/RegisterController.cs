@@ -8,15 +8,16 @@ namespace NMP.Portal.Controllers
         public IActionResult Index()
         {
             FarmsViewModel model = new FarmsViewModel();
+            //need to fetch user farms
             if (model.Farms.Count > 0)
             {
                 ViewBag.IsUserHaveAnyFarms = true;
-                return View("~/Views/Farm/Index.cshtml", model);
+                return View("~/Views/Farm/FarmList.cshtml", model);
             }
             else
             {
                 ViewBag.IsUserHaveAnyFarms = false;
-                return View("~/Views/Farm/Name.cshtml");
+                return RedirectToAction("Name", "Farm");
             }
 
         }

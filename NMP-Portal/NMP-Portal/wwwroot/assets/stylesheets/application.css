@@ -12,3 +12,7 @@
         white-space: nowrap
     }
 }
+
+.input-width-15 {
+    max-width: 14.5em;
+}

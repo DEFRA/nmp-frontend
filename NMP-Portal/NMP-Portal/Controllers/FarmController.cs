@@ -12,7 +12,7 @@ namespace NMP.Portal.Controllers
             FarmsViewModel model = new FarmsViewModel();
             //need to fetch user farms 
             ViewBag.IsUserHaveAnyFarms = model.Farms.Count > 0 ? true : false;            
-            return View();
+            return View("~/Views/Farm/FarmList.cshtml");
         }
 
         [HttpGet]
