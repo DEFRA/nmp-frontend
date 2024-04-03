@@ -32,5 +32,7 @@ namespace NMP.Portal.Models
         public bool EnglishRules { get; set; } = true;
         public bool NVZField { get; set; } = false;
         public bool FieldsAbove300SeaLevel { get; set; } = false;
+        public string? EncryptedFarmName { get; set; } 
+        public string? EncryptedPostcode { get; set; }
     }
 }
