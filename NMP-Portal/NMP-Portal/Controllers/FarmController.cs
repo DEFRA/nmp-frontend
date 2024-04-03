@@ -14,16 +14,22 @@ namespace NMP.Portal.Controllers
             ViewBag.IsUserHaveAnyFarms = model.Farms.Count > 0 ? true : false;            
             return View();
         }
-        public IActionResult ManualAddress()
+        public IActionResult Address()
         {
             return View();
         }
-        [HttpPost]
-        public IActionResult ManualAddress(FarmAddress farm)
+        public IActionResult ManualAddress(string? farmName)
         {
-            FarmsViewModel model = new FarmsViewModel();
+            FarmViewModel model = new FarmViewModel();
+            model.Name = farmName??string.Empty;
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult ManualAddress(FarmViewModel farm)
+        {
+            FarmViewModel model = new FarmViewModel();
             //need to fetch user farms 
-            ViewBag.IsUserHaveAnyFarms = model.Farms.Count > 0 ? true : false;            
+            //ViewBag.IsUserHaveAnyFarms = model.Farms.Count > 0 ? true : false;            
             return View();
         }
 

@@ -9,12 +9,21 @@ namespace NMP.Portal.Models
         [Required(ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblWhatIsTheFarmName))]
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheFarmName))]
         public string Name { get; set; } = string.Empty;
+
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblAddressLine1))]
         public string? Address1 { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblAddressLine2))]
         public string? Address2 { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblTownOrCity))]
         public string? Address3 { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblCounty))]
         public string? Address4 { get; set; }
+
         [Required(ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblWhatIsTheFarmPostcode))]
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheFarmPostcode))]
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblPostCode))]
         public string PostCode { get; set; } = string.Empty;
         public string? CPH { get; set; }
         public string? FarmerName { get; set; }

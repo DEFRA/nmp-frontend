@@ -214,7 +214,7 @@
     <value>Please Enter {0}</value>
   </data>
   <data name="lblPostCode" xml:space="preserve">
-    <value>PostCode</value>
+    <value>Postcode</value>
   </data>
   <data name="lblRegOrganicProducer" xml:space="preserve">
     <value>RegistredOrganicProducer</value>
