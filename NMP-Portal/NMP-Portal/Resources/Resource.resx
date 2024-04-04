@@ -231,6 +231,9 @@
   <data name="lblSelectTheFarmAddress" xml:space="preserve">
     <value>Select the farm address</value>
   </data>
+  <data name="lblSignout" xml:space="preserve">
+    <value>Sign out</value>
+  </data>
   <data name="lblTheCropsYouGrow" xml:space="preserve">
     <value>the crops you grow</value>
   </data>

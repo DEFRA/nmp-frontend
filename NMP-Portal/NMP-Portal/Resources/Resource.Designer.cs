@@ -403,6 +403,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sign out.
+        /// </summary>
+        public static string lblSignout {
+            get {
+                return ResourceManager.GetString("lblSignout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to the crops you grow.
         /// </summary>
         public static string lblTheCropsYouGrow {
