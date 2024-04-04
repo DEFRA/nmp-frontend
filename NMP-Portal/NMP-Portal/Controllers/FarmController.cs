@@ -9,11 +9,32 @@ namespace NMP.Portal.Controllers
     {
         public IActionResult Index()
         {
+            return View();
+        }
+        [HttpGet]
+        public IActionResult FarmList(FarmsViewModel model)
+        {
+            if (model.Farms.Count > 0)
+            {
+                ViewBag.IsUserHaveAnyFarms = true;
+            }
+            else
+            {
+                ViewBag.IsUserHaveAnyFarms = false;
+            }
+            return View(model);
+
+        }
+
+        [HttpGet]
+        public IActionResult Name()
+        {
             FarmsViewModel model = new FarmsViewModel();
             //need to fetch user farms 
-            ViewBag.IsUserHaveAnyFarms = model.Farms.Count > 0 ? true : false;            
-            return View("~/Views/Farm/FarmList.cshtml");
+            ViewBag.IsUserHaveAnyFarms = model.Farms.Count > 0 ? true : false;
+            return View();
         }
+
         public IActionResult Address()
         {
             return View();
@@ -21,7 +42,7 @@ namespace NMP.Portal.Controllers
         public IActionResult ManualAddress(string? farmName)
         {
             FarmViewModel model = new FarmViewModel();
-            model.Name = farmName??string.Empty;
+            model.Name = farmName ?? string.Empty;
             return View(model);
         }
         [HttpPost]

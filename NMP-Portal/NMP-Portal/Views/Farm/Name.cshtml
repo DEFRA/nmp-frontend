@@ -23,12 +23,8 @@
                 <govuk-input class="input-width-15" asp-for="@Model.PostCode"></govuk-input>
             </div>
             
-
-            @* <button type="submit" class="govuk-button margin-bottom-forty" data-module="govuk-button">
-                @Resource.lblContinue
-            </button> *@
             <a class="govuk-button margin-bottom-forty" asp-action="Address" asp-controller="Farm">@Resource.lblContinue</a>
         </form>
-        <p class="govuk-body cancel-link"><a asp-action="Index" asp-controller="Farm">@Resource.lblCancel</a></p>
+        <p class="govuk-body cancel-link"><a asp-action="FarmList" asp-controller="Farm">@Resource.lblCancel</a></p>
     </div>
 </div>
