@@ -1,7 +1,9 @@
 ﻿@using NMP.Portal.Resources;
+@using NMP.Portal.ViewModels;
+@model FarmsViewModel
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = Resource.lblFarmList;
 }
 
 <div class="govuk-grid-row">
@@ -12,9 +14,10 @@
         @if (ViewBag.IsUserHaveAnyFarms != null && ViewBag.IsUserHaveAnyFarms)
         {
             <div>
-                <p>
-                    @* <a class="govuk-link" asp-action="AddEditFarm" asp-controller="Farm">@Resource.lblAddAFarm</a> *@
-                </p>
+               @foreach(var farmList in Model.Farms)
+                {
+                    <a asp-action="" asp-controller="">@farmList.Name</a>
+                }
             </div>
 
             <hr class="seperator_five" />

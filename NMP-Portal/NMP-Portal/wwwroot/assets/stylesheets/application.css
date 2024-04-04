@@ -69,4 +69,6 @@ button.accept-policy {
     border-bottom: 1px solid #b1b4b6;
     margin-bottom: 0;
 }
-
+.input-width-15 {
+    max-width: 14.5em;
+}
