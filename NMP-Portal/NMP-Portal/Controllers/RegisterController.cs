@@ -12,7 +12,7 @@ namespace NMP.Portal.Controllers
             if (model.Farms.Count > 0)
             {
                 ViewBag.IsUserHaveAnyFarms = true;
-                return View("~/Views/Farm/FarmList.cshtml", model);
+                return RedirectToAction("FarmList", "Farm",model);
             }
             else
             {
