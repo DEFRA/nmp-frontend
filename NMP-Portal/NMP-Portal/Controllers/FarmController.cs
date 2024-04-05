@@ -276,9 +276,7 @@ namespace NMP.Portal.Controllers
                 };
                 return View(model);
             }
-            //need to fetch user farms 
-            //ViewBag.IsUserHaveAnyFarms = model.Farms.Count > 0 ? true : false;            
-            return View();
+           
         }
        
 

@@ -811,11 +811,7 @@ namespace NMP.Portal.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Enter a valid postcode.
         /// </summary>
-        public static string MsgEnterAValidPostcode {
-            get {
-                return ResourceManager.GetString("MsgEnterAValidPostcode", resourceCulture);
-            }
-        }
+        
         
         /// <summary>
         ///   Looks up a localized string similar to Enter the farm name.
