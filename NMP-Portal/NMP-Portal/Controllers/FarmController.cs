@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
+using NMP.Portal.Resources;
 using NMP.Portal.ViewModels;
 using System.Reflection;
 
