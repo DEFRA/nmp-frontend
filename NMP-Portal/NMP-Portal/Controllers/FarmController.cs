@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
-using NMP.Portal.Models;
-using NMP.Portal.Resources;
 using NMP.Portal.ViewModels;
 
 namespace NMP.Portal.Controllers
@@ -21,17 +19,32 @@ namespace NMP.Portal.Controllers
         {
             return View();
         }
-        [HttpGet]
-        public IActionResult FarmList(FarmsViewModel model)
+
+        
+        public IActionResult FarmList()
         {
+            FarmsViewModel model = new FarmsViewModel();
+
             if (model.Farms.Count > 0)
             {
                 ViewBag.IsUserHaveAnyFarms = true;
+                
             }
             else
             {
                 ViewBag.IsUserHaveAnyFarms = false;
+                return RedirectToAction("Name", "Farm");
             }
+            //if (model.Farms.Count > 0)
+            //{
+            //    ViewBag.IsUserHaveAnyFarms = true;
+            //}
+            //else
+            //{
+            //    ViewBag.IsUserHaveAnyFarms = false;
+
+
+            //}
             return View(model);
 
         }
