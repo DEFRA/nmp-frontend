@@ -11,7 +11,7 @@
         <h1 class="govuk-heading-l">
             @Resource.lblYourFarms
         </h1>
-        @if (ViewBag.IsUserHaveAnyFarms != null && ViewBag.IsUserHaveAnyFarms)
+        @if (Model.Farms.Count>0)
         {
             <div>
                @foreach(var farmList in Model.Farms)

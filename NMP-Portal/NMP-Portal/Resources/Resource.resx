@@ -123,6 +123,12 @@
   <data name="lblAddANewFarm" xml:space="preserve">
     <value>Add a new farm</value>
   </data>
+  <data name="lblAdddressFound" xml:space="preserve">
+    <value>{0} addresses found</value>
+  </data>
+  <data name="lblAddressFoundCondition" xml:space="preserve">
+    <value>addresses found</value>
+  </data>
   <data name="lblAddressLine1" xml:space="preserve">
     <value>Address line 1</value>
   </data>
@@ -360,5 +366,14 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
   <data name="MsgSelectAnOptionBeforeContinuing" xml:space="preserve">
     <value>Select an option before continuing</value>
+  </data>
+  <data name="MsgEnterAValidPostcode" xml:space="preserve">
+    <value>Enter a valid postcode</value>
+  </data>
+  <data name="MsgEnterTheFarmName" xml:space="preserve">
+    <value>Enter the farm name</value>
+  </data>
+  <data name="MsgEnterTheFarmPostcode" xml:space="preserve">
+    <value>Enter the farm postcode</value>
   </data>
 </root>

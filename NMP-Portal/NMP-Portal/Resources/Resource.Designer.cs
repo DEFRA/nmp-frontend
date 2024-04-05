@@ -79,6 +79,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} addresses found.
+        /// </summary>
+        public static string lblAdddressFound {
+            get {
+                return ResourceManager.GetString("lblAdddressFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to addresses found.
+        /// </summary>
+        public static string lblAddressFoundCondition {
+            get {
+                return ResourceManager.GetString("lblAddressFoundCondition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Address line 1.
         /// </summary>
         public static string lblAddressLine1 {
@@ -787,6 +805,33 @@ namespace NMP.Portal.Resources {
         public static string MsgSelectAnOptionBeforeContinuing {
             get {
                 return ResourceManager.GetString("MsgSelectAnOptionBeforeContinuing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a valid postcode.
+        /// </summary>
+        public static string MsgEnterAValidPostcode {
+            get {
+                return ResourceManager.GetString("MsgEnterAValidPostcode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the farm name.
+        /// </summary>
+        public static string MsgEnterTheFarmName {
+            get {
+                return ResourceManager.GetString("MsgEnterTheFarmName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the farm postcode.
+        /// </summary>
+        public static string MsgEnterTheFarmPostcode {
+            get {
+                return ResourceManager.GetString("MsgEnterTheFarmPostcode", resourceCulture);
             }
         }
     }
