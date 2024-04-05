@@ -1,10 +1,10 @@
 ﻿@using NMP.Portal.Resources;
-@using NMP.Portal.ViewModels;
-@model FarmViewModel
+@model NMP.Portal.ViewModels.FarmViewModel
+
 @{
-    ViewData["Title"] = Resource.lblManualAddress;
+    ViewData["Title"] = Resource.lblRainfallManual;
 }
-<form asp-action="Address" asp-controller="Farm" method="post" novalidate="">
+<form asp-action="Rainfall" asp-controller="Farm" method="post" novalidate="">
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
@@ -16,45 +16,44 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZField"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel"></govuk-input>
     <govuk-button type="submit">@Resource.lblBack</govuk-button>
-    <govuk-back-link asp-action="Address" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
 </form>
-@* <a asp-action="Address" asp-controller="Farm" class="govuk-back-link">@Resource.lblBack</a> *@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
         <h1 class="govuk-heading-l">
-            @(string.Format(Resource.lblEnterTheAddressFor, Model.Name))
+            @string.Format(Resource.lblEnterAverageAnualRainfall,Model.PostCode)
         </h1>
 
-        <form asp-action="Rainfall" method="post" novalidate="" asp-controller="Farm">
+        <form asp-action="NVZ" asp-controller="Farm" method="post" >
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Rainfall"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address3"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PostCode"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegistredOrganicProducer"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZField"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel"></govuk-input>
             <div class="govuk-form-group">
-                <govuk-input asp-for="@Model.Address1"></govuk-input>
+               @*  <div class="govuk-input__wrapper">
+                    <govuk-input class="govuk-input--width-5" asp-for="@Model.Rainfall" type="text"></govuk-input>
+                    <div class="govuk-input__suffix" aria-hidden="true">@Resource.lblmm</div>
+                </div> *@
+                <div class="govuk-input__wrapper">
+                    <input class="govuk-input govuk-input--width-5" asp-for="@Model.Rainfall" type="text" spellcheck="false">
+                    <div class="govuk-input__suffix" aria-hidden="true">@Resource.lblmm</div>
+                </div>
+                
             </div>
 
             <div class="govuk-form-group">
-                <govuk-input asp-for="@Model.Address2"></govuk-input>
+                <fieldset class="govuk-fieldset">
+                    <br>
+                    <govuk-button type="submit">@Resource.lblContinue</govuk-button>
+                </fieldset>
             </div>
 
-            <div class="govuk-form-group">
-                <govuk-input class="govuk-input--width-20" asp-for="@Model.Address3"></govuk-input>
-            </div>
-
-            <div class="govuk-form-group">
-                <govuk-input class="govuk-input--width-20" asp-for="@Model.Address4"></govuk-input>
-            </div>
-
-            <div class="govuk-form-group">
-                <govuk-input class="govuk-input--width-10" asp-for="@Model.PostCode"></govuk-input>
-            </div>
-
-            <div class="govuk-form-group">
-                <govuk-button type="submit">@Resource.lblContinue</govuk-button>
-            </div>
+            <p class="govuk-body cancel-link"><a href="#">@Resource.lblCancel</a></p>
 
         </form>
     </div>

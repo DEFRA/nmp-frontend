@@ -2,6 +2,7 @@
 using NMP.Portal.Models;
 using NMP.Portal.Resources;
 using NMP.Portal.ViewModels;
+using System.Reflection;
 
 namespace NMP.Portal.Controllers
 {
@@ -11,27 +12,157 @@ namespace NMP.Portal.Controllers
         {
             FarmsViewModel model = new FarmsViewModel();
             //need to fetch user farms 
-            ViewBag.IsUserHaveAnyFarms = model.Farms.Count > 0 ? true : false;            
+            ViewBag.IsUserHaveAnyFarms = model.Farms.Count > 0 ? true : false;
             return View("~/Views/Farm/FarmList.cshtml");
         }
-        public IActionResult Address()
+        public IActionResult Name()
         {
+            FarmsViewModel model = new FarmsViewModel();
+            //need to fetch user farms 
+            ViewBag.IsUserHaveAnyFarms = model.Farms.Count > 0 ? true : false;
             return View();
         }
-        public IActionResult ManualAddress(string? farmName)
+        public IActionResult Address(FarmViewModel farm)
         {
-            FarmViewModel model = new FarmViewModel();
-            model.Name = farmName??string.Empty;
-            return View(model);
+            if (!ModelState.IsValid)
+            {
+                return View("~/Views/Farm/Name.cshtml", farm);
+            }
+            else
+            {
+                FarmViewModel model = new FarmViewModel
+                {
+                    Name = farm.Name,
+                    Address1 = farm.Address1,
+                    Address2 = farm.Address2,
+                    Address3 = farm.Address3,
+                    Address4 = farm.Address4,
+                    PostCode = farm.PostCode
+                };
+                return View(model);
+            }
+
+
         }
+
         [HttpPost]
         public IActionResult ManualAddress(FarmViewModel farm)
         {
-            FarmViewModel model = new FarmViewModel();
-            //need to fetch user farms 
-            //ViewBag.IsUserHaveAnyFarms = model.Farms.Count > 0 ? true : false;            
-            return View();
-        }
+            if (!ModelState.IsValid)
+            {
+                return View("~/Views/Farm/Address.cshtml", farm);
+            }
+            else
+            {
+                FarmViewModel model = new FarmViewModel
+                {
+                    Name = farm.Name,
+                    Address1 = farm.Address1,
+                    Address2 = farm.Address2,
+                    Address3 = farm.Address3,
+                    Address4 = farm.Address4,
+                    PostCode = farm.PostCode
+                };
+                return View(model);
+            }
 
+        }
+        public IActionResult Rainfall(FarmViewModel farm)
+        {
+            FarmsViewModel farmsViewModel = new FarmsViewModel();
+            FarmViewModel model = new FarmViewModel();
+            if (!ModelState.IsValid)
+            {
+                return View("~/Views/Farm/ManualAddress.cshtml", farm);
+            }
+            else
+            {
+                ViewBag.IsUserHaveAnyFarms = farmsViewModel.Farms.Count > 0 ? true : false;
+
+                model.Name = farm.Name;
+                model.PostCode = farm.PostCode;
+                model.Address1 = farm.Address1;
+                model.Address2 = farm.Address2;
+                model.Address3 = farm.Address3;
+                model.Address4 = farm.Address4;
+                return View(model);
+            }
+
+        }
+        public IActionResult RainfallManual(FarmViewModel farm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("~/Views/Farm/Rainfall.cshtml", farm);
+            }
+            else
+            {
+                FarmViewModel model = new FarmViewModel
+                {
+                    Name = farm.Name,
+                    PostCode = farm.PostCode,
+                    Address1 = farm.Address1,
+                    Address2 = farm.Address2,
+                    Address3 = farm.Address3,
+                    Address4 = farm.Address4
+                };
+                return View(model);
+            }
+
+        }
+        public IActionResult NVZ(FarmViewModel farm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("~/Views/Farm/RainfallManual.cshtml", farm);
+            }
+            else
+            {
+                FarmViewModel model = new FarmViewModel
+                {
+                    Name = farm.Name,
+                    Address1 = farm.Address1,
+                    Address2 = farm.Address2,
+                    Address3 = farm.Address3,
+                    Address4 = farm.Address4,
+                    PostCode = farm.PostCode,
+                    Rainfall= farm.Rainfall,
+                    RegistredOrganicProducer=farm.RegistredOrganicProducer,
+                    NVZField= farm.NVZField,
+                    FieldsAbove300SeaLevel= farm.FieldsAbove300SeaLevel
+
+
+                };
+                return View(model);
+            }
+            
+        }
+        public IActionResult Elevation(FarmViewModel farm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("~/Views/Farm/NVZ.cshtml", farm);
+            }
+            else
+            {
+                FarmViewModel model = new FarmViewModel
+                {
+                    Name = farm.Name,
+                    Address1 = farm.Address1,
+                    Address2 = farm.Address2,
+                    Address3 = farm.Address3,
+                    Address4 = farm.Address4,
+                    PostCode = farm.PostCode,
+                    Rainfall = farm.Rainfall,
+                    RegistredOrganicProducer = farm.RegistredOrganicProducer,
+                    NVZField = farm.NVZField,
+                    FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel
+
+
+                };
+                return View(model);
+            }
+
+        }
     }
 }

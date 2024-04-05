@@ -1,7 +1,18 @@
 ﻿@using NMP.Portal.Resources
-
+@model NMP.Portal.ViewModels.FarmViewModel
 
 <div class="text-center">
-
-    <p class="govuk-body margin-bottom-forty"><a asp-action="ManualAddress" asp-controller="Farm">@Resource.lblEnterAddressManually</a></p>
+    <form asp-action="ManualAddress" asp-controller="Farm" method="post" novalidate="">
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address3"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PostCode"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Rainfall"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegistredOrganicProducer"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZField"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel"></govuk-input>
+        <p class="govuk-body margin-bottom-forty"><govuk-button type="submit">@Resource.lblEnterAddressManually</govuk-button></p>
+    </form>
 </div>

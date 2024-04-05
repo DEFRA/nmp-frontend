@@ -27,7 +27,7 @@
             @* <button type="submit" class="govuk-button margin-bottom-forty" data-module="govuk-button">
                 @Resource.lblContinue
             </button> *@
-            <a class="govuk-button margin-bottom-forty" asp-action="Address" asp-controller="Farm">@Resource.lblContinue</a>
+            <govuk-button type="submit" class="margin-bottom-forty" asp-action="Address" asp-controller="Farm">@Resource.lblContinue</govuk-button>
         </form>
         <p class="govuk-body cancel-link"><a asp-action="Index" asp-controller="Farm">@Resource.lblCancel</a></p>
     </div>
