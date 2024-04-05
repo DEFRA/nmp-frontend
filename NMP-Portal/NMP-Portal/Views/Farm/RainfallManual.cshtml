@@ -4,27 +4,16 @@
 @{
     ViewData["Title"] = Resource.lblRainfallManual;
 }
-<form asp-action="Rainfall" asp-controller="Farm" method="post" novalidate="">
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address3"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PostCode"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Rainfall"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegistredOrganicProducer"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZField"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel"></govuk-input>
-    <govuk-button type="submit">@Resource.lblBack</govuk-button>
-</form>
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
 
-        <h1 class="govuk-heading-l">
-            @string.Format(Resource.lblEnterAverageAnualRainfall,Model.PostCode)
-        </h1>
+<form asp-action="NVZ" asp-controller="Farm" method="post">
+    <button class="govuk-back-link back-link" type="submit" asp-action="Rainfall" asp-controller="Farm">@Resource.lblBack</button>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
 
-        <form asp-action="NVZ" asp-controller="Farm" method="post" >
+            <h1 class="govuk-heading-l">
+                @string.Format(Resource.lblEnterAverageAnualRainfall, Model.PostCode)
+            </h1>
+
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
@@ -35,26 +24,19 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZField"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel"></govuk-input>
             <div class="govuk-form-group">
-               @*  <div class="govuk-input__wrapper">
-                    <govuk-input class="govuk-input--width-5" asp-for="@Model.Rainfall" type="text"></govuk-input>
-                    <div class="govuk-input__suffix" aria-hidden="true">@Resource.lblmm</div>
-                </div> *@
-                <div class="govuk-input__wrapper">
-                    <input class="govuk-input govuk-input--width-5" asp-for="@Model.Rainfall" type="text" spellcheck="false">
-                    <div class="govuk-input__suffix" aria-hidden="true">@Resource.lblmm</div>
+                 <div class="govuk-input__wrapper">
+                <govuk-input class="govuk-input--width-5" asp-for="@Model.Rainfall" type="text"></govuk-input>
+                <div class="govuk-input__suffix rainfall-suffix" aria-hidden="true">@Resource.lblmm</div>
                 </div>
-                
             </div>
-
             <div class="govuk-form-group">
                 <fieldset class="govuk-fieldset">
                     <br>
-                    <govuk-button type="submit">@Resource.lblContinue</govuk-button>
+                    <govuk-button type="submit" name="isRainfalManual" value="true">@Resource.lblContinue</govuk-button>
                 </fieldset>
             </div>
+            <p class="govuk-body cancel-link"><a asp-action="FarmList" asp-controller="Farm">@Resource.lblCancel</a></p>
 
-            <p class="govuk-body cancel-link"><a href="#">@Resource.lblCancel</a></p>
-
-        </form>
+        </div>
     </div>
-</div>
+</form>

@@ -36,13 +36,6 @@ namespace NMP.Portal.Controllers
             return View();
         }
 
-        public IActionResult Address()
-        {
-            FarmsViewModel model = new FarmsViewModel();
-            //need to fetch user farms 
-            ViewBag.IsUserHaveAnyFarms = model.Farms.Count > 0 ? true : false;
-            return View();
-        }
         public IActionResult Address(FarmViewModel farm)
         {
             if (!ModelState.IsValid)
@@ -92,8 +85,29 @@ namespace NMP.Portal.Controllers
         {
             FarmsViewModel farmsViewModel = new FarmsViewModel();
             FarmViewModel model = new FarmViewModel();
-            if (!ModelState.IsValid)
+
+            if (string.IsNullOrEmpty(farm.Address1))
             {
+                ModelState.AddModelError("Address1", Resource.MsgEnterAnAddress);
+                return View("~/Views/Farm/ManualAddress.cshtml", farm);
+            }
+            if (string.IsNullOrEmpty(farm.Address3))
+            {
+                ModelState.AddModelError("Address3", Resource.MsgEnterATownOrCity);
+                return View("~/Views/Farm/ManualAddress.cshtml", farm);
+            }
+            if (string.IsNullOrEmpty(farm.Address4))
+            {
+                ModelState.AddModelError("Address4", Resource.MsgEnterACounty);
+                return View("~/Views/Farm/ManualAddress.cshtml", farm);
+            }
+            if (string.IsNullOrEmpty(farm.PostCode))
+            {
+                ModelState.AddModelError("PostCode", Resource.MsgEnterAPostcode);
+                return View("~/Views/Farm/ManualAddress.cshtml", farm);
+            }
+            if (!ModelState.IsValid)
+            {               
                 return View("~/Views/Farm/ManualAddress.cshtml", farm);
             }
             else
@@ -129,10 +143,21 @@ namespace NMP.Portal.Controllers
                 };
                 return View(model);
             }
-
         }
-        public IActionResult NVZ(FarmViewModel farm)
+        public IActionResult NVZ(FarmViewModel farm, bool isRainfalManual)
         {
+            ViewBag.IsManualRainfall=isRainfalManual;
+            //we need to call api for rainfall on the basis of postcode
+            if (farm.Rainfall==null)
+            {
+                //ModelState.AddModelError("Rainfall", Resource.MsgEnterAverageAnnualRainfall);
+               // return View("~/Views/Farm/RainfallManual.cshtml", farm);
+            }
+            if (farm.Rainfall != null)
+            {   //check valid rainfall value
+                //ModelState.AddModelError("Rainfall", Resource.MsgEnterValidAnnualRainfall);
+                //return View("~/Views/Farm/RainfallManual.cshtml", farm);
+            }
             if (!ModelState.IsValid)
             {
                 return View("~/Views/Farm/RainfallManual.cshtml", farm);
@@ -160,6 +185,12 @@ namespace NMP.Portal.Controllers
         }
         public IActionResult Elevation(FarmViewModel farm)
         {
+            if (farm.NVZField == null)
+            {
+                ModelState.AddModelError("NVZField", Resource.MsgSelectAnOptionBeforeContinuing);
+                return View("~/Views/Farm/NVZ.cshtml", farm);
+            }
+
             if (!ModelState.IsValid)
             {
                 return View("~/Views/Farm/NVZ.cshtml", farm);

@@ -69,6 +69,40 @@ button.accept-policy {
     border-bottom: 1px solid #b1b4b6;
     margin-bottom: 0;
 }
+
 .input-width-15 {
     max-width: 14.5em;
+}
+
+.back-link {
+    background-color: white;
+    border: aliceblue;
+    cursor: pointer;
+}
+
+    /* Hover effect */
+    .back-link:hover {
+        text-decoration: underline;
+    }
+
+    .back-link:focus {
+        outline: none;
+    }
+
+.change-link {
+    background: none;
+    border: none;
+    color: #005ea5;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 1.1875rem;
+    padding-left: unset;
+}
+
+    .change-link:focus {
+        outline: none;
+    }
+.rainfall-suffix
+{
+    margin-top:30px;
 }

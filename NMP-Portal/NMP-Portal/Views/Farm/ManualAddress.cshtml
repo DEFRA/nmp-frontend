@@ -4,29 +4,16 @@
 @{
     ViewData["Title"] = Resource.lblManualAddress;
 }
-<form asp-action="Address" asp-controller="Farm" method="post" novalidate="">
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address3"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PostCode"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Rainfall"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegistredOrganicProducer"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZField"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel"></govuk-input>
-    <govuk-button type="submit">@Resource.lblBack</govuk-button>
-    <govuk-back-link asp-action="Address" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
-</form>
-@* <a asp-action="Address" asp-controller="Farm" class="govuk-back-link">@Resource.lblBack</a> *@
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
 
-        <h1 class="govuk-heading-l">
-            @(string.Format(Resource.lblEnterTheAddressFor, Model.Name))
-        </h1>
+<form asp-action="Rainfall" method="post" asp-controller="Farm">
+    <button class="govuk-back-link back-link" type="submit" asp-action="Address" asp-controller="Farm">@Resource.lblBack</button>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
 
-        <form asp-action="Rainfall" method="post" novalidate="" asp-controller="Farm">
+            <h1 class="govuk-heading-l">
+                @(string.Format(Resource.lblEnterTheAddressFor, Model.Name))
+            </h1>
+
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Rainfall"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegistredOrganicProducer"></govuk-input>
@@ -55,7 +42,6 @@
             <div class="govuk-form-group">
                 <govuk-button type="submit">@Resource.lblContinue</govuk-button>
             </div>
-
-        </form>
+        </div>
     </div>
-</div>
+</form>

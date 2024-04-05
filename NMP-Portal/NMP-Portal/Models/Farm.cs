@@ -6,7 +6,7 @@ namespace NMP.Portal.Models
     public class Farm
     {
         public int Id { get; set; } = 0;
-        //[Required(ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblWhatIsTheFarmName))]
+        
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheFarmName))]
         public string Name { get; set; } = string.Empty;
 
@@ -22,7 +22,6 @@ namespace NMP.Portal.Models
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblCounty))]
         public string? Address4 { get; set; }
 
-        //[Required(ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblWhatIsTheFarmPostcode))]
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblPostCode))]
         public string PostCode { get; set; } = string.Empty;
         public string? CPH { get; set; }
@@ -39,8 +38,8 @@ namespace NMP.Portal.Models
         public bool RegistredOrganicProducer { get; set; } = false;
         public bool MetricUnits { get; set; } = false;
         public bool EnglishRules { get; set; } = true;
-        public int NVZField { get; set; } = 0;
-        public int FieldsAbove300SeaLevel { get; set; } = 0;
+        public int? NVZField { get; set; } 
+        public int? FieldsAbove300SeaLevel { get; set; } 
         public string? EncryptedFarmName { get; set; } 
         public string? EncryptedPostcode { get; set; }
     }

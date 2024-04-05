@@ -4,46 +4,23 @@
 @{
     ViewData["Title"] = Resource.lblRainfall;
 }
-<form asp-action="ManualAddress" asp-controller="Farm" method="post" novalidate="">
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address3"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PostCode"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Rainfall"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegistredOrganicProducer"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZField"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel"></govuk-input>
-    <govuk-button type="submit" >@Resource.lblBack</govuk-button>
-</form>
-<div class="govuk-grid-row">
 
-    <div class="govuk-grid-column-two-thirds">
+<form asp-action="NVZ" asp-controller="Farm" method="post">
+    <button class="govuk-back-link back-link" type="submit" asp-action="ManualAddress" asp-controller="Farm">@Resource.lblBack</button>
+    <div class="govuk-grid-row">
 
-        <h1 class="govuk-heading-l">@string.Format(Resource.lblAverageAnnualRainfallFor,Model.PostCode)</h1>
-        <p class="govuk-body">@Resource.lblYourAverageAnualRainfall</p>
-        <div class="text-group margin-bottom-forty">
-            <h3 class="govuk-heading-s">@Resource.lblAverageAnnualRainfall</h3>
-            <p class="govuk-body">@Model.Rainfall</p>
-            <p class="govuk-body">
-                <form asp-action="RainfallManual" asp-controller="Farm">
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address3"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PostCode"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Rainfall"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegistredOrganicProducer"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZField"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel"></govuk-input>
-                    <govuk-button type="submit">@Resource.lblChange</govuk-button>
-                </form>
-            </p>
-        </div>
+        <div class="govuk-grid-column-two-thirds">
 
-        <form asp-action="NVZ" asp-controller="Farm" method="post">
+            <h1 class="govuk-heading-l">@string.Format(Resource.lblAverageAnnualRainfallFor, Model.PostCode)</h1>
+            <p class="govuk-body">@Resource.lblYourAverageAnualRainfall</p>
+            <div class="text-group margin-bottom-forty">
+                <h3 class="govuk-heading-s">@Resource.lblAverageAnnualRainfall</h3>
+                <p class="govuk-body">@Model.Rainfall</p>
+                <p class="govuk-body">
+                    <button class="govuk-link change-link" type="submit" asp-action="RainfallManual" asp-controller="farm">@Resource.lblChange</button>
+                </p>
+            </div>
+
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
@@ -54,13 +31,13 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegistredOrganicProducer"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZField"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel"></govuk-input>
-            <govuk-button type="submit" class="margin-bottom-forty">
+            <govuk-button type="submit" class="margin-bottom-forty" name="isRainfalManual" value="false">
                 @Resource.lblContinue
             </govuk-button>
-        </form>
 
-        <p class="govuk-body cancel-link"><a asp-action="ManualAddress" asp-controller="Farm">@Resource.lblCancel</a></p>
+            <p class="govuk-body cancel-link"><a asp-action="FarmList" asp-controller="Farm">@Resource.lblCancel</a></p>
+
+        </div>
 
     </div>
-
-</div>
+</form>

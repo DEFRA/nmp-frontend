@@ -663,5 +663,77 @@ namespace NMP.Portal.Resources {
                 return ResourceManager.GetString("lblYourPlanWillBasedOn", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a county.
+        /// </summary>
+        public static string MsgEnterACounty {
+            get {
+                return ResourceManager.GetString("MsgEnterACounty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter an address.
+        /// </summary>
+        public static string MsgEnterAnAddress {
+            get {
+                return ResourceManager.GetString("MsgEnterAnAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a postcode.
+        /// </summary>
+        public static string MsgEnterAPostcode {
+            get {
+                return ResourceManager.GetString("MsgEnterAPostcode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a town or city.
+        /// </summary>
+        public static string MsgEnterATownOrCity {
+            get {
+                return ResourceManager.GetString("MsgEnterATownOrCity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a valid postcode.
+        /// </summary>
+        public static string MsgEnterAValidPostcode {
+            get {
+                return ResourceManager.GetString("MsgEnterAValidPostcode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the average annual rainfall.
+        /// </summary>
+        public static string MsgEnterAverageAnnualRainfall {
+            get {
+                return ResourceManager.GetString("MsgEnterAverageAnnualRainfall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the valid annual rainfall.
+        /// </summary>
+        public static string MsgEnterValidAnnualRainfall {
+            get {
+                return ResourceManager.GetString("MsgEnterValidAnnualRainfall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select an option before continuing.
+        /// </summary>
+        public static string MsgSelectAnOptionBeforeContinuing {
+            get {
+                return ResourceManager.GetString("MsgSelectAnOptionBeforeContinuing", resourceCulture);
+            }
+        }
     }
 }

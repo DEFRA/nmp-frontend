@@ -2,22 +2,22 @@
 @model NMP.Portal.ViewModels.FarmViewModel
 @{
     ViewData["Title"] = Resource.lblNVZ;
+    var backAction = "";
+    var AllFieldsInNVZ = (int)NMP.Portal.Enums.NVZFields.AllFieldsInNVZ;
+    var SomeFieldsInNVZ = (int)NMP.Portal.Enums.NVZFields.SomeFieldsInNVZ;
+    var NoFieldsInNVZ = (int)NMP.Portal.Enums.NVZFields.NoFieldsInNVZ;
+    if (ViewBag.IsManualRainfall != null)
+    {
+        backAction=ViewBag.IsManualRainfall == true ? "RainfallManual" : "Rainfall";
+    }
+    
 }
-<form asp-action="RainfallManual" asp-controller="Farm" method="post" novalidate="">
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address3"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PostCode"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Rainfall"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegistredOrganicProducer"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel"></govuk-input>
-    <govuk-button type="submit">@Resource.lblBack</govuk-button>
-</form>
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-        <form asp-action="elevation" asp-controller="Farm" method="post">
+
+<form asp-action="elevation" asp-controller="Farm" method="post">
+    <button class="govuk-back-link back-link" type="submit" asp-action=@backAction asp-controller="Farm">@Resource.lblBack</button>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
@@ -32,18 +32,17 @@
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @Resource.lblHowManyFieldsInNVZ
                     </govuk-radios-fieldset-legend>
-                    <govuk-radios-item value="1">@Resource.lblAllTheFieldsAreInAnNVZ</govuk-radios-item>
-                    <govuk-radios-item value="2">@Resource.lblSomeOfTheFieldsAreInAnNVZ</govuk-radios-item>
-                    <govuk-radios-item value="3">@Resource.lblNoneOfTheFieldsAreInAnNVZ</govuk-radios-item>
+                    <govuk-radios-item value="@AllFieldsInNVZ">@Resource.lblAllTheFieldsAreInAnNVZ</govuk-radios-item>
+                    <govuk-radios-item value="@SomeFieldsInNVZ">@Resource.lblSomeOfTheFieldsAreInAnNVZ</govuk-radios-item>
+                    <govuk-radios-item value="@NoFieldsInNVZ">@Resource.lblNoneOfTheFieldsAreInAnNVZ</govuk-radios-item>
                 </govuk-radios-fieldset>
             </govuk-radios>
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
-        </form>
-         
-        <p class="govuk-body cancel-link"><a href="/mvp/farms">@Resource.lblCancel</a></p>
-        
-    </div>
+            <p class="govuk-body cancel-link"><a asp-action="FarmList" asp-controller="Farm">@Resource.lblCancel</a></p>
 
-</div>
+        </div>
+
+    </div>
+</form>

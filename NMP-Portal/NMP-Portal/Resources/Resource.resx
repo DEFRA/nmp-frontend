@@ -319,4 +319,28 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblYourPlanWillBasedOn" xml:space="preserve">
     <value>Your plan will be based on:</value>
   </data>
+  <data name="MsgEnterACounty" xml:space="preserve">
+    <value>Enter a county</value>
+  </data>
+  <data name="MsgEnterAnAddress" xml:space="preserve">
+    <value>Enter an address</value>
+  </data>
+  <data name="MsgEnterAPostcode" xml:space="preserve">
+    <value>Enter a postcode</value>
+  </data>
+  <data name="MsgEnterATownOrCity" xml:space="preserve">
+    <value>Enter a town or city</value>
+  </data>
+  <data name="MsgEnterAValidPostcode" xml:space="preserve">
+    <value>Enter a valid postcode</value>
+  </data>
+  <data name="MsgEnterAverageAnnualRainfall" xml:space="preserve">
+    <value>Enter the average annual rainfall</value>
+  </data>
+  <data name="MsgEnterValidAnnualRainfall" xml:space="preserve">
+    <value>Enter the valid annual rainfall</value>
+  </data>
+  <data name="MsgSelectAnOptionBeforeContinuing" xml:space="preserve">
+    <value>Select an option before continuing</value>
+  </data>
 </root>
