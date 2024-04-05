@@ -6,12 +6,11 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.Identity.Web;
 using GovUk.Frontend.AspNetCore;
 using Joonasw.AspNetCore.SecurityHeaders;
 using Joonasw.AspNetCore.SecurityHeaders.Csp;
 using NMP.Portal.Security;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<IISServerOptions>(options =>
@@ -41,18 +40,22 @@ builder.Services.Configure<FormOptions>(options =>
 // Add services to the container.
 //builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
 //            .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
-//builder.Services.AddAuthorization(options =>
-//{
-//    options.FallbackPolicy = options.DefaultPolicy;
-//});
 
-//builder.Services.AddControllersWithViews(options =>
-//{
-//    var policy = new AuthorizationPolicyBuilder()
-//        .RequireAuthenticatedUser()
-//        .Build();
-//    options.Filters.Add(new AuthorizeFilter(policy));
-//});
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(o => o.LoginPath = new PathString("/Account/Login"));
+
+builder.Services.AddAuthorization(options =>
+{
+    options.FallbackPolicy = options.DefaultPolicy;
+});
+
+builder.Services.AddControllersWithViews(options =>
+{
+    var policy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+    options.Filters.Add(new AuthorizeFilter(policy));
+});
 
 
 
@@ -69,7 +72,7 @@ builder.Services.AddHttpContextAccessor(); // Access current UserName in Reposit
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 builder.Services.AddAntiforgery(options =>
 {
-    // Set Cookie properties using CookieBuilder properties†.
+    // Set Cookie properties using CookieBuilder propertiesï¿½.
     options.Cookie = new CookieBuilder()
     {
         Name = "NMP-Portal",
@@ -136,10 +139,7 @@ app.UseCsp(csp =>
         .FromSelf();
 
     csp.AllowStyles
-           .FromSelf()
-           //.AddNonce()
-           .From(pageTemplateHelper.GetCspScriptHashes());
-
+           .FromSelf(); 
     csp.AllowScripts
         .FromSelf()
         //.AddNonce()
@@ -168,7 +168,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-//app.UseAuthentication();
+app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<SecurityHeadersMiddleware>();
 app.MapControllerRoute(
