@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json.Linq;
@@ -12,25 +14,38 @@ using System.Text.RegularExpressions;
 
 namespace NMP.Portal.Controllers
 {
+    [Authorize]
     public class FarmController : Controller
     {
+        private readonly ILogger<FarmController> _logger;
+        private readonly IDataProtector _dataProtector;
+        public FarmController(ILogger<FarmController> logger, IDataProtectionProvider dataProtectionProvider)
+        {
+            _logger = logger;
+            _dataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
+        }
         public IActionResult Index()
         {
             return View();
         }
-        [HttpGet]
-        public IActionResult FarmList(FarmsViewModel model)
+
+        
+        public IActionResult FarmList()
         {
-            if (model.Farms.Count > 0)
+            FarmsViewModel model = new FarmsViewModel();
+
+            if (model.Farms.Count == 0)
             {
-                ViewBag.IsUserHaveAnyFarms = true;
-            }
-            else
-            {
-                ViewBag.IsUserHaveAnyFarms = false;
+                return RedirectToAction("Name", "Farm");
+
             }
             return View(model);
 
+        }
+        public IActionResult CreateFarmCancel()
+        {
+            FarmsViewModel model = new FarmsViewModel();
+            return View("~/Views/Farm/FarmList.cshtml",model);
         }
 
         [HttpGet]
