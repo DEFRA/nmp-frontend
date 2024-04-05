@@ -1,6 +1,6 @@
 ﻿@using NMP.Portal.Resources
-@using NMP.Portal.Models
-@model Farm
+@using NMP.Portal.ViewModels
+@model FarmViewModel
 
 @{
     ViewData["Title"] = Resource.lblAddAFarm;
@@ -14,17 +14,26 @@
         <p class="govuk-body">@Resource.lblIfYouhaveMoreThanOneHolding</p>
 
         <form asp-action="Address" method="post" asp-controller="Farm">
-
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FullAddress"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address3"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Rainfall" ></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZField"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel" ></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegistredOrganicProducer"></govuk-input>
             <div class="govuk-form-group">
-                <govuk-input asp-for="@Model.Name"></govuk-input>
+                <govuk-input asp-for="@Model.Name" ></govuk-input>
             </div>
 
             <div class="govuk-form-group margin-bottom-forty">
-                <govuk-input class="input-width-15" asp-for="@Model.PostCode"></govuk-input>
+                <govuk-input class="input-width-15" asp-for="@Model.PostCode">@Resource.lblWhatIsTheFarmPostcode</govuk-input>
             </div>
-            
-            <a class="govuk-button margin-bottom-forty" asp-action="Address" asp-controller="Farm">@Resource.lblContinue</a>
+            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
         </form>
-        <p class="govuk-body cancel-link"><a asp-action="FarmList" asp-controller="Farm">@Resource.lblCancel</a></p>
+        <p class="govuk-body cancel-link"><a asp-action="CreateFarmCancel" asp-controller="Farm">@Resource.lblCancel</a></p>
     </div>
 </div>
