@@ -26,7 +26,7 @@ namespace NMP.Portal.Models
 
         [Required(ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterTheFarmPostcode))]
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheFarmPostcode))]
-        public string? PostCode { get; set; }
+        public string PostCode { get; set; }
         public string? CPH { get; set; }
         public string? FarmerName { get; set; }
         public string? BusinessName { get; set; }

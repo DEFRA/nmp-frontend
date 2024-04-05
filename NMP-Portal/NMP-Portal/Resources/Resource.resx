@@ -135,6 +135,18 @@
   <data name="lblAddressLine2" xml:space="preserve">
     <value>Address line 2 (optional)</value>
   </data>
+  <data name="lblAllTheFieldsAreAbove300m" xml:space="preserve">
+    <value>All the fields are above 300m</value>
+  </data>
+  <data name="lblAllTheFieldsAreInAnNVZ" xml:space="preserve">
+    <value>All the fields are in an NVZ</value>
+  </data>
+  <data name="lblAverageAnnualRainfall" xml:space="preserve">
+    <value>Average annual rainfall</value>
+  </data>
+  <data name="lblAverageAnnualRainfallFor" xml:space="preserve">
+    <value>Average annual rainfall for {0}</value>
+  </data>
   <data name="lblApplicationName" xml:space="preserve">
     <value>Plan and record nutrient applications</value>
   </data>
@@ -171,6 +183,9 @@
   <data name="lblEnterAddressManually" xml:space="preserve">
     <value>Enter address manually</value>
   </data>
+  <data name="lblEnterAverageAnualRainfall" xml:space="preserve">
+    <value>Enter the average annual rainfall in millimetres for {0}</value>
+  </data>
   <data name="lblEnterTheAddressFor" xml:space="preserve">
     <value>Enter the address for {0}</value>
   </data>
@@ -196,7 +211,7 @@
     <value>STD</value>
   </data>
   <data name="lblFieldsAbove300SeaLevel" xml:space="preserve">
-    <value>How many fields at Oaktree Lane Farm are more than 300 metres above sea level</value>
+    <value>How many fields at {0} are more than 300 metres above sea level</value>
   </data>
   <data name="lblHelpProtectTheEnvironment" xml:space="preserve">
     <value>help protect the environment</value>
@@ -207,8 +222,15 @@
   <data name="lblHomePage" xml:space="preserve">
     <value>Home Page</value>
   </data>
+  <data name="lblHowManyFieldsInNVZ" xml:space="preserve">
+    <value>How many fields at
+are in a Nitrate Vulnerable Zone (NVZ)?</value>
+  </data>
   <data name="lblIfYouhaveMoreThanOneHolding" xml:space="preserve">
     <value>If you have more than one holding, it's best to add a separate farm for each.</value>
+  </data>
+  <data name="lblManualAddress" xml:space="preserve">
+    <value>Manual Address</value>
   </data>
   <data name="lblLicenseText" xml:space="preserve">
     <value>All content is available under the</value>
@@ -218,6 +240,18 @@
   </data>
   <data name="lblMetricUnits" xml:space="preserve">
     <value>Metric Units</value>
+  </data>
+  <data name="lblmm" xml:space="preserve">
+    <value>mm</value>
+  </data>
+  <data name="lblNoneOfTheFieldsAreAbove300m" xml:space="preserve">
+    <value>None of the fields are above 300m</value>
+  </data>
+  <data name="lblNoneOfTheFieldsAreInAnNVZ" xml:space="preserve">
+    <value>None of the fields are in an NVZ</value>
+  </data>
+  <data name="lblNVZ" xml:space="preserve">
+    <value>NVZ</value>
   </data>
   <data name="lblNVZField" xml:space="preserve">
     <value>How many fields at Oaktree Lane Farm are in a Nitrate Vulnerable Zone (NVZ)</value>
@@ -240,6 +274,12 @@
   <data name="lblPostCode" xml:space="preserve">
     <value>Postcode</value>
   </data>
+  <data name="lblRainfall" xml:space="preserve">
+    <value>Rainfall</value>
+  </data>
+  <data name="lblRainfallManual" xml:space="preserve">
+    <value>Rainfall Manual</value>
+  </data>
   <data name="lblRegOrganicProducer" xml:space="preserve">
     <value>RegistredOrganicProducer</value>
   </data>
@@ -254,6 +294,12 @@
   </data>
   <data name="lblSelectTheFarmAddress" xml:space="preserve">
     <value>Select the farm address</value>
+  </data>
+  <data name="lblSomeOfTheFieldsAreAbove300m" xml:space="preserve">
+    <value>Some of the fields are above 300m</value>
+  </data>
+  <data name="lblSomeOfTheFieldsAreInAnNVZ" xml:space="preserve">
+    <value>Some of the fields are in an NVZ</value>
   </data>
   <data name="lblSignout" xml:space="preserve">
     <value>Sign out</value>
@@ -288,11 +334,38 @@
   <data name="lblYouHaveNotAddedAnyFarms" xml:space="preserve">
     <value>You have not added any farms.</value>
   </data>
+  <data name="lblYourAverageAnualRainfall" xml:space="preserve">
+    <value>This is your estimated average annual rainfall. If you think this is wrong, you can change it now or later.</value>
+  </data>
   <data name="lblYourFarms" xml:space="preserve">
     <value>Your farms</value>
   </data>
   <data name="lblYourPlanWillBasedOn" xml:space="preserve">
     <value>Your plan will be based on:</value>
+  </data>
+  <data name="MsgEnterACounty" xml:space="preserve">
+    <value>Enter a county</value>
+  </data>
+  <data name="MsgEnterAnAddress" xml:space="preserve">
+    <value>Enter an address</value>
+  </data>
+  <data name="MsgEnterAPostcode" xml:space="preserve">
+    <value>Enter a postcode</value>
+  </data>
+  <data name="MsgEnterATownOrCity" xml:space="preserve">
+    <value>Enter a town or city</value>
+  </data>
+  <data name="MsgEnterAValidPostcode" xml:space="preserve">
+    <value>Enter a valid postcode</value>
+  </data>
+  <data name="MsgEnterAverageAnnualRainfall" xml:space="preserve">
+    <value>Enter the average annual rainfall</value>
+  </data>
+  <data name="MsgEnterValidAnnualRainfall" xml:space="preserve">
+    <value>Enter the valid annual rainfall</value>
+  </data>
+  <data name="MsgSelectAnOptionBeforeContinuing" xml:space="preserve">
+    <value>Select an option before continuing</value>
   </data>
   <data name="MsgEnterAValidPostcode" xml:space="preserve">
     <value>Enter a valid postcode</value>
