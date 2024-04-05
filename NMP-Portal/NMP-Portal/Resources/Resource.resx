@@ -141,6 +141,9 @@
   <data name="lblAverageAnnualRainfallFor" xml:space="preserve">
     <value>Average annual rainfall for {0}</value>
   </data>
+  <data name="lblApplicationName" xml:space="preserve">
+    <value>Plan and record nutrient applications</value>
+  </data>
   <data name="lblAvgAtitude" xml:space="preserve">
     <value>AverageAltitude</value>
   </data>
@@ -158,6 +161,9 @@
   </data>
   <data name="lblContinue" xml:space="preserve">
     <value>Continue</value>
+  </data>
+  <data name="lblCopyRight" xml:space="preserve">
+    <value>© Crown copyright</value>
   </data>
   <data name="lblCounty" xml:space="preserve">
     <value>County</value>
@@ -220,6 +226,12 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblManualAddress" xml:space="preserve">
     <value>Manual Address</value>
   </data>
+  <data name="lblLicenseText" xml:space="preserve">
+    <value>All content is available under the</value>
+  </data>
+  <data name="lblLicenseTextExtra" xml:space="preserve">
+    <value>, except where otherwise stated</value>
+  </data>
   <data name="lblMetricUnits" xml:space="preserve">
     <value>Metric Units</value>
   </data>
@@ -237,6 +249,9 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
   <data name="lblNVZField" xml:space="preserve">
     <value>How many fields at Oaktree Lane Farm are in a Nitrate Vulnerable Zone (NVZ)</value>
+  </data>
+  <data name="lblOpenGovernmentLicence" xml:space="preserve">
+    <value>Open Government Licence v3.0</value>
   </data>
   <data name="lblPlanAndRecordNutrient applications" xml:space="preserve">
     <value>Plan and record nutrient applications</value>
@@ -279,6 +294,9 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
   <data name="lblSomeOfTheFieldsAreInAnNVZ" xml:space="preserve">
     <value>Some of the fields are in an NVZ</value>
+  </data>
+  <data name="lblSignout" xml:space="preserve">
+    <value>Sign out</value>
   </data>
   <data name="lblTheCropsYouGrow" xml:space="preserve">
     <value>the crops you grow</value>

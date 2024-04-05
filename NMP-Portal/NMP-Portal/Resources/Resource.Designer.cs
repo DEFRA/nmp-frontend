@@ -133,6 +133,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Plan and record nutrient applications.
+        /// </summary>
+        public static string lblApplicationName {
+            get {
+                return ResourceManager.GetString("lblApplicationName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to AverageAltitude.
         /// </summary>
         public static string lblAvgAtitude {
@@ -183,6 +192,15 @@ namespace NMP.Portal.Resources {
         public static string lblContinue {
             get {
                 return ResourceManager.GetString("lblContinue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to © Crown copyright.
+        /// </summary>
+        public static string lblCopyRight {
+            get {
+                return ResourceManager.GetString("lblCopyRight", resourceCulture);
             }
         }
         
@@ -368,6 +386,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All content is available under the.
+        /// </summary>
+        public static string lblLicenseText {
+            get {
+                return ResourceManager.GetString("lblLicenseText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to , except where otherwise stated.
+        /// </summary>
+        public static string lblLicenseTextExtra {
+            get {
+                return ResourceManager.GetString("lblLicenseTextExtra", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Metric Units.
         /// </summary>
         public static string lblMetricUnits {
@@ -418,6 +454,15 @@ namespace NMP.Portal.Resources {
         public static string lblNVZField {
             get {
                 return ResourceManager.GetString("lblNVZField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Government Licence v3.0.
+        /// </summary>
+        public static string lblOpenGovernmentLicence {
+            get {
+                return ResourceManager.GetString("lblOpenGovernmentLicence", resourceCulture);
             }
         }
         
@@ -544,6 +589,15 @@ namespace NMP.Portal.Resources {
         public static string lblSomeOfTheFieldsAreInAnNVZ {
             get {
                 return ResourceManager.GetString("lblSomeOfTheFieldsAreInAnNVZ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sign out.
+        /// </summary>
+        public static string lblSignout {
+            get {
+                return ResourceManager.GetString("lblSignout", resourceCulture);
             }
         }
         

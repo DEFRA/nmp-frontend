@@ -1,28 +1,51 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using NMP.Portal.Models;
-using NMP.Portal.Resources;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Mvc;
 using NMP.Portal.ViewModels;
 using System.Reflection;
 
 namespace NMP.Portal.Controllers
 {
+    [Authorize]
     public class FarmController : Controller
     {
+        private readonly ILogger<FarmController> _logger;
+        private readonly IDataProtector _dataProtector;
+        public FarmController(ILogger<FarmController> logger, IDataProtectionProvider dataProtectionProvider)
+        {
+            _logger = logger;
+            _dataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
+        }
         public IActionResult Index()
         {
             return View();
         }
-        [HttpGet]
-        public IActionResult FarmList(FarmsViewModel model)
+
+        
+        public IActionResult FarmList()
         {
+            FarmsViewModel model = new FarmsViewModel();
+
             if (model.Farms.Count > 0)
             {
                 ViewBag.IsUserHaveAnyFarms = true;
+                
             }
             else
             {
                 ViewBag.IsUserHaveAnyFarms = false;
+                return RedirectToAction("Name", "Farm");
             }
+            //if (model.Farms.Count > 0)
+            //{
+            //    ViewBag.IsUserHaveAnyFarms = true;
+            //}
+            //else
+            //{
+            //    ViewBag.IsUserHaveAnyFarms = false;
+
+
+            //}
             return View(model);
 
         }
