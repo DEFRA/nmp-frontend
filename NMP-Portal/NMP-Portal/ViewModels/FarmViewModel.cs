@@ -8,5 +8,6 @@ namespace NMP.Portal.ViewModels
         {
 
         }
+        public bool IsManualAddress { get; set; } = false;
     }
 }
