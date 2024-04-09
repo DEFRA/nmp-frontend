@@ -12,11 +12,16 @@
         <div class="govuk-grid-column-two-thirds">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name" value="@Model.Name"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PostCode" value="@Model.PostCode"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address3"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Rainfall" value="@Model.Rainfall"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZField" value="@Model.NVZField"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel" value="@Model.FieldsAbove300SeaLevel"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegistredOrganicProducer" value="@Model.RegistredOrganicProducer"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsRainfalManual"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManualAddress" value="@Model.IsManualAddress.ToString().ToLower()"></govuk-input>
+            @* <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsRainfalManual"></govuk-input> *@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address3"></govuk-input>
@@ -36,7 +41,8 @@
             </div>
 
             <div class="govuk-form-group">
-                <govuk-select id="FullAddress" name="FullAddress" asp-for="FullAddress">
+                <govuk-select class="govuk-!-width-full" id="FullAddress" name="FullAddress" asp-for="FullAddress">
+                    <govuk-select-item value="">@ViewBag.AddressCount</govuk-select-item>
                     @foreach (var item in ViewBag.AddressList as List<SelectListItem>)
                     {
                     <govuk-select-item value="@item.Value">@item.Text</govuk-select-item>

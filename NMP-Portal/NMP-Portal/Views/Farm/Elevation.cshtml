@@ -7,7 +7,7 @@
     var NoneAbove300m = (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.NoneAbove300m;
 }
 
-<form asp-action="Organic" asp-controller="Farm" method="post">
+<form asp-controller="Farm" method="post">
     <button class="govuk-back-link back-link" type="submit" asp-action="NVZ" asp-controller="Farm">@Resource.lblBack</button>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
@@ -21,6 +21,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegistredOrganicProducer"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZField"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FullAddress"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManualAddress" value="@Model.IsManualAddress.ToString().ToLower()"></govuk-input>
             <govuk-radios asp-for="@Model.FieldsAbove300SeaLevel">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
@@ -31,7 +32,7 @@
                     <govuk-radios-item value="@NoneAbove300m">@Resource.lblNoneOfTheFieldsAreAbove300m</govuk-radios-item>
                 </govuk-radios-fieldset>
             </govuk-radios>
-            <govuk-button type="submit" class="margin-bottom-forty">
+            <govuk-button type="submit" class="margin-bottom-forty" asp-action="Organic">
                 @Resource.lblContinue
             </govuk-button>
             <p class="govuk-body cancel-link"><a asp-action="CreateFarmCancel" asp-controller="Farm">@Resource.lblCancel</a></p>

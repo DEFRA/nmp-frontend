@@ -151,6 +151,11 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Plan and record nutrient applications.
+        /// </summary>
+       
+        
+        /// <summary>
         ///   Looks up a localized string similar to Average annual rainfall.
         /// </summary>
         public static string lblAverageAnnualRainfall {
@@ -210,6 +215,15 @@ namespace NMP.Portal.Resources {
         public static string lblChange {
             get {
                 return ResourceManager.GetString("lblChange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change this postcode.
+        /// </summary>
+        public static string lblChangeThisPostcode {
+            get {
+                return ResourceManager.GetString("lblChangeThisPostcode", resourceCulture);
             }
         }
         
@@ -295,6 +309,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to enter the address manually.
+        /// </summary>
+        public static string lblEnterTheAddressManually {
+            get {
+                return ResourceManager.GetString("lblEnterTheAddressManually", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error:.
         /// </summary>
         public static string lblError {
@@ -309,6 +332,15 @@ namespace NMP.Portal.Resources {
         public static string lblErrorMsgForFarmName {
             get {
                 return ResourceManager.GetString("lblErrorMsgForFarmName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to false.
+        /// </summary>
+        public static string lblFalse {
+            get {
+                return ResourceManager.GetString("lblFalse", resourceCulture);
             }
         }
         
@@ -451,9 +483,21 @@ namespace NMP.Portal.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Manual Address.
         /// </summary>
-        public static string lblManualAddress {
-            get {
+        public static string lblManualAddress
+        {
+            get
+            {
                 return ResourceManager.GetString("lblManualAddress", resourceCulture);
+            }
+        }
+        
+        
+        /// <summary>
+        ///   Looks up a localized string similar to success.
+        /// </summary>
+        public static string lblMessage {
+            get {
+                return ResourceManager.GetString("lblMessage", resourceCulture);
             }
         }
         
@@ -526,6 +570,15 @@ namespace NMP.Portal.Resources {
         public static string lblOpenGovernmentLicence {
             get {
                 return ResourceManager.GetString("lblOpenGovernmentLicence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to or.
+        /// </summary>
+        public static string lblOr {
+            get {
+                return ResourceManager.GetString("lblOr", resourceCulture);
             }
         }
         
@@ -746,6 +799,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to We could not find any addresses for  {0}.
+        /// </summary>
+        public static string lblWeCouldNotFindAnyAddressesFor {
+            get {
+                return ResourceManager.GetString("lblWeCouldNotFindAnyAddressesFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the farm name?.
         /// </summary>
         public static string lblWhatIsTheFarmName {
@@ -863,6 +925,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter the average annual rainfall.
+        /// </summary>
+        public static string MsgEnterTheAverageAnnualRainfall {
+            get {
+                return ResourceManager.GetString("MsgEnterTheAverageAnnualRainfall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the farm name.
         /// </summary>
         public static string MsgEnterTheFarmName {
@@ -882,7 +953,49 @@ namespace NMP.Portal.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to Enter the valid annual rainfall.
+        ///   Looks up a localized string similar to Enter the farm name.
         /// </summary>
+        
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the farm postcode.
+        /// </summary>
+        public static string MsgFarmNameMinMaxValidation {
+            get
+            {
+                return ResourceManager.GetString("MsgFarmNameMinMaxValidation", resourceCulture);
+            }
+        }
+        
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The postcode entered is in the wrong format..
+        /// </summary>
+        public static string MsgPostcodeEnteredInWrongFomat {
+            get {
+                return ResourceManager.GetString("MsgPostcodeEnteredInWrongFomat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a valid postcode. Postcodes contain only letters and numbers and are between 6 and 8 characters long..
+        /// </summary>
+        public static string MsgPostcodeMinMaxValidation {
+            get {
+                return ResourceManager.GetString("MsgPostcodeMinMaxValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select an address.
+        ///   Looks up a localized string similar to Enter the valid annual rainfall.
+        /// </summary>
+        public static string MsgSelectAddress {
+            get
+            {
+                return ResourceManager.GetString("MsgSelectAddress", resourceCulture);
+            }
+        }
         public static string MsgEnterValidAnnualRainfall {
             get {
                 return ResourceManager.GetString("MsgEnterValidAnnualRainfall", resourceCulture);

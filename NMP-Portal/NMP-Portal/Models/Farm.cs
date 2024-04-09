@@ -7,6 +7,7 @@ namespace NMP.Portal.Models
     {
         public int Id { get; set; }
         //[Required(ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterTheFarmName))]
+        [StringLength(250,ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgFarmNameMinMaxValidation))]
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheFarmName))]
         public string? Name { get; set; }
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblSelectTheFarmAddress))]
@@ -24,9 +25,11 @@ namespace NMP.Portal.Models
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblCounty))]
         public string? Address4 { get; set; }
 
+        [StringLength(8, MinimumLength = 6 ,ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgPostcodeMinMaxValidation))]
+        [RegularExpression(@"^[A-Z]{1,2}\d{1,2}[A-Z]?\s*\d[A-Z]{2}$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgPostcodeEnteredInWrongFomat))]
         [Required(ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterTheFarmPostcode))]
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheFarmPostcode))]
-        public string PostCode { get; set; }
+        public string PostCode { get; set; }=string.Empty;
         public string? CPH { get; set; }
         public string? FarmerName { get; set; }
         public string? BusinessName { get; set; }
@@ -35,6 +38,7 @@ namespace NMP.Portal.Models
         public string? Telephone { get; set; }
         public string? Mobile { get; set; }
         public string? Email { get; set; }
+        [RegularExpression("^[0-9]+$",  ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterTheAverageAnnualRainfall))] 
         public int? Rainfall { get; set; }
         public decimal TotalFarmArea { get; set; } = 0;
         public int AverageAltitude { get; set; } = 0;

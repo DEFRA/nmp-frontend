@@ -373,6 +373,39 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="MsgEnterTheFarmPostcode" xml:space="preserve">
     <value>Enter the farm postcode</value>
   </data>
+  <data name="lblChangeThisPostcode" xml:space="preserve">
+    <value>Change this postcode</value>
+  </data>
+  <data name="lblEnterTheAddressManually" xml:space="preserve">
+    <value>enter the address manually</value>
+  </data>
+  <data name="lblMessage" xml:space="preserve">
+    <value>success</value>
+  </data>
+  <data name="lblOr" xml:space="preserve">
+    <value>or</value>
+  </data>
+  <data name="lblWeCouldNotFindAnyAddressesFor" xml:space="preserve">
+    <value>We could not find any addresses for  {0}</value>
+  </data>
+  <data name="MsgPostcodeEnteredInWrongFomat" xml:space="preserve">
+    <value>The postcode entered is in the wrong format.</value>
+  </data>
+  <data name="MsgPostcodeMinMaxValidation" xml:space="preserve">
+    <value>Enter a valid postcode. Postcodes contain only letters and numbers and are between 6 and 8 characters long.</value>
+  </data>
+  <data name="MsgSelectAddress" xml:space="preserve">
+    <value>Select an address</value>
+  </data>
+  <data name="lblFalse" xml:space="preserve">
+    <value>false</value>
+  </data>
+  <data name="MsgFarmNameMinMaxValidation" xml:space="preserve">
+    <value>Enter a farm name that is no more than 250 characters long</value>
+  </data>
+  <data name="MsgEnterTheAverageAnnualRainfall" xml:space="preserve">
+    <value>Enter the average annual rainfall</value>
+  </data>
   <data name="lblNo" xml:space="preserve">
     <value>No</value>
   </data>

@@ -8,10 +8,12 @@ using NMP.Portal.Enums;
 using NMP.Portal.Models;
 using NMP.Portal.Resources;
 using NMP.Portal.ViewModels;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace NMP.Portal.Controllers
 {
@@ -46,7 +48,7 @@ namespace NMP.Portal.Controllers
         public IActionResult CreateFarmCancel()
         {
             FarmsViewModel model = new FarmsViewModel();
-            return View("~/Views/Farm/FarmList.cshtml",model);
+            return View("~/Views/Farm/FarmList.cshtml", model);
         }
 
         [HttpGet]
@@ -70,24 +72,25 @@ namespace NMP.Portal.Controllers
 
 
         public async Task<IActionResult> Address(FarmViewModel farm)
-        {
+        {            
             if (string.IsNullOrWhiteSpace(farm.Name) && string.IsNullOrWhiteSpace(farm.PostCode))
             {
                 ModelState.AddModelError("Name", Resource.MsgEnterTheFarmName);
                 ModelState.AddModelError("PostCode", Resource.MsgEnterTheFarmPostcode);
-                return View("~/Views/Farm/Name.cshtml", farm);
             }
             if (string.IsNullOrWhiteSpace(farm.Name))
             {
                 ModelState.AddModelError("Name", Resource.MsgEnterTheFarmName);
-                return View("~/Views/Farm/Name.cshtml", farm);
             }
             if (string.IsNullOrWhiteSpace(farm.PostCode))
             {
                 ModelState.AddModelError("PostCode", Resource.MsgEnterTheFarmPostcode);
-                return View("~/Views/Farm/Name.cshtml", farm);
             }
 
+            if (!ModelState.IsValid)
+            {
+                return View("~/Views/Farm/Name.cshtml", farm);
+            }
 
             JArray addressList = await FetchAddressesFromAPI(farm.PostCode);
             List<string> addressLines = new List<string>();
@@ -100,8 +103,12 @@ namespace NMP.Portal.Controllers
             var itemList = new List<string>();
             if (addressList.Count > 0)
             {
-                string AddressListFirstOption = string.Format(Resource.lblAdddressFound, addressList.Count.ToString());
-                itemList.Add(AddressListFirstOption);
+                ViewBag.AddressCount = string.Format(Resource.lblAdddressFound, addressList.Count.ToString());
+            }
+            else
+            {
+                //return RedirectToAction("PostcodeError", "Farm", farm);
+                return View("~/Views/Farm/PostcodeError.cshtml", farm);
             }
             itemList.AddRange(addressLines);
 
@@ -112,18 +119,27 @@ namespace NMP.Portal.Controllers
 
                 ViewBag.AddressList = selectListItems;
             }
+            if (farm.IsManualAddress)
+            {
+                farm.IsManualAddress = false;
+            }
             return View(farm);
         }
 
+        
+        public IActionResult PostcodeError(FarmViewModel farm)
+        {
+            return View(farm);
+        }
 
-        //public IActionResult ManualAddress(string? farmName)
-        //{
-        //    FarmViewModel model = new FarmViewModel();
-        //    model.Name = farmName ?? string.Empty;
-        //    return View(model);
-        //}
-        //[HttpPost]
-        public IActionResult ManualAddress(FarmViewModel farm)
+        public IActionResult ManualAddress(string? farmName)
+        {
+            FarmViewModel model = new FarmViewModel();
+            model.Name = farmName ?? string.Empty;
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> ManualAddress(FarmViewModel farm)
         {
             if (!ModelState.IsValid)
             {
@@ -139,37 +155,81 @@ namespace NMP.Portal.Controllers
                     Address3 = farm.Address3,
                     Address4 = farm.Address4,
                     PostCode = farm.PostCode,
-                    FullAddress = farm.FullAddress,
-                    NVZField=farm.NVZField
+                    FullAddress = "",
+                    IsManualAddress = true,
+                    NVZField = farm.NVZField,
+                    FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
+                    RegistredOrganicProducer = farm.RegistredOrganicProducer,
+                    Rainfall = farm.Rainfall
+
                 };
                 return View(model);
             }
-
         }
-        public IActionResult Rainfall(FarmViewModel farm)
+
+        public async Task<IActionResult> Rainfall(FarmViewModel farm)
         {
             FarmsViewModel farmsViewModel = new FarmsViewModel();
             FarmViewModel model = new FarmViewModel();
 
+            if (string.IsNullOrWhiteSpace(farm.FullAddress) && (!farm.IsManualAddress))
+            {
+                ModelState.AddModelError("FullAddress", Resource.MsgSelectAddress);
+                JArray addressList = await FetchAddressesFromAPI(farm.PostCode);
+                List<string> addressLines = new List<string>();
+                foreach (JObject result in addressList)
+                {
+                    string addressLine = result["addressLine"].ToString();
+                    addressLines.Add(addressLine);
+                }
+
+                var itemList = new List<string>();
+                if (addressList.Count > 0)
+                {
+                    ViewBag.AddressCount = string.Format(Resource.lblAdddressFound, addressList.Count.ToString());
+                }
+                itemList.AddRange(addressLines);
+
+                if (itemList != null)
+                {
+                    // Convert each string item to SelectListItem
+                    var selectListItems = itemList.Select(item => new SelectListItem { Value = item, Text = item }).ToList();
+
+                    ViewBag.AddressList = selectListItems;
+                }
+                return View("~/Views/Farm/Address.cshtml", farm);
+            }
+            else if (!string.IsNullOrWhiteSpace(farm.FullAddress) && (!farm.IsManualAddress))
+            {
+                List<string> addressList = await GetHistoricCountyFromJson(farm.PostCode, farm.FullAddress);
+                if (addressList != null && addressList.Count > 3)
+                {
+                    farm.Address1 = addressList[0];
+                    farm.Address2 = addressList[1];
+                    farm.Address3 = addressList[2];
+                    farm.Address4 = addressList[3];
+                }
+                farm.IsManualAddress = false;
+                if (farm.Rainfall == null)
+                {
+                    farm.Rainfall = 600;//get rainfall default value from Api
+                }
+            }
             if (string.IsNullOrEmpty(farm.Address1))
             {
                 ModelState.AddModelError("Address1", Resource.MsgEnterAnAddress);
-                return View("~/Views/Farm/ManualAddress.cshtml", farm);
             }
             if (string.IsNullOrEmpty(farm.Address3))
             {
                 ModelState.AddModelError("Address3", Resource.MsgEnterATownOrCity);
-                return View("~/Views/Farm/ManualAddress.cshtml", farm);
             }
             if (string.IsNullOrEmpty(farm.Address4))
             {
                 ModelState.AddModelError("Address4", Resource.MsgEnterACounty);
-                return View("~/Views/Farm/ManualAddress.cshtml", farm);
             }
             if (string.IsNullOrEmpty(farm.PostCode))
             {
                 ModelState.AddModelError("PostCode", Resource.MsgEnterAPostcode);
-                return View("~/Views/Farm/ManualAddress.cshtml", farm);
             }
             if (!ModelState.IsValid)
             {
@@ -177,22 +237,31 @@ namespace NMP.Portal.Controllers
             }
             else
             {
-                ViewBag.IsUserHaveAnyFarms = farmsViewModel.Farms.Count > 0 ? true : false;
+                if (farm.IsManualAddress && farm.Rainfall == null) // from Manual Address screen
+                {
+                        farm.Rainfall = 600;  //get rainfall default value from Api
+                 
+                }
 
+                ViewBag.IsUserHaveAnyFarms = farmsViewModel.Farms.Count > 0 ? true : false;
                 model.Name = farm.Name;
                 model.PostCode = farm.PostCode;
                 model.Address1 = farm.Address1;
                 model.Address2 = farm.Address2;
                 model.Address3 = farm.Address3;
                 model.Address4 = farm.Address4;
-                model.FullAddress=farm.FullAddress;
+                model.FullAddress = farm.FullAddress;
+                model.IsManualAddress = farm.IsManualAddress;
+                model.Rainfall = farm.Rainfall;
                 model.NVZField = farm.NVZField;
+                model.RegistredOrganicProducer = farm.RegistredOrganicProducer;
+                model.FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel;
                 return View(model);
             }
 
         }
         public IActionResult RainfallManual(FarmViewModel farm)
-        {
+        {            
             if (!ModelState.IsValid)
             {
                 return View("~/Views/Farm/Rainfall.cshtml", farm);
@@ -208,9 +277,11 @@ namespace NMP.Portal.Controllers
                     Address3 = farm.Address3,
                     Address4 = farm.Address4,
                     FullAddress = farm.FullAddress,
-                    NVZField=farm.NVZField
-
-
+                    IsManualAddress = farm.IsManualAddress,
+                    Rainfall = farm.Rainfall,
+                    NVZField = farm.NVZField,
+                    RegistredOrganicProducer = farm.RegistredOrganicProducer,
+                    FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel
                 };
                 return View(model);
             }
@@ -220,13 +291,7 @@ namespace NMP.Portal.Controllers
             //we need to call api for rainfall on the basis of postcode
             if (farm.Rainfall == null)
             {
-                //ModelState.AddModelError("Rainfall", Resource.MsgEnterAverageAnnualRainfall);
-                // return View("~/Views/Farm/RainfallManual.cshtml", farm);
-            }
-            if (farm.Rainfall != null)
-            {   //check valid rainfall value
-                //ModelState.AddModelError("Rainfall", Resource.MsgEnterValidAnnualRainfall);
-                //return View("~/Views/Farm/RainfallManual.cshtml", farm);
+                ModelState.AddModelError("Rainfall", Resource.MsgEnterTheAverageAnnualRainfall);
             }
             if (!ModelState.IsValid)
             {
@@ -242,11 +307,12 @@ namespace NMP.Portal.Controllers
                     Address3 = farm.Address3,
                     Address4 = farm.Address4,
                     PostCode = farm.PostCode,
-                    FullAddress = farm.FullAddress,
                     Rainfall = farm.Rainfall,
+                    FullAddress = farm.FullAddress,
                     RegistredOrganicProducer = farm.RegistredOrganicProducer,
                     NVZField = farm.NVZField,
-                    FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel
+                    FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
+                    IsManualAddress = farm.IsManualAddress
 
 
                 };
@@ -259,7 +325,7 @@ namespace NMP.Portal.Controllers
             if (farm.NVZField == null)
             {
                 ModelState.AddModelError("NVZField", Resource.MsgSelectAnOptionBeforeContinuing);
-                return View("~/Views/Farm/NVZ.cshtml", farm);
+                //return View("~/Views/Farm/NVZ.cshtml", farm);
             }
 
             if (!ModelState.IsValid)
@@ -280,7 +346,8 @@ namespace NMP.Portal.Controllers
                     Rainfall = farm.Rainfall,
                     RegistredOrganicProducer = farm.RegistredOrganicProducer,
                     NVZField = farm.NVZField,
-                    FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel
+                    FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
+                    IsManualAddress = farm.IsManualAddress
 
 
                 };
@@ -349,15 +416,20 @@ namespace NMP.Portal.Controllers
             };
             return View(model);
         }
-        private async Task<string> GetHistoricCountyFromJson(string addressLine, string postcode)
+        private async Task<List<string>> GetHistoricCountyFromJson(string postcode, string addressLine)
         {
             JArray addressList = await FetchAddressesFromAPI(postcode);
             JObject matchingEntry = addressList.Children<JObject>().FirstOrDefault(x => (string)x["addressLine"] == addressLine);
 
             // If a matching entry is found, return its historicCounty
+            List<string> strings = new List<string>();
             if (matchingEntry != null)
             {
-                return (string)matchingEntry["historicCounty"];
+                strings.Add(string.Concat((string)matchingEntry["buildingNumber"], " ", (string)matchingEntry["street"]));
+                strings.Add((string)matchingEntry["locality"]);
+                strings.Add((string)matchingEntry["town"]);
+                strings.Add((string)matchingEntry["historicCounty"]);
+                return strings;
             }
             else
             {
@@ -391,10 +463,12 @@ namespace NMP.Portal.Controllers
                         if (!string.IsNullOrWhiteSpace(jsonString))
                         {
                             JObject jsonObj = JObject.Parse(jsonString);
-
-                            // Extract the "results" array
-                            addressList = (JArray)jsonObj["data"]["results"];
-
+                            string message = (string)jsonObj["message"];
+                            if (!string.IsNullOrWhiteSpace(message) && message == Resource.lblMessage)
+                            {
+                                // Extract the "results" array
+                                addressList = (JArray)jsonObj["data"]["results"];
+                            }
                         }
                     }
                     else
