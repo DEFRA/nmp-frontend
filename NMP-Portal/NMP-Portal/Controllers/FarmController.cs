@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json.Linq;
+using NMP.Portal.Enums;
 using NMP.Portal.Models;
 using NMP.Portal.Resources;
 using NMP.Portal.ViewModels;
@@ -29,7 +30,7 @@ namespace NMP.Portal.Controllers
             return View();
         }
 
-        
+
         public IActionResult FarmList()
         {
             FarmsViewModel model = new FarmsViewModel();
@@ -85,7 +86,7 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("PostCode", Resource.MsgEnterTheFarmPostcode);
                 return View("~/Views/Farm/Name.cshtml", farm);
-            }                        
+            }
 
 
             JArray addressList = await FetchAddressesFromAPI(farm.PostCode);
@@ -115,13 +116,13 @@ namespace NMP.Portal.Controllers
         }
 
 
-        public IActionResult ManualAddress(string? farmName)
-        {
-            FarmViewModel model = new FarmViewModel();
-            model.Name = farmName ?? string.Empty;
-            return View(model);
-        }
-        [HttpPost]
+        //public IActionResult ManualAddress(string? farmName)
+        //{
+        //    FarmViewModel model = new FarmViewModel();
+        //    model.Name = farmName ?? string.Empty;
+        //    return View(model);
+        //}
+        //[HttpPost]
         public IActionResult ManualAddress(FarmViewModel farm)
         {
             if (!ModelState.IsValid)
@@ -137,7 +138,9 @@ namespace NMP.Portal.Controllers
                     Address2 = farm.Address2,
                     Address3 = farm.Address3,
                     Address4 = farm.Address4,
-                    PostCode = farm.PostCode
+                    PostCode = farm.PostCode,
+                    FullAddress = farm.FullAddress,
+                    NVZField=farm.NVZField
                 };
                 return View(model);
             }
@@ -169,7 +172,7 @@ namespace NMP.Portal.Controllers
                 return View("~/Views/Farm/ManualAddress.cshtml", farm);
             }
             if (!ModelState.IsValid)
-            {               
+            {
                 return View("~/Views/Farm/ManualAddress.cshtml", farm);
             }
             else
@@ -182,6 +185,8 @@ namespace NMP.Portal.Controllers
                 model.Address2 = farm.Address2;
                 model.Address3 = farm.Address3;
                 model.Address4 = farm.Address4;
+                model.FullAddress=farm.FullAddress;
+                model.NVZField = farm.NVZField;
                 return View(model);
             }
 
@@ -201,19 +206,22 @@ namespace NMP.Portal.Controllers
                     Address1 = farm.Address1,
                     Address2 = farm.Address2,
                     Address3 = farm.Address3,
-                    Address4 = farm.Address4
+                    Address4 = farm.Address4,
+                    FullAddress = farm.FullAddress,
+                    NVZField=farm.NVZField
+
+
                 };
                 return View(model);
             }
         }
-        public IActionResult NVZ(FarmViewModel farm, bool isRainfalManual)
+        public IActionResult NVZ(FarmViewModel farm)
         {
-            ViewBag.IsManualRainfall=isRainfalManual;
             //we need to call api for rainfall on the basis of postcode
-            if (farm.Rainfall==null)
+            if (farm.Rainfall == null)
             {
                 //ModelState.AddModelError("Rainfall", Resource.MsgEnterAverageAnnualRainfall);
-               // return View("~/Views/Farm/RainfallManual.cshtml", farm);
+                // return View("~/Views/Farm/RainfallManual.cshtml", farm);
             }
             if (farm.Rainfall != null)
             {   //check valid rainfall value
@@ -234,16 +242,17 @@ namespace NMP.Portal.Controllers
                     Address3 = farm.Address3,
                     Address4 = farm.Address4,
                     PostCode = farm.PostCode,
-                    Rainfall= farm.Rainfall,
-                    RegistredOrganicProducer=farm.RegistredOrganicProducer,
-                    NVZField= farm.NVZField,
-                    FieldsAbove300SeaLevel= farm.FieldsAbove300SeaLevel
+                    FullAddress = farm.FullAddress,
+                    Rainfall = farm.Rainfall,
+                    RegistredOrganicProducer = farm.RegistredOrganicProducer,
+                    NVZField = farm.NVZField,
+                    FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel
 
 
                 };
                 return View(model);
             }
-            
+
         }
         public IActionResult Elevation(FarmViewModel farm)
         {
@@ -267,6 +276,7 @@ namespace NMP.Portal.Controllers
                     Address3 = farm.Address3,
                     Address4 = farm.Address4,
                     PostCode = farm.PostCode,
+                    FullAddress = farm.FullAddress,
                     Rainfall = farm.Rainfall,
                     RegistredOrganicProducer = farm.RegistredOrganicProducer,
                     NVZField = farm.NVZField,
@@ -276,10 +286,69 @@ namespace NMP.Portal.Controllers
                 };
                 return View(model);
             }
-           
-        }
-       
 
+        }
+        public IActionResult Organic(FarmViewModel farm)
+        {
+            if (farm.FieldsAbove300SeaLevel == null)
+            {
+                ModelState.AddModelError("FieldsAbove300SeaLevel", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View("~/Views/Farm/Elevation.cshtml", farm);
+            }
+            FarmViewModel model = new FarmViewModel
+            {
+                Name = farm.Name,
+                Address1 = farm.Address1,
+                Address2 = farm.Address2,
+                Address3 = farm.Address3,
+                Address4 = farm.Address4,
+                PostCode = farm.PostCode,
+                FullAddress = farm.FullAddress,
+                Rainfall = farm.Rainfall,
+                RegistredOrganicProducer = farm.RegistredOrganicProducer,
+                NVZField = farm.NVZField,
+                FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel
+
+
+            };
+            return View(model);
+        }
+        public IActionResult FarmCheck(FarmViewModel farm)
+        {
+            if (farm.RegistredOrganicProducer == null)
+            {
+                ModelState.AddModelError("RegistredOrganicProducer", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View("~/Views/Farm/Elevation.cshtml", farm);
+            }
+            if (string.IsNullOrWhiteSpace(farm.FullAddress))
+            {
+                farm.FullAddress = string.Format("{0},{1},{2},{3},{4}", farm.Address1, farm.Address2, farm.Address3, farm.Address4, farm.PostCode);
+            }
+            FarmViewModel model = new FarmViewModel
+            {
+                Name = farm.Name,
+                Address1 = farm.Address1,
+                Address2 = farm.Address2,
+                Address3 = farm.Address3,
+                Address4 = farm.Address4,
+                PostCode = farm.PostCode,
+                Rainfall = farm.Rainfall,
+                RegistredOrganicProducer = farm.RegistredOrganicProducer,
+                NVZField = farm.NVZField,
+                FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
+                FullAddress= farm.FullAddress
+
+            };
+            return View(model);
+        }
         private async Task<string> GetHistoricCountyFromJson(string addressLine, string postcode)
         {
             JArray addressList = await FetchAddressesFromAPI(postcode);
