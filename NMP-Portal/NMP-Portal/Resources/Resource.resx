@@ -406,4 +406,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="MsgEnterTheAverageAnnualRainfall" xml:space="preserve">
     <value>Enter the average annual rainfall</value>
   </data>
+  <data name="MsgEnterAddressLine1TypicallyTheBuildingAndSreet" xml:space="preserve">
+    <value>Enter address line 1, typically the building and street</value>
+  </data>
 </root>
