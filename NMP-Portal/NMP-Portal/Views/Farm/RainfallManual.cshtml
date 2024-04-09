@@ -23,6 +23,8 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegistredOrganicProducer"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZField"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FullAddress"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManualAddress" value="@Model.IsManualAddress.ToString().ToLower()"></govuk-input>
             <div class="govuk-form-group">
                  <div class="govuk-input__wrapper">
                 <govuk-input class="govuk-input--width-5" asp-for="@Model.Rainfall" type="text"></govuk-input>
@@ -32,10 +34,10 @@
             <div class="govuk-form-group">
                 <fieldset class="govuk-fieldset">
                     <br>
-                    <govuk-button type="submit" name="isRainfalManual" value="true">@Resource.lblContinue</govuk-button>
+                    <govuk-button type="submit">@Resource.lblContinue</govuk-button>
                 </fieldset>
             </div>
-            <p class="govuk-body cancel-link"><a asp-action="FarmList" asp-controller="Farm">@Resource.lblCancel</a></p>
+            <p class="govuk-body cancel-link"><a asp-action="CreateFarmCancel" asp-controller="Farm">@Resource.lblCancel</a></p>
 
         </div>
     </div>

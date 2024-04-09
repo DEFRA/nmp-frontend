@@ -5,7 +5,7 @@
     ViewData["Title"] = Resource.lblManualAddress;
 }
 
-<form asp-action="Rainfall" method="post" asp-controller="Farm">
+<form  method="post" asp-controller="Farm">
     <button class="govuk-back-link back-link" type="submit" asp-action="Address" asp-controller="Farm">@Resource.lblBack</button>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
@@ -20,6 +20,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZField"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FullAddress"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManualAddress" value="@Model.IsManualAddress.ToString().ToLower()"></govuk-input>
             <div class="govuk-form-group">
                 <govuk-input asp-for="@Model.Address1"></govuk-input>
             </div>
@@ -41,7 +42,7 @@
             </div>
 
             <div class="govuk-form-group">
-                <govuk-button type="submit">@Resource.lblContinue</govuk-button>
+                <govuk-button type="submit" asp-action="Rainfall">@Resource.lblContinue</govuk-button>
             </div>
         </div>
     </div>
