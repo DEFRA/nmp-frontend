@@ -6,13 +6,16 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NMP.Portal.Enums;
 using NMP.Portal.Models;
 using NMP.Portal.Resources;
 using NMP.Portal.ViewModels;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace NMP.Portal.Controllers
 {
@@ -58,7 +61,7 @@ namespace NMP.Portal.Controllers
             FarmsViewModel model = new FarmsViewModel();
             //need to fetch user farms 
             ViewBag.IsUserHaveAnyFarms = model.Farms.Count > 0 ? true : false;
-            return View();
+            return View(new FarmViewModel());
         }
 
         [HttpPost]
@@ -345,8 +348,79 @@ namespace NMP.Portal.Controllers
             }
 
         }
+        public IActionResult Organic(FarmViewModel farm)
+        {
+            if (farm.FieldsAbove300SeaLevel == null)
+            {
+                ModelState.AddModelError("FieldsAbove300SeaLevel", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View("~/Views/Farm/Elevation.cshtml", farm);
+            }
+            FarmViewModel model = new FarmViewModel
+            {
+                Name = farm.Name,
+                Address1 = farm.Address1,
+                Address2 = farm.Address2,
+                Address3 = farm.Address3,
+                Address4 = farm.Address4,
+                PostCode = farm.PostCode,
+                FullAddress = farm.FullAddress,
+                Rainfall = farm.Rainfall,
+                RegistredOrganicProducer = farm.RegistredOrganicProducer,
+                NVZField = farm.NVZField,
+                FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel
 
 
+            };
+            return View(model);
+        }
+        public IActionResult CheckAnswer(FarmViewModel farm)
+        {
+            if (farm.RegistredOrganicProducer == null)
+            {
+                ModelState.AddModelError("RegistredOrganicProducer", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View("~/Views/Farm/Elevation.cshtml", farm);
+            }
+            if (string.IsNullOrWhiteSpace(farm.FullAddress))
+            {
+                farm.FullAddress = string.Format("{0},{1},{2},{3},{4}", farm.Address1, farm.Address2, farm.Address3, farm.Address4, farm.PostCode);
+            }
+            if (!string.IsNullOrWhiteSpace(farm.OldPostcode))
+            {
+                if(farm.OldPostcode!= farm.PostCode)
+                {
+                    return RedirectToAction("Address",farm);
+                }
+            }
+            //    FarmViewModel model = new FarmViewModel
+            //    {
+            //        Name = farm.Name,
+            //        Address1 = farm.Address1,
+            //        Address2 = farm.Address2,
+            //        Address3 = farm.Address3,
+            //        Address4 = farm.Address4,
+            //        PostCode = farm.PostCode,
+            //        Rainfall = farm.Rainfall,
+            //        RegistredOrganicProducer = farm.RegistredOrganicProducer,
+            //        NVZField = farm.NVZField,
+            //        FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
+            //        FullAddress= farm.FullAddress,
+            //        OldPostcode=farm.PostCode,
+            //        IsCheckAnswer = true
+
+            //};
+
+            farm.OldPostcode = farm.PostCode;
+            farm.IsCheckAnswer= true;
+            return View(farm);
+        }
         private async Task<List<string>> GetHistoricCountyFromJson(string postcode, string addressLine)
         {
             JArray addressList = await FetchAddressesFromAPI(postcode);

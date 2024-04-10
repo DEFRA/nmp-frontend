@@ -223,7 +223,7 @@
     <value>Home Page</value>
   </data>
   <data name="lblHowManyFieldsInNVZ" xml:space="preserve">
-    <value>How many fields at
+    <value>How many fields at {0}
 are in a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
   <data name="lblIfYouhaveMoreThanOneHolding" xml:space="preserve">
@@ -405,6 +405,30 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
   <data name="MsgEnterTheAverageAnnualRainfall" xml:space="preserve">
     <value>Enter the average annual rainfall</value>
+  </data>
+  <data name="lblNo" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="lblYes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="lblOrganic" xml:space="preserve">
+    <value>Organic</value>
+  </data>
+  <data name="lblRegisteredOrganicProducer" xml:space="preserve">
+    <value>Are you a registered organic producer?</value>
+  </data>
+  <data name="lblCheckYourAnswers" xml:space="preserve">
+    <value>Check your answers</value>
+  </data>
+  <data name="lblFarmAddress" xml:space="preserve">
+    <value>Farm Address</value>
+  </data>
+  <data name="lblFarmCheck" xml:space="preserve">
+    <value>Check Answer</value>
+  </data>
+  <data name="lblAddThisFarm" xml:space="preserve">
+    <value>Add this farm</value>
   </data>
   <data name="MsgEnterAddressLine1TypicallyTheBuildingAndSreet" xml:space="preserve">
     <value>Enter address line 1, typically the building and street</value>

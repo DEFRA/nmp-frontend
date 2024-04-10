@@ -6,7 +6,7 @@
 }
 
 
-<form  method="post" asp-controller="Farm">
+<form method="post" asp-controller="Farm">
     <button class="govuk-back-link back-link" type="submit" asp-action="Name" asp-controller="Farm">@Resource.lblBack</button>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
@@ -21,6 +21,13 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel" value="@Model.FieldsAbove300SeaLevel"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegistredOrganicProducer" value="@Model.RegistredOrganicProducer"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManualAddress" value="@Model.IsManualAddress.ToString().ToLower()"></govuk-input>
+            @* <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsRainfalManual"></govuk-input> *@
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address3"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OldPostcode"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer"></govuk-input>
             <h1 class="govuk-heading-l">
                 @string.Format(Resource.lblSelectTheAddressFor, Model.Name)
             </h1>
@@ -32,7 +39,7 @@
                 </p>
 
 
-                <button class="govuk-link change-link" type="submit" asp-action="Name" asp-controller="Farm">@Resource.lblChange</button></p>
+                <button class="govuk-link change-link" type="submit" asp-action="Name" asp-controller="Farm">@Resource.lblChange</button>
             </div>
 
             <div class="govuk-form-group">
@@ -40,16 +47,16 @@
                     <govuk-select-item value="">@ViewBag.AddressCount</govuk-select-item>
                     @foreach (var item in ViewBag.AddressList as List<SelectListItem>)
                     {
-                        <govuk-select-item value="@item.Value">@item.Text</govuk-select-item>
+                    <govuk-select-item value="@item.Value">@item.Text</govuk-select-item>
                     }
                 </govuk-select>
             </div>
 
+            @*<p class="govuk-body margin-bottom-forty"><a class="govuk-link" asp-action="ManualAddress" asp-controller="Farm">@Resource.lblEnterAddressManually</a></p>*@
             <p class="govuk-body margin-bottom-forty">
                 <a class="govuk-link" asp-action="ManualAddress" asp-controller="Farm">@Resource.lblEnterAddressManually</a>
 @*                 <govuk-button-link class="govuk-link" asp-action="ManualAddress" asp-controller="Farm">@Resource.lblEnterAddressManually</govuk-button-link>
  *@            </p>
-
 
 
             <govuk-button type="submit" asp-action="Rainfall" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
