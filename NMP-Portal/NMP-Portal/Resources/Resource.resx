@@ -430,4 +430,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblAddThisFarm" xml:space="preserve">
     <value>Add this farm</value>
   </data>
+  <data name="MsgEnterAddressLine1TypicallyTheBuildingAndSreet" xml:space="preserve">
+    <value>Enter address line 1, typically the building and street</value>
+  </data>
 </root>

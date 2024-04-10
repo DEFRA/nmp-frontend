@@ -880,6 +880,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter address line 1, typically the building and street.
+        /// </summary>
+        public static string MsgEnterAddressLine1TypicallyTheBuildingAndSreet {
+            get {
+                return ResourceManager.GetString("MsgEnterAddressLine1TypicallyTheBuildingAndSreet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter an address.
         /// </summary>
         public static string MsgEnterAnAddress {

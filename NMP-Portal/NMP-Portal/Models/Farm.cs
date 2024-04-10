@@ -26,7 +26,7 @@ namespace NMP.Portal.Models
         public string? Address4 { get; set; }
 
         [StringLength(8, MinimumLength = 6 ,ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgPostcodeMinMaxValidation))]
-        [RegularExpression(@"^[A-Z]{1,2}\d{1,2}[A-Z]?\s*\d[A-Z]{2}$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgPostcodeEnteredInWrongFomat))]
+        [RegularExpression(@"^[A-Z]{1,2}\d{1,2}[A-Z]?\s*\d[A-Z]{2}$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgPostcodeMinMaxValidation))]
         [Required(ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterTheFarmPostcode))]
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheFarmPostcode))]
         public string PostCode { get; set; }=string.Empty;

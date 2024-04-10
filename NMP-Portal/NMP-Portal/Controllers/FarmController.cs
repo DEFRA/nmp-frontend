@@ -218,7 +218,7 @@ namespace NMP.Portal.Controllers
             }
             if (string.IsNullOrEmpty(farm.Address1))
             {
-                ModelState.AddModelError("Address1", Resource.MsgEnterAnAddress);
+                ModelState.AddModelError("Address1", Resource.MsgEnterAddressLine1TypicallyTheBuildingAndSreet);
             }
             if (string.IsNullOrEmpty(farm.Address3))
             {
