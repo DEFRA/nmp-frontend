@@ -57,7 +57,7 @@ namespace NMP.Portal.Controllers
             FarmsViewModel model = new FarmsViewModel();
             //need to fetch user farms 
             ViewBag.IsUserHaveAnyFarms = model.Farms.Count > 0 ? true : false;
-            return View();
+            return View(new FarmViewModel());
         }
 
         [HttpPost]
@@ -160,7 +160,8 @@ namespace NMP.Portal.Controllers
                     NVZField = farm.NVZField,
                     FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
                     RegistredOrganicProducer = farm.RegistredOrganicProducer,
-                    Rainfall = farm.Rainfall
+                    Rainfall = farm.Rainfall,
+                    IsCheckAnswer = farm.IsCheckAnswer
 
                 };
                 return View(model);
@@ -256,6 +257,7 @@ namespace NMP.Portal.Controllers
                 model.NVZField = farm.NVZField;
                 model.RegistredOrganicProducer = farm.RegistredOrganicProducer;
                 model.FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel;
+                model.IsCheckAnswer= farm.IsCheckAnswer;
                 return View(model);
             }
 
@@ -299,6 +301,11 @@ namespace NMP.Portal.Controllers
             }
             else
             {
+                if (farm.IsCheckAnswer)
+                {
+                    farm.OldPostcode = string.Empty;
+                   return RedirectToAction("CheckAnswer", farm);
+                }
                 FarmViewModel model = new FarmViewModel
                 {
                     Name = farm.Name,
@@ -384,7 +391,7 @@ namespace NMP.Portal.Controllers
             };
             return View(model);
         }
-        public IActionResult FarmCheck(FarmViewModel farm)
+        public IActionResult CheckAnswer(FarmViewModel farm)
         {
             if (farm.RegistredOrganicProducer == null)
             {
@@ -399,22 +406,34 @@ namespace NMP.Portal.Controllers
             {
                 farm.FullAddress = string.Format("{0},{1},{2},{3},{4}", farm.Address1, farm.Address2, farm.Address3, farm.Address4, farm.PostCode);
             }
-            FarmViewModel model = new FarmViewModel
+            if (!string.IsNullOrWhiteSpace(farm.OldPostcode))
             {
-                Name = farm.Name,
-                Address1 = farm.Address1,
-                Address2 = farm.Address2,
-                Address3 = farm.Address3,
-                Address4 = farm.Address4,
-                PostCode = farm.PostCode,
-                Rainfall = farm.Rainfall,
-                RegistredOrganicProducer = farm.RegistredOrganicProducer,
-                NVZField = farm.NVZField,
-                FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
-                FullAddress= farm.FullAddress
+                if(farm.OldPostcode!= farm.PostCode)
+                {
+                    return RedirectToAction("Address",farm);
+                }
+            }
+            //    FarmViewModel model = new FarmViewModel
+            //    {
+            //        Name = farm.Name,
+            //        Address1 = farm.Address1,
+            //        Address2 = farm.Address2,
+            //        Address3 = farm.Address3,
+            //        Address4 = farm.Address4,
+            //        PostCode = farm.PostCode,
+            //        Rainfall = farm.Rainfall,
+            //        RegistredOrganicProducer = farm.RegistredOrganicProducer,
+            //        NVZField = farm.NVZField,
+            //        FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
+            //        FullAddress= farm.FullAddress,
+            //        OldPostcode=farm.PostCode,
+            //        IsCheckAnswer = true
 
-            };
-            return View(model);
+            //};
+
+            farm.OldPostcode = farm.PostCode;
+            farm.IsCheckAnswer= true;
+            return View(farm);
         }
         private async Task<List<string>> GetHistoricCountyFromJson(string postcode, string addressLine)
         {

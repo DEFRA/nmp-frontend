@@ -7,7 +7,7 @@
 
 }
 
-<form asp-action="FarmCheck" asp-controller="Farm" method="post">
+<form asp-action="CheckAnswer" asp-controller="Farm" method="post">
     <button class="govuk-back-link back-link" type="submit" asp-action="Elevation" asp-controller="Farm">@Resource.lblBack</button>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
@@ -23,6 +23,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FullAddress"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZField"></govuk-input>
             @* <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsRainfalManual.ToString().ToLower()"></govuk-input> *@
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OldPostcode"></govuk-input>
 
             <govuk-radios class="govuk-radios--inline" asp-for="@Model.RegistredOrganicProducer">
             

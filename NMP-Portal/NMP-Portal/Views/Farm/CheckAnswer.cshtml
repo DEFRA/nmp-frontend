@@ -6,6 +6,7 @@
     var organicProducer = "";
     var fieldsAbove300m = "";
     var fieldsInNVZ = "";
+    
     switch (Model.NVZField)
     {
         case 0:
@@ -57,29 +58,20 @@
             <h1 class="govuk-heading-l">
                 @Resource.lblCheckYourAnswers
             </h1>
-
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OldPostcode" value="@Model.OldPostcode"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address3"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PostCode"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CPH"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmerName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.BusinessName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SBI"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.STD"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Telephone"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Mobile"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Email"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Rainfall"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalFarmArea"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AverageAltitude"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegistredOrganicProducer"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MetricUnits"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EnglishRules"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZField"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FullAddress"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer"></govuk-input>
+           
 
             <dl class="govuk-summary-list">
                 <div class="govuk-summary-list__row">
@@ -91,7 +83,6 @@
                     </dd>
                     <dd class="govuk-summary-list__actions">
                            <button class="govuk-link change-link" type="submit" asp-action="Name" asp-controller="Farm">@Resource.lblChange</button>
-                        @* <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"> name</span></a> *@
                     </dd>
                 </div>
                 <div class="govuk-summary-list__row">
@@ -103,7 +94,6 @@
                     </dd>
                     <dd class="govuk-summary-list__actions">
                         <button class="govuk-link change-link" type="submit" asp-action="Address" asp-controller="Farm">@Resource.lblChange</button>
-                        @* <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"> date of birth</span></a> *@
                     </dd>
                 </div>
                 <div class="govuk-summary-list__row">
@@ -115,7 +105,6 @@
                     </dd>
                     <dd class="govuk-summary-list__actions">
                         <button class="govuk-link change-link" type="submit" asp-action="Rainfall" asp-controller="Farm">@Resource.lblChange</button>
-                        @* <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"> address</span></a> *@
                     </dd>
                 </div>
                 <div class="govuk-summary-list__row">
