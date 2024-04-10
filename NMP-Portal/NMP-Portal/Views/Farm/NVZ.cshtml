@@ -5,11 +5,15 @@
     var AllFieldsInNVZ = (int)NMP.Portal.Enums.NVZFields.AllFieldsInNVZ;
     var SomeFieldsInNVZ = (int)NMP.Portal.Enums.NVZFields.SomeFieldsInNVZ;
     var NoFieldsInNVZ = (int)NMP.Portal.Enums.NVZFields.NoFieldsInNVZ;
+    // if (Model.IsRainfalManual != null)
+    // {
+    //     backAction = Model.IsRainfalManual == true ? "RainfallManual" : "Rainfall";
+    // }
     
     
 }
 
-<form    asp-controller="Farm" method="post">
+<form asp-action="Elevation" asp-controller="Farm" method="post">
     <button class="govuk-back-link back-link" type="submit" asp-action="Rainfall" asp-controller="Farm">@Resource.lblBack</button>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
@@ -25,10 +29,11 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FullAddress"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManualAddress" value="@Model.IsManualAddress.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OldPostcode"></govuk-input>
             <govuk-radios asp-for="@Model.NVZField">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @Resource.lblHowManyFieldsInNVZ
+                         @string.Format(Resource.lblHowManyFieldsInNVZ,Model.Name)
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-item value="@AllFieldsInNVZ">@Resource.lblAllTheFieldsAreInAnNVZ</govuk-radios-item>
                     <govuk-radios-item value="@SomeFieldsInNVZ">@Resource.lblSomeOfTheFieldsAreInAnNVZ</govuk-radios-item>
