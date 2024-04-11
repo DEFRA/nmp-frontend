@@ -7,7 +7,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="ManualAddress" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@backAction asp-controller="Farm">@Resource.lblBack</govuk-back-link>
 }
 <form asp-controller="Farm" method="post">
    @Html.AntiForgeryToken()
