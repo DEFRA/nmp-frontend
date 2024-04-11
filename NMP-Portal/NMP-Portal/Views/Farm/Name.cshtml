@@ -13,7 +13,7 @@
         <p class="govuk-body">@Resource.lblIfYouhaveMoreThanOneHolding</p>
 
         <form asp-action="Name" method="post" asp-controller="Farm">
-            @Html.AntiForgeryToken();
+            @Html.AntiForgeryToken()
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address3"></govuk-input>
