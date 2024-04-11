@@ -7,8 +7,11 @@
 
 }
 
-<form asp-action="CheckAnswer" asp-controller="Farm" method="post">
-    <button class="govuk-back-link back-link" type="submit" asp-action="Elevation" asp-controller="Farm">@Resource.lblBack</button>
+@section BeforeContent {
+    <govuk-back-link asp-action="Elevation" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+}
+<form asp-action="Organic" asp-controller="Farm" method="post">
+    @Html.AntiForgeryToken()
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
@@ -21,7 +24,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Rainfall"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FullAddress"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZField"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZField"></govuk-input> 
             @* <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsRainfalManual.ToString().ToLower()"></govuk-input> *@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OldPostcode"></govuk-input>
 

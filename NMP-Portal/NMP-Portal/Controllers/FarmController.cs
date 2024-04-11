@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -10,8 +11,10 @@ using NMP.Portal.Models;
 using NMP.Portal.Resources;
 using NMP.Portal.ViewModels;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -24,12 +27,11 @@ namespace NMP.Portal.Controllers
         private readonly ILogger<FarmController> _logger;
         private readonly IDataProtector _dataProtector;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public FarmController(ILogger<FarmController> logger, IDataProtectionProvider dataProtectionProvider,
-            IHttpContextAccessor contextAccessor)
+        public FarmController(ILogger<FarmController> logger, IDataProtectionProvider dataProtectionProvider, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _dataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
-            _httpContextAccessor = contextAccessor;
+            _httpContextAccessor = httpContextAccessor;
         }
         public IActionResult Index()
         {
@@ -69,6 +71,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Name(FarmViewModel farm)
         {
             if (string.IsNullOrWhiteSpace(farm.Name))
@@ -84,11 +87,10 @@ namespace NMP.Portal.Controllers
             {
                 return View(farm);
             }
-            else
-            {
-                var farmModel = JsonConvert.SerializeObject(farm);
-                _httpContextAccessor.HttpContext?.Session.SetString("FarmData", farmModel);
-            }
+
+            var farmModel = JsonConvert.SerializeObject(farm);
+            _httpContextAccessor.HttpContext?.Session.SetString("FarmData", farmModel);
+
             return RedirectToAction("Address");
         }
         [HttpGet]
@@ -136,6 +138,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Address(FarmViewModel farm)
         {
             if (string.IsNullOrWhiteSpace(farm.FullAddress))
@@ -157,18 +160,17 @@ namespace NMP.Portal.Controllers
 
                 return View(farm);
             }
-            else
-            {
-                farm.IsManualAddress = false;
-                if (farm.Rainfall == null)
-                {
-                    farm.Rainfall = 600;
-                }
-                var farmData = JsonConvert.SerializeObject(farm);
-                _httpContextAccessor.HttpContext?.Session.SetString("FarmData", farmData);
 
+            farm.IsManualAddress = false;
+            if (farm.Rainfall == null)
+            {
+                farm.Rainfall = 600;
             }
-            return View("Rainfall");
+            var farmData = JsonConvert.SerializeObject(farm);
+            _httpContextAccessor.HttpContext?.Session.SetString("FarmData", farmData);
+
+
+            return RedirectToAction("Rainfall");
         }
 
 
@@ -192,47 +194,54 @@ namespace NMP.Portal.Controllers
             }
             return View(model);
         }
+
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ManualAddress(FarmViewModel farm)
         {
+            if (string.IsNullOrEmpty(farm.Address1))
+            {
+                ModelState.AddModelError("Address1", Resource.MsgEnterAddressLine1TypicallyTheBuildingAndSreet);
+            }
+            if (string.IsNullOrEmpty(farm.Address3))
+            {
+                ModelState.AddModelError("Address3", Resource.MsgEnterATownOrCity);
+            }
+            if (string.IsNullOrEmpty(farm.Address4))
+            {
+                ModelState.AddModelError("Address4", Resource.MsgEnterACounty);
+            }
+            if (string.IsNullOrEmpty(farm.PostCode))
+            {
+                ModelState.AddModelError("PostCode", Resource.MsgEnterAPostcode);
+            }
             if (!ModelState.IsValid)
             {
-                return View("~/Views/Farm/Address.cshtml", farm);
+                return View("~/Views/Farm/ManualAddress.cshtml", farm);
             }
-            else
-            {
-                FarmViewModel model = new FarmViewModel
-                {
-                    Name = farm.Name,
-                    Address1 = farm.Address1,
-                    Address2 = farm.Address2,
-                    Address3 = farm.Address3,
-                    Address4 = farm.Address4,
-                    PostCode = farm.PostCode,
-                    FullAddress = "",
-                    IsManualAddress = true,
-                    NVZField = farm.NVZField,
-                    FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
-                    RegistredOrganicProducer = farm.RegistredOrganicProducer,
-                    Rainfall = farm.Rainfall,
-                    IsCheckAnswer = farm.IsCheckAnswer
 
-                };
-                return View(model);
-            }
+            farm.FullAddress = "";
+            farm.IsManualAddress = true;
+
+            var farmModel = JsonConvert.SerializeObject(farm);
+            _httpContextAccessor.HttpContext?.Session.SetString("FarmData", farmModel);
+
+            return RedirectToAction("Rainfall");
         }
-
         [HttpGet]
-        public IActionResult Rainfall()
+        public async Task<IActionResult> Rainfall()
         {
-            FarmViewModel model = null;
-            if (_httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+            FarmViewModel model = new FarmViewModel();
+            if (_httpContextAccessor.HttpContext.Session.GetString("FarmData") != null)
             {
-                model = JsonConvert.DeserializeObject<FarmViewModel>(_httpContextAccessor.HttpContext?.Session.GetString("FarmData"));
+                model = (JsonConvert.DeserializeObject<FarmViewModel>(_httpContextAccessor.HttpContext?.Session.GetString("FarmData")));
             }
             return View(model);
+
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Rainfall(FarmViewModel farm)
         {
             FarmsViewModel farmsViewModel = new FarmsViewModel();
@@ -254,80 +263,35 @@ namespace NMP.Portal.Controllers
                     farm.Rainfall = 600;//get rainfall default value from Api
                 }
             }
-            if (string.IsNullOrEmpty(farm.Address1))
-            {
-                ModelState.AddModelError("Address1", Resource.MsgEnterAddressLine1TypicallyTheBuildingAndSreet);
-            }
-            if (string.IsNullOrEmpty(farm.Address3))
-            {
-                ModelState.AddModelError("Address3", Resource.MsgEnterATownOrCity);
-            }
-            if (string.IsNullOrEmpty(farm.Address4))
-            {
-                ModelState.AddModelError("Address4", Resource.MsgEnterACounty);
-            }
-            if (string.IsNullOrEmpty(farm.PostCode))
-            {
-                ModelState.AddModelError("PostCode", Resource.MsgEnterAPostcode);
-            }
-            if (!ModelState.IsValid)
-            {
-                return View("~/Views/Farm/ManualAddress.cshtml", farm);
-            }
-            else
-            {
-                if (farm.IsManualAddress && farm.Rainfall == null) // from Manual Address screen
-                {
-                    farm.Rainfall = 600;  //get rainfall default value from Api
 
-                }
+            if (farm.IsManualAddress && farm.Rainfall == null) // from Manual Address screen
+            {
+                farm.Rainfall = 600;  //get rainfall default value from Api
 
-                ViewBag.IsUserHaveAnyFarms = farmsViewModel.Farms.Count > 0 ? true : false;
-                model.Name = farm.Name;
-                model.PostCode = farm.PostCode;
-                model.Address1 = farm.Address1;
-                model.Address2 = farm.Address2;
-                model.Address3 = farm.Address3;
-                model.Address4 = farm.Address4;
-                model.FullAddress = farm.FullAddress;
-                model.IsManualAddress = farm.IsManualAddress;
-                model.Rainfall = farm.Rainfall;
-                model.NVZField = farm.NVZField;
-                model.RegistredOrganicProducer = farm.RegistredOrganicProducer;
-                model.FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel;
-                model.IsCheckAnswer = farm.IsCheckAnswer;
-                return View(model);
             }
+
+            ViewBag.IsUserHaveAnyFarms = farmsViewModel.Farms.Count > 0 ? true : false;
+
+            var farmModel = JsonConvert.SerializeObject(farm);
+            _httpContextAccessor.HttpContext?.Session.SetString("FarmData", farmModel);
+            return RedirectToAction("NVZ");
+        }
+        [HttpGet]
+        public async Task<IActionResult> RainfallManual()
+        {
+            FarmViewModel model = new FarmViewModel();
+            if (_httpContextAccessor.HttpContext.Session.GetString("FarmData") != null)
+            {
+                model = (JsonConvert.DeserializeObject<FarmViewModel>(_httpContextAccessor.HttpContext?.Session.GetString("FarmData")));
+            }
+            return View(model);
 
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult RainfallManual(FarmViewModel farm)
         {
-            if (!ModelState.IsValid)
-            {
-                return View("~/Views/Farm/Rainfall.cshtml", farm);
-            }
-            else
-            {
-                FarmViewModel model = new FarmViewModel
-                {
-                    Name = farm.Name,
-                    PostCode = farm.PostCode,
-                    Address1 = farm.Address1,
-                    Address2 = farm.Address2,
-                    Address3 = farm.Address3,
-                    Address4 = farm.Address4,
-                    FullAddress = farm.FullAddress,
-                    IsManualAddress = farm.IsManualAddress,
-                    Rainfall = farm.Rainfall,
-                    NVZField = farm.NVZField,
-                    RegistredOrganicProducer = farm.RegistredOrganicProducer,
-                    FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel
-                };
-                return View(model);
-            }
-        }
-        public IActionResult NVZ(FarmViewModel farm)
-        {
+
             //we need to call api for rainfall on the basis of postcode
             if (farm.Rainfall == null)
             {
@@ -335,72 +299,58 @@ namespace NMP.Portal.Controllers
             }
             if (!ModelState.IsValid)
             {
-                return View("~/Views/Farm/RainfallManual.cshtml", farm);
+                return View("RainfallManual", farm);
             }
-            else
+
+            var farmModel = JsonConvert.SerializeObject(farm);
+            _httpContextAccessor.HttpContext?.Session.SetString("FarmData", farmModel);
+
+            return RedirectToAction("NVZ");
+        }
+        [HttpGet]
+        public async Task<IActionResult> NVZ()
+        {
+            FarmViewModel model = new FarmViewModel();
+            if (_httpContextAccessor.HttpContext.Session.GetString("FarmData") != null)
             {
-                if (farm.IsCheckAnswer)
-                {
-                    farm.OldPostcode = string.Empty;
-                    return RedirectToAction("CheckAnswer", farm);
-                }
-                FarmViewModel model = new FarmViewModel
-                {
-                    Name = farm.Name,
-                    Address1 = farm.Address1,
-                    Address2 = farm.Address2,
-                    Address3 = farm.Address3,
-                    Address4 = farm.Address4,
-                    PostCode = farm.PostCode,
-                    Rainfall = farm.Rainfall,
-                    FullAddress = farm.FullAddress,
-                    RegistredOrganicProducer = farm.RegistredOrganicProducer,
-                    NVZField = farm.NVZField,
-                    FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
-                    IsManualAddress = farm.IsManualAddress
-
-
-                };
-                return View(model);
+                model = (JsonConvert.DeserializeObject<FarmViewModel>(_httpContextAccessor.HttpContext?.Session.GetString("FarmData")));
             }
+            return View(model);
 
         }
-        public IActionResult Elevation(FarmViewModel farm)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult NVZ(FarmViewModel farm)
         {
             if (farm.NVZField == null)
             {
                 ModelState.AddModelError("NVZField", Resource.MsgSelectAnOptionBeforeContinuing);
                 //return View("~/Views/Farm/NVZ.cshtml", farm);
             }
-
             if (!ModelState.IsValid)
             {
-                return View("~/Views/Farm/NVZ.cshtml", farm);
+                return View("NVZ", farm);
             }
-            else
-            {
-                FarmViewModel model = new FarmViewModel
-                {
-                    Name = farm.Name,
-                    Address1 = farm.Address1,
-                    Address2 = farm.Address2,
-                    Address3 = farm.Address3,
-                    Address4 = farm.Address4,
-                    PostCode = farm.PostCode,
-                    FullAddress = farm.FullAddress,
-                    Rainfall = farm.Rainfall,
-                    RegistredOrganicProducer = farm.RegistredOrganicProducer,
-                    NVZField = farm.NVZField,
-                    FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
-                    IsManualAddress = farm.IsManualAddress
 
-
-                };
-                return View(model);
-            }
+            var farmModel = JsonConvert.SerializeObject(farm);
+            _httpContextAccessor.HttpContext?.Session.SetString("FarmData", farmModel);
+            return RedirectToAction("Elevation");
 
         }
-        public IActionResult Organic(FarmViewModel farm)
+        [HttpGet]
+        public async Task<IActionResult> Elevation()
+        {
+            FarmViewModel model = new FarmViewModel();
+            if (_httpContextAccessor.HttpContext.Session.GetString("FarmData") != null)
+            {
+                model = (JsonConvert.DeserializeObject<FarmViewModel>(_httpContextAccessor.HttpContext?.Session.GetString("FarmData")));
+            }
+            return View(model);
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Elevation(FarmViewModel farm)
         {
             if (farm.FieldsAbove300SeaLevel == null)
             {
@@ -409,37 +359,39 @@ namespace NMP.Portal.Controllers
 
             if (!ModelState.IsValid)
             {
-                return View("~/Views/Farm/Elevation.cshtml", farm);
+                return View("Elevation", farm);
             }
-            FarmViewModel model = new FarmViewModel
-            {
-                Name = farm.Name,
-                Address1 = farm.Address1,
-                Address2 = farm.Address2,
-                Address3 = farm.Address3,
-                Address4 = farm.Address4,
-                PostCode = farm.PostCode,
-                FullAddress = farm.FullAddress,
-                Rainfall = farm.Rainfall,
-                RegistredOrganicProducer = farm.RegistredOrganicProducer,
-                NVZField = farm.NVZField,
-                FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel
+
+            var farmModel = JsonConvert.SerializeObject(farm);
+            _httpContextAccessor.HttpContext?.Session.SetString("FarmData", farmModel);
+            return RedirectToAction("Organic");
 
 
-            };
-            return View(model);
         }
-        public IActionResult CheckAnswer(FarmViewModel farm)
+        [HttpGet]
+        public async Task<IActionResult> Organic()
+        {
+            FarmViewModel model = new FarmViewModel();
+            if (_httpContextAccessor.HttpContext.Session.GetString("FarmData") != null)
+            {
+                model = (JsonConvert.DeserializeObject<FarmViewModel>(_httpContextAccessor.HttpContext?.Session.GetString("FarmData")));
+            }
+            return View(model);
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Organic(FarmViewModel farm)
         {
             if (farm.RegistredOrganicProducer == null)
             {
                 ModelState.AddModelError("RegistredOrganicProducer", Resource.MsgSelectAnOptionBeforeContinuing);
             }
-
             if (!ModelState.IsValid)
             {
-                return View("~/Views/Farm/Elevation.cshtml", farm);
+                return View("Organic", farm);
             }
+
             if (string.IsNullOrWhiteSpace(farm.FullAddress))
             {
                 farm.FullAddress = string.Format("{0},{1},{2},{3},{4}", farm.Address1, farm.Address2, farm.Address3, farm.Address4, farm.PostCode);
@@ -451,27 +403,29 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("Address", farm);
                 }
             }
-            //    FarmViewModel model = new FarmViewModel
-            //    {
-            //        Name = farm.Name,
-            //        Address1 = farm.Address1,
-            //        Address2 = farm.Address2,
-            //        Address3 = farm.Address3,
-            //        Address4 = farm.Address4,
-            //        PostCode = farm.PostCode,
-            //        Rainfall = farm.Rainfall,
-            //        RegistredOrganicProducer = farm.RegistredOrganicProducer,
-            //        NVZField = farm.NVZField,
-            //        FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
-            //        FullAddress= farm.FullAddress,
-            //        OldPostcode=farm.PostCode,
-            //        IsCheckAnswer = true
-
-            //};
-
             farm.OldPostcode = farm.PostCode;
             farm.IsCheckAnswer = true;
-            return View(farm);
+
+            var farmModel = JsonConvert.SerializeObject(farm);
+            _httpContextAccessor.HttpContext?.Session.SetString("FarmData", farmModel);
+            return RedirectToAction("CheckAnswer");
+        }
+        [HttpGet]
+        public async Task<IActionResult> CheckAnswer()
+        {
+            FarmViewModel model = new FarmViewModel();
+            if (_httpContextAccessor.HttpContext.Session.GetString("FarmData") != null)
+            {
+                model = (JsonConvert.DeserializeObject<FarmViewModel>(_httpContextAccessor.HttpContext?.Session.GetString("FarmData")));
+            }
+            return View(model);
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CheckAnswer(FarmViewModel farm)
+        {
+            return RedirectToAction("CheckAnswer", farm);
         }
         private async Task<List<string>> GetHistoricCountyFromJson(string postcode, string addressLine)
         {

@@ -9,33 +9,28 @@
     
     switch (Model.NVZField)
     {
-        case 0:
+        case (int)NMP.Portal.Enums.NVZFields.NoFieldsInNVZ:
             fieldsInNVZ = Resource.lblNoneOfTheFieldsAreInAnNVZ;
             break;
-        case 1:
-            fieldsInNVZ = Resource.lblAllTheFieldsAreInAnNVZ;
-            break;
-        case 2:
+        case (int)NMP.Portal.Enums.NVZFields.SomeFieldsInNVZ:
             fieldsInNVZ = Resource.lblSomeOfTheFieldsAreInAnNVZ;
             break;
-        default:
-            fieldsInNVZ = Resource.lblNoneOfTheFieldsAreInAnNVZ;
+        case (int)NMP.Portal.Enums.NVZFields.AllFieldsInNVZ:
+            fieldsInNVZ = Resource.lblAllTheFieldsAreInAnNVZ;
             break;
     }
     switch (Model.FieldsAbove300SeaLevel)
     {
-        case 0:
+        case (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.NoneAbove300m:
             fieldsAbove300m = Resource.lblNoneOfTheFieldsAreAbove300m;
             break;
-        case 1:
+        case (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.SomeFieldsAbove300m:
             fieldsAbove300m = Resource.lblSomeOfTheFieldsAreAbove300m;
             break;
-        case 2:
+        case (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m:
             fieldsAbove300m = Resource.lblAllTheFieldsAreAbove300m;
             break;
-        default:
-            fieldsAbove300m = Resource.lblNoneOfTheFieldsAreAbove300m;
-            break;
+        
     }
     switch (Model.RegistredOrganicProducer)
     {
@@ -50,11 +45,14 @@
             break;
     }
 }
-
-<form asp-controller="Farm" method="post">
+@section BeforeContent {
+    <govuk-back-link asp-action="Organic" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+}
+<form asp-action="CheckAnswer" asp-controller="Farm" method="post">
+    @Html.AntiForgeryToken()
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds-from-desktop">
-            <button class="govuk-back-link back-link" type="submit" asp-action="Organic" asp-controller="Farm">@Resource.lblBack</button>
+            @* <button class="govuk-back-link back-link" type="submit" asp-action="Organic" asp-controller="Farm">@Resource.lblBack</button> *@
             <h1 class="govuk-heading-l">
                 @Resource.lblCheckYourAnswers
             </h1>
@@ -73,74 +71,75 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer"></govuk-input>
            
 
-            <dl class="govuk-summary-list">
-                <div class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key">
+            <govuk-summary-list>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
                         @Resource.lblFarmName
-                    </dt>
-                    <dd class="govuk-summary-list__value">
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
                         @Model.Name
-                    </dd>
-                    <dd class="govuk-summary-list__actions">
-                           <button class="govuk-link change-link" type="submit" asp-action="Name" asp-controller="Farm">@Resource.lblChange</button>
-                    </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key">
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="Name" asp-controller="Farm">@Resource.lblChange</govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
                         @Resource.lblFarmAddress
-                    </dt>
-                    <dd class="govuk-summary-list__value">
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
                         @Model.FullAddress
-                    </dd>
-                    <dd class="govuk-summary-list__actions">
-                        <button class="govuk-link change-link" type="submit" asp-action="Address" asp-controller="Farm">@Resource.lblChange</button>
-                    </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key">
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="Address" asp-controller="Farm" asp-route-farm="@Model">@Resource.lblChange</govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
                         @Resource.lblAverageAnnualRainfall
-                    </dt>
-                    <dd class="govuk-summary-list__value">
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
                         @Model.Rainfall
-                    </dd>
-                    <dd class="govuk-summary-list__actions">
-                        <button class="govuk-link change-link" type="submit" asp-action="Rainfall" asp-controller="Farm">@Resource.lblChange</button>
-                    </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key">
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="Rainfall" asp-controller="Farm">@Resource.lblChange</govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
                         @string.Format(Resource.lblHowManyFieldsInNVZ, Model.Name)
-                    </dt>
-                    <dd class="govuk-summary-list__value">
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
                         @fieldsInNVZ
-                    </dd>
-                    <dd class="govuk-summary-list__actions">
-                        <button class="govuk-link change-link" type="submit" asp-action="NVZ" asp-controller="Farm">@Resource.lblChange</button>
-                    </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key">
+                    </govuk-summary-list-row-value>
+
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="NVZ" asp-controller="Farm">@Resource.lblChange</govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
                         @string.Format(Resource.lblFieldsAbove300SeaLevel, Model.Name)
-                    </dt>
-                    <dd class="govuk-summary-list__value">
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
                         @fieldsAbove300m
-                    </dd>
-                    <dd class="govuk-summary-list__actions">
-                        <button class="govuk-link change-link" type="submit" asp-action="Elevation" asp-controller="Farm">@Resource.lblChange</button>
-                    </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key">
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="Elevation" asp-controller="Farm">@Resource.lblChange</govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
                         @Resource.lblRegisteredOrganicProducer
-                    </dt>
-                    <dd class="govuk-summary-list__value">
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
                         @organicProducer
-                    </dd>
-                    <dd class="govuk-summary-list__actions">
-                        <button class="govuk-link change-link" type="submit" asp-action="Organic" asp-controller="Farm">@Resource.lblChange</button>
-                    </dd>
-                </div>
-            </dl>
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="Organic" asp-controller="Farm">@Resource.lblChange</govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+            </govuk-summary-list>
             
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblAddThisFarm

@@ -11,20 +11,9 @@
 
 
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">        
-        <h1 class="govuk-heading-l">
-            @string.Format(Resource.lblSelectTheAddressFor, Model.Name)
-        </h1>
-
-        <div class="text-group">
-            <h3 class="govuk-heading-s">@Resource.lblPostCode</h3>
-            <p class="govuk-body">
-                @Model.PostCode
-            </p>
-            <p class="govuk-body"><a class="govuk-link change-link" asp-action="Name" asp-controller="Farm">@Resource.lblChange</a>
-            </p>
-        </div>
-        <form asp-action="Rainfall" method="post" asp-controller="Farm">
+    <div class="govuk-grid-column-two-thirds">
+        <form asp-action="Address" method="post" asp-controller="Farm">
+            @Html.AntiForgeryToken()
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
@@ -36,6 +25,19 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManualAddress" value="@Model.IsManualAddress.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZField"></govuk-input>
+            <h1 class="govuk-heading-l">
+                @string.Format(Resource.lblSelectTheAddressFor, Model.Name)
+            </h1>
+
+            <div class="text-group">
+                <h3 class="govuk-heading-s">@Resource.lblPostCode</h3>
+                <p class="govuk-body">
+                    @Model.PostCode
+                </p>
+                <p class="govuk-body">
+                    <a class="govuk-link change-link" asp-action="Name" asp-controller="Farm">@Resource.lblChange</a>
+                </p>
+            </div>
             <div class="govuk-form-group">
                 <govuk-select class="govuk-!-width-full" id="FullAddress" name="FullAddress" asp-for="FullAddress">
                     <govuk-select-item value="">@ViewBag.AddressCount</govuk-select-item>
