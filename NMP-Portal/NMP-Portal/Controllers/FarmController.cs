@@ -162,10 +162,8 @@ namespace NMP.Portal.Controllers
             }
 
             farm.IsManualAddress = false;
-            if (farm.Rainfall == null)
-            {
-                farm.Rainfall = 600;
-            }
+            farm.Rainfall = farm.Rainfall ?? 600;
+
             var farmData = JsonConvert.SerializeObject(farm);
             _httpContextAccessor.HttpContext?.Session.SetString("FarmData", farmData);
 
@@ -222,7 +220,7 @@ namespace NMP.Portal.Controllers
 
             farm.FullAddress = "";
             farm.IsManualAddress = true;
-
+            farm.Rainfall = farm.Rainfall ?? 600;
             var farmModel = JsonConvert.SerializeObject(farm);
             _httpContextAccessor.HttpContext?.Session.SetString("FarmData", farmModel);
 
@@ -246,31 +244,6 @@ namespace NMP.Portal.Controllers
         {
             FarmsViewModel farmsViewModel = new FarmsViewModel();
             FarmViewModel model = new FarmViewModel();
-
-            if (!string.IsNullOrWhiteSpace(farm.FullAddress) && (!farm.IsManualAddress))
-            {
-                List<string> addressList = await GetHistoricCountyFromJson(farm.PostCode, farm.FullAddress);
-                if (addressList != null && addressList.Count > 3)
-                {
-                    farm.Address1 = addressList[0];
-                    farm.Address2 = addressList[1];
-                    farm.Address3 = addressList[2];
-                    farm.Address4 = addressList[3];
-                }
-                farm.IsManualAddress = false;
-                if (farm.Rainfall == null)
-                {
-                    farm.Rainfall = 600;//get rainfall default value from Api
-                }
-            }
-
-            if (farm.IsManualAddress && farm.Rainfall == null) // from Manual Address screen
-            {
-                farm.Rainfall = 600;  //get rainfall default value from Api
-
-            }
-
-            ViewBag.IsUserHaveAnyFarms = farmsViewModel.Farms.Count > 0 ? true : false;
 
             var farmModel = JsonConvert.SerializeObject(farm);
             _httpContextAccessor.HttpContext?.Session.SetString("FarmData", farmModel);
@@ -383,9 +356,9 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Organic(FarmViewModel farm)
         {
-            if (farm.RegistredOrganicProducer == null)
+            if (farm.RegisteredOrganicProducer == null)
             {
-                ModelState.AddModelError("RegistredOrganicProducer", Resource.MsgSelectAnOptionBeforeContinuing);
+                ModelState.AddModelError("RegisteredOrganicProducer", Resource.MsgSelectAnOptionBeforeContinuing);
             }
             if (!ModelState.IsValid)
             {
@@ -423,8 +396,16 @@ namespace NMP.Portal.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CheckAnswer(FarmViewModel farm)
+        public async Task<IActionResult> CheckAnswer(FarmViewModel farm)
         {
+            List<string> addressList2 = await GetHistoricCountyFromJson(farm.PostCode, farm.FullAddress);
+            if (addressList2 != null && addressList2.Count > 3)
+            {
+                farm.Address1 = addressList2[0];
+                farm.Address2 = addressList2[1];
+                farm.Address3 = addressList2[2];
+                farm.Address4 = addressList2[3];
+            }
             return RedirectToAction("CheckAnswer", farm);
         }
         private async Task<List<string>> GetHistoricCountyFromJson(string postcode, string addressLine)
