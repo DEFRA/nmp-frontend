@@ -1,0 +1,28 @@
+﻿@using NMP.Portal.Resources
+@using NMP.Portal.ViewModels
+@model FarmViewModel
+
+@{
+            // ViewData["Title"] = Resource.lblAddAFarm;
+}
+
+@section BeforeContent{
+    <govuk-back-link class="govuk-back-link back-link" asp-action="Name" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">      
+
+        <h1 class="govuk-heading-l">@string.Format(Resource.lblWeCouldNotFindAnyAddressesFor, Model.PostCode)</h1>
+        <div class="govuk-body">
+            <a class="govuk-link change-link" asp-action="Name" asp-controller="Farm">@Resource.lblChangeThisPostcode</a>
+        </div>
+        <div class="govuk-body">
+            @Resource.lblOr <a class="govuk-link change-link" asp-action="ManualAddress" asp-controller="Farm">@Resource.lblEnterTheAddressManually</a>
+        </div>
+        <br />
+        <div class="govuk-body">
+            <a class="govuk-link change-link" asp-action="CreateFarmCancel" asp-controller="Farm">@Resource.lblCancel</a></p>
+        </div>
+    </div>
+</div>
