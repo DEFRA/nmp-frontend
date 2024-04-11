@@ -5,9 +5,9 @@
     ViewData["Title"] = Resource.lblRainfall;
     var backAction = Model.IsManualAddress == true ? "ManualAddress" : "Address";
 }
-
+<govuk-back-link asp-action="ManualAddress" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
 <form asp-controller="Farm" method="post">
-    <govuk-back-link asp-action="ManualAddress" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+    @* <govuk-back-link asp-action="ManualAddress" asp-controller="Farm">@Resource.lblBack</govuk-back-link> *@
     <div class="govuk-grid-row">
 
         <div class="govuk-grid-column-two-thirds">
@@ -17,9 +17,13 @@
             <div class="text-group margin-bottom-forty">
                 <h3 class="govuk-heading-s">@Resource.lblAverageAnnualRainfall</h3>
                 <p class="govuk-body">@string.Concat(Model.Rainfall,Resource.lblmm)</p>
-                <p class="govuk-body">
-                    <button class="govuk-link change-link" type="submit" asp-action="RainfallManual" asp-controller="farm">@Resource.lblChange</button>
+                <p class="govuk-body margin-bottom-forty">
+                    <a class="govuk-link" asp-action="RainfallManual" asp-controller="farm">@Resource.lblChange</a>
                 </p>
+                @* <p class="govuk-body">
+
+                    <button class="govuk-link change-link" type="submit" asp-action="RainfallManual" asp-controller="farm">@Resource.lblChange</button>
+                </p> *@
             </div>
 
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
@@ -36,7 +40,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManualAddress" value="@Model.IsManualAddress.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OldPostcode"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer"></govuk-input>
-            <govuk-button type="submit" class="margin-bottom-forty" asp-action="NVZ">
+            <govuk-button type="submit" class="margin-bottom-forty" asp-action="Rainfall">
                 @Resource.lblContinue
             </govuk-button>
 

@@ -36,7 +36,7 @@
             <div class="govuk-form-group margin-bottom-forty">
                 <govuk-input class="input-width-15" asp-for="@Model.PostCode">@Resource.lblWhatIsTheFarmPostcode</govuk-input>
             </div>
-            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty" asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "Address")">
+            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty" asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "Name")">
                 @Resource.lblContinue
             </govuk-button>
         </form>
