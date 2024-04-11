@@ -356,9 +356,9 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Organic(FarmViewModel farm)
         {
-            if (farm.RegistredOrganicProducer == null)
+            if (farm.RegisteredOrganicProducer == null)
             {
-                ModelState.AddModelError("RegistredOrganicProducer", Resource.MsgSelectAnOptionBeforeContinuing);
+                ModelState.AddModelError("RegisteredOrganicProducer", Resource.MsgSelectAnOptionBeforeContinuing);
             }
             if (!ModelState.IsValid)
             {

@@ -664,7 +664,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to RegistredOrganicProducer.
+        ///   Looks up a localized string similar to RegisteredOrganicProducer.
         /// </summary>
         public static string lblRegOrganicProducer {
             get {
