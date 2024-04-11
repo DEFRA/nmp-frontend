@@ -16,12 +16,13 @@
             @string.Format(Resource.lblSelectTheAddressFor, Model.Name)
         </h1>
 
-        <div class="text-group govuk-body">
+        <div class="text-group">
             <h3 class="govuk-heading-s">@Resource.lblPostCode</h3>
             <p class="govuk-body">
                 @Model.PostCode
             </p>
-            <a class="govuk-link change-link" asp-action="Name" asp-controller="Farm">@Resource.lblChange</a>
+            <p class="govuk-body"><a class="govuk-link change-link" asp-action="Name" asp-controller="Farm">@Resource.lblChange</a>
+            </p>
         </div>
         <form asp-action="Rainfall" method="post" asp-controller="Farm">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
