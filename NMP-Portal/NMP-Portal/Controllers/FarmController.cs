@@ -40,18 +40,20 @@ namespace NMP.Portal.Controllers
 
         public IActionResult FarmList()
         {
+            _httpContextAccessor.HttpContext?.Session.Clear();
             FarmsViewModel model = new FarmsViewModel();
 
             if (model.Farms.Count == 0)
             {
                 return RedirectToAction("Name", "Farm");
-
             }
+
             return View(model);
 
         }
         public IActionResult CreateFarmCancel()
         {
+            _httpContextAccessor.HttpContext?.Session.Clear();
             FarmsViewModel model = new FarmsViewModel();
             return View("~/Views/Farm/FarmList.cshtml", model);
         }
@@ -59,21 +61,17 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public IActionResult Name()
         {
-            FarmsViewModel model = new FarmsViewModel();
-            //need to fetch user farms 
-            ViewBag.IsUserHaveAnyFarms = model.Farms.Count > 0 ? true : false;
-            return View(new FarmViewModel());
+            FarmViewModel model = null;
+            if (_httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+            {
+                model = JsonConvert.DeserializeObject<FarmViewModel>(_httpContextAccessor.HttpContext?.Session.GetString("FarmData"));
+            }
+            return View(model);
         }
 
         [HttpPost]
         public IActionResult Name(FarmViewModel farm)
         {
-            FarmsViewModel model = new FarmsViewModel();
-            if (string.IsNullOrWhiteSpace(farm.Name) && string.IsNullOrWhiteSpace(farm.PostCode))
-            {
-                ModelState.AddModelError("Name", Resource.MsgEnterTheFarmName);
-                ModelState.AddModelError("PostCode", Resource.MsgEnterTheFarmPostcode);
-            }
             if (string.IsNullOrWhiteSpace(farm.Name))
             {
                 ModelState.AddModelError("Name", Resource.MsgEnterTheFarmName);
@@ -82,32 +80,28 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("PostCode", Resource.MsgEnterTheFarmPostcode);
             }
+
             if (!ModelState.IsValid)
             {
-                return View();
+                return View(farm);
             }
-            //need to fetch user farms 
-            ViewBag.IsUserHaveAnyFarms = model.Farms.Count > 0 ? true : false;
-            var farmModel = JsonConvert.SerializeObject(farm);
-
-            _httpContextAccessor.HttpContext?.Session.SetString("FarmData", farmModel);
+            else
+            {
+                var farmModel = JsonConvert.SerializeObject(farm);
+                _httpContextAccessor.HttpContext?.Session.SetString("FarmData", farmModel);
+            }
             return RedirectToAction("Address");
         }
-
         [HttpGet]
         public async Task<IActionResult> Address()
         {
-            FarmsViewModel model = new FarmsViewModel();
-
-            FarmViewModel farm = new FarmViewModel();
-            if (_httpContextAccessor.HttpContext.Session.GetString("FarmData") != null)
+            FarmViewModel model = null;
+            if (_httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
             {
-                farm = (JsonConvert.DeserializeObject<FarmViewModel>(_httpContextAccessor.HttpContext?.Session.GetString("FarmData")));
+                model = JsonConvert.DeserializeObject<FarmViewModel>(_httpContextAccessor.HttpContext?.Session.GetString("FarmData"));
             }
-            //need to fetch user farms 
-            ViewBag.IsUserHaveAnyFarms = model.Farms.Count > 0 ? true : false;
 
-            JArray addressList = await FetchAddressesFromAPI(farm.PostCode);
+            JArray addressList = await FetchAddressesFromAPI(model.PostCode);
             List<string> addressLines = new List<string>();
             foreach (JObject result in addressList)
             {
@@ -122,8 +116,7 @@ namespace NMP.Portal.Controllers
             }
             else
             {
-                //return RedirectToAction("PostcodeError", "Farm", farm);
-                return View("~/Views/Farm/PostcodeError.cshtml", farm);
+                return RedirectToAction("AddressNotFound");
             }
             itemList.AddRange(addressLines);
 
@@ -133,78 +126,70 @@ namespace NMP.Portal.Controllers
                 var selectListItems = itemList.Select(item => new SelectListItem { Value = item, Text = item }).ToList();
 
                 ViewBag.AddressList = selectListItems;
+                // Serialize ViewBag.AddressList to JSON string
+                var jsonString = JsonConvert.SerializeObject(selectListItems);
+                _httpContextAccessor.HttpContext?.Session.SetString("AddressList", jsonString);
+
+
             }
-            return View(farm);
+
+            return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Address(FarmViewModel farm)
         {
-            if (string.IsNullOrWhiteSpace(farm.Name) && string.IsNullOrWhiteSpace(farm.PostCode))
+            if (string.IsNullOrWhiteSpace(farm.FullAddress))
             {
-                ModelState.AddModelError("Name", Resource.MsgEnterTheFarmName);
-                ModelState.AddModelError("PostCode", Resource.MsgEnterTheFarmPostcode);
-            }
-            if (string.IsNullOrWhiteSpace(farm.Name))
-            {
-                ModelState.AddModelError("Name", Resource.MsgEnterTheFarmName);
-            }
-            if (string.IsNullOrWhiteSpace(farm.PostCode))
-            {
-                ModelState.AddModelError("PostCode", Resource.MsgEnterTheFarmPostcode);
+                ModelState.AddModelError("FullAddress", Resource.MsgSelectAddress);
             }
 
             if (!ModelState.IsValid)
             {
-                return View("~/Views/Farm/Address.cshtml", farm);
-            }
+                if (_httpContextAccessor.HttpContext.Session.Keys.Contains("AddressList"))
+                {
+                    var addressList = JsonConvert.DeserializeObject<List<SelectListItem>>(_httpContextAccessor.HttpContext?.Session.GetString("AddressList"));
+                    if (addressList != null && addressList.Count > 0)
+                    {
+                        ViewBag.AddressList = addressList;
+                        ViewBag.AddressCount = string.Format(Resource.lblAdddressFound, addressList.Count.ToString());
+                    }
+                }
 
-            JArray addressList = await FetchAddressesFromAPI(farm.PostCode);
-            List<string> addressLines = new List<string>();
-            foreach (JObject result in addressList)
-            {
-                string addressLine = result["addressLine"].ToString();
-                addressLines.Add(addressLine);
-            }
-
-            var itemList = new List<string>();
-            if (addressList.Count > 0)
-            {
-                ViewBag.AddressCount = string.Format(Resource.lblAdddressFound, addressList.Count.ToString());
+                return View(farm);
             }
             else
             {
-                //return RedirectToAction("PostcodeError", "Farm", farm);
-                return View("~/Views/Farm/PostcodeError.cshtml", farm);
-            }
-            itemList.AddRange(addressLines);
-
-            if (itemList != null)
-            {
-                // Convert each string item to SelectListItem
-                var selectListItems = itemList.Select(item => new SelectListItem { Value = item, Text = item }).ToList();
-
-                ViewBag.AddressList = selectListItems;
-            }
-            if (farm.IsManualAddress)
-            {
                 farm.IsManualAddress = false;
+                if (farm.Rainfall == null)
+                {
+                    farm.Rainfall = 600;
+                }
+                var farmData = JsonConvert.SerializeObject(farm);
+                _httpContextAccessor.HttpContext?.Session.SetString("FarmData", farmData);
+
             }
-            return View(farm);
+            return RedirectToAction("Rainfall");
         }
 
 
-        public IActionResult PostcodeError(FarmViewModel farm)
+        public IActionResult AddressNotFound()
         {
-            return View(farm);
+            FarmViewModel model = null;
+            if (_httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+            {
+                model = JsonConvert.DeserializeObject<FarmViewModel>(_httpContextAccessor.HttpContext?.Session.GetString("FarmData"));
+            }
+            return View(model);
         }
+
         [HttpGet]
         public IActionResult ManualAddress()
         {
-            FarmViewModel model = new FarmViewModel();
-            if (_httpContextAccessor.HttpContext.Session.GetString("FarmData") != null)
+            FarmViewModel model = null;
+            if (_httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
             {
-                model = (JsonConvert.DeserializeObject<FarmViewModel>(_httpContextAccessor.HttpContext?.Session.GetString("FarmData")));
+                model = JsonConvert.DeserializeObject<FarmViewModel>(_httpContextAccessor.HttpContext?.Session.GetString("FarmData"));
             }
             return View(model);
         }
@@ -252,40 +237,14 @@ namespace NMP.Portal.Controllers
             return View(model);
 
         }
+        
         [HttpPost]
         public async Task<IActionResult> Rainfall(FarmViewModel farm)
         {
             FarmsViewModel farmsViewModel = new FarmsViewModel();
             FarmViewModel model = new FarmViewModel();
 
-            if (string.IsNullOrWhiteSpace(farm.FullAddress) && (!farm.IsManualAddress))
-            {
-                ModelState.AddModelError("FullAddress", Resource.MsgSelectAddress);
-                JArray addressList = await FetchAddressesFromAPI(farm.PostCode);
-                List<string> addressLines = new List<string>();
-                foreach (JObject result in addressList)
-                {
-                    string addressLine = result["addressLine"].ToString();
-                    addressLines.Add(addressLine);
-                }
-
-                var itemList = new List<string>();
-                if (addressList.Count > 0)
-                {
-                    ViewBag.AddressCount = string.Format(Resource.lblAdddressFound, addressList.Count.ToString());
-                }
-                itemList.AddRange(addressLines);
-
-                if (itemList != null)
-                {
-                    // Convert each string item to SelectListItem
-                    var selectListItems = itemList.Select(item => new SelectListItem { Value = item, Text = item }).ToList();
-
-                    ViewBag.AddressList = selectListItems;
-                }
-                return View("~/Views/Farm/Address.cshtml", farm);
-            }
-            else if (!string.IsNullOrWhiteSpace(farm.FullAddress) && (!farm.IsManualAddress))
+            if (!string.IsNullOrWhiteSpace(farm.FullAddress) && (!farm.IsManualAddress))
             {
                 List<string> addressList = await GetHistoricCountyFromJson(farm.PostCode, farm.FullAddress);
                 if (addressList != null && addressList.Count > 3)
