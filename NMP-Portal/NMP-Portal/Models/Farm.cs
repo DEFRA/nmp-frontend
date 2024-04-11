@@ -5,7 +5,7 @@ namespace NMP.Portal.Models
 {
     public class Farm
     {
-        public int Id { get; set; }
+        //public int Id { get; set; }
         //[Required(ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterTheFarmName))]
         [StringLength(250,ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgFarmNameMinMaxValidation))]
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheFarmName))]

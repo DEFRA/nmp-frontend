@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
@@ -406,7 +407,66 @@ namespace NMP.Portal.Controllers
                 farm.Address3 = addressList2[2];
                 farm.Address4 = addressList2[3];
             }
-            return RedirectToAction("CheckAnswer", farm);
+            
+            var farmData = new FarmData
+            {
+                Farm = new Farm()
+                {
+                    Name = farm.Name,
+                    Address1 = farm.Address1,
+                    Address2 = farm.Address2,
+                    Address3 = farm.Address3,
+                    Address4 = farm.Address4,
+                    PostCode = farm.PostCode,
+                    CPH = farm.CPH,
+                    FarmerName = farm.Name,
+                    BusinessName = farm.BusinessName,
+                    SBI = farm.SBI,
+                    STD = farm.STD,
+                    Telephone = farm.Telephone,
+                    Mobile = farm.Mobile,
+                    Email = farm.Email,
+                    Rainfall = farm.Rainfall,
+                    TotalFarmArea = farm.TotalFarmArea,
+                    AverageAltitude = farm.AverageAltitude,
+                    RegisteredOrganicProducer = farm.RegisteredOrganicProducer,
+                    MetricUnits = farm.MetricUnits,
+                    EnglishRules = farm.EnglishRules,
+                    NVZField = farm.NVZField,
+                    FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel
+                },
+                UserID = 1,
+                RoleID = 2
+            };
+           
+            string jsonData = JsonConvert.SerializeObject(farmData);
+            using (var client = new HttpClient())
+            {
+                string apiUrl = "http://localhost:3000/farm";
+
+                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                try
+                {
+                    var response = await client.PostAsync(apiUrl, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return Ok("Farm data posted successfully.");
+                        //return RedirectToAction("CheckAnswer", farm);
+                    }
+                    else
+                    {
+                        return StatusCode((int)response.StatusCode, $"Failed to post farm data. Status code: {response.StatusCode}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return RedirectToAction("CheckAnswer", farm);
+                }
+                
+                
+            }
+            
         }
         private async Task<List<string>> GetHistoricCountyFromJson(string postcode, string addressLine)
         {
@@ -441,7 +501,7 @@ namespace NMP.Portal.Controllers
                     string encodedPostcode = Uri.EscapeDataString(postcode);
 
                     // Construct the URL with the postcode parameter
-                    string url = $"http://localhost:3000/apis/v1/vendors/address-lookup/addresses?postcode={encodedPostcode}";
+                    string url = $"http://localhost:3000/vendors/address-lookup/addresses?postcode={encodedPostcode}&offset=0";
 
 
                     // Send a GET request to the URL and get the response
