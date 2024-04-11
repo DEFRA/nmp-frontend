@@ -5,9 +5,12 @@
     ViewData["Title"] = Resource.lblManualAddress;
 }
 
-<govuk-back-link asp-action="Address" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+
+@section BeforeContent {
+    <govuk-back-link asp-action="Address" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+}
 <form  method="post" asp-controller="Farm">
-    @* <button class="govuk-back-link back-link" type="submit" asp-action="Address" asp-controller="Farm">@Resource.lblBack</button> *@
+    @Html.AntiForgeryToken();
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 

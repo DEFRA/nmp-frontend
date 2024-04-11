@@ -5,9 +5,12 @@
     ViewData["Title"] = Resource.lblRainfall;
     var backAction = Model.IsManualAddress == true ? "ManualAddress" : "Address";
 }
-<govuk-back-link asp-action="ManualAddress" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+
+@section BeforeContent {
+    <govuk-back-link asp-action="ManualAddress" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+}
 <form asp-controller="Farm" method="post">
-    @* <govuk-back-link asp-action="ManualAddress" asp-controller="Farm">@Resource.lblBack</govuk-back-link> *@
+   @Html.AntiForgeryToken();
     <div class="govuk-grid-row">
 
         <div class="govuk-grid-column-two-thirds">

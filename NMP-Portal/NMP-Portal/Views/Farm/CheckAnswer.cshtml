@@ -45,8 +45,11 @@
             break;
     }
 }
-<govuk-back-link asp-action ="Organic" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+@section BeforeContent {
+    <govuk-back-link asp-action="Organic" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+}
 <form asp-action="CheckAnswer" asp-controller="Farm" method="post">
+    @Html.AntiForgeryToken();
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds-from-desktop">
             @* <button class="govuk-back-link back-link" type="submit" asp-action="Organic" asp-controller="Farm">@Resource.lblBack</button> *@

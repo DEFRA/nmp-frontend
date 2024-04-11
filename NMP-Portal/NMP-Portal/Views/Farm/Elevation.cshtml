@@ -7,8 +7,11 @@
     var NoneAbove300m = (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.NoneAbove300m;
 }
 
+@section BeforeContent {
+    <govuk-back-link asp-action="NVZ" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+}
 <form asp-controller="Farm" method="post">
-    <button class="govuk-back-link back-link" type="submit" asp-action="NVZ" asp-controller="Farm">@Resource.lblBack</button>
+    @Html.AntiForgeryToken();
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>

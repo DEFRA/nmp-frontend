@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -70,6 +71,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Name(FarmViewModel farm)
         {
             if (string.IsNullOrWhiteSpace(farm.Name))
@@ -85,11 +87,10 @@ namespace NMP.Portal.Controllers
             {
                 return View(farm);
             }
-            else
-            {
-                var farmModel = JsonConvert.SerializeObject(farm);
-                _httpContextAccessor.HttpContext?.Session.SetString("FarmData", farmModel);
-            }
+
+            var farmModel = JsonConvert.SerializeObject(farm);
+            _httpContextAccessor.HttpContext?.Session.SetString("FarmData", farmModel);
+
             return RedirectToAction("Address");
         }
         [HttpGet]
@@ -137,6 +138,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Address(FarmViewModel farm)
         {
             if (string.IsNullOrWhiteSpace(farm.FullAddress))
@@ -158,17 +160,16 @@ namespace NMP.Portal.Controllers
 
                 return View(farm);
             }
-            else
-            {
-                farm.IsManualAddress = false;
-                if (farm.Rainfall == null)
-                {
-                    farm.Rainfall = 600;
-                }
-                var farmData = JsonConvert.SerializeObject(farm);
-                _httpContextAccessor.HttpContext?.Session.SetString("FarmData", farmData);
 
+            farm.IsManualAddress = false;
+            if (farm.Rainfall == null)
+            {
+                farm.Rainfall = 600;
             }
+            var farmData = JsonConvert.SerializeObject(farm);
+            _httpContextAccessor.HttpContext?.Session.SetString("FarmData", farmData);
+
+
             return RedirectToAction("Rainfall");
         }
 
@@ -195,6 +196,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ManualAddress(FarmViewModel farm)
         {
             if (string.IsNullOrEmpty(farm.Address1))
@@ -237,8 +239,9 @@ namespace NMP.Portal.Controllers
             return View(model);
 
         }
-        
+
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Rainfall(FarmViewModel farm)
         {
             FarmsViewModel farmsViewModel = new FarmsViewModel();
@@ -285,9 +288,10 @@ namespace NMP.Portal.Controllers
 
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult RainfallManual(FarmViewModel farm)
         {
-            
+
             //we need to call api for rainfall on the basis of postcode
             if (farm.Rainfall == null)
             {
@@ -315,6 +319,7 @@ namespace NMP.Portal.Controllers
 
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult NVZ(FarmViewModel farm)
         {
             if (farm.NVZField == null)
@@ -326,10 +331,10 @@ namespace NMP.Portal.Controllers
             {
                 return View("NVZ", farm);
             }
-            
-                var farmModel = JsonConvert.SerializeObject(farm);
-                _httpContextAccessor.HttpContext?.Session.SetString("FarmData", farmModel);
-                return RedirectToAction("Elevation");
+
+            var farmModel = JsonConvert.SerializeObject(farm);
+            _httpContextAccessor.HttpContext?.Session.SetString("FarmData", farmModel);
+            return RedirectToAction("Elevation");
 
         }
         [HttpGet]
@@ -344,6 +349,7 @@ namespace NMP.Portal.Controllers
 
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Elevation(FarmViewModel farm)
         {
             if (farm.FieldsAbove300SeaLevel == null)
@@ -355,11 +361,11 @@ namespace NMP.Portal.Controllers
             {
                 return View("Elevation", farm);
             }
-            
-                var farmModel = JsonConvert.SerializeObject(farm);
-                _httpContextAccessor.HttpContext?.Session.SetString("FarmData", farmModel);
-                return RedirectToAction("Organic");
-           
+
+            var farmModel = JsonConvert.SerializeObject(farm);
+            _httpContextAccessor.HttpContext?.Session.SetString("FarmData", farmModel);
+            return RedirectToAction("Organic");
+
 
         }
         [HttpGet]
@@ -374,6 +380,7 @@ namespace NMP.Portal.Controllers
 
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Organic(FarmViewModel farm)
         {
             if (farm.RegistredOrganicProducer == null)
@@ -415,6 +422,7 @@ namespace NMP.Portal.Controllers
 
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult CheckAnswer(FarmViewModel farm)
         {
             return RedirectToAction("CheckAnswer", farm);
