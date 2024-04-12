@@ -11,6 +11,10 @@ using Joonasw.AspNetCore.SecurityHeaders;
 using Joonasw.AspNetCore.SecurityHeaders.Csp;
 using NMP.Portal.Security;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using NMP.Portal.Authorization;
+using System.Net.Http.Headers;
+using Microsoft.Extensions.DependencyInjection;
+using NMP.Portal.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<IISServerOptions>(options =>
@@ -26,7 +30,7 @@ builder.Services.Configure<FormOptions>(options =>
 {
     options.ValueLengthLimit = int.MaxValue;
     options.ValueCountLimit = int.MaxValue;
-    options.MultipartBodyLengthLimit = Int64.MaxValue; // if don't set default value is: 128 MB
+    options.MultipartBodyLengthLimit = long.MaxValue; // if don't set default value is: 128 MB
     options.MultipartHeadersLengthLimit = int.MaxValue;
     options.MultipartBoundaryLengthLimit = int.MaxValue;
     options.KeyLengthLimit = int.MaxValue;
@@ -40,13 +44,20 @@ builder.Services.Configure<FormOptions>(options =>
 // Add services to the container.
 //builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
 //            .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
+//builder.Services.AddAuthorization(options =>
+//{
+//    options.FallbackPolicy = options.DefaultPolicy;
+//});
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(o => o.LoginPath = new PathString("/Account/Login"));
 
+
+
+//Policy Based Authorization
 builder.Services.AddAuthorization(options =>
 {
-    options.FallbackPolicy = options.DefaultPolicy;
+    options.AddPolicy("ValidateToken", policy => policy.Requirements.Add(new ValidateTokenRequirement()));
 });
 
 builder.Services.AddControllersWithViews(options =>
@@ -68,8 +79,18 @@ builder.Services.AddLogging(builder =>
     builder.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
 });
 
-builder.Services.AddHttpContextAccessor(); // Access current UserName in Repository or other Custom Components
-builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();  // Access current UserName in Repository or other Custom Components
+//builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+builder.Services.AddHttpClient("NMPApi", httpClient =>
+{
+    httpClient.BaseAddress = new Uri(uriString: builder.Configuration.GetSection("NMPApiUrl").Value?? "/");
+    httpClient.Timeout = TimeSpan.FromMinutes(5);
+    httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+});
+
+builder.Services.AddSingleton<IAddressLookupService, AddressLookupService>();
+
 builder.Services.AddAntiforgery(options =>
 {
     // Set Cookie properties using CookieBuilder properties�.
@@ -86,7 +107,7 @@ builder.Services.AddAntiforgery(options =>
     options.SuppressXFrameOptionsHeader = false;
 
 });
-builder.Services.AddSession();
+
 builder.Services.AddMvc(options =>
 {
     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
@@ -139,13 +160,14 @@ app.UseCsp(csp =>
         .FromSelf();
 
     csp.AllowStyles
-           .FromSelf(); 
+           .FromSelf().AddNonce(); 
     csp.AllowScripts
         .FromSelf()
-        //.AddNonce()
-        .From(pageTemplateHelper.GetCspScriptHashes());
+        .AddNonce()
+        .From(pageTemplateHelper.GetCspScriptHashes())
+        .From("https://*/-vs/browserLink.js");
 
-    csp.AllowConnections.ToSelf().To("wss:").To("ws").To("https:").To("http:");
+    csp.AllowConnections.ToSelf().To("wss:").To("ws:").To("https:").To("http:");
     csp.AllowBaseUri.FromSelf();
     csp.AllowFrames.FromSelf();
     csp.AllowAudioAndVideo.FromSelf();

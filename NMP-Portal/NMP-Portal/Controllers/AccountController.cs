@@ -5,6 +5,7 @@ using NMP.Portal.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Principal;
+using NMP.Portal.Helpers;
 
 namespace NMP.Portal.Controllers
 {
@@ -25,7 +26,7 @@ namespace NMP.Portal.Controllers
             
             var claims = new[] { new Claim(ClaimTypes.Sid, user.Id.ToString()), 
                 new Claim(ClaimTypes.Name, user.GivenName),
-                 new Claim(ClaimTypes.Surname, user.Surname),
+                new Claim(ClaimTypes.Surname, user.Surname),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.NameIdentifier,user.UserName),
             };
@@ -33,13 +34,25 @@ namespace NMP.Portal.Controllers
             var claimsIdentity = new ClaimsIdentity(identity,claims, CookieAuthenticationDefaults.AuthenticationScheme, null, null);
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
+            Token token = new Token();
+            token.AccessToken = "Test String for nothing";
+            token.RefreshToken = "";
+            token.UserId = 1;
+            token.UserName = user.UserName;
+            token.Issues = "";
+
+            HttpContext.Session.SetObjectAsJson("token", token);
+
             return Redirect(returnUrl?? "/");
         }
 
         public async Task<IActionResult> LogOut()
-        {
+        {            
             base.SignOut();
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            HttpContext?.Session.Remove("token");
+            HttpContext?.Session.Clear();
             return RedirectToAction("Index","Home");
         }
     }
