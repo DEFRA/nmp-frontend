@@ -281,7 +281,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Rainfall Manual</value>
   </data>
   <data name="lblRegOrganicProducer" xml:space="preserve">
-    <value>RegistredOrganicProducer</value>
+    <value>RegisteredOrganicProducer</value>
   </data>
   <data name="lblSaveYouMoney" xml:space="preserve">
     <value>save you money</value>
