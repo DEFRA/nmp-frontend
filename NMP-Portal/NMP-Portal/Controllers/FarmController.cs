@@ -15,6 +15,7 @@ using System.Net.Http;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Claims;
+using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
@@ -88,7 +89,22 @@ namespace NMP.Portal.Controllers
             {
                 return View(farm);
             }
+            if(farm.IsCheckAnswer)
+            {
+                FarmViewModel dataObject = JsonConvert.DeserializeObject<FarmViewModel>(_httpContextAccessor.HttpContext.Session.GetString("FarmData"));
 
+                var updatedFarm = JsonConvert.SerializeObject(farm);
+                _httpContextAccessor.HttpContext?.Session.SetString("FarmData", updatedFarm);
+
+                if (dataObject.PostCode == farm.PostCode)
+                {
+                    return RedirectToAction("CheckAnswer");
+                }
+                else
+                {
+                    return RedirectToAction("Address");
+                }
+            }
             var farmModel = JsonConvert.SerializeObject(farm);
             _httpContextAccessor.HttpContext?.Session.SetString("FarmData", farmModel);
 
@@ -167,7 +183,10 @@ namespace NMP.Portal.Controllers
 
             var farmData = JsonConvert.SerializeObject(farm);
             _httpContextAccessor.HttpContext?.Session.SetString("FarmData", farmData);
-
+            if(farm.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
 
             return RedirectToAction("Rainfall");
         }
@@ -243,12 +262,16 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Rainfall(FarmViewModel farm)
         {
-            FarmsViewModel farmsViewModel = new FarmsViewModel();
-            FarmViewModel model = new FarmViewModel();
-
             var farmModel = JsonConvert.SerializeObject(farm);
             _httpContextAccessor.HttpContext?.Session.SetString("FarmData", farmModel);
-            return RedirectToAction("NVZ");
+            if(farm.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
+            else
+            {
+                return RedirectToAction("NVZ");
+            }
         }
         [HttpGet]
         public async Task<IActionResult> RainfallManual()
@@ -308,6 +331,22 @@ namespace NMP.Portal.Controllers
 
             var farmModel = JsonConvert.SerializeObject(farm);
             _httpContextAccessor.HttpContext?.Session.SetString("FarmData", farmModel);
+            //if (string.IsNullOrWhiteSpace(farm.FullAddress))
+            //{
+            //    farm.FullAddress = string.Format("{0},{1},{2},{3},{4}", farm.Address1, farm.Address2, farm.Address3, farm.Address4, farm.PostCode);
+            //}
+            //if (!string.IsNullOrWhiteSpace(farm.OldPostcode))
+            //{
+            //    if (farm.OldPostcode != farm.PostCode)
+            //    {
+            //        return RedirectToAction("Address", farm);
+            //    }
+            //}
+            //farm.OldPostcode = farm.PostCode;
+            if (farm.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
             return RedirectToAction("Elevation");
 
         }
@@ -338,6 +377,10 @@ namespace NMP.Portal.Controllers
 
             var farmModel = JsonConvert.SerializeObject(farm);
             _httpContextAccessor.HttpContext?.Session.SetString("FarmData", farmModel);
+            if (farm.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
             return RedirectToAction("Organic");
 
 
@@ -350,6 +393,9 @@ namespace NMP.Portal.Controllers
             {
                 model = (JsonConvert.DeserializeObject<FarmViewModel>(_httpContextAccessor.HttpContext?.Session.GetString("FarmData")));
             }
+            //model.IsCheckAnswer = false;
+            //string updatedSessionData = JsonConvert.SerializeObject(model);
+            //_httpContextAccessor.HttpContext.Session.SetString("FarmData", updatedSessionData);
             return View(model);
 
         }
@@ -366,18 +412,18 @@ namespace NMP.Portal.Controllers
                 return View("Organic", farm);
             }
 
-            if (string.IsNullOrWhiteSpace(farm.FullAddress))
-            {
-                farm.FullAddress = string.Format("{0},{1},{2},{3},{4}", farm.Address1, farm.Address2, farm.Address3, farm.Address4, farm.PostCode);
-            }
-            if (!string.IsNullOrWhiteSpace(farm.OldPostcode))
-            {
-                if (farm.OldPostcode != farm.PostCode)
-                {
-                    return RedirectToAction("Address", farm);
-                }
-            }
-            farm.OldPostcode = farm.PostCode;
+            //if (string.IsNullOrWhiteSpace(farm.FullAddress))
+            //{
+            //    farm.FullAddress = string.Format("{0},{1},{2},{3},{4}", farm.Address1, farm.Address2, farm.Address3, farm.Address4, farm.PostCode);
+            //}
+            //if (!string.IsNullOrWhiteSpace(farm.OldPostcode))
+            //{
+            //    if (farm.OldPostcode != farm.PostCode)
+            //    {
+            //        return RedirectToAction("Address", farm);
+            //    }
+            //}
+            //farm.OldPostcode = farm.PostCode;
             farm.IsCheckAnswer = true;
 
             var farmModel = JsonConvert.SerializeObject(farm);
@@ -392,6 +438,8 @@ namespace NMP.Portal.Controllers
             {
                 model = (JsonConvert.DeserializeObject<FarmViewModel>(_httpContextAccessor.HttpContext?.Session.GetString("FarmData")));
             }
+            model.IsCheckAnswer = true;
+            model.FullAddress = string.Format("{0},{1},{2},{3},{4}", model.Address1, model.Address2, model.Address3, model.Address4, model.PostCode);
             return View(model);
 
         }
@@ -419,7 +467,7 @@ namespace NMP.Portal.Controllers
                     Address4 = farm.Address4,
                     PostCode = farm.PostCode,
                     CPH = farm.CPH,
-                    FarmerName = farm.Name,
+                    FarmerName = farm.FarmerName,
                     BusinessName = farm.BusinessName,
                     SBI = farm.SBI,
                     STD = farm.STD,
@@ -455,7 +503,9 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        return StatusCode((int)response.StatusCode, $"Failed to post farm data. Status code: {response.StatusCode}");
+                        ViewBag.AddFarmError = "Failed to post farm data "+ response.ReasonPhrase;
+                        return View("CheckAnswer",farm);
+                        //return StatusCode((int)response.StatusCode, $"Failed to post farm data. Status code: {response.StatusCode}");
                     }
                 }
                 catch (Exception ex)
