@@ -425,7 +425,47 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult CheckAnswer(FarmViewModel farm)
         {
-            return RedirectToAction("CheckAnswer", farm);
+
+            return RedirectToAction("FarmSummary");
+        }
+
+        [HttpGet]
+        public IActionResult FarmSummary()
+        {
+            ViewBag.Success = false;
+            ViewBag.UserHaveFields = true;
+            FarmViewModel model = new FarmViewModel();
+            if (_httpContextAccessor.HttpContext.Session.GetString("FarmData") != null)
+            {
+                model = (JsonConvert.DeserializeObject<FarmViewModel>(_httpContextAccessor.HttpContext?.Session.GetString("FarmData")));
+            }
+            return View(model);
+
+        }
+        private async Task<List<Farm>> FetchUserDetail(int userId)
+        {
+            List<Farm> list = new List<Farm>();
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    // Encode the postcode for safe inclusion in the URL
+                    string encodedUserId = Uri.EscapeDataString(userId.ToString());
+
+                    // Construct the URL with the postcode parameter
+                    string url = $"http://localhost:3000/farm/user-id={encodedUserId}";
+
+
+                    // Send a GET request to the URL and get the response
+                    HttpResponseMessage response = await client.GetAsync(url);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+            }
+            return list;
+
         }
         private async Task<List<string>> GetHistoricCountyFromJson(string postcode, string addressLine)
         {
@@ -460,7 +500,7 @@ namespace NMP.Portal.Controllers
                     string encodedPostcode = Uri.EscapeDataString(postcode);
 
                     // Construct the URL with the postcode parameter
-                    string url = $"http://localhost:3000/apis/v1/vendors/address-lookup/addresses?postcode={encodedPostcode}";
+                    string url = $"http://localhost:3000/vendors/address-lookup/addresses?postcode={encodedPostcode}&offset=0";
 
 
                     // Send a GET request to the URL and get the response

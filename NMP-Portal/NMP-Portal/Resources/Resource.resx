@@ -433,4 +433,34 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="MsgEnterAddressLine1TypicallyTheBuildingAndSreet" xml:space="preserve">
     <value>Enter address line 1, typically the building and street</value>
   </data>
+  <data name="lblAddFieldFor" xml:space="preserve">
+    <value>Add fields for {0}</value>
+  </data>
+  <data name="lblAddYourFields" xml:space="preserve">
+    <value>add your fields</value>
+  </data>
+  <data name="lblAllFarm" xml:space="preserve">
+    <value>All farms</value>
+  </data>
+  <data name="lblCreateACropNutrientManagementPlan" xml:space="preserve">
+    <value>Create a crop nutrient management plan</value>
+  </data>
+  <data name="lblFarmAndFieldDetails" xml:space="preserve">
+    <value>Farm and field details</value>
+  </data>
+  <data name="lblFarmSummary" xml:space="preserve">
+    <value>FarmSummary</value>
+  </data>
+  <data name="lblToStartCreatingPlanAndRecords" xml:space="preserve">
+    <value>To start creating plans and records,</value>
+  </data>
+  <data name="lblUpdateFarmDetails" xml:space="preserve">
+    <value>Update farm details</value>
+  </data>
+  <data name="lblUpdateFieldsOrSoilAnalysis" xml:space="preserve">
+    <value>Update fields or soil analysis</value>
+  </data>
+  <data name="lblYouHaveAdded" xml:space="preserve">
+    <value> You have added {0}</value>
+  </data>
 </root>

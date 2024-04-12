@@ -1,0 +1,77 @@
+﻿@using NMP.Portal.Resources
+@using NMP.Portal.ViewModels
+@model FarmViewModel
+@{
+    ViewData["Title"] = Resource.lblFarmSummary;
+}
+
+
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        @if (ViewBag.Success != null && ViewBag.Success == true)
+        {
+            <govuk-notification-banner type="Success">
+                <div class="">
+                    <h3 class="govuk-notification-banner__heading"> @string.Format(Resource.lblYouHaveAdded, Model.Name)</h3>
+                    <p class="govuk-body"></p>
+                    <a class="govuk-notification-banner__link" asp-action="" asp-controller="">@string.Format(Resource.lblAddFieldFor, Model.Name)</a>
+                </div>
+            </govuk-notification-banner>
+        }
+        <div id="farm-title">
+            <h1 class="govuk-heading-xl">@Model.Name</h1>
+            <p class="govuk-body address">@Model.FullAddress</p>
+        </div>
+        @if (ViewBag.UserHaveFields != null && (!ViewBag.UserHaveFields))
+        {
+            <div>
+                <p class="govuk-body">
+                    @Resource.lblToStartCreatingPlanAndRecords
+                    <a class="govuk-link" asp-action="" asp-controller="">
+                        @Resource.lblAddYourFields
+                    </a>
+                </p>
+            </div>
+        }
+        @if (ViewBag.UserHaveFields != null && ViewBag.UserHaveFields)
+        {
+            <p class="govuk-body cancel-link">
+                <a class="govuk-link" asp-action="" asp-controller="">
+                    @Resource.lblCreateACropNutrientManagementPlan
+                </a>
+            </p>
+        }
+        <hr class="seperator_five" />
+        <div>
+            <h2 class="govuk-heading-m">@Resource.lblFarmAndFieldDetails</h2>
+            <ul class="menu-list govuk-list">
+                <li>
+                    <a class="govuk-link" asp-action="" asp-controller="">@Resource.lblUpdateFarmDetails</a>
+                </li>
+            </ul>
+        </div>
+        @if (ViewBag.UserHaveFields != null && ViewBag.UserHaveFields)
+        {
+            <div>
+                <p class="govuk-body cancel-link">
+                    <a class="govuk-link" asp-action="" asp-controller="">
+                        @Resource.lblUpdateFieldsOrSoilAnalysis
+                    </a>
+                </p>
+            </div>
+        }
+    </div>
+</div>
+
+
+@section BeforeContent {
+    <govuk-breadcrumbs class="govuk-breadcrumbs-link">
+        <govuk-breadcrumbs-item asp-action="FarmList" asp-controller="Farm">
+            @Resource.lblAllFarm
+        </govuk-breadcrumbs-item>
+        <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
+            @Model.Name
+        </govuk-breadcrumbs-item>
+    </govuk-breadcrumbs>
+}
