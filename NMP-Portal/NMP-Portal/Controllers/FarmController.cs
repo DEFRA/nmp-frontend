@@ -1,19 +1,26 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NMP.Portal.Enums;
+using NMP.Portal.Helpers;
 using NMP.Portal.Models;
 using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
 using NMP.Portal.Services;
 using NMP.Portal.ViewModels;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace NMP.Portal.Controllers
 {
@@ -22,11 +29,13 @@ namespace NMP.Portal.Controllers
     {
         private readonly ILogger<FarmController> _logger;
         private readonly IDataProtector _dataProtector;
-        private readonly IAddressLookupService _addressLookupService;
-        public FarmController(ILogger<FarmController> logger, IDataProtectionProvider dataProtectionProvider, IAddressLookupService addressLookupService)
+        private readonly IAddressLookupService _addressLookupService;        
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public FarmController(ILogger<FarmController> logger, IDataProtectionProvider dataProtectionProvider, IHttpContextAccessor httpContextAccessor, IAddressLookupService addressLookupService)
         {
             _logger = logger;
             _dataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
+            _httpContextAccessor = httpContextAccessor;
             _addressLookupService = addressLookupService;
         }
         public IActionResult Index()
@@ -34,263 +43,388 @@ namespace NMP.Portal.Controllers
             return View();
         }
 
-        
         public IActionResult FarmList()
         {
+            _httpContextAccessor.HttpContext?.Session.Remove("FarmData");
+            _httpContextAccessor.HttpContext?.Session.Remove("AddressList");
             FarmsViewModel model = new FarmsViewModel();
 
             if (model.Farms.Count == 0)
             {
                 return RedirectToAction("Name", "Farm");
-
             }
-            return View(model);
 
+            return View(model);
         }
         public IActionResult CreateFarmCancel()
         {
+            _httpContextAccessor.HttpContext?.Session.Remove("FarmData");
+            _httpContextAccessor.HttpContext?.Session.Remove("AddressList");
             FarmsViewModel model = new FarmsViewModel();
-            return View("~/Views/Farm/FarmList.cshtml",model);
+            return View("~/Views/Farm/FarmList.cshtml", model);
         }
 
         [HttpGet]
         public IActionResult Name()
         {
-            FarmsViewModel model = new FarmsViewModel();
-            //need to fetch user farms 
-            ViewBag.IsUserHaveAnyFarms = model.Farms.Count > 0 ? true : false;
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult Name(FarmViewModel farm)
-        {
-            FarmsViewModel model = new FarmsViewModel();
-            //need to fetch user farms 
-            ViewBag.IsUserHaveAnyFarms = model.Farms.Count > 0 ? true : false;
-            return View(farm);
-        }
-
-
-
-        public async Task<IActionResult> Address(FarmViewModel farm)
-        {
-            //if (string.IsNullOrWhiteSpace(farm.Name) && string.IsNullOrWhiteSpace(farm.PostCode))
-            //{
-            //    ModelState.AddModelError("Name", Resource.MsgEnterTheFarmName);
-            //    ModelState.AddModelError("PostCode", Resource.MsgEnterTheFarmPostcode);
-            //    return View("~/Views/Farm/Name.cshtml", farm);
-            //}
-            if (string.IsNullOrWhiteSpace(farm.Name))
+            FarmViewModel? model = null;
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains<string>("FarmData"))
             {
-                ModelState.AddModelError("Name", Resource.MsgEnterTheFarmName);
-               // return View("~/Views/Farm/Name.cshtml", farm);
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
-            if (string.IsNullOrWhiteSpace(farm.PostCode))
-            {
-                ModelState.AddModelError("PostCode", Resource.MsgEnterTheFarmPostcode);
-                //return View("~/Views/Farm/Name.cshtml", farm);
-            }
-
-            if(!ModelState.IsValid)
-            {
-                return View("~/Views/Farm/Name.cshtml", farm);
-            }
-
-            List<AddressLookupResponse> addresses = await _addressLookupService.AddressesAsync(farm.PostCode, 0);
-            var addressesList = addresses.Select(a => new SelectListItem { Value = a.AddressLine , Text = a.AddressLine }).ToList();           
-
-            if (addressesList.Count > 0 && addressesList!= null)
-            {
-                addressesList.Insert(0, new SelectListItem { 
-                    Value = string.Format(Resource.lblAdddressFound, addresses.Count), 
-                    Text = string.Format(Resource.lblAdddressFound, addresses.Count)
-                    });
-            }
-
-            if (addressesList != null)
-            { 
-                ViewBag.AddressList = addressesList;
-            }
-            return View(farm);
-        }
-
-
-        public IActionResult ManualAddress(string? farmName)
-        {
-            FarmViewModel model = new FarmViewModel();
-            model.Name = farmName ?? string.Empty;
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult ManualAddress(FarmViewModel farm)
+        [ValidateAntiForgeryToken]
+        public IActionResult Name(FarmViewModel farm)
         {
+            if (string.IsNullOrWhiteSpace(farm.Name))
+            {
+                ModelState.AddModelError("Name", Resource.MsgEnterTheFarmName);
+            }
+            if (string.IsNullOrWhiteSpace(farm.PostCode))
+            {
+                ModelState.AddModelError("PostCode", Resource.MsgEnterTheFarmPostcode);
+            }
+
             if (!ModelState.IsValid)
             {
-                return View("~/Views/Farm/Address.cshtml", farm);
+                return View(farm);
+            }
+                        
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", farm);
+
+            return RedirectToAction("Address");
+        }
+        [HttpGet]
+        public async Task<IActionResult> Address()
+        {
+            FarmViewModel? model = null;
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+            }
+
+            _httpContextAccessor.HttpContext?.Session.Remove("AddressList");
+
+            List<AddressLookupResponse> addresses = await _addressLookupService.AddressesAsync(model.PostCode, 0);
+            var addressesList = addresses.Select(a => new SelectListItem { Value = a.AddressLine, Text = a.AddressLine }).ToList();
+
+            if (addressesList.Count > 0 && addressesList.Any())
+            {
+                ViewBag.AddressCount = string.Format(Resource.lblAdddressFound, addresses.Count.ToString());
             }
             else
             {
-                FarmViewModel model = new FarmViewModel
-                {
-                    Name = farm.Name,
-                    Address1 = farm.Address1,
-                    Address2 = farm.Address2,
-                    Address3 = farm.Address3,
-                    Address4 = farm.Address4,
-                    PostCode = farm.PostCode
-                };
-                return View(model);
+                return RedirectToAction("AddressNotFound");
             }
 
+            if (addressesList != null && addressesList.Any())
+            {
+                ViewBag.AddressList = addressesList;                
+                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("AddressList", addresses);
+            }
+           
+            return View(model);
         }
-        public IActionResult Rainfall(FarmViewModel farm)
-        {
-            FarmsViewModel farmsViewModel = new FarmsViewModel();
-            FarmViewModel model = new FarmViewModel();
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Address(FarmViewModel farm)
+        {
+            if (string.IsNullOrWhiteSpace(farm.FullAddress))
+            {
+                ModelState.AddModelError("FullAddress", Resource.MsgSelectAddress);
+            }
+
+            List<AddressLookupResponse> addresses = new List<AddressLookupResponse>();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("AddressList"))
+            {
+                addresses = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<List<AddressLookupResponse>>("AddressList");
+                
+            }
+
+            if (!ModelState.IsValid)
+            {
+                if (addresses != null && addresses.Count > 0)
+                {
+                    var addressList = addresses.Select(a => new SelectListItem { Value = a.AddressLine, Text = a.AddressLine }).ToList();
+                    ViewBag.AddressList = addressList;
+                    ViewBag.AddressCount = string.Format(Resource.lblAdddressFound, addressList.Count.ToString());
+                }                
+                return View(farm);
+            }
+
+            AddressLookupResponse? address = addresses.FirstOrDefault(a => a.AddressLine == farm.FullAddress);
+            if (address != null)
+            {
+                farm.Address1 = string.Format("{0}, {1}",address.BuildingNumber, address.Street);
+                farm.Address2 = address.Locality;
+                farm.Address3 = address.Town;
+                farm.Address4 = address.HistoricCounty;
+            }
+
+
+            farm.IsManualAddress = false;
+            //farm.Rainfall = farm.Rainfall ?? 600;
+
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", farm);
+
+
+            return RedirectToAction("Rainfall");
+        }
+
+
+        public IActionResult AddressNotFound()
+        {
+            FarmViewModel? model = null;
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+            }
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult ManualAddress()
+        {
+            FarmViewModel? model = null;
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+            }
+
+            
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ManualAddress(FarmViewModel farm)
+        {
             if (string.IsNullOrEmpty(farm.Address1))
             {
-                ModelState.AddModelError("Address1", Resource.MsgEnterAnAddress);
-                //return View("~/Views/Farm/ManualAddress.cshtml", farm);
+                ModelState.AddModelError("Address1", Resource.MsgEnterAddressLine1TypicallyTheBuildingAndSreet);
             }
             if (string.IsNullOrEmpty(farm.Address3))
             {
                 ModelState.AddModelError("Address3", Resource.MsgEnterATownOrCity);
-                //return View("~/Views/Farm/ManualAddress.cshtml", farm);
             }
             if (string.IsNullOrEmpty(farm.Address4))
             {
                 ModelState.AddModelError("Address4", Resource.MsgEnterACounty);
-                //return View("~/Views/Farm/ManualAddress.cshtml", farm);
             }
             if (string.IsNullOrEmpty(farm.PostCode))
             {
                 ModelState.AddModelError("PostCode", Resource.MsgEnterAPostcode);
-                //return View("~/Views/Farm/ManualAddress.cshtml", farm);
             }
             if (!ModelState.IsValid)
-            {               
+            {
                 return View("~/Views/Farm/ManualAddress.cshtml", farm);
             }
-            else
-            {
-                ViewBag.IsUserHaveAnyFarms = farmsViewModel.Farms.Count > 0 ? true : false;
 
-                model.Name = farm.Name;
-                model.PostCode = farm.PostCode;
-                model.Address1 = farm.Address1;
-                model.Address2 = farm.Address2;
-                model.Address3 = farm.Address3;
-                model.Address4 = farm.Address4;
-                return View(model);
+            farm.FullAddress = string.Empty;
+            farm.IsManualAddress = true;            
+            
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", farm);
+
+            return RedirectToAction("Rainfall");
+        }
+        [HttpGet]
+        public IActionResult Rainfall()
+        {
+            FarmViewModel? model = null;
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
+            if(model == null)
+            {
+                model= new FarmViewModel();
+            }
+            model.Rainfall = model.Rainfall ?? 600;
+
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", model);
+
+            return View(model);
 
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Rainfall(FarmViewModel farm)
+        {    
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", farm);
+            return RedirectToAction("NVZ");
+        }
+        [HttpGet]
+        public IActionResult RainfallManual()
+        {
+            FarmViewModel? model = new FarmViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+            }
+            return View(model);
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult RainfallManual(FarmViewModel farm)
         {
-            if (!ModelState.IsValid)
-            {
-                return View("~/Views/Farm/Rainfall.cshtml", farm);
-            }
-            else
-            {
-                FarmViewModel model = new FarmViewModel
-                {
-                    Name = farm.Name,
-                    PostCode = farm.PostCode,
-                    Address1 = farm.Address1,
-                    Address2 = farm.Address2,
-                    Address3 = farm.Address3,
-                    Address4 = farm.Address4
-                };
-                return View(model);
-            }
-        }
-        public IActionResult NVZ(FarmViewModel farm, bool isRainfalManual)
-        {
-            ViewBag.IsManualRainfall=isRainfalManual;
+
             //we need to call api for rainfall on the basis of postcode
-            if (farm.Rainfall==null)
+            if (farm.Rainfall == null)
             {
-                //ModelState.AddModelError("Rainfall", Resource.MsgEnterAverageAnnualRainfall);
-               // return View("~/Views/Farm/RainfallManual.cshtml", farm);
-            }
-            if (farm.Rainfall != null)
-            {   //check valid rainfall value
-                //ModelState.AddModelError("Rainfall", Resource.MsgEnterValidAnnualRainfall);
-                //return View("~/Views/Farm/RainfallManual.cshtml", farm);
+                ModelState.AddModelError("Rainfall", Resource.MsgEnterTheAverageAnnualRainfall);
             }
             if (!ModelState.IsValid)
             {
-                return View("~/Views/Farm/RainfallManual.cshtml", farm);
+                return View("RainfallManual", farm);
             }
-            else
-            {
-                FarmViewModel model = new FarmViewModel
-                {
-                    Name = farm.Name,
-                    Address1 = farm.Address1,
-                    Address2 = farm.Address2,
-                    Address3 = farm.Address3,
-                    Address4 = farm.Address4,
-                    PostCode = farm.PostCode,
-                    Rainfall= farm.Rainfall,
-                    RegistredOrganicProducer=farm.RegistredOrganicProducer,
-                    NVZField= farm.NVZField,
-                    FieldsAbove300SeaLevel= farm.FieldsAbove300SeaLevel
 
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", farm);
 
-                };
-                return View(model);
-            }
-            
+            return RedirectToAction("NVZ");
         }
-        public IActionResult Elevation(FarmViewModel farm)
+        [HttpGet]
+        public IActionResult NVZ()
+        {
+            FarmViewModel? model = new FarmViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+            }
+            return View(model);
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult NVZ(FarmViewModel farm)
         {
             if (farm.NVZField == null)
             {
-                ModelState.AddModelError("NVZField", Resource.MsgSelectAnOptionBeforeContinuing);
-                return View("~/Views/Farm/NVZ.cshtml", farm);
+                ModelState.AddModelError("NVZField", Resource.MsgSelectAnOptionBeforeContinuing);                
+            }
+            if (!ModelState.IsValid)
+            {
+                return View("NVZ", farm);
+            }
+
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", farm);
+            return RedirectToAction("Elevation");
+
+        }
+        [HttpGet]
+        public IActionResult Elevation()
+        {
+            FarmViewModel? model = new FarmViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+            }
+            return View(model);
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Elevation(FarmViewModel farm)
+        {
+            if (farm.FieldsAbove300SeaLevel == null)
+            {
+                ModelState.AddModelError("FieldsAbove300SeaLevel", Resource.MsgSelectAnOptionBeforeContinuing);
             }
 
             if (!ModelState.IsValid)
             {
-                return View("~/Views/Farm/NVZ.cshtml", farm);
+                return View("Elevation", farm);
             }
-            else
-            {
-                FarmViewModel model = new FarmViewModel
-                {
-                    Name = farm.Name,
-                    Address1 = farm.Address1,
-                    Address2 = farm.Address2,
-                    Address3 = farm.Address3,
-                    Address4 = farm.Address4,
-                    PostCode = farm.PostCode,
-                    Rainfall = farm.Rainfall,
-                    RegistredOrganicProducer = farm.RegistredOrganicProducer,
-                    NVZField = farm.NVZField,
-                    FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel
+
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", farm);
+            return RedirectToAction("Organic");
 
 
-                };
-                return View(model);
-            }
-           
         }
-       
+        [HttpGet]
+        public IActionResult Organic()
+        {
+            FarmViewModel? model = new FarmViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+            }
+            return View(model);
 
-        private async Task<string> GetHistoricCountyFromJson(string addressLine, string postcode)
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Organic(FarmViewModel farm)
+        {
+            if (farm.RegisteredOrganicProducer == null)
+            {
+                ModelState.AddModelError("RegisteredOrganicProducer", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View("Organic", farm);
+            }
+
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", farm);
+            return RedirectToAction("CheckAnswer");
+        }
+        [HttpGet]
+        public IActionResult CheckAnswer()
+        {
+            FarmViewModel? model = null;
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+            }
+            if(model== null)
+            {
+                model=  new FarmViewModel();
+            }
+
+            if (string.IsNullOrWhiteSpace(model.FullAddress))
+            {
+                model.FullAddress = string.Format("{0}, {1} {2}, {3}, {4}", model.Address1, model.Address2 != null ? model.Address2 + "," :  string.Empty, model.Address3, model.Address4, model.PostCode);
+            }
+            
+            model.IsCheckAnswer = true;
+
+            return View(model);
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CheckAnswer(FarmViewModel farm)
+        {
+            List<string> addressList2 = await GetHistoricCountyFromJson(farm.PostCode, farm.FullAddress);
+            if (addressList2 != null && addressList2.Count > 3)
+            {
+                farm.Address1 = addressList2[0];
+                farm.Address2 = addressList2[1];
+                farm.Address3 = addressList2[2];
+                farm.Address4 = addressList2[3];
+            }
+            return RedirectToAction("CheckAnswer", farm);
+        }
+        private async Task<List<string>> GetHistoricCountyFromJson(string postcode, string addressLine)
         {
             JArray addressList = await FetchAddressesFromAPI(postcode);
             JObject matchingEntry = addressList.Children<JObject>().FirstOrDefault(x => (string)x["addressLine"] == addressLine);
 
             // If a matching entry is found, return its historicCounty
+            List<string> strings = new List<string>();
             if (matchingEntry != null)
             {
-                return (string)matchingEntry["historicCounty"];
+                strings.Add(string.Concat((string)matchingEntry["buildingNumber"], " ", (string)matchingEntry["street"]));
+                strings.Add((string)matchingEntry["locality"]);
+                strings.Add((string)matchingEntry["town"]);
+                strings.Add((string)matchingEntry["historicCounty"]);
+                return strings;
             }
             else
             {
@@ -324,10 +458,12 @@ namespace NMP.Portal.Controllers
                         if (!string.IsNullOrWhiteSpace(jsonString))
                         {
                             JObject jsonObj = JObject.Parse(jsonString);
-
-                            // Extract the "results" array
-                            addressList = (JArray)jsonObj["data"]["results"];
-
+                            string message = (string)jsonObj["message"];
+                            if (!string.IsNullOrWhiteSpace(message) && message == Resource.lblMessage)
+                            {
+                                // Extract the "results" array
+                                addressList = (JArray)jsonObj["data"]["results"];
+                            }
                         }
                     }
                     else

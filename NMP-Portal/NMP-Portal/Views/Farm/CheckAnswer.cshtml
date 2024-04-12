@@ -1,0 +1,150 @@
+﻿@using NMP.Portal.Resources;
+@model NMP.Portal.ViewModels.FarmViewModel
+
+@{
+    ViewData["Title"] = Resource.lblFarmCheck;
+    var organicProducer = "";
+    var fieldsAbove300m = "";
+    var fieldsInNVZ = "";
+    
+    switch (Model.NVZField)
+    {
+        case (int)NMP.Portal.Enums.NVZFields.NoFieldsInNVZ:
+            fieldsInNVZ = Resource.lblNoneOfTheFieldsAreInAnNVZ;
+            break;
+        case (int)NMP.Portal.Enums.NVZFields.SomeFieldsInNVZ:
+            fieldsInNVZ = Resource.lblSomeOfTheFieldsAreInAnNVZ;
+            break;
+        case (int)NMP.Portal.Enums.NVZFields.AllFieldsInNVZ:
+            fieldsInNVZ = Resource.lblAllTheFieldsAreInAnNVZ;
+            break;
+    }
+    switch (Model.FieldsAbove300SeaLevel)
+    {
+        case (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.NoneAbove300m:
+            fieldsAbove300m = Resource.lblNoneOfTheFieldsAreAbove300m;
+            break;
+        case (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.SomeFieldsAbove300m:
+            fieldsAbove300m = Resource.lblSomeOfTheFieldsAreAbove300m;
+            break;
+        case (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m:
+            fieldsAbove300m = Resource.lblAllTheFieldsAreAbove300m;
+            break;
+        
+    }
+    switch (Model.RegisteredOrganicProducer)
+    {
+        case true:
+            organicProducer = Resource.lblYes;
+            break;
+        case false:
+            organicProducer = Resource.lblNo;
+            break;
+        default:
+            organicProducer = Resource.lblNo;
+            break;
+    }
+}
+@section BeforeContent {
+    <govuk-back-link asp-action="Organic" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+}
+<form asp-action="CheckAnswer" asp-controller="Farm" method="post">
+    @Html.AntiForgeryToken()
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds-from-desktop">
+            @* <button class="govuk-back-link back-link" type="submit" asp-action="Organic" asp-controller="Farm">@Resource.lblBack</button> *@
+            <h1 class="govuk-heading-l">
+                @Resource.lblCheckYourAnswers
+            </h1>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OldPostcode" value="@Model.OldPostcode"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address3"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PostCode"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Rainfall"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegisteredOrganicProducer"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZField"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FullAddress"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer"></govuk-input>
+           
+
+            <govuk-summary-list>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        @Resource.lblFarmName
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @Model.Name
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="Name" asp-controller="Farm">@Resource.lblChange</govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        @Resource.lblFarmAddress
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @Model.FullAddress
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="Address" asp-controller="Farm" asp-route-farm="@Model">@Resource.lblChange</govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        @Resource.lblAverageAnnualRainfall
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @Model.Rainfall
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="Rainfall" asp-controller="Farm">@Resource.lblChange</govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        @string.Format(Resource.lblHowManyFieldsInNVZ, Model.Name)
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @fieldsInNVZ
+                    </govuk-summary-list-row-value>
+
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="NVZ" asp-controller="Farm">@Resource.lblChange</govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        @string.Format(Resource.lblFieldsAbove300SeaLevel, Model.Name)
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @fieldsAbove300m
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="Elevation" asp-controller="Farm">@Resource.lblChange</govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        @Resource.lblRegisteredOrganicProducer
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @organicProducer
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="Organic" asp-controller="Farm">@Resource.lblChange</govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+            </govuk-summary-list>
+            
+            <govuk-button type="submit" class="margin-bottom-forty">
+                @Resource.lblAddThisFarm
+            </govuk-button>
+            <p class="govuk-body cancel-link"><a asp-action="CreateFarmCancel" asp-controller="Farm">@Resource.lblCancel</a></p>
+        </div>
+    </div>
+</form>

@@ -1,23 +1,17 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.FarmViewModel
 @{
-    ViewData["Title"] = Resource.lblNVZ;
-    var AllFieldsInNVZ = (int)NMP.Portal.Enums.NVZFields.AllFieldsInNVZ;
-    var SomeFieldsInNVZ = (int)NMP.Portal.Enums.NVZFields.SomeFieldsInNVZ;
-    var NoFieldsInNVZ = (int)NMP.Portal.Enums.NVZFields.NoFieldsInNVZ;
-    // if (Model.IsRainfalManual != null)
-    // {
-    //     backAction = Model.IsRainfalManual == true ? "RainfallManual" : "Rainfall";
-    // }
-    
-    
-}
-@section BeforeContent {
-    <govuk-back-link asp-action="Rainfall" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+    ViewData["Title"] = Resource.lblOrganic;
+    var organicProducer = Convert.ToBoolean((int)NMP.Portal.Enums.OrganicProducer.Yes);
+    var noOrganicProducer = Convert.ToBoolean((int)NMP.Portal.Enums.OrganicProducer.No);
+
 }
 
-<form asp-action="Elevation" asp-controller="Farm" method="post">
-   @Html.AntiForgeryToken()
+@section BeforeContent {
+    <govuk-back-link asp-action="Elevation" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+}
+<form asp-action="Organic" asp-controller="Farm" method="post">
+    @Html.AntiForgeryToken()
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
@@ -28,22 +22,23 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PostCode"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Rainfall"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegisteredOrganicProducer"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FullAddress"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZField"></govuk-input> 
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManualAddress" value="@Model.IsManualAddress.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OldPostcode"></govuk-input>
-            <govuk-radios asp-for="@Model.NVZField">
+
+            <govuk-radios class="govuk-radios--inline" asp-for="@Model.RegisteredOrganicProducer">
+            
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                         @string.Format(Resource.lblHowManyFieldsInNVZ,Model.Name)
+                        @Resource.lblRegisteredOrganicProducer
                     </govuk-radios-fieldset-legend>
-                    <govuk-radios-item value="@AllFieldsInNVZ">@Resource.lblAllTheFieldsAreInAnNVZ</govuk-radios-item>
-                    <govuk-radios-item value="@SomeFieldsInNVZ">@Resource.lblSomeOfTheFieldsAreInAnNVZ</govuk-radios-item>
-                    <govuk-radios-item value="@NoFieldsInNVZ">@Resource.lblNoneOfTheFieldsAreInAnNVZ</govuk-radios-item>
+                    <govuk-radios-item value="@organicProducer">@Resource.lblYes</govuk-radios-item>
+                    <govuk-radios-item value="@noOrganicProducer">@Resource.lblNo</govuk-radios-item>
                 </govuk-radios-fieldset>
             </govuk-radios>
-            <govuk-button type="submit" class="margin-bottom-forty" asp-action="NVZ">
+            <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
             <p class="govuk-body cancel-link"><a asp-action="CreateFarmCancel" asp-controller="Farm">@Resource.lblCancel</a></p>
