@@ -6,7 +6,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json.Linq;
 using NMP.Portal.Models;
 using NMP.Portal.Resources;
+using NMP.Portal.ServiceResponses;
+using NMP.Portal.Services;
 using NMP.Portal.ViewModels;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.Json.Nodes;
@@ -19,10 +22,12 @@ namespace NMP.Portal.Controllers
     {
         private readonly ILogger<FarmController> _logger;
         private readonly IDataProtector _dataProtector;
-        public FarmController(ILogger<FarmController> logger, IDataProtectionProvider dataProtectionProvider)
+        private readonly IAddressLookupService _addressLookupService;
+        public FarmController(ILogger<FarmController> logger, IDataProtectionProvider dataProtectionProvider, IAddressLookupService addressLookupService)
         {
             _logger = logger;
             _dataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
+            _addressLookupService = addressLookupService;
         }
         public IActionResult Index()
         {
@@ -70,46 +75,42 @@ namespace NMP.Portal.Controllers
 
         public async Task<IActionResult> Address(FarmViewModel farm)
         {
-            if (string.IsNullOrWhiteSpace(farm.Name) && string.IsNullOrWhiteSpace(farm.PostCode))
-            {
-                ModelState.AddModelError("Name", Resource.MsgEnterTheFarmName);
-                ModelState.AddModelError("PostCode", Resource.MsgEnterTheFarmPostcode);
-                return View("~/Views/Farm/Name.cshtml", farm);
-            }
+            //if (string.IsNullOrWhiteSpace(farm.Name) && string.IsNullOrWhiteSpace(farm.PostCode))
+            //{
+            //    ModelState.AddModelError("Name", Resource.MsgEnterTheFarmName);
+            //    ModelState.AddModelError("PostCode", Resource.MsgEnterTheFarmPostcode);
+            //    return View("~/Views/Farm/Name.cshtml", farm);
+            //}
             if (string.IsNullOrWhiteSpace(farm.Name))
             {
                 ModelState.AddModelError("Name", Resource.MsgEnterTheFarmName);
-                return View("~/Views/Farm/Name.cshtml", farm);
+               // return View("~/Views/Farm/Name.cshtml", farm);
             }
             if (string.IsNullOrWhiteSpace(farm.PostCode))
             {
                 ModelState.AddModelError("PostCode", Resource.MsgEnterTheFarmPostcode);
+                //return View("~/Views/Farm/Name.cshtml", farm);
+            }
+
+            if(!ModelState.IsValid)
+            {
                 return View("~/Views/Farm/Name.cshtml", farm);
-            }                        
-
-
-            JArray addressList = await FetchAddressesFromAPI(farm.PostCode);
-            List<string> addressLines = new List<string>();
-            foreach (JObject result in addressList)
-            {
-                string addressLine = result["addressLine"].ToString();
-                addressLines.Add(addressLine);
             }
 
-            var itemList = new List<string>();
-            if (addressList.Count > 0)
+            List<AddressLookupResponse> addresses = await _addressLookupService.AddressesAsync(farm.PostCode, 0);
+            var addressesList = addresses.Select(a => new SelectListItem { Value = a.AddressLine , Text = a.AddressLine }).ToList();           
+
+            if (addressesList.Count > 0 && addressesList!= null)
             {
-                string AddressListFirstOption = string.Format(Resource.lblAdddressFound, addressList.Count.ToString());
-                itemList.Add(AddressListFirstOption);
+                addressesList.Insert(0, new SelectListItem { 
+                    Value = string.Format(Resource.lblAdddressFound, addresses.Count), 
+                    Text = string.Format(Resource.lblAdddressFound, addresses.Count)
+                    });
             }
-            itemList.AddRange(addressLines);
 
-            if (itemList != null)
-            {
-                // Convert each string item to SelectListItem
-                var selectListItems = itemList.Select(item => new SelectListItem { Value = item, Text = item }).ToList();
-
-                ViewBag.AddressList = selectListItems;
+            if (addressesList != null)
+            { 
+                ViewBag.AddressList = addressesList;
             }
             return View(farm);
         }
@@ -121,6 +122,7 @@ namespace NMP.Portal.Controllers
             model.Name = farmName ?? string.Empty;
             return View(model);
         }
+
         [HttpPost]
         public IActionResult ManualAddress(FarmViewModel farm)
         {
@@ -151,22 +153,22 @@ namespace NMP.Portal.Controllers
             if (string.IsNullOrEmpty(farm.Address1))
             {
                 ModelState.AddModelError("Address1", Resource.MsgEnterAnAddress);
-                return View("~/Views/Farm/ManualAddress.cshtml", farm);
+                //return View("~/Views/Farm/ManualAddress.cshtml", farm);
             }
             if (string.IsNullOrEmpty(farm.Address3))
             {
                 ModelState.AddModelError("Address3", Resource.MsgEnterATownOrCity);
-                return View("~/Views/Farm/ManualAddress.cshtml", farm);
+                //return View("~/Views/Farm/ManualAddress.cshtml", farm);
             }
             if (string.IsNullOrEmpty(farm.Address4))
             {
                 ModelState.AddModelError("Address4", Resource.MsgEnterACounty);
-                return View("~/Views/Farm/ManualAddress.cshtml", farm);
+                //return View("~/Views/Farm/ManualAddress.cshtml", farm);
             }
             if (string.IsNullOrEmpty(farm.PostCode))
             {
                 ModelState.AddModelError("PostCode", Resource.MsgEnterAPostcode);
-                return View("~/Views/Farm/ManualAddress.cshtml", farm);
+                //return View("~/Views/Farm/ManualAddress.cshtml", farm);
             }
             if (!ModelState.IsValid)
             {               
@@ -308,7 +310,7 @@ namespace NMP.Portal.Controllers
                     string encodedPostcode = Uri.EscapeDataString(postcode);
 
                     // Construct the URL with the postcode parameter
-                    string url = $"http://localhost:3000/apis/v1/vendors/address-lookup/addresses?postcode={encodedPostcode}";
+                    string url = $"http://localhost:3000/vendors/address-lookup/addresses?postcode={encodedPostcode}&offset=0";
 
 
                     // Send a GET request to the URL and get the response

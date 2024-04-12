@@ -38,7 +38,7 @@ public sealed class SecurityHeadersMiddleware
             "autoplay=(self), " +
             "camera=(self), " +
             "display-capture=(self), " +
-            "document-domain=(self), " +
+           // "document-domain=(self), " +
             "midi=(self), " +
             "publickey-credentials-get=(self), " +
             "sync-xhr=(self), " +
