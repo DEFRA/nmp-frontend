@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System.Net;
 using NMP.Portal.ServiceResponses;
 using Microsoft.Extensions.Logging;
+using System.Runtime.Remoting;
 
 namespace NMP.Portal.Services
 {
@@ -27,13 +28,16 @@ namespace NMP.Portal.Services
             var response = await httpClient.GetAsync(string.Format(APIURLHelper.AddressLookupAPI, postcode, offset));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower()!="string")
             {
+                
+                
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
                     AddressLookupResponseWrapper addressLookupResponseWrapper = responseWrapper.Data.ToObject<AddressLookupResponseWrapper>();
                     addresses.AddRange(addressLookupResponseWrapper.Results);
                 }
+
             }
             else
             {
