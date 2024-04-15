@@ -52,5 +52,8 @@ namespace NMP.Portal.ServiceResponses
 
         [JsonProperty("language")]
         public string Language { get; set; }
+
+        [JsonProperty("subBuildingName")]
+        public string SubBuildingName { get; set; }
     }
 }

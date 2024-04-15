@@ -33,12 +33,14 @@ namespace NMP.Portal.Controllers
         private readonly IDataProtector _dataProtector;
         private readonly IAddressLookupService _addressLookupService;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public FarmController(ILogger<FarmController> logger, IDataProtectionProvider dataProtectionProvider, IHttpContextAccessor httpContextAccessor, IAddressLookupService addressLookupService)
+        private readonly IFarmService _farmService;
+        public FarmController(ILogger<FarmController> logger, IDataProtectionProvider dataProtectionProvider, IHttpContextAccessor httpContextAccessor, IAddressLookupService addressLookupService, IFarmService farmService)
         {
             _logger = logger;
             _dataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
             _httpContextAccessor = httpContextAccessor;
             _addressLookupService = addressLookupService;
+            _farmService = farmService;
         }
         public IActionResult Index()
         {
@@ -177,7 +179,7 @@ namespace NMP.Portal.Controllers
             AddressLookupResponse? address = addresses.FirstOrDefault(a => a.AddressLine == farm.FullAddress);
             if (address != null)
             {
-                farm.Address1 = string.Format("{0}, {1}",address.BuildingNumber, address.Street);
+                farm.Address1 = string.Format("{0}{1}, {2}", address.SubBuildingName != null ? address.SubBuildingName + ", " : string.Empty, address.BuildingNumber, address.Street);
                 farm.Address2 = address.Locality;
                 farm.Address3 = address.Town;
                 farm.Address4 = address.HistoricCounty;
@@ -470,37 +472,8 @@ namespace NMP.Portal.Controllers
                 UserID = 1,
                 RoleID = 2
             };
-
-            string jsonData = JsonConvert.SerializeObject(farmData);
-            using (var client = new HttpClient())
-            {
-                string apiUrl = "http://localhost:3000/farm";
-
-                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                try
-                {
-                    var response = await client.PostAsync(apiUrl, new StringContent(jsonData, Encoding.UTF8, "application/json"));
-                    if (response.IsSuccessStatusCode)
-                    {
-                        return Ok("Farm data posted successfully.");
-                        //return RedirectToAction("CheckAnswer", farm);
-                    }
-                    else
-                    {
-                        ViewBag.AddFarmError = "Failed to post farm data "+ response.ReasonPhrase;
-                        return View("CheckAnswer",farm);
-                        //return StatusCode((int)response.StatusCode, $"Failed to post farm data. Status code: {response.StatusCode}");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                    return RedirectToAction("CheckAnswer", farm);
-                }
-
-
-            }
-
+            Farm response = await _farmService.AddFarmAsync(farmData);
+            return Ok("Farm data posted successfully.");
         }
         public IActionResult BackCheckAnswer()
         {
