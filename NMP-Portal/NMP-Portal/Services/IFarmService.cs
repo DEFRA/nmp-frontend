@@ -5,6 +5,6 @@ namespace NMP.Portal.Services
 {
     public interface IFarmService:IService
     {
-        Task<Farm> AddFarmAsync(FarmData farmData);
+        Task<(Farm,Error)> AddFarmAsync(FarmData farmData);
     }
 }

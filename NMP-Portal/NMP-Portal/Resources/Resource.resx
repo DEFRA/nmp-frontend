@@ -433,4 +433,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="MsgEnterAddressLine1TypicallyTheBuildingAndSreet" xml:space="preserve">
     <value>Enter address line 1, typically the building and street</value>
   </data>
+  <data name="MsgFarmAlreadyExist" xml:space="preserve">
+    <value>The farm name {0} under postcode {1} already exits</value>
+  </data>
 </root>

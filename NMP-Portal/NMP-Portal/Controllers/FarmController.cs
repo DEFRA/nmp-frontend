@@ -179,7 +179,7 @@ namespace NMP.Portal.Controllers
             AddressLookupResponse? address = addresses.FirstOrDefault(a => a.AddressLine == farm.FullAddress);
             if (address != null)
             {
-                farm.Address1 = string.Format("{0}{1}, {2}", address.SubBuildingName != null ? address.SubBuildingName + ", " : string.Empty, address.BuildingNumber, address.Street);
+                farm.Address1 = string.Format("{0}{1}{2}{3}", address.SubBuildingName != null ? address.SubBuildingName + ", " : string.Empty, address.BuildingNumber !=null?address.BuildingNumber + ", ": string.Empty, address.BuildingName !=null ?address.BuildingName + ", " : string.Empty , address.Street);
                 farm.Address2 = address.Locality;
                 farm.Address3 = address.Town;
                 farm.Address4 = address.HistoricCounty;
@@ -472,7 +472,12 @@ namespace NMP.Portal.Controllers
                 UserID = 1,
                 RoleID = 2
             };
-            Farm response = await _farmService.AddFarmAsync(farmData);
+            (Farm farmResponse ,Error error)= await _farmService.AddFarmAsync(farmData);
+            if (!string.IsNullOrWhiteSpace(error.Message))
+            {
+                ViewBag.AddFarmError = error.Message;
+                return View(farm);
+            }
             return Ok("Farm data posted successfully.");
         }
         public IActionResult BackCheckAnswer()
