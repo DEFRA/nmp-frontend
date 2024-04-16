@@ -40,18 +40,23 @@
         case false:
             organicProducer = Resource.lblNo;
             break;
-        default:
-            organicProducer = Resource.lblNo;
-            break;
     }
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="Organic" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="BackCheckAnswer" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="CheckAnswer" asp-controller="Farm" method="post">
     @Html.AntiForgeryToken()
+    
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds-from-desktop">
+            @if (ViewBag.AddFarmError != null)
+            {
+                @* <govuk-error-message>@ViewBag.AddFarmError</govuk-error-message> *@
+                <govuk-error-summary>
+                    <govuk-error-summary-item href="#passport-issued-day">@ViewBag.AddFarmError</govuk-error-summary-item>
+                </govuk-error-summary>
+            }
             @* <button class="govuk-back-link back-link" type="submit" asp-action="Organic" asp-controller="Farm">@Resource.lblBack</button> *@
             <h1 class="govuk-heading-l">
                 @Resource.lblCheckYourAnswers
@@ -68,8 +73,8 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZField"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FullAddress"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer"></govuk-input>
-           
+            @* <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer"></govuk-input> *@
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
 
             <govuk-summary-list>
                 <govuk-summary-list-row>
@@ -91,7 +96,7 @@
                         @Model.FullAddress
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="Address" asp-controller="Farm" asp-route-farm="@Model">@Resource.lblChange</govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action asp-action="@(Model.IsManualAddress ? "ManualAddress" : "Address")" asp-controller="Farm">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>

@@ -7,7 +7,7 @@
 
 
 @section BeforeContent {
-    <govuk-back-link asp-action="Address" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "Address")" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
 }
 <form  method="post" asp-controller="Farm">
     @Html.AntiForgeryToken()
@@ -26,6 +26,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FullAddress"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManualAddress" value="@Model.IsManualAddress.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OldPostcode"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
             <div class="govuk-form-group">
                 <govuk-input asp-for="@Model.Address1"></govuk-input>
             </div>
