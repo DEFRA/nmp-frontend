@@ -11,23 +11,24 @@
         <h1 class="govuk-heading-l">
             @Resource.lblYourFarms
         </h1>
-        @if (Model.Farms.Count>0)
+        @if (Model.Farms.Count > 0)
         {
-            <div>
-               @foreach(var farmList in Model.Farms)
-                {
-                    <a asp-action="" asp-controller="">@farmList.Name</a>
-                }
-            </div>
+            @foreach (var farmList in Model.Farms)
+            {
+                <p class="govuk-body">
+                    <a asp-action="FarmSummary" asp-controller="Farm" asp-route-EncryptedFarmId="@farmList.EncryptedFarmId">@farmList.Name</a>
+                </p>
+            }
+
 
             <hr class="seperator_five" />
             <div>
                 <h2 class="govuk-heading-m">
-                @Resource.lblAddANewFarm
-            </h2>
-            <p class="govuk-body">
+                    @Resource.lblAddANewFarm
+                </h2>
+                <p class="govuk-body">
                     <a class="govuk-link" asp-action="Name" asp-controller="Farm">@Resource.lblAddAFarm</a>
-            </p>
+                </p>
             </div>
         }
         else

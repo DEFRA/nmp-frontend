@@ -463,4 +463,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblYouHaveAdded" xml:space="preserve">
     <value> You have added {0}</value>
   </data>
+  <data name="lblFieldsCount" xml:space="preserve">
+    <value>{0} field(s)</value>
+  </data>
 </root>

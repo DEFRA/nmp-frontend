@@ -466,6 +466,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} field(s).
+        /// </summary>
+        public static string lblFieldsCount {
+            get {
+                return ResourceManager.GetString("lblFieldsCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to help protect the environment.
         /// </summary>
         public static string lblHelpProtectTheEnvironment {
