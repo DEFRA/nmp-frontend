@@ -2,7 +2,7 @@
 
 namespace NMP.Portal.ServiceResponses
 {
-    public class FieldResponse
+    public class FieldResponseWapper
     {
         [JsonProperty("Count")]
         public int Count { get; set; }

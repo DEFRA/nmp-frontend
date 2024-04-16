@@ -1061,6 +1061,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The farm name {0} under postcode {1} already exits.
+        /// </summary>
+        public static string MsgFarmAlreadyExist {
+            get {
+                return ResourceManager.GetString("MsgFarmAlreadyExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a farm name that is no more than 250 characters long.
         /// </summary>
         public static string MsgFarmNameMinMaxValidation {

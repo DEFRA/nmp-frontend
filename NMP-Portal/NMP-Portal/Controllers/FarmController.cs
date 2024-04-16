@@ -17,6 +17,8 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security.Claims;
+using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
@@ -56,10 +58,10 @@ namespace NMP.Portal.Controllers
             _httpContextAccessor.HttpContext?.Session.Remove("FarmData");
             _httpContextAccessor.HttpContext?.Session.Remove("AddressList");
             FarmsViewModel model = new FarmsViewModel();
-            List<Farm> userFarmList = await _userFarmService.UserFarmAsync(1);
-            if (userFarmList != null && userFarmList.Count > 0)
+            UserFarmResponse userFarmList = await _userFarmService.UserFarmAsync(1);
+            if (userFarmList != null && userFarmList.Farms.Count > 0)
             {
-                model.Farms.AddRange(userFarmList);
+                model.Farms.AddRange(userFarmList.Farms);
                 model.Farms.ForEach(m => m.EncryptedFarmId = _dataProtector.Protect(m.ID.ToString()));
             }
             if (model.Farms.Count == 0)
@@ -105,7 +107,23 @@ namespace NMP.Portal.Controllers
             {
                 return View(farm);
             }
+            if (farm.IsCheckAnswer)
+            {
+                FarmViewModel dataObject = JsonConvert.DeserializeObject<FarmViewModel>(_httpContextAccessor.HttpContext.Session.GetString("FarmData"));
 
+                var updatedFarm = JsonConvert.SerializeObject(farm);
+                _httpContextAccessor.HttpContext?.Session.SetString("FarmData", updatedFarm);
+
+                if (dataObject.PostCode == farm.PostCode)
+                {
+                    return RedirectToAction("CheckAnswer");
+                }
+                else
+                {
+                    return RedirectToAction("Address");
+                }
+            }
+            var farmModel = JsonConvert.SerializeObject(farm);
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", farm);
 
             return RedirectToAction("Address");
@@ -172,7 +190,7 @@ namespace NMP.Portal.Controllers
             AddressLookupResponse? address = addresses.FirstOrDefault(a => a.AddressLine == farm.FullAddress);
             if (address != null)
             {
-                farm.Address1 = string.Format("{0}, {1}", address.BuildingNumber, address.Street);
+                farm.Address1 = string.Format("{0}{1}{2}{3}", address.SubBuildingName != null ? address.SubBuildingName + ", " : string.Empty, address.BuildingNumber != null ? address.BuildingNumber + ", " : string.Empty, address.BuildingName != null ? address.BuildingName + ", " : string.Empty, address.Street);
                 farm.Address2 = address.Locality;
                 farm.Address3 = address.Town;
                 farm.Address4 = address.HistoricCounty;
@@ -183,7 +201,10 @@ namespace NMP.Portal.Controllers
             //farm.Rainfall = farm.Rainfall ?? 600;
 
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", farm);
-
+            if (farm.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
 
             return RedirectToAction("Rainfall");
         }
@@ -270,6 +291,10 @@ namespace NMP.Portal.Controllers
         public IActionResult Rainfall(FarmViewModel farm)
         {
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", farm);
+            if (farm.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
             return RedirectToAction("NVZ");
         }
         [HttpGet]
@@ -299,7 +324,10 @@ namespace NMP.Portal.Controllers
             }
 
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", farm);
-
+            if (farm.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
             return RedirectToAction("NVZ");
         }
         [HttpGet]
@@ -327,6 +355,10 @@ namespace NMP.Portal.Controllers
             }
 
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", farm);
+            if (farm.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
             return RedirectToAction("Elevation");
 
         }
@@ -356,6 +388,10 @@ namespace NMP.Portal.Controllers
             }
 
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", farm);
+            if (farm.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
             return RedirectToAction("Organic");
 
 
@@ -368,6 +404,9 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
+            //model.IsCheckAnswer = false;
+            //string updatedSessionData = JsonConvert.SerializeObject(model);
+            //_httpContextAccessor.HttpContext.Session.SetString("FarmData", updatedSessionData);
             return View(model);
 
         }
@@ -406,7 +445,7 @@ namespace NMP.Portal.Controllers
             }
 
             model.IsCheckAnswer = true;
-
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", model);
             return View(model);
 
         }
@@ -414,13 +453,57 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CheckAnswer(FarmViewModel farm)
         {
+            var farmData = new FarmData
+            {
+                Farm = new Farm()
+                {
+                    Name = farm.Name,
+                    Address1 = farm.Address1,
+                    Address2 = farm.Address2,
+                    Address3 = farm.Address3,
+                    Address4 = farm.Address4,
+                    PostCode = farm.PostCode,
+                    CPH = farm.CPH,
+                    FarmerName = farm.FarmerName,
+                    BusinessName = farm.BusinessName,
+                    SBI = farm.SBI,
+                    STD = farm.STD,
+                    Telephone = farm.Telephone,
+                    Mobile = farm.Mobile,
+                    Email = farm.Email,
+                    Rainfall = farm.Rainfall,
+                    TotalFarmArea = farm.TotalFarmArea,
+                    AverageAltitude = farm.AverageAltitude,
+                    RegisteredOrganicProducer = farm.RegisteredOrganicProducer,
+                    MetricUnits = farm.MetricUnits,
+                    EnglishRules = farm.EnglishRules,
+                    NVZField = farm.NVZField,
+                    FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel
+                },
+                UserID = 1,
+                RoleID = 2
+            };
+            (Farm farmResponse, Error error) = await _farmService.AddFarmAsync(farmData);
+
+            if (!string.IsNullOrWhiteSpace(error.Message))
+            {
+                ViewBag.AddFarmError = error.Message;
+                return View(farm);
+            }
+            farmResponse.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());
+            return RedirectToAction("FarmSummary", new { EncryptedFarmId = farmResponse.EncryptedFarmId });
+            return RedirectToRoute("FarmSummary", farmResponse.EncryptedFarmId);
+        }
+        public IActionResult BackCheckAnswer()
+        {
             FarmViewModel? model = null;
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
-            
-            return RedirectToAction("FarmSummary");
+            model.IsCheckAnswer = false;
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", model);
+            return RedirectToAction("Organic");
         }
 
         [HttpGet]
@@ -428,24 +511,35 @@ namespace NMP.Portal.Controllers
         {
             string farmId = string.Empty;
             ViewBag.FieldCount = 0;
+            ViewBag.Success = false;
+            FarmViewModel? farmData = null;
+            FarmViewModel farmViewModel = new FarmViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+            {
+                farmViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+            }
+            if (farmViewModel.IsCheckAnswer)
+            {
+                ViewBag.Success = true;
+            }
+
             if (!string.IsNullOrWhiteSpace(EncryptedFarmId))
             {
                 farmId = _dataProtector.Unprotect(EncryptedFarmId);
+                //fetch farm detail using Api
+               Farm farm = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+                //fetch field data using Api
+                if (farm != null)
+                {
+                    farmData = new FarmViewModel();
+                    farmData.Name=farm.Name;
+                    farmData.FullAddress = string.Format("{0}, {1} {2}, {3} {4}", farm.Address1, farm.Address2 != null ? farm.Address2 + "," : string.Empty, farm.Address3, farm.Address4, farm.PostCode);                    
+                    
+                    ViewBag.FieldCount = await _fieldService.FetchFieldCountByFarmIdAsync(Convert.ToInt32(farmId));
+                }
             }
 
-            //fetch farm detail using Api
-            FarmResponse model = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-            //fetch field data using Api
-            if (model != null)
-            {
-                model.FullAddress = string.Format("{0}, {1} {2}, {3} {4}", model.Address1, model.Address2 != null ? model.Address2 + "," : string.Empty, model.Address3, model.Address4, model.PostCode);
-                ViewBag.FieldCount = await _fieldService.FetchFieldCountByFarmIdAsync(Convert.ToInt32(farmId));
-            }
-
-            ViewBag.Success = false;
-
-
-            return View(model);
+            return View(farmData);
 
         }
 

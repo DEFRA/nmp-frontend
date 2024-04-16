@@ -5,7 +5,7 @@ namespace NMP.Portal.Services
 {
     public interface IUserFarmService : IService
     {
-        Task<List<Farm>> UserFarmAsync(int userId);
+        Task<UserFarmResponse> UserFarmAsync(int userId);
 
     }
 }

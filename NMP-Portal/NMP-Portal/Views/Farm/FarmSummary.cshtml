@@ -25,7 +25,7 @@
                     <div class="">
                         <h3 class="govuk-notification-banner__heading"> @string.Format(Resource.lblYouHaveAdded, Model.Name)</h3>
                         <p class="govuk-body"></p>
-                        <a class="govuk-notification-banner__link" asp-action="" asp-controller="">@string.Format(Resource.lblAddFieldFor, Model.Name)</a>
+                        <a class="govuk-notification-banner__link" href="#">@string.Format(Resource.lblAddFieldFor, Model.Name)</a>
                     </div>
                 </govuk-notification-banner>
             }
@@ -37,7 +37,7 @@
             {
                 <p class="govuk-body">
                     @Resource.lblToStartCreatingPlanAndRecords
-                    <a class="govuk-link" asp-action="" asp-controller="">
+                    <a class="govuk-link" href="#">
                         @Resource.lblAddYourFields
                     </a>
                 </p>
@@ -52,7 +52,7 @@
 
                     <ul class="menu-list govuk-list">
                         <li>
-                            <a class="govuk-link" asp-action="" asp-controller="">
+                            <a class="govuk-link" href="#">
                                 @Resource.lblCreateACropNutrientManagementPlan
                             </a>
                         </li>
@@ -65,12 +65,12 @@
                 <h2 class="govuk-heading-m">@Resource.lblFarmAndFieldDetails</h2>
                 <ul class="menu-list govuk-list">
                     <li>
-                        <a class="govuk-link" asp-action="" asp-controller="">@Resource.lblUpdateFarmDetails</a>
+                        <a class="govuk-link" href="#">@Resource.lblUpdateFarmDetails</a>
                     </li>
                     @if (ViewBag.FieldCount != null && ViewBag.FieldCount > 0)
                     {
                         <li>
-                            <a class="govuk-link" asp-action="" asp-controller="">
+                            <a class="govuk-link" href="#">
                                 @Resource.lblUpdateFieldsOrSoilAnalysis
                             </a>
                         </li>

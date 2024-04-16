@@ -12,9 +12,9 @@ namespace NMP.Portal.Services
         {
             _logger = logger;
         }
-        public async Task<List<Farm>> UserFarmAsync(int userId)
+        public async Task<UserFarmResponse> UserFarmAsync(int userId)
         {
-            List<Farm> userFarmList = new List<Farm>();
+            UserFarmResponse userFarmList = new UserFarmResponse();
             Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
             HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
             httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
@@ -25,8 +25,8 @@ namespace NMP.Portal.Services
             {
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    UserFarmResponse userFarmResponse = responseWrapper.Data.ToObject<UserFarmResponse>();
-                    userFarmList.AddRange(userFarmResponse.Farms);
+                    UserFarmResponse userFarmResponse =responseWrapper.Data.ToObject<UserFarmResponse>();
+                    userFarmList.Farms=userFarmResponse.Farms;
                 }
             }
             else

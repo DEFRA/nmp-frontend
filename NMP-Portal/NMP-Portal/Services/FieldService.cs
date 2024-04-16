@@ -25,8 +25,8 @@ namespace NMP.Portal.Services
             {
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    FieldResponse fieldResponse = responseWrapper.Data.ToObject<FieldResponse>();
-                    fieldCount = fieldResponse.Count;
+                    FieldResponseWapper fieldResponseWapper = responseWrapper.Data.ToObject<FieldResponseWapper>();
+                    fieldCount = fieldResponseWapper.Count;
                 }
             }
             else
