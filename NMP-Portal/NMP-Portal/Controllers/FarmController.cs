@@ -513,12 +513,12 @@ namespace NMP.Portal.Controllers
             ViewBag.FieldCount = 0;
             ViewBag.Success = false;
             FarmViewModel? farmData = null;
-            FarmViewModel farmViewModel = new FarmViewModel();
+            FarmViewModel model = new FarmViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
             {
-                farmViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
-            if (farmViewModel.IsCheckAnswer)
+            if (model.IsCheckAnswer)
             {
                 ViewBag.Success = true;
             }
@@ -526,9 +526,9 @@ namespace NMP.Portal.Controllers
             if (!string.IsNullOrWhiteSpace(EncryptedFarmId))
             {
                 farmId = _dataProtector.Unprotect(EncryptedFarmId);
-                //fetch farm detail using Api
+                
                Farm farm = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-                //fetch field data using Api
+ 
                 if (farm != null)
                 {
                     farmData = new FarmViewModel();
