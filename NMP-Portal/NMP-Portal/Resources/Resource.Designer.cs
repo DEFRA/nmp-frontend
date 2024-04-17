@@ -88,6 +88,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add a field.
+        /// </summary>
+        public static string lblAddField {
+            get {
+                return ResourceManager.GetString("lblAddField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add fields for {0}.
         /// </summary>
         public static string lblAddFieldFor {
@@ -304,6 +313,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cropped area (optional).
+        /// </summary>
+        public static string lblCroppedArea {
+            get {
+                return ResourceManager.GetString("lblCroppedArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to English Rules.
         /// </summary>
         public static string lblEnglishRules {
@@ -457,6 +475,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Field measurements for {0}.
+        /// </summary>
+        public static string lblFieldMeasurements {
+            get {
+                return ResourceManager.GetString("lblFieldMeasurements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Field name.
+        /// </summary>
+        public static string lblFieldName {
+            get {
+                return ResourceManager.GetString("lblFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How many fields at {0} are more than 300 metres above sea level.
         /// </summary>
         public static string lblFieldsAbove300SeaLevel {
@@ -471,6 +507,15 @@ namespace NMP.Portal.Resources {
         public static string lblFieldsCount {
             get {
                 return ResourceManager.GetString("lblFieldsCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hectares.
+        /// </summary>
+        public static string lblHectares {
+            get {
+                return ResourceManager.GetString("lblHectares", resourceCulture);
             }
         }
         
@@ -521,6 +566,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Land Parcel ID (optional).
+        /// </summary>
+        public static string lblLandParcelID {
+            get {
+                return ResourceManager.GetString("lblLandParcelID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All content is available under the.
         /// </summary>
         public static string lblLicenseText {
@@ -548,6 +602,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manure non-spreading area (optional).
+        /// </summary>
+        public static string lblManureNonSpreadingArea {
+            get {
+                return ResourceManager.GetString("lblManureNonSpreadingArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to success.
         /// </summary>
         public static string lblMessage {
@@ -571,6 +634,15 @@ namespace NMP.Portal.Resources {
         public static string lblmm {
             get {
                 return ResourceManager.GetString("lblmm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to National Grid Reference (optional).
+        /// </summary>
+        public static string lblNationalGridReference {
+            get {
+                return ResourceManager.GetString("lblNationalGridReference", resourceCulture);
             }
         }
         
@@ -836,6 +908,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total field area.
+        /// </summary>
+        public static string lblTotalFieldArea {
+            get {
+                return ResourceManager.GetString("lblTotalFieldArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Town or city.
         /// </summary>
         public static string lblTownOrCity {
@@ -1057,15 +1138,6 @@ namespace NMP.Portal.Resources {
         public static string MsgEnterValidAnnualRainfall {
             get {
                 return ResourceManager.GetString("MsgEnterValidAnnualRainfall", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The farm name {0} under postcode {1} already exits.
-        /// </summary>
-        public static string MsgFarmAlreadyExist {
-            get {
-                return ResourceManager.GetString("MsgFarmAlreadyExist", resourceCulture);
             }
         }
         

@@ -58,8 +58,8 @@ namespace NMP.Portal.Services
             }
             else
             {
-                error.Message= 
-                    string.Format(Resource.MsgFarmAlreadyExist,farmData.Farm.Name,farmData.Farm.PostCode);
+                //error.Message= 
+                //    string.Format(Resource.MsgFarmAlreadyExist,farmData.Farm.Name,farmData.Farm.PostCode);
             }
 
             return (farm,error);

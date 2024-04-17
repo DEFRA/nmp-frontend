@@ -25,7 +25,7 @@
                     <div class="">
                         <h3 class="govuk-notification-banner__heading"> @string.Format(Resource.lblYouHaveAdded, Model.Name)</h3>
                         <p class="govuk-body"></p>
-                        <a class="govuk-notification-banner__link" href="#">@string.Format(Resource.lblAddFieldFor, Model.Name)</a>
+                        <a class="govuk-notification-banner__link" asp-action="AddField" asp-controller="Field" asp-route-encryptedfarmId="@Model.EncryptedFarmId">@string.Format(Resource.lblAddFieldFor, Model.Name)</a>
                     </div>
                 </govuk-notification-banner>
             }
@@ -37,7 +37,7 @@
             {
                 <p class="govuk-body">
                     @Resource.lblToStartCreatingPlanAndRecords
-                    <a class="govuk-link" href="#">
+                    <a class="govuk-link" asp-action="AddField" asp-controller="Field" asp-route-encryptedfarmId="@Model.EncryptedFarmId">
                         @Resource.lblAddYourFields
                     </a>
                 </p>
