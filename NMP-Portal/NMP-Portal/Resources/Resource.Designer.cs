@@ -1115,7 +1115,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Service not available at this moment. Please try after some time.
+        ///   Looks up a localized string similar to Service not available at this moment. Please try after some time..
         /// </summary>
         public static string MsgServiceNotAvailable {
             get {

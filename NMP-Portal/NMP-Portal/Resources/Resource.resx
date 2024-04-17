@@ -470,6 +470,6 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>The farm name {0} under the postcode {1} already exist</value>
   </data>
   <data name="MsgServiceNotAvailable" xml:space="preserve">
-    <value>Service not available at this moment. Please try after some time</value>
+    <value>Service not available at this moment. Please try after some time.</value>
   </data>
 </root>
