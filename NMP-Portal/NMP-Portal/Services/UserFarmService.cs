@@ -1,7 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
+using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
+using System.Linq.Expressions;
 
 namespace NMP.Portal.Services
 {
@@ -12,33 +15,47 @@ namespace NMP.Portal.Services
         {
             _logger = logger;
         }
-        public async Task<UserFarmResponse> UserFarmAsync(int userId)
+        public async Task<(UserFarmResponse, Error)> UserFarmAsync(int userId)
         {
             UserFarmResponse userFarmList = new UserFarmResponse();
-            Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
-            HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
-            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchFarmByUserIdAPI, userId));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+            Error error = new Error();
+            try
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
+                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
+                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchFarmByUserIdAPI, userId));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode)
                 {
-                    UserFarmResponse userFarmResponse =responseWrapper.Data.ToObject<UserFarmResponse>();
-                    userFarmList.Farms=userFarmResponse.Farms;
+                    if (responseWrapper != null && responseWrapper.Data != null)
+                    {
+                        UserFarmResponse userFarmResponse = responseWrapper.Data.ToObject<UserFarmResponse>();
+                        userFarmList.Farms = userFarmResponse.Farms;
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
                 }
             }
-            else
+            catch(HttpRequestException hre)
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    Error error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
             }
 
-            return userFarmList;
+            return (userFarmList, error);
         }
     }
 }

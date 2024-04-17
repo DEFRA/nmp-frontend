@@ -1061,7 +1061,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The farm name {0} under postcode {1} already exits.
+        ///   Looks up a localized string similar to The farm name {0} under the postcode {1} already exist.
         /// </summary>
         public static string MsgFarmAlreadyExist {
             get {
@@ -1111,6 +1111,15 @@ namespace NMP.Portal.Resources {
         public static string MsgSelectAnOptionBeforeContinuing {
             get {
                 return ResourceManager.GetString("MsgSelectAnOptionBeforeContinuing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Service not available at this moment. Please try after some time.
+        /// </summary>
+        public static string MsgServiceNotAvailable {
+            get {
+                return ResourceManager.GetString("MsgServiceNotAvailable", resourceCulture);
             }
         }
     }
