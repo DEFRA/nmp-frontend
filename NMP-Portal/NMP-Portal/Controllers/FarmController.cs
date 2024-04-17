@@ -33,26 +33,37 @@ namespace NMP.Portal.Controllers
         private readonly IDataProtector _dataProtector;
         private readonly IAddressLookupService _addressLookupService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserFarmService _userFarmService;
         private readonly IFarmService _farmService;
-        public FarmController(ILogger<FarmController> logger, IDataProtectionProvider dataProtectionProvider, IHttpContextAccessor httpContextAccessor, IAddressLookupService addressLookupService, IFarmService farmService)
+        private readonly IFieldService _fieldService;
+        public FarmController(ILogger<FarmController> logger, IDataProtectionProvider dataProtectionProvider, IHttpContextAccessor httpContextAccessor, IAddressLookupService addressLookupService,
+            IUserFarmService userFarmService, IFarmService farmService,
+            IFieldService fieldService)
         {
             _logger = logger;
             _dataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
             _httpContextAccessor = httpContextAccessor;
             _addressLookupService = addressLookupService;
+            _userFarmService = userFarmService;
             _farmService = farmService;
+            _fieldService = fieldService;
         }
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult FarmList()
+        public async Task<IActionResult> FarmList()
         {
             _httpContextAccessor.HttpContext?.Session.Remove("FarmData");
             _httpContextAccessor.HttpContext?.Session.Remove("AddressList");
             FarmsViewModel model = new FarmsViewModel();
-
+            UserFarmResponse userFarmList = await _userFarmService.UserFarmAsync(1);
+            if (userFarmList != null && userFarmList.Farms.Count > 0)
+            {
+                model.Farms.AddRange(userFarmList.Farms);
+                model.Farms.ForEach(m => m.EncryptedFarmId = _dataProtector.Protect(m.ID.ToString()));
+            }
             if (model.Farms.Count == 0)
             {
                 return RedirectToAction("Name", "Farm");
@@ -179,7 +190,7 @@ namespace NMP.Portal.Controllers
             AddressLookupResponse? address = addresses.FirstOrDefault(a => a.AddressLine == farm.FullAddress);
             if (address != null)
             {
-                farm.Address1 = string.Format("{0}{1}{2}{3}", address.SubBuildingName != null ? address.SubBuildingName + ", " : string.Empty, address.BuildingNumber !=null?address.BuildingNumber + ", ": string.Empty, address.BuildingName !=null ?address.BuildingName + ", " : string.Empty , address.Street);
+                farm.Address1 = string.Format("{0}{1}{2}{3}", address.SubBuildingName != null ? address.SubBuildingName + ", " : string.Empty, address.BuildingNumber != null ? address.BuildingNumber + ", " : string.Empty, address.BuildingName != null ? address.BuildingName + ", " : string.Empty, address.Street);
                 farm.Address2 = address.Locality;
                 farm.Address3 = address.Town;
                 farm.Address4 = address.HistoricCounty;
@@ -190,11 +201,11 @@ namespace NMP.Portal.Controllers
             //farm.Rainfall = farm.Rainfall ?? 600;
 
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", farm);
-            if(farm.IsCheckAnswer)
+            if (farm.IsCheckAnswer)
             {
                 return RedirectToAction("CheckAnswer");
             }
-            
+
             return RedirectToAction("Rainfall");
         }
 
@@ -252,7 +263,7 @@ namespace NMP.Portal.Controllers
             farm.IsManualAddress = true;
 
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", farm);
-            
+
             return RedirectToAction("Rainfall");
         }
         [HttpGet]
@@ -263,9 +274,9 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
-            if(model == null)
+            if (model == null)
             {
-                model= new FarmViewModel();
+                model = new FarmViewModel();
             }
             model.Rainfall = model.Rainfall ?? 600;
 
@@ -313,7 +324,7 @@ namespace NMP.Portal.Controllers
             }
 
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", farm);
-            if(farm.IsCheckAnswer)
+            if (farm.IsCheckAnswer)
             {
                 return RedirectToAction("CheckAnswer");
             }
@@ -423,14 +434,14 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
-            if(model== null)
+            if (model == null)
             {
-                model=  new FarmViewModel();
+                model = new FarmViewModel();
             }
 
             if (string.IsNullOrWhiteSpace(model.FullAddress))
             {
-                model.FullAddress = string.Format("{0}, {1} {2}, {3}, {4}", model.Address1, model.Address2 != null ? model.Address2 + "," :  string.Empty, model.Address3, model.Address4, model.PostCode);
+                model.FullAddress = string.Format("{0}, {1} {2}, {3}, {4}", model.Address1, model.Address2 != null ? model.Address2 + "," : string.Empty, model.Address3, model.Address4, model.PostCode);
             }
 
             model.IsCheckAnswer = true;
@@ -472,13 +483,16 @@ namespace NMP.Portal.Controllers
                 UserID = 1,
                 RoleID = 2
             };
-            (Farm farmResponse ,Error error)= await _farmService.AddFarmAsync(farmData);
+            (Farm farmResponse, Error error) = await _farmService.AddFarmAsync(farmData);
+
             if (!string.IsNullOrWhiteSpace(error.Message))
             {
                 ViewBag.AddFarmError = error.Message;
                 return View(farm);
             }
-            return Ok("Farm data posted successfully.");
+            farmResponse.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());
+            return RedirectToAction("FarmSummary", new { EncryptedFarmId = farmResponse.EncryptedFarmId });
+            return RedirectToRoute("FarmSummary", farmResponse.EncryptedFarmId);
         }
         public IActionResult BackCheckAnswer()
         {
@@ -487,76 +501,47 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
-            model.IsCheckAnswer =false;
+            model.IsCheckAnswer = false;
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", model);
             return RedirectToAction("Organic");
         }
-        private async Task<List<string>> GetHistoricCountyFromJson(string postcode, string addressLine)
-        {
-            JArray addressList = await FetchAddressesFromAPI(postcode);
-            JObject matchingEntry = addressList.Children<JObject>().FirstOrDefault(x => (string)x["addressLine"] == addressLine);
 
-            // If a matching entry is found, return its historicCounty
-            List<string> strings = new List<string>();
-            if (matchingEntry != null)
+        [HttpGet]
+        public async Task<IActionResult> FarmSummary(string EncryptedFarmId)
+        {
+            string farmId = string.Empty;
+            ViewBag.FieldCount = 0;
+            ViewBag.Success = false;
+            FarmViewModel? farmData = null;
+            FarmViewModel model = new FarmViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
             {
-                strings.Add(string.Concat((string)matchingEntry["buildingNumber"], " ", (string)matchingEntry["street"]));
-                strings.Add((string)matchingEntry["locality"]);
-                strings.Add((string)matchingEntry["town"]);
-                strings.Add((string)matchingEntry["historicCounty"]);
-                return strings;
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
-            else
+            if (model.IsCheckAnswer)
             {
-                return null; // Return null if no matching entry is found
+                ViewBag.Success = true;
             }
+
+            if (!string.IsNullOrWhiteSpace(EncryptedFarmId))
+            {
+                farmId = _dataProtector.Unprotect(EncryptedFarmId);
+                
+               Farm farm = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+ 
+                if (farm != null)
+                {
+                    farmData = new FarmViewModel();
+                    farmData.Name=farm.Name;
+                    farmData.FullAddress = string.Format("{0}, {1} {2}, {3} {4}", farm.Address1, farm.Address2 != null ? farm.Address2 + "," : string.Empty, farm.Address3, farm.Address4, farm.PostCode);                    
+                    
+                    ViewBag.FieldCount = await _fieldService.FetchFieldCountByFarmIdAsync(Convert.ToInt32(farmId));
+                }
+            }
+
+            return View(farmData);
+
         }
 
-
-        private async Task<JArray> FetchAddressesFromAPI(string postcode)
-        {
-            JArray addressList = new JArray();
-            using (HttpClient client = new HttpClient())
-            {
-                try
-                {
-                    // Encode the postcode for safe inclusion in the URL
-                    string encodedPostcode = Uri.EscapeDataString(postcode);
-
-                    // Construct the URL with the postcode parameter
-                    string url = $"http://localhost:3000/vendors/address-lookup/addresses?postcode={encodedPostcode}&offset=0";
-
-
-                    // Send a GET request to the URL and get the response
-                    HttpResponseMessage response = await client.GetAsync(url);
-
-                    // Check if the request was successful
-                    if (response.IsSuccessStatusCode)
-                    {
-                        // Read the JSON response as a string
-                        string jsonString = await response.Content.ReadAsStringAsync();
-                        if (!string.IsNullOrWhiteSpace(jsonString))
-                        {
-                            JObject jsonObj = JObject.Parse(jsonString);
-                            string message = (string)jsonObj["message"];
-                            if (!string.IsNullOrWhiteSpace(message) && message == Resource.lblMessage)
-                            {
-                                // Extract the "results" array
-                                addressList = (JArray)jsonObj["data"]["results"];
-                            }
-                        }
-                    }
-                    else
-                    {
-                        //if IsSuccessStatusCode is false
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message);
-                }
-                return addressList;
-            }
-        }
     }
 }

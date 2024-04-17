@@ -113,3 +113,31 @@ button.accept-policy {
 .text-group h3, .text-group p {
     margin-bottom: 10px;
 }
+.govuk-breadcrumbs-link {
+    font-size: 19px !important;
+    line-height: 1.25;
+    margin-top: 20px;
+}
+
+hr.seperator_five {
+    margin: 40px 0 40px 0;
+}
+
+#farm-title {
+    margin-bottom: 20px;
+    display: block;
+}
+
+    #farm-title p.address {
+        margin-bottom: 15px;
+    }
+
+    #farm-title p {
+        margin: 0;
+        padding: 0;
+    }
+
+    #farm-title h1 {
+        margin: 0 0 15px 0;
+        padding: 0;
+    }

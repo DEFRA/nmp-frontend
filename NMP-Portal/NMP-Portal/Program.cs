@@ -90,7 +90,9 @@ builder.Services.AddHttpClient("NMPApi", httpClient =>
 });
 
 builder.Services.AddSingleton<IAddressLookupService, AddressLookupService>();
+builder.Services.AddSingleton<IUserFarmService, UserFarmService>();
 builder.Services.AddSingleton<IFarmService, FarmService>();
+builder.Services.AddSingleton<IFieldService, FieldService>();
 
 builder.Services.AddAntiforgery(options =>
 {

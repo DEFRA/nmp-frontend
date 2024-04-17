@@ -4,6 +4,7 @@ using NMP.Portal.Helpers;
 using NMP.Portal.Models;
 using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
+using NMP.Portal.ViewModels;
 using System.Text;
 using System.Text.Json.Nodes;
 
@@ -62,6 +63,34 @@ namespace NMP.Portal.Services
             }
 
             return (farm,error);
+        }
+        public async Task<Farm> FetchFarmByIdAsync(int farmId)
+        {
+            Farm farm = new Farm();
+            Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
+            HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
+            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchFarmByIdAPI, farmId));
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null )
+            {
+                JObject farmDataJObject = responseWrapper.Data["Farm"] as JObject;
+                if (farmDataJObject != null)
+                {
+                    farm = farmDataJObject.ToObject<Farm>();
+                }
+            }
+            else
+            {
+                if (responseWrapper != null && responseWrapper.Error != null)
+                {
+                    Error error = responseWrapper.Error.ToObject<Error>();
+                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                }
+            }
+
+            return farm;
         }
     }
 }
