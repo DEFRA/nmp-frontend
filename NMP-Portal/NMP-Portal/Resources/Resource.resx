@@ -466,10 +466,43 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblFieldsCount" xml:space="preserve">
     <value>{0} field(s)</value>
   </data>
-  <data name="MsgFarmAlreadyExist" xml:space="preserve">
-    <value>The farm name {0} under the postcode {1} already exist</value>
+  <data name="lblFieldMeasurements" xml:space="preserve">
+    <value>Field measurements for {0}</value>
+  </data>
+  <data name="lblAddField" xml:space="preserve">
+    <value>Add a field</value>
+  </data>
+  <data name="lblCroppedArea" xml:space="preserve">
+    <value>Cropped area (optional)</value>
+  </data>
+  <data name="lblHectares" xml:space="preserve">
+    <value>Hectares</value>
+  </data>
+  <data name="lblManureNonSpreadingArea" xml:space="preserve">
+    <value>Manure non-spreading area (optional)</value>
+  </data>
+  <data name="lblTotalFieldArea" xml:space="preserve">
+    <value>Total field area</value>
+  </data>
+  <data name="lblFieldName" xml:space="preserve">
+    <value>Field name</value>
+  </data>
+  <data name="lblLandParcelID" xml:space="preserve">
+    <value>Land Parcel ID (optional)</value>
+  </data>
+  <data name="lblNationalGridReference" xml:space="preserve">
+    <value>National Grid Reference (optional)</value>
+  </data>
+  <data name="MsgEnterTheFieldName" xml:space="preserve">
+    <value>Enter field name</value>
+  </data>
+  <data name="MsgEnterTotalFieldArea" xml:space="preserve">
+    <value>Enter total field area</value>
   </data>
   <data name="MsgServiceNotAvailable" xml:space="preserve">
     <value>Service not available at this moment. Please try after some time.</value>
+  </data>
+  <data name="MsgFarmAlreadyExist" xml:space="preserve">
+    <value>The farm name {0} under the postcode {1} already exist</value>
   </data>
 </root>

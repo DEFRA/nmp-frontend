@@ -107,15 +107,15 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("Name", Resource.MsgEnterTheFarmName);
             }
-            if (string.IsNullOrWhiteSpace(farm.PostCode))
+            if (string.IsNullOrWhiteSpace(farm.Postcode))
             {
-                ModelState.AddModelError("PostCode", Resource.MsgEnterTheFarmPostcode);
+                ModelState.AddModelError("Postcode", Resource.MsgEnterTheFarmPostcode);
             }
 
-            bool IsFarmExist = await _farmService.IsFarmExistAsync(farm.Name, farm.PostCode);
+            bool IsFarmExist = await _farmService.IsFarmExistAsync(farm.Name, farm.Postcode);
             if(IsFarmExist)
             {
-                ModelState.AddModelError("Name",string.Format(Resource.MsgFarmAlreadyExist,farm.Name,farm.PostCode));
+                ModelState.AddModelError("Name",string.Format(Resource.MsgFarmAlreadyExist, farm.Name,farm.Postcode));
             }
             if (!ModelState.IsValid)
             {
@@ -154,7 +154,7 @@ namespace NMP.Portal.Controllers
 
             _httpContextAccessor.HttpContext?.Session.Remove("AddressList");
 
-            List<AddressLookupResponse> addresses = await _addressLookupService.AddressesAsync(model.PostCode, 0);
+            List<AddressLookupResponse> addresses = await _addressLookupService.AddressesAsync(model.Postcode, 0);
             var addressesList = addresses.Select(a => new SelectListItem { Value = a.AddressLine, Text = a.AddressLine }).ToList();
 
             if (addressesList.Count > 0 && addressesList.Any())
@@ -265,9 +265,9 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("Address4", Resource.MsgEnterACounty);
             }
-            if (string.IsNullOrEmpty(farm.PostCode))
+            if (string.IsNullOrEmpty(farm.Postcode))
             {
-                ModelState.AddModelError("PostCode", Resource.MsgEnterAPostcode);
+                ModelState.AddModelError("Postcode", Resource.MsgEnterAPostcode);
             }
             if (!ModelState.IsValid)
             {
@@ -456,7 +456,7 @@ namespace NMP.Portal.Controllers
 
             if (string.IsNullOrWhiteSpace(model.FullAddress))
             {
-                model.FullAddress = string.Format("{0}, {1} {2}, {3}, {4}", model.Address1, model.Address2 != null ? model.Address2 + "," : string.Empty, model.Address3, model.Address4, model.PostCode);
+                model.FullAddress = string.Format("{0}, {1} {2}, {3}, {4}", model.Address1, model.Address2 != null ? model.Address2 + "," : string.Empty, model.Address3, model.Address4, model.Postcode);
             }
 
             model.IsCheckAnswer = true;
@@ -478,7 +478,7 @@ namespace NMP.Portal.Controllers
                     Address2 = farm.Address2,
                     Address3 = farm.Address3,
                     Address4 = farm.Address4,
-                    PostCode = farm.PostCode,
+                    Postcode = farm.Postcode,
                     CPH = farm.CPH,
                     FarmerName = farm.FarmerName,
                     BusinessName = farm.BusinessName,
@@ -508,7 +508,7 @@ namespace NMP.Portal.Controllers
             }
             farmResponse.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());
             return RedirectToAction("FarmSummary", new { EncryptedFarmId = farmResponse.EncryptedFarmId });
-           // return RedirectToRoute("FarmSummary", farmResponse.EncryptedFarmId);
+
         }
         public IActionResult BackCheckAnswer()
         {
@@ -543,30 +543,26 @@ namespace NMP.Portal.Controllers
                     ViewBag.Success = true;
                 }
 
-                if (!string.IsNullOrWhiteSpace(EncryptedFarmId))
-                {
-                    farmId = _dataProtector.Unprotect(EncryptedFarmId);
-                    (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-                    if (error != null && !(string.IsNullOrWhiteSpace(error.Message)))
-                    {
-                        ViewBag.Error = error.Message;
-                        return View();
-                    }
-                    if (farm != null)
-                    {
-                        farmData = new FarmViewModel();
-                        farmData.Name = farm.Name;
-                        farmData.FullAddress = string.Format("{0}, {1} {2}, {3} {4}", farm.Address1, farm.Address2 != null ? farm.Address2 + "," : string.Empty, farm.Address3, farm.Address4, farm.PostCode);
-                        ViewBag.FieldCount = await _fieldService.FetchFieldCountByFarmIdAsync(Convert.ToInt32(farmId));
-                    }
+            if (!string.IsNullOrWhiteSpace(EncryptedFarmId))
+            {
+                farmId = _dataProtector.Unprotect(EncryptedFarmId);
 
+                 (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+ 
+                if (farm != null)
+                {
+                    farmData = new FarmViewModel();
+                    farmData.Name=farm.Name;
+                    farmData.FullAddress = string.Format("{0}, {1} {2}, {3} {4}", farm.Address1, farm.Address2 != null ? farm.Address2 + "," : string.Empty, farm.Address3, farm.Address4, farm.Postcode);
+                    farmData.EncryptedFarmId = _dataProtector.Protect(farm.ID.ToString());
+                    ViewBag.FieldCount = await _fieldService.FetchFieldCountByFarmIdAsync(Convert.ToInt32(farmId));
                 }
+            }
             }
             catch (Exception ex)
             {
-                ViewBag.Error =ex.Message;
+                ViewBag.Error = ex.Message;
             }
-
             return View(farmData);
 
         }

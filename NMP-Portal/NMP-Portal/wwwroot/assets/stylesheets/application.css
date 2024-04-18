@@ -141,3 +141,9 @@ hr.seperator_five {
         margin: 0 0 15px 0;
         padding: 0;
     }
+.govuk-input__wrapper label {
+    min-width: 40.0625em;
+}
+.govuk-input__wrapper input {
+    max-width: 5.5em;
+}

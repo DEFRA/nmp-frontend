@@ -31,7 +31,7 @@ namespace NMP.Portal.Services
                 httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
 
                 // check if farm already exists or not
-                bool IsFarmExist =await IsFarmExistAsync(farmData.Farm.Name, farmData.Farm.PostCode);                
+                bool IsFarmExist = await IsFarmExistAsync(farmData.Farm.Name, farmData.Farm.Postcode);
                 if (!IsFarmExist)
                 {
                     // if new farm then save farm data
@@ -60,7 +60,7 @@ namespace NMP.Portal.Services
                 else
                 {
                     error.Message =
-                        string.Format(Resource.MsgFarmAlreadyExist, farmData.Farm.Name, farmData.Farm.PostCode);
+                        string.Format(Resource.MsgFarmAlreadyExist, farmData.Farm.Name, farmData.Farm.Postcode);
                 }
             }
             catch (HttpRequestException hre)
@@ -73,7 +73,7 @@ namespace NMP.Portal.Services
                 error.Message = ex.Message;
                 _logger.LogError(ex.Message);
             }
-            return (farm, error);
+            return (farm,error);
         }
         public async Task<(Farm, Error)> FetchFarmByIdAsync(int farmId)
         {
