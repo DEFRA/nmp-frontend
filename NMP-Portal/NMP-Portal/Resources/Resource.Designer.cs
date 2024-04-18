@@ -1133,6 +1133,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter field name.
+        /// </summary>
+        public static string MsgEnterTheFieldName {
+            get {
+                return ResourceManager.GetString("MsgEnterTheFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter total field area.
+        /// </summary>
+        public static string MsgEnterTotalFieldArea {
+            get {
+                return ResourceManager.GetString("MsgEnterTotalFieldArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the valid annual rainfall.
         /// </summary>
         public static string MsgEnterValidAnnualRainfall {

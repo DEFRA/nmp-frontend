@@ -493,4 +493,10 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblNationalGridReference" xml:space="preserve">
     <value>National Grid Reference (optional)</value>
   </data>
+  <data name="MsgEnterTheFieldName" xml:space="preserve">
+    <value>Enter field name</value>
+  </data>
+  <data name="MsgEnterTotalFieldArea" xml:space="preserve">
+    <value>Enter total field area</value>
+  </data>
 </root>

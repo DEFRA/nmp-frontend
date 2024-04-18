@@ -6,6 +6,9 @@
     ViewData["Title"] = Resource.lblAddField;
 }
 
+@section BeforeContent {
+    <govuk-back-link asp-action="FarmSummary" asp-controller="Farm" asp-route-EncryptedFarmId="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+}
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -13,6 +16,7 @@
 
         <form asp-action="AddField" method="post" asp-controller="Field">
             @Html.AntiForgeryToken()
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
             <div class="govuk-form-group">
                 <govuk-input asp-for="@Model.Name"></govuk-input>
             </div>

@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using NMP.Portal.Helpers;
 using NMP.Portal.Models;
+using NMP.Portal.Resources;
 using NMP.Portal.Services;
 using NMP.Portal.ViewModels;
 
@@ -49,14 +51,45 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddField(FieldViewModel fieldViewModel)
+        public IActionResult AddField(FieldViewModel field)
         {
+
+            if (string.IsNullOrWhiteSpace(field.Name))
+            {
+                ModelState.AddModelError("Name", Resource.MsgEnterTheFieldName);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(field);
+            }
+
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
             return RedirectToAction("FieldMeasurements");
         }
-
+        [HttpGet]
         public IActionResult FieldMeasurements()
         {
-            return View();
+            FieldViewModel model = new FieldViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+            }
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult FieldMeasurements(FieldViewModel field)
+        {
+            if (field.TotalArea == null || field.TotalArea == 0)
+            {
+                ModelState.AddModelError("Name", Resource.MsgEnterTotalFieldArea);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(field);
+            }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
+            return RedirectToAction("FieldMeasurements");
         }
     }
 }
