@@ -94,6 +94,7 @@ namespace NMP.Portal.Controllers
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains<string>("FarmData"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+                model.OldPostcode = model.PostCode;
             }
             return View(model);
         }
@@ -122,17 +123,18 @@ namespace NMP.Portal.Controllers
             }
             if (farm.IsCheckAnswer)
             {
-                FarmViewModel dataObject = JsonConvert.DeserializeObject<FarmViewModel>(_httpContextAccessor.HttpContext.Session.GetString("FarmData"));
+                FarmViewModel farmView = JsonConvert.DeserializeObject<FarmViewModel>(_httpContextAccessor.HttpContext.Session.GetString("FarmData"));
 
                 var updatedFarm = JsonConvert.SerializeObject(farm);
                 _httpContextAccessor.HttpContext?.Session.SetString("FarmData", updatedFarm);
 
-                if (dataObject.Postcode == farm.Postcode)
+                if (farmView.PostCode == farm.PostCode)
                 {
                     return RedirectToAction("CheckAnswer");
                 }
                 else
                 {
+                    
                     return RedirectToAction("Address");
                 }
             }
@@ -214,7 +216,7 @@ namespace NMP.Portal.Controllers
             //farm.Rainfall = farm.Rainfall ?? 600;
 
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", farm);
-            if (farm.IsCheckAnswer)
+            if (farm.IsCheckAnswer && farm.OldPostcode == farm.PostCode)
             {
                 return RedirectToAction("CheckAnswer");
             }
@@ -458,6 +460,7 @@ namespace NMP.Portal.Controllers
             }
 
             model.IsCheckAnswer = true;
+            model.OldPostcode = model.PostCode;
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", model);
             return View(model);
 
