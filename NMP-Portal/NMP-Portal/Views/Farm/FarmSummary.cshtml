@@ -5,20 +5,27 @@
     ViewData["Title"] = Resource.lblFarmSummary;
 }
 
-@section BeforeContent {
+@if (ViewBag.Error != null)
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item href="#">@ViewBag.Error</govuk-error-summary-item>
+    </govuk-error-summary>
+}
+@if (Model != null)
+{
+    @section BeforeContent {
     <govuk-breadcrumbs class="govuk-breadcrumbs-link">
         <govuk-breadcrumbs-item asp-action="FarmList" asp-controller="Farm">
             @Resource.lblAllFarm
-        </govuk-breadcrumbs-item>
-        <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
-            @Model.Name
-        </govuk-breadcrumbs-item>
-    </govuk-breadcrumbs>
-}
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-        @if (Model != null)
-        {
+            </govuk-breadcrumbs-item>
+            <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
+                @Model.Name
+            </govuk-breadcrumbs-item>
+        </govuk-breadcrumbs>
+    }
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
             @if (ViewBag.Success != null && ViewBag.Success == true)
             {
                 <govuk-notification-banner type="Success">
@@ -78,8 +85,8 @@
 
                 </ul>
             </div>
-        }
-    </div>
-</div>
 
+        </div>
+    </div>
+}
 
