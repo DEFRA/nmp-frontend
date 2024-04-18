@@ -23,6 +23,8 @@ using System.Text;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using Error = NMP.Portal.ServiceResponses.Error;
 
 namespace NMP.Portal.Controllers
 {
@@ -58,7 +60,14 @@ namespace NMP.Portal.Controllers
             _httpContextAccessor.HttpContext?.Session.Remove("FarmData");
             _httpContextAccessor.HttpContext?.Session.Remove("AddressList");
             FarmsViewModel model = new FarmsViewModel();
-            UserFarmResponse userFarmList = await _userFarmService.UserFarmAsync(1);
+            Error error = null;
+            UserFarmResponse userFarmList = null;
+            (userFarmList, error) = await _userFarmService.UserFarmAsync(1);
+            if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
+            {
+                ViewBag.Error = error.Message;
+                return View("~/Views/Home/Index.cshtml");
+            }
             if (userFarmList != null && userFarmList.Farms.Count > 0)
             {
                 model.Farms.AddRange(userFarmList.Farms);
@@ -75,8 +84,7 @@ namespace NMP.Portal.Controllers
         {
             _httpContextAccessor.HttpContext?.Session.Remove("FarmData");
             _httpContextAccessor.HttpContext?.Session.Remove("AddressList");
-            FarmsViewModel model = new FarmsViewModel();
-            return View("~/Views/Farm/FarmList.cshtml", model);
+            return RedirectToAction("FarmList");
         }
 
         [HttpGet]
@@ -92,17 +100,22 @@ namespace NMP.Portal.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Name(FarmViewModel farm)
+        public async Task<IActionResult> Name(FarmViewModel farm)
         {
             if (string.IsNullOrWhiteSpace(farm.Name))
             {
                 ModelState.AddModelError("Name", Resource.MsgEnterTheFarmName);
             }
-            if (string.IsNullOrWhiteSpace(farm.PostCode))
+            if (string.IsNullOrWhiteSpace(farm.Postcode))
             {
-                ModelState.AddModelError("PostCode", Resource.MsgEnterTheFarmPostcode);
+                ModelState.AddModelError("Postcode", Resource.MsgEnterTheFarmPostcode);
             }
 
+            bool IsFarmExist = await _farmService.IsFarmExistAsync(farm.Name, farm.Postcode);
+            if(IsFarmExist)
+            {
+                ModelState.AddModelError("Name",string.Format(Resource.MsgFarmAlreadyExist, farm.Name,farm.Postcode));
+            }
             if (!ModelState.IsValid)
             {
                 return View(farm);
@@ -114,7 +127,7 @@ namespace NMP.Portal.Controllers
                 var updatedFarm = JsonConvert.SerializeObject(farm);
                 _httpContextAccessor.HttpContext?.Session.SetString("FarmData", updatedFarm);
 
-                if (dataObject.PostCode == farm.PostCode)
+                if (dataObject.Postcode == farm.Postcode)
                 {
                     return RedirectToAction("CheckAnswer");
                 }
@@ -139,7 +152,7 @@ namespace NMP.Portal.Controllers
 
             _httpContextAccessor.HttpContext?.Session.Remove("AddressList");
 
-            List<AddressLookupResponse> addresses = await _addressLookupService.AddressesAsync(model.PostCode, 0);
+            List<AddressLookupResponse> addresses = await _addressLookupService.AddressesAsync(model.Postcode, 0);
             var addressesList = addresses.Select(a => new SelectListItem { Value = a.AddressLine, Text = a.AddressLine }).ToList();
 
             if (addressesList.Count > 0 && addressesList.Any())
@@ -250,9 +263,9 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("Address4", Resource.MsgEnterACounty);
             }
-            if (string.IsNullOrEmpty(farm.PostCode))
+            if (string.IsNullOrEmpty(farm.Postcode))
             {
-                ModelState.AddModelError("PostCode", Resource.MsgEnterAPostcode);
+                ModelState.AddModelError("Postcode", Resource.MsgEnterAPostcode);
             }
             if (!ModelState.IsValid)
             {
@@ -441,7 +454,7 @@ namespace NMP.Portal.Controllers
 
             if (string.IsNullOrWhiteSpace(model.FullAddress))
             {
-                model.FullAddress = string.Format("{0}, {1} {2}, {3}, {4}", model.Address1, model.Address2 != null ? model.Address2 + "," : string.Empty, model.Address3, model.Address4, model.PostCode);
+                model.FullAddress = string.Format("{0}, {1} {2}, {3}, {4}", model.Address1, model.Address2 != null ? model.Address2 + "," : string.Empty, model.Address3, model.Address4, model.Postcode);
             }
 
             model.IsCheckAnswer = true;
@@ -462,7 +475,7 @@ namespace NMP.Portal.Controllers
                     Address2 = farm.Address2,
                     Address3 = farm.Address3,
                     Address4 = farm.Address4,
-                    PostCode = farm.PostCode,
+                    Postcode = farm.Postcode,
                     CPH = farm.CPH,
                     FarmerName = farm.FarmerName,
                     BusinessName = farm.BusinessName,
@@ -492,7 +505,7 @@ namespace NMP.Portal.Controllers
             }
             farmResponse.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());
             return RedirectToAction("FarmSummary", new { EncryptedFarmId = farmResponse.EncryptedFarmId });
-            return RedirectToRoute("FarmSummary", farmResponse.EncryptedFarmId);
+            //return RedirectToRoute("FarmSummary", farmResponse.EncryptedFarmId);
         }
         public IActionResult BackCheckAnswer()
         {
@@ -510,35 +523,43 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> FarmSummary(string EncryptedFarmId)
         {
             string farmId = string.Empty;
+
             ViewBag.FieldCount = 0;
             ViewBag.Success = false;
             FarmViewModel? farmData = null;
+            Error error = null;
             FarmViewModel model = new FarmViewModel();
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+            try
             {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-            }
-            if (model.IsCheckAnswer)
-            {
-                ViewBag.Success = true;
-            }
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+                }
+                if (model.IsCheckAnswer)
+                {
+                    ViewBag.Success = true;
+                }
 
             if (!string.IsNullOrWhiteSpace(EncryptedFarmId))
             {
                 farmId = _dataProtector.Unprotect(EncryptedFarmId);
-                
-               Farm farm = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+
+                 (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
  
                 if (farm != null)
                 {
                     farmData = new FarmViewModel();
                     farmData.Name=farm.Name;
-                    farmData.FullAddress = string.Format("{0}, {1} {2}, {3} {4}", farm.Address1, farm.Address2 != null ? farm.Address2 + "," : string.Empty, farm.Address3, farm.Address4, farm.PostCode);
+                    farmData.FullAddress = string.Format("{0}, {1} {2}, {3} {4}", farm.Address1, farm.Address2 != null ? farm.Address2 + "," : string.Empty, farm.Address3, farm.Address4, farm.Postcode);
                     farmData.EncryptedFarmId = _dataProtector.Protect(farm.ID.ToString());
                     ViewBag.FieldCount = await _fieldService.FetchFieldCountByFarmIdAsync(Convert.ToInt32(farmId));
                 }
             }
-
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.Message;
+            }
             return View(farmData);
 
         }

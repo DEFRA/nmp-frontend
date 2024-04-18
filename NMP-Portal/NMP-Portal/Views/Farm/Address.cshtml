@@ -19,7 +19,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address3"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PostCode"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Postcode"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Rainfall"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegisteredOrganicProducer"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel"></govuk-input>
@@ -33,7 +33,7 @@
             <div class="text-group">
                 <h3 class="govuk-heading-s">@Resource.lblPostCode</h3>
                 <p class="govuk-body">
-                    @Model.PostCode
+                    @Model.Postcode
                 </p>
                 <p class="govuk-body">
                     <a class="govuk-link change-link" asp-action="Name" asp-controller="Farm">@Resource.lblChange</a>

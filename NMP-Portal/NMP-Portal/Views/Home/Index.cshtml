@@ -6,6 +6,12 @@
 
 <div class="govuk-body">
     <h1 class="govuk-heading-xl">
+        @if (ViewBag.Error != null)
+        {
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@ViewBag.Error</govuk-error-summary-item>
+            </govuk-error-summary>
+        }
     <strong>
             @Resource.lblPlanAndRecordNutrientApplications
     </strong>    

@@ -7,6 +7,7 @@ using NMP.Portal.Models;
 using NMP.Portal.Resources;
 using NMP.Portal.Services;
 using NMP.Portal.ViewModels;
+using Error = NMP.Portal.ServiceResponses.Error;
 
 namespace NMP.Portal.Controllers
 {
@@ -33,10 +34,11 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> AddField(string encryptedFarmId)
         {
             FieldViewModel? model = null;
+            Error error = null;
             if (!string.IsNullOrEmpty(encryptedFarmId))
             {
                 string farmId = _farmDataProtector.Unprotect(encryptedFarmId);
-                Farm farm = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+                (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
                 if (farm != null)
                 {
                     model = new FieldViewModel();

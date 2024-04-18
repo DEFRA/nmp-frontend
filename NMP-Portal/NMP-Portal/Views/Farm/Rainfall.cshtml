@@ -15,7 +15,7 @@
 
         <div class="govuk-grid-column-two-thirds">
 
-            <h1 class="govuk-heading-l">@string.Format(Resource.lblAverageAnnualRainfallFor, Model.PostCode)</h1>
+            <h1 class="govuk-heading-l">@string.Format(Resource.lblAverageAnnualRainfallFor, Model.Postcode)</h1>
             <p class="govuk-body">@Resource.lblYourAverageAnualRainfall</p>
             <div class="text-group margin-bottom-forty">
                 <h3 class="govuk-heading-s">@Resource.lblAverageAnnualRainfall</h3>
@@ -34,7 +34,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address3"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PostCode"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Postcode"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Rainfall" value="@Model.Rainfall"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegisteredOrganicProducer"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZField"></govuk-input>
