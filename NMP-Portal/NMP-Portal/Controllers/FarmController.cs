@@ -505,7 +505,7 @@ namespace NMP.Portal.Controllers
             }
             farmResponse.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());
             return RedirectToAction("FarmSummary", new { EncryptedFarmId = farmResponse.EncryptedFarmId });
-            return RedirectToRoute("FarmSummary", farmResponse.EncryptedFarmId);
+           // return RedirectToRoute("FarmSummary", farmResponse.EncryptedFarmId);
         }
         public IActionResult BackCheckAnswer()
         {
