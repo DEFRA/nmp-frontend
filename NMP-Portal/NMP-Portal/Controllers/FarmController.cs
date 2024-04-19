@@ -94,7 +94,7 @@ namespace NMP.Portal.Controllers
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains<string>("FarmData"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-                model.OldPostcode = model.Postcode;
+                //model.OldPostcode = model.Postcode;
             }
             return View(model);
         }
@@ -460,7 +460,7 @@ namespace NMP.Portal.Controllers
             }
 
             model.IsCheckAnswer = true;
-            model.OldPostcode = model.Postcode;
+            //model.OldPostcode = model.Postcode;
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", model);
             return View(model);
 
