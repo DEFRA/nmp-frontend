@@ -94,6 +94,7 @@ namespace NMP.Portal.Controllers
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains<string>("FarmData"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+                model.OldPostcode = model.Postcode;
             }
             return View(model);
         }
@@ -121,12 +122,12 @@ namespace NMP.Portal.Controllers
             }
             if (farm.IsCheckAnswer)
             {
-                FarmViewModel dataObject = JsonConvert.DeserializeObject<FarmViewModel>(_httpContextAccessor.HttpContext.Session.GetString("FarmData"));
+                FarmViewModel farmView = JsonConvert.DeserializeObject<FarmViewModel>(_httpContextAccessor.HttpContext.Session.GetString("FarmData"));
 
                 var updatedFarm = JsonConvert.SerializeObject(farm);
                 _httpContextAccessor.HttpContext?.Session.SetString("FarmData", updatedFarm);
 
-                if (dataObject.Postcode == farm.Postcode)
+                if (farmView.Postcode == farm.Postcode)
                 {
                     farm.IsPostCodeChanged = false;
                     return RedirectToAction("CheckAnswer");
@@ -459,6 +460,7 @@ namespace NMP.Portal.Controllers
             }
 
             model.IsCheckAnswer = true;
+            model.OldPostcode = model.Postcode;
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", model);
             return View(model);
 
