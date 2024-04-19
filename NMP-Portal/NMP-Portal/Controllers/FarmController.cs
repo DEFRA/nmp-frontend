@@ -94,7 +94,7 @@ namespace NMP.Portal.Controllers
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains<string>("FarmData"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-                model.OldPostcode = model.Postcode;
+                //model.OldPostcode = model.Postcode;
             }
             return View(model);
         }
@@ -111,16 +111,18 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("Postcode", Resource.MsgEnterTheFarmPostcode);
             }
-
             bool IsFarmExist = await _farmService.IsFarmExistAsync(farm.Name, farm.Postcode);
-            if(IsFarmExist)
+
+            if (IsFarmExist)
             {
-                ModelState.AddModelError("Name",string.Format(Resource.MsgFarmAlreadyExist, farm.Name,farm.Postcode));
+                ModelState.AddModelError("Name", string.Format(Resource.MsgFarmAlreadyExist, farm.Name, farm.Postcode));
             }
+
             if (!ModelState.IsValid)
             {
                 return View(farm);
             }
+           
             if (farm.IsCheckAnswer)
             {
                 FarmViewModel farmView = JsonConvert.DeserializeObject<FarmViewModel>(_httpContextAccessor.HttpContext.Session.GetString("FarmData"));
@@ -130,12 +132,13 @@ namespace NMP.Portal.Controllers
 
                 if (farmView.Postcode == farm.Postcode)
                 {
+                    farm.IsPostCodeChanged = false;
                     return RedirectToAction("CheckAnswer");
                 }
                 else
                 {
-                    
-                    return RedirectToAction("Address");
+                    farm.IsPostCodeChanged= true;
+                    //return RedirectToAction("Address");
                 }
             }
             var farmModel = JsonConvert.SerializeObject(farm);
@@ -216,7 +219,7 @@ namespace NMP.Portal.Controllers
             //farm.Rainfall = farm.Rainfall ?? 600;
 
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", farm);
-            if (farm.IsCheckAnswer && farm.OldPostcode == farm.Postcode)
+            if (!farm.IsPostCodeChanged && farm.IsCheckAnswer)
             {
                 return RedirectToAction("CheckAnswer");
             }
@@ -360,7 +363,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult NVZ(FarmViewModel farm)
         {
-            if (farm.NVZField == null)
+            if (farm.NVZFields == null)
             {
                 ModelState.AddModelError("NVZField", Resource.MsgSelectAnOptionBeforeContinuing);
             }
@@ -460,7 +463,7 @@ namespace NMP.Portal.Controllers
             }
 
             model.IsCheckAnswer = true;
-            model.OldPostcode = model.Postcode;
+            //model.OldPostcode = model.Postcode;
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", model);
             return View(model);
 
@@ -493,8 +496,12 @@ namespace NMP.Portal.Controllers
                     RegisteredOrganicProducer = farm.RegisteredOrganicProducer,
                     MetricUnits = farm.MetricUnits,
                     EnglishRules = farm.EnglishRules,
-                    NVZField = farm.NVZField,
-                    FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel
+                    NVZFields = farm.NVZFields,
+                    FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
+                    CreatedByID=1,
+                    CreatedOn=System.DateTime.Now,
+                    ModifiedByID=farm.ModifiedByID,
+                    ModifiedOn=farm.ModifiedOn
                 },
                 UserID = 1,
                 RoleID = 2

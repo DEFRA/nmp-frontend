@@ -45,8 +45,12 @@ namespace NMP.Portal.Models
         public bool? RegisteredOrganicProducer { get; set; } = false;
         public bool MetricUnits { get; set; } = false;
         public bool EnglishRules { get; set; } = true;
-        public int? NVZField { get; set; } = null;
+        public int? NVZFields { get; set; } = null;
         public int? FieldsAbove300SeaLevel { get; set; } = null;
         public string? EncryptedFarmId { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public int CreatedByID { get; set; }
+        public DateTime? ModifiedOn { get; set; } = null;
+        public int? ModifiedByID { get; set; } = null;
     }
 }

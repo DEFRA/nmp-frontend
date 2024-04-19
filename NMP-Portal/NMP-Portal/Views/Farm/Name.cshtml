@@ -22,11 +22,12 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Rainfall"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegisteredOrganicProducer"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZField"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZFields"></govuk-input>
             @if (Model != null)
             {
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManualAddress" value="@Model.IsManualAddress.ToString().ToLower()"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPostCodeChanged" value="@Model.IsPostCodeChanged"></govuk-input>
             }
             <div class="govuk-form-group">
                 <govuk-input asp-for="@Model.Name"></govuk-input>
