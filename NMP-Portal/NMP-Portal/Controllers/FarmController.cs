@@ -111,15 +111,18 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("Postcode", Resource.MsgEnterTheFarmPostcode);
             }
-            if (!ModelState.IsValid)
-            {
-                return View(farm);
-            }
             bool IsFarmExist = await _farmService.IsFarmExistAsync(farm.Name, farm.Postcode);
+
             if (IsFarmExist)
             {
                 ModelState.AddModelError("Name", string.Format(Resource.MsgFarmAlreadyExist, farm.Name, farm.Postcode));
             }
+
+            if (!ModelState.IsValid)
+            {
+                return View(farm);
+            }
+           
             if (farm.IsCheckAnswer)
             {
                 FarmViewModel farmView = JsonConvert.DeserializeObject<FarmViewModel>(_httpContextAccessor.HttpContext.Session.GetString("FarmData"));
