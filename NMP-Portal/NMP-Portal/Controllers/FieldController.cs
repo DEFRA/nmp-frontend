@@ -33,22 +33,28 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> AddField(string encryptedFarmId)
         {
-            FieldViewModel? model = null;
+            FieldViewModel model = new FieldViewModel();
             Error error = null;
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+            }
+            model.EncryptedFarmId= encryptedFarmId;
             if (!string.IsNullOrEmpty(encryptedFarmId))
             {
                 string farmId = _farmDataProtector.Unprotect(encryptedFarmId);
                 (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
                 if (farm != null)
                 {
-                    model = new FieldViewModel();
-                    model.FarmName = farm.Name;
-                    model.FarmID = farm.ID;
-                    model.EncryptedFarmId = encryptedFarmId;
-                    var fieldModel = JsonConvert.SerializeObject(model);
-                    _httpContextAccessor.HttpContext?.Session.SetString("FieldData", fieldModel);
+                    //model = new FieldViewModel();
+                    //model.FarmName = farm.Name;
+                    //model.FarmID = farm.ID;
+                    //model.EncryptedFarmId = encryptedFarmId;
+                    //var fieldModel = JsonConvert.SerializeObject(model);
+                    //_httpContextAccessor.HttpContext?.Session.SetString("FieldData", fieldModel);
                 }
             }
+            
             return View(model);
         }
 
@@ -91,7 +97,42 @@ namespace NMP.Portal.Controllers
                 return View(field);
             }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
-            return RedirectToAction("FieldMeasurements");
+            return RedirectToAction("NVZField");
         }
+        [HttpGet]
+        public async Task<IActionResult> NVZField()
+        {
+            Error error = new Error();
+
+            FieldViewModel model = new FieldViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+            }
+            string farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
+            (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+            if (farm.NVZFields == 1)
+            {
+                return View(model);
+            }
+            model.IsWithinNVZ = Convert.ToBoolean(farm.NVZFields);
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
+            return RedirectToAction("ElevationField");
+        }
+        [HttpPost]
+        public IActionResult NVZField(FieldViewModel field)
+        {
+            if (field.IsWithinNVZ == null)
+            {
+                ModelState.AddModelError("IsWithinNVZ", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(field);
+            }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
+            return RedirectToAction("NVZField");
+        }
+        
     }
 }

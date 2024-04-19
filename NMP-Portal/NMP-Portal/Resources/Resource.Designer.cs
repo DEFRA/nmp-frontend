@@ -566,6 +566,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Is {0} more than 300 metres above sea level?.
+        /// </summary>
+        public static string lblIsAbove300SeaLevel {
+            get {
+                return ResourceManager.GetString("lblIsAbove300SeaLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is {0} inside a Nitrate Vulnerable Zone (NVZ)?.
+        /// </summary>
+        public static string lblIsNVZField {
+            get {
+                return ResourceManager.GetString("lblIsNVZField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Land Parcel ID (optional).
         /// </summary>
         public static string lblLandParcelID {

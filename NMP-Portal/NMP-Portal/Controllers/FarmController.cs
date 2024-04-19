@@ -110,15 +110,14 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("Postcode", Resource.MsgEnterTheFarmPostcode);
             }
-
-            bool IsFarmExist = await _farmService.IsFarmExistAsync(farm.Name, farm.Postcode);
-            if(IsFarmExist)
-            {
-                ModelState.AddModelError("Name",string.Format(Resource.MsgFarmAlreadyExist, farm.Name,farm.Postcode));
-            }
             if (!ModelState.IsValid)
             {
                 return View(farm);
+            }
+            bool IsFarmExist = await _farmService.IsFarmExistAsync(farm.Name, farm.Postcode);
+            if (IsFarmExist)
+            {
+                ModelState.AddModelError("Name", string.Format(Resource.MsgFarmAlreadyExist, farm.Name, farm.Postcode));
             }
             if (farm.IsCheckAnswer)
             {
@@ -129,11 +128,13 @@ namespace NMP.Portal.Controllers
 
                 if (dataObject.Postcode == farm.Postcode)
                 {
+                    farm.IsPostCodeChanged = false;
                     return RedirectToAction("CheckAnswer");
                 }
                 else
                 {
-                    return RedirectToAction("Address");
+                    farm.IsPostCodeChanged= true;
+                    //return RedirectToAction("Address");
                 }
             }
             var farmModel = JsonConvert.SerializeObject(farm);
@@ -214,7 +215,7 @@ namespace NMP.Portal.Controllers
             //farm.Rainfall = farm.Rainfall ?? 600;
 
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", farm);
-            if (farm.IsCheckAnswer)
+            if (!farm.IsPostCodeChanged && farm.IsCheckAnswer)
             {
                 return RedirectToAction("CheckAnswer");
             }
@@ -358,7 +359,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult NVZ(FarmViewModel farm)
         {
-            if (farm.NVZField == null)
+            if (farm.NVZFields == null)
             {
                 ModelState.AddModelError("NVZField", Resource.MsgSelectAnOptionBeforeContinuing);
             }
@@ -490,8 +491,12 @@ namespace NMP.Portal.Controllers
                     RegisteredOrganicProducer = farm.RegisteredOrganicProducer,
                     MetricUnits = farm.MetricUnits,
                     EnglishRules = farm.EnglishRules,
-                    NVZField = farm.NVZField,
-                    FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel
+                    NVZFields = farm.NVZFields,
+                    FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
+                    CreatedByID=1,
+                    CreatedOn=System.DateTime.Now,
+                    ModifiedByID=farm.ModifiedByID,
+                    ModifiedOn=farm.ModifiedOn
                 },
                 UserID = 1,
                 RoleID = 2

@@ -505,4 +505,10 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="MsgFarmAlreadyExist" xml:space="preserve">
     <value>The farm name {0} under the postcode {1} already exist</value>
   </data>
+  <data name="lblIsNVZField" xml:space="preserve">
+    <value>Is {0} inside a Nitrate Vulnerable Zone (NVZ)?</value>
+  </data>
+  <data name="lblIsAbove300SeaLevel" xml:space="preserve">
+    <value>Is {0} more than 300 metres above sea level?</value>
+  </data>
 </root>
