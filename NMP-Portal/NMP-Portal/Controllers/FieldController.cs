@@ -39,7 +39,7 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
             }
-            model.EncryptedFarmId= encryptedFarmId;
+            model.EncryptedFarmId = encryptedFarmId;
             if (!string.IsNullOrEmpty(encryptedFarmId))
             {
                 string farmId = _farmDataProtector.Unprotect(encryptedFarmId);
@@ -54,7 +54,7 @@ namespace NMP.Portal.Controllers
                     //_httpContextAccessor.HttpContext?.Session.SetString("FieldData", fieldModel);
                 }
             }
-            
+
             return View(model);
         }
 
@@ -131,8 +131,25 @@ namespace NMP.Portal.Controllers
                 return View(field);
             }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
-            return RedirectToAction("NVZField");
+            return RedirectToAction("HowWouldYouLikeToEnterYourSoilNutrientValues");
         }
-        
+
+        [HttpGet]
+        public async Task<IActionResult> HowWouldYouLikeToEnterYourSoilNutrientValues()
+        {
+            Error error = new Error();
+
+            FieldViewModel model = new FieldViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+            }
+            string farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
+            (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+            model.IsWithinNVZ = Convert.ToBoolean(farm.NVZFields);
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
+            return View(model);
+        }
+
     }
 }

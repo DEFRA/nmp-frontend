@@ -187,6 +187,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to As an index.
+        /// </summary>
+        public static string lblAsAnIndex {
+            get {
+                return ResourceManager.GetString("lblAsAnIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Average annual rainfall.
         /// </summary>
         public static string lblAverageAnnualRainfall {
@@ -557,11 +566,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How would you like to enter your soil nutrient values.
+        /// </summary>
+        public static string lblHowWouldYouLikeToEnterYourSoilNutrientValues {
+            get {
+                return ResourceManager.GetString("lblHowWouldYouLikeToEnterYourSoilNutrientValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If you have more than one holding, it&apos;s best to add a separate farm for each..
         /// </summary>
         public static string lblIfYouhaveMoreThanOneHolding {
             get {
                 return ResourceManager.GetString("lblIfYouhaveMoreThanOneHolding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In milligrams per litre.
+        /// </summary>
+        public static string lblInMilligramsPerLitre {
+            get {
+                return ResourceManager.GetString("lblInMilligramsPerLitre", resourceCulture);
             }
         }
         

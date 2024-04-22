@@ -6,6 +6,7 @@ namespace NMP.Portal.ViewModels
     {
         public string FarmName { get; set; } = string.Empty;
         public string EncryptedFarmId { get; set; } = string.Empty;
+        public string HowWouldYouLikeToEnterYourSoilNutrientValues { get; set; } = string.Empty;
 
     }
 }

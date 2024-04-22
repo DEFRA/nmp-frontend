@@ -1,0 +1,41 @@
+﻿@using NMP.Portal.Resources
+@model NMP.Portal.ViewModels.FieldViewModel
+@{
+    ViewData["Title"] = Resource.lblHowWouldYouLikeToEnterYourSoilNutrientValues;
+    var AsAnIndex = (int)NMP.Portal.Enums.HowWouldYouLikeToEnterYourSoilNutrientValues.AsAnIndex;
+    var InMilligramsPerLitre = (int)NMP.Portal.Enums.HowWouldYouLikeToEnterYourSoilNutrientValues.InMilligramsPerLitre;
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="FieldMeasurements" asp-controller="Field">@Resource.lblBack</govuk-back-link>
+}
+<form asp-action="HowWouldYouLikeToEnterYourSoilNutrientValues" asp-controller="Field" method="post">
+    @Html.AntiForgeryToken()
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LPIDNumber"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalArea"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CroppedArea"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureNonSpreadingArea"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZ"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <govuk-radios class="govuk-radios--inline" asp-for="@Model.HowWouldYouLikeToEnterYourSoilNutrientValues">
+                <govuk-radios-fieldset>
+                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @Resource.lblHowWouldYouLikeToEnterYourSoilNutrientValues
+                    </govuk-radios-fieldset-legend>
+                    <govuk-radios-item value="0">@Resource.lblAsAnIndex</govuk-radios-item>
+                    <govuk-radios-item value="1">@Resource.lblInMilligramsPerLitre</govuk-radios-item>
+                </govuk-radios-fieldset>
+            </govuk-radios>
+            <govuk-button type="submit" class="margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+            <p class="govuk-body cancel-link"><a asp-action="FarmSummary" asp-controller="Farm">@Resource.lblCancel</a></p>
+
+        </div>
+
+    </div>
+</form>
