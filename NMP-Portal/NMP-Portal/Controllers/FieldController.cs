@@ -90,7 +90,7 @@ namespace NMP.Portal.Controllers
         {
             if (field.TotalArea == null || field.TotalArea == 0)
             {
-                ModelState.AddModelError("Name", Resource.MsgEnterTotalFieldArea);
+                ModelState.AddModelError("TotalArea", Resource.MsgEnterTotalFieldArea);
             }
             if (!ModelState.IsValid)
             {
@@ -131,8 +131,43 @@ namespace NMP.Portal.Controllers
                 return View(field);
             }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
-            return RedirectToAction("NVZField");
+            return RedirectToAction("ElevationField");
         }
-        
+
+        [HttpGet]
+        public async Task<IActionResult> ElevationField()
+        {
+            Error error = new Error();
+
+            FieldViewModel model = new FieldViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+            }
+            string farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
+            (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+            if (farm.FieldsAbove300SeaLevel == 1)
+            {
+                return View(model);
+            }
+            model.IsAbove300SeaLevel = Convert.ToBoolean(farm.FieldsAbove300SeaLevel);
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
+            return RedirectToAction("Soil");
+        }
+
+        [HttpPost]
+        public IActionResult ElevationField(FieldViewModel field)
+        {
+            if (field.IsAbove300SeaLevel == null)
+            {
+                ModelState.AddModelError("IsAbove300SeaLevel", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(field);
+            }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
+            return RedirectToAction("ElevationField");
+        }
     }
 }
