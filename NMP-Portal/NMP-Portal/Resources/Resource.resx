@@ -511,4 +511,25 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblIsAbove300SeaLevel" xml:space="preserve">
     <value>Is {0} more than 300 metres above sea level?</value>
   </data>
+  <data name="lblSoilType" xml:space="preserve">
+    <value>Soil Type</value>
+  </data>
+  <data name="lblWhatIsSoilType" xml:space="preserve">
+    <value>What is the soil type in {0}?</value>
+  </data>
+  <data name="lblAddTheSoilAnalysisFor" xml:space="preserve">
+    <value>Add the soil analysis for {0}</value>
+  </data>
+  <data name="lblDoesContainPotashReleasingClay" xml:space="preserve">
+    <value>Does contain potash-releasing clay?</value>
+  </data>
+  <data name="lblIsSoilDeficientInSulphur" xml:space="preserve">
+    <value>Is the soil deficient in sulphur (S)?</value>
+  </data>
+  <data name="lblSoilReleasingClay" xml:space="preserve">
+    <value>Soil Releasing Clay</value>
+  </data>
+  <data name="lblSulpherDeficient" xml:space="preserve">
+    <value>Sulpher Deficient</value>
+  </data>
 </root>

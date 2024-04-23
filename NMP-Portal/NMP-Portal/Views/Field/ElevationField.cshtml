@@ -18,8 +18,14 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsAbove300SeaLevel">
+            @if (ViewBag.SoilTypeError != null)
+            {
+                <govuk-error-summary>
+                    <govuk-error-summary-item href="#">@ViewBag.SoilTypeError</govuk-error-summary-item>
+                </govuk-error-summary>
+            }
 
+            <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsAbove300SeaLevel">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @string.Format(Resource.lblIsAbove300SeaLevel, Model.Name)
@@ -31,7 +37,7 @@
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
-            <p class="govuk-body cancel-link"><a asp-action="FarmSummary" asp-controller="Farm">@Resource.lblCancel</a></p>
+            <p class="govuk-body cancel-link"><a asp-action="FarmSummary" asp-controller="Farm" asp-route-EncryptedFarmId="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
 
         </div>
 

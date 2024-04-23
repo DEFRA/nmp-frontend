@@ -1,13 +1,13 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.FieldViewModel
 @{
-    ViewData["Title"] = Resource.lblNVZField;
+    ViewData["Title"] = Resource.lblSoilReleasingClay;
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="FieldMeasurements" asp-controller="Field">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="SoilType" asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="NVZField" asp-controller="Field" method="post">
+<form asp-action="SoilReleasingClay" asp-controller="Field" method="post">
     @Html.AntiForgeryToken()
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference"></govuk-input>
@@ -16,21 +16,35 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CroppedArea"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureNonSpreadingArea"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilTypeID"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilReleasingClay"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalysis.SulphurDeficient"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAbove300SeaLevel"></govuk-input>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsWithinNVZ">
-
+            
+            <govuk-radios name="SoilAnasysis">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblIsNVZField,Model.Name)
+                        @string.Format(Resource.lblAddTheSoilAnalysisFor, Model.Name)
                     </govuk-radios-fieldset-legend>
+                   
+                </govuk-radios-fieldset>
+            </govuk-radios>
+            
+            <govuk-radios class="govuk-radios--inline" asp-for="@Model.SoilReleasingClay">
+                <govuk-radios-fieldset>
+                    <govuk-radios-fieldset-legend>@Resource.lblDoesContainPotashReleasingClay</govuk-radios-fieldset-legend>
                     <govuk-radios-item value="true">@Resource.lblYes</govuk-radios-item>
                     <govuk-radios-item value="false">@Resource.lblNo</govuk-radios-item>
                 </govuk-radios-fieldset>
             </govuk-radios>
+
+            <govuk-radios class="govuk-radios--inline" asp-for="@Model.SoilAnalysis.SulphurDeficient">
+                <govuk-radios-fieldset>
+                    <govuk-radios-fieldset-legend>@Resource.lblIsSoilDeficientInSulphur</govuk-radios-fieldset-legend>
+                    <govuk-radios-item value="true">@Resource.lblYes</govuk-radios-item>
+                    <govuk-radios-item value="false">@Resource.lblNo</govuk-radios-item>
+                </govuk-radios-fieldset>
+            </govuk-radios>
+
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>

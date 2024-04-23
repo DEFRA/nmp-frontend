@@ -40,5 +40,33 @@ namespace NMP.Portal.Services
 
             return fieldCount;
         }
+        public async Task<List<SoilTypesResponse>> FetchSoilTypes()
+        {
+            List<SoilTypesResponse> soilTypes = new List<SoilTypesResponse>();
+            Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
+            HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
+            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+            var response = await httpClient.GetAsync(APIURLHelper.FetchSoilTypesAsyncAPI);
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode)
+            {
+                if (responseWrapper != null && responseWrapper.Data != null)
+                {
+                    var soiltypeslist = responseWrapper.Data.ToObject<List<SoilTypesResponse>>();
+                    soilTypes.AddRange(soiltypeslist);
+                }
+            }
+            else
+            {
+                if (responseWrapper != null && responseWrapper.Error != null)
+                {
+                    Error error = responseWrapper.Error.ToObject<Error>();
+                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                }
+            }
+
+            return soilTypes;
+        }
     }
 }

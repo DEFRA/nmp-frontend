@@ -5,5 +5,6 @@ namespace NMP.Portal.Services
     public interface IFieldService : IService
     {
         Task<int> FetchFieldCountByFarmIdAsync(int farmId);
+        Task<List<SoilTypesResponse>> FetchSoilTypes();
     }
 }
