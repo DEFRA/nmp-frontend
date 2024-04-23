@@ -2,38 +2,33 @@
 
 namespace NMP.Portal.Security;
 
-public sealed class SecurityHeadersMiddleware
+public sealed class SecurityHeadersMiddleware(RequestDelegate requestDelegate)
 {
-    private readonly RequestDelegate _requestDelegate;
-
-    public SecurityHeadersMiddleware(RequestDelegate requestDelegate)
-    {
-        _requestDelegate = requestDelegate;
-    }
+    private readonly RequestDelegate _requestDelegate = requestDelegate;
 
     public Task Invoke(HttpContext context)
     {
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
         // TODO Change the value depending of your needs
-        context.Response.Headers.Add("Referrer-Policy", new StringValues("strict-origin"));
+        context.Response.Headers.Append("Referrer-Policy", new StringValues("strict-origin"));
 
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options
-        context.Response.Headers.Add("X-Content-Type-Options", new StringValues("nosniff"));
+        context.Response.Headers.Append("X-Content-Type-Options", new StringValues("nosniff"));
 
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
-        context.Response.Headers.Add("X-Frame-Options", new StringValues("DENY"));
+        context.Response.Headers.Append("X-Frame-Options", new StringValues("DENY"));
 
         // https://security.stackexchange.com/questions/166024/does-the-x-permitted-cross-domain-policies-header-have-any-benefit-for-my-websit
-        context.Response.Headers.Add("X-Permitted-Cross-Domain-Policies", new StringValues("none"));
+        context.Response.Headers.Append("X-Permitted-Cross-Domain-Policies", new StringValues("none"));
 
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection
-        context.Response.Headers.Add("X-Xss-Protection", new StringValues("1; mode=block"));
+        context.Response.Headers.Append("X-Xss-Protection", new StringValues("1; mode=block"));
 
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expect-CT
         // You can use https://report-uri.com/ to get notified when a misissued certificate is detected
         //context.Response.Headers.Add("Expect-CT", new StringValues("max-age=0, enforce, report-uri=\"https://example.report-uri.com/r/d/ct/enforce\""));
 
-        context.Response.Headers.Add("Permissions-Policy", new StringValues(
+        context.Response.Headers.Append("Permissions-Policy", new StringValues(
             "accelerometer=(self), " +
             "autoplay=(self), " +
             "camera=(self), " +
