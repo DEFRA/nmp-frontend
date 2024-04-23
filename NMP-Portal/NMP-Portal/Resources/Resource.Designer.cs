@@ -133,6 +133,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add the soil analysis for {0}.
+        /// </summary>
+        public static string lblAddTheSoilAnalysisFor {
+            get {
+                return ResourceManager.GetString("lblAddTheSoilAnalysisFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add this farm.
         /// </summary>
         public static string lblAddThisFarm {
@@ -318,6 +327,15 @@ namespace NMP.Portal.Resources {
         public static string lblCroppedArea {
             get {
                 return ResourceManager.GetString("lblCroppedArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Does contain potash-releasing clay?.
+        /// </summary>
+        public static string lblDoesContainPotashReleasingClay {
+            get {
+                return ResourceManager.GetString("lblDoesContainPotashReleasingClay", resourceCulture);
             }
         }
         
@@ -580,6 +598,15 @@ namespace NMP.Portal.Resources {
         public static string lblIsNVZField {
             get {
                 return ResourceManager.GetString("lblIsNVZField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is the soil deficient in sulphur (S)?.
+        /// </summary>
+        public static string lblIsSoilDeficientInSulphur {
+            get {
+                return ResourceManager.GetString("lblIsSoilDeficientInSulphur", resourceCulture);
             }
         }
         
@@ -863,6 +890,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Soil Releasing Clay.
+        /// </summary>
+        public static string lblSoilReleasingClay {
+            get {
+                return ResourceManager.GetString("lblSoilReleasingClay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Soil Type.
+        /// </summary>
+        public static string lblSoilType {
+            get {
+                return ResourceManager.GetString("lblSoilType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Some of the fields are above 300m.
         /// </summary>
         public static string lblSomeOfTheFieldsAreAbove300m {
@@ -877,6 +922,15 @@ namespace NMP.Portal.Resources {
         public static string lblSomeOfTheFieldsAreInAnNVZ {
             get {
                 return ResourceManager.GetString("lblSomeOfTheFieldsAreInAnNVZ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sulpher Deficient.
+        /// </summary>
+        public static string lblSulpherDeficient {
+            get {
+                return ResourceManager.GetString("lblSulpherDeficient", resourceCulture);
             }
         }
         
@@ -985,6 +1039,15 @@ namespace NMP.Portal.Resources {
         public static string lblWeCouldNotFindAnyAddressesFor {
             get {
                 return ResourceManager.GetString("lblWeCouldNotFindAnyAddressesFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the soil type in {0}?.
+        /// </summary>
+        public static string lblWhatIsSoilType {
+            get {
+                return ResourceManager.GetString("lblWhatIsSoilType", resourceCulture);
             }
         }
         

@@ -10,5 +10,6 @@
         public const string FetchFarmByIdAPI = "farm/{0}";
         public const string FetchFieldCountByFarmIdAPI = "field/farm/{0}/count";
         public const string FetchRainfallAverageAsyncAPI = "vendors/rb209/RainFall/RainfallAverage/{0}";
+        public const string FetchSoilTypesAsyncAPI = "vendors/rb209/Soil/SoilTypes";
     }
 }
