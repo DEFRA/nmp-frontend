@@ -192,6 +192,15 @@ namespace NMP.Portal.Controllers
         [HttpPost]
         public IActionResult SoilNutrientValueType(FieldViewModel model)
         {
+            if (model.IsSoilNutrientValueTypeIndex == null)
+            {
+                ModelState.AddModelError("IsSoilNutrientValueTypeIndex", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
 
             return RedirectToAction("AddSoilAnalysis");
