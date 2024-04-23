@@ -1,34 +1,36 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.FieldViewModel
 @{
-    ViewData["Title"] = Resource.lblNVZField;
+    ViewData["Title"] = Resource.lblSoilNutrientValueType;
+    var AsAnIndex = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
+    var InMilligramsPerLitre = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
 }
 
 @section BeforeContent {
     <govuk-back-link asp-action="FieldMeasurements" asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="NVZField" asp-controller="Field" method="post">
+<form asp-action="SoilNutrientValueType" asp-controller="Field" method="post">
     @Html.AntiForgeryToken()
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LPIDNumber"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalArea"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CroppedArea"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureNonSpreadingArea"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZ"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilNutrientValueTypeIndex" value="@Model.IsSoilNutrientValueTypeIndex.ToString().ToLower()"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAbove300SeaLevel"></govuk-input>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsWithinNVZ">
-
+            <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsSoilNutrientValueTypeIndex">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblIsNVZField,Model.Name)
+                        @Resource.lblHowWouldYouLikeToEnterYourSoilNutrientValues
                     </govuk-radios-fieldset-legend>
-                    <govuk-radios-item value="true">@Resource.lblYes</govuk-radios-item>
-                    <govuk-radios-item value="false">@Resource.lblNo</govuk-radios-item>
+                    <govuk-radios-item value=@AsAnIndex>@Resource.lblAsAnIndex</govuk-radios-item>
+                    <govuk-radios-item value=@InMilligramsPerLitre>@Resource.lblInMilligramsPerLitre</govuk-radios-item>
                 </govuk-radios-fieldset>
             </govuk-radios>
             <govuk-button type="submit" class="margin-bottom-forty">

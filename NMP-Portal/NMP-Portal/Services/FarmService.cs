@@ -134,5 +134,19 @@ namespace NMP.Portal.Services
 
             return isFarmExist;
         }
+
+        public async Task<decimal> FetchRainfallAverageAsync(string firstHalfPostcode)
+        {
+            decimal rainfallAverage=0;
+            Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
+            HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
+            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+            var rainfall = await httpClient.GetAsync(string.Format(APIURLHelper.FetchRainfallAverageAsyncAPI, firstHalfPostcode));
+            string result = await rainfall.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapperFarmExist = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            
+            rainfallAverage = responseWrapperFarmExist.Data["averageRainfall"];
+            return rainfallAverage;
+        }
     }
 }

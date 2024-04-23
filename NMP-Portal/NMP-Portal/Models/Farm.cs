@@ -38,8 +38,8 @@ namespace NMP.Portal.Models
         public string? Telephone { get; set; }
         public string? Mobile { get; set; }
         public string? Email { get; set; }
-        [RegularExpression("^[0-9]+$",  ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterTheAverageAnnualRainfall))] 
-        public int? Rainfall { get; set; }
+        [RegularExpression(@"^\d+(\.\d+)?$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterTheAverageAnnualRainfall))]
+        public decimal? Rainfall { get; set; }
         public decimal TotalFarmArea { get; set; } = 0;
         public int AverageAltitude { get; set; } = 0;
         public bool? RegisteredOrganicProducer { get; set; } = false;
