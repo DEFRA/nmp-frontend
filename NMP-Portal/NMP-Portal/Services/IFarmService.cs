@@ -8,5 +8,7 @@ namespace NMP.Portal.Services
         Task<(Farm,Error)> AddFarmAsync(FarmData farmData);
         Task<(Farm, Error)> FetchFarmByIdAsync(int farmId);
         Task<bool> IsFarmExistAsync(string farmName, string postcode);
+
+        Task<decimal> FetchRainfallAverageAsync(string postcode);
     }
 }
