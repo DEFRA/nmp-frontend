@@ -1,0 +1,21 @@
+﻿@model ErrorViewModel
+@{
+    ViewBag.Title = "Page not found – Plan and record nutrient applications – GOV.UK";
+}
+
+<div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">@ViewBag.Title</h1>
+    <p class="govuk-body">
+        There is no page at <strong>@ViewBag.Path</strong>
+    </p>
+    <p class="govuk-body">This may be because:</p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>you typed or pasted the web address incorrectly</li>
+        <li>a link in your code is wrong</li>
+        <li>a form in your code is wrong</li>
+        <li>you have not created the page yet</li>
+    </ul>
+    <p class="govuk-body">
+        You can try and fix this yourself or <a class="govuk-link" href="#">contact the GOV.UK Plan and record nutrient applications team</a> if you need help.
+    </p>
+</div>

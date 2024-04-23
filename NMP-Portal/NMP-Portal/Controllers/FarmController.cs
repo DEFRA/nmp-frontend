@@ -486,6 +486,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CheckAnswer(FarmViewModel farm)
         {
+            int userId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value);
             var farmData = new FarmData
             {
                 Farm = new Farm()
@@ -512,12 +513,12 @@ namespace NMP.Portal.Controllers
                     EnglishRules = farm.EnglishRules,
                     NVZFields = farm.NVZFields,
                     FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
-                    CreatedByID = 1,
+                    CreatedByID = userId,
                     CreatedOn = System.DateTime.Now,
                     ModifiedByID = farm.ModifiedByID,
                     ModifiedOn = farm.ModifiedOn
                 },
-                UserID = 1,
+                UserID = userId,
                 RoleID = 2
             };
             (Farm farmResponse, Error error) = await _farmService.AddFarmAsync(farmData);

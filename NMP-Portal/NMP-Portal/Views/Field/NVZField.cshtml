@@ -2,6 +2,8 @@
 @model NMP.Portal.ViewModels.FieldViewModel
 @{
     ViewData["Title"] = Resource.lblNVZField;
+    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
 }
 
 @section BeforeContent {
@@ -18,6 +20,9 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilTypeID"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilReleasingClay"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalysis.SulphurDeficient"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilNutrientValueTypeIndex" value="@Model.IsSoilNutrientValueTypeIndex.ToString().ToLower()"></govuk-input>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
@@ -27,14 +32,14 @@
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @string.Format(Resource.lblIsNVZField,Model.Name)
                     </govuk-radios-fieldset-legend>
-                    <govuk-radios-item value="true">@Resource.lblYes</govuk-radios-item>
-                    <govuk-radios-item value="false">@Resource.lblNo</govuk-radios-item>
+                    <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>
+                    <govuk-radios-item value=@no>@Resource.lblNo</govuk-radios-item>
                 </govuk-radios-fieldset>
             </govuk-radios>
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
-            <p class="govuk-body cancel-link"><a asp-action="FarmSummary" asp-controller="Farm">@Resource.lblCancel</a></p>
+            <p class="govuk-body cancel-link"><a asp-action="FarmSummary" asp-controller="Farm" asp-route-EncryptedFarmId="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
 
         </div>
 
