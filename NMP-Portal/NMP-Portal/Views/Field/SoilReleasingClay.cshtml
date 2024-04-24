@@ -2,6 +2,8 @@
 @model NMP.Portal.ViewModels.FieldViewModel
 @{
     ViewData["Title"] = Resource.lblSoilReleasingClay;
+    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
 }
 
 @section BeforeContent {
@@ -17,6 +19,7 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureNonSpreadingArea"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAbove300SeaLevel"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilNutrientValueTypeIndex" value="@Model.IsSoilNutrientValueTypeIndex.ToString().ToLower()"></govuk-input>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             
@@ -32,16 +35,16 @@
             <govuk-radios class="govuk-radios--inline" asp-for="@Model.SoilReleasingClay">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend>@Resource.lblDoesContainPotashReleasingClay</govuk-radios-fieldset-legend>
-                    <govuk-radios-item value="true">@Resource.lblYes</govuk-radios-item>
-                    <govuk-radios-item value="false">@Resource.lblNo</govuk-radios-item>
+                    <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>
+                    <govuk-radios-item value=@no>@Resource.lblNo</govuk-radios-item>
                 </govuk-radios-fieldset>
             </govuk-radios>
 
             <govuk-radios class="govuk-radios--inline" asp-for="@Model.SoilAnalysis.SulphurDeficient">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend>@Resource.lblIsSoilDeficientInSulphur</govuk-radios-fieldset-legend>
-                    <govuk-radios-item value="true">@Resource.lblYes</govuk-radios-item>
-                    <govuk-radios-item value="false">@Resource.lblNo</govuk-radios-item>
+                    <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>
+                    <govuk-radios-item value=@no>@Resource.lblNo</govuk-radios-item>
                 </govuk-radios-fieldset>
             </govuk-radios>
 

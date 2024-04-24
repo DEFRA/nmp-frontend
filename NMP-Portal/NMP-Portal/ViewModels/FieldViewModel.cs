@@ -2,14 +2,19 @@
 
 namespace NMP.Portal.ViewModels
 {
+
     public class FieldViewModel : Field
     {
+        public SoilAnalysis SoilAnalysis { get; set; }
+
         public FieldViewModel()
         {
-            SoilAnalysis = new SoilAnalysis();
+            SoilAnalysis=new SoilAnalysis();
         }
-        public string FarmName { get; set; } = string.Empty;
+
+        public string? FarmName { get; set; } = string.Empty;
         public string EncryptedFarmId { get; set; } = string.Empty;
-        public SoilAnalysis SoilAnalysis { get; set; }
+        public bool? IsSoilNutrientValueTypeIndex { get; set; }
+
     }
 }

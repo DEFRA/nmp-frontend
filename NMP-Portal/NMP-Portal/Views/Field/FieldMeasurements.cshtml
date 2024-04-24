@@ -14,6 +14,8 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LPIDNumber"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZ"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
 
@@ -21,22 +23,20 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilTypeID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilReleasingClay"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalysis.SulphurDeficient"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilNutrientValueTypeIndex" value="@Model.IsSoilNutrientValueTypeIndex.ToString().ToLower()"></govuk-input>
             <div class="govuk-form-group">
                 <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                    <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblFieldMeasurements, "")</h1>
+                    <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblFieldMeasurements, Model.FarmName)</h1>
                 </legand>
-                <div class="govuk-input__wrapper">
-                    <govuk-input class="govuk-input--width-5" asp-for="@Model.TotalArea" type="text"></govuk-input>
-                    <div class="govuk-input__suffix rainfall-suffix" aria-hidden="true">@Resource.lblHectares</div>
-                </div>
-                <div class="govuk-input__wrapper">
-                    <govuk-input class="govuk-input--width-5" asp-for="@Model.CroppedArea" type="text"></govuk-input>
-                    <div class="govuk-input__suffix rainfall-suffix" aria-hidden="true">@Resource.lblHectares</div>
-                </div>
-                <div class="govuk-input__wrapper">
-                    <govuk-input class="govuk-input--width-5" asp-for="@Model.ManureNonSpreadingArea" type="text"></govuk-input>
-                    <div class="govuk-input__suffix rainfall-suffix" aria-hidden="true">@Resource.lblHectares</div>
-                </div>
+                <govuk-input name="TotalArea" asp-for=@Model.TotalArea input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-suffix>@Resource.lblHectares</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input name="CroppedArea" asp-for=@Model.CroppedArea input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-suffix>@Resource.lblHectares</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input name="ManureNonSpreadingArea" asp-for=@Model.ManureNonSpreadingArea input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-suffix>@Resource.lblHectares</govuk-input-suffix>
+                </govuk-input>
             </div>
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                 @Resource.lblContinue

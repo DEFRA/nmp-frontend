@@ -25,8 +25,8 @@ namespace NMP.Portal.Services
             {
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    FieldResponseWapper fieldResponseWapper = responseWrapper.Data.ToObject<FieldResponseWapper>();
-                    fieldCount = fieldResponseWapper.Count;
+                    fieldCount = responseWrapper.Data["count"];
+
                 }
             }
             else
@@ -67,6 +67,34 @@ namespace NMP.Portal.Services
             }
 
             return soilTypes;
+        }
+        public async Task<List<FieldResponseWapper>> FetchNutrientsAsync()
+        {
+            List<FieldResponseWapper> nutrients = new List<FieldResponseWapper>();
+            Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
+            HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
+            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchNutrientsAsyncAPI));
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode)
+            {
+                if (responseWrapper != null && responseWrapper.Data != null)
+                {
+                    List<FieldResponseWapper> fieldResponseWapper = responseWrapper.Data.ToObject<List<FieldResponseWapper>>();
+                    nutrients.AddRange(fieldResponseWapper);
+                }
+            }
+            else
+            {
+                if (responseWrapper != null && responseWrapper.Error != null)
+                {
+                    Error error = responseWrapper.Error.ToObject<Error>();
+                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                }
+            }
+
+            return nutrients;
         }
     }
 }

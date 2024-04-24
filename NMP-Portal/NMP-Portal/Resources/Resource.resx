@@ -532,4 +532,82 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblSulpherDeficient" xml:space="preserve">
     <value>Sulpher Deficient</value>
   </data>
+  <data name="lblHowWouldYouLikeToEnterYourSoilNutrientValues" xml:space="preserve">
+    <value>How would you like to enter your soil nutrient values ?</value>
+  </data>
+  <data name="lblAsAnIndex" xml:space="preserve">
+    <value>As an index</value>
+  </data>
+  <data name="lblInMilligramsPerLitre" xml:space="preserve">
+    <value>In milligrams per litre</value>
+  </data>
+  <data name="lblAddSoilAnalysis" xml:space="preserve">
+    <value>Add soil analysis for {0}</value>
+  </data>
+  <data name="lblAddSoilNutrientValue" xml:space="preserve">
+    <value>Add soil nutrient value</value>
+  </data>
+  <data name="lblSoilNutrientValueType" xml:space="preserve">
+    <value>Soil nutrient value Type</value>
+  </data>
+  <data name="lblMagnesiumIndex" xml:space="preserve">
+    <value>Magnesium (Mg) index</value>
+  </data>
+  <data name="lblMagnesiumPerLitreOfSoil" xml:space="preserve">
+    <value>Magnesium (Mg) per litre of soil</value>
+  </data>
+  <data name="lblMilligrams" xml:space="preserve">
+    <value>Milligrams</value>
+  </data>
+  <data name="lblPhosphorusIndex" xml:space="preserve">
+    <value>Phosphorus (P) index</value>
+  </data>
+  <data name="lblPhosphorusPerLitreOfSoil" xml:space="preserve">
+    <value>Phosphorus (P) per litre of soil</value>
+  </data>
+  <data name="lblPotassiumIndex" xml:space="preserve">
+    <value>Potassium (K) index</value>
+  </data>
+  <data name="lblPotassiumPerLitreOfSoil" xml:space="preserve">
+    <value>Potassium (K) per litre of soil</value>
+  </data>
+  <data name="MsgMagnesiumIndex" xml:space="preserve">
+    <value>Enter the magnesium index before continuing</value>
+  </data>
+  <data name="MsgPhosphorusIndex" xml:space="preserve">
+    <value>Enter the phosphorus index before continuing</value>
+  </data>
+  <data name="MsgPotassiumIndex" xml:space="preserve">
+    <value>Enter the potassium index before continuing</value>
+  </data>
+  <data name="MsgMagnesiumPerLitreOfSoil" xml:space="preserve">
+    <value>Enter the amount of magnesium before continuing</value>
+  </data>
+  <data name="MsgPhosphorusPerLitreOfSoil" xml:space="preserve">
+    <value>Enter the amount of phosphorus before continuing</value>
+  </data>
+  <data name="MsgPotassiumPerLitreOfSoil" xml:space="preserve">
+    <value>Enter the amount of potassium before continuing</value>
+  </data>
+  <data name="lbllblAddSoilAnalysisTitle" xml:space="preserve">
+    <value>Add soil analysis</value>
+  </data>
+  <data name="lblPhosphorusAnalysisType" xml:space="preserve">
+    <value>What was the phosphorus (P) analysis type?</value>
+  </data>
+  <data name="lblMagnesium" xml:space="preserve">
+    <value>Magnesium</value>
+  </data>
+  <data name="lblPhosphate" xml:space="preserve">
+    <value>Phosphate</value>
+  </data>
+  <data name="lblPotash" xml:space="preserve">
+    <value>Potash</value>
+  </data>
+  <data name="MsgEnterValidValueForNutrient" xml:space="preserve">
+    <value>Enter an amount between 0 and 9999kg</value>
+  </data>
+  <data name="MsgEnterValidValueForNutrientIndex" xml:space="preserve">
+    <value>Enter an index between 0 and 9</value>
+  </data>
 </root>
