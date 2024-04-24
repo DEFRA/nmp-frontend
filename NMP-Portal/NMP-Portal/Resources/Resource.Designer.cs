@@ -61,6 +61,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Start now.
+        /// </summary>
+        public static string btnStartNow {
+            get {
+                return ResourceManager.GetString("btnStartNow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add a farm.
         /// </summary>
         public static string lblAddAFarm {
@@ -647,7 +656,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Is {0} inside a Nitrate Vulnerable Zone (NVZ)?.
+        ///   Looks up a localized string similar to Is {0} in a Nitrate Vulnerable Zone (NVZ)?.
         /// </summary>
         public static string lblIsNVZField {
             get {
@@ -1061,6 +1070,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Soil nutrient value Type.
+        /// </summary>
+        public static string lblSoilNutrientValueType {
+            get {
+                return ResourceManager.GetString("lblSoilNutrientValueType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Soil pH level.
         /// </summary>
         public static string lblSoilPHLevel {
@@ -1205,7 +1223,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use this service to plan and record how you apply nutrients and fertilisers on your farm..
+        ///   Looks up a localized string similar to Use this service to plan and record how you use nutrients on your farm..
         /// </summary>
         public static string lblUseThisServiceToPlan {
             get {

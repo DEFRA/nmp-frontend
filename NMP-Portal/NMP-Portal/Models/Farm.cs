@@ -49,7 +49,7 @@ namespace NMP.Portal.Models
         public int? FieldsAbove300SeaLevel { get; set; } = null;
         public string? EncryptedFarmId { get; set; }
         public DateTime CreatedOn { get; set; }
-        public int CreatedByID { get; set; }
+        public int? CreatedByID { get; set; }
         public DateTime? ModifiedOn { get; set; } = null;
         public int? ModifiedByID { get; set; } = null;
     }
