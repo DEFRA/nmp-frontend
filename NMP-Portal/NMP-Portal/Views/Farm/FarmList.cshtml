@@ -6,17 +6,24 @@
     ViewData["Title"] = Resource.lblFarmList;
 }
 
+@if (ViewBag.Error != null)
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item href="#">@ViewBag.Error</govuk-error-summary-item>
+    </govuk-error-summary>
+}
+
 <div class="govuk-grid-row">
     <div id="all-plans-table" class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-l">
             @Resource.lblYourFarms
         </h1>
-        @if (Model.Farms.Count > 0)
+        @if (Model!=null&&Model.Farms.Count > 0)
         {
             @foreach (var farmList in Model.Farms)
             {
                 <p class="govuk-body">
-                    <a asp-action="FarmSummary" asp-controller="Farm" asp-route-EncryptedFarmId="@farmList.EncryptedFarmId">@farmList.Name</a>
+                    <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@farmList.EncryptedFarmId">@farmList.Name</a>
                 </p>
             }
 

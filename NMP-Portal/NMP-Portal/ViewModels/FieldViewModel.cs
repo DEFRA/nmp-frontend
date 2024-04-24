@@ -12,7 +12,7 @@ namespace NMP.Portal.ViewModels
             SoilAnalysis=new SoilAnalysis();
         }
 
-        public string? FarmName { get; set; } = string.Empty;
+        public bool IsSoilReleasingClay { get; set; } = false;
         public string EncryptedFarmId { get; set; } = string.Empty;
         public bool? IsSoilNutrientValueTypeIndex { get; set; }
 

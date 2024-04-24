@@ -10,7 +10,12 @@ namespace NMP.Portal.Models
         public int? FieldID { get; set; }
         public int? Year { get; set; }
         public bool? SulphurDeficient { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblDateWhenTheSoilSampleWasTaken))]
         public DateTime? Date { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblSoilPHLevel))]
+        [RegularExpression(@"^(?:9(?:\.[0-9])?|[0-8](?:\.[0-9])?)$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterAPH))]
         public decimal? PH { get; set; }
         public int? PhosphorusMethodologyId { get; set; }
 
