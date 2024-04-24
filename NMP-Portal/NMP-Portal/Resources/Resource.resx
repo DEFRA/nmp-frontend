@@ -323,7 +323,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>true</value>
   </data>
   <data name="lblUseThisServiceToPlan" xml:space="preserve">
-    <value>Use this service to plan and record how you apply nutrients and fertilisers on your farm.</value>
+    <value>Use this service to plan and record how you use nutrients on your farm.</value>
   </data>
   <data name="lblWhatIsTheFarmName" xml:space="preserve">
     <value>What is the farm name?</value>
@@ -506,7 +506,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>The farm name {0} under the postcode {1} already exist</value>
   </data>
   <data name="lblIsNVZField" xml:space="preserve">
-    <value>Is {0} inside a Nitrate Vulnerable Zone (NVZ)?</value>
+    <value>Is {0} in a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
   <data name="lblIsAbove300SeaLevel" xml:space="preserve">
     <value>Is {0} more than 300 metres above sea level?</value>
@@ -609,5 +609,8 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
   <data name="MsgEnterValidValueForNutrientIndex" xml:space="preserve">
     <value>Enter an index between 0 and 9</value>
+  </data>
+  <data name="btnStartNow" xml:space="preserve">
+    <value>Start now</value>
   </data>
 </root>
