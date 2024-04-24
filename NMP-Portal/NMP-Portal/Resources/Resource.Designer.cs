@@ -1069,15 +1069,7 @@ namespace NMP.Portal.Resources {
             }
         }
         
-        /// <summary>
-        ///   Looks up a localized string similar to Soil nutrient value Type.
-        /// </summary>
-        public static string lblSoilNutrientValueType {
-            get {
-                return ResourceManager.GetString("lblSoilNutrientValueType", resourceCulture);
-            }
-        }
-        
+              
         /// <summary>
         ///   Looks up a localized string similar to Soil pH level.
         /// </summary>
