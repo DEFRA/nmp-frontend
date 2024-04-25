@@ -133,15 +133,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add the soil analysis for {0}.
-        /// </summary>
-        public static string lblAddTheSoilAnalysisFor {
-            get {
-                return ResourceManager.GetString("lblAddTheSoilAnalysisFor", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Add soil analysis for {0}.
         /// </summary>
         public static string lblAddSoilAnalysis {
@@ -156,6 +147,15 @@ namespace NMP.Portal.Resources {
         public static string lblAddSoilNutrientValue {
             get {
                 return ResourceManager.GetString("lblAddSoilNutrientValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add the soil analysis for {0}.
+        /// </summary>
+        public static string lblAddTheSoilAnalysisFor {
+            get {
+                return ResourceManager.GetString("lblAddTheSoilAnalysisFor", resourceCulture);
             }
         }
         
@@ -259,6 +259,16 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Calculate based on a recent soil nitrogen analysis
+        ///Continue.
+        /// </summary>
+        public static string lblBasedOnRecentSNA {
+            get {
+                return ResourceManager.GetString("lblBasedOnRecentSNA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Business Name.
         /// </summary>
         public static string lblBusinessName {
@@ -349,11 +359,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Crop Group.
+        /// </summary>
+        public static string lblCropGroup {
+            get {
+                return ResourceManager.GetString("lblCropGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cropped area (optional).
         /// </summary>
         public static string lblCroppedArea {
             get {
                 return ResourceManager.GetString("lblCroppedArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Crop Type.
+        /// </summary>
+        public static string lblCropType {
+            get {
+                return ResourceManager.GetString("lblCropType", resourceCulture);
             }
         }
         
@@ -426,6 +454,15 @@ namespace NMP.Portal.Resources {
         public static string lblErrorMsgForFarmName {
             get {
                 return ResourceManager.GetString("lblErrorMsgForFarmName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Estimate based on the previous crop.
+        /// </summary>
+        public static string lblEstimateBasedOnPreviousCrop {
+            get {
+                return ResourceManager.GetString("lblEstimateBasedOnPreviousCrop", resourceCulture);
             }
         }
         
@@ -598,6 +635,15 @@ namespace NMP.Portal.Resources {
         public static string lblHowManyFieldsInNVZ {
             get {
                 return ResourceManager.GetString("lblHowManyFieldsInNVZ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How would you like to calculate the soil nitrogen supply for {0}?.
+        /// </summary>
+        public static string lblHowWouldYouLikeToCalculateSNS {
+            get {
+                return ResourceManager.GetString("lblHowWouldYouLikeToCalculateSNS", resourceCulture);
             }
         }
         
@@ -1043,6 +1089,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Soil nutrient value Type.
+        /// </summary>
+        public static string lblSoilNutrientValueType {
+            get {
+                return ResourceManager.GetString("lblSoilNutrientValueType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Soil Releasing Clay.
         /// </summary>
         public static string lblSoilReleasingClay {
@@ -1057,15 +1112,6 @@ namespace NMP.Portal.Resources {
         public static string lblSoilType {
             get {
                 return ResourceManager.GetString("lblSoilType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Soil nutrient value Type.
-        /// </summary>
-        public static string lblSoilNutrientValueType {
-            get {
-                return ResourceManager.GetString("lblSoilNutrientValueType", resourceCulture);
             }
         }
         
@@ -1214,6 +1260,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the current crop group?.
+        /// </summary>
+        public static string lblWhatIsTheCurrentCropGroup {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheCurrentCropGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the current crop type?.
+        /// </summary>
+        public static string lblWhatIsTheCurrentCropType {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheCurrentCropType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the farm name?.
         /// </summary>
         public static string lblWhatIsTheFarmName {
@@ -1228,6 +1292,24 @@ namespace NMP.Portal.Resources {
         public static string lblWhatIsTheFarmPostcode {
             get {
                 return ResourceManager.GetString("lblWhatIsTheFarmPostcode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What was the previous crop group?.
+        /// </summary>
+        public static string lblWhatWasThePreviousCropGroup {
+            get {
+                return ResourceManager.GetString("lblWhatWasThePreviousCropGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What was the previous crop type?.
+        /// </summary>
+        public static string lblWhatWasThePreviousCropType {
+            get {
+                return ResourceManager.GetString("lblWhatWasThePreviousCropType", resourceCulture);
             }
         }
         
