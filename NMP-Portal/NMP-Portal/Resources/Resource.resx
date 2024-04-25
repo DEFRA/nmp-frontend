@@ -613,4 +613,28 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="btnStartNow" xml:space="preserve">
     <value>Start now</value>
   </data>
+  <data name="lblDateWhenTheSoilSampleWasTaken" xml:space="preserve">
+    <value>Date when the soil sample was taken</value>
+  </data>
+  <data name="lblSoilPHLevel" xml:space="preserve">
+    <value>Soil pH level</value>
+  </data>
+  <data name="MsgDateExample" xml:space="preserve">
+    <value>For example, 27 3 2007</value>
+  </data>
+  <data name="MsgEnterADateBeforeContinuing" xml:space="preserve">
+    <value>Enter a date before continuing</value>
+  </data>
+  <data name="MsgEnterAPHBeforeContinuing" xml:space="preserve">
+    <value>Enter a pH before continuing</value>
+  </data>
+  <data name="MsgEnterAPH" xml:space="preserve">
+    <value>Enter a pH range between 0 and 9.9</value>
+  </data>
+  <data name="MsgEnterADateAfter" xml:space="preserve">
+    <value>Enter a date after DD/MM/YYYY</value>
+  </data>
+  <data name="MsgEnterTheDateInNumber" xml:space="preserve">
+    <value>Enter the date in numbers. For example, 27 3 2007</value>
+  </data>
 </root>

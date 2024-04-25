@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.DataProtection;
+﻿using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,6 +12,7 @@ using NMP.Portal.ServiceResponses;
 using NMP.Portal.Services;
 using NMP.Portal.ViewModels;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Reflection;
 using Error = NMP.Portal.ServiceResponses.Error;
 
@@ -40,31 +42,27 @@ namespace NMP.Portal.Controllers
         {
             return View();
         }
+
+        public IActionResult CreateFieldCancel(string id)
+        {
+            _httpContextAccessor.HttpContext?.Session.Remove("FieldData");
+            return RedirectToAction("FarmSummary","Farm", new { Id = id });
+        }
+
         [HttpGet]
-        public async Task<IActionResult> AddField(string encryptedFarmId)
+        public async Task<IActionResult> AddField(string q)//EncryptedfarmId
         {
             FieldViewModel model = new FieldViewModel();
-            Error error = null;
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
             }
-            model.EncryptedFarmId = encryptedFarmId;
-            if (!string.IsNullOrEmpty(encryptedFarmId))
+            if (!string.IsNullOrEmpty(q))
             {
-                string farmId = _farmDataProtector.Unprotect(encryptedFarmId);
-                (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-                if (farm != null)
-                {
-                    model = new FieldViewModel();
-                    model.FarmName = farm.Name;
-                    model.FarmID = farm.ID;
-                    model.EncryptedFarmId = encryptedFarmId;
-                    var fieldModel = JsonConvert.SerializeObject(model);
-                    _httpContextAccessor.HttpContext?.Session.SetString("FieldData", fieldModel);
-                }
-                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", farm);
+                model.FarmID =Convert.ToInt32(_farmDataProtector.Unprotect(q));
+                model.EncryptedFarmId = q;
             }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
 
             return View(model);
         }
@@ -277,14 +275,13 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("SoilAnalysis.SulphurDeficient", Resource.MsgSelectAnOptionBeforeContinuing);
             }
-
+            field.IsSoilReleasingClay = true;
             if (!ModelState.IsValid)
             {
                 return View(field);
             }
-
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
-            return RedirectToAction("SoilNutrientValueType");
+            return RedirectToAction("SoilDateAndPHLevel");
         }
 
         [HttpGet]
@@ -305,14 +302,52 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("SoilAnalysis.SulphurDeficient", Resource.MsgSelectAnOptionBeforeContinuing);
             }
-
+            if(field.IsSoilReleasingClay)
+            {
+                field.IsSoilReleasingClay = false;
+            }
             if (!ModelState.IsValid)
             {
                 return View(field);
             }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);            
+            return RedirectToAction("SoilDateAndPHLevel");
+        }
+        [HttpGet]
+        public async Task<IActionResult> SoilDateAndPHLevel()
+        {
+            FieldViewModel model = new FieldViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+            }
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult SoilDateAndPHLevel(FieldViewModel model)
+        {
+            if (model.SoilAnalysis.Date == null)
+            {
+                ModelState.AddModelError("SoilAnalysis.Date", Resource.MsgEnterADateBeforeContinuing);
+            }
+            if (model.SoilAnalysis.PH == null)
+            {
+                ModelState.AddModelError("SoilAnalysis.PH", Resource.MsgEnterAPHBeforeContinuing);
+            }
+            //if (model.SoilAnalysis.Date > DateTime.Now.Date)
+            //{
+            //    ModelState.AddModelError("SoilAnalysis.Date", Resource.MsgEnterTheDateInNumber);
+            //}
+            if (DateTime.TryParseExact(model.SoilAnalysis.Date.ToString(), "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out _))
+            {
+                ModelState.AddModelError("SoilAnalysis.Date", Resource.MsgEnterTheDateInNumber);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
 
-            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
-            //return RedirectToAction("SoilAnalysis");
             return RedirectToAction("SoilNutrientValueType");
         }
         [HttpGet]
@@ -323,7 +358,6 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
             }
-            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             return View(model);
         }
         [HttpPost]
@@ -340,22 +374,21 @@ namespace NMP.Portal.Controllers
             }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
 
-            return RedirectToAction("AddSoilAnalysis");
+            return RedirectToAction("SoilNutrientValue");
         }
         [HttpGet]
-        public async Task<IActionResult> AddSoilAnalysis()
+        public async Task<IActionResult> SoilNutrientValue()
         {
             FieldViewModel model = new FieldViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
             }
-            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddSoilAnalysis(FieldViewModel model)
+        public async Task<IActionResult> SoilNutrientValue(FieldViewModel model)
         {
             Error error = null;
             try
@@ -423,5 +456,6 @@ namespace NMP.Portal.Controllers
             }
             return View(model);
         }
+       
     }
 }

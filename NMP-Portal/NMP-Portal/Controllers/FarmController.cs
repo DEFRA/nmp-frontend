@@ -55,10 +55,17 @@ namespace NMP.Portal.Controllers
             return View();
         }
 
-        public async Task<IActionResult> FarmList()
+        public async Task<IActionResult> FarmList(string? q)
         {
             _httpContextAccessor.HttpContext?.Session.Remove("FarmData");
             _httpContextAccessor.HttpContext?.Session.Remove("AddressList");
+
+            if(!string.IsNullOrWhiteSpace(q))
+            {
+                string errorMsg=_dataProtector.Unprotect(q);
+                ViewBag.Error = errorMsg;
+            }
+
             FarmsViewModel model = new FarmsViewModel();
             Error error = null;
             UserFarmResponse userFarmList = null;
@@ -528,8 +535,9 @@ namespace NMP.Portal.Controllers
                 ViewBag.AddFarmError = error.Message;
                 return View(farm);
             }
+            string success = _dataProtector.Protect("true");
             farmResponse.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());
-            return RedirectToAction("FarmSummary", new { EncryptedFarmId = farmResponse.EncryptedFarmId });
+            return RedirectToAction("FarmSummary", new { id = farmResponse.EncryptedFarmId,q= success });
 
         }
         public IActionResult BackCheckAnswer()
@@ -545,12 +553,19 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> FarmSummary(string EncryptedFarmId)
+        public async Task<IActionResult> FarmSummary(string id,string? q)
         {
             string farmId = string.Empty;
-
+            if(!string.IsNullOrWhiteSpace(q))
+            {
+                ViewBag.Success=_dataProtector.Unprotect(q);
+            }
+            else
+            {
+                ViewBag.Success = false;
+            }
             ViewBag.FieldCount = 0;
-            ViewBag.Success = false;
+            
             FarmViewModel? farmData = null;
             Error error = null;
             FarmViewModel model = new FarmViewModel();
@@ -565,12 +580,16 @@ namespace NMP.Portal.Controllers
                     ViewBag.Success = true;
                 }
 
-                if (!string.IsNullOrWhiteSpace(EncryptedFarmId))
+                if (!string.IsNullOrWhiteSpace(id))
                 {
-                    farmId = _dataProtector.Unprotect(EncryptedFarmId);
+                    farmId = _dataProtector.Unprotect(id);
 
                     (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-
+                    if(!string.IsNullOrWhiteSpace(error.Message))
+                    {
+                        string errorMsg = _dataProtector.Protect(error.Message);
+                        return RedirectToAction("FarmList", new {q= errorMsg });
+                    }
                     if (farm != null)
                     {
                         farmData = new FarmViewModel();
