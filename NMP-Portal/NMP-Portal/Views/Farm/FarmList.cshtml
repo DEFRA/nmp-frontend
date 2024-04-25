@@ -6,10 +6,10 @@
     ViewData["Title"] = Resource.lblFarmList;
 }
 
-@if (ViewBag.Error != null)
+@if (TempData["Error"] != null)
 {
     <govuk-error-summary>
-        <govuk-error-summary-item href="#">@ViewBag.Error</govuk-error-summary-item>
+        <govuk-error-summary-item href="#">@TempData["Error"]</govuk-error-summary-item>
     </govuk-error-summary>
 }
 
@@ -18,7 +18,7 @@
         <h1 class="govuk-heading-l">
             @Resource.lblYourFarms
         </h1>
-        @if (Model!=null&&Model.Farms.Count > 0)
+        @if (Model != null && Model.Farms.Count > 0)
         {
             @foreach (var farmList in Model.Farms)
             {
