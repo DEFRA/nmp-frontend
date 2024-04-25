@@ -59,6 +59,8 @@ namespace NMP.Portal.Controllers
         {
             _httpContextAccessor.HttpContext?.Session.Remove("FarmData");
             _httpContextAccessor.HttpContext?.Session.Remove("AddressList");
+
+
             FarmsViewModel model = new FarmsViewModel();
             Error error = null;
             UserFarmResponse userFarmList = null;
@@ -139,7 +141,7 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    farm.IsPostCodeChanged= true;
+                    farm.IsPostCodeChanged = true;
                     //return RedirectToAction("Address");
                 }
             }
@@ -528,8 +530,9 @@ namespace NMP.Portal.Controllers
                 ViewBag.AddFarmError = error.Message;
                 return View(farm);
             }
+            string success = _dataProtector.Protect("true");
             farmResponse.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());
-            return RedirectToAction("FarmSummary", new { EncryptedFarmId = farmResponse.EncryptedFarmId });
+            return RedirectToAction("FarmSummary", new { id = farmResponse.EncryptedFarmId, q = success });
 
         }
         public IActionResult BackCheckAnswer()
@@ -545,12 +548,19 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> FarmSummary(string EncryptedFarmId)
+        public async Task<IActionResult> FarmSummary(string id, string? q)
         {
             string farmId = string.Empty;
-
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                ViewBag.Success = _dataProtector.Unprotect(q);
+            }
+            else
+            {
+                ViewBag.Success = false;
+            }
             ViewBag.FieldCount = 0;
-            ViewBag.Success = false;
+
             FarmViewModel? farmData = null;
             Error error = null;
             FarmViewModel model = new FarmViewModel();
@@ -565,16 +575,20 @@ namespace NMP.Portal.Controllers
                     ViewBag.Success = true;
                 }
 
-                if (!string.IsNullOrWhiteSpace(EncryptedFarmId))
+                if (!string.IsNullOrWhiteSpace(id))
                 {
-                    farmId = _dataProtector.Unprotect(EncryptedFarmId);
+                    farmId = _dataProtector.Unprotect(id);
 
                     (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-
+                    if (!string.IsNullOrWhiteSpace(error.Message))
+                    {
+                        TempData["Error"] = error.Message;
+                        return RedirectToAction("FarmList");
+                    }
                     if (farm != null)
                     {
                         farmData = new FarmViewModel();
-                        farmData.Name=farm.Name;
+                        farmData.Name = farm.Name;
                         farmData.FullAddress = string.Format("{0}, {1} {2}, {3} {4}", farm.Address1, farm.Address2 != null ? farm.Address2 + "," : string.Empty, farm.Address3, farm.Address4, farm.Postcode);
                         farmData.EncryptedFarmId = _dataProtector.Protect(farm.ID.ToString());
                         ViewBag.FieldCount = await _fieldService.FetchFieldCountByFarmIdAsync(Convert.ToInt32(farmId));

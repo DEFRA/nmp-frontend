@@ -61,6 +61,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Start now.
+        /// </summary>
+        public static string btnStartNow {
+            get {
+                return ResourceManager.GetString("btnStartNow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add a farm.
         /// </summary>
         public static string lblAddAFarm {
@@ -386,6 +395,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Date when the soil sample was taken.
+        /// </summary>
+        public static string lblDateWhenTheSoilSampleWasTaken {
+            get {
+                return ResourceManager.GetString("lblDateWhenTheSoilSampleWasTaken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Does contain potash-releasing clay?.
         /// </summary>
         public static string lblDoesContainPotashReleasingClay {
@@ -684,7 +702,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Is {0} inside a Nitrate Vulnerable Zone (NVZ)?.
+        ///   Looks up a localized string similar to Is {0} in a Nitrate Vulnerable Zone (NVZ)?.
         /// </summary>
         public static string lblIsNVZField {
             get {
@@ -1097,6 +1115,17 @@ namespace NMP.Portal.Resources {
             }
         }
         
+              
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Soil pH level.
+        /// </summary>
+        public static string lblSoilPHLevel {
+            get {
+                return ResourceManager.GetString("lblSoilPHLevel", resourceCulture);
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to Soil Releasing Clay.
         /// </summary>
@@ -1115,6 +1144,7 @@ namespace NMP.Portal.Resources {
             }
         }
         
+       
         /// <summary>
         ///   Looks up a localized string similar to Some of the fields are above 300m.
         /// </summary>
@@ -1233,7 +1263,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use this service to plan and record how you apply nutrients and fertilisers on your farm..
+        ///   Looks up a localized string similar to Use this service to plan and record how you use nutrients on your farm..
         /// </summary>
         public static string lblUseThisServiceToPlan {
             get {
@@ -1368,11 +1398,38 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For example, 27 3 2007.
+        /// </summary>
+        public static string MsgDateExample {
+            get {
+                return ResourceManager.GetString("MsgDateExample", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a county.
         /// </summary>
         public static string MsgEnterACounty {
             get {
                 return ResourceManager.GetString("MsgEnterACounty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a date after DD/MM/YYYY.
+        /// </summary>
+        public static string MsgEnterADateAfter {
+            get {
+                return ResourceManager.GetString("MsgEnterADateAfter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a date before continuing.
+        /// </summary>
+        public static string MsgEnterADateBeforeContinuing {
+            get {
+                return ResourceManager.GetString("MsgEnterADateBeforeContinuing", resourceCulture);
             }
         }
         
@@ -1391,6 +1448,24 @@ namespace NMP.Portal.Resources {
         public static string MsgEnterAnAddress {
             get {
                 return ResourceManager.GetString("MsgEnterAnAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a pH range between 0 and 9.9.
+        /// </summary>
+        public static string MsgEnterAPH {
+            get {
+                return ResourceManager.GetString("MsgEnterAPH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a pH before continuing.
+        /// </summary>
+        public static string MsgEnterAPHBeforeContinuing {
+            get {
+                return ResourceManager.GetString("MsgEnterAPHBeforeContinuing", resourceCulture);
             }
         }
         
@@ -1436,6 +1511,15 @@ namespace NMP.Portal.Resources {
         public static string MsgEnterTheAverageAnnualRainfall {
             get {
                 return ResourceManager.GetString("MsgEnterTheAverageAnnualRainfall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the date in numbers. For example, 27 3 2007.
+        /// </summary>
+        public static string MsgEnterTheDateInNumber {
+            get {
+                return ResourceManager.GetString("MsgEnterTheDateInNumber", resourceCulture);
             }
         }
         

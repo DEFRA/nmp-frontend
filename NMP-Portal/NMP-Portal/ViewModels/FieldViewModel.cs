@@ -10,6 +10,8 @@ namespace NMP.Portal.ViewModels
             SoilAnalysis=new SoilAnalysis();
             Crop=new Crop();
         }
+
+        public bool IsSoilReleasingClay { get; set; } = false;
         public SoilAnalysis SoilAnalysis { get; set; }
         public Crop Crop { get; set; }
         public string? FarmName { get; set; } = string.Empty;
