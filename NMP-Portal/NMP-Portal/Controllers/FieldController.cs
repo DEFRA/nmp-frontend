@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using Error = NMP.Portal.ServiceResponses.Error;
 
 namespace NMP.Portal.Controllers
@@ -185,37 +186,44 @@ namespace NMP.Portal.Controllers
             Error error = new Error();
             FieldViewModel model = new FieldViewModel();
             List<SoilTypesResponse> soilTypes = new List<SoilTypesResponse>();
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+            try
             {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
-            }
-            FarmViewModel farm = new FarmViewModel();
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
-            {
-                farm = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-            }
-            if (_httpContextAccessor.HttpContext != null && !_httpContextAccessor.HttpContext.Session.Keys.Contains("SoilTypes"))
-            {
-                soilTypes = await _fieldService.FetchSoilTypes();
-                if (soilTypes.Count > 0 && soilTypes.Any())
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
                 {
-                    var isEnglishRule = farm.EnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
-                    var soilTypesList = soilTypes.Where(x => x.CountryId == isEnglishRule).ToList();
-                    ViewBag.SoilTypesList = soilTypesList;
-                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("SoilTypes", soilTypesList);
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                }
+                FarmViewModel farm = new FarmViewModel();
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+                {
+                    farm = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+                }
+                if (_httpContextAccessor.HttpContext != null && !_httpContextAccessor.HttpContext.Session.Keys.Contains("SoilTypes"))
+                {
+                    soilTypes = await _fieldService.FetchSoilTypes();
+                    if (soilTypes.Count > 0 && soilTypes.Any())
+                    {
+                        var isEnglishRule = farm.EnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
+                        var soilTypesList = soilTypes.Where(x => x.CountryId == isEnglishRule).ToList();
+                        ViewBag.SoilTypesList = soilTypesList;
+                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("SoilTypes", soilTypesList);
+                    }
+                    else
+                    {
+                        ViewBag.SoilTypeError = Resource.MsgServiceNotAvailable;
+                        RedirectToAction("ElevationField");
+                    }
                 }
                 else
                 {
-                    ViewBag.SoilTypeError = Resource.MsgServiceNotAvailable;
-                    RedirectToAction("ElevationField");
+                    soilTypes = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<List<SoilTypesResponse>>("SoilTypes");
+                    ViewBag.SoilTypesList = soilTypes;
                 }
             }
-            else
+            catch (Exception ex)
             {
-                soilTypes = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<List<SoilTypesResponse>>("SoilTypes");
-                ViewBag.SoilTypesList = soilTypes;
+                TempData["Error"] = ex.Message;
+                return RedirectToAction("ElevationField");
             }
-
 
             return View(model);
         }
@@ -223,15 +231,18 @@ namespace NMP.Portal.Controllers
         [HttpPost]
         public IActionResult SoilType(FieldViewModel field)
         {
+            List<SoilTypesResponse> soilTypes = new List<SoilTypesResponse>();
             if (field.SoilTypeID == null)
             {
                 ModelState.AddModelError("SoilTypeID", Resource.MsgSelectAnOptionBeforeContinuing);
             }
             if (!ModelState.IsValid)
             {
+                soilTypes = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<List<SoilTypesResponse>>("SoilTypes");
+                ViewBag.SoilTypesList = soilTypes;
                 return View(field);
             }
-            List<SoilTypesResponse> soilTypes = new List<SoilTypesResponse>();
+
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("SoilTypes"))
             {
                 soilTypes = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<List<SoilTypesResponse>>("SoilTypes");
@@ -239,14 +250,6 @@ namespace NMP.Portal.Controllers
 
             var soilType = soilTypes?.Where(x => x.SoilTypeId == field.SoilTypeID).FirstOrDefault();
 
-            if (soilType.KReleasingClay)
-            {
-                field.SoilReleasingClay = true;
-            }
-            else
-            {
-                field.SoilReleasingClay = false;
-            }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
             if (soilType.KReleasingClay)
             {
@@ -265,6 +268,7 @@ namespace NMP.Portal.Controllers
             }
             return View(model);
         }
+
         [HttpPost]
         public async Task<IActionResult> SoilReleasingClay(FieldViewModel field)
         {
@@ -281,6 +285,18 @@ namespace NMP.Portal.Controllers
             {
                 return View(field);
             }
+            List<SoilTypesResponse> soilTypes = new List<SoilTypesResponse>();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("SoilTypes"))
+            {
+                soilTypes = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<List<SoilTypesResponse>>("SoilTypes");
+            }
+
+            var soilType = soilTypes?.Where(x => x.SoilTypeId == field.SoilTypeID).FirstOrDefault();
+            if (!soilType.KReleasingClay)
+            {
+                field.SoilReleasingClay = false;
+            }
+
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
             return RedirectToAction("SoilDateAndPHLevel");
         }
@@ -293,6 +309,7 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
             }
+            model.SoilAnalysis.SulphurDeficient = null;
             return View(model);
         }
         [HttpPost]
@@ -466,8 +483,129 @@ namespace NMP.Portal.Controllers
             {
                 ViewBag.Error = string.Concat(error, ex.Message);
             }
-            return View(model);
+            return RedirectToAction("SNSCalculationMethod");
         }
 
+        [HttpGet]
+        public IActionResult SNSCalculationMethod()
+        {
+            FieldViewModel model = new FieldViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+            }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult SNSCalculationMethod(FieldViewModel field)
+        {
+            if (field.IsSnsBasedOnPreviousCrop == null)
+            {
+                ModelState.AddModelError("IsSnsBasedOnPreviousCrop", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(field);
+            }
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", field);
+            return RedirectToAction("CropGroups");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CropGroups()
+        {
+            FieldViewModel model = new FieldViewModel();
+            List<CropGroupResponse> cropGroups = new List<CropGroupResponse>();
+
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                }
+                cropGroups = await _fieldService.FetchCropGroups();
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropGroupList", cropGroups);
+                ViewBag.CropGroupList = cropGroups;
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+                return RedirectToAction("SNSCalculationMethod");
+            }
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult CropGroups(FieldViewModel field)
+        {
+            if (field.CropGroupId == null)
+            {
+                ModelState.AddModelError("CropGroupId", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                List<CropGroupResponse> cropTypes = new List<CropGroupResponse>();
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+                {
+                    ViewBag.CropGroupList = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<List<CropGroupResponse>>("CropGroupList");
+                }
+                return View(field);
+            }
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", field);
+            return RedirectToAction("CropTypes");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CropTypes()
+        {
+            FieldViewModel model = new FieldViewModel();
+            List<CropTypeResponse> cropTypes = new List<CropTypeResponse>();
+
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                }
+                FarmViewModel farm = new FarmViewModel();
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+                {
+                    farm = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+                }
+
+                cropTypes = await _fieldService.FetchCropTypes(model.CropGroupId ?? 0);
+                var isEnglishRule = farm.EnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
+                var cropTypeList = cropTypes.Where(x => x.CountryId == isEnglishRule || x.CountryId == (int)NMP.Portal.Enums.Country.Both).ToList();
+
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropTypeList", cropTypeList);
+                ViewBag.CropTypeList = cropTypeList;
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+                return RedirectToAction("CropGroups");
+            }
+
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult CropTypes(FieldViewModel field)
+        {
+            if (field.Crop.CropTypeId == null)
+            {
+                ModelState.AddModelError("Crop.CropTypeId", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                List<CropTypeResponse> cropTypes = new List<CropTypeResponse>();
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+                {
+                    ViewBag.CropTypeList = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<List<CropTypeResponse>>("CropTypeList");
+                }
+                return View(field);
+            }
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", field);
+            return RedirectToAction("CropTypes");
+        }
     }
 }

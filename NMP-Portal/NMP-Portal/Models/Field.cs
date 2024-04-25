@@ -8,7 +8,7 @@ namespace NMP.Portal.Models
     {
         public int? ID { get; set; }
         public int FarmID { get; set; }
-        public int SoilTypeID { get; set; }
+        public int? SoilTypeID { get; set; }
         public string?  NVZProgrammeID { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblFieldName))]

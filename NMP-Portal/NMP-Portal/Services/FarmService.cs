@@ -8,6 +8,8 @@ using NMP.Portal.ViewModels;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json.Nodes;
+//using static System.Runtime.InteropServices.JavaScript.JSType;
+//using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace NMP.Portal.Services
 {
@@ -121,15 +123,30 @@ namespace NMP.Portal.Services
         public async Task<bool> IsFarmExistAsync(string farmName, string postcode)
         {
             bool isFarmExist = false;
-            Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
-            HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
-            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
-            var farmExist = await httpClient.GetAsync(string.Format(APIURLHelper.IsFarmExist, farmName, postcode.Trim()));
-            string resultFarmExist = await farmExist.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapperFarmExist = JsonConvert.DeserializeObject<ResponseWrapper>(resultFarmExist);
-            if (responseWrapperFarmExist.Data["exists"] == true)
+            Error error=new Error();
+            try
             {
-                isFarmExist = true;
+                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
+                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
+                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                var farmExist = await httpClient.GetAsync(string.Format(APIURLHelper.IsFarmExist, farmName, postcode.Trim()));
+                string resultFarmExist = await farmExist.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapperFarmExist = JsonConvert.DeserializeObject<ResponseWrapper>(resultFarmExist);
+                if (responseWrapperFarmExist.Data["exists"] == true)
+                {
+                    isFarmExist = true;
+                }
+
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
             }
 
             return isFarmExist;
@@ -138,14 +155,28 @@ namespace NMP.Portal.Services
         public async Task<decimal> FetchRainfallAverageAsync(string firstHalfPostcode)
         {
             decimal rainfallAverage=0;
-            Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
-            HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
-            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
-            var rainfall = await httpClient.GetAsync(string.Format(APIURLHelper.FetchRainfallAverageAsyncAPI, firstHalfPostcode));
-            string result = await rainfall.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapperFarmExist = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            
-            rainfallAverage = responseWrapperFarmExist.Data["averageRainfall"];
+            Error error = new Error();
+            try
+            {
+                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
+                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
+                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                var rainfall = await httpClient.GetAsync(string.Format(APIURLHelper.FetchRainfallAverageAsyncAPI, firstHalfPostcode));
+                string result = await rainfall.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapperFarmExist = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
+                rainfallAverage = responseWrapperFarmExist.Data["averageRainfall"];
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
             return rainfallAverage;
         }
     }
