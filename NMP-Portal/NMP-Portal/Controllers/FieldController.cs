@@ -11,6 +11,7 @@ using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
 using NMP.Portal.Services;
 using NMP.Portal.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
@@ -46,7 +47,7 @@ namespace NMP.Portal.Controllers
         public IActionResult CreateFieldCancel(string id)
         {
             _httpContextAccessor.HttpContext?.Session.Remove("FieldData");
-            return RedirectToAction("FarmSummary","Farm", new { Id = id });
+            return RedirectToAction("FarmSummary", "Farm", new { Id = id });
         }
 
         [HttpGet]
@@ -59,7 +60,7 @@ namespace NMP.Portal.Controllers
             }
             if (!string.IsNullOrEmpty(q))
             {
-                model.FarmID =Convert.ToInt32(_farmDataProtector.Unprotect(q));
+                model.FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(q));
                 model.EncryptedFarmId = q;
             }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
@@ -211,10 +212,10 @@ namespace NMP.Portal.Controllers
             }
             else
             {
-                soilTypes=_httpContextAccessor.HttpContext?.Session.GetObjectFromJson<List<SoilTypesResponse>>("SoilTypes");
+                soilTypes = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<List<SoilTypesResponse>>("SoilTypes");
                 ViewBag.SoilTypesList = soilTypes;
             }
-            
+
 
             return View(model);
         }
@@ -230,7 +231,7 @@ namespace NMP.Portal.Controllers
             {
                 return View(field);
             }
-            List<SoilTypesResponse> soilTypes=new List<SoilTypesResponse>();
+            List<SoilTypesResponse> soilTypes = new List<SoilTypesResponse>();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("SoilTypes"))
             {
                 soilTypes = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<List<SoilTypesResponse>>("SoilTypes");
@@ -244,10 +245,10 @@ namespace NMP.Portal.Controllers
             }
             else
             {
-                field.SoilReleasingClay= false;
+                field.SoilReleasingClay = false;
             }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
-            if(soilType.KReleasingClay)
+            if (soilType.KReleasingClay)
             {
                 return RedirectToAction("SoilReleasingClay");
             }
@@ -267,7 +268,7 @@ namespace NMP.Portal.Controllers
         [HttpPost]
         public async Task<IActionResult> SoilReleasingClay(FieldViewModel field)
         {
-            if (field.SoilReleasingClay==null)
+            if (field.SoilReleasingClay == null)
             {
                 ModelState.AddModelError("SoilReleasingClay", Resource.MsgSelectAnOptionBeforeContinuing);
             }
@@ -298,11 +299,11 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> SulphurDeficient(FieldViewModel field)
         {
 
-            if (field.SoilAnalysis.SulphurDeficient==null)
+            if (field.SoilAnalysis.SulphurDeficient == null)
             {
                 ModelState.AddModelError("SoilAnalysis.SulphurDeficient", Resource.MsgSelectAnOptionBeforeContinuing);
             }
-            if(field.IsSoilReleasingClay)
+            if (field.IsSoilReleasingClay)
             {
                 field.IsSoilReleasingClay = false;
             }
@@ -310,7 +311,7 @@ namespace NMP.Portal.Controllers
             {
                 return View(field);
             }
-            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);            
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
             return RedirectToAction("SoilDateAndPHLevel");
         }
         [HttpGet]
@@ -334,13 +335,24 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("SoilAnalysis.PH", Resource.MsgEnterAPHBeforeContinuing);
             }
-            //if (model.SoilAnalysis.Date > DateTime.Now.Date)
-            //{
-            //    ModelState.AddModelError("SoilAnalysis.Date", Resource.MsgEnterTheDateInNumber);
-            //}
             if (DateTime.TryParseExact(model.SoilAnalysis.Date.ToString(), "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out _))
             {
                 ModelState.AddModelError("SoilAnalysis.Date", Resource.MsgEnterTheDateInNumber);
+            }
+
+            if (model.SoilAnalysis.Date != null)
+            {
+                int current_year = DateTime.Now.Year;
+                int min_year = 1690;
+                int max_year = current_year + 1;
+                string date_part = model.SoilAnalysis.Date.ToString().Split(' ')[0];
+                string[] date = date_part.Split("-");
+                int enteredYear = Convert.ToInt32(date[2]);
+
+                if (enteredYear < min_year || enteredYear > max_year)
+                {
+                    ModelState.AddModelError("SoilAnalysis.Date", Resource.MsgEnterADateAfter);
+                }
             }
             if (!ModelState.IsValid)
             {
@@ -393,7 +405,7 @@ namespace NMP.Portal.Controllers
             Error error = null;
             try
             {
-                if (model.IsSoilNutrientValueTypeIndex!=null&&model.IsSoilNutrientValueTypeIndex==true)
+                if (model.IsSoilNutrientValueTypeIndex != null && model.IsSoilNutrientValueTypeIndex == true)
                 {
                     if (model.SoilAnalysis.PotassiumIndex == null)
                     {
@@ -444,7 +456,7 @@ namespace NMP.Portal.Controllers
                         (model.SoilAnalysis.PhosphorusIndex, error) = await _soilService.FetchSoilNutrientIndex(phosphorusId, model.SoilAnalysis.Phosphorus, (int)PhosphorusMethodology.Olsens);
                         (model.SoilAnalysis.MagnesiumIndex, error) = await _soilService.FetchSoilNutrientIndex(magnesiumId, model.SoilAnalysis.Magnesium, (int)MagnesiumMethodology.None);
                         (model.SoilAnalysis.PotassiumIndex, error) = await _soilService.FetchSoilNutrientIndex(potassiumId, model.SoilAnalysis.Potassium, (int)PotassiumMethodology.None);
-                        
+
                     }
                 }
 
@@ -452,10 +464,10 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Error =string.Concat(error,ex.Message);
+                ViewBag.Error = string.Concat(error, ex.Message);
             }
             return View(model);
         }
-       
+
     }
 }
