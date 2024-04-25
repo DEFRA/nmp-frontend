@@ -15,6 +15,8 @@ namespace NMP.Portal.ViewModels
         public bool IsSoilReleasingClay { get; set; } = false;
         public string EncryptedFarmId { get; set; } = string.Empty;
         public bool? IsSoilNutrientValueTypeIndex { get; set; }
+        public bool IsCheckAnswer { get; set; } = false;
+        public string SoilType { get; set; } = string.Empty;
 
     }
 }

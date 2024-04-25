@@ -637,4 +637,40 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="MsgEnterTheDateInNumber" xml:space="preserve">
     <value>Enter the date in numbers. For example, 27 3 2007</value>
   </data>
+  <data name="lblAddThisField" xml:space="preserve">
+    <value>Add this field</value>
+  </data>
+  <data name="lblCroppedAreaForCheckAnswere" xml:space="preserve">
+    <value>Cropped area</value>
+  </data>
+  <data name="lblDateSampleTaken" xml:space="preserve">
+    <value>Date sample taken</value>
+  </data>
+  <data name="lblDoesPotashClayForCheckAnswere" xml:space="preserve">
+    <value>Does {0} contain potash-releasing clay?</value>
+  </data>
+  <data name="lblFieldArea" xml:space="preserve">
+    <value>Field area</value>
+  </data>
+  <data name="lblIsThisFieldAboveForFieldCheckAnswere" xml:space="preserve">
+    <value>Is this field above 300 meters?</value>
+  </data>
+  <data name="lblMagnesiumPerLitreOfSoilForCheckAnswere" xml:space="preserve">
+    <value>Magnesium (Mg) per litre</value>
+  </data>
+  <data name="lblManureNonSpreadingAreaForCheckAnswere" xml:space="preserve">
+    <value>Manure non-spreading area</value>
+  </data>
+  <data name="lblNVZFieldForFieldCheckAnswere" xml:space="preserve">
+    <value>Is this field within an NVZ?</value>
+  </data>
+  <data name="lblPhosphorusPerLitreOfSoilForCheckAnswere" xml:space="preserve">
+    <value>Phosphorus (P) per litre</value>
+  </data>
+  <data name="lblPotassiumPerLitreOfSoilForCheckAnswere" xml:space="preserve">
+    <value>Potassium (K) per litre</value>
+  </data>
+  <data name="lblNutrientValueTypeForCheckAnswere" xml:space="preserve">
+    <value>How would you like to enter your values?</value>
+  </data>
 </root>

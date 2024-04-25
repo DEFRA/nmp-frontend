@@ -9,7 +9,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@backAction asp-controller="Field">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : @backAction)" asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="SoilDateAndPHLevel" asp-controller="Field" method="post">
     @Html.AntiForgeryToken()
@@ -38,6 +38,7 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalysis.Magnesium"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalysis.Phosphorus"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalysis.Potassium"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
     <div class="govuk-grid-row">
 
         <div class="govuk-grid-column-two-thirds">
