@@ -262,11 +262,13 @@ namespace NMP.Portal.Services
             {
                 error.Message = Resource.MsgServiceNotAvailable;
                 _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
             }
             catch (Exception ex)
             {
                 error.Message = ex.Message;
                 _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
             }
             return cropGroup;
         }
@@ -300,11 +302,13 @@ namespace NMP.Portal.Services
             {
                 error.Message = Resource.MsgServiceNotAvailable;
                 _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
             }
             catch (Exception ex)
             {
                 error.Message = ex.Message;
                 _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
             }
             return cropType;
         }

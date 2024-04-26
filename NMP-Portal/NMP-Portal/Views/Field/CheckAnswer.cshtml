@@ -60,12 +60,10 @@
         <div class="govuk-grid-column-two-thirds-from-desktop">
             @if (ViewBag.AddFieldError != null)
             {
-                @* <govuk-error-message>@ViewBag.AddFieldError</govuk-error-message> *@
                 <govuk-error-summary>
                     <govuk-error-summary-item href="#passport-issued-day">@ViewBag.AddFieldError</govuk-error-summary-item>
                 </govuk-error-summary>
             }
-            @* <button class="govuk-back-link back-link" type="submit" asp-action="Organic" asp-controller="Field">@Resource.lblBack</button> *@
             <h1 class="govuk-heading-l">
                 @Resource.lblCheckYourAnswers
             </h1>
@@ -212,8 +210,7 @@
                         <govuk-summary-list-row-action asp-action="SoilDateAndPHLevel" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
-                @if (Model.SoilAnalysis.Phosphorus != null && Model.SoilAnalysis.Potassium != null
-                && Model.SoilAnalysis.Magnesium != null)
+                @if (!Model.IsSoilNutrientValueTypeIndex.Value)
                 {
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
