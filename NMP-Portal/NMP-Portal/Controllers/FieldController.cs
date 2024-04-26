@@ -236,22 +236,22 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("SoilTypeID", Resource.MsgSelectAnOptionBeforeContinuing);
             }
-            if (!ModelState.IsValid)
-            {
-                soilTypes = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<List<SoilTypesResponse>>("SoilTypes");
-                ViewBag.SoilTypesList = soilTypes;
-                return View(field);
-            }
 
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("SoilTypes"))
             {
                 soilTypes = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<List<SoilTypesResponse>>("SoilTypes");
             }
 
-            var soilType = soilTypes?.Where(x => x.SoilTypeId == field.SoilTypeID).FirstOrDefault();
+            if (!ModelState.IsValid)
+            {                
+                ViewBag.SoilTypesList = soilTypes;
+                return View(field);
+            }
+
+            SoilTypesResponse? soilType = soilTypes.FirstOrDefault(x => x.SoilTypeId == field.SoilTypeID);
 
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
-            if (soilType.KReleasingClay)
+            if (soilType!= null && soilType.KReleasingClay)
             {
                 return RedirectToAction("SoilReleasingClay");
             }
@@ -358,15 +358,8 @@ namespace NMP.Portal.Controllers
             }
 
             if (model.SoilAnalysis.Date != null)
-            {
-                int current_year = DateTime.Now.Year;
-                int min_year = 1690;
-                int max_year = current_year + 1;
-                string date_part = model.SoilAnalysis.Date.ToString().Split(' ')[0];
-                string[] date = date_part.Split("-");
-                int enteredYear = Convert.ToInt32(date[2]);
-
-                if (enteredYear < min_year || enteredYear > max_year)
+            {                
+                if (model.SoilAnalysis.Date.Value.Date.Year < 1601 || model.SoilAnalysis.Date.Value.Date.Year > DateTime.Now.AddYears(1).Year)
                 {
                     ModelState.AddModelError("SoilAnalysis.Date", Resource.MsgEnterADateAfter);
                 }
@@ -422,7 +415,7 @@ namespace NMP.Portal.Controllers
             Error error = null;
             try
             {
-                if (model.IsSoilNutrientValueTypeIndex != null && model.IsSoilNutrientValueTypeIndex == true)
+                if (model.IsSoilNutrientValueTypeIndex != null && model.IsSoilNutrientValueTypeIndex.Value)
                 {
                     if (model.SoilAnalysis.PotassiumIndex == null)
                     {
@@ -458,7 +451,7 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
 
-                model.SoilAnalysis.PhosphorusMethodologyId = (int?)PhosphorusMethodology.Olsens;
+                model.SoilAnalysis.PhosphorusMethodologyId = (int)PhosphorusMethodology.Olsens;
 
                 if (model.SoilAnalysis.Magnesium != null && model.SoilAnalysis.Potassium != null &&
                     model.SoilAnalysis.Phosphorus != null)
@@ -466,9 +459,27 @@ namespace NMP.Portal.Controllers
                     List<FieldResponseWapper> nutrients = await _fieldService.FetchNutrientsAsync();
                     if (nutrients.Count > 0)
                     {
-                        int phosphorusId = nutrients.FirstOrDefault(a => a.nutrient.Equals(Resource.lblPhosphate)).nutrientId;
-                        int magnesiumId = nutrients.FirstOrDefault(a => a.nutrient.Equals(Resource.lblMagnesium)).nutrientId;
-                        int potassiumId = nutrients.FirstOrDefault(a => a.nutrient.Equals(Resource.lblPotash)).nutrientId;
+                        int phosphorusId = 1;
+                        int potassiumId = 2;
+                        int magnesiumId = 3;
+                       
+                        var phosphorusNuetrient = nutrients.FirstOrDefault(a => a.nutrient.Equals(Resource.lblPhosphate));
+                        if(phosphorusNuetrient != null)
+                        {
+                            phosphorusId= phosphorusNuetrient.nutrientId;
+                        }
+
+                        var magnesiumNuetrient = nutrients.FirstOrDefault(a => a.nutrient.Equals(Resource.lblMagnesium));
+                        if (magnesiumNuetrient != null)
+                        {
+                            magnesiumId = magnesiumNuetrient.nutrientId;
+                        }
+
+                        var potassiumNuetrient = nutrients.FirstOrDefault(a => a.nutrient.Equals(Resource.lblPotash));
+                        if (potassiumNuetrient != null)
+                        {
+                            potassiumId = potassiumNuetrient.nutrientId;
+                        }                        
 
                         (model.SoilAnalysis.PhosphorusIndex, error) = await _soilService.FetchSoilNutrientIndex(phosphorusId, model.SoilAnalysis.Phosphorus, (int)PhosphorusMethodology.Olsens);
                         (model.SoilAnalysis.MagnesiumIndex, error) = await _soilService.FetchSoilNutrientIndex(magnesiumId, model.SoilAnalysis.Magnesium, (int)MagnesiumMethodology.None);
@@ -489,7 +500,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public IActionResult SNSCalculationMethod()
         {
-            FieldViewModel model = new FieldViewModel();
+            FieldViewModel? model = new FieldViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
