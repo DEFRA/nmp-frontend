@@ -22,15 +22,16 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAbove300SeaLevel"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilNutrientValueTypeIndex" value="@Model.IsSoilNutrientValueTypeIndex.ToString().ToLower()"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilTypeID"></govuk-input>
-    <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalysis.Date"></govuk-date-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalysis.PH"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalysis.MagnesiumIndex"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalysis.PhosphorusIndex"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalysis.PotassiumIndex"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalysis.PhosphorusMethodologyId"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalysis.Magnesium"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalysis.Phosphorus"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalysis.Potassium"></govuk-input>
+    <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.Date"></govuk-date-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.PH"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.MagnesiumIndex"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.PhosphorusIndex"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.PotassiumIndex"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.PhosphorusMethodologyID"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.Magnesium"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.Phosphorus"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.Potassium"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules" value="@Model.isEnglishRules.ToString().ToLower()"></govuk-input>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             
@@ -51,7 +52,7 @@
                 </govuk-radios-fieldset>
             </govuk-radios>
 
-            <govuk-radios class="govuk-radios--inline" asp-for="@Model.SoilAnalysis.SulphurDeficient">
+            <govuk-radios class="govuk-radios--inline" asp-for="@Model.SoilAnalyses.SulphurDeficient">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend>@Resource.lblIsSoilDeficientInSulphur</govuk-radios-fieldset-legend>
                     <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>

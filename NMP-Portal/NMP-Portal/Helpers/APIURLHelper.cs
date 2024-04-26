@@ -1,4 +1,6 @@
-﻿namespace NMP.Portal.Helpers
+﻿using NMP.Portal.Models;
+
+namespace NMP.Portal.Helpers
 {
     public static class APIURLHelper
     {
@@ -15,5 +17,7 @@
         public const string FetchSoilNutrientIndexAsyncAPI = "vendors/rb209/Soil/NutrientIndex/{0}/{1}/{2}";
         public const string FetchCropGroupsAsyncAPI = "vendors/rb209/Arable/CropGroups";
         public const string FetchCropTypesAsyncAPI = "vendors/rb209/Arable/CropTypes/{0}";
+        public const string AddFieldAsyncAPI = "field/farm/{0}/soil-analyses/crop"; 
+        public const string IsFieldExistAsyncAPI = "field/farm/{0}/exists? Name = {1}";
     }
 }
