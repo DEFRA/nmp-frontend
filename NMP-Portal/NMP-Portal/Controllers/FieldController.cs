@@ -783,7 +783,7 @@ namespace NMP.Portal.Controllers
                       CropInfo2=model.Crop.CropInfo2,
                       SowingDate=model.Crop.SowingDate,
                       Yield=model.Crop.Yield,
-                      Confirm=model.Crop.Confirm,
+                      Confirm=true,
                       PreviousGrass=model.Crop.PreviousGrass,
                       GrassHistory=model.Crop.GrassHistory,
                       Comments=model.Crop.Comments,
