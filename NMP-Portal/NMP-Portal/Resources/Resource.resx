@@ -610,6 +610,34 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="MsgEnterValidValueForNutrientIndex" xml:space="preserve">
     <value>Enter an index between 0 and 9</value>
   </data>
+  <data name="lblBasedOnRecentSNA" xml:space="preserve">
+    <value>Calculate based on a recent soil nitrogen analysis
+Continue</value>
+  </data>
+  <data name="lblCropGroup" xml:space="preserve">
+    <value>Crop Group</value>
+  </data>
+  <data name="lblCropType" xml:space="preserve">
+    <value>Crop Type</value>
+  </data>
+  <data name="lblEstimateBasedOnPreviousCrop" xml:space="preserve">
+    <value>Estimate based on the previous crop</value>
+  </data>
+  <data name="lblHowWouldYouLikeToCalculateSNS" xml:space="preserve">
+    <value>How would you like to calculate the soil nitrogen supply for {0}?</value>
+  </data>
+  <data name="lblWhatIsTheCurrentCropGroup" xml:space="preserve">
+    <value>What is the current crop group?</value>
+  </data>
+  <data name="lblWhatIsTheCurrentCropType" xml:space="preserve">
+    <value>What is the current crop type?</value>
+  </data>
+  <data name="lblWhatWasThePreviousCropGroup" xml:space="preserve">
+    <value>What was the previous crop group?</value>
+  </data>
+  <data name="lblWhatWasThePreviousCropType" xml:space="preserve">
+    <value>What was the previous crop type?</value>
+  </data>
   <data name="btnStartNow" xml:space="preserve">
     <value>Start now</value>
   </data>
@@ -672,5 +700,17 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
   <data name="lblNutrientValueTypeForCheckAnswere" xml:space="preserve">
     <value>How would you like to enter your values?</value>
+  </data>
+  <data name="lblBasedOnARecentSoilNitrogenAnalysis" xml:space="preserve">
+    <value>Based on a recent soil nitrogen analysis</value>
+  </data>
+  <data name="lblBasedOnThePreviousCrop" xml:space="preserve">
+    <value>Based on the previous crop</value>
+  </data>
+  <data name="lblIndexValues" xml:space="preserve">
+    <value>Index values</value>
+  </data>
+  <data name="lblMiligramValues" xml:space="preserve">
+    <value>Miligram values</value>
   </data>
 </root>
