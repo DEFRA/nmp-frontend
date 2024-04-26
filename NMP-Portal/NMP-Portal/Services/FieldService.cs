@@ -104,9 +104,9 @@ namespace NMP.Portal.Services
             }
             return soilTypes;
         }
-        public async Task<List<FieldResponseWapper>> FetchNutrientsAsync()
+        public async Task<List<NutrientResponseWrapper>> FetchNutrientsAsync()
         {
-            List<FieldResponseWapper> nutrients = new List<FieldResponseWapper>();
+            List<NutrientResponseWrapper> nutrients = new List<NutrientResponseWrapper>();
             Error error = new Error();
             try
             {
@@ -120,8 +120,8 @@ namespace NMP.Portal.Services
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        List<FieldResponseWapper> fieldResponseWapper = responseWrapper.Data.ToObject<List<FieldResponseWapper>>();
-                        nutrients.AddRange(fieldResponseWapper);
+                        List<NutrientResponseWrapper> nutrientResponseWapper = responseWrapper.Data.ToObject<List<NutrientResponseWrapper>>();
+                        nutrients.AddRange(nutrientResponseWapper);
                     }
                 }
                 else
@@ -235,6 +235,86 @@ namespace NMP.Portal.Services
 
             return soilTypes;
         }
+        public async Task<string> FetchCropGroupById(int cropGroupId)
+        {
+            Error error = null;
+            string cropGroup = string.Empty;
+            try
+            {
+
+                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
+                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
+                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropGroupByIdAsyncAPI, cropGroupId));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+                {
+                    cropGroup = responseWrapper.Data["cropGroupName"];
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return cropGroup;
+        }
+        public async Task<string> FetchCropTypeById(int cropTypeId)
+        {
+            Error error = null;
+            string cropType = string.Empty;
+            try
+            {
+
+                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
+                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
+                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropTypeByIdAsyncAPI, cropTypeId));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+                {
+                    cropType = responseWrapper.Data["cropTypeName"];
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return cropType;
+        }
         public async Task<(Field,Error)> AddFieldAsync(FieldData fieldData, int farmId, string farmName)
         {
             string jsonData = JsonConvert.SerializeObject(fieldData);
@@ -245,12 +325,9 @@ namespace NMP.Portal.Services
                 Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
                 HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
                 httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
-
-                //check if farm already exists or not
                 bool IsFarmExist = await IsFieldExistAsync(farmId, fieldData.Field.Name);
                 if (!IsFarmExist)
                 {
-                    // if new farm then save farm data
                     var response = await httpClient.PostAsync(string.Format(APIURLHelper.AddFieldAsyncAPI, farmId), new StringContent(jsonData, Encoding.UTF8, "application/json"));
                     string result = await response.Content.ReadAsStringAsync();
                     ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -276,7 +353,7 @@ namespace NMP.Portal.Services
                 else
                 {
                     error.Message =
-                        string.Format(Resource.MsgFarmAlreadyExist, farmName, fieldData.Field.Name);
+                        string.Format(Resource.MsgFieldAlreadyExist, fieldData.Field.Name, farmName);
                 }
             }
             catch (HttpRequestException hre)

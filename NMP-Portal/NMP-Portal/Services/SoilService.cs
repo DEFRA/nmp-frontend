@@ -52,5 +52,43 @@ namespace NMP.Portal.Services
             }
             return (nutrientIndex,error);
         }
+        public async Task<string> FetchSoilTypeById(int soilTypeId)
+        {
+            Error error = null;
+            string soilType = string.Empty;
+            try
+            {
+
+                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
+                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
+                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchSoilTypeByIdAsyncAPI, soilTypeId));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+                {
+                    soilType = responseWrapper.Data["soilType"];
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+            return soilType;
+        }
     }
 }

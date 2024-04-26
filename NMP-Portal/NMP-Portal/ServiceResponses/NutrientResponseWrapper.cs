@@ -2,7 +2,7 @@
 
 namespace NMP.Portal.ServiceResponses
 {
-    public class FieldResponseWapper
+    public class NutrientResponseWrapper
     {
         [JsonProperty("nutrientId")]
         public int nutrientId { get; set; }
