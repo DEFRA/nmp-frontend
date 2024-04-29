@@ -2,10 +2,10 @@
 {
     public class Crop
     {
-        public int Id { get; set; }
-        public int FieldId { get; set; }
+        //public int Id { get; set; }
+        //public int FieldId { get; set; }
         public int Year { get; set; }
-        public int? CropTypeId { get; set; }
+        public int? CropTypeID { get; set; }
         public string? Variety { get; set; }
         public int? CropInfo1 { get; set; }
         public int? CropInfo2 { get; set; }
@@ -22,6 +22,10 @@
         public decimal? StockingRate { get; set; }
         public int? DefoliationSequence { get; set; }
         public int? GrazingIntensity { get; set; }
-        public int? PreviousId { get; set; }
+        public int? PreviousID { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public int? CreatedByID { get; set; }
+        public DateTime? ModifiedOn { get; set; }
+        public int? ModifiedByID { get; set; }
     }
 }

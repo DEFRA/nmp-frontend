@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Components.Forms;
+﻿using GovUk.Frontend.AspNetCore.TagHelpers;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
@@ -15,6 +17,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
+using System.Security.Claims;
+using System.Xml.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Error = NMP.Portal.ServiceResponses.Error;
 
@@ -66,6 +70,9 @@ namespace NMP.Portal.Controllers
             {
                 model.FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(q));
                 model.EncryptedFarmId = q;
+
+                (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(model.FarmID);
+                model.isEnglishRules = farm.EnglishRules;
             }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
 
@@ -213,18 +220,18 @@ namespace NMP.Portal.Controllers
                 {
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
                 }
-                FarmViewModel farm = new FarmViewModel();
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
-                {
-                    farm = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-                }
+                //FarmViewModel farm = new FarmViewModel();
+                //if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+                //{
+                //    farm = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+                //}
                 if (_httpContextAccessor.HttpContext != null && !_httpContextAccessor.HttpContext.Session.Keys.Contains("SoilTypes"))
                 {
                     soilTypes = await _fieldService.FetchSoilTypes();
                     if (soilTypes.Count > 0 && soilTypes.Any())
                     {
-                        var isEnglishRule = farm.EnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
-                        var soilTypesList = soilTypes.Where(x => x.CountryId == isEnglishRule).ToList();
+                        var country = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
+                        var soilTypesList = soilTypes.Where(x => x.CountryId == country).ToList();
                         ViewBag.SoilTypesList = soilTypesList;
                         _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("SoilTypes", soilTypesList);
                     }
@@ -300,9 +307,9 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("SoilReleasingClay", Resource.MsgSelectAnOptionBeforeContinuing);
             }
-            if (field.SoilAnalysis.SulphurDeficient == null)
+            if (field.SoilAnalyses.SulphurDeficient == null)
             {
-                ModelState.AddModelError("SoilAnalysis.SulphurDeficient", Resource.MsgSelectAnOptionBeforeContinuing);
+                ModelState.AddModelError("SoilAnalyses.SulphurDeficient", Resource.MsgSelectAnOptionBeforeContinuing);
             }
             field.IsSoilReleasingClay = true;
             if (!ModelState.IsValid)
@@ -343,9 +350,9 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> SulphurDeficient(FieldViewModel field)
         {
 
-            if (field.SoilAnalysis.SulphurDeficient == null)
+            if (field.SoilAnalyses.SulphurDeficient == null)
             {
-                ModelState.AddModelError("SoilAnalysis.SulphurDeficient", Resource.MsgSelectAnOptionBeforeContinuing);
+                ModelState.AddModelError("SoilAnalyses.SulphurDeficient", Resource.MsgSelectAnOptionBeforeContinuing);
             }
             if (field.IsSoilReleasingClay)
             {
@@ -376,24 +383,24 @@ namespace NMP.Portal.Controllers
         [HttpPost]
         public IActionResult SoilDateAndPHLevel(FieldViewModel model)
         {
-            if (model.SoilAnalysis.Date == null)
+            if (model.SoilAnalyses.Date == null)
             {
-                ModelState.AddModelError("SoilAnalysis.Date", Resource.MsgEnterADateBeforeContinuing);
+                ModelState.AddModelError("SoilAnalyses.Date", Resource.MsgEnterADateBeforeContinuing);
             }
-            if (model.SoilAnalysis.PH == null)
+            if (model.SoilAnalyses.PH == null)
             {
-                ModelState.AddModelError("SoilAnalysis.PH", Resource.MsgEnterAPHBeforeContinuing);
+                ModelState.AddModelError("SoilAnalyses.PH", Resource.MsgEnterAPHBeforeContinuing);
             }
-            if (DateTime.TryParseExact(model.SoilAnalysis.Date.ToString(), "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out _))
+            if (DateTime.TryParseExact(model.SoilAnalyses.Date.ToString(), "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out _))
             {
-                ModelState.AddModelError("SoilAnalysis.Date", Resource.MsgEnterTheDateInNumber);
+                ModelState.AddModelError("SoilAnalyses.Date", Resource.MsgEnterTheDateInNumber);
             }
 
-            if (model.SoilAnalysis.Date != null)
+            if (model.SoilAnalyses.Date != null)
             {                
-                if (model.SoilAnalysis.Date.Value.Date.Year < 1601 || model.SoilAnalysis.Date.Value.Date.Year > DateTime.Now.AddYears(1).Year)
+                if (model.SoilAnalyses.Date.Value.Date.Year < 1601 || model.SoilAnalyses.Date.Value.Date.Year > DateTime.Now.AddYears(1).Year)
                 {
-                    ModelState.AddModelError("SoilAnalysis.Date", Resource.MsgEnterADateAfter);
+                    ModelState.AddModelError("SoilAnalyses.Date", Resource.MsgEnterADateAfter);
                 }
             }
 
@@ -455,32 +462,32 @@ namespace NMP.Portal.Controllers
             {
                 if (model.IsSoilNutrientValueTypeIndex != null && model.IsSoilNutrientValueTypeIndex.Value)
                 {
-                    if (model.SoilAnalysis.PotassiumIndex == null)
+                    if (model.SoilAnalyses.PotassiumIndex == null)
                     {
-                        ModelState.AddModelError("SoilAnalysis.PotassiumIndex", Resource.MsgPotassiumIndex);
+                        ModelState.AddModelError("SoilAnalyses.PotassiumIndex", Resource.MsgPotassiumIndex);
                     }
-                    if (model.SoilAnalysis.PhosphorusIndex == null)
+                    if (model.SoilAnalyses.PhosphorusIndex == null)
                     {
-                        ModelState.AddModelError("SoilAnalysis.PhosphorusIndex", Resource.MsgPhosphorusIndex);
+                        ModelState.AddModelError("SoilAnalyses.PhosphorusIndex", Resource.MsgPhosphorusIndex);
                     }
-                    if (model.SoilAnalysis.MagnesiumIndex == null)
+                    if (model.SoilAnalyses.MagnesiumIndex == null)
                     {
-                        ModelState.AddModelError("SoilAnalysis.MagnesiumIndex", Resource.MsgMagnesiumIndex);
+                        ModelState.AddModelError("SoilAnalyses.MagnesiumIndex", Resource.MsgMagnesiumIndex);
                     }
                 }
                 else
                 {
-                    if (model.SoilAnalysis.Potassium == null)
+                    if (model.SoilAnalyses.Potassium == null)
                     {
-                        ModelState.AddModelError("SoilAnalysis.Potassium", Resource.MsgPotassiumPerLitreOfSoil);
+                        ModelState.AddModelError("SoilAnalyses.Potassium", Resource.MsgPotassiumPerLitreOfSoil);
                     }
-                    if (model.SoilAnalysis.Phosphorus == null)
+                    if (model.SoilAnalyses.Phosphorus == null)
                     {
-                        ModelState.AddModelError("SoilAnalysis.Phosphorus", Resource.MsgPhosphorusPerLitreOfSoil);
+                        ModelState.AddModelError("SoilAnalyses.Phosphorus", Resource.MsgPhosphorusPerLitreOfSoil);
                     }
-                    if (model.SoilAnalysis.Magnesium == null)
+                    if (model.SoilAnalyses.Magnesium == null)
                     {
-                        ModelState.AddModelError("SoilAnalysis.Magnesium", Resource.MsgMagnesiumPerLitreOfSoil);
+                        ModelState.AddModelError("SoilAnalyses.Magnesium", Resource.MsgMagnesiumPerLitreOfSoil);
                     }
                 }
 
@@ -489,7 +496,7 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
 
-                model.SoilAnalysis.PhosphorusMethodologyId = (int)PhosphorusMethodology.Olsens;
+                model.SoilAnalyses.PhosphorusMethodologyID = (int)PhosphorusMethodology.Olsens;
 
                 if (model.IsSoilNutrientValueTypeIndex != null && (!model.IsSoilNutrientValueTypeIndex.Value))
                 {
@@ -518,9 +525,9 @@ namespace NMP.Portal.Controllers
                             potassiumId = potassiumNuetrient.nutrientId;
                         }                        
 
-                        (model.SoilAnalysis.PhosphorusIndex, error) = await _soilService.FetchSoilNutrientIndex(phosphorusId, model.SoilAnalysis.Phosphorus, (int)PhosphorusMethodology.Olsens);
-                        (model.SoilAnalysis.MagnesiumIndex, error) = await _soilService.FetchSoilNutrientIndex(magnesiumId, model.SoilAnalysis.Magnesium, (int)MagnesiumMethodology.None);
-                        (model.SoilAnalysis.PotassiumIndex, error) = await _soilService.FetchSoilNutrientIndex(potassiumId, model.SoilAnalysis.Potassium, (int)PotassiumMethodology.None);
+                        (model.SoilAnalyses.PhosphorusIndex, error) = await _soilService.FetchSoilNutrientIndex(phosphorusId, model.SoilAnalyses.Phosphorus, (int)PhosphorusMethodology.Olsens);
+                        (model.SoilAnalyses.MagnesiumIndex, error) = await _soilService.FetchSoilNutrientIndex(magnesiumId, model.SoilAnalyses.Magnesium, (int)MagnesiumMethodology.None);
+                        (model.SoilAnalyses.PotassiumIndex, error) = await _soilService.FetchSoilNutrientIndex(potassiumId, model.SoilAnalyses.Potassium, (int)PotassiumMethodology.None);
 
                     }
                 }
@@ -621,15 +628,15 @@ namespace NMP.Portal.Controllers
                 {
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
                 }
-                FarmViewModel farm = new FarmViewModel();
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
-                {
-                    farm = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-                }
+                //FarmViewModel farm = new FarmViewModel();
+                //if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+                //{
+                //    farm = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+                //}
 
                 cropTypes = await _fieldService.FetchCropTypes(model.CropGroupId ?? 0);
-                var isEnglishRule = farm.EnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
-                var cropTypeList = cropTypes.Where(x => x.CountryId == isEnglishRule || x.CountryId == (int)NMP.Portal.Enums.Country.Both).ToList();
+                var country = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
+                var cropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.Both).ToList();
 
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropTypeList", cropTypeList);
                 ViewBag.CropTypeList = cropTypeList;
@@ -645,9 +652,9 @@ namespace NMP.Portal.Controllers
         [HttpPost]
         public IActionResult CropTypes(FieldViewModel field)
         {
-            if (field.Crop.CropTypeId == null)
+            if (field.Crop.CropTypeID == null)
             {
-                ModelState.AddModelError("Crop.CropTypeId", Resource.MsgSelectAnOptionBeforeContinuing);
+                ModelState.AddModelError("Crop.CropTypeID", Resource.MsgSelectAnOptionBeforeContinuing);
             }
             if (!ModelState.IsValid)
             {
@@ -679,7 +686,7 @@ namespace NMP.Portal.Controllers
 
                 model.SoilType = await _soilService.FetchSoilTypeById(model.SoilTypeID ?? 0);
                 model.CropGroup = await _fieldService.FetchCropGroupById(model.CropGroupId ?? 0);
-                model.CropType = await _fieldService.FetchCropTypeById(model.Crop.CropTypeId ?? 0);
+                model.CropType = await _fieldService.FetchCropTypeById(model.Crop.CropTypeID ?? 0);
                 model.IsCheckAnswer = true;
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             }
@@ -702,6 +709,102 @@ namespace NMP.Portal.Controllers
             model.IsCheckAnswer = false;
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             return RedirectToAction("CropTypes");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddFieldData(FieldViewModel model)
+        {
+            int userId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value);
+
+            var farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
+            //int farmId = model.FarmID;
+            (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+
+            FieldData fieldData = new FieldData
+            {
+                Field = new Field
+                {
+                    SoilTypeID = model.SoilTypeID,
+                    NVZProgrammeID = model.NVZProgrammeID,
+                    Name = model.Name,
+                    LPIDNumber = model.LPIDNumber,
+                    NationalGridReference = model.NationalGridReference,
+                    OtherReference = model.OtherReference,
+                    TotalArea = model.TotalArea,
+                    CroppedArea = model.CroppedArea,
+                    ManureNonSpreadingArea = model.ManureNonSpreadingArea,
+                    SoilReleasingClay = model.SoilReleasingClay,
+                    IsWithinNVZ = model.IsWithinNVZ,
+                    IsAbove300SeaLevel = model.IsAbove300SeaLevel,
+                    IsActive = true,
+                    CreatedOn = DateTime.Now,
+                    CreatedByID = userId,
+                    ModifiedOn = model.ModifiedOn,
+                    ModifiedByID = model.ModifiedByID
+                },
+                SoilAnalyses = new SoilAnalyses
+                {
+                    Year= DateTime.Now.Year-1,
+                    SulphurDeficient= model.SoilAnalyses.SulphurDeficient,
+                    Date= model.SoilAnalyses.Date,
+                    PH= model.SoilAnalyses.PH,
+                    PhosphorusMethodologyID= model.SoilAnalyses.PhosphorusMethodologyID,
+                    Phosphorus= model.SoilAnalyses.Phosphorus,
+                    PhosphorusIndex= model.SoilAnalyses.PhosphorusIndex,
+                    Potassium= model.SoilAnalyses.Potassium,
+                    PotassiumIndex= model.SoilAnalyses.PotassiumIndex,
+                    Magnesium= model.SoilAnalyses.Magnesium,
+                    MagnesiumIndex= model.SoilAnalyses.MagnesiumIndex,
+                    SoilNitrogenSupply= model.SoilAnalyses.SoilNitrogenSupply,
+                    SoilNitrogenSupplyIndex= model.SoilAnalyses.SoilNitrogenSupplyIndex,
+                    Sodium= model.SoilAnalyses.Sodium,
+                    Lime= model.SoilAnalyses.Lime,
+                    PhosphorusStatus= model.SoilAnalyses.PhosphorusStatus,
+                    PotassiumAnalysis= model.SoilAnalyses.PotassiumAnalysis,
+                    PotassiumStatus= model.SoilAnalyses.PotassiumStatus,
+                    MagnesiumAnalysis= model.SoilAnalyses.MagnesiumAnalysis,
+                    MagnesiumStatus= model.SoilAnalyses.MagnesiumStatus,
+                    NitrogenResidueGroup= model.SoilAnalyses.NitrogenResidueGroup,
+                    Comments= model.SoilAnalyses.Comments,
+                    PreviousID= model.SoilAnalyses.PreviousID,
+                    CreatedOn=DateTime.Now,
+                    CreatedByID=userId,
+                    ModifiedOn= model.SoilAnalyses.ModifiedOn,
+                    ModifiedByID= model.SoilAnalyses.ModifiedByID
+                },
+                Crops = new List<Crop>
+                {
+                   new Crop
+                   {
+                      Year=model.Crop.Year,
+                      CropTypeID=model.Crop.CropTypeID,
+                      Variety=model.Crop.Variety,
+                      CropInfo1=model.Crop.CropInfo1,
+                      CropInfo2=model.Crop.CropInfo2,
+                      SowingDate=model.Crop.SowingDate,
+                      Yield=model.Crop.Yield,
+                      Confirm=true,
+                      PreviousGrass=model.Crop.PreviousGrass,
+                      GrassHistory=model.Crop.GrassHistory,
+                      Comments=model.Crop.Comments,
+                      Establishment=model.Crop.Establishment,
+                      LivestockType=model.Crop.LivestockType,
+                      MilkYield=model.Crop.MilkYield,
+                      ConcentrateUse=model.Crop.ConcentrateUse,
+                      StockingRate=model.Crop.StockingRate,
+                      DefoliationSequence=model.Crop.DefoliationSequence,
+                      GrazingIntensity=model.Crop.GrazingIntensity,
+                      PreviousID=model.Crop.PreviousID,
+                      CreatedOn=DateTime.Now,
+                      CreatedByID=userId,
+                      ModifiedOn=model.Crop.ModifiedOn,
+                      ModifiedByID=model.Crop.ModifiedByID
+                   }
+                }
+            };
+
+            (Field fieldResponse,Error error1) = await _fieldService.AddFieldAsync(fieldData, farm.ID,farm.Name);
+            return RedirectToAction("CheckAnswer");
         }
     }
 }

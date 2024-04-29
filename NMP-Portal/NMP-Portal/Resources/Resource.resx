@@ -713,4 +713,7 @@ Continue</value>
   <data name="lblMiligramValues" xml:space="preserve">
     <value>Miligram values</value>
   </data>
+  <data name="MsgFieldAlreadyExist" xml:space="preserve">
+    <value>The field name {0} under the farm {1} already exist</value>
+  </data>
 </root>

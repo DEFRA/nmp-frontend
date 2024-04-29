@@ -6,8 +6,8 @@ namespace NMP.Portal.Models
 {
     public class Field
     {
-        public int? ID { get; set; }
-        public int FarmID { get; set; }
+        //public int? ID { get; set; }
+        //public int FarmID { get; set; }
         public int? SoilTypeID { get; set; }
         public string?  NVZProgrammeID { get; set; }
 
@@ -19,6 +19,7 @@ namespace NMP.Portal.Models
 
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblNationalGridReference))]
         public string? NationalGridReference { get; set; }
+        public string? OtherReference { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblTotalFieldArea))]
         public decimal TotalArea { get; set; }
@@ -31,10 +32,13 @@ namespace NMP.Portal.Models
         public bool? SoilReleasingClay { get; set; }
         public bool? IsWithinNVZ { get; set; }
         public bool? IsAbove300SeaLevel { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public int CreatedByID { get; set; }
-        public DateTime ModifiedOn { get; set; }
-        public int ModifiedByID { get; set; }
+        public bool IsActive { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public int? CreatedByID { get; set; }
+        public DateTime? ModifiedOn { get; set; }
+        public int? ModifiedByID { get; set; }
+
+       
 
     }
 }

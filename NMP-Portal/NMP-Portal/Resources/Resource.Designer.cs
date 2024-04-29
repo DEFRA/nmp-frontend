@@ -1746,6 +1746,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The field name {0} under the farm {1} already exist.
+        /// </summary>
+        public static string MsgFieldAlreadyExist {
+            get {
+                return ResourceManager.GetString("MsgFieldAlreadyExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the magnesium index before continuing.
         /// </summary>
         public static string MsgMagnesiumIndex {
