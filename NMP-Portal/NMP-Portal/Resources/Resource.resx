@@ -716,4 +716,25 @@ Continue</value>
   <data name="MsgFieldAlreadyExist" xml:space="preserve">
     <value>The field name {0} under the farm {1} already exist</value>
   </data>
+  <data name="lblAddAnotherField" xml:space="preserve">
+    <value>Add another field</value>
+  </data>
+  <data name="lblCreateANutrientManagementPlan" xml:space="preserve">
+    <value>Create a nutrient management plan</value>
+  </data>
+  <data name="lblCurrentFields" xml:space="preserve">
+    <value>Current fields</value>
+  </data>
+  <data name="lblFarmFields" xml:space="preserve">
+    <value>{0} fields</value>
+  </data>
+  <data name="lblFieldAndSoilDetails" xml:space="preserve">
+    <value>Field and soil details</value>
+  </data>
+  <data name="lblManageFarmFields" xml:space="preserve">
+    <value>Manage Farm Fields</value>
+  </data>
+  <data name="lblManageFieldDetailsAndSoilAnalysis" xml:space="preserve">
+    <value>Manage field details and soil analysis</value>
+  </data>
 </root>
