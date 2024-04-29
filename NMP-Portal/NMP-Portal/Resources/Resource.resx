@@ -713,4 +713,31 @@ Continue</value>
   <data name="lblMiligramValues" xml:space="preserve">
     <value>Miligram values</value>
   </data>
+  <data name="lblOtherReference" xml:space="preserve">
+    <value>Other reference (optional)</value>
+  </data>
+  <data name="lblLandParcelIDForCheckAnswere" xml:space="preserve">
+    <value>Land Parcel ID</value>
+  </data>
+  <data name="lblNationalGridReferenceForCheckAnswere" xml:space="preserve">
+    <value>National grid reference</value>
+  </data>
+  <data name="lblOtherReferenceForCheckAnswere" xml:space="preserve">
+    <value>Other reference</value>
+  </data>
+  <data name="MsgCroppedAreaIsGreaterThanTotalArea" xml:space="preserve">
+    <value>The cropped area cannot be larger than the total field area</value>
+  </data>
+  <data name="MsgManureNonSpreadingAreaIsGreaterThanTotalArea" xml:space="preserve">
+    <value>The manure non-spreading area cannot be larger than the total field area</value>
+  </data>
+  <data name="MsgIfCroppedAreaAndNonSpreadingArea" xml:space="preserve">
+    <value>The combined cropped area and manure non-spreading area cannot be larger than the total field area</value>
+  </data>
+  <data name="MsgLandParcelIdMinMaxValidation" xml:space="preserve">
+    <value>Enter a Land Parcel ID that is no more than 14 characters long</value>
+  </data>
+  <data name="MsgNationalGridReferenceMinMaxValidation" xml:space="preserve">
+    <value>Enter a National Grid Reference that is no more than 4 characters long</value>
+  </data>
 </root>

@@ -487,7 +487,7 @@ namespace NMP.Portal.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CheckAnswer(FarmViewModel farm)
-        {
+        {            
             int userId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value);
             var farmData = new FarmData
             {
@@ -532,6 +532,8 @@ namespace NMP.Portal.Controllers
             }
             string success = _dataProtector.Protect("true");
             farmResponse.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());
+            _httpContextAccessor.HttpContext?.Session.Remove("FarmData");
+            _httpContextAccessor.HttpContext?.Session.Remove("AddressList");
             return RedirectToAction("FarmSummary", new { id = farmResponse.EncryptedFarmId, q = success });
 
         }
@@ -597,7 +599,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Error = ex.Message;
+                TempData["Error"] = ex.Message;
             }
             return View(farmData);
 

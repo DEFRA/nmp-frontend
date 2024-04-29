@@ -14,9 +14,13 @@ namespace NMP.Portal.Models
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblFieldName))]
         public string Name { get; set; }
 
+        [StringLength(14, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgLandParcelIdMinMaxValidation))]
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblLandParcelID))]
         public string? LPIDNumber { get; set; }
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblOtherReference))]
+        public string? OtherReference { get; set; }
 
+        [StringLength(4, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgNationalGridReferenceMinMaxValidation))]
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblNationalGridReference))]
         public string? NationalGridReference { get; set; }
 

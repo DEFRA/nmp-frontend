@@ -24,6 +24,7 @@ namespace NMP.Portal.ViewModels
         public string CropType { get; set; } = string.Empty;
         public string CropGroup { get; set; } = string.Empty;
         public string SampleDate { get; set; } = string.Empty;
+        public bool isEnglishRules { get; set; } 
 
     }
 }

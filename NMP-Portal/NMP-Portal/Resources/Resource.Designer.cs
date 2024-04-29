@@ -810,6 +810,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Land Parcel ID.
+        /// </summary>
+        public static string lblLandParcelIDForCheckAnswere {
+            get {
+                return ResourceManager.GetString("lblLandParcelIDForCheckAnswere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add soil analysis.
         /// </summary>
         public static string lbllblAddSoilAnalysisTitle {
@@ -954,6 +963,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to National grid reference.
+        /// </summary>
+        public static string lblNationalGridReferenceForCheckAnswere {
+            get {
+                return ResourceManager.GetString("lblNationalGridReferenceForCheckAnswere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
         public static string lblNo {
@@ -1040,6 +1058,24 @@ namespace NMP.Portal.Resources {
         public static string lblOrganic {
             get {
                 return ResourceManager.GetString("lblOrganic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Other reference (optional).
+        /// </summary>
+        public static string lblOtherReference {
+            get {
+                return ResourceManager.GetString("lblOtherReference", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Other reference.
+        /// </summary>
+        public static string lblOtherReferenceForCheckAnswere {
+            get {
+                return ResourceManager.GetString("lblOtherReferenceForCheckAnswere", resourceCulture);
             }
         }
         
@@ -1539,6 +1575,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The cropped area cannot be larger than the total field area.
+        /// </summary>
+        public static string MsgCroppedAreaIsGreaterThanTotalArea {
+            get {
+                return ResourceManager.GetString("MsgCroppedAreaIsGreaterThanTotalArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to For example, 27 3 2007.
         /// </summary>
         public static string MsgDateExample {
@@ -1746,6 +1791,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The combined cropped area and manure non-spreading area cannot be larger than the total field area.
+        /// </summary>
+        public static string MsgIfCroppedAreaAndNonSpreadingArea {
+            get {
+                return ResourceManager.GetString("MsgIfCroppedAreaAndNonSpreadingArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a Land Parcel ID that is no more than 14 characters long.
+        /// </summary>
+        public static string MsgLandParcelIdMinMaxValidation {
+            get {
+                return ResourceManager.GetString("MsgLandParcelIdMinMaxValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the magnesium index before continuing.
         /// </summary>
         public static string MsgMagnesiumIndex {
@@ -1760,6 +1823,24 @@ namespace NMP.Portal.Resources {
         public static string MsgMagnesiumPerLitreOfSoil {
             get {
                 return ResourceManager.GetString("MsgMagnesiumPerLitreOfSoil", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The manure non-spreading area cannot be larger than the total field area.
+        /// </summary>
+        public static string MsgManureNonSpreadingAreaIsGreaterThanTotalArea {
+            get {
+                return ResourceManager.GetString("MsgManureNonSpreadingAreaIsGreaterThanTotalArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a National Grid Reference that is no more than 4 characters long.
+        /// </summary>
+        public static string MsgNationalGridReferenceMinMaxValidation {
+            get {
+                return ResourceManager.GetString("MsgNationalGridReferenceMinMaxValidation", resourceCulture);
             }
         }
         
