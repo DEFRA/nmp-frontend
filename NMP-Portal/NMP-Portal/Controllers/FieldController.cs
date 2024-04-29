@@ -804,7 +804,36 @@ namespace NMP.Portal.Controllers
             };
 
             (Field fieldResponse,Error error1) = await _fieldService.AddFieldAsync(fieldData, farm.ID,farm.Name);
-            return RedirectToAction("CheckAnswer");
+            if (error1.Message == null && fieldResponse !=null)
+            {
+                return RedirectToAction("ManageFarmFields");
+            }
+            else
+            {
+                ViewBag.AddFieldError = error1.Message;
+                return RedirectToAction("CheckAnswer");
+            }
+            
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ManageFarmFields()
+        {
+            FieldViewModel model = new FieldViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+            }
+            ViewBag.Success = true;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult ManageFarmFields(FieldViewModel field)
+        {
+
+            return RedirectToAction("ManageFarmFields");
         }
     }
 }
