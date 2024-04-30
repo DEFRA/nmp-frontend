@@ -18,8 +18,8 @@
         <govuk-breadcrumbs-item asp-action="FarmList" asp-controller="Farm">
             @Resource.lblAllFarm
         </govuk-breadcrumbs-item>
-        <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm">
-            @Model.Name
+        <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+            @Model.FarmName
         </govuk-breadcrumbs-item>
         <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
             @Resource.lblManageFieldDetailsAndSoilAnalysis
@@ -34,15 +34,15 @@
                 <govuk-notification-banner type="Success">
                     <div class="">
                         <h3 class="govuk-notification-banner__heading"> @string.Format(Resource.lblYouHaveAdded, Model.Name)</h3>
-                        <p class="govuk-body"></p>
+                        <p class="govuk-body">
                         <a class="govuk-notification-banner__link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@Resource.lblAddAnotherField</a>
-                        <p class="govuk-body">@Resource.lblOr</p>
+                        @Resource.lblOr</p>
                         <a class="govuk-notification-banner__link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCreateANutrientManagementPlan</a>
                     </div>
                 </govuk-notification-banner>
             }
 
-            <h1 class="govuk-heading-l">@Resource.lblFarmFields</h1>
+            <h1 class="govuk-heading-l">@string.Format(Resource.lblFarmFields,Model.FarmName)</h1>
             <p class="govuk-body">
                 <a class="govuk-notification-banner__link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@Resource.lblAddAnotherField</a>
             </p>
@@ -65,7 +65,7 @@
                             <tr class="govuk-table__row">
                                 <td class="govuk-table__cell">@item.Name</td>
                                 <td class="govuk-table__cell">
-                                    <a href="field-select-handler?chosenfield=field 1">@Resource.lblFieldAndSoilDetails</a>
+                                    <a href="#">@Resource.lblFieldAndSoilDetails</a>
                                 </td>
                             </tr>
                         }

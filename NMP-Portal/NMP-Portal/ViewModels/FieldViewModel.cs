@@ -9,8 +9,9 @@ namespace NMP.Portal.ViewModels
         {
             SoilAnalyses=new SoilAnalyses();
             Crop=new Crop();
+            Fields = new List<Field>();
         }
-
+        public List<Field> Fields { get; set; }
         public bool IsSoilReleasingClay { get; set; } = false;
         public SoilAnalyses SoilAnalyses { get; set; }
         public Crop Crop { get; set; }

@@ -77,7 +77,7 @@
                     @if (ViewBag.FieldCount != null && ViewBag.FieldCount > 0)
                     {
                         <li>
-                            <a class="govuk-link" href="#">
+                            <a class="govuk-link" asp-action="ManageFarmFields" asp-controller="Field" asp-route-Id="@Model.EncryptedFarmId">
                                 @Resource.lblUpdateFieldsOrSoilAnalysis
                             </a>
                         </li>

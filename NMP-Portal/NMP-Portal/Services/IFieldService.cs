@@ -14,5 +14,6 @@ namespace NMP.Portal.Services
         Task<string> FetchCropTypeById(int cropTypeId);
         Task<(Field, Error)> AddFieldAsync(FieldData fieldData, int farmId,string farmName);
         Task<bool> IsFieldExistAsync(int fieldId, string name);
+        Task<List<Field>> FetchFieldsByFarmId(int farmId);
     }
 }

@@ -76,6 +76,7 @@ namespace NMP.Portal.Controllers
 
                     (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmID);
                     model.isEnglishRules = farm.EnglishRules;
+                    model.FarmName = farm.Name;
                 }
             }
             catch (Exception ex)
@@ -903,7 +904,9 @@ namespace NMP.Portal.Controllers
             (Field fieldResponse, Error error1) = await _fieldService.AddFieldAsync(fieldData, farm.ID, farm.Name);
             if (error1.Message == null && fieldResponse != null)
             {
-                return RedirectToAction("ManageFarmFields");
+                string success = _farmDataProtector.Protect("true");
+
+                return RedirectToAction("ManageFarmFields", new {id= model.EncryptedFarmId,q = success });
             }
             else
             {
@@ -914,15 +917,35 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ManageFarmFields()
+        public async Task<IActionResult> ManageFarmFields(string id,string? q)
         {
             FieldViewModel model = new FieldViewModel();
+            List<Field> listFields = new List<Field>();
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                ViewBag.Success = true;
+            }
+            else
+            {
+                ViewBag.Success = false;
+            }
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
             }
-            ViewBag.Success = true;
+            if (!string.IsNullOrWhiteSpace(id))
+            {
+                int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
+                model.Fields = await _fieldService.FetchFieldsByFarmId(farmId);
 
+                (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(farmId);
+                model.isEnglishRules = farm.EnglishRules;
+                model.FarmName = farm.Name;
+
+
+                ViewBag.FieldsList = model.Fields;
+                model.EncryptedFarmId = id;
+            }
             return View(model);
         }
 
