@@ -32,7 +32,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
 
             <div class="govuk-form-group">
-                <govuk-input asp-for=@Model.Rainfall input-class="govuk-input--width-5" spellcheck="false">
+                <govuk-input asp-for=@Model.Rainfall input-class="govuk-input--width-5" type="number" step="any" spellcheck="false">
                     <govuk-input-suffix>@Resource.lblmm</govuk-input-suffix>
                 </govuk-input>
             </div>

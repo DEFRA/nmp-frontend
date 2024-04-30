@@ -7,7 +7,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="SoilNutrientValueType" asp-controller="Field">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" :"SoilNutrientValueType")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
 @if (ViewBag.Error != null)
 {
@@ -51,6 +51,8 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilType"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroup"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropType"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAbove300SeaLevelForFarm" value="@Model.IsAbove300SeaLevelForFarm.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZForFarm" value="@Model.IsWithinNVZForFarm.ToString().ToLower()"></govuk-input>
             @if (Model.IsSoilNutrientValueTypeIndex != null && Model.IsSoilNutrientValueTypeIndex.Value)            
             {
 
@@ -68,13 +70,13 @@
             {
                 <div class="govuk-form-group">
                     <govuk-input asp-for=@Model.SoilAnalyses.Phosphorus input-class="govuk-input--width-5" spellcheck="false">
-                        <govuk-input-suffix>@Resource.lblMilligrams</govuk-input-suffix>
+                        <govuk-input-suffix>@Resource.lblMgL</govuk-input-suffix>
                     </govuk-input>
                     <govuk-input asp-for=@Model.SoilAnalyses.Potassium input-class="govuk-input--width-5" spellcheck="false">
-                        <govuk-input-suffix>@Resource.lblMilligrams</govuk-input-suffix>
+                        <govuk-input-suffix>@Resource.lblMgL</govuk-input-suffix>
                     </govuk-input>
                     <govuk-input asp-for=@Model.SoilAnalyses.Magnesium input-class="govuk-input--width-5" spellcheck="false">
-                        <govuk-input-suffix>@Resource.lblMilligrams</govuk-input-suffix>
+                        <govuk-input-suffix>@Resource.lblMgL</govuk-input-suffix>
                     </govuk-input>
                 </div>
             }
