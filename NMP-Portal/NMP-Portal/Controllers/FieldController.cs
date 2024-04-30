@@ -54,9 +54,9 @@ namespace NMP.Portal.Controllers
         public IActionResult CreateFieldCancel(string id)
         {
             _httpContextAccessor.HttpContext?.Session.Remove("FieldData");
-            _httpContextAccessor.HttpContext?.Session.Remove("CropGroupList");
-            _httpContextAccessor.HttpContext?.Session.Remove("SoilTypes");
-            _httpContextAccessor.HttpContext?.Session.Remove("CropTypeList");
+            //_httpContextAccessor.HttpContext?.Session.Remove("CropGroupList");
+            //_httpContextAccessor.HttpContext?.Session.Remove("SoilTypes");
+            //_httpContextAccessor.HttpContext?.Session.Remove("CropTypeList");
             return RedirectToAction("FarmSummary", "Farm", new { Id = id });
         }
 
@@ -269,27 +269,21 @@ namespace NMP.Portal.Controllers
                 {
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
                 }
-                if (_httpContextAccessor.HttpContext != null && !_httpContextAccessor.HttpContext.Session.Keys.Contains("SoilTypes"))
+
+
+                soilTypes = await _fieldService.FetchSoilTypes();
+                if (soilTypes.Count > 0 && soilTypes.Any())
                 {
-                    soilTypes = await _fieldService.FetchSoilTypes();
-                    if (soilTypes.Count > 0 && soilTypes.Any())
-                    {
-                        var country = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
-                        var soilTypesList = soilTypes.Where(x => x.CountryId == country).ToList();
-                        ViewBag.SoilTypesList = soilTypesList;
-                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("SoilTypes", soilTypesList);
-                    }
-                    else
-                    {
-                        ViewBag.SoilTypeError = Resource.MsgServiceNotAvailable;
-                        RedirectToAction("ElevationField");
-                    }
+                    var country = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
+                    var soilTypesList = soilTypes.Where(x => x.CountryId == country).ToList();
+                    ViewBag.SoilTypesList = soilTypesList;
                 }
                 else
                 {
-                    soilTypes = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<List<SoilTypesResponse>>("SoilTypes");
-                    ViewBag.SoilTypesList = soilTypes;
+                    ViewBag.SoilTypeError = Resource.MsgServiceNotAvailable;
+                    RedirectToAction("ElevationField");
                 }
+
             }
             catch (Exception ex)
             {
@@ -312,9 +306,12 @@ namespace NMP.Portal.Controllers
                     ModelState.AddModelError("SoilTypeID",string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing,Resource.lblSoilType.ToLower()));
                 }
 
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("SoilTypes"))
+                soilTypes = await _fieldService.FetchSoilTypes();
+                if (soilTypes.Count > 0 && soilTypes.Any())
                 {
-                    soilTypes = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<List<SoilTypesResponse>>("SoilTypes");
+                    var country = field.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
+                    var soilTypesList = soilTypes.Where(x => x.CountryId == country).ToList();
+                    soilTypes = soilTypesList;
                 }
 
                 if (!ModelState.IsValid)
@@ -377,11 +374,17 @@ namespace NMP.Portal.Controllers
                 return View(field);
             }
             List<SoilTypesResponse> soilTypes = new List<SoilTypesResponse>();
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("SoilTypes"))
+            //if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("SoilTypes"))
+            //{
+            //    soilTypes = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<List<SoilTypesResponse>>("SoilTypes");
+            //}
+            soilTypes = await _fieldService.FetchSoilTypes();
+            if (soilTypes.Count > 0 && soilTypes.Any())
             {
-                soilTypes = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<List<SoilTypesResponse>>("SoilTypes");
+                var country = field.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
+                var soilTypesList = soilTypes.Where(x => x.CountryId == country).ToList();
+                soilTypes = soilTypesList;
             }
-
             var soilType = soilTypes?.Where(x => x.SoilTypeId == field.SoilTypeID).FirstOrDefault();
             if (!soilType.KReleasingClay)
             {
@@ -658,7 +661,7 @@ namespace NMP.Portal.Controllers
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
                 }
                 cropGroups = await _fieldService.FetchCropGroups();
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropGroupList", cropGroups);
+                //_httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropGroupList", cropGroups);
                 ViewBag.CropGroupList = cropGroups;
             }
             catch (Exception ex)
@@ -679,10 +682,7 @@ namespace NMP.Portal.Controllers
             if (!ModelState.IsValid)
             {
                 List<CropGroupResponse> cropTypes = new List<CropGroupResponse>();
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropGroupList"))
-                {
-                    ViewBag.CropGroupList = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<List<CropGroupResponse>>("CropGroupList");
-                }
+                ViewBag.CropGroupList = await _fieldService.FetchCropGroups();
                 return View(field);
             }
 
@@ -719,7 +719,6 @@ namespace NMP.Portal.Controllers
                 var country = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
                 var cropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.Both).ToList();
 
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropTypeList", cropTypeList);
                 ViewBag.CropTypeList = cropTypeList;
             }
             catch (Exception ex)
@@ -741,10 +740,9 @@ namespace NMP.Portal.Controllers
             if (!ModelState.IsValid)
             {
                 List<CropTypeResponse> cropTypes = new List<CropTypeResponse>();
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropTypeList"))
-                {
-                    ViewBag.CropTypeList = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<List<CropTypeResponse>>("CropTypeList");
-                }
+                cropTypes = await _fieldService.FetchCropTypes(field.CropGroupId ?? 0);
+                var country = field.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
+                ViewBag.CropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.Both).ToList();
                 return View(field);
             }
             field.CropType = await _fieldService.FetchCropTypeById(field.Crop.CropTypeID.Value);
@@ -914,6 +912,7 @@ namespace NMP.Portal.Controllers
             if (error1.Message == null && fieldResponse != null)
             {
                 string success = _farmDataProtector.Protect("true");
+                _httpContextAccessor.HttpContext?.Session.Remove("FieldData");
 
                 return RedirectToAction("ManageFarmFields", new { id = model.EncryptedFarmId, q = success });
             }
@@ -926,10 +925,9 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ManageFarmFields(string id,string? q)
+        public async Task<IActionResult> ManageFarmFields(string id, string? q)
         {
-            FieldViewModel model = new FieldViewModel();
-            List<Field> listFields = new List<Field>();
+            FarmFieldsViewModel model = new FarmFieldsViewModel();
             if (!string.IsNullOrWhiteSpace(q))
             {
                 ViewBag.Success = true;
@@ -938,20 +936,14 @@ namespace NMP.Portal.Controllers
             {
                 ViewBag.Success = false;
             }
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
-            {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
-            }
             if (!string.IsNullOrWhiteSpace(id))
             {
                 int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
                 model.Fields = await _fieldService.FetchFieldsByFarmId(farmId);
 
                 (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(farmId);
-                model.isEnglishRules = farm.EnglishRules;
                 model.FarmName = farm.Name;
-
-
+                model.FieldName= model.Fields.LastOrDefault()?.Name;
                 ViewBag.FieldsList = model.Fields;
                 model.EncryptedFarmId = id;
             }

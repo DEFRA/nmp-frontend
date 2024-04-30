@@ -9,11 +9,11 @@
 @section BeforeContent {
     <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "Address")" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
 }
-<form  method="post" asp-controller="Farm">
-    @Html.AntiForgeryToken()
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
 
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form method="post" asp-controller="Farm">
+            @Html.AntiForgeryToken()
             <h1 class="govuk-heading-l">
                 @(string.Format(Resource.lblEnterTheAddressFor, Model.Name))
             </h1>
@@ -44,12 +44,14 @@
             </div>
 
             <div class="govuk-form-group">
-                <govuk-input class="govuk-input--width-10" asp-for="@Model.Postcode"></govuk-input>
+                <govuk-input class="govuk-input--width-10" asp-for="@Model.Postcode">
+                    <govuk-input-label>@Resource.lblPostCode</govuk-input-label>
+                </govuk-input>
             </div>
 
             <div class="govuk-form-group">
                 <govuk-button type="submit" asp-action="ManualAddress">@Resource.lblContinue</govuk-button>
             </div>
-        </div>
+        </form>
     </div>
-</form>
+</div>

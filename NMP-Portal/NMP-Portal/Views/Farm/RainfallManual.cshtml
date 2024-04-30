@@ -7,11 +7,11 @@
 @section BeforeContent {
     <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "Rainfall")" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="RainfallManual" asp-controller="Farm" method="post">
-   @Html.AntiForgeryToken()
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
 
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form asp-action="RainfallManual" asp-controller="Farm" method="post">
+            @Html.AntiForgeryToken()
             <h1 class="govuk-heading-l">
                 @string.Format(Resource.lblEnterAverageAnualRainfall, Model.Postcode)
             </h1>
@@ -30,11 +30,11 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManualAddress" value="@Model.IsManualAddress.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPostCodeChanged" value="@Model.IsPostCodeChanged.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
+
             <div class="govuk-form-group">
-                 <div class="govuk-input__wrapper">
-                <govuk-input class="govuk-input--width-5" asp-for="@Model.Rainfall" type="text"></govuk-input>
-                <div class="govuk-input__suffix rainfall-suffix" aria-hidden="true">@Resource.lblmm</div>
-                </div>
+                <govuk-input asp-for=@Model.Rainfall input-class="govuk-input--width-5" type="number" step="any" spellcheck="false">
+                    <govuk-input-suffix>@Resource.lblmm</govuk-input-suffix>
+                </govuk-input>
             </div>
             <div class="govuk-form-group">
                 <fieldset class="govuk-fieldset">
@@ -43,7 +43,6 @@
                 </fieldset>
             </div>
             <p class="govuk-body cancel-link"><a asp-action="CreateFarmCancel" asp-controller="Farm">@Resource.lblCancel</a></p>
-
-        </div>
+        </form>
     </div>
-</form>
+</div>

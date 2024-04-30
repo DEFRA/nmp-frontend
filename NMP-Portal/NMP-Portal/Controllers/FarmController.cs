@@ -59,12 +59,12 @@ namespace NMP.Portal.Controllers
         {
             _httpContextAccessor.HttpContext?.Session.Remove("FarmData");
             _httpContextAccessor.HttpContext?.Session.Remove("AddressList");
-
+            int userId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value);
 
             FarmsViewModel model = new FarmsViewModel();
             Error error = null;
             UserFarmResponse userFarmList = null;
-            (userFarmList, error) = await _userFarmService.UserFarmAsync(1);
+            (userFarmList, error) = await _userFarmService.UserFarmAsync(userId);
             if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
             {
                 ViewBag.Error = error.Message;
@@ -118,7 +118,7 @@ namespace NMP.Portal.Controllers
                 bool IsFarmExist = await _farmService.IsFarmExistAsync(farm.Name, farm.Postcode);
                 if (IsFarmExist)
                 {
-                    ModelState.AddModelError("Name", string.Format(Resource.MsgFarmAlreadyExist, farm.Name, farm.Postcode));
+                    ModelState.AddModelError("Name",Resource.MsgFarmAlreadyExist);
                 }
             }
 
@@ -258,7 +258,7 @@ namespace NMP.Portal.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult ManualAddress(FarmViewModel farm)
+        public async Task<IActionResult> ManualAddress(FarmViewModel farm)
         {
             if (string.IsNullOrEmpty(farm.Address1))
             {
@@ -275,6 +275,14 @@ namespace NMP.Portal.Controllers
             if (string.IsNullOrEmpty(farm.Postcode))
             {
                 ModelState.AddModelError("Postcode", Resource.MsgEnterAPostcode);
+            }
+            if (!string.IsNullOrWhiteSpace(farm.Postcode))
+            {
+                bool IsFarmExist = await _farmService.IsFarmExistAsync(farm.Name, farm.Postcode);
+                if (IsFarmExist)
+                {
+                    ModelState.AddModelError("Postcode", Resource.MsgFarmAlreadyExist);
+                }
             }
             if (!ModelState.IsValid)
             {
@@ -300,12 +308,14 @@ namespace NMP.Portal.Controllers
             {
                 model = new FarmViewModel();
             }
-
-            string[] postcode = model.Postcode.Split(' ');
-            string firstHalfPostcode = postcode[0];
-            var rainfall = await _farmService.FetchRainfallAverageAsync(firstHalfPostcode);
-            model.Rainfall = rainfall;
-            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", model);
+            if(model.Rainfall==0 || model.Rainfall==null)
+            {
+                string[] postcode = model.Postcode.Split(' ');
+                string firstHalfPostcode = postcode[0];
+                var rainfall = await _farmService.FetchRainfallAverageAsync(firstHalfPostcode);
+                model.Rainfall = rainfall;
+                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", model);
+            }
 
             return View(model);
 
@@ -381,7 +391,7 @@ namespace NMP.Portal.Controllers
         {
             if (farm.NVZFields == null)
             {
-                ModelState.AddModelError("NVZField", Resource.MsgSelectAnOptionBeforeContinuing);
+                ModelState.AddModelError("NVZFields", Resource.MsgSelectAnOptionBeforeContinuing);
             }
             if (!ModelState.IsValid)
             {
