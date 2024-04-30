@@ -352,8 +352,7 @@ namespace NMP.Portal.Services
                 }
                 else
                 {
-                    error.Message =
-                        string.Format(Resource.MsgFieldAlreadyExist, fieldData.Field.Name, farmName);
+                    error.Message = Resource.MsgFieldAlreadyExist;
                 }
             }
             catch (HttpRequestException hre)

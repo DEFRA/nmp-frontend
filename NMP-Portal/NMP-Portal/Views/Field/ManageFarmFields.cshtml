@@ -1,6 +1,6 @@
 ﻿@using NMP.Portal.Resources
 @using NMP.Portal.ViewModels
-@model FieldViewModel
+@model FarmFieldsViewModel
 @{
     ViewData["Title"] = Resource.lblManageFarmFields;
 }
@@ -33,7 +33,7 @@
             {
                 <govuk-notification-banner type="Success">
                     <div class="">
-                        <h3 class="govuk-notification-banner__heading"> @string.Format(Resource.lblYouHaveAdded, Model.Name)</h3>
+                        <h3 class="govuk-notification-banner__heading"> @string.Format(Resource.lblYouHaveAdded, Model.FieldName)</h3>
                         <p class="govuk-body">
                         <a class="govuk-notification-banner__link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@Resource.lblAddAnotherField</a>
                         @Resource.lblOr</p>

@@ -1835,7 +1835,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The farm name {0} under the postcode {1} already exist.
+        ///   Looks up a localized string similar to A farm with that name and postcode has already been added. You or someone else who works on the farm may have already added it..
         /// </summary>
         public static string MsgFarmAlreadyExist {
             get {
@@ -1853,7 +1853,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The field name {0} under the farm {1} already exist.
+        ///   Looks up a localized string similar to You have already added a field with that name. Enter a different field name..
         /// </summary>
         public static string MsgFieldAlreadyExist {
             get {
