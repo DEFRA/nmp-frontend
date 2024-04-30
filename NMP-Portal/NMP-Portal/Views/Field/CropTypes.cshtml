@@ -5,7 +5,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="CropGroups" asp-controller="Field">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" :"CropGroups")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="CropTypes" asp-controller="Field" method="post">
     @Html.AntiForgeryToken()
