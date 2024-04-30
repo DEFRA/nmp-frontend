@@ -559,7 +559,7 @@ namespace NMP.Portal.Controllers
             }
             else
             {
-                ViewBag.Success = false;
+                ViewBag.Success = "false";
             }
             ViewBag.FieldCount = 0;
 
@@ -574,7 +574,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.IsCheckAnswer)
                 {
-                    ViewBag.Success = true;
+                    ViewBag.Success = "true";
                 }
 
                 if (!string.IsNullOrWhiteSpace(id))

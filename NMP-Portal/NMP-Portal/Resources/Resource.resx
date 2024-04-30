@@ -533,7 +533,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Sulpher Deficient</value>
   </data>
   <data name="lblHowWouldYouLikeToEnterYourSoilNutrientValues" xml:space="preserve">
-    <value>How would you like to enter your soil nutrient values ?</value>
+    <value>How would you like to enter your soil nutrient values?</value>
   </data>
   <data name="lblAsAnIndex" xml:space="preserve">
     <value>As an index</value>
@@ -611,8 +611,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Enter an index between 0 and 9</value>
   </data>
   <data name="lblBasedOnRecentSNA" xml:space="preserve">
-    <value>Calculate based on a recent soil nitrogen analysis
-Continue</value>
+    <value>Calculate based on a recent soil nitrogen analysis</value>
   </data>
   <data name="lblCropGroup" xml:space="preserve">
     <value>Crop Group</value>
@@ -624,7 +623,7 @@ Continue</value>
     <value>Estimate based on the previous crop</value>
   </data>
   <data name="lblHowWouldYouLikeToCalculateSNS" xml:space="preserve">
-    <value>How would you like to calculate the soil nitrogen supply for {0}?</value>
+    <value>How would you like to calculate the soil nitrogen supply</value>
   </data>
   <data name="lblWhatIsTheCurrentCropGroup" xml:space="preserve">
     <value>What is the current crop group?</value>
@@ -632,17 +631,14 @@ Continue</value>
   <data name="lblWhatIsTheCurrentCropType" xml:space="preserve">
     <value>What is the current crop type?</value>
   </data>
-  <data name="lblWhatWasThePreviousCropGroup" xml:space="preserve">
-    <value>What was the previous crop group?</value>
+  <data name="lblWhatWasThePreviousCropGroupForCheckAnswere" xml:space="preserve">
+    <value>Previous crop group</value>
   </data>
-  <data name="lblWhatWasThePreviousCropType" xml:space="preserve">
-    <value>What was the previous crop type?</value>
+  <data name="lblWhatWasThePreviousCropTypeForCheckAnswere" xml:space="preserve">
+    <value>Previous crop type</value>
   </data>
   <data name="btnStartNow" xml:space="preserve">
     <value>Start now</value>
-  </data>
-  <data name="lblDateWhenTheSoilSampleWasTaken" xml:space="preserve">
-    <value>Date when the soil sample was taken</value>
   </data>
   <data name="lblSoilPHLevel" xml:space="preserve">
     <value>Soil pH level</value>
@@ -672,34 +668,25 @@ Continue</value>
     <value>Cropped area</value>
   </data>
   <data name="lblDateSampleTaken" xml:space="preserve">
-    <value>Date sample taken</value>
+    <value>When was the soil sample taken?</value>
   </data>
   <data name="lblDoesPotashClayForCheckAnswere" xml:space="preserve">
-    <value>Does {0} contain potash-releasing clay?</value>
+    <value>Does this field contain potash-releasing clay?</value>
   </data>
   <data name="lblFieldArea" xml:space="preserve">
     <value>Field area</value>
   </data>
   <data name="lblIsThisFieldAboveForFieldCheckAnswere" xml:space="preserve">
-    <value>Is this field above 300 meters?</value>
-  </data>
-  <data name="lblMagnesiumPerLitreOfSoilForCheckAnswere" xml:space="preserve">
-    <value>Magnesium (Mg) per litre</value>
+    <value>Is this field more than 300 metres above sea level?</value>
   </data>
   <data name="lblManureNonSpreadingAreaForCheckAnswere" xml:space="preserve">
     <value>Manure non-spreading area</value>
   </data>
   <data name="lblNVZFieldForFieldCheckAnswere" xml:space="preserve">
-    <value>Is this field within an NVZ?</value>
-  </data>
-  <data name="lblPhosphorusPerLitreOfSoilForCheckAnswere" xml:space="preserve">
-    <value>Phosphorus (P) per litre</value>
-  </data>
-  <data name="lblPotassiumPerLitreOfSoilForCheckAnswere" xml:space="preserve">
-    <value>Potassium (K) per litre</value>
+    <value>Is this field inside a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
   <data name="lblNutrientValueTypeForCheckAnswere" xml:space="preserve">
-    <value>How would you like to enter your values?</value>
+    <value>How would you like to enter your soil nutrient values?</value>
   </data>
   <data name="lblBasedOnARecentSoilNitrogenAnalysis" xml:space="preserve">
     <value>Based on a recent soil nitrogen analysis</value>
@@ -711,7 +698,31 @@ Continue</value>
     <value>Index values</value>
   </data>
   <data name="lblMiligramValues" xml:space="preserve">
-    <value>Miligram values</value>
+    <value>Milligram values</value>
+  </data>
+  <data name="MsgFieldAlreadyExist" xml:space="preserve">
+    <value>The field name {0} under the farm {1} already exist</value>
+  </data>
+  <data name="lblAddAnotherField" xml:space="preserve">
+    <value>Add another field</value>
+  </data>
+  <data name="lblCreateANutrientManagementPlan" xml:space="preserve">
+    <value>Create a nutrient management plan</value>
+  </data>
+  <data name="lblCurrentFields" xml:space="preserve">
+    <value>Current fields</value>
+  </data>
+  <data name="lblFarmFields" xml:space="preserve">
+    <value>{0} fields</value>
+  </data>
+  <data name="lblFieldAndSoilDetails" xml:space="preserve">
+    <value>Field and soil details</value>
+  </data>
+  <data name="lblManageFarmFields" xml:space="preserve">
+    <value>Manage Farm Fields</value>
+  </data>
+  <data name="lblManageFieldDetailsAndSoilAnalysis" xml:space="preserve">
+    <value>Manage field details and soil analysis</value>
   </data>
   <data name="lblOtherReference" xml:space="preserve">
     <value>Other reference (optional)</value>
@@ -720,10 +731,10 @@ Continue</value>
     <value>Land Parcel ID</value>
   </data>
   <data name="lblNationalGridReferenceForCheckAnswere" xml:space="preserve">
-    <value>National grid reference</value>
+    <value>National Grid Reference</value>
   </data>
   <data name="lblOtherReferenceForCheckAnswere" xml:space="preserve">
-    <value>Other reference</value>
+    <value>Other Reference</value>
   </data>
   <data name="MsgCroppedAreaIsGreaterThanTotalArea" xml:space="preserve">
     <value>The cropped area cannot be larger than the total field area</value>
@@ -739,5 +750,32 @@ Continue</value>
   </data>
   <data name="MsgNationalGridReferenceMinMaxValidation" xml:space="preserve">
     <value>Enter a National Grid Reference that is no more than 4 characters long</value>
+  </data>
+  <data name="lblNotSet" xml:space="preserve">
+    <value>Not set</value>
+  </data>
+  <data name="MsgPreviousCropTypeNotSet" xml:space="preserve">
+    <value>Previous crop type not set</value>
+  </data>
+  <data name="MsgMagnesiumNotSet" xml:space="preserve">
+    <value>Magnesium (Mg) per litre of soil not set</value>
+  </data>
+  <data name="MsgPhosphorusNotSet" xml:space="preserve">
+    <value>Phosphorus (P) per litre of soil not set</value>
+  </data>
+  <data name="MsgPotassiumNotSet" xml:space="preserve">
+    <value>Potassium (K) per litre of soil not set</value>
+  </data>
+  <data name="lblWhatWasThePreviousCropGroup" xml:space="preserve">
+    <value>What was the previous crop group?</value>
+  </data>
+  <data name="lblWhatWasThePreviousCropType" xml:space="preserve">
+    <value>What was the previous crop type?</value>
+  </data>
+  <data name="MsgSoilReleasingClayNotSet" xml:space="preserve">
+    <value>Potash-releasing clay not set</value>
+  </data>
+  <data name="MsgEnterNumericValue" xml:space="preserve">
+    <value>Enter the area only in numbers</value>
   </data>
 </root>

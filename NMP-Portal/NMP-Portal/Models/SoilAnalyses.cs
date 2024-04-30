@@ -4,20 +4,20 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NMP.Portal.Models
 {
-    public class SoilAnalysis
+    public class SoilAnalyses
     {
-        public int? ID { get; set; }
-        public int? FieldID { get; set; }
+        //public int? ID { get; set; }
+        //public int? FieldID { get; set; }
         public int? Year { get; set; }
         public bool? SulphurDeficient { get; set; }
 
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblDateWhenTheSoilSampleWasTaken))]
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblDateSampleTaken))]
         public DateTime? Date { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblSoilPHLevel))]
         [RegularExpression(@"^(?:9(?:\.[0-9])?|[0-8](?:\.[0-9])?)$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterAPH))]
         public decimal? PH { get; set; }
-        public int? PhosphorusMethodologyId { get; set; }
+        public int? PhosphorusMethodologyID { get; set; }
 
         [RegularExpression(@"^(?:[0-9]{1,4}|10000)$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterValidValueForNutrient))]
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblPhosphorusPerLitreOfSoil))]
@@ -54,6 +54,10 @@ namespace NMP.Portal.Models
         public string? MagnesiumStatus { get; set; }
         public string? NitrogenResidueGroup { get; set; }
         public string? Comments { get; set; }
-
+        public int? PreviousID { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public int? CreatedByID { get; set; }
+        public DateTime? ModifiedOn { get; set; }
+        public int? ModifiedByID { get; set; }
     }
 }

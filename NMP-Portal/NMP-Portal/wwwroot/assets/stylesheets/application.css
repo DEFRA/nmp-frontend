@@ -147,3 +147,7 @@ hr.seperator_five {
 .govuk-input__wrapper input {
     max-width: 5.5em;
 }
+
+.data_not_set {
+    color:red;
+}
