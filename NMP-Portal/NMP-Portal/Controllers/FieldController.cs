@@ -909,9 +909,10 @@ namespace NMP.Portal.Controllers
             if (error1.Message == null && fieldResponse != null)
             {
                 string success = _farmDataProtector.Protect("true");
+                string fieldName = _farmDataProtector.Protect(fieldResponse.Name);
                 _httpContextAccessor.HttpContext?.Session.Remove("FieldData");
 
-                return RedirectToAction("ManageFarmFields", new { id = model.EncryptedFarmId, q = success });
+                return RedirectToAction("ManageFarmFields", new { id = model.EncryptedFarmId, q = success,name=fieldName });
             }
             else
             {
@@ -922,7 +923,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ManageFarmFields(string id, string? q)
+        public async Task<IActionResult> ManageFarmFields(string id, string? q, string? name)
         {
             FarmFieldsViewModel model = new FarmFieldsViewModel();
             if (!string.IsNullOrWhiteSpace(q))
@@ -940,7 +941,10 @@ namespace NMP.Portal.Controllers
 
                 (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(farmId);
                 model.FarmName = farm.Name;
-                model.FieldName= model.Fields.LastOrDefault()?.Name;
+                if(name != null)
+                {
+                    model.FieldName = _farmDataProtector.Unprotect(name);
+                }
                 ViewBag.FieldsList = model.Fields;
                 model.EncryptedFarmId = id;
             }
