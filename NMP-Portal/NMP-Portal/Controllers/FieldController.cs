@@ -104,7 +104,7 @@ namespace NMP.Portal.Controllers
             bool isFieldAlreadyexist =await _fieldService.IsFieldExistAsync(field.FarmID, field.Name);
             if(isFieldAlreadyexist)
             {
-                ModelState.AddModelError("Name",string.Format(Resource.MsgFieldAlreadyExist,field.Name,field.FarmName));
+                ModelState.AddModelError("Name",Resource.MsgFieldAlreadyExist);
             }
 
             if (!ModelState.IsValid)
