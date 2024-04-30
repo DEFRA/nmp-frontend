@@ -42,12 +42,17 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSnsBasedOnPreviousCrop" value="@Model.IsSnsBasedOnPreviousCrop.ToString().ToLower()"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crop.CropTypeID"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupId"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherReference"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilType"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroup"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropType"></govuk-input>
     <div class="govuk-grid-row">
 
         <div class="govuk-grid-column-two-thirds">
             <div class="govuk-form-group">
-                <govuk-date-input asp-for="@Model.SoilAnalyses.Date" pattern="^(0?[1-9]|[12][0-9]|3[01]) (0?[1-9]|1[0-2]) \d{4}$" label="@Resource.lblDateWhenTheSoilSampleWasTaken">
+                <govuk-date-input asp-for="@Model.SoilAnalyses.Date" pattern="^(0?[1-9]|[12][0-9]|3[01]) (0?[1-9]|1[0-2]) \d{4}$">
                     <govuk-date-input-fieldset>
                         @*  <govuk-date-input-fieldset-legend class="govuk-fieldset__legend--s">
                         @Resource.lblDateWhenTheSoilSampleWasTaken

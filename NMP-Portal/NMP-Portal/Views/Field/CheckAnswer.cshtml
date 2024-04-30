@@ -7,11 +7,13 @@
     var isAbove300SeaLevel = "";
     var soilReleasingClay = "";
     var sulphurDeficient = "";
-    var isSoilNutrientValueTypeIndex = Model.IsSoilNutrientValueTypeIndex == true ? Resource.lblIndexValues
+    var isSoilNutrientValueTypeIndex = Model.IsSoilNutrientValueTypeIndex.Value ? Resource.lblIndexValues
                                         : Resource.lblMiligramValues;
-    var sNSCalculationMethod = Model.IsSnsBasedOnPreviousCrop == true ?
+    var sNSCalculationMethod = Model.IsSnsBasedOnPreviousCrop.Value ?
     Resource.lblBasedOnThePreviousCrop : Resource.lblBasedOnARecentSoilNitrogenAnalysis;
     var sampleDate = Model.SoilAnalyses.Date.Value.Date.ToString("dd MMMM yyyy");
+    var changeAction = Model.IsSoilReleasingClay ? "SoilReleasingClay"
+                        : "SulphurDeficient";
 
     switch (Model.IsWithinNVZ)
     {
@@ -70,6 +72,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LPIDNumber"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalArea"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CroppedArea"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureNonSpreadingArea"></govuk-input>
@@ -94,7 +97,12 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crop.CropTypeID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherReference"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilType"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroup"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropType"></govuk-input>
             <govuk-summary-list>
                 <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
@@ -109,7 +117,43 @@
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
-                        @Resource.lblFieldArea
+                        @Resource.lblNationalGridReferenceForCheckAnswere
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @Model.NationalGridReference
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="AddField" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        @Resource.lblOtherReferenceForCheckAnswere
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @Model.OtherReference
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="AddField" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                @if (!Model.isEnglishRules)
+                {
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            @Resource.lblLandParcelIDForCheckAnswere
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @Model.LPIDNumber
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action asp-action="AddField" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+                }
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        @Resource.lblTotalFieldArea
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
                         @Model.TotalArea
@@ -173,34 +217,33 @@
                         <govuk-summary-list-row-action asp-action="SoilType" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
-                @if (!Model.IsSoilReleasingClay)
+                @if (Model.IsSoilReleasingClay)
                 {
-                    <govuk-summary-list-row>
+                    <govuk-summary-list-row class=@((!Model.SoilReleasingClay.HasValue)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
-                            @Resource.lblIsSoilDeficientInSulphur
+                            @Resource.lblDoesPotashClayForCheckAnswere
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @sulphurDeficient
-                        </govuk-summary-list-row-value>
-                        <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="SulphurDeficient" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
-                        </govuk-summary-list-row-actions>
-                    </govuk-summary-list-row>
-                }
-                else
-                {
-                    <govuk-summary-list-row>
-                        <govuk-summary-list-row-key>
-                            @string.Format(Resource.lblDoesPotashClayForCheckAnswere, Model.Name)
-                        </govuk-summary-list-row-key>
-                        <govuk-summary-list-row-value>
-                            @soilReleasingClay
+                            @((!Model.SoilReleasingClay.HasValue) ? @Resource.lblNotSet : @soilReleasingClay)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="SoilReleasingClay" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
+
                 }
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        @Resource.lblIsSoilDeficientInSulphur
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @sulphurDeficient
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action=@changeAction asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+
                 <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
                         @Resource.lblDateSampleTaken
@@ -212,66 +255,68 @@
                         <govuk-summary-list-row-action asp-action="SoilDateAndPHLevel" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        @Resource.lblSoilPHLevel
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @Model.SoilAnalyses.PH
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="SoilDateAndPHLevel" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        @Resource.lblNutrientValueTypeForCheckAnswere
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @isSoilNutrientValueTypeIndex
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="SoilNutrientValueType" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
                 @if (!Model.IsSoilNutrientValueTypeIndex.Value)
-                {
-                    <govuk-summary-list-row>
+                {                    
+                    <govuk-summary-list-row class=@((!Model.SoilAnalyses.Phosphorus.HasValue)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
-                            @Resource.lblNutrientValueTypeForCheckAnswere
+                            @Resource.lblPhosphorusPerLitreOfSoil
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @isSoilNutrientValueTypeIndex
-                        </govuk-summary-list-row-value>
-                        <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="SoilNutrientValueType" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
-                        </govuk-summary-list-row-actions>
-                    </govuk-summary-list-row>
-                    <govuk-summary-list-row>
-                        <govuk-summary-list-row-key>
-                            @Resource.lblPhosphorusPerLitreOfSoilForCheckAnswere
-                        </govuk-summary-list-row-key>
-                        <govuk-summary-list-row-value>
-                            @Model.SoilAnalyses.Phosphorus
+                            @((!Model.SoilAnalyses.Phosphorus.HasValue)?@Resource.lblNotSet:@Model.SoilAnalyses.Phosphorus)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
-                    <govuk-summary-list-row>
+                    <govuk-summary-list-row class=@((!Model.SoilAnalyses.Potassium.HasValue)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
-                            @Resource.lblPotassiumPerLitreOfSoilForCheckAnswere
+                            @Resource.lblPotassiumPerLitreOfSoil
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @Model.SoilAnalyses.Potassium
+                            @((!Model.SoilAnalyses.Potassium.HasValue)?@Resource.lblNotSet:@Model.SoilAnalyses.Potassium)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
-                    <govuk-summary-list-row>
+
+                    <govuk-summary-list-row class=@((!Model.SoilAnalyses.Magnesium.HasValue)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
-                            @Resource.lblMagnesiumPerLitreOfSoilForCheckAnswere
+                            @Resource.lblMagnesiumPerLitreOfSoil
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @Model.SoilAnalyses.Magnesium
+                            @((!Model.SoilAnalyses.Magnesium.HasValue)?@Resource.lblNotSet:@Model.SoilAnalyses.Magnesium)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
+
                 }
                 else
-                {
-                    <govuk-summary-list-row>
-                        <govuk-summary-list-row-key>
-                            @Resource.lblNutrientValueTypeForCheckAnswere
-                        </govuk-summary-list-row-key>
-                        <govuk-summary-list-row-value>
-                            @isSoilNutrientValueTypeIndex
-                        </govuk-summary-list-row-value>
-                        <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="SoilNutrientValueType" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
-                        </govuk-summary-list-row-actions>
-                    </govuk-summary-list-row>
+                {                    
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
                             @Resource.lblPhosphorusIndex
@@ -320,7 +365,7 @@
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
-                        @Resource.lblWhatWasThePreviousCropGroup
+                        @Resource.lblWhatWasThePreviousCropGroupForCheckAnswere
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
                         @Model.CropGroup
@@ -329,17 +374,18 @@
                         <govuk-summary-list-row-action asp-action="CropGroups" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
-                <govuk-summary-list-row>
+                <govuk-summary-list-row class=@((!Model.Crop.CropTypeID.HasValue)?"govuk-error-message":"")>
                     <govuk-summary-list-row-key>
-                        @Resource.lblWhatWasThePreviousCropType
+                        @Resource.lblWhatWasThePreviousCropTypeForCheckAnswere
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
-                        @Model.CropType
+                        @((!Model.Crop.CropTypeID.HasValue) ? @Resource.lblNotSet : Model.CropType)
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
                         <govuk-summary-list-row-action asp-action="CropTypes" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
+
             </govuk-summary-list>
 
             <govuk-button type="submit" class="margin-bottom-forty">

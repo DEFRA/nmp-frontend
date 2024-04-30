@@ -14,7 +14,6 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LPIDNumber"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalArea"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CroppedArea"></govuk-input>
@@ -32,13 +31,20 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.Phosphorus"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.Potassium"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.Magnesium"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.PhosphorusMethodologyID"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crop.CropTypeID"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.SulphurDeficient"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupId"></govuk-input>
     <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.Date" value="@Model.SoilAnalyses.Date"></govuk-date-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.PH"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules" value="@Model.isEnglishRules.ToString().ToLower()"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilReleasingClay" value="@Model.IsSoilReleasingClay.ToString().ToLower()"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherReference"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilType"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroup"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropType"></govuk-input>
+
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <govuk-radios asp-for="@Model.IsSnsBasedOnPreviousCrop">
@@ -47,7 +53,7 @@
                         @string.Format(Resource.lblHowWouldYouLikeToCalculateSNS, Model.Name)
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-item value=@IsSnsBasedOnPreviousCrop>@Resource.lblEstimateBasedOnPreviousCrop</govuk-radios-item>
-                    <govuk-radios-item value=@IsSnsBasedOnRecentSNA>@Resource.lblBasedOnRecentSNA</govuk-radios-item>
+                    <govuk-radios-item value=@IsSnsBasedOnRecentSNA disabled="true">@Resource.lblBasedOnRecentSNA</govuk-radios-item>
                 </govuk-radios-fieldset>
             </govuk-radios>
             <govuk-button type="submit" class="margin-bottom-forty">
