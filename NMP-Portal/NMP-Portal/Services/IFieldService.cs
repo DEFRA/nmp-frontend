@@ -13,7 +13,7 @@ namespace NMP.Portal.Services
         Task<string> FetchCropGroupById(int cropGroupId);
         Task<string> FetchCropTypeById(int cropTypeId);
         Task<(Field, Error)> AddFieldAsync(FieldData fieldData, int farmId,string farmName);
-        Task<bool> IsFieldExistAsync(int fieldId, string name);
+        Task<bool> IsFieldExistAsync(int farmId, string name);
         Task<List<Field>> FetchFieldsByFarmId(int farmId);
     }
 }

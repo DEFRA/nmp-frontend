@@ -368,7 +368,7 @@ namespace NMP.Portal.Services
             }
             return (field,error);
         }
-        public async Task<bool> IsFieldExistAsync(int fieldId, string name)
+        public async Task<bool> IsFieldExistAsync(int farmId, string name)
         {
             bool isFieldExist = false;
             Error error = new Error();
@@ -377,7 +377,7 @@ namespace NMP.Portal.Services
                 Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
                 HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
                 httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
-                var farmExist = await httpClient.GetAsync(string.Format(APIURLHelper.IsFieldExistAsyncAPI, fieldId, name));
+                var farmExist = await httpClient.GetAsync(string.Format(APIURLHelper.IsFieldExistAsyncAPI, farmId, name));
                 string resultFarmExist = await farmExist.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapperFarmExist = JsonConvert.DeserializeObject<ResponseWrapper>(resultFarmExist);
                 if (responseWrapperFarmExist.Data["exists"] == true)

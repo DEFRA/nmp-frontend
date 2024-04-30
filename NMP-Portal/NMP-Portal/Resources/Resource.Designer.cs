@@ -971,20 +971,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to mg/l.
+        /// </summary>
+        public static string lblMgL {
+            get {
+                return ResourceManager.GetString("lblMgL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Milligram values.
         /// </summary>
         public static string lblMiligramValues {
             get {
                 return ResourceManager.GetString("lblMiligramValues", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Milligrams.
-        /// </summary>
-        public static string lblMilligrams {
-            get {
-                return ResourceManager.GetString("lblMilligrams", resourceCulture);
             }
         }
         
@@ -1790,7 +1790,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter field name.
+        ///   Looks up a localized string similar to Enter the field name.
         /// </summary>
         public static string MsgEnterTheFieldName {
             get {
@@ -1799,7 +1799,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter total field area.
+        ///   Looks up a localized string similar to Enter the total field area.
         /// </summary>
         public static string MsgEnterTotalFieldArea {
             get {
@@ -2011,6 +2011,15 @@ namespace NMP.Portal.Resources {
         public static string MsgSelectAddress {
             get {
                 return ResourceManager.GetString("MsgSelectAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a {0} before continuing.
+        /// </summary>
+        public static string MsgSelectANameOfFieldBeforeContinuing {
+            get {
+                return ResourceManager.GetString("MsgSelectANameOfFieldBeforeContinuing", resourceCulture);
             }
         }
         

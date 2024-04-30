@@ -1,4 +1,5 @@
 ﻿using GovUk.Frontend.AspNetCore.TagHelpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
@@ -24,6 +25,7 @@ using Error = NMP.Portal.ServiceResponses.Error;
 
 namespace NMP.Portal.Controllers
 {
+    [Authorize]
     public class FieldController : Controller
     {
         private readonly ILogger<FieldController> _logger;
@@ -90,12 +92,19 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddField(FieldViewModel field)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddField(FieldViewModel field)
         {
 
             if (string.IsNullOrWhiteSpace(field.Name))
             {
                 ModelState.AddModelError("Name", Resource.MsgEnterTheFieldName);
+            }
+
+            bool isFieldAlreadyexist =await _fieldService.IsFieldExistAsync(field.FarmID, field.Name);
+            if(isFieldAlreadyexist)
+            {
+                ModelState.AddModelError("Name",string.Format(Resource.MsgFieldAlreadyExist,field.Name,field.FarmName));
             }
 
             if (!ModelState.IsValid)
@@ -112,17 +121,18 @@ namespace NMP.Portal.Controllers
             return RedirectToAction("FieldMeasurements");
         }
         [HttpGet]
-        public async Task<IActionResult> FieldMeasurementsAsync()
+        public async Task<IActionResult> FieldMeasurements()
         {
             FieldViewModel model = new FieldViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
-            }            
+            }
             return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> FieldMeasurementsAsync(FieldViewModel field)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> FieldMeasurements(FieldViewModel field)
         {
             if (field.TotalArea == null || field.TotalArea == 0)
             {
@@ -137,15 +147,6 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("ManureNonSpreadingArea", Resource.MsgManureNonSpreadingAreaIsGreaterThanTotalArea);
             }
-
-            //if (field.CroppedArea.HasValue && field.ManureNonSpreadingArea.HasValue)
-            //{
-            //    decimal totalArea = field.CroppedArea.Value + field.ManureNonSpreadingArea.Value;
-            //    if (totalArea > field.TotalArea)
-            //    {
-            //        ModelState.AddModelError("ManureNonSpreadingArea", Resource.MsgIfCroppedAreaAndNonSpreadingArea);
-            //    }
-            //}
 
             if (!ModelState.IsValid)
             {
@@ -162,8 +163,12 @@ namespace NMP.Portal.Controllers
                 field.CroppedArea = field.TotalArea - field.ManureNonSpreadingArea;
             }
 
+            string farmId = _farmDataProtector.Unprotect(field.EncryptedFarmId);
+            (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
 
-            
+            field.IsWithinNVZForFarm = farm.NVZFields == 1 ? true : false;
+            field.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == 1 ? true : false;
+
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
             if (field.IsCheckAnswer)
             {
@@ -183,7 +188,7 @@ namespace NMP.Portal.Controllers
             }
             string farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
             (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-            if (farm.NVZFields == 1)
+            if (model.IsWithinNVZForFarm != null && model.IsWithinNVZForFarm.Value)
             {
                 return View(model);
             }
@@ -191,7 +196,9 @@ namespace NMP.Portal.Controllers
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             return RedirectToAction("ElevationField");
         }
+
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult NVZField(FieldViewModel field)
         {
             if (field.IsWithinNVZ == null)
@@ -222,7 +229,7 @@ namespace NMP.Portal.Controllers
             }
             string farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
             (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-            if (farm.FieldsAbove300SeaLevel == 1)
+            if (model.IsAbove300SeaLevelForFarm != null && model.IsAbove300SeaLevelForFarm.Value)
             {
                 return View(model);
             }
@@ -232,6 +239,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult ElevationField(FieldViewModel field)
         {
             if (field.IsAbove300SeaLevel == null)
@@ -261,11 +269,6 @@ namespace NMP.Portal.Controllers
                 {
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
                 }
-                //FarmViewModel farm = new FarmViewModel();
-                //if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
-                //{
-                //    farm = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-                //}
                 if (_httpContextAccessor.HttpContext != null && !_httpContextAccessor.HttpContext.Session.Keys.Contains("SoilTypes"))
                 {
                     soilTypes = await _fieldService.FetchSoilTypes();
@@ -298,14 +301,15 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SoilTypeAsync(FieldViewModel field)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SoilType(FieldViewModel field)
         {
             List<SoilTypesResponse> soilTypes = new List<SoilTypesResponse>();
             try
             {
                 if (field.SoilTypeID == null)
                 {
-                    ModelState.AddModelError("SoilTypeID", Resource.MsgSelectAnOptionBeforeContinuing);
+                    ModelState.AddModelError("SoilTypeID",string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing,Resource.lblSoilType.ToLower()));
                 }
 
                 if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("SoilTypes"))
@@ -356,6 +360,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> SoilReleasingClay(FieldViewModel field)
         {
             if (field.SoilReleasingClay == null)
@@ -402,7 +407,9 @@ namespace NMP.Portal.Controllers
             model.IsSoilReleasingClay = false;
             return View(model);
         }
+
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> SulphurDeficient(FieldViewModel field)
         {
 
@@ -437,6 +444,7 @@ namespace NMP.Portal.Controllers
             return View(model);
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult SoilDateAndPHLevel(FieldViewModel model)
         {
             if (model.SoilAnalyses.Date == null)
@@ -483,6 +491,7 @@ namespace NMP.Portal.Controllers
             return View(model);
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult SoilNutrientValueType(FieldViewModel model)
         {
             if (model.IsSoilNutrientValueTypeIndex == null)
@@ -511,6 +520,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> SoilNutrientValue(FieldViewModel model)
         {
             Error error = null;
@@ -619,6 +629,7 @@ namespace NMP.Portal.Controllers
             return View(model);
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult SNSCalculationMethod(FieldViewModel field)
         {
             if (field.IsSnsBasedOnPreviousCrop == null)
@@ -658,16 +669,17 @@ namespace NMP.Portal.Controllers
             return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> CropGroupsAsync(FieldViewModel field)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CropGroups(FieldViewModel field)
         {
             if (field.CropGroupId == null)
             {
-                ModelState.AddModelError("CropGroupId", Resource.MsgSelectAnOptionBeforeContinuing);
+                ModelState.AddModelError("CropGroupId", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropGroup.ToLower()));
             }
             if (!ModelState.IsValid)
             {
                 List<CropGroupResponse> cropTypes = new List<CropGroupResponse>();
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropGroupList"))
                 {
                     ViewBag.CropGroupList = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<List<CropGroupResponse>>("CropGroupList");
                 }
@@ -702,11 +714,6 @@ namespace NMP.Portal.Controllers
                 {
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
                 }
-                //FarmViewModel farm = new FarmViewModel();
-                //if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
-                //{
-                //    farm = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-                //}
 
                 cropTypes = await _fieldService.FetchCropTypes(model.CropGroupId ?? 0);
                 var country = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
@@ -724,16 +731,17 @@ namespace NMP.Portal.Controllers
             return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> CropTypesAsync(FieldViewModel field)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CropTypes(FieldViewModel field)
         {
             if (field.Crop.CropTypeID == null)
             {
-                ModelState.AddModelError("Crop.CropTypeID", Resource.MsgSelectAnOptionBeforeContinuing);
+                ModelState.AddModelError("Crop.CropTypeID", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropType.ToLower()));
             }
             if (!ModelState.IsValid)
             {
                 List<CropTypeResponse> cropTypes = new List<CropTypeResponse>();
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropTypeList"))
                 {
                     ViewBag.CropTypeList = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<List<CropTypeResponse>>("CropTypeList");
                 }
@@ -783,6 +791,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CheckAnswer(FieldViewModel model)
         {
             if (!model.Crop.CropTypeID.HasValue)
@@ -906,7 +915,7 @@ namespace NMP.Portal.Controllers
             {
                 string success = _farmDataProtector.Protect("true");
 
-                return RedirectToAction("ManageFarmFields", new {id= model.EncryptedFarmId,q = success });
+                return RedirectToAction("ManageFarmFields", new { id = model.EncryptedFarmId, q = success });
             }
             else
             {
@@ -950,6 +959,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult ManageFarmFields(FieldViewModel field)
         {
 

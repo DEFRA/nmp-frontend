@@ -12,7 +12,7 @@ namespace NMP.Portal.Models
         public string?  NVZProgrammeID { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblFieldName))]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [StringLength(14, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgLandParcelIdMinMaxValidation))]
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblLandParcelID))]

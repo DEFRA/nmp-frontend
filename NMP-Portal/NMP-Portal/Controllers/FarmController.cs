@@ -487,7 +487,7 @@ namespace NMP.Portal.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CheckAnswer(FarmViewModel farm)
-        {            
+        {
             int userId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value);
             var farmData = new FarmData
             {
@@ -565,18 +565,8 @@ namespace NMP.Portal.Controllers
 
             FarmViewModel? farmData = null;
             Error error = null;
-            FarmViewModel model = new FarmViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
-                {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-                }
-                if (model.IsCheckAnswer)
-                {
-                    ViewBag.Success = "true";
-                }
-
                 if (!string.IsNullOrWhiteSpace(id))
                 {
                     farmId = _dataProtector.Unprotect(id);
