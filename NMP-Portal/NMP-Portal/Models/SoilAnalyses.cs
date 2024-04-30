@@ -11,7 +11,7 @@ namespace NMP.Portal.Models
         public int? Year { get; set; }
         public bool? SulphurDeficient { get; set; }
 
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblDateWhenTheSoilSampleWasTaken))]
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblDateSampleTaken))]
         public DateTime? Date { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblSoilPHLevel))]
