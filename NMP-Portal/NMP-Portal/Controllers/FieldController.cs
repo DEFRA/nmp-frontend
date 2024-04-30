@@ -166,8 +166,8 @@ namespace NMP.Portal.Controllers
             string farmId = _farmDataProtector.Unprotect(field.EncryptedFarmId);
             (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
 
-            field.IsWithinNVZForFarm = farm.NVZFields == 1 ? true : false;
-            field.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == 1 ? true : false;
+            field.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Portal.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
+            field.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
 
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
             if (field.IsCheckAnswer)
