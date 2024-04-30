@@ -381,7 +381,7 @@ namespace NMP.Portal.Controllers
         {
             if (farm.NVZFields == null)
             {
-                ModelState.AddModelError("NVZField", Resource.MsgSelectAnOptionBeforeContinuing);
+                ModelState.AddModelError("NVZFields", Resource.MsgSelectAnOptionBeforeContinuing);
             }
             if (!ModelState.IsValid)
             {

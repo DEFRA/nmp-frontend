@@ -211,7 +211,7 @@
     <value>STD</value>
   </data>
   <data name="lblFieldsAbove300SeaLevel" xml:space="preserve">
-    <value>How many fields at {0} are more than 300 metres above sea level</value>
+    <value>How many fields at {0} are more than 300 metres above sea level?</value>
   </data>
   <data name="lblHelpProtectTheEnvironment" xml:space="preserve">
     <value>help protect the environment</value>

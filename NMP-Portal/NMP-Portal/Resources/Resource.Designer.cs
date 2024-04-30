@@ -701,7 +701,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How many fields at {0} are more than 300 metres above sea level.
+        ///   Looks up a localized string similar to How many fields at {0} are more than 300 metres above sea level?.
         /// </summary>
         public static string lblFieldsAbove300SeaLevel {
             get {

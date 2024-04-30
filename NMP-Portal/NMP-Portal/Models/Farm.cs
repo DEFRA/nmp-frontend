@@ -42,7 +42,7 @@ namespace NMP.Portal.Models
         public decimal? Rainfall { get; set; }
         public decimal TotalFarmArea { get; set; } = 0;
         public int AverageAltitude { get; set; } = 0;
-        public bool? RegisteredOrganicProducer { get; set; } = false;
+        public bool? RegisteredOrganicProducer { get; set; } 
         public bool MetricUnits { get; set; } = false;
         public bool EnglishRules { get; set; } = true;
         public int? NVZFields { get; set; } = null;
