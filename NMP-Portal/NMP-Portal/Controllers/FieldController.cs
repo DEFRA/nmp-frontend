@@ -93,12 +93,18 @@ namespace NMP.Portal.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddField(FieldViewModel field)
+        public async Task<IActionResult> AddField(FieldViewModel field)
         {
 
             if (string.IsNullOrWhiteSpace(field.Name))
             {
                 ModelState.AddModelError("Name", Resource.MsgEnterTheFieldName);
+            }
+
+            bool isFieldAlreadyexist =await _fieldService.IsFieldExistAsync(field.FarmID, field.Name);
+            if(isFieldAlreadyexist)
+            {
+                ModelState.AddModelError("Name",Resource.MsgFieldAlreadyExist);
             }
 
             if (!ModelState.IsValid)
@@ -115,7 +121,7 @@ namespace NMP.Portal.Controllers
             return RedirectToAction("FieldMeasurements");
         }
         [HttpGet]
-        public async Task<IActionResult> FieldMeasurementsAsync()
+        public async Task<IActionResult> FieldMeasurements()
         {
             FieldViewModel model = new FieldViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
@@ -126,7 +132,7 @@ namespace NMP.Portal.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> FieldMeasurementsAsync(FieldViewModel field)
+        public async Task<IActionResult> FieldMeasurements(FieldViewModel field)
         {
             if (field.TotalArea == null || field.TotalArea == 0)
             {
@@ -141,15 +147,6 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("ManureNonSpreadingArea", Resource.MsgManureNonSpreadingAreaIsGreaterThanTotalArea);
             }
-
-            //if (field.CroppedArea.HasValue && field.ManureNonSpreadingArea.HasValue)
-            //{
-            //    decimal totalArea = field.CroppedArea.Value + field.ManureNonSpreadingArea.Value;
-            //    if (totalArea > field.TotalArea)
-            //    {
-            //        ModelState.AddModelError("ManureNonSpreadingArea", Resource.MsgIfCroppedAreaAndNonSpreadingArea);
-            //    }
-            //}
 
             if (!ModelState.IsValid)
             {
@@ -166,7 +163,11 @@ namespace NMP.Portal.Controllers
                 field.CroppedArea = field.TotalArea - field.ManureNonSpreadingArea;
             }
 
+            string farmId = _farmDataProtector.Unprotect(field.EncryptedFarmId);
+            (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
 
+            field.IsWithinNVZForFarm = farm.NVZFields == 1 ? true : false;
+            field.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == 1 ? true : false;
 
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
             if (field.IsCheckAnswer)
@@ -187,7 +188,7 @@ namespace NMP.Portal.Controllers
             }
             string farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
             (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-            if (farm.NVZFields == 1)
+            if (model.IsWithinNVZForFarm != null && model.IsWithinNVZForFarm.Value)
             {
                 return View(model);
             }
@@ -195,6 +196,7 @@ namespace NMP.Portal.Controllers
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             return RedirectToAction("ElevationField");
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult NVZField(FieldViewModel field)
@@ -227,7 +229,7 @@ namespace NMP.Portal.Controllers
             }
             string farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
             (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-            if (farm.FieldsAbove300SeaLevel == 1)
+            if (model.IsAbove300SeaLevelForFarm != null && model.IsAbove300SeaLevelForFarm.Value)
             {
                 return View(model);
             }
@@ -294,14 +296,14 @@ namespace NMP.Portal.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SoilTypeAsync(FieldViewModel field)
+        public async Task<IActionResult> SoilType(FieldViewModel field)
         {
             List<SoilTypesResponse> soilTypes = new List<SoilTypesResponse>();
             try
             {
                 if (field.SoilTypeID == null)
                 {
-                    ModelState.AddModelError("SoilTypeID", Resource.MsgSelectAnOptionBeforeContinuing);
+                    ModelState.AddModelError("SoilTypeID",string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing,Resource.lblSoilType.ToLower()));
                 }
 
                 soilTypes = await _fieldService.FetchSoilTypes();
@@ -408,6 +410,7 @@ namespace NMP.Portal.Controllers
             model.IsSoilReleasingClay = false;
             return View(model);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SulphurDeficient(FieldViewModel field)
@@ -670,11 +673,11 @@ namespace NMP.Portal.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CropGroupsAsync(FieldViewModel field)
+        public async Task<IActionResult> CropGroups(FieldViewModel field)
         {
             if (field.CropGroupId == null)
             {
-                ModelState.AddModelError("CropGroupId", Resource.MsgSelectAnOptionBeforeContinuing);
+                ModelState.AddModelError("CropGroupId", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropGroup.ToLower()));
             }
             if (!ModelState.IsValid)
             {
@@ -728,11 +731,11 @@ namespace NMP.Portal.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CropTypesAsync(FieldViewModel field)
+        public async Task<IActionResult> CropTypes(FieldViewModel field)
         {
             if (field.Crop.CropTypeID == null)
             {
-                ModelState.AddModelError("Crop.CropTypeID", Resource.MsgSelectAnOptionBeforeContinuing);
+                ModelState.AddModelError("Crop.CropTypeID", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropType.ToLower()));
             }
             if (!ModelState.IsValid)
             {

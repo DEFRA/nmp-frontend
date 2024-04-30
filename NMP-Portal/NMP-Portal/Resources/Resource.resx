@@ -494,10 +494,10 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>National Grid Reference (optional)</value>
   </data>
   <data name="MsgEnterTheFieldName" xml:space="preserve">
-    <value>Enter field name</value>
+    <value>Enter the field name</value>
   </data>
   <data name="MsgEnterTotalFieldArea" xml:space="preserve">
-    <value>Enter total field area</value>
+    <value>Enter the total field area</value>
   </data>
   <data name="MsgServiceNotAvailable" xml:space="preserve">
     <value>Service not available at this moment. Please try after some time.</value>
@@ -556,8 +556,8 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblMagnesiumPerLitreOfSoil" xml:space="preserve">
     <value>Magnesium (Mg) per litre of soil</value>
   </data>
-  <data name="lblMilligrams" xml:space="preserve">
-    <value>Milligrams</value>
+  <data name="lblMgL" xml:space="preserve">
+    <value>mg/l</value>
   </data>
   <data name="lblPhosphorusIndex" xml:space="preserve">
     <value>Phosphorus (P) index</value>
@@ -777,5 +777,8 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
   <data name="MsgEnterNumericValue" xml:space="preserve">
     <value>Enter the area only in numbers</value>
+  </data>
+  <data name="MsgSelectANameOfFieldBeforeContinuing" xml:space="preserve">
+    <value>Select a {0} before continuing</value>
   </data>
 </root>

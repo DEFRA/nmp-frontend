@@ -28,6 +28,8 @@ namespace NMP.Portal.ViewModels
         public bool isEnglishRules { get; set; } 
 
         public int FarmID { get; set; }
-       
+        public bool? IsWithinNVZForFarm { get; set; }
+        public bool? IsAbove300SeaLevelForFarm { get; set; }
+
     }
 }
