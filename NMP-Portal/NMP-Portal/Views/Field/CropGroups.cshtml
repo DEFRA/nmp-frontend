@@ -68,11 +68,14 @@
                     <govuk-error-summary-item href="#">@TempData["Error"]</govuk-error-summary-item>
                 </govuk-error-summary>
             }
+
             <govuk-radios asp-for="@Model.CropGroupId">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @(Model.IsSnsBasedOnPreviousCrop == true ? Resource.lblWhatWasThePreviousCropGroup : Resource.lblWhatIsTheCurrentCropGroup)
                     </govuk-radios-fieldset-legend>
+                    <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
+
                     @if (ViewBag.CropGroupList != null)
                     {
                         @foreach (var item in ViewBag.CropGroupList)

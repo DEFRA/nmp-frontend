@@ -60,6 +60,7 @@
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @(Model.IsSnsBasedOnPreviousCrop == true ? Resource.lblWhatWasThePreviousCropType : Resource.lblWhatIsTheCurrentCropType)
                     </govuk-radios-fieldset-legend>
+                    <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
                     @if (ViewBag.CropTypeList != null)
                     {
                         @foreach (var item in ViewBag.CropTypeList)

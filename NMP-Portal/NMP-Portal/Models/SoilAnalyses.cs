@@ -11,6 +11,9 @@ namespace NMP.Portal.Models
         public int? Year { get; set; }
         public bool? SulphurDeficient { get; set; }
 
+//        [Required(AllowEmptyStrings =false, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterTheDateInNumber))]
+        [DataType(DataType.DateTime, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterTheDateInNumber))]
+        //[RegularExpression(@"^(0?[1-9]|[12][0-9]|3[01]) (0?[1-9]|1[0-2]) \d{4}$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterTheDateInNumber))]
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblDateSampleTaken))]
         public DateTime? Date { get; set; }
 
