@@ -295,7 +295,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Calculate based on a recent soil nitrogen analysis.
+        ///   Looks up a localized string similar to Calculate based on a recent soil mineral nitrogen analysis result.
         /// </summary>
         public static string lblBasedOnRecentSNA {
             get {
@@ -466,15 +466,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Does contain potash-releasing clay?.
-        /// </summary>
-        public static string lblDoesContainPotashReleasingClay {
-            get {
-                return ResourceManager.GetString("lblDoesContainPotashReleasingClay", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Does this field contain potash-releasing clay?.
         /// </summary>
         public static string lblDoesPotashClayForCheckAnswere {
@@ -547,7 +538,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Estimate based on the previous crop.
+        ///   Looks up a localized string similar to Estimate based on previous cropping, soil type, and average rainfall.
         /// </summary>
         public static string lblEstimateBasedOnPreviousCrop {
             get {
@@ -755,7 +746,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How would you like to calculate the soil nitrogen supply.
+        ///   Looks up a localized string similar to How would you like to calculate the soil nitrogen supply for {0}?.
         /// </summary>
         public static string lblHowWouldYouLikeToCalculateSNS {
             get {
@@ -818,11 +809,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Is the soil deficient in sulphur (S)?.
+        ///   Looks up a localized string similar to Is sulphur (S) deficiency expected in the soil?.
         /// </summary>
         public static string lblIsSoilDeficientInSulphur {
             get {
                 return ResourceManager.GetString("lblIsSoilDeficientInSulphur", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is the soil a potash-releasing clay?.
+        /// </summary>
+        public static string lblIsSoilPostashReleasingClay {
+            get {
+                return ResourceManager.GetString("lblIsSoilPostashReleasingClay", resourceCulture);
             }
         }
         
