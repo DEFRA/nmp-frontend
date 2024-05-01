@@ -1295,6 +1295,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select one option.
+        /// </summary>
+        public static string lblSelectOneOption {
+            get {
+                return ResourceManager.GetString("lblSelectOneOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select the address for {0}.
         /// </summary>
         public static string lblSelectTheAddressFor {

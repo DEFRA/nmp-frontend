@@ -54,12 +54,14 @@
 
         <div class="govuk-grid-column-two-thirds">
             <div class="govuk-form-group">
-                <govuk-date-input asp-for="@Model.SoilAnalyses.Date" pattern="^(0?[1-9]|[12][0-9]|3[01]) (0?[1-9]|1[0-2]) \d{4}$">
+                <govuk-date-input asp-for="@Model.SoilAnalyses.Date" type="number" step="1"  pattern="[0-9]*">
                     <govuk-date-input-fieldset>
                         <govuk-date-input-hint>
                             @Resource.MsgDateExample
                         </govuk-date-input-hint>
-                    </govuk-date-input-fieldset>
+                         @* <govuk-date-input-error-message visually-hidden-text="Error">@Resource.MsgEnterTheDateInNumber</govuk-date-input-error-message> *@
+                    </govuk-date-input-fieldset>  
+                    
                 </govuk-date-input>
             </div>
             <govuk-input asp-for="@Model.SoilAnalyses.PH" input-class="govuk-input--width-5" spellcheck="false"></govuk-input>

@@ -781,4 +781,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="MsgSelectANameOfFieldBeforeContinuing" xml:space="preserve">
     <value>Select a {0} before continuing</value>
   </data>
+  <data name="lblSelectOneOption" xml:space="preserve">
+    <value>Select one option</value>
+  </data>
 </root>
