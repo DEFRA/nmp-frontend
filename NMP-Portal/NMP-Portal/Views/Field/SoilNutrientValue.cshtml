@@ -57,25 +57,25 @@
             {
 
                 <div class="govuk-form-group govuk-input__wrapper">
-                    <govuk-input asp-for="@Model.SoilAnalyses.PhosphorusIndex"></govuk-input>
+                    <govuk-input asp-for="@Model.SoilAnalyses.PhosphorusIndex" type="number" step="any"></govuk-input>
                 </div>
                 <div class="govuk-form-group govuk-input__wrapper">
-                    <govuk-input asp-for="@Model.SoilAnalyses.PotassiumIndex"></govuk-input>
+                    <govuk-input asp-for="@Model.SoilAnalyses.PotassiumIndex" type="number" step="any"></govuk-input>
                 </div>
                 <div class="govuk-form-group govuk-input__wrapper">
-                    <govuk-input asp-for="@Model.SoilAnalyses.MagnesiumIndex"></govuk-input>
+                    <govuk-input asp-for="@Model.SoilAnalyses.MagnesiumIndex" type="number" step="any"></govuk-input>
                 </div>
             }
             else
             {
                 <div class="govuk-form-group">
-                    <govuk-input asp-for=@Model.SoilAnalyses.Phosphorus input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input asp-for=@Model.SoilAnalyses.Phosphorus type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
                         <govuk-input-suffix>@Resource.lblMgL</govuk-input-suffix>
                     </govuk-input>
-                    <govuk-input asp-for=@Model.SoilAnalyses.Potassium input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input asp-for=@Model.SoilAnalyses.Potassium type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
                         <govuk-input-suffix>@Resource.lblMgL</govuk-input-suffix>
                     </govuk-input>
-                    <govuk-input asp-for=@Model.SoilAnalyses.Magnesium input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input asp-for=@Model.SoilAnalyses.Magnesium type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
                         <govuk-input-suffix>@Resource.lblMgL</govuk-input-suffix>
                     </govuk-input>
                 </div>
