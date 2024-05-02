@@ -30,6 +30,7 @@ namespace NMP.Portal.ViewModels
         public int FarmID { get; set; }
         public bool? IsWithinNVZForFarm { get; set; }
         public bool? IsAbove300SeaLevelForFarm { get; set; }
+        public bool? IsSampleDateMoreThanFiveYearOld { get; set; }
 
     }
 }

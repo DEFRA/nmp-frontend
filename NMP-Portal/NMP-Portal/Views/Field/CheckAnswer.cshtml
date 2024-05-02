@@ -60,10 +60,10 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds-from-desktop">
-            @if (ViewBag.AddFieldError != null)
+            @if (TempData["AddFieldError"] != null)
             {
                 <govuk-error-summary>
-                    <govuk-error-summary-item href="#passport-issued-day">@ViewBag.AddFieldError</govuk-error-summary-item>
+                    <govuk-error-summary-item href="#passport-issued-day">@TempData["AddFieldError"]</govuk-error-summary-item>
                 </govuk-error-summary>
             }
             <h1 class="govuk-heading-l">
@@ -105,6 +105,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSnsBasedOnPreviousCrop" value="@Model.IsSnsBasedOnPreviousCrop.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAbove300SeaLevelForFarm" value="@Model.IsAbove300SeaLevelForFarm.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZForFarm" value="@Model.IsWithinNVZForFarm.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSampleDateMoreThanFiveYearOld" value="@Model.IsSampleDateMoreThanFiveYearOld.ToString().ToLower()"></govuk-input>
             <govuk-summary-list>
                 <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
@@ -216,7 +217,7 @@
                 }
                 <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
-                        @Resource.lblSoilType
+                        @Resource.lblSoilTypeForCheckAnswer
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
                         @Model.SoilType
@@ -242,7 +243,7 @@
                 }
                 <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
-                        @Resource.lblIsSoilDeficientInSulphur
+                        @Resource.lblSoilDeficientInSulpurForCheckAnswer
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
                         @sulphurDeficient
@@ -362,7 +363,7 @@
                 }
                 <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
-                        @string.Format(Resource.lblHowWouldYouLikeToCalculateSNS, Model.Name)
+                        @Resource.lblHowWouldYouLikeToCalculateSNSForCheckAnswer
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
                         @sNSCalculationMethod

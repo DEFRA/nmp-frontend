@@ -118,7 +118,7 @@ namespace NMP.Portal.Controllers
                 bool IsFarmExist = await _farmService.IsFarmExistAsync(farm.Name, farm.Postcode);
                 if (IsFarmExist)
                 {
-                    ModelState.AddModelError("Name",Resource.MsgFarmAlreadyExist);
+                    ModelState.AddModelError("Name", Resource.MsgFarmAlreadyExist);
                 }
             }
 
@@ -308,7 +308,7 @@ namespace NMP.Portal.Controllers
             {
                 model = new FarmViewModel();
             }
-            if(model.Rainfall==0 || model.Rainfall==null)
+            if (model.Rainfall == 0 || model.Rainfall == null)
             {
                 string[] postcode = model.Postcode.Split(' ');
                 string firstHalfPostcode = postcode[0];
@@ -499,6 +499,8 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> CheckAnswer(FarmViewModel farm)
         {
             int userId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value);
+            farm.AverageAltitude = farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.NoneAbove300m ? (int)NMP.Portal.Enums.AverageAltitude.below :
+                    farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m ? (int)NMP.Portal.Enums.AverageAltitude.above : 0;
             var farmData = new FarmData
             {
                 Farm = new Farm()

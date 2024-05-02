@@ -232,11 +232,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to amount.
+        /// </summary>
+        public static string lblAmount {
+            get {
+                return ResourceManager.GetString("lblAmount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Plan and record nutrient applications.
         /// </summary>
         public static string lblApplicationName {
             get {
                 return ResourceManager.GetString("lblApplicationName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to area.
+        /// </summary>
+        public static string lblArea {
+            get {
+                return ResourceManager.GetString("lblArea", resourceCulture);
             }
         }
         
@@ -502,6 +520,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The value &apos;{0}&apos; is not valid for {1}..
+        /// </summary>
+        public static string lblEnterNumericValue {
+            get {
+                return ResourceManager.GetString("lblEnterNumericValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the address for {0}.
         /// </summary>
         public static string lblEnterTheAddressFor {
@@ -751,6 +778,15 @@ namespace NMP.Portal.Resources {
         public static string lblHowWouldYouLikeToCalculateSNS {
             get {
                 return ResourceManager.GetString("lblHowWouldYouLikeToCalculateSNS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How would you like to calculate the soil nitrogen supply.
+        /// </summary>
+        public static string lblHowWouldYouLikeToCalculateSNSForCheckAnswer {
+            get {
+                return ResourceManager.GetString("lblHowWouldYouLikeToCalculateSNSForCheckAnswer", resourceCulture);
             }
         }
         
@@ -1331,6 +1367,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Is the soil deficient in sulphur (S)?.
+        /// </summary>
+        public static string lblSoilDeficientInSulpurForCheckAnswer {
+            get {
+                return ResourceManager.GetString("lblSoilDeficientInSulpurForCheckAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Soil nutrient value Type.
         /// </summary>
         public static string lblSoilNutrientValueType {
@@ -1363,6 +1408,15 @@ namespace NMP.Portal.Resources {
         public static string lblSoilType {
             get {
                 return ResourceManager.GetString("lblSoilType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Soil type.
+        /// </summary>
+        public static string lblSoilTypeForCheckAnswer {
+            get {
+                return ResourceManager.GetString("lblSoilTypeForCheckAnswer", resourceCulture);
             }
         }
         
@@ -1754,6 +1808,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter the {0} only in numbers..
+        /// </summary>
+        public static string MsgEnterDataOnlyInNumber {
+            get {
+                return ResourceManager.GetString("MsgEnterDataOnlyInNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the area only in numbers.
         /// </summary>
         public static string MsgEnterNumericValue {
@@ -1876,6 +1939,15 @@ namespace NMP.Portal.Resources {
         public static string MsgIfCroppedAreaAndNonSpreadingArea {
             get {
                 return ResourceManager.GetString("MsgIfCroppedAreaAndNonSpreadingArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter your soil nutrient values. As your soil sample is more than five years old, your crop need recommendations will be based on standard figures for your soil type..
+        /// </summary>
+        public static string MsgIfSampleDateIsFiveYearOld {
+            get {
+                return ResourceManager.GetString("MsgIfSampleDateIsFiveYearOld", resourceCulture);
             }
         }
         
@@ -2015,6 +2087,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When was the soil sample taken? must be a real date.
+        /// </summary>
+        public static string MsgSampleDateMustBeARealDate {
+            get {
+                return ResourceManager.GetString("MsgSampleDateMustBeARealDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select an address.
         /// </summary>
         public static string MsgSelectAddress {
@@ -2056,6 +2137,15 @@ namespace NMP.Portal.Resources {
         public static string MsgSoilReleasingClayNotSet {
             get {
                 return ResourceManager.GetString("MsgSoilReleasingClayNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We couldn’t add your field, please try again later.
+        /// </summary>
+        public static string MsgWeCouldNotAddYourFieldPleaseTryAgainLater {
+            get {
+                return ResourceManager.GetString("MsgWeCouldNotAddYourFieldPleaseTryAgainLater", resourceCulture);
             }
         }
     }
