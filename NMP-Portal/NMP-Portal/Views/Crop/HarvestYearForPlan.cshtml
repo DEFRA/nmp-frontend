@@ -1,0 +1,41 @@
+﻿@using NMP.Portal.Resources
+@model NMP.Portal.ViewModels.CropViewModel
+@{
+    ViewData["Title"] = Resource.lblWhichHarvestWouldYouLikeToPlanFor;
+    int previousYear = (DateTime.Now.Year) - 1;
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="FarmSummary" asp-controller="Farm" asp-route-id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+}
+
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form asp-action="HarvestYearForPlan" asp-controller="Crop" method="post">
+            @Html.AntiForgeryToken()
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroup"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropType"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+            <div class="govuk-form-group">
+                <govuk-radios class="govuk-radios" asp-for="@Model.Year">
+                    <govuk-radios-fieldset>
+                        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                            @Resource.lblWhichHarvestWouldYouLikeToPlanFor
+                        </govuk-radios-fieldset-legend>
+                        <govuk-radios-item value=@DateTime.Now.Year>@DateTime.Now.Year</govuk-radios-item>
+                        <govuk-radios-item value=@previousYear>@previousYear</govuk-radios-item>
+                    </govuk-radios-fieldset>
+                </govuk-radios>
+            </div>
+            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+        </form>
+        <p class="govuk-body cancel-link"><a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
+    </div>
+
+</div>
