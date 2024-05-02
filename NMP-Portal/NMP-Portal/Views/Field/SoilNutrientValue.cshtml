@@ -77,13 +77,13 @@
                             @Resource.MsgIfSampleDateIsFiveYearOld
                         </govuk-inset-text>
                     }
-                    <govuk-input asp-for=@Model.SoilAnalyses.Phosphorus inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input asp-for=@Model.SoilAnalyses.Phosphorus type="number" step="1" input-class="govuk-input--width-5" spellcheck="false">
                         <govuk-input-suffix>@Resource.lblMgL</govuk-input-suffix>
                     </govuk-input>
-                    <govuk-input asp-for=@Model.SoilAnalyses.Potassium inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input asp-for=@Model.SoilAnalyses.Potassium type="number" step="1" input-class="govuk-input--width-5" spellcheck="false">
                         <govuk-input-suffix>@Resource.lblMgL</govuk-input-suffix>
                     </govuk-input>
-                    <govuk-input asp-for=@Model.SoilAnalyses.Magnesium inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input asp-for=@Model.SoilAnalyses.Magnesium type="number" step="1" input-class="govuk-input--width-5" spellcheck="false">
                         <govuk-input-suffix>@Resource.lblMgL</govuk-input-suffix>
                     </govuk-input>
                 </div>

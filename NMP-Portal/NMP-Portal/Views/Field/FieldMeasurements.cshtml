@@ -49,13 +49,13 @@
                 <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
                     <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblFieldMeasurements, Model.Name)</h1>
                 </legand>
-                <govuk-input name="TotalArea" asp-for=@Model.TotalArea input-class="govuk-input--width-5" spellcheck="false">
+                <govuk-input name="TotalArea" asp-for=@Model.TotalArea type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
                     <govuk-input-suffix>@Resource.lblHectares</govuk-input-suffix>                    
                 </govuk-input>
-                <govuk-input name="CroppedArea" asp-for=@Model.CroppedArea inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                <govuk-input name="CroppedArea" asp-for=@Model.CroppedArea type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
                     <govuk-input-suffix>@Resource.lblHectares</govuk-input-suffix>
                 </govuk-input>
-                <govuk-input name="ManureNonSpreadingArea" asp-for=@Model.ManureNonSpreadingArea inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                <govuk-input name="ManureNonSpreadingArea" asp-for=@Model.ManureNonSpreadingArea type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
                     <govuk-input-suffix>@Resource.lblHectares</govuk-input-suffix>
                 </govuk-input>
             </div>
