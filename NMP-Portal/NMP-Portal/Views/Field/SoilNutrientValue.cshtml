@@ -18,9 +18,6 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
-            <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblAddSoilAnalysis, Model.Name)</h1>
-        </legand>
         <form asp-action="SoilNutrientValue" method="post" asp-controller="Field">
             @Html.AntiForgeryToken()
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
@@ -53,29 +50,40 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropType"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAbove300SeaLevelForFarm" value="@Model.IsAbove300SeaLevelForFarm.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZForFarm" value="@Model.IsWithinNVZForFarm.ToString().ToLower()"></govuk-input>
-            @if (Model.IsSoilNutrientValueTypeIndex != null && Model.IsSoilNutrientValueTypeIndex.Value)            
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSampleDateMoreThanFiveYearOld" value="@Model.IsSampleDateMoreThanFiveYearOld.ToString().ToLower()"></govuk-input>
+            <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblAddSoilAnalysis, Model.Name)</h1>
+            </legand>
+            @if (Model.IsSoilNutrientValueTypeIndex != null && Model.IsSoilNutrientValueTypeIndex.Value)
             {
 
                 <div class="govuk-form-group govuk-input__wrapper">
-                    <govuk-input asp-for="@Model.SoilAnalyses.PhosphorusIndex" type="number" step="any"></govuk-input>
+                    <govuk-input asp-for="@Model.SoilAnalyses.PhosphorusIndex" type="number" step="1"></govuk-input>
                 </div>
                 <div class="govuk-form-group govuk-input__wrapper">
-                    <govuk-input asp-for="@Model.SoilAnalyses.PotassiumIndex" type="number" step="any"></govuk-input>
+                    <govuk-input asp-for="@Model.SoilAnalyses.PotassiumIndex" type="number" step="1"></govuk-input>
                 </div>
                 <div class="govuk-form-group govuk-input__wrapper">
-                    <govuk-input asp-for="@Model.SoilAnalyses.MagnesiumIndex" type="number" step="any"></govuk-input>
+                    <govuk-input asp-for="@Model.SoilAnalyses.MagnesiumIndex" type="number" step="1"></govuk-input>
                 </div>
             }
             else
             {
+
                 <div class="govuk-form-group">
-                    <govuk-input asp-for=@Model.SoilAnalyses.Phosphorus type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                    @if (Model.IsSampleDateMoreThanFiveYearOld != null && Model.IsSampleDateMoreThanFiveYearOld.Value)
+                    {
+                        <govuk-inset-text>
+                            @Resource.MsgIfSampleDateIsFiveYearOld
+                        </govuk-inset-text>
+                    }
+                    <govuk-input asp-for=@Model.SoilAnalyses.Phosphorus inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                         <govuk-input-suffix>@Resource.lblMgL</govuk-input-suffix>
                     </govuk-input>
-                    <govuk-input asp-for=@Model.SoilAnalyses.Potassium type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input asp-for=@Model.SoilAnalyses.Potassium inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                         <govuk-input-suffix>@Resource.lblMgL</govuk-input-suffix>
                     </govuk-input>
-                    <govuk-input asp-for=@Model.SoilAnalyses.Magnesium type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input asp-for=@Model.SoilAnalyses.Magnesium inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                         <govuk-input-suffix>@Resource.lblMgL</govuk-input-suffix>
                     </govuk-input>
                 </div>

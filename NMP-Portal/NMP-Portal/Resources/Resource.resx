@@ -784,4 +784,34 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblSelectOneOption" xml:space="preserve">
     <value>Select one option</value>
   </data>
+  <data name="MsgSampleDateMustBeARealDate" xml:space="preserve">
+    <value>When was the soil sample taken? must be a real date</value>
+  </data>
+  <data name="lblHowWouldYouLikeToCalculateSNSForCheckAnswer" xml:space="preserve">
+    <value>How would you like to calculate the soil nitrogen supply</value>
+  </data>
+  <data name="lblSoilDeficientInSulpurForCheckAnswer" xml:space="preserve">
+    <value>Is the soil deficient in sulphur (S)?</value>
+  </data>
+  <data name="lblSoilTypeForCheckAnswer" xml:space="preserve">
+    <value>Soil type</value>
+  </data>
+  <data name="MsgWeCouldNotAddYourFieldPleaseTryAgainLater" xml:space="preserve">
+    <value>We couldn’t add your field, please try again later</value>
+  </data>
+  <data name="MsgIfSampleDateIsFiveYearOld" xml:space="preserve">
+    <value>Enter your soil nutrient values. As your soil sample is more than five years old, your crop need recommendations will be based on standard figures for your soil type.</value>
+  </data>
+  <data name="lblArea" xml:space="preserve">
+    <value>area</value>
+  </data>
+  <data name="lblEnterNumericValue" xml:space="preserve">
+    <value>The value '{0}' is not valid for {1}.</value>
+  </data>
+  <data name="MsgEnterDataOnlyInNumber" xml:space="preserve">
+    <value>Enter the {0} only in numbers.</value>
+  </data>
+  <data name="lblAmount" xml:space="preserve">
+    <value>amount</value>
+  </data>
 </root>

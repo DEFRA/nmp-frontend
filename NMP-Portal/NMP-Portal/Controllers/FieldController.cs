@@ -101,10 +101,10 @@ namespace NMP.Portal.Controllers
                 ModelState.AddModelError("Name", Resource.MsgEnterTheFieldName);
             }
 
-            bool isFieldAlreadyexist =await _fieldService.IsFieldExistAsync(field.FarmID, field.Name);
-            if(isFieldAlreadyexist)
+            bool isFieldAlreadyexist = await _fieldService.IsFieldExistAsync(field.FarmID, field.Name);
+            if (isFieldAlreadyexist)
             {
-                ModelState.AddModelError("Name",Resource.MsgFieldAlreadyExist);
+                ModelState.AddModelError("Name", Resource.MsgFieldAlreadyExist);
             }
 
             if (!ModelState.IsValid)
@@ -134,6 +134,39 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> FieldMeasurements(FieldViewModel field)
         {
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("TotalArea"))
+            {
+                var InvalidFormatError = ModelState["TotalArea"].Errors.Count > 0 ?
+                                ModelState["TotalArea"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["TotalArea"].AttemptedValue, Resource.lblTotalFieldArea)))
+                {
+                    ModelState["TotalArea"].Errors.Clear();
+                    ModelState["TotalArea"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber,Resource.lblArea));
+                }
+            }
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("CroppedArea"))
+            {
+                var InvalidFormatError = ModelState["CroppedArea"].Errors.Count > 0 ?
+                                ModelState["CroppedArea"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["CroppedArea"].AttemptedValue, Resource.lblCroppedArea)))
+                {
+                    ModelState["CroppedArea"].Errors.Clear();
+                    ModelState["CroppedArea"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblArea));
+                }
+            }
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("ManureNonSpreadingArea"))
+            {
+                var InvalidFormatError = ModelState["ManureNonSpreadingArea"].Errors.Count > 0 ?
+                                ModelState["ManureNonSpreadingArea"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["ManureNonSpreadingArea"].AttemptedValue, Resource.lblManureNonSpreadingArea)))
+                {
+                    ModelState["ManureNonSpreadingArea"].Errors.Clear();
+                    ModelState["ManureNonSpreadingArea"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblArea));
+                }
+            }
             if (field.TotalArea == null || field.TotalArea == 0)
             {
                 ModelState.AddModelError("TotalArea", Resource.MsgEnterTotalFieldArea);
@@ -303,7 +336,7 @@ namespace NMP.Portal.Controllers
             {
                 if (field.SoilTypeID == null)
                 {
-                    ModelState.AddModelError("SoilTypeID",string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing,Resource.lblSoilType.ToLower()));
+                    ModelState.AddModelError("SoilTypeID", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblSoilType.ToLower()));
                 }
 
                 soilTypes = await _fieldService.FetchSoilTypes();
@@ -450,6 +483,19 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult SoilDateAndPHLevel(FieldViewModel model)
         {
+
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilAnalyses.Date"))
+            {
+                var dateError = ModelState["SoilAnalyses.Date"].Errors.Count > 0 ?
+                                ModelState["SoilAnalyses.Date"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (dateError != null && dateError.Equals(Resource.MsgSampleDateMustBeARealDate))
+                {
+                    ModelState["SoilAnalyses.Date"].Errors.Clear();
+                    ModelState["SoilAnalyses.Date"].Errors.Add(Resource.MsgEnterTheDateInNumber);
+                }
+            }
+
             if (model.SoilAnalyses.Date == null)
             {
                 ModelState.AddModelError("SoilAnalyses.Date", Resource.MsgEnterADateBeforeContinuing);
@@ -467,7 +513,7 @@ namespace NMP.Portal.Controllers
             {
                 if (model.SoilAnalyses.Date.Value.Date.Year < 1601 || model.SoilAnalyses.Date.Value.Date.Year > DateTime.Now.AddYears(1).Year)
                 {
-                    ModelState.AddModelError("SoilAnalyses.Date", Resource.MsgEnterADateAfter);
+                    ModelState.AddModelError("SoilAnalyses.Date", Resource.MsgEnterTheDateInNumber);
                 }
             }
 
@@ -475,6 +521,10 @@ namespace NMP.Portal.Controllers
             {
                 return View(model);
             }
+
+            int currentYear = DateTime.Now.Year;
+            model.IsSampleDateMoreThanFiveYearOld = model.SoilAnalyses.Date.Value.Year <= currentYear - 5 ? true : false;
+
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             if (model.IsCheckAnswer)
             {
@@ -546,6 +596,39 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
+                    if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilAnalyses.Potassium"))
+                    {
+                        var InvalidFormatError = ModelState["SoilAnalyses.Potassium"].Errors.Count > 0 ?
+                                        ModelState["SoilAnalyses.Potassium"].Errors[0].ErrorMessage.ToString() : null;
+
+                        if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SoilAnalyses.Potassium"].AttemptedValue, Resource.lblPotassiumPerLitreOfSoil)))
+                        {
+                            ModelState["SoilAnalyses.Potassium"].Errors.Clear();
+                            ModelState["SoilAnalyses.Potassium"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblAmount));
+                        }
+                    }
+                    if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilAnalyses.Phosphorus"))
+                    {
+                        var InvalidFormatError = ModelState["SoilAnalyses.Phosphorus"].Errors.Count > 0 ?
+                                        ModelState["SoilAnalyses.Phosphorus"].Errors[0].ErrorMessage.ToString() : null;
+
+                        if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SoilAnalyses.Phosphorus"].AttemptedValue, Resource.lblPhosphorusPerLitreOfSoil)))
+                        {
+                            ModelState["SoilAnalyses.Phosphorus"].Errors.Clear();
+                            ModelState["SoilAnalyses.Phosphorus"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblAmount));
+                        }
+                    }
+                    if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilAnalyses.Magnesium"))
+                    {
+                        var InvalidFormatError = ModelState["SoilAnalyses.Magnesium"].Errors.Count > 0 ?
+                                        ModelState["SoilAnalyses.Magnesium"].Errors[0].ErrorMessage.ToString() : null;
+
+                        if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SoilAnalyses.Magnesium"].AttemptedValue, Resource.lblMagnesiumPerLitreOfSoil)))
+                        {
+                            ModelState["SoilAnalyses.Magnesium"].Errors.Clear();
+                            ModelState["SoilAnalyses.Magnesium"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblAmount));
+                        }
+                    }
                     if (model.SoilAnalyses.Potassium == null)
                     {
                         ModelState.AddModelError("SoilAnalyses.Potassium", Resource.MsgPotassiumPerLitreOfSoil);
@@ -915,11 +998,11 @@ namespace NMP.Portal.Controllers
                 string fieldName = _farmDataProtector.Protect(fieldResponse.Name);
                 _httpContextAccessor.HttpContext?.Session.Remove("FieldData");
 
-                return RedirectToAction("ManageFarmFields", new { id = model.EncryptedFarmId, q = success,name=fieldName });
+                return RedirectToAction("ManageFarmFields", new { id = model.EncryptedFarmId, q = success, name = fieldName });
             }
             else
             {
-                ViewBag.AddFieldError = error1.Message;
+                TempData["AddFieldError"] = Resource.MsgWeCouldNotAddYourFieldPleaseTryAgainLater;
                 return RedirectToAction("CheckAnswer");
             }
 
@@ -944,7 +1027,7 @@ namespace NMP.Portal.Controllers
 
                 (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(farmId);
                 model.FarmName = farm.Name;
-                if(name != null)
+                if (name != null)
                 {
                     model.FieldName = _farmDataProtector.Unprotect(name);
                 }
