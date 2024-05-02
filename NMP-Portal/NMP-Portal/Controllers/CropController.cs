@@ -76,8 +76,7 @@ namespace NMP.Portal.Controllers
         {
             if (model.Year == null)
             {
-                ModelState.AddModelError("Year", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblHarvestYear.ToLower()));
-                ModelState.AddModelError("Year", Resource.MsgSelectAnOptionBeforeContinuing);
+                ModelState.AddModelError("Year", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblHarvestYear.ToLower()));             
             }
             if (!ModelState.IsValid)
             {
