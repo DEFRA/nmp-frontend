@@ -439,6 +439,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Which crop group would you like to plan for?.
+        /// </summary>
+        public static string lblCropGroupForPlan {
+            get {
+                return ResourceManager.GetString("lblCropGroupForPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cropped area (optional).
         /// </summary>
         public static string lblCroppedArea {
@@ -462,6 +471,15 @@ namespace NMP.Portal.Resources {
         public static string lblCropType {
             get {
                 return ResourceManager.GetString("lblCropType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which crop type would you like to plan for?.
+        /// </summary>
+        public static string lblCropTypeForPlan {
+            get {
+                return ResourceManager.GetString("lblCropTypeForPlan", resourceCulture);
             }
         }
         
@@ -723,6 +741,15 @@ namespace NMP.Portal.Resources {
         public static string lblFieldsCount {
             get {
                 return ResourceManager.GetString("lblFieldsCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Harvest Year.
+        /// </summary>
+        public static string lblHarvestYear {
+            get {
+                return ResourceManager.GetString("lblHarvestYear", resourceCulture);
             }
         }
         
@@ -1633,6 +1660,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhatWasThePreviousCropTypeForCheckAnswere {
             get {
                 return ResourceManager.GetString("lblWhatWasThePreviousCropTypeForCheckAnswere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which harvest would you like to plan for?.
+        /// </summary>
+        public static string lblWhichHarvestWouldYouLikeToPlanFor {
+            get {
+                return ResourceManager.GetString("lblWhichHarvestWouldYouLikeToPlanFor", resourceCulture);
             }
         }
         

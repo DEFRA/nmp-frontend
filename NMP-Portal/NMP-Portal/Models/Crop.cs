@@ -1,10 +1,14 @@
-﻿namespace NMP.Portal.Models
+﻿using NMP.Portal.Resources;
+using System.ComponentModel.DataAnnotations;
+
+namespace NMP.Portal.Models
 {
     public class Crop
     {
         //public int Id { get; set; }
         //public int FieldId { get; set; }
-        public int Year { get; set; }
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhichHarvestWouldYouLikeToPlanFor))]
+        public int? Year { get; set; }
         public int? CropTypeID { get; set; }
         public string? Variety { get; set; }
         public int? CropInfo1 { get; set; }
