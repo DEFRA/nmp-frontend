@@ -54,10 +54,22 @@ namespace NMP.Portal.Controllers
         public IActionResult CreateFieldCancel(string id)
         {
             _httpContextAccessor.HttpContext?.Session.Remove("FieldData");
-            //_httpContextAccessor.HttpContext?.Session.Remove("CropGroupList");
-            //_httpContextAccessor.HttpContext?.Session.Remove("SoilTypes");
-            //_httpContextAccessor.HttpContext?.Session.Remove("CropTypeList");
             return RedirectToAction("FarmSummary", "Farm", new { Id = id });
+        }
+
+        public async Task<IActionResult> BackActionForAddField(string id)
+        {
+            _httpContextAccessor.HttpContext?.Session.Remove("FieldData");
+            int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(id));
+            int fieldCount = await _fieldService.FetchFieldCountByFarmIdAsync(Convert.ToInt32(farmID));
+            if (fieldCount > 0)
+            {
+                return RedirectToAction("ManageFarmFields", "Field", new { id = id });
+            }
+            else
+            {
+                return RedirectToAction("FarmSummary", "Farm", new { id = id });
+            }
         }
 
         [HttpGet]
