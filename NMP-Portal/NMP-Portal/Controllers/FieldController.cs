@@ -59,16 +59,29 @@ namespace NMP.Portal.Controllers
 
         public async Task<IActionResult> BackActionForAddField(string id)
         {
-            _httpContextAccessor.HttpContext?.Session.Remove("FieldData");
-            int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(id));
-            int fieldCount = await _fieldService.FetchFieldCountByFarmIdAsync(Convert.ToInt32(farmID));
-            if (fieldCount > 0)
+            FieldViewModel model = new FieldViewModel();
+            try
             {
-                return RedirectToAction("ManageFarmFields", "Field", new { id = id });
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                }
+                int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(id));
+                int fieldCount = await _fieldService.FetchFieldCountByFarmIdAsync(Convert.ToInt32(farmID));
+                _httpContextAccessor.HttpContext?.Session.Remove("FieldData");
+                if (fieldCount > 0)
+                {
+                    return RedirectToAction("ManageFarmFields", "Field", new { id = id });
+                }
+                else
+                {
+                    return RedirectToAction("FarmSummary", "Farm", new { id = id });
+                }
             }
-            else
+            catch(Exception ex)
             {
-                return RedirectToAction("FarmSummary", "Farm", new { id = id });
+                TempData["ErrorOnBackButton"] = ex.Message;
+                return View("AddField", model);
             }
         }
 
