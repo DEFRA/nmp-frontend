@@ -8,7 +8,7 @@ namespace NMP.Portal.Models
         //public int Id { get; set; }
         //public int FieldId { get; set; }
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhichHarvestWouldYouLikeToPlanFor))]
-        public int? Year { get; set; }
+        public int Year { get; set; }
         public int? CropTypeID { get; set; }
         public string? Variety { get; set; }
         public int? CropInfo1 { get; set; }

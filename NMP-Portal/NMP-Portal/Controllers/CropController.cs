@@ -44,7 +44,7 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> HarvestYearForPlan(string q)
         {
             CropViewModel model = new CropViewModel();
-            Error error = null;
+            Error? error = null;
             try
             {
                 if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
