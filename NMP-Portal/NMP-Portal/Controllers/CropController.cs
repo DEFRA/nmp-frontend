@@ -191,12 +191,9 @@ namespace NMP.Portal.Controllers
                 }
 
                 //Other crop validation
-                if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other)
+                if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other && model.OtherCropName == null)
                 {
-                    if (model.OtherCropName == null)
-                    {
-                        ModelState.AddModelError("OtherCropName", string.Format(Resource.lblEnterTheCropName, Resource.lblCropType.ToLower()));
-                    }
+                    ModelState.AddModelError("OtherCropName", string.Format(Resource.lblEnterTheCropName, Resource.lblCropType.ToLower()));
                 }
                 if (!ModelState.IsValid)
                 {
@@ -254,7 +251,7 @@ namespace NMP.Portal.Controllers
         {
             try
             {
-                if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes)
+                if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes && model.Variety == null)
                 {
                     ModelState.AddModelError("Variety", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblVarietyName.ToLower()));
                 }
