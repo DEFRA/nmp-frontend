@@ -20,8 +20,9 @@ namespace NMP.Portal.Helpers
         public const string FetchSoilTypeByIdAsyncAPI = "vendors/rb209/Soil/SoilType/{0}";
         public const string FetchCropGroupByIdAsyncAPI = "vendors/rb209/Arable/CropGroup/{0}";
         public const string FetchCropTypeByIdAsyncAPI = "vendors/rb209/Arable/CropType/{0}";
-        public const string AddFieldAsyncAPI = "field/farm/{0}/soil-analyses/crop"; 
-        public const string IsFieldExistAsyncAPI = "field/farm/{0}/exists?Name={1}";     
+        public const string AddFieldAsyncAPI = "field/farm/{0}/soil-analyses/crop";
+        public const string IsFieldExistAsyncAPI = "field/farm/{0}/exists?Name={1}";
         public const string FetchFieldsByFarmIdAsyncAPI = "field/farm/{0}";
+        public const string FetchPotatoVarietiesAsyncAPI = "vendors/rb209/Arable/PotatoVarieties";
     }
 }

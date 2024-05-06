@@ -11,6 +11,7 @@ namespace NMP.Portal.Models
         public int Year { get; set; }
         public int? CropTypeID { get; set; }
         public string? Variety { get; set; }
+        public string? OtherCropName { get; set; }
         public int? CropInfo1 { get; set; }
         public int? CropInfo2 { get; set; }
         public DateTime? SowingDate { get; set; }

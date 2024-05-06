@@ -16,6 +16,7 @@ using System.Net.Http.Headers;
 using Microsoft.Extensions.DependencyInjection;
 using NMP.Portal.Services;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<IISServerOptions>(options =>
@@ -95,6 +96,7 @@ builder.Services.AddSingleton<IUserFarmService, UserFarmService>();
 builder.Services.AddSingleton<IFarmService, FarmService>();
 builder.Services.AddSingleton<IFieldService, FieldService>();
 builder.Services.AddSingleton<ISoilService, SoilService>();
+builder.Services.AddSingleton<ICropService, CropService>();
 
 builder.Services.AddAntiforgery(options =>
 {

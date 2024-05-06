@@ -826,4 +826,19 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblHarvestYear" xml:space="preserve">
     <value>Harvest Year</value>
   </data>
+  <data name="lblVarietyName" xml:space="preserve">
+    <value>Variety name</value>
+  </data>
+  <data name="lblVarietyNameWithOptional" xml:space="preserve">
+    <value>What is the variety name (optional)?</value>
+  </data>
+  <data name="lblWhatIsTheNameOfTheCrop" xml:space="preserve">
+    <value>What is the name of the crop?</value>
+  </data>
+  <data name="lblWhichVarietyNameWouldYouLikeToPlanFor" xml:space="preserve">
+    <value>Which variety name would you like to plan for?</value>
+  </data>
+  <data name="lblEnterTheCropName" xml:space="preserve">
+    <value>Enter the crop name</value>
+  </data>
 </root>
