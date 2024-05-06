@@ -14,12 +14,21 @@
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="HarvestYearForPlan" asp-controller="Crop" method="post">
             @Html.AntiForgeryToken()
+
+            @if (TempData["ErrorOnHarvestYear"] != null)
+            {
+                <govuk-error-summary>
+                    <govuk-error-summary-item href="#">@TempData["ErrorOnHarvestYear"]</govuk-error-summary-item>
+                </govuk-error-summary>
+            }
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroup"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropType"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Variety"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherCropName"></govuk-input>
             <div class="govuk-form-group">
                 <govuk-radios class="govuk-radios" asp-for="@Model.Year">
                     <govuk-radios-fieldset>

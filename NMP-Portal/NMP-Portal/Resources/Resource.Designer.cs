@@ -565,6 +565,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter the crop name.
+        /// </summary>
+        public static string lblEnterTheCropName {
+            get {
+                return ResourceManager.GetString("lblEnterTheCropName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error:.
         /// </summary>
         public static string lblError {
@@ -1574,6 +1583,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Variety name.
+        /// </summary>
+        public static string lblVarietyName {
+            get {
+                return ResourceManager.GetString("lblVarietyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the variety name (optional)?.
+        /// </summary>
+        public static string lblVarietyNameWithOptional {
+            get {
+                return ResourceManager.GetString("lblVarietyNameWithOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to We could not find any addresses for  {0}.
         /// </summary>
         public static string lblWeCouldNotFindAnyAddressesFor {
@@ -1628,6 +1655,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the name of the crop?.
+        /// </summary>
+        public static string lblWhatIsTheNameOfTheCrop {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheNameOfTheCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What was the previous crop group?.
         /// </summary>
         public static string lblWhatWasThePreviousCropGroup {
@@ -1669,6 +1705,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhichHarvestWouldYouLikeToPlanFor {
             get {
                 return ResourceManager.GetString("lblWhichHarvestWouldYouLikeToPlanFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which variety name would you like to plan for?.
+        /// </summary>
+        public static string lblWhichVarietyNameWouldYouLikeToPlanFor {
+            get {
+                return ResourceManager.GetString("lblWhichVarietyNameWouldYouLikeToPlanFor", resourceCulture);
             }
         }
         
