@@ -305,7 +305,7 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 TempData["ErrorOnVariety"] = ex.Message;
-                return RedirectToAction("CropTypes");
+                return RedirectToAction("VarietyName");
             }
             return View(model);
         }
