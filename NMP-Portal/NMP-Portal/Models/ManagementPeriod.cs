@@ -13,6 +13,6 @@
         public int? ModifiedByID { get; set; }
         public DateTime? CreatedOn { get; set; }
         public DateTime? ModifiedOn { get; set; }
-        public int PreviousID { get; set; }
+        public int? PreviousID { get; set; }
     }
 }

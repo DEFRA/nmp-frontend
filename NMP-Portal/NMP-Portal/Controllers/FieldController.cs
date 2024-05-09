@@ -954,7 +954,7 @@ namespace NMP.Portal.Controllers
                 Field = new Field
                 {
                     SoilTypeID = model.SoilTypeID,
-                    NVZProgrammeID = model.NVZProgrammeID,
+                    NVZProgrammeID = model.IsWithinNVZ==true?(int)NMP.Portal.Enums.NVZProgram.CurrentNVZRule: (int)NMP.Portal.Enums.NVZProgram.NotInNVZ,
                     Name = model.Name,
                     LPIDNumber = model.LPIDNumber,
                     NationalGridReference = model.NationalGridReference,
@@ -973,7 +973,7 @@ namespace NMP.Portal.Controllers
                 },
                 SoilAnalysis = new SoilAnalysis
                 {
-                    Year = DateTime.Now.Year - 1,
+                    Year = model.SoilAnalyses.Date.Value.Year,
                     SulphurDeficient = model.SoilAnalyses.SulphurDeficient,
                     Date = model.SoilAnalyses.Date,
                     PH = model.SoilAnalyses.PH,

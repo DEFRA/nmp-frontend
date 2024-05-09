@@ -9,7 +9,7 @@ namespace NMP.Portal.Models
         public int? ID { get; set; }
         //public int FarmID { get; set; }
         public int? SoilTypeID { get; set; }
-        public string?  NVZProgrammeID { get; set; }
+        public int?  NVZProgrammeID { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblFieldName))]
         public string? Name { get; set; } = string.Empty;
@@ -17,12 +17,13 @@ namespace NMP.Portal.Models
         [StringLength(14, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgLandParcelIdMinMaxValidation))]
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblLandParcelID))]
         public string? LPIDNumber { get; set; }
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblOtherReference))]
-        public string? OtherReference { get; set; }
 
         [StringLength(4, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgNationalGridReferenceMinMaxValidation))]
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblNationalGridReference))]
         public string? NationalGridReference { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblOtherReference))]
+        public string? OtherReference { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblTotalFieldArea))]
         public decimal? TotalArea { get; set; }
