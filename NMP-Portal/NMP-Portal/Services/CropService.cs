@@ -57,9 +57,9 @@ namespace NMP.Portal.Services
             }
             return potatoVarieties;
         }
-        public async Task<CropTypeResponse> FetchCropTypeByGroupId(int cropGroupId)
+        public async Task<int> FetchCropTypeByGroupId(int cropGroupId)
         {
-            CropTypeResponse cropTypeResponse = new CropTypeResponse();
+            int cropTypeId = 0;
             Error error = new Error();
             try
             {
@@ -73,11 +73,10 @@ namespace NMP.Portal.Services
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        var soiltypeslist = responseWrapper.Data.ToObject<List<CropTypeResponse>>();
-                        var cropTypeResponses = responseWrapper.Data.ToObject<List<CropTypeResponse>>();
-                        if (cropTypeResponses != null)
+                        var cropTypeResponse = responseWrapper.Data.ToObject<List<CropTypeResponse>>();
+                        if (cropTypeResponse != null)
                         {
-                            cropTypeResponse = cropTypeResponses[0];
+                            cropTypeId = cropTypeResponse[0].CropTypeId;
                         }
                     }
                 }
@@ -102,7 +101,50 @@ namespace NMP.Portal.Services
                 _logger.LogError(ex.Message);
                 throw new Exception(error.Message, ex);
             }
-            return cropTypeResponse;
+            return cropTypeId;
+        }
+        public async Task<List<CropInfoOneResponse>> FetchCropInfoOneByCropTypeId(int cropTypeId)
+        {
+            List<CropInfoOneResponse> cropInfoOneList = new List<CropInfoOneResponse>();
+            Error error = new Error();
+            try
+            {
+                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
+                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
+                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropInfoOneByCropTypeIdAsyncAPI, cropTypeId));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode)
+                {
+                    if (responseWrapper != null && responseWrapper.Data != null)
+                    {
+                        var cropInfoOneResponses = responseWrapper.Data.ToObject<List<CropInfoOneResponse>>();
+                        cropInfoOneList.AddRange(cropInfoOneResponses);
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return cropInfoOneList;
         }
     }
 }

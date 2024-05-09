@@ -22,8 +22,9 @@ namespace NMP.Portal.ViewModels
         public List<Crop>? Crops { get; set; }
         public int? SowingDateQuestion { get; set; }
         public int? YieldQuestion { get; set; }
-        public int TotalCount { get; set; } = 0;
-        public int CropCurrentCounter { get; set; } = 0;
-        public string? EncryptedCounter { get; set; }
+        public int SowingDateCurrentCounter { get; set; } = 0;
+        public string? SowingDateEncryptedCounter { get; set; }
+        public int YieldCurrentCounter { get; set; } = 0;
+        public string? YieldEncryptedCounter { get; set; }
     }
 }

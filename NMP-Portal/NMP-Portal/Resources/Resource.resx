@@ -901,4 +901,28 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblPotato" xml:space="preserve">
     <value> potato </value>
   </data>
+  <data name="lblTonnesAndHectare" xml:space="preserve">
+    <value>tonnes/hectare</value>
+  </data>
+  <data name="lblWhatIsTheExpectedYieldForSingle" xml:space="preserve">
+    <value>What is the expected yield for {0} in these fields?</value>
+  </data>
+  <data name="lblWhatIsTheDifferentExpectedYield" xml:space="preserve">
+    <value>What is the expected yield for {0} in {1}?</value>
+  </data>
+  <data name="lblHowDoYouPlanToUseTheFromTheseFields" xml:space="preserve">
+    <value>How do you plan to use the {0} from these fields?</value>
+  </data>
+  <data name="MsgEnterYield" xml:space="preserve">
+    <value>Enter yield before continue</value>
+  </data>
+  <data name="lbDoYouPlanToGrowAnyOtherCropsInTheseFields" xml:space="preserve">
+    <value>Do you plan to grow any other crops in these fields?</value>
+  </data>
+  <data name="lblAnotherCrop" xml:space="preserve">
+    <value>Another crop</value>
+  </data>
+  <data name="lblCropInfoOne" xml:space="preserve">
+    <value>Crop info 1</value>
+  </data>
 </root>
