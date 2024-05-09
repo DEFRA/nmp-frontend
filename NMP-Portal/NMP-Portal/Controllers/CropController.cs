@@ -669,7 +669,7 @@ namespace NMP.Portal.Controllers
             {
                 if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other)
                 {
-                    return RedirectToAction("");
+                    return RedirectToAction("CheckAnswer");
                 }
                 else
                 {
