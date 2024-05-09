@@ -1,5 +1,5 @@
 ﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.CropViewModel
+@model NMP.Portal.ViewModels.PlanViewModel
 @{
     ViewData["Title"] = Resource.lblWhichHarvestWouldYouLikeToPlanFor;
     int previousYear = (DateTime.Now.Year) - 1;
@@ -25,10 +25,33 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroup"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropType"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEnglishRules"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Variety"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherCropName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SowingDateQuestion"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.YieldQuestion"></govuk-input>
+            @if (Model != null && Model.FieldList!=null&& Model.FieldList.Count > 0)
+            {
+                @for (int i = 0; i < Model.FieldList.Count; i++)
+                {
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldList[i]" value="@Model.FieldList[i]"></govuk-input>
+                }
+            }
+            @if (Model != null && Model.Crops != null && Model.Crops.Count > 0)
+            {
+                @for (int i = 0; i < Model.Crops.Count; i++)
+                {
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].FieldId" value="@Model.Crops[i].FieldId"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].Year" value="@Model.Crops[i].Year"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].CropTypeID" value="@Model.Crops[i].CropTypeID"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].OtherCropName" value="@Model.Crops[i].OtherCropName"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].Variety" value="@Model.Crops[i].Variety"></govuk-input>
+                    <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].SowingDate" value="@Model.Crops[i].SowingDate"></govuk-date-input>
+                }
+            }
+
             <div class="govuk-form-group">
                 <govuk-radios class="govuk-radios" asp-for="@Model.Year">
                     <govuk-radios-fieldset>

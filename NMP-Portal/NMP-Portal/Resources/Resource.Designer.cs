@@ -511,6 +511,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you have a date for when you planted your {0} , or when you will plant it?.
+        /// </summary>
+        public static string lblDoYouHaveADateForWhenYouPlantedYour {
+            get {
+                return ResourceManager.GetString("lblDoYouHaveADateForWhenYouPlantedYour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to English Rules.
         /// </summary>
         public static string lblEnglishRules {
@@ -529,6 +538,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a single figure for all these fields.
+        /// </summary>
+        public static string lblEnterASingleFigureForAllTheseFields {
+            get {
+                return ResourceManager.GetString("lblEnterASingleFigureForAllTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the average annual rainfall in millimetres for {0}.
         /// </summary>
         public static string lblEnterAverageAnualRainfall {
@@ -538,11 +556,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter different figures for each field.
+        /// </summary>
+        public static string lblEnterDifferentFiguresForEachField {
+            get {
+                return ResourceManager.GetString("lblEnterDifferentFiguresForEachField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The value &apos;{0}&apos; is not valid for {1}..
         /// </summary>
         public static string lblEnterNumericValue {
             get {
                 return ResourceManager.GetString("lblEnterNumericValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the planting date for {0} in these fields?.
+        /// </summary>
+        public static string lblEnterSingleDateForAllField {
+            get {
+                return ResourceManager.GetString("lblEnterSingleDateForAllField", resourceCulture);
             }
         }
         
@@ -700,6 +736,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Field.
+        /// </summary>
+        public static string lblField {
+            get {
+                return ResourceManager.GetString("lblField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Field and soil details.
         /// </summary>
         public static string lblFieldAndSoilDetails {
@@ -795,6 +840,15 @@ namespace NMP.Portal.Resources {
         public static string lblHomePage {
             get {
                 return ResourceManager.GetString("lblHomePage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How do you want to enter the expected yield for {0} in these fields?.
+        /// </summary>
+        public static string lblHowDoYouWantToEnterTheExpectedYieldForInTheseFields {
+            get {
+                return ResourceManager.GetString("lblHowDoYouWantToEnterTheExpectedYieldForInTheseFields", resourceCulture);
             }
         }
         
@@ -1097,6 +1151,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No, I&apos;ll enter the date later.
+        /// </summary>
+        public static string lblNoIWillEnterTheDateLater {
+            get {
+                return ResourceManager.GetString("lblNoIWillEnterTheDateLater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to None of the fields are above 300m.
         /// </summary>
         public static string lblNoneOfTheFieldsAreAbove300m {
@@ -1313,6 +1376,33 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to  potato .
+        /// </summary>
+        public static string lblPotato {
+            get {
+                return ResourceManager.GetString("lblPotato", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which potato variety group are you planning to grow?.
+        /// </summary>
+        public static string lblPotatoForCropType {
+            get {
+                return ResourceManager.GetString("lblPotatoForCropType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which fields do you plan to grow {0} potato in?.
+        /// </summary>
+        public static string lblPotatoForField {
+            get {
+                return ResourceManager.GetString("lblPotatoForField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rainfall.
         /// </summary>
         public static string lblRainfall {
@@ -1363,6 +1453,24 @@ namespace NMP.Portal.Resources {
         public static string lblSBI {
             get {
                 return ResourceManager.GetString("lblSBI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select all.
+        /// </summary>
+        public static string lblSelectAll {
+            get {
+                return ResourceManager.GetString("lblSelectAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select all that apply..
+        /// </summary>
+        public static string lblSelectAllThatApply {
+            get {
+                return ResourceManager.GetString("lblSelectAllThatApply", resourceCulture);
             }
         }
         
@@ -1475,6 +1583,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sowing date.
+        /// </summary>
+        public static string lblSowingDate {
+            get {
+                return ResourceManager.GetString("lblSowingDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to sowing date question.
+        /// </summary>
+        public static string lblSowingDateQuestion {
+            get {
+                return ResourceManager.GetString("lblSowingDateQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sulpher Deficient.
         /// </summary>
         public static string lblSulpherDeficient {
@@ -1574,6 +1700,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use the standard figure of 8 tonnes per hectare for all these fields.
+        /// </summary>
+        public static string lblUseTheStandardFigureOf8TonnesPerHectareForAllTheseFields {
+            get {
+                return ResourceManager.GetString("lblUseTheStandardFigureOf8TonnesPerHectareForAllTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use this service to plan and record how you use nutrients on your farm..
         /// </summary>
         public static string lblUseThisServiceToPlan {
@@ -1664,6 +1799,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the planting date for {0} in {1}?.
+        /// </summary>
+        public static string lblWhatIsThePlantingDate {
+            get {
+                return ResourceManager.GetString("lblWhatIsThePlantingDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What was the previous crop group?.
         /// </summary>
         public static string lblWhatWasThePreviousCropGroup {
@@ -1700,6 +1844,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Which fields do you plan to grow {0} in?.
+        /// </summary>
+        public static string lblWhichFieldsDoYouPlanToGrow {
+            get {
+                return ResourceManager.GetString("lblWhichFieldsDoYouPlanToGrow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which harvest would you like to plan for?.
         /// </summary>
         public static string lblWhichHarvestWouldYouLikeToPlanFor {
@@ -1723,6 +1876,33 @@ namespace NMP.Portal.Resources {
         public static string lblYes {
             get {
                 return ResourceManager.GetString("lblYes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes, I have a single date for all these fields.
+        /// </summary>
+        public static string lblYesIHaveASingleDateForAllTheseFields {
+            get {
+                return ResourceManager.GetString("lblYesIHaveASingleDateForAllTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes, I have different dates for each of these fields.
+        /// </summary>
+        public static string lblYesIHaveDifferentDatesForEachOfTheseFields {
+            get {
+                return ResourceManager.GetString("lblYesIHaveDifferentDatesForEachOfTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can change your planting date later..
+        /// </summary>
+        public static string lblYouCanChangeYourPlantingDateLater {
+            get {
+                return ResourceManager.GetString("lblYouCanChangeYourPlantingDateLater", resourceCulture);
             }
         }
         

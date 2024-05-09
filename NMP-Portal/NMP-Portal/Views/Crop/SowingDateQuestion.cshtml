@@ -1,30 +1,36 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblCropGroup;
+    ViewData["Title"] = Resource.lblSowingDateQuestion;
+    var YesIHaveASingleDateForAllTheseFields = (int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields;
+    var NoIWillEnterTheDateLater = (int)NMP.Portal.Enums.SowingDateQuestion.NoIWillEnterTheDateLater;
+    var YesIHaveDifferentDatesForEachOfTheseFields = (int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveDifferentDatesForEachOfTheseFields;
+    int PotatoGroupId = (int)NMP.Portal.Enums.CropGroup.Potatoes;
+    int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="HarvestYearForPlan" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="CropFields" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="CropGroups" asp-controller="Crop" method="post">
+<form asp-action="SowingDateQuestion" asp-controller="Crop" method="post">
     @Html.AntiForgeryToken()
-    @if (TempData["CropGroupError"] != null)
+    @if (TempData["SowingDateQuestionError"] != null)
     {
         <govuk-error-summary>
-            <govuk-error-summary-item href="#">@TempData["CropGroupError"]</govuk-error-summary-item>
+            <govuk-error-summary-item href="#">@TempData["SowingDateQuestionError"]</govuk-error-summary-item>
         </govuk-error-summary>
     }
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupId"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroup"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropType"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEnglishRules"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Variety"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherCropName"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SowingDateQuestion"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropCurrentCounter"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.YieldQuestion"></govuk-input>
     @if (Model.FieldList != null && Model.FieldList.Count > 0)
     {
@@ -50,22 +56,19 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-
-            <govuk-radios asp-for="@Model.CropGroupId">
+            <govuk-radios asp-for="@Model.SowingDateQuestion">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @Resource.lblCropGroupForPlan
+                        @(Model.CropGroupId == PotatoGroupId ? string.Format(Resource.lblDoYouHaveADateForWhenYouPlantedYour, Model.Variety + Resource.lblPotato) :
+                            Model.CropGroupId == OtherGroupId ? string.Format(Resource.lblDoYouHaveADateForWhenYouPlantedYour, Model.OtherCropName) :
+                           string.Format(Resource.lblDoYouHaveADateForWhenYouPlantedYour,Model.CropType))
                     </govuk-radios-fieldset-legend>
-                    <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
-
-                    @if (ViewBag.CropGroupList != null)
-                    {
-                        @foreach (var item in ViewBag.CropGroupList)
-                        {
-                            <govuk-radios-item value="@item.CropGroupId">@item.CropGroupName</govuk-radios-item>
-                        }
-                    }
-
+                    <govuk-radios-hint>
+                        @Resource.lblYouCanChangeYourPlantingDateLater
+                    </govuk-radios-hint>
+                    <govuk-radios-item value="@YesIHaveASingleDateForAllTheseFields">@Resource.lblYesIHaveASingleDateForAllTheseFields</govuk-radios-item>
+                    <govuk-radios-item value="@YesIHaveDifferentDatesForEachOfTheseFields" disabled="@Model.Crops.Count>1?false:true">@Resource.lblYesIHaveDifferentDatesForEachOfTheseFields</govuk-radios-item>
+                    <govuk-radios-item value="@NoIWillEnterTheDateLater">@Resource.lblNoIWillEnterTheDateLater</govuk-radios-item>
                 </govuk-radios-fieldset>
             </govuk-radios>
             <govuk-button type="submit" class="margin-bottom-forty">
