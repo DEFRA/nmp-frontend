@@ -933,22 +933,6 @@ namespace NMP.Portal.Controllers
             //int farmId = model.FarmID;
             (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
 
-            List<Crop> crops = new List<Crop>();
-
-            foreach (Crop crop in model.Crops)
-            {
-                crop.CreatedOn = DateTime.Now;
-                crop.CreatedByID = userId;
-                crop.Confirm = true;
-                crop.CropTypeID = model.CropTypeID;
-                crops.Add(crop);
-            }
-            List<ManagementPeriod> managementPeriods = new List<ManagementPeriod>()
-            {
-
-            };
-            
-
             FieldData fieldData = new FieldData
             {
                 Field = new Field
