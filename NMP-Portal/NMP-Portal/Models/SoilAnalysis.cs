@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NMP.Portal.Models
 {
-    public class SoilAnalyses
+    public class SoilAnalysis
     {
         //public int? ID { get; set; }
         //public int? FieldID { get; set; }

@@ -56,7 +56,7 @@
                 </govuk-error-summary>
             }
 
-            <govuk-radios asp-for="@Model.Crop.CropTypeID">
+            <govuk-radios asp-for="@Model.CropTypeID">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @(Model.IsSnsBasedOnPreviousCrop == true ? Resource.lblWhatWasThePreviousCropType : Resource.lblWhatIsTheCurrentCropType)
