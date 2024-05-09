@@ -841,4 +841,64 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblEnterTheCropName" xml:space="preserve">
     <value>Enter the crop name</value>
   </data>
+  <data name="lblSelectAll" xml:space="preserve">
+    <value>Select all</value>
+  </data>
+  <data name="lblSelectAllThatApply" xml:space="preserve">
+    <value>Select all that apply.</value>
+  </data>
+  <data name="lblWhichFieldsDoYouPlanToGrow" xml:space="preserve">
+    <value>Which fields do you plan to grow {0} in?</value>
+  </data>
+  <data name="lblField" xml:space="preserve">
+    <value>Field</value>
+  </data>
+  <data name="lblDoYouHaveADateForWhenYouPlantedYour" xml:space="preserve">
+    <value>Do you have a date for when you planted your {0} , or when you will plant it?</value>
+  </data>
+  <data name="lblNoIWillEnterTheDateLater" xml:space="preserve">
+    <value>No, I'll enter the date later</value>
+  </data>
+  <data name="lblSowingDateQuestion" xml:space="preserve">
+    <value>sowing date question</value>
+  </data>
+  <data name="lblYesIHaveASingleDateForAllTheseFields" xml:space="preserve">
+    <value>Yes, I have a single date for all these fields</value>
+  </data>
+  <data name="lblYesIHaveDifferentDatesForEachOfTheseFields" xml:space="preserve">
+    <value>Yes, I have different dates for each of these fields</value>
+  </data>
+  <data name="lblSowingDate" xml:space="preserve">
+    <value>Sowing date</value>
+  </data>
+  <data name="lblWhatIsThePlantingDate" xml:space="preserve">
+    <value>What is the planting date for {0} in {1}?</value>
+  </data>
+  <data name="lblEnterASingleFigureForAllTheseFields" xml:space="preserve">
+    <value>Enter a single figure for all these fields</value>
+  </data>
+  <data name="lblEnterDifferentFiguresForEachField" xml:space="preserve">
+    <value>Enter different figures for each field</value>
+  </data>
+  <data name="lblUseTheStandardFigureOf8TonnesPerHectareForAllTheseFields" xml:space="preserve">
+    <value>Use the standard figure of 8 tonnes per hectare for all these fields</value>
+  </data>
+  <data name="lblHowDoYouWantToEnterTheExpectedYieldForInTheseFields" xml:space="preserve">
+    <value>How do you want to enter the expected yield for {0} in these fields?</value>
+  </data>
+  <data name="lblPotatoForCropType" xml:space="preserve">
+    <value>Which potato variety group are you planning to grow?</value>
+  </data>
+  <data name="lblPotatoForField" xml:space="preserve">
+    <value>Which fields do you plan to grow {0} potato in?</value>
+  </data>
+  <data name="lblEnterSingleDateForAllField" xml:space="preserve">
+    <value>What is the planting date for {0} in these fields?</value>
+  </data>
+  <data name="lblYouCanChangeYourPlantingDateLater" xml:space="preserve">
+    <value>You can change your planting date later.</value>
+  </data>
+  <data name="lblPotato" xml:space="preserve">
+    <value> potato </value>
+  </data>
 </root>

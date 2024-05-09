@@ -24,5 +24,6 @@ namespace NMP.Portal.Helpers
         public const string IsFieldExistAsyncAPI = "fields/farms/{0}/exists?Name={1}";
         public const string FetchFieldsByFarmIdAsyncAPI = "fields/farms/{0}";
         public const string FetchPotatoVarietiesAsyncAPI = "vendors/rb209/Arable/PotatoVarieties";
+        public const string FetchFieldByFieldIdAsyncAPI = "fields/{0}";
     }
 }

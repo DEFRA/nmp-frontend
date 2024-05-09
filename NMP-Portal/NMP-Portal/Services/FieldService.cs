@@ -441,5 +441,48 @@ namespace NMP.Portal.Services
             }
             return fields;
         }
+
+        public async Task<Field> FetchFieldByFieldId(int fieldId)
+        {
+            Field field = new Field();
+            Error error = new Error();
+            try
+            {
+                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
+                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
+                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchFieldByFieldIdAsyncAPI, fieldId));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode)
+                {
+                    if (responseWrapper != null && responseWrapper.Data != null)
+                    {
+                        field = responseWrapper.Data.Field.ToObject<Field>();
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return field;
+        }
     }
 }

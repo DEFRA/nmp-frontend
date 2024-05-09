@@ -1,39 +1,34 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblCropGroup;
+    ViewData["Title"] = Resource.lblField;
+    int PotatoGroupId = (int)NMP.Portal.Enums.CropGroup.Potatoes;
+    int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="HarvestYearForPlan" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="VarietyName" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="CropGroups" asp-controller="Crop" method="post">
+<form asp-action="CropFields" asp-controller="Crop" method="post">
     @Html.AntiForgeryToken()
-    @if (TempData["CropGroupError"] != null)
+    @if (TempData["ErrorOnSelectField"] != null)
     {
         <govuk-error-summary>
-            <govuk-error-summary-item href="#">@TempData["CropGroupError"]</govuk-error-summary-item>
+            <govuk-error-summary-item href="#">@TempData["ErrorOnSelectField"]</govuk-error-summary-item>
         </govuk-error-summary>
     }
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupId"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroup"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropType"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEnglishRules"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Variety"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherCropName"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SowingDateQuestion"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SowingDateQuestion"></govuk-input>        
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.YieldQuestion"></govuk-input>
-    @if (Model.FieldList != null && Model.FieldList.Count > 0)
-    {
-        @for (int i = 0; i < Model.FieldList.Count; i++)
-        {
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldList[i]" value="@Model.FieldList[i]"></govuk-input>
-        }
-    }
-
     @if (Model.Crops != null && Model.Crops.Count > 0)
     {
         @for (int i = 0; i < Model.Crops.Count; i++)
@@ -48,26 +43,32 @@
 
     }
 
+
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
+            <govuk-checkboxes name="FieldList" asp-for="FieldList">
+                <govuk-checkboxes-fieldset>
+                    <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @(Model.CropGroupId==PotatoGroupId?string.Format(Resource.lblPotatoForField,Model.Variety):
+                            Model.CropGroupId == OtherGroupId ? string.Format(Resource.lblWhichFieldsDoYouPlanToGrow, Model.OtherCropName) :
+                        string.Format(Resource.lblWhichFieldsDoYouPlanToGrow,Model.CropType))
+                    </govuk-checkboxes-fieldset-legend>
 
-            <govuk-radios asp-for="@Model.CropGroupId">
-                <govuk-radios-fieldset>
-                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @Resource.lblCropGroupForPlan
-                    </govuk-radios-fieldset-legend>
-                    <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
-
-                    @if (ViewBag.CropGroupList != null)
+                    <govuk-checkboxes-hint>
+                        @Resource.lblSelectAllThatApply
+                    </govuk-checkboxes-hint>
+                    @if (ViewBag.fieldList != null)
                     {
-                        @foreach (var item in ViewBag.CropGroupList)
+                        @foreach (var item in ViewBag.fieldList)
                         {
-                            <govuk-radios-item value="@item.CropGroupId">@item.CropGroupName</govuk-radios-item>
+                            <govuk-checkboxes-item value="@item.Value">@item.Text</govuk-checkboxes-item>
                         }
                     }
-
-                </govuk-radios-fieldset>
-            </govuk-radios>
+                    
+                    <govuk-checkboxes-divider>or</govuk-checkboxes-divider>
+                    <govuk-checkboxes-item value=@Resource.lblSelectAll behavior="Exclusive">@Resource.lblSelectAll</govuk-checkboxes-item>
+                </govuk-checkboxes-fieldset>
+            </govuk-checkboxes>
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>

@@ -6,7 +6,7 @@ namespace NMP.Portal.Models
 {
     public class Field
     {
-        //public int? ID { get; set; }
+        public int? ID { get; set; }
         //public int FarmID { get; set; }
         public int? SoilTypeID { get; set; }
         public string?  NVZProgrammeID { get; set; }
