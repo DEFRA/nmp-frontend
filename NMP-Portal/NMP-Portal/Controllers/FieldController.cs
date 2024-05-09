@@ -800,7 +800,7 @@ namespace NMP.Portal.Controllers
                 if (fieldData.CropGroupId != field.CropGroupId)
                 {
                     field.CropType = string.Empty;
-                    field.Crop.CropTypeID = null;
+                    field.CropTypeID = null;
                 }
             }
 
@@ -841,7 +841,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CropTypes(FieldViewModel field)
         {
-            if (field.Crop.CropTypeID == null)
+            if (field.CropTypeID == null)
             {
                 ModelState.AddModelError("Crop.CropTypeID", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropType.ToLower()));
             }
@@ -853,7 +853,7 @@ namespace NMP.Portal.Controllers
                 ViewBag.CropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.Both).ToList();
                 return View(field);
             }
-            field.CropType = await _fieldService.FetchCropTypeById(field.Crop.CropTypeID.Value);
+            field.CropType = await _fieldService.FetchCropTypeById(field.CropTypeID.Value);
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", field);
 
             return RedirectToAction("CheckAnswer");
@@ -900,7 +900,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CheckAnswer(FieldViewModel model)
         {
-            if (!model.Crop.CropTypeID.HasValue)
+            if (!model.CropTypeID.HasValue)
             {
                 ModelState.AddModelError("Crop.CropTypeID", Resource.MsgPreviousCropTypeNotSet);
             }
@@ -938,7 +938,7 @@ namespace NMP.Portal.Controllers
                 Field = new Field
                 {
                     SoilTypeID = model.SoilTypeID,
-                    NVZProgrammeID = model.NVZProgrammeID,
+                    NVZProgrammeID = model.IsWithinNVZ==true?(int)NMP.Portal.Enums.NVZProgram.CurrentNVZRule: (int)NMP.Portal.Enums.NVZProgram.NotInNVZ,
                     Name = model.Name,
                     LPIDNumber = model.LPIDNumber,
                     NationalGridReference = model.NationalGridReference,
@@ -955,9 +955,9 @@ namespace NMP.Portal.Controllers
                     ModifiedOn = model.ModifiedOn,
                     ModifiedByID = model.ModifiedByID
                 },
-                SoilAnalyses = new SoilAnalyses
+                SoilAnalysis = new SoilAnalysis
                 {
-                    Year = DateTime.Now.Year - 1,
+                    Year = model.SoilAnalyses.Date.Value.Year,
                     SulphurDeficient = model.SoilAnalyses.SulphurDeficient,
                     Date = model.SoilAnalyses.Date,
                     PH = model.SoilAnalyses.PH,
@@ -985,35 +985,32 @@ namespace NMP.Portal.Controllers
                     ModifiedOn = model.SoilAnalyses.ModifiedOn,
                     ModifiedByID = model.SoilAnalyses.ModifiedByID
                 },
-                Crops = new List<Crop>
+                Crops = new List<CropData>
                 {
-                   new Crop
-                   {
-                      Year=model.Crop.Year,
-                      CropTypeID=model.Crop.CropTypeID,
-                      Variety=model.Crop.Variety,
-                      CropInfo1=model.Crop.CropInfo1,
-                      CropInfo2=model.Crop.CropInfo2,
-                      SowingDate=model.Crop.SowingDate,
-                      Yield=model.Crop.Yield,
-                      Confirm=true,
-                      PreviousGrass=model.Crop.PreviousGrass,
-                      GrassHistory=model.Crop.GrassHistory,
-                      Comments=model.Crop.Comments,
-                      Establishment=model.Crop.Establishment,
-                      LivestockType=model.Crop.LivestockType,
-                      MilkYield=model.Crop.MilkYield,
-                      ConcentrateUse=model.Crop.ConcentrateUse,
-                      StockingRate=model.Crop.StockingRate,
-                      DefoliationSequence=model.Crop.DefoliationSequence,
-                      GrazingIntensity=model.Crop.GrazingIntensity,
-                      PreviousID=model.Crop.PreviousID,
-                      CreatedOn=DateTime.Now,
-                      CreatedByID=userId,
-                      ModifiedOn=model.Crop.ModifiedOn,
-                      ModifiedByID=model.Crop.ModifiedByID
-                   }
+                    new CropData
+                    {
+                        Crop = new Crop
+                        {
+                            CropTypeID=model.CropTypeID,
+                            CreatedOn=DateTime.Now,
+                            CreatedByID=userId
+                        },
+                        ManagementPeriods = new List<ManagementPeriod>
+                        {
+                            new ManagementPeriod
+                            {
+                                DefoliationID=1,
+                                Utilisation1ID=2,
+                                CreatedOn=DateTime.Now,
+                                CreatedByID=userId
+                            }
+                            
+                        }
+                    },
+                    
                 }
+
+
             };
 
             (Field fieldResponse, Error error1) = await _fieldService.AddFieldAsync(fieldData, farm.ID, farm.Name);

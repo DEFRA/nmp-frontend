@@ -7,14 +7,17 @@ namespace NMP.Portal.ViewModels
     {
         public FieldViewModel()
         {
-            SoilAnalyses=new SoilAnalyses();
-            Crop=new Crop();
+            SoilAnalyses=new SoilAnalysis();
+            Crops=new List<Crop>();
             Fields = new List<Field>();
+            ManagementPeriods = new List<ManagementPeriod>();
         }
         public List<Field> Fields { get; set; }
+        public List<ManagementPeriod> ManagementPeriods { get; set; }
         public bool IsSoilReleasingClay { get; set; } = false;
-        public SoilAnalyses SoilAnalyses { get; set; }
-        public Crop Crop { get; set; }
+        public SoilAnalysis SoilAnalyses { get; set; }
+        public List<Crop> Crops { get; set; }
+        public int? CropTypeID { get; set; }
         public string? FarmName { get; set; } = string.Empty;
         public string EncryptedFarmId { get; set; } = string.Empty;
         public bool? IsSoilNutrientValueTypeIndex { get; set; }
