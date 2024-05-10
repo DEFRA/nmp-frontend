@@ -153,10 +153,6 @@ namespace NMP.Portal.Controllers
                 {
                     model.OtherCropName = null;
                 }
-                if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Cereals)
-                {
-                    model.CropInfo2 = null;
-                }
 
                 if (model.CropGroupId != null)
                 {
@@ -776,6 +772,7 @@ namespace NMP.Portal.Controllers
             }
             else
             {
+                model.CropInfo2 = null;
                 return RedirectToAction("CheckAnswer");
             }
         }
