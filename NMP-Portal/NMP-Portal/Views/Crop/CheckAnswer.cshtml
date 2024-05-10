@@ -1,4 +1,10 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
+@{
+    int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
+}
 
+@section BeforeContent {
+    <govuk-back-link asp-action=@(Model.CropGroupId==OtherGroupId?"Yield":"CropInfoTwo") asp-controller="Crop" asp-route-q="@Model.YieldEncryptedCounter">@Resource.lblBack</govuk-back-link>
+}
 <p class="govuk-body cancel-link"><a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>

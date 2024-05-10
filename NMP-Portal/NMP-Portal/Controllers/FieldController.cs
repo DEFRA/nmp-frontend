@@ -514,7 +514,7 @@ namespace NMP.Portal.Controllers
                 var dateError = ModelState["SoilAnalyses.Date"].Errors.Count > 0 ?
                                 ModelState["SoilAnalyses.Date"].Errors[0].ErrorMessage.ToString() : null;
 
-                if (dateError != null && dateError.Equals(Resource.MsgSampleDateMustBeARealDate))
+                if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate,Resource.lblDateSampleTaken)))
                 {
                     ModelState["SoilAnalyses.Date"].Errors.Clear();
                     ModelState["SoilAnalyses.Date"].Errors.Add(Resource.MsgEnterTheDateInNumber);
@@ -843,7 +843,7 @@ namespace NMP.Portal.Controllers
         {
             if (field.CropTypeID == null)
             {
-                ModelState.AddModelError("Crop.CropTypeID", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropType.ToLower()));
+                ModelState.AddModelError("CropTypeID", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropType.ToLower()));
             }
             if (!ModelState.IsValid)
             {
