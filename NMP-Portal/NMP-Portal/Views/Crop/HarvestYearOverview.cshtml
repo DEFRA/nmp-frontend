@@ -1,0 +1,81 @@
+﻿@using NMP.Portal.Resources
+@using NMP.Portal.ViewModels
+@model PlanViewModel
+@{
+    ViewData["Title"] = Resource.lblHarvestYearOverview;
+}
+
+@if (ViewBag.Error != null)
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item href="#">@ViewBag.Error</govuk-error-summary-item>
+    </govuk-error-summary>
+}
+@if (Model != null)
+{
+    @section BeforeContent {
+    <govuk-breadcrumbs class="govuk-breadcrumbs-link">
+        
+        <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+            @Resource.lblFarmName @* @Model.FarmName *@
+        </govuk-breadcrumbs-item>
+        <govuk-breadcrumbs-item asp-action="PlansRecordsOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId">
+            @Resource.lblPlansAndRecords
+        </govuk-breadcrumbs-item>
+        <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
+            @Resource.lblHarvestYearOverview
+        </govuk-breadcrumbs-item>
+    </govuk-breadcrumbs>
+    }
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            @if (ViewBag.Success != null && ViewBag.Success == true)
+            {
+                <govuk-notification-banner type="Success">
+                    <p class="govuk-notification-banner__heading">
+                        @Resource.lblPlanCreated
+                    </p>
+                </govuk-notification-banner>
+            }
+
+            <h1 class="govuk-heading-l">@string.Format(Resource.lblCropPlanFor, Model.Year)</h1>
+            <div class="crop_plan_title">
+                <p class="govuk-body">There are 1 fields in this plan</p>
+                <p class="govuk-body">@Resource.lblLastUpdated</p>
+                <p class="govuk-body"><a href="/mvp/plan/crop/crop_group">@Resource.lblAddAnotherCrop</a></p>
+                <p class="govuk-body"><a href="/mvp/plan/manure/manure_fields">@Resource.lblAddManuresToThisPlan</a></p>
+            </div>
+            <hr class="seperator_five">
+            <h2 class="govuk-heading-m">@Model.OtherCropName</h2>
+            <p class="govuk-body"><a asp-action="ChangePlan" asp-controller="Crop">@Resource.lblChangeThisPlan</a></p>
+           
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th id="field_name" scope="col" class="govuk-table__header">@Resource.lblField</th>
+                        <th scope="col" class="govuk-table__header">@Resource.lblSecondCrop </th>
+                        <th scope="col" class="govuk-table__header"> </th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                    @if (ViewBag.CropPlansList != null)
+                    {
+                        @foreach (var item in ViewBag.CropPlansList)
+                        {
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell">@item.FieldName</td>
+                                <td class="govuk-table__cell"></td>
+                                <td class="govuk-table__cell">
+                                    <a href="#">@Resource.lblViewRecommendations</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+

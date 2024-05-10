@@ -27,5 +27,6 @@ namespace NMP.Portal.Helpers
         public const string FetchFieldByFieldIdAsyncAPI = "fields/{0}";
         public const string FetchCropInfoOneByCropTypeIdAsyncAPI = "vendors/rb209/Arable/CropInfo1s/{0}";
         public const string FetchCropInfoTwoByCropTypeIdAsyncAPI = "vendors/rb209/Arable/CropInfo2s";
+        public const string AddCropNutrientManagementPlanAsyncAPI = "crops/fields/{0}";
     }
 }

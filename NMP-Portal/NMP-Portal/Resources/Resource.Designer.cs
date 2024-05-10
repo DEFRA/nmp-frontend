@@ -97,6 +97,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add another crop to this plan.
+        /// </summary>
+        public static string lblAddAnotherCrop {
+            get {
+                return ResourceManager.GetString("lblAddAnotherCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add another field.
         /// </summary>
         public static string lblAddAnotherField {
@@ -129,6 +138,15 @@ namespace NMP.Portal.Resources {
         public static string lblAddFieldFor {
             get {
                 return ResourceManager.GetString("lblAddFieldFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add manures to this plan.
+        /// </summary>
+        public static string lblAddManuresToThisPlan {
+            get {
+                return ResourceManager.GetString("lblAddManuresToThisPlan", resourceCulture);
             }
         }
         
@@ -376,6 +394,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change this {0} plan.
+        /// </summary>
+        public static string lblChangeThisPlan {
+            get {
+                return ResourceManager.GetString("lblChangeThisPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change this postcode.
         /// </summary>
         public static string lblChangeThisPostcode {
@@ -448,6 +475,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create plan.
+        /// </summary>
+        public static string lblCreatePlan {
+            get {
+                return ResourceManager.GetString("lblCreatePlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Crop Group.
         /// </summary>
         public static string lblCropGroup {
@@ -498,6 +534,15 @@ namespace NMP.Portal.Resources {
         public static string lblCroppedAreaForCheckAnswere {
             get {
                 return ResourceManager.GetString("lblCroppedAreaForCheckAnswere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Crop plan for {0}.
+        /// </summary>
+        public static string lblCropPlanFor {
+            get {
+                return ResourceManager.GetString("lblCropPlanFor", resourceCulture);
             }
         }
         
@@ -835,11 +880,47 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to First crop.
+        /// </summary>
+        public static string lblFirstCrop {
+            get {
+                return ResourceManager.GetString("lblFirstCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First crop group.
+        /// </summary>
+        public static string lblFirstCropGroup {
+            get {
+                return ResourceManager.GetString("lblFirstCropGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Harvest Year.
         /// </summary>
         public static string lblHarvestYear {
             get {
                 return ResourceManager.GetString("lblHarvestYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Harvest Year Overview.
+        /// </summary>
+        public static string lblHarvestYearOverview {
+            get {
+                return ResourceManager.GetString("lblHarvestYearOverview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Have you planted your {0} yet?.
+        /// </summary>
+        public static string lblHaveYouPlantedYourCrop {
+            get {
+                return ResourceManager.GetString("lblHaveYouPlantedYourCrop", resourceCulture);
             }
         }
         
@@ -885,6 +966,15 @@ namespace NMP.Portal.Resources {
         public static string lblHowDoYouPlanToUseTheStrawFromTheseFields {
             get {
                 return ResourceManager.GetString("lblHowDoYouPlanToUseTheStrawFromTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How do you want to enter the expected yield?.
+        /// </summary>
+        public static string lblHowDoYouWantToEnterExpectedYield {
+            get {
+                return ResourceManager.GetString("lblHowDoYouWantToEnterExpectedYield", resourceCulture);
             }
         }
         
@@ -1021,6 +1111,15 @@ namespace NMP.Portal.Resources {
         public static string lblLandParcelIDForCheckAnswere {
             get {
                 return ResourceManager.GetString("lblLandParcelIDForCheckAnswere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last updated: {0}.
+        /// </summary>
+        public static string lblLastUpdated {
+            get {
+                return ResourceManager.GetString("lblLastUpdated", resourceCulture);
             }
         }
         
@@ -1367,11 +1466,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Plan created.
+        /// </summary>
+        public static string lblPlanCreated {
+            get {
+                return ResourceManager.GetString("lblPlanCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Planning and recording can:.
         /// </summary>
         public static string lblPlanningAndRecordingCan {
             get {
                 return ResourceManager.GetString("lblPlanningAndRecordingCan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plans and records.
+        /// </summary>
+        public static string lblPlansAndRecords {
+            get {
+                return ResourceManager.GetString("lblPlansAndRecords", resourceCulture);
             }
         }
         
@@ -1498,6 +1615,15 @@ namespace NMP.Portal.Resources {
         public static string lblSBI {
             get {
                 return ResourceManager.GetString("lblSBI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Second crop.
+        /// </summary>
+        public static string lblSecondCrop {
+            get {
+                return ResourceManager.GetString("lblSecondCrop", resourceCulture);
             }
         }
         
@@ -1700,6 +1826,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are {0} fields in this plan.
+        /// </summary>
+        public static string lblThereAreFieldsInThisPlan {
+            get {
+                return ResourceManager.GetString("lblThereAreFieldsInThisPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to tonnes/hectare.
         /// </summary>
         public static string lblTonnesAndHectare {
@@ -1808,6 +1943,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View recommendations.
+        /// </summary>
+        public static string lblViewRecommendations {
+            get {
+                return ResourceManager.GetString("lblViewRecommendations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to We could not find any addresses for  {0}.
         /// </summary>
         public static string lblWeCouldNotFindAnyAddressesFor {
@@ -1817,11 +1961,38 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the expected yield for {0} per hectare in these fields?.
+        /// </summary>
+        public static string lblWhatIsExpectedYieldForFields {
+            get {
+                return ResourceManager.GetString("lblWhatIsExpectedYieldForFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the length of growing season for Maris Piper potato?.
+        /// </summary>
+        public static string lblWhatIsLengthOfGrowingSeasonForCrop {
+            get {
+                return ResourceManager.GetString("lblWhatIsLengthOfGrowingSeasonForCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the soil type in {0}?.
         /// </summary>
         public static string lblWhatIsSoilType {
             get {
                 return ResourceManager.GetString("lblWhatIsSoilType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the sowing date for {0} in these fields?.
+        /// </summary>
+        public static string lblWhatIsSowingDateinFields {
+            get {
+                return ResourceManager.GetString("lblWhatIsSowingDateinFields", resourceCulture);
             }
         }
         
@@ -2524,6 +2695,15 @@ namespace NMP.Portal.Resources {
         public static string MsgWeCouldNotAddYourFieldPleaseTryAgainLater {
             get {
                 return ResourceManager.GetString("MsgWeCouldNotAddYourFieldPleaseTryAgainLater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We couldn’t create your plan, please try again later.
+        /// </summary>
+        public static string MsgWeCouldNotCreateYourPlanPleaseTryAgainLater {
+            get {
+                return ResourceManager.GetString("MsgWeCouldNotCreateYourPlanPleaseTryAgainLater", resourceCulture);
             }
         }
     }

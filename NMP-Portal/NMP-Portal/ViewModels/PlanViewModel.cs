@@ -26,5 +26,8 @@ namespace NMP.Portal.ViewModels
         public string? SowingDateEncryptedCounter { get; set; }
         public int YieldCurrentCounter { get; set; } = 0;
         public string? YieldEncryptedCounter { get; set; }
+        public decimal? Yield { get; set; }
+        public decimal? Length { get; set; }
+        public string? FarmName { get; set; }
     }
 }
