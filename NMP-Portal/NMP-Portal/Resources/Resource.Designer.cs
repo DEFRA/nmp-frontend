@@ -511,6 +511,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Crop info two.
+        /// </summary>
+        public static string lblCropInfoTwo {
+            get {
+                return ResourceManager.GetString("lblCropInfoTwo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cropped area (optional).
         /// </summary>
         public static string lblCroppedArea {
@@ -952,11 +961,11 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How do you plan to use the {0} from these fields?.
+        ///   Looks up a localized string similar to How do you plan to use the straw from these fields?.
         /// </summary>
-        public static string lblHowDoYouPlanToUseTheFromTheseFields {
+        public static string lblHowDoYouPlanToUseTheStrawFromTheseFields {
             get {
-                return ResourceManager.GetString("lblHowDoYouPlanToUseTheFromTheseFields", resourceCulture);
+                return ResourceManager.GetString("lblHowDoYouPlanToUseTheStrawFromTheseFields", resourceCulture);
             }
         }
         
@@ -1655,6 +1664,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select the crop information that is applicable.
+        /// </summary>
+        public static string lblSelectTheCropInformationThatIsApplicable {
+            get {
+                return ResourceManager.GetString("lblSelectTheCropInformationThatIsApplicable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select the farm address.
         /// </summary>
         public static string lblSelectTheFarmAddress {
@@ -1750,6 +1768,15 @@ namespace NMP.Portal.Resources {
         public static string lblSowingDate {
             get {
                 return ResourceManager.GetString("lblSowingDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SowingDate.
+        /// </summary>
+        public static string lblSowingDateForError {
+            get {
+                return ResourceManager.GetString("lblSowingDateForError", resourceCulture);
             }
         }
         
@@ -2132,6 +2159,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Yield.
+        /// </summary>
+        public static string lblYield {
+            get {
+                return ResourceManager.GetString("lblYield", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yield question.
+        /// </summary>
+        public static string lblYieldQuestion {
+            get {
+                return ResourceManager.GetString("lblYieldQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You can change your planting date later..
         /// </summary>
         public static string lblYouCanChangeYourPlantingDateLater {
@@ -2200,6 +2245,15 @@ namespace NMP.Portal.Resources {
         public static string MsgDateExample {
             get {
                 return ResourceManager.GetString("MsgDateExample", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} must be a real date.
+        /// </summary>
+        public static string MsgDateMustBeARealDate {
+            get {
+                return ResourceManager.GetString("MsgDateMustBeARealDate", resourceCulture);
             }
         }
         
@@ -2587,15 +2641,6 @@ namespace NMP.Portal.Resources {
         public static string MsgPreviousCropTypeNotSet {
             get {
                 return ResourceManager.GetString("MsgPreviousCropTypeNotSet", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to When was the soil sample taken? must be a real date.
-        /// </summary>
-        public static string MsgSampleDateMustBeARealDate {
-            get {
-                return ResourceManager.GetString("MsgSampleDateMustBeARealDate", resourceCulture);
             }
         }
         

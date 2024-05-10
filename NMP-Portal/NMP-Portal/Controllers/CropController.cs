@@ -139,8 +139,20 @@ namespace NMP.Portal.Controllers
                     {
                         model.CropType = string.Empty;
                         model.CropTypeID = null;
+                        model.CropInfo1 = null;
                     }
                 }
+
+                if(model.CropGroupId==(int)NMP.Portal.Enums.CropGroup.Other)
+                {
+                    model.CropInfo1 = null;
+                    model.CropInfo2 = null;
+                }
+                else
+                {
+                    model.OtherCropName = null;
+                }
+
                 if (model.CropGroupId != null)
                 {
                     model.CropGroup = await _fieldService.FetchCropGroupById(model.CropGroupId.Value);
@@ -491,6 +503,18 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SowingDate(PlanViewModel model)
         {
+
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("Crops[" + model.SowingDateCurrentCounter + "].SowingDate"))
+            {
+                var dateError = ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Count > 0 ?
+                                ModelState["Crops[" + model.SowingDateCurrentCounter +"].SowingDate"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, Resource.lblSowingDateForError)))
+                {
+                    ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Clear();
+                    ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Add(Resource.MsgEnterTheDateInNumber);
+                }
+            }
             if (model.Crops[model.SowingDateCurrentCounter].SowingDate == null)
             {
                 ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", Resource.MsgEnterADateBeforeContinuing);
@@ -719,10 +743,21 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("CropInfo1", Resource.MsgSelectAnOptionBeforeContinuing);
                 }
-                List<CropInfoOneResponse> cropInfoOneResponse = await _cropService.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0);
-                var country = model.IsEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
-                var cropInfoOneList = cropInfoOneResponse.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.Both).ToList();
-                ViewBag.CropInfoOneList = cropInfoOneList.OrderBy(c => c.CropInfo1Name);
+                if (!ModelState.IsValid)
+                {
+                    List<CropInfoOneResponse> cropInfoOneResponse = await _cropService.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0);
+                    var country = model.IsEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
+                    var cropInfoOneList = cropInfoOneResponse.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.Both).ToList();
+                    ViewBag.CropInfoOneList = cropInfoOneList.OrderBy(c => c.CropInfo1Name);
+                    return View(model);
+                }
+
+                for (int i = 0; i < model.Crops.Count; i++)
+                {
+                    model.Crops[i].CropInfo1 = model.CropInfo1;
+                }
+
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
 
             }
             catch (Exception ex)
@@ -731,7 +766,7 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("CropInfoOne");
             }
 
-            return RedirectToAction("CheckAnswer"); ;
+            return RedirectToAction("CropInfoTwo");
         }
 
         [HttpGet]
@@ -751,6 +786,70 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> AnotherCrop(PlanViewModel model)
         {
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CropInfoTwo()
+        {
+            PlanViewModel model = new PlanViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+                }
+
+                List<CropInfoTwoResponse> cropInfoTwoResponse = await _cropService.FetchCropInfoTwoByCropTypeId();
+                var country = model.IsEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
+                var cropInfoTwoList = cropInfoTwoResponse.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.Both).ToList();
+                ViewBag.CropInfoTwoList = cropInfoTwoList.OrderBy(c => c.CropInfo2);
+
+
+            }
+            catch (Exception ex)
+            {
+                TempData["CropInfoOneError"] = ex.Message;
+                return RedirectToAction("CropInfoOne");
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CropInfoTwo(PlanViewModel model)
+        {
+            try
+            {
+                if (model.CropInfo2 == null)
+                {
+                    ModelState.AddModelError("CropInfo2", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    List<CropInfoTwoResponse> cropInfoTwoResponse = await _cropService.FetchCropInfoTwoByCropTypeId();
+                    var country = model.IsEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
+                    var cropInfoTwoList = cropInfoTwoResponse.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.Both).ToList();
+                    ViewBag.CropInfoTwoList = cropInfoTwoList.OrderBy(c => c.CropInfo2);
+                    return View(model);
+                }
+
+                for(int i=0;i<model.Crops.Count;i++)
+                {
+                    model.Crops[i].CropInfo2 = model.CropInfo2;
+                }
+
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+
+            }
+            catch (Exception ex)
+            {
+                TempData["CropInfoTwoError"] = ex.Message;
+                return RedirectToAction("CropInfoTwo");
+            }
+
+            return RedirectToAction("CheckAnswer");
         }
 
         [HttpGet]
