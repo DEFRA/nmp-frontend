@@ -30,7 +30,7 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Variety"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherCropName"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropCurrentCounter"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SowingDateCurrentCounter"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.YieldQuestion"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldList"></govuk-input>
     @if (Model.FieldList != null && Model.FieldList.Count > 0)
@@ -51,6 +51,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].OtherCropName" value="@Model.Crops[i].OtherCropName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].Variety" value="@Model.Crops[i].Variety"></govuk-input>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].SowingDate" value="@Model.Crops[i].SowingDate"></govuk-date-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].Yield" value="@Model.Crops[i].Yield"></govuk-input>
         }
 
     }
@@ -68,7 +69,10 @@
                         @Resource.lblYouCanChangeYourPlantingDateLater
                     </govuk-radios-hint>
                     <govuk-radios-item value="@YesIHaveASingleDateForAllTheseFields">@Resource.lblYesIHaveASingleDateForAllTheseFields</govuk-radios-item>
-                    <govuk-radios-item value="@YesIHaveDifferentDatesForEachOfTheseFields" disabled="@Model.Crops.Count>1?false:true">@Resource.lblYesIHaveDifferentDatesForEachOfTheseFields</govuk-radios-item>
+                    @if (Model.Crops.Count > 1)
+                    {
+                        <govuk-radios-item value="@YesIHaveDifferentDatesForEachOfTheseFields">@Resource.lblYesIHaveDifferentDatesForEachOfTheseFields</govuk-radios-item>
+                    }
                     <govuk-radios-item value="@NoIWillEnterTheDateLater">@Resource.lblNoIWillEnterTheDateLater</govuk-radios-item>
                 </govuk-radios-fieldset>
             </govuk-radios>

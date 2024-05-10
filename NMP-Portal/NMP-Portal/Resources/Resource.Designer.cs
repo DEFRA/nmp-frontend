@@ -70,6 +70,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you plan to grow any other crops in these fields?.
+        /// </summary>
+        public static string lbDoYouPlanToGrowAnyOtherCropsInTheseFields {
+            get {
+                return ResourceManager.GetString("lbDoYouPlanToGrowAnyOtherCropsInTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add a farm.
         /// </summary>
         public static string lblAddAFarm {
@@ -237,6 +246,15 @@ namespace NMP.Portal.Resources {
         public static string lblAmount {
             get {
                 return ResourceManager.GetString("lblAmount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Another crop.
+        /// </summary>
+        public static string lblAnotherCrop {
+            get {
+                return ResourceManager.GetString("lblAnotherCrop", resourceCulture);
             }
         }
         
@@ -453,6 +471,15 @@ namespace NMP.Portal.Resources {
         public static string lblCropGroupForPlan {
             get {
                 return ResourceManager.GetString("lblCropGroupForPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Crop info 1.
+        /// </summary>
+        public static string lblCropInfoOne {
+            get {
+                return ResourceManager.GetString("lblCropInfoOne", resourceCulture);
             }
         }
         
@@ -876,6 +903,15 @@ namespace NMP.Portal.Resources {
         public static string lblHomePage {
             get {
                 return ResourceManager.GetString("lblHomePage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How do you plan to use the {0} from these fields?.
+        /// </summary>
+        public static string lblHowDoYouPlanToUseTheFromTheseFields {
+            get {
+                return ResourceManager.GetString("lblHowDoYouPlanToUseTheFromTheseFields", resourceCulture);
             }
         }
         
@@ -1682,6 +1718,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to tonnes/hectare.
+        /// </summary>
+        public static string lblTonnesAndHectare {
+            get {
+                return ResourceManager.GetString("lblTonnesAndHectare", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To start creating plans and records,.
         /// </summary>
         public static string lblToStartCreatingPlanAndRecords {
@@ -1840,6 +1885,24 @@ namespace NMP.Portal.Resources {
         public static string lblWhatIsTheCurrentCropType {
             get {
                 return ResourceManager.GetString("lblWhatIsTheCurrentCropType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the expected yield for {0} in {1}?.
+        /// </summary>
+        public static string lblWhatIsTheDifferentExpectedYield {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheDifferentExpectedYield", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the expected yield for {0} in these fields?.
+        /// </summary>
+        public static string lblWhatIsTheExpectedYieldForSingle {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheExpectedYieldForSingle", resourceCulture);
             }
         }
         
@@ -2236,6 +2299,15 @@ namespace NMP.Portal.Resources {
         public static string MsgEnterValidValueForNutrientIndex {
             get {
                 return ResourceManager.GetString("MsgEnterValidValueForNutrientIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter yield before continue.
+        /// </summary>
+        public static string MsgEnterYield {
+            get {
+                return ResourceManager.GetString("MsgEnterYield", resourceCulture);
             }
         }
         
