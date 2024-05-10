@@ -28,5 +28,6 @@ namespace NMP.Portal.ViewModels
         public string? YieldEncryptedCounter { get; set; }
         public decimal? Yield { get; set; }
         public decimal? Length { get; set; }
+        public string? FarmName { get; set; }
     }
 }

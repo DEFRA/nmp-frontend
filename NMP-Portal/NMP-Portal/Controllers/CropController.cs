@@ -11,6 +11,7 @@ using NMP.Portal.ViewModels;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Security.Claims;
+using System.Xml.Linq;
 using Error = NMP.Portal.ServiceResponses.Error;
 
 namespace NMP.Portal.Controllers
@@ -730,7 +731,7 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("CropInfoOne");
             }
 
-            return View(model);
+            return RedirectToAction("CheckAnswer"); ;
         }
 
         [HttpGet]
@@ -752,7 +753,7 @@ namespace NMP.Portal.Controllers
             return View(model);
         }
 
-                [HttpGet]
+        [HttpGet]
         public async Task<IActionResult> CheckAnswer()
         {
             PlanViewModel model = new PlanViewModel();
@@ -769,48 +770,76 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CheckAnswer(PlanViewModel model)
         {
-
+            Crop cropResponse = null;
+            Error error = null;
             int userId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value);
-            //var farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
-            //int farmId = model.FarmID;
-            //(Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-
-            CropData cropData = new CropData
+            
+            foreach (Crop crop in model.Crops)
             {
-                Crop = new Crop
+                crop.CreatedOn = DateTime.Now;
+                crop.CreatedByID = userId;
+                CropData cropData = new CropData
                 {
-                    CropTypeID = model.CropTypeID,
-                    CreatedOn = DateTime.Now,
-                    CreatedByID = userId
-                },
-                ManagementPeriods = new List<ManagementPeriod>
-                {
-                    new ManagementPeriod
+                    Crop = crop,
+                    ManagementPeriods = new List<ManagementPeriod>
                     {
-                        DefoliationID=1,
-                        Utilisation1ID=2,
-                        CreatedOn=DateTime.Now,
-                        CreatedByID=userId
+                        new ManagementPeriod
+                        {
+                            DefoliationID=1,
+                            Utilisation1ID=2,
+                            CreatedOn=DateTime.Now,
+                            CreatedByID=userId
+                        }
                     }
-                }
 
-            };
-            (Crop crop, Error error) = await _cropService.AddCropNutrientManagementPlan(cropData,model.FieldID??0);
-            //(Field fieldResponse, Error error1) = await _fieldService.AddFieldAsync(fieldData, farm.ID, farm.Name);
-            return RedirectToAction("CheckAnswer");
-            //if (error1.Message == null && fieldResponse != null)
-            //{
-            //    string success = _farmDataProtector.Protect("true");
-            //    string fieldName = _farmDataProtector.Protect(fieldResponse.Name);
-            //    _httpContextAccessor.HttpContext?.Session.Remove("FieldData");
+                };
+                (cropResponse, error) = await _cropService.AddCropNutrientManagementPlan(cropData, crop.FieldId??0);
+            }
 
-            //    return RedirectToAction("ManageFarmFields", new { id = model.EncryptedFarmId, q = success, name = fieldName });
-            //}
-            //else
-            //{
-            //    TempData["AddFieldError"] = Resource.MsgWeCouldNotAddYourFieldPleaseTryAgainLater;
-            //    return RedirectToAction("CheckAnswer");
-            //}
+            if (error.Message == null && cropResponse != null)
+            {
+                string success = _farmDataProtector.Protect("true");
+                _httpContextAccessor.HttpContext?.Session.Remove("CropData");
+                return RedirectToAction("HarvestYearOverview", new { id = model.EncryptedFarmId, q = success});
+            }
+            else
+            {
+                TempData["ErrorCreatePlan"] = Resource.MsgWeCouldNotCreateYourPlanPleaseTryAgainLater;
+                return RedirectToAction("CheckAnswer");
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> HarvestYearOverview(string id, string? q)
+        {
+            PlanViewModel model = new PlanViewModel();
+
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                ViewBag.Success = true;
+            }
+            else
+            {
+                ViewBag.Success = false;
+            }
+            if (!string.IsNullOrWhiteSpace(id))
+            {
+                int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
+               // model.Fields = await _fieldService.FetchFieldsByFarmId(farmId);
+
+                (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(farmId);
+                model.FarmName = farm.Name;
+                
+               // ViewBag.CropPlansList = model.Fields;
+                model.EncryptedFarmId = id;
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> HarvestYearOverview(PlanViewModel model)
+        {
+            return View(model);
         }
     }
 }

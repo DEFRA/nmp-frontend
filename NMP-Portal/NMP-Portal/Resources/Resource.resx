@@ -949,4 +949,40 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblWhatIsSowingDateinFields" xml:space="preserve">
     <value>What is the sowing date for {0} in these fields?</value>
   </data>
+  <data name="MsgWeCouldNotCreateYourPlanPleaseTryAgainLater" xml:space="preserve">
+    <value>We couldn’t create your plan, please try again later</value>
+  </data>
+  <data name="lblAddAnotherCrop" xml:space="preserve">
+    <value>Add another crop to this plan</value>
+  </data>
+  <data name="lblAddManuresToThisPlan" xml:space="preserve">
+    <value>Add manures to this plan</value>
+  </data>
+  <data name="lblChangeThisPlan" xml:space="preserve">
+    <value>Change this {0} plan</value>
+  </data>
+  <data name="lblCropPlanFor" xml:space="preserve">
+    <value>Crop plan for {0}</value>
+  </data>
+  <data name="lblHarvestYearOverview" xml:space="preserve">
+    <value>Harvest Year Overview</value>
+  </data>
+  <data name="lblLastUpdated" xml:space="preserve">
+    <value>Last updated: {0}</value>
+  </data>
+  <data name="lblPlanCreated" xml:space="preserve">
+    <value>Plan created</value>
+  </data>
+  <data name="lblPlansAndRecords" xml:space="preserve">
+    <value>Plans and records</value>
+  </data>
+  <data name="lblSecondCrop" xml:space="preserve">
+    <value>Second crop</value>
+  </data>
+  <data name="lblThereAreFieldsInThisPlan" xml:space="preserve">
+    <value>There are {0} fields in this plan</value>
+  </data>
+  <data name="lblViewRecommendations" xml:space="preserve">
+    <value>View recommendations</value>
+  </data>
 </root>
