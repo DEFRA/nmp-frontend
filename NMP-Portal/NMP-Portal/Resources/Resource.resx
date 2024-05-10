@@ -784,8 +784,8 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblSelectOneOption" xml:space="preserve">
     <value>Select one option</value>
   </data>
-  <data name="MsgSampleDateMustBeARealDate" xml:space="preserve">
-    <value>When was the soil sample taken? must be a real date</value>
+  <data name="MsgDateMustBeARealDate" xml:space="preserve">
+    <value>{0} must be a real date</value>
   </data>
   <data name="lblHowWouldYouLikeToCalculateSNSForCheckAnswer" xml:space="preserve">
     <value>How would you like to calculate the soil nitrogen supply</value>
@@ -910,8 +910,8 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblWhatIsTheDifferentExpectedYield" xml:space="preserve">
     <value>What is the expected yield for {0} in {1}?</value>
   </data>
-  <data name="lblHowDoYouPlanToUseTheFromTheseFields" xml:space="preserve">
-    <value>How do you plan to use the {0} from these fields?</value>
+  <data name="lblSelectTheCropInformationThatIsApplicable" xml:space="preserve">
+    <value>Select the crop information that is applicable</value>
   </data>
   <data name="MsgEnterYield" xml:space="preserve">
     <value>Enter yield before continue</value>
@@ -924,5 +924,20 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
   <data name="lblCropInfoOne" xml:space="preserve">
     <value>Crop info 1</value>
+  </data>
+  <data name="lblHowDoYouPlanToUseTheStrawFromTheseFields" xml:space="preserve">
+    <value>How do you plan to use the straw from these fields?</value>
+  </data>
+  <data name="lblCropInfoTwo" xml:space="preserve">
+    <value>Crop info two</value>
+  </data>
+  <data name="lblYield" xml:space="preserve">
+    <value>Yield</value>
+  </data>
+  <data name="lblYieldQuestion" xml:space="preserve">
+    <value>Yield question</value>
+  </data>
+  <data name="lblSowingDateForError" xml:space="preserve">
+    <value>SowingDate</value>
   </data>
 </root>

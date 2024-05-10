@@ -1,22 +1,25 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblCropGroup;
+    ViewData["Title"] = Resource.lblCropInfoTwo;
+    int PotatoGroupId = (int)NMP.Portal.Enums.CropGroup.Potatoes;
+    int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="HarvestYearForPlan" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="CropInfoOne" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="CropGroups" asp-controller="Crop" method="post">
+<form asp-action="CropInfoTwo" asp-controller="Crop" method="post">
     @Html.AntiForgeryToken()
-    @if (TempData["CropGroupError"] != null)
+    @if (TempData["CropInfoOneError"] != null)
     {
         <govuk-error-summary>
-            <govuk-error-summary-item href="#">@TempData["CropGroupError"]</govuk-error-summary-item>
+            <govuk-error-summary-item href="#">@TempData["CropInfoOneError"]</govuk-error-summary-item>
         </govuk-error-summary>
     }
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupId"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroup"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropType"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEnglishRules"></govuk-input>
@@ -26,8 +29,11 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SowingDateQuestion"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.YieldQuestion"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.YieldCurrentCounter" value="@Model.YieldCurrentCounter"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.YieldEncryptedCounter" value="@Model.YieldEncryptedCounter"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SowingDateCurrentCounter"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SowingDateEncryptedCounter" value="@Model.SowingDateEncryptedCounter"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropInfo1"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropInfo2"></govuk-input>
     @if (Model.FieldList != null && Model.FieldList.Count > 0)
     {
         @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -35,7 +41,6 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldList[i]" value="@Model.FieldList[i]"></govuk-input>
         }
     }
-
     @if (Model.Crops != null && Model.Crops.Count > 0)
     {
         @for (int i = 0; i < Model.Crops.Count; i++)
@@ -48,7 +53,6 @@
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].SowingDate" value="@Model.Crops[i].SowingDate"></govuk-date-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].Yield" value="@Model.Crops[i].Yield"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].CropInfo1" value="@Model.Crops[i].CropInfo1"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].CropInfo2" value="@Model.Crops[i].CropInfo2"></govuk-input>
         }
 
     }
@@ -56,18 +60,18 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
-            <govuk-radios asp-for="@Model.CropGroupId">
+            <govuk-radios asp-for="@Model.CropInfo2">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @Resource.lblCropGroupForPlan
+                        @Resource.lblHowDoYouPlanToUseTheStrawFromTheseFields
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
 
-                    @if (ViewBag.CropGroupList != null)
+                    @if (ViewBag.CropInfoTwoList != null)
                     {
-                        @foreach (var item in ViewBag.CropGroupList)
+                        @foreach (var item in ViewBag.CropInfoTwoList)
                         {
-                            <govuk-radios-item value="@item.CropGroupId">@item.CropGroupName</govuk-radios-item>
+                            <govuk-radios-item value="@item.CropInfo2Id">@item.CropInfo2</govuk-radios-item>
                         }
                     }
 
