@@ -4,7 +4,7 @@
     {
         England=1,
         Scotland=2,
-        Both=3
+        All=3
 
     }
 }

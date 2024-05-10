@@ -138,17 +138,22 @@ namespace NMP.Portal.Controllers
                         model.CropType = string.Empty;
                         model.CropTypeID = null;
                         model.CropInfo1 = null;
+                        model.CropInfo2 = null;
                     }
                 }
 
-                if(model.CropGroupId==(int)NMP.Portal.Enums.CropGroup.Other)
+                if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other)
                 {
                     model.CropInfo1 = null;
                     model.CropInfo2 = null;
                 }
-                else
+                else 
                 {
                     model.OtherCropName = null;
+                }
+                if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Cereals)
+                {
+                    model.CropInfo2 = null;
                 }
 
                 if (model.CropGroupId != null)
@@ -180,7 +185,7 @@ namespace NMP.Portal.Controllers
                 {
                     List<CropTypeResponse> cropTypes = await _fieldService.FetchCropTypes(model.CropGroupId ?? 0);
                     var country = model.IsEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
-                    var cropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.Both).ToList();
+                    var cropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.All).ToList();
                     ViewBag.CropTypeList = cropTypeList.OrderBy(c => c.CropType); ;
                 }
             }
@@ -219,7 +224,7 @@ namespace NMP.Portal.Controllers
                         List<CropTypeResponse> cropTypes = new List<CropTypeResponse>();
                         cropTypes = await _fieldService.FetchCropTypes(model.CropGroupId ?? 0);
                         var country = model.IsEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
-                        ViewBag.CropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.Both).ToList().OrderBy(c => c.CropType); ;
+                        ViewBag.CropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.All).ToList().OrderBy(c => c.CropType); ;
                     }
                     return View(model);
                 }
@@ -252,7 +257,7 @@ namespace NMP.Portal.Controllers
                     List<PotatoVarietyResponse> potatoVarieties = new List<PotatoVarietyResponse>();
                     potatoVarieties = await _cropService.FetchPotatoVarieties();
                     var country = model.IsEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
-                    ViewBag.PotatoVarietyList = potatoVarieties.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.Both).ToList().OrderBy(c => c.PotatoVariety); ;
+                    ViewBag.PotatoVarietyList = potatoVarieties.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.All).ToList().OrderBy(c => c.PotatoVariety); ;
                 }
             }
             catch (Exception ex)
@@ -280,7 +285,7 @@ namespace NMP.Portal.Controllers
                         List<PotatoVarietyResponse> potatoVarieties = new List<PotatoVarietyResponse>();
                         potatoVarieties = await _cropService.FetchPotatoVarieties();
                         var country = model.IsEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
-                        ViewBag.PotatoVarietyList = potatoVarieties.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.Both).ToList().OrderBy(c => c.PotatoVariety); ;
+                        ViewBag.PotatoVarietyList = potatoVarieties.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.All).ToList().OrderBy(c => c.PotatoVariety); ;
                     }
                     return View(model);
                 }
@@ -505,7 +510,7 @@ namespace NMP.Portal.Controllers
             if ((!ModelState.IsValid) && ModelState.ContainsKey("Crops[" + model.SowingDateCurrentCounter + "].SowingDate"))
             {
                 var dateError = ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Count > 0 ?
-                                ModelState["Crops[" + model.SowingDateCurrentCounter +"].SowingDate"].Errors[0].ErrorMessage.ToString() : null;
+                                ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors[0].ErrorMessage.ToString() : null;
 
                 if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, Resource.lblSowingDateForError)))
                 {
@@ -718,7 +723,7 @@ namespace NMP.Portal.Controllers
                 }
                 List<CropInfoOneResponse> cropInfoOneResponse = await _cropService.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0);
                 var country = model.IsEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
-                var cropInfoOneList = cropInfoOneResponse.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.Both).ToList();
+                var cropInfoOneList = cropInfoOneResponse.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.All).ToList();
                 ViewBag.CropInfoOneList = cropInfoOneList.OrderBy(c => c.CropInfo1Name); ;
 
             }
@@ -745,7 +750,7 @@ namespace NMP.Portal.Controllers
                 {
                     List<CropInfoOneResponse> cropInfoOneResponse = await _cropService.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0);
                     var country = model.IsEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
-                    var cropInfoOneList = cropInfoOneResponse.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.Both).ToList();
+                    var cropInfoOneList = cropInfoOneResponse.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.All).ToList();
                     ViewBag.CropInfoOneList = cropInfoOneList.OrderBy(c => c.CropInfo1Name);
                     return View(model);
                 }
@@ -763,8 +768,14 @@ namespace NMP.Portal.Controllers
                 TempData["CropInfoOneError"] = ex.Message;
                 return RedirectToAction("CropInfoOne");
             }
-
-            return RedirectToAction("CropInfoTwo");
+            if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Cereals)
+            {
+                return RedirectToAction("CropInfoTwo");
+            }
+            else
+            {
+                return RedirectToAction("CheckAnswer");
+            }
         }
 
         [HttpGet]
@@ -799,7 +810,7 @@ namespace NMP.Portal.Controllers
 
                 List<CropInfoTwoResponse> cropInfoTwoResponse = await _cropService.FetchCropInfoTwoByCropTypeId();
                 var country = model.IsEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
-                var cropInfoTwoList = cropInfoTwoResponse.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.Both).ToList();
+                var cropInfoTwoList = cropInfoTwoResponse.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.All).ToList();
                 ViewBag.CropInfoTwoList = cropInfoTwoList.OrderBy(c => c.CropInfo2);
 
 
@@ -828,12 +839,12 @@ namespace NMP.Portal.Controllers
                 {
                     List<CropInfoTwoResponse> cropInfoTwoResponse = await _cropService.FetchCropInfoTwoByCropTypeId();
                     var country = model.IsEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
-                    var cropInfoTwoList = cropInfoTwoResponse.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.Both).ToList();
+                    var cropInfoTwoList = cropInfoTwoResponse.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.All).ToList();
                     ViewBag.CropInfoTwoList = cropInfoTwoList.OrderBy(c => c.CropInfo2);
                     return View(model);
                 }
 
-                for(int i=0;i<model.Crops.Count;i++)
+                for (int i = 0; i < model.Crops.Count; i++)
                 {
                     model.Crops[i].CropInfo2 = model.CropInfo2;
                 }
