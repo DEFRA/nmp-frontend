@@ -10,6 +10,7 @@ using NMP.Portal.Services;
 using NMP.Portal.ViewModels;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Security.Claims;
 using Error = NMP.Portal.ServiceResponses.Error;
 
 namespace NMP.Portal.Controllers
@@ -361,7 +362,7 @@ namespace NMP.Portal.Controllers
 
                             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
                             {
-                               PlanViewModel planViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+                                PlanViewModel planViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
 
                                 if (planViewModel.Crops != null && planViewModel.Crops.Count > 0)
                                 {
@@ -567,7 +568,68 @@ namespace NMP.Portal.Controllers
             }
 
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
-            return RedirectToAction("YieldQuestion");
+            return RedirectToAction("CheckAnswer");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CheckAnswer()
+        {
+            PlanViewModel model = new PlanViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+            }
+
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CheckAnswer(PlanViewModel model)
+        {
+
+            int userId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value);
+            //var farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
+            //int farmId = model.FarmID;
+            //(Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+
+            CropData cropData = new CropData
+            {
+                Crop = new Crop
+                {
+                    CropTypeID = model.CropTypeID,
+                    CreatedOn = DateTime.Now,
+                    CreatedByID = userId
+                },
+                ManagementPeriods = new List<ManagementPeriod>
+                {
+                    new ManagementPeriod
+                    {
+                        DefoliationID=1,
+                        Utilisation1ID=2,
+                        CreatedOn=DateTime.Now,
+                        CreatedByID=userId
+                    }
+                }
+
+            };
+            (Crop crop, Error error) = await _cropService.AddCropNutrientManagementPlan(cropData,model.FieldID??0);
+            //(Field fieldResponse, Error error1) = await _fieldService.AddFieldAsync(fieldData, farm.ID, farm.Name);
+            return RedirectToAction("CheckAnswer");
+            //if (error1.Message == null && fieldResponse != null)
+            //{
+            //    string success = _farmDataProtector.Protect("true");
+            //    string fieldName = _farmDataProtector.Protect(fieldResponse.Name);
+            //    _httpContextAccessor.HttpContext?.Session.Remove("FieldData");
+
+            //    return RedirectToAction("ManageFarmFields", new { id = model.EncryptedFarmId, q = success, name = fieldName });
+            //}
+            //else
+            //{
+            //    TempData["AddFieldError"] = Resource.MsgWeCouldNotAddYourFieldPleaseTryAgainLater;
+            //    return RedirectToAction("CheckAnswer");
+            //}
         }
     }
 }

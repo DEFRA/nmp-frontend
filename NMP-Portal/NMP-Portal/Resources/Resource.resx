@@ -901,4 +901,28 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblPotato" xml:space="preserve">
     <value> potato </value>
   </data>
+  <data name="lblCreatePlan" xml:space="preserve">
+    <value>Create plan</value>
+  </data>
+  <data name="lblFirstCrop" xml:space="preserve">
+    <value>First crop</value>
+  </data>
+  <data name="lblFirstCropGroup" xml:space="preserve">
+    <value>First crop group</value>
+  </data>
+  <data name="lblHaveYouPlantedYourCrop" xml:space="preserve">
+    <value>Have you planted your {0} yet?</value>
+  </data>
+  <data name="lblHowDoYouWantToEnterExpectedYield" xml:space="preserve">
+    <value>How do you want to enter the expected yield?</value>
+  </data>
+  <data name="lblWhatIsExpectedYieldForFields" xml:space="preserve">
+    <value>What is the expected yield for {0} per hectare in these fields?</value>
+  </data>
+  <data name="lblWhatIsLengthOfGrowingSeasonForCrop" xml:space="preserve">
+    <value>What is the length of growing season for Maris Piper potato?</value>
+  </data>
+  <data name="lblWhatIsSowingDateinFields" xml:space="preserve">
+    <value>What is the sowing date for {0} in these fields?</value>
+  </data>
 </root>

@@ -25,5 +25,8 @@ namespace NMP.Portal.ViewModels
         public int TotalCount { get; set; } = 0;
         public int CropCurrentCounter { get; set; } = 0;
         public string? EncryptedCounter { get; set; }
+
+        public decimal? Yield { get; set; }
+        public decimal? Length { get; set; }
     }
 }

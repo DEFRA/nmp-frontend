@@ -46,6 +46,7 @@
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[@i].CropTypeID" name="crops[@i].CropTypeID" value="@Model.Crops[i].CropTypeID"></govuk-input>
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[@i].OtherCropName" name="crops[@i].OtherCropName" value="@Model.Crops[i].OtherCropName"></govuk-input>
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[@i].Variety" name="crops[@i].Variety" value="@Model.Crops[i].Variety"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldList"></govuk-input>
                     @if (Model.CropCurrentCounter == i)
                     {
                         <govuk-date-input asp-for="@Model.Crops[i].SowingDate" pattern="[0-9]*">

@@ -4,6 +4,7 @@ using NMP.Portal.Helpers;
 using NMP.Portal.Models;
 using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
+using System.Text;
 
 namespace NMP.Portal.Services
 {
@@ -103,6 +104,58 @@ namespace NMP.Portal.Services
                 throw new Exception(error.Message, ex);
             }
             return cropTypeResponse;
+        }
+        public async Task<(Crop, Error)> AddCropNutrientManagementPlan(CropData cropData, int fieldID)
+        {
+            string jsonData = JsonConvert.SerializeObject(cropData);
+            Crop crop = null;
+            Error error = new Error();
+            try
+            {
+                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
+                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
+                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                //bool IsFarmExist = await IsFieldExistAsync(farmId, fieldData.Field.Name);
+                //if (!IsFarmExist)
+                //{
+                    var response = await httpClient.PostAsync(string.Format(APIURLHelper.AddCropNutrientManagementPlanAsyncAPI, fieldID), new StringContent(jsonData, Encoding.UTF8, "application/json"));
+                    string result = await response.Content.ReadAsStringAsync();
+                    ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                    if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+                    {
+
+                        JObject farmDataJObject = responseWrapper.Data["Crop"] as JObject;
+                        if (cropData != null)
+                        {
+                            crop = farmDataJObject.ToObject<Crop>();
+                        }
+
+                    }
+                    else
+                    {
+                        if (responseWrapper != null && responseWrapper.Error != null)
+                        {
+                            error = responseWrapper.Error.ToObject<Error>();
+                            _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                        }
+                    }
+                //}
+                //else
+                //{
+                //    error.Message = Resource.MsgFieldAlreadyExist;
+                //}
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+            return (crop, error);
         }
     }
 }

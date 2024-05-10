@@ -25,5 +25,6 @@ namespace NMP.Portal.Helpers
         public const string FetchFieldsByFarmIdAsyncAPI = "fields/farms/{0}";
         public const string FetchPotatoVarietiesAsyncAPI = "vendors/rb209/Arable/PotatoVarieties";
         public const string FetchFieldByFieldIdAsyncAPI = "fields/{0}";
+        public const string AddCropNutrientManagementPlanAsyncAPI = "crops/fields/{0}";
     }
 }
