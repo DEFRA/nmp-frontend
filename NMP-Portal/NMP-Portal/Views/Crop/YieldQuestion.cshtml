@@ -12,7 +12,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@bachAction asp-controller="Crop" asp-route-q="@Model.EncryptedCounter">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@bachAction asp-controller="Crop" asp-route-q="@Model.SowingDateEncryptedCounter">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="YieldQuestion" asp-controller="Crop" method="post">
     @Html.AntiForgeryToken()
@@ -26,8 +26,8 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Variety"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherCropName"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropCurrentCounter"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCounter" value="@Model.EncryptedCounter"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SowingDateCurrentCounter"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SowingDateEncryptedCounter" value="@Model.SowingDateEncryptedCounter"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SowingDateQuestion" value="@Model.SowingDateQuestion"></govuk-input>
     @if (Model.FieldList != null && Model.FieldList.Count > 0)
     {
@@ -47,6 +47,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].OtherCropName" value="@Model.Crops[i].OtherCropName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].Variety" value="@Model.Crops[i].Variety"></govuk-input>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].SowingDate" value="@Model.Crops[i].SowingDate"></govuk-date-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].Yield" value="@Model.Crops[i].Yield"></govuk-input>
         }
 
     }

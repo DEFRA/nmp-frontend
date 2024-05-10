@@ -1,0 +1,4 @@
+﻿@using NMP.Portal.Resources
+@model NMP.Portal.ViewModels.PlanViewModel
+
+<p class="govuk-body cancel-link"><a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>

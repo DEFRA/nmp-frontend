@@ -5,6 +5,7 @@ namespace NMP.Portal.Services
     public interface ICropService
     {
         Task<List<PotatoVarietyResponse>> FetchPotatoVarieties();
-        Task<CropTypeResponse> FetchCropTypeByGroupId(int cropGroupId);
+        Task<int> FetchCropTypeByGroupId(int cropGroupId);
+        Task<List<CropInfoOneResponse>> FetchCropInfoOneByCropTypeId(int cropTypeId);
     }
 }
