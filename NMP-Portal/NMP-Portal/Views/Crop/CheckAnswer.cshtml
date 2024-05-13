@@ -4,6 +4,7 @@
     ViewData["Title"] = Resource.lblCheckYourAnswers;
     int PotatoGroupId = (int)NMP.Portal.Enums.CropGroup.Potatoes;
     int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
+    int CerealsGroupId = (int)NMP.Portal.Enums.CropGroup.Cereals;
     var yieldQuestion = "";
     var sowingDateQuestion = "";
 
@@ -35,7 +36,8 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="YieldQuestion" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(Model.CropGroupId==OtherGroupId?"Yield":Model.CropGroupId==CerealsGroupId?
+                 "CropInfoTwo": "CropInfoOne") asp-controller="Crop" asp-route-q="@Model.YieldEncryptedCounter">@Resource.lblBack</govuk-back-link>
 }
 
 
