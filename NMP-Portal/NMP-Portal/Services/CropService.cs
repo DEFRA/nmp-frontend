@@ -190,7 +190,7 @@ namespace NMP.Portal.Services
             }
             return cropInfoTwoList;
         }
-        public async Task<(Crop, Error)> AddCropNutrientManagementPlan(CropData cropData, int fieldID)
+        public async Task<(Crop, Error)> AddCropNutrientManagementPlan(CropData cropData)
         {
             string jsonData = JsonConvert.SerializeObject(cropData);
             Crop crop = null;
@@ -203,7 +203,7 @@ namespace NMP.Portal.Services
                 //bool IsFarmExist = await IsFieldExistAsync(farmId, fieldData.Field.Name);
                 //if (!IsFarmExist)
                 //{
-                    var response = await httpClient.PostAsync(string.Format(APIURLHelper.AddCropNutrientManagementPlanAsyncAPI, fieldID), new StringContent(jsonData, Encoding.UTF8, "application/json"));
+                    var response = await httpClient.PostAsync(APIURLHelper.AddCropNutrientManagementPlanAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
                     string result = await response.Content.ReadAsStringAsync();
                     ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                     if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")

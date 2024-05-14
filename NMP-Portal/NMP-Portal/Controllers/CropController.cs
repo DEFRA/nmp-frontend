@@ -897,10 +897,11 @@ namespace NMP.Portal.Controllers
                             CreatedOn=DateTime.Now,
                             CreatedByID=userId
                         }
-                    }
+                    },
+                    fieldID = crop.FieldId??0
 
                 };
-                (cropResponse, error) = await _cropService.AddCropNutrientManagementPlan(cropData, crop.FieldId??0);
+                (cropResponse, error) = await _cropService.AddCropNutrientManagementPlan(cropData);
             }
 
             if (error.Message == null && cropResponse != null)
