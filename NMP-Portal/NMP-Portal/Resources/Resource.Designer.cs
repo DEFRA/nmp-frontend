@@ -421,6 +421,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose the option that applies to your {0}.
+        /// </summary>
+        public static string lblChooseTheOptionThatAppliesToYour {
+            get {
+                return ResourceManager.GetString("lblChooseTheOptionThatAppliesToYour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Continue.
         /// </summary>
         public static string lblContinue {
@@ -624,6 +633,15 @@ namespace NMP.Portal.Resources {
         public static string lblEnterAddressManually {
             get {
                 return ResourceManager.GetString("lblEnterAddressManually", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a figure.
+        /// </summary>
+        public static string lblEnterAFigure {
+            get {
+                return ResourceManager.GetString("lblEnterAFigure", resourceCulture);
             }
         }
         
@@ -889,6 +907,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Figure.
+        /// </summary>
+        public static string lblFigure {
+            get {
+                return ResourceManager.GetString("lblFigure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to First crop.
         /// </summary>
         public static string lblFirstCrop {
@@ -970,11 +997,11 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How do you plan to use the straw from these fields?.
+        ///   Looks up a localized string similar to How do you plan to use the straw from your {0}?.
         /// </summary>
-        public static string lblHowDoYouPlanToUseTheStrawFromTheseFields {
+        public static string lblHowDoYouPlanToUseTheStrawFromYourCropType {
             get {
-                return ResourceManager.GetString("lblHowDoYouPlanToUseTheStrawFromTheseFields", resourceCulture);
+                return ResourceManager.GetString("lblHowDoYouPlanToUseTheStrawFromYourCropType", resourceCulture);
             }
         }
         
@@ -2168,6 +2195,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Year.
+        /// </summary>
+        public static string lblYear {
+            get {
+                return ResourceManager.GetString("lblYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Yes.
         /// </summary>
         public static string lblYes {
@@ -2209,6 +2245,15 @@ namespace NMP.Portal.Resources {
         public static string lblYieldQuestion {
             get {
                 return ResourceManager.GetString("lblYieldQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How do you want to enter the expected yield for your {0}?.
+        /// </summary>
+        public static string lblYieldQuestionForSingleField {
+            get {
+                return ResourceManager.GetString("lblYieldQuestionForSingleField", resourceCulture);
             }
         }
         
@@ -2402,6 +2447,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a figure before continuing.
+        /// </summary>
+        public static string MsgEnterFigureBeforeContinuing {
+            get {
+                return ResourceManager.GetString("MsgEnterFigureBeforeContinuing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the area only in numbers.
         /// </summary>
         public static string MsgEnterNumericValue {
@@ -2488,15 +2542,6 @@ namespace NMP.Portal.Resources {
         public static string MsgEnterValidValueForNutrientIndex {
             get {
                 return ResourceManager.GetString("MsgEnterValidValueForNutrientIndex", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Enter yield before continue.
-        /// </summary>
-        public static string MsgEnterYield {
-            get {
-                return ResourceManager.GetString("MsgEnterYield", resourceCulture);
             }
         }
         

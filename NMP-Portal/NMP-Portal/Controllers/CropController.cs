@@ -85,7 +85,7 @@ namespace NMP.Portal.Controllers
         {
             if (model.Year == null)
             {
-                ModelState.AddModelError("Year", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblHarvestYear.ToLower()));
+                ModelState.AddModelError("Year", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblYear.ToLower()));
             }
             if (!ModelState.IsValid)
             {
@@ -646,7 +646,7 @@ namespace NMP.Portal.Controllers
         {
             if (model.Crops[model.YieldCurrentCounter].Yield == null)
             {
-                ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", Resource.MsgEnterYield);
+                ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield",Resource.MsgEnterFigureBeforeContinuing);
             }
 
             if (!ModelState.IsValid)

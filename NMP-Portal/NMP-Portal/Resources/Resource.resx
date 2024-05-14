@@ -910,8 +910,8 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblSelectTheCropInformationThatIsApplicable" xml:space="preserve">
     <value>Select the crop information that is applicable</value>
   </data>
-  <data name="MsgEnterYield" xml:space="preserve">
-    <value>Enter yield before continue</value>
+  <data name="lblFigure" xml:space="preserve">
+    <value>Figure</value>
   </data>
   <data name="lbDoYouPlanToGrowAnyOtherCropsInTheseFields" xml:space="preserve">
     <value>Do you plan to grow any other crops in these fields?</value>
@@ -922,8 +922,8 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblCropInfoOne" xml:space="preserve">
     <value>Crop info 1</value>
   </data>
-  <data name="lblHowDoYouPlanToUseTheStrawFromTheseFields" xml:space="preserve">
-    <value>How do you plan to use the straw from these fields?</value>
+  <data name="lblHowDoYouPlanToUseTheStrawFromYourCropType" xml:space="preserve">
+    <value>How do you plan to use the straw from your {0}?</value>
   </data>
   <data name="lblCropInfoTwo" xml:space="preserve">
     <value>Crop info two</value>
@@ -1011,5 +1011,20 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
   <data name="MsgSoilAnalysisOlderThanFiveYears" xml:space="preserve">
     <value>Enter your soil nutrient values. As your soil sample is more than five years old, your crop need recommendations will be based on standard figures for your soil type.</value>
+  </data>
+  <data name="lblChooseTheOptionThatAppliesToYour" xml:space="preserve">
+    <value>Choose the option that applies to your {0}</value>
+  </data>
+  <data name="lblEnterAFigure" xml:space="preserve">
+    <value>Enter a figure</value>
+  </data>
+  <data name="lblYear" xml:space="preserve">
+    <value>Year</value>
+  </data>
+  <data name="lblYieldQuestionForSingleField" xml:space="preserve">
+    <value>How do you want to enter the expected yield for your {0}?</value>
+  </data>
+  <data name="MsgEnterFigureBeforeContinuing" xml:space="preserve">
+    <value>Enter a figure before continuing</value>
   </data>
 </root>
