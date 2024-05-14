@@ -32,5 +32,6 @@ namespace NMP.Portal.Models
         public int? CreatedByID { get; set; }
         public DateTime? ModifiedOn { get; set; }
         public int? ModifiedByID { get; set; }
+        public string? FieldName { get; set; }
     }
 }
