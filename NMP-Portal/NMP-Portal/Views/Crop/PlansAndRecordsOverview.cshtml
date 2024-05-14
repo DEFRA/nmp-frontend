@@ -1,0 +1,82 @@
+﻿@using NMP.Portal.Resources
+@using NMP.Portal.ViewModels
+@model PlanViewModel
+@{
+    ViewData["Title"] = Resource.lblPlansAndRecordsOverview;
+    var currentPlaningYear = Model.Year??0;
+    var previousPlaningYear = 0;
+    var nextPlaningYear = 0;
+    if (currentPlaningYear == System.DateTime.Now.Year)
+    {
+        previousPlaningYear = System.DateTime.Now.Year - 1;
+        nextPlaningYear = currentPlaningYear + 1;
+    }
+    else
+    {
+        previousPlaningYear = System.DateTime.Now.Year;
+        nextPlaningYear = System.DateTime.Now.Year + 1;
+    }
+
+}
+
+@if (ViewBag.Error != null)
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item href="#">@ViewBag.Error</govuk-error-summary-item>
+    </govuk-error-summary>
+}
+@if (Model != null)
+{
+    @section BeforeContent {
+    <govuk-breadcrumbs class="govuk-breadcrumbs-link">
+
+        <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+            @Resource.lblFarmName @* @Model.FarmName *@
+        </govuk-breadcrumbs-item>
+        <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
+            @Resource.lblPlansAndRecords
+        </govuk-breadcrumbs-item>
+        
+    </govuk-breadcrumbs>
+    }
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-l">@Resource.lblPlansAndRecords</h1>
+            
+            <p class="govuk-body">
+                <a asp-action="CropGroups" asp-controller="Crop">@string.Format(Resource.lblCreateAPlan, previousPlaningYear)</a>
+            </p>
+            <p class="govuk-body">
+                <a asp-action="CropGroups" asp-controller="Crop">@string.Format(Resource.lblCreateAPlan, nextPlaningYear)</a>
+            </p>
+
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th id="field_name" scope="col" class="govuk-table__header">@Resource.lblPlans</th>
+                        <th scope="col" class="govuk-table__header">@Resource.lblLastModified </th>
+                        <th scope="col" class="govuk-table__header"> </th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                    @* @if (ViewBag.CropPlansList != null)
+                    {
+                        @foreach (var item in ViewBag.CropPlansList)
+                        {
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell">@item</td>
+                                <td class="govuk-table__cell"></td>
+                                <td class="govuk-table__cell">
+                                    <a href="#">@Resource.lblViewRecommendations</a>
+                                </td>
+                            </tr>
+                        }
+                    } *@
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+

@@ -906,7 +906,7 @@ namespace NMP.Portal.Controllers
             if (error.Message == null && cropResponse != null)
             {
                 string success = _farmDataProtector.Protect("true");
-                _httpContextAccessor.HttpContext?.Session.Remove("CropData");
+                //_httpContextAccessor.HttpContext?.Session.Remove("CropData");
                 return RedirectToAction("HarvestYearOverview", new { id = model.EncryptedFarmId, q = success});
             }
             else
@@ -919,7 +919,11 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> HarvestYearOverview(string id, string? q)
         {
             PlanViewModel model = new PlanViewModel();
-
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+                _httpContextAccessor.HttpContext?.Session.Remove("CropData");
+            }
             if (!string.IsNullOrWhiteSpace(q))
             {
                 ViewBag.Success = true;
@@ -935,8 +939,14 @@ namespace NMP.Portal.Controllers
 
                 (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(farmId);
                 model.FarmName = farm.Name;
+                List<string> fields= new List<string>();
+                foreach (var field in model.FieldList)
+                {
+                    int fieldId = Convert.ToInt32(field);
+                    fields.Add((await _fieldService.FetchFieldByFieldId(fieldId)).Name);
+                }
                 
-               // ViewBag.CropPlansList = model.Fields;
+               ViewBag.CropPlansList = fields;
                 model.EncryptedFarmId = id;
             }
             return View(model);
@@ -945,6 +955,25 @@ namespace NMP.Portal.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> HarvestYearOverview(PlanViewModel model)
+        {
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> PlansAndRecordsOverview(string id, string? q)
+        {
+            PlanViewModel model = new PlanViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+            }
+            
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PlansAndRecordsOverview(PlanViewModel model)
         {
             return View(model);
         }
