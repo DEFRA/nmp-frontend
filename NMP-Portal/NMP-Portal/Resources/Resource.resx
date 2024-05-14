@@ -799,9 +799,6 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="MsgWeCouldNotAddYourFieldPleaseTryAgainLater" xml:space="preserve">
     <value>We couldn’t add your field, please try again later</value>
   </data>
-  <data name="MsgIfSampleDateIsFiveYearOld" xml:space="preserve">
-    <value>Enter your soil nutrient values. As your soil sample is more than five years old, your crop need recommendations will be based on standard figures for your soil type.</value>
-  </data>
   <data name="lblArea" xml:space="preserve">
     <value>area</value>
   </data>
@@ -974,7 +971,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Add manures to this plan</value>
   </data>
   <data name="lblChangeThisPlan" xml:space="preserve">
-    <value>Change this {0} plan</value>
+    <value>Change this plan</value>
   </data>
   <data name="lblCropPlanFor" xml:space="preserve">
     <value>Crop plan for {0}</value>
@@ -999,6 +996,21 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
   <data name="lblViewRecommendations" xml:space="preserve">
     <value>View recommendations</value>
+  </data>
+  <data name="lblCreateAPlan" xml:space="preserve">
+    <value>Create a {0} plan</value>
+  </data>
+  <data name="lblLastModified" xml:space="preserve">
+    <value>Last modified</value>
+  </data>
+  <data name="lblPlans" xml:space="preserve">
+    <value>plans</value>
+  </data>
+  <data name="lblPlansAndRecordsOverview" xml:space="preserve">
+    <value>Plans and records overview</value>
+  </data>
+  <data name="MsgSoilAnalysisOlderThanFiveYears" xml:space="preserve">
+    <value>Enter your soil nutrient values. As your soil sample is more than five years old, your crop need recommendations will be based on standard figures for your soil type.</value>
   </data>
   <data name="lblChooseTheOptionThatAppliesToYour" xml:space="preserve">
     <value>Choose the option that applies to your {0}</value>

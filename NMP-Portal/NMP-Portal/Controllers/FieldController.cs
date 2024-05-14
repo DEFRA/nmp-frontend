@@ -547,9 +547,6 @@ namespace NMP.Portal.Controllers
                 return View(model);
             }
 
-            int currentYear = DateTime.Now.Year;
-            model.IsSampleDateMoreThanFiveYearOld = model.SoilAnalyses.Date.Value.Year <= currentYear - 5 ? true : false;
-
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             if (model.IsCheckAnswer)
             {

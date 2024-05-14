@@ -394,7 +394,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Change this {0} plan.
+        ///   Looks up a localized string similar to Change this plan.
         /// </summary>
         public static string lblChangeThisPlan {
             get {
@@ -480,6 +480,15 @@ namespace NMP.Portal.Resources {
         public static string lblCreateANutrientManagementPlan {
             get {
                 return ResourceManager.GetString("lblCreateANutrientManagementPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a {0} plan.
+        /// </summary>
+        public static string lblCreateAPlan {
+            get {
+                return ResourceManager.GetString("lblCreateAPlan", resourceCulture);
             }
         }
         
@@ -1142,6 +1151,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Last modified.
+        /// </summary>
+        public static string lblLastModified {
+            get {
+                return ResourceManager.GetString("lblLastModified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Last updated: {0}.
         /// </summary>
         public static string lblLastUpdated {
@@ -1511,11 +1529,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to plans.
+        /// </summary>
+        public static string lblPlans {
+            get {
+                return ResourceManager.GetString("lblPlans", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Plans and records.
         /// </summary>
         public static string lblPlansAndRecords {
             get {
                 return ResourceManager.GetString("lblPlansAndRecords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plans and records overview.
+        /// </summary>
+        public static string lblPlansAndRecordsOverview {
+            get {
+                return ResourceManager.GetString("lblPlansAndRecordsOverview", resourceCulture);
             }
         }
         
@@ -2546,15 +2582,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter your soil nutrient values. As your soil sample is more than five years old, your crop need recommendations will be based on standard figures for your soil type..
-        /// </summary>
-        public static string MsgIfSampleDateIsFiveYearOld {
-            get {
-                return ResourceManager.GetString("MsgIfSampleDateIsFiveYearOld", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Enter a Land Parcel ID that is no more than 14 characters long.
         /// </summary>
         public static string MsgLandParcelIdMinMaxValidation {
@@ -2722,6 +2749,15 @@ namespace NMP.Portal.Resources {
         public static string MsgServiceNotAvailable {
             get {
                 return ResourceManager.GetString("MsgServiceNotAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter your soil nutrient values. As your soil sample is more than five years old, your crop need recommendations will be based on standard figures for your soil type..
+        /// </summary>
+        public static string MsgSoilAnalysisOlderThanFiveYears {
+            get {
+                return ResourceManager.GetString("MsgSoilAnalysisOlderThanFiveYears", resourceCulture);
             }
         }
         
