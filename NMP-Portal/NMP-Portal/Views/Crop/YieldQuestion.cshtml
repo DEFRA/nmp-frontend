@@ -7,7 +7,6 @@
     var UseTheStandardFigureOf8TonnesPerHectareForAllTheseFields = (int)NMP.Portal.Enums.YieldQuestion.UseTheStandardFigureOf8TonnesPerHectareForAllTheseFields;
     var bachAction = (Model.SowingDateQuestion == (int)NMP.Portal.Enums.SowingDateQuestion.NoIWillEnterTheDateLater) ? "SowingDateQuestion" :
      "SowingDate";
-    int PotatoGroupId = (int)NMP.Portal.Enums.CropGroup.Potatoes;
     int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
 }
 
@@ -65,13 +64,11 @@
             <govuk-radios asp-for="@Model.YieldQuestion">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @(Model.CropGroupId == PotatoGroupId ? string.Format(Resource.lblHowDoYouWantToEnterTheExpectedYieldForInTheseFields, Model.Variety + Resource.lblPotato) :
-                            Model.CropGroupId == OtherGroupId ? string.Format(Resource.lblHowDoYouWantToEnterTheExpectedYieldForInTheseFields, Model.OtherCropName) :
-                            string.Format(Resource.lblHowDoYouWantToEnterTheExpectedYieldForInTheseFields, Model.CropType))
+                        @(Model.CropGroupId == OtherGroupId ? string.Format(Model.Crops.Count > 1 ? Resource.lblHowDoYouWantToEnterTheExpectedYieldForInTheseFields : Resource.lblYieldQuestionForSingleField, Model.OtherCropName) :
+                            string.Format(Model.Crops.Count > 1 ? Resource.lblHowDoYouWantToEnterTheExpectedYieldForInTheseFields : Resource.lblYieldQuestionForSingleField, Model.CropType))
                     </govuk-radios-fieldset-legend>
-                    <govuk-radios-item value="@EnterASingleFigureForAllTheseFields">@Resource.lblEnterASingleFigureForAllTheseFields</govuk-radios-item>
+                    <govuk-radios-item value="@EnterASingleFigureForAllTheseFields">@(Model.Crops.Count > 1 ? Resource.lblEnterASingleFigureForAllTheseFields : Resource.lblEnterAFigure)</govuk-radios-item>
                     <govuk-radios-item value="@EnterDifferentFiguresForEachField">@Resource.lblEnterDifferentFiguresForEachField</govuk-radios-item>
-                    @* <govuk-radios-item value="@UseTheStandardFigureOf8TonnesPerHectareForAllTheseFields">@Resource.lblUseTheStandardFigureOf8TonnesPerHectareForAllTheseFields</govuk-radios-item> *@
                 </govuk-radios-fieldset>
             </govuk-radios>
             <govuk-button type="submit" class="margin-bottom-forty">

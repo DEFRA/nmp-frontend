@@ -2,7 +2,6 @@
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
     ViewData["Title"] = Resource.lblYield;
-    int PotatoGroupId = (int)NMP.Portal.Enums.CropGroup.Potatoes;
     int EnterASingleFigureForAllTheseFields = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
     int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
     var backAction = Model.Crops.Count > 1 ? "Yield" : Model.SowingDateQuestion != (int)NMP.Portal.Enums.SowingDateQuestion.NoIWillEnterTheDateLater ? "SowingDate" :
@@ -68,8 +67,11 @@
                     {
                         <govuk-input asp-for=@Model.Crops[i].Yield input-class="govuk-input--width-5" type="number" step="any" spellcheck="false">
                             <govuk-input-label is-page-heading="true" class="govuk-label--l">
-                                @(Model.YieldQuestion == EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheExpectedYieldForSingle, Model.CropGroupId == PotatoGroupId ? Model.Variety + Resource.lblPotato : Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType) :
-                                    string.Format(Resource.lblWhatIsTheDifferentExpectedYield, Model.CropGroupId == PotatoGroupId ? Model.Variety + Resource.lblPotato : Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType, Model.FieldName))
+                                @(Model.Crops.Count > 1 ?
+                                    Model.YieldQuestion == EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheExpectedYieldForSingle, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType) :
+                                    string.Format(Resource.lblWhatIsTheDifferentExpectedYield, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType, Model.FieldName)
+                                    : string.Format(Resource.lblWhatIsTheDifferentExpectedYield,Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType, Model.FieldName))
+
                             </govuk-input-label>
                             <govuk-input-suffix>@Resource.lblTonnesAndHectare</govuk-input-suffix>
                         </govuk-input>

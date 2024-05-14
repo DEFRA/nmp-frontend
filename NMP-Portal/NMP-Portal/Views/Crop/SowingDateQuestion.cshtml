@@ -69,14 +69,14 @@
             <govuk-radios asp-for="@Model.SowingDateQuestion">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @(Model.CropGroupId == PotatoGroupId ? string.Format(Resource.lblDoYouHaveADateForWhenYouPlantedYour, Model.Variety + Resource.lblPotato) :
-                            Model.CropGroupId == OtherGroupId ? string.Format(Resource.lblDoYouHaveADateForWhenYouPlantedYour, Model.OtherCropName) :
-                           string.Format(Resource.lblDoYouHaveADateForWhenYouPlantedYour,Model.CropType))
+                        @(Model.CropGroupId == OtherGroupId ? string.Format(Resource.lblDoYouHaveADateForWhenYouPlantedYour, Model.OtherCropName) :
+                            string.Format(Resource.lblDoYouHaveADateForWhenYouPlantedYour, Model.CropType))
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>
                         @Resource.lblYouCanChangeYourPlantingDateLater
                     </govuk-radios-hint>
-                    <govuk-radios-item value="@YesIHaveASingleDateForAllTheseFields">@Resource.lblYesIHaveASingleDateForAllTheseFields</govuk-radios-item>
+
+                    <govuk-radios-item value="@YesIHaveASingleDateForAllTheseFields">@(Model.Crops.Count > 1 ? Resource.lblYesIHaveASingleDateForAllTheseFields : Resource.lblYes)</govuk-radios-item>
                     @if (Model.Crops.Count > 1)
                     {
                         <govuk-radios-item value="@YesIHaveDifferentDatesForEachOfTheseFields">@Resource.lblYesIHaveDifferentDatesForEachOfTheseFields</govuk-radios-item>

@@ -2,7 +2,6 @@
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
     ViewData["Title"] = Resource.lblField;
-    int PotatoGroupId = (int)NMP.Portal.Enums.CropGroup.Potatoes;
     int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
 }
 
@@ -58,8 +57,7 @@
             <govuk-checkboxes name="FieldList" asp-for="FieldList">
                 <govuk-checkboxes-fieldset>
                     <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @(Model.CropGroupId==PotatoGroupId?string.Format(Resource.lblPotatoForField,Model.Variety):
-                            Model.CropGroupId == OtherGroupId ? string.Format(Resource.lblWhichFieldsDoYouPlanToGrow, Model.OtherCropName) :
+                        @(Model.CropGroupId == OtherGroupId ? string.Format(Resource.lblWhichFieldsDoYouPlanToGrow, Model.OtherCropName) :
                         string.Format(Resource.lblWhichFieldsDoYouPlanToGrow,Model.CropType))
                     </govuk-checkboxes-fieldset-legend>
 
