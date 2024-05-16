@@ -9,6 +9,8 @@ namespace NMP.Portal.ViewModels
         public string? OtherCropName { get; set; }
         public int? CropInfo1 { get; set; }
         public int? CropInfo2 { get; set; }
+        public string? CropInfo1Name { get; set; }
+        public string? CropInfo2Name { get; set; }
         public bool IsEnglishRules { get; set; }
         public string EncryptedFarmId { get; set; } = string.Empty;
         public int? CropGroupId { get; set; }
@@ -29,5 +31,8 @@ namespace NMP.Portal.ViewModels
         public decimal? Yield { get; set; }
         public decimal? Length { get; set; }
         public string? FarmName { get; set; }
+        public bool IsCheckAnswer { get; set; } = false;
+        public bool IsAnyChangeInField { get; set; } = false;
+        public bool IsQuestionChange { get; set; } = false;
     }
 }

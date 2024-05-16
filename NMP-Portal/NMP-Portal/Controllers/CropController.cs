@@ -8,6 +8,7 @@ using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
 using NMP.Portal.Services;
 using NMP.Portal.ViewModels;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Security.Claims;
@@ -92,7 +93,10 @@ namespace NMP.Portal.Controllers
                 return View(model);
             }
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
-
+            if (model.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
             return RedirectToAction("CropGroups");
         }
 
@@ -137,10 +141,15 @@ namespace NMP.Portal.Controllers
                     PlanViewModel CropData = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
                     if (CropData.CropGroupId != model.CropGroupId)
                     {
+                        model.IsCheckAnswer = false;
                         model.CropType = string.Empty;
                         model.CropTypeID = null;
                         model.CropInfo1 = null;
                         model.CropInfo2 = null;
+                    }
+                    else if (CropData.CropGroupId == model.CropGroupId && model.IsCheckAnswer)
+                    {
+                        return RedirectToAction("CheckAnswer");
                     }
                 }
 
@@ -149,7 +158,7 @@ namespace NMP.Portal.Controllers
                     model.CropInfo1 = null;
                     model.CropInfo2 = null;
                 }
-                else 
+                else
                 {
                     model.OtherCropName = null;
                 }
@@ -158,6 +167,7 @@ namespace NMP.Portal.Controllers
                 {
                     model.CropGroup = await _fieldService.FetchCropGroupById(model.CropGroupId.Value);
                 }
+
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
             }
             catch (Exception ex)
@@ -226,6 +236,22 @@ namespace NMP.Portal.Controllers
                     }
                     return View(model);
                 }
+                if (model.IsCheckAnswer)
+                {
+                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
+                    {
+                        PlanViewModel CropData = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+                        if (CropData.CropTypeID == model.CropTypeID)
+                        {
+                            return RedirectToAction("CheckAnswer");
+                        }
+                        else
+                        {
+                            model.IsCheckAnswer = false;
+                        }
+                    }
+                }
+
                 if (model.CropTypeID != null)
                 {
                     model.CropType = await _fieldService.FetchCropTypeById(model.CropTypeID.Value);
@@ -288,7 +314,10 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
-
+                if (model.IsCheckAnswer)
+                {
+                    return RedirectToAction("CheckAnswer");
+                }
                 return RedirectToAction("CropFields");
             }
             catch (Exception ex)
@@ -315,7 +344,11 @@ namespace NMP.Portal.Controllers
                     Text = f.Name
                 }).ToList();
                 ViewBag.fieldList = SelectListItem;
-
+                if (model.IsAnyChangeInField)
+                {
+                    model.IsAnyChangeInField = false;
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                }
             }
             catch (Exception ex)
             {
@@ -374,6 +407,8 @@ namespace NMP.Portal.Controllers
                                 Variety = model.Variety
                             };
 
+                            crop.FieldName = (await _fieldService.FetchFieldByFieldId(fieldId)).Name;
+
                             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
                             {
                                 PlanViewModel planViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
@@ -395,7 +430,41 @@ namespace NMP.Portal.Controllers
                         }
                     }
                 }
-
+                if (model.IsCheckAnswer)
+                {
+                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
+                    {
+                        bool matchFound = false;
+                        PlanViewModel planViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+                        if (planViewModel.Crops != null && planViewModel.Crops.Count > 0)
+                        {
+                            foreach (var cropList1 in model.Crops)
+                            {
+                                matchFound = planViewModel.Crops.Any(cropList2 => cropList2.FieldId == cropList1.FieldId);
+                                if (!matchFound || model.Crops.Count != planViewModel.Crops.Count)
+                                {
+                                    //model.IsCheckAnswer = false;
+                                    model.IsAnyChangeInField = true;
+                                    break;
+                                }
+                            }
+                            if(model.SowingDateQuestion==(int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveDifferentDatesForEachOfTheseFields||
+                               model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterDifferentFiguresForEachField)
+                            {
+                                if(model.Crops.Count==1)
+                                {
+                                    model.SowingDateQuestion = model.SowingDateQuestion == (int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveDifferentDatesForEachOfTheseFields ? null : model.SowingDateQuestion;
+                                    model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
+                                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                                }
+                            }
+                            if (matchFound && model.Crops.Count == planViewModel.Crops.Count)
+                            {
+                                return RedirectToAction("CheckAnswer");
+                            }
+                        }
+                    }
+                }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
 
                 return RedirectToAction("SowingDateQuestion");
@@ -416,6 +485,11 @@ namespace NMP.Portal.Controllers
                 if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
                 {
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+                }
+                if (model.IsQuestionChange)
+                {
+                    model.IsQuestionChange = false;
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                 }
 
             }
@@ -439,8 +513,25 @@ namespace NMP.Portal.Controllers
             {
                 return View(model);
             }
-            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+            if (model.IsCheckAnswer)
+            {
+                PlanViewModel planViewModel = new PlanViewModel();
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
+                {
+                    planViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+                }
+                if (planViewModel.SowingDateQuestion == model.SowingDateQuestion && (!model.IsAnyChangeInField))
+                {
+                    return RedirectToAction("CheckAnswer");
+                }
+                else
+                {
+                    model.IsQuestionChange = true;
+                    model.SowingDateCurrentCounter = 0;
+                }
+            }
 
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
             if (model.SowingDateQuestion == (int)NMP.Portal.Enums.SowingDateQuestion.NoIWillEnterTheDateLater)
             {
                 if (model.Crops != null)
@@ -454,6 +545,11 @@ namespace NMP.Portal.Controllers
                     }
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                 }
+                if (model.IsCheckAnswer && (!model.IsAnyChangeInField))
+                {
+                    return RedirectToAction("CheckAnswer");
+                }
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                 return RedirectToAction("YieldQuestion");
             }
             else
@@ -476,7 +572,8 @@ namespace NMP.Portal.Controllers
                 if (model.SowingDateCurrentCounter == 0)
                 {
                     model.FieldID = model.Crops[0].FieldId.Value;
-                    model.FieldName = (await _fieldService.FetchFieldByFieldId(model.Crops[0].FieldId.Value)).Name;
+                    //model.FieldName = (await _fieldService.FetchFieldByFieldId(model.Crops[0].FieldId.Value)).Name;
+                    model.Crops[0].EncryptedCounter = _fieldDataProtector.Protect((model.SowingDateCurrentCounter + 1).ToString());
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
             }
@@ -532,33 +629,49 @@ namespace NMP.Portal.Controllers
                 {
                     if (model.FieldID == model.Crops[i].FieldId.Value)
                     {
+                        model.SowingDateCurrentCounter++;
                         if (i + 1 < model.Crops.Count)
                         {
                             model.FieldID = model.Crops[i + 1].FieldId.Value;
-                            model.FieldName = (await _fieldService.FetchFieldByFieldId(model.Crops[i + 1].FieldId.Value)).Name;
+                            //model.Crops[i + 1].FieldName = (await _fieldService.FetchFieldByFieldId(model.Crops[i + 1].FieldId.Value)).Name;
+                            model.Crops[i + 1].EncryptedCounter = _fieldDataProtector.Protect((model.SowingDateCurrentCounter + 1).ToString());
                         }
 
-                        model.SowingDateCurrentCounter++;
                         break;
                     }
                 }
                 model.SowingDateEncryptedCounter = _fieldDataProtector.Protect(model.SowingDateCurrentCounter.ToString());
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                if (model.IsCheckAnswer && (!model.IsAnyChangeInField) && (!model.IsQuestionChange))
+                {
+                    return RedirectToAction("CheckAnswer");
+                }
             }
+
             else if (model.SowingDateQuestion == (int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields)
             {
                 model.SowingDateCurrentCounter = 1;
                 for (int i = 0; i < model.Crops.Count; i++)
                 {
                     model.Crops[i].SowingDate = model.Crops[0].SowingDate;
+                    model.Crops[i].EncryptedCounter = _fieldDataProtector.Protect(model.SowingDateCurrentCounter.ToString());
                 }
                 model.SowingDateEncryptedCounter = _fieldDataProtector.Protect(model.SowingDateCurrentCounter.ToString());
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                if (model.IsCheckAnswer && (!model.IsAnyChangeInField))
+                {
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                    return RedirectToAction("CheckAnswer");
+                }
                 return RedirectToAction("YieldQuestion");
             }
 
             if (model.SowingDateCurrentCounter == model.Crops.Count)
             {
+                if (model.IsCheckAnswer && (!model.IsAnyChangeInField))
+                {
+                    return RedirectToAction("CheckAnswer");
+                }
                 return RedirectToAction("YieldQuestion");
             }
             else
@@ -574,6 +687,11 @@ namespace NMP.Portal.Controllers
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+            }
+            if (model.IsQuestionChange)
+            {
+                model.IsQuestionChange = false;
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
             }
             if (model.Crops.Count == 1)
             {
@@ -597,7 +715,23 @@ namespace NMP.Portal.Controllers
             {
                 return View(model);
             }
-
+            if (model.IsCheckAnswer)
+            {
+                PlanViewModel planViewModel = new PlanViewModel();
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
+                {
+                    planViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+                }
+                if (planViewModel.YieldQuestion == model.YieldQuestion && (!model.IsAnyChangeInField))
+                {
+                    return RedirectToAction("CheckAnswer");
+                }
+                else
+                {
+                    model.IsQuestionChange = true;
+                    model.YieldCurrentCounter = 0;
+                }
+            }
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
             return RedirectToAction("Yield");
         }
@@ -616,7 +750,7 @@ namespace NMP.Portal.Controllers
                 if (model.YieldCurrentCounter == 0)
                 {
                     model.FieldID = model.Crops[0].FieldId.Value;
-                    model.FieldName = (await _fieldService.FetchFieldByFieldId(model.Crops[0].FieldId.Value)).Name;
+                    model.Crops[0].EncryptedCounter = _fieldDataProtector.Protect((model.YieldCurrentCounter + 1).ToString());
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
             }
@@ -646,7 +780,7 @@ namespace NMP.Portal.Controllers
         {
             if (model.Crops[model.YieldCurrentCounter].Yield == null)
             {
-                ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield",Resource.MsgEnterFigureBeforeContinuing);
+                ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", Resource.MsgEnterFigureBeforeContinuing);
             }
 
             if (!ModelState.IsValid)
@@ -660,18 +794,22 @@ namespace NMP.Portal.Controllers
                 {
                     if (model.FieldID == model.Crops[i].FieldId.Value)
                     {
+                        model.YieldCurrentCounter++;
                         if (i + 1 < model.Crops.Count)
                         {
                             model.FieldID = model.Crops[i + 1].FieldId.Value;
-                            model.FieldName = (await _fieldService.FetchFieldByFieldId(model.Crops[i + 1].FieldId.Value)).Name;
+                            model.Crops[i + 1].EncryptedCounter = _fieldDataProtector.Protect((model.YieldCurrentCounter + 1).ToString());
                         }
 
-                        model.YieldCurrentCounter++;
                         break;
                     }
                 }
                 model.YieldEncryptedCounter = _fieldDataProtector.Protect(model.YieldCurrentCounter.ToString());
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                if (model.IsCheckAnswer && (!model.IsAnyChangeInField) && (!model.IsQuestionChange))
+                {
+                    return RedirectToAction("CheckAnswer");
+                }
             }
             else if (model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
             {
@@ -682,8 +820,13 @@ namespace NMP.Portal.Controllers
                 }
                 model.YieldEncryptedCounter = _fieldDataProtector.Protect(model.YieldCurrentCounter.ToString());
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
-                if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other)
+                if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other || (model.IsCheckAnswer))
                 {
+                    if (model.IsAnyChangeInField)
+                    {
+                        model.IsAnyChangeInField = false;
+                    }
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                     return RedirectToAction("CheckAnswer");
                 }
                 else
@@ -694,8 +837,13 @@ namespace NMP.Portal.Controllers
 
             if (model.YieldCurrentCounter == model.Crops.Count)
             {
-                if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other)
+                if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other || (model.IsCheckAnswer))
                 {
+                    if (model.IsAnyChangeInField)
+                    {
+                        model.IsAnyChangeInField = false;
+                    }
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                     return RedirectToAction("CheckAnswer");
                 }
                 else
@@ -740,18 +888,20 @@ namespace NMP.Portal.Controllers
         {
             try
             {
+                List<CropInfoOneResponse> cropInfoOneResponse = await _cropService.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0);
+                var country = model.IsEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
+                var cropInfoOneList = cropInfoOneResponse.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.All).ToList();
                 if (model.CropInfo1 == null)
                 {
                     ModelState.AddModelError("CropInfo1", Resource.MsgSelectAnOptionBeforeContinuing);
                 }
                 if (!ModelState.IsValid)
                 {
-                    List<CropInfoOneResponse> cropInfoOneResponse = await _cropService.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0);
-                    var country = model.IsEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
-                    var cropInfoOneList = cropInfoOneResponse.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.All).ToList();
+
                     ViewBag.CropInfoOneList = cropInfoOneList.OrderBy(c => c.CropInfo1Name);
                     return View(model);
                 }
+                model.CropInfo1Name = cropInfoOneList.FirstOrDefault(x => x.CropInfo1Id == model.CropInfo1).CropInfo1Name;
 
                 for (int i = 0; i < model.Crops.Count; i++)
                 {
@@ -765,6 +915,10 @@ namespace NMP.Portal.Controllers
             {
                 TempData["CropInfoOneError"] = ex.Message;
                 return RedirectToAction("CropInfoOne");
+            }
+            if (model.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
             }
             if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Cereals)
             {
@@ -811,8 +965,6 @@ namespace NMP.Portal.Controllers
                 var country = model.IsEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
                 var cropInfoTwoList = cropInfoTwoResponse.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.All).ToList();
                 ViewBag.CropInfoTwoList = cropInfoTwoList.OrderBy(c => c.CropInfo2);
-
-
             }
             catch (Exception ex)
             {
@@ -829,6 +981,9 @@ namespace NMP.Portal.Controllers
         {
             try
             {
+                List<CropInfoTwoResponse> cropInfoTwoResponse = await _cropService.FetchCropInfoTwoByCropTypeId();
+                var country = model.IsEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
+                var cropInfoTwoList = cropInfoTwoResponse.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.All).ToList();
                 if (model.CropInfo2 == null)
                 {
                     ModelState.AddModelError("CropInfo2", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -836,13 +991,10 @@ namespace NMP.Portal.Controllers
 
                 if (!ModelState.IsValid)
                 {
-                    List<CropInfoTwoResponse> cropInfoTwoResponse = await _cropService.FetchCropInfoTwoByCropTypeId();
-                    var country = model.IsEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
-                    var cropInfoTwoList = cropInfoTwoResponse.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.All).ToList();
                     ViewBag.CropInfoTwoList = cropInfoTwoList.OrderBy(c => c.CropInfo2);
                     return View(model);
                 }
-
+                model.CropInfo2Name = cropInfoTwoList.FirstOrDefault(x => x.CropInfo2Id == model.CropInfo2).CropInfo2;
                 for (int i = 0; i < model.Crops.Count; i++)
                 {
                     model.Crops[i].CropInfo2 = model.CropInfo2;
@@ -868,10 +1020,25 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
             }
-
-
+            model.IsCheckAnswer = true;
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("CropData", model);
             return View(model);
         }
+
+        public IActionResult BackCheckAnswer()
+        {
+            PlanViewModel? model = null;
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+            }
+            string action = model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other ? "Yield" : model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Cereals ?
+                "CropInfoTwo" : "CropInfoOne";
+            model.IsCheckAnswer = false;
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("CropData", model);
+            return RedirectToAction(action,new { q = model.YieldEncryptedCounter });
+        }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -880,7 +1047,6 @@ namespace NMP.Portal.Controllers
             Crop cropResponse = null;
             Error error = null;
             int userId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value);
-            
             foreach (Crop crop in model.Crops)
             {
                 crop.CreatedOn = DateTime.Now;
@@ -901,14 +1067,14 @@ namespace NMP.Portal.Controllers
                     fieldID = crop.FieldId??0
 
                 };
-                (cropResponse, error) = await _cropService.AddCropNutrientManagementPlan(cropData);
+                (cropResponse, error) = await _cropService.AddCropNutrientManagementPlan(cropData, crop.FieldId ?? 0);
             }
 
             if (error.Message == null && cropResponse != null)
             {
                 string success = _farmDataProtector.Protect("true");
-                //_httpContextAccessor.HttpContext?.Session.Remove("CropData");
-                return RedirectToAction("HarvestYearOverview", new { id = model.EncryptedFarmId, q = success});
+                _httpContextAccessor.HttpContext?.Session.Remove("CropData");
+                return RedirectToAction("HarvestYearOverview", new { id = model.EncryptedFarmId, q = success });
             }
             else
             {
@@ -936,7 +1102,7 @@ namespace NMP.Portal.Controllers
             if (!string.IsNullOrWhiteSpace(id))
             {
                 int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
-               // model.Fields = await _fieldService.FetchFieldsByFarmId(farmId);
+                // model.Fields = await _fieldService.FetchFieldsByFarmId(farmId);
 
                 (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(farmId);
                 model.FarmName = farm.Name;

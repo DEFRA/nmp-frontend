@@ -907,8 +907,8 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblWhatIsTheDifferentExpectedYield" xml:space="preserve">
     <value>What is the expected yield for {0} in {1}?</value>
   </data>
-  <data name="lblSelectTheCropInformationThatIsApplicable" xml:space="preserve">
-    <value>Select the crop information that is applicable</value>
+  <data name="lblChooseTheOptionThatAppliesToYour" xml:space="preserve">
+    <value>Choose the option that applies to your {0}</value>
   </data>
   <data name="lblFigure" xml:space="preserve">
     <value>Figure</value>
@@ -940,11 +940,8 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblCreatePlan" xml:space="preserve">
     <value>Create plan</value>
   </data>
-  <data name="lblFirstCrop" xml:space="preserve">
-    <value>First crop</value>
-  </data>
-  <data name="lblFirstCropGroup" xml:space="preserve">
-    <value>First crop group</value>
+  <data name="lblMainCropType" xml:space="preserve">
+    <value>Main crop type</value>
   </data>
   <data name="lblHaveYouPlantedYourCrop" xml:space="preserve">
     <value>Have you planted your {0} yet?</value>
@@ -1012,9 +1009,6 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="MsgSoilAnalysisOlderThanFiveYears" xml:space="preserve">
     <value>Enter your soil nutrient values. As your soil sample is more than five years old, your crop need recommendations will be based on standard figures for your soil type.</value>
   </data>
-  <data name="lblChooseTheOptionThatAppliesToYour" xml:space="preserve">
-    <value>Choose the option that applies to your {0}</value>
-  </data>
   <data name="lblEnterAFigure" xml:space="preserve">
     <value>Enter a figure</value>
   </data>
@@ -1026,5 +1020,29 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
   <data name="MsgEnterFigureBeforeContinuing" xml:space="preserve">
     <value>Enter a figure before continuing</value>
+  </data>
+  <data name="lblNotEntered" xml:space="preserve">
+    <value>Not entered</value>
+  </data>
+  <data name="lblCropInfo1ForCheckAnswer" xml:space="preserve">
+    <value>Which option applies to your {0}?</value>
+  </data>
+  <data name="lblCropInfo2ForCheckAnswer" xml:space="preserve">
+    <value>How do you plan to use the straw from your {0}?</value>
+  </data>
+  <data name="lblMainCropGroup" xml:space="preserve">
+    <value>Main crop group</value>
+  </data>
+  <data name="lblSowingDateQuestionForCheckAnswer" xml:space="preserve">
+    <value>Do you have a planting date for your {0}?</value>
+  </data>
+  <data name="lblSowingDiffrentDateForCheckAnswer" xml:space="preserve">
+    <value>When is the planting date for {0} in {1}?</value>
+  </data>
+  <data name="lblSowingSingleDateForCheckAnswer" xml:space="preserve">
+    <value>When is the planting date for your {0}?</value>
+  </data>
+  <data name="lblVarietyNameForCheckAnswer" xml:space="preserve">
+    <value>Variety name</value>
   </data>
 </root>
