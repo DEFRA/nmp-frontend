@@ -1,0 +1,80 @@
+﻿@using NMP.Portal.Resources
+@model NMP.Portal.ViewModels.PlanViewModel
+@{
+    ViewData["Title"] = Resource.lblRecommendations;
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.YieldEncryptedCounter">@Resource.lblBack</govuk-back-link>
+}
+<form asp-action="Recommendations" asp-controller="Crop" method="post">
+    @Html.AntiForgeryToken()
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-l">
+                @string.Format(Resource.lblNutrientRecommendationsFor,Model.FieldName,Model.Year)
+            </h1>
+            @foreach(var crop in Model.Crops)
+            {
+            <govuk-table>
+                <govuk-table__caption class="govuk-table__caption--m">@string.Format(Resource.lblNutrientRecommendations,crop.CropTypeID)</govuk-table__caption>
+                <govuk-table__head>
+                    <govuk-table__row>
+                        <govuk-table__header scope="col">@Resource.lblNutrient</govuk-table__header>
+                        <govuk-table__header scope="col">@Resource.lblIndexPH</govuk-table__header>
+                        <govuk-table__header scope="col">
+                            @Resource.lblCropNeed
+                            <span>@Resource.lblPerHectare</span>
+                        </govuk-table__header>
+                    </govuk-table__row>
+                </govuk-table__head>
+                <govuk-table__body>
+                    <govuk-table__row>
+                        <govuk-table__header scope="row">First 6 weeks</govuk-table__header>
+                        <govuk-table__cell>£109.80 per week</govuk-table__cell>
+                    </govuk-table__row>
+                </govuk-table__body>
+            </govuk-table>
+            <govuk-table>
+                <govuk-table__caption class="govuk-table__caption--m">@Resource.lblCropDetails</govuk-table__caption>
+                <govuk-table__head>
+                    <govuk-table__row>
+                        <govuk-table__header scope="col">@Resource.lblNutrient</govuk-table__header>
+                        <govuk-table__header scope="col">@Resource.lblIndexPH</govuk-table__header>
+                        <govuk-table__header scope="col">
+                            @Resource.lblCropNeed
+                            <span>@Resource.lblPerHectare</span>
+                        </govuk-table__header>
+                    </govuk-table__row>
+                </govuk-table__head>
+                <govuk-table__body>
+                    <govuk-table__row>
+                        <govuk-table__header scope="row">@Resource.lblCropType</govuk-table__header>
+                        <govuk-table__cell>@crop.CropTypeID</govuk-table__cell>
+                            <govuk-table__header scope="row">@Resource.lblVariety</govuk-table__header>
+                        <govuk-table__header scope="row">@crop.Variety</govuk-table__header>
+                            <govuk-table__header scope="row">@Resource.lblSowingDate</govuk-table__header>
+                            <govuk-table__header scope="row">@crop.SowingDate</govuk-table__header>
+                            <govuk-table__header scope="row">@Resource.lblEstimatedYield</govuk-table__header>
+                            <govuk-table__header scope="row">@crop.Yield</govuk-table__header>
+                            @if(Model.CropGroupId!=(int)NMP.Portal.Enums.CropGroup.Other)
+                            {
+                                <govuk-table__header scope="row">@Resource.lblCropUse</govuk-table__header>
+                                <govuk-table__header scope="row">@crop.CropInfo1</govuk-table__header>
+                            }
+                            @if (Model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Cereals)
+                            {
+                                <govuk-table__header scope="row">@Resource.lblStrawUse</govuk-table__header>
+                                <govuk-table__header scope="row">@crop.CropInfo2</govuk-table__header>
+                            }
+                            <govuk-table__cell></govuk-table__cell>
+                    </govuk-table__row>
+                </govuk-table__body>
+            </govuk-table>
+                <a class="govuk-notification-banner__link" asp-action="" asp-controller="Crop">@string.Format(Resource.lblChangeLinkForRecommendation, crop.CropTypeID,crop.FieldId)</a>
+            }
+            
+        </div>
+
+    </div>
+</form>

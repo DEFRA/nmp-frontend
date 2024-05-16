@@ -1045,4 +1045,43 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblVarietyNameForCheckAnswer" xml:space="preserve">
     <value>Variety name</value>
   </data>
+  <data name="lblChangeLinkForRecommendation" xml:space="preserve">
+    <value>Change {0} details for {1}</value>
+  </data>
+  <data name="lblCropDetails" xml:space="preserve">
+    <value>Crop details</value>
+  </data>
+  <data name="lblCropNeed" xml:space="preserve">
+    <value>Crop need</value>
+  </data>
+  <data name="lblCropUse" xml:space="preserve">
+    <value>Crop use</value>
+  </data>
+  <data name="lblEstimatedYield" xml:space="preserve">
+    <value>Estimated yield</value>
+  </data>
+  <data name="lblIndexPH" xml:space="preserve">
+    <value>Index / pH</value>
+  </data>
+  <data name="lblNutrient" xml:space="preserve">
+    <value>Nutrient</value>
+  </data>
+  <data name="lblNutrientRecommendations" xml:space="preserve">
+    <value>{0} nutrient recommendations</value>
+  </data>
+  <data name="lblNutrientRecommendationsFor" xml:space="preserve">
+    <value>Nutrient recommendations for {0} {1}</value>
+  </data>
+  <data name="lblPerHectare" xml:space="preserve">
+    <value>per hectare</value>
+  </data>
+  <data name="lblRecommendations" xml:space="preserve">
+    <value>Recommendations</value>
+  </data>
+  <data name="lblStrawUse" xml:space="preserve">
+    <value>Straw use</value>
+  </data>
+  <data name="lblVariety" xml:space="preserve">
+    <value>Variety</value>
+  </data>
 </root>

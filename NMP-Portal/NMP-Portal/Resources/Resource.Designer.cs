@@ -394,6 +394,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change {0} details for {1}.
+        /// </summary>
+        public static string lblChangeLinkForRecommendation {
+            get {
+                return ResourceManager.GetString("lblChangeLinkForRecommendation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change this plan.
         /// </summary>
         public static string lblChangeThisPlan {
@@ -502,6 +511,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Crop details.
+        /// </summary>
+        public static string lblCropDetails {
+            get {
+                return ResourceManager.GetString("lblCropDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Crop Group.
         /// </summary>
         public static string lblCropGroup {
@@ -556,6 +574,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Crop need.
+        /// </summary>
+        public static string lblCropNeed {
+            get {
+                return ResourceManager.GetString("lblCropNeed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cropped area (optional).
         /// </summary>
         public static string lblCroppedArea {
@@ -597,6 +624,15 @@ namespace NMP.Portal.Resources {
         public static string lblCropTypeForPlan {
             get {
                 return ResourceManager.GetString("lblCropTypeForPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Crop use.
+        /// </summary>
+        public static string lblCropUse {
+            get {
+                return ResourceManager.GetString("lblCropUse", resourceCulture);
             }
         }
         
@@ -759,6 +795,15 @@ namespace NMP.Portal.Resources {
         public static string lblEstimateBasedOnPreviousCrop {
             get {
                 return ResourceManager.GetString("lblEstimateBasedOnPreviousCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Estimated yield.
+        /// </summary>
+        public static string lblEstimatedYield {
+            get {
+                return ResourceManager.GetString("lblEstimatedYield", resourceCulture);
             }
         }
         
@@ -1066,6 +1111,15 @@ namespace NMP.Portal.Resources {
         public static string lblIfYouhaveMoreThanOneHolding {
             get {
                 return ResourceManager.GetString("lblIfYouhaveMoreThanOneHolding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Index / pH.
+        /// </summary>
+        public static string lblIndexPH {
+            get {
+                return ResourceManager.GetString("lblIndexPH", resourceCulture);
             }
         }
         
@@ -1403,6 +1457,33 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nutrient.
+        /// </summary>
+        public static string lblNutrient {
+            get {
+                return ResourceManager.GetString("lblNutrient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} nutrient recommendations.
+        /// </summary>
+        public static string lblNutrientRecommendations {
+            get {
+                return ResourceManager.GetString("lblNutrientRecommendations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nutrient recommendations for {0} {1}.
+        /// </summary>
+        public static string lblNutrientRecommendationsFor {
+            get {
+                return ResourceManager.GetString("lblNutrientRecommendationsFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How would you like to enter your soil nutrient values?.
         /// </summary>
         public static string lblNutrientValueTypeForCheckAnswere {
@@ -1480,6 +1561,15 @@ namespace NMP.Portal.Resources {
         public static string lblOtherReferenceForCheckAnswere {
             get {
                 return ResourceManager.GetString("lblOtherReferenceForCheckAnswere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to per hectare.
+        /// </summary>
+        public static string lblPerHectare {
+            get {
+                return ResourceManager.GetString("lblPerHectare", resourceCulture);
             }
         }
         
@@ -1669,6 +1759,15 @@ namespace NMP.Portal.Resources {
         public static string lblRainfallManual {
             get {
                 return ResourceManager.GetString("lblRainfallManual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recommendations.
+        /// </summary>
+        public static string lblRecommendations {
+            get {
+                return ResourceManager.GetString("lblRecommendations", resourceCulture);
             }
         }
         
@@ -1898,6 +1997,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Straw use.
+        /// </summary>
+        public static string lblStrawUse {
+            get {
+                return ResourceManager.GetString("lblStrawUse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sulpher Deficient.
         /// </summary>
         public static string lblSulpherDeficient {
@@ -2029,6 +2137,15 @@ namespace NMP.Portal.Resources {
         public static string lblUseThisServiceToPlan {
             get {
                 return ResourceManager.GetString("lblUseThisServiceToPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variety.
+        /// </summary>
+        public static string lblVariety {
+            get {
+                return ResourceManager.GetString("lblVariety", resourceCulture);
             }
         }
         
