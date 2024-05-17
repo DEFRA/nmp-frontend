@@ -1067,7 +1067,7 @@ namespace NMP.Portal.Controllers
                     fieldID = crop.FieldId??0
 
                 };
-                (cropResponse, error) = await _cropService.AddCropNutrientManagementPlan(cropData, crop.FieldId ?? 0);
+                (cropResponse, error) = await _cropService.AddCropNutrientManagementPlan(cropData);
             }
 
             if (error.Message == null && cropResponse != null)
@@ -1127,14 +1127,20 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> PlansAndRecordsOverview(string id, string? q)
+        public async Task<IActionResult> PlansAndRecordsOverview(string id)
         {
             PlanViewModel model = new PlanViewModel();
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
+            if (!string.IsNullOrWhiteSpace(id))
             {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+                int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
+                (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(farmId);
+                model.FarmName = farm.Name;
+                List<PlanSummaryResponse> planSummaryResponse = await _cropService.FetchPlanSummaryByFarmId(farmId, 0);
+                planSummaryResponse.RemoveAll(x => x.Year == 0);
+                planSummaryResponse=planSummaryResponse.OrderByDescending(x => x.Year).ToList();
+                ViewBag.PlanSummaryList = planSummaryResponse;
+                model.EncryptedFarmId = id;
             }
-            
             return View(model);
         }
 

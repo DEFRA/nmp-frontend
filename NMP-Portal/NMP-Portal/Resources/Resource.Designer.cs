@@ -394,7 +394,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Change this plan.
+        ///   Looks up a localized string similar to Change this {0} plan.
         /// </summary>
         public static string lblChangeThisPlan {
             get {
@@ -1556,7 +1556,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to plans.
+        ///   Looks up a localized string similar to Plans.
         /// </summary>
         public static string lblPlans {
             get {
@@ -2056,6 +2056,15 @@ namespace NMP.Portal.Resources {
         public static string lblVarietyNameWithOptional {
             get {
                 return ResourceManager.GetString("lblVarietyNameWithOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View or edit.
+        /// </summary>
+        public static string lblViewEdit {
+            get {
+                return ResourceManager.GetString("lblViewEdit", resourceCulture);
             }
         }
         

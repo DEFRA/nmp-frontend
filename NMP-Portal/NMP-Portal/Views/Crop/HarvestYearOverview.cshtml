@@ -47,8 +47,13 @@
                 <p class="govuk-body"><a href="/mvp/plan/manure/manure_fields">@Resource.lblAddManuresToThisPlan</a></p>
             </div>
             <hr class="seperator_five">
-            <h2 class="govuk-heading-m">@Model.OtherCropName</h2>
-            <p class="govuk-body"><a asp-action="ChangePlan" asp-controller="Crop">@Resource.lblChangeThisPlan</a></p>
+            
+            @* @foreach (var i in Model.CropPlansCount)
+            {
+                
+            } *@
+            <h2 class="govuk-heading-m">@Model.CropType</h2>
+            <p class="govuk-body"><a asp-action="ChangePlan" asp-controller="Crop">@string.Format(Resource.lblChangeThisPlan,Model.CropType)</a></p>
            
             <table class="govuk-table">
                 <thead class="govuk-table__head">

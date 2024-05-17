@@ -10,6 +10,7 @@ namespace NMP.Portal.Services
         Task<List<CropInfoOneResponse>> FetchCropInfoOneByCropTypeId(int cropTypeId);
         Task<List<CropInfoTwoResponse>> FetchCropInfoTwoByCropTypeId();
         Task<(Crop, Error)> AddCropNutrientManagementPlan(CropData cropData);
+        Task<List<PlanSummaryResponse>> FetchPlanSummaryByFarmId(int farmId,int type);
 
     }
 }

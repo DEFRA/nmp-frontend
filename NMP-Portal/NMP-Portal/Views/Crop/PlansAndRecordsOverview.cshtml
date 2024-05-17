@@ -1,22 +1,30 @@
 ﻿@using NMP.Portal.Resources
 @using NMP.Portal.ViewModels
+
 @model PlanViewModel
 @{
     ViewData["Title"] = Resource.lblPlansAndRecordsOverview;
-    var currentPlaningYear = Model.Year??0;
-    var previousPlaningYear = 0;
-    var nextPlaningYear = 0;
-    if (currentPlaningYear == System.DateTime.Now.Year)
-    {
-        previousPlaningYear = System.DateTime.Now.Year - 1;
-        nextPlaningYear = currentPlaningYear + 1;
-    }
-    else
-    {
-        previousPlaningYear = System.DateTime.Now.Year;
-        nextPlaningYear = System.DateTime.Now.Year + 1;
-    }
+    List<int> yearList = new List<int>();
+    List<int> years = new List<int>();
 
+    @if (ViewBag.PlanSummaryList != null)
+    {
+        foreach (var item in ViewBag.PlanSummaryList)
+        {
+            yearList.Add(item.Year);
+        }
+
+        int minYear = System.DateTime.Now.Year - 1;
+        int maxYear = System.DateTime.Now.Year + 1;
+        for (int year = minYear; year <= maxYear; year++)
+        {
+            if (!yearList.Contains(year))
+            {
+                years.Add(year);
+
+            }
+        }
+    }
 }
 
 @if (ViewBag.Error != null)
@@ -31,48 +39,51 @@
     <govuk-breadcrumbs class="govuk-breadcrumbs-link">
 
         <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
-            @Resource.lblFarmName @* @Model.FarmName *@
+            @Model.FarmName
         </govuk-breadcrumbs-item>
         <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
             @Resource.lblPlansAndRecords
         </govuk-breadcrumbs-item>
-        
+
     </govuk-breadcrumbs>
     }
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
             <h1 class="govuk-heading-l">@Resource.lblPlansAndRecords</h1>
-            
-            <p class="govuk-body">
-                <a asp-action="CropGroups" asp-controller="Crop">@string.Format(Resource.lblCreateAPlan, previousPlaningYear)</a>
-            </p>
-            <p class="govuk-body">
-                <a asp-action="CropGroups" asp-controller="Crop">@string.Format(Resource.lblCreateAPlan, nextPlaningYear)</a>
-            </p>
+            @foreach (int year in years)
+            {
+                <p class="govuk-body">
+                    <a asp-action="CropGroups" asp-controller="Crop">@string.Format(Resource.lblCreateAPlan, year)</a>
+                </p>
+            }
 
             <table class="govuk-table">
+                <caption class="govuk-table__caption govuk-table__caption--m">@Resource.lblPlans</caption>
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
-                        <th id="field_name" scope="col" class="govuk-table__header">@Resource.lblPlans</th>
+                        <th id="field_name" scope="col" class="govuk-table__header">@Resource.lblHarvestYear</th>
                         <th scope="col" class="govuk-table__header">@Resource.lblLastModified </th>
                         <th scope="col" class="govuk-table__header"> </th>
                     </tr>
                 </thead>
                 <tbody class="govuk-table__body">
-                    @* @if (ViewBag.CropPlansList != null)
+                    @if (ViewBag.PlanSummaryList != null)
                     {
-                        @foreach (var item in ViewBag.CropPlansList)
+                        foreach (var item in ViewBag.PlanSummaryList)
                         {
                             <tr class="govuk-table__row">
-                                <td class="govuk-table__cell">@item</td>
-                                <td class="govuk-table__cell"></td>
+                                <td class="govuk-table__cell">@item.Year</td>
                                 <td class="govuk-table__cell">
-                                    <a href="#">@Resource.lblViewRecommendations</a>
+                                    @item.LastModifiedOn.ToString("dd MMM yyyy")
+                                    
+                                </td>
+                                <td class="govuk-table__cell">
+                                    <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId">@Resource.lblViewEdit</a>
                                 </td>
                             </tr>
                         }
-                    } *@
+                    }
 
                 </tbody>
             </table>
