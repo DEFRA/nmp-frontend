@@ -1146,10 +1146,12 @@ namespace NMP.Portal.Controllers
             (bool success, error) = await _cropService.AddCropNutrientManagementPlan(cropDataWrapper);
             if (error.Message == null && success)
             {
+                model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
                 _httpContextAccessor.HttpContext?.Session.Remove("CropData");
                 return RedirectToAction("HarvestYearOverview", new
                 {
                     id = model.EncryptedFarmId,
+                    year = model.EncryptedHarvestYear,
                     q = _farmDataProtector.Protect(success.ToString())
                 });
             }
