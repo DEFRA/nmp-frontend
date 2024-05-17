@@ -11,7 +11,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@(Model.IsCheckAnswer&& (!Model.IsAnyChangeInField) ? "CheckAnswer" :bachAction) asp-controller="Crop" asp-route-q="@Model.SowingDateEncryptedCounter">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(Model.IsCheckAnswer&& (!Model.IsAnyChangeInField)&& (!Model.IsCropGroupChange) ? "CheckAnswer" :bachAction) asp-controller="Crop" asp-route-q="@Model.SowingDateEncryptedCounter">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="YieldQuestion" asp-controller="Crop" method="post">
     @Html.AntiForgeryToken()
@@ -36,6 +36,7 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropInfo2Name"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyChangeInField" value="@Model.IsAnyChangeInField"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsQuestionChange" value="@Model.IsQuestionChange"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCropGroupChange" value="@Model.IsCropGroupChange"></govuk-input>
     @if (Model.FieldList != null && Model.FieldList.Count > 0)
     {
         @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -47,7 +48,7 @@
     {
         @for (int i = 0; i < Model.Crops.Count; i++)
         {
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].FieldId" value="@Model.Crops[i].FieldId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].FieldID" value="@Model.Crops[i].FieldID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].Year" value="@Model.Crops[i].Year"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].CropTypeID" value="@Model.Crops[i].CropTypeID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].OtherCropName" value="@Model.Crops[i].OtherCropName"></govuk-input>

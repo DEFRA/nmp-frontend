@@ -32,6 +32,7 @@ namespace NMP.Portal.ViewModels
         public decimal? Length { get; set; }
         public string? FarmName { get; set; }
         public bool IsCheckAnswer { get; set; } = false;
+        public bool IsCropGroupChange { get; set; } = false;
         public bool IsAnyChangeInField { get; set; } = false;
         public bool IsQuestionChange { get; set; } = false;
     }

@@ -1045,4 +1045,34 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblVarietyNameForCheckAnswer" xml:space="preserve">
     <value>Variety name</value>
   </data>
+  <data name="MsgCropInfo1NotSet" xml:space="preserve">
+    <value>Which option applies to your {0} not set?</value>
+  </data>
+  <data name="MsgCropInfo2NotSet" xml:space="preserve">
+    <value>How do you plan to use the straw from your {0} not set?</value>
+  </data>
+  <data name="MsgMainCropTypeNotSet" xml:space="preserve">
+    <value>Main crop type not set</value>
+  </data>
+  <data name="MsgSowingDateNotSet" xml:space="preserve">
+    <value>Sowing date not set</value>
+  </data>
+  <data name="MsgYieldNotSet" xml:space="preserve">
+    <value>yield not set</value>
+  </data>
+  <data name="lblSowingDiffrentDateNotSet" xml:space="preserve">
+    <value>When is the planting date for {0} in {1} not set?</value>
+  </data>
+  <data name="lblSowingSingleDateNotSet" xml:space="preserve">
+    <value>When is the planting date for your {0} not set?</value>
+  </data>
+  <data name="lblWhatIsTheDifferentExpectedYieldNotSet" xml:space="preserve">
+    <value>What is the expected yield for {0} in {1} not set?</value>
+  </data>
+  <data name="MsgVarietyNameNotSet" xml:space="preserve">
+    <value>Variety name not set</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
+  </data>
 </root>

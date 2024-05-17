@@ -78,7 +78,7 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmSummary", "Farm", new { id = id });
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 TempData["ErrorOnBackButton"] = ex.Message;
                 return View("AddField", model);
@@ -167,7 +167,7 @@ namespace NMP.Portal.Controllers
                 if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["TotalArea"].AttemptedValue, Resource.lblTotalFieldArea)))
                 {
                     ModelState["TotalArea"].Errors.Clear();
-                    ModelState["TotalArea"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber,Resource.lblArea));
+                    ModelState["TotalArea"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblArea));
                 }
             }
             if ((!ModelState.IsValid) && ModelState.ContainsKey("CroppedArea"))
@@ -514,7 +514,7 @@ namespace NMP.Portal.Controllers
                 var dateError = ModelState["SoilAnalyses.Date"].Errors.Count > 0 ?
                                 ModelState["SoilAnalyses.Date"].Errors[0].ErrorMessage.ToString() : null;
 
-                if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate,Resource.lblDateSampleTaken)))
+                if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, Resource.lblDateSampleTaken)))
                 {
                     ModelState["SoilAnalyses.Date"].Errors.Clear();
                     ModelState["SoilAnalyses.Date"].Errors.Add(Resource.MsgEnterTheDateInNumber);
@@ -928,6 +928,12 @@ namespace NMP.Portal.Controllers
             int userId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value);
             var farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
             //int farmId = model.FarmID;
+            if (model.IsSnsBasedOnPreviousCrop.Value)
+            {
+                model.SoilAnalyses.SoilNitrogenSupply = 0;
+                model.SoilAnalyses.SoilNitrogenSupplyIndex = 0;
+            }
+
             (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
 
             FieldData fieldData = new FieldData
@@ -935,7 +941,7 @@ namespace NMP.Portal.Controllers
                 Field = new Field
                 {
                     SoilTypeID = model.SoilTypeID,
-                    NVZProgrammeID = model.IsWithinNVZ==true?(int)NMP.Portal.Enums.NVZProgram.CurrentNVZRule: (int)NMP.Portal.Enums.NVZProgram.NotInNVZ,
+                    NVZProgrammeID = model.IsWithinNVZ == true ? (int)NMP.Portal.Enums.NVZProgram.CurrentNVZRule : (int)NMP.Portal.Enums.NVZProgram.NotInNVZ,
                     Name = model.Name,
                     LPIDNumber = model.LPIDNumber,
                     NationalGridReference = model.NationalGridReference,
@@ -1001,10 +1007,10 @@ namespace NMP.Portal.Controllers
                                 CreatedOn=DateTime.Now,
                                 CreatedByID=userId
                             }
-                            
+
                         }
                     },
-                    
+
                 }
 
 

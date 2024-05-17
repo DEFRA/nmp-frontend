@@ -1889,11 +1889,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When is the planting date for {0} in {1} not set?.
+        /// </summary>
+        public static string lblSowingDiffrentDateNotSet {
+            get {
+                return ResourceManager.GetString("lblSowingDiffrentDateNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When is the planting date for your {0}?.
         /// </summary>
         public static string lblSowingSingleDateForCheckAnswer {
             get {
                 return ResourceManager.GetString("lblSowingSingleDateForCheckAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When is the planting date for your {0} not set?.
+        /// </summary>
+        public static string lblSowingSingleDateNotSet {
+            get {
+                return ResourceManager.GetString("lblSowingSingleDateNotSet", resourceCulture);
             }
         }
         
@@ -2141,6 +2159,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the expected yield for {0} in {1} not set?.
+        /// </summary>
+        public static string lblWhatIsTheDifferentExpectedYieldNotSet {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheDifferentExpectedYieldNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the expected yield for {0} in these fields?.
         /// </summary>
         public static string lblWhatIsTheExpectedYieldForSingle {
@@ -2362,6 +2389,24 @@ namespace NMP.Portal.Resources {
         public static string lblYourPlanWillBasedOn {
             get {
                 return ResourceManager.GetString("lblYourPlanWillBasedOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which option applies to your {0} not set?.
+        /// </summary>
+        public static string MsgCropInfo1NotSet {
+            get {
+                return ResourceManager.GetString("MsgCropInfo1NotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How do you plan to use the straw from your {0} not set?.
+        /// </summary>
+        public static string MsgCropInfo2NotSet {
+            get {
+                return ResourceManager.GetString("MsgCropInfo2NotSet", resourceCulture);
             }
         }
         
@@ -2672,6 +2717,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Main crop type not set.
+        /// </summary>
+        public static string MsgMainCropTypeNotSet {
+            get {
+                return ResourceManager.GetString("MsgMainCropTypeNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The manure non-spreading area cannot be larger than the total field area.
         /// </summary>
         public static string MsgManureNonSpreadingAreaIsGreaterThanTotalArea {
@@ -2825,6 +2879,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sowing date not set.
+        /// </summary>
+        public static string MsgSowingDateNotSet {
+            get {
+                return ResourceManager.GetString("MsgSowingDateNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variety name not set.
+        /// </summary>
+        public static string MsgVarietyNameNotSet {
+            get {
+                return ResourceManager.GetString("MsgVarietyNameNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to We couldn’t add your field, please try again later.
         /// </summary>
         public static string MsgWeCouldNotAddYourFieldPleaseTryAgainLater {
@@ -2839,6 +2911,24 @@ namespace NMP.Portal.Resources {
         public static string MsgWeCouldNotCreateYourPlanPleaseTryAgainLater {
             get {
                 return ResourceManager.GetString("MsgWeCouldNotCreateYourPlanPleaseTryAgainLater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to yield not set.
+        /// </summary>
+        public static string MsgYieldNotSet {
+            get {
+                return ResourceManager.GetString("MsgYieldNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string String1 {
+            get {
+                return ResourceManager.GetString("String1", resourceCulture);
             }
         }
     }
