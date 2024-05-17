@@ -34,5 +34,11 @@ namespace NMP.Portal.ViewModels
         public bool IsCheckAnswer { get; set; } = false;
         public bool IsAnyChangeInField { get; set; } = false;
         public bool IsQuestionChange { get; set; } = false;
+
+        public string? EncryptedHarvestYear { get; set; } = string.Empty;
+        public string? LastModifiedOn { get; set; }
+        public List<string>? CropTypeList { get; set; }
+        public List<string>? VarietyList { get; set; }
+        public List<string>? EncryptedHarvestYearList { get; set; }
     }
 }

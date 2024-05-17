@@ -1,5 +1,6 @@
 ﻿@using NMP.Portal.Resources
 @using NMP.Portal.ViewModels
+@using System.Globalization
 @model PlanViewModel
 @{
     ViewData["Title"] = Resource.lblHarvestYearOverview;
@@ -15,9 +16,9 @@
 {
     @section BeforeContent {
     <govuk-breadcrumbs class="govuk-breadcrumbs-link">
-        
+
         <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
-            @Model.FarmName 
+            @Model.FarmName
         </govuk-breadcrumbs-item>
         <govuk-breadcrumbs-item asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId">
             @Resource.lblPlansAndRecords
@@ -41,45 +42,48 @@
 
             <h1 class="govuk-heading-l">@string.Format(Resource.lblCropPlanFor, Model.Year)</h1>
             <div class="crop_plan_title">
-                <p class="govuk-body">@string.Format( Resource.lblThereAreFieldsInThisPlan,Model.FieldList.Count)</p>
-                <p class="govuk-body">@Resource.lblLastUpdated</p>
+                <p class="govuk-body">@string.Format(Resource.lblThereAreFieldsInThisPlan, Model.FieldList.Count)</p>
+                <p class="govuk-body">@string.Format(Resource.lblLastUpdated, Model.LastModifiedOn)
+                </p>
                 <p class="govuk-body"><a href="/mvp/plan/crop/crop_group">@Resource.lblAddAnotherCrop</a></p>
                 <p class="govuk-body"><a href="/mvp/plan/manure/manure_fields">@Resource.lblAddManuresToThisPlan</a></p>
             </div>
             <hr class="seperator_five">
-            
-            @* @foreach (var i in Model.CropPlansCount)
-            {
-                
-            } *@
-            <h2 class="govuk-heading-m">@Model.CropType</h2>
-            <p class="govuk-body"><a asp-action="ChangePlan" asp-controller="Crop">@string.Format(Resource.lblChangeThisPlan,Model.CropType)</a></p>
-           
-            <table class="govuk-table">
-                <thead class="govuk-table__head">
-                    <tr class="govuk-table__row">
-                        <th id="field_name" scope="col" class="govuk-table__header">@Resource.lblField</th>
-                        @* <th scope="col" class="govuk-table__header">@Resource.lblSecondCrop </th> *@
-                        <th scope="col" class="govuk-table__header"> </th>
-                    </tr>
-                </thead>
-                <tbody class="govuk-table__body">
-                    @if (ViewBag.CropPlansList != null)
-                    {
-                        @foreach (var item in ViewBag.CropPlansList)
-                        {
-                            <tr class="govuk-table__row">
-                                <td class="govuk-table__cell">@item</td>
-                                @* <td class="govuk-table__cell"></td> *@
-                                <td class="govuk-table__cell">
-                                    <a href="#">@Resource.lblViewRecommendations</a>
-                                </td>
-                            </tr>
-                        }
-                    }
 
-                </tbody>
-            </table>
+            @for (int i = 0; i < Model.CropTypeList.Count(); i++)
+            {
+
+                <h2 class="govuk-heading-m">@Model.CropTypeList[i]</h2>
+                <h2 class="govuk-heading-m">@Model.VarietyList[i]</h2>
+                <p class="govuk-body"><a asp-action="ChangePlan" asp-controller="Crop">@string.Format(Resource.lblChangeThisPlan, Model.CropTypeList[i])</a></p>
+
+                <table class="govuk-table">
+                    <thead class="govuk-table__head">
+                        <tr class="govuk-table__row">
+                            <th id="field_name" scope="col" class="govuk-table__header">@Resource.lblField</th>
+                            @* <th scope="col" class="govuk-table__header">@Resource.lblSecondCrop </th> *@
+                            <th scope="col" class="govuk-table__header"> </th>
+                        </tr>
+                    </thead>
+                    <tbody class="govuk-table__body">
+                        @if (Model.FieldList != null)
+                        {
+                            @foreach (var item in Model.FieldList)
+                            {
+                                <tr class="govuk-table__row">
+                                    <td class="govuk-table__cell">@item</td>
+                                    @* <td class="govuk-table__cell"></td> *@
+                                    <td class="govuk-table__cell">
+                                        <a href="#">@Resource.lblViewRecommendations</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            }
+
         </div>
     </div>
 }

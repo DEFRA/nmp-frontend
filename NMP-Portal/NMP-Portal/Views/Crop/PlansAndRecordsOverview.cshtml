@@ -70,16 +70,16 @@
                 <tbody class="govuk-table__body">
                     @if (ViewBag.PlanSummaryList != null)
                     {
-                        foreach (var item in ViewBag.PlanSummaryList)
+                        for(int i=0;i< ViewBag.PlanSummaryList.Count;i++)
                         {
                             <tr class="govuk-table__row">
-                                <td class="govuk-table__cell">@item.Year</td>
+                                <td class="govuk-table__cell">@ViewBag.PlanSummaryList[i].Year</td>
                                 <td class="govuk-table__cell">
-                                    @item.LastModifiedOn.ToString("dd MMM yyyy")
+                                    @ViewBag.PlanSummaryList[i].LastModifiedOn.ToString("dd MMM yyyy")
                                     
                                 </td>
                                 <td class="govuk-table__cell">
-                                    <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId">@Resource.lblViewEdit</a>
+                                    <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYearList[i]">@Resource.lblViewEdit</a>
                                 </td>
                             </tr>
                         }

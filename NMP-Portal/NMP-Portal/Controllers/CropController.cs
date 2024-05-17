@@ -1073,8 +1073,10 @@ namespace NMP.Portal.Controllers
             if (error.Message == null && cropResponse != null)
             {
                 string success = _farmDataProtector.Protect("true");
+                //model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year??0);
+                model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
                 _httpContextAccessor.HttpContext?.Session.Remove("CropData");
-                return RedirectToAction("HarvestYearOverview", new { id = model.EncryptedFarmId, q = success });
+                return RedirectToAction("HarvestYearOverview", new { id = model.EncryptedFarmId,year= model.EncryptedHarvestYear, q = success });
             }
             else
             {
@@ -1083,14 +1085,10 @@ namespace NMP.Portal.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> HarvestYearOverview(string id, string? q)
+        public async Task<IActionResult> HarvestYearOverview(string id,string year ,string? q)
         {
             PlanViewModel model = new PlanViewModel();
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
-            {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
-                _httpContextAccessor.HttpContext?.Session.Remove("CropData");
-            }
+            
             if (!string.IsNullOrWhiteSpace(q))
             {
                 ViewBag.Success = true;
@@ -1102,19 +1100,40 @@ namespace NMP.Portal.Controllers
             if (!string.IsNullOrWhiteSpace(id))
             {
                 int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
-                // model.Fields = await _fieldService.FetchFieldsByFarmId(farmId);
+                int harvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(year));
 
                 (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(farmId);
                 model.FarmName = farm.Name;
                 List<string> fields= new List<string>();
-                foreach (var field in model.FieldList)
+
+                List<HarvestYearPlanResponse> harvestYearPlanResponse = await _cropService.FetchHarvestYearPlansByFarmId(harvestYear, farmId);
+
+                model.Year = harvestYear;
+                model.LastModifiedOn = harvestYearPlanResponse.Max(x => x.LastModifiedOn).ToString("dd MMM yyyy");
+
+                var groupedResult = harvestYearPlanResponse
+                                    .GroupBy(h => new { h.CropTypeName, h.CropVariety })
+                                    .Select(g => new
+                                    {
+                                        CropTypeName = g.Key.CropTypeName,
+                                        CropVariety = g.Key.CropVariety,
+                                        HarvestPlans = g.ToList()
+                                    });
+                model.CropTypeList = new List<string>();
+                model.VarietyList = new List<string>();
+                model.FieldList = new List<string>();
+                foreach (var group in groupedResult)
                 {
-                    int fieldId = Convert.ToInt32(field);
-                    fields.Add((await _fieldService.FetchFieldByFieldId(fieldId)).Name);
+                    model.CropTypeList.Add(group.CropTypeName);
+                    model.VarietyList.Add(group.CropVariety);
+                    foreach (var plan in group.HarvestPlans)
+                    {
+                        model.FieldList.Add(plan.FieldName);
+                    }
                 }
                 
-               ViewBag.CropPlansList = fields;
                 model.EncryptedFarmId = id;
+                model.EncryptedHarvestYear = year;
             }
             return View(model);
         }
@@ -1138,6 +1157,12 @@ namespace NMP.Portal.Controllers
                 List<PlanSummaryResponse> planSummaryResponse = await _cropService.FetchPlanSummaryByFarmId(farmId, 0);
                 planSummaryResponse.RemoveAll(x => x.Year == 0);
                 planSummaryResponse=planSummaryResponse.OrderByDescending(x => x.Year).ToList();
+                model.EncryptedHarvestYearList = new List<string>();
+                foreach (var planSummary in planSummaryResponse)
+                {
+                    model.EncryptedHarvestYearList.Add(_farmDataProtector.Protect(planSummary.Year.ToString()));
+                }
+
                 ViewBag.PlanSummaryList = planSummaryResponse;
                 model.EncryptedFarmId = id;
             }
