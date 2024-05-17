@@ -968,7 +968,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Add manures to this plan</value>
   </data>
   <data name="lblChangeThisPlan" xml:space="preserve">
-    <value>Change this plan</value>
+    <value>Change this {0} plan</value>
   </data>
   <data name="lblCropPlanFor" xml:space="preserve">
     <value>Crop plan for {0}</value>
@@ -1001,7 +1001,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Last modified</value>
   </data>
   <data name="lblPlans" xml:space="preserve">
-    <value>plans</value>
+    <value>Plans</value>
   </data>
   <data name="lblPlansAndRecordsOverview" xml:space="preserve">
     <value>Plans and records overview</value>
@@ -1044,6 +1044,9 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
   <data name="lblVarietyNameForCheckAnswer" xml:space="preserve">
     <value>Variety name</value>
+  </data>
+  <data name="lblViewEdit" xml:space="preserve">
+    <value>View or edit</value>
   </data>
   <data name="MsgCropInfo1NotSet" xml:space="preserve">
     <value>Which option applies to your {0} not set?</value>
