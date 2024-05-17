@@ -1063,17 +1063,20 @@ namespace NMP.Portal.Controllers
                             CreatedOn=DateTime.Now,
                             CreatedByID=userId
                         }
-                    }
+                    },
+                    fieldID = crop.FieldId??0
 
                 };
-                (cropResponse, error) = await _cropService.AddCropNutrientManagementPlan(cropData, crop.FieldId ?? 0);
+                (cropResponse, error) = await _cropService.AddCropNutrientManagementPlan(cropData);
             }
 
             if (error.Message == null && cropResponse != null)
             {
                 string success = _farmDataProtector.Protect("true");
+                //model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year??0);
+                model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
                 _httpContextAccessor.HttpContext?.Session.Remove("CropData");
-                return RedirectToAction("HarvestYearOverview", new { id = model.EncryptedFarmId, q = success });
+                return RedirectToAction("HarvestYearOverview", new { id = model.EncryptedFarmId,year= model.EncryptedHarvestYear, q = success });
             }
             else
             {
@@ -1082,10 +1085,10 @@ namespace NMP.Portal.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> HarvestYearOverview(string id, string? q)
+        public async Task<IActionResult> HarvestYearOverview(string id,string year ,string? q)
         {
             PlanViewModel model = new PlanViewModel();
-
+            
             if (!string.IsNullOrWhiteSpace(q))
             {
                 ViewBag.Success = true;
@@ -1097,13 +1100,40 @@ namespace NMP.Portal.Controllers
             if (!string.IsNullOrWhiteSpace(id))
             {
                 int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
-                // model.Fields = await _fieldService.FetchFieldsByFarmId(farmId);
+                int harvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(year));
 
                 (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(farmId);
                 model.FarmName = farm.Name;
+                List<string> fields= new List<string>();
 
-                // ViewBag.CropPlansList = model.Fields;
+                List<HarvestYearPlanResponse> harvestYearPlanResponse = await _cropService.FetchHarvestYearPlansByFarmId(harvestYear, farmId);
+
+                model.Year = harvestYear;
+                model.LastModifiedOn = harvestYearPlanResponse.Max(x => x.LastModifiedOn).ToString("dd MMM yyyy");
+
+                var groupedResult = harvestYearPlanResponse
+                                    .GroupBy(h => new { h.CropTypeName, h.CropVariety })
+                                    .Select(g => new
+                                    {
+                                        CropTypeName = g.Key.CropTypeName,
+                                        CropVariety = g.Key.CropVariety,
+                                        HarvestPlans = g.ToList()
+                                    });
+                model.CropTypeList = new List<string>();
+                model.VarietyList = new List<string>();
+                model.FieldList = new List<string>();
+                foreach (var group in groupedResult)
+                {
+                    model.CropTypeList.Add(group.CropTypeName);
+                    model.VarietyList.Add(group.CropVariety);
+                    foreach (var plan in group.HarvestPlans)
+                    {
+                        model.FieldList.Add(plan.FieldName);
+                    }
+                }
+                
                 model.EncryptedFarmId = id;
+                model.EncryptedHarvestYear = year;
             }
             return View(model);
         }
@@ -1111,6 +1141,37 @@ namespace NMP.Portal.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> HarvestYearOverview(PlanViewModel model)
+        {
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> PlansAndRecordsOverview(string id)
+        {
+            PlanViewModel model = new PlanViewModel();
+            if (!string.IsNullOrWhiteSpace(id))
+            {
+                int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
+                (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(farmId);
+                model.FarmName = farm.Name;
+                List<PlanSummaryResponse> planSummaryResponse = await _cropService.FetchPlanSummaryByFarmId(farmId, 0);
+                planSummaryResponse.RemoveAll(x => x.Year == 0);
+                planSummaryResponse=planSummaryResponse.OrderByDescending(x => x.Year).ToList();
+                model.EncryptedHarvestYearList = new List<string>();
+                foreach (var planSummary in planSummaryResponse)
+                {
+                    model.EncryptedHarvestYearList.Add(_farmDataProtector.Protect(planSummary.Year.ToString()));
+                }
+
+                ViewBag.PlanSummaryList = planSummaryResponse;
+                model.EncryptedFarmId = id;
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PlansAndRecordsOverview(PlanViewModel model)
         {
             return View(model);
         }
