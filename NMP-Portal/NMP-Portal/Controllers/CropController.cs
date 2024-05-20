@@ -1145,11 +1145,11 @@ namespace NMP.Portal.Controllers
                     }
                 };
                 cropEntries.Add(cropEntry);
-                
+
             }
             CropDataWrapper cropDataWrapper = new CropDataWrapper
             {
-                Crops =  cropEntries
+                Crops = cropEntries
             };
             (bool success, error) = await _cropService.AddCropNutrientManagementPlan(cropDataWrapper);
             if (error.Message == null && success)
@@ -1165,60 +1165,78 @@ namespace NMP.Portal.Controllers
             }
             else
             {
-                TempData["ErrorCreatePlan"] = Resource.MsgWeCouldNotCreateYourPlanPleaseTryAgainLater;
+                TempData["ErrorCreatePlan"] = error.Message; //Resource.MsgWeCouldNotCreateYourPlanPleaseTryAgainLater;
                 return RedirectToAction("CheckAnswer");
             }
         }
         [HttpGet]
-        public async Task<IActionResult> HarvestYearOverview(string id,string year ,string? q)
+        public async Task<IActionResult> HarvestYearOverview(string id, string year, string? q)
         {
             PlanViewModel model = new PlanViewModel();
-            
-            if (!string.IsNullOrWhiteSpace(q))
+            try
             {
-                ViewBag.Success = true;
-            }
-            else
-            {
-                ViewBag.Success = false;
-            }
-            if (!string.IsNullOrWhiteSpace(id))
-            {
-                int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
-                int harvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(year));
-
-                (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(farmId);
-                model.FarmName = farm.Name;
-                List<string> fields= new List<string>();
-
-                List<HarvestYearPlanResponse> harvestYearPlanResponse = await _cropService.FetchHarvestYearPlansByFarmId(harvestYear, farmId);
-
-                model.Year = harvestYear;
-                model.LastModifiedOn = harvestYearPlanResponse.Max(x => x.LastModifiedOn).ToString("dd MMM yyyy");
-
-                var groupedResult = harvestYearPlanResponse
-                                    .GroupBy(h => new { h.CropTypeName, h.CropVariety })
-                                    .Select(g => new
-                                    {
-                                        CropTypeName = g.Key.CropTypeName,
-                                        CropVariety = g.Key.CropVariety,
-                                        HarvestPlans = g.ToList()
-                                    });
-                model.CropTypeList = new List<string>();
-                model.VarietyList = new List<string>();
-                model.FieldList = new List<string>();
-                foreach (var group in groupedResult)
+                if (!string.IsNullOrWhiteSpace(q))
                 {
-                    model.CropTypeList.Add(group.CropTypeName);
-                    model.VarietyList.Add(group.CropVariety);
-                    foreach (var plan in group.HarvestPlans)
-                    {
-                        model.FieldList.Add(plan.FieldName);
-                    }
+                    ViewBag.Success = true;
                 }
-                
-                model.EncryptedFarmId = id;
-                model.EncryptedHarvestYear = year;
+                else
+                {
+                    ViewBag.Success = false;
+                }
+                if (!string.IsNullOrWhiteSpace(id))
+                {
+                    int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
+                    int harvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(year));
+
+                    (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(farmId);
+                    if (farm != null)
+                    {
+                        model.FarmName = farm.Name;
+                    }
+                    List<string> fields = new List<string>();
+
+                    (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropService.FetchHarvestYearPlansByFarmId(harvestYear, farmId);
+
+                    model.Year = harvestYear;
+                    if (harvestYearPlanResponse != null && error.Message == null)
+                    {
+                        model.LastModifiedOn = harvestYearPlanResponse.Max(x => x.LastModifiedOn).ToString("dd MMM yyyy");
+
+                        var groupedResult = harvestYearPlanResponse
+                                            .GroupBy(h => new { h.CropTypeName, h.CropVariety })
+                                            .Select(g => new
+                                            {
+                                                CropTypeName = g.Key.CropTypeName,
+                                                CropVariety = g.Key.CropVariety,
+                                                HarvestPlans = g.ToList()
+                                            });
+                        model.CropTypeList = new List<string>();
+                        model.VarietyList = new List<string>();
+                        model.FieldList = new List<string>();
+                        foreach (var group in groupedResult)
+                        {
+                            model.CropTypeList.Add(group.CropTypeName);
+                            model.VarietyList.Add(group.CropVariety);
+                            foreach (var plan in group.HarvestPlans)
+                            {
+                                model.FieldList.Add(plan.FieldName);
+                            }
+                        }
+                        model.EncryptedFarmId = id;
+                        model.EncryptedHarvestYear = year;
+                    }
+                    else
+                    {
+                        TempData["ErrorOnHarvestYearOverview"] = error.Message; //Resource.MsgWeCouldNotCreateYourPlanPleaseTryAgainLater;
+                        model = null;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorOnHarvestYearOverview"] = ex.Message;
+                model = null;
             }
             return View(model);
         }
@@ -1241,7 +1259,7 @@ namespace NMP.Portal.Controllers
                 model.FarmName = farm.Name;
                 List<PlanSummaryResponse> planSummaryResponse = await _cropService.FetchPlanSummaryByFarmId(farmId, 0);
                 planSummaryResponse.RemoveAll(x => x.Year == 0);
-                planSummaryResponse=planSummaryResponse.OrderByDescending(x => x.Year).ToList();
+                planSummaryResponse = planSummaryResponse.OrderByDescending(x => x.Year).ToList();
                 model.EncryptedHarvestYearList = new List<string>();
                 foreach (var planSummary in planSummaryResponse)
                 {

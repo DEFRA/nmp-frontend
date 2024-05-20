@@ -278,7 +278,7 @@ namespace NMP.Portal.Services
             return planSummaryList;
         }
 
-        public async Task<List<HarvestYearPlanResponse>> FetchHarvestYearPlansByFarmId(int harvestYear, int farmId)
+        public async Task<(List<HarvestYearPlanResponse>, Error)> FetchHarvestYearPlansByFarmId(int harvestYear, int farmId)
         {
             List<HarvestYearPlanResponse> harvestYearPlanList = new List<HarvestYearPlanResponse>();
             Error error = new Error();
@@ -319,7 +319,7 @@ namespace NMP.Portal.Services
                 _logger.LogError(ex.Message);
                 throw new Exception(error.Message, ex);
             }
-            return harvestYearPlanList;
+            return (harvestYearPlanList, error);
         }
     }
 }
