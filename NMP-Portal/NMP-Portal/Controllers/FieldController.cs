@@ -994,6 +994,8 @@ namespace NMP.Portal.Controllers
                     {
                         Crop = new Crop
                         {
+                            Year=DateTime.Now.Year-1,
+                            Confirm=true,
                             CropTypeID=model.CropTypeID,
                             CreatedOn=DateTime.Now,
                             CreatedByID=userId
