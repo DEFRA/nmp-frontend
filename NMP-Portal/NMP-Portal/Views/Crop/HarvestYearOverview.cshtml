@@ -20,7 +20,7 @@
         <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
             @Model.FarmName
         </govuk-breadcrumbs-item>
-        <govuk-breadcrumbs-item asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId">
+        <govuk-breadcrumbs-item asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">
             @Resource.lblPlansAndRecords
         </govuk-breadcrumbs-item>
         <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
@@ -42,20 +42,20 @@
 
             <h1 class="govuk-heading-l">@string.Format(Resource.lblCropPlanFor, Model.Year)</h1>
             <div class="crop_plan_title">
-                <p class="govuk-body">@string.Format(Resource.lblThereAreFieldsInThisPlan, Model.FieldList.Count)</p>
-                <p class="govuk-body">@string.Format(Resource.lblLastUpdated, Model.LastModifiedOn)
+                <p class="govuk-body">@string.Format(Resource.lblThereAreFieldsInThisPlan, Model.FieldCount)</p>
+                <p class="govuk-body">
+                    @string.Format(Resource.lblLastUpdated, Model.LastModifiedOn)
                 </p>
-                <p class="govuk-body"><a href="/mvp/plan/crop/crop_group">@Resource.lblAddAnotherCrop</a></p>
-                <p class="govuk-body"><a href="/mvp/plan/manure/manure_fields">@Resource.lblAddManuresToThisPlan</a></p>
+                <p class="govuk-body"><a asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblAddAnotherCrop</a></p>
+                <p class="govuk-body"><a href="#">@Resource.lblAddManuresToThisPlan</a></p>
             </div>
             <hr class="seperator_five">
 
-            @for (int i = 0; i < Model.CropTypeList.Count(); i++)
+            @foreach (var harvestYearPlan in Model.HarvestYearPlans)
             {
-
-                <h2 class="govuk-heading-m">@Model.CropTypeList[i]</h2>
-                <h2 class="govuk-heading-m">@Model.VarietyList[i]</h2>
-                <p class="govuk-body"><a asp-action="ChangePlan" asp-controller="Crop">@string.Format(Resource.lblChangeThisPlan, Model.CropTypeList[i])</a></p>
+                <h2 class="govuk-heading-m">@harvestYearPlan.CropTypeName</h2>
+                <h2 class="govuk-heading-m">@harvestYearPlan.CropVariety</h2>
+                <p class="govuk-body"><a asp-action="ChangePlan" asp-controller="Crop">@string.Format(Resource.lblChangeThisPlan, harvestYearPlan.CropTypeName)</a></p>
 
                 <table class="govuk-table">
                     <thead class="govuk-table__head">
@@ -66,18 +66,15 @@
                         </tr>
                     </thead>
                     <tbody class="govuk-table__body">
-                        @if (Model.FieldList != null)
+                        @foreach (var field in harvestYearPlan.FieldNames)
                         {
-                            @foreach (var item in Model.FieldList)
-                            {
-                                <tr class="govuk-table__row">
-                                    <td class="govuk-table__cell">@item</td>
-                                    @* <td class="govuk-table__cell"></td> *@
-                                    <td class="govuk-table__cell">
-                                        <a href="#">@Resource.lblViewRecommendations</a>
-                                    </td>
-                                </tr>
-                            }
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell">@field</td>
+                                @* <td class="govuk-table__cell"></td> *@
+                                <td class="govuk-table__cell">
+                                    <a href="#">@Resource.lblViewRecommendations</a>
+                                </td>
+                            </tr>
                         }
 
                     </tbody>
