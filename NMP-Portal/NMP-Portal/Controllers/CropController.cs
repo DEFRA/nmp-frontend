@@ -114,7 +114,11 @@ namespace NMP.Portal.Controllers
                 {
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
                 }
-                ViewBag.CropGroupList = await _fieldService.FetchCropGroups();
+                List<CropGroupResponse> cropGroups = await _fieldService.FetchCropGroups();
+                var country = model.IsEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
+                var cropGroupsList = cropGroups.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.All).ToList();
+                ViewBag.CropGroupList = cropGroupsList.OrderBy(c => c.CropGroupName); ;
+                //ViewBag.CropGroupList = await _fieldService.FetchCropGroups();
                 if (model.IsCropGroupChange)
                 {
                     model.IsCropGroupChange = false;
@@ -140,7 +144,11 @@ namespace NMP.Portal.Controllers
                 }
                 if (!ModelState.IsValid)
                 {
-                    ViewBag.CropGroupList = await _fieldService.FetchCropGroups();
+                    List<CropGroupResponse> cropGroups = await _fieldService.FetchCropGroups();
+                    var country = model.IsEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
+                    var cropGroupsList = cropGroups.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.All).ToList();
+                    ViewBag.CropGroupList = cropGroupsList.OrderBy(c => c.CropGroupName); ;
+                    //ViewBag.CropGroupList = await _fieldService.FetchCropGroups();
                     return View(model);
                 }
 
