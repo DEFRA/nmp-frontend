@@ -2,7 +2,8 @@
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
     ViewData["Title"] = Resource.lblCropGroup;
-    int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
+    int otherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
+    int grassGroupId = (int)NMP.Portal.Enums.CropGroup.Grass;
 }
 
 @section BeforeContent {
@@ -74,7 +75,14 @@
                     {
                         @foreach (var item in ViewBag.CropGroupList)
                         {
-                            <govuk-radios-item value="@item.CropGroupId">@item.CropGroupName</govuk-radios-item>
+                            @if (item.CropGroupId == grassGroupId || item.CropGroupId == otherGroupId)
+                            {
+                                <govuk-radios-item value="@item.CropGroupId" disabled="true">@item.CropGroupName</govuk-radios-item>
+                            }
+                            else
+                            {
+                                <govuk-radios-item value="@item.CropGroupId">@item.CropGroupName</govuk-radios-item>
+                            }
                         }
                     }
 

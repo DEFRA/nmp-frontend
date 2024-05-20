@@ -6,10 +6,10 @@
     ViewData["Title"] = Resource.lblHarvestYearOverview;
 }
 
-@if (ViewBag.Error != null)
+@if (TempData["ErrorOnHarvestYearOverview"] != null)
 {
     <govuk-error-summary>
-        <govuk-error-summary-item href="#">@ViewBag.Error</govuk-error-summary-item>
+        <govuk-error-summary-item href="#">@TempData["ErrorOnHarvestYearOverview"]</govuk-error-summary-item>
     </govuk-error-summary>
 }
 @if (Model != null)
