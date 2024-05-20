@@ -4,27 +4,7 @@
 @model PlanViewModel
 @{
     ViewData["Title"] = Resource.lblPlansAndRecordsOverview;
-    List<int> yearList = new List<int>();
-    List<int> years = new List<int>();
-
-    @if (ViewBag.PlanSummaryList != null)
-    {
-        foreach (var item in ViewBag.PlanSummaryList)
-        {
-            yearList.Add(item.Year);
-        }
-
-        int minYear = System.DateTime.Now.Year - 1;
-        int maxYear = System.DateTime.Now.Year + 1;
-        for (int year = minYear; year <= maxYear; year++)
-        {
-            if (!yearList.Contains(year))
-            {
-                years.Add(year);
-
-            }
-        }
-    }
+   
 }
 
 @if (ViewBag.Error != null)
@@ -51,10 +31,10 @@
         <div class="govuk-grid-column-two-thirds">
 
             <h1 class="govuk-heading-l">@Resource.lblPlansAndRecords</h1>
-            @foreach (int year in years)
+            @foreach (var year in Model.HarvestYear)
             {
                 <p class="govuk-body">
-                    <a asp-action="CropGroups" asp-controller="Crop">@string.Format(Resource.lblCreateAPlan, year)</a>
+                    <a asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@year.EncryptedYear">@string.Format(Resource.lblCreateAPlan, year.Year)</a>
                 </p>
             }
 
@@ -70,13 +50,13 @@
                 <tbody class="govuk-table__body">
                     @if (ViewBag.PlanSummaryList != null)
                     {
-                        for(int i=0;i< ViewBag.PlanSummaryList.Count;i++)
+                        for (int i = 0; i < ViewBag.PlanSummaryList.Count; i++)
                         {
                             <tr class="govuk-table__row">
                                 <td class="govuk-table__cell">@ViewBag.PlanSummaryList[i].Year</td>
                                 <td class="govuk-table__cell">
                                     @ViewBag.PlanSummaryList[i].LastModifiedOn.ToString("dd MMM yyyy")
-                                    
+
                                 </td>
                                 <td class="govuk-table__cell">
                                     <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYearList[i]">@Resource.lblViewEdit</a>

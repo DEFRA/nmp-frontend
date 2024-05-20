@@ -38,8 +38,9 @@ namespace NMP.Portal.ViewModels
 
         public string? EncryptedHarvestYear { get; set; } = string.Empty;
         public string? LastModifiedOn { get; set; }
-        public List<string>? CropTypeList { get; set; }
-        public List<string>? VarietyList { get; set; }
         public List<string>? EncryptedHarvestYearList { get; set; }
+        public List<HarvestYearPlans> HarvestYearPlans { get; set; } = new List<HarvestYearPlans>();
+        public int FieldCount { get; set; }
+        public List<HarvestYear> HarvestYear { get; set; } = new List<HarvestYear>();
     }
 }
