@@ -54,7 +54,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> HarvestYearForPlan(string q)
+        public async Task<IActionResult> HarvestYearForPlan(string q, string? year)
         {
             PlanViewModel model = new PlanViewModel();
             Error? error = null;
@@ -71,6 +71,15 @@ namespace NMP.Portal.Controllers
 
                     (Farm farm, error) = await _farmService.FetchFarmByIdAsync(farmID);
                     model.IsEnglishRules = farm.EnglishRules;
+
+                    if (!string.IsNullOrWhiteSpace(year))
+                    {
+                        int harvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(year));
+                        model.Year = harvestYear;
+                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("CropData", model);
+                        return RedirectToAction("CropGroups");
+                    }
+
                     _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("CropData", model);
                 }
             }
@@ -1258,17 +1267,20 @@ namespace NMP.Portal.Controllers
                                                 CropVariety = g.Key.CropVariety,
                                                 HarvestPlans = g.ToList()
                                             });
-                        model.CropTypeList = new List<string>();
-                        model.VarietyList = new List<string>();
-                        model.FieldList = new List<string>();
+                        model.FieldCount = harvestYearPlanResponse.Select(h => h.FieldID).Distinct().Count();
                         foreach (var group in groupedResult)
                         {
-                            model.CropTypeList.Add(group.CropTypeName);
-                            model.VarietyList.Add(group.CropVariety);
+                            var harvestYearPlans = new HarvestYearPlans
+                            {
+                                CropTypeName = group.CropTypeName,
+                                CropVariety = group.CropVariety,
+                            };
+
                             foreach (var plan in group.HarvestPlans)
                             {
-                                model.FieldList.Add(plan.FieldName);
+                                harvestYearPlans.FieldNames.Add(plan.FieldName);
                             }
+                            model.HarvestYearPlans.Add(harvestYearPlans);
                         }
                         model.EncryptedFarmId = id;
                         model.EncryptedHarvestYear = year;
@@ -1297,7 +1309,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> PlansAndRecordsOverview(string id)
+        public async Task<IActionResult> PlansAndRecordsOverview(string id, string? year)
         {
             PlanViewModel model = new PlanViewModel();
             if (!string.IsNullOrWhiteSpace(id))
@@ -1313,8 +1325,37 @@ namespace NMP.Portal.Controllers
                 {
                     model.EncryptedHarvestYearList.Add(_farmDataProtector.Protect(planSummary.Year.ToString()));
                 }
+                if (!string.IsNullOrWhiteSpace(year))
+                {
+                    model.EncryptedHarvestYear = year;
 
+                }
                 ViewBag.PlanSummaryList = planSummaryResponse;
+
+                //To show the list Create Plan for year (2023,2024,..) 
+                List<int> yearList = new List<int>();
+                if(planSummaryResponse != null)
+                {
+                    foreach (var item in planSummaryResponse)
+                    {
+                        yearList.Add(item.Year);
+                    }
+
+                    int minYear = System.DateTime.Now.Year - 1;
+                    int maxYear = System.DateTime.Now.Year + 1;
+                    for (int i = minYear; i <= maxYear; i++)
+                    {
+                        if (!yearList.Contains(i))
+                        {
+                            var harvestYear = new HarvestYear
+                            {
+                                Year = i,
+                                EncryptedYear = _farmDataProtector.Protect(i.ToString()),
+                            };
+                            model.HarvestYear.Add(harvestYear);
+                        }
+                    }
+                }
                 model.EncryptedFarmId = id;
             }
             return View(model);
