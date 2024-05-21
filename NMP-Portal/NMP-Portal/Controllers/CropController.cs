@@ -1181,9 +1181,6 @@ namespace NMP.Portal.Controllers
             List<CropData> cropEntries = new List<CropData>();
             foreach (Crop crop in model.Crops)
             {
-                crop.Year = model.Year.Value;
-                crop.Variety = model.Variety == crop.Variety ? crop.Variety : model.Variety;
-                crop.CropTypeID = model.CropTypeID.Value;
                 crop.CreatedOn = DateTime.Now;
                 crop.CreatedByID = userId;
 
