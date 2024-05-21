@@ -35,6 +35,7 @@ namespace NMP.Portal.ViewModels
         public bool IsCropGroupChange { get; set; } = false;
         public bool IsAnyChangeInField { get; set; } = false;
         public bool IsQuestionChange { get; set; } = false;
+        public bool IsCropTypeChange { get; set; } = false;
 
         public string? EncryptedHarvestYear { get; set; } = string.Empty;
         public string? LastModifiedOn { get; set; }

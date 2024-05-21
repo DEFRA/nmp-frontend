@@ -246,7 +246,7 @@ namespace NMP.Portal.Controllers
             }
             string farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
             (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-            if (model.IsWithinNVZForFarm.HasValue)
+            if (model.IsWithinNVZForFarm.HasValue&&model.IsWithinNVZForFarm.Value)
             {
                 return View(model);
             }
@@ -287,7 +287,7 @@ namespace NMP.Portal.Controllers
             }
             string farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
             (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-            if (model.IsAbove300SeaLevelForFarm.HasValue)
+            if (model.IsAbove300SeaLevelForFarm.HasValue&& model.IsAbove300SeaLevelForFarm.Value)
             {
                 return View(model);
             }
