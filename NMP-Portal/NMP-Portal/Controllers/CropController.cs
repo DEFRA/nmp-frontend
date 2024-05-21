@@ -686,6 +686,16 @@ namespace NMP.Portal.Controllers
                     ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Clear();
                     ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Add(Resource.MsgEnterTheDateInNumber);
                 }
+                if (dateError != null && (dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonth, Resource.lblSowingDateForError))||
+                    dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonthAndYear, Resource.lblSowingDateForError)) ||
+                    dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndYear, Resource.lblSowingDateForError)) ||
+                    dateError.Equals(string.Format(Resource.MsgDateMustIncludeAYear, Resource.lblSowingDateForError)) ||
+                    dateError.Equals(string.Format(Resource.MsgDateMustIncludeADay, Resource.lblSowingDateForError)) ||
+                    dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndMonth, Resource.lblSowingDateForError))))
+                {
+                    ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Clear();
+                    ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Add(Resource.ErrorMsgForDate);
+                }
             }
             if (model.Crops[model.SowingDateCurrentCounter].SowingDate == null)
             {
@@ -1219,7 +1229,7 @@ namespace NMP.Portal.Controllers
             }
             else
             {
-                TempData["ErrorCreatePlan"] = error.Message; //Resource.MsgWeCouldNotCreateYourPlanPleaseTryAgainLater;
+                TempData["ErrorCreatePlan"] = Resource.MsgWeCouldNotCreateYourPlanPleaseTryAgainLater; //error.Message; //
                 return RedirectToAction("CheckAnswer");
             }
         }
@@ -1284,7 +1294,7 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        TempData["ErrorOnHarvestYearOverview"] = error.Message; //Resource.MsgWeCouldNotCreateYourPlanPleaseTryAgainLater;
+                        TempData["ErrorOnHarvestYearOverview"] = Resource.MsgWeCouldNotCreateYourPlanPleaseTryAgainLater;//error.Message; //
                         model = null;
                     }
 

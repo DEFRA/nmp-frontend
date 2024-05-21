@@ -70,6 +70,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The date must include the day, the month and the year.
+        /// </summary>
+        public static string ErrorMsgForDate {
+            get {
+                return ResourceManager.GetString("ErrorMsgForDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you plan to grow any other crops in these fields?.
         /// </summary>
         public static string lbDoYouPlanToGrowAnyOtherCropsInTheseFields {
@@ -2447,6 +2456,60 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} must include a day.
+        /// </summary>
+        public static string MsgDateMustIncludeADay {
+            get {
+                return ResourceManager.GetString("MsgDateMustIncludeADay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} must include a day and month.
+        /// </summary>
+        public static string MsgDateMustIncludeADayAndMonth {
+            get {
+                return ResourceManager.GetString("MsgDateMustIncludeADayAndMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} must include a day and year.
+        /// </summary>
+        public static string MsgDateMustIncludeADayAndYear {
+            get {
+                return ResourceManager.GetString("MsgDateMustIncludeADayAndYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} must include a month.
+        /// </summary>
+        public static string MsgDateMustIncludeAMonth {
+            get {
+                return ResourceManager.GetString("MsgDateMustIncludeAMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} must include a month and year.
+        /// </summary>
+        public static string MsgDateMustIncludeAMonthAndYear {
+            get {
+                return ResourceManager.GetString("MsgDateMustIncludeAMonthAndYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} must include a year.
+        /// </summary>
+        public static string MsgDateMustIncludeAYear {
+            get {
+                return ResourceManager.GetString("MsgDateMustIncludeAYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a county.
         /// </summary>
         public static string MsgEnterACounty {
@@ -2929,15 +2992,6 @@ namespace NMP.Portal.Resources {
         public static string MsgYieldNotSet {
             get {
                 return ResourceManager.GetString("MsgYieldNotSet", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string String1 {
-            get {
-                return ResourceManager.GetString("String1", resourceCulture);
             }
         }
     }
