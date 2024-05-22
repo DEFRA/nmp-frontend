@@ -511,6 +511,11 @@ namespace NMP.Portal.Controllers
                                 matchFound = planViewModel.Crops.Any(cropList2 => cropList2.FieldID == cropList1.FieldID);
                                 if (matchFound && model.Crops.Count == 1)
                                 {
+                                    if (model.SowingDateQuestion != (int)NMP.Portal.Enums.SowingDateQuestion.NoIWillEnterTheDateLater)
+                                    {
+                                        model.SowingDateQuestion = (int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields;
+                                    }
+                                    model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
                                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                                     return RedirectToAction("CheckAnswer");
                                 }
@@ -686,12 +691,12 @@ namespace NMP.Portal.Controllers
                     ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Clear();
                     ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Add(Resource.MsgEnterTheDateInNumber);
                 }
-                if (dateError != null && (dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonth, Resource.lblSowingDateForError))||
-                    dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonthAndYear, Resource.lblSowingDateForError)) ||
-                    dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndYear, Resource.lblSowingDateForError)) ||
-                    dateError.Equals(string.Format(Resource.MsgDateMustIncludeAYear, Resource.lblSowingDateForError)) ||
-                    dateError.Equals(string.Format(Resource.MsgDateMustIncludeADay, Resource.lblSowingDateForError)) ||
-                    dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndMonth, Resource.lblSowingDateForError))))
+                else if (dateError != null && (dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonth, Resource.lblSowingDateForError))||
+                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonthAndYear, Resource.lblSowingDateForError)) ||
+                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndYear, Resource.lblSowingDateForError)) ||
+                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeAYear, Resource.lblSowingDateForError)) ||
+                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADay, Resource.lblSowingDateForError)) ||
+                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndMonth, Resource.lblSowingDateForError))))
                 {
                     ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Clear();
                     ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Add(Resource.ErrorMsgForDate);
@@ -1148,15 +1153,26 @@ namespace NMP.Portal.Controllers
                         if (model.SowingDateQuestion == (int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields)
                         {
                             ModelState.AddModelError(string.Concat("Crops[", i, "].SowingDate"), string.Format(Resource.lblSowingSingleDateNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType));
+                            break;
                         }
                         else if (model.SowingDateQuestion == (int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveDifferentDatesForEachOfTheseFields)
                         {
                             ModelState.AddModelError(string.Concat("Crops[", i, "].SowingDate"), string.Format(Resource.lblSowingDiffrentDateNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType, crop.FieldName));
                         }
                     }
+                    i++;
+                }
+                i = 0;
+                foreach (var crop in model.Crops)
+                {
                     if (crop.Yield == null)
                     {
-                        if (model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterDifferentFiguresForEachField)
+                        if (model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
+                        {
+                            ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format(Resource.lblWhatIsTheExpectedYieldForSingleNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType));
+                            break;
+                        }
+                        else if (model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterDifferentFiguresForEachField)
                         {
                             ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format(Resource.lblWhatIsTheDifferentExpectedYieldNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType, crop.FieldName));
                         }
@@ -1193,7 +1209,8 @@ namespace NMP.Portal.Controllers
             {
                 crop.CreatedOn = DateTime.Now;
                 crop.CreatedByID = userId;
-
+                crop.FieldName = null;
+                crop.EncryptedCounter = null;
                 CropData cropEntry = new CropData
                 {
                     Crop = crop,

@@ -2195,6 +2195,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the expected yield for {0} per hectare in these fields not set?.
+        /// </summary>
+        public static string lblWhatIsTheExpectedYieldForSingleNotSet {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheExpectedYieldForSingleNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the farm name?.
         /// </summary>
         public static string lblWhatIsTheFarmName {

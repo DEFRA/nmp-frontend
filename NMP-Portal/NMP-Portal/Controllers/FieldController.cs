@@ -674,8 +674,8 @@ namespace NMP.Portal.Controllers
 
                 if (model.IsSoilNutrientValueTypeIndex != null && (!model.IsSoilNutrientValueTypeIndex.Value))
                 {
-                    List<NutrientResponseWrapper> nutrients = await _fieldService.FetchNutrientsAsync();
-                    if (nutrients.Count > 0)
+                    (List<NutrientResponseWrapper> nutrients,error) = await _fieldService.FetchNutrientsAsync();
+                    if (error == null&&nutrients.Count > 0)
                     {
                         int phosphorusId = 1;
                         int potassiumId = 2;
@@ -701,8 +701,17 @@ namespace NMP.Portal.Controllers
 
                         (model.SoilAnalyses.PhosphorusIndex, error) = await _soilService.FetchSoilNutrientIndex(phosphorusId, model.SoilAnalyses.Phosphorus, (int)PhosphorusMethodology.Olsens);
                         (model.SoilAnalyses.MagnesiumIndex, error) = await _soilService.FetchSoilNutrientIndex(magnesiumId, model.SoilAnalyses.Magnesium, (int)MagnesiumMethodology.None);
-                        (model.SoilAnalyses.PotassiumIndex, error) = await _soilService.FetchSoilNutrientIndex(potassiumId, model.SoilAnalyses.Potassium, (int)PotassiumMethodology.None);
-
+                        (model.SoilAnalyses.PotassiumIndex, error) = await _soilService.FetchSoilNutrientIndex(potassiumId, model.SoilAnalyses.Potassium, (int)PotassiumMethodology.None);                        
+                        //if (error != null && error.Message != null)
+                        //{
+                        //    ViewBag.Error = error.Message;
+                        //    return View(model);
+                        //}
+                    }
+                    if (error != null && error.Message != null)
+                    {
+                        ViewBag.Error = error.Message;
+                        return View(model);
                     }
                 }
                 else
@@ -721,6 +730,7 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 ViewBag.Error = string.Concat(error, ex.Message);
+                return View(model);
             }
             return RedirectToAction("SNSCalculationMethod");
         }
@@ -899,7 +909,7 @@ namespace NMP.Portal.Controllers
         {
             if (!model.CropTypeID.HasValue)
             {
-                ModelState.AddModelError("Crop.CropTypeID", Resource.MsgPreviousCropTypeNotSet);
+                ModelState.AddModelError("CropTypeID", Resource.MsgPreviousCropTypeNotSet);
             }
             if (model.IsSoilReleasingClay && (!model.SoilReleasingClay.HasValue))
             {
