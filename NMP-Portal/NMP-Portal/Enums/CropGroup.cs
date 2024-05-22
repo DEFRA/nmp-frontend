@@ -4,6 +4,7 @@
     {
         Cereals = 0,
         Potatoes = 7,
-        Other = 8
+        Other = 8,
+        Grass = 6
     }
 }

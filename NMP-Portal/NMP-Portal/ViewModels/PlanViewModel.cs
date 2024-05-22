@@ -32,7 +32,15 @@ namespace NMP.Portal.ViewModels
         public decimal? Length { get; set; }
         public string? FarmName { get; set; }
         public bool IsCheckAnswer { get; set; } = false;
+        public bool IsCropGroupChange { get; set; } = false;
         public bool IsAnyChangeInField { get; set; } = false;
         public bool IsQuestionChange { get; set; } = false;
+
+        public string? EncryptedHarvestYear { get; set; } = string.Empty;
+        public string? LastModifiedOn { get; set; }
+        public List<string>? EncryptedHarvestYearList { get; set; }
+        public List<HarvestYearPlans> HarvestYearPlans { get; set; } = new List<HarvestYearPlans>();
+        public int FieldCount { get; set; }
+        public List<HarvestYear> HarvestYear { get; set; } = new List<HarvestYear>();
     }
 }
