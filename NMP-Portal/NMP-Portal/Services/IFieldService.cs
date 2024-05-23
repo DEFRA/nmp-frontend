@@ -7,7 +7,7 @@ namespace NMP.Portal.Services
     {
         Task<int> FetchFieldCountByFarmIdAsync(int farmId);
         Task<List<SoilTypesResponse>> FetchSoilTypes();
-        Task<List<NutrientResponseWrapper>> FetchNutrientsAsync();
+        Task<(List<NutrientResponseWrapper>, Error)> FetchNutrientsAsync();
         Task<List<CropGroupResponse>> FetchCropGroups();
         Task<List<CropTypeResponse>> FetchCropTypes(int cropGroupId);
         Task<string> FetchCropGroupById(int cropGroupId);

@@ -104,10 +104,10 @@ namespace NMP.Portal.Services
             }
             return soilTypes;
         }
-        public async Task<List<NutrientResponseWrapper>> FetchNutrientsAsync()
+        public async Task<(List<NutrientResponseWrapper>,Error)> FetchNutrientsAsync()
         {
             List<NutrientResponseWrapper> nutrients = new List<NutrientResponseWrapper>();
-            Error error = new Error();
+            Error error = null;
             try
             {
                 Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
@@ -135,18 +135,20 @@ namespace NMP.Portal.Services
             }
             catch (HttpRequestException hre)
             {
+                error = new();
                 error.Message = Resource.MsgServiceNotAvailable;
                 _logger.LogError(hre.Message);
                 throw new Exception(error.Message, hre);
             }
             catch (Exception ex)
             {
+                error = new();
                 error.Message = ex.Message;
                 _logger.LogError(ex.Message);
                 throw new Exception(error.Message, ex);
             }
 
-            return nutrients;
+            return (nutrients,error);
         }
         public async Task<List<CropGroupResponse>> FetchCropGroups()
         {
