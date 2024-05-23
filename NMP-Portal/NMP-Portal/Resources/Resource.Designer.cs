@@ -106,7 +106,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add another crop to this plan.
+        ///   Looks up a localized string similar to Add another crop to this {0} plan.
         /// </summary>
         public static string lblAddAnotherCrop {
             get {
@@ -151,7 +151,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add manures to this plan.
+        ///   Looks up a localized string similar to Add manures to this {0} plan.
         /// </summary>
         public static string lblAddManuresToThisPlan {
             get {

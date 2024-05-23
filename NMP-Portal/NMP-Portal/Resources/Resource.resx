@@ -962,10 +962,10 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>We couldn’t create your plan, please try again later</value>
   </data>
   <data name="lblAddAnotherCrop" xml:space="preserve">
-    <value>Add another crop to this plan</value>
+    <value>Add another crop to this {0} plan</value>
   </data>
   <data name="lblAddManuresToThisPlan" xml:space="preserve">
-    <value>Add manures to this plan</value>
+    <value>Add manures to this {0} plan</value>
   </data>
   <data name="lblChangeThisPlan" xml:space="preserve">
     <value>Change this {0} plan</value>
