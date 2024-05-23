@@ -6,7 +6,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer&& (!Model.IsCropGroupChange) ? "CheckAnswer" :"CropInfoOne")" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer&& (!Model.IsCropGroupChange)&&(!Model.IsCropTypeChange) ? "CheckAnswer" :"CropInfoOne")" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="CropInfoTwo" asp-controller="Crop" method="post">
     @Html.AntiForgeryToken()
@@ -38,6 +38,7 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropInfo1Name" value="@Model.CropInfo1Name"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropInfo2Name" value="@Model.CropInfo2Name"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCropGroupChange" value="@Model.IsCropGroupChange"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCropTypeChange" value="@Model.IsCropTypeChange"></govuk-input>
     @if (Model.FieldList != null && Model.FieldList.Count > 0)
     {
         @for (int i = 0; i < Model.FieldList.Count; i++)

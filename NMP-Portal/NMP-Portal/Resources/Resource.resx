@@ -1075,7 +1075,28 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="MsgVarietyNameNotSet" xml:space="preserve">
     <value>Variety name not set</value>
   </data>
-  <data name="String1" xml:space="preserve">
-    <value />
+  <data name="MsgDateMustIncludeAMonth" xml:space="preserve">
+    <value>{0} must include a month</value>
+  </data>
+  <data name="ErrorMsgForDate" xml:space="preserve">
+    <value>The date must include the day, the month and the year</value>
+  </data>
+  <data name="MsgDateMustIncludeADay" xml:space="preserve">
+    <value>{0} must include a day</value>
+  </data>
+  <data name="MsgDateMustIncludeADayAndMonth" xml:space="preserve">
+    <value>{0} must include a day and month</value>
+  </data>
+  <data name="MsgDateMustIncludeADayAndYear" xml:space="preserve">
+    <value>{0} must include a day and year</value>
+  </data>
+  <data name="MsgDateMustIncludeAMonthAndYear" xml:space="preserve">
+    <value>{0} must include a month and year</value>
+  </data>
+  <data name="MsgDateMustIncludeAYear" xml:space="preserve">
+    <value>{0} must include a year</value>
+  </data>
+  <data name="lblWhatIsTheExpectedYieldForSingleNotSet" xml:space="preserve">
+    <value>What is the expected yield for {0} per hectare in these fields not set?</value>
   </data>
 </root>
