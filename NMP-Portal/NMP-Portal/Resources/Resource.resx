@@ -1075,8 +1075,8 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="MsgVarietyNameNotSet" xml:space="preserve">
     <value>Variety name not set</value>
   </data>
-  <data name="String1" xml:space="preserve">
-    <value />
+  <data name="lblNitrogen" xml:space="preserve">
+    <value>Nitrogen (N)</value>
   </data>
   <data name="lblChangeLinkForRecommendation" xml:space="preserve">
     <value>Change {0} details for {1}</value>
@@ -1116,5 +1116,26 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
   <data name="lblVariety" xml:space="preserve">
     <value>Variety</value>
+  </data>
+  <data name="lblLime" xml:space="preserve">
+    <value>Lime</value>
+  </data>
+  <data name="lblPhosphateP2O5" xml:space="preserve">
+    <value>Phosphate (P2O5)</value>
+  </data>
+  <data name="lblPotashK2O" xml:space="preserve">
+    <value>Potash (K2O)</value>
+  </data>
+  <data name="lblSulphurSO3" xml:space="preserve">
+    <value>Sulphur (SO3)</value>
+  </data>
+  <data name="lblHyphen" xml:space="preserve">
+    <value>-</value>
+  </data>
+  <data name="lblkg" xml:space="preserve">
+    <value>kg</value>
+  </data>
+  <data name="lblType" xml:space="preserve">
+    <value>Type</value>
   </data>
 </root>

@@ -26,6 +26,7 @@ namespace NMP.Portal.Controllers
         private readonly ILogger<CropController> _logger;
         private readonly IDataProtector _farmDataProtector;
         private readonly IDataProtector _fieldDataProtector;
+        private readonly IDataProtector _cropDataProtector;
         private readonly IFarmService _farmService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IFieldService _fieldService;
@@ -38,6 +39,7 @@ namespace NMP.Portal.Controllers
             _httpContextAccessor = httpContextAccessor;
             _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
             _fieldDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FieldController");
+            _cropDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.CropController");
             _farmService = farmService;
             _fieldService = fieldService;
             _cropService = cropService;
@@ -1230,6 +1232,7 @@ namespace NMP.Portal.Controllers
 
                             foreach (var plan in group.HarvestPlans)
                             {
+                                harvestYearPlans.FieldData.Add(_cropDataProtector.Protect(plan.FieldID.ToString()), plan.FieldName);
                                 harvestYearPlans.FieldNames.Add(plan.FieldName);
                             }
                             model.HarvestYearPlans.Add(harvestYearPlans);
@@ -1317,6 +1320,64 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> PlansAndRecordsOverview(PlanViewModel model)
         {
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Recommendations(string q, string? s)//q=fieldId,s=harvestYear
+        {
+            RecommendationViewModel model = new RecommendationViewModel();
+            Error error = null;
+            int decryptedFarmId = 0;
+            int decryptedFieldId = 0;
+            int decryptedHarvestYear = 0;
+            List<Recommendation> recommendations = null;
+            List<Crop> crops = null;
+            try
+            {
+                //string q, 
+                //if (!string.IsNullOrWhiteSpace(q))
+                //{
+                //    decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
+                //}
+                if (!string.IsNullOrWhiteSpace(q))
+                {
+                    decryptedFieldId = Convert.ToInt32(_cropDataProtector.Unprotect(q));
+                }
+                if (!string.IsNullOrWhiteSpace(s))
+                {
+                    decryptedHarvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(s));
+                }
+                if (decryptedFieldId > 0 && decryptedHarvestYear > 0)
+                {
+                    (recommendations, error) = await _cropService.FetchRecommendationByFieldIdAndYear(decryptedFieldId, decryptedHarvestYear);
+                    if (error != null)
+                    {
+                        crops = new();
+                        (crops, error) = await _cropService.FetchCropByFieldId(decryptedFieldId);
+                        if(crops.Count > 0)
+                        {
+                            var cropList=crops.Where(x=>x.Year == decryptedHarvestYear&&x.Confirm.Equals(false)).ToList();
+                            crops = null;
+                            crops = cropList;
+                            model.Recommendations = recommendations;
+                            model.Crops = crops;
+                            //var fieldList = (await _fieldService.FetchFieldsByFarmId(decryptedFarmId)).ToList();
+                            //if(fieldList.Count > 0)
+                            //{
+
+                            //}
+                            model.FieldName = (await _fieldService.FetchFieldByFieldId(crops[0].FieldID.Value)).Name;
+                            model.CropTypeName = await _fieldService.FetchCropTypeById(crops[0].CropTypeID.Value);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorOnHarvestYearOverview"] =string.Concat(error.Message,ex.Message);
+                return RedirectToAction("HarvestYearOverview");
+            }
             return View(model);
         }
     }

@@ -394,7 +394,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Change this {0} plan.
         ///   Looks up a localized string similar to Change {0} details for {1}.
         /// </summary>
         public static string lblChangeLinkForRecommendation {
@@ -404,7 +403,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Change this plan.
+        ///   Looks up a localized string similar to Change this {0} plan.
         /// </summary>
         public static string lblChangeThisPlan {
             get {
@@ -1107,6 +1106,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to -.
+        /// </summary>
+        public static string lblHyphen {
+            get {
+                return ResourceManager.GetString("lblHyphen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If you have more than one holding, it&apos;s best to add a separate farm for each..
         /// </summary>
         public static string lblIfYouhaveMoreThanOneHolding {
@@ -1188,6 +1196,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to kg.
+        /// </summary>
+        public static string lblkg {
+            get {
+                return ResourceManager.GetString("lblkg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Land Parcel ID (optional).
         /// </summary>
         public static string lblLandParcelID {
@@ -1247,6 +1264,15 @@ namespace NMP.Portal.Resources {
         public static string lblLicenseTextExtra {
             get {
                 return ResourceManager.GetString("lblLicenseTextExtra", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lime.
+        /// </summary>
+        public static string lblLime {
+            get {
+                return ResourceManager.GetString("lblLime", resourceCulture);
             }
         }
         
@@ -1400,6 +1426,15 @@ namespace NMP.Portal.Resources {
         public static string lblNationalGridReferenceForCheckAnswere {
             get {
                 return ResourceManager.GetString("lblNationalGridReferenceForCheckAnswere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nitrogen (N).
+        /// </summary>
+        public static string lblNitrogen {
+            get {
+                return ResourceManager.GetString("lblNitrogen", resourceCulture);
             }
         }
         
@@ -1584,6 +1619,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Phosphate (P2O5).
+        /// </summary>
+        public static string lblPhosphateP2O5 {
+            get {
+                return ResourceManager.GetString("lblPhosphateP2O5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What was the phosphorus (P) analysis type?.
         /// </summary>
         public static string lblPhosphorusAnalysisType {
@@ -1697,6 +1741,15 @@ namespace NMP.Portal.Resources {
         public static string lblPotash {
             get {
                 return ResourceManager.GetString("lblPotash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Potash (K2O).
+        /// </summary>
+        public static string lblPotashK2O {
+            get {
+                return ResourceManager.GetString("lblPotashK2O", resourceCulture);
             }
         }
         
@@ -2034,6 +2087,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sulphur (SO3).
+        /// </summary>
+        public static string lblSulphurSO3 {
+            get {
+                return ResourceManager.GetString("lblSulphurSO3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to the crops you grow.
         /// </summary>
         public static string lblTheCropsYouGrow {
@@ -2120,6 +2182,15 @@ namespace NMP.Portal.Resources {
         public static string lblTrue {
             get {
                 return ResourceManager.GetString("lblTrue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type.
+        /// </summary>
+        public static string lblType {
+            get {
+                return ResourceManager.GetString("lblType", resourceCulture);
             }
         }
         
@@ -3047,15 +3118,6 @@ namespace NMP.Portal.Resources {
         public static string MsgYieldNotSet {
             get {
                 return ResourceManager.GetString("MsgYieldNotSet", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string String1 {
-            get {
-                return ResourceManager.GetString("String1", resourceCulture);
             }
         }
     }

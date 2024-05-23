@@ -30,5 +30,7 @@ namespace NMP.Portal.Helpers
         public const string FetchPlanSummaryByFarmIdAsyncAPI = "crops/plans?farmId={0}&type={1}";
         public const string FetchHarvestYearPlansByFarmIdAsyncAPI = "crops/plans/{0}?farmId={1}";
         public const string AddCropNutrientManagementPlanAsyncAPI = "crops/plans";
+        public const string FetchRecommendationByFieldIdAndYearAsyncAPI = "recommendations?fieldId={0}&harvestYear={1}";
+        public const string FetchCropByFieldIdAsyncAPI = "crops/fields/{0}";
     }
 }

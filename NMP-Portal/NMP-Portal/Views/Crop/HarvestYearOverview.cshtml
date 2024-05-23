@@ -76,6 +76,16 @@
                                 </td>
                             </tr>
                         }
+                        @foreach (var field in harvestYearPlan.FieldData)
+                        {
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell">@field.Value</td>
+                                @* <td class="govuk-table__cell"></td> *@
+                                <td class="govuk-table__cell">
+                                    <a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@field.Key" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblViewRecommendations</a>
+                                </td>
+                            </tr>
+                        }
 
                     </tbody>
                 </table>
