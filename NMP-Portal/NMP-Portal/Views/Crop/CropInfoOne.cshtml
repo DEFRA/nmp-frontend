@@ -4,10 +4,14 @@
     ViewData["Title"] = Resource.lblCropInfoOne;
     int PotatoGroupId = (int)NMP.Portal.Enums.CropGroup.Potatoes;
     int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
+    int LessThan60days = (int)NMP.Portal.Enums.PotatoCropInfo1.LessThan60days;
+    int GreaterThan120days = (int)NMP.Portal.Enums.PotatoCropInfo1.GreaterThan120days;
+    int PotatoVarietyGroup1 = (int)NMP.Portal.Enums.CropType.PotatoVarietyGroup1;
+    int PotatoVarietyGroup4 = (int)NMP.Portal.Enums.CropType.PotatoVarietyGroup4;
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer&& (!Model.IsCropGroupChange) ? "CheckAnswer" :"Yield")" asp-controller="Crop" asp-route-q="@Model.YieldEncryptedCounter">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer&& (!Model.IsCropGroupChange) &&(!Model.IsCropTypeChange) ? "CheckAnswer" :(Model.IsCropTypeChange)?"VarietyName":"Yield")" asp-controller="Crop" asp-route-q="@Model.YieldEncryptedCounter">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="CropInfoOne" asp-controller="Crop" method="post">
     @Html.AntiForgeryToken()
@@ -39,6 +43,7 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropInfo1Name" value="@Model.CropInfo1Name"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropInfo2Name" value="@Model.CropInfo2Name"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCropGroupChange" value="@Model.IsCropGroupChange"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCropTypeChange" value="@Model.IsCropTypeChange"></govuk-input>
     @if (Model.FieldList != null && Model.FieldList.Count > 0)
     {
         @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -78,7 +83,14 @@
                     {
                         @foreach (var item in ViewBag.CropInfoOneList)
                         {
-                            <govuk-radios-item value="@item.CropInfo1Id">@item.CropInfo1Name</govuk-radios-item>
+                            @if ((Model.CropTypeID == PotatoVarietyGroup1 && item.CropInfo1Id == GreaterThan120days) || (Model.CropTypeID == PotatoVarietyGroup4 && item.CropInfo1Id == LessThan60days))
+                            {
+                                <govuk-radios-item value="@item.CropInfo1Id" disabled="true">@item.CropInfo1Name</govuk-radios-item>
+                            }
+                            else
+                            {
+                                <govuk-radios-item value="@item.CropInfo1Id">@item.CropInfo1Name</govuk-radios-item>
+                            }
                         }
                     }
 
