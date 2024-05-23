@@ -46,7 +46,10 @@
                 <p class="govuk-body">
                     @string.Format(Resource.lblLastUpdated, Model.LastModifiedOn)
                 </p>
-                <p class="govuk-body"><a asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblAddAnotherCrop</a></p>
+                @if (ViewBag.PendingField.Count > 0)
+                {
+                    <p class="govuk-body"><a asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblAddAnotherCrop</a></p>
+                }
                 <p class="govuk-body"><a href="#">@Resource.lblAddManuresToThisPlan</a></p>
             </div>
             <hr class="seperator_five">
@@ -54,8 +57,11 @@
             @foreach (var harvestYearPlan in Model.HarvestYearPlans)
             {
                 <h2 class="govuk-heading-m">@harvestYearPlan.CropTypeName</h2>
-                <h2 class="govuk-heading-m">@harvestYearPlan.CropVariety</h2>
-                <p class="govuk-body"><a asp-action="ChangePlan" asp-controller="Crop">@string.Format(Resource.lblChangeThisPlan, harvestYearPlan.CropTypeName)</a></p>
+                @if (!string.IsNullOrWhiteSpace(harvestYearPlan.CropVariety))
+                {
+                    <p class="govuk-body">@string.Format(Resource.lblVariety, harvestYearPlan.CropVariety)</p>
+                }
+                <p class="govuk-body"><a href="#">@string.Format(Resource.lblChangeThisPlan, harvestYearPlan.CropTypeName)</a></p>
 
                 <table class="govuk-table">
                     <thead class="govuk-table__head">

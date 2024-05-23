@@ -2051,6 +2051,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Variety: {0}.
+        /// </summary>
+        public static string lblVariety {
+            get {
+                return ResourceManager.GetString("lblVariety", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Variety name.
         /// </summary>
         public static string lblVarietyName {
@@ -2083,6 +2092,15 @@ namespace NMP.Portal.Resources {
         public static string lblViewEdit {
             get {
                 return ResourceManager.GetString("lblViewEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View or create a plan or record.
+        /// </summary>
+        public static string lblViewOrCreateAPlanOrRecord {
+            get {
+                return ResourceManager.GetString("lblViewOrCreateAPlanOrRecord", resourceCulture);
             }
         }
         
@@ -2929,15 +2947,6 @@ namespace NMP.Portal.Resources {
         public static string MsgYieldNotSet {
             get {
                 return ResourceManager.GetString("MsgYieldNotSet", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string String1 {
-            get {
-                return ResourceManager.GetString("String1", resourceCulture);
             }
         }
     }
