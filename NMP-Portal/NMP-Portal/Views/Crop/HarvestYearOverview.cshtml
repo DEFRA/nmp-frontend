@@ -46,22 +46,28 @@
                 <p class="govuk-body">
                     @string.Format(Resource.lblLastUpdated, Model.LastModifiedOn)
                 </p>
-                <p class="govuk-body"><a asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblAddAnotherCrop</a></p>
-                <p class="govuk-body"><a href="#">@Resource.lblAddManuresToThisPlan</a></p>
+                @if (ViewBag.PendingField.Count > 0)
+                {
+                    <p class="govuk-body"><a asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@string.Format(Resource.lblAddAnotherCrop, Model.Year)</a></p>
+                }
+                <p class="govuk-body"><a href="#">@string.Format(Resource.lblAddManuresToThisPlan, Model.Year)</a></p>
             </div>
             <hr class="seperator_five">
 
             @foreach (var harvestYearPlan in Model.HarvestYearPlans)
             {
                 <h2 class="govuk-heading-m">@harvestYearPlan.CropTypeName</h2>
-                <h2 class="govuk-heading-m">@harvestYearPlan.CropVariety</h2>
-                <p class="govuk-body"><a asp-action="ChangePlan" asp-controller="Crop">@string.Format(Resource.lblChangeThisPlan, harvestYearPlan.CropTypeName)</a></p>
+                @if (!string.IsNullOrWhiteSpace(harvestYearPlan.CropVariety))
+                {
+                    <p class="govuk-body">@string.Format(Resource.lblVariety, harvestYearPlan.CropVariety)</p>
+                }
+                <p class="govuk-body"><a href="#">@string.Format(Resource.lblChangeThisPlan, harvestYearPlan.CropTypeName)</a></p>
 
-                <table class="govuk-table">
+                <table class="govuk-table margin-bottom-forty big_crop_table">
                     <thead class="govuk-table__head">
                         <tr class="govuk-table__row">
                             <th id="field_name" scope="col" class="govuk-table__header">@Resource.lblField</th>
-                            @* <th scope="col" class="govuk-table__header">@Resource.lblSecondCrop </th> *@
+                            <th scope="col" class="govuk-table__header"> </th>
                             <th scope="col" class="govuk-table__header"> </th>
                         </tr>
                     </thead>
@@ -70,8 +76,8 @@
                         {
                             <tr class="govuk-table__row">
                                 <td class="govuk-table__cell">@field</td>
-                                @* <td class="govuk-table__cell"></td> *@
-                                <td class="govuk-table__cell">
+                                <td class="govuk-table__cell"></td>
+                                <td class="govuk-table__cell alignRight">
                                     <a href="#">@Resource.lblViewRecommendations</a>
                                 </td>
                             </tr>
@@ -79,6 +85,7 @@
 
                     </tbody>
                 </table>
+
             }
 
         </div>

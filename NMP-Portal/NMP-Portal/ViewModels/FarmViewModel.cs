@@ -11,6 +11,6 @@ namespace NMP.Portal.ViewModels
         public bool IsManualAddress { get; set; } = false;
         public bool IsCheckAnswer { get; set; } = false;
         public bool IsPostCodeChanged { get; set; } = false;
-        
+        public bool IsPlanExist { get; set; } = false;
     }
 }
