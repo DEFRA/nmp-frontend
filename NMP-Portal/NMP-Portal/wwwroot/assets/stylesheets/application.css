@@ -147,6 +147,9 @@ hr.seperator_five {
 .govuk-input__wrapper input {
     max-width: 5.5em;
 }
+.alignRight{
+    text-align:right !important;
+}
 .hint {
     font-weight: normal !important;
 }

@@ -38,9 +38,10 @@ namespace NMP.Portal.Controllers
         private readonly IUserFarmService _userFarmService;
         private readonly IFarmService _farmService;
         private readonly IFieldService _fieldService;
+        private readonly ICropService _cropService;
         public FarmController(ILogger<FarmController> logger, IDataProtectionProvider dataProtectionProvider, IHttpContextAccessor httpContextAccessor, IAddressLookupService addressLookupService,
             IUserFarmService userFarmService, IFarmService farmService,
-            IFieldService fieldService)
+            IFieldService fieldService, ICropService cropService)
         {
             _logger = logger;
             _dataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
@@ -49,6 +50,7 @@ namespace NMP.Portal.Controllers
             _userFarmService = userFarmService;
             _farmService = farmService;
             _fieldService = fieldService;
+            _cropService = cropService;
         }
         public IActionResult Index()
         {
@@ -596,6 +598,12 @@ namespace NMP.Portal.Controllers
                         farmData.FullAddress = string.Format("{0}, {1} {2}, {3} {4}", farm.Address1, farm.Address2 != null ? farm.Address2 + "," : string.Empty, farm.Address3, farm.Address4, farm.Postcode);
                         farmData.EncryptedFarmId = _dataProtector.Protect(farm.ID.ToString());
                         ViewBag.FieldCount = await _fieldService.FetchFieldCountByFarmIdAsync(Convert.ToInt32(farmId));
+                    }
+                    List<PlanSummaryResponse> planSummaryResponse = await _cropService.FetchPlanSummaryByFarmId(Convert.ToInt32(farmId), 0);
+                    planSummaryResponse.RemoveAll(x => x.Year == 0);
+                    if (planSummaryResponse.Count()>0)
+                    {
+                        farmData.IsPlanExist= true;
                     }
                 }
             }

@@ -106,7 +106,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add another crop to this plan.
+        ///   Looks up a localized string similar to Add another crop to this {0} plan.
         /// </summary>
         public static string lblAddAnotherCrop {
             get {
@@ -151,7 +151,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add manures to this plan.
+        ///   Looks up a localized string similar to Add manures to this {0} plan.
         /// </summary>
         public static string lblAddManuresToThisPlan {
             get {
@@ -2240,7 +2240,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variety.
+        ///   Looks up a localized string similar to Variety: {0}.
         /// </summary>
         public static string lblVariety {
             get {
@@ -2281,6 +2281,15 @@ namespace NMP.Portal.Resources {
         public static string lblViewEdit {
             get {
                 return ResourceManager.GetString("lblViewEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View or create a plan or record.
+        /// </summary>
+        public static string lblViewOrCreateAPlanOrRecord {
+            get {
+                return ResourceManager.GetString("lblViewOrCreateAPlanOrRecord", resourceCulture);
             }
         }
         
