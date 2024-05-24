@@ -24,8 +24,8 @@ namespace NMP.Portal.Security
             var extraQueryParameters = new Dictionary<string, string>();
             extraQueryParameters.Add("serviceId", value: builder.Configuration["CustomerIdentityServiceId"].ToString());
             options.ExtraQueryParameters = extraQueryParameters;
-            options.CallbackPath = "/account/afterlogin"; // signin-oidc";
-            options.SignedOutCallbackPath = "/account/logout";
+            options.CallbackPath = builder.Configuration["CustomerIdentityCallbackPath"]; // signin-oidc";
+            options.SignedOutCallbackPath = builder.Configuration["CustomerIdentitySignedOutCallbackPath"];
             options.SignUpSignInPolicyId = builder.Configuration["CustomerIdentityPolicyId"];
             
             options.ErrorPath = "/Error/index";
