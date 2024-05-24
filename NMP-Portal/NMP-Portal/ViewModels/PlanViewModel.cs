@@ -44,5 +44,6 @@ namespace NMP.Portal.ViewModels
         public int FieldCount { get; set; }
         public List<HarvestYear> HarvestYear { get; set; } = new List<HarvestYear>();
         public bool IsAddAnotherCrop { get; set; }
+        public bool? IsPlanRecord { get; set; } = false;
     }
 }

@@ -110,7 +110,7 @@
                         @Model.Year
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="HarvestYearForPlan" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action class="@(Model.IsAddAnotherCrop? "disabled": "")" asp-action="HarvestYearForPlan" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
@@ -175,7 +175,7 @@
                         }
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="CropFields" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action class="@(Model.FieldList.Count==1? "disabled": "")" asp-action="CropFields" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row class=@((!Model.SowingDateQuestion.HasValue)?"govuk-error-message":"")>
