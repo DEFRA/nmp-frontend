@@ -66,23 +66,13 @@
                         </tr>
                     </thead>
                     <tbody class="govuk-table__body">
-                        @foreach (var field in harvestYearPlan.FieldNames)
-                        {
-                            <tr class="govuk-table__row">
-                                <td class="govuk-table__cell">@field</td>
-                                @* <td class="govuk-table__cell"></td> *@
-                                <td class="govuk-table__cell">
-                                    <a href="#">@Resource.lblViewRecommendations</a>
-                                </td>
-                            </tr>
-                        }
                         @foreach (var field in harvestYearPlan.FieldData)
                         {
                             <tr class="govuk-table__row">
                                 <td class="govuk-table__cell">@field.Value</td>
                                 @* <td class="govuk-table__cell"></td> *@
                                 <td class="govuk-table__cell">
-                                    <a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@field.Key" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblViewRecommendations</a>
+                                    <a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@field.Key" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblViewRecommendations</a>
                                 </td>
                             </tr>
                         }

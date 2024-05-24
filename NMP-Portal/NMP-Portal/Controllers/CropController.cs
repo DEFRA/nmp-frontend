@@ -13,6 +13,7 @@ using NMP.Portal.ViewModels;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Reflection;
 using System.Security.Claims;
 using System.Xml.Linq;
@@ -471,7 +472,7 @@ namespace NMP.Portal.Controllers
                             };
                             counter++;
                             crop.FieldName = (await _fieldService.FetchFieldByFieldId(fieldId)).Name;
-                            if(model.CropInfo1.HasValue)
+                            if (model.CropInfo1.HasValue)
                             {
                                 crop.CropInfo1 = model.CropInfo1.Value;
                             }
@@ -693,7 +694,7 @@ namespace NMP.Portal.Controllers
                     ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Clear();
                     ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Add(Resource.MsgEnterTheDateInNumber);
                 }
-                else if (dateError != null && (dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonth, Resource.lblSowingDateForError))||
+                else if (dateError != null && (dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonth, Resource.lblSowingDateForError)) ||
                      dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonthAndYear, Resource.lblSowingDateForError)) ||
                      dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndYear, Resource.lblSowingDateForError)) ||
                      dateError.Equals(string.Format(Resource.MsgDateMustIncludeAYear, Resource.lblSowingDateForError)) ||
@@ -1305,7 +1306,7 @@ namespace NMP.Portal.Controllers
                             foreach (var plan in group.HarvestPlans)
                             {
                                 harvestYearPlans.FieldData.Add(_cropDataProtector.Protect(plan.FieldID.ToString()), plan.FieldName);
-                                harvestYearPlans.FieldNames.Add(plan.FieldName);
+                                //harvestYearPlans.FieldNames.Add(plan.FieldName);
                             }
                             model.HarvestYearPlans.Add(harvestYearPlans);
                         }
@@ -1361,7 +1362,7 @@ namespace NMP.Portal.Controllers
 
                 //To show the list Create Plan for year (2023,2024,..) 
                 List<int> yearList = new List<int>();
-                if(planSummaryResponse != null)
+                if (planSummaryResponse != null)
                 {
                     foreach (var item in planSummaryResponse)
                     {
@@ -1396,25 +1397,26 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Recommendations(string q, string? s)//q=fieldId,s=harvestYear
+        public async Task<IActionResult> Recommendations(string q, string r, string? s)//q=fieldId,s=harvestYear
         {
             RecommendationViewModel model = new RecommendationViewModel();
             Error error = null;
             int decryptedFarmId = 0;
             int decryptedFieldId = 0;
             int decryptedHarvestYear = 0;
-            List<Recommendation> recommendations = null;
+            List<RecommendationHeader> recommendations = null;
             List<Crop> crops = null;
             try
             {
                 //string q, 
-                //if (!string.IsNullOrWhiteSpace(q))
-                //{
-                //    decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
-                //}
                 if (!string.IsNullOrWhiteSpace(q))
                 {
-                    decryptedFieldId = Convert.ToInt32(_cropDataProtector.Unprotect(q));
+                    decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
+                    model.FarmName = (await _farmService.FetchFarmByIdAsync(decryptedFarmId)).Item1.Name;
+                }
+                if (!string.IsNullOrWhiteSpace(r))
+                {
+                    decryptedFieldId = Convert.ToInt32(_cropDataProtector.Unprotect(r));
                 }
                 if (!string.IsNullOrWhiteSpace(s))
                 {
@@ -1425,29 +1427,84 @@ namespace NMP.Portal.Controllers
                     (recommendations, error) = await _cropService.FetchRecommendationByFieldIdAndYear(decryptedFieldId, decryptedHarvestYear);
                     if (error != null)
                     {
-                        crops = new();
-                        (crops, error) = await _cropService.FetchCropByFieldId(decryptedFieldId);
-                        if(crops.Count > 0)
+                        if (model.Crops == null)
                         {
-                            var cropList=crops.Where(x=>x.Year == decryptedHarvestYear&&x.Confirm.Equals(false)).ToList();
-                            crops = null;
-                            crops = cropList;
-                            model.Recommendations = recommendations;
-                            model.Crops = crops;
-                            //var fieldList = (await _fieldService.FetchFieldsByFarmId(decryptedFarmId)).ToList();
-                            //if(fieldList.Count > 0)
-                            //{
+                            model.Crops = new List<Crop>();
+                        }
+                        //if (crops.Count > 0)
+                        //{
+                        foreach (var recommendation in recommendations)
+                        {
+                            var crop = new Crop
+                            {
+                                Year = recommendation.Crops.Year,
+                                CropTypeID = recommendation.Crops.CropTypeID,
+                                FieldID = recommendation.Crops.FieldID,
+                                Variety = recommendation.Crops.Variety,
+                                CropInfo1 = recommendation.Crops.CropInfo1,
+                                CropInfo2 = recommendation.Crops.CropInfo2,
+                                Yield = recommendation.Crops.Yield,
+                                SowingDate = recommendation.Crops.SowingDate
+                            };
+                            
+                            List<CropTypeResponse> cropTypeResponseList = (await _fieldService.FetchAllCropTypes());
+                            if(cropTypeResponseList!=null)
+                            {
+                                CropTypeResponse cropTypeResponse = cropTypeResponseList.Where(x => x.CropTypeId == crop.CropTypeID).FirstOrDefault();
+                                if(cropTypeResponse!=null)
+                                {
+                                    model.CropGroupID = cropTypeResponse.CropGroupId;
+                                }
+                            }
+                            model.FieldName = (await _fieldService.FetchFieldByFieldId(crop.FieldID.Value)).Name;
+                            model.CropTypeName = await _fieldService.FetchCropTypeById(crop.CropTypeID.Value);
+                            model.CropInfo1Name = await _cropService.FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(crop.CropTypeID.Value, crop.CropInfo1.Value);
+                            model.CropInfo2Name = await _cropService.FetchCropInfo2NameByCropInfo2Id(crop.CropInfo2.Value);
+                            model.Crops.Add(crop);
+                            if (recommendation.RecommendationData.Count > 0)
+                            {
+                                foreach (var recData in recommendation.RecommendationData)
+                                {
+                                    var rec = new Recommendation
+                                    {
+                                        CropN = recData.Recommendation.CropN.Value,
+                                        CropP2O5 = recData.Recommendation.CropP2O5,
+                                        CropK2O = recData.Recommendation.CropK2O,
+                                        CropSO3 = recData.Recommendation.CropSO3,
+                                        CropLime = recData.Recommendation.CropLime,
+                                        SNSIndex = recData.Recommendation.SNSIndex,
+                                        SIndex = recData.Recommendation.SIndex,
+                                        KIndex = recData.Recommendation.KIndex,
+                                        MgIndex = recData.Recommendation.MgIndex,
+                                        PIndex = recData.Recommendation.PIndex,
+                                        NaIndex = recData.Recommendation.NaIndex
+                                    };
+                                    model.Recommendations.Add(rec);
 
-                            //}
-                            model.FieldName = (await _fieldService.FetchFieldByFieldId(crops[0].FieldID.Value)).Name;
-                            model.CropTypeName = await _fieldService.FetchCropTypeById(crops[0].CropTypeID.Value);
+
+                                    foreach (var item in recData.RecommendationComments)
+                                    {
+                                        var recCom = new RecommendationComment
+                                        {
+                                            ID = item.ID,
+                                            RecommendationID = item.RecommendationID,
+                                            Nutrient = item.Nutrient,
+                                            Comment = item.Comment
+                                        };
+                                        model.RecommendationComments.Add(recCom);
+                                    }
+
+
+                                }
+                            }
+                            
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                TempData["ErrorOnHarvestYearOverview"] =string.Concat(error.Message,ex.Message);
+                TempData["ErrorOnHarvestYearOverview"] = string.Concat(error.Message, ex.Message);
                 return RedirectToAction("HarvestYearOverview");
             }
             return View(model);

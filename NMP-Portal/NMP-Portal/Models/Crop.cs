@@ -5,7 +5,7 @@ namespace NMP.Portal.Models
 {
     public class Crop
     {
-        //public int Id { get; set; }
+        public int? ID { get; set; }
         public int? FieldID { get; set; }
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhichHarvestWouldYouLikeToPlanFor))]
         public int Year { get; set; }

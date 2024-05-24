@@ -13,7 +13,9 @@ namespace NMP.Portal.Services
         Task<(List<HarvestYearPlanResponse>, Error)> FetchHarvestYearPlansByFarmId(int harvestYear, int farmId);
 
         Task<(bool, Error)> AddCropNutrientManagementPlan(CropDataWrapper cropData);
-        Task<(List<Recommendation>, Error)> FetchRecommendationByFieldIdAndYear(int fieldId, int harvestYear);
+        Task<(List<RecommendationHeader>, Error)> FetchRecommendationByFieldIdAndYear(int fieldId, int harvestYear);
         Task<(List<Crop>, Error)> FetchCropByFieldId(int fieldId);
+        Task<string> FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(int cropTypeId, int cropInfo1Id);
+            Task<string> FetchCropInfo2NameByCropInfo2Id(int cropInfo2Id);
     }
 }

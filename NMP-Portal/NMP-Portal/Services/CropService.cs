@@ -321,9 +321,9 @@ namespace NMP.Portal.Services
             }
             return (harvestYearPlanList, error);
         }
-        public async Task<(List<Recommendation>, Error)> FetchRecommendationByFieldIdAndYear(int fieldId, int harvestYear)
+        public async Task<(List<RecommendationHeader>, Error)> FetchRecommendationByFieldIdAndYear(int fieldId, int harvestYear)
         {
-            List<Recommendation> recommendationList = new List<Recommendation>();
+            List<RecommendationHeader> recommendationList = new List<RecommendationHeader>();
             Error error = new Error();
             try
             {
@@ -337,7 +337,7 @@ namespace NMP.Portal.Services
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        var recommendationsList = responseWrapper.Data.Recommendations.ToObject<List<Recommendation>>();
+                        var recommendationsList = responseWrapper.Data.Recommendations.ToObject<List<RecommendationHeader>>();
                         recommendationList.AddRange(recommendationsList);
                     }
                 }
@@ -409,5 +409,87 @@ namespace NMP.Portal.Services
             }
             return (cropList, error);
         }
+
+        public async Task<string> FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(int cropTypeId,int cropInfo1Id)
+        {
+            Error error = null;
+            string cropInfo1Name = string.Empty;
+            try
+            {
+
+                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
+                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
+                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropInfo1NameByCropTypeIdAndCropInfo1IdAsyncAPI, cropTypeId, cropInfo1Id));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+                {
+                    cropInfo1Name = responseWrapper.Data["cropInfo1Name"];
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return cropInfo1Name;
+        }
+        public async Task<string> FetchCropInfo2NameByCropInfo2Id(int cropInfo2Id)
+        {
+            Error error = null;
+            string cropInfo2Name = string.Empty;
+            try
+            {
+
+                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
+                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
+                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropInfo2NameByCropInfo2IdAsyncAPI,cropInfo2Id));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+                {
+                    cropInfo2Name = responseWrapper.Data["cropInfo2Name"];
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return cropInfo2Name;
+        }
+
     }
 }
