@@ -34,7 +34,7 @@
             @foreach (var year in Model.HarvestYear)
             {
                 <p class="govuk-body">
-                    <a asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@year.EncryptedYear">@string.Format(Resource.lblCreateAPlan, year.Year)</a>
+                    <a asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@year.EncryptedYear" asp-route-isPlanRecord="true">@string.Format(Resource.lblCreateAPlan, year.Year)</a>
                 </p>
             }
 

@@ -122,7 +122,7 @@
                         @Resource.lblNationalGridReferenceForCheckAnswere
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
-                        @Model.NationalGridReference
+                        @(string.IsNullOrWhiteSpace(Model.NationalGridReference) ? Resource.lblNotEntered : Model.NationalGridReference)
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
                         <govuk-summary-list-row-action asp-action="AddField" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
@@ -133,7 +133,7 @@
                         @Resource.lblOtherReferenceForCheckAnswere
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
-                        @Model.OtherReference
+                        @(string.IsNullOrWhiteSpace(Model.OtherReference) ? Resource.lblNotEntered : Model.OtherReference)
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
                         <govuk-summary-list-row-action asp-action="AddField" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
@@ -169,7 +169,7 @@
                         @Resource.lblCroppedAreaForCheckAnswere
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
-                        @Model.CroppedArea
+                        @(Model.CroppedArea == null ? Resource.lblNotEntered : Model.CroppedArea)
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
                         <govuk-summary-list-row-action asp-action="FieldMeasurements" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
@@ -180,7 +180,7 @@
                         @Resource.lblManureNonSpreadingAreaForCheckAnswere
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
-                        @Model.ManureNonSpreadingArea
+                        @(Model.ManureNonSpreadingArea == null ? Resource.lblNotEntered : Model.ManureNonSpreadingArea)
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
                         <govuk-summary-list-row-action asp-action="FieldMeasurements" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
