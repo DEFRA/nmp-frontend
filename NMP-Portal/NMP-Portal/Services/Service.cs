@@ -7,29 +7,38 @@ namespace NMP.Portal.Services
     {
         public readonly IHttpClientFactory _clientFactory;
         public readonly IHttpContextAccessor _httpContextAccessor;
-        
-        public Service(IHttpContextAccessor httpContextAccessor,IHttpClientFactory clientFactory)
+
+        public Service(IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory)
         {
             _httpContextAccessor = httpContextAccessor;
             _clientFactory = clientFactory;
         }
 
+        public async Task<HttpClient> GetNMPAPIClient()
+        {
+            string? jwtToken = _httpContextAccessor.HttpContext?.Session.GetString("JwtToken");
+            HttpClient httpClient = _clientFactory.CreateClient("NMPApi");
+            httpClient.DefaultRequestHeaders.Add("Authorization", jwtToken);
+            return await Task.FromResult(httpClient).ConfigureAwait(false);
+
+        }
+
         public async Task<HttpResponseMessage> PostJsonDataAsync(string url, object? model = null)
         {
-            Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
+            string? jwtToken = _httpContextAccessor.HttpContext?.Session.GetString("JwtToken");
             HttpClient httpClient = _clientFactory.CreateClient("NMPApi");            
-            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
-            var response = httpClient.PostAsJsonAsync(url, model);
-            return await response;
+            httpClient.DefaultRequestHeaders.Add("Authorization", jwtToken);
+            var response = await httpClient.PostAsJsonAsync(url, model);
+            return response;
         }
 
         public async Task<HttpResponseMessage> GetDataAsync(string url)
         {
-            Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
+            string? jwtToken = _httpContextAccessor.HttpContext?.Session.GetString("JwtToken");
             HttpClient httpClient = _clientFactory.CreateClient("NMPApi");            
-            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
-            var response = httpClient.GetAsync(url);
-            return await response;
+            httpClient.DefaultRequestHeaders.Add("Authorization", jwtToken);
+            var response = await httpClient.GetAsync(url);
+            return response;
         }
     }
 }
