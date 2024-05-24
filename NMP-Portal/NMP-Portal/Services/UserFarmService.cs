@@ -21,9 +21,7 @@ namespace NMP.Portal.Services
             Error error = new Error();
             try
             {
-                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
-                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
-                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                HttpClient httpClient = await GetNMPAPIClient();
                 var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchFarmByUserIdAPI, userId));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);

@@ -17,6 +17,11 @@ using Microsoft.Extensions.DependencyInjection;
 using NMP.Portal.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.Identity.Web;
+using NMP.Portal.Helpers;
+using NMP.Portal.Models;
+using Microsoft.Identity.Web.UI;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<IISServerOptions>(options =>
@@ -46,21 +51,25 @@ builder.Services.Configure<FormOptions>(options =>
 // Add services to the container.
 //builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
 //            .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
-//builder.Services.AddAuthorization(options =>
-//{
-//    options.FallbackPolicy = options.DefaultPolicy;
-//});
 
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(o => o.LoginPath = new PathString("/Account/Login"));
+builder.Services.AddDefraCustomerIdentity(builder);
+
+
+builder.Services.AddAuthorization(options =>
+{
+    options.FallbackPolicy = options.DefaultPolicy;
+});
+
+//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+//    .AddCookie(o => o.LoginPath = new PathString("/Account/Login"));
 
 
 
 //Policy Based Authorization
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("ValidateToken", policy => policy.Requirements.Add(new ValidateTokenRequirement()));
-});
+//builder.Services.AddAuthorization(options =>
+//{
+//    options.AddPolicy("ValidateToken", policy => policy.Requirements.Add(new ValidateTokenRequirement()));
+//});
 
 builder.Services.AddControllersWithViews(options =>
 {
@@ -68,7 +77,15 @@ builder.Services.AddControllersWithViews(options =>
         .RequireAuthenticatedUser()
         .Build();
     options.Filters.Add(new AuthorizeFilter(policy));
-});
+}).AddMicrosoftIdentityUI();
+
+builder.Services.AddRazorPages().AddMvcOptions(options =>
+{
+    var policy = new AuthorizationPolicyBuilder()
+                  .RequireAuthenticatedUser()
+                  .Build();
+    options.Filters.Add(new AuthorizeFilter(policy));
+}).AddMicrosoftIdentityUI();
 
 
 
@@ -228,3 +245,4 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+

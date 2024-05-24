@@ -935,7 +935,7 @@ namespace NMP.Portal.Controllers
             {
                 return View("CheckAnswer", model);
             }
-            int userId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value);
+            int userId = HttpContext.Session.GetInt32("UserId")??0;  // Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value);
             var farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
             //int farmId = model.FarmID;
             if (model.IsSnsBasedOnPreviousCrop.Value)

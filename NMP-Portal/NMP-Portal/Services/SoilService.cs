@@ -21,9 +21,7 @@ namespace NMP.Portal.Services
             try
             {
 
-                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
-                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
-                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                HttpClient httpClient = await GetNMPAPIClient();
                 var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchSoilNutrientIndexAsyncAPI, nutrientId, nutrientValue, methodologyId));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -63,9 +61,7 @@ namespace NMP.Portal.Services
             try
             {
 
-                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
-                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
-                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                HttpClient httpClient = await GetNMPAPIClient();
                 var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchSoilTypeByIdAsyncAPI, soilTypeId));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
