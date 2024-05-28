@@ -313,9 +313,7 @@ namespace NMP.Portal.Services
             Error error = null;
             try
             {
-                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
-                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
-                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                HttpClient httpClient = await GetNMPAPIClient();
                 var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchRecommendationByFieldIdAndYearAsyncAPI, fieldId, harvestYear));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -352,51 +350,6 @@ namespace NMP.Portal.Services
             }
             return (recommendationList, error);
         }
-        public async Task<(List<Crop>, Error)> FetchCropByFieldId(int fieldId)
-        {
-            List<Crop> cropList = new List<Crop>();
-            Error error =null;
-            try
-            {
-                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
-                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
-                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropByFieldIdAsyncAPI, fieldId));
-                string result = await response.Content.ReadAsStringAsync();
-                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-                if (response.IsSuccessStatusCode)
-                {
-                    if (responseWrapper != null && responseWrapper.Data != null)
-                    {
-                        var cropsList = responseWrapper.Data.Crops.records.ToObject<List<Crop>>();
-                        cropList.AddRange(cropsList);
-                    }
-                }
-                else
-                {
-                    if (responseWrapper != null && responseWrapper.Error != null)
-                    {
-                        error = responseWrapper.Error.ToObject<Error>();
-                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                    }
-                }
-            }
-            catch (HttpRequestException hre)
-            {
-                error = new();
-                error.Message = Resource.MsgServiceNotAvailable;
-                _logger.LogError(hre.Message);
-                throw new Exception(error.Message, hre);
-            }
-            catch (Exception ex)
-            {
-                error = new();
-                error.Message = ex.Message;
-                _logger.LogError(ex.Message);
-                throw new Exception(error.Message, ex);
-            }
-            return (cropList, error);
-        }
 
         public async Task<string> FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(int cropTypeId,int cropInfo1Id)
         {
@@ -404,10 +357,7 @@ namespace NMP.Portal.Services
             string cropInfo1Name = string.Empty;
             try
             {
-
-                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
-                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
-                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                HttpClient httpClient = await GetNMPAPIClient();
                 var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropInfo1NameByCropTypeIdAndCropInfo1IdAsyncAPI, cropTypeId, cropInfo1Id));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -444,10 +394,7 @@ namespace NMP.Portal.Services
             string cropInfo2Name = string.Empty;
             try
             {
-
-                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
-                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
-                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                HttpClient httpClient = await GetNMPAPIClient();
                 var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropInfo2NameByCropInfo2IdAsyncAPI,cropInfo2Id));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);

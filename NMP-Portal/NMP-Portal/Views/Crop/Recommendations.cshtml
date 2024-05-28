@@ -30,7 +30,7 @@
     <div class="govuk-grid-row">
         @if (Model.Recommendations.Count > 0 && Model.Crops.Count > 0)
         {
-            <div class="govuk-grid-column-two-thirds margin-bottom-forty">
+            <div class="govuk-grid-column-two-thirds">
                     <h1 class="govuk-heading-l">
                         @string.Format(Resource.lblNutrientRecommendationsFor, Model.FieldName, Model.Crops[0].Year)
                     </h1>
