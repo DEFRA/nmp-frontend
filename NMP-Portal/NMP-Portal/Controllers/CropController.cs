@@ -1639,7 +1639,7 @@ namespace NMP.Portal.Controllers
                                     {
                                         ID=recData.Recommendation.ID,
                                         ManagementPeriodID=recData.Recommendation.ManagementPeriodID,
-                                        CropN = recData.Recommendation.CropN.Value,
+                                        CropN = recData.Recommendation.CropN,
                                         CropP2O5 = recData.Recommendation.CropP2O5,
                                         CropK2O = recData.Recommendation.CropK2O,
                                         CropSO3 = recData.Recommendation.CropSO3,
