@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.TokenCacheProviders.InMemory;
 using NMP.Portal.Helpers;
+using System.Net;
 
 namespace NMP.Portal.Security
 {
@@ -13,6 +14,8 @@ namespace NMP.Portal.Security
 
         public static IServiceCollection AddDefraCustomerIdentity(this IServiceCollection services, WebApplicationBuilder builder )
         {
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
             services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
         .AddMicrosoftIdentityWebApp(options =>
         {
