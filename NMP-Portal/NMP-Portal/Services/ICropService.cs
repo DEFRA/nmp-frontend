@@ -9,9 +9,12 @@ namespace NMP.Portal.Services
         Task<int> FetchCropTypeByGroupId(int cropGroupId);
         Task<List<CropInfoOneResponse>> FetchCropInfoOneByCropTypeId(int cropTypeId);
         Task<List<CropInfoTwoResponse>> FetchCropInfoTwoByCropTypeId();
-        Task<List<PlanSummaryResponse>> FetchPlanSummaryByFarmId(int farmId,int type);
+        Task<List<PlanSummaryResponse>> FetchPlanSummaryByFarmId(int farmId, int type);
         Task<(List<HarvestYearPlanResponse>, Error)> FetchHarvestYearPlansByFarmId(int harvestYear, int farmId);
 
         Task<(bool, Error)> AddCropNutrientManagementPlan(CropDataWrapper cropData);
+        Task<(List<RecommendationHeader>, Error)> FetchRecommendationByFieldIdAndYear(int fieldId, int harvestYear);
+        Task<string> FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(int cropTypeId, int cropInfo1Id);
+        Task<string> FetchCropInfo2NameByCropInfo2Id(int cropInfo2Id);
     }
 }

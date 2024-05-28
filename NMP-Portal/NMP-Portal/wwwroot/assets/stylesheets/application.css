@@ -154,3 +154,11 @@ a.disabled {
     pointer-events: none;
     cursor: default;
 }
+.hint {
+    font-weight: normal !important;
+}
+
+.margin-bottom-forty {
+    margin-bottom: 40px !important;
+}
+
