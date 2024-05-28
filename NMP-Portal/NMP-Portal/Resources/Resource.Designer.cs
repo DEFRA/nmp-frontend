@@ -403,6 +403,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change {0} plan for {1}.
+        /// </summary>
+        public static string lblChangeForReccomendation {
+            get {
+                return ResourceManager.GetString("lblChangeForReccomendation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change {0} details for {1}.
         /// </summary>
         public static string lblChangeLinkForRecommendation {
@@ -2245,6 +2254,15 @@ namespace NMP.Portal.Resources {
         public static string lblVariety {
             get {
                 return ResourceManager.GetString("lblVariety", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variety.
+        /// </summary>
+        public static string lblVarietyForRecommendation {
+            get {
+                return ResourceManager.GetString("lblVarietyForRecommendation", resourceCulture);
             }
         }
         

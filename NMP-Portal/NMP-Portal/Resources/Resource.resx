@@ -1098,7 +1098,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
   <data name="lblWhatIsTheExpectedYieldForSingleNotSet" xml:space="preserve">
     <value>What is the expected yield for {0} per hectare in these fields not set?</value>
-    </data>
+  </data>
   <data name="lblNitrogen" xml:space="preserve">
     <value>Nitrogen (N)</value>
   </data>
@@ -1139,7 +1139,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Straw use</value>
   </data>
   <data name="lblVariety" xml:space="preserve">
-    <value>Variety</value>
+    <value>Variety: {0}</value>
   </data>
   <data name="lblLime" xml:space="preserve">
     <value>Lime</value>
@@ -1162,10 +1162,13 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblType" xml:space="preserve">
     <value>Type</value>
   </data>
-  <data name="lblVariety" xml:space="preserve">
-    <value>Variety: {0}</value>
-  </data>
   <data name="lblViewOrCreateAPlanOrRecord" xml:space="preserve">
     <value>View or create a plan or record</value>
+  </data>
+  <data name="lblChangeForReccomendation" xml:space="preserve">
+    <value>Change {0} plan for {1}</value>
+  </data>
+  <data name="lblVarietyForRecommendation" xml:space="preserve">
+    <value>Variety</value>
   </data>
 </root>

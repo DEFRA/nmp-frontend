@@ -324,7 +324,7 @@ namespace NMP.Portal.Services
         public async Task<(List<RecommendationHeader>, Error)> FetchRecommendationByFieldIdAndYear(int fieldId, int harvestYear)
         {
             List<RecommendationHeader> recommendationList = new List<RecommendationHeader>();
-            Error error = new Error();
+            Error error = null;
             try
             {
                 Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
@@ -352,12 +352,14 @@ namespace NMP.Portal.Services
             }
             catch (HttpRequestException hre)
             {
+                error= new Error();
                 error.Message = Resource.MsgServiceNotAvailable;
                 _logger.LogError(hre.Message);
                 throw new Exception(error.Message, hre);
             }
             catch (Exception ex)
             {
+                error = new Error();
                 error.Message = ex.Message;
                 _logger.LogError(ex.Message);
                 throw new Exception(error.Message, ex);
