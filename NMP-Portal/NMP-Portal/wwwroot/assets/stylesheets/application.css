@@ -150,6 +150,10 @@ hr.seperator_five {
 .alignRight{
     text-align:right !important;
 }
+a.disabled {
+    pointer-events: none;
+    cursor: default;
+}
 .hint {
     font-weight: normal !important;
 }

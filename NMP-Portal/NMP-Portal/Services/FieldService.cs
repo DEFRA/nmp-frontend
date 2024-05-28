@@ -23,9 +23,7 @@ namespace NMP.Portal.Services
             Error error = new Error();
             try
             {
-                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
-                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
-                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                HttpClient httpClient = await GetNMPAPIClient();
                 var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchFieldCountByFarmIdAPI, farmId));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -67,9 +65,7 @@ namespace NMP.Portal.Services
             Error error = new Error();
             try
             {
-                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
-                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
-                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                HttpClient httpClient = await GetNMPAPIClient();
                 var response = await httpClient.GetAsync(APIURLHelper.FetchSoilTypesAsyncAPI);
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -110,9 +106,7 @@ namespace NMP.Portal.Services
             Error error = null;
             try
             {
-                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
-                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
-                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                HttpClient httpClient = await GetNMPAPIClient();
                 var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchNutrientsAsyncAPI));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -156,9 +150,7 @@ namespace NMP.Portal.Services
             Error error = new Error();
             try
             {
-                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
-                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
-                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                HttpClient httpClient = await GetNMPAPIClient();
                 var response = await httpClient.GetAsync(APIURLHelper.FetchCropGroupsAsyncAPI);
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -199,9 +191,7 @@ namespace NMP.Portal.Services
             Error error = new Error();
             try
             {
-                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
-                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
-                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                HttpClient httpClient = await GetNMPAPIClient();
                 var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropTypesAsyncAPI, cropGroupId));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -244,9 +234,7 @@ namespace NMP.Portal.Services
             try
             {
 
-                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
-                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
-                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                HttpClient httpClient = await GetNMPAPIClient();
                 var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropGroupByIdAsyncAPI, cropGroupId));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -284,9 +272,7 @@ namespace NMP.Portal.Services
             try
             {
 
-                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
-                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
-                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                HttpClient httpClient = await GetNMPAPIClient();
                 var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropTypeByIdAsyncAPI, cropTypeId));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -324,9 +310,7 @@ namespace NMP.Portal.Services
             Error error = new Error();
             try
             {
-                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
-                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
-                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                HttpClient httpClient = await GetNMPAPIClient();
                 bool IsFarmExist = await IsFieldExistAsync(farmId, fieldData.Field.Name);
                 if (!IsFarmExist)
                 {
@@ -375,9 +359,7 @@ namespace NMP.Portal.Services
             Error error = new Error();
             try
             {
-                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
-                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
-                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                HttpClient httpClient = await GetNMPAPIClient();
                 var farmExist = await httpClient.GetAsync(string.Format(APIURLHelper.IsFieldExistAsyncAPI, farmId, name));
                 string resultFarmExist = await farmExist.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapperFarmExist = JsonConvert.DeserializeObject<ResponseWrapper>(resultFarmExist);
@@ -406,9 +388,7 @@ namespace NMP.Portal.Services
             Error error = new Error();
             try
             {
-                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
-                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
-                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                HttpClient httpClient = await GetNMPAPIClient();
                 var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchFieldsByFarmIdAsyncAPI,farmId));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -450,9 +430,7 @@ namespace NMP.Portal.Services
             Error error = new Error();
             try
             {
-                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
-                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
-                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                HttpClient httpClient = await GetNMPAPIClient();
                 var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchFieldByFieldIdAsyncAPI, fieldId));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);

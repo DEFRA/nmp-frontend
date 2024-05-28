@@ -28,9 +28,7 @@ namespace NMP.Portal.Services
             Error error = new Error();
             try
             {
-                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
-                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
-                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                HttpClient httpClient = await GetNMPAPIClient();
 
                 // check if farm already exists or not
                 bool IsFarmExist = await IsFarmExistAsync(farmData.Farm.Name, farmData.Farm.Postcode);
@@ -84,10 +82,8 @@ namespace NMP.Portal.Services
             Farm farm = new Farm();
             Error error = new Error();
             try
-            {
-                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
-                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
-                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+            {                
+                HttpClient httpClient = await GetNMPAPIClient(); 
                 var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchFarmByIdAPI, farmId));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -130,9 +126,7 @@ namespace NMP.Portal.Services
             Error error=new Error();
             try
             {
-                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
-                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
-                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                HttpClient httpClient = await GetNMPAPIClient();
                 var farmExist = await httpClient.GetAsync(string.Format(APIURLHelper.IsFarmExist, farmName, postcode.Trim()));
                 string resultFarmExist = await farmExist.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapperFarmExist = JsonConvert.DeserializeObject<ResponseWrapper>(resultFarmExist);
@@ -162,9 +156,7 @@ namespace NMP.Portal.Services
             Error error = new Error();
             try
             {
-                Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
-                HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
-                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+                HttpClient httpClient = await GetNMPAPIClient();
                 var rainfall = await httpClient.GetAsync(string.Format(APIURLHelper.FetchRainfallAverageAsyncAPI, firstHalfPostcode));
                 string result = await rainfall.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapperFarmExist = JsonConvert.DeserializeObject<ResponseWrapper>(result);

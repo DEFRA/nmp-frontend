@@ -59,7 +59,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> HarvestYearForPlan(string q, string? year)
+        public async Task<IActionResult> HarvestYearForPlan(string q, string? year, bool? isPlanRecord)
         {
             PlanViewModel model = new PlanViewModel();
             Error? error = null;
@@ -81,12 +81,23 @@ namespace NMP.Portal.Controllers
                     {
                         int harvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(year));
                         model.Year = harvestYear;
-                        model.IsAddAnotherCrop = true;
+                        if (isPlanRecord==false || isPlanRecord==null)
+                        {
+                            model.IsAddAnotherCrop = true;
+                        }
+                        if(isPlanRecord==true)
+                        {
+                            model.IsPlanRecord = true;
+                        }
                         _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("CropData", model);
                         return RedirectToAction("CropGroups");
                     }
 
                     _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("CropData", model);
+                }
+                if (model.IsPlanRecord.Value)
+                {
+                    return RedirectToAction("PlansAndRecordsOverview", "Crop", new { id = model.EncryptedFarmId, year = _farmDataProtector.Protect(model.Year.ToString()) });
                 }
                 if (model.IsAddAnotherCrop)
                 {
@@ -1329,7 +1340,7 @@ namespace NMP.Portal.Controllers
             }
 
             Error error = null;
-            int userId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value);
+            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;  // Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value);
             List<CropData> cropEntries = new List<CropData>();
             foreach (Crop crop in model.Crops)
             {

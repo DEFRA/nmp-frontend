@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Identity.Web;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NMP.Portal.Enums;
@@ -61,8 +62,8 @@ namespace NMP.Portal.Controllers
         {
             _httpContextAccessor.HttpContext?.Session.Remove("FarmData");
             _httpContextAccessor.HttpContext?.Session.Remove("AddressList");
-            int userId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value);
-
+            int userId = HttpContext.Session.GetInt32("UserId")?? 0;// Convert.ToInt32(HttpContext.Items["UserId"]);  //Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            
             FarmsViewModel model = new FarmsViewModel();
             Error error = null;
             UserFarmResponse userFarmList = null;
@@ -500,7 +501,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CheckAnswer(FarmViewModel farm)
         {
-            int userId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value);
+            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;  // Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value);
             farm.AverageAltitude = farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.NoneAbove300m ? (int)NMP.Portal.Enums.AverageAltitude.below :
                     farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m ? (int)NMP.Portal.Enums.AverageAltitude.above : 0;
             var farmData = new FarmData

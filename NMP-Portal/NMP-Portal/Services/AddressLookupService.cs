@@ -22,9 +22,7 @@ namespace NMP.Portal.Services
         public async Task<List<AddressLookupResponse>> AddressesAsync(string postcode, int offset)
         {
             List<AddressLookupResponse> addresses = new List<AddressLookupResponse>();
-            Token? token = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<Token>("token");
-            HttpClient httpClient = this._clientFactory.CreateClient("NMPApi");
-            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
+            HttpClient httpClient = await GetNMPAPIClient();
             var response = await httpClient.GetAsync(string.Format(APIURLHelper.AddressLookupAPI, postcode, offset));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
