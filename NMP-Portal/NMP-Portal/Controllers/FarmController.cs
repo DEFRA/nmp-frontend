@@ -65,7 +65,7 @@ namespace NMP.Portal.Controllers
             
             FarmsViewModel model = new FarmsViewModel();
             Error error = null;
-            var claim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "relationships").Value;
+            var claim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "relationships")?.Value;
             string[] relationshipData = claim.Split(":");
             Guid organisationId = relationshipData[4] == "Employee" ? Guid.Parse(relationshipData[1]) :Guid.Parse(relationshipData[0]);
             (List<Farm> farms, error) = await _farmService.FetchFarmByOrgIdAsync(organisationId);
