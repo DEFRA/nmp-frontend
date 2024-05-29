@@ -5,6 +5,7 @@ namespace NMP.Portal.Services
 {
     public interface IFarmService:IService
     {
+        Task<(List<Farm>, Error)> FetchFarmByOrgIdAsync(string orgId);
         Task<(Farm,Error)> AddFarmAsync(FarmData farmData);
         Task<(Farm, Error)> FetchFarmByIdAsync(int farmId);
         Task<bool> IsFarmExistAsync(string farmName, string postcode);

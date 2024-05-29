@@ -62,20 +62,21 @@ namespace NMP.Portal.Controllers
         {
             _httpContextAccessor.HttpContext?.Session.Remove("FarmData");
             _httpContextAccessor.HttpContext?.Session.Remove("AddressList");
-            int userId = HttpContext.Session.GetInt32("UserId")?? 0;// Convert.ToInt32(HttpContext.Items["UserId"]);  //Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             
             FarmsViewModel model = new FarmsViewModel();
             Error error = null;
-            UserFarmResponse userFarmList = null;
-            (userFarmList, error) = await _userFarmService.UserFarmAsync(userId);
+            var claim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "relationships").Value;
+            string[] relationshipData = claim.Split(":");
+            string organisationId = relationshipData[4] == "Employee" ? relationshipData[1] : relationshipData[0];
+            (List<Farm> farms, error) = await _farmService.FetchFarmByOrgIdAsync(organisationId);
             if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
             {
                 ViewBag.Error = error.Message;
                 return View("~/Views/Home/Index.cshtml");
             }
-            if (userFarmList != null && userFarmList.Farms.Count > 0)
+            if (farms != null && farms.Count > 0)
             {
-                model.Farms.AddRange(userFarmList.Farms);
+                model.Farms.AddRange(farms);
                 model.Farms.ForEach(m => m.EncryptedFarmId = _dataProtector.Protect(m.ID.ToString()));
             }
             if (model.Farms.Count == 0)
