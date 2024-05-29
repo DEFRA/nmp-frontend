@@ -114,6 +114,7 @@ builder.Services.AddSingleton<IFarmService, FarmService>();
 builder.Services.AddSingleton<IFieldService, FieldService>();
 builder.Services.AddSingleton<ISoilService, SoilService>();
 builder.Services.AddSingleton<ICropService, CropService>();
+builder.Services.AddSingleton<IAuthService, AuthService>();
 
 builder.Services.AddAntiforgery(options =>
 {
