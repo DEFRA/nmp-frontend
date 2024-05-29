@@ -52,9 +52,18 @@ namespace NMP.Portal.Controllers
             return View();
         }
 
-        public IActionResult CreateCropPlanCancel(string q)
+        public async Task<IActionResult> CreateCropPlanCancel(string q)
         {
             _httpContextAccessor.HttpContext?.Session.Remove("CropData");
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
+                List<PlanSummaryResponse> planSummaryResponse = await _cropService.FetchPlanSummaryByFarmId(farmId, 0);
+                if(planSummaryResponse.Count>0)
+                {
+                    return RedirectToAction("PlansAndRecordsOverview", "Crop", new { id = q});
+                }
+            }
             return RedirectToAction("FarmSummary", "Farm", new { Id = q });
         }
 
@@ -1591,7 +1600,7 @@ namespace NMP.Portal.Controllers
                         {
                             var crop = new CropViewModel
                             {
-                                ID=recommendation.Crops.ID,                                
+                                ID=recommendation.Crops.ID,
                                 Year = recommendation.Crops.Year,
                                 CropTypeID = recommendation.Crops.CropTypeID,
                                 FieldID = recommendation.Crops.FieldID,
@@ -1620,7 +1629,7 @@ namespace NMP.Portal.Controllers
 
                             model.Crops.Add(crop);
 
-                            
+
                             if (recommendation.RecommendationData.Count > 0)
                             {
                                 foreach (var recData in recommendation.RecommendationData)
