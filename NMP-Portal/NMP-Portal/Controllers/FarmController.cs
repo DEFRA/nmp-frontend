@@ -67,7 +67,7 @@ namespace NMP.Portal.Controllers
             Error error = null;
             var claim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "relationships").Value;
             string[] relationshipData = claim.Split(":");
-            Guid organisationId = relationshipData[4] == "Employee" ?Guid.Parse(relationshipData[1]) :Guid.Parse(relationshipData[0]);
+            string organisationId = relationshipData[4] == "Employee" ? relationshipData[1] : relationshipData[0];
             (List<Farm> farms, error) = await _farmService.FetchFarmByOrgIdAsync(organisationId);
             if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
             {

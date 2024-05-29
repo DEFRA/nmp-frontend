@@ -21,7 +21,7 @@ namespace NMP.Portal.Services
         {
             _logger = logger;
         }
-        public async Task<(List<Farm>, Error)> FetchFarmByOrgIdAsync(Guid orgId)
+        public async Task<(List<Farm>, Error)> FetchFarmByOrgIdAsync(string orgId)
         {
             List<Farm> farmList = new List<Farm>();
             Error error = new Error();
