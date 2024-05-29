@@ -67,7 +67,7 @@ namespace NMP.Portal.Controllers
             Error error = null;
             var claim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "relationships").Value;
             string[] relationshipData = claim.Split(":");
-            string organisationId = relationshipData[4] == "Employee" ? relationshipData[1] : relationshipData[0];
+            Guid organisationId = relationshipData[4] == "Employee" ? Guid.Parse(relationshipData[1]) :Guid.Parse(relationshipData[0]);
             (List<Farm> farms, error) = await _farmService.FetchFarmByOrgIdAsync(organisationId);
             if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
             {
@@ -505,6 +505,9 @@ namespace NMP.Portal.Controllers
             int userId = HttpContext.Session.GetInt32("UserId") ?? 0;  // Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value);
             farm.AverageAltitude = farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.NoneAbove300m ? (int)NMP.Portal.Enums.AverageAltitude.below :
                     farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m ? (int)NMP.Portal.Enums.AverageAltitude.above : 0;
+            var claim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "relationships").Value;
+            string[] relationshipData = claim.Split(":");
+            Guid organisationId = relationshipData[4] == "Employee" ? Guid.Parse(relationshipData[1]) : Guid.Parse(relationshipData[0]);
             var farmData = new FarmData
             {
                 Farm = new Farm()
@@ -524,6 +527,7 @@ namespace NMP.Portal.Controllers
                     Mobile = farm.Mobile,
                     Email = farm.Email,
                     Rainfall = farm.Rainfall,
+                    OrganisationId=organisationId,
                     TotalFarmArea = farm.TotalFarmArea,
                     AverageAltitude = farm.AverageAltitude,
                     RegisteredOrganicProducer = farm.RegisteredOrganicProducer,
