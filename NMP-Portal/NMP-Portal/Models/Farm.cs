@@ -39,6 +39,7 @@ namespace NMP.Portal.Models
         public string? Email { get; set; }
         [RegularExpression(@"^\d+(\.\d+)?$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterTheAverageAnnualRainfall))]
         public decimal? Rainfall { get; set; }
+        public Guid? OrganisationId { get; set; }
         public decimal TotalFarmArea { get; set; } = 0;
         public int AverageAltitude { get; set; } = 0;
         public bool? RegisteredOrganicProducer { get; set; } 
