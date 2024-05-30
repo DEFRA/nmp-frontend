@@ -76,10 +76,10 @@ namespace NMP.Portal.Security
 
         private static async Task OnRedirectToIdentityProviderForSignOut(RedirectContext context)
         {
-            //.ProtocolMessage.IdToken = context.HttpContext.Session.GetString("JwtToken");
+            //ProtocolMessage.IdToken = context.HttpContext.Session.GetString("JwtToken");
             //context.ProtocolMessage.IdTokenHint = context.HttpContext.Session.GetString("JwtToken");
-            context.Request.Method = "POST";
-            //context.ProtocolMessage.Parameters.Add("login_redirect_url", context.Request.PathBase);
+            //context.Request.Method = "POST";
+            //context.ProtocolMessage.Parameters.Add("post_logout_redirect_uri", context.Request.PathBase);
             // Don't remove this line
             await Task.CompletedTask.ConfigureAwait(false);
         }
