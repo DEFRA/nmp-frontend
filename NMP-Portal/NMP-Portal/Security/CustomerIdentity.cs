@@ -4,17 +4,18 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.TokenCacheProviders.InMemory;
 using NMP.Portal.Helpers;
+using NMP.Portal.Models;
+using NMP.Portal.ServiceResponses;
+using NMP.Portal.Services;
 using System.Net;
 using System.Security.Claims;
 
 namespace NMP.Portal.Security
 {
-    
-    public static class CustomerIdentity
-    {     
-        
 
-        public static IServiceCollection AddDefraCustomerIdentity(this IServiceCollection services, WebApplicationBuilder builder )
+    public static class CustomerIdentity
+    {
+        public static IServiceCollection AddDefraCustomerIdentity(this IServiceCollection services, WebApplicationBuilder builder)
         {
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
@@ -32,7 +33,7 @@ namespace NMP.Portal.Security
             options.CallbackPath = builder.Configuration["CustomerIdentityCallbackPath"]; // signin-oidc";
             options.SignedOutCallbackPath = builder.Configuration["CustomerIdentitySignedOutCallbackPath"];
             options.SignUpSignInPolicyId = builder.Configuration["CustomerIdentityPolicyId"];
-            
+
             options.ErrorPath = "/Error/index";
 
             options.Events ??= new OpenIdConnectEvents();
@@ -44,7 +45,7 @@ namespace NMP.Portal.Security
             options.Events.OnSignedOutCallbackRedirect += OnSignedOutCallbackRedirect;
             options.Events.OnAuthenticationFailed += OnAuthenticationFailed;
             options.Events.OnRemoteSignOut += OnRemoteSignOut;
-            
+
 
         })
         .Services.AddTokenAcquisition()
@@ -105,20 +106,45 @@ namespace NMP.Portal.Security
             IEnumerable<Claim> claims = context.SecurityToken.Claims;
             if (claims.Any())
             {
-                var userIdentifier = claims.FirstOrDefault(c => c.Type == "sub").Value;
+                Guid userIdentifier = Guid.Parse(claims.FirstOrDefault(c => c.Type == "sub").Value);
                 var firstName = claims.FirstOrDefault(c => c.Type == "firstName").Value;
                 var surname = claims.FirstOrDefault(c => c.Type == "lastName").Value; ;
                 var email = claims.FirstOrDefault(c => c.Type == "email").Value; //currentRelationshipId"];
                 var relationShips = claims.FirstOrDefault(c => c.Type == "relationships").Value;
                 string[] relationshipClaimArray = relationShips.Split(":");
                 var organisationName = relationshipClaimArray[5] == "Employee" ? relationshipClaimArray[2] : $"{firstName} {surname}";
-                var organisationId = relationshipClaimArray[5] == "Employee" ? relationshipClaimArray[1] : relationshipClaimArray[0];
-                context.HttpContext.Items.Add("UserId", 1);
-                context.HttpContext.Session.SetInt32("UserId", 1);
+                Guid organisationId = relationshipClaimArray[5] == "Employee" ? Guid.Parse(relationshipClaimArray[1]) : Guid.Parse(relationshipClaimArray[0]);
+                UserData userData = new UserData()
+                {
+                    User = new User()
+                    {
+                        GivenName = firstName,
+                        Surname = surname,
+                        Email = email,
+                        UserIdentifier = userIdentifier
+                    },
+                    Organisation = new Organisation()
+                    {
+                        ID = organisationId,
+                        Name = organisationName
+                    }
+
+                };
+                
+                //(int userId,Error error) = await _authService.AddOrUpdateUser(userData);
+                //if (error == null)
+                //{
+                //    context.HttpContext.Items.Add("UserId", userId);
+                //    context.HttpContext.Session.SetInt32("UserId", userId);
+                //}
+                //else
+                //{
+
+                //}
             }
 
             // Don't remove this line
             await Task.CompletedTask.ConfigureAwait(false);
-        }                
+        }
     }
 }
