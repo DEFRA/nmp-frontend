@@ -527,7 +527,7 @@ namespace NMP.Portal.Controllers
                     Mobile = farm.Mobile,
                     Email = farm.Email,
                     Rainfall = farm.Rainfall,
-                    OrganisationId=organisationId,
+                    OrganisationID = organisationId,
                     TotalFarmArea = farm.TotalFarmArea,
                     AverageAltitude = farm.AverageAltitude,
                     RegisteredOrganicProducer = farm.RegisteredOrganicProducer,
