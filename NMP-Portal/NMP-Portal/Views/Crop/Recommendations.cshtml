@@ -39,153 +39,151 @@
             @foreach (var crop in Model.Crops)
             {
                 var cropManagementPeriods = Model.ManagementPeriods.Where(mp => mp.CropID == crop.ID);
-                    <div class="govuk-grid-column-two-thirds margin-bottom-forty">
-                        <p class="govuk-body">
+                <div class="govuk-grid-column-two-thirds margin-bottom-forty">
+                    <p class="govuk-body">
 
-                            <a href="#">@string.Format(Resource.lblChangeForReccomendation, crop.CropTypeName, Model.FieldName)</a>
+                        <a href="#">@string.Format(Resource.lblChangeForReccomendation, crop.CropTypeName, Model.FieldName)</a>
 
-                        </p>
-                    </div>
-                    <div class="govuk-grid-column-full margin-bottom-forty">
-                        <table class="govuk-table">
-                            <caption class="govuk-table__caption govuk-table__caption--m">
-                                @Resource.lblCropDetails
-                            </caption>
-                            <thead class="govuk-table__header">
-                                <tr class="govuk-table__row">
-                                    <th class="govuk-table__cell" scope="row">
-                                        @Resource.lblType
-                                    </th>
-                                    <th class="govuk-table__cell" scope="row">
-                                        @Resource.lblVarietyForRecommendation
-                                    </th>
-                                    <th class="govuk-table__cell" scope="row">
-                                        @Resource.lblSowingDate
-                                    </th>
-                                    <th class="govuk-table__cell" scope="row">
-                                        @Resource.lblEstimatedYield
-                                    </th>
-                                    @if (Model.CropGroupID != OtherGroupId)
-                                    {
-                                        <th class="govuk-table__cell" scope="row">
-                                            @Resource.lblCropUse
-                                        </th>
-                                    }
-                                    @if (Model.CropGroupID == CerealsGroupId)
-                                    {
-                                        <th class="govuk-table__cell" scope="row">
-                                            @Resource.lblStrawUse
-                                        </th>
-                                    }
-                                </tr>
-                            </thead>
-                            <tbody class="govuk-table__body">
-                                <tr class="govuk-table__row">
-                                    <td class="govuk-table__cell">@crop.CropTypeName</td>
-                                    <td class="govuk-table__cell">@(crop.Variety != null ? crop.Variety : Resource.lblNotEntered)</td>
-                                    <td class="govuk-table__cell">@(crop.SowingDate != null ? crop.SowingDate.Value.Date.ToString("dd MMMM yyyy") : Resource.lblNotEntered)</td>
-                                    <td class="govuk-table__cell">@(crop.Yield != null ? crop.Yield : Resource.lblNotEntered)</td>
-                                    @if (Model.CropGroupID != OtherGroupId)
-                                    {
-                                        <td class="govuk-table__cell">@(crop.CropInfo1Name)</td>
-                                    }
-                                    @if (Model.CropGroupID == CerealsGroupId)
-                                    {
-                                        <td class="govuk-table__cell">@(crop.CropInfo2Name)</td>
-                                    }
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="govuk-grid-column-two-thirds">
-                        <div class="margin-bottom-forty">
-                            @foreach (var mp in cropManagementPeriods)
-                            {
-                                var rec = Model.Recommendations.Where(r => r.ManagementPeriodID == mp.ID);
-                                @foreach (var recommendation in rec)
+                    </p>
+                </div>
+                <div class="govuk-grid-column-two-thirds"><h2 class="govuk-heading-m"> @Resource.lblCropDetails</h2></div>
+                <div class="govuk-grid-column-full margin-bottom-forty table-container">
+                    <table class="govuk-table">                       
+                        <thead class="govuk-table__header">
+                            <tr class="govuk-table__row">
+                                <th class="govuk-table__cell" scope="row">
+                                    @Resource.lblType
+                                </th>
+                                <th class="govuk-table__cell" scope="row">
+                                    @Resource.lblVarietyForRecommendation
+                                </th>
+                                <th class="govuk-table__cell" scope="row">
+                                    @Resource.lblSowingDate
+                                </th>
+                                <th class="govuk-table__cell" scope="row">
+                                    @Resource.lblEstimatedYield
+                                </th>
+                                @if (Model.CropGroupID != OtherGroupId)
                                 {
-                                    <table class="govuk-table">
-                                        <caption class="govuk-table__caption govuk-table__caption--m">@string.Format(Resource.lblNutrientRecommendations, crop.CropTypeName)</caption>
-                                        <thead class="govuk-table__header">
-                                            <tr class="govuk-table__row">
-                                                <th class="govuk-table__header" scope="col">@Resource.lblNutrient</th>
-                                                <th class="govuk-table__header" scope="col">@Resource.lblIndexPH</th>
-                                                <th class="govuk-table__header" scope="col">
-                                                    @Resource.lblCropNeed
-                                                    <br />
-                                                    <span class="hint">@Resource.lblPerHectare</span>
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="govuk-table__body">
-                                            <tr class="govuk-table__row">
-                                                <th class="govuk-table__header" scope="row">
-                                                    @Resource.lblNitrogen
-                                                </th>
-                                                <td class="govuk-table__cell">
-                                                    @(recommendation.SNSIndex == null ? Resource.lblHyphen : recommendation.SNSIndex)
-                                                </td>
-                                                <td class="govuk-table__cell">@(recommendation.CropN == null ? Resource.lblHyphen : recommendation.CropLime == 0 ? recommendation.CropN : string.Concat(recommendation.CropN, Resource.lblkg))</td>
-                                            </tr>
-                                            <tr class="govuk-table__row">
-                                                <th class="govuk-table__header" scope="row">
-                                                    @Resource.lblPhosphateP2O5
-                                                </th>
-                                                <td class="govuk-table__cell">
-                                                    @(recommendation.PIndex == null ? Resource.lblHyphen : recommendation.PIndex)
-                                                </td>
-                                                <td class="govuk-table__cell">@(recommendation.CropP2O5 == null ? Resource.lblHyphen : recommendation.CropP2O5 == 0 ? recommendation.CropP2O5 : string.Concat(recommendation.CropP2O5, Resource.lblkg))</td>
-                                            </tr>
-                                            <tr class="govuk-table__row">
-                                                <th class="govuk-table__header" scope="row">
-                                                    @Resource.lblPotashK2O
-                                                </th>
-                                                <td class="govuk-table__cell">
-                                                    @(recommendation.KIndex == null ? Resource.lblHyphen : recommendation.KIndex)
-                                                </td>
-                                                <td class="govuk-table__cell">@(recommendation.CropK2O == null ? Resource.lblHyphen : recommendation.CropK2O == 0 ? recommendation.CropK2O : string.Concat(recommendation.CropK2O, Resource.lblkg))</td>
-                                            </tr>
-                                            <tr class="govuk-table__row">
-                                                <th class="govuk-table__header" scope="row">
-                                                    @Resource.lblSulphurSO3
-                                                </th>
-                                                <td class="govuk-table__cell">
-                                                    @(recommendation.SIndex == null ? Resource.lblHyphen : recommendation.SIndex)
-                                                </td>
-                                                <td class="govuk-table__cell">@(recommendation.CropSO3 == null ? Resource.lblHyphen : recommendation.CropSO3 == 0 ? recommendation.CropSO3 : string.Concat(recommendation.CropSO3, Resource.lblkg))</td>
-                                            </tr>
-                                            <tr class="govuk-table__row">
-                                                <th class="govuk-table__header" scope="row">
-                                                    @Resource.lblLime
-                                                </th>
-                                                <td class="govuk-table__cell">
-                                                    @Resource.lblHyphen
-                                                </td>
-                                                <td class="govuk-table__cell">
-                                                    @(recommendation.CropLime == null ? Resource.lblHyphen : recommendation.CropLime == 0 ? recommendation.CropLime : string.Concat(recommendation.CropLime, Resource.lblkg))
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <div class="margin-bottom-forty">
-                                        @if (Model.RecommendationComments.Count > 0)
-                                        {
-                                            <govuk-inset-text>
-
-                                                @foreach (var recCom in Model.RecommendationComments.Where(rc => rc.RecommendationID == recommendation.ID))
-                                                {
-                                                    @recCom.Comment
-                                                    <br />
-
-                                                }
-                                            </govuk-inset-text>
-                                        }
-                                    </div>
+                                    <th class="govuk-table__cell" scope="row">
+                                        @Resource.lblCropUse
+                                    </th>
                                 }
-                            }
-                        </div>
+                                @if (Model.CropGroupID == CerealsGroupId)
+                                {
+                                    <th class="govuk-table__cell" scope="row">
+                                        @Resource.lblStrawUse
+                                    </th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody class="govuk-table__body">
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell">@crop.CropTypeName</td>
+                                <td class="govuk-table__cell">@(crop.Variety != null ? crop.Variety : Resource.lblNotEntered)</td>
+                                <td class="govuk-table__cell">@(crop.SowingDate != null ? crop.SowingDate.Value.Date.ToString("dd MMMM yyyy") : Resource.lblNotEntered)</td>
+                                <td class="govuk-table__cell">@(crop.Yield != null ? crop.Yield : Resource.lblNotEntered)</td>
+                                @if (Model.CropGroupID != OtherGroupId)
+                                {
+                                    <td class="govuk-table__cell">@(crop.CropInfo1Name)</td>
+                                }
+                                @if (Model.CropGroupID == CerealsGroupId)
+                                {
+                                    <td class="govuk-table__cell">@(crop.CropInfo2Name)</td>
+                                }
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="govuk-grid-column-two-thirds">
+                    <div class="margin-bottom-forty">
+                        @foreach (var mp in cropManagementPeriods)
+                        {
+                            var rec = Model.Recommendations.Where(r => r.ManagementPeriodID == mp.ID);
+                            @foreach (var recommendation in rec)
+                            {
+                                <table class="govuk-table">
+                                    <caption class="govuk-table__caption govuk-table__caption--m">@string.Format(Resource.lblNutrientRecommendations, crop.CropTypeName)</caption>
+                                    <thead class="govuk-table__header">
+                                        <tr class="govuk-table__row">
+                                            <th class="govuk-table__header" scope="col">@Resource.lblNutrient</th>
+                                            <th class="govuk-table__header" scope="col">@Resource.lblIndexPH</th>
+                                            <th class="govuk-table__header" scope="col">
+                                                @Resource.lblCropNeed
+                                                <br />
+                                                <span class="hint">@Resource.lblPerHectare</span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="govuk-table__body">
+                                        <tr class="govuk-table__row">
+                                            <th class="govuk-table__header" scope="row">
+                                                @Resource.lblNitrogen
+                                            </th>
+                                            <td class="govuk-table__cell">
+                                                @(recommendation.SNSIndex == null ? Resource.lblHyphen : recommendation.SNSIndex)
+                                            </td>
+                                            <td class="govuk-table__cell">@(recommendation.CropN == null ? Resource.lblHyphen : recommendation.CropLime == 0 ? recommendation.CropN : string.Concat(recommendation.CropN, Resource.lblkg))</td>
+                                        </tr>
+                                        <tr class="govuk-table__row">
+                                            <th class="govuk-table__header" scope="row">
+                                                @Resource.lblPhosphateP2O5
+                                            </th>
+                                            <td class="govuk-table__cell">
+                                                @(recommendation.PIndex == null ? Resource.lblHyphen : recommendation.PIndex)
+                                            </td>
+                                            <td class="govuk-table__cell">@(recommendation.CropP2O5 == null ? Resource.lblHyphen : recommendation.CropP2O5 == 0 ? recommendation.CropP2O5 : string.Concat(recommendation.CropP2O5, Resource.lblkg))</td>
+                                        </tr>
+                                        <tr class="govuk-table__row">
+                                            <th class="govuk-table__header" scope="row">
+                                                @Resource.lblPotashK2O
+                                            </th>
+                                            <td class="govuk-table__cell">
+                                                @(recommendation.KIndex == null ? Resource.lblHyphen : recommendation.KIndex)
+                                            </td>
+                                            <td class="govuk-table__cell">@(recommendation.CropK2O == null ? Resource.lblHyphen : recommendation.CropK2O == 0 ? recommendation.CropK2O : string.Concat(recommendation.CropK2O, Resource.lblkg))</td>
+                                        </tr>
+                                        <tr class="govuk-table__row">
+                                            <th class="govuk-table__header" scope="row">
+                                                @Resource.lblSulphurSO3
+                                            </th>
+                                            <td class="govuk-table__cell">
+                                                @(recommendation.SIndex == null ? Resource.lblHyphen : recommendation.SIndex)
+                                            </td>
+                                            <td class="govuk-table__cell">@(recommendation.CropSO3 == null ? Resource.lblHyphen : recommendation.CropSO3 == 0 ? recommendation.CropSO3 : string.Concat(recommendation.CropSO3, Resource.lblkg))</td>
+                                        </tr>
+                                        <tr class="govuk-table__row">
+                                            <th class="govuk-table__header" scope="row">
+                                                @Resource.lblLime
+                                            </th>
+                                            <td class="govuk-table__cell">
+                                                @Resource.lblHyphen
+                                            </td>
+                                            <td class="govuk-table__cell">
+                                                @(recommendation.CropLime == null ? Resource.lblHyphen : recommendation.CropLime == 0 ? recommendation.CropLime : string.Concat(recommendation.CropLime, Resource.lblkg))
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="margin-bottom-forty">
+                                    @if (Model.RecommendationComments.Count > 0)
+                                    {
+                                        <govuk-inset-text>
 
+                                            @foreach (var recCom in Model.RecommendationComments.Where(rc => rc.RecommendationID == recommendation.ID))
+                                            {
+                                                @recCom.Comment
+                                                <br />
+
+                                            }
+                                        </govuk-inset-text>
+                                    }
+                                </div>
+                            }
+                        }
                     </div>
+
+                </div>
             }
 
             @* <a class="govuk-notification-banner__link" asp-action="" asp-controller="Crop">@string.Format(Resource.lblChangeLinkForRecommendation, crop.CropTypeID,crop.FieldID)</a>           *@

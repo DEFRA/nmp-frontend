@@ -102,6 +102,7 @@ button.accept-policy {
     .change-link:focus {
         outline: none;
     }
+
 .rainfall-suffix {
     margin-top: 30px;
 }
@@ -110,9 +111,11 @@ button.accept-policy {
     margin-top: 30px;
     margin-bottom: 30px;
 }
-.text-group h3, .text-group p {
-    margin-bottom: 10px;
-}
+
+    .text-group h3, .text-group p {
+        margin-bottom: 10px;
+    }
+
 .govuk-breadcrumbs-link {
     font-size: 19px !important;
     line-height: 1.25;
@@ -141,19 +144,24 @@ hr.seperator_five {
         margin: 0 0 15px 0;
         padding: 0;
     }
+
 .govuk-input__wrapper label {
     min-width: 40.0625em;
 }
+
 .govuk-input__wrapper input {
     max-width: 5.5em;
 }
-.alignRight{
-    text-align:right !important;
+
+.alignRight {
+    text-align: right !important;
 }
+
 a.disabled {
     pointer-events: none;
     cursor: default;
 }
+
 .hint {
     font-weight: normal !important;
 }
@@ -162,3 +170,24 @@ a.disabled {
     margin-bottom: 40px !important;
 }
 
+.table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+    .table-container table {
+        width: 100%;
+        min-width: 600px;
+        table-layout: auto;
+    }
+
+@media (max-width: 600px) {
+    .table-container {
+        overflow-x: auto;
+    }
+
+        .table-container table {
+            width: 100%;
+            min-width: 600px;
+        }
+}
