@@ -65,7 +65,7 @@
                             <tr class="govuk-table__row">
                                 <td class="govuk-table__cell">@item.Name</td>
                                 <td class="govuk-table__cell">
-                                    <a href="#">@Resource.lblFieldAndSoilDetails</a>
+                                    <a asp-controller="Field" asp-action="FieldSoilAnalysisDetail" asp-route-id="@item.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">@Resource.lblFieldAndSoilDetails</a>
                                 </td>
                             </tr>
                         }
