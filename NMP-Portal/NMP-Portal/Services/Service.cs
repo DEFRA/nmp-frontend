@@ -16,7 +16,7 @@ namespace NMP.Portal.Services
 
         public async Task<HttpClient> GetNMPAPIClient()
         {
-            string? jwtToken = _httpContextAccessor.HttpContext?.Session.GetString("JwtToken");
+            string? jwtToken =string.Concat("Bearer ",_httpContextAccessor.HttpContext?.Session.GetString("JwtToken"));
             HttpClient httpClient = _clientFactory.CreateClient("NMPApi");
             httpClient.DefaultRequestHeaders.Add("Authorization", jwtToken);
             return await Task.FromResult(httpClient).ConfigureAwait(false);

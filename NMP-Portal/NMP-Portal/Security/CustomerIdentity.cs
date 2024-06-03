@@ -141,7 +141,7 @@ namespace NMP.Portal.Security
                     string jsonData = JsonConvert.SerializeObject(userData);
                     using HttpClient httpClient = new HttpClient();
                     httpClient.BaseAddress = new Uri(configuration["NMPApiUrl"]);
-                    httpClient.DefaultRequestHeaders.Add("Authorization", token);
+                    httpClient.DefaultRequestHeaders.Add("Authorization", string.Concat("Bearer ", token));
                     var response = await httpClient.PostAsync(APIURLHelper.AddOrUpdateUserAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
                     string result = await response.Content.ReadAsStringAsync();
                     ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);

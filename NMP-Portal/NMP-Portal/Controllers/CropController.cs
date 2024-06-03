@@ -13,6 +13,7 @@ using NMP.Portal.ViewModels;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
@@ -59,9 +60,9 @@ namespace NMP.Portal.Controllers
             {
                 int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
                 List<PlanSummaryResponse> planSummaryResponse = await _cropService.FetchPlanSummaryByFarmId(farmId, 0);
-                if(planSummaryResponse.Count>0)
+                if (planSummaryResponse.Count > 0)
                 {
-                    return RedirectToAction("PlansAndRecordsOverview", "Crop", new { id = q});
+                    return RedirectToAction("PlansAndRecordsOverview", "Crop", new { id = q });
                 }
             }
             return RedirectToAction("FarmSummary", "Farm", new { Id = q });
@@ -90,11 +91,11 @@ namespace NMP.Portal.Controllers
                     {
                         int harvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(year));
                         model.Year = harvestYear;
-                        if (isPlanRecord==false || isPlanRecord==null)
+                        if (isPlanRecord == false || isPlanRecord == null)
                         {
                             model.IsAddAnotherCrop = true;
                         }
-                        if(isPlanRecord==true)
+                        if (isPlanRecord == true)
                         {
                             model.IsPlanRecord = true;
                         }
@@ -853,6 +854,14 @@ namespace NMP.Portal.Controllers
                 ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", Resource.MsgEnterADateBeforeContinuing);
             }
 
+            if (model.Crops[model.SowingDateCurrentCounter].SowingDate != null)
+            {
+                if (model.Crops[model.SowingDateCurrentCounter].SowingDate.Value.Year < 1601 || model.Crops[model.SowingDateCurrentCounter].SowingDate.Value.Date.Year >= model.Year + 1)
+                {
+                    ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", Resource.MsgEnterADateAfter);
+                }
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -1600,7 +1609,7 @@ namespace NMP.Portal.Controllers
                         {
                             var crop = new CropViewModel
                             {
-                                ID=recommendation.Crops.ID,
+                                ID = recommendation.Crops.ID,
                                 Year = recommendation.Crops.Year,
                                 CropTypeID = recommendation.Crops.CropTypeID,
                                 FieldID = recommendation.Crops.FieldID,
@@ -1646,8 +1655,8 @@ namespace NMP.Portal.Controllers
                                     model.ManagementPeriods.Add(ManagementPeriods);
                                     var rec = new Recommendation
                                     {
-                                        ID=recData.Recommendation.ID,
-                                        ManagementPeriodID=recData.Recommendation.ManagementPeriodID,
+                                        ID = recData.Recommendation.ID,
+                                        ManagementPeriodID = recData.Recommendation.ManagementPeriodID,
                                         CropN = recData.Recommendation.CropN,
                                         CropP2O5 = recData.Recommendation.CropP2O5,
                                         CropK2O = recData.Recommendation.CropK2O,
