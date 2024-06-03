@@ -1062,6 +1062,10 @@ namespace NMP.Portal.Controllers
                 int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
                 model.Fields = await _fieldService.FetchFieldsByFarmId(farmId);
 
+                if (model.Fields != null && model.Fields.Count > 0)
+                {
+                    model.Fields.ForEach(x => x.EncryptedFieldId = _farmDataProtector.Protect(x.ID.ToString()));
+                }
                 (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(farmId);
                 model.FarmName = farm.Name;
                 if (name != null)
@@ -1080,6 +1084,34 @@ namespace NMP.Portal.Controllers
         {
 
             return RedirectToAction("ManageFarmFields");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> FieldSoilAnalysisDetail(string id, string farmId)
+        {
+            FieldViewModel model = new FieldViewModel();
+
+            (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(farmId)));
+            int fieldId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
+            var field = await _fieldService.FetchFieldByFieldId(fieldId);
+            model.Name= field.Name;
+            model.TotalArea=field.TotalArea??0;
+            model.CroppedArea = field.CroppedArea??0;
+            model.ManureNonSpreadingArea = field.ManureNonSpreadingArea??0;
+            //model.SoilType = await _fieldService.FetchSoilTypeById(field.SoilTypeID.Value); 
+            model.SoilReleasingClay = field.SoilReleasingClay??false;
+            model.IsWithinNVZ = field.IsWithinNVZ??false;
+            model.IsAbove300SeaLevel = field.IsAbove300SeaLevel??false;
+
+            var soilType = await _fieldService.FetchSoilTypeById(field.SoilTypeID.Value);
+            model.SoilType = !string.IsNullOrWhiteSpace(soilType) ? soilType : string.Empty;
+
+            model.EncryptedFarmId = farmId;
+            model.FarmName = farm.Name;
+            List<SoilAnalysisResponse> soilAnalysisResponse= await _fieldService.FetchSoilAnalysisByFieldId(fieldId);
+            ViewBag.SampleDate = soilAnalysisResponse;
+
+            return View(model);
         }
     }
 }

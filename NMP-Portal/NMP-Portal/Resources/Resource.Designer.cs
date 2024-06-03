@@ -160,6 +160,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add new soil analysis.
+        /// </summary>
+        public static string lblAddNewSoilAnalysis {
+            get {
+                return ResourceManager.GetString("lblAddNewSoilAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to addresses found.
         /// </summary>
         public static string lblAddressFoundCondition {
@@ -403,6 +412,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change field details.
+        /// </summary>
+        public static string lblChangeFieldDetails {
+            get {
+                return ResourceManager.GetString("lblChangeFieldDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change {0} plan for {1}.
         /// </summary>
         public static string lblChangeForReccomendation {
@@ -538,6 +556,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cropped area.
+        /// </summary>
+        public static string lblCropedArea {
+            get {
+                return ResourceManager.GetString("lblCropedArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Crop Group.
         /// </summary>
         public static string lblCropGroup {
@@ -660,6 +687,15 @@ namespace NMP.Portal.Resources {
         public static string lblCurrentFields {
             get {
                 return ResourceManager.GetString("lblCurrentFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date sample taken.
+        /// </summary>
+        public static string lblDateSample {
+            get {
+                return ResourceManager.GetString("lblDateSample", resourceCulture);
             }
         }
         
@@ -952,6 +988,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Field details.
+        /// </summary>
+        public static string lblFieldDetails {
+            get {
+                return ResourceManager.GetString("lblFieldDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Field measurements for {0}.
         /// </summary>
         public static string lblFieldMeasurements {
@@ -970,6 +1015,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fields.
+        /// </summary>
+        public static string lblFields {
+            get {
+                return ResourceManager.GetString("lblFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How many fields at {0} are more than 300 metres above sea level?.
         /// </summary>
         public static string lblFieldsAbove300SeaLevel {
@@ -984,6 +1038,15 @@ namespace NMP.Portal.Resources {
         public static string lblFieldsCount {
             get {
                 return ResourceManager.GetString("lblFieldsCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Field soil analysis detail.
+        /// </summary>
+        public static string lblFieldSoilAnalysisDetail {
+            get {
+                return ResourceManager.GetString("lblFieldSoilAnalysisDetail", resourceCulture);
             }
         }
         
@@ -1020,6 +1083,15 @@ namespace NMP.Portal.Resources {
         public static string lblHaveYouPlantedYourCrop {
             get {
                 return ResourceManager.GetString("lblHaveYouPlantedYourCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} hectares.
+        /// </summary>
+        public static string lblHectare {
+            get {
+                return ResourceManager.GetString("lblHectare", resourceCulture);
             }
         }
         
@@ -1174,6 +1246,24 @@ namespace NMP.Portal.Resources {
         public static string lblIsAbove300SeaLevel {
             get {
                 return ResourceManager.GetString("lblIsAbove300SeaLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is field above 300 meters.
+        /// </summary>
+        public static string lblIsFieldAbove300Meters {
+            get {
+                return ResourceManager.GetString("lblIsFieldAbove300Meters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is field within an NVZ.
+        /// </summary>
+        public static string lblIsFieldWithinNVZ {
+            get {
+                return ResourceManager.GetString("lblIsFieldWithinNVZ", resourceCulture);
             }
         }
         
@@ -1363,6 +1453,15 @@ namespace NMP.Portal.Resources {
         public static string lblManualAddress {
             get {
                 return ResourceManager.GetString("lblManualAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manure non spreading area.
+        /// </summary>
+        public static string lblManureNonSpreadArea {
+            get {
+                return ResourceManager.GetString("lblManureNonSpreadArea", resourceCulture);
             }
         }
         
@@ -1862,6 +1961,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove {0}.
+        /// </summary>
+        public static string lblRemoveField {
+            get {
+                return ResourceManager.GetString("lblRemoveField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to save you money.
         /// </summary>
         public static string lblSaveYouMoney {
@@ -1939,6 +2047,24 @@ namespace NMP.Portal.Resources {
         public static string lblSignout {
             get {
                 return ResourceManager.GetString("lblSignout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Soil analysis.
+        /// </summary>
+        public static string lblSoilAnalysis {
+            get {
+                return ResourceManager.GetString("lblSoilAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Soil contains potash releasing clay.
+        /// </summary>
+        public static string lblSoilContainsPostashReleasingClay {
+            get {
+                return ResourceManager.GetString("lblSoilContainsPostashReleasingClay", resourceCulture);
             }
         }
         
@@ -2317,6 +2443,15 @@ namespace NMP.Portal.Resources {
         public static string lblViewRecommendations {
             get {
                 return ResourceManager.GetString("lblViewRecommendations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View soil analysis.
+        /// </summary>
+        public static string lblViewSoilAnalysis {
+            get {
+                return ResourceManager.GetString("lblViewSoilAnalysis", resourceCulture);
             }
         }
         
@@ -3118,6 +3253,15 @@ namespace NMP.Portal.Resources {
         public static string MsgPreviousCropTypeNotSet {
             get {
                 return ResourceManager.GetString("MsgPreviousCropTypeNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can also remove {0}. This will remove all of the field data including soil analysis. It will also remove {0} from your plans. You will not be able to get it back..
+        /// </summary>
+        public static string MsgRemoveField {
+            get {
+                return ResourceManager.GetString("MsgRemoveField", resourceCulture);
             }
         }
         
