@@ -18,7 +18,7 @@ namespace NMP.Portal.Services
         {
             string? jwtToken = _httpContextAccessor.HttpContext?.Session.GetString("JwtToken");
             HttpClient httpClient = _clientFactory.CreateClient("NMPApi");
-            httpClient.DefaultRequestHeaders.Add("Authorization", jwtToken);
+            httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwtToken}");
             return await Task.FromResult(httpClient).ConfigureAwait(false);
 
         }
@@ -27,7 +27,7 @@ namespace NMP.Portal.Services
         {
             string? jwtToken = _httpContextAccessor.HttpContext?.Session.GetString("JwtToken");
             HttpClient httpClient = _clientFactory.CreateClient("NMPApi");            
-            httpClient.DefaultRequestHeaders.Add("Authorization", jwtToken);
+            httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwtToken}");
             var response = await httpClient.PostAsJsonAsync(url, model);
             return response;
         }
@@ -36,7 +36,7 @@ namespace NMP.Portal.Services
         {
             string? jwtToken = _httpContextAccessor.HttpContext?.Session.GetString("JwtToken");
             HttpClient httpClient = _clientFactory.CreateClient("NMPApi");            
-            httpClient.DefaultRequestHeaders.Add("Authorization", jwtToken);
+            httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwtToken}");
             var response = await httpClient.GetAsync(url);
             return response;
         }
