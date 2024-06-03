@@ -36,5 +36,7 @@ namespace NMP.Portal.Helpers
         public const string FetchCropInfo2NameByCropInfo2IdAsyncAPI = "vendors/rb209/Arable/CropInfo2/{0}";
         public const string FetchAllCropTypeAsyncAPI = "vendors/rb209/Arable/CropTypes";
         public const string AddOrUpdateUserAsyncAPI = "users";
+        public const string FetchSoilTypeBySoilTypeIdAsyncAPI = "vendors/rb209/Soil/SoilType/{0}";
+        public const string FetchSoilAnalysisByFieldIdAsyncAPI = "soil-analyses/fields/{0}?shortSummary={1}";
     }
 }

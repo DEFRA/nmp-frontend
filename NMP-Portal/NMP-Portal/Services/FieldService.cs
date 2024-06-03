@@ -1,9 +1,11 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NMP.Portal.Enums;
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
 using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 //using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -505,6 +507,84 @@ namespace NMP.Portal.Services
             }
 
             return cropTypes;
+        }
+
+        public async Task<string> FetchSoilTypeById(int soilTypeId)
+        {
+            Error error = null;
+            string soilType = string.Empty;
+            try
+            {
+
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchSoilTypeBySoilTypeIdAsyncAPI, soilTypeId));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+                {
+                    soilType = responseWrapper.Data["soilType"];
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return soilType;
+        }
+
+        public async Task<List<SoilAnalysisResponse>> FetchSoilAnalysisByFieldId(int fieldId)
+        {
+            Error error = null;
+            List<SoilAnalysisResponse> soilAnalysis = new List<SoilAnalysisResponse>();
+            try
+            {
+
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchSoilAnalysisByFieldIdAsyncAPI, fieldId,"true"));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+                {
+                      soilAnalysis = responseWrapper.Data.SoilAnalyses.records.ToObject<List<SoilAnalysisResponse>>();
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return soilAnalysis;
         }
     }
 }

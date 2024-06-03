@@ -1171,4 +1171,52 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblVarietyForRecommendation" xml:space="preserve">
     <value>Variety</value>
   </data>
+  <data name="lblAddNewSoilAnalysis" xml:space="preserve">
+    <value>Add new soil analysis</value>
+  </data>
+  <data name="lblChangeFieldDetails" xml:space="preserve">
+    <value>Change field details</value>
+  </data>
+  <data name="lblCropedArea" xml:space="preserve">
+    <value>Cropped area</value>
+  </data>
+  <data name="lblDateSample" xml:space="preserve">
+    <value>Date sample taken</value>
+  </data>
+  <data name="lblFieldDetails" xml:space="preserve">
+    <value>Field details</value>
+  </data>
+  <data name="lblFields" xml:space="preserve">
+    <value>Fields</value>
+  </data>
+  <data name="lblFieldSoilAnalysisDetail" xml:space="preserve">
+    <value>Field soil analysis detail</value>
+  </data>
+  <data name="lblIsFieldAbove300Meters" xml:space="preserve">
+    <value>Is field above 300 meters</value>
+  </data>
+  <data name="lblIsFieldWithinNVZ" xml:space="preserve">
+    <value>Is field within an NVZ</value>
+  </data>
+  <data name="lblRemoveField" xml:space="preserve">
+    <value>Remove {0}</value>
+  </data>
+  <data name="lblSoilAnalysis" xml:space="preserve">
+    <value>Soil analysis</value>
+  </data>
+  <data name="lblSoilContainsPostashReleasingClay" xml:space="preserve">
+    <value>Soil contains potash releasing clay</value>
+  </data>
+  <data name="lblViewSoilAnalysis" xml:space="preserve">
+    <value>View soil analysis</value>
+  </data>
+  <data name="MsgRemoveField" xml:space="preserve">
+    <value>You can also remove {0}. This will remove all of the field data including soil analysis. It will also remove {0} from your plans. You will not be able to get it back.</value>
+  </data>
+  <data name="lblManureNonSpreadArea" xml:space="preserve">
+    <value>Manure non spreading area</value>
+  </data>
+  <data name="lblHectare" xml:space="preserve">
+    <value>{0} hectares</value>
+  </data>
 </root>
