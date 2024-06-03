@@ -12,7 +12,7 @@ namespace NMP.Portal.Controllers
     [AllowAnonymous]
     public class AccountController : Controller
     {
-        public async Task<IActionResult> LoginAsync(string returnUrl = "")
+        public async Task<IActionResult> AfterLogin()
         {
 
             //var user = new User();
@@ -44,14 +44,14 @@ namespace NMP.Portal.Controllers
 
             //HttpContext.Session.SetObjectAsJson("token", token);
 
-            return Redirect(returnUrl?? "/");
+            return Redirect("/");
         }
 
         public async Task<IActionResult> LogOut()
         {            
             base.SignOut();
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            HttpContext?.Session.Remove("token");
+            HttpContext?.Session.Remove("JwtToken");
             HttpContext?.Session.Clear();
             return RedirectToAction("Index","Home");
         }

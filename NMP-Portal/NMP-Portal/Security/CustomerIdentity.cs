@@ -11,7 +11,9 @@ using NMP.Portal.Models;
 using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
 using NMP.Portal.Services;
+using System.Collections.Generic;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 
@@ -31,15 +33,23 @@ namespace NMP.Portal.Security
                     {
                         options.Instance = builder.Configuration?["CustomerIdentityInstance"];
                         options.ClientId = builder.Configuration["CustomerIdentityClientId"];
-                        options.ClientSecret = builder.Configuration["CustomerIdentityClientSecret"];
+                        //options.ClientSecret = builder.Configuration["CustomerIdentityClientSecret"];
                         options.TenantId = builder.Configuration["CustomerIdentityTenantId"];
                         options.Domain = builder.Configuration["CustomerIdentityDomain"];
                         var extraQueryParameters = new Dictionary<string, string>();
                         extraQueryParameters.Add("serviceId", value: builder.Configuration["CustomerIdentityServiceId"].ToString());
                         options.ExtraQueryParameters = extraQueryParameters;
                         options.CallbackPath = builder.Configuration["CustomerIdentityCallbackPath"]; // signin-oidc";
-                        options.SignedOutCallbackPath = builder.Configuration["CustomerIdentitySignedOutCallbackPath"];
+                        //options.SignedOutCallbackPath = builder.Configuration["CustomerIdentitySignedOutCallbackPath"];
                         options.SignUpSignInPolicyId = builder.Configuration["CustomerIdentityPolicyId"];
+                        //options.RefreshInterval = TimeSpan.FromMinutes(19);
+                       
+                        //options.UseTokenLifetime = true;
+                        //options.SaveTokens = true;
+                        options.ResponseType = "code";
+                        options.Scope.Add("openid");
+                        options.Scope.Add("offline_access");
+                        options.Scope.Add(options.ClientId?? string.Empty);
                         options.ErrorPath = "/Error/index";
                         options.Events ??= new OpenIdConnectEvents();
                         options.Events.OnAuthorizationCodeReceived += OnAuthorizationCodeReceived;
@@ -50,11 +60,17 @@ namespace NMP.Portal.Security
                         options.Events.OnSignedOutCallbackRedirect += OnSignedOutCallbackRedirect;
                         options.Events.OnAuthenticationFailed += OnAuthenticationFailed;
                         options.Events.OnRemoteSignOut += OnRemoteSignOut;
+                        options.Events.OnUserInformationReceived += OnUserInformationReceived;
                     })
                     .Services.AddTokenAcquisition()
                     .AddInMemoryTokenCaches();
 
             return services;
+        }
+
+        private static async Task OnUserInformationReceived(UserInformationReceivedContext context)
+        {
+            await Task.CompletedTask.ConfigureAwait(false);
         }
 
         private static async Task OnRemoteSignOut(RemoteSignOutContext context)
@@ -98,6 +114,12 @@ namespace NMP.Portal.Security
 
         private static async Task OnAuthorizationCodeReceived(AuthorizationCodeReceivedContext context)
         {
+            var code = context.ProtocolMessage.Code;
+            //using HttpClient httpClient = new HttpClient();
+            //httpClient.BaseAddress = new Uri(context.TokenEndpointRequest.TokenEndpoint);
+            //var response = await httpClient.PostAsync(null, new StringContent(jsonData, mediaType: MediaTypeHeaderValue. "application/x-www-form-urlencoded"));
+            //string result = await response.Content.ReadAsStringAsync();
+
             // Don't remove this line
             await Task.CompletedTask.ConfigureAwait(false);
         }
@@ -106,24 +128,72 @@ namespace NMP.Portal.Security
         {
             string token = context.SecurityToken.RawData;
             context.HttpContext.Session.SetString("JwtToken", token);
-            context.HttpContext.Session.SetObjectAsJson("JwtPayload", context.SecurityToken.Payload);
+            //context.HttpContext.Session.SetObjectAsJson("JwtPayload", context.SecurityToken.Payload);
             IEnumerable<Claim> claims = context.SecurityToken.Claims;
             if (claims.Any())
             {
-                Guid userIdentifier = Guid.Parse(claims.FirstOrDefault(c => c.Type == "sub").Value);
-                var firstName = claims.FirstOrDefault(c => c.Type == "firstName").Value;
-                var surname = claims.FirstOrDefault(c => c.Type == "lastName").Value;
-                var email = claims.FirstOrDefault(c => c.Type == "email").Value; //currentRelationshipId"];
-                var relationShips = claims.FirstOrDefault(c => c.Type == "relationships").Value;
-                string[] relationshipClaimArray = relationShips.Split(":");
-                var organisationName = relationshipClaimArray[5] == "Employee" ? relationshipClaimArray[2] : $"{firstName} {surname}";
-                Guid organisationId = relationshipClaimArray[5] == "Employee" ? Guid.Parse(relationshipClaimArray[1]) : Guid.Parse(relationshipClaimArray[0]);
+                Guid? userIdentifier= null;
+                string firstName = string.Empty;
+                string lastName = string.Empty;
+                string email = string.Empty;
+                string currentRelationShipId = string.Empty;
+                string organisationName = string.Empty;
+                Guid? organisationId = null;
+                List<string> relationShipsArray = new List<string>();
+                List<string> relationShipDetails = new List<string>(); 
+                foreach (var claim in claims)
+                {
+                    switch(claim.Type)
+                    {
+                        case "sub":
+                            userIdentifier = Guid.Parse(claim.Value);
+                            break;
+                        case "firstName":
+                            firstName= claim.Value;
+                            break;
+                        case "lastName":
+                            lastName = claim.Value;
+                            break;
+                        case "email":
+                            email = claim.Value;
+                            break;
+                        case "currentRelationshipId":
+                            currentRelationShipId = claim.Value;
+                            break;
+                        case "relationships":
+                            if(claim.Value.GetType().IsArray)
+                            {
+                                relationShipsArray.AddRange(claim.Value.Split(","));
+                            }
+                            else
+                            {
+                                relationShipsArray.Add(claim.Value);
+                            }
+                            var rs = relationShipsArray.FirstOrDefault(r => r.Contains(currentRelationShipId));
+                            if(rs != null)
+                            {
+                                relationShipDetails.AddRange(rs.Split(":"));
+                                if(relationShipDetails[4] == "Citizen")
+                                {
+                                    organisationName = $"{firstName} {lastName}";
+                                    organisationId = Guid.Parse(relationShipDetails[0]);
+                                }
+                                else
+                                {
+                                    organisationName = relationShipDetails[2];
+                                    organisationId = Guid.Parse(relationShipDetails[1]);
+                                } 
+                            }                            
+                            break;
+                    }
+                }                
+                
                 UserData userData = new UserData()
                 {
                     User = new User()
                     {
                         GivenName = firstName,
-                        Surname = surname,
+                        Surname = lastName,
                         Email = email,
                         UserIdentifier = userIdentifier
                     },
@@ -139,23 +209,30 @@ namespace NMP.Portal.Security
                 try
                 {
                     string jsonData = JsonConvert.SerializeObject(userData);
-                    using HttpClient httpClient = new HttpClient();
-                    httpClient.BaseAddress = new Uri(configuration["NMPApiUrl"]);
-                    httpClient.DefaultRequestHeaders.Add("Authorization", token);
-                    var response = await httpClient.PostAsync(APIURLHelper.AddOrUpdateUserAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
-                    string result = await response.Content.ReadAsStringAsync();
-                    ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-                    if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
+                    if(configuration != null)
                     {
-                        userId = responseWrapper?.Data?["UserID"];
-                    }
-                    else
-                    {
-                        if (responseWrapper != null && responseWrapper?.Error != null)
+                        using HttpClient httpClient = new HttpClient();
+                        httpClient.BaseAddress = new Uri(configuration["NMPApiUrl"]?? "http://localhost:3000/");
+                        httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+                        var response = await httpClient.PostAsync(APIURLHelper.AddOrUpdateUserAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+                        string result = await response.Content.ReadAsStringAsync();
+                        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
                         {
-                            throw new Exception(responseWrapper?.Error);
+                            userId = responseWrapper?.Data?["UserID"];
                         }
-                    }
+                        else if(response.StatusCode == HttpStatusCode.Unauthorized)
+                        {
+
+                        }
+                        else
+                        {
+                            if (responseWrapper != null && responseWrapper?.Error != null)
+                            {
+                                throw new Exception(responseWrapper?.Error);
+                            }
+                        }
+                    }                    
                 }
                 catch (HttpRequestException hre)
                 {
@@ -168,6 +245,7 @@ namespace NMP.Portal.Security
 
                 context.HttpContext.Items.Add("UserId", userId);
                 context.HttpContext.Session.SetInt32("UserId", userId);
+                
             }
 
             // Don't remove this line
