@@ -12,7 +12,7 @@ namespace NMP.Portal.Helpers
         public const string FetchFarmByOrgIdAPI = "farms/organisations/{0}";
         public const string FetchFarmByIdAPI = "farms/{0}";
         public const string FetchFieldCountByFarmIdAPI = "fields/farms/{0}/count";
-        public const string FetchRainfallAverageAsyncAPI = "vendors/rb209/RainFall/RainfallAverage/{0}";
+        public const string FetchRainfallAverageAsyncAPI = "climates/rainfall-average/{0}";
         public const string FetchSoilTypesAsyncAPI = "vendors/rb209/Soil/SoilTypes";
         public const string FetchNutrientsAsyncAPI = "vendors/rb209/Field/Nutrients";
         public const string FetchSoilNutrientIndexAsyncAPI = "vendors/rb209/Soil/NutrientIndex/{0}/{1}/{2}";
