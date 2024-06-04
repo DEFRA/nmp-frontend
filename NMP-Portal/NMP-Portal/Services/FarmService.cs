@@ -203,7 +203,7 @@ namespace NMP.Portal.Services
                 string result = await rainfall.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapperFarmExist = JsonConvert.DeserializeObject<ResponseWrapper>(result);
 
-                rainfallAverage = responseWrapperFarmExist.Data["averageRainfall"];
+                rainfallAverage = responseWrapperFarmExist.Data["rainfallAverage"];
             }
             catch (HttpRequestException hre)
             {
