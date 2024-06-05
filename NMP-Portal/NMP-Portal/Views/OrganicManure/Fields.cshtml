@@ -1,0 +1,61 @@
+﻿@using NMP.Portal.Resources
+@model NMP.Portal.ViewModels.OrganicManureViewModel
+@{
+    ViewData["Title"] = Resource.lblField;
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="@("FieldGroup")" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
+}
+<form asp-action="Fields" asp-controller="OrganicManure" method="post">
+    @Html.AntiForgeryToken()
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroup"></govuk-input>
+    @if (Model.FieldList != null && Model.FieldList.Count > 0)
+    {
+        @for (int i = 0; i < Model.FieldList.Count; i++)
+        {
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldList[i]" value="@Model.FieldList[i]"></govuk-input>
+        }
+    }
+    @if (TempData["FieldError"] != null)
+    {
+        <govuk-error-summary>
+            <govuk-error-summary-item href="#">@TempData["FieldError"]</govuk-error-summary-item>
+        </govuk-error-summary>
+    }
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <govuk-checkboxes name="FieldList" asp-for="FieldList">
+                <govuk-checkboxes-fieldset>
+                    <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @Resource.lblWhichFieldsWouldYouLikeToPlanAnOrganic
+                    </govuk-checkboxes-fieldset-legend>
+                    <govuk-checkboxes-hint>
+                        @Resource.lblSelectAllThatApply
+                    </govuk-checkboxes-hint>
+                    @if (ViewBag.FieldList != null)
+                    {
+                        @foreach (var item in ViewBag.FieldList)
+                        {
+                            <govuk-checkboxes-item value="@item.Value">@item.Text</govuk-checkboxes-item>
+                        }
+                    }
+
+                    <govuk-checkboxes-divider>or</govuk-checkboxes-divider>
+                    <govuk-checkboxes-item value=@Resource.lblSelectAll behavior="Exclusive">@Resource.lblSelectAll</govuk-checkboxes-item>
+                </govuk-checkboxes-fieldset>
+            </govuk-checkboxes>
+            <govuk-button type="submit" class="margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+            <p class="govuk-body cancel-link"><a asp-action="CreateManureCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
+
+        </div>
+
+    </div>
+</form>
