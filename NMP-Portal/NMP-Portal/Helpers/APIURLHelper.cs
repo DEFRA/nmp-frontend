@@ -38,5 +38,7 @@ namespace NMP.Portal.Helpers
         public const string AddOrUpdateUserAsyncAPI = "users";
         public const string FetchSoilTypeBySoilTypeIdAsyncAPI = "vendors/rb209/Soil/SoilType/{0}";
         public const string FetchSoilAnalysisByFieldIdAsyncAPI = "soil-analyses/fields/{0}?shortSummary={1}";
+        public const string FetchCropTypeByFarmIdAndHarvestYearAsyncAPI = "crops/plans/crop-types/{0}?farmId={1}";
+        public const string FetchFieldByFarmIdAndHarvestYearAndCropTypeIdAsyncAPI = "crops/plans/fields/{0}?cropTypeId={1}&farmId={2}";
     }
 }

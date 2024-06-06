@@ -20,17 +20,17 @@ namespace NMP.Portal.Controllers
         private readonly IDataProtector _fieldDataProtector;
         private readonly IDataProtector _cropDataProtector;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly ICropService _cropService;
+        private readonly IOrganicManureService _organicManureService;
 
         public OrganicManureController(ILogger<OrganicManureController> logger, IDataProtectionProvider dataProtectionProvider,
-              IHttpContextAccessor httpContextAccessor, ICropService cropService)
+              IHttpContextAccessor httpContextAccessor, IOrganicManureService organicManureService)
         {
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
             _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
             _fieldDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FieldController");
             _cropDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.CropController");
-            _cropService = cropService;
+            _organicManureService = organicManureService;
         }
 
         public IActionResult Index()
@@ -59,14 +59,14 @@ namespace NMP.Portal.Controllers
                 model.EncryptedHarvestYear = r;
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
             }
-            (List<HarvestYearPlanResponse> harvestYearPlanResponse, Error error) = await _cropService.FetchHarvestYearPlansByFarmId(model.HarvestYear.Value, model.FarmId.Value);
-            if (harvestYearPlanResponse.Count > 0)
+            (List<OrganicManureCropTypeResponse> cropTypeList, Error error) = await _organicManureService.FetchCropTypeByFarmIdAndHarvestYear(model.FarmId.Value, model.HarvestYear.Value);
+            if (cropTypeList.Count > 0)
             {
 
-                var SelectListItem = harvestYearPlanResponse.Select(f => new SelectListItem
+                var SelectListItem = cropTypeList.Select(f => new SelectListItem
                 {
-                    Value = f.CropTypeID.ToString(),
-                    Text = string.Format(Resource.lblTheCropTypeField, f.CropTypeName.ToString())
+                    Value = f.CropTypeId.ToString(),
+                    Text = string.Format(Resource.lblTheCropTypeField, f.CropType.ToString())
                 }).ToList();
                 SelectListItem.Insert(0, new SelectListItem { Value = Resource.lblAll, Text = string.Format(Resource.lblAllFieldsInTheYearPlan, model.HarvestYear) });
                 SelectListItem.Add(new SelectListItem { Value = Resource.lblSelectSpecificFields, Text = Resource.lblSelectSpecificFields });
@@ -85,14 +85,14 @@ namespace NMP.Portal.Controllers
             }
             if(!ModelState.IsValid)
             {
-                (List<HarvestYearPlanResponse> harvestYearPlanResponse, Error error) = await _cropService.FetchHarvestYearPlansByFarmId(model.HarvestYear.Value, model.FarmId.Value);
-                if (harvestYearPlanResponse.Count > 0)
+                (List<OrganicManureCropTypeResponse> cropTypeList, Error error) = await _organicManureService.FetchCropTypeByFarmIdAndHarvestYear(model.FarmId.Value, model.HarvestYear.Value);
+                if (cropTypeList.Count > 0)
                 {
 
-                    var SelectListItem = harvestYearPlanResponse.Select(f => new SelectListItem
+                    var SelectListItem = cropTypeList.Select(f => new SelectListItem
                     {
-                        Value = f.CropTypeID.ToString(),
-                        Text = string.Format(Resource.lblTheCropTypeField, f.CropTypeName.ToString())
+                        Value = f.CropTypeId.ToString(),
+                        Text = string.Format(Resource.lblTheCropTypeField, f.CropType.ToString())
                     }).ToList();
                     SelectListItem.Insert(0, new SelectListItem { Value = Resource.lblAll, Text = string.Format(Resource.lblAllFieldsInTheYearPlan, model.HarvestYear) });
                     SelectListItem.Add(new SelectListItem { Value = Resource.lblSelectSpecificFields, Text = Resource.lblSelectSpecificFields });
@@ -114,20 +114,26 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
             }
-            (List<HarvestYearPlanResponse> harvestYearPlanResponse, Error error) = await _cropService.FetchHarvestYearPlansByFarmId(model.HarvestYear.Value, model.FarmId.Value);
-            if (harvestYearPlanResponse.Count > 0)
+            (List<OrganicManureFieldResponse> fieldList, Error error) = await _organicManureService.FetchFieldByFarmIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields)|| model.FieldGroup.Equals(Resource.lblAll)?null:model.FieldGroup);
+            if (fieldList.Count > 0)
             {
 
-                var SelectListItem = harvestYearPlanResponse.Select(f => new SelectListItem
+                var SelectListItem = fieldList.Select(f => new SelectListItem
                 {
-                    Value = f.CropTypeID.ToString(),
-                    Text = string.Format(Resource.lblTheCropTypeField, f.CropTypeName.ToString())
+                    Value = f.FieldId.ToString(),
+                    Text = f.FieldName.ToString()
                 }).ToList();
-                SelectListItem.Insert(0, new SelectListItem { Value = Resource.lblAll, Text = string.Format(Resource.lblAllFieldsInTheYearPlan, model.HarvestYear) });
-                SelectListItem.Add(new SelectListItem { Value = Resource.lblSelectSpecificFields, Text = Resource.lblSelectSpecificFields });
                 ViewBag.FieldList = SelectListItem;
             }
-            return View(model);
+            if (model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
+            {
+                return View(model);
+            }
+            else
+            {
+                return RedirectToAction("Fields");
+            }
+            
         }
 
         [HttpPost]
@@ -140,17 +146,15 @@ namespace NMP.Portal.Controllers
             }
             if (!ModelState.IsValid)
             {
-                (List<HarvestYearPlanResponse> harvestYearPlanResponse, Error error) = await _cropService.FetchHarvestYearPlansByFarmId(model.HarvestYear.Value, model.FarmId.Value);
-                if (harvestYearPlanResponse.Count > 0)
+                (List<OrganicManureFieldResponse> fieldList, Error error) = await _organicManureService.FetchFieldByFarmIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
+                if (fieldList.Count > 0)
                 {
 
-                    var SelectListItem = harvestYearPlanResponse.Select(f => new SelectListItem
+                    var SelectListItem = fieldList.Select(f => new SelectListItem
                     {
-                        Value = f.CropTypeID.ToString(),
-                        Text = string.Format(Resource.lblTheCropTypeField, f.CropTypeName.ToString())
+                        Value = f.FieldId.ToString(),
+                        Text = f.FieldName.ToString()
                     }).ToList();
-                    SelectListItem.Insert(0, new SelectListItem { Value = Resource.lblAll, Text = string.Format(Resource.lblAllFieldsInTheYearPlan, model.HarvestYear) });
-                    SelectListItem.Add(new SelectListItem { Value = Resource.lblSelectSpecificFields, Text = Resource.lblSelectSpecificFields });
                     ViewBag.FieldList = SelectListItem;
                 }
                 return View(model);
