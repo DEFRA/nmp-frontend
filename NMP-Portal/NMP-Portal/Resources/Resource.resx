@@ -1237,4 +1237,16 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblWhichFieldsWouldYouLikeToPlanAnOrganic" xml:space="preserve">
     <value>Which fields would you like to plan an organic material application for?</value>
   </data>
+  <data name="lblManureGroup" xml:space="preserve">
+    <value>Manure Group</value>
+  </data>
+  <data name="lblWhatTypeOfOrganicMaterialAreYouUsingInThisApplication" xml:space="preserve">
+    <value>What type of organic material are you using in this application?</value>
+  </data>
+  <data name="lblManureType" xml:space="preserve">
+    <value>Manue Type</value>
+  </data>
+  <data name="lblWhatTypeOfManureGroupAreYouUsingInThisApplication" xml:space="preserve">
+    <value>What type of {0} are you using in this application?</value>
+  </data>
 </root>

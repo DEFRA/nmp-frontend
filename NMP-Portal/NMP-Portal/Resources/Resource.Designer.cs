@@ -1484,6 +1484,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manure Group.
+        /// </summary>
+        public static string lblManureGroup {
+            get {
+                return ResourceManager.GetString("lblManureGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manure non spreading area.
         /// </summary>
         public static string lblManureNonSpreadArea {
@@ -1507,6 +1516,15 @@ namespace NMP.Portal.Resources {
         public static string lblManureNonSpreadingAreaForCheckAnswere {
             get {
                 return ResourceManager.GetString("lblManureNonSpreadingAreaForCheckAnswere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manue Type.
+        /// </summary>
+        public static string lblManureType {
+            get {
+                return ResourceManager.GetString("lblManureType", resourceCulture);
             }
         }
         
@@ -2632,6 +2650,24 @@ namespace NMP.Portal.Resources {
         public static string lblWhatIsThePlantingDate {
             get {
                 return ResourceManager.GetString("lblWhatIsThePlantingDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What type of {0} are you using in this application?.
+        /// </summary>
+        public static string lblWhatTypeOfManureGroupAreYouUsingInThisApplication {
+            get {
+                return ResourceManager.GetString("lblWhatTypeOfManureGroupAreYouUsingInThisApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What type of organic material are you using in this application?.
+        /// </summary>
+        public static string lblWhatTypeOfOrganicMaterialAreYouUsingInThisApplication {
+            get {
+                return ResourceManager.GetString("lblWhatTypeOfOrganicMaterialAreYouUsingInThisApplication", resourceCulture);
             }
         }
         

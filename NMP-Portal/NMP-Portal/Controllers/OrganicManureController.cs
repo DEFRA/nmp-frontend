@@ -9,6 +9,8 @@ using System.Reflection;
 using NMP.Portal.Resources;
 using NMP.Portal.Helpers;
 using NMP.Portal.ViewModels;
+using System.Diagnostics.Metrics;
+using NMP.Portal.Enums;
 
 namespace NMP.Portal.Controllers
 {
@@ -21,9 +23,10 @@ namespace NMP.Portal.Controllers
         private readonly IDataProtector _cropDataProtector;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IOrganicManureService _organicManureService;
+        private readonly IFarmService _farmService;
 
         public OrganicManureController(ILogger<OrganicManureController> logger, IDataProtectionProvider dataProtectionProvider,
-              IHttpContextAccessor httpContextAccessor, IOrganicManureService organicManureService)
+              IHttpContextAccessor httpContextAccessor, IOrganicManureService organicManureService, IFarmService farmService)
         {
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
@@ -31,6 +34,7 @@ namespace NMP.Portal.Controllers
             _fieldDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FieldController");
             _cropDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.CropController");
             _organicManureService = organicManureService;
+            _farmService = farmService;
         }
 
         public IActionResult Index()
@@ -39,7 +43,7 @@ namespace NMP.Portal.Controllers
         }
         public IActionResult CreateManureCancel(string q, string r)
         {
-            //_httpContextAccessor.HttpContext?.Session.Remove("CropData");
+            _httpContextAccessor.HttpContext?.Session.Remove("OrganicManure");
             return RedirectToAction("HarvestYearOverview", "Crop", new { Id = q, year = r });
         }
 
@@ -47,30 +51,46 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> FieldGroup(string q, string r)
         {
             OrganicManureViewModel model = new OrganicManureViewModel();
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
+            Error error = null;
+            try
             {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
-            }
-            if ((!string.IsNullOrWhiteSpace(q)) && (!string.IsNullOrWhiteSpace(r)))
-            {
-                model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
-                model.HarvestYear= Convert.ToInt32(_farmDataProtector.Unprotect(r));
-                model.EncryptedFarmId = q;
-                model.EncryptedHarvestYear = r;
-                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
-            }
-            (List<OrganicManureCropTypeResponse> cropTypeList, Error error) = await _organicManureService.FetchCropTypeByFarmIdAndHarvestYear(model.FarmId.Value, model.HarvestYear.Value);
-            if (cropTypeList.Count > 0)
-            {
-
-                var SelectListItem = cropTypeList.Select(f => new SelectListItem
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
                 {
-                    Value = f.CropTypeId.ToString(),
-                    Text = string.Format(Resource.lblTheCropTypeField, f.CropType.ToString())
-                }).ToList();
-                SelectListItem.Insert(0, new SelectListItem { Value = Resource.lblAll, Text = string.Format(Resource.lblAllFieldsInTheYearPlan, model.HarvestYear) });
-                SelectListItem.Add(new SelectListItem { Value = Resource.lblSelectSpecificFields, Text = Resource.lblSelectSpecificFields });
-                ViewBag.FieldGroupList = SelectListItem;
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+                }
+                if ((!string.IsNullOrWhiteSpace(q)) && (!string.IsNullOrWhiteSpace(r)))
+                {
+                    model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
+                    model.HarvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(r));
+                    model.EncryptedFarmId = q;
+                    model.EncryptedHarvestYear = r;
+                    (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
+                    model.isEnglishRules = farm.EnglishRules;
+                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                }
+                (List<OrganicManureCropTypeResponse> cropTypeList, error) = await _organicManureService.FetchCropTypeByFarmIdAndHarvestYear(model.FarmId.Value, model.HarvestYear.Value);
+                if (error == null)
+                {
+                    if (cropTypeList.Count > 0)
+                    {
+                        var SelectListItem = cropTypeList.Select(f => new SelectListItem
+                        {
+                            Value = f.CropTypeId.ToString(),
+                            Text = string.Format(Resource.lblTheCropTypeField, f.CropType.ToString())
+                        }).ToList();
+                        SelectListItem.Insert(0, new SelectListItem { Value = Resource.lblAll, Text = string.Format(Resource.lblAllFieldsInTheYearPlan, model.HarvestYear) });
+                        SelectListItem.Add(new SelectListItem { Value = Resource.lblSelectSpecificFields, Text = Resource.lblSelectSpecificFields });
+                        ViewBag.FieldGroupList = SelectListItem;
+                    }
+                }
+                else
+                {
+                    TempData["FieldGroupError"] = error.Message;
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["FieldGroupError"] = ex.Message;
             }
             return View(model);
         }
@@ -79,29 +99,44 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> FieldGroup(OrganicManureViewModel model)
         {
+            Error error = null;
             if (model.FieldGroup == null)
             {
                 ModelState.AddModelError("FieldGroup", Resource.MsgSelectAnOptionBeforeContinuing);
             }
-            if(!ModelState.IsValid)
+            try
             {
-                (List<OrganicManureCropTypeResponse> cropTypeList, Error error) = await _organicManureService.FetchCropTypeByFarmIdAndHarvestYear(model.FarmId.Value, model.HarvestYear.Value);
-                if (cropTypeList.Count > 0)
+                if (!ModelState.IsValid)
                 {
-
-                    var SelectListItem = cropTypeList.Select(f => new SelectListItem
+                    (List<OrganicManureCropTypeResponse> cropTypeList, error) = await _organicManureService.FetchCropTypeByFarmIdAndHarvestYear(model.FarmId.Value, model.HarvestYear.Value);
+                    if (error == null)
                     {
-                        Value = f.CropTypeId.ToString(),
-                        Text = string.Format(Resource.lblTheCropTypeField, f.CropType.ToString())
-                    }).ToList();
-                    SelectListItem.Insert(0, new SelectListItem { Value = Resource.lblAll, Text = string.Format(Resource.lblAllFieldsInTheYearPlan, model.HarvestYear) });
-                    SelectListItem.Add(new SelectListItem { Value = Resource.lblSelectSpecificFields, Text = Resource.lblSelectSpecificFields });
-                    ViewBag.FieldGroupList = SelectListItem;
+                        if (cropTypeList.Count > 0)
+                        {
+
+                            var SelectListItem = cropTypeList.Select(f => new SelectListItem
+                            {
+                                Value = f.CropTypeId.ToString(),
+                                Text = string.Format(Resource.lblTheCropTypeField, f.CropType.ToString())
+                            }).ToList();
+                            SelectListItem.Insert(0, new SelectListItem { Value = Resource.lblAll, Text = string.Format(Resource.lblAllFieldsInTheYearPlan, model.HarvestYear) });
+                            SelectListItem.Add(new SelectListItem { Value = Resource.lblSelectSpecificFields, Text = Resource.lblSelectSpecificFields });
+                            ViewBag.FieldGroupList = SelectListItem;
+                        }
+                    }
+                    else
+                    {
+                        TempData["FieldGroupError"] = error.Message;
+                    }
+                    return View(model);
                 }
+                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+            }
+            catch (Exception ex)
+            {
+                TempData["FieldGroupError"] = ex.Message;
                 return View(model);
             }
-            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
-
             return RedirectToAction("Fields");
 
         }
@@ -110,59 +145,279 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> Fields()
         {
             OrganicManureViewModel model = new OrganicManureViewModel();
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
+            Error error = null;
+            try
             {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
-            }
-            (List<OrganicManureFieldResponse> fieldList, Error error) = await _organicManureService.FetchFieldByFarmIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields)|| model.FieldGroup.Equals(Resource.lblAll)?null:model.FieldGroup);
-            if (fieldList.Count > 0)
-            {
-
-                var SelectListItem = fieldList.Select(f => new SelectListItem
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
                 {
-                    Value = f.FieldId.ToString(),
-                    Text = f.FieldName.ToString()
-                }).ToList();
-                ViewBag.FieldList = SelectListItem;
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+                }
+                (List<OrganicManureFieldResponse> fieldList, error) = await _organicManureService.FetchFieldByFarmIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
+                if (error == null)
+                {
+                    if (model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
+                    {
+                        if (fieldList.Count > 0)
+                        {
+
+                            var SelectListItem = fieldList.Select(f => new SelectListItem
+                            {
+                                Value = f.FieldId.ToString(),
+                                Text = f.FieldName.ToString()
+                            }).ToList();
+                            ViewBag.FieldList = SelectListItem;
+                        }
+                        return View(model);
+                    }
+                    else
+                    {
+                        if (fieldList.Count > 0)
+                        {
+                            model.FieldList = fieldList.Select(x => x.FieldId.ToString()).ToList();
+                            string fieldIds = string.Join(",", model.FieldList);
+                            (List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldIds, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
+                            if (error == null)
+                            {
+                                if (managementIds.Count > 0)
+                                {
+                                    if (model.OrganicManures == null)
+                                    {
+                                        model.OrganicManures = new List<OrganicManure>();
+                                    }
+                                    if (model.OrganicManures.Count > 0)
+                                    {
+                                        model.OrganicManures.Clear();
+                                    }
+                                    foreach (var manIds in managementIds)
+                                    {
+                                        var organicManure = new OrganicManure
+                                        {
+                                            ManagementPeriodID = manIds
+                                        };
+                                        model.OrganicManures.Add(organicManure);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                TempData["FieldGroupError"] = error.Message;
+                                return View("FieldGroup", model);
+                            }
+                        }
+                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                        return RedirectToAction("ManureGroup");
+                    }
+                }
+                else
+                {
+                    TempData["FieldGroupError"] = error.Message;
+                    return View("FieldGroup", model);
+                }
             }
-            if (model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
+            catch (Exception ex)
             {
-                return View(model);
+                TempData["FieldGroupError"] = ex.Message;
+                return RedirectToAction("FieldGroup", model);
             }
-            else
-            {
-                return RedirectToAction("Fields");
-            }
-            
+            //return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Fields(OrganicManureViewModel model)
         {
-            if (model.FieldList == null || model.FieldList.Count == 0)
+            Error error = null;
+            try
             {
-                ModelState.AddModelError("FieldList", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblField.ToLower()));
-            }
-            if (!ModelState.IsValid)
-            {
-                (List<OrganicManureFieldResponse> fieldList, Error error) = await _organicManureService.FetchFieldByFarmIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
-                if (fieldList.Count > 0)
+                (List<OrganicManureFieldResponse> fieldList, error) = await _organicManureService.FetchFieldByFarmIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
+                if (error == null)
                 {
-
-                    var SelectListItem = fieldList.Select(f => new SelectListItem
+                    var selectListItem = fieldList.Select(f => new SelectListItem
                     {
                         Value = f.FieldId.ToString(),
                         Text = f.FieldName.ToString()
                     }).ToList();
-                    ViewBag.FieldList = SelectListItem;
+                    ViewBag.FieldList = selectListItem;
+
+                    if (model.FieldList == null || model.FieldList.Count == 0)
+                    {
+                        ModelState.AddModelError("FieldList", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblField.ToLower()));
+                    }
+                    if (!ModelState.IsValid)
+                    {
+
+                        return View(model);
+
+                    }
+                    if (model.FieldList.Count == 1 && model.FieldList[0] == Resource.lblSelectAll)
+                    {
+                        model.FieldList = selectListItem.Select(item => item.Value).ToList();
+                    }
+                    string fieldIds = string.Join(",", model.FieldList);
+                    (List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldIds, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
+                    if (error == null)
+                    {
+                        if (managementIds.Count > 0)
+                        {
+                            if (model.OrganicManures == null)
+                            {
+                                model.OrganicManures = new List<OrganicManure>();
+                            }
+                            if (model.OrganicManures.Count > 0)
+                            {
+                                model.OrganicManures.Clear();
+                            }
+                            foreach (var manIds in managementIds)
+                            {
+                                var organicManure = new OrganicManure
+                                {
+                                    ManagementPeriodID = manIds
+                                };
+                                model.OrganicManures.Add(organicManure);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        TempData["FieldError"] = error.Message;
+                        return View(model);
+                    }
+                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
                 }
-                return View(model);
-                
+                else
+                {
+                    TempData["FieldError"] = error.Message;
+                    return View(model);
+                }
             }
-            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
-            return RedirectToAction("Fields");
+            catch(Exception ex)
+            {
+                TempData["FieldError"] = ex.Message;
+                return View(model);
+            }
+            return RedirectToAction("ManureGroup");
 
         }
+        [HttpGet]
+        public async Task<IActionResult> ManureGroup()
+        {
+            OrganicManureViewModel model = new OrganicManureViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+            }
+            (List<CommonResponse> manureGroupList, Error error) = await _organicManureService.FetchManureGroupList();
+            if (error == null)
+            {
+                if (manureGroupList.Count > 0)
+                {
+
+                    var SelectListItem = manureGroupList.Select(f => new SelectListItem
+                    {
+                        Value = f.Id.ToString(),
+                        Text = f.Name.ToString()
+                    }).ToList();
+                    ViewBag.ManureGroupList = SelectListItem;
+                }
+            }
+            else
+            {
+                TempData["FieldError"] = error.Message;
+                return RedirectToAction("Fields", model);
+            }
+            return View(model);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ManureGroup(OrganicManureViewModel model)
+        {
+            if (model.ManureGroup == null)
+            {
+                ModelState.AddModelError("ManureGroup", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                (List<CommonResponse> manureGroupList, Error error) = await _organicManureService.FetchManureGroupList();
+
+                if (manureGroupList.Count > 0)
+                {
+
+                    var SelectListItem = manureGroupList.Select(f => new SelectListItem
+                    {
+                        Value = f.Id.ToString(),
+                        Text = f.Name.ToString()
+                    }).ToList();
+                    ViewBag.ManureGroupList = SelectListItem;
+                }
+                return View(model);
+
+            }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+            return RedirectToAction("ManureType");
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ManureType()
+        {
+            OrganicManureViewModel model = new OrganicManureViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+            }
+            TempData["InProcess"] = "work in process";
+           int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
+            (List<ManureType> manureTypeList, Error error) = await _organicManureService.FetchManureTypeList(model.ManureGroup.Value,countryId);
+
+            if (manureTypeList.Count > 0)
+            {
+
+                var SelectListItem = manureTypeList.Select(f => new SelectListItem
+                {
+                    Value = f.Id.ToString(),
+                    Text = f.Name.ToString()
+                }).ToList();
+                ViewBag.ManureTypeList = SelectListItem;
+            }
+            return View(model);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ManureType(OrganicManureViewModel model)
+        {
+            if (model.ManureType == null)
+            {
+                ModelState.AddModelError("ManureType", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
+            (List<ManureType> manureTypeList, Error error) = await _organicManureService.FetchManureTypeList(model.ManureGroup.Value, countryId);
+            if (!ModelState.IsValid)
+            {
+                              
+
+                if (manureTypeList.Count > 0)
+                {
+
+                    var SelectListItem = manureTypeList.Select(f => new SelectListItem
+                    {
+                        Value = f.Id.ToString(),
+                        Text = f.Name.ToString()
+                    }).ToList();
+                    ViewBag.ManureTypeList = SelectListItem;
+
+                }
+                return View(model);
+
+            }
+
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+            return RedirectToAction("ManureType");
+
+        }
+
     }
 }
