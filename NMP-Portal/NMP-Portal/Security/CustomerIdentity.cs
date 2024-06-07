@@ -13,6 +13,7 @@ using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
 using NMP.Portal.Services;
 using System.Net;
+using System.Runtime.ConstrainedExecution;
 using System.Security.Claims;
 using System.Text;
 
@@ -89,6 +90,12 @@ namespace NMP.Portal.Security
 
         private static async Task OnAuthenticationFailed(AuthenticationFailedContext context)
         {
+            var errorViewModel = new ErrorViewModel();
+            errorViewModel.Message= context.Exception.Message;
+            errorViewModel.Stack = context.Exception.StackTrace?? string.Empty;
+            context.HttpContext.Session.SetObjectAsJson("Error", errorViewModel);
+            context.Response.Redirect("/Error");
+            context.HandleResponse(); // Suppress the exception
             // Don't remove this line
             await Task.CompletedTask.ConfigureAwait(false);
         }
@@ -101,10 +108,19 @@ namespace NMP.Portal.Security
 
         private static async Task OnRedirectToIdentityProviderForSignOut(RedirectContext context)
         {
-            //ProtocolMessage.IdToken = context.HttpContext.Session.GetString("JwtToken");
-            //context.ProtocolMessage.IdTokenHint = context.HttpContext.Session.GetString("JwtToken");
-            //context.Request.Method = "POST";
-            //context.ProtocolMessage.Parameters.Add("post_logout_redirect_uri", context.Request.PathBase);
+            var logoutUri = configuration?["CustomerIdentityInstance"] + configuration?["CustomerIdentityDomain"] + "/" + configuration?["CustomerIdentityPolicyId"] + "/signout";
+            var postLogoutUri = configuration?["CustomerIdentitySignedOutCallbackPath"]; //context.Properties.RedirectUri;
+            if (!string.IsNullOrEmpty(postLogoutUri))
+            {
+                if (postLogoutUri.StartsWith("/"))
+                {
+                    var request = context.Request;
+                    postLogoutUri = request.Scheme + "://" + request.Host + request.PathBase + postLogoutUri;
+                }
+                logoutUri += "?post_logout_redirect_uri=" + Uri.EscapeDataString(postLogoutUri);
+            }
+            context.Response.Redirect(logoutUri);
+            context.HandleResponse();
             // Don't remove this line
             await Task.CompletedTask.ConfigureAwait(false);
         }
@@ -130,26 +146,80 @@ namespace NMP.Portal.Security
 
         private static async Task OnTokenValidated(TokenValidatedContext context)
         {
-            string token = context.SecurityToken.RawData;
-            context.HttpContext.Session.SetString("JwtToken", token);
-            context.HttpContext.Session.SetObjectAsJson("JwtPayload", context.SecurityToken.Payload);
+            var accessToken = context.ProtocolMessage.AccessToken;
+            //var refreshToken = context.ProtocolMessage.RefreshToken;            
+            var identity = context?.Principal?.Identity as ClaimsIdentity;
+            identity?.AddClaim(new Claim("access_token", accessToken));
+            //identity?.AddClaim(new Claim("refresh_token", refreshToken?? string.Empty));
+
             IEnumerable<Claim> claims = context.SecurityToken.Claims;
             if (claims.Any())
             {
-                Guid userIdentifier = Guid.Parse(claims.FirstOrDefault(c => c.Type == "sub").Value);
-                var firstName = claims.FirstOrDefault(c => c.Type == "firstName").Value;
-                var surname = claims.FirstOrDefault(c => c.Type == "lastName").Value;
-                var email = claims.FirstOrDefault(c => c.Type == "email").Value; //currentRelationshipId"];
-                var relationShips = claims.FirstOrDefault(c => c.Type == "relationships").Value;
-                string[] relationshipClaimArray = relationShips.Split(":");
-                var organisationName = relationshipClaimArray[5] == "Employee" ? relationshipClaimArray[2] : $"{firstName} {surname}";
-                Guid organisationId = relationshipClaimArray[5] == "Employee" ? Guid.Parse(relationshipClaimArray[1]) : Guid.Parse(relationshipClaimArray[0]);
+                Guid? userIdentifier = null;
+                string firstName = string.Empty;
+                string lastName = string.Empty;
+                string email = string.Empty;
+                string currentRelationShipId = string.Empty;
+                string organisationName = string.Empty;
+                Guid? organisationId = null;
+                List<string> relationShipsArray = new List<string>();
+                List<string> relationShipDetails = new List<string>();
+                foreach (var claim in claims)
+                {
+                    switch (claim.Type)
+                    {
+                        case "sub":
+                            userIdentifier = Guid.Parse(claim.Value);
+                            break;
+                        case "firstName":
+                            firstName = claim.Value;
+                            break;
+                        case "lastName":
+                            lastName = claim.Value;
+                            break;
+                        case "email":
+                            email = claim.Value;
+                            break;
+                        case "currentRelationshipId":
+                            currentRelationShipId = claim.Value;
+                            break;
+                        case "relationships":
+                            if (claim.Value.GetType().IsArray)
+                            {
+                                relationShipsArray.AddRange(claim.Value.Split(","));
+                            }
+                            else
+                            {
+                                relationShipsArray.Add(claim.Value);
+                            }
+                            var rs = relationShipsArray.FirstOrDefault(r => r.Contains(currentRelationShipId));
+                            if (rs != null)
+                            {
+                                relationShipDetails.AddRange(rs.Split(":"));
+                                if (relationShipDetails[4] == "Citizen")
+                                {
+                                    organisationName = $"{firstName} {lastName}";
+                                    organisationId = Guid.Parse(relationShipDetails[0]);
+                                }
+                                else
+                                {
+                                    organisationName = relationShipDetails[2];
+                                    organisationId = Guid.Parse(relationShipDetails[1]);
+                                }
+                            }
+                            break;
+                    }
+                }
+
+                identity?.AddClaim(new Claim("organisationName", organisationName));
+                identity?.AddClaim(new Claim("organisationId", organisationId.ToString() ?? string.Empty));
+
                 UserData userData = new UserData()
                 {
                     User = new User()
                     {
                         GivenName = firstName,
-                        Surname = surname,
+                        Surname = lastName,
                         Email = email,
                         UserIdentifier = userIdentifier
                     },
@@ -165,39 +235,40 @@ namespace NMP.Portal.Security
                 try
                 {
                     string jsonData = JsonConvert.SerializeObject(userData);
-                    using HttpClient httpClient = new HttpClient();
-                    httpClient.BaseAddress = new Uri(configuration["NMPApiUrl"]);
-                    httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
-                    var response = await httpClient.PostAsync(APIURLHelper.AddOrUpdateUserAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
-                    string result = await response.Content.ReadAsStringAsync();
-                    ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-                    if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
+                    if (configuration != null)
                     {
-                        userId = responseWrapper?.Data?["UserID"];
-                    }
-                    else
-                    {
-                        if (responseWrapper != null && responseWrapper?.Error != null)
+                        using HttpClient httpClient = new HttpClient();
+                        httpClient.BaseAddress = new Uri(configuration["NMPApiUrl"] ?? "http://localhost:3000/");
+                        httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
+                        var response = await httpClient.PostAsync(APIURLHelper.AddOrUpdateUserAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+                        string result = await response.Content.ReadAsStringAsync();
+                        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
                         {
-                            throw new Exception(responseWrapper?.Error);
+                            userId = responseWrapper?.Data?["UserID"];
+                            identity?.AddClaim(new Claim("userId", userId.ToString()));
+                        }
+                        else
+                        {
+                            if (responseWrapper != null && responseWrapper?.Error != null)
+                            {
+                                throw new Exception(responseWrapper?.Error);
+                            }
                         }
                     }
-                }
-                catch (HttpRequestException hre)
-                {
-                    throw new Exception(hre.Message);
-                }
+                }                
                 catch (Exception ex)
                 {
-                    throw new Exception(ex.Message);
-                }
-
-                context.HttpContext.Items.Add("UserId", userId);
-                context.HttpContext.Session.SetInt32("UserId", userId);
+                    var errorViewModel = new ErrorViewModel();
+                    errorViewModel.Message = ex.Message;
+                    errorViewModel.Stack = ex.StackTrace ?? string.Empty;
+                    context.HttpContext.Session.SetObjectAsJson("Error", errorViewModel);
+                    context.Response.Redirect("/Error/index");
+                    context.HandleResponse(); // Suppress the exception                    
+                }                
             }
-
-            // Don't remove this line
-            await Task.CompletedTask.ConfigureAwait(false);
+                // Don't remove this line
+                await Task.CompletedTask.ConfigureAwait(false);
         }
     }
 }
