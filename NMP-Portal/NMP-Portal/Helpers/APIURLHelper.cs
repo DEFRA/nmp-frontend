@@ -38,5 +38,12 @@ namespace NMP.Portal.Helpers
         public const string AddOrUpdateUserAsyncAPI = "users";
         public const string FetchSoilTypeBySoilTypeIdAsyncAPI = "vendors/rb209/Soil/SoilType/{0}";
         public const string FetchSoilAnalysisByFieldIdAsyncAPI = "soil-analyses/fields/{0}?shortSummary={1}";
+        public const string FetchCropTypeByFarmIdAndHarvestYearAsyncAPI = "crops/plans/crop-types/{0}?farmId={1}";
+        public const string FetchFieldByFarmIdAndHarvestYearAsyncAPI = "crops/plans/fields/{0}?farmId={1}";
+        public const string FetchFieldByFarmIdAndHarvestYearAndCropTypeIdAsyncAPI = "crops/plans/fields/{0}?cropTypeId={1}&farmId={2}";
+        public const string FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeIdAsyncAPI = "crops/plans/management-periods/{0}?cropTypeId={1}&fieldIds={2}";
+        public const string FetchManagementIdsByFieldIdAndHarvestYearAsyncAPI = "crops/plans/management-periods/{0}?fieldIds={1}";
+        public const string FetchManureGroupListAsyncAPI = "manure-groups";
+        public const string FetchManureTypeListByGroupIdAsyncAPI = "manure-types/{0}?countryId={1}";
     }
 }
