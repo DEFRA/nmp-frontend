@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.TokenCacheProviders.InMemory;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NMP.Portal.Helpers;
@@ -41,20 +42,44 @@ namespace NMP.Portal.Security
                         options.SignedOutCallbackPath = builder.Configuration["CustomerIdentitySignedOutCallbackPath"];
                         options.SignUpSignInPolicyId = builder.Configuration["CustomerIdentityPolicyId"];
                         options.ErrorPath = "/Error/index";
-                        options.Events ??= new OpenIdConnectEvents();
-                        options.Events.OnAuthorizationCodeReceived += OnAuthorizationCodeReceived;
-                        options.Events.OnRedirectToIdentityProvider += OnRedirectToIdentityProvider;
-                        options.Events.OnAccessDenied += OnAccessDenied;
-                        options.Events.OnRedirectToIdentityProviderForSignOut += OnRedirectToIdentityProviderForSignOut;
-                        options.Events.OnTokenValidated += OnTokenValidated;
-                        options.Events.OnSignedOutCallbackRedirect += OnSignedOutCallbackRedirect;
-                        options.Events.OnAuthenticationFailed += OnAuthenticationFailed;
-                        options.Events.OnRemoteSignOut += OnRemoteSignOut;
-                    })
-                    .Services.AddTokenAcquisition()
-                    .AddInMemoryTokenCaches();
+                        
 
-            return services;
+                        //options.Events ??= new OpenIdConnectEvents();
+                        //options.Events.OnAuthorizationCodeReceived += OnAuthorizationCodeReceived;
+                        //options.Events.OnRedirectToIdentityProvider += OnRedirectToIdentityProvider;
+                        //options.Events.OnAccessDenied += OnAccessDenied;
+                        //options.Events.OnRedirectToIdentityProviderForSignOut += OnRedirectToIdentityProviderForSignOut;
+                        //options.Events.OnTokenValidated += OnTokenValidated;
+                        //options.Events.OnSignedOutCallbackRedirect += OnSignedOutCallbackRedirect;
+                        //options.Events.OnAuthenticationFailed += OnAuthenticationFailed;
+                        //options.Events.OnRemoteSignOut += OnRemoteSignOut;
+                    })
+                    //.Services.AddTokenAcquisition()
+                    //.AddInMemoryTokenCaches();
+                    .EnableTokenAcquisitionToCallDownstreamApi(new string[] { "openid", "profile", "offline_access", builder.Configuration["CustomerIdentityClientId"] })
+                    .AddInMemoryTokenCaches();
+            services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
+            {
+                //options.MetadataAddress = "https://your-account.cpdev.cui.defra.gov.uk/idphub/b2c/b2c_1a_cui_cpdev_signupsignin/v2.0/.well-known/openid-configuration";
+                //options.Authority = "https://your-account.cpdev.cui.defra.gov.uk/idphub/b2c/b2c_1a_cui_cpdev_signupsignin/v2.0/";
+
+                
+                options.ResponseType = OpenIdConnectResponseType.CodeToken;
+                options.SaveTokens = true;  // Save tokens in the authentication session
+                options.Scope.Add("openid profile offline_access");
+
+                options.Events ??= new OpenIdConnectEvents();
+                options.Events.OnAuthorizationCodeReceived += OnAuthorizationCodeReceived;
+                options.Events.OnRedirectToIdentityProvider += OnRedirectToIdentityProvider;
+                options.Events.OnAccessDenied += OnAccessDenied;
+                options.Events.OnRedirectToIdentityProviderForSignOut += OnRedirectToIdentityProviderForSignOut;
+                options.Events.OnTokenValidated += OnTokenValidated;
+                options.Events.OnSignedOutCallbackRedirect += OnSignedOutCallbackRedirect;
+                options.Events.OnAuthenticationFailed += OnAuthenticationFailed;
+                options.Events.OnRemoteSignOut += OnRemoteSignOut;
+
+            });
+                return services;
         }
 
         private static async Task OnRemoteSignOut(RemoteSignOutContext context)
@@ -92,6 +117,7 @@ namespace NMP.Portal.Security
 
         private static async Task OnRedirectToIdentityProvider(RedirectContext context)
         {
+            //context.ProtocolMessage.Parameters.Add("serviceId", configuration["CustomerIdentityServiceId"].ToString());
             // Don't remove this line
             await Task.CompletedTask.ConfigureAwait(false);
         }
