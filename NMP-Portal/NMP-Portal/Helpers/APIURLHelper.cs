@@ -44,6 +44,8 @@ namespace NMP.Portal.Helpers
         public const string FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeIdAsyncAPI = "crops/plans/management-periods/{0}?cropTypeId={1}&fieldIds={2}";
         public const string FetchManagementIdsByFieldIdAndHarvestYearAsyncAPI = "crops/plans/management-periods/{0}?fieldIds={1}";
         public const string FetchManureGroupListAsyncAPI = "manure-groups";
-        public const string FetchManureTypeListByGroupIdAsyncAPI = "manure-types/{0}?countryId={1}";
+        public const string FetchManureTypeListByGroupIdAsyncAPI = "manure-types/manure-groups/{0}?countryId={1}";
+        public const string FetchManureGroupByIdAsyncAPI = "manure-groups/{0}";
+        public const string FetchManureTypeByIdAsyncAPI = "manure-types/{0}";
     }
 }

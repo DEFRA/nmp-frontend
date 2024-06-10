@@ -1411,10 +1411,6 @@ namespace NMP.Portal.Controllers
             PlanViewModel model = new PlanViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
-                {
-                    _httpContextAccessor.HttpContext?.Session.Remove("OrganicManure");
-                }
                 if (!string.IsNullOrWhiteSpace(q))
                 {
                     ViewBag.Success = true;
