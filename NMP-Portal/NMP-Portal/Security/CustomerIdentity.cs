@@ -290,8 +290,8 @@ namespace NMP.Portal.Security
                             {
                                 userId = responseWrapper?.Data?["UserID"];
                                 identity?.AddClaim(new Claim("userId", userId.ToString()));
-                                var claimsPrincipal = new ClaimsPrincipal(identity);
-                                await context.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+                                //var claimsPrincipal = new ClaimsPrincipal(identity);
+                                //await context.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
                             }
                             else
                             {
