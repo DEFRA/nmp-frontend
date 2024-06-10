@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Abstractions;
+using NMP.Portal.Helpers;
 using NMP.Portal.Models;
+using NMP.Portal.ServiceResponses;
 using System.Diagnostics;
 
 namespace NMP.Portal.Controllers
@@ -83,7 +85,13 @@ namespace NMP.Portal.Controllers
 
         public IActionResult Index()
         {
-            return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var error = new ErrorViewModel();
+            if (HttpContext.Session.Keys.Contains("Error"))
+            {
+                error = HttpContext.Session.GetObjectFromJson<ErrorViewModel>("Error");
+            }
+
+            return View("Error", error);
         }
     }
 }

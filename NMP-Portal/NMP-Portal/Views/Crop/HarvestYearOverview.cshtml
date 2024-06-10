@@ -50,7 +50,7 @@
                 {
                     <p class="govuk-body"><a asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@string.Format(Resource.lblAddAnotherCrop, Model.Year)</a></p>
                 }
-                <p class="govuk-body"><a href="#">@string.Format(Resource.lblAddManuresToThisPlan, Model.Year)</a></p>
+                <p class="govuk-body"><a asp-action="FieldGroup" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@string.Format(Resource.lblAddManuresToThisPlan, Model.Year)</a></p>
             </div>
             <hr class="seperator_five">
 

@@ -1,6 +1,8 @@
+using NMP.Portal.ServiceResponses;
+
 namespace NMP.Portal.Models
 {
-    public class ErrorViewModel
+    public class ErrorViewModel: Error
     {
         public string? RequestId { get; set; }
 

@@ -1219,6 +1219,36 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblHectare" xml:space="preserve">
     <value>{0} hectares</value>
   </data>
+  <data name="lblAll" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="lblAllFieldsInTheYearPlan" xml:space="preserve">
+    <value>All fields in the {0} plan</value>
+  </data>
+  <data name="lblFieldGroup" xml:space="preserve">
+    <value>Field Group</value>
+  </data>
+  <data name="lblSelectSpecificFields" xml:space="preserve">
+    <value>Select specific fields</value>
+  </data>
+  <data name="lblTheCropTypeField" xml:space="preserve">
+    <value>The {0} fields</value>
+  </data>
+  <data name="lblWhichFieldsWouldYouLikeToPlanAnOrganic" xml:space="preserve">
+    <value>Which fields would you like to plan an organic material application for?</value>
+  </data>
+  <data name="lblManureGroup" xml:space="preserve">
+    <value>Manure Group</value>
+  </data>
+  <data name="lblWhatTypeOfOrganicMaterialAreYouUsingInThisApplication" xml:space="preserve">
+    <value>What type of organic material are you using in this application?</value>
+  </data>
+  <data name="lblManureType" xml:space="preserve">
+    <value>Manue Type</value>
+  </data>
+  <data name="lblWhatTypeOfManureGroupAreYouUsingInThisApplication" xml:space="preserve">
+    <value>What type of {0} are you using in this application?</value>
+  </data>
   <data name="lblManureApplyingDate" xml:space="preserve">
     <value>Manure Applying Date</value>
   </data>

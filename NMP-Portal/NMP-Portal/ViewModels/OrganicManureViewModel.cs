@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NMP.Portal.ViewModels
 {
-    public class OrganicManureViewModel : OrganicManure
+    public class OrganicManureViewModel
     {
         public string? FieldGroup { get; set; }
         public string? EncryptedFarmId { get; set; }
@@ -13,6 +13,13 @@ namespace NMP.Portal.ViewModels
         public List<string>? FieldList { get; set; }
         public DateTime ApplicationDate { get; set; }
         public bool IsDefaultNutrientValues { get; set; }
+        public int? ManureGroup { get; set; }
+        public int? ManureType { get; set; }
+        public bool isEnglishRules { get; set; }
+
+        public List<OrganicManure>? OrganicManures { get; set; }
+
+
+
     }
-    
 }

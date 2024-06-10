@@ -250,11 +250,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All.
+        /// </summary>
+        public static string lblAll {
+            get {
+                return ResourceManager.GetString("lblAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All farms.
         /// </summary>
         public static string lblAllFarm {
             get {
                 return ResourceManager.GetString("lblAllFarm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All fields in the {0} plan.
+        /// </summary>
+        public static string lblAllFieldsInTheYearPlan {
+            get {
+                return ResourceManager.GetString("lblAllFieldsInTheYearPlan", resourceCulture);
             }
         }
         
@@ -1015,6 +1033,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Field Group.
+        /// </summary>
+        public static string lblFieldGroup {
+            get {
+                return ResourceManager.GetString("lblFieldGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Field measurements for {0}.
         /// </summary>
         public static string lblFieldMeasurements {
@@ -1484,6 +1511,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manure Group.
+        /// </summary>
+        public static string lblManureGroup {
+            get {
+                return ResourceManager.GetString("lblManureGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manure Applying Date.
         /// </summary>
         public static string lblManureApplyingDate {
@@ -1516,6 +1552,15 @@ namespace NMP.Portal.Resources {
         public static string lblManureNonSpreadingAreaForCheckAnswere {
             get {
                 return ResourceManager.GetString("lblManureNonSpreadingAreaForCheckAnswere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manue Type.
+        /// </summary>
+        public static string lblManureType {
+            get {
+                return ResourceManager.GetString("lblManureType", resourceCulture);
             }
         }
         
@@ -2078,6 +2123,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select specific fields.
+        /// </summary>
+        public static string lblSelectSpecificFields {
+            get {
+                return ResourceManager.GetString("lblSelectSpecificFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select the address for {0}.
         /// </summary>
         public static string lblSelectTheAddressFor {
@@ -2308,6 +2362,15 @@ namespace NMP.Portal.Resources {
         public static string lblTheCropsYouGrow {
             get {
                 return ResourceManager.GetString("lblTheCropsYouGrow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The {0} fields.
+        /// </summary>
+        public static string lblTheCropTypeField {
+            get {
+                return ResourceManager.GetString("lblTheCropTypeField", resourceCulture);
             }
         }
         
@@ -2726,6 +2789,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What type of {0} are you using in this application?.
+        /// </summary>
+        public static string lblWhatTypeOfManureGroupAreYouUsingInThisApplication {
+            get {
+                return ResourceManager.GetString("lblWhatTypeOfManureGroupAreYouUsingInThisApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What type of organic material are you using in this application?.
+        /// </summary>
+        public static string lblWhatTypeOfOrganicMaterialAreYouUsingInThisApplication {
+            get {
+                return ResourceManager.GetString("lblWhatTypeOfOrganicMaterialAreYouUsingInThisApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What was the previous crop group?.
         /// </summary>
         public static string lblWhatWasThePreviousCropGroup {
@@ -2776,6 +2857,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhichFieldsDoYouPlanToGrow {
             get {
                 return ResourceManager.GetString("lblWhichFieldsDoYouPlanToGrow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which fields would you like to plan an organic material application for?.
+        /// </summary>
+        public static string lblWhichFieldsWouldYouLikeToPlanAnOrganic {
+            get {
+                return ResourceManager.GetString("lblWhichFieldsWouldYouLikeToPlanAnOrganic", resourceCulture);
             }
         }
         
