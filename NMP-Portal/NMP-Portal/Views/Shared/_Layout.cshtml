@@ -44,7 +44,7 @@
         var lastName = User.Claims.FirstOrDefault(c => c.Type == "lastName")?.Value;
         <div class="govuk-width-container">
             <div id="signed-in">
-                <p class="govuk-body-s cancel-link">@firstName @lastName |  <a asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">@Resource.lblSignout</a></p>
+                <p class="govuk-body-s cancel-link">@firstName @lastName |  <a asp-controller="Account" asp-action="logout">@Resource.lblSignout</a></p>
             </div>
         </div>
     }

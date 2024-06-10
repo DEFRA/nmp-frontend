@@ -1358,7 +1358,7 @@ namespace NMP.Portal.Controllers
             }
 
             Error error = null;
-            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;  // Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value);
+            int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
             List<CropData> cropEntries = new List<CropData>();
             foreach (Crop crop in model.Crops)
             {

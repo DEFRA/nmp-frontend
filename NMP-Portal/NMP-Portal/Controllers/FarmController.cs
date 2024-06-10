@@ -34,8 +34,7 @@ namespace NMP.Portal.Controllers
     {
         private readonly ILogger<FarmController> _logger;
         private readonly IDataProtector _dataProtector;
-        private readonly IAddressLookupService _addressLookupService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IAddressLookupService _addressLookupService;        
         private readonly IUserFarmService _userFarmService;
         private readonly IFarmService _farmService;
         private readonly IFieldService _fieldService;
@@ -45,8 +44,7 @@ namespace NMP.Portal.Controllers
             IFieldService fieldService, ICropService cropService)
         {
             _logger = logger;
-            _dataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
-            _httpContextAccessor = httpContextAccessor;
+            _dataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");            
             _addressLookupService = addressLookupService;
             _userFarmService = userFarmService;
             _farmService = farmService;
@@ -60,15 +58,12 @@ namespace NMP.Portal.Controllers
 
         public async Task<IActionResult> FarmList()
         {
-            _httpContextAccessor.HttpContext?.Session.Remove("FarmData");
-            _httpContextAccessor.HttpContext?.Session.Remove("AddressList");
+            HttpContext?.Session.Remove("FarmData");
+            HttpContext?.Session.Remove("AddressList");
             
             FarmsViewModel model = new FarmsViewModel();
             Error error = null;
-            Guid organisationId = Guid.Parse(HttpContext.User.Claims.First(c => c.Type == "organisationId").Value);
-            //var claim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "relationships")?.Value;
-            //string[] relationshipData = claim.Split(":");
-            //Guid organisationId = relationshipData[4] == "Employee" ? Guid.Parse(relationshipData[1]) :Guid.Parse(relationshipData[0]);
+            Guid organisationId = Guid.Parse(HttpContext.User.FindFirst("organisationId").Value);            
             (List<Farm> farms, error) = await _farmService.FetchFarmByOrgIdAsync(organisationId);
             if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
             {
@@ -89,8 +84,8 @@ namespace NMP.Portal.Controllers
         }
         public IActionResult CreateFarmCancel()
         {
-            _httpContextAccessor.HttpContext?.Session.Remove("FarmData");
-            _httpContextAccessor.HttpContext?.Session.Remove("AddressList");
+            HttpContext?.Session.Remove("FarmData");
+            HttpContext?.Session.Remove("AddressList");
             return RedirectToAction("FarmList");
         }
 
@@ -98,10 +93,9 @@ namespace NMP.Portal.Controllers
         public IActionResult Name()
         {
             FarmViewModel? model = null;
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains<string>("FarmData"))
+            if (HttpContext.Session.Keys.Contains<string>("FarmData"))
             {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-                //model.OldPostcode = model.Postcode;
+                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");                
             }
             return View(model);
         }
@@ -134,10 +128,10 @@ namespace NMP.Portal.Controllers
 
             if (farm.IsCheckAnswer)
             {
-                FarmViewModel farmView = JsonConvert.DeserializeObject<FarmViewModel>(_httpContextAccessor.HttpContext.Session.GetString("FarmData"));
+                FarmViewModel farmView = JsonConvert.DeserializeObject<FarmViewModel>(HttpContext.Session.GetString("FarmData"));
 
                 var updatedFarm = JsonConvert.SerializeObject(farm);
-                _httpContextAccessor.HttpContext?.Session.SetString("FarmData", updatedFarm);
+                HttpContext?.Session.SetString("FarmData", updatedFarm);
 
                 if (farmView.Postcode == farm.Postcode)
                 {
@@ -151,7 +145,7 @@ namespace NMP.Portal.Controllers
                 }
             }
             var farmModel = JsonConvert.SerializeObject(farm);
-            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", farm);
+            HttpContext?.Session.SetObjectAsJson("FarmData", farm);
 
             return RedirectToAction("Address");
         }
@@ -159,12 +153,12 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> Address()
         {
             FarmViewModel? model = null;
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+            if (HttpContext.Session.Keys.Contains("FarmData"))
             {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
 
-            _httpContextAccessor.HttpContext?.Session.Remove("AddressList");
+            HttpContext.Session.Remove("AddressList");
 
             List<AddressLookupResponse> addresses = await _addressLookupService.AddressesAsync(model.Postcode, 0);
             var addressesList = addresses.Select(a => new SelectListItem { Value = a.AddressLine, Text = a.AddressLine }).ToList();
@@ -181,7 +175,7 @@ namespace NMP.Portal.Controllers
             if (addressesList != null && addressesList.Any())
             {
                 ViewBag.AddressList = addressesList;
-                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("AddressList", addresses);
+                HttpContext.Session.SetObjectAsJson("AddressList", addresses);
             }
 
             return View(model);
@@ -197,9 +191,9 @@ namespace NMP.Portal.Controllers
             }
 
             List<AddressLookupResponse> addresses = new List<AddressLookupResponse>();
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("AddressList"))
+            if (HttpContext.Session.Keys.Contains("AddressList"))
             {
-                addresses = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<List<AddressLookupResponse>>("AddressList");
+                addresses = HttpContext.Session.GetObjectFromJson<List<AddressLookupResponse>>("AddressList");
 
             }
 
@@ -227,7 +221,7 @@ namespace NMP.Portal.Controllers
             farm.IsManualAddress = false;
             //farm.Rainfall = farm.Rainfall ?? 600;
 
-            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", farm);
+            HttpContext.Session.SetObjectAsJson("FarmData", farm);
             if (!farm.IsPostCodeChanged && farm.IsCheckAnswer)
             {
                 return RedirectToAction("CheckAnswer");
@@ -240,9 +234,9 @@ namespace NMP.Portal.Controllers
         public IActionResult AddressNotFound()
         {
             FarmViewModel? model = null;
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+            if (HttpContext != null && HttpContext.Session.Keys.Contains("FarmData"))
             {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
             return View(model);
         }
@@ -251,9 +245,9 @@ namespace NMP.Portal.Controllers
         public IActionResult ManualAddress()
         {
             FarmViewModel? model = null;
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+            if (HttpContext.Session.Keys.Contains("FarmData"))
             {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
 
 
@@ -297,7 +291,7 @@ namespace NMP.Portal.Controllers
             farm.FullAddress = string.Empty;
             farm.IsManualAddress = true;
 
-            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", farm);
+            HttpContext.Session.SetObjectAsJson("FarmData", farm);
 
             return RedirectToAction("Rainfall");
         }
@@ -305,9 +299,9 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> Rainfall()
         {
             FarmViewModel? model = null;
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+            if (HttpContext.Session.Keys.Contains("FarmData"))
             {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
             if (model == null)
             {
@@ -319,7 +313,7 @@ namespace NMP.Portal.Controllers
                 string firstHalfPostcode = postcode[0];
                 var rainfall = await _farmService.FetchRainfallAverageAsync(firstHalfPostcode);
                 model.Rainfall = rainfall;
-                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", model);
+                HttpContext.Session.SetObjectAsJson("FarmData", model);
             }
 
             return View(model);
@@ -339,7 +333,7 @@ namespace NMP.Portal.Controllers
                 return View("Rainfall", farm);
             }
 
-            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", farm);
+            HttpContext.Session.SetObjectAsJson("FarmData", farm);
             if (farm.IsCheckAnswer)
             {
                 return RedirectToAction("CheckAnswer");
@@ -350,9 +344,9 @@ namespace NMP.Portal.Controllers
         public IActionResult RainfallManual()
         {
             FarmViewModel? model = new FarmViewModel();
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+            if (HttpContext.Session.Keys.Contains("FarmData"))
             {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
             return View(model);
 
@@ -372,7 +366,7 @@ namespace NMP.Portal.Controllers
                 return View("RainfallManual", farm);
             }
 
-            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", farm);
+            HttpContext.Session.SetObjectAsJson("FarmData", farm);
             if (farm.IsCheckAnswer)
             {
                 return RedirectToAction("CheckAnswer");
@@ -383,9 +377,9 @@ namespace NMP.Portal.Controllers
         public IActionResult NVZ()
         {
             FarmViewModel? model = new FarmViewModel();
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+            if (HttpContext.Session.Keys.Contains("FarmData"))
             {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
             return View(model);
 
@@ -403,7 +397,7 @@ namespace NMP.Portal.Controllers
                 return View("NVZ", farm);
             }
 
-            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", farm);
+            HttpContext.Session.SetObjectAsJson("FarmData", farm);
             if (farm.IsCheckAnswer)
             {
                 return RedirectToAction("CheckAnswer");
@@ -415,9 +409,9 @@ namespace NMP.Portal.Controllers
         public IActionResult Elevation()
         {
             FarmViewModel? model = new FarmViewModel();
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+            if (HttpContext.Session.Keys.Contains("FarmData"))
             {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
             return View(model);
 
@@ -436,7 +430,7 @@ namespace NMP.Portal.Controllers
                 return View("Elevation", farm);
             }
 
-            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", farm);
+            HttpContext.Session.SetObjectAsJson("FarmData", farm);
             if (farm.IsCheckAnswer)
             {
                 return RedirectToAction("CheckAnswer");
@@ -449,9 +443,9 @@ namespace NMP.Portal.Controllers
         public IActionResult Organic()
         {
             FarmViewModel? model = new FarmViewModel();
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+            if (HttpContext.Session.Keys.Contains("FarmData"))
             {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
             //model.IsCheckAnswer = false;
             //string updatedSessionData = JsonConvert.SerializeObject(model);
@@ -472,16 +466,16 @@ namespace NMP.Portal.Controllers
                 return View("Organic", farm);
             }
 
-            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", farm);
+            HttpContext.Session.SetObjectAsJson("FarmData", farm);
             return RedirectToAction("CheckAnswer");
         }
         [HttpGet]
         public IActionResult CheckAnswer()
         {
             FarmViewModel? model = null;
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+            if (HttpContext.Session.Keys.Contains("FarmData"))
             {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
             if (model == null)
             {
@@ -495,7 +489,7 @@ namespace NMP.Portal.Controllers
 
             model.IsCheckAnswer = true;
             //model.OldPostcode = model.Postcode;
-            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", model);
+            HttpContext.Session.SetObjectAsJson("FarmData", model);
             return View(model);
 
         }
@@ -503,12 +497,12 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CheckAnswer(FarmViewModel farm)
         {
-            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;  // Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value);
+            int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
             farm.AverageAltitude = farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.NoneAbove300m ? (int)NMP.Portal.Enums.AverageAltitude.below :
                     farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m ? (int)NMP.Portal.Enums.AverageAltitude.above : 0;
-            var claim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "relationships").Value;
-            string[] relationshipData = claim.Split(":");
-            Guid organisationId = relationshipData[4] == "Employee" ? Guid.Parse(relationshipData[1]) : Guid.Parse(relationshipData[0]);
+            //var claim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "relationships").Value;
+            //string[] relationshipData = claim.Split(":");
+            Guid organisationId = Guid.Parse(HttpContext.User.FindFirst("organisationId")?.Value);
             var farmData = new FarmData
             {
                 Farm = new Farm()
@@ -553,20 +547,20 @@ namespace NMP.Portal.Controllers
             }
             string success = _dataProtector.Protect("true");
             farmResponse.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());
-            _httpContextAccessor.HttpContext?.Session.Remove("FarmData");
-            _httpContextAccessor.HttpContext?.Session.Remove("AddressList");
+            HttpContext.Session.Remove("FarmData");
+            HttpContext.Session.Remove("AddressList");
             return RedirectToAction("FarmSummary", new { id = farmResponse.EncryptedFarmId, q = success });
 
         }
         public IActionResult BackCheckAnswer()
         {
             FarmViewModel? model = null;
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmData"))
+            if (HttpContext.Session.Keys.Contains("FarmData"))
             {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
             model.IsCheckAnswer = false;
-            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmData", model);
+            HttpContext.Session.SetObjectAsJson("FarmData", model);
             return RedirectToAction("Organic");
         }
 
