@@ -1219,4 +1219,58 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblHectare" xml:space="preserve">
     <value>{0} hectares</value>
   </data>
+  <data name="lblManureApplyingDate" xml:space="preserve">
+    <value>Manure Applying Date</value>
+  </data>
+  <data name="lblWhenAreYouApplyingManureOnField" xml:space="preserve">
+    <value>When are you applying {0} - {1} on these fields?</value>
+  </data>
+  <data name="MsgManureApplyingDate1OctToJan" xml:space="preserve">
+    <value>Based on your crop and soil type, your closed period for spreading manures with high readily available nitrogen is 1 October to 31 January.</value>
+  </data>
+  <data name="MsgManureApplyingDateDontHaveExactDate" xml:space="preserve">
+    <value>If you don't know the exact date, enter an estimated date. For example, </value>
+  </data>
+  <data name="lblSampleDate" xml:space="preserve">
+    <value>27 3 2023. You can change the date later.</value>
+  </data>
+  <data name="lblAmmonium" xml:space="preserve">
+    <value>Ammonium (N)</value>
+  </data>
+  <data name="lblDryMatter" xml:space="preserve">
+    <value>Dry Matter</value>
+  </data>
+  <data name="lblIwantToEnterARecentManure" xml:space="preserve">
+    <value>No, I want to enter a recent manure analysis</value>
+  </data>
+  <data name="lblNitrate" xml:space="preserve">
+    <value>Nitrate (N)</value>
+  </data>
+  <data name="lblStandardNutrientValues" xml:space="preserve">
+    <value>Do you want to use these standard nutrient values for ?</value>
+  </data>
+  <data name="lblTotalMagnesiumOxide" xml:space="preserve">
+    <value>Total magnesium oxide (Mg0)</value>
+  </data>
+  <data name="lblTotalNitrogen" xml:space="preserve">
+    <value>Total Nitrogen</value>
+  </data>
+  <data name="lblTotalPhosphate" xml:space="preserve">
+    <value>Total phosphate (P2O5)</value>
+  </data>
+  <data name="lblTotalPotassium" xml:space="preserve">
+    <value>Total potassium (K20)</value>
+  </data>
+  <data name="lblTotalSulphur" xml:space="preserve">
+    <value>Total Sulphur (SO3)</value>
+  </data>
+  <data name="lblUricAcid" xml:space="preserve">
+    <value>Uric Acid (N)</value>
+  </data>
+  <data name="lblValuesAreSourcedFromAHDB" xml:space="preserve">
+    <value>These values are sourced from the AHDB Nutrient Management Guide (RB209).</value>
+  </data>
+  <data name="lblValuesKgPerTonne" xml:space="preserve">
+    <value>Value (Kilograms per tonne)</value>
+  </data>
 </root>
