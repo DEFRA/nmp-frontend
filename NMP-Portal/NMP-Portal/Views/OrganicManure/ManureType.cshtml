@@ -54,8 +54,6 @@ else
                         <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                             @string.Format(Resource.lblWhatTypeOfManureGroupAreYouUsingInThisApplication, Model.ManureGroup)
                         </govuk-radios-fieldset-legend>
-                        <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
-
                         @if (ViewBag.ManureTypeList != null)
                         {
                             @foreach (var item in ViewBag.ManureTypeList)
