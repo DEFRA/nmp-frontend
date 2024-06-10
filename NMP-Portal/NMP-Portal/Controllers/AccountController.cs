@@ -22,7 +22,7 @@ namespace NMP.Portal.Controllers
             base.SignOut();
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);            
             HttpContext?.Session.Clear();
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("SignOut","Account", new { Area = "MicrosoftIdentity" });            
         }
     }
 }

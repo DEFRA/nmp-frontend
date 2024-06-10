@@ -55,6 +55,7 @@ builder.Services.Configure<FormOptions>(options =>
 builder.Services.AddDefraCustomerIdentity(builder);
 
 
+
 builder.Services.AddAuthorization(options =>
 {
     options.FallbackPolicy = options.DefaultPolicy;
@@ -162,16 +163,12 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-
     // Configure the HTTP request pipeline.
-
-    //app.UseExceptionHandler("/Error/404");
-   
+    //app.UseExceptionHandler("/Error/404");   
     //app.UseStatusCodePagesWithReExecute("/Error/{0}");
     app.Use(async (ctx, next) =>
     {
         await next();
-
         if (ctx.Response.StatusCode == 404 && !ctx.Response.HasStarted)
         {
             //Re-execute the request so the user gets the error page
@@ -241,7 +238,8 @@ app.UseSession();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
+// Add the reauthentication middleware
+app.UseMiddleware<ReauthenticationMiddleware>();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
