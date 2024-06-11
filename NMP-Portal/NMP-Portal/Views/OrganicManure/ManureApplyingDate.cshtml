@@ -10,11 +10,20 @@
     <div class="govuk-grid-column-two-thirds">
         <form class="form" action="ManureApplyingDate" method="post">
             @Html.AntiForgeryToken()
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroup"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroup"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDefaultNutrientValues" value="@Model.IsDefaultNutrientValues"></govuk-input>
             <div class="govuk-form-group">
                 <govuk-date-input asp-for="@Model.ApplicationDate" pattern="[0-9]*">
                     <govuk-date-input-fieldset>
                         <govuk-date-input-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                            @string.Format(Resource.lblWhenAreYouApplyingManureOnField, "ManureGroup", "ManureType")
+                            @string.Format(Resource.lblWhenAreYouApplyingManureOnField, Model.ManureGroupName, Model.ManureTypeName)
                         </govuk-date-input-fieldset-legend>
                         
                         <govuk-date-input-hint>
@@ -30,7 +39,7 @@
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
-            <p class="govuk-body cancel-link"><a asp-action="" asp-controller="" >@Resource.lblCancel</a></p>
+            <p class="govuk-body cancel-link"><a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
 
         </form>
 

@@ -368,7 +368,7 @@ namespace NMP.Portal.Controllers
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
             }
             TempData["InProcess"] = "work in process";
-           int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
+            int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
             (List<ManureType> manureTypeList, Error error) = await _organicManureService.FetchManureTypeList(model.ManureGroup.Value,countryId);
 
             if (manureTypeList.Count > 0)
@@ -397,7 +397,7 @@ namespace NMP.Portal.Controllers
             (List<ManureType> manureTypeList, Error error) = await _organicManureService.FetchManureTypeList(model.ManureGroup.Value, countryId);
             if (!ModelState.IsValid)
             {
-                              
+
 
                 if (manureTypeList.Count > 0)
                 {
@@ -415,30 +415,39 @@ namespace NMP.Portal.Controllers
             }
 
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
-            return RedirectToAction("ManureType");
+            return RedirectToAction("ManureApplyingDate");
 
         }
         [HttpGet]
-        public IActionResult ManureApplyingDate()
+        public async Task<IActionResult> ManureApplyingDate()
         {
             OrganicManureViewModel model = new OrganicManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
             }
+            int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
+            (List<ManureType> manureTypeList, Error error) = await _organicManureService.FetchManureTypeList(model.ManureGroup.Value, countryId);
+            model.ManureTypeName= (error == null && manureTypeList.Count > 0) ? manureTypeList.FirstOrDefault(x => x.Id==model.ManureTypeId)?.Name:string.Empty;
 
-            return View();
+            (List<CommonResponse> manureGroupList, Error error1) = await _organicManureService.FetchManureGroupList();
+            model.ManureGroupName=(error1 == null && manureGroupList.Count > 0) ? manureGroupList.FirstOrDefault(x => x.Id == model.ManureGroup)?.Name : string.Empty;
+            
+            return View(model);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult ManureApplyingDate(OrganicManureViewModel model)
         {
-
+            if (model.ApplicationDate == null)
+            {
+                ModelState.AddModelError("ApplicationDate", Resource.MsgEnterADateBeforeContinuing);
+            }
             if (model.ApplicationDate != null)
             {
-                if (model.ApplicationDate.Date.Year < 1601 || model.ApplicationDate.Date.Year > DateTime.Now.AddYears(1).Year)
+                if (model.ApplicationDate.Value.Date.Year < 1601 || model.ApplicationDate.Value.Date.Year > DateTime.Now.AddYears(1).Year)
                 {
-                    ModelState.AddModelError("SoilAnalyses.Date", Resource.MsgEnterTheDateInNumber);
+                    ModelState.AddModelError("ApplicationDate", Resource.MsgEnterTheDateInNumber);
                 }
             }
 
@@ -469,7 +478,10 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DefaultNutrientValues(OrganicManureViewModel model)
         {
-
+            if(model.IsDefaultNutrientValues==null)
+            {
+                ModelState.AddModelError("IsDefaultNutrientValues", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
             if (!ModelState.IsValid)
             {
                 return View(model);

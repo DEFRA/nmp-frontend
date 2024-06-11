@@ -17,7 +17,7 @@
 }
 else
 {
-    <form asp-action="ManureGroup" asp-controller="OrganicManure" method="post">
+    <form asp-action="ManureType" asp-controller="OrganicManure" method="post">
         @Html.AntiForgeryToken()
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>

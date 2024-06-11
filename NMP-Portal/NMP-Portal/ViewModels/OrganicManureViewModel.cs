@@ -15,8 +15,8 @@ namespace NMP.Portal.ViewModels
         public int? FarmId { get; set; }
         public int? HarvestYear { get; set; }
         public List<string>? FieldList { get; set; }
-        public DateTime ApplicationDate { get; set; }
-        public bool IsDefaultNutrientValues { get; set; }
+        public DateTime? ApplicationDate { get; set; }
+        public bool? IsDefaultNutrientValues { get; set; }
         public int? ManureGroup { get; set; }
         public int? ManureTypeId { get; set; }
         public bool isEnglishRules { get; set; }
@@ -24,6 +24,8 @@ namespace NMP.Portal.ViewModels
         public List<OrganicManure>? OrganicManures { get; set; }
         public ManureType ManureType { get; set; }
 
+        public string? ManureGroupName { get; set; }
+        public string? ManureTypeName { get; set; }
 
 
     }
