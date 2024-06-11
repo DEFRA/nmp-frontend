@@ -1,0 +1,101 @@
+﻿@using NMP.Portal.Resources
+@using NMP.Portal.ViewModels
+
+@model OrganicManureViewModel
+@{
+    ViewData["Title"] = Resource.lblPlansAndRecordsOverview;
+    var DefaultNutrientValues = true;
+    var NotDefaultNutrientValues = false;
+
+}
+
+@if (ViewBag.Error != null)
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item href="#">@ViewBag.Error</govuk-error-summary-item>
+    </govuk-error-summary>
+}
+@* @if (Model != null)
+{ *@
+@section BeforeContent {
+    <govuk-back-link asp-action="ManureApplyingDate" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+
+}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form class="form" asp-action="DefaultNutrientValues" asp-controller="OrganicManure" method="post">
+            @Html.AntiForgeryToken()
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroup"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationDate"></govuk-input>
+            <h1 class="govuk-heading-l">@Resource.lblStandardNutrientValues</h1>
+            <p class="govuk-body">@Resource.lblValuesAreSourcedFromAHDB</p>
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th id="field_name" scope="col" class="govuk-table__header">@Resource.lblNutrient</th>
+                        <th scope="col" class="govuk-table__header alignRight">@Resource.lblValuesKgPerTonne </th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.lblDryMatter</td>
+                        <td class="govuk-table__cell alignRight">@Model.ManureType.DryMatter</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.lblTotalNitrogen</td>
+                        <td class="govuk-table__cell alignRight">@Model.ManureType.TotalN</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.lblAmmonium</td>
+                        <td class="govuk-table__cell alignRight">@Model.ManureType.NH4N</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.lblUricAcid</td>
+                        <td class="govuk-table__cell alignRight">@Model.ManureType.Uric</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.lblNitrate</td>
+                        <td class="govuk-table__cell alignRight">@Model.ManureType.NO3N</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.lblTotalPhosphate</td>
+                        <td class="govuk-table__cell alignRight">@Model.ManureType.P2O5</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.lblTotalPotassium</td>
+                        <td class="govuk-table__cell alignRight">@Model.ManureType.K2O</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.lblTotalSulphur</td>
+                        <td class="govuk-table__cell alignRight">@Model.ManureType.SO3</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.lblTotalMagnesiumOxide</td>
+                        <td class="govuk-table__cell alignRight">@Model.ManureType.MgO</td>
+                    </tr>
+                </tbody>
+            </table>
+            <govuk-radios asp-for="@Model.IsDefaultNutrientValues">
+                <govuk-radios-fieldset>
+                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                    </govuk-radios-fieldset-legend>
+                    <govuk-radios-item value="@DefaultNutrientValues">@Resource.lblYes</govuk-radios-item>
+                    <govuk-radios-item value="@NotDefaultNutrientValues">@Resource.lblIwantToEnterARecentManure</govuk-radios-item>
+                </govuk-radios-fieldset>
+            </govuk-radios>
+            <govuk-button type="submit" class="margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+            <p class="govuk-body cancel-link"><a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
+        </form>
+    </div>
+</div>
+@* } *@
+

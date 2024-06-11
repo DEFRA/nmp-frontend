@@ -292,5 +292,48 @@ namespace NMP.Portal.Services
             return (manureGroup, error);
         }
 
+        public async Task<(ManureType,Error)> FetchManureTypeByManureTypeId(int manureTypeId)
+        {
+            ManureType manureType = new ManureType();
+            Error error = null;
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchManureTypeByManureTypeIdAsyncAPI, manureTypeId));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode)
+                {
+                    if (responseWrapper != null && responseWrapper.Data != null)
+                    {
+                        manureType = responseWrapper.Data.ManureType.ToObject<ManureType>();
+                        //manureTypeList.AddRange(manureTypes);
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error = new Error();
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error = new Error();
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (manureType, error);
+        }
     }
 }

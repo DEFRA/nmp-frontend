@@ -17,8 +17,10 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroup"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupId"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroup"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupName"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationDate"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDefaultNutrientValues" value="@Model.IsDefaultNutrientValues"></govuk-input>
     @if (Model.FieldList != null && Model.FieldList.Count > 0)
     {
         @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -55,7 +57,7 @@
             <govuk-radios asp-for="@Model.ManureTypeId">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblWhatTypeOfManureGroupAreYouUsingInThisApplication, Model.ManureGroup)
+                        @string.Format(Resource.lblWhatTypeOfManureGroupAreYouUsingInThisApplication, Model.ManureGroupName)
                     </govuk-radios-fieldset-legend>
                     @if (ViewBag.ManureTypeList != null)
                     {

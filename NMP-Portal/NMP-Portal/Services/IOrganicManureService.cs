@@ -12,5 +12,6 @@ namespace NMP.Portal.Services
         Task<(List<ManureType>, Error)> FetchManureTypeList(int manureGroupId, int countryId);
         Task<(CommonResponse, Error)> FetchManureGroupById(int manureGroupId);
 
+        Task<(ManureType, Error)> FetchManureTypeByManureTypeId(int manureTypeId);
     }
 }
