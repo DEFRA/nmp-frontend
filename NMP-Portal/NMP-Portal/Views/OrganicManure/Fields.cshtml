@@ -14,13 +14,27 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroup"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroup"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupId"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupName"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeId"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationDate"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDefaultNutrientValues" value="@Model.IsDefaultNutrientValues"></govuk-input>
     @if (Model.OrganicManures != null && Model.OrganicManures.Count > 0)
     {
         @for (int i = 0; i < Model.OrganicManures.Count; i++)
         {
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i]" value="@Model.OrganicManures[i]"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].ManagementPeriodID" value="@Model.OrganicManures[i].ManagementPeriodID"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].ManureTypeID" value="@Model.OrganicManures[i].ManureTypeID"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].K2O" value="@Model.OrganicManures[i].K2O"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].MgO" value="@Model.OrganicManures[i].MgO"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].P2O5" value="@Model.OrganicManures[i].P2O5"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].SO3" value="@Model.OrganicManures[i].SO3"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].NH4N" value="@Model.OrganicManures[i].NH4N"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].NO3N" value="@Model.OrganicManures[i].NO3N"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].UricAcid" value="@Model.OrganicManures[i].UricAcid"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].DryMatterPercent" value="@Model.OrganicManures[i].DryMatterPercent"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].N" value="@Model.OrganicManures[i].N"></govuk-input>
         }
 
     }
