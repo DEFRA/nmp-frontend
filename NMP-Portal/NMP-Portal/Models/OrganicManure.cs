@@ -14,8 +14,8 @@
         public decimal SO3 { get; set; }
         public decimal AvailableN { get; set; }
         public int AppRate { get; set; }
-        public int DryMatterPercent { get; set; }
-        public int UricAcid { get; set; }
+        public decimal DryMatterPercent { get; set; }
+        public decimal UricAcid { get; set; }
         public DateTime EndOfDrain { get; set; }
         public int Rainfall { get; set; }
         public decimal AreaSpread { get; set; }

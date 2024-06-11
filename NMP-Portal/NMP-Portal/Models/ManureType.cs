@@ -5,7 +5,7 @@
         public int? Id { get; set; }
         public string? Name { get; set; }
         public int? ManureGroupId { get; set; }
-        public int? CountryID { get; set; }
+        public int? CountryId { get; set; }
         public bool? IsLiquid { get; set; }
         public decimal? DryMatter { get; set; }
         public decimal? TotalN { get; set; }

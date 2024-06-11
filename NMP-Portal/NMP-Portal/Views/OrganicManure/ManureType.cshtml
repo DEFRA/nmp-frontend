@@ -9,69 +9,71 @@
 }
 
 
-@if (TempData["InProcess"] != null)
-{
-    <div class="govuk-error-message">
-        <p>@TempData["InProcess"]</p>
-    </div>
-}
-else
-{
-    <form asp-action="ManureGroup" asp-controller="OrganicManure" method="post">
-        @Html.AntiForgeryToken()
-        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
-        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
-        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
-        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
-        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroup"></govuk-input>
-        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroup"></govuk-input>
-        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules"></govuk-input>
-        @if (Model.FieldList != null && Model.FieldList.Count > 0)
+<form asp-action="ManureType" asp-controller="OrganicManure" method="post">
+    @Html.AntiForgeryToken()
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroup"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupId"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroup"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules"></govuk-input>
+    @if (Model.FieldList != null && Model.FieldList.Count > 0)
+    {
+        @for (int i = 0; i < Model.FieldList.Count; i++)
         {
-            @for (int i = 0; i < Model.FieldList.Count; i++)
-            {
-                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldList[i]" value="@Model.FieldList[i]"></govuk-input>
-            }
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldList[i]" value="@Model.FieldList[i]"></govuk-input>
         }
-        @if (Model.OrganicManures != null && Model.OrganicManures.Count > 0)
+    }
+    @if (Model.OrganicManures != null && Model.OrganicManures.Count > 0)
+    {
+        @for (int i = 0; i < Model.OrganicManures.Count; i++)
         {
-            @for (int i = 0; i < Model.OrganicManures.Count; i++)
-            {
-                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i]" value="@Model.OrganicManures[i]"></govuk-input>
-            }
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].ManagementPeriodID" value="@Model.OrganicManures[i].ManagementPeriodID"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].ManureTypeID" value="@Model.OrganicManures[i].ManureTypeID"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].K2O" value="@Model.OrganicManures[i].K2O"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].MgO" value="@Model.OrganicManures[i].MgO"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].P2O5" value="@Model.OrganicManures[i].P2O5"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].SO3" value="@Model.OrganicManures[i].SO3"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].NH4N" value="@Model.OrganicManures[i].NH4N"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].NO3N" value="@Model.OrganicManures[i].NO3N"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].UricAcid" value="@Model.OrganicManures[i].UricAcid"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].DryMatterPercent" value="@Model.OrganicManures[i].DryMatterPercent"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].N" value="@Model.OrganicManures[i].N"></govuk-input>
         }
-        @if (TempData["ManureTypeError"] != null)
-        {
-            <govuk-error-summary>
-                <govuk-error-summary-item href="#">@TempData["ManureTypeError"]</govuk-error-summary-item>
-            </govuk-error-summary>
-        }
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
+    }
+    @if (TempData["ManureTypeError"] != null)
+    {
+        <govuk-error-summary>
+            <govuk-error-summary-item href="#">@TempData["ManureTypeError"]</govuk-error-summary-item>
+        </govuk-error-summary>
+    }
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
 
-                <govuk-radios asp-for="@Model.ManureType">
-                    <govuk-radios-fieldset>
-                        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                            @string.Format(Resource.lblWhatTypeOfManureGroupAreYouUsingInThisApplication, Model.ManureGroup)
-                        </govuk-radios-fieldset-legend>
-                        @if (ViewBag.ManureTypeList != null)
+            <govuk-radios asp-for="@Model.ManureTypeId">
+                <govuk-radios-fieldset>
+                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @string.Format(Resource.lblWhatTypeOfManureGroupAreYouUsingInThisApplication, Model.ManureGroup)
+                    </govuk-radios-fieldset-legend>
+                    @if (ViewBag.ManureTypeList != null)
+                    {
+                        @foreach (var item in ViewBag.ManureTypeList)
                         {
-                            @foreach (var item in ViewBag.ManureTypeList)
-                            {
-                                <govuk-radios-item value="@item.Value">@item.Text</govuk-radios-item>
+                            <govuk-radios-item value="@item.Value">@item.Text</govuk-radios-item>
 
-                            }
                         }
+                    }
 
-                    </govuk-radios-fieldset>
-                </govuk-radios>
-                <govuk-button type="submit" class="margin-bottom-forty">
-                    @Resource.lblContinue
-                </govuk-button>
-                <p class="govuk-body cancel-link"><a asp-action="CreateManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
-
-            </div>
+                </govuk-radios-fieldset>
+            </govuk-radios>
+            <govuk-button type="submit" class="margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+            <p class="govuk-body cancel-link"><a asp-action="CreateManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
 
         </div>
-    </form>
-}
+
+    </div>
+</form>

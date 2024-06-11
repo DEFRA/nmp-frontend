@@ -43,7 +43,7 @@ namespace NMP.Portal.Services
             }
             catch (HttpRequestException hre)
             {
-                error= new Error();
+                error = new Error();
                 error.Message = Resource.MsgServiceNotAvailable;
                 _logger.LogError(hre.Message);
                 throw new Exception(error.Message, hre);
@@ -120,7 +120,7 @@ namespace NMP.Portal.Services
                 string url = string.Empty;
                 if (cropTypeId != null)
                 {
-                    url = string.Format(APIURLHelper.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeIdAsyncAPI, harvestYear, cropTypeId, fieldIds );
+                    url = string.Format(APIURLHelper.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeIdAsyncAPI, harvestYear, cropTypeId, fieldIds);
                 }
                 else
                 {
@@ -134,7 +134,7 @@ namespace NMP.Portal.Services
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
                         List<CommonResponse> managementIdsList = responseWrapper.Data.ManagementPeriods.ToObject<List<CommonResponse>>();
-                        managementIds.AddRange(managementIdsList.Select(x=>x.Id));
+                        managementIds.AddRange(managementIdsList.Select(x => x.Id));
                     }
                 }
                 else
@@ -206,7 +206,7 @@ namespace NMP.Portal.Services
             }
             return (manureGroupList, error);
         }
-        public async Task<(List<ManureType>, Error)> FetchManureTypeList(int manureGroupId,int countryId)
+        public async Task<(List<ManureType>, Error)> FetchManureTypeList(int manureGroupId, int countryId)
         {
             List<ManureType> manureTypeList = new List<ManureType>();
             Error error = null;
@@ -218,9 +218,9 @@ namespace NMP.Portal.Services
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
                 {
-                   if (responseWrapper != null && responseWrapper.Data != null)
+                    if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        var manureTypes = responseWrapper.Data.ManureTypes.ToObject<List<ManureType>>();
+                        var manureTypes = responseWrapper.Data.ManureTypes.ToObject<List<ManureType>>();                       
                         manureTypeList.AddRange(manureTypes);
                     }
                 }
@@ -249,5 +249,48 @@ namespace NMP.Portal.Services
             }
             return (manureTypeList, error);
         }
+        public async Task<(CommonResponse, Error)> FetchManureGroupById(int manureGroupId)
+        {
+            CommonResponse manureGroup =new CommonResponse();
+            Error error = null;
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchManureGroupByIdAsyncAPI, manureGroupId));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode)
+                {
+                    if (responseWrapper != null && responseWrapper.Data != null)
+                    {
+                        manureGroup = responseWrapper.Data.ManureGroup.ToObject<CommonResponse>();
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error = new Error();
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error = new Error();
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (manureGroup, error);
+        }
+
     }
 }
