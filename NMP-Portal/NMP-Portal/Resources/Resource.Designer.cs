@@ -1511,20 +1511,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manure Group.
-        /// </summary>
-        public static string lblManureGroup {
-            get {
-                return ResourceManager.GetString("lblManureGroup", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Manure Applying Date.
         /// </summary>
         public static string lblManureApplyingDate {
             get {
                 return ResourceManager.GetString("lblManureApplyingDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manure Group.
+        /// </summary>
+        public static string lblManureGroup {
+            get {
+                return ResourceManager.GetString("lblManureGroup", resourceCulture);
             }
         }
         
@@ -2564,7 +2564,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Value (Kilograms per tonne).
+        ///   Looks up a localized string similar to Value per tonne.
         /// </summary>
         public static string lblValuesKgPerTonne {
             get {

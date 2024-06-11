@@ -454,14 +454,16 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public IActionResult DefaultNutrientValues()
+        public async Task<IActionResult> DefaultNutrientValues()
         {
             OrganicManureViewModel model = new OrganicManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
             }
-            return View();
+            (ManureType manureType, Error error) = await _organicManureService.FetchManureTypeByManureTypeId(2);
+            model.ManureType = manureType;
+            return View(model);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]

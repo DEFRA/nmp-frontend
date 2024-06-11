@@ -1301,6 +1301,6 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>These values are sourced from the AHDB Nutrient Management Guide (RB209).</value>
   </data>
   <data name="lblValuesKgPerTonne" xml:space="preserve">
-    <value>Value (Kilograms per tonne)</value>
+    <value>Value per tonne</value>
   </data>
 </root>

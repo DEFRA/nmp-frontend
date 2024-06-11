@@ -5,6 +5,10 @@ namespace NMP.Portal.ViewModels
 {
     public class OrganicManureViewModel
     {
+        public OrganicManureViewModel()
+        {
+            ManureType = new ManureType();
+        }
         public string? FieldGroup { get; set; }
         public string? EncryptedFarmId { get; set; }
         public string? EncryptedHarvestYear { get; set; }
@@ -14,10 +18,11 @@ namespace NMP.Portal.ViewModels
         public DateTime ApplicationDate { get; set; }
         public bool IsDefaultNutrientValues { get; set; }
         public int? ManureGroup { get; set; }
-        public int? ManureType { get; set; }
+        public int? ManureTypeId { get; set; }
         public bool isEnglishRules { get; set; }
 
         public List<OrganicManure>? OrganicManures { get; set; }
+        public ManureType ManureType { get; set; }
 
 
 

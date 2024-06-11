@@ -10,6 +10,6 @@ namespace NMP.Portal.Services
         Task<(List<int>, Error)> FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(int harvestYear, string fieldIds, string? cropTypeId);
         Task<(List<CommonResponse>, Error)> FetchManureGroupList();
         Task<(List<ManureType>, Error)> FetchManureTypeList(int manureGroupId, int countryId);
-
+        Task<(ManureType, Error)> FetchManureTypeByManureTypeId(int manureTypeId);
     }
 }
