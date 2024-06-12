@@ -349,7 +349,7 @@ namespace NMP.Portal.Controllers
         {
             if (model.ManureGroupId == null)
             {
-                ModelState.AddModelError("ManureGroup", Resource.MsgSelectAnOptionBeforeContinuing);
+                ModelState.AddModelError("ManureGroupId", Resource.MsgSelectAnOptionBeforeContinuing);
             }
             Error error = null;
             try { 
@@ -450,7 +450,7 @@ namespace NMP.Portal.Controllers
             Error error = null;
             if (model.ManureTypeId == null)
             {
-                ModelState.AddModelError("ManureType", Resource.MsgSelectAnOptionBeforeContinuing);
+                ModelState.AddModelError("ManureTypeId", Resource.MsgSelectAnOptionBeforeContinuing);
             }
             try
             {
