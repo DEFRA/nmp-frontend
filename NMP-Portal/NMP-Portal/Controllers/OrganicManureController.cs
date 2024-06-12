@@ -483,9 +483,15 @@ namespace NMP.Portal.Controllers
                         {
                             orgManure.ManureTypeID = model.ManureTypeId.Value;
                             orgManure.K2O = manureType.K2O.Value;
-                            orgManure.MgO = manureType.MgO==null?0:manureType.MgO.Value;
+                            if (manureType.MgO != null)
+                            {
+                                orgManure.MgO = manureType.MgO.Value;
+                            }
                             orgManure.P2O5 = manureType.P2O5.Value;
-                            orgManure.SO3 = manureType.SO3 == null ? 0 : manureType.SO3.Value;
+                            if (manureType.SO3 != null)
+                            {
+                                orgManure.SO3 = manureType.SO3.Value;
+                            }
                             orgManure.NH4N = manureType.NH4N.Value;
                             orgManure.NO3N = manureType.NO3N.Value;
                             orgManure.UricAcid = manureType.Uric.Value;
@@ -560,7 +566,7 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
             }
-            (ManureType manureType, Error error) = await _organicManureService.FetchManureTypeByManureTypeId(2);
+            (ManureType manureType, Error error) = await _organicManureService.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
             model.ManureType = manureType;
             return View(model);
         }
