@@ -483,9 +483,9 @@ namespace NMP.Portal.Controllers
                         {
                             orgManure.ManureTypeID = model.ManureTypeId.Value;
                             orgManure.K2O = manureType.K2O.Value;
-                            orgManure.MgO = manureType.MgO.Value;
+                            orgManure.MgO = manureType.MgO==null?0:manureType.MgO.Value;
                             orgManure.P2O5 = manureType.P2O5.Value;
-                            orgManure.SO3 = manureType.SO3.Value;
+                            orgManure.SO3 = manureType.SO3 == null ? 0 : manureType.SO3.Value;
                             orgManure.NH4N = manureType.NH4N.Value;
                             orgManure.NO3N = manureType.NO3N.Value;
                             orgManure.UricAcid = manureType.Uric.Value;
