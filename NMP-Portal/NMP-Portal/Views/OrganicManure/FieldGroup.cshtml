@@ -21,9 +21,7 @@
     @if (Model != null)
     {
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules" value="@Model.isEnglishRules.ToString().ToLower()"></govuk-input>
-    }
-    @if (Model != null)
-    {
+   
         @if (Model.FieldList != null && Model.FieldList.Count > 0)
         {
             @for (int i = 0; i < Model.FieldList.Count; i++)
