@@ -1,0 +1,47 @@
+﻿@using NMP.Portal.Resources
+@model NMP.Portal.ViewModels.OrganicManureViewModel
+@{
+    ViewData["Title"] = Resource.lblApplicationRate;
+    var enterAnApplicationRate = (int)NMP.Portal.Enums.ApplicationRate.EnterAnApplicationRate;
+    var calculateBasedOnAreaAndQuantity = (int)NMP.Portal.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity;
+    var useDefaultApplicationRate = (int)NMP.Portal.Enums.ApplicationRate.UseDefaultApplicationRate;
+
+}
+@section BeforeContent {
+    <govuk-back-link asp-action="DefaultNutrientValues" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+}
+
+<form asp-action="ApplicationRate" asp-controller="OrganicManure" method="post">
+    @Html.AntiForgeryToken()
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroup"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationDate"></govuk-input>
+            <govuk-radios asp-for="@Model.ApplicationRate">
+                <govuk-radios-fieldset>
+                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @string.Format(Resource.lblHowWouldYouLikeToEnterTheApplicationRate, Model.ManureGroupName,Model.ManureTypeName
+                        )
+                    </govuk-radios-fieldset-legend>
+                    <govuk-radios-item value="@enterAnApplicationRate">@Resource.lblEnterAnApplicationRate</govuk-radios-item>
+                    <govuk-radios-item value="@calculateBasedOnAreaAndQuantity">@Resource.lblCalculateBasedOnTheAreaAndQuantity</govuk-radios-item>
+                    <govuk-radios-item value="@useDefaultApplicationRate">@string.Format(Resource.lblUseTypicalApplicationRate,20)</govuk-radios-item>
+                </govuk-radios-fieldset>
+            </govuk-radios>
+            <govuk-button type="submit" class="margin-bottom-forty" asp-action="ApplicationRate">
+                @Resource.lblContinue
+            </govuk-button>
+            <p class="govuk-body cancel-link"><a asp-action="HarvestYearOverview" asp-controller="Crop">@Resource.lblCancel</a></p>
+
+        </div>
+
+    </div>
+</form>

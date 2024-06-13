@@ -1,0 +1,42 @@
+﻿@using NMP.Portal.Resources
+@model NMP.Portal.ViewModels.OrganicManureViewModel
+@{
+    ViewData["Title"] = Resource.lblApplicationRate;
+}
+@section BeforeContent {
+    <govuk-back-link asp-action="ManureApplyingDate" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+}
+
+<form asp-action="ApplicationRate" asp-controller="OrganicManure" method="post">
+    @Html.AntiForgeryToken()
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroup"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationDate"></govuk-input>
+            <govuk-radios asp-for="@Model.ApplicationRate">
+                <govuk-radios-fieldset>
+                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @string.Format(Resource.lblHowWouldYouLikeToEnterTheApplicationRate, Model.ManureGroupName, Model.ManureTypeName
+                                 )
+                    </govuk-radios-fieldset-legend>
+                    <govuk-radios-item value="">@Resource.lblEnterAnApplicationRate</govuk-radios-item>
+                    
+                </govuk-radios-fieldset>
+            </govuk-radios>
+            <govuk-button type="submit" class="margin-bottom-forty" asp-action="ApplicationRate">
+                @Resource.lblContinue
+            </govuk-button>
+            <p class="govuk-body cancel-link"><a asp-action="CreateFarmCancel" asp-controller="Farm">@Resource.lblCancel</a></p>
+
+        </div>
+
+    </div>
+</form>

@@ -1,4 +1,5 @@
 ﻿using NMP.Portal.Models;
+using NMP.Portal.Resources;
 using System.ComponentModel.DataAnnotations;
 
 namespace NMP.Portal.ViewModels
@@ -19,7 +20,8 @@ namespace NMP.Portal.ViewModels
         public int? ManureGroupId { get; set; }
         //public string? ManureGroup { get; set; }
         public int? ManureTypeId { get; set; }
-       // public string? ManureType { get; set; }
+        // public string? ManureType { get; set; }
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblEnterTheDateInCorrectFormat))]
         public DateTime? ApplicationDate { get; set; }
         public bool? IsDefaultNutrientValues { get; set; }
         public bool isEnglishRules { get; set; }
@@ -30,6 +32,7 @@ namespace NMP.Portal.ViewModels
         public string? ManureGroupName { get; set; }
         public string? ManureTypeName { get; set; }
 
-
+        public int? ApplicationRate { get; set; }
+        public int? ApplicationMethod { get; set; }
     }
 }

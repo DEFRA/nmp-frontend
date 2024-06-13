@@ -1301,6 +1301,33 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>These values are sourced from the AHDB Nutrient Management Guide (RB209).</value>
   </data>
   <data name="lblValuesKgPerTonne" xml:space="preserve">
-    <value>Value per tonne</value>
+    <value>kg/t</value>
+  </data>
+  <data name="lblApplicationRate" xml:space="preserve">
+    <value>Application Rate</value>
+  </data>
+  <data name="lblCalculateBasedOnTheAreaAndQuantity" xml:space="preserve">
+    <value>Calculate based on the area and quantity you are spreading</value>
+  </data>
+  <data name="lblEnterAnApplicationRate" xml:space="preserve">
+    <value>Enter an application rate in t/ha</value>
+  </data>
+  <data name="lblHowWouldYouLikeToEnterTheApplicationRate" xml:space="preserve">
+    <value>How would you like to enter the application rate for your {0} - {1}?</value>
+  </data>
+  <data name="lblUseTypicalApplicationRate" xml:space="preserve">
+    <value>Use the typical application rate of {0} t/ha</value>
+  </data>
+  <data name="MsgSelectAMethodForEnteringApplicationRate" xml:space="preserve">
+    <value>Select a method for entering the application rate before continuing.</value>
+  </data>
+  <data name="lblApplicationDate" xml:space="preserve">
+    <value>Application Date</value>
+  </data>
+  <data name="lblEnterTheDateInCorrectFormat" xml:space="preserve">
+    <value>Enter the date in the correct format (DD/MM/YYYY).</value>
+  </data>
+  <data name="lblValueKg" xml:space="preserve">
+    <value>{0}kg</value>
   </data>
 </root>

@@ -322,11 +322,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application Date.
+        /// </summary>
+        public static string lblApplicationDate {
+            get {
+                return ResourceManager.GetString("lblApplicationDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Plan and record nutrient applications.
         /// </summary>
         public static string lblApplicationName {
             get {
                 return ResourceManager.GetString("lblApplicationName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application Rate.
+        /// </summary>
+        public static string lblApplicationRate {
+            get {
+                return ResourceManager.GetString("lblApplicationRate", resourceCulture);
             }
         }
         
@@ -417,6 +435,15 @@ namespace NMP.Portal.Resources {
         public static string lblBusinessName {
             get {
                 return ResourceManager.GetString("lblBusinessName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Calculate based on the area and quantity you are spreading.
+        /// </summary>
+        public static string lblCalculateBasedOnTheAreaAndQuantity {
+            get {
+                return ResourceManager.GetString("lblCalculateBasedOnTheAreaAndQuantity", resourceCulture);
             }
         }
         
@@ -790,6 +817,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter an application rate in t/ha.
+        /// </summary>
+        public static string lblEnterAnApplicationRate {
+            get {
+                return ResourceManager.GetString("lblEnterAnApplicationRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a single figure for all these fields.
         /// </summary>
         public static string lblEnterASingleFigureForAllTheseFields {
@@ -858,6 +894,15 @@ namespace NMP.Portal.Resources {
         public static string lblEnterTheCropName {
             get {
                 return ResourceManager.GetString("lblEnterTheCropName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the date in the correct format (DD/MM/YYYY)..
+        /// </summary>
+        public static string lblEnterTheDateInCorrectFormat {
+            get {
+                return ResourceManager.GetString("lblEnterTheDateInCorrectFormat", resourceCulture);
             }
         }
         
@@ -1228,6 +1273,15 @@ namespace NMP.Portal.Resources {
         public static string lblHowWouldYouLikeToCalculateSNSForCheckAnswer {
             get {
                 return ResourceManager.GetString("lblHowWouldYouLikeToCalculateSNSForCheckAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How would you like to enter the application rate for your {0} - {1}?.
+        /// </summary>
+        public static string lblHowWouldYouLikeToEnterTheApplicationRate {
+            get {
+                return ResourceManager.GetString("lblHowWouldYouLikeToEnterTheApplicationRate", resourceCulture);
             }
         }
         
@@ -2555,6 +2609,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use the typical application rate of {0} t/ha.
+        /// </summary>
+        public static string lblUseTypicalApplicationRate {
+            get {
+                return ResourceManager.GetString("lblUseTypicalApplicationRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}kg.
+        /// </summary>
+        public static string lblValueKg {
+            get {
+                return ResourceManager.GetString("lblValueKg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to These values are sourced from the AHDB Nutrient Management Guide (RB209)..
         /// </summary>
         public static string lblValuesAreSourcedFromAHDB {
@@ -2564,7 +2636,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Value per tonne.
+        ///   Looks up a localized string similar to kg/t.
         /// </summary>
         public static string lblValuesKgPerTonne {
             get {
@@ -3523,6 +3595,15 @@ namespace NMP.Portal.Resources {
         public static string MsgSelectAddress {
             get {
                 return ResourceManager.GetString("MsgSelectAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a method for entering the application rate before continuing..
+        /// </summary>
+        public static string MsgSelectAMethodForEnteringApplicationRate {
+            get {
+                return ResourceManager.GetString("MsgSelectAMethodForEnteringApplicationRate", resourceCulture);
             }
         }
         
