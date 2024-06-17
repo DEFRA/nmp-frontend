@@ -47,5 +47,7 @@ namespace NMP.Portal.Helpers
         public const string FetchManureTypeListByGroupIdAsyncAPI = "manure-types/manure-groups/{0}?countryId={1}";
         public const string FetchManureGroupByIdAsyncAPI = "manure-groups/{0}";
         public const string FetchManureTypeByManureTypeIdAsyncAPI = "manure-types/{0}";
+
+        public const string FetchApplicationMethodsByApplicableForAsyncAPI = "application-method/{0}";
     }
 }

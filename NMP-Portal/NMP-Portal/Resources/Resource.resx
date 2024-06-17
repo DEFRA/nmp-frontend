@@ -1253,7 +1253,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Manure Applying Date</value>
   </data>
   <data name="lblWhenAreYouApplyingManureOnField" xml:space="preserve">
-    <value>When are you applying {0} - {1} on these fields?</value>
+    <value>When are you applying {0} on these fields?</value>
   </data>
   <data name="MsgManureApplyingDate1OctToJan" xml:space="preserve">
     <value>Based on your crop and soil type, your closed period for spreading manures with high readily available nitrogen is 1 October to 31 January.</value>
@@ -1277,7 +1277,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Nitrate (N)</value>
   </data>
   <data name="lblStandardNutrientValues" xml:space="preserve">
-    <value>Do you want to use these standard nutrient values for ?</value>
+    <value>Do you want to use these nutrient values from RB209 for {0}?</value>
   </data>
   <data name="lblTotalMagnesiumOxide" xml:space="preserve">
     <value>Total magnesium oxide (Mg0)</value>
@@ -1298,7 +1298,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Uric Acid (N)</value>
   </data>
   <data name="lblValuesAreSourcedFromAHDB" xml:space="preserve">
-    <value>These values are sourced from the AHDB Nutrient Management Guide (RB209).</value>
+    <value>These values are taken from the AHDB Nutrient Management Guide (RB209).</value>
   </data>
   <data name="lblValuesKgPerTonne" xml:space="preserve">
     <value>kg/t</value>
@@ -1310,10 +1310,10 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Calculate based on the area and quantity you are spreading</value>
   </data>
   <data name="lblEnterAnApplicationRate" xml:space="preserve">
-    <value>Enter an application rate in t/ha</value>
+    <value>Enter an application rate in t/ha or m3/ha</value>
   </data>
   <data name="lblHowWouldYouLikeToEnterTheApplicationRate" xml:space="preserve">
-    <value>How would you like to enter the application rate for your {0} - {1}?</value>
+    <value>How would you like to enter the application rate for your {0}?</value>
   </data>
   <data name="lblUseTypicalApplicationRate" xml:space="preserve">
     <value>Use the typical application rate of {0} t/ha</value>
@@ -1329,5 +1329,41 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
   <data name="lblValueKg" xml:space="preserve">
     <value>{0}kg</value>
+  </data>
+  <data name="lblEnterTheApplicationRate" xml:space="preserve">
+    <value>Enter the application rate</value>
+  </data>
+  <data name="lblManualApplicationRate" xml:space="preserve">
+    <value>Manual Application Rate</value>
+  </data>
+  <data name="lblTonnesPerHectare" xml:space="preserve">
+    <value>tonnes per hectare</value>
+  </data>
+  <data name="lblAreaAndQuantity" xml:space="preserve">
+    <value>Area and quantity</value>
+  </data>
+  <data name="lblEnterTheAreaAndQuantity" xml:space="preserve">
+    <value>Enter the area and quantity</value>
+  </data>
+  <data name="lblhectar" xml:space="preserve">
+    <value>hectares</value>
+  </data>
+  <data name="lbltonnes" xml:space="preserve">
+    <value>tonnes</value>
+  </data>
+  <data name="lblWhatIsTheApplicationMethod" xml:space="preserve">
+    <value>What is the application method for your {0}?</value>
+  </data>
+  <data name="MsgDateCannotBeLaterThanHarvestYear" xml:space="preserve">
+    <value>The date cannot be later than the harvest year you are planning for</value>
+  </data>
+  <data name="MsgEnterAnapplicationRateBeforeContinuing" xml:space="preserve">
+    <value>Enter an application rate before continuing.</value>
+  </data>
+  <data name="MsgEnterAreaBeforeContinuing" xml:space="preserve">
+    <value>Enter an area before continuing</value>
+  </data>
+  <data name="MsgEnterQuantityBeforeContinuing" xml:space="preserve">
+    <value>Enter a quantity before continuing</value>
   </data>
 </root>

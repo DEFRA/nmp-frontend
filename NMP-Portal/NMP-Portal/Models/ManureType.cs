@@ -16,6 +16,12 @@
         public decimal? K2O { get; set; }
         public decimal? SO3 { get; set; }
         public decimal? MgO { get; set; }
+        public decimal? P2O5Available { get; set; }
+        public decimal? K2OAvailable { get; set; }
+        public decimal? NMaxConstant { get; set; }
+        public int? ApplicationRateArable { get; set; }
+        public int? ApplicationRateGrass { get; set; }
+        
 
     }
 }

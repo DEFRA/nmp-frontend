@@ -32,7 +32,12 @@ namespace NMP.Portal.ViewModels
         public string? ManureGroupName { get; set; }
         public string? ManureTypeName { get; set; }
 
-        public int? ApplicationRate { get; set; }
+        public int? ApplicationRateMethod { get; set; }
+        public decimal? ApplicationRate { get; set; }
         public int? ApplicationMethod { get; set; }
+        //public int? ManualApplicationRate { get; set; }
+        public decimal? Area { get; set; }
+        public decimal? Quantity { get; set; }
+        public int? ApplicationRateArable { get; set; }
     }
 }

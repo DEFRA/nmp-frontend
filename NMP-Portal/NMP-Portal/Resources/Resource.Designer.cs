@@ -358,6 +358,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Area and quantity.
+        /// </summary>
+        public static string lblAreaAndQuantity {
+            get {
+                return ResourceManager.GetString("lblAreaAndQuantity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to As an index.
         /// </summary>
         public static string lblAsAnIndex {
@@ -817,7 +826,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter an application rate in t/ha.
+        ///   Looks up a localized string similar to Enter an application rate in t/ha or m3/ha.
         /// </summary>
         public static string lblEnterAnApplicationRate {
             get {
@@ -885,6 +894,24 @@ namespace NMP.Portal.Resources {
         public static string lblEnterTheAddressManually {
             get {
                 return ResourceManager.GetString("lblEnterTheAddressManually", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the application rate.
+        /// </summary>
+        public static string lblEnterTheApplicationRate {
+            get {
+                return ResourceManager.GetString("lblEnterTheApplicationRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the area and quantity.
+        /// </summary>
+        public static string lblEnterTheAreaAndQuantity {
+            get {
+                return ResourceManager.GetString("lblEnterTheAreaAndQuantity", resourceCulture);
             }
         }
         
@@ -1177,6 +1204,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to hectares.
+        /// </summary>
+        public static string lblhectar {
+            get {
+                return ResourceManager.GetString("lblhectar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} hectares.
         /// </summary>
         public static string lblHectare {
@@ -1277,7 +1313,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How would you like to enter the application rate for your {0} - {1}?.
+        ///   Looks up a localized string similar to How would you like to enter the application rate for your {0}?.
         /// </summary>
         public static string lblHowWouldYouLikeToEnterTheApplicationRate {
             get {
@@ -1561,6 +1597,15 @@ namespace NMP.Portal.Resources {
         public static string lblManualAddress {
             get {
                 return ResourceManager.GetString("lblManualAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manual Application Rate.
+        /// </summary>
+        public static string lblManualApplicationRate {
+            get {
+                return ResourceManager.GetString("lblManualApplicationRate", resourceCulture);
             }
         }
         
@@ -2375,7 +2420,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to use these standard nutrient values for ?.
+        ///   Looks up a localized string similar to Do you want to use these nutrient values from RB209 for {0}?.
         /// </summary>
         public static string lblStandardNutrientValues {
             get {
@@ -2456,11 +2501,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to tonnes.
+        /// </summary>
+        public static string lbltonnes {
+            get {
+                return ResourceManager.GetString("lbltonnes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to tonnes/hectare.
         /// </summary>
         public static string lblTonnesAndHectare {
             get {
                 return ResourceManager.GetString("lblTonnesAndHectare", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to tonnes per hectare.
+        /// </summary>
+        public static string lblTonnesPerHectare {
+            get {
+                return ResourceManager.GetString("lblTonnesPerHectare", resourceCulture);
             }
         }
         
@@ -2627,7 +2690,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to These values are sourced from the AHDB Nutrient Management Guide (RB209)..
+        ///   Looks up a localized string similar to These values are taken from the AHDB Nutrient Management Guide (RB209)..
         /// </summary>
         public static string lblValuesAreSourcedFromAHDB {
             get {
@@ -2767,6 +2830,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhatIsSowingDateinFields {
             get {
                 return ResourceManager.GetString("lblWhatIsSowingDateinFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the application method for your {0}?.
+        /// </summary>
+        public static string lblWhatIsTheApplicationMethod {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheApplicationMethod", resourceCulture);
             }
         }
         
@@ -2915,7 +2987,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When are you applying {0} - {1} on these fields?.
+        ///   Looks up a localized string similar to When are you applying {0} on these fields?.
         /// </summary>
         public static string lblWhenAreYouApplyingManureOnField {
             get {
@@ -3104,6 +3176,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The date cannot be later than the harvest year you are planning for.
+        /// </summary>
+        public static string MsgDateCannotBeLaterThanHarvestYear {
+            get {
+                return ResourceManager.GetString("MsgDateCannotBeLaterThanHarvestYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to For example, 27 3 2007.
         /// </summary>
         public static string MsgDateExample {
@@ -3221,6 +3302,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter an application rate before continuing..
+        /// </summary>
+        public static string MsgEnterAnapplicationRateBeforeContinuing {
+            get {
+                return ResourceManager.GetString("MsgEnterAnapplicationRateBeforeContinuing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a pH range between 0 and 9.9.
         /// </summary>
         public static string MsgEnterAPH {
@@ -3244,6 +3334,15 @@ namespace NMP.Portal.Resources {
         public static string MsgEnterAPostcode {
             get {
                 return ResourceManager.GetString("MsgEnterAPostcode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter an area before continuing.
+        /// </summary>
+        public static string MsgEnterAreaBeforeContinuing {
+            get {
+                return ResourceManager.GetString("MsgEnterAreaBeforeContinuing", resourceCulture);
             }
         }
         
@@ -3298,6 +3397,15 @@ namespace NMP.Portal.Resources {
         public static string MsgEnterNumericValue {
             get {
                 return ResourceManager.GetString("MsgEnterNumericValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a quantity before continuing.
+        /// </summary>
+        public static string MsgEnterQuantityBeforeContinuing {
+            get {
+                return ResourceManager.GetString("MsgEnterQuantityBeforeContinuing", resourceCulture);
             }
         }
         
