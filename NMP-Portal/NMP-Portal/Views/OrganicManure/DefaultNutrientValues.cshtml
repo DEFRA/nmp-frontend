@@ -30,10 +30,20 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroup"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupId"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeId"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationDate"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules"></govuk-input>
+            
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationMethod"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationRateMethod"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Area"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Quantity"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationRate"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupId"></govuk-input>
+
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationDate" value="@Model.ApplicationDate"></govuk-input>
+            
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -59,7 +69,7 @@
                 }
 
             }
-            <h1 class="govuk-heading-l">@Resource.lblStandardNutrientValues</h1>
+            <h1 class="govuk-heading-l">@string.Format( Resource.lblStandardNutrientValues,Model.ManureTypeName)</h1>
             <p class="govuk-body">@Resource.lblValuesAreSourcedFromAHDB</p>
             <table class="govuk-table">
                 <thead class="govuk-table__head">
@@ -71,39 +81,40 @@
                 <tbody class="govuk-table__body">
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblDryMatter</td>
-                        <td class="govuk-table__cell alignRight">@Model.ManureType.DryMatter</td>
+                        <td class="govuk-table__cell alignRight">
+                            @string.Format(Resource.lblValueKg, Model.ManureType.DryMatter) </td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblTotalNitrogen</td>
-                        <td class="govuk-table__cell alignRight">@Model.ManureType.TotalN</td>
+                        <td class="govuk-table__cell alignRight">@string.Format(Resource.lblValueKg, Model.ManureType.TotalN)</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblAmmonium</td>
-                        <td class="govuk-table__cell alignRight">@Model.ManureType.NH4N</td>
+                        <td class="govuk-table__cell alignRight">@string.Format(Resource.lblValueKg, Model.ManureType.NH4N)</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblUricAcid</td>
-                        <td class="govuk-table__cell alignRight">@Model.ManureType.Uric</td>
+                        <td class="govuk-table__cell alignRight">@string.Format(Resource.lblValueKg, Model.ManureType.Uric)</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblNitrate</td>
-                        <td class="govuk-table__cell alignRight">@Model.ManureType.NO3N</td>
+                        <td class="govuk-table__cell alignRight">@string.Format(Resource.lblValueKg, Model.ManureType.NO3N)</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblTotalPhosphate</td>
-                        <td class="govuk-table__cell alignRight">@Model.ManureType.P2O5</td>
+                        <td class="govuk-table__cell alignRight">@string.Format(Resource.lblValueKg, Model.ManureType.P2O5)</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblTotalPotassium</td>
-                        <td class="govuk-table__cell alignRight">@Model.ManureType.K2O</td>
+                        <td class="govuk-table__cell alignRight">@string.Format(Resource.lblValueKg, Model.ManureType.K2O)</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblTotalSulphur</td>
-                        <td class="govuk-table__cell alignRight">@Model.ManureType.SO3</td>
+                        <td class="govuk-table__cell alignRight">@string.Format(Resource.lblValueKg, Model.ManureType.SO3)</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblTotalMagnesiumOxide</td>
-                        <td class="govuk-table__cell alignRight">@Model.ManureType.MgO</td>
+                        <td class="govuk-table__cell alignRight">@string.Format(Resource.lblValueKg, Model.ManureType.MgO)</td>
                     </tr>
                 </tbody>
             </table>
@@ -112,13 +123,13 @@
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-item value="@DefaultNutrientValues">@Resource.lblYes</govuk-radios-item>
-                    <govuk-radios-item value="@NotDefaultNutrientValues">@Resource.lblIwantToEnterARecentManure</govuk-radios-item>
+                    <govuk-radios-item value="@NotDefaultNutrientValues" disabled="true">@Resource.lblIwantToEnterARecentManure</govuk-radios-item>
                 </govuk-radios-fieldset>
             </govuk-radios>
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
-            <p class="govuk-body cancel-link"><a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
+            <p class="govuk-body cancel-link"><a asp-action="CreateManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
         </form>
     </div>
 </div>
