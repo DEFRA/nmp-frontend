@@ -49,5 +49,6 @@ namespace NMP.Portal.Helpers
         public const string FetchManureTypeByManureTypeIdAsyncAPI = "manure-types/{0}";
 
         public const string FetchApplicationMethodsByApplicableForAsyncAPI = "application-method/{0}";
+        public const string FetchIncorporationMethodsByApplicationIdAsyncAPI = "incorporation-methods/{0}";
     }
 }

@@ -26,6 +26,8 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Quantity"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationRate"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationMethod"></govuk-input>
+
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -60,8 +62,11 @@
                         
                         <govuk-date-input-hint>
                             <p>@Resource.MsgManureApplyingDateDontHaveExactDate <br> @Resource.lblSampleDate</p>
-                            <p>@Resource.MsgManureApplyingDate1OctToJan</p>
-
+                            @if (ViewBag.HighReadilyAvailableNitrogen != null && ViewBag.HighReadilyAvailableNitrogen==true)
+                            {
+                                <p>@Resource.MsgManureApplyingDate1OctToJan</p>
+                            }
+                            
                         </govuk-date-input-hint>
                         
                     </govuk-date-input-fieldset>

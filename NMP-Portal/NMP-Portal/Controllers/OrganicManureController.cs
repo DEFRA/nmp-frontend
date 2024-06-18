@@ -524,7 +524,17 @@ namespace NMP.Portal.Controllers
             }
             int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
             (List<ManureType> manureTypeList, Error error) = await _organicManureService.FetchManureTypeList(model.ManureGroupId.Value, countryId);
-            model.ManureTypeName= (error == null && manureTypeList.Count > 0) ? manureTypeList.FirstOrDefault(x => x.Id==model.ManureTypeId)?.Name:string.Empty;
+
+            if (error == null && manureTypeList.Count > 0)
+            {
+                var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
+                model.ManureTypeName = manureType.Name;
+                ViewBag.HighReadilyAvailableNitrogen = manureType.HighReadilyAvailableNitrogen;
+            }
+            else
+            {
+                model.ManureTypeName = string.Empty;
+            }
 
             (List<CommonResponse> manureGroupList, Error error1) = await _organicManureService.FetchManureGroupList();
             model.ManureGroupName=(error1 == null && manureGroupList.Count > 0) ? manureGroupList.FirstOrDefault(x => x.Id == model.ManureGroupId)?.Name : string.Empty;
@@ -590,6 +600,7 @@ namespace NMP.Portal.Controllers
             if(applicationMethodList.Count==1)
             {
                 model.ApplicationMethod = applicationMethodList[0].ID;
+                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
                 return RedirectToAction("DefaultNutrientValues");
             }
             return View(model);
@@ -722,7 +733,8 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("AreaQuantity");
             }
-            return RedirectToAction("ApplicationRateMethod");
+            
+            return RedirectToAction("IncorporationMethod");
         }
 
        
@@ -761,8 +773,8 @@ namespace NMP.Portal.Controllers
             }
 
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
-            
-            return RedirectToAction("ManualApplicationRate");
+
+            return RedirectToAction("IncorporationMethod");
         }
 
         [HttpGet]
@@ -797,7 +809,66 @@ namespace NMP.Portal.Controllers
             model.ApplicationRate = model.Quantity / model.Area;
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
 
-            return RedirectToAction("AreaQuantity");
+            return RedirectToAction("IncorporationMethod");
+        }
+        [HttpGet]
+        public async Task<IActionResult> IncorporationMethod()
+        {
+            OrganicManureViewModel? model = new OrganicManureViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+            }
+
+            //int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
+            //(List<ManureType> manureTypeList, Error error) = await _organicManureService.FetchManureTypeList(model.ManureGroupId.Value, countryId);
+            //bool isLiquid = false;
+            //if (error == null && manureTypeList.Count > 0)
+            //{
+            //    var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
+            //    model.ManureTypeName = manureType?.Name;
+            //    isLiquid = manureType.IsLiquid.Value;
+
+            //}
+            //else
+            //{
+            //    model.ManureTypeName = string.Empty;
+            //}
+            //string applicableFor = isLiquid ? "L" : "B";
+            //(List<ApplicationMethodResponse> applicationMethodList, Error error1) = await _organicManureService.FetchApplicationMethodList(applicableFor);
+            //ViewBag.ApplicationMethodList = applicationMethodList;
+            //if (applicationMethodList.Count == 1)
+            //{
+            //    model.ApplicationMethod = applicationMethodList[0].ID;
+            //    return RedirectToAction("DefaultNutrientValues");
+            //}
+
+            (List<IncorporationMethodResponse> incorporationMethods, Error error1) = await _organicManureService.FetchIncorporationMethodsByApplicationId(model.ApplicationMethod??0);
+
+            ViewBag.IncorporationMethod = incorporationMethods;
+            return View(model);
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> IncorporationMethod(OrganicManureViewModel model)
+        {
+            if (model.IncorporationMethod == null)
+            {
+                ModelState.AddModelError("IncorporationMethod", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                (List<IncorporationMethodResponse> incorporationMethods, Error error1) = await _organicManureService.FetchIncorporationMethodsByApplicationId(model.ApplicationMethod ?? 0);
+
+                ViewBag.IncorporationMethod = incorporationMethods;
+                return View("ApplicationMethod", model);
+            }
+
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+
+            return RedirectToAction("DefaultNutrientValues");
+
         }
     }
 }
