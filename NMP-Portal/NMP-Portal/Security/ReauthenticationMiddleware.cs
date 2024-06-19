@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 namespace NMP.Portal.Security
 {
@@ -23,21 +24,17 @@ namespace NMP.Portal.Security
         {
             if (context.User.Identity != null && context.User.Identity.IsAuthenticated)
             {
-                var userIdentofier = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                var scopes = new string[] { "openid", "offline_access" };
-                var tenantId = _configuration["CustomerIdentityTenantId"];
-                // "dcidmtest";// "131a35fb-0422-49c9-8753-15217cec5411";
-                //var refreshToken = context.User.Claims.FirstOrDefault(c => c.Type == "refresh_token")?.Value;
-                var homeAccountId = $"{userIdentofier}.{tenantId}";
+                
+                var scopes = new string[] { "openid", "offline_access", _configuration["CustomerIdentityClientId"].ToString() };
+                
+                var refreshToken = context.User.Claims.FirstOrDefault(c => c.Type == "refresh_token")?.Value; 
+                
                 try
                 {
-                    if (!string.IsNullOrEmpty(userIdentofier))
-                    {
+                    
                         if (!_tokenAcquisitionService.IsTokenValid(context.User, out DateTime expiration))
                         {
-
-
-                            var accessToken = await _tokenAcquisitionService.AcquireTokenSilentAsync(homeAccountId, scopes);
+                            string accessToken = await _tokenAcquisitionService.AcquireTokenByRefreshTokenAsync(refreshToken);
                             if (!string.IsNullOrEmpty(accessToken))
                             {
                                 // Optionally, update the authentication cookie with the new access token
@@ -49,9 +46,11 @@ namespace NMP.Portal.Security
 
                                 var authProperties = new AuthenticationProperties
                                 {
-                                    IsPersistent = true
+                                    IsPersistent = true,
+                                    //RedirectUri = context.Request.Path,
+                                    //AllowRefresh = true
                                 };
-                                await context.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity), authProperties);
+                                await context.SignInAsync(OpenIdConnectDefaults.AuthenticationScheme, new ClaimsPrincipal(identity), authProperties);
                             }
                             else
                             {
@@ -59,11 +58,17 @@ namespace NMP.Portal.Security
                             }
                         }
 
-                    }
+                    
                 }
                 catch (MsalUiRequiredException)
                 {
-                    await context.ChallengeAsync();
+                    var authProperties = new AuthenticationProperties
+                    {
+                        IsPersistent = true,
+                        RedirectUri = context.Request.Path,
+                        AllowRefresh = true
+                    };
+                    await context.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, authProperties);
                 }
                 catch (Exception)
                 {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Identity.Client;
+using System.Net.Http;
 using System.Security.Claims;
 
 namespace NMP.Portal.Security
@@ -7,36 +8,29 @@ namespace NMP.Portal.Security
     {
         private readonly IConfidentialClientApplication _confidentialClientApp;
         private readonly IConfiguration _configuration;
-
-        public TokenAcquisitionService(IConfiguration configuration)
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IConfidentialClientApplication _confidentialClientApplication;
+        public TokenAcquisitionService(IConfiguration configuration, IHttpClientFactory httpClientFactory, IConfidentialClientApplication confidentialClientApplication)
         {
             _configuration = configuration;
+            _httpClientFactory = httpClientFactory;
             var authority = $"{_configuration["CustomerIdentityInstance"]}/{_configuration["CustomerIdentityDomain"]}/{_configuration["CustomerIdentityPolicyId"]}/V2.0/";
 
-            confidentialClientApplication = confidentialClientApplication
-                .Create(_configuration["CustomerIdentityClientId"])
-                .WithClientSecret(_configuration["CustomerIdentityClientSecret"])
-                .WithB2CAuthority(authority)
-                .Build();
-            TokenCacheHelper.EnableSerialization(_confidentialClientApp.AppTokenCache);
+            _confidentialClientApplication = confidentialClientApplication;
+            TokenCacheHelper.EnableSerialization(_confidentialClientApplication.AppTokenCache);
         }
 
-        public async Task<string> AcquireTokenSilentAsync(string userId, IEnumerable<string> scopes)
+        public async Task<string> AcquireTokenByRefreshTokenAsync(string refreshToken)
         {
             try
             {
-                var account = await _confidentialClientApp.GetAccountAsync(userId);
-                //var account = accounts.FirstOrDefault(a => a.HomeAccountId.Identifier == userId);
-                if (account == null)
-                {
-                    // Handle account not found scenario
-                    throw new MsalUiRequiredException("account_not_found", "User account was not found in the token cache.");
-                }
+                HttpClient httpClient = new HttpClient();
+                httpClient.BaseAddress = new Uri("");
+                //var result = await _confidentialClientApplication.AcquireTokenByRefreshToken(new[] { "https://<your-tenant-name>.onmicrosoft.com/<your-api-id>/access_as_user" }, refreshToken)
+                //.ExecuteAsync();
 
-                var result = await _confidentialClientApp.AcquireTokenSilent(scopes, account)
-                                                         .ExecuteAsync();
-
-                return result.AccessToken;
+                //return result.AccessToken;
+                return null;
             }
             catch (MsalUiRequiredException)
             {
