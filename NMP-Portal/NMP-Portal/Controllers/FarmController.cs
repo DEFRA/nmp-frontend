@@ -29,7 +29,7 @@ using Error = NMP.Portal.ServiceResponses.Error;
 
 namespace NMP.Portal.Controllers
 {
-    [AllowAnonymous]
+    [Authorize]
     public class FarmController : Controller
     {
         private readonly ILogger<FarmController> _logger;
