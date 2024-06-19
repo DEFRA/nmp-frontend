@@ -12,9 +12,9 @@
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="RainfallManual" asp-controller="Farm" method="post">
             @Html.AntiForgeryToken()
-            <h1 class="govuk-heading-l">
+        @*     <h1 class="govuk-heading-l">
                 @string.Format(Resource.lblEnterAverageAnualRainfall, Model.Postcode)
-            </h1>
+            </h1> *@
 
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
@@ -32,7 +32,9 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
 
             <div class="govuk-form-group">
-                <govuk-input asp-for=@Model.Rainfall input-class="govuk-input--width-5" pattern="[0-9]" onkeydown="return event.key !== '.'" type="number" spellcheck="false">
+                <govuk-input asp-for=@Model.Rainfall input-class="govuk-input--width-5" pattern="[0-9]*" type="number" step="1" spellcheck="false">                    
+                    <govuk-input-label is-page-heading="true" class="govuk-label--l"> @string.Format(Resource.lblEnterAverageAnualRainfall, Model.Postcode)</govuk-input-label>
+                    <govuk-input-hint>@Resource.lblRainfallValueHint</govuk-input-hint>
                     <govuk-input-suffix>@Resource.lblmm</govuk-input-suffix>
                 </govuk-input>
             </div>

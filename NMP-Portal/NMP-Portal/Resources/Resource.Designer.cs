@@ -2123,6 +2123,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Value should be without decimal places.
+        /// </summary>
+        public static string lblRainfallValueHint {
+            get {
+                return ResourceManager.GetString("lblRainfallValueHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Recommendations.
         /// </summary>
         public static string lblRecommendations {
@@ -3514,6 +3523,15 @@ namespace NMP.Portal.Resources {
         public static string MsgFieldAlreadyExist {
             get {
                 return ResourceManager.GetString("MsgFieldAlreadyExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Average annual rainfall must be a whole number, like 600’..
+        /// </summary>
+        public static string MsgForRainfallManual {
+            get {
+                return ResourceManager.GetString("MsgForRainfallManual", resourceCulture);
             }
         }
         

@@ -1366,4 +1366,10 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="MsgEnterQuantityBeforeContinuing" xml:space="preserve">
     <value>Enter a quantity before continuing</value>
   </data>
+  <data name="lblRainfallValueHint" xml:space="preserve">
+    <value>Value should be without decimal places</value>
+  </data>
+  <data name="MsgForRainfallManual" xml:space="preserve">
+    <value>Average annual rainfall must be a whole number, like 600’.</value>
+  </data>
 </root>
