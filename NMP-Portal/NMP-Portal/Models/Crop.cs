@@ -10,6 +10,7 @@ namespace NMP.Portal.Models
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhichHarvestWouldYouLikeToPlanFor))]
         public int Year { get; set; }
         public int? CropTypeID { get; set; }
+        public int? FieldType { get; set; }
         public string? Variety { get; set; }
         public string? OtherCropName { get; set; }
         public int? CropInfo1 { get; set; }

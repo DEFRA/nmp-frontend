@@ -29,12 +29,12 @@ using Error = NMP.Portal.ServiceResponses.Error;
 
 namespace NMP.Portal.Controllers
 {
-    [Authorize]
+    [AllowAnonymous]
     public class FarmController : Controller
     {
         private readonly ILogger<FarmController> _logger;
         private readonly IDataProtector _dataProtector;
-        private readonly IAddressLookupService _addressLookupService;        
+        private readonly IAddressLookupService _addressLookupService;
         private readonly IUserFarmService _userFarmService;
         private readonly IFarmService _farmService;
         private readonly IFieldService _fieldService;
@@ -44,7 +44,7 @@ namespace NMP.Portal.Controllers
             IFieldService fieldService, ICropService cropService)
         {
             _logger = logger;
-            _dataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");            
+            _dataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
             _addressLookupService = addressLookupService;
             _userFarmService = userFarmService;
             _farmService = farmService;
@@ -60,10 +60,10 @@ namespace NMP.Portal.Controllers
         {
             HttpContext?.Session.Remove("FarmData");
             HttpContext?.Session.Remove("AddressList");
-            
+
             FarmsViewModel model = new FarmsViewModel();
             Error error = null;
-            Guid organisationId = Guid.Parse(HttpContext.User.FindFirst("organisationId").Value);            
+            Guid organisationId = Guid.Parse("AFB875A9-7E16-EF11-9F8A-6045BD8F7280"); //Guid.Parse(HttpContext.User.FindFirst("organisationId").Value);
             (List<Farm> farms, error) = await _farmService.FetchFarmByOrgIdAsync(organisationId);
             if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
             {
@@ -95,7 +95,7 @@ namespace NMP.Portal.Controllers
             FarmViewModel? model = null;
             if (HttpContext.Session.Keys.Contains<string>("FarmData"))
             {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");                
+                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
             return View(model);
         }
@@ -125,11 +125,13 @@ namespace NMP.Portal.Controllers
             {
                 return View(farm);
             }
-
+            FarmViewModel farmView = null;
+            if (HttpContext.Session.Keys.Contains("FarmData"))
+            {
+                farmView = JsonConvert.DeserializeObject<FarmViewModel>(HttpContext.Session.GetString("FarmData"));
+            }
             if (farm.IsCheckAnswer)
             {
-                FarmViewModel farmView = JsonConvert.DeserializeObject<FarmViewModel>(HttpContext.Session.GetString("FarmData"));
-
                 var updatedFarm = JsonConvert.SerializeObject(farm);
                 HttpContext?.Session.SetString("FarmData", updatedFarm);
 
@@ -141,9 +143,19 @@ namespace NMP.Portal.Controllers
                 else
                 {
                     farm.IsPostCodeChanged = true;
+                    farm.Rainfall = null;
                     //return RedirectToAction("Address");
                 }
             }
+            if (farmView != null)
+            {
+                if (farmView.Postcode != farm.Postcode)
+                {
+                    farm.Rainfall = null;
+                }
+            }
+
+
             var farmModel = JsonConvert.SerializeObject(farm);
             HttpContext?.Session.SetObjectAsJson("FarmData", farm);
 
@@ -288,6 +300,17 @@ namespace NMP.Portal.Controllers
                 return View("~/Views/Farm/ManualAddress.cshtml", farm);
             }
 
+            FarmViewModel farmView = JsonConvert.DeserializeObject<FarmViewModel>(HttpContext.Session.GetString("FarmData"));
+            if (farmView != null)
+            {
+                var updatedFarm = JsonConvert.SerializeObject(farm);
+                HttpContext?.Session.SetString("FarmData", updatedFarm);
+
+                if (farmView.Postcode != farm.Postcode)
+                {
+                    farm.Rainfall = null;
+                }
+            }
             farm.FullAddress = string.Empty;
             farm.IsManualAddress = true;
 
@@ -309,10 +332,21 @@ namespace NMP.Portal.Controllers
             }
             if (model.Rainfall == 0 || model.Rainfall == null)
             {
-                string[] postcode = model.Postcode.Split(' ');
-                string firstHalfPostcode = postcode[0];
+                string firstHalfPostcode = string.Empty;
+                if (!model.Postcode.Contains(" "))
+                {
+                    firstHalfPostcode = model.Postcode.Substring(0, model.Postcode.Length - 3);
+                }
+                else
+                {
+                    string[] postcode = model.Postcode.Split(' ');
+                    firstHalfPostcode = postcode[0];
+                }
                 var rainfall = await _farmService.FetchRainfallAverageAsync(firstHalfPostcode);
-                model.Rainfall = rainfall;
+                if (rainfall != null)
+                {
+                    model.Rainfall = (int)Math.Round(rainfall);
+                }
                 HttpContext.Session.SetObjectAsJson("FarmData", model);
             }
 
@@ -355,7 +389,17 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult RainfallManual(FarmViewModel farm)
         {
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("Rainfall"))
+            {
+                var RainfallError = ModelState["Rainfall"].Errors.Count > 0 ?
+                                ModelState["Rainfall"].Errors[0].ErrorMessage.ToString() : null;
 
+                if (RainfallError != null && RainfallError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["Rainfall"].RawValue, Resource.lblRainfall)))
+                {
+                    ModelState["Rainfall"].Errors.Clear();
+                    ModelState["Rainfall"].Errors.Add(Resource.MsgEnterTheAverageAnnualRainfall);
+                }
+            }
             //we need to call api for rainfall on the basis of postcode
             if (farm.Rainfall == null)
             {
@@ -602,9 +646,9 @@ namespace NMP.Portal.Controllers
                     }
                     List<PlanSummaryResponse> planSummaryResponse = await _cropService.FetchPlanSummaryByFarmId(Convert.ToInt32(farmId), 0);
                     planSummaryResponse.RemoveAll(x => x.Year == 0);
-                    if (planSummaryResponse.Count()>0)
+                    if (planSummaryResponse.Count() > 0)
                     {
-                        farmData.IsPlanExist= true;
+                        farmData.IsPlanExist = true;
                     }
                 }
             }
