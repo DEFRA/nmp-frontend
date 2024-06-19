@@ -13,7 +13,7 @@ namespace NMP.Portal.Security
             _configuration = configuration;
             var authority = $"{_configuration["CustomerIdentityInstance"]}/{_configuration["CustomerIdentityDomain"]}/{_configuration["CustomerIdentityPolicyId"]}/V2.0/";
 
-            _confidentialClientApp = ConfidentialClientApplicationBuilder
+            confidentialClientApplication = confidentialClientApplication
                 .Create(_configuration["CustomerIdentityClientId"])
                 .WithClientSecret(_configuration["CustomerIdentityClientSecret"])
                 .WithB2CAuthority(authority)
