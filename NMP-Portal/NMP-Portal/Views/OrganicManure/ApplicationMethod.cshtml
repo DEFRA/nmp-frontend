@@ -34,7 +34,7 @@
                 <govuk-radios-fieldset>
                     
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @Resource.lblWhatIsTheApplicationMethod
+                        @string.Format(Resource.lblWhatIsTheApplicationMethod,Model.ManureTypeName)
                     </govuk-radios-fieldset-legend>
                     @foreach (var applicationMethod in ViewBag.ApplicationMethodList)
                     {
