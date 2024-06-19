@@ -1,0 +1,93 @@
+﻿@using NMP.Portal.Resources
+@model NMP.Portal.ViewModels.OrganicManureViewModel
+@{
+    ViewData["Title"] = Resource.lblManureDefaultsValue;
+}
+@section BeforeContent {
+    <govuk-back-link asp-action="DefaultNutrientValues" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+}
+
+<form asp-action="EnterDefaultNutrientValues" asp-controller="OrganicManure" method="post">
+    @Html.AntiForgeryToken()
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroup"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationDate"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDefaultNutrientValues" value="@Model.IsDefaultNutrientValues"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationRateMethod"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Area"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Quantity"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationRate"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupId"></govuk-input>
+            @if (Model.FieldList != null && Model.FieldList.Count > 0)
+            {
+                @for (int i = 0; i < Model.FieldList.Count; i++)
+                {
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldList[i]" value="@Model.FieldList[i]"></govuk-input>
+                }
+            }
+            <div class="govuk-form-group">
+                <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                    <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblAddAnalysisValues, Model.ManureTypeName)</h1>
+                </legand>
+                @if (Model.OrganicManures != null && Model.OrganicManures.Count > 0)
+                {
+                    @for (int i = 0; i < 1; i++)
+                    {
+                        <govuk-input asp-for=@Model.OrganicManures[i].DryMatterPercent type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                            <govuk-input-label is-page-heading="true">@Resource.lblDryMatter</govuk-input-label>
+                            <govuk-input-suffix>@Resource.lblPerTonne</govuk-input-suffix>
+                        </govuk-input>
+                        <govuk-input asp-for=@Model.OrganicManures[i].N type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                            <govuk-input-label is-page-heading="true">@Resource.lblTotalNitrogen</govuk-input-label>
+                            <govuk-input-suffix>@Resource.lblKgPerTonne</govuk-input-suffix>
+                        </govuk-input>
+                        <govuk-input asp-for=@Model.OrganicManures[i].NH4N type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                            <govuk-input-label is-page-heading="true">@Resource.lblAmmonium</govuk-input-label>
+                            <govuk-input-suffix>@Resource.lblKgPerTonne</govuk-input-suffix>
+                        </govuk-input>
+                        <govuk-input asp-for=@Model.OrganicManures[i].UricAcid type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                            <govuk-input-label is-page-heading="true">@Resource.lblUricAcid</govuk-input-label>
+                            <govuk-input-suffix>@Resource.lblKgPerTonne</govuk-input-suffix>
+                        </govuk-input>
+                        <govuk-input asp-for=@Model.OrganicManures[i].NO3N type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                            <govuk-input-label is-page-heading="true">@Resource.lblNitrate</govuk-input-label>
+                            <govuk-input-suffix>@Resource.lblKgPerTonne</govuk-input-suffix>
+                        </govuk-input>
+                        <govuk-input asp-for=@Model.OrganicManures[i].P2O5 type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                            <govuk-input-label is-page-heading="true">@Resource.lblTotalPhosphate</govuk-input-label>
+                            <govuk-input-suffix>@Resource.lblKgPerTonne</govuk-input-suffix>
+                        </govuk-input>
+                        <govuk-input asp-for=@Model.OrganicManures[i].K2O type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                            <govuk-input-label is-page-heading="true">@Resource.lblTotalPotassium</govuk-input-label>
+                            <govuk-input-suffix>@Resource.lblKgPerTonne</govuk-input-suffix>
+                        </govuk-input>
+                        <govuk-input asp-for=@Model.OrganicManures[i].SO3 type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                            <govuk-input-label is-page-heading="true">@Resource.lblTotalSulphur</govuk-input-label>
+                            <govuk-input-suffix>@Resource.lblKgPerTonne</govuk-input-suffix>
+                        </govuk-input>
+                        <govuk-input asp-for=@Model.OrganicManures[i].MgO type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                            <govuk-input-label is-page-heading="true">@Resource.lblTotalMagnesiumOxide</govuk-input-label>
+                            <govuk-input-suffix>@Resource.lblKgPerTonne</govuk-input-suffix>
+                        </govuk-input>
+                    }
+                }
+            </div>
+            <govuk-button type="submit" class="margin-bottom-forty" asp-action="ApplicationMethod">
+                @Resource.lblContinue
+            </govuk-button>
+            <p class="govuk-body cancel-link"><a asp-action="CreateManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
+
+        </div>
+
+    </div>
+</form>

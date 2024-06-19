@@ -97,6 +97,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add analysis values for {0}..
+        /// </summary>
+        public static string lblAddAnalysisValues {
+            get {
+                return ResourceManager.GetString("lblAddAnalysisValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add a new farm.
         /// </summary>
         public static string lblAddANewFarm {
@@ -934,6 +943,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a valid {0} value.
+        /// </summary>
+        public static string lblEnterValidValue {
+            get {
+                return ResourceManager.GetString("lblEnterValidValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error:.
         /// </summary>
         public static string lblError {
@@ -1457,6 +1475,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Kg per tonne.
+        /// </summary>
+        public static string lblKgPerTonne {
+            get {
+                return ResourceManager.GetString("lblKgPerTonne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Land Parcel ID (optional).
         /// </summary>
         public static string lblLandParcelID {
@@ -1615,6 +1642,15 @@ namespace NMP.Portal.Resources {
         public static string lblManureApplyingDate {
             get {
                 return ResourceManager.GetString("lblManureApplyingDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ManureDefaultsValue.
+        /// </summary>
+        public static string lblManureDefaultsValue {
+            get {
+                return ResourceManager.GetString("lblManureDefaultsValue", resourceCulture);
             }
         }
         
@@ -1912,6 +1948,15 @@ namespace NMP.Portal.Resources {
         public static string lblPerHectare {
             get {
                 return ResourceManager.GetString("lblPerHectare", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to % per tonne.
+        /// </summary>
+        public static string lblPerTonne {
+            get {
+                return ResourceManager.GetString("lblPerTonne", resourceCulture);
             }
         }
         
