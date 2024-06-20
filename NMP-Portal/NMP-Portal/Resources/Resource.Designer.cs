@@ -3311,6 +3311,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Defra Customer Identity Service is down, please re-visit after sometime..
+        /// </summary>
+        public static string MsgDefraIdentityServiceDown {
+            get {
+                return ResourceManager.GetString("MsgDefraIdentityServiceDown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a county.
         /// </summary>
         public static string MsgEnterACounty {

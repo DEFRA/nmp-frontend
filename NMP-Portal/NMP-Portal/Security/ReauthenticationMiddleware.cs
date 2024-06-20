@@ -4,6 +4,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using System.Security.Principal;
 
 namespace NMP.Portal.Security
 {
@@ -24,41 +25,40 @@ namespace NMP.Portal.Security
         {
             if (context.User.Identity != null && context.User.Identity.IsAuthenticated)
             {
-                
-                var scopes = new string[] { "openid", "offline_access", _configuration["CustomerIdentityClientId"].ToString() };
-                
-                var refreshToken = context.User.Claims.FirstOrDefault(c => c.Type == "refresh_token")?.Value; 
-                
                 try
                 {
-                    
-                        if (!_tokenAcquisitionService.IsTokenValid(context.User, out DateTime expiration))
+                    if (!_tokenAcquisitionService.IsTokenValid(context.User, out DateTime expiration))
+                    {
+                        var identity = context.User.Identity as ClaimsIdentity;
+                        var refreshToken = identity?.FindFirst("refresh_token")?.Value;
+                        string issuer = identity?.FindFirst("issuer")?.Value;
+                        OAuthTokenResponse oauthTokenResponse = await _tokenAcquisitionService.AcquireTokenByRefreshTokenAsync(refreshToken, issuer);
+                        if (oauthTokenResponse != null)
                         {
-                            string accessToken = await _tokenAcquisitionService.AcquireTokenByRefreshTokenAsync(refreshToken);
-                            if (!string.IsNullOrEmpty(accessToken))
-                            {
-                                // Optionally, update the authentication cookie with the new access token
-                                var identity = context.User.Identity as ClaimsIdentity;
-                                identity?.RemoveClaim(identity.FindFirst("access_token"));
-                                identity?.AddClaim(new Claim("access_token", accessToken));
-                                identity?.RemoveClaim(identity.FindFirst("access_token_expiry"));
-                                identity?.AddClaim(new Claim("access_token_expiry", DateTimeOffset.UtcNow.AddMinutes(60).ToUnixTimeSeconds().ToString()));
+                            // Optionally, update the authentication cookie with the new access token                            
+                            identity?.RemoveClaim(identity.FindFirst("access_token"));
+                            identity?.AddClaim(new Claim("access_token", oauthTokenResponse.AccessToken));
+                            identity?.RemoveClaim(identity.FindFirst("refresh_token"));
+                            identity?.AddClaim(new Claim("refresh_token", oauthTokenResponse.RefeshToken));
+                            identity?.RemoveClaim(identity.FindFirst("access_token_expiry"));
+                            //identity?.AddClaim(new Claim("access_token_expiry", DateTimeOffset.UtcNow.AddMilliseconds(60).ToUnixTimeSeconds().ToString()));
+                            identity?.AddClaim(new Claim("access_token_expiry", oauthTokenResponse.ExpiresOn));
 
-                                var authProperties = new AuthenticationProperties
-                                {
-                                    IsPersistent = true,
-                                    //RedirectUri = context.Request.Path,
-                                    //AllowRefresh = true
-                                };
-                                await context.SignInAsync(OpenIdConnectDefaults.AuthenticationScheme, new ClaimsPrincipal(identity), authProperties);
-                            }
-                            else
-                            {
-                                throw new MsalUiRequiredException("401", "Token expired, need to re login");
-                            }
+                            //var authProperties = new AuthenticationProperties
+                            //{
+                            //    IsPersistent = true,
+                            //    RedirectUri = context.Request.Path,
+                            //    AllowRefresh = true
+                            //};
+                            //await context.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity), authProperties);
                         }
+                        else
+                        {
+                            throw new MsalUiRequiredException("401", "Token expired, need to re login");
+                        }
+                    }
 
-                    
+
                 }
                 catch (MsalUiRequiredException)
                 {
@@ -68,7 +68,7 @@ namespace NMP.Portal.Security
                         RedirectUri = context.Request.Path,
                         AllowRefresh = true
                     };
-                    await context.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, authProperties);
+                    await context.ChallengeAsync(CookieAuthenticationDefaults.AuthenticationScheme, authProperties);
                 }
                 catch (Exception)
                 {

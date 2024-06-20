@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Abstractions;
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
@@ -14,11 +15,11 @@ namespace NMP.Portal.Controllers
     
     public class ErrorController : Controller
     {
-        //private readonly TelemetryClient _telemetryClient;
+        //private readonly ILogger<ErrorController> _logger;
 
-        //public ErrorController(TelemetryClient telemetryClient)
+        //public ErrorController(ILogger<ErrorController> logger)
         //{
-        //    _telemetryClient = telemetryClient;
+        //    _logger = logger;
         //}
 
         [Route("Error/{statusCode}")]        
@@ -91,6 +92,7 @@ namespace NMP.Portal.Controllers
             if (HttpContext.Session.Keys.Contains("Error"))
             {
                 error = HttpContext.Session.GetObjectFromJson<ErrorViewModel>("Error");
+                //_logger.LogError(error?.Message);
             }
 
             return View("Error", error);

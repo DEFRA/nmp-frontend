@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using NMP.Portal.Models;
+using NMP.Portal.Resources;
 using System.Diagnostics;
 using System.Net.Http;
 
@@ -27,8 +28,6 @@ namespace NMP.Portal.Controllers
             HttpClient client = _httpClientFactory.CreateClient("DefraIdentityConfiguration");
             var uri = new Uri($"{_configuration["CustomerIdentityInstance"]}{_configuration["CustomerIdentityDomain"]}/{_configuration["CustomerIdentityPolicyId"]}/v2.0/.well-known/openid-configuration");
             var response = await client.GetAsync(uri);
-            //var json = await response.Content.ReadAsStringAsync();            
-            //var tokenReponse = JsonConvert.DeserializeObject<OAuthTokenResponse>(json);
             if(response != null)
             {
                 ViewBag.IsDefraCustomerIdentifyConfigurationWorking = response.IsSuccessStatusCode;
@@ -36,7 +35,7 @@ namespace NMP.Portal.Controllers
             else
             {
                 ViewBag.IsDefraCustomerIdentifyConfigurationWorking = false;
-                ViewBag.Error = "Defra Customer Identity service is down, please re-visit after sometime.";
+                ViewBag.Error = Resource.MsgDefraIdentityServiceDown;
             }
             
 
