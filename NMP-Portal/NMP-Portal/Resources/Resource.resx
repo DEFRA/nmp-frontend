@@ -1366,4 +1366,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="MsgEnterQuantityBeforeContinuing" xml:space="preserve">
     <value>Enter a quantity before continuing</value>
   </data>
+  <data name="MsgDefraIdentityServiceDown" xml:space="preserve">
+    <value>Defra Customer Identity Service is down, please re-visit after sometime.</value>
+  </data>
 </root>

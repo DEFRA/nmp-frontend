@@ -118,15 +118,6 @@ builder.Services.AddHttpClient("DefraIdentityConfiguration", httpClient =>
     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 });
 
-builder.Services.AddSingleton<IConfidentialClientApplication>(sp =>
-{
-    //var azureAdB2COptions = builder.Configuration.GetSection("AzureAdB2C").Get<AzureAdB2COptions>();
-    return ConfidentialClientApplicationBuilder.Create(builder.Configuration.GetSection("CustomerIdentityClientId").Value)
-        .WithClientSecret(builder.Configuration.GetSection("CustomerIdentityClientSecret").Value)
-        .WithAuthority($"{builder.Configuration.GetSection("CustomerIdentityInstance").Value}/{builder.Configuration.GetSection("CustomerIdentityTenantId").Value}/{builder.Configuration.GetSection("CustomerIdentityPolicyId").Value}")
-        .Build();
-});
-
 builder.Services.AddSingleton<IAddressLookupService, AddressLookupService>();
 builder.Services.AddSingleton<IUserFarmService, UserFarmService>();
 builder.Services.AddSingleton<IFarmService, FarmService>();

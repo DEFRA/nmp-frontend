@@ -25,6 +25,7 @@ namespace NMP.Portal.Security
     public static class CustomerIdentity
     {
         private static IConfiguration? configuration = null;
+        
         public static IServiceCollection AddDefraCustomerIdentity(this IServiceCollection services, WebApplicationBuilder builder)
         {
             configuration = builder.Configuration;
@@ -189,6 +190,9 @@ namespace NMP.Portal.Security
                             // Add the claims to the ClaimsIdentity
                             switch (claim.Type)
                             {
+                                case "iss":
+                                    identity?.AddClaim(new Claim("issuer", claim.Value));
+                                    break;
                                 case "exp":
                                     identity?.AddClaim(new Claim("access_token_expiry", claim.Value));
                                     break;
@@ -323,13 +327,23 @@ namespace NMP.Portal.Security
                 }
 
             }
-            catch (Exception ex)
+            catch(HttpRequestException ex)
             {
                 var errorViewModel = new ErrorViewModel();
+                //errorViewModel.Code= (int)ex.StatusCode;
+                errorViewModel.Message = ex.StatusCode + " : " + ex.Message;                
+                errorViewModel.Stack = ex.StackTrace ?? string.Empty;
+                context.HttpContext.Session.SetObjectAsJson("Error", errorViewModel);
+                context.Response.Redirect("/Error");
+                context.HandleResponse(); // Suppress the exception 
+            }
+            catch (Exception ex)
+            {
+                var errorViewModel = new ErrorViewModel();                
                 errorViewModel.Message = ex.Message;
                 errorViewModel.Stack = ex.StackTrace ?? string.Empty;
                 context.HttpContext.Session.SetObjectAsJson("Error", errorViewModel);
-                context.Response.Redirect("/Error/index");
+                context.Response.Redirect("/Error");
                 context.HandleResponse(); // Suppress the exception                    
             }
             // Don't remove this line
