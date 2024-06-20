@@ -4,10 +4,11 @@
     ViewData["Title"] = Resource.lblApplicationRate;
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="ManureApplyingDate" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="IncorporationMethod" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+
 }
 
-<form asp-action="ApplicationMethod" asp-controller="OrganicManure" method="post">
+<form asp-action="IncorporationMethod" asp-controller="OrganicManure" method="post">
     @Html.AntiForgeryToken()
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
@@ -21,14 +22,14 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationDate"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDefaultNutrientValues" value="@Model.IsDefaultNutrientValues"></govuk-input>         
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDefaultNutrientValues" value="@Model.IsDefaultNutrientValues"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationRateMethod"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Area"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Quantity"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationRate"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupId"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationMethod"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationMethod"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationMethodCount"></govuk-input>
 
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
@@ -56,21 +57,11 @@
                 }
             }
 
-            <govuk-radios asp-for="@Model.ApplicationMethod">
-                <govuk-radios-fieldset>
-                    
-                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblWhatIsTheApplicationMethod,Model.ManureTypeName)
-                    </govuk-radios-fieldset-legend>
-                    @foreach (var applicationMethod in ViewBag.ApplicationMethodList)
-                    {
-                        <govuk-radios-item value="@applicationMethod.ID">@applicationMethod.Name</govuk-radios-item>
-                    }
-                    
-                    
-                </govuk-radios-fieldset>
-            </govuk-radios>
-            <govuk-button type="submit" class="margin-bottom-forty" asp-action="ApplicationMethod">
+            <h1>How long is the gap between application and incorporation for your ORGANIC_MATERIAL_TYPE ?</h1>
+            <br />
+            <h1>work in progress</h1>
+
+            <govuk-button type="submit" class="margin-bottom-forty" asp-action="IncorporationMethod">
                 @Resource.lblContinue
             </govuk-button>
             <p class="govuk-body cancel-link"><a asp-action="CreateManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>

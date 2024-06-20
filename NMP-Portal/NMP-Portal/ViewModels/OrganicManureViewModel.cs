@@ -39,5 +39,7 @@ namespace NMP.Portal.ViewModels
         public decimal? Area { get; set; }
         public decimal? Quantity { get; set; }
         public int? ApplicationRateArable { get; set; }
+        public int? IncorporationMethod { get; set; }
+        public int? ApplicationMethodCount { get; set; }
     }
 }

@@ -12,12 +12,12 @@ namespace NMP.Portal.Controllers
     [AllowAnonymous]
     public class AccountController : Controller
     {
-        public async Task<IActionResult> LoginAsync(string returnUrl = "")
-        {
-            return Redirect(returnUrl?? "/");
-        }
+        //public IActionResult afterlogin(string returnUrl = "")
+        //{
+        //    return Redirect(returnUrl ?? "/");
+        //}
 
-        public async Task<IActionResult> logout()
+        public async Task<IActionResult>logout()
         {            
             base.SignOut();
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);            

@@ -1366,6 +1366,27 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="MsgEnterQuantityBeforeContinuing" xml:space="preserve">
     <value>Enter a quantity before continuing</value>
   </data>
+  <data name="lblDiscs" xml:space="preserve">
+    <value>Discs</value>
+  </data>
+  <data name="lblNotIncorporated" xml:space="preserve">
+    <value>Not incorporated</value>
+  </data>
+  <data name="lblPlough" xml:space="preserve">
+    <value>Plough</value>
+  </data>
+  <data name="lblRotaryCultivator" xml:space="preserve">
+    <value>Rotary cultivator</value>
+  </data>
+  <data name="lblTineCultivator" xml:space="preserve">
+    <value>Tine cultivator</value>
+  </data>
+  <data name="lblWhatIsTheIncorporationMethod" xml:space="preserve">
+    <value>What is the incorporation method for your {0}?</value>
+  </data>
+  <data name="MsgDefraIdentityServiceDown" xml:space="preserve">
+    <value>Defra Customer Identity Service is down, please re-visit after sometime.</value>
+  </data>
   <data name="lblAddAnalysisValues" xml:space="preserve">
     <value>Add analysis values for {0}.</value>
   </data>
