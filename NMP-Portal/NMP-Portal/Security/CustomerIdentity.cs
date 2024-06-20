@@ -294,6 +294,7 @@ namespace NMP.Portal.Security
                         if (configuration != null)
                         {
                             using HttpClient httpClient = new HttpClient();
+                            httpClient.Timeout = TimeSpan.FromMinutes(5);
                             httpClient.BaseAddress = new Uri(configuration["NMPApiUrl"] ?? "http://localhost:3000/");
                             httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
                             var response = await httpClient.PostAsync(APIURLHelper.AddOrUpdateUserAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
