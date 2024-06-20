@@ -649,22 +649,8 @@ namespace NMP.Portal.Controllers
                 return View(model);
             }
             if (!model.IsDefaultNutrientValues.Value)
-            {
-                for(int i=0;i<model.OrganicManures.Count;i++)
-                {
-                    model.OrganicManures[i].DryMatterPercent = null;
-                    model.OrganicManures[i].N = null;
-                    model.OrganicManures[i].NH4N = null;
-                    model.OrganicManures[i].NO3N = null;
-                    model.OrganicManures[i].UricAcid = null;
-                    model.OrganicManures[i].P2O5 = null;
-                    model.OrganicManures[i].SO3 = null;
-                    model.OrganicManures[i].MgO = null;
-                    model.OrganicManures[i].K2O = null;
-                }
-               
-                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
-                return RedirectToAction("EnterDefaultNutrientValues");
+            {             
+                return RedirectToAction("ManualNutrientValues");
             }
 
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
@@ -674,7 +660,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> EnterDefaultNutrientValues()
+        public async Task<IActionResult> ManualNutrientValues()
         {
             OrganicManureViewModel model = new OrganicManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
@@ -687,43 +673,43 @@ namespace NMP.Portal.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EnterDefaultNutrientValues(OrganicManureViewModel model)
+        public async Task<IActionResult> ManualNutrientValues(OrganicManureViewModel model)
         {
-            if (model.OrganicManures[0].DryMatterPercent == null)
+            if (model.ManureType.DryMatter == null)
             {
-                ModelState.AddModelError("OrganicManures[0].DryMatterPercent", string.Format(Resource.lblEnterValidValue, Resource.lblDryMatter));
+                ModelState.AddModelError("ManureType.DryMatter", string.Format(Resource.lblEnterValidValue, Resource.lblDryMatter));
             }
-            if (model.OrganicManures[0].N == null)
+            if (model.ManureType.TotalN == null)
             {
-                ModelState.AddModelError("OrganicManures[0].N", string.Format(Resource.lblEnterValidValue, Resource.lblTotalNitrogen));
+                ModelState.AddModelError("ManureType.TotalN", string.Format(Resource.lblEnterValidValue, Resource.lblTotalNitrogen));
             }
-            if (model.OrganicManures[0].NH4N == null)
+            if (model.ManureType.NH4N == null)
             {
-                ModelState.AddModelError("OrganicManures[0].NH4N", string.Format(Resource.lblEnterValidValue, Resource.lblAmmonium));
+                ModelState.AddModelError("ManureType.NH4N", string.Format(Resource.lblEnterValidValue, Resource.lblAmmonium));
             }
-            if (model.OrganicManures[0].UricAcid == null)
+            if (model.ManureType.Uric == null)
             {
-                ModelState.AddModelError("OrganicManures[0].UricAcid", string.Format(Resource.lblEnterValidValue, Resource.lblUricAcid));
+                ModelState.AddModelError("ManureType.Uric", string.Format(Resource.lblEnterValidValue, Resource.lblUricAcid));
             }
-            if (model.OrganicManures[0].NO3N == null)
+            if (model.ManureType.NO3N == null)
             {
-                ModelState.AddModelError("OrganicManures[0].NO3N", string.Format(Resource.lblEnterValidValue, Resource.lblNitrogen));
+                ModelState.AddModelError("ManureType.NO3N", string.Format(Resource.lblEnterValidValue, Resource.lblNitrogen));
             }
-            if (model.OrganicManures[0].P2O5 == null)
+            if (model.ManureType.P2O5 == null)
             {
-                ModelState.AddModelError("OrganicManures[0].P2O5", string.Format(Resource.lblEnterValidValue, Resource.lblTotalPhosphate));
+                ModelState.AddModelError("ManureType.P2O5", string.Format(Resource.lblEnterValidValue, Resource.lblTotalPhosphate));
             }
-            if (model.OrganicManures[0].K2O == null)
+            if (model.ManureType.K2O == null)
             {
-                ModelState.AddModelError("OrganicManures[0].K2O", string.Format(Resource.lblEnterValidValue, Resource.lblTotalPotassium));
+                ModelState.AddModelError("ManureType.K2O", string.Format(Resource.lblEnterValidValue, Resource.lblTotalPotassium));
             }
-            if (model.OrganicManures[0].SO3 == null)
+            if (model.ManureType.SO3 == null)
             {
-                ModelState.AddModelError("OrganicManures[0].SO3", string.Format(Resource.lblEnterValidValue, Resource.lblSulphurSO3));
+                ModelState.AddModelError("ManureType.SO3", string.Format(Resource.lblEnterValidValue, Resource.lblSulphurSO3));
             }
-            if (model.OrganicManures[0].MgO == null)
+            if (model.ManureType.MgO == null)
             {
-                ModelState.AddModelError("OrganicManures[0].MgO", string.Format(Resource.lblEnterValidValue, Resource.lblTotalMagnesiumOxide));
+                ModelState.AddModelError("ManureType.MgO", string.Format(Resource.lblEnterValidValue, Resource.lblTotalMagnesiumOxide));
             }
             if (!ModelState.IsValid)
             {
