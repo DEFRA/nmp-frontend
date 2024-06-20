@@ -63,7 +63,7 @@ namespace NMP.Portal.Controllers
 
             FarmsViewModel model = new FarmsViewModel();
             Error error = null;
-            Guid organisationId = Guid.Parse("AFB875A9-7E16-EF11-9F8A-6045BD8F7280"); //Guid.Parse(HttpContext.User.FindFirst("organisationId").Value);
+            Guid organisationId = Guid.Parse(HttpContext.User.FindFirst("organisationId").Value);
             (List<Farm> farms, error) = await _farmService.FetchFarmByOrgIdAsync(organisationId);
             if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
             {
