@@ -252,7 +252,7 @@ namespace NMP.Portal.Controllers
 
                     if (model.FieldList == null || model.FieldList.Count == 0)
                     {
-                        ModelState.AddModelError("FieldList", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblField.ToLower()));
+                        ModelState.AddModelError("FieldList", Resource.MsgSelectAtLeastOneField);
                     }
                     if (!ModelState.IsValid)
                     {
