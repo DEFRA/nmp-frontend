@@ -336,14 +336,14 @@ namespace NMP.Portal.Services
             return (manureType, error);
         }
 
-        public async Task<(List<ApplicationMethodResponse>, Error)> FetchApplicationMethodList(string applicableFor)
+        public async Task<(List<ApplicationMethodResponse>, Error)> FetchApplicationMethodList(int fieldType,string applicableFor)
         {
             List<ApplicationMethodResponse> applicationMethodList = new List<ApplicationMethodResponse>();
             Error error = null;
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchApplicationMethodsByApplicableForAsyncAPI, applicableFor));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchApplicationMethodsByApplicableForAsyncAPI, fieldType, applicableFor));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
@@ -379,5 +379,50 @@ namespace NMP.Portal.Services
             }
             return (applicationMethodList, error);
         }
+
+        public async Task<(List<IncorporationMethodResponse>, Error)> FetchIncorporationMethodsByApplicationId(int fieldType, string applicableFor, int appId)
+        {
+            List<IncorporationMethodResponse> incorporationMethods = new List<IncorporationMethodResponse>();
+            Error error = null;
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchIncorporationMethodsByApplicationIdAsyncAPI, appId,fieldType,applicableFor));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode)
+                {
+                    if (responseWrapper != null && responseWrapper.Data != null)
+                    {
+                        var methods = responseWrapper.Data.IncorporationMethods.ToObject<List<IncorporationMethodResponse>>();
+                        incorporationMethods.AddRange(methods);
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error = new Error();
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error = new Error();
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (incorporationMethods, error);
+        }
+
     }
 }
