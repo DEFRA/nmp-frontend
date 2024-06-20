@@ -1370,6 +1370,6 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Value should be without decimal places</value>
   </data>
   <data name="MsgForRainfallManual" xml:space="preserve">
-    <value>Average annual rainfall must be a whole number, like 600’.</value>
+    <value>Average annual rainfall must be a whole number, like 600.</value>
   </data>
 </root>

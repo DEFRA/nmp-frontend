@@ -3527,7 +3527,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Average annual rainfall must be a whole number, like 600’..
+        ///   Looks up a localized string similar to Average annual rainfall must be a whole number, like 600..
         /// </summary>
         public static string MsgForRainfallManual {
             get {
