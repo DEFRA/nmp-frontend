@@ -10,8 +10,11 @@ namespace NMP.Portal.ServiceResponses
         [JsonProperty("name")]
         public string? Name { get; set; }
 
-        [JsonProperty("applicableFor")]
-        public string? ApplicableFor { get; set; }
+        [JsonProperty("applicableForGrass")]
+        public string? ApplicableForGrass { get; set; }
+
+        [JsonProperty("applicableForArableAndHorticulture")]
+        public string? ApplicableForArableAndHorticulture { get; set; }
 
     }
 }

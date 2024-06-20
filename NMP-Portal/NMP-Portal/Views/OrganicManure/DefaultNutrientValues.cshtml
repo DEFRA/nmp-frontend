@@ -6,6 +6,7 @@
     ViewData["Title"] = Resource.lblPlansAndRecordsOverview;
     var DefaultNutrientValues = true;
     var NotDefaultNutrientValues = false;
+    var backAction = Model.ApplicationMethodCount > 0 ? "ApplicationMethod" : "ManureApplyingDate";
 
 }
 
@@ -18,7 +19,7 @@
 @* @if (Model != null)
 { *@
 @section BeforeContent {
-    <govuk-back-link asp-action="ManureApplyingDate" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
 
 }
 <div class="govuk-grid-row">
@@ -45,6 +46,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationDate" value="@Model.ApplicationDate"></govuk-input>
 
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationMethod"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationMethodCount"></govuk-input>
             
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {

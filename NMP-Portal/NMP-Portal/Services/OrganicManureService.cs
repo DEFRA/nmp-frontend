@@ -336,14 +336,14 @@ namespace NMP.Portal.Services
             return (manureType, error);
         }
 
-        public async Task<(List<ApplicationMethodResponse>, Error)> FetchApplicationMethodList(string applicableFor)
+        public async Task<(List<ApplicationMethodResponse>, Error)> FetchApplicationMethodList(int fieldType,string applicableFor)
         {
             List<ApplicationMethodResponse> applicationMethodList = new List<ApplicationMethodResponse>();
             Error error = null;
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchApplicationMethodsByApplicableForAsyncAPI, applicableFor));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchApplicationMethodsByApplicableForAsyncAPI, fieldType, applicableFor));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
@@ -380,14 +380,14 @@ namespace NMP.Portal.Services
             return (applicationMethodList, error);
         }
 
-        public async Task<(List<IncorporationMethodResponse>, Error)> FetchIncorporationMethodsByApplicationId(int applicationId)
+        public async Task<(List<IncorporationMethodResponse>, Error)> FetchIncorporationMethodsByApplicationId(int fieldType, string applicableFor, int appId)
         {
             List<IncorporationMethodResponse> incorporationMethods = new List<IncorporationMethodResponse>();
             Error error = null;
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchIncorporationMethodsByApplicationIdAsyncAPI, applicationId));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchIncorporationMethodsByApplicationIdAsyncAPI, appId,fieldType,applicableFor));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
