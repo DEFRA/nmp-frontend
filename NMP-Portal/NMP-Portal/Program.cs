@@ -22,6 +22,8 @@ using Microsoft.Identity.Web;
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
 using Microsoft.Identity.Web.UI;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Identity.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<IISServerOptions>(options =>
@@ -104,7 +106,14 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();  // 
 //builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 builder.Services.AddHttpClient("NMPApi", httpClient =>
 {
-    httpClient.BaseAddress = new Uri(uriString: builder.Configuration.GetSection("NMPApiUrl").Value?? "/");
+    httpClient.BaseAddress = new Uri(uriString: builder.Configuration.GetSection("NMPApiUrl").Value ?? "/");
+    httpClient.Timeout = TimeSpan.FromMinutes(5);
+    httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+});
+
+builder.Services.AddHttpClient("DefraIdentityConfiguration", httpClient =>
+{
+    httpClient.BaseAddress = new Uri(uriString: builder.Configuration.GetSection("CustomerIdentityInstance").Value ?? "/");
     httpClient.Timeout = TimeSpan.FromMinutes(5);
     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 });

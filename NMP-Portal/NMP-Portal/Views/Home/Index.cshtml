@@ -45,7 +45,10 @@
         </div>
         <div class="govuk-body">
             <br />
-            <govuk-button-link asp-action="FarmList" asp-controller="Farm">@Resource.btnStartNow</govuk-button-link>
+            @if (ViewBag.IsDefraCustomerIdentifyConfigurationWorking)
+            {
+                <govuk-button-link asp-action="FarmList" asp-controller="Farm">@Resource.btnStartNow</govuk-button-link>
+            }
         </div>
     </div>
 </div>

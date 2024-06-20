@@ -4,7 +4,10 @@
 }
 
 <h1 class="text-danger">@ViewData["Title"]</h1>
-<h2 class="text-danger">@Model.Code : @Model.Stack</h2>
+<h2 class="text-danger">@Model.Message</h2>
+<p>
+    @Model.Stack
+</p>
 
 @* @if (Model.ShowRequestId)
 {

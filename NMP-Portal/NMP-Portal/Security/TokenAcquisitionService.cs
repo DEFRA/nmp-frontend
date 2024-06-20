@@ -1,42 +1,29 @@
-﻿using Microsoft.Identity.Client;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.Identity.Client;
+using Newtonsoft.Json;
+using System.Net.Http;
 using System.Security.Claims;
 
 namespace NMP.Portal.Security
 {
     public class TokenAcquisitionService
     {
-        private readonly IConfidentialClientApplication _confidentialClientApp;
+        
         private readonly IConfiguration _configuration;
-
-        public TokenAcquisitionService(IConfiguration configuration)
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IConfidentialClientApplication _confidentialClientApplication;
+        public TokenAcquisitionService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
         {
             _configuration = configuration;
-            var authority = $"{_configuration["CustomerIdentityInstance"]}/{_configuration["CustomerIdentityDomain"]}/{_configuration["CustomerIdentityPolicyId"]}/V2.0/";
-
-            _confidentialClientApp = ConfidentialClientApplicationBuilder
-                .Create(_configuration["CustomerIdentityClientId"])
-                .WithClientSecret(_configuration["CustomerIdentityClientSecret"])
-                .WithB2CAuthority(authority)
-                .Build();
-            TokenCacheHelper.EnableSerialization(_confidentialClientApp.AppTokenCache);
+            _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<string> AcquireTokenSilentAsync(string userId, IEnumerable<string> scopes)
+        public async Task<OAuthTokenResponse> AcquireTokenByRefreshTokenAsync(string refreshToken, string issuer)
         {
             try
             {
-                var account = await _confidentialClientApp.GetAccountAsync(userId);
-                //var account = accounts.FirstOrDefault(a => a.HomeAccountId.Identifier == userId);
-                if (account == null)
-                {
-                    // Handle account not found scenario
-                    throw new MsalUiRequiredException("account_not_found", "User account was not found in the token cache.");
-                }
-
-                var result = await _confidentialClientApp.AcquireTokenSilent(scopes, account)
-                                                         .ExecuteAsync();
-
-                return result.AccessToken;
+                OAuthTokenResponse oauthTokenResponse = await GetAccessTokenByRefreshTokenAsync(refreshToken, issuer);
+                return oauthTokenResponse;
             }
             catch (MsalUiRequiredException)
             {
@@ -61,6 +48,31 @@ namespace NMP.Portal.Security
 
             expiration = DateTime.MinValue;
             return false;
+        }
+
+        private async Task<OAuthTokenResponse> GetAccessTokenByRefreshTokenAsync(string refreshToken, string issuer)
+        {
+            using (var client = _httpClientFactory.CreateClient())
+            {
+                string scopes = "openid profile offline_access " + _configuration["CustomerIdentityClientId"];
+
+                var formData = new FormUrlEncodedContent(new[]
+                {
+                    new KeyValuePair<string, string>("refresh_token", refreshToken),
+                    new KeyValuePair<string, string>("redirect_uri", ""),
+                    new KeyValuePair<string, string>("client_id", _configuration["CustomerIdentityClientId"]),
+                    new KeyValuePair<string, string>("client_secret", _configuration["CustomerIdentityClientSecret"]),
+                    new KeyValuePair<string, string>("grant_type", "refresh_token"),
+                    new KeyValuePair<string, string>("scope", scopes)
+                });
+                Uri uri = new Uri(issuer);
+                var url = $"https://{uri.Authority}/{_configuration["CustomerIdentityTenantId"]}/{_configuration["CustomerIdentityPolicyId"]}/oauth2/v2.0/token";
+
+                var response = await client.PostAsync(url, formData);
+                var json = await response.Content.ReadAsStringAsync();
+                var oauthTokenResponse = JsonConvert.DeserializeObject<OAuthTokenResponse>(json);
+                return oauthTokenResponse;
+            }
         }
     }
 }
