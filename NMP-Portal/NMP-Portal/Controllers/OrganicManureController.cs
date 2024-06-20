@@ -630,10 +630,14 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
             }
-            (ManureType manureType, Error error) = await _organicManureService.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
-            model.ManureType = manureType;
+
+            if (model.IsDefaultNutrientValues == null || model.IsDefaultNutrientValues.Value)
+            {
+                (ManureType manureType, Error error) = await _organicManureService.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
+                model.ManureType = manureType;
+            }
             return View(model);
-        }
+        } 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DefaultNutrientValues(OrganicManureViewModel model)
@@ -644,18 +648,18 @@ namespace NMP.Portal.Controllers
             }
             if (!ModelState.IsValid)
             {
-                (ManureType manureType, Error error) = await _organicManureService.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
-                model.ManureType = manureType;
+                if (model.IsDefaultNutrientValues == null || model.IsDefaultNutrientValues.Value)
+                {
+                    (ManureType manureType, Error error) = await _organicManureService.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
+                    model.ManureType = manureType;
+                }
                 return View(model);
             }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
             if (!model.IsDefaultNutrientValues.Value)
             {             
                 return RedirectToAction("ManualNutrientValues");
             }
-
-            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
-
-
             return RedirectToAction("ApplicationRateMethod");
         }
 
@@ -667,8 +671,6 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
             }
-            (ManureType manureType, Error error) = await _organicManureService.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
-            model.ManureType = manureType;
             return View(model);
         }
         [HttpPost]
@@ -713,15 +715,23 @@ namespace NMP.Portal.Controllers
             }
             if (!ModelState.IsValid)
             {
-                (ManureType manureType, Error error) = await _organicManureService.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
-                model.ManureType = manureType;
                 return View(model);
             }
-            if (!model.IsDefaultNutrientValues.Value)
+            if(model.OrganicManures.Count>0)
             {
-                return RedirectToAction("DefaultNutrientValues");
+                foreach(var orgManure in model.OrganicManures)
+                {
+                    orgManure.DryMatterPercent = model.ManureType.DryMatter;
+                    orgManure.N = model.ManureType.TotalN;
+                    orgManure.NH4N = model.ManureType.NH4N;
+                    orgManure.UricAcid = model.ManureType.Uric;
+                    orgManure.NO3N = model.ManureType.NO3N;
+                    orgManure.P2O5 = model.ManureType.P2O5;
+                    orgManure.K2O = model.ManureType.K2O;
+                    orgManure.SO3 = model.ManureType.SO3;
+                    orgManure.MgO = model.ManureType.MgO;
+                }
             }
-
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
 
 
