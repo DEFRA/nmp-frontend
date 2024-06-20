@@ -1372,4 +1372,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="MsgForRainfallManual" xml:space="preserve">
     <value>Average annual rainfall must be a whole number, like 600.</value>
   </data>
+  <data name="MsgSelectAtLeastOneField" xml:space="preserve">
+    <value>Select at least one field before continuing</value>
+  </data>
 </root>

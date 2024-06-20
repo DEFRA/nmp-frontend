@@ -3752,6 +3752,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select at least one field before continuing.
+        /// </summary>
+        public static string MsgSelectAtLeastOneField {
+            get {
+                return ResourceManager.GetString("MsgSelectAtLeastOneField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Service not available at this moment. Please try after some time..
         /// </summary>
         public static string MsgServiceNotAvailable {
