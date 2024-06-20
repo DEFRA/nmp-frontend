@@ -772,6 +772,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Discs.
+        /// </summary>
+        public static string lblDiscs {
+            get {
+                return ResourceManager.GetString("lblDiscs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Does this field contain potash-releasing clay?.
         /// </summary>
         public static string lblDoesPotashClayForCheckAnswere {
@@ -1790,6 +1799,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not incorporated.
+        /// </summary>
+        public static string lblNotIncorporated {
+            get {
+                return ResourceManager.GetString("lblNotIncorporated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not set.
         /// </summary>
         public static string lblNotSet {
@@ -2033,6 +2051,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Plough.
+        /// </summary>
+        public static string lblPlough {
+            get {
+                return ResourceManager.GetString("lblPlough", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Postcode.
         /// </summary>
         public static string lblPostCode {
@@ -2155,6 +2182,15 @@ namespace NMP.Portal.Resources {
         public static string lblRemoveField {
             get {
                 return ResourceManager.GetString("lblRemoveField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rotary cultivator.
+        /// </summary>
+        public static string lblRotaryCultivator {
+            get {
+                return ResourceManager.GetString("lblRotaryCultivator", resourceCulture);
             }
         }
         
@@ -2497,6 +2533,15 @@ namespace NMP.Portal.Resources {
         public static string lblThereAreFieldsInThisPlan {
             get {
                 return ResourceManager.GetString("lblThereAreFieldsInThisPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tine cultivator.
+        /// </summary>
+        public static string lblTineCultivator {
+            get {
+                return ResourceManager.GetString("lblTineCultivator", resourceCulture);
             }
         }
         
@@ -2911,6 +2956,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhatIsTheFarmPostcode {
             get {
                 return ResourceManager.GetString("lblWhatIsTheFarmPostcode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the incorporation method for your {0}?.
+        /// </summary>
+        public static string lblWhatIsTheIncorporationMethod {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheIncorporationMethod", resourceCulture);
             }
         }
         

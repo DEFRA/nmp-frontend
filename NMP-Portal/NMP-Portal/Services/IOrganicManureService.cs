@@ -14,6 +14,8 @@ namespace NMP.Portal.Services
 
         Task<(ManureType, Error)> FetchManureTypeByManureTypeId(int manureTypeId);
 
-        Task<(List<ApplicationMethodResponse>, Error)> FetchApplicationMethodList(string applicableFor);
+        Task<(List<ApplicationMethodResponse>, Error)> FetchApplicationMethodList(int fieldType,string applicableFor);
+
+        Task<(List<IncorporationMethodResponse>, Error)> FetchIncorporationMethodsByApplicationId(int fieldType,string applicableFor,int appId);
     }
 }
