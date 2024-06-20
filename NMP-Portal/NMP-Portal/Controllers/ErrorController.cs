@@ -9,7 +9,9 @@ using NMP.Portal.ServiceResponses;
 using System.Diagnostics;
 
 namespace NMP.Portal.Controllers
-{   
+{
+    [AllowAnonymous]   
+    
     public class ErrorController : Controller
     {
         //private readonly TelemetryClient _telemetryClient;
