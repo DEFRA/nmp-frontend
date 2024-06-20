@@ -303,9 +303,6 @@ namespace NMP.Portal.Controllers
             FarmViewModel farmView = JsonConvert.DeserializeObject<FarmViewModel>(HttpContext.Session.GetString("FarmData"));
             if (farmView != null)
             {
-                var updatedFarm = JsonConvert.SerializeObject(farm);
-                HttpContext?.Session.SetString("FarmData", updatedFarm);
-
                 if (farmView.Postcode != farm.Postcode)
                 {
                     farm.Rainfall = null;
