@@ -11,6 +11,7 @@ using NMP.Portal.Helpers;
 using NMP.Portal.ViewModels;
 using System.Diagnostics.Metrics;
 using NMP.Portal.Enums;
+using Newtonsoft.Json;
 
 namespace NMP.Portal.Controllers
 {
@@ -745,6 +746,21 @@ namespace NMP.Portal.Controllers
                 model.K2O = null;
                 model.MgO = null;
                 model.NO3N = null;
+                if (model.OrganicManures.Count > 0)
+                {
+                    foreach (var orgManure in model.OrganicManures)
+                    {
+                        orgManure.DryMatterPercent = model.ManureType.DryMatter;
+                        orgManure.N = model.ManureType.TotalN;
+                        orgManure.NH4N = model.ManureType.NH4N;
+                        orgManure.UricAcid = model.ManureType.Uric;
+                        orgManure.NO3N = model.ManureType.NO3N;
+                        orgManure.P2O5 = model.ManureType.P2O5;
+                        orgManure.K2O = model.ManureType.K2O;
+                        orgManure.SO3 = model.ManureType.SO3;
+                        orgManure.MgO = model.ManureType.MgO;
+                    }
+                }
             }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
 
@@ -768,6 +784,105 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ManualNutrientValues(OrganicManureViewModel model)
         {
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("DryMatterPercent"))
+            {
+                var dryMatterPercentError = ModelState["DryMatterPercent"].Errors.Count > 0 ?
+                                ModelState["DryMatterPercent"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (dryMatterPercentError != null && dryMatterPercentError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["DryMatterPercent"].RawValue, Resource.lblDryMatterPercent)))
+                {
+                    ModelState["DryMatterPercent"].Errors.Clear();
+                    ModelState["DryMatterPercent"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblDryMatter));
+                }
+            }
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("N"))
+            {
+                var totalNitrogenError = ModelState["N"].Errors.Count > 0 ?
+                                ModelState["N"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (totalNitrogenError != null && totalNitrogenError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["N"].RawValue, Resource.lblN)))
+                {
+                    ModelState["N"].Errors.Clear();
+                    ModelState["N"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblTotalNitrogen));
+                }
+            }
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("NH4N"))
+            {
+                var ammoniumError = ModelState["NH4N"].Errors.Count > 0 ?
+                                ModelState["NH4N"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (ammoniumError != null && ammoniumError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["NH4N"].RawValue, Resource.lblNH4N)))
+                {
+                    ModelState["NH4N"].Errors.Clear();
+                    ModelState["NH4N"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblAmmonium));
+                }
+            }
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("UricAcid"))
+            {
+                var uricAcidError = ModelState["UricAcid"].Errors.Count > 0 ?
+                                ModelState["UricAcid"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (uricAcidError != null && uricAcidError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["UricAcid"].RawValue, Resource.lblUricAcidForError)))
+                {
+                    ModelState["UricAcid"].Errors.Clear();
+                    ModelState["UricAcid"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblUricAcid));
+                } 
+            }
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("NO3N"))
+            {
+                var nitrogenError = ModelState["NO3N"].Errors.Count > 0 ?
+                                ModelState["NO3N"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (nitrogenError != null && nitrogenError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["NO3N"].RawValue, Resource.lblNO3N)))
+                {
+                    ModelState["NO3N"].Errors.Clear();
+                    ModelState["NO3N"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblNitrogen));
+                }
+            }
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("P2O5"))
+            {
+                var totalPhosphateError = ModelState["P2O5"].Errors.Count > 0 ?
+                                ModelState["P2O5"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (totalPhosphateError != null && totalPhosphateError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["P2O5"].RawValue, Resource.lblP2O5)))
+                {
+                    ModelState["P2O5"].Errors.Clear();
+                    ModelState["P2O5"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblTotalPhosphate));
+                }
+            }
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("K2O"))
+            {
+                var totalPotassiumError = ModelState["K2O"].Errors.Count > 0 ?
+                                ModelState["K2O"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (totalPotassiumError != null && totalPotassiumError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["K2O"].RawValue, Resource.lblK2O)))
+                {
+                    ModelState["K2O"].Errors.Clear();
+                    ModelState["K2O"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblTotalPotassium));
+                }
+            }
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("SO3"))
+            {
+                var sulphurSO3Error = ModelState["SO3"].Errors.Count > 0 ?
+                                ModelState["SO3"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (sulphurSO3Error != null && sulphurSO3Error.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SO3"].RawValue, Resource.lblSO3)))
+                {
+                    ModelState["SO3"].Errors.Clear();
+                    ModelState["SO3"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblTotalSulphur));
+                }
+            }
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("MgO"))
+            {
+                var totalMagnesiumOxideError = ModelState["MgO"].Errors.Count > 0 ?
+                                ModelState["MgO"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (totalMagnesiumOxideError != null && totalMagnesiumOxideError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["MgO"].RawValue, Resource.lblMgO)))
+                {
+                    ModelState["MgO"].Errors.Clear();
+                    ModelState["MgO"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblTotalMagnesiumOxide));
+                }
+            }
             if (model.DryMatterPercent == null)
             {
                 ModelState.AddModelError("DryMatterPercent", string.Format(Resource.lblEnterValidValue, Resource.lblDryMatter));

@@ -835,6 +835,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to DryMatterPercent.
+        /// </summary>
+        public static string lblDryMatterPercent {
+            get {
+                return ResourceManager.GetString("lblDryMatterPercent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to English Rules.
         /// </summary>
         public static string lblEnglishRules {
@@ -1511,6 +1520,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to K2O.
+        /// </summary>
+        public static string lblK2O {
+            get {
+                return ResourceManager.GetString("lblK2O", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to kg.
         /// </summary>
         public static string lblkg {
@@ -1520,20 +1538,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to L.
-        /// </summary>
-        public static string lblL {
-            get {
-                return ResourceManager.GetString("lblL", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Kg per tonne.
         /// </summary>
         public static string lblKgPerTonne {
             get {
                 return ResourceManager.GetString("lblKgPerTonne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to L.
+        /// </summary>
+        public static string lblL {
+            get {
+                return ResourceManager.GetString("lblL", resourceCulture);
             }
         }
         
@@ -1781,6 +1799,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to MgO.
+        /// </summary>
+        public static string lblMgO {
+            get {
+                return ResourceManager.GetString("lblMgO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Milligram values.
         /// </summary>
         public static string lblMiligramValues {
@@ -1799,6 +1826,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to N.
+        /// </summary>
+        public static string lblN {
+            get {
+                return ResourceManager.GetString("lblN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to National Grid Reference (optional).
         /// </summary>
         public static string lblNationalGridReference {
@@ -1813,6 +1849,15 @@ namespace NMP.Portal.Resources {
         public static string lblNationalGridReferenceForCheckAnswere {
             get {
                 return ResourceManager.GetString("lblNationalGridReferenceForCheckAnswere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NH4N.
+        /// </summary>
+        public static string lblNH4N {
+            get {
+                return ResourceManager.GetString("lblNH4N", resourceCulture);
             }
         }
         
@@ -1840,6 +1885,15 @@ namespace NMP.Portal.Resources {
         public static string lblNo {
             get {
                 return ResourceManager.GetString("lblNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NO3N.
+        /// </summary>
+        public static string lblNO3N {
+            get {
+                return ResourceManager.GetString("lblNO3N", resourceCulture);
             }
         }
         
@@ -2011,6 +2065,15 @@ namespace NMP.Portal.Resources {
         public static string lblP {
             get {
                 return ResourceManager.GetString("lblP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to P2O5.
+        /// </summary>
+        public static string lblP2O5 {
+            get {
+                return ResourceManager.GetString("lblP2O5", resourceCulture);
             }
         }
         
@@ -2420,6 +2483,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SO3.
+        /// </summary>
+        public static string lblSO3 {
+            get {
+                return ResourceManager.GetString("lblSO3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Soil analysis.
         /// </summary>
         public static string lblSoilAnalysis {
@@ -2821,6 +2893,15 @@ namespace NMP.Portal.Resources {
         public static string lblUricAcid {
             get {
                 return ResourceManager.GetString("lblUricAcid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UricAcid.
+        /// </summary>
+        public static string lblUricAcidForError {
+            get {
+                return ResourceManager.GetString("lblUricAcidForError", resourceCulture);
             }
         }
         

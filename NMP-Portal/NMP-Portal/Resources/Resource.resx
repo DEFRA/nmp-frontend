@@ -1435,4 +1435,31 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblEnterValidValue" xml:space="preserve">
     <value>Enter a valid {0} value</value>
   </data>
+  <data name="lblDryMatterPercent" xml:space="preserve">
+    <value>DryMatterPercent</value>
+  </data>
+  <data name="lblK2O" xml:space="preserve">
+    <value>K2O</value>
+  </data>
+  <data name="lblMgO" xml:space="preserve">
+    <value>MgO</value>
+  </data>
+  <data name="lblN" xml:space="preserve">
+    <value>N</value>
+  </data>
+  <data name="lblNH4N" xml:space="preserve">
+    <value>NH4N</value>
+  </data>
+  <data name="lblNO3N" xml:space="preserve">
+    <value>NO3N</value>
+  </data>
+  <data name="lblP2O5" xml:space="preserve">
+    <value>P2O5</value>
+  </data>
+  <data name="lblSO3" xml:space="preserve">
+    <value>SO3</value>
+  </data>
+  <data name="lblUricAcidForError" xml:space="preserve">
+    <value>UricAcid</value>
+  </data>
 </root>
