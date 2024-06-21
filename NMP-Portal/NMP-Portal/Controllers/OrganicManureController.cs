@@ -12,6 +12,7 @@ using NMP.Portal.ViewModels;
 using System.Diagnostics.Metrics;
 using NMP.Portal.Enums;
 using Microsoft.VisualBasic.FileIO;
+using Newtonsoft.Json;
 
 namespace NMP.Portal.Controllers
 {
@@ -515,6 +516,23 @@ namespace NMP.Portal.Controllers
             {
                 TempData["ManureTypeError"] = ex.Message;
             }
+
+            OrganicManureViewModel organicManureViewModel = JsonConvert.DeserializeObject<OrganicManureViewModel>(HttpContext.Session.GetString("OrganicManure"));
+            if (organicManureViewModel != null)
+            {
+                if (organicManureViewModel.ManureTypeId != model.ManureTypeId)
+                {
+                    model.DryMatterPercent = null;
+                    model.N = null;
+                    model.P2O5 = null;
+                    model.NH4N = null;
+                    model.UricAcid = null;
+                    model.SO3 = null;
+                    model.K2O = null;
+                    model.MgO = null;
+                    model.NO3N = null;
+                }
+            }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
             return RedirectToAction("ManureApplyingDate");
 
@@ -686,19 +704,35 @@ namespace NMP.Portal.Controllers
             }
             if (!model.IsDefaultNutrientValues.Value)
             {
-                model.DryMatterPercent = model.ManureType.DryMatter;
-                model.N = model.ManureType.TotalN;
-                model.P2O5 = model.ManureType.P2O5;
-                model.NH4N = model.ManureType.NH4N;
-                model.UricAcid = model.ManureType.Uric;
-                model.SO3 = model.ManureType.SO3;
-                model.K2O = model.ManureType.K2O;
-                model.MgO = model.ManureType.MgO;
-                model.NO3N = model.ManureType.NO3N;
+                if (model.DryMatterPercent == null)
+                {
+                    model.DryMatterPercent = model.ManureType.DryMatter;
+                    model.N = model.ManureType.TotalN;
+                    model.P2O5 = model.ManureType.P2O5;
+                    model.NH4N = model.ManureType.NH4N;
+                    model.UricAcid = model.ManureType.Uric;
+                    model.SO3 = model.ManureType.SO3;
+                    model.K2O = model.ManureType.K2O;
+                    model.MgO = model.ManureType.MgO;
+                    model.NO3N = model.ManureType.NO3N;
+                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                }
                 return RedirectToAction("ManualNutrientValues");
             }
+            else
+            {
+                model.DryMatterPercent = null;
+                model.N = null;
+                model.P2O5 = null;
+                model.NH4N = null;
+                model.UricAcid = null;
+                model.SO3 = null;
+                model.K2O = null;
+                model.MgO = null;
+                model.NO3N = null;
+            }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
-            
+
             return RedirectToAction("ApplicationRateMethod");
         }
 
