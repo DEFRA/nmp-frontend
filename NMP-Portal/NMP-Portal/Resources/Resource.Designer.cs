@@ -412,6 +412,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to B.
+        /// </summary>
+        public static string lblB {
+            get {
+                return ResourceManager.GetString("lblB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back.
         /// </summary>
         public static string lblBack {
@@ -543,6 +552,15 @@ namespace NMP.Portal.Resources {
         public static string lblChooseTheOptionThatAppliesToYour {
             get {
                 return ResourceManager.GetString("lblChooseTheOptionThatAppliesToYour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Conditions affecting the loss of nutrients from your organic materials.
+        /// </summary>
+        public static string lblConditionsAffectingTheLossOfNutrients {
+            get {
+                return ResourceManager.GetString("lblConditionsAffectingTheLossOfNutrients", resourceCulture);
             }
         }
         
@@ -1312,6 +1330,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How long is the gap between application and incorporation for your {0}?.
+        /// </summary>
+        public static string lblHowLongIsTheGapBetweenApplicationAndIncoporation {
+            get {
+                return ResourceManager.GetString("lblHowLongIsTheGapBetweenApplicationAndIncoporation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How many fields at {0}
         ///are in a Nitrate Vulnerable Zone (NVZ)?.
         /// </summary>
@@ -1372,6 +1399,15 @@ namespace NMP.Portal.Resources {
         public static string lblIfYouhaveMoreThanOneHolding {
             get {
                 return ResourceManager.GetString("lblIfYouhaveMoreThanOneHolding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Incorpration Delay.
+        /// </summary>
+        public static string lblIncorprationDelay {
+            get {
+                return ResourceManager.GetString("lblIncorprationDelay", resourceCulture);
             }
         }
         
@@ -1480,6 +1516,15 @@ namespace NMP.Portal.Resources {
         public static string lblkg {
             get {
                 return ResourceManager.GetString("lblkg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to L.
+        /// </summary>
+        public static string lblL {
+            get {
+                return ResourceManager.GetString("lblL", resourceCulture);
             }
         }
         
@@ -1961,6 +2006,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to P.
+        /// </summary>
+        public static string lblP {
+            get {
+                return ResourceManager.GetString("lblP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to per hectare.
         /// </summary>
         public static string lblPerHectare {
@@ -2177,6 +2231,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Poultry manure.
+        /// </summary>
+        public static string lblPoultryManure {
+            get {
+                return ResourceManager.GetString("lblPoultryManure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rainfall.
         /// </summary>
         public static string lblRainfall {
@@ -2191,6 +2254,15 @@ namespace NMP.Portal.Resources {
         public static string lblRainfallManual {
             get {
                 return ResourceManager.GetString("lblRainfallManual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value should be without decimal places.
+        /// </summary>
+        public static string lblRainfallValueHint {
+            get {
+                return ResourceManager.GetString("lblRainfallValueHint", resourceCulture);
             }
         }
         
@@ -2236,6 +2308,15 @@ namespace NMP.Portal.Resources {
         public static string lblRotaryCultivator {
             get {
                 return ResourceManager.GetString("lblRotaryCultivator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to S.
+        /// </summary>
+        public static string lblS {
+            get {
+                return ResourceManager.GetString("lblS", resourceCulture);
             }
         }
         
@@ -3626,6 +3707,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Average annual rainfall must be a whole number, like 600..
+        /// </summary>
+        public static string MsgForRainfallManual {
+            get {
+                return ResourceManager.GetString("MsgForRainfallManual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The combined cropped area and manure non-spreading area cannot be larger than the total field area.
         /// </summary>
         public static string MsgIfCroppedAreaAndNonSpreadingArea {
@@ -3838,6 +3928,15 @@ namespace NMP.Portal.Resources {
         public static string MsgSelectAnOptionBeforeContinuing {
             get {
                 return ResourceManager.GetString("MsgSelectAnOptionBeforeContinuing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select at least one field before continuing.
+        /// </summary>
+        public static string MsgSelectAtLeastOneField {
+            get {
+                return ResourceManager.GetString("MsgSelectAtLeastOneField", resourceCulture);
             }
         }
         

@@ -41,6 +41,7 @@ namespace NMP.Portal.ViewModels
         public int? ApplicationRateArable { get; set; }
         public int? IncorporationMethod { get; set; }
         public int? ApplicationMethodCount { get; set; }
+        public int? IncorporationDelay { get; set; }
         public decimal? N { get; set; }
         public decimal? P2O5 { get; set; }
         public decimal? K2O { get; set; }

@@ -1357,6 +1357,7 @@ namespace NMP.Portal.Controllers
                 return View("CheckAnswer", model);
             }
 
+            
             Error error = null;
             int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
             List<CropData> cropEntries = new List<CropData>();
@@ -1366,6 +1367,7 @@ namespace NMP.Portal.Controllers
                 crop.CreatedByID = userId;
                 crop.FieldName = null;
                 crop.EncryptedCounter = null;
+                crop.FieldType = model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass ? 2 : 1;
                 CropData cropEntry = new CropData
                 {
                     Crop = crop,
