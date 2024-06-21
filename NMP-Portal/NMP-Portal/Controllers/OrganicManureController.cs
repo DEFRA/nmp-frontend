@@ -588,6 +588,13 @@ namespace NMP.Portal.Controllers
                 model.ManureTypeName = (error == null && manureTypeList.Count > 0) ? manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId)?.Name : string.Empty;
                 return View(model);
             }
+            if (model.OrganicManures.Count > 0)
+            {
+                foreach (var orgManure in model.OrganicManures)
+                {
+                    orgManure.AppDate = model.ApplicationDate.Value;
+                }
+            }
 
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
 
@@ -666,6 +673,14 @@ namespace NMP.Portal.Controllers
                 ViewBag.ApplicationMethodList = applicationMethodList;
                 model.ApplicationMethodCount = applicationMethodList.Count;
                 return View(model);
+            }
+
+            if (model.OrganicManures.Count > 0)
+            {
+                foreach (var orgManure in model.OrganicManures)
+                {
+                    orgManure.ApplicationMethodID = model.ApplicationMethod.Value;
+                }
             }
 
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
