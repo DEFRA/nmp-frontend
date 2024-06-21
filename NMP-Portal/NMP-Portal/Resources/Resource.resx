@@ -1396,4 +1396,28 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="MsgSelectAtLeastOneField" xml:space="preserve">
     <value>Select at least one field before continuing</value>
   </data>
+  <data name="lblB" xml:space="preserve">
+    <value>B</value>
+  </data>
+  <data name="lblConditionsAffectingTheLossOfNutrients" xml:space="preserve">
+    <value>Conditions affecting the loss of nutrients from your organic materials</value>
+  </data>
+  <data name="lblHowLongIsTheGapBetweenApplicationAndIncoporation" xml:space="preserve">
+    <value>How long is the gap between application and incorporation for your {0}?</value>
+  </data>
+  <data name="lblIncorprationDelay" xml:space="preserve">
+    <value>Incorpration Delay</value>
+  </data>
+  <data name="lblL" xml:space="preserve">
+    <value>L</value>
+  </data>
+  <data name="lblP" xml:space="preserve">
+    <value>P</value>
+  </data>
+  <data name="lblPoultryManure" xml:space="preserve">
+    <value>Poultry manure</value>
+  </data>
+  <data name="lblS" xml:space="preserve">
+    <value>S</value>
+  </data>
 </root>
