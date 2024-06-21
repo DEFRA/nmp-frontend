@@ -52,5 +52,9 @@ namespace NMP.Portal.Helpers
         public const string FetchIncorporationMethodsByApplicationIdAsyncAPI = "incorporation-methods/{0}?fieldType={1}&applicableFor={2}";
 
         public const string FetchCropsByFieldIdAsyncAPI = "crops/fields/{0}";
+
+        public const string FetchIncorporationDelaysByMethodIdAndApplicableForAsyncAPI = "incorporation-delays/{0}?applicableFor={1}";
+
+        public const string FetchFieldDetailByFieldIdAndHarvestYearAsyncAPI = "fields/info/{0}?year={1}&confirm={2}";
     }
 }
