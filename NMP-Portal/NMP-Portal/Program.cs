@@ -94,7 +94,11 @@ builder.Services.AddRazorPages().AddMvcOptions(options =>
 
 builder.Services.AddDataProtection();
 builder.Services.AddControllersWithViews().AddSessionStateTempDataProvider();
-builder.Services.AddSession(options => { options.Cookie.HttpOnly = true; options.Cookie.IsEssential = true; });
+builder.Services.AddSession(options => { 
+    options.Cookie.HttpOnly = true; 
+    options.Cookie.IsEssential = true; 
+    options.IdleTimeout = TimeSpan.FromMinutes(60);
+});
 builder.Services.AddLogging(builder =>
 {
     builder.ClearProviders();
