@@ -42,5 +42,7 @@ namespace NMP.Portal.ViewModels
         public int? IncorporationMethod { get; set; }
         public int? ApplicationMethodCount { get; set; }
         public int? IncorporationDelay { get; set; }
+
+        public bool? IsDefaultNutrient { get; set; } = false;
     }
 }

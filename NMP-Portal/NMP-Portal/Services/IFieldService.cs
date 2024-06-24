@@ -19,5 +19,7 @@ namespace NMP.Portal.Services
         Task<List<CropTypeResponse>> FetchAllCropTypes();
         Task<string> FetchSoilTypeById(int soilTypeId);
         Task<List<SoilAnalysisResponse>> FetchSoilAnalysisByFieldId(int fieldId);
+
+        Task<(FieldDetailResponse, Error)> FetchFieldDetailByFieldIdAndHarvestYear(int fieldId, int year, bool confirm);
     }
 }

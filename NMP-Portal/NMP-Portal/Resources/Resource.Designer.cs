@@ -88,6 +88,51 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 15 Oct to 15 Jan.
+        /// </summary>
+        public static string lbl15Octto15Jan {
+            get {
+                return ResourceManager.GetString("lbl15Octto15Jan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 16 Sep to 31 Dec.
+        /// </summary>
+        public static string lbl16Septo31Dec {
+            get {
+                return ResourceManager.GetString("lbl16Septo31Dec", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 Aug to 31 Dec.
+        /// </summary>
+        public static string lbl1Augto31Dec {
+            get {
+                return ResourceManager.GetString("lbl1Augto31Dec", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 Oct to 15 Jan.
+        /// </summary>
+        public static string lbl1Octto15Jan {
+            get {
+                return ResourceManager.GetString("lbl1Octto15Jan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 Sep to 31 Dec.
+        /// </summary>
+        public static string lbl1Septo31Dec {
+            get {
+                return ResourceManager.GetString("lbl1Septo31Dec", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add a farm.
         /// </summary>
         public static string lblAddAFarm {
@@ -3725,11 +3770,11 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Based on your crop and soil type, your closed period for spreading manures with high readily available nitrogen is 1 October to 31 January..
+        ///   Looks up a localized string similar to Based on your crop and soil type, your closed period for spreading manures with high readily available nitrogen is {0}..
         /// </summary>
-        public static string MsgManureApplyingDate1OctToJan {
+        public static string MsgManureApplyingDateClosedPeriod {
             get {
-                return ResourceManager.GetString("MsgManureApplyingDate1OctToJan", resourceCulture);
+                return ResourceManager.GetString("MsgManureApplyingDateClosedPeriod", resourceCulture);
             }
         }
         
