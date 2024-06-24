@@ -42,5 +42,14 @@ namespace NMP.Portal.ViewModels
         public int? IncorporationMethod { get; set; }
         public int? ApplicationMethodCount { get; set; }
         public int? IncorporationDelay { get; set; }
+        public decimal? N { get; set; }
+        public decimal? P2O5 { get; set; }
+        public decimal? K2O { get; set; }
+        public decimal? MgO { get; set; }
+        public decimal? SO3 { get; set; }
+        public decimal? DryMatterPercent { get; set; }
+        public decimal? UricAcid { get; set; }
+        public decimal? NH4N { get; set; }
+        public decimal? NO3N { get; set; }
     }
 }
