@@ -51,5 +51,7 @@ namespace NMP.Portal.ViewModels
         public decimal? UricAcid { get; set; }
         public decimal? NH4N { get; set; }
         public decimal? NO3N { get; set; }
+
+        public bool? IsDefaultNutrient { get; set; } = false;
     }
 }

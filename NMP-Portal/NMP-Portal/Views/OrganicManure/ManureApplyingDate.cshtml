@@ -86,7 +86,10 @@
                             <p>@Resource.MsgManureApplyingDateDontHaveExactDate <br> @Resource.lblSampleDate</p>
                             @if (ViewBag.HighReadilyAvailableNitrogen != null && ViewBag.HighReadilyAvailableNitrogen==true)
                             {
-                                <p>@Resource.MsgManureApplyingDate1OctToJan</p>
+                                @if (ViewBag.ClosedPeriod != null)
+                                {
+                                    <p>@string.Format(Resource.MsgManureApplyingDateClosedPeriod, ViewBag.ClosedPeriod)</p>
+                                }
                             }
                             
                         </govuk-date-input-hint>
