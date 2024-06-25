@@ -1367,7 +1367,7 @@ namespace NMP.Portal.Controllers
                 crop.CreatedByID = userId;
                 crop.FieldName = null;
                 crop.EncryptedCounter = null;
-                crop.FieldType = model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass ? 2 : 1;
+                crop.FieldType = model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass ? (int)NMP.Portal.Enums.FieldType.Grass : (int)NMP.Portal.Enums.FieldType.Arable;
                 CropData cropEntry = new CropData
                 {
                     Crop = crop,

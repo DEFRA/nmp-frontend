@@ -680,7 +680,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Manure non-spreading area</value>
   </data>
   <data name="lblNVZFieldForFieldCheckAnswere" xml:space="preserve">
-    <value>Is this field inside a Nitrate Vulnerable Zone (NVZ)?</value>
+    <value>Is this field in a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
   <data name="lblNutrientValueTypeForCheckAnswere" xml:space="preserve">
     <value>How would you like to enter your soil nutrient values?</value>
@@ -1360,11 +1360,11 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="MsgEnterAnapplicationRateBeforeContinuing" xml:space="preserve">
     <value>Enter an application rate before continuing.</value>
   </data>
-  <data name="MsgEnterAreaBeforeContinuing" xml:space="preserve">
-    <value>Enter an area before continuing</value>
+  <data name="MsgEnterAValidArea" xml:space="preserve">
+    <value>Enter a valid area</value>
   </data>
-  <data name="MsgEnterQuantityBeforeContinuing" xml:space="preserve">
-    <value>Enter a quantity before continuing</value>
+  <data name="MsgEnterAValidQuantity" xml:space="preserve">
+    <value>Enter a valid quantity</value>
   </data>
   <data name="lblDiscs" xml:space="preserve">
     <value>Discs</value>
@@ -1485,5 +1485,11 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
   <data name="MsgIfUserEnterDecimalValueInRainfall" xml:space="preserve">
     <value>Enter a whole number without a decimal point</value>
+  </data>
+  <data name="MsgApplicationRate" xml:space="preserve">
+    <value>application rate</value>
+  </data>
+  <data name="MsgQuantity" xml:space="preserve">
+    <value>quantity</value>
   </data>
 </root>
