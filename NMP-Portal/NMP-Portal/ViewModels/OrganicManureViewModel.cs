@@ -33,6 +33,8 @@ namespace NMP.Portal.ViewModels
         public string? ManureTypeName { get; set; }
 
         public int? ApplicationRateMethod { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblApplicationRate))]
         public decimal? ApplicationRate { get; set; }
         public int? ApplicationMethod { get; set; }
         //public int? ManualApplicationRate { get; set; }

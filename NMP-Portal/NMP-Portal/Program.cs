@@ -48,15 +48,7 @@ builder.Services.Configure<FormOptions>(options =>
     options.BufferBody = true;
 });
 
-
-
-// Add services to the container.
-//builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-//            .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
-
 builder.Services.AddDefraCustomerIdentity(builder);
-
-
 
 builder.Services.AddAuthorization(options =>
 {
@@ -65,14 +57,6 @@ builder.Services.AddAuthorization(options =>
 
 //builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 //    .AddCookie(o => o.LoginPath = new PathString("/Account/Login"));
-
-
-
-//Policy Based Authorization
-//builder.Services.AddAuthorization(options =>
-//{
-//    options.AddPolicy("ValidateToken", policy => policy.Requirements.Add(new ValidateTokenRequirement()));
-//});
 
 builder.Services.AddControllersWithViews(options =>
 {
@@ -90,11 +74,9 @@ builder.Services.AddRazorPages().AddMvcOptions(options =>
     options.Filters.Add(new AuthorizeFilter(policy));
 }).AddMicrosoftIdentityUI();
 
-
-
 builder.Services.AddDataProtection();
 builder.Services.AddControllersWithViews().AddSessionStateTempDataProvider();
-builder.Services.AddSession(options => { options.Cookie.HttpOnly = true; options.Cookie.IsEssential = true; });
+builder.Services.AddSession(options => { options.Cookie.HttpOnly = true; options.Cookie.IsEssential = true; options.IdleTimeout = TimeSpan.FromMinutes(100); });
 builder.Services.AddLogging(builder =>
 {
     builder.ClearProviders();
@@ -102,8 +84,7 @@ builder.Services.AddLogging(builder =>
 });
 
 
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();  // Access current UserName in Repository or other Custom Components
-//builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+
 builder.Services.AddHttpClient("NMPApi", httpClient =>
 {
     httpClient.BaseAddress = new Uri(uriString: builder.Configuration.GetSection("NMPApiUrl").Value ?? "/");
@@ -118,6 +99,7 @@ builder.Services.AddHttpClient("DefraIdentityConfiguration", httpClient =>
     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 });
 
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();  // Access current UserName in Repository or other Custom Components
 builder.Services.AddSingleton<IAddressLookupService, AddressLookupService>();
 builder.Services.AddSingleton<IUserFarmService, UserFarmService>();
 builder.Services.AddSingleton<IFarmService, FarmService>();
@@ -141,7 +123,6 @@ builder.Services.AddAntiforgery(options =>
     options.FormFieldName = "NMP-Portal-Antiforgery-Field";
     options.HeaderName = "X-CSRF-TOKEN-NMP";
     options.SuppressXFrameOptionsHeader = false;
-
 });
 
 builder.Services.AddMvc(options =>
@@ -207,12 +188,9 @@ app.Use(async (context, next) =>
 
 app.UseCsp(csp =>
 {
-
     var pageTemplateHelper = app.Services.GetRequiredService<PageTemplateHelper>();
-
     csp.ByDefaultAllow
         .FromSelf();
-
     csp.AllowStyles
            .FromSelf().AddNonce(); 
     csp.AllowScripts
@@ -220,15 +198,12 @@ app.UseCsp(csp =>
         .AddNonce()
         .From(pageTemplateHelper.GetCspScriptHashes())
         .From("https://*/-vs/browserLink.js");
-
     csp.AllowConnections.ToSelf().To("wss:").To("ws:").To("https:").To("http:");
     csp.AllowBaseUri.FromSelf();
     csp.AllowFrames.FromSelf();
     csp.AllowAudioAndVideo.FromSelf();
     csp.AllowFonts.FromSelf();
-    csp.AllowManifest.FromSelf();
-    //csp.AllowFormActions.To().
-
+    csp.AllowManifest.FromSelf();    
     //csp.AllowScripts
     //    .FromSelf()
     //    .AllowUnsafeInline()
@@ -241,10 +216,8 @@ app.UseCsp(csp =>
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 app.UseSession();
-
 app.UseAuthentication();
 app.UseAuthorization();
 // Add the reauthentication middleware

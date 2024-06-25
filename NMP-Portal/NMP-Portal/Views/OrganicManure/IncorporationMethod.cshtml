@@ -4,11 +4,11 @@
     ViewData["Title"] = Resource.lblApplicationRate;
 }
 @section BeforeContent {
-    @if(Model.ApplicationRateMethod.Value==0)
+    @if(Model.ApplicationRateMethod.Value==(int)NMP.Portal.Enums.ApplicationRate.EnterAnApplicationRate)
     {
         <govuk-back-link asp-action="ManualApplicationRate" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
     }
-    else if (Model.ApplicationRateMethod.Value == 1)
+    else if (Model.ApplicationRateMethod.Value == (int)NMP.Portal.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
     {
         <govuk-back-link asp-action="AreaQuantity" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
     }
@@ -98,11 +98,11 @@
                     {
                         @foreach (var item in ViewBag.IncorporationMethod)
                         {
-                            @if (!(item.Name == Resource.lblNotIncorporated))
+                            @if (!(item.ID == (int)NMP.Portal.Enums.IncorporationMethod.NotIncorporated))
                             {
                                 <govuk-radios-item value="@item.ID">@item.Name</govuk-radios-item>
                             }
-                            @if (item.Name == Resource.lblNotIncorporated)
+                            @if (item.ID == (int)NMP.Portal.Enums.IncorporationMethod.NotIncorporated)
                             {
                                 <govuk-radios-divider>@Resource.lblOr</govuk-radios-divider>
                                 <govuk-radios-item value="@item.ID">@item.Name</govuk-radios-item>

@@ -1477,6 +1477,12 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lbl1Octto15Jan" xml:space="preserve">
     <value>1 Oct to 15 Jan</value>
   </data>
+  <data name="lblAreas" xml:space="preserve">
+    <value>Area</value>
+  </data>
+  <data name="lblQuantity" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
   <data name="MsgIfUserEnterDecimalValueInRainfall" xml:space="preserve">
     <value>Enter a whole number without a decimal point</value>
   </data>

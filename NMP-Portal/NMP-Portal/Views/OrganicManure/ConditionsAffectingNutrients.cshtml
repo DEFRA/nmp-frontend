@@ -2,9 +2,28 @@
 @model NMP.Portal.ViewModels.OrganicManureViewModel
 @{
     ViewData["Title"] = Resource.lblIncorprationDelay;
+    var backAction = Model.IncorporationMethod == (int)NMP.Portal.Enums.IncorporationMethod.NotIncorporated ? "IncorporationMethod" : "IncorporationDelay";
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="IncorporationDelay" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+    @if((Model.ApplicationMethod== (int)NMP.Portal.Enums.ApplicationMethod.DeepInjection2530cm) || (Model.ApplicationMethod == (int)NMP.Portal.Enums.ApplicationMethod.ShallowInjection57cm))
+    {
+        @if (Model.ApplicationRateMethod.Value == (int)NMP.Portal.Enums.ApplicationRate.EnterAnApplicationRate)
+        {
+            <govuk-back-link asp-action="ManualApplicationRate" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+        }
+        else if (Model.ApplicationRateMethod.Value == (int)NMP.Portal.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
+        {
+            <govuk-back-link asp-action="AreaQuantity" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+        }
+        else
+        {
+            <govuk-back-link asp-action="ApplicationRateMethod" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+        }
+    }
+    else
+    {
+        <govuk-back-link asp-action="@backAction" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+    }
 
 }
 

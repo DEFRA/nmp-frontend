@@ -421,6 +421,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Area.
+        /// </summary>
+        public static string lblAreas {
+            get {
+                return ResourceManager.GetString("lblAreas", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to As an index.
         /// </summary>
         public static string lblAsAnIndex {
@@ -2344,6 +2353,15 @@ namespace NMP.Portal.Resources {
         public static string lblPoultryManure {
             get {
                 return ResourceManager.GetString("lblPoultryManure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quantity.
+        /// </summary>
+        public static string lblQuantity {
+            get {
+                return ResourceManager.GetString("lblQuantity", resourceCulture);
             }
         }
         
