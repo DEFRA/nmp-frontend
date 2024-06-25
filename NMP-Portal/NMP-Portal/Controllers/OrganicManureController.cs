@@ -581,23 +581,23 @@ namespace NMP.Portal.Controllers
 
                     DateTime september16 = new DateTime(model.HarvestYear ?? 0, 9, 16);
 
-                    if ((fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Sand || fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Shallow) && fieldDetail.FieldType == 1)
+                    if ((fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Sand || fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Shallow) && fieldDetail.FieldType == (int)NMP.Portal.Enums.FieldType.Grass)
                     {
                         ViewBag.ClosedPeriod = Resource.lbl1Septo31Dec;
                     }
-                    else if (fieldDetail.FieldType == 1)
+                    else if (fieldDetail.FieldType == (int)NMP.Portal.Enums.FieldType.Grass)
                     {
                         ViewBag.ClosedPeriod = Resource.lbl15Octto15Jan;
                     }
-                    else if ((fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Sand || fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Shallow) && fieldDetail.FieldType == 2 && fieldDetail.SowingDate >= september16)
+                    else if ((fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Sand || fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Shallow) && fieldDetail.FieldType == (int)NMP.Portal.Enums.FieldType.Arable && fieldDetail.SowingDate >= september16)
                     {
                         ViewBag.ClosedPeriod = Resource.lbl1Augto31Dec;
                     }
-                    else if ((fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Sand || fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Shallow) && fieldDetail.FieldType == 2 && fieldDetail.SowingDate <= september16)
+                    else if ((fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Sand || fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Shallow) && fieldDetail.FieldType == (int)NMP.Portal.Enums.FieldType.Arable && fieldDetail.SowingDate < september16)
                     {
                         ViewBag.ClosedPeriod = Resource.lbl16Septo31Dec;
                     }
-                    else if (fieldDetail.FieldType == 2)
+                    else if (fieldDetail.FieldType == (int)NMP.Portal.Enums.FieldType.Arable)
                     {
                         ViewBag.ClosedPeriod = Resource.lbl1Octto15Jan;
                     }
@@ -647,23 +647,23 @@ namespace NMP.Portal.Controllers
 
                         DateTime september16 = new DateTime(model.HarvestYear ?? 0, 9, 16);
 
-                        if ((fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Sand || fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Shallow) && fieldDetail.FieldType == 1)
+                        if ((fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Sand || fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Shallow) && fieldDetail.FieldType == (int)NMP.Portal.Enums.FieldType.Grass)
                         {
                             ViewBag.ClosedPeriod = Resource.lbl1Septo31Dec;
                         }
-                        else if (fieldDetail.FieldType == 1)
+                        else if (fieldDetail.FieldType == (int)NMP.Portal.Enums.FieldType.Grass)
                         {
                             ViewBag.ClosedPeriod = Resource.lbl15Octto15Jan;
                         }
-                        else if ((fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Sand || fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Shallow) && fieldDetail.FieldType == 2 && fieldDetail.SowingDate >= september16)
+                        else if ((fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Sand || fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Shallow) && fieldDetail.FieldType == (int)NMP.Portal.Enums.FieldType.Arable && fieldDetail.SowingDate >= september16)
                         {
                             ViewBag.ClosedPeriod = Resource.lbl1Augto31Dec;
                         }
-                        else if ((fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Sand || fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Shallow) && fieldDetail.FieldType == 2 && fieldDetail.SowingDate <= september16)
+                        else if ((fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Sand || fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Shallow) && fieldDetail.FieldType == (int)NMP.Portal.Enums.FieldType.Arable && fieldDetail.SowingDate < september16)
                         {
                             ViewBag.ClosedPeriod = Resource.lbl16Septo31Dec;
                         }
-                        else if (fieldDetail.FieldType == 2)
+                        else if (fieldDetail.FieldType == (int)NMP.Portal.Enums.FieldType.Arable)
                         {
                             ViewBag.ClosedPeriod = Resource.lbl1Octto15Jan;
                         }
@@ -1128,6 +1128,17 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ManualApplicationRate(OrganicManureViewModel model)
         {
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("ApplicationRate"))
+            {
+                var applicationRateError = ModelState["ApplicationRate"].Errors.Count > 0 ?
+                                ModelState["ApplicationRate"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (applicationRateError != null && applicationRateError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["ApplicationRate"].RawValue, Resource.lblApplicationRate)))
+                {
+                    ModelState["ApplicationRate"].Errors.Clear();
+                    ModelState["ApplicationRate"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblApplicationRate));
+                }
+            }
 
             if (model.ApplicationRate == null)
             {
@@ -1159,6 +1170,28 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AreaQuantity(OrganicManureViewModel model)
         {
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("Area"))
+            {
+                var areaError = ModelState["Area"].Errors.Count > 0 ?
+                                ModelState["Area"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (areaError != null && areaError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["Area"].RawValue, Resource.lblAreas)))
+                {
+                    ModelState["Area"].Errors.Clear();
+                    ModelState["Area"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblAreas));
+                }
+            }
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("Quantity"))
+            {
+                var quantityError = ModelState["Quantity"].Errors.Count > 0 ?
+                                ModelState["Quantity"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (quantityError != null && quantityError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["Quantity"].RawValue, Resource.lblQuantity)))
+                {
+                    ModelState["Quantity"].Errors.Clear();
+                    ModelState["Quantity"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblQuantity));
+                }
+            }
 
             if (model.Area == null)
             {
@@ -1185,7 +1218,10 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
             }
-
+            if((model.ApplicationMethod== (int)NMP.Portal.Enums.ApplicationMethod.DeepInjection2530cm) || (model.ApplicationMethod == (int)NMP.Portal.Enums.ApplicationMethod.ShallowInjection57cm))
+            {
+                return RedirectToAction("ConditionsAffectingNutrients");
+            }
             int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
             (List<ManureType> manureTypeList, Error error) = await _organicManureService.FetchManureTypeList(model.ManureGroupId.Value, countryId);
             bool isLiquid = false;
@@ -1196,14 +1232,8 @@ namespace NMP.Portal.Controllers
 
             }
 
-            string applicableFor = isLiquid ? "L" : "B";
-            //(List<ApplicationMethodResponse> applicationMethodList, Error error1) = await _organicManureService.FetchApplicationMethodList(applicableFor);
-            //ViewBag.ApplicationMethodList = applicationMethodList;
-            //if (applicationMethodList.Count == 1)
-            //{
-            //    model.ApplicationMethod = applicationMethodList[0].ID;
-            //    return RedirectToAction("DefaultNutrientValues");
-            //}
+            string applicableFor = isLiquid ? Resource.lblL : Resource.lblB;
+            
             List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
             var fieldType = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.FieldType).FirstOrDefault();
 
@@ -1233,7 +1263,7 @@ namespace NMP.Portal.Controllers
 
                 }
 
-                string applicableFor = isLiquid ? "L" : "B";
+                string applicableFor = isLiquid ? Resource.lblL :Resource.lblB;
                 List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
                 var fieldType = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.FieldType).FirstOrDefault();
 
@@ -1244,7 +1274,7 @@ namespace NMP.Portal.Controllers
             }
 
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
-            if (model.IncorporationMethod == 7)
+            if (model.IncorporationMethod == (int)NMP.Portal.Enums.IncorporationMethod.NotIncorporated)
             {
                 return RedirectToAction("ConditionsAffectingNutrients");
             }
@@ -1269,7 +1299,7 @@ namespace NMP.Portal.Controllers
                 var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
                 isLiquid = manureType.IsLiquid.Value;
                 applicableFor = isLiquid ? Resource.lblL : Resource.lblS;
-                if (manureType.Id == 8 && manureType.Name == Resource.lblPoultryManure)
+                if (manureType.Id == (int)NMP.Portal.Enums.ManureTypes.PoultryManure)
                 {
                     applicableFor = Resource.lblP;
                 }
@@ -1299,7 +1329,7 @@ namespace NMP.Portal.Controllers
                     var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
                     isLiquid = manureType.IsLiquid.Value;
                     applicableFor = isLiquid ? Resource.lblL : Resource.lblS;
-                    if (manureType.Id == 8 && manureType.Name == Resource.lblPoultryManure)
+                    if (manureType.Id == (int)NMP.Portal.Enums.ManureTypes.PoultryManure)
                     {
                         applicableFor = Resource.lblP;
                     }

@@ -80,14 +80,12 @@
                 <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
                     <h1 class="govuk-fieldset__heading">@Resource.lblEnterTheAreaAndQuantity</h1>
                 </legand>
-                <govuk-input asp-for=@Model.Area type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                <govuk-input asp-for=@Model.Area inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                     <govuk-input-suffix>@Resource.lblhectar</govuk-input-suffix>
                 </govuk-input>
-                <govuk-input asp-for=@Model.Quantity type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                <govuk-input asp-for=@Model.Quantity inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                     <govuk-input-suffix>@Resource.lbltonnes</govuk-input-suffix>
                 </govuk-input>
-
-
 
             </div>
             <govuk-button type="submit" class="margin-bottom-forty" asp-action="AreaQuantity">
