@@ -1070,7 +1070,8 @@ namespace NMP.Portal.Controllers
                             Year=DateTime.Now.Year-1,
                             Confirm=true,
                             CropTypeID=model.CropTypeID,
-                            CreatedOn=DateTime.Now,
+                            FieldType = model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass ? (int)NMP.Portal.Enums.FieldType.Grass : (int)NMP.Portal.Enums.FieldType.Arable,
+                            CreatedOn =DateTime.Now,
                             CreatedByID=userId
                         },
                         ManagementPeriods = new List<ManagementPeriod>
