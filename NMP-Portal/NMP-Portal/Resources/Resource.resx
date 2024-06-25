@@ -1483,4 +1483,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblQuantity" xml:space="preserve">
     <value>Quantity</value>
   </data>
+  <data name="MsgIfUserEnterDecimalValueInRainfall" xml:space="preserve">
+    <value>Enter a whole number without a decimal point</value>
+  </data>
 </root>
