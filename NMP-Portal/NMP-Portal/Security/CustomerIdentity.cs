@@ -46,7 +46,8 @@ namespace NMP.Portal.Security
                         //options.CallbackPath = builder.Configuration["CustomerIdentityCallbackPath"]; // signin-oidc";
                         //options.SignedOutCallbackPath = builder.Configuration["CustomerIdentitySignedOutCallbackPath"];
                         options.SignUpSignInPolicyId = builder.Configuration["CustomerIdentityPolicyId"];
-                        options.ErrorPath = "/Error/index";                        
+                        options.ErrorPath = "/Error/index";
+                        
                     })                    
                     .EnableTokenAcquisitionToCallDownstreamApi(new string[] { "openid", "profile", "offline_access", builder.Configuration["CustomerIdentityClientId"] })
                     .AddInMemoryTokenCaches();
@@ -70,8 +71,8 @@ namespace NMP.Portal.Security
             });
             services.Configure<CookieAuthenticationOptions>(CookieAuthenticationDefaults.AuthenticationScheme, options =>
             {
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(30); // Set cookie expiration time
-                options.SlidingExpiration = true; // Enable sliding expiration
+                //options.ExpireTimeSpan = TimeSpan.FromDays(14); // Set cookie expiration time
+                //options.SlidingExpiration = true; // Enable sliding expiration
             });
             services.AddTokenAcquisition();
             services.AddInMemoryTokenCaches();
