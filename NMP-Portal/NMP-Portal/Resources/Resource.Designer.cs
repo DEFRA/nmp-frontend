@@ -3878,6 +3878,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a whole number without a decimal point.
+        /// </summary>
+        public static string MsgIfUserEnterDecimalValueInRainfall {
+            get {
+                return ResourceManager.GetString("MsgIfUserEnterDecimalValueInRainfall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a Land Parcel ID that is no more than 14 characters long.
         /// </summary>
         public static string MsgLandParcelIdMinMaxValidation {
