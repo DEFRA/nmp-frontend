@@ -2060,7 +2060,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Is this field inside a Nitrate Vulnerable Zone (NVZ)?.
+        ///   Looks up a localized string similar to Is this field in a Nitrate Vulnerable Zone (NVZ)?.
         /// </summary>
         public static string lblNVZFieldForFieldCheckAnswere {
             get {
@@ -3473,6 +3473,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to application rate.
+        /// </summary>
+        public static string MsgApplicationRate {
+            get {
+                return ResourceManager.GetString("MsgApplicationRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which option applies to your {0} not set?.
         /// </summary>
         public static string MsgCropInfo1NotSet {
@@ -3671,15 +3680,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter an area before continuing.
-        /// </summary>
-        public static string MsgEnterAreaBeforeContinuing {
-            get {
-                return ResourceManager.GetString("MsgEnterAreaBeforeContinuing", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Enter a town or city.
         /// </summary>
         public static string MsgEnterATownOrCity {
@@ -3689,11 +3689,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a valid area.
+        /// </summary>
+        public static string MsgEnterAValidArea {
+            get {
+                return ResourceManager.GetString("MsgEnterAValidArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a valid postcode.
         /// </summary>
         public static string MsgEnterAValidPostcode {
             get {
                 return ResourceManager.GetString("MsgEnterAValidPostcode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a valid quantity.
+        /// </summary>
+        public static string MsgEnterAValidQuantity {
+            get {
+                return ResourceManager.GetString("MsgEnterAValidQuantity", resourceCulture);
             }
         }
         
@@ -3730,15 +3748,6 @@ namespace NMP.Portal.Resources {
         public static string MsgEnterNumericValue {
             get {
                 return ResourceManager.GetString("MsgEnterNumericValue", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Enter a quantity before continuing.
-        /// </summary>
-        public static string MsgEnterQuantityBeforeContinuing {
-            get {
-                return ResourceManager.GetString("MsgEnterQuantityBeforeContinuing", resourceCulture);
             }
         }
         
@@ -4027,6 +4036,15 @@ namespace NMP.Portal.Resources {
         public static string MsgPreviousCropTypeNotSet {
             get {
                 return ResourceManager.GetString("MsgPreviousCropTypeNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to quantity.
+        /// </summary>
+        public static string MsgQuantity {
+            get {
+                return ResourceManager.GetString("MsgQuantity", resourceCulture);
             }
         }
         

@@ -1136,7 +1136,7 @@ namespace NMP.Portal.Controllers
                 if (applicationRateError != null && applicationRateError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["ApplicationRate"].RawValue, Resource.lblApplicationRate)))
                 {
                     ModelState["ApplicationRate"].Errors.Clear();
-                    ModelState["ApplicationRate"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblApplicationRate));
+                    ModelState["ApplicationRate"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.MsgApplicationRate));
                 }
             }
 
@@ -1178,7 +1178,7 @@ namespace NMP.Portal.Controllers
                 if (areaError != null && areaError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["Area"].RawValue, Resource.lblAreas)))
                 {
                     ModelState["Area"].Errors.Clear();
-                    ModelState["Area"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblAreas));
+                    ModelState["Area"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblArea));
                 }
             }
             if ((!ModelState.IsValid) && ModelState.ContainsKey("Quantity"))
@@ -1189,17 +1189,17 @@ namespace NMP.Portal.Controllers
                 if (quantityError != null && quantityError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["Quantity"].RawValue, Resource.lblQuantity)))
                 {
                     ModelState["Quantity"].Errors.Clear();
-                    ModelState["Quantity"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblQuantity));
+                    ModelState["Quantity"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.MsgQuantity));
                 }
             }
 
             if (model.Area == null)
             {
-                ModelState.AddModelError("Area", Resource.MsgEnterAreaBeforeContinuing);
+                ModelState.AddModelError("Area", Resource.MsgEnterAValidArea);
             }
             if (model.Quantity == null)
             {
-                ModelState.AddModelError("Quantity", Resource.MsgEnterQuantityBeforeContinuing);
+                ModelState.AddModelError("Quantity", Resource.MsgEnterAValidQuantity);
             }
             if (!ModelState.IsValid)
             {
