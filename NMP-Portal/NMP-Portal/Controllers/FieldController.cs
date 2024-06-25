@@ -153,6 +153,10 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
             }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
             return View(model);
         }
         [HttpPost]
@@ -244,9 +248,14 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
             }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+
             string farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
             (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-            if (model.IsWithinNVZForFarm.HasValue&&model.IsWithinNVZForFarm.Value)
+            if (model.IsWithinNVZForFarm.HasValue && model.IsWithinNVZForFarm.Value)
             {
                 return View(model);
             }
@@ -285,9 +294,14 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
             }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+
             string farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
             (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-            if (model.IsAbove300SeaLevelForFarm.HasValue&& model.IsAbove300SeaLevelForFarm.Value)
+            if (model.IsAbove300SeaLevelForFarm.HasValue && model.IsAbove300SeaLevelForFarm.Value)
             {
                 return View(model);
             }
@@ -411,6 +425,10 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
             }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
             return View(model);
         }
 
@@ -465,6 +483,10 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
             }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
             model.IsSoilReleasingClay = false;
             return View(model);
         }
@@ -501,6 +523,10 @@ namespace NMP.Portal.Controllers
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
             }
             return View(model);
         }
@@ -563,6 +589,11 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
             }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+
             return View(model);
         }
         [HttpPost]
@@ -590,6 +621,10 @@ namespace NMP.Portal.Controllers
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
             }
             return View(model);
         }
@@ -674,8 +709,8 @@ namespace NMP.Portal.Controllers
 
                 if (model.IsSoilNutrientValueTypeIndex != null && (!model.IsSoilNutrientValueTypeIndex.Value))
                 {
-                    (List<NutrientResponseWrapper> nutrients,error) = await _fieldService.FetchNutrientsAsync();
-                    if (error == null&&nutrients.Count > 0)
+                    (List<NutrientResponseWrapper> nutrients, error) = await _fieldService.FetchNutrientsAsync();
+                    if (error == null && nutrients.Count > 0)
                     {
                         int phosphorusId = 1;
                         int potassiumId = 2;
@@ -701,7 +736,7 @@ namespace NMP.Portal.Controllers
 
                         (model.SoilAnalyses.PhosphorusIndex, error) = await _soilService.FetchSoilNutrientIndex(phosphorusId, model.SoilAnalyses.Phosphorus, (int)PhosphorusMethodology.Olsens);
                         (model.SoilAnalyses.MagnesiumIndex, error) = await _soilService.FetchSoilNutrientIndex(magnesiumId, model.SoilAnalyses.Magnesium, (int)MagnesiumMethodology.None);
-                        (model.SoilAnalyses.PotassiumIndex, error) = await _soilService.FetchSoilNutrientIndex(potassiumId, model.SoilAnalyses.Potassium, (int)PotassiumMethodology.None);                        
+                        (model.SoilAnalyses.PotassiumIndex, error) = await _soilService.FetchSoilNutrientIndex(potassiumId, model.SoilAnalyses.Potassium, (int)PotassiumMethodology.None);
                         //if (error != null && error.Message != null)
                         //{
                         //    ViewBag.Error = error.Message;
@@ -743,6 +778,10 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
             }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             return View(model);
         }
@@ -774,6 +813,10 @@ namespace NMP.Portal.Controllers
                 if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
                 {
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
                 }
                 cropGroups = await _fieldService.FetchCropGroups();
                 //_httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropGroupList", cropGroups);
@@ -810,7 +853,10 @@ namespace NMP.Portal.Controllers
                     field.CropTypeID = null;
                 }
             }
-
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
             field.CropGroup = await _fieldService.FetchCropGroupById(field.CropGroupId.Value);
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", field);
 
@@ -828,6 +874,10 @@ namespace NMP.Portal.Controllers
                 if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
                 {
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
                 }
 
                 cropTypes = await _fieldService.FetchCropTypes(model.CropGroupId ?? 0);
@@ -875,6 +925,11 @@ namespace NMP.Portal.Controllers
                 {
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
                 }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
                 if (model == null)
                 {
                     model = new FieldViewModel();
@@ -897,6 +952,10 @@ namespace NMP.Portal.Controllers
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
             }
             model.IsCheckAnswer = false;
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
@@ -1094,21 +1153,21 @@ namespace NMP.Portal.Controllers
             (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(farmId)));
             int fieldId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
             var field = await _fieldService.FetchFieldByFieldId(fieldId);
-            model.Name= field.Name;
-            model.TotalArea=field.TotalArea??0;
-            model.CroppedArea = field.CroppedArea??0;
-            model.ManureNonSpreadingArea = field.ManureNonSpreadingArea??0;
+            model.Name = field.Name;
+            model.TotalArea = field.TotalArea ?? 0;
+            model.CroppedArea = field.CroppedArea ?? 0;
+            model.ManureNonSpreadingArea = field.ManureNonSpreadingArea ?? 0;
             //model.SoilType = await _fieldService.FetchSoilTypeById(field.SoilTypeID.Value); 
-            model.SoilReleasingClay = field.SoilReleasingClay??false;
-            model.IsWithinNVZ = field.IsWithinNVZ??false;
-            model.IsAbove300SeaLevel = field.IsAbove300SeaLevel??false;
+            model.SoilReleasingClay = field.SoilReleasingClay ?? false;
+            model.IsWithinNVZ = field.IsWithinNVZ ?? false;
+            model.IsAbove300SeaLevel = field.IsAbove300SeaLevel ?? false;
 
             var soilType = await _fieldService.FetchSoilTypeById(field.SoilTypeID.Value);
             model.SoilType = !string.IsNullOrWhiteSpace(soilType) ? soilType : string.Empty;
 
             model.EncryptedFarmId = farmId;
             model.FarmName = farm.Name;
-            List<SoilAnalysisResponse> soilAnalysisResponse= await _fieldService.FetchSoilAnalysisByFieldId(fieldId);
+            List<SoilAnalysisResponse> soilAnalysisResponse = await _fieldService.FetchSoilAnalysisByFieldId(fieldId);
             ViewBag.SampleDate = soilAnalysisResponse;
 
             return View(model);

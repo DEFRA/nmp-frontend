@@ -159,6 +159,10 @@ namespace NMP.Portal.Controllers
                 {
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
                 }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
                 List<CropGroupResponse> cropGroups = await _fieldService.FetchCropGroups();
                 var country = model.IsEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
                 var cropGroupsList = cropGroups.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.All).ToList();
@@ -215,6 +219,10 @@ namespace NMP.Portal.Controllers
                         return RedirectToAction("CheckAnswer");
                     }
                 }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
 
                 if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other)
                 {
@@ -254,6 +262,11 @@ namespace NMP.Portal.Controllers
                 {
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
                 }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
                 if (model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Other)
                 {
                     List<CropTypeResponse> cropTypes = await _fieldService.FetchCropTypes(model.CropGroupId ?? 0);
@@ -329,6 +342,11 @@ namespace NMP.Portal.Controllers
                             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                         }
                     }
+                    else
+                    {
+                        return RedirectToAction("FarmList", "Farm");
+                    }
+
                 }
 
                 if (model.CropTypeID != null)
@@ -354,6 +372,10 @@ namespace NMP.Portal.Controllers
                 if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
                 {
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
                 }
                 if (model != null && model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes)
                 {
@@ -453,6 +475,10 @@ namespace NMP.Portal.Controllers
                                             }
                                         }
                                     }
+                                    else
+                                    {
+                                        return RedirectToAction("FarmList", "Farm");
+                                    }
 
                                     model.Crops.Add(crop);
                                 }
@@ -491,6 +517,10 @@ namespace NMP.Portal.Controllers
                                         return RedirectToAction("CheckAnswer");
                                     }
                                 }
+                            }
+                            else
+                            {
+                                return RedirectToAction("FarmList", "Farm");
                             }
                         }
 
@@ -532,6 +562,11 @@ namespace NMP.Portal.Controllers
                 {
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
                 }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
                 int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
                 List<Field> fieldList = await _fieldService.FetchFieldsByFarmId(farmID);
                 var SelectListItem = fieldList.Select(f => new SelectListItem
@@ -640,6 +675,10 @@ namespace NMP.Portal.Controllers
                                     }
                                 }
                             }
+                            else
+                            {
+                                return RedirectToAction("FarmList", "Farm");
+                            }
 
                             model.Crops.Add(crop);
                         }
@@ -690,6 +729,10 @@ namespace NMP.Portal.Controllers
                             }
                         }
                     }
+                    else
+                    {
+                        return RedirectToAction("FarmList", "Farm");
+                    }
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
 
@@ -712,6 +755,11 @@ namespace NMP.Portal.Controllers
                 {
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
                 }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
                 if (model.IsQuestionChange)
                 {
                     model.IsQuestionChange = false;
@@ -745,6 +793,10 @@ namespace NMP.Portal.Controllers
                 if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
                 {
                     planViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
                 }
                 if (planViewModel.SowingDateQuestion == model.SowingDateQuestion && (!model.IsAnyChangeInField) && (!model.IsCropGroupChange))
                 {
@@ -791,6 +843,10 @@ namespace NMP.Portal.Controllers
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
             }
             if (string.IsNullOrWhiteSpace(q) && model.Crops != null && model.Crops.Count > 0)
             {
@@ -932,6 +988,10 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
             }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
             if (model.IsQuestionChange)
             {
                 model.IsQuestionChange = false;
@@ -966,6 +1026,10 @@ namespace NMP.Portal.Controllers
                 {
                     planViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
                 }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
                 if (planViewModel.YieldQuestion == model.YieldQuestion && (!model.IsAnyChangeInField) && (!model.IsCropGroupChange))
                 {
                     return RedirectToAction("CheckAnswer");
@@ -987,6 +1051,10 @@ namespace NMP.Portal.Controllers
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
             }
             if (string.IsNullOrWhiteSpace(q) && model.Crops != null && model.Crops.Count > 0)
             {
@@ -1111,6 +1179,10 @@ namespace NMP.Portal.Controllers
                 {
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
                 }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
                 List<CropInfoOneResponse> cropInfoOneResponse = await _cropService.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0);
                 var country = model.IsEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
                 var cropInfoOneList = cropInfoOneResponse.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.All).ToList();
@@ -1189,6 +1261,10 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
             }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
             return View(model);
         }
 
@@ -1208,6 +1284,10 @@ namespace NMP.Portal.Controllers
                 if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
                 {
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
                 }
 
                 List<CropInfoTwoResponse> cropInfoTwoResponse = await _cropService.FetchCropInfoTwoByCropTypeId();
@@ -1271,6 +1351,10 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
             }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
             model.IsCheckAnswer = true;
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("CropData", model);
             return View(model);
@@ -1282,6 +1366,10 @@ namespace NMP.Portal.Controllers
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
             }
             string action = model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other ? "Yield" : model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Cereals ?
                 "CropInfoTwo" : "CropInfoOne";
