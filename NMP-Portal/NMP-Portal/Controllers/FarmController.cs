@@ -394,7 +394,15 @@ namespace NMP.Portal.Controllers
                 if (RainfallError != null && RainfallError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["Rainfall"].RawValue, Resource.lblRainfall)))
                 {
                     ModelState["Rainfall"].Errors.Clear();
-                    ModelState["Rainfall"].Errors.Add(Resource.MsgForRainfallManual);
+                    decimal decimalValue;
+                    if (decimal.TryParse(ModelState["Rainfall"].RawValue.ToString(), out decimalValue))
+                    {
+                        ModelState["Rainfall"].Errors.Add(Resource.MsgIfUserEnterDecimalValueInRainfall);
+                    }
+                    else
+                    {
+                        ModelState["Rainfall"].Errors.Add(Resource.MsgForRainfallManual);
+                    }
                 }
             }
             //we need to call api for rainfall on the basis of postcode
