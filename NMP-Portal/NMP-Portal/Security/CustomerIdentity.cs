@@ -71,8 +71,8 @@ namespace NMP.Portal.Security
             });
             services.Configure<CookieAuthenticationOptions>(CookieAuthenticationDefaults.AuthenticationScheme, options =>
             {
-                //options.ExpireTimeSpan = TimeSpan.FromDays(14); // Set cookie expiration time
-                //options.SlidingExpiration = true; // Enable sliding expiration
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(20); // Set cookie expiration time
+                options.SlidingExpiration = true; // Enable sliding expiration
             });
             services.AddTokenAcquisition();
             services.AddInMemoryTokenCaches();

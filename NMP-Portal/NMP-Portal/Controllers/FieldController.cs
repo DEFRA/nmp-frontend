@@ -341,6 +341,10 @@ namespace NMP.Portal.Controllers
                 {
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
                 }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
 
 
                 soilTypes = await _fieldService.FetchSoilTypes();
