@@ -69,6 +69,7 @@ namespace NMP.Portal.Controllers
                     model.HarvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(r));
                     model.EncryptedFarmId = q;
                     model.EncryptedHarvestYear = r;
+                    model.IsSingleField = false;
                     (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
                     if (error == null)
                     {
@@ -84,7 +85,7 @@ namespace NMP.Portal.Controllers
                 (List<OrganicManureCropTypeResponse> cropTypeList, error) = await _organicManureService.FetchCropTypeByFarmIdAndHarvestYear(model.FarmId.Value, model.HarvestYear.Value);
                 if (error == null)
                 {
-                    if (cropTypeList.Count > 0)
+                    if (cropTypeList.Count > 1)
                     {
                         var SelectListItem = cropTypeList.Select(f => new SelectListItem
                         {
@@ -94,6 +95,68 @@ namespace NMP.Portal.Controllers
                         SelectListItem.Insert(0, new SelectListItem { Value = Resource.lblAll, Text = string.Format(Resource.lblAllFieldsInTheYearPlan, model.HarvestYear) });
                         SelectListItem.Add(new SelectListItem { Value = Resource.lblSelectSpecificFields, Text = Resource.lblSelectSpecificFields });
                         ViewBag.FieldGroupList = SelectListItem;
+                    }
+                    if (cropTypeList.Count == 1)
+                    {
+                        model.FieldGroup = "Select specific fields";
+
+                        (List<OrganicManureFieldResponse> fieldList, error) = await _organicManureService.FetchFieldByFarmIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
+                        if (error == null)
+                        {
+                            if (model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
+                            {
+                                if (fieldList.Count == 1)
+                                {
+
+                                    var SelectListItem = fieldList.Select(f => new SelectListItem
+                                    {
+                                        Value = f.FieldId.ToString(),
+                                        Text = f.FieldName.ToString()
+                                    }).ToList();
+                                    //ViewBag.FieldList = SelectListItem;
+                                    //code sk
+
+                                    model.FieldList = SelectListItem.Select(item => item.Value).ToList();
+
+                                    string fieldIds = string.Join(",", model.FieldList);
+                                    (List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldIds, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
+                                    if (error == null)
+                                    {
+                                        if (managementIds.Count > 0)
+                                        {
+                                            if (model.OrganicManures == null)
+                                            {
+                                                model.OrganicManures = new List<OrganicManure>();
+                                            }
+                                            if (model.OrganicManures.Count > 0)
+                                            {
+                                                model.OrganicManures.Clear();
+                                            }
+                                            foreach (var manIds in managementIds)
+                                            {
+                                                var organicManure = new OrganicManure
+                                                {
+                                                    ManagementPeriodID = manIds
+                                                };
+                                                model.OrganicManures.Add(organicManure);
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        TempData["FieldError"] = error.Message;
+                                        return View(model);
+                                    }
+                                    model.IsSingleField = true;
+                                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+
+                                    return RedirectToAction("ManureGroup");
+
+                                }
+                                return View(model);
+                            }
+
+                        }
                     }
                 }
                 else
@@ -916,7 +979,7 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState["UricAcid"].Errors.Clear();
                     ModelState["UricAcid"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblUricAcid));
-                } 
+                }
             }
             if ((!ModelState.IsValid) && ModelState.ContainsKey("NO3N"))
             {
@@ -1233,7 +1296,7 @@ namespace NMP.Portal.Controllers
             }
 
             string applicableFor = isLiquid ? Resource.lblL : Resource.lblB;
-            
+
             List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
             var fieldType = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.FieldType).FirstOrDefault();
 
