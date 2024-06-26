@@ -5,7 +5,17 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.FieldGroup==Resource.lblSelectSpecificFields?"Fields":"FieldGroup")" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
+
+    @*     <govuk-back-link asp-action="@(Model.FieldGroup==Resource.lblSelectSpecificFields?"Fields":"FieldGroup")" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>  *@
+
+    @if (Model.FieldGroup == Resource.lblSelectSpecificFields && Model.IsSingleField.Value)
+    {
+        <govuk-back-link asp-action="@("HarvestYearOverview")" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
+    }
+    else
+    {
+        <govuk-back-link asp-action="@(Model.FieldGroup==Resource.lblSelectSpecificFields?"Fields":"FieldGroup")" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
+    }
 }
 
 
@@ -49,7 +59,7 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.K2O"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MgO"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SO3"></govuk-input>
-    
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSingleField" value="@Model.IsSingleField"></govuk-input>
 
     @if (Model.FieldList != null && Model.FieldList.Count > 0)
     {
