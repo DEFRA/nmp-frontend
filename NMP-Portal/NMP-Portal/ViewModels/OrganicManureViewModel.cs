@@ -55,5 +55,6 @@ namespace NMP.Portal.ViewModels
         public decimal? NO3N { get; set; }
 
         public bool? IsDefaultNutrient { get; set; } = false;
+        public bool? IsSingleField { get; set; } = false;
     }
 }
