@@ -63,6 +63,10 @@ namespace NMP.Portal.Controllers
                 {
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
                 }
+                else if (string.IsNullOrWhiteSpace(q) && string.IsNullOrWhiteSpace(r))
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
                 if ((!string.IsNullOrWhiteSpace(q)) && (!string.IsNullOrWhiteSpace(r)))
                 {
                     model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
@@ -228,6 +232,10 @@ namespace NMP.Portal.Controllers
                 {
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
                 }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
                 (List<OrganicManureFieldResponse> fieldList, error) = await _organicManureService.FetchFieldByFarmIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
                 if (error == null)
                 {
@@ -382,6 +390,10 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
             }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
             try
             {
                 (List<CommonResponse> manureGroupList, Error error) = await _organicManureService.FetchManureGroupList();
@@ -480,6 +492,10 @@ namespace NMP.Portal.Controllers
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
             }
             try
             {
@@ -609,6 +625,10 @@ namespace NMP.Portal.Controllers
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
             }
             int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
             (List<ManureType> manureTypeList, Error error) = await _organicManureService.FetchManureTypeList(model.ManureGroupId.Value, countryId);
@@ -758,6 +778,10 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
             }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
 
             int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
             (List<ManureType> manureTypeList, Error error) = await _organicManureService.FetchManureTypeList(model.ManureGroupId.Value, countryId);
@@ -849,6 +873,10 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
             }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
 
             (ManureType manureType, Error error) = await _organicManureService.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
             model.ManureType = manureType;
@@ -928,8 +956,10 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
             }
-
-
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
 
             return View(model);
         }
@@ -1105,6 +1135,10 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
             }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
 
             int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
             (List<ManureType> manureTypeList, Error error) = await _organicManureService.FetchManureTypeList(model.ManureGroupId.Value, countryId);
@@ -1176,6 +1210,10 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
             }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
 
             int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
             (List<ManureType> manureTypeList, Error error) = await _organicManureService.FetchManureTypeList(model.ManureGroupId.Value, countryId);
@@ -1224,6 +1262,10 @@ namespace NMP.Portal.Controllers
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
             }
 
             return View(model);
@@ -1281,7 +1323,11 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
             }
-            if((model.ApplicationMethod== (int)NMP.Portal.Enums.ApplicationMethod.DeepInjection2530cm) || (model.ApplicationMethod == (int)NMP.Portal.Enums.ApplicationMethod.ShallowInjection57cm))
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+            if ((model.ApplicationMethod== (int)NMP.Portal.Enums.ApplicationMethod.DeepInjection2530cm) || (model.ApplicationMethod == (int)NMP.Portal.Enums.ApplicationMethod.ShallowInjection57cm))
             {
                 return RedirectToAction("ConditionsAffectingNutrients");
             }
@@ -1353,6 +1399,10 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
             }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
             string applicableFor = string.Empty;
             int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
             (List<ManureType> manureTypeList, Error error) = await _organicManureService.FetchManureTypeList(model.ManureGroupId.Value, countryId);
@@ -1416,6 +1466,10 @@ namespace NMP.Portal.Controllers
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
             }
             return View(model);
         }
