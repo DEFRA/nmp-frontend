@@ -96,6 +96,10 @@ namespace NMP.Portal.Controllers
                 {
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
                 }
+                else if (string.IsNullOrWhiteSpace(q))
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
                 if (!string.IsNullOrEmpty(q))
                 {
                     model.FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(q));

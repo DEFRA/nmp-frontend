@@ -79,6 +79,10 @@ namespace NMP.Portal.Controllers
                 {
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
                 }
+                else if (string.IsNullOrWhiteSpace(q)&& string.IsNullOrWhiteSpace(year))
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
                 if (!string.IsNullOrEmpty(q))
                 {
                     int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(q));

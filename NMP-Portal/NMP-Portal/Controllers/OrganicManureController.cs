@@ -63,6 +63,10 @@ namespace NMP.Portal.Controllers
                 {
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
                 }
+                else if (string.IsNullOrWhiteSpace(q) && string.IsNullOrWhiteSpace(r))
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
                 if ((!string.IsNullOrWhiteSpace(q)) && (!string.IsNullOrWhiteSpace(r)))
                 {
                     model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
