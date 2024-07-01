@@ -424,7 +424,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblFarmAddress" xml:space="preserve">
     <value>Farm Address</value>
   </data>
-  <data name="lblFarmCheck" xml:space="preserve">
+  <data name="lblCheckAnswer" xml:space="preserve">
     <value>Check Answer</value>
   </data>
   <data name="lblAddThisFarm" xml:space="preserve">
@@ -1491,5 +1491,47 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
   <data name="MsgQuantity" xml:space="preserve">
     <value>quantity</value>
+  </data>
+  <data name="lblAddToPlan" xml:space="preserve">
+    <value>Add to plan</value>
+  </data>
+  <data name="lblAutumnCropNitrogenUptake" xml:space="preserve">
+    <value>Autumn crop Nitrogen uptake</value>
+  </data>
+  <data name="lblDoYouWantToUseTheseNutrientValuesFromRB209" xml:space="preserve">
+    <value>Do you want to use these nutrient values from RB209 for {0} ?</value>
+  </data>
+  <data name="lblEndOfSoilDrainage" xml:space="preserve">
+    <value>End of soil drainage</value>
+  </data>
+  <data name="lblHowLongIsTheGapBetweenApplicationAndIncorporation" xml:space="preserve">
+    <value>How long is the gap between application and incorporation for your {0} ?</value>
+  </data>
+  <data name="lblHowWouldYouLikeToEnterTheApplicationRateA" xml:space="preserve">
+    <value>What is the incorporation method for your {0} ?</value>
+  </data>
+  <data name="lblRainfallWithinSixHoursOfApplication" xml:space="preserve">
+    <value>Rainfall within 6 hours of application</value>
+  </data>
+  <data name="lblTopsoilMoisture" xml:space="preserve">
+    <value>Topsoil moisture</value>
+  </data>
+  <data name="lblTotalRainfallSinceApplication" xml:space="preserve">
+    <value>Total rainfall since application</value>
+  </data>
+  <data name="lblWhatIsTheApplicationMethodForYour" xml:space="preserve">
+    <value>What is the application method for your {0} ?</value>
+  </data>
+  <data name="lblWhatTypeOfOrganicMaterialAreYouUsing" xml:space="preserve">
+    <value>What type of organic material are you using in this application?</value>
+  </data>
+  <data name="lblWhenAreYouApplyingYourManureType" xml:space="preserve">
+    <value>When are you applying your {0} ?</value>
+  </data>
+  <data name="lblWhichFieldsWouldYouLikeToPlan" xml:space="preserve">
+    <value>Which fields would you like to plan an organic material application for?</value>
+  </data>
+  <data name="lblWindspeedAtApplication" xml:space="preserve">
+    <value>Windspeed at application</value>
   </data>
 </root>
