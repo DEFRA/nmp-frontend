@@ -5,6 +5,7 @@
     ViewData["Title"] = Resource.lblCheckAnswer;
     var applicationDate = Model.ApplicationDate.Value.Date.ToString("dd MMMM yyyy");
     var isDefaultNutrientValues = "";
+    var howWouldYouEnterApplicationRate = "";
 
     switch (Model.IsDefaultNutrientValues)
     {
@@ -13,6 +14,18 @@
             break;
         case false:
             isDefaultNutrientValues = Resource.lblIwantToEnterARecentManure;
+            break;
+    }
+    switch (Model.ApplicationRateMethod)
+    {
+        case 0:
+            howWouldYouEnterApplicationRate = Resource.lblEnterAnApplicationRate;
+            break;
+        case 1:
+            howWouldYouEnterApplicationRate = Resource.lblCalculateBasedOnTheAreaAndQuantity;
+            break;
+        case 2:
+            howWouldYouEnterApplicationRate = string.Format(Resource.lblUseTypicalApplicationRate, Model.ApplicationRateArable);
             break;
     }
 
@@ -70,6 +83,11 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsFieldGroupChange" value="@Model.IsFieldGroupChange.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManureTypeChange" value="@Model.IsManureTypeChange.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManureTypeLiquid" value="@Model.IsManureTypeLiquid.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationMethodName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationDelayName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationMethodName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroupName"></govuk-input>
+
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -102,10 +120,10 @@
                         @Resource.lblWhichFieldsWouldYouLikeToPlan
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
-                        @Model.FieldGroup
+                        @Model.FieldGroupName
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="FieldGroup" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action class="disabled" asp-action="FieldGroup" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
@@ -116,7 +134,7 @@
                         @Model.ManureTypeName
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="ManureType" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action class="disabled" asp-action="ManureType" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
@@ -127,7 +145,7 @@
                         @applicationDate
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="ManureApplyingDate" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action class="disabled" asp-action="ManureApplyingDate" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
@@ -135,10 +153,10 @@
                         @string.Format(Resource.lblWhatIsTheApplicationMethodForYour, Model.ManureTypeName)
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
-                        @Model.ApplicationMethod
+                        @Model.ApplicationMethodName
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="ApplicationMethod" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action class="disabled" asp-action="ApplicationMethod" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
@@ -149,7 +167,7 @@
                         @isDefaultNutrientValues
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="DefaultNutrientValues" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action class="disabled" asp-action="DefaultNutrientValues" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
@@ -157,10 +175,21 @@
                         @string.Format(Resource.lblHowWouldYouLikeToEnterTheApplicationRate, Model.ManureTypeName)
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
+                        @howWouldYouEnterApplicationRate
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action class="disabled" asp-action="ApplicationRateMethod" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        @Resource.lblApplicationRateRow
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
                         @Model.ApplicationRate
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="ManualApplicationRate" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action class="disabled" asp-action="ManualApplicationRate" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
@@ -168,10 +197,10 @@
                         @string.Format(Resource.lblWhatIsTheIncorporationMethod, Model.ManureTypeName)
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
-                        @Model.IncorporationMethod
+                        @Model.IncorporationMethodName
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="IncorporationMethod" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action class="disabled" asp-action="IncorporationMethod" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
@@ -179,10 +208,10 @@
                         @string.Format(Resource.lblHowLongIsTheGapBetweenApplicationAndIncorporation, Model.ManureTypeName)
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
-                        @Model.IncorporationDelay
+                        @Model.IncorporationDelayName
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="IncorporationDelay" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action class="disabled" asp-action="IncorporationDelay" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
@@ -193,7 +222,7 @@
                         @Model.AutumnCropNitrogenUptake
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="AutumnCropNitrogenUptake" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action class="disabled" asp-action="AutumnCropNitrogenUptake" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
@@ -204,7 +233,7 @@
                         @Model.EndOfSoilDrainage
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="EndOfSoilDrainage" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action class="disabled" asp-action="EndOfSoilDrainage" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
@@ -215,7 +244,7 @@
                         @Model.RainfallWithinSixHours
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action=RainfallWithinSixHoursID asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action class="disabled" asp-action=RainfallWithinSixHoursID asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
 
@@ -227,7 +256,7 @@
                         @Model.Rainfall
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="Rainfall" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action class="disabled" asp-action="Rainfall" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
@@ -238,7 +267,7 @@
                         @Model.Windspeed
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="Windspeed" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action class="disabled" asp-action="Windspeed" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
@@ -249,7 +278,7 @@
                         @Model.Moisture
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="Moisture" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action class="disabled" asp-action="Moisture" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
             </govuk-summary-list>

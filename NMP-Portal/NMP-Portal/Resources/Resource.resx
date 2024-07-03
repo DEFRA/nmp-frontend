@@ -1534,4 +1534,9 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblWindspeedAtApplication" xml:space="preserve">
     <value>Windspeed at application</value>
   </data>
+  <data name="lblApplicationRateRow" xml:space="preserve">
+    <value>Application rate
+t/ha
+m3/ha</value>
+  </data>
 </root>

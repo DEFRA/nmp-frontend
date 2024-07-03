@@ -412,6 +412,17 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application rate
+        ///t/ha
+        ///m3/ha.
+        /// </summary>
+        public static string lblApplicationRateRow {
+            get {
+                return ResourceManager.GetString("lblApplicationRateRow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to area.
         /// </summary>
         public static string lblArea {

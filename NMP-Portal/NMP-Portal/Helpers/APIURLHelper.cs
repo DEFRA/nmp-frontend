@@ -49,12 +49,15 @@ namespace NMP.Portal.Helpers
         public const string FetchManureTypeByManureTypeIdAsyncAPI = "manure-types/{0}";
 
         public const string FetchApplicationMethodsByApplicableForAsyncAPI = "application-method?fieldType={0}&applicableFor={1}";
-        public const string FetchIncorporationMethodsByApplicationIdAsyncAPI = "incorporation-methods/{0}?fieldType={1}&applicableFor={2}";
+        public const string FetchIncorporationMethodsByApplicationIdAsyncAPI = "incorporation-methods/application-methods/{0}?fieldType={1}&applicableFor={2}";
 
         public const string FetchCropsByFieldIdAsyncAPI = "crops/fields/{0}";
 
-        public const string FetchIncorporationDelaysByMethodIdAndApplicableForAsyncAPI = "incorporation-delays/{0}?applicableFor={1}";
+        public const string FetchIncorporationDelaysByMethodIdAndApplicableForAsyncAPI = "incorporation-delays/incorporation-methods/{0}?applicableFor={1}";
 
         public const string FetchFieldDetailByFieldIdAndHarvestYearAsyncAPI = "fields/info/{0}?year={1}&confirm={2}";
+        public const string FetchIncorporationDelayByIdAsyncAPI = "incorporation-delays/{0}";
+        public const string FetchIncorporationMethodByIdAsyncAPI = "incorporation-methods/{0}";
+        public const string FetchApplicationMethodByIdAsyncAPI = "application-method/{0}";
     }
 }

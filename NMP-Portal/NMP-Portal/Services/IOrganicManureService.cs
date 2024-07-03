@@ -18,6 +18,10 @@ namespace NMP.Portal.Services
 
         Task<(List<IncorporationMethodResponse>, Error)> FetchIncorporationMethodsByApplicationId(int fieldType,string applicableFor,int appId);
         Task<(List<IncorprationDelaysResponse>, Error)> FetchIncorporationDelaysByMethodIdAndApplicableFor(int methodId, string applicableFor);
+               
+        Task<(string, Error)> FetchApplicationMethodById(int Id);
+        Task<(string, Error)> FetchIncorporationMethodById(int Id);
+        Task<(string, Error)> FetchIncorporationDelayById(int Id);
 
     }
 }
