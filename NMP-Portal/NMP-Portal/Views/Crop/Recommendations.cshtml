@@ -28,6 +28,13 @@
     }
     @Html.AntiForgeryToken()
     <div class="govuk-grid-row">
+
+        @if (TempData["NutrientRecommendationsError"] != null)
+        {
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["NutrientRecommendationsError"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        }
         @if (Model.Recommendations.Count > 0 && Model.Crops.Count > 0)
         {
             <div class="govuk-grid-column-two-thirds">
@@ -45,6 +52,16 @@
                         <a href="#">@string.Format(Resource.lblChangeForReccomendation, crop.CropTypeName, Model.FieldName)</a>
 
                     </p>
+                    <p class="govuk-body">
+
+                        <a asp-action="FieldGroup" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear" asp-route-s="@Model.EncryptedFieldId">@string.Format(Resource.lblPlanOrEditAnApplicationOfOrganicMaterial, Model.FieldName)</a>
+
+                    </p>
+                  @*   <p class="govuk-body">
+
+                        <a href="#">@string.Format(Resource.lblChangeForReccomendation, crop.CropTypeName, Model.FieldName)</a>
+
+                    </p> *@
                 </div>
                 <div class="govuk-grid-column-two-thirds"><h2 class="govuk-heading-m"> @Resource.lblCropDetails</h2></div>
                 <div class="govuk-grid-column-full margin-bottom-forty table-container">

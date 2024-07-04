@@ -2231,6 +2231,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Plan or edit an application of organic material to {0}.
+        /// </summary>
+        public static string lblPlanOrEditAnApplicationOfOrganicMaterial {
+            get {
+                return ResourceManager.GetString("lblPlanOrEditAnApplicationOfOrganicMaterial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Plans.
         /// </summary>
         public static string lblPlans {

@@ -1651,7 +1651,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Recommendations(string q, string r, string? s)//q=fieldId,s=harvestYear
+        public async Task<IActionResult> Recommendations(string q, string r, string? s)//q=farmId,r=fieldId,s=harvestYear
         {
             RecommendationViewModel model = new RecommendationViewModel();
             Error error = null;
@@ -1672,6 +1672,7 @@ namespace NMP.Portal.Controllers
                 if (!string.IsNullOrWhiteSpace(r))
                 {
                     decryptedFieldId = Convert.ToInt32(_cropDataProtector.Unprotect(r));
+                    model.EncryptedFieldId = r;
                 }
                 if (!string.IsNullOrWhiteSpace(s))
                 {
@@ -1683,6 +1684,7 @@ namespace NMP.Portal.Controllers
                     (recommendations, error) = await _cropService.FetchRecommendationByFieldIdAndYear(decryptedFieldId, decryptedHarvestYear);
                     if (error == null)
                     {
+                     
                         if (model.Crops == null)
                         {
                             model.Crops = new List<CropViewModel>();

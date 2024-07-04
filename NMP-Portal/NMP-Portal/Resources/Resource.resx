@@ -1492,4 +1492,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="MsgQuantity" xml:space="preserve">
     <value>quantity</value>
   </data>
+  <data name="lblPlanOrEditAnApplicationOfOrganicMaterial" xml:space="preserve">
+    <value>Plan or edit an application of organic material to {0}</value>
+  </data>
 </root>
