@@ -35,7 +35,7 @@ namespace NMP.Portal.ViewModels
         public int? ApplicationRateMethod { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblApplicationRate))]
-        public decimal? ApplicationRate { get; set; }
+        public int? ApplicationRate { get; set; }
         public int? ApplicationMethod { get; set; }
         //public int? ManualApplicationRate { get; set; }
         public decimal? Area { get; set; }

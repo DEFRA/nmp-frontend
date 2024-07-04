@@ -22,6 +22,7 @@ namespace NMP.Portal.Services
         Task<(string, Error)> FetchApplicationMethodById(int Id);
         Task<(string, Error)> FetchIncorporationMethodById(int Id);
         Task<(string, Error)> FetchIncorporationDelayById(int Id);
+        Task<(bool, Error)> AddOrganicManuresAsync(string organicManureData);
 
     }
 }

@@ -1,10 +1,12 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NMP.Portal.Enums;
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
 using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace NMP.Portal.Services
 {
@@ -221,7 +223,7 @@ namespace NMP.Portal.Services
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        var manureTypes = responseWrapper.Data.ManureTypes.ToObject<List<ManureType>>();                       
+                        var manureTypes = responseWrapper.Data.ManureTypes.ToObject<List<ManureType>>();
                         manureTypeList.AddRange(manureTypes);
                     }
                 }
@@ -252,7 +254,7 @@ namespace NMP.Portal.Services
         }
         public async Task<(CommonResponse, Error)> FetchManureGroupById(int manureGroupId)
         {
-            CommonResponse manureGroup =new CommonResponse();
+            CommonResponse manureGroup = new CommonResponse();
             Error error = null;
             try
             {
@@ -293,7 +295,7 @@ namespace NMP.Portal.Services
             return (manureGroup, error);
         }
 
-        public async Task<(ManureType,Error)> FetchManureTypeByManureTypeId(int manureTypeId)
+        public async Task<(ManureType, Error)> FetchManureTypeByManureTypeId(int manureTypeId)
         {
             ManureType manureType = new ManureType();
             Error error = null;
@@ -337,7 +339,7 @@ namespace NMP.Portal.Services
             return (manureType, error);
         }
 
-        public async Task<(List<ApplicationMethodResponse>, Error)> FetchApplicationMethodList(int fieldType,string applicableFor)
+        public async Task<(List<ApplicationMethodResponse>, Error)> FetchApplicationMethodList(int fieldType, string applicableFor)
         {
             List<ApplicationMethodResponse> applicationMethodList = new List<ApplicationMethodResponse>();
             Error error = null;
@@ -388,7 +390,7 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchIncorporationMethodsByApplicationIdAsyncAPI, appId,fieldType,applicableFor));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchIncorporationMethodsByApplicationIdAsyncAPI, appId, fieldType, applicableFor));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
@@ -479,10 +481,10 @@ namespace NMP.Portal.Services
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
                 {
-                    if (responseWrapper != null && responseWrapper.Data != null&& responseWrapper.Data.ApplicationMethod!=null)
+                    if (responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.ApplicationMethod != null)
                     {
                         applicationMethod = responseWrapper.Data.ApplicationMethod.Name;
-                        
+
                     }
                 }
                 else
@@ -522,7 +524,7 @@ namespace NMP.Portal.Services
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
                 {
-                    if (responseWrapper != null && responseWrapper.Data != null&& responseWrapper.Data.IncorporationMethod!=null)
+                    if (responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.IncorporationMethod != null)
                     {
                         incorporationMethod = responseWrapper.Data.IncorporationMethod.Name;
 
@@ -565,7 +567,7 @@ namespace NMP.Portal.Services
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
                 {
-                    if (responseWrapper != null && responseWrapper.Data != null&& responseWrapper.Data.IncorporationDelay!=null)
+                    if (responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.IncorporationDelay != null)
                     {
                         incorporationDelay = responseWrapper.Data.IncorporationDelay.Name;
 
@@ -595,6 +597,51 @@ namespace NMP.Portal.Services
                 throw new Exception(error.Message, ex);
             }
             return (incorporationDelay, error);
+        }
+
+        public async Task<(bool, Error)> AddOrganicManuresAsync(string organicManureData)
+        {
+            bool success = false;
+            Error error =null;
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+
+                var response = await httpClient.PostAsync(string.Format(APIURLHelper.AddOrganicManuresAsyncAPI), new StringContent(organicManureData, Encoding.UTF8, "application/json"));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+                {
+                    var organicManures = responseWrapper.Data.OrganicManures;
+
+                    if (organicManures != null)
+                    {
+                        success = true;
+                    }
+
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (success, error);
         }
     }
 }

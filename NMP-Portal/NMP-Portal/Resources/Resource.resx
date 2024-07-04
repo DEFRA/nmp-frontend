@@ -1539,4 +1539,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
 t/ha
 m3/ha</value>
   </data>
+  <data name="MsgWeCounldNotAddOrganicManure" xml:space="preserve">
+    <value>We couldn’t add your application, please try again later</value>
+  </data>
 </root>

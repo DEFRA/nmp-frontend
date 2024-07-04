@@ -4312,6 +4312,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to We couldn’t add your application, please try again later.
+        /// </summary>
+        public static string MsgWeCounldNotAddOrganicManure {
+            get {
+                return ResourceManager.GetString("MsgWeCounldNotAddOrganicManure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to yield not set.
         /// </summary>
         public static string MsgYieldNotSet {
