@@ -35,7 +35,7 @@ namespace NMP.Portal.ViewModels
         public int? ApplicationRateMethod { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblApplicationRate))]
-        public decimal? ApplicationRate { get; set; }
+        public int? ApplicationRate { get; set; }
         public int? ApplicationMethod { get; set; }
         //public int? ManualApplicationRate { get; set; }
         public decimal? Area { get; set; }
@@ -56,5 +56,24 @@ namespace NMP.Portal.ViewModels
 
         public bool? IsDefaultNutrient { get; set; } = false;
         public bool? IsSingleField { get; set; } = false;
+        public bool IsCheckAnswer { get; set; } = false;
+        public decimal? AutumnCropNitrogenUptake { get; set; }
+
+        public DateTime? EndOfSoilDrainage { get; set; }
+
+        public int? RainfallWithinSixHoursID { get; set; }
+        public string? RainfallWithinSixHours { get; set; }
+        public int? Rainfall { get; set; }
+        public int? WindspeedID { get; set; }
+        public string? Windspeed { get; set; }
+        public int? MoistureID { get; set; }
+        public string? Moisture { get; set; }
+        public bool IsFieldGroupChange { get; set; } = false;
+        public bool IsManureTypeChange { get; set; } = false;
+        public bool? IsManureTypeLiquid { get; set; }
+        public string? ApplicationMethodName { get; set; }
+        public string? IncorporationMethodName { get; set; }
+        public string? IncorporationDelayName { get; set; }
+        public string? FieldGroupName { get; set; }
     }
 }
