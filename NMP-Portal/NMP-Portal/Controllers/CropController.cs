@@ -79,7 +79,7 @@ namespace NMP.Portal.Controllers
                 {
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
                 }
-                else if (string.IsNullOrWhiteSpace(q)&& string.IsNullOrWhiteSpace(year))
+                else if (string.IsNullOrWhiteSpace(q) && string.IsNullOrWhiteSpace(year))
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
@@ -1449,7 +1449,7 @@ namespace NMP.Portal.Controllers
                 return View("CheckAnswer", model);
             }
 
-            
+
             Error error = null;
             int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
             List<CropData> cropEntries = new List<CropData>();
@@ -1490,7 +1490,8 @@ namespace NMP.Portal.Controllers
                 {
                     id = model.EncryptedFarmId,
                     year = model.EncryptedHarvestYear,
-                    q = _farmDataProtector.Protect(success.ToString())
+                    q = _farmDataProtector.Protect(success.ToString()),
+                    r = _cropDataProtector.Protect(Resource.lblPlanCreated)
                 });
             }
             else
@@ -1500,13 +1501,17 @@ namespace NMP.Portal.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> HarvestYearOverview(string id, string year, string? q)
+        public async Task<IActionResult> HarvestYearOverview(string id, string year, string? q, string? r)
         {
             PlanViewModel model = new PlanViewModel();
             try
             {
                 if (!string.IsNullOrWhiteSpace(q))
                 {
+                    if (!string.IsNullOrWhiteSpace(r))
+                    {
+                        TempData["successMsg"] = _cropDataProtector.Unprotect(r);
+                    }
                     ViewBag.Success = true;
                 }
                 else
@@ -1531,8 +1536,7 @@ namespace NMP.Portal.Controllers
                     model.Year = harvestYear;
                     if (harvestYearPlanResponse != null && error.Message == null)
                     {
-                        model.LastModifiedOn = harvestYearPlanResponse.Max(x => x.LastModifiedOn).ToString("dd MMM yyyy");
-
+                        model.LastModifiedOn = harvestYearPlanResponse.Max(x => x.LastModifiedOn).ToString("dd MMM yyyy");                        
                         var groupedResult = harvestYearPlanResponse
                                             .GroupBy(h => new { h.CropTypeName, h.CropVariety })
                                             .Select(g => new
@@ -1556,10 +1560,16 @@ namespace NMP.Portal.Controllers
                                 CropTypeName = group.CropTypeName,
                                 CropVariety = group.CropVariety,
                             };
-
+                            harvestYearPlans.FieldData = new List<HarvestYearPlanFields>();
                             foreach (var plan in group.HarvestPlans)
                             {
-                                harvestYearPlans.FieldData.Add(_cropDataProtector.Protect(plan.FieldID.ToString()), plan.FieldName);
+                                var newField = new HarvestYearPlanFields
+                                {
+                                    EncryptedFieldId = _cropDataProtector.Protect(plan.FieldID.ToString()), // Assuming this returns a string
+                                    FieldName = plan.FieldName,
+                                    OrganicManureCount=plan.OrganicManuresCount
+                                };
+                                harvestYearPlans.FieldData.Add(newField);
                                 //harvestYearPlans.FieldNames.Add(plan.FieldName);
                             }
                             model.HarvestYearPlans.Add(harvestYearPlans);
