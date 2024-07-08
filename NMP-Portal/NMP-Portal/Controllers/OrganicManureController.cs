@@ -831,7 +831,7 @@ namespace NMP.Portal.Controllers
                 if (error != null)
                 {
                     TempData["ManureApplyingDateError"] = error.Message;
-                    return RedirectToAction("ManureApplyingDate",model);
+                    return RedirectToAction("ManureApplyingDate", model);
                 }
                 if (model.OrganicManures.Count > 0)
                 {
@@ -1716,28 +1716,30 @@ namespace NMP.Portal.Controllers
                     successMsg = string.Format(Resource.lblOrganicManureCreatedSuccessfullyForCropType, model.CropTypeName);
                 }
                 else
-                {                    
-                    if (model.FieldGroup == Resource.lblSelectSpecificFields)
+                {
+                    (List<OrganicManureFieldResponse> organicManureField, error) = await _organicManureService.FetchFieldByFarmIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
+                    if (error == null)
                     {
-                        (List<OrganicManureFieldResponse> listOfFields, error) = await _organicManureService.FetchFieldByFarmIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
-                        if (error == null)
+                        if (model.FieldGroup == Resource.lblSelectSpecificFields && model.FieldList.Count < organicManureField.Count)
                         {
-                            List<string> fieldNames = model.FieldList
-                           .Select(id => listOfFields.FirstOrDefault(f => f.FieldId == Convert.ToInt64(id))?.FieldName).ToList();
-                            string concatenatedFieldNames = string.Join(", ", fieldNames);
 
+                            List<string> fieldNames = model.FieldList
+                           .Select(id => organicManureField.FirstOrDefault(f => f.FieldId == Convert.ToInt64(id))?.FieldName).ToList();
+                            string concatenatedFieldNames = string.Join(", ", fieldNames);
                             successMsg = string.Format(Resource.lblOrganicManureCreatedSuccessfullyForSpecificField, concatenatedFieldNames);
+
                         }
-                        else
+                        else 
                         {
-                            TempData["AddOrganicManureError"] = error.Message;
-                            return View(model);
+                            successMsg = Resource.lblOrganicManureCreatedSuccessfullyForAllField;
                         }
                     }
-                    else if (model.FieldGroup == Resource.lblAll)
+                    else
                     {
-                        successMsg = Resource.lblOrganicManureCreatedSuccessfullyForAllField;
+                        TempData["AddOrganicManureError"] = error.Message;
+                        return View(model);
                     }
+                    
                 }
                 if (success)
                 {
