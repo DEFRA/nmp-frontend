@@ -61,5 +61,10 @@ namespace NMP.Portal.Helpers
         public const string FetchApplicationMethodByIdAsyncAPI = "application-method/{0}";
 
         public const string AddOrganicManuresAsyncAPI = "organic-manures";
+        public const string FetchRainfallByPostcodeAndDateRange = "climates/total-rainfall?postcode={0}&startDate={1}&endDate={2}";
+        
+        public const string FetchWindspeedDataDefault = "windspeeds/default";
+        public const string FetchMoisterTypeDefaultByApplicationDate = "moisture-types/default/{0}";
+        public const string FetchRainTypeDefault = "rain-types/default";
     }
 }

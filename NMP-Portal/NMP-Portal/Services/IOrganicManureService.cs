@@ -24,5 +24,11 @@ namespace NMP.Portal.Services
         Task<(string, Error)> FetchIncorporationDelayById(int Id);
         Task<(bool, Error)> AddOrganicManuresAsync(string organicManureData);
 
+        Task<(RainTypeResponse, Error)> FetchRainTypeDefault();
+        Task<int> FetchRainfallByPostcodeAndDateRange(string postCode, string applicationDate, string soilDrainageDate);
+
+        Task<(WindspeedResponse, Error)> FetchWindspeedDataDefault();
+        Task<(MoistureTypeResponse, Error)> FetchMoisterTypeDefaultByApplicationDate(string applicationDate);
+
     }
 }

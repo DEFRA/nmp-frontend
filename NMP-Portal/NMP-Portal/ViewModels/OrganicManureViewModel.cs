@@ -76,5 +76,14 @@ namespace NMP.Portal.ViewModels
         public string? IncorporationDelayName { get; set; }
         public string? FieldGroupName { get; set; }
         public string? CropTypeName { get; set; }
+        //public int? AutumnCropNitrogenUptake { get; set; }
+
+        public DateTime? SoilDrainageEndDate { get; set; }
+        public int? TotalRainfall { get; set; }
+
+        //public string? Windspeed { get; set; }
+        public string? MoisterType { get; set; }
+
+        public int? RainWithin6Hours { get; set; }
     }
 }

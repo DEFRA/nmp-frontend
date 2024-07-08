@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.OrganicManureViewModel
 @{
-    ViewData["Title"] = Resource.lblIncorprationDelay;
+    ViewData["Title"] = Resource.lblConditionsAffectingNutrientLoss;
     var backAction = Model.IncorporationMethod == (int)NMP.Portal.Enums.IncorporationMethod.NotIncorporated ? "IncorporationMethod" : "IncorporationDelay";
 }
 @section BeforeContent {
@@ -120,16 +120,66 @@
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].IncorporationMethodID" value="@Model.OrganicManures[i].IncorporationMethodID"></govuk-input>
                 }
             }
-            <h1>@Resource.lblConditionsAffectingTheLossOfNutrients</h1>
-            <br />
-            <h1>need to work on this page</h1>
+            <h1 class="govuk-heading-l">@Resource.lblConditionsAffectingTheLossOfNutrients</h1>
+            <p class="govuk-body">
+                @Resource.lblTheseAreApproximateValues
+            </p>
+            <govuk-details>
+                <govuk-details-summary>
+                    @Resource.lblAboutTheseValues
+                </govuk-details-summary>
+                <govuk-details-text>
+                    @Resource.lblTheEffectivenessOfYourOrganicMaterialApp
+                </govuk-details-text>
+            </govuk-details>
+            
+            <table class="govuk-table">
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">@Resource.lblAutumnCropNitrogenUptake</th>
+                        <td class="govuk-table__cell">@Resource.lblAmountOfNFromTheApplicationTaken</td>
+                        <td class="govuk-table__cell">@string.Format(Resource.lblAutumnCropNitrogenPerHectare,Model.AutumnCropNitrogenUptake)</td>
+                        <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">@Resource.lblEndOfSoilDrainage</th>
+                        <td class="govuk-table__cell">@Resource.lblDateWhenSoilDrainageEnds</td>
+                        <td class="govuk-table__cell">@Model.SoilDrainageEndDate.Value.Date.ToString("dd MMMM yyyy")</td>
+                        <td class="govuk-table__cell"><a href="manure_drainage">@Resource.lblChange</a></td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">@Resource.lblRainfallWithin6HoursOfApplication</th>
+                        <td class="govuk-table__cell">@Resource.lblAmountOfRainThatFallsInThe6Hours</td>
+                        <td class="govuk-table__cell">@string.Format(Resource.lblRainfallMM, Model.RainWithin6Hours)</td>
+                        <td class="govuk-table__cell"><a href="manure_rain_six">@Resource.lblChange</a></td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">@Resource.lblEffectiveRainfallAfterApplication</th>
+                        <td class="govuk-table__cell">@Resource.lblAverageRainfallBetweenManAppAndEndOfSoilDrainage</td>
+                        <td class="govuk-table__cell">@string.Format(Resource.lblRainfallMM, Model.TotalRainfall)</td>
+                        <td class="govuk-table__cell"><a href="manure_rain_total">@Resource.lblChange</a></td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">@Resource.lblWindspeedDuringApplication</th>
+                        <td class="govuk-table__cell">@Resource.lblWindspeedWhenTheMaterialIsApplied</td>
+                        <td class="govuk-table__cell">@Model.Windspeed</td>
+                        <td class="govuk-table__cell"><a href="manure_wind">@Resource.lblChange</a></td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">@Resource.lblTopsoilMoisture</th>
+                        <td class="govuk-table__cell">@Resource.lblHowMoistTheTopsoilIs</td>
+                        <td class="govuk-table__cell">@Model.MoisterType</td>
+                        <td class="govuk-table__cell"><a href="manure_moisture">@Resource.lblChange</a></td>
+                    </tr>
+                </tbody>
+            </table>
 
 
             <govuk-button type="submit" class="margin-bottom-forty">
             @Resource.lblContinue
             </govuk-button>
-            @*  <p class="govuk-body cancel-link"><a asp-action="CreateManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
-            *@
+            <p class="govuk-body cancel-link"><a asp-action="CreateManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
+
         </div>
 
     </div>
