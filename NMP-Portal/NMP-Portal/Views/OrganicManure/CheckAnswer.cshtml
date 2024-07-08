@@ -93,6 +93,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MoistureID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.WindspeedID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RainfallWithinSixHoursID"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeName"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -159,17 +160,20 @@
                         <govuk-summary-list-row-action class="disabled" asp-action="ManureApplyingDate" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
-                <govuk-summary-list-row>
-                    <govuk-summary-list-row-key>
-                        @string.Format(Resource.lblWhatIsTheApplicationMethodForYour, Model.ManureTypeName)
-                    </govuk-summary-list-row-key>
-                    <govuk-summary-list-row-value>
-                        @Model.ApplicationMethodName
-                    </govuk-summary-list-row-value>
-                    <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action class="disabled" asp-action="ApplicationMethod" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
-                    </govuk-summary-list-row-actions>
-                </govuk-summary-list-row>
+                @if (Model.IsManureTypeLiquid.Value)
+                {
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            @string.Format(Resource.lblWhatIsTheApplicationMethodForYour, Model.ManureTypeName)
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @Model.ApplicationMethodName
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action class="disabled" asp-action="ApplicationMethod" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+                }
                 <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
                         @string.Format(Resource.lblDoYouWantToUseTheseNutrientValuesFromRB209, Model.ManureTypeName)
@@ -218,7 +222,7 @@
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
-                else
+                else @if (howWouldYouEnterApplicationRate == Resource.lblEnterAnApplicationRate)
                 {
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
