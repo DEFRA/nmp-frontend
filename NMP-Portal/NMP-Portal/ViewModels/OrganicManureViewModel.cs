@@ -75,6 +75,7 @@ namespace NMP.Portal.ViewModels
         public string? IncorporationMethodName { get; set; }
         public string? IncorporationDelayName { get; set; }
         public string? FieldGroupName { get; set; }
+        public string? CropTypeName { get; set; }
         //public int? AutumnCropNitrogenUptake { get; set; }
 
         public DateTime? SoilDrainageEndDate { get; set; }

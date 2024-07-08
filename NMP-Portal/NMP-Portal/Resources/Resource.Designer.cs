@@ -2244,6 +2244,42 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Organic material application added for all fields in this plan.
+        /// </summary>
+        public static string lblOrganicManureCreatedSuccessfullyForAllField {
+            get {
+                return ResourceManager.GetString("lblOrganicManureCreatedSuccessfullyForAllField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Organic material application added for all {0} fields in this plan.
+        /// </summary>
+        public static string lblOrganicManureCreatedSuccessfullyForCropType {
+            get {
+                return ResourceManager.GetString("lblOrganicManureCreatedSuccessfullyForCropType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Organic material application added for {0} in this plan.
+        /// </summary>
+        public static string lblOrganicManureCreatedSuccessfullyForSpecificField {
+            get {
+                return ResourceManager.GetString("lblOrganicManureCreatedSuccessfullyForSpecificField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Organic material applications.
+        /// </summary>
+        public static string lblOrganicMaterialApplications {
+            get {
+                return ResourceManager.GetString("lblOrganicMaterialApplications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Other reference (optional).
         /// </summary>
         public static string lblOtherReference {
