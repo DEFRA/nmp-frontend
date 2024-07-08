@@ -1542,4 +1542,16 @@ m3/ha</value>
   <data name="MsgWeCounldNotAddOrganicManure" xml:space="preserve">
     <value>We couldn’t add your application, please try again later</value>
   </data>
+  <data name="lblOrganicManureCreatedSuccessfullyForAllField" xml:space="preserve">
+    <value>Organic material application added for all fields in this plan</value>
+  </data>
+  <data name="lblOrganicMaterialApplications" xml:space="preserve">
+    <value>Organic material applications</value>
+  </data>
+  <data name="lblOrganicManureCreatedSuccessfullyForCropType" xml:space="preserve">
+    <value>Organic material application added for all {0} fields in this plan</value>
+  </data>
+  <data name="lblOrganicManureCreatedSuccessfullyForSpecificField" xml:space="preserve">
+    <value>Organic material application added for {0} in this plan</value>
+  </data>
 </root>

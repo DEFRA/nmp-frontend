@@ -31,11 +31,11 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
-            @if (ViewBag.Success != null && ViewBag.Success == true)
+            @if (ViewBag.Success != null && ViewBag.Success == true && TempData["successMsg"] != null)
             {
                 <govuk-notification-banner type="Success">
                     <p class="govuk-notification-banner__heading">
-                        @Resource.lblPlanCreated
+                        @TempData["successMsg"]
                     </p>
                 </govuk-notification-banner>
             }
@@ -67,7 +67,7 @@
                     <thead class="govuk-table__head">
                         <tr class="govuk-table__row">
                             <th id="field_name" scope="col" class="govuk-table__header">@Resource.lblField</th>
-                            <th scope="col" class="govuk-table__header"> </th>
+                            <th scope="col" class="govuk-table__header">@Resource.lblOrganicMaterialApplications</th>
                             <th scope="col" class="govuk-table__header"> </th>
                         </tr>
                     </thead>
@@ -75,10 +75,10 @@
                         @foreach (var field in harvestYearPlan.FieldData)
                         {
                             <tr class="govuk-table__row">
-                                <td class="govuk-table__cell">@field.Value</td>
-                                <td class="govuk-table__cell"></td>
+                                <td class="govuk-table__cell">@field.FieldName</td>
+                                <td class="govuk-table__cell">@field.OrganicManureCount</td>
                                 <td class="govuk-table__cell alignRight">
-                                    <a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@field.Key" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblViewRecommendations</a>
+                                    <a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@field.FieldName" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblViewRecommendations</a>
                                 </td>
                             </tr>
                         }
