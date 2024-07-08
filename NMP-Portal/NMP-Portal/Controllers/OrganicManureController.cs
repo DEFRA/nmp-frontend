@@ -1616,8 +1616,33 @@ namespace NMP.Portal.Controllers
             }
             //crop N uptake
             List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
-            int cropTypeId = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.CropTypeID).FirstOrDefault()??0;
+            var crop = cropsResponse.Where(x => x.Year == model.HarvestYear);
+            int cropTypeId = crop.Select(x => x.CropTypeID).FirstOrDefault()??0;
             int cropCategoryId =await _mannerService.FetchCategoryIdByCropTypeIdAsync(cropTypeId);
+
+            //check early and late for winter cereals and winter oilseed rape
+            //if sowing date after 15 sept then late
+            DateTime? sowingDate = crop.Select(x => x.SowingDate).FirstOrDefault();
+            if(cropCategoryId== (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal || cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlyStablishedWinterOilseedRape)
+            {
+                if (sowingDate != null)
+                {
+                    int day = sowingDate.Value.Day;
+                    int month = sowingDate.Value.Month;
+                    if (month == (int)NMP.Portal.Enums.Month.September && day > 15)
+                    {
+                        if(cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal)
+                        {
+                            cropCategoryId = (int)NMP.Portal.Enums.CropCategory.LateSownWinterCereal;
+                        }
+                        else
+                        {
+                            cropCategoryId = (int)NMP.Portal.Enums.CropCategory.LateStablishedWinterOilseedRape;
+                        }
+                    }
+                }
+            }
+
             if (model.ApplicationDate.Value.Month >= (int)NMP.Portal.Enums.Month.August && model.ApplicationDate.Value.Month <= (int)NMP.Portal.Enums.Month.October)
             {
 
@@ -1650,7 +1675,7 @@ namespace NMP.Portal.Controllers
 
             if (model.ApplicationDate.HasValue && model.SoilDrainageEndDate.HasValue)
             {
-                model.TotalRainfall = await _organicManureService.FetchRainfallByPostcodeAndDateRange(halfPostCode, model.ApplicationDate.Value.ToString("yyyy-MM-dd"), model.SoilDrainageEndDate.Value.ToString("yyyy-MM-dd"));
+                model.TotalRainfall = await _organicManureService.FetchRainfallByPostcodeAndDateRange(halfPostCode, model.ApplicationDate.Value.ToString("yyyy-MM-ddTHH:mm:ss"), model.SoilDrainageEndDate.Value.ToString("yyyy-MM-ddTHH:mm:ss"));
             }
 
             //Windspeed during application 
@@ -1658,7 +1683,7 @@ namespace NMP.Portal.Controllers
             model.Windspeed = windspeed.Name;
 
             //Topsoil moisture
-            (MoistureTypeResponse moisterType, error) = await _organicManureService.FetchMoisterTypeDefaultByApplicationDate(model.ApplicationDate.Value.ToString("yyyy-MM-dd"));
+            (MoistureTypeResponse moisterType, error) = await _organicManureService.FetchMoisterTypeDefaultByApplicationDate(model.ApplicationDate.Value.ToString("yyyy-MM-ddTHH:mm:ss"));
             model.MoisterType = moisterType.Name;
 
             return View(model);
