@@ -785,8 +785,8 @@ namespace NMP.Portal.Services
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        var moister = responseWrapper.Data.MoistureType.ToObject<List<MoistureTypeResponse>>();
-                        moisterType.Name = moister[0].Name;
+                        moisterType = responseWrapper.Data.MoistureType.ToObject<MoistureTypeResponse>();
+                        //moisterType.Name = moister.Name;
                     }
                 }
                 else

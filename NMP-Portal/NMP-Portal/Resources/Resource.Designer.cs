@@ -503,14 +503,6 @@ namespace NMP.Portal.Resources {
             }
         }
         
-        /// <summary>
-        ///   Looks up a localized string similar to Autumn crop Nitrogen uptake.
-        /// </summary>
-        public static string lblAutumnCropNitrogenUptake {
-            get {
-                return ResourceManager.GetString("lblAutumnCropNitrogenUptake", resourceCulture);
-            }
-        }
         
         /// <summary>
         ///   Looks up a localized string similar to Average annual rainfall.
@@ -1034,14 +1026,6 @@ namespace NMP.Portal.Resources {
             }
         }
         
-        /// <summary>
-        ///   Looks up a localized string similar to End of soil drainage.
-        /// </summary>
-        public static string lblEndOfSoilDrainage {
-            get {
-                return ResourceManager.GetString("lblEndOfSoilDrainage", resourceCulture);
-            }
-        }
         
         /// <summary>
         ///   Looks up a localized string similar to English Rules.
