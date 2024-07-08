@@ -466,5 +466,176 @@ namespace NMP.Portal.Services
             }
             return (incorporationDelays, error);
         }
+        public async Task<(RainTypeResponse, Error)> FetchRainTypeDefault()
+        {
+            RainTypeResponse rainType = new RainTypeResponse();
+            Error error = null;
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(APIURLHelper.FetchRainTypeDefault);
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode)
+                {
+                    if (responseWrapper != null && responseWrapper.Data != null)
+                    {
+                        rainType = responseWrapper.Data.ToObject<RainTypeResponse>();
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error = new Error();
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error = new Error();
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (rainType, error);
+        }
+        public async Task<int> FetchRainfallByPostcodeAndDateRange(string postCode, string applicationDate, string soilDrainageDate)
+        {
+            int totalRainfall = 0;
+            Error error = null;
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchRainfallByPostcodeAndDateRange, postCode, applicationDate,soilDrainageDate));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode)
+                {
+                    if (responseWrapper != null && responseWrapper.Data != null)
+                    {
+                        totalRainfall = responseWrapper.Data.totalRainfall.ToObject<int>();
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error = new Error();
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error = new Error();
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return totalRainfall;
+        }
+
+        public async Task<(WindspeedResponse, Error)> FetchWindspeedDataDefault()
+        {
+            WindspeedResponse windSpeed = new WindspeedResponse();
+            Error error = null;
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(APIURLHelper.FetchWindspeedDataDefault);
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode)
+                {
+                    if (responseWrapper != null && responseWrapper.Data != null)
+                    {
+                        windSpeed = responseWrapper.Data.ToObject<WindspeedResponse>();
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error = new Error();
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error = new Error();
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (windSpeed, error); 
+        }
+
+        public async Task<(MoistureTypeResponse, Error)> FetchMoisterTypeDefaultByApplicationDate(string applicationDate)
+        {
+            MoistureTypeResponse moisterType = new MoistureTypeResponse();
+            Error error = null;
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMoisterTypeDefaultByApplicationDate,applicationDate));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode)
+                {
+                    if (responseWrapper != null && responseWrapper.Data != null)
+                    {
+                        var moister = responseWrapper.Data.MoistureType.ToObject<List<MoistureTypeResponse>>();
+                        moisterType.Name = moister[0].Name;
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error = new Error();
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error = new Error();
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (moisterType, error);
+        }
     }
 }

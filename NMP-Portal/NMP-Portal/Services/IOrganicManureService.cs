@@ -19,5 +19,11 @@ namespace NMP.Portal.Services
         Task<(List<IncorporationMethodResponse>, Error)> FetchIncorporationMethodsByApplicationId(int fieldType,string applicableFor,int appId);
         Task<(List<IncorprationDelaysResponse>, Error)> FetchIncorporationDelaysByMethodIdAndApplicableFor(int methodId, string applicableFor);
 
+        Task<(RainTypeResponse, Error)> FetchRainTypeDefault();
+        Task<int> FetchRainfallByPostcodeAndDateRange(string postCode, string applicationDate, string soilDrainageDate);
+
+        Task<(WindspeedResponse, Error)> FetchWindspeedDataDefault();
+        Task<(MoistureTypeResponse, Error)> FetchMoisterTypeDefaultByApplicationDate(string applicationDate);
+
     }
 }

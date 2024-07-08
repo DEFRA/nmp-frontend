@@ -56,5 +56,14 @@ namespace NMP.Portal.ViewModels
 
         public bool? IsDefaultNutrient { get; set; } = false;
         public bool? IsSingleField { get; set; } = false;
+        public int? AutumnCropNitrogenUptake { get; set; }
+
+        public DateTime? SoilDrainageEndDate { get; set; }
+        public int? TotalRainfall { get; set; }
+
+        public string? Windspeed { get; set; }
+        public string? MoisterType { get; set; }
+
+        public int? RainWithin6Hours { get; set; }
     }
 }
