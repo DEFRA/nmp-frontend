@@ -12,6 +12,7 @@ using NMP.Portal.ViewModels;
 using System.Diagnostics.Metrics;
 using NMP.Portal.Enums;
 using Newtonsoft.Json;
+using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 
 namespace NMP.Portal.Controllers
 {
@@ -65,6 +66,10 @@ namespace NMP.Portal.Controllers
                 {
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
                 }
+                else if (string.IsNullOrWhiteSpace(q) && string.IsNullOrWhiteSpace(r))
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
                 if ((!string.IsNullOrWhiteSpace(q)) && (!string.IsNullOrWhiteSpace(r)))
                 {
                     model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
@@ -87,79 +92,79 @@ namespace NMP.Portal.Controllers
                 (List<OrganicManureCropTypeResponse> cropTypeList, error) = await _organicManureService.FetchCropTypeByFarmIdAndHarvestYear(model.FarmId.Value, model.HarvestYear.Value);
                 if (error == null)
                 {
-                    if (cropTypeList.Count > 1)
+                    //if (cropTypeList.Count > 1)
+                    //{
+                    var SelectListItem = cropTypeList.Select(f => new SelectListItem
                     {
-                        var SelectListItem = cropTypeList.Select(f => new SelectListItem
-                        {
-                            Value = f.CropTypeId.ToString(),
-                            Text = string.Format(Resource.lblTheCropTypeField, f.CropType.ToString())
-                        }).ToList();
-                        SelectListItem.Insert(0, new SelectListItem { Value = Resource.lblAll, Text = string.Format(Resource.lblAllFieldsInTheYearPlan, model.HarvestYear) });
-                        SelectListItem.Add(new SelectListItem { Value = Resource.lblSelectSpecificFields, Text = Resource.lblSelectSpecificFields });
-                        ViewBag.FieldGroupList = SelectListItem;
-                    }
-                    if (cropTypeList.Count == 1)
-                    {
-                        model.FieldGroup = "Select specific fields";
+                        Value = f.CropTypeId.ToString(),
+                        Text = string.Format(Resource.lblTheCropTypeField, f.CropType.ToString())
+                    }).ToList();
+                    SelectListItem.Insert(0, new SelectListItem { Value = Resource.lblAll, Text = string.Format(Resource.lblAllFieldsInTheYearPlan, model.HarvestYear) });
+                    SelectListItem.Add(new SelectListItem { Value = Resource.lblSelectSpecificFields, Text = Resource.lblSelectSpecificFields });
+                    ViewBag.FieldGroupList = SelectListItem;
+                    //}
+                    //if (cropTypeList.Count == 1)
+                    //{
+                    //    model.FieldGroup = "Select specific fields";
 
-                        (List<OrganicManureFieldResponse> fieldList, error) = await _organicManureService.FetchFieldByFarmIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
-                        if (error == null)
-                        {
-                            if (model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
-                            {
-                                if (fieldList.Count == 1)
-                                {
+                    //    (List<OrganicManureFieldResponse> fieldList, error) = await _organicManureService.FetchFieldByFarmIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
+                    //    if (error == null)
+                    //    {
+                    //        if (model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
+                    //        {
+                    //            if (fieldList.Count == 1)
+                    //            {
 
-                                    var SelectListItem = fieldList.Select(f => new SelectListItem
-                                    {
-                                        Value = f.FieldId.ToString(),
-                                        Text = f.FieldName.ToString()
-                                    }).ToList();
-                                    //ViewBag.FieldList = SelectListItem;
-                                    //code sk
+                    //                var SelectListItem = fieldList.Select(f => new SelectListItem
+                    //                {
+                    //                    Value = f.FieldId.ToString(),
+                    //                    Text = f.FieldName.ToString()
+                    //                }).ToList();
+                    //                //ViewBag.FieldList = SelectListItem;
+                    //                //code sk
 
-                                    model.FieldList = SelectListItem.Select(item => item.Value).ToList();
+                    //                model.FieldList = SelectListItem.Select(item => item.Value).ToList();
 
-                                    string fieldIds = string.Join(",", model.FieldList);
-                                    (List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldIds, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
-                                    if (error == null)
-                                    {
-                                        if (managementIds.Count > 0)
-                                        {
-                                            if (model.OrganicManures == null)
-                                            {
-                                                model.OrganicManures = new List<OrganicManure>();
-                                            }
-                                            if (model.OrganicManures.Count > 0)
-                                            {
-                                                model.OrganicManures.Clear();
-                                            }
-                                            foreach (var manIds in managementIds)
-                                            {
-                                                var organicManure = new OrganicManure
-                                                {
-                                                    ManagementPeriodID = manIds
-                                                };
-                                                model.OrganicManures.Add(organicManure);
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        TempData["FieldError"] = error.Message;
-                                        return View(model);
-                                    }
-                                    model.IsSingleField = true;
-                                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                    //                string fieldIds = string.Join(",", model.FieldList);
+                    //                (List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldIds, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
+                    //                if (error == null)
+                    //                {
+                    //                    if (managementIds.Count > 0)
+                    //                    {
+                    //                        if (model.OrganicManures == null)
+                    //                        {
+                    //                            model.OrganicManures = new List<OrganicManure>();
+                    //                        }
+                    //                        if (model.OrganicManures.Count > 0)
+                    //                        {
+                    //                            model.OrganicManures.Clear();
+                    //                        }
+                    //                        foreach (var manIds in managementIds)
+                    //                        {
+                    //                            var organicManure = new OrganicManure
+                    //                            {
+                    //                                ManagementPeriodID = manIds
+                    //                            };
+                    //                            model.OrganicManures.Add(organicManure);
+                    //                        }
+                    //                    }
+                    //                }
+                    //                else
+                    //                {
+                    //                    TempData["FieldError"] = error.Message;
+                    //                    return View(model);
+                    //                }
+                    //                model.IsSingleField = true;
+                    //                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
 
-                                    return RedirectToAction("ManureGroup");
+                    //                return RedirectToAction("ManureGroup");
 
-                                }
-                                return View(model);
-                            }
+                    //            }
+                    //            return View(model);
+                    //        }
 
-                        }
-                    }
+                    //    }
+                    //}
                 }
                 else
                 {
@@ -184,9 +189,9 @@ namespace NMP.Portal.Controllers
             }
             try
             {
+                (List<OrganicManureCropTypeResponse> cropTypeList, error) = await _organicManureService.FetchCropTypeByFarmIdAndHarvestYear(model.FarmId.Value, model.HarvestYear.Value);
                 if (!ModelState.IsValid)
                 {
-                    (List<OrganicManureCropTypeResponse> cropTypeList, error) = await _organicManureService.FetchCropTypeByFarmIdAndHarvestYear(model.FarmId.Value, model.HarvestYear.Value);
                     if (error == null)
                     {
                         if (cropTypeList.Count > 0)
@@ -208,6 +213,23 @@ namespace NMP.Portal.Controllers
                     }
                     return View(model);
                 }
+
+                if (int.TryParse(model.FieldGroup, out int value))
+                {
+                    model.FieldGroupName = string.Format(Resource.lblTheCropTypeField, cropTypeList.FirstOrDefault(x => x.CropTypeId == value).CropType);
+                }
+                else
+                {
+                    if (model.FieldGroup.Equals(Resource.lblAll))
+                    {
+                        model.FieldGroupName = string.Format(Resource.lblAllFieldsInTheYearPlan, model.HarvestYear);
+                    }
+                    else
+                    {
+                        model.FieldGroupName = model.FieldGroup;
+                    }
+                }
+
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
             }
             catch (Exception ex)
@@ -229,6 +251,10 @@ namespace NMP.Portal.Controllers
                 if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
                 {
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
                 }
                 (List<OrganicManureFieldResponse> fieldList, error) = await _organicManureService.FetchFieldByFarmIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
                 if (error == null)
@@ -384,6 +410,10 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
             }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
             try
             {
                 (List<CommonResponse> manureGroupList, Error error) = await _organicManureService.FetchManureGroupList();
@@ -482,6 +512,10 @@ namespace NMP.Portal.Controllers
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
             }
             try
             {
@@ -611,6 +645,10 @@ namespace NMP.Portal.Controllers
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
             }
             int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
             (List<ManureType> manureTypeList, Error error) = await _organicManureService.FetchManureTypeList(model.ManureGroupId.Value, countryId);
@@ -742,7 +780,7 @@ namespace NMP.Portal.Controllers
             {
                 foreach (var orgManure in model.OrganicManures)
                 {
-                    orgManure.AppDate = model.ApplicationDate.Value;
+                    orgManure.ApplicationDate = model.ApplicationDate.Value;
                 }
             }
 
@@ -759,6 +797,10 @@ namespace NMP.Portal.Controllers
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
             }
 
             int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
@@ -785,6 +827,19 @@ namespace NMP.Portal.Controllers
             if (applicationMethodList.Count == 1)
             {
                 model.ApplicationMethod = applicationMethodList[0].ID;
+                (model.ApplicationMethodName, error) = await _organicManureService.FetchApplicationMethodById(model.ApplicationMethod.Value);
+                if (error != null)
+                {
+                    TempData["ManureApplyingDateError"] = error.Message;
+                    return RedirectToAction("ManureApplyingDate",model);
+                }
+                if (model.OrganicManures.Count > 0)
+                {
+                    foreach (var orgManure in model.OrganicManures)
+                    {
+                        orgManure.ApplicationMethodID = model.ApplicationMethod.Value;
+                    }
+                }
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
                 if (model.IsDefaultNutrient.Value)
                 {
@@ -799,15 +854,16 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ApplicationMethod(OrganicManureViewModel model)
         {
+            Error error = null;
             if (model.ApplicationMethod == null)
             {
                 ModelState.AddModelError("ApplicationMethod", Resource.MsgSelectAnOptionBeforeContinuing);
             }
+            int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
+            (List<ManureType> manureTypeList, error) = await _organicManureService.FetchManureTypeList(model.ManureGroupId.Value, countryId);
+            bool isLiquid = false;
             if (!ModelState.IsValid)
             {
-                int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
-                (List<ManureType> manureTypeList, Error error) = await _organicManureService.FetchManureTypeList(model.ManureGroupId.Value, countryId);
-                bool isLiquid = false;
                 if (error == null && manureTypeList.Count > 0)
                 {
                     var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
@@ -823,7 +879,7 @@ namespace NMP.Portal.Controllers
                 var fieldType = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.FieldType).FirstOrDefault();
 
                 string applicableFor = isLiquid ? Resource.lblL : Resource.lblB;
-                (List<ApplicationMethodResponse> applicationMethodList, Error error1) = await _organicManureService.FetchApplicationMethodList(fieldType ?? 0, applicableFor);
+                (List<ApplicationMethodResponse> applicationMethodList, error) = await _organicManureService.FetchApplicationMethodList(fieldType ?? 0, applicableFor);
                 ViewBag.ApplicationMethodList = applicationMethodList;
                 model.ApplicationMethodCount = applicationMethodList.Count;
                 return View(model);
@@ -834,6 +890,53 @@ namespace NMP.Portal.Controllers
                 foreach (var orgManure in model.OrganicManures)
                 {
                     orgManure.ApplicationMethodID = model.ApplicationMethod.Value;
+                }
+            }
+            (model.ApplicationMethodName, error) = await _organicManureService.FetchApplicationMethodById(model.ApplicationMethod.Value);
+
+            if ((model.ApplicationMethod == (int)NMP.Portal.Enums.ApplicationMethod.DeepInjection2530cm) || (model.ApplicationMethod == (int)NMP.Portal.Enums.ApplicationMethod.ShallowInjection57cm))
+            {
+                if (manureTypeList.Count > 0)
+                {
+                    var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
+                    isLiquid = manureType.IsLiquid.Value;
+                    string applicableFor = isLiquid ? Resource.lblL : Resource.lblB;
+                    List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
+                    var fieldType = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.FieldType).FirstOrDefault();
+                    (List<IncorporationMethodResponse> incorporationMethods, error) = await _organicManureService.FetchIncorporationMethodsByApplicationId(fieldType ?? 0, applicableFor, model.ApplicationMethod ?? 0);
+                    if (error == null && incorporationMethods.Count == 1)
+                    {
+                        model.IncorporationMethod = incorporationMethods.FirstOrDefault().ID;
+                        applicableFor = isLiquid ? Resource.lblL : Resource.lblS;
+                        if (manureType.Id == (int)NMP.Portal.Enums.ManureTypes.PoultryManure)
+                        {
+                            applicableFor = Resource.lblP;
+                        }
+                        (List<IncorprationDelaysResponse> incorporationDelaysList, error) = await _organicManureService.FetchIncorporationDelaysByMethodIdAndApplicableFor(model.IncorporationMethod ?? 0, applicableFor);
+                        if (error == null && incorporationDelaysList.Count == 1)
+                        {
+                            model.IncorporationDelay = incorporationDelaysList.FirstOrDefault().ID;
+                            if (model.OrganicManures.Count > 0)
+                            {
+                                foreach (var orgManure in model.OrganicManures)
+                                {
+                                    orgManure.IncorporationMethodID = model.IncorporationMethod.Value;
+                                    orgManure.IncorporationDelayID = model.IncorporationDelay.Value;
+                                }
+                            }
+                            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                        }
+                        else if (error != null)
+                        {
+                            TempData["ApplicationMethodError"] = error.Message;
+                            return View(model);
+                        }
+                    }
+                    else if (error != null)
+                    {
+                        TempData["ApplicationMethodError"] = error.Message;
+                        return View(model);
+                    }
                 }
             }
 
@@ -850,6 +953,10 @@ namespace NMP.Portal.Controllers
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
             }
 
             (ManureType manureType, Error error) = await _organicManureService.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
@@ -930,8 +1037,10 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
             }
-
-
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
 
             return View(model);
         }
@@ -1107,6 +1216,10 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
             }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
 
             int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
             (List<ManureType> manureTypeList, Error error) = await _organicManureService.FetchManureTypeList(model.ManureGroupId.Value, countryId);
@@ -1178,6 +1291,10 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
             }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
 
             int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
             (List<ManureType> manureTypeList, Error error) = await _organicManureService.FetchManureTypeList(model.ManureGroupId.Value, countryId);
@@ -1214,8 +1331,14 @@ namespace NMP.Portal.Controllers
                 return View("ManualApplicationRate", model);
             }
 
+            if (model.OrganicManures.Count > 0)
+            {
+                foreach (var orgManure in model.OrganicManures)
+                {
+                    orgManure.ApplicationRate = model.ApplicationRate.Value;
+                }
+            }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
-
             return RedirectToAction("IncorporationMethod");
         }
 
@@ -1226,6 +1349,10 @@ namespace NMP.Portal.Controllers
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
             }
 
             return View(model);
@@ -1270,7 +1397,14 @@ namespace NMP.Portal.Controllers
             {
                 return View("AreaQuantity", model);
             }
-            model.ApplicationRate = model.Quantity / model.Area;
+            model.ApplicationRate = (int)Math.Round(model.Quantity.Value / model.Area.Value);
+            if (model.OrganicManures.Count > 0)
+            {
+                foreach (var orgManure in model.OrganicManures)
+                {
+                    orgManure.ApplicationRate = model.ApplicationRate.Value;
+                }
+            }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
 
             return RedirectToAction("IncorporationMethod");
@@ -1283,7 +1417,11 @@ namespace NMP.Portal.Controllers
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
             }
-            if((model.ApplicationMethod== (int)NMP.Portal.Enums.ApplicationMethod.DeepInjection2530cm) || (model.ApplicationMethod == (int)NMP.Portal.Enums.ApplicationMethod.ShallowInjection57cm))
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+            if ((model.ApplicationMethod == (int)NMP.Portal.Enums.ApplicationMethod.DeepInjection2530cm) || (model.ApplicationMethod == (int)NMP.Portal.Enums.ApplicationMethod.ShallowInjection57cm))
             {
                 return RedirectToAction("ConditionsAffectingNutrients");
             }
@@ -1312,6 +1450,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> IncorporationMethod(OrganicManureViewModel model)
         {
+            Error error = null;
             if (model.IncorporationMethod == null)
             {
                 ModelState.AddModelError("IncorporationMethod", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -1319,7 +1458,7 @@ namespace NMP.Portal.Controllers
             if (!ModelState.IsValid)
             {
                 int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
-                (List<ManureType> manureTypeList, Error error) = await _organicManureService.FetchManureTypeList(model.ManureGroupId.Value, countryId);
+                (List<ManureType> manureTypeList, error) = await _organicManureService.FetchManureTypeList(model.ManureGroupId.Value, countryId);
                 bool isLiquid = false;
                 if (error == null && manureTypeList.Count > 0)
                 {
@@ -1328,19 +1467,63 @@ namespace NMP.Portal.Controllers
 
                 }
 
-                string applicableFor = isLiquid ? Resource.lblL :Resource.lblB;
+                string applicableFor = isLiquid ? Resource.lblL : Resource.lblB;
                 List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
                 var fieldType = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.FieldType).FirstOrDefault();
 
-                (List<IncorporationMethodResponse> incorporationMethods, Error error1) = await _organicManureService.FetchIncorporationMethodsByApplicationId(fieldType ?? 0, applicableFor, model.ApplicationMethod ?? 0);
+                (List<IncorporationMethodResponse> incorporationMethods, error) = await _organicManureService.FetchIncorporationMethodsByApplicationId(fieldType ?? 0, applicableFor, model.ApplicationMethod ?? 0);
 
                 ViewBag.IncorporationMethod = incorporationMethods;
                 return View(model);
             }
 
+            (model.IncorporationMethodName, error) = await _organicManureService.FetchIncorporationMethodById(model.IncorporationMethod.Value);
+
+            if (model.OrganicManures.Count > 0)
+            {
+                foreach (var orgManure in model.OrganicManures)
+                {
+                    orgManure.IncorporationMethodID = model.IncorporationMethod.Value;
+                }
+            }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
             if (model.IncorporationMethod == (int)NMP.Portal.Enums.IncorporationMethod.NotIncorporated)
             {
+                int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
+                (List<ManureType> manureTypeList, error) = await _organicManureService.FetchManureTypeList(model.ManureGroupId.Value, countryId);
+                if (error == null && manureTypeList.Count > 0)
+                {                    
+                    var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
+                    bool isLiquid = manureType.IsLiquid.Value;
+                    string applicableFor = isLiquid ? Resource.lblL : Resource.lblS;
+                    if (manureType.Id == (int)NMP.Portal.Enums.ManureTypes.PoultryManure)
+                    {
+                        applicableFor = Resource.lblP;
+                    }
+                    (List<IncorprationDelaysResponse> incorporationDelaysList, error) = await _organicManureService.FetchIncorporationDelaysByMethodIdAndApplicableFor(model.IncorporationMethod ?? 0, applicableFor);
+                    if (error == null && incorporationDelaysList.Count == 1)
+                    {
+                        model.IncorporationDelay = incorporationDelaysList.FirstOrDefault().ID;
+                        if (model.OrganicManures.Count > 0)
+                        {
+                            foreach (var orgManure in model.OrganicManures)
+                            {
+                                orgManure.IncorporationDelayID = model.IncorporationDelay.Value;
+                            }
+                        }
+                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                    }
+                    else if (error != null)
+                    {
+                        TempData["IncorporationMethodError"] = error.Message;
+                        return View(model);
+                    }
+                }
+                else if (error != null)
+                {
+                    TempData["IncorporationMethodError"] = error.Message;
+                    return View(model);
+                }
                 return RedirectToAction("ConditionsAffectingNutrients");
             }
             return RedirectToAction("IncorporationDelay");
@@ -1354,6 +1537,10 @@ namespace NMP.Portal.Controllers
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
             }
             string applicableFor = string.Empty;
             int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
@@ -1379,6 +1566,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> IncorporationDelay(OrganicManureViewModel model)
         {
+            Error error = null;
             if (model.IncorporationDelay == null)
             {
                 ModelState.AddModelError("IncorporationDelay", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -1387,7 +1575,7 @@ namespace NMP.Portal.Controllers
             {
                 string applicableFor = string.Empty;
                 int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
-                (List<ManureType> manureTypeList, Error error) = await _organicManureService.FetchManureTypeList(model.ManureGroupId.Value, countryId);
+                (List<ManureType> manureTypeList, error) = await _organicManureService.FetchManureTypeList(model.ManureGroupId.Value, countryId);
                 bool isLiquid = false;
                 if (error == null && manureTypeList.Count > 0)
                 {
@@ -1400,13 +1588,20 @@ namespace NMP.Portal.Controllers
                     }
                 }
 
-                (List<IncorprationDelaysResponse> incorporationDelaysList, Error error1) = await _organicManureService.FetchIncorporationDelaysByMethodIdAndApplicableFor(model.IncorporationMethod ?? 0, applicableFor);
+                (List<IncorprationDelaysResponse> incorporationDelaysList, error) = await _organicManureService.FetchIncorporationDelaysByMethodIdAndApplicableFor(model.IncorporationMethod ?? 0, applicableFor);
                 ViewBag.IncorporationDelaysList = incorporationDelaysList;
                 return View(model);
             }
+            (model.IncorporationDelayName, error) = await _organicManureService.FetchIncorporationDelayById(model.IncorporationDelay.Value);
 
+            if (model.OrganicManures.Count > 0)
+            {
+                foreach (var orgManure in model.OrganicManures)
+                {
+                    orgManure.IncorporationDelayID = model.IncorporationDelay.Value;
+                }
+            }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
-
             return RedirectToAction("ConditionsAffectingNutrients");
 
         }
@@ -1468,6 +1663,92 @@ namespace NMP.Portal.Controllers
 
             return View(model);
         }
-        
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConditionsAffectingNutrients(OrganicManureViewModel model)
+        {
+            model.MoistureID = 1;
+            model.WindspeedID = 1;
+            model.RainfallWithinSixHoursID = 1;
+            if (model.OrganicManures.Count > 0)
+            {
+                foreach (var orgManure in model.OrganicManures)
+                {
+                    orgManure.MoistureID = model.MoistureID.Value;
+                    orgManure.WindspeedID = model.WindspeedID.Value;
+                    orgManure.RainfallWithinSixHoursID = model.RainfallWithinSixHoursID.Value;
+                }
+            }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+
+            return RedirectToAction("CheckAnswer");
+
+        }
+        [HttpGet]
+        public async Task<IActionResult> CheckAnswer()
+        {
+            OrganicManureViewModel? model = null;
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+                if (model == null)
+                {
+                    model = new OrganicManureViewModel();
+                }
+                model.IsCheckAnswer = true;
+                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+            }
+            catch (Exception ex)
+            {
+                TempData["ConditionsAffectingNutrientsError"] = ex.Message;
+                return RedirectToAction("ConditionsAffectingNutrients");
+            }
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CheckAnswer(OrganicManureViewModel model)
+        {
+            try
+            {
+
+                var jsonData = new
+                {
+                    OrganicManures = model.OrganicManures.Select(orgManure => new
+                    {
+                        OrganicManure = orgManure,
+                        FarmID = model.FarmId,
+                        FieldTypeID = (int)NMP.Portal.Enums.FieldType.Arable,
+                        SaveDefaultForFarm = false
+                    }).ToList()
+                };
+
+
+                string jsonString = JsonConvert.SerializeObject(jsonData);
+                (bool success, Error error) = await _organicManureService.AddOrganicManuresAsync(jsonString);
+                if(!success||error!=null)
+                {
+                    TempData["AddOrganicManureError"] = Resource.MsgWeCounldNotAddOrganicManure;
+                    return View(model);
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["AddOrganicManureError"] = Resource.MsgWeCounldNotAddOrganicManure;
+                return View(model);
+            }
+            return View(model);
+
+        }
     }
 }

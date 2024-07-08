@@ -169,6 +169,10 @@ namespace NMP.Portal.Controllers
             {
                 model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
 
             HttpContext.Session.Remove("AddressList");
 
@@ -207,6 +211,10 @@ namespace NMP.Portal.Controllers
             {
                 addresses = HttpContext.Session.GetObjectFromJson<List<AddressLookupResponse>>("AddressList");
 
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
             }
 
             if (!ModelState.IsValid)
@@ -250,6 +258,10 @@ namespace NMP.Portal.Controllers
             {
                 model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
             return View(model);
         }
 
@@ -260,6 +272,10 @@ namespace NMP.Portal.Controllers
             if (HttpContext.Session.Keys.Contains("FarmData"))
             {
                 model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
             }
 
 
@@ -300,7 +316,11 @@ namespace NMP.Portal.Controllers
                 return View("~/Views/Farm/ManualAddress.cshtml", farm);
             }
 
-            FarmViewModel farmView = JsonConvert.DeserializeObject<FarmViewModel>(HttpContext.Session.GetString("FarmData"));
+            FarmViewModel farmView = null;
+            if (HttpContext.Session.Keys.Contains("FarmData"))
+            {
+                farmView = JsonConvert.DeserializeObject<FarmViewModel>(HttpContext.Session.GetString("FarmData"));
+            }
             if (farmView != null)
             {
                 if (farmView.Postcode != farm.Postcode)
@@ -322,6 +342,10 @@ namespace NMP.Portal.Controllers
             if (HttpContext.Session.Keys.Contains("FarmData"))
             {
                 model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
             }
             if (model == null)
             {
@@ -379,6 +403,10 @@ namespace NMP.Portal.Controllers
             {
                 model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
             return View(model);
 
         }
@@ -430,6 +458,10 @@ namespace NMP.Portal.Controllers
             {
                 model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
             return View(model);
 
         }
@@ -461,6 +493,10 @@ namespace NMP.Portal.Controllers
             if (HttpContext.Session.Keys.Contains("FarmData"))
             {
                 model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
             }
             return View(model);
 
@@ -496,6 +532,10 @@ namespace NMP.Portal.Controllers
             {
                 model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
             //model.IsCheckAnswer = false;
             //string updatedSessionData = JsonConvert.SerializeObject(model);
             //_httpContextAccessor.HttpContext.Session.SetString("FarmData", updatedSessionData);
@@ -525,6 +565,10 @@ namespace NMP.Portal.Controllers
             if (HttpContext.Session.Keys.Contains("FarmData"))
             {
                 model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
             }
             if (model == null)
             {
@@ -607,6 +651,10 @@ namespace NMP.Portal.Controllers
             if (HttpContext.Session.Keys.Contains("FarmData"))
             {
                 model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
             }
             model.IsCheckAnswer = false;
             HttpContext.Session.SetObjectAsJson("FarmData", model);
