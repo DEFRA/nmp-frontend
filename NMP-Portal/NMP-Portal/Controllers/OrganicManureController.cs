@@ -29,9 +29,10 @@ namespace NMP.Portal.Controllers
         private readonly IFarmService _farmService;
         private readonly ICropService _cropService;
         private readonly IFieldService _fieldService;
+        private readonly IMannerService _mannerService;
 
         public OrganicManureController(ILogger<OrganicManureController> logger, IDataProtectionProvider dataProtectionProvider,
-              IHttpContextAccessor httpContextAccessor, IOrganicManureService organicManureService, IFarmService farmService, ICropService cropService, IFieldService fieldService)
+              IHttpContextAccessor httpContextAccessor, IOrganicManureService organicManureService, IFarmService farmService, ICropService cropService, IFieldService fieldService, IMannerService mannerService)
         {
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
@@ -43,6 +44,7 @@ namespace NMP.Portal.Controllers
             _farmService = farmService;
             _cropService = cropService;
             _fieldService = fieldService;
+            _mannerService = mannerService;
         }
 
         public IActionResult Index()
@@ -1668,17 +1670,85 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public IActionResult ConditionsAffectingNutrients()
+        public async Task<IActionResult> ConditionsAffectingNutrients()
         {
             OrganicManureViewModel? model = new OrganicManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
             }
+            //crop N uptake
+            List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
+            var crop = cropsResponse.Where(x => x.Year == model.HarvestYear);
+            int cropTypeId = crop.Select(x => x.CropTypeID).FirstOrDefault()??0;
+            int cropCategoryId =await _mannerService.FetchCategoryIdByCropTypeIdAsync(cropTypeId);
+
+            //check early and late for winter cereals and winter oilseed rape
+            //if sowing date after 15 sept then late
+            DateTime? sowingDate = crop.Select(x => x.SowingDate).FirstOrDefault();
+            if(cropCategoryId== (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal || cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlyStablishedWinterOilseedRape)
+            {
+                if (sowingDate != null)
+                {
+                    int day = sowingDate.Value.Day;
+                    int month = sowingDate.Value.Month;
+                    if (month == (int)NMP.Portal.Enums.Month.September && day > 15)
+                    {
+                        if(cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal)
+                        {
+                            cropCategoryId = (int)NMP.Portal.Enums.CropCategory.LateSownWinterCereal;
+                        }
+                        else
+                        {
+                            cropCategoryId = (int)NMP.Portal.Enums.CropCategory.LateStablishedWinterOilseedRape;
+                        }
+                    }
+                }
+            }
+
+            if (model.ApplicationDate.Value.Month >= (int)NMP.Portal.Enums.Month.August && model.ApplicationDate.Value.Month <= (int)NMP.Portal.Enums.Month.October)
+            {
+
+                model.AutumnCropNitrogenUptake = await _mannerService.FetchCropNUptakeDefaultAsync(cropCategoryId);
+            }
             else
             {
-                return RedirectToAction("FarmList", "Farm");
+                model.AutumnCropNitrogenUptake = 0;
             }
+
+            //Soil drainage end date
+            model.SoilDrainageEndDate=new DateTime(model.ApplicationDate.Value.Year, (int)NMP.Portal.Enums.Month.March, 31);
+
+            //Rainfall within 6 hours
+            (RainTypeResponse rainType,Error error) = await _organicManureService.FetchRainTypeDefault();
+            model.RainWithin6Hours = rainType.RainInMM;
+
+            //Effective rainfall after application
+            (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
+            string halfPostCode = string.Empty;
+            if (error.Message==null)
+            {
+                string[] postCodeParts = farm.Postcode.Split(' ');
+
+                if (postCodeParts.Length == 2)
+                {
+                    halfPostCode = postCodeParts[0];
+                }
+            }
+
+            if (model.ApplicationDate.HasValue && model.SoilDrainageEndDate.HasValue)
+            {
+                model.TotalRainfall = await _organicManureService.FetchRainfallByPostcodeAndDateRange(halfPostCode, model.ApplicationDate.Value.ToString("yyyy-MM-ddTHH:mm:ss"), model.SoilDrainageEndDate.Value.ToString("yyyy-MM-ddTHH:mm:ss"));
+            }
+
+            //Windspeed during application 
+            (WindspeedResponse windspeed,error) = await _organicManureService.FetchWindspeedDataDefault();
+            model.Windspeed = windspeed.Name;
+
+            //Topsoil moisture
+            (MoistureTypeResponse moisterType, error) = await _organicManureService.FetchMoisterTypeDefaultByApplicationDate(model.ApplicationDate.Value.ToString("yyyy-MM-ddTHH:mm:ss"));
+            model.MoisterType = moisterType.Name;
+
             return View(model);
         }
 
