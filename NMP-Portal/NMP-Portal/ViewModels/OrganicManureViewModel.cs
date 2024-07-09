@@ -84,6 +84,8 @@ namespace NMP.Portal.ViewModels
         //public string? Windspeed { get; set; }
         public string? MoisterType { get; set; }
 
+        public int? MoisterTypeId { get; set; }
+
         public int? RainWithin6Hours { get; set; }
     }
 }

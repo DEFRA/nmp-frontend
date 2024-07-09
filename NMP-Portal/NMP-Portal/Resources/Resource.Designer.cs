@@ -486,15 +486,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Autumn crop Nitrogen uptake.
-        /// </summary>
-        public static string lblAutumnCropNitrogenUptake {
-            get {
-                return ResourceManager.GetString("lblAutumnCropNitrogenUptake", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to {0}kg per hectare.
         /// </summary>
         public static string lblAutumnCropNitrogenPerHectare {
@@ -503,6 +494,14 @@ namespace NMP.Portal.Resources {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to Autumn crop Nitrogen uptake.
+        /// </summary>
+        public static string lblAutumnCropNitrogenUptake {
+            get {
+                return ResourceManager.GetString("lblAutumnCropNitrogenUptake", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Average annual rainfall.
@@ -1009,15 +1008,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to End of soil drainage.
-        /// </summary>
-        public static string lblEndOfSoilDrainage {
-            get {
-                return ResourceManager.GetString("lblEndOfSoilDrainage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Effective rainfall after application.
         /// </summary>
         public static string lblEffectiveRainfallAfterApplication {
@@ -1026,6 +1016,14 @@ namespace NMP.Portal.Resources {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to End of soil drainage.
+        /// </summary>
+        public static string lblEndOfSoilDrainage {
+            get {
+                return ResourceManager.GetString("lblEndOfSoilDrainage", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to English Rules.
@@ -1406,6 +1404,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For example, 27 3 2007.
+        /// </summary>
+        public static string lblForExample {
+            get {
+                return ResourceManager.GetString("lblForExample", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Harvest Year.
         /// </summary>
         public static string lblHarvestYear {
@@ -1736,6 +1743,15 @@ namespace NMP.Portal.Resources {
         public static string lblkg {
             get {
                 return ResourceManager.GetString("lblkg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to kg/ha.
+        /// </summary>
+        public static string lblKgPerHectare {
+            get {
+                return ResourceManager.GetString("lblKgPerHectare", resourceCulture);
             }
         }
         
@@ -2588,18 +2604,18 @@ namespace NMP.Portal.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Rainfall within 6 hours of application.
         /// </summary>
-        public static string lblRainfallWithinSixHoursOfApplication {
+        public static string lblRainfallWithin6HoursOfApplication {
             get {
-                return ResourceManager.GetString("lblRainfallWithinSixHoursOfApplication", resourceCulture);
+                return ResourceManager.GetString("lblRainfallWithin6HoursOfApplication", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Rainfall within 6 hours of application.
         /// </summary>
-        public static string lblRainfallWithin6HoursOfApplication {
+        public static string lblRainfallWithinSixHoursOfApplication {
             get {
-                return ResourceManager.GetString("lblRainfallWithin6HoursOfApplication", resourceCulture);
+                return ResourceManager.GetString("lblRainfallWithinSixHoursOfApplication", resourceCulture);
             }
         }
         
@@ -3414,6 +3430,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the Autumn crop Nitrogen uptake?.
+        /// </summary>
+        public static string lblWhatIsTheAutumnCropNitrogenUptake {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheAutumnCropNitrogenUptake", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the current crop group?.
         /// </summary>
         public static string lblWhatIsTheCurrentCropGroup {
@@ -3446,6 +3471,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhatIsTheDifferentExpectedYieldNotSet {
             get {
                 return ResourceManager.GetString("lblWhatIsTheDifferentExpectedYieldNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the end of drainage date?.
+        /// </summary>
+        public static string lblWhatIsTheEndOfDrainageDate {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheEndOfDrainageDate", resourceCulture);
             }
         }
         
@@ -4026,6 +4060,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a value before continuing.
+        /// </summary>
+        public static string MsgEnterAValueBeforeContinue {
+            get {
+                return ResourceManager.GetString("MsgEnterAValueBeforeContinue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the average annual rainfall.
         /// </summary>
         public static string MsgEnterAverageAnnualRainfall {
@@ -4121,6 +4164,15 @@ namespace NMP.Portal.Resources {
         public static string MsgEnterValidAnnualRainfall {
             get {
                 return ResourceManager.GetString("MsgEnterValidAnnualRainfall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a valid numeric value before continuing.
+        /// </summary>
+        public static string MsgEnterValidNumericValueBeforeContinuing {
+            get {
+                return ResourceManager.GetString("MsgEnterValidNumericValueBeforeContinuing", resourceCulture);
             }
         }
         
@@ -4436,6 +4488,15 @@ namespace NMP.Portal.Resources {
         public static string MsgSoilAnalysisOlderThanFiveYears {
             get {
                 return ResourceManager.GetString("MsgSoilAnalysisOlderThanFiveYears", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The date for End of soil drainage must be between 1st jan and 30th Apr.
+        /// </summary>
+        public static string MsgSoilDrainageEndDate1stJan30Apr {
+            get {
+                return ResourceManager.GetString("MsgSoilDrainageEndDate1stJan30Apr", resourceCulture);
             }
         }
         

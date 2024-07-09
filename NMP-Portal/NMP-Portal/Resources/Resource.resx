@@ -1563,9 +1563,6 @@ m3/ha</value>
   <data name="lblAmountOfRainThatFallsInThe6Hours" xml:space="preserve">
     <value>Amount of rain that falls in the 6 hours after the material is applied</value>
   </data>
-  <data name="lblAutumnCropNitrogenUptake" xml:space="preserve">
-    <value>Autumn crop Nitrogen uptake</value>
-  </data>
   <data name="lblAverageRainfallBetweenManAppAndEndOfSoilDrainage" xml:space="preserve">
     <value>Average rainfall between manure application and end of soil drainage</value>
   </data>
@@ -1577,9 +1574,6 @@ m3/ha</value>
   </data>
   <data name="lblEffectiveRainfallAfterApplication" xml:space="preserve">
     <value>Effective rainfall after application</value>
-  </data>
-  <data name="lblEndOfSoilDrainage" xml:space="preserve">
-    <value>End of soil drainage</value>
   </data>
   <data name="lblHowMoistTheTopsoilIs" xml:space="preserve">
     <value>How moist the topsoil is when the material is applied</value>
@@ -1593,9 +1587,6 @@ m3/ha</value>
   <data name="lblTheseAreApproximateValues" xml:space="preserve">
     <value>These are approximate values. You can change them now or later.</value>
   </data>
-  <data name="lblTopsoilMoisture" xml:space="preserve">
-    <value>Topsoil moisture</value>
-  </data>
   <data name="lblWindspeedDuringApplication" xml:space="preserve">
     <value>Windspeed during application</value>
   </data>
@@ -1607,5 +1598,26 @@ m3/ha</value>
   </data>
   <data name="lblRainfallMM" xml:space="preserve">
     <value>{0}mm</value>
+  </data>
+  <data name="lblForExample" xml:space="preserve">
+    <value>For example, 27 3 2007</value>
+  </data>
+  <data name="lblKgPerHectare" xml:space="preserve">
+    <value>kg/ha</value>
+  </data>
+  <data name="lblWhatIsTheAutumnCropNitrogenUptake" xml:space="preserve">
+    <value>What is the Autumn crop Nitrogen uptake?</value>
+  </data>
+  <data name="lblWhatIsTheEndOfDrainageDate" xml:space="preserve">
+    <value>What is the end of drainage date?</value>
+  </data>
+  <data name="MsgEnterAValueBeforeContinue" xml:space="preserve">
+    <value>Enter a value before continuing</value>
+  </data>
+  <data name="MsgEnterValidNumericValueBeforeContinuing" xml:space="preserve">
+    <value>Enter a valid numeric value before continuing</value>
+  </data>
+  <data name="MsgSoilDrainageEndDate1stJan30Apr" xml:space="preserve">
+    <value>The date for End of soil drainage must be between 1st jan and 30th Apr</value>
   </data>
 </root>

@@ -91,6 +91,15 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RainfallWithinSixHoursID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeName"></govuk-input>
 
+
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptake"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilDrainageEndDate"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RainWithin6Hours"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalRainfall"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.WindspeedID"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Windspeed"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MoisterTypeId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MoisterType"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -139,13 +148,13 @@
                         <th scope="row" class="govuk-table__header">@Resource.lblAutumnCropNitrogenUptake</th>
                         <td class="govuk-table__cell">@Resource.lblAmountOfNFromTheApplicationTaken</td>
                         <td class="govuk-table__cell">@string.Format(Resource.lblAutumnCropNitrogenPerHectare,Model.AutumnCropNitrogenUptake)</td>
-                        <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
+                        <td class="govuk-table__cell"><a asp-action="AutumnCropNitrogenUptake" asp-controller="OrganicManure">@Resource.lblChange</a></td>
                     </tr>
                     <tr class="govuk-table__row">
                         <th scope="row" class="govuk-table__header">@Resource.lblEndOfSoilDrainage</th>
                         <td class="govuk-table__cell">@Resource.lblDateWhenSoilDrainageEnds</td>
                         <td class="govuk-table__cell">@Model.SoilDrainageEndDate.Value.Date.ToString("dd MMMM yyyy")</td>
-                        <td class="govuk-table__cell"><a href="manure_drainage">@Resource.lblChange</a></td>
+                        <td class="govuk-table__cell"><a asp-action="SoilDrainageEndDate" asp-controller="OrganicManure">@Resource.lblChange</a></td>
                     </tr>
                     <tr class="govuk-table__row">
                         <th scope="row" class="govuk-table__header">@Resource.lblRainfallWithin6HoursOfApplication</th>
