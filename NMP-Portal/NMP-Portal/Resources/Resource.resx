@@ -1563,9 +1563,6 @@ m3/ha</value>
   <data name="lblAmountOfRainThatFallsInThe6Hours" xml:space="preserve">
     <value>Amount of rain that falls in the 6 hours after the material is applied</value>
   </data>
-  <data name="lblAutumnCropNitrogenUptake" xml:space="preserve">
-    <value>Autumn crop Nitrogen uptake</value>
-  </data>
   <data name="lblAverageRainfallBetweenManAppAndEndOfSoilDrainage" xml:space="preserve">
     <value>Average rainfall between manure application and end of soil drainage</value>
   </data>
@@ -1577,9 +1574,6 @@ m3/ha</value>
   </data>
   <data name="lblEffectiveRainfallAfterApplication" xml:space="preserve">
     <value>Effective rainfall after application</value>
-  </data>
-  <data name="lblEndOfSoilDrainage" xml:space="preserve">
-    <value>End of soil drainage</value>
   </data>
   <data name="lblHowMoistTheTopsoilIs" xml:space="preserve">
     <value>How moist the topsoil is when the material is applied</value>
@@ -1593,9 +1587,6 @@ m3/ha</value>
   <data name="lblTheseAreApproximateValues" xml:space="preserve">
     <value>These are approximate values. You can change them now or later.</value>
   </data>
-  <data name="lblTopsoilMoisture" xml:space="preserve">
-    <value>Topsoil moisture</value>
-  </data>
   <data name="lblWindspeedDuringApplication" xml:space="preserve">
     <value>Windspeed during application</value>
   </data>
@@ -1607,5 +1598,14 @@ m3/ha</value>
   </data>
   <data name="lblRainfallMM" xml:space="preserve">
     <value>{0}mm</value>
+  </data>
+  <data name="lblPlanOrEditAnApplicationOfOrganicMaterial" xml:space="preserve">
+    <value>Plan or edit an application of organic material to {0}</value>
+  </data>
+  <data name="lblViewFieldPlan" xml:space="preserve">
+    <value>View field plan</value>
+  </data>
+  <data name="MsgAreaMustBeGreaterThanZero" xml:space="preserve">
+    <value>Area must be greater than zero</value>
   </data>
 </root>

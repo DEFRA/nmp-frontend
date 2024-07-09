@@ -78,7 +78,7 @@
                                 <td class="govuk-table__cell">@field.FieldName</td>
                                 <td class="govuk-table__cell">@field.OrganicManureCount</td>
                                 <td class="govuk-table__cell alignRight">
-                                    <a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@field.FieldName" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblViewRecommendations</a>
+                                    <a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@field.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblViewFieldPlan</a>
                                 </td>
                             </tr>
                         }

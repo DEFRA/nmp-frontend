@@ -14,5 +14,6 @@ namespace NMP.Portal.ViewModels
         public string? EncryptedFarmId { get; set; }
        
         public string? EncryptedHarvestYear { get; set; }
+        public string? EncryptedFieldId { get; set; } = string.Empty;
     }
 }
