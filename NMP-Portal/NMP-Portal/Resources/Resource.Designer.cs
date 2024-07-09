@@ -3214,6 +3214,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View field plan.
+        /// </summary>
+        public static string lblViewFieldPlan {
+            get {
+                return ResourceManager.GetString("lblViewFieldPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to View or create a plan or record.
         /// </summary>
         public static string lblViewOrCreateAPlanOrRecord {

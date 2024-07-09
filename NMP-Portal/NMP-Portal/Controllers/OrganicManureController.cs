@@ -76,9 +76,8 @@ namespace NMP.Portal.Controllers
                     model.HarvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(r));
                     model.EncryptedFarmId = q;
                     model.EncryptedHarvestYear = r;
-                    model.IsSingleField = false;
                     (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
-                    if (error.Message==null)
+                    if (error.Message == null)
                     {
                         model.isEnglishRules = farm.EnglishRules;
                         _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
@@ -89,6 +88,10 @@ namespace NMP.Portal.Controllers
                     }
                     if(!string.IsNullOrWhiteSpace(s))
                     {
+                        model.FieldList = new List<string>();
+                        model.FieldGroup = Resource.lblSelectSpecificFields;
+                        model.FieldGroupName = Resource.lblSelectSpecificFields;
+                        model.IsComingFromRecommendation = true;
                         string fieldId = _cropDataProtector.Unprotect(s);
                         model.FieldList.Add(fieldId);
                         (List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldId, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
@@ -117,7 +120,7 @@ namespace NMP.Portal.Controllers
                         else
                         {
                             TempData["NutrientRecommendationsError"] = error.Message;
-                            return RedirectToAction("Recommendations", "Crop", new {q=q,r=s,s=r});
+                            return RedirectToAction("Recommendations", "Crop", new { q = q, r = s, s = r });
                         }
                         _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
                         return RedirectToAction("ManureGroup");
@@ -266,7 +269,7 @@ namespace NMP.Portal.Controllers
                         model.FieldGroupName = model.FieldGroup;
                     }
                 }
-
+                model.IsComingFromRecommendation = false;
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
             }
             catch (Exception ex)
@@ -1306,21 +1309,25 @@ namespace NMP.Portal.Controllers
 
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
 
-            if (model.ApplicationRateMethod.Value == 0)
+            if (model.ApplicationRateMethod.Value == (int)NMP.Portal.Enums.ApplicationRate.EnterAnApplicationRate)
             {
                 return RedirectToAction("ManualApplicationRate");
             }
-            else if (model.ApplicationRateMethod.Value == 1)
+            else if (model.ApplicationRateMethod.Value == (int)NMP.Portal.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
             {
                 return RedirectToAction("AreaQuantity");
             }
             else if (model.ApplicationRateMethod.Value == (int)NMP.Portal.Enums.ApplicationRate.UseDefaultApplicationRate)
             {
                 model.ApplicationRate = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId)?.ApplicationRateArable;
+                model.Area = null;
+                model.Quantity = null;
                 if (model.OrganicManures.Count > 0)
                 {
                     foreach (var orgManure in model.OrganicManures)
                     {
+                        orgManure.AreaSpread = null;
+                        orgManure.ManureQuantity = null;
                         orgManure.ApplicationRate = model.ApplicationRate.Value;
                     }
                 }
@@ -1379,11 +1386,14 @@ namespace NMP.Portal.Controllers
             {
                 return View("ManualApplicationRate", model);
             }
-
+            model.Area = null;
+            model.Quantity = null;
             if (model.OrganicManures.Count > 0)
             {
                 foreach (var orgManure in model.OrganicManures)
                 {
+                    orgManure.AreaSpread = null;
+                    orgManure.ManureQuantity = null;
                     orgManure.ApplicationRate = model.ApplicationRate.Value;
                 }
             }
@@ -1451,6 +1461,8 @@ namespace NMP.Portal.Controllers
             {
                 foreach (var orgManure in model.OrganicManures)
                 {
+                    orgManure.AreaSpread = model.Area.Value;
+                    orgManure.ManureQuantity = model.Quantity.Value;
                     orgManure.ApplicationRate = model.ApplicationRate.Value;
                 }
             }
@@ -1691,10 +1703,54 @@ namespace NMP.Portal.Controllers
             return RedirectToAction("CheckAnswer");
 
         }
+
+        [HttpGet]
+        public IActionResult backActionForManureGroup()
+        {
+            OrganicManureViewModel? model = new OrganicManureViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+
+
+
+            if (model.FieldGroup == Resource.lblSelectSpecificFields && model.IsComingFromRecommendation)
+            {
+                if (model.FieldList.Count > 0 && model.FieldList.Count == 1)
+                {
+                    string fieldId = model.FieldList[0];
+                    return RedirectToAction("Recommendations", "Crop", new
+                    {
+                        q = model.EncryptedFarmId,
+                        r = _cropDataProtector.Protect(fieldId),
+                        s = model.EncryptedHarvestYear
+
+                    });
+                }
+            }
+            else if (model.FieldGroup == Resource.lblSelectSpecificFields && (!model.IsComingFromRecommendation))
+            {
+                return RedirectToAction("Fields");
+            }
+
+            return RedirectToAction("FieldGroup", new
+            {
+                q = model.EncryptedFarmId,
+                r = model.EncryptedHarvestYear
+            });
+
+
+
+        }
         [HttpGet]
         public async Task<IActionResult> CheckAnswer()
         {
-            OrganicManureViewModel? model = null;
+            OrganicManureViewModel model =new OrganicManureViewModel();
             try
             {
                 if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
@@ -1705,12 +1761,27 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-
-                if (model == null)
-                {
-                    model = new OrganicManureViewModel();
-                }
                 model.IsCheckAnswer = true;
+                if (model.OrganicManures.Count > 0)
+                {
+                    if (model.IsDefaultNutrientValues.Value)
+                    {
+                        foreach (var orgManure in model.OrganicManures)
+                        {
+                            orgManure.AvailableK2O = model.ManureType.K2O.Value * (model.ApplicationRate.Value * (model.ManureType.K2OAvailable.Value / 100));
+                            orgManure.AvailableP2O5 = model.ManureType.P2O5.Value * (model.ApplicationRate.Value * (model.ManureType.P2O5Available.Value / 100));
+                        }
+                    }
+                    else
+                    {
+                        foreach (var orgManure in model.OrganicManures)
+                        {
+                            orgManure.AvailableK2O =  model.K2O.Value * (model.ApplicationRate.Value * (model.ManureType.K2OAvailable.Value / 100));
+                            orgManure.AvailableP2O5 =  model.P2O5.Value * (model.ApplicationRate.Value * (model.ManureType.P2O5Available.Value / 100));
+                        }
+                    }
+
+                }
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
             }
             catch (Exception ex)
@@ -1767,7 +1838,7 @@ namespace NMP.Portal.Controllers
                             successMsg = string.Format(Resource.lblOrganicManureCreatedSuccessfullyForSpecificField, concatenatedFieldNames);
 
                         }
-                        else 
+                        else
                         {
                             successMsg = Resource.lblOrganicManureCreatedSuccessfullyForAllField;
                         }
@@ -1777,7 +1848,7 @@ namespace NMP.Portal.Controllers
                         TempData["AddOrganicManureError"] = error.Message;
                         return View(model);
                     }
-                    
+
                 }
                 if (success)
                 {

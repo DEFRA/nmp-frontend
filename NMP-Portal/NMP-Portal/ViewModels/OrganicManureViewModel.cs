@@ -55,7 +55,7 @@ namespace NMP.Portal.ViewModels
         public decimal? NO3N { get; set; }
 
         public bool? IsDefaultNutrient { get; set; } = false;
-        public bool? IsSingleField { get; set; } = false;
+        //public bool? IsSingleField { get; set; } = false;
         public bool IsCheckAnswer { get; set; } = false;
         public decimal? AutumnCropNitrogenUptake { get; set; }
 
@@ -76,5 +76,6 @@ namespace NMP.Portal.ViewModels
         public string? IncorporationDelayName { get; set; }
         public string? FieldGroupName { get; set; }
         public string? CropTypeName { get; set; }
+        public bool IsComingFromRecommendation { get; set; } = false;
     }
 }

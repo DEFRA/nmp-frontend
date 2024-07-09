@@ -1557,4 +1557,7 @@ m3/ha</value>
   <data name="lblPlanOrEditAnApplicationOfOrganicMaterial" xml:space="preserve">
     <value>Plan or edit an application of organic material to {0}</value>
   </data>
+  <data name="lblViewFieldPlan" xml:space="preserve">
+    <value>View field plan</value>
+  </data>
 </root>
