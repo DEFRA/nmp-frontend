@@ -1599,6 +1599,15 @@ m3/ha</value>
   <data name="lblRainfallMM" xml:space="preserve">
     <value>{0}mm</value>
   </data>
+  <data name="lblPlanOrEditAnApplicationOfOrganicMaterial" xml:space="preserve">
+    <value>Plan or edit an application of organic material to {0}</value>
+  </data>
+  <data name="lblViewFieldPlan" xml:space="preserve">
+    <value>View field plan</value>
+  </data>
+  <data name="MsgAreaMustBeGreaterThanZero" xml:space="preserve">
+    <value>Area must be greater than zero</value>
+  </data>
   <data name="lblForExample" xml:space="preserve">
     <value>For example, 27 3 2007</value>
   </data>

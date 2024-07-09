@@ -2431,6 +2431,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Plan or edit an application of organic material to {0}.
+        /// </summary>
+        public static string lblPlanOrEditAnApplicationOfOrganicMaterial {
+            get {
+                return ResourceManager.GetString("lblPlanOrEditAnApplicationOfOrganicMaterial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Plans.
         /// </summary>
         public static string lblPlans {
@@ -3340,6 +3349,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View field plan.
+        /// </summary>
+        public static string lblViewFieldPlan {
+            get {
+                return ResourceManager.GetString("lblViewFieldPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to View or create a plan or record.
         /// </summary>
         public static string lblViewOrCreateAPlanOrRecord {
@@ -3822,6 +3840,15 @@ namespace NMP.Portal.Resources {
         public static string MsgApplicationRate {
             get {
                 return ResourceManager.GetString("MsgApplicationRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Area must be greater than zero.
+        /// </summary>
+        public static string MsgAreaMustBeGreaterThanZero {
+            get {
+                return ResourceManager.GetString("MsgAreaMustBeGreaterThanZero", resourceCulture);
             }
         }
         
