@@ -1454,6 +1454,10 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("Quantity", Resource.MsgEnterAValidQuantity);
             }
+            if (model.Area != null&&model.Area==0)
+            {
+                ModelState.AddModelError("Area", Resource.MsgAreaMustBeGreaterThanZero);
+            }
             if (!ModelState.IsValid)
             {
                 return View("AreaQuantity", model);
