@@ -1690,39 +1690,46 @@ namespace NMP.Portal.Controllers
             //check early and late for winter cereals and winter oilseed rape
             //if sowing date after 15 sept then late
             DateTime? sowingDate = crop.Select(x => x.SowingDate).FirstOrDefault();
-            if(cropCategoryId== (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal || cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlyStablishedWinterOilseedRape)
+            if(model.AutumnCropNitrogenUptake==null)
             {
-                if (sowingDate != null)
+                if (cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal || cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlyStablishedWinterOilseedRape)
                 {
-                    int day = sowingDate.Value.Day;
-                    int month = sowingDate.Value.Month;
-                    if (month == (int)NMP.Portal.Enums.Month.September && day > 15)
+                    if (sowingDate != null)
                     {
-                        if(cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal)
+                        int day = sowingDate.Value.Day;
+                        int month = sowingDate.Value.Month;
+                        if (month == (int)NMP.Portal.Enums.Month.September && day > 15)
                         {
-                            cropCategoryId = (int)NMP.Portal.Enums.CropCategory.LateSownWinterCereal;
-                        }
-                        else
-                        {
-                            cropCategoryId = (int)NMP.Portal.Enums.CropCategory.LateStablishedWinterOilseedRape;
+                            if(cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal)
+                            {
+                                cropCategoryId = (int)NMP.Portal.Enums.CropCategory.LateSownWinterCereal;
+                            }
+                            else
+                            {
+                                cropCategoryId = (int)NMP.Portal.Enums.CropCategory.LateStablishedWinterOilseedRape;
+                            }
                         }
                     }
                 }
-            }
 
-            if (model.ApplicationDate.Value.Month >= (int)NMP.Portal.Enums.Month.August && model.ApplicationDate.Value.Month <= (int)NMP.Portal.Enums.Month.October)
-            {
+                if (model.ApplicationDate.Value.Month >= (int)NMP.Portal.Enums.Month.August && model.ApplicationDate.Value.Month <= (int)NMP.Portal.Enums.Month.October)
+                {
 
-                model.AutumnCropNitrogenUptake = await _mannerService.FetchCropNUptakeDefaultAsync(cropCategoryId);
+                    model.AutumnCropNitrogenUptake = await _mannerService.FetchCropNUptakeDefaultAsync(cropCategoryId);
+                }
+                else
+                {
+                    model.AutumnCropNitrogenUptake = 0;
+                }
             }
-            else
-            {
-                model.AutumnCropNitrogenUptake = 0;
-            }
+            
 
             //Soil drainage end date
-            model.SoilDrainageEndDate=new DateTime(model.ApplicationDate.Value.Year, (int)NMP.Portal.Enums.Month.March, 31);
-
+            if(model.SoilDrainageEndDate ==null)
+            {
+                model.SoilDrainageEndDate = new DateTime(model.ApplicationDate.Value.AddYears(1).Year, (int)NMP.Portal.Enums.Month.March, 31);
+            }
+           
             //Rainfall within 6 hours
             (RainTypeResponse rainType,Error error) = await _organicManureService.FetchRainTypeDefault();
             model.RainWithin6Hours = rainType.RainInMM;
@@ -1747,11 +1754,15 @@ namespace NMP.Portal.Controllers
 
             //Windspeed during application 
             (WindspeedResponse windspeed,error) = await _organicManureService.FetchWindspeedDataDefault();
+            model.WindspeedID=windspeed.ID;
             model.Windspeed = windspeed.Name;
 
             //Topsoil moisture
             (MoistureTypeResponse moisterType, error) = await _organicManureService.FetchMoisterTypeDefaultByApplicationDate(model.ApplicationDate.Value.ToString("yyyy-MM-ddTHH:mm:ss"));
             model.MoisterType = moisterType.Name;
+            model.MoisterTypeId=moisterType.ID;
+
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
 
             return View(model);
         }
@@ -1944,6 +1955,93 @@ namespace NMP.Portal.Controllers
             }
             return View(model);
 
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AutumnCropNitrogenUptake()
+        {
+            OrganicManureViewModel? model = new OrganicManureViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+            }
+
+            return View(model);
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AutumnCropNitrogenUptake(OrganicManureViewModel model)
+        {
+            if (!ModelState.IsValid && ModelState.ContainsKey("AutumnCropNitrogenUptake"))
+            {
+                var autumnCropNitrogenUptakeState = ModelState["AutumnCropNitrogenUptake"];
+
+                if (autumnCropNitrogenUptakeState.Errors.Count > 0)
+                {
+                    var firstError = autumnCropNitrogenUptakeState.Errors[0];
+
+                    if (firstError.ErrorMessage == string.Format(Resource.lblEnterNumericValue, autumnCropNitrogenUptakeState.RawValue, "AutumnCropNitrogenUptake"))
+                    {
+                        autumnCropNitrogenUptakeState.Errors.Clear();
+                        autumnCropNitrogenUptakeState.Errors.Add(Resource.MsgEnterValidNumericValueBeforeContinuing);
+                    }
+                }
+            }
+
+            if (model.AutumnCropNitrogenUptake == null)
+            {
+                ModelState.AddModelError("AutumnCropNitrogenUptake", Resource.MsgEnterAValueBeforeContinue);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View("AutumnCropNitrogenUptake", model);
+            }
+
+            
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+            return RedirectToAction("ConditionsAffectingNutrients");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> SoilDrainageEndDate()
+        {
+            OrganicManureViewModel? model = new OrganicManureViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+            }
+
+            return View(model);
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SoilDrainageEndDate(OrganicManureViewModel model)
+        {
+            if (model.SoilDrainageEndDate == null)
+            {
+                ModelState.AddModelError("SoilDrainageEndDate", Resource.MsgEnterADateBeforeContinuing);
+            }
+            if (model.SoilDrainageEndDate != null)
+            {
+                if (model.SoilDrainageEndDate.Value.Date.Year > model.HarvestYear+1 )
+                {
+                    ModelState.AddModelError("SoilDrainageEndDate", Resource.MsgDateCannotBeLaterThanHarvestYear);
+                }
+                if(!(model.SoilDrainageEndDate.Value.Month >= (int)NMP.Portal.Enums.Month.January && model.SoilDrainageEndDate.Value.Month <= (int)NMP.Portal.Enums.Month.April))
+                {
+                    ModelState.AddModelError("SoilDrainageEndDate", Resource.MsgSoilDrainageEndDate1stJan30Apr);
+                }
+            }
+            if (!ModelState.IsValid)
+            {
+                return View("SoilDrainageEndDate", model);
+            }
+
+
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+            return RedirectToAction("ConditionsAffectingNutrients");
         }
     }
 }

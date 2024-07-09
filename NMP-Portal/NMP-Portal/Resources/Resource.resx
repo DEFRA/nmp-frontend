@@ -1608,4 +1608,25 @@ m3/ha</value>
   <data name="MsgAreaMustBeGreaterThanZero" xml:space="preserve">
     <value>Area must be greater than zero</value>
   </data>
+  <data name="lblForExample" xml:space="preserve">
+    <value>For example, 27 3 2007</value>
+  </data>
+  <data name="lblKgPerHectare" xml:space="preserve">
+    <value>kg/ha</value>
+  </data>
+  <data name="lblWhatIsTheAutumnCropNitrogenUptake" xml:space="preserve">
+    <value>What is the Autumn crop Nitrogen uptake?</value>
+  </data>
+  <data name="lblWhatIsTheEndOfDrainageDate" xml:space="preserve">
+    <value>What is the end of drainage date?</value>
+  </data>
+  <data name="MsgEnterAValueBeforeContinue" xml:space="preserve">
+    <value>Enter a value before continuing</value>
+  </data>
+  <data name="MsgEnterValidNumericValueBeforeContinuing" xml:space="preserve">
+    <value>Enter a valid numeric value before continuing</value>
+  </data>
+  <data name="MsgSoilDrainageEndDate1stJan30Apr" xml:space="preserve">
+    <value>The date for End of soil drainage must be between 1st jan and 30th Apr</value>
+  </data>
 </root>
