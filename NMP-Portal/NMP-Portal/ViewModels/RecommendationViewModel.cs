@@ -9,11 +9,12 @@ namespace NMP.Portal.ViewModels
         public List<CropViewModel>? Crops { get; set; }
         public List<ManagementPeriod>? ManagementPeriods { get; set; }
         public int? CropGroupID { get; set; }
-        public string? FieldName { get; set; }        
+        public string? FieldName { get; set; }
         public string? FarmName { get; set; }
         public string? EncryptedFarmId { get; set; }
-       
+
         public string? EncryptedHarvestYear { get; set; }
         public string? EncryptedFieldId { get; set; } = string.Empty;
+        public List<OrganicManureData> OrganicManures { get; set; }
     }
 }

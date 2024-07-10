@@ -96,6 +96,9 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.K2OAvailable"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.P2O5Available"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyNeedToStoreNutrientValueForFuture"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
+
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -347,7 +350,7 @@
                         @Resource.lblTopsoilMoisture
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
-                        @Model.Moisture
+                        @Model.MoisterType
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
                         <govuk-summary-list-row-action class="disabled" asp-action="Moisture" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>

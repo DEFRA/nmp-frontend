@@ -67,7 +67,6 @@ namespace NMP.Portal.ViewModels
         public int? WindspeedID { get; set; }
         public string? Windspeed { get; set; }
         public int? MoistureID { get; set; }
-        public string? Moisture { get; set; }
         public bool IsFieldGroupChange { get; set; } = false;
         public bool IsManureTypeChange { get; set; } = false;
         public bool? IsManureTypeLiquid { get; set; }
@@ -83,6 +82,8 @@ namespace NMP.Portal.ViewModels
 
         //public string? Windspeed { get; set; }
         public string? MoisterType { get; set; }
+        public string? FarmName { get; set; }
+        public bool IsAnyNeedToStoreNutrientValueForFuture { get; set; } = false;
 
         public int? RainWithin6Hours { get; set; }
         public bool IsComingFromRecommendation { get; set; } = false;

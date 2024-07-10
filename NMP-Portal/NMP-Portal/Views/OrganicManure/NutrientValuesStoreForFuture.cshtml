@@ -1,33 +1,18 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.OrganicManureViewModel
 @{
-    ViewData["Title"] = Resource.lblApplicationRate;
+    ViewData["Title"] = Resource.lblNutrientValuesUseForFuture;
+    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+
 }
 @section BeforeContent {
-    @if(Model.ApplicationRateMethod.Value==(int)NMP.Portal.Enums.ApplicationRate.EnterAnApplicationRate)
-    {
-        <govuk-back-link asp-action="ManualApplicationRate" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
-    }
-    else if (Model.ApplicationRateMethod.Value == (int)NMP.Portal.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
-    {
-        <govuk-back-link asp-action="AreaQuantity" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
-    }
-    else
-    {
-        <govuk-back-link asp-action="ApplicationRateMethod" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
-    }
-    
+    <govuk-back-link asp-action="ManualNutrientValues" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
 }
 
-<form asp-action="IncorporationMethod" asp-controller="OrganicManure" method="post">
+<form asp-action="NutrientValuesStoreForFuture" asp-controller="OrganicManure" method="post">
     @Html.AntiForgeryToken()
     <div class="govuk-grid-row">
-        @if (TempData["IncorporationMethodError"] != null)
-        {
-            <govuk-error-summary>
-                <govuk-error-summary-item href="#">@TempData["IncorporationMethodError"]</govuk-error-summary-item>
-            </govuk-error-summary>
-        }
         <div class="govuk-grid-column-two-thirds">
 
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
@@ -40,16 +25,15 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules"></govuk-input>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationDate" value="@Model.ApplicationDate"></govuk-date-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDefaultNutrientValues" value="@Model.IsDefaultNutrientValues"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationRateMethod"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationMethod"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Area"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Quantity"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationRate"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupId"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationMethod"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationMethod"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationMethodCount"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationDelay" value="@Model.IncorporationDelay"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationRateArable"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationDelay"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.DryMatter"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.TotalN"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.NH4N"></govuk-input>
@@ -74,14 +58,14 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManureTypeLiquid" value="@Model.IsManureTypeLiquid.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationMethodName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationDelayName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationMethodName" value="@Model.IncorporationMethodName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationMethodName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroupName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.K2OAvailable"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.P2O5Available"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyNeedToStoreNutrientValueForFuture"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationRateMethod"></govuk-input>
 
 
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
@@ -111,6 +95,7 @@
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].ApplicationRate" value="@Model.OrganicManures[i].ApplicationRate"></govuk-input>
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].IncorporationDelayID" value="@Model.OrganicManures[i].IncorporationDelayID"></govuk-input>
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].IncorporationMethodID" value="@Model.OrganicManures[i].IncorporationMethodID"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationRateArable" value="@Model.ApplicationRateArable"></govuk-input>
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].AvailableK2O" value="@Model.OrganicManures[i].AvailableK2O"></govuk-input>
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].AvailableP2O5" value="@Model.OrganicManures[i].AvailableP2O5"></govuk-input>
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].AreaSpread" value="@Model.OrganicManures[i].AreaSpread"></govuk-input>
@@ -118,33 +103,17 @@
                 }
             }
 
-            <govuk-radios asp-for="@Model.IncorporationMethod">
+            <govuk-radios asp-for="@Model.IsAnyNeedToStoreNutrientValueForFuture">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblWhatIsTheIncorporationMethod,Model.ManureTypeName)
+                        @string.Format(Resource.lblWouldYouLikeToUseTheseAnalysisValuesForFutureApplications, Model.ManureTypeName, Model.FarmName)
                     </govuk-radios-fieldset-legend>
-                    @if (ViewBag.IncorporationMethod != null && ViewBag.IncorporationMethod.Count>0)
-                    {
-                        @foreach (var item in ViewBag.IncorporationMethod)
-                        {
-                            @if (!(item.ID == (int)NMP.Portal.Enums.IncorporationMethod.NotIncorporated))
-                            {
-                                <govuk-radios-item value="@item.ID">@item.Name</govuk-radios-item>
-                            }
-                            @if (item.ID == (int)NMP.Portal.Enums.IncorporationMethod.NotIncorporated)
-                            {
-                                <govuk-radios-divider>@Resource.lblOr</govuk-radios-divider>
-                                <govuk-radios-item value="@item.ID">@item.Name</govuk-radios-item>
-                            }
-                            
-                        }
-                        
-                    }
-                   
+                    <govuk-radios-hint>@Resource.lblNutrientValuesStoreForFutureHint</govuk-radios-hint>
+                    <govuk-radios-item value="@yes" disabled="true">@Resource.lblYes</govuk-radios-item>
+                    <govuk-radios-item value="@no">@Resource.lblNo</govuk-radios-item>
                 </govuk-radios-fieldset>
             </govuk-radios>
-
-            <govuk-button type="submit" class="margin-bottom-forty" asp-action="IncorporationMethod">
+            <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
             <p class="govuk-body cancel-link"><a asp-action="CreateManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>

@@ -58,7 +58,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> FieldGroup(string q, string r,string? s)//q=FarmId,r=harvestYear,s=fieldId
+        public async Task<IActionResult> FieldGroup(string q, string r, string? s)//q=FarmId,r=harvestYear,s=fieldId
         {
             OrganicManureViewModel model = new OrganicManureViewModel();
             Error error = null;
@@ -81,6 +81,7 @@ namespace NMP.Portal.Controllers
                     (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
                     if (error.Message == null)
                     {
+                        model.FarmName = farm.Name;
                         model.isEnglishRules = farm.EnglishRules;
                         _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
                     }
@@ -88,7 +89,7 @@ namespace NMP.Portal.Controllers
                     {
                         TempData["FieldGroupError"] = error.Message;
                     }
-                    if(!string.IsNullOrWhiteSpace(s))
+                    if (!string.IsNullOrWhiteSpace(s))
                     {
                         model.FieldList = new List<string>();
                         model.FieldGroup = Resource.lblSelectSpecificFields;
@@ -1248,6 +1249,39 @@ namespace NMP.Portal.Controllers
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
 
 
+            return RedirectToAction("NutrientValuesStoreForFuture");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> NutrientValuesStoreForFuture()
+        {
+            OrganicManureViewModel? model = new OrganicManureViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+            return View(model);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> NutrientValuesStoreForFuture(OrganicManureViewModel model)
+        {
+            if (model.IsAnyNeedToStoreNutrientValueForFuture == null)
+            {
+                ModelState.AddModelError("IsAnyNeedToStoreNutrientValueForFuture", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
             return RedirectToAction("ApplicationRateMethod");
         }
 
@@ -1454,7 +1488,7 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("Quantity", Resource.MsgEnterAValidQuantity);
             }
-            if (model.Area != null&&model.Area==0)
+            if (model.Area != null && model.Area == 0)
             {
                 ModelState.AddModelError("Area", Resource.MsgAreaMustBeGreaterThanZero);
             }
@@ -1684,13 +1718,13 @@ namespace NMP.Portal.Controllers
             //crop N uptake
             List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
             var crop = cropsResponse.Where(x => x.Year == model.HarvestYear);
-            int cropTypeId = crop.Select(x => x.CropTypeID).FirstOrDefault()??0;
-            int cropCategoryId =await _mannerService.FetchCategoryIdByCropTypeIdAsync(cropTypeId);
+            int cropTypeId = crop.Select(x => x.CropTypeID).FirstOrDefault() ?? 0;
+            int cropCategoryId = await _mannerService.FetchCategoryIdByCropTypeIdAsync(cropTypeId);
 
             //check early and late for winter cereals and winter oilseed rape
             //if sowing date after 15 sept then late
             DateTime? sowingDate = crop.Select(x => x.SowingDate).FirstOrDefault();
-            if(cropCategoryId== (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal || cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlyStablishedWinterOilseedRape)
+            if (cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal || cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlyStablishedWinterOilseedRape)
             {
                 if (sowingDate != null)
                 {
@@ -1698,7 +1732,7 @@ namespace NMP.Portal.Controllers
                     int month = sowingDate.Value.Month;
                     if (month == (int)NMP.Portal.Enums.Month.September && day > 15)
                     {
-                        if(cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal)
+                        if (cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal)
                         {
                             cropCategoryId = (int)NMP.Portal.Enums.CropCategory.LateSownWinterCereal;
                         }
@@ -1721,16 +1755,16 @@ namespace NMP.Portal.Controllers
             }
 
             //Soil drainage end date
-            model.SoilDrainageEndDate=new DateTime(model.ApplicationDate.Value.Year, (int)NMP.Portal.Enums.Month.March, 31);
+            model.SoilDrainageEndDate = new DateTime(model.ApplicationDate.Value.Year, (int)NMP.Portal.Enums.Month.March, 31);
 
             //Rainfall within 6 hours
-            (RainTypeResponse rainType,Error error) = await _organicManureService.FetchRainTypeDefault();
+            (RainTypeResponse rainType, Error error) = await _organicManureService.FetchRainTypeDefault();
             model.RainWithin6Hours = rainType.RainInMM;
 
             //Effective rainfall after application
             (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
             string halfPostCode = string.Empty;
-            if (error.Message==null)
+            if (error.Message == null)
             {
                 string[] postCodeParts = farm.Postcode.Split(' ');
 
@@ -1746,7 +1780,7 @@ namespace NMP.Portal.Controllers
             }
 
             //Windspeed during application 
-            (WindspeedResponse windspeed,error) = await _organicManureService.FetchWindspeedDataDefault();
+            (WindspeedResponse windspeed, error) = await _organicManureService.FetchWindspeedDataDefault();
             model.Windspeed = windspeed.Name;
 
             //Topsoil moisture
@@ -1824,7 +1858,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> CheckAnswer()
         {
-            OrganicManureViewModel model =new OrganicManureViewModel();
+            OrganicManureViewModel model = new OrganicManureViewModel();
             try
             {
                 if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
@@ -1850,8 +1884,8 @@ namespace NMP.Portal.Controllers
                     {
                         foreach (var orgManure in model.OrganicManures)
                         {
-                            orgManure.AvailableK2O =  model.K2O.Value * (model.ApplicationRate.Value * (model.ManureType.K2OAvailable.Value / 100));
-                            orgManure.AvailableP2O5 =  model.P2O5.Value * (model.ApplicationRate.Value * (model.ManureType.P2O5Available.Value / 100));
+                            orgManure.AvailableK2O = model.K2O.Value * (model.ApplicationRate.Value * (model.ManureType.K2OAvailable.Value / 100));
+                            orgManure.AvailableP2O5 = model.P2O5.Value * (model.ApplicationRate.Value * (model.ManureType.P2O5Available.Value / 100));
                         }
                     }
 
@@ -1880,7 +1914,7 @@ namespace NMP.Portal.Controllers
                         OrganicManure = orgManure,
                         FarmID = model.FarmId,
                         FieldTypeID = (int)NMP.Portal.Enums.FieldType.Arable,
-                        SaveDefaultForFarm = false
+                        SaveDefaultForFarm = model.IsAnyNeedToStoreNutrientValueForFuture
                     }).ToList()
                 };
 
