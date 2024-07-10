@@ -85,6 +85,8 @@ namespace NMP.Portal.ViewModels
         public string? FarmName { get; set; }
         public bool IsAnyNeedToStoreNutrientValueForFuture { get; set; } = false;
 
+        public int? MoisterTypeId { get; set; }
+
         public int? RainWithin6Hours { get; set; }
         public bool IsComingFromRecommendation { get; set; } = false;
     }

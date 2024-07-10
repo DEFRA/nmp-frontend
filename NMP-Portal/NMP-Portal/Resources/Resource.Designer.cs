@@ -1422,6 +1422,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For example, 27 3 2007.
+        /// </summary>
+        public static string lblForExample {
+            get {
+                return ResourceManager.GetString("lblForExample", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Harvest Year.
         /// </summary>
         public static string lblHarvestYear {
@@ -1761,6 +1770,15 @@ namespace NMP.Portal.Resources {
         public static string lblkg {
             get {
                 return ResourceManager.GetString("lblkg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to kg/ha.
+        /// </summary>
+        public static string lblKgPerHectare {
+            get {
+                return ResourceManager.GetString("lblKgPerHectare", resourceCulture);
             }
         }
         
@@ -3484,6 +3502,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the Autumn crop Nitrogen uptake?.
+        /// </summary>
+        public static string lblWhatIsTheAutumnCropNitrogenUptake {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheAutumnCropNitrogenUptake", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the current crop group?.
         /// </summary>
         public static string lblWhatIsTheCurrentCropGroup {
@@ -3516,6 +3543,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhatIsTheDifferentExpectedYieldNotSet {
             get {
                 return ResourceManager.GetString("lblWhatIsTheDifferentExpectedYieldNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the end of drainage date?.
+        /// </summary>
+        public static string lblWhatIsTheEndOfDrainageDate {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheEndOfDrainageDate", resourceCulture);
             }
         }
         
@@ -4114,6 +4150,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a value before continuing.
+        /// </summary>
+        public static string MsgEnterAValueBeforeContinue {
+            get {
+                return ResourceManager.GetString("MsgEnterAValueBeforeContinue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the average annual rainfall.
         /// </summary>
         public static string MsgEnterAverageAnnualRainfall {
@@ -4209,6 +4254,15 @@ namespace NMP.Portal.Resources {
         public static string MsgEnterValidAnnualRainfall {
             get {
                 return ResourceManager.GetString("MsgEnterValidAnnualRainfall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a valid numeric value before continuing.
+        /// </summary>
+        public static string MsgEnterValidNumericValueBeforeContinuing {
+            get {
+                return ResourceManager.GetString("MsgEnterValidNumericValueBeforeContinuing", resourceCulture);
             }
         }
         
@@ -4524,6 +4578,15 @@ namespace NMP.Portal.Resources {
         public static string MsgSoilAnalysisOlderThanFiveYears {
             get {
                 return ResourceManager.GetString("MsgSoilAnalysisOlderThanFiveYears", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The date for End of soil drainage must be between 1st jan and 30th Apr.
+        /// </summary>
+        public static string MsgSoilDrainageEndDate1stJan30Apr {
+            get {
+                return ResourceManager.GetString("MsgSoilDrainageEndDate1stJan30Apr", resourceCulture);
             }
         }
         
