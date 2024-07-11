@@ -1629,4 +1629,25 @@ m3/ha</value>
   <data name="MsgSoilDrainageEndDate1stJan30Apr" xml:space="preserve">
     <value>The date for End of soil drainage must be between 1st jan and 30th Apr</value>
   </data>
+  <data name="lblApplicationMethod" xml:space="preserve">
+    <value>Application method</value>
+  </data>
+  <data name="lblDate" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="lblInorganicFertiliserOrLime" xml:space="preserve">
+    <value>Inorganic fertiliser or lime</value>
+  </data>
+  <data name="lblOrganicMaterial" xml:space="preserve">
+    <value>Organic material</value>
+  </data>
+  <data name="lblNutrientValuesUseForFuture" xml:space="preserve">
+    <value>Nutrient Values Use For Future</value>
+  </data>
+  <data name="lblWouldYouLikeToUseTheseAnalysisValuesForFutureApplications" xml:space="preserve">
+    <value>Would you like to use these analysis values for future applications of {0} on {1}?</value>
+  </data>
+  <data name="lblNutrientValuesStoreForFutureHint" xml:space="preserve">
+    <value>You can change these values later in your Farm and field details section.</value>
+  </data>
 </root>

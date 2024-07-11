@@ -5,7 +5,7 @@
     var enterAnApplicationRate = (int)NMP.Portal.Enums.ApplicationRate.EnterAnApplicationRate;
     var calculateBasedOnAreaAndQuantity = (int)NMP.Portal.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity;
     var useDefaultApplicationRate = (int)NMP.Portal.Enums.ApplicationRate.UseDefaultApplicationRate;
-    var backaction = (Model.IsDefaultNutrientValues != null && (!Model.IsDefaultNutrientValues.Value) ? "ManualNutrientValues" : "DefaultNutrientValues");
+    var backaction = (Model.IsDefaultNutrientValues != null && (!Model.IsDefaultNutrientValues.Value) ? "NutrientValuesStoreForFuture" : "DefaultNutrientValues");
 
 }
 @section BeforeContent {
@@ -66,6 +66,9 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.K2OAvailable"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.P2O5Available"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyNeedToStoreNutrientValueForFuture"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
+
 
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {

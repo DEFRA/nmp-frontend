@@ -421,6 +421,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application method.
+        /// </summary>
+        public static string lblApplicationMethod {
+            get {
+                return ResourceManager.GetString("lblApplicationMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Plan and record nutrient applications.
         /// </summary>
         public static string lblApplicationName {
@@ -923,6 +932,15 @@ namespace NMP.Portal.Resources {
         public static string lblCurrentFields {
             get {
                 return ResourceManager.GetString("lblCurrentFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date.
+        /// </summary>
+        public static string lblDate {
+            get {
+                return ResourceManager.GetString("lblDate", resourceCulture);
             }
         }
         
@@ -1657,6 +1675,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Inorganic fertiliser or lime.
+        /// </summary>
+        public static string lblInorganicFertiliserOrLime {
+            get {
+                return ResourceManager.GetString("lblInorganicFertiliserOrLime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Is {0} more than 300 metres above sea level?.
         /// </summary>
         public static string lblIsAbove300SeaLevel {
@@ -2197,6 +2224,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can change these values later in your Farm and field details section..
+        /// </summary>
+        public static string lblNutrientValuesStoreForFutureHint {
+            get {
+                return ResourceManager.GetString("lblNutrientValuesStoreForFutureHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nutrient Values Use For Future.
+        /// </summary>
+        public static string lblNutrientValuesUseForFuture {
+            get {
+                return ResourceManager.GetString("lblNutrientValuesUseForFuture", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How would you like to enter your soil nutrient values?.
         /// </summary>
         public static string lblNutrientValueTypeForCheckAnswere {
@@ -2283,6 +2328,15 @@ namespace NMP.Portal.Resources {
         public static string lblOrganicManureCreatedSuccessfullyForSpecificField {
             get {
                 return ResourceManager.GetString("lblOrganicManureCreatedSuccessfullyForSpecificField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Organic material.
+        /// </summary>
+        public static string lblOrganicMaterial {
+            get {
+                return ResourceManager.GetString("lblOrganicMaterial", resourceCulture);
             }
         }
         
@@ -3714,6 +3768,15 @@ namespace NMP.Portal.Resources {
         public static string lblWindspeedWhenTheMaterialIsApplied {
             get {
                 return ResourceManager.GetString("lblWindspeedWhenTheMaterialIsApplied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Would you like to use these analysis values for future applications of {0} on {1}?.
+        /// </summary>
+        public static string lblWouldYouLikeToUseTheseAnalysisValuesForFutureApplications {
+            get {
+                return ResourceManager.GetString("lblWouldYouLikeToUseTheseAnalysisValuesForFutureApplications", resourceCulture);
             }
         }
         
