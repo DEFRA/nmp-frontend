@@ -13,6 +13,7 @@ using System.Diagnostics.Metrics;
 using NMP.Portal.Enums;
 using Newtonsoft.Json;
 using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
+using Microsoft.IdentityModel.Abstractions;
 
 namespace NMP.Portal.Controllers
 {
@@ -1193,39 +1194,47 @@ namespace NMP.Portal.Controllers
             }
             if (model.DryMatterPercent == null)
             {
-                ModelState.AddModelError("DryMatterPercent", string.Format(Resource.lblEnterValidValue, Resource.lblDryMatter));
+                ModelState.AddModelError("DryMatterPercent", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblDryMatter.ToLower()));
             }
             if (model.N == null)
             {
-                ModelState.AddModelError("N", string.Format(Resource.lblEnterValidValue, Resource.lblTotalNitrogen));
+                ModelState.AddModelError("N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblTotalNitrogen.ToLower()));
             }
             if (model.NH4N == null)
             {
-                ModelState.AddModelError("NH4N", string.Format(Resource.lblEnterValidValue, Resource.lblAmmonium));
+                ModelState.AddModelError("NH4N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblAmmoniumForError));
             }
             if (model.UricAcid == null)
             {
-                ModelState.AddModelError("UricAcid", string.Format(Resource.lblEnterValidValue, Resource.lblUricAcid));
+                ModelState.AddModelError("UricAcid", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblUricAcid.ToLower()));
             }
             if (model.NO3N == null)
             {
-                ModelState.AddModelError("NO3N", string.Format(Resource.lblEnterValidValue, Resource.lblNitrogen));
+                ModelState.AddModelError("NO3N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblNitrateForErrorMsg));
             }
             if (model.P2O5 == null)
             {
-                ModelState.AddModelError("P2O5", string.Format(Resource.lblEnterValidValue, Resource.lblTotalPhosphate));
+                ModelState.AddModelError("P2O5", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblPhosphate.ToLower()));
             }
             if (model.K2O == null)
             {
-                ModelState.AddModelError("K2O", string.Format(Resource.lblEnterValidValue, Resource.lblTotalPotassium));
+                ModelState.AddModelError("K2O", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblPotash.ToLower()));
             }
             if (model.SO3 == null)
             {
-                ModelState.AddModelError("SO3", string.Format(Resource.lblEnterValidValue, Resource.lblSulphurSO3));
+                ModelState.AddModelError("SO3", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblSulphur));
             }
             if (model.MgO == null)
             {
-                ModelState.AddModelError("MgO", string.Format(Resource.lblEnterValidValue, Resource.lblTotalMagnesiumOxide));
+                ModelState.AddModelError("MgO", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblMagnesium.ToLower()));
+            }
+            if (model.N != null && model.NH4N != null && model.UricAcid != null && model.NO3N != null)
+            {
+                decimal totalValue = model.NH4N.Value + model.UricAcid.Value + model.NO3N.Value;
+                if (model.N < totalValue)
+                {
+                    ModelState.AddModelError("MgO", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblMagnesium.ToLower()));
+                }
             }
             if (!ModelState.IsValid)
             {
@@ -1724,7 +1733,7 @@ namespace NMP.Portal.Controllers
             //check early and late for winter cereals and winter oilseed rape
             //if sowing date after 15 sept then late
             DateTime? sowingDate = crop.Select(x => x.SowingDate).FirstOrDefault();
-            if(model.AutumnCropNitrogenUptake==null)
+            if (model.AutumnCropNitrogenUptake == null)
             {
                 if (cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal || cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlyStablishedWinterOilseedRape)
                 {
@@ -1756,14 +1765,14 @@ namespace NMP.Portal.Controllers
                     model.AutumnCropNitrogenUptake = 0;
                 }
             }
-            
+
 
             //Soil drainage end date
             if(model.SoilDrainageEndDate ==null)
             {
                 model.SoilDrainageEndDate = new DateTime(model.ApplicationDate.Value.AddYears(1).Year, (int)NMP.Portal.Enums.Month.March, 31);
             }
-           
+
             //Rainfall within 6 hours
             (RainTypeResponse rainType, Error error) = await _organicManureService.FetchRainTypeDefault();
             model.RainWithin6Hours = rainType.RainInMM;
@@ -2032,7 +2041,7 @@ namespace NMP.Portal.Controllers
                 return View("AutumnCropNitrogenUptake", model);
             }
 
-            
+
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
             return RedirectToAction("ConditionsAffectingNutrients");
         }
