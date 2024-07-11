@@ -1802,7 +1802,7 @@ namespace NMP.Portal.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to kg/t
-        ///kg/m3.
+        ///kg/m³.
         /// </summary>
         public static string lblKgPerTonneAndKgPerMeterCube {
             get {
@@ -3242,11 +3242,38 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The figure for Total nitrogen (N) must be equal to or greater than the sum of Ammonium (N), Uric acid (N) and Nitrate (N).
+        /// </summary>
+        public static string lblTotalNitrogenMustBeGreaterOrEqualToAmmoniumUricacidNitrate {
+            get {
+                return ResourceManager.GetString("lblTotalNitrogenMustBeGreaterOrEqualToAmmoniumUricacidNitrate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total nitrogen (N).
+        /// </summary>
+        public static string lblTotalNitrogenN {
+            get {
+                return ResourceManager.GetString("lblTotalNitrogenN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total phosphate (P2O5).
         /// </summary>
         public static string lblTotalPhosphate {
             get {
                 return ResourceManager.GetString("lblTotalPhosphate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total potash (K2O).
+        /// </summary>
+        public static string lblTotalPotashK2O {
+            get {
+                return ResourceManager.GetString("lblTotalPotashK2O", resourceCulture);
             }
         }
         
@@ -4466,6 +4493,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a value for {0} between 0 and {1}.
+        /// </summary>
+        public static string MsgMinMaxValidation {
+            get {
+                return ResourceManager.GetString("MsgMinMaxValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a National Grid Reference that is no more than 4 characters long.
         /// </summary>
         public static string MsgNationalGridReferenceMinMaxValidation {
@@ -4660,6 +4696,15 @@ namespace NMP.Portal.Resources {
         public static string MsgSowingDateNotSet {
             get {
                 return ResourceManager.GetString("MsgSowingDateNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to uric acid.
+        /// </summary>
+        public static string MsgUricAcid {
+            get {
+                return ResourceManager.GetString("MsgUricAcid", resourceCulture);
             }
         }
         
