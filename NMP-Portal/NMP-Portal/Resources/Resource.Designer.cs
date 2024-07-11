@@ -376,6 +376,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ammonium.
+        /// </summary>
+        public static string lblAmmoniumForError {
+            get {
+                return ResourceManager.GetString("lblAmmoniumForError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to amount.
         /// </summary>
         public static string lblAmount {
@@ -1792,6 +1801,16 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to kg/t
+        ///kg/m³.
+        /// </summary>
+        public static string lblKgPerTonneAndKgPerMeterCube {
+            get {
+                return ResourceManager.GetString("lblKgPerTonneAndKgPerMeterCube", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to L.
         /// </summary>
         public static string lblL {
@@ -2116,6 +2135,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to nitrate.
+        /// </summary>
+        public static string lblNitrateForErrorMsg {
+            get {
+                return ResourceManager.GetString("lblNitrateForErrorMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nitrogen (N).
         /// </summary>
         public static string lblNitrogen {
@@ -2382,6 +2410,15 @@ namespace NMP.Portal.Resources {
         public static string lblP2O5 {
             get {
                 return ResourceManager.GetString("lblP2O5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to %.
+        /// </summary>
+        public static string lblPercentage {
+            get {
+                return ResourceManager.GetString("lblPercentage", resourceCulture);
             }
         }
         
@@ -3034,6 +3071,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to sulphur.
+        /// </summary>
+        public static string lblSulphur {
+            get {
+                return ResourceManager.GetString("lblSulphur", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sulphur (SO3).
         /// </summary>
         public static string lblSulphurSO3 {
@@ -3196,11 +3242,38 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The figure for Total nitrogen (N) must be equal to or greater than the sum of Ammonium (N), Uric acid (N) and Nitrate (N).
+        /// </summary>
+        public static string lblTotalNitrogenMustBeGreaterOrEqualToAmmoniumUricacidNitrate {
+            get {
+                return ResourceManager.GetString("lblTotalNitrogenMustBeGreaterOrEqualToAmmoniumUricacidNitrate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total nitrogen (N).
+        /// </summary>
+        public static string lblTotalNitrogenN {
+            get {
+                return ResourceManager.GetString("lblTotalNitrogenN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total phosphate (P2O5).
         /// </summary>
         public static string lblTotalPhosphate {
             get {
                 return ResourceManager.GetString("lblTotalPhosphate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total potash (K2O).
+        /// </summary>
+        public static string lblTotalPotashK2O {
+            get {
+                return ResourceManager.GetString("lblTotalPotashK2O", resourceCulture);
             }
         }
         
@@ -4240,6 +4313,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter the {0} before continuing.
+        /// </summary>
+        public static string MsgEnterTheValueBeforeContinuing {
+            get {
+                return ResourceManager.GetString("MsgEnterTheValueBeforeContinuing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the total field area.
         /// </summary>
         public static string MsgEnterTotalFieldArea {
@@ -4407,6 +4489,15 @@ namespace NMP.Portal.Resources {
         public static string MsgManureNonSpreadingAreaIsGreaterThanTotalArea {
             get {
                 return ResourceManager.GetString("MsgManureNonSpreadingAreaIsGreaterThanTotalArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a value for {0} between 0 and {1}.
+        /// </summary>
+        public static string MsgMinMaxValidation {
+            get {
+                return ResourceManager.GetString("MsgMinMaxValidation", resourceCulture);
             }
         }
         
@@ -4605,6 +4696,15 @@ namespace NMP.Portal.Resources {
         public static string MsgSowingDateNotSet {
             get {
                 return ResourceManager.GetString("MsgSowingDateNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to uric acid.
+        /// </summary>
+        public static string MsgUricAcid {
+            get {
+                return ResourceManager.GetString("MsgUricAcid", resourceCulture);
             }
         }
         

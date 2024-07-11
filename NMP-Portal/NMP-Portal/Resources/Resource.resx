@@ -1650,4 +1650,38 @@ m3/ha</value>
   <data name="lblNutrientValuesStoreForFutureHint" xml:space="preserve">
     <value>You can change these values later in your Farm and field details section.</value>
   </data>
+  <data name="lblAmmoniumForError" xml:space="preserve">
+    <value>ammonium</value>
+  </data>
+  <data name="lblKgPerTonneAndKgPerMeterCube" xml:space="preserve">
+    <value>kg/t
+kg/m³</value>
+  </data>
+  <data name="lblNitrateForErrorMsg" xml:space="preserve">
+    <value>nitrate</value>
+  </data>
+  <data name="lblPercentage" xml:space="preserve">
+    <value>%</value>
+  </data>
+  <data name="lblSulphur" xml:space="preserve">
+    <value>sulphur</value>
+  </data>
+  <data name="MsgEnterTheValueBeforeContinuing" xml:space="preserve">
+    <value>Enter the {0} before continuing</value>
+  </data>
+  <data name="lblTotalNitrogenMustBeGreaterOrEqualToAmmoniumUricacidNitrate" xml:space="preserve">
+    <value>The figure for Total nitrogen (N) must be equal to or greater than the sum of Ammonium (N), Uric acid (N) and Nitrate (N)</value>
+  </data>
+  <data name="lblTotalNitrogenN" xml:space="preserve">
+    <value>Total nitrogen (N)</value>
+  </data>
+  <data name="lblTotalPotashK2O" xml:space="preserve">
+    <value>Total potash (K2O)</value>
+  </data>
+  <data name="MsgMinMaxValidation" xml:space="preserve">
+    <value>Enter a value for {0} between 0 and {1}</value>
+  </data>
+  <data name="MsgUricAcid" xml:space="preserve">
+    <value>uric acid</value>
+  </data>
 </root>
