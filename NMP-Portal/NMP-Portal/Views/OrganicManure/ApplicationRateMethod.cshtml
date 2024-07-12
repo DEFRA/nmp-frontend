@@ -12,11 +12,16 @@
     <govuk-back-link asp-action=@backaction asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
 }
 
-<form asp-action="ApplicationRateMethod" asp-controller="OrganicManure" method="post">
-    @Html.AntiForgeryToken()
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form asp-action="ApplicationRateMethod" asp-controller="OrganicManure" method="post">
+            @Html.AntiForgeryToken()
+            @if (ViewBag.Error != null)
+            {
+                <govuk-error-summary>
+                    <govuk-error-summary-item href="#passport-issued-day">@ViewBag.Error</govuk-error-summary-item>
+                </govuk-error-summary>
+            }
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
@@ -67,6 +72,13 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.K2OAvailable"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.P2O5Available"></govuk-input>
 
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptake"></govuk-input>
+            <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilDrainageEndDate" value="@Model.SoilDrainageEndDate"></govuk-date-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RainfallWithinSixHoursID"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalRainfall"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.WindspeedID"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MoistureTypeId"></govuk-input>
+
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -105,20 +117,19 @@
             <govuk-radios asp-for="@Model.ApplicationRateMethod">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblHowWouldYouLikeToEnterTheApplicationRate,Model.ManureTypeName
-                        )
+                        @string.Format(Resource.lblHowWouldYouLikeToEnterTheApplicationRate, Model.ManureTypeName
+                                 )
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-item value="@enterAnApplicationRate">@Resource.lblEnterAnApplicationRate</govuk-radios-item>
                     <govuk-radios-item value="@calculateBasedOnAreaAndQuantity">@Resource.lblCalculateBasedOnTheAreaAndQuantity</govuk-radios-item>
-                    <govuk-radios-item value="@useDefaultApplicationRate">@string.Format(Resource.lblUseTypicalApplicationRate,Model.ApplicationRateArable)</govuk-radios-item>
+                    <govuk-radios-item value="@useDefaultApplicationRate">@string.Format(Resource.lblUseTypicalApplicationRate, Model.ApplicationRateArable)</govuk-radios-item>
                 </govuk-radios-fieldset>
             </govuk-radios>
             <govuk-button type="submit" class="margin-bottom-forty" asp-action="ApplicationRateMethod">
                 @Resource.lblContinue
             </govuk-button>
             <p class="govuk-body cancel-link"><a asp-action="CreateManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
-
-        </div>
-
+        </form>
     </div>
-</form>
+
+</div>

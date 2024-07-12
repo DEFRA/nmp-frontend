@@ -30,5 +30,7 @@
         public int WindspeedID { get; set; }
         public int RainfallWithinSixHoursID { get; set; }
         public int MoistureID { get; set; }
+        public decimal AutumnCropNitrogenUptake { get; set; }
+        public DateTime SoilDrainageEndDate { get; set; }
     }
 }

@@ -7,13 +7,13 @@
     <govuk-back-link asp-action="ConditionsAffectingNutrients" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
 }
 <div class="govuk-grid-row">
-    @if (TempData["SoilDrainageDateError"] != null)
-    {
-        <govuk-error-summary>
-            <govuk-error-summary-item href="#">@TempData["SoilDrainageDateError"]</govuk-error-summary-item>
-        </govuk-error-summary>
-    }
     <div class="govuk-grid-column-two-thirds">
+        @if (ViewBag.Error != null)
+        {
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@ViewBag.Error</govuk-error-summary-item>
+            </govuk-error-summary>
+        }
         <form class="form" action="SoilDrainageEndDate" method="post">
             @Html.AntiForgeryToken()
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
@@ -64,6 +64,16 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationMethodName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroupName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeName"></govuk-input>
+            <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationDate" value="@Model.ApplicationDate"></govuk-date-input>
+
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptake"></govuk-input>
+            @* <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilDrainageEndDate" value="@Model.SoilDrainageEndDate"></govuk-date-input> *@
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RainfallWithinSixHoursID"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalRainfall"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.WindspeedID"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MoistureTypeId"></govuk-input>
+
+
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)

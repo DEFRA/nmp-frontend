@@ -1629,4 +1629,49 @@ m3/ha</value>
   <data name="MsgSoilDrainageEndDate1stJan30Apr" xml:space="preserve">
     <value>The date for End of soil drainage must be between 1st jan and 30th Apr</value>
   </data>
+  <data name="lblRainfallWithin6Hours" xml:space="preserve">
+    <value>Rainfall within 6 hours of application</value>
+  </data>
+  <data name="lblEffectiveRainfall" xml:space="preserve">
+    <value>Effective Rainfall</value>
+  </data>
+  <data name="lblEffectiveRainfallManual" xml:space="preserve">
+    <value>Effective Rainfall Manual</value>
+  </data>
+  <data name="lblThisIsTotalRainfall" xml:space="preserve">
+    <value>This is the total rainfall between x and y. If you think this is wrong, you can change it now or later.</value>
+  </data>
+  <data name="lblTotalRainfall" xml:space="preserve">
+    <value>Total rainfall</value>
+  </data>
+  <data name="lblEnterRainfallAmount" xml:space="preserve">
+    <value>Enter Rainfall Amount</value>
+  </data>
+  <data name="MsgEnterRainfallAmountBeforeContinuing" xml:space="preserve">
+    <value>Enter a rainfall amount before continuing</value>
+  </data>
+  <data name="MsgForEffectiveRainfallManual" xml:space="preserve">
+    <value>Rainfall amount must be a whole number, like 600..</value>
+  </data>
+  <data name="lblWindAtTheTimeOfApplication" xml:space="preserve">
+    <value>Wind at the time of application</value>
+  </data>
+  <data name="lblWindspeed" xml:space="preserve">
+    <value>Windspeed</value>
+  </data>
+  <data name="lblHowWetWasTheTopsoil" xml:space="preserve">
+    <value>How wet was the topsoil at time of application?</value>
+  </data>
+  <data name="lblTopsoilMoister" xml:space="preserve">
+    <value>Topsoil Moister</value>
+  </data>
+  <data name="MsgEnterValidDate" xml:space="preserve">
+    <value>Enter a valid date in the format dd/mm/yyyy before continuing</value>
+  </data>
+  <data name="MsgSelectATopsoilWetnessConditionBeforeContinuing" xml:space="preserve">
+    <value>Select a topsoil wetness condition before continuing</value>
+  </data>
+  <data name="MsgSelectAWindConditionBeforeContinuing" xml:space="preserve">
+    <value>Select a wind condition before continuing</value>
+  </data>
 </root>

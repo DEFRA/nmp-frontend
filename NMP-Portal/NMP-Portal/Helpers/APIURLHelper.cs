@@ -66,5 +66,8 @@ namespace NMP.Portal.Helpers
         public const string FetchWindspeedDataDefault = "windspeeds/default";
         public const string FetchMoisterTypeDefaultByApplicationDate = "moisture-types/default/{0}";
         public const string FetchRainTypeDefault = "rain-types/default";
+        public const string FetchRainTypesAsyncAPI = "rain-types";
+        public const string FetchWindspeedsAsyncAPI = "windspeeds";
+        public const string FetchMoisterTypesAsyncAPI = "moisture-types";
     }
 }
