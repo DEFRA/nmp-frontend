@@ -71,9 +71,15 @@ namespace NMP.Portal.ViewModels
         public DateTime? SoilDrainageEndDate { get; set; }
         public int? TotalRainfall { get; set; }
 
-        public string? MoistureType { get; set; }
+        //public string? Windspeed { get; set; }
+        public string? MoisterType { get; set; }
+        public string? FarmName { get; set; }
+        public bool IsAnyNeedToStoreNutrientValueForFuture { get; set; } = false;
 
         public int? MoistureTypeId { get; set; }
+        public string? MoistureType { get; set; }
+
+        public int? RainWithin6Hours { get; set; }
         public bool IsComingFromRecommendation { get; set; } = false;
     }
 }

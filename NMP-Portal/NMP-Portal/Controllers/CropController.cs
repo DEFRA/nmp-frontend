@@ -1711,6 +1711,10 @@ namespace NMP.Portal.Controllers
                         {
                             model.RecommendationComments = new List<RecommendationComment>();
                         }
+                        if (model.OrganicManures == null)
+                        {
+                            model.OrganicManures = new List<OrganicManureData>();
+                        }
                         foreach (var recommendation in recommendations)
                         {
                             var crop = new CropViewModel
@@ -1768,6 +1772,16 @@ namespace NMP.Portal.Controllers
                                         CropK2O = recData.Recommendation.CropK2O,
                                         CropSO3 = recData.Recommendation.CropSO3,
                                         CropLime = recData.Recommendation.CropLime,
+                                        ManureN = recData.Recommendation.ManureN,
+                                        ManureP2O5 = recData.Recommendation.ManureP2O5,
+                                        ManureK2O = recData.Recommendation.ManureK2O,
+                                        ManureSO3 = recData.Recommendation.ManureSO3,
+                                        ManureLime = recData.Recommendation.ManureLime,
+                                        FertilizerN = recData.Recommendation.FertilizerN,
+                                        FertilizerP2O5 = recData.Recommendation.FertilizerP2O5,
+                                        FertilizerK2O = recData.Recommendation.FertilizerK2O,
+                                        FertilizerSO3 = recData.Recommendation.FertilizerSO3,
+                                        FertilizerLime = recData.Recommendation.FertilizerLime,
                                         SNSIndex = recData.Recommendation.SNSIndex,
                                         SIndex = recData.Recommendation.SIndex,
                                         KIndex = recData.Recommendation.KIndex,
@@ -1777,17 +1791,35 @@ namespace NMP.Portal.Controllers
                                     };
                                     model.Recommendations.Add(rec);
 
-
-                                    foreach (var item in recData.RecommendationComments)
+                                    if (recData.RecommendationComments.Count > 0)
                                     {
-                                        var recCom = new RecommendationComment
+                                        foreach (var item in recData.RecommendationComments)
                                         {
-                                            ID = item.ID,
-                                            RecommendationID = item.RecommendationID,
-                                            Nutrient = item.Nutrient,
-                                            Comment = item.Comment
-                                        };
-                                        model.RecommendationComments.Add(recCom);
+                                            var recCom = new RecommendationComment
+                                            {
+                                                ID = item.ID,
+                                                RecommendationID = item.RecommendationID,
+                                                Nutrient = item.Nutrient,
+                                                Comment = item.Comment
+                                            };
+                                            model.RecommendationComments.Add(recCom);
+                                        }
+                                    }
+
+                                    if (recData.OrganicManures.Count > 0)
+                                    {
+                                        foreach (var item in recData.OrganicManures)
+                                        {
+                                            var orgManure = new OrganicManureData
+                                            {
+                                                ID = item.ID,
+                                                ManureTypeName = item.ManureTypeName,
+                                                ApplicationMethodName = item.ApplicationMethodName,
+                                                ApplicationDate = item.ApplicationDate,
+                                                ApplicationRate = item.ApplicationRate
+                                            };
+                                            model.OrganicManures.Add(orgManure);
+                                        }
                                     }
 
 

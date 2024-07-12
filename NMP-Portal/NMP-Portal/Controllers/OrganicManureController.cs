@@ -13,6 +13,7 @@ using System.Diagnostics.Metrics;
 using NMP.Portal.Enums;
 using Newtonsoft.Json;
 using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
+using Microsoft.IdentityModel.Abstractions;
 using System.Globalization;
 using System.Linq.Expressions;
 
@@ -60,7 +61,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> FieldGroup(string q, string r,string? s)//q=FarmId,r=harvestYear,s=fieldId
+        public async Task<IActionResult> FieldGroup(string q, string r, string? s)//q=FarmId,r=harvestYear,s=fieldId
         {
             OrganicManureViewModel model = new OrganicManureViewModel();
             Error error = null;
@@ -83,6 +84,7 @@ namespace NMP.Portal.Controllers
                     (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
                     if (error.Message == null)
                     {
+                        model.FarmName = farm.Name;
                         model.isEnglishRules = farm.EnglishRules;
                         _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
                     }
@@ -90,7 +92,7 @@ namespace NMP.Portal.Controllers
                     {
                         TempData["FieldGroupError"] = error.Message;
                     }
-                    if(!string.IsNullOrWhiteSpace(s))
+                    if (!string.IsNullOrWhiteSpace(s))
                     {
                         model.FieldList = new List<string>();
                         model.FieldGroup = Resource.lblSelectSpecificFields;
@@ -1107,6 +1109,7 @@ namespace NMP.Portal.Controllers
 
             return View(model);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ManualNutrientValues(OrganicManureViewModel model)
@@ -1214,40 +1217,125 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.DryMatterPercent == null)
                 {
-                    ModelState.AddModelError("DryMatterPercent", string.Format(Resource.lblEnterValidValue, Resource.lblDryMatter));
+                    ModelState.AddModelError("DryMatterPercent", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblDryMatter.ToLower()));
                 }
                 if (model.N == null)
                 {
-                    ModelState.AddModelError("N", string.Format(Resource.lblEnterValidValue, Resource.lblTotalNitrogen));
+                    ModelState.AddModelError("N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblTotalNitrogen.ToLower()));
                 }
                 if (model.NH4N == null)
                 {
-                    ModelState.AddModelError("NH4N", string.Format(Resource.lblEnterValidValue, Resource.lblAmmonium));
+                    ModelState.AddModelError("NH4N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblAmmoniumForError));
                 }
                 if (model.UricAcid == null)
                 {
-                    ModelState.AddModelError("UricAcid", string.Format(Resource.lblEnterValidValue, Resource.lblUricAcid));
+                    ModelState.AddModelError("UricAcid", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.MsgUricAcid));
                 }
                 if (model.NO3N == null)
                 {
-                    ModelState.AddModelError("NO3N", string.Format(Resource.lblEnterValidValue, Resource.lblNitrogen));
+                    ModelState.AddModelError("NO3N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblNitrateForErrorMsg));
                 }
                 if (model.P2O5 == null)
                 {
-                    ModelState.AddModelError("P2O5", string.Format(Resource.lblEnterValidValue, Resource.lblTotalPhosphate));
+                    ModelState.AddModelError("P2O5", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblPhosphate.ToLower()));
                 }
                 if (model.K2O == null)
                 {
-                    ModelState.AddModelError("K2O", string.Format(Resource.lblEnterValidValue, Resource.lblTotalPotassium));
+                    ModelState.AddModelError("K2O", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblPotash.ToLower()));
                 }
                 if (model.SO3 == null)
                 {
-                    ModelState.AddModelError("SO3", string.Format(Resource.lblEnterValidValue, Resource.lblSulphurSO3));
+                    ModelState.AddModelError("SO3", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblSulphur));
                 }
                 if (model.MgO == null)
                 {
-                    ModelState.AddModelError("MgO", string.Format(Resource.lblEnterValidValue, Resource.lblTotalMagnesiumOxide));
+                    ModelState.AddModelError("MgO", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblMagnesium.ToLower()));
                 }
+                if (model.N != null && model.NH4N != null && model.UricAcid != null && model.NO3N != null)
+                {
+                    decimal totalValue = model.NH4N.Value + model.UricAcid.Value + model.NO3N.Value;
+                    if (model.N < totalValue)
+                    {
+                        ModelState.AddModelError("N", Resource.lblTotalNitrogenMustBeGreaterOrEqualToAmmoniumUricacidNitrate);
+                    }
+                }
+
+                if (model.DryMatterPercent != null)
+                {
+                    if (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.PigSlurry ||
+                        model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.CattleSlurry)
+                    {
+                        if (model.DryMatterPercent < 0 || model.DryMatterPercent > 25)
+                        {
+                            ModelState.AddModelError("DryMatterPercent", string.Format(Resource.MsgMinMaxValidation, Resource.lblDryMatter.ToLower(), 25));
+                        }
+                    }
+                    else
+                    {
+                        if (model.DryMatterPercent < 0 || model.DryMatterPercent > 99)
+                        {
+                            ModelState.AddModelError("DryMatterPercent", string.Format(Resource.MsgMinMaxValidation, Resource.lblDryMatter, 99));
+                        }
+                    }
+                }
+                if (model.N != null)
+                {
+                    if (model.N < 0 || model.N > 297)
+                    {
+                        ModelState.AddModelError("N", string.Format(Resource.MsgMinMaxValidation, Resource.lblTotalNitrogenN, 297));
+                    }
+                }
+                if (model.NH4N != null)
+                {
+                    if (model.NH4N < 0 || model.NH4N > 99)
+                    {
+                        ModelState.AddModelError("NH4N", string.Format(Resource.MsgMinMaxValidation, Resource.lblAmmonium, 99));
+                    }
+                }
+                if (model.UricAcid != null)
+                {
+                    if (model.UricAcid < 0 || model.UricAcid > 99)
+                    {
+                        ModelState.AddModelError("UricAcid", string.Format(Resource.MsgMinMaxValidation, Resource.lblUricAcid, 99));
+                    }
+                }
+                if (model.NO3N != null)
+                {
+                    if (model.NO3N < 0 || model.NO3N > 99)
+                    {
+                        ModelState.AddModelError("NO3N", string.Format(Resource.MsgMinMaxValidation, Resource.lblNitrate, 99));
+                    }
+                }
+                if (model.P2O5 != null)
+                {
+                    if (model.P2O5 < 0 || model.P2O5 > 99)
+                    {
+                        ModelState.AddModelError("P2O5", string.Format(Resource.MsgMinMaxValidation, Resource.lblPhosphateP2O5, 99));
+                    }
+                }
+                if (model.K2O != null)
+                {
+                    if (model.K2O < 0 || model.K2O > 99)
+                    {
+                        ModelState.AddModelError("K2O", string.Format(Resource.MsgMinMaxValidation, Resource.lblPotashK2O, 99));
+                    }
+                }
+                if (model.MgO != null)
+                {
+                    if (model.MgO < 0 || model.MgO > 99)
+                    {
+                        ModelState.AddModelError("MgO", string.Format(Resource.MsgMinMaxValidation, Resource.lblTotalMagnesiumOxide, 99));
+                    }
+                }
+                if (model.SO3 != null)
+                {
+                    if (model.SO3 < 0 || model.SO3 > 99)
+                    {
+                        ModelState.AddModelError("SO3", string.Format(Resource.MsgMinMaxValidation, Resource.lblSulphurSO3, 99));
+                    }
+                }
+
+
                 if (!ModelState.IsValid)
                 {
                     return View(model);
@@ -1270,15 +1358,49 @@ namespace NMP.Portal.Controllers
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
 
 
-                return RedirectToAction("ApplicationRateMethod");
+                return RedirectToAction("NutrientValuesStoreForFuture");
             }
             catch (Exception ex)
             {
-                ViewBag.Error = ex.Message;
+                ViewBag.Error=ex.Message;
+                return View(model);
+            }
+           
+        }
+        [HttpGet]
+        public async Task<IActionResult> NutrientValuesStoreForFuture()
+        {
+            OrganicManureViewModel? model = new OrganicManureViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+            return View(model);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> NutrientValuesStoreForFuture(OrganicManureViewModel model)
+        {
+            if (model.IsAnyNeedToStoreNutrientValueForFuture == null)
+            {
+                ModelState.AddModelError("IsAnyNeedToStoreNutrientValueForFuture", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
                 return View(model);
             }
 
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+            return RedirectToAction("ApplicationRateMethod");
         }
+
+        
 
         [HttpGet]
         public async Task<IActionResult> ApplicationRateMethod()
@@ -1503,7 +1625,7 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("Quantity", Resource.MsgEnterAValidQuantity);
             }
-            if (model.Area != null&&model.Area==0)
+            if (model.Area != null && model.Area == 0)
             {
                 ModelState.AddModelError("Area", Resource.MsgAreaMustBeGreaterThanZero);
             }
@@ -2070,7 +2192,7 @@ namespace NMP.Portal.Controllers
                         OrganicManure = orgManure,
                         FarmID = model.FarmId,
                         FieldTypeID = (int)NMP.Portal.Enums.FieldType.Arable,
-                        SaveDefaultForFarm = false
+                        SaveDefaultForFarm = model.IsAnyNeedToStoreNutrientValueForFuture
                     }).ToList()
                 };
 
