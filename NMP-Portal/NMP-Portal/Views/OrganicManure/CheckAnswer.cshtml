@@ -302,7 +302,7 @@
                         @Resource.lblAutumnCropNitrogenUptake
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
-                        @Model.AutumnCropNitrogenUptake
+                        @(Model.AutumnCropNitrogenUptake.Value == 0.0m ? 0 : Model.AutumnCropNitrogenUptake?.ToString("#.#"))
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
                         <govuk-summary-list-row-action class="disabled" asp-action="AutumnCropNitrogenUptake" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
@@ -313,7 +313,7 @@
                         @Resource.lblEndOfSoilDrainage
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
-                        @Model.SoilDrainageEndDate.Value.Date
+                        @Model.SoilDrainageEndDate.Value.Date.ToString("dd MMMM yyyy")
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
                         <govuk-summary-list-row-action class="disabled" asp-action="EndOfSoilDrainage" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>

@@ -156,7 +156,7 @@
                     <tr class="govuk-table__row">
                         <th scope="row" class="govuk-table__header">@Resource.lblAutumnCropNitrogenUptake</th>
                         <td class="govuk-table__cell">@Resource.lblAmountOfNFromTheApplicationTaken</td>
-                        <td class="govuk-table__cell">@string.Format(Resource.lblAutumnCropNitrogenPerHectare, Model.AutumnCropNitrogenUptake?.ToString("#.###"))</td>
+                        <td class="govuk-table__cell">@string.Format(Resource.lblAutumnCropNitrogenPerHectare, (Model.AutumnCropNitrogenUptake.Value == 0.0m ? 0 : Model.AutumnCropNitrogenUptake?.ToString("#.#")))</td>
                         <td class="govuk-table__cell"><a asp-action="AutumnCropNitrogenUptake" asp-controller="OrganicManure">@Resource.lblChange</a></td>
                     </tr>
                     <tr class="govuk-table__row">

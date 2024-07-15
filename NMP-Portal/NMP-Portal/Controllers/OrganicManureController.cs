@@ -2067,9 +2067,6 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ConditionsAffectingNutrients(OrganicManureViewModel model)
         {
-            //model.MoistureID = 1;
-            //model.WindspeedID = 1;
-            //model.RainfallWithinSixHoursID = 1;
             if (model.OrganicManures.Count > 0)
             {
                 foreach (var orgManure in model.OrganicManures)
