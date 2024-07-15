@@ -1820,6 +1820,7 @@ namespace NMP.Portal.Controllers
                                             };
                                             model.OrganicManures.Add(orgManure);
                                         }
+                                        model.OrganicManures = model.OrganicManures.OrderByDescending(x => x.ApplicationDate).ToList();
                                     }
 
 
