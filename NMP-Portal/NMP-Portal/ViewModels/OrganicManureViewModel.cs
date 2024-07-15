@@ -18,9 +18,8 @@ namespace NMP.Portal.ViewModels
         public List<string>? FieldList { get; set; }
 
         public int? ManureGroupId { get; set; }
-        //public string? ManureGroup { get; set; }
         public int? ManureTypeId { get; set; }
-        // public string? ManureType { get; set; }
+
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblEnterTheDateInCorrectFormat))]
         public DateTime? ApplicationDate { get; set; }
         public bool? IsDefaultNutrientValues { get; set; }
@@ -53,20 +52,14 @@ namespace NMP.Portal.ViewModels
         public decimal? UricAcid { get; set; }
         public decimal? NH4N { get; set; }
         public decimal? NO3N { get; set; }
-
         public bool? IsDefaultNutrient { get; set; } = false;
-        //public bool? IsSingleField { get; set; } = false;
         public bool IsCheckAnswer { get; set; } = false;
         public decimal? AutumnCropNitrogenUptake { get; set; }
-
-        public DateTime? EndOfSoilDrainage { get; set; }
-
         public int? RainfallWithinSixHoursID { get; set; }
         public string? RainfallWithinSixHours { get; set; }
-        public int? Rainfall { get; set; }
         public int? WindspeedID { get; set; }
         public string? Windspeed { get; set; }
-        public int? MoistureID { get; set; }
+        
         public bool IsFieldGroupChange { get; set; } = false;
         public bool IsManureTypeChange { get; set; } = false;
         public bool? IsManureTypeLiquid { get; set; }
@@ -75,8 +68,6 @@ namespace NMP.Portal.ViewModels
         public string? IncorporationDelayName { get; set; }
         public string? FieldGroupName { get; set; }
         public string? CropTypeName { get; set; }
-        //public int? AutumnCropNitrogenUptake { get; set; }
-
         public DateTime? SoilDrainageEndDate { get; set; }
         public int? TotalRainfall { get; set; }
 
@@ -85,7 +76,8 @@ namespace NMP.Portal.ViewModels
         public string? FarmName { get; set; }
         public bool IsAnyNeedToStoreNutrientValueForFuture { get; set; } = false;
 
-        public int? MoisterTypeId { get; set; }
+        public int? MoistureTypeId { get; set; }
+        public string? MoistureType { get; set; }
 
         public int? RainWithin6Hours { get; set; }
         public bool IsComingFromRecommendation { get; set; } = false;

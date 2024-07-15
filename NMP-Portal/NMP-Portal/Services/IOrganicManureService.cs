@@ -30,5 +30,9 @@ namespace NMP.Portal.Services
         Task<(WindspeedResponse, Error)> FetchWindspeedDataDefault();
         Task<(MoistureTypeResponse, Error)> FetchMoisterTypeDefaultByApplicationDate(string applicationDate);
 
+        Task<(List<RainTypeResponse>, Error)> FetchRainTypeList();
+        Task<(List<WindspeedResponse>, Error)> FetchWindspeedList();
+        Task<(List<MoistureTypeResponse>, Error)> FetchMoisterTypeList();
+
     }
 }

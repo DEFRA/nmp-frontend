@@ -1035,11 +1035,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Effective Rainfall.
+        /// </summary>
+        public static string lblEffectiveRainfall {
+            get {
+                return ResourceManager.GetString("lblEffectiveRainfall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Effective rainfall after application.
         /// </summary>
         public static string lblEffectiveRainfallAfterApplication {
             get {
                 return ResourceManager.GetString("lblEffectiveRainfallAfterApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Effective Rainfall Manual.
+        /// </summary>
+        public static string lblEffectiveRainfallManual {
+            get {
+                return ResourceManager.GetString("lblEffectiveRainfallManual", resourceCulture);
             }
         }
         
@@ -1121,6 +1139,15 @@ namespace NMP.Portal.Resources {
         public static string lblEnterNumericValue {
             get {
                 return ResourceManager.GetString("lblEnterNumericValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter Rainfall Amount.
+        /// </summary>
+        public static string lblEnterRainfallAmount {
+            get {
+                return ResourceManager.GetString("lblEnterRainfallAmount", resourceCulture);
             }
         }
         
@@ -1581,6 +1608,15 @@ namespace NMP.Portal.Resources {
         public static string lblHowMoistTheTopsoilIs {
             get {
                 return ResourceManager.GetString("lblHowMoistTheTopsoilIs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How wet was the topsoil at time of application?.
+        /// </summary>
+        public static string lblHowWetWasTheTopsoil {
+            get {
+                return ResourceManager.GetString("lblHowWetWasTheTopsoil", resourceCulture);
             }
         }
         
@@ -2704,6 +2740,15 @@ namespace NMP.Portal.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Rainfall within 6 hours of application.
         /// </summary>
+        public static string lblRainfallWithin6Hours {
+            get {
+                return ResourceManager.GetString("lblRainfallWithin6Hours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rainfall within 6 hours of application.
+        /// </summary>
         public static string lblRainfallWithin6HoursOfApplication {
             get {
                 return ResourceManager.GetString("lblRainfallWithin6HoursOfApplication", resourceCulture);
@@ -3152,6 +3197,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This is the total rainfall between x and y. If you think this is wrong, you can change it now or later..
+        /// </summary>
+        public static string lblThisIsTotalRainfall {
+            get {
+                return ResourceManager.GetString("lblThisIsTotalRainfall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tine cultivator.
         /// </summary>
         public static string lblTineCultivator {
@@ -3184,6 +3238,15 @@ namespace NMP.Portal.Resources {
         public static string lblTonnesPerHectare {
             get {
                 return ResourceManager.GetString("lblTonnesPerHectare", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Topsoil Moister.
+        /// </summary>
+        public static string lblTopsoilMoister {
+            get {
+                return ResourceManager.GetString("lblTopsoilMoister", resourceCulture);
             }
         }
         
@@ -3283,6 +3346,15 @@ namespace NMP.Portal.Resources {
         public static string lblTotalPotassium {
             get {
                 return ResourceManager.GetString("lblTotalPotassium", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total rainfall.
+        /// </summary>
+        public static string lblTotalRainfall {
+            get {
+                return ResourceManager.GetString("lblTotalRainfall", resourceCulture);
             }
         }
         
@@ -3818,6 +3890,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wind at the time of application.
+        /// </summary>
+        public static string lblWindAtTheTimeOfApplication {
+            get {
+                return ResourceManager.GetString("lblWindAtTheTimeOfApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Windspeed.
+        /// </summary>
+        public static string lblWindspeed {
+            get {
+                return ResourceManager.GetString("lblWindspeed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Windspeed at application.
         /// </summary>
         public static string lblWindspeedAtApplication {
@@ -4268,6 +4358,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a rainfall amount before continuing.
+        /// </summary>
+        public static string MsgEnterRainfallAmountBeforeContinuing {
+            get {
+                return ResourceManager.GetString("MsgEnterRainfallAmountBeforeContinuing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the average annual rainfall.
         /// </summary>
         public static string MsgEnterTheAverageAnnualRainfall {
@@ -4340,6 +4439,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a valid date in the format dd/mm/yyyy before continuing.
+        /// </summary>
+        public static string MsgEnterValidDate {
+            get {
+                return ResourceManager.GetString("MsgEnterValidDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a valid numeric value before continuing.
         /// </summary>
         public static string MsgEnterValidNumericValueBeforeContinuing {
@@ -4390,6 +4498,15 @@ namespace NMP.Portal.Resources {
         public static string MsgFieldAlreadyExist {
             get {
                 return ResourceManager.GetString("MsgFieldAlreadyExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rainfall amount must be a whole number, like 600...
+        /// </summary>
+        public static string MsgForEffectiveRainfallManual {
+            get {
+                return ResourceManager.GetString("MsgForEffectiveRainfallManual", resourceCulture);
             }
         }
         
@@ -4651,6 +4768,24 @@ namespace NMP.Portal.Resources {
         public static string MsgSelectAtLeastOneField {
             get {
                 return ResourceManager.GetString("MsgSelectAtLeastOneField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a topsoil wetness condition before continuing.
+        /// </summary>
+        public static string MsgSelectATopsoilWetnessConditionBeforeContinuing {
+            get {
+                return ResourceManager.GetString("MsgSelectATopsoilWetnessConditionBeforeContinuing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a wind condition before continuing.
+        /// </summary>
+        public static string MsgSelectAWindConditionBeforeContinuing {
+            get {
+                return ResourceManager.GetString("MsgSelectAWindConditionBeforeContinuing", resourceCulture);
             }
         }
         
