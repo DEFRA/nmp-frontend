@@ -315,7 +315,7 @@ namespace NMP.Portal.Controllers
                                 Value = f.FieldId.ToString(),
                                 Text = f.FieldName.ToString()
                             }).ToList();
-                            ViewBag.FieldList = SelectListItem.OrderBy(x=>x.Text).ToList();
+                            ViewBag.FieldList = SelectListItem.OrderBy(x => x.Text).ToList();
                         }
                         return View(model);
                     }
@@ -524,6 +524,11 @@ namespace NMP.Portal.Controllers
                     }
                     return View(model);
 
+                }
+
+                if (model.IsCheckAnswer)
+                {
+                    model.IsManureTypeChange = true;
                 }
 
 
@@ -843,7 +848,7 @@ namespace NMP.Portal.Controllers
 
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
 
-                if (model.IsCheckAnswer)
+                if (model.IsCheckAnswer && (!model.IsManureTypeChange))
                 {
                     return RedirectToAction("CheckAnswer");
                 }
@@ -889,8 +894,8 @@ namespace NMP.Portal.Controllers
             var fieldType = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.FieldType).FirstOrDefault();
 
             string applicableFor = isLiquid ? Resource.lblL : Resource.lblB;
-            (List<ApplicationMethodResponse> applicationMethodList,error) = await _organicManureService.FetchApplicationMethodList(fieldType ?? 0, applicableFor);
-            if(error==null && applicationMethodList.Count > 0)
+            (List<ApplicationMethodResponse> applicationMethodList, error) = await _organicManureService.FetchApplicationMethodList(fieldType ?? 0, applicableFor);
+            if (error == null && applicationMethodList.Count > 0)
             {
                 ViewBag.ApplicationMethodList = applicationMethodList.OrderBy(x => x.Name).ToList();
             }
@@ -1369,7 +1374,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Error=ex.Message;
+                ViewBag.Error = ex.Message;
                 return View(model);
             }
 
@@ -2090,7 +2095,7 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("FarmList", "Farm");
             }
 
-            if(model.IsCheckAnswer)
+            if (model.IsCheckAnswer)
             {
                 return RedirectToAction("CheckAnswer");
             }
@@ -2139,6 +2144,7 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmList", "Farm");
                 }
                 model.IsCheckAnswer = true;
+                model.IsManureTypeChange = false;
                 if (model.OrganicManures.Count > 0)
                 {
                     if (model.IsDefaultNutrientValues.Value)
@@ -2175,7 +2181,7 @@ namespace NMP.Portal.Controllers
         {
             try
             {
-                if(model.OrganicManures!=null)
+                if (model.OrganicManures != null)
                 {
                     model.OrganicManures.ForEach(x => x.EndOfDrain = x.SoilDrainageEndDate);
                 }
