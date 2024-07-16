@@ -843,7 +843,10 @@ namespace NMP.Portal.Controllers
 
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
 
-
+                if (model.IsCheckAnswer)
+                {
+                    return RedirectToAction("CheckAnswer");
+                }
                 return RedirectToAction("ApplicationMethod");
             }
             catch (Exception ex)
@@ -2172,7 +2175,10 @@ namespace NMP.Portal.Controllers
         {
             try
             {
-
+                if(model.OrganicManures!=null)
+                {
+                    model.OrganicManures.ForEach(x => x.EndOfDrain = x.SoilDrainageEndDate);
+                }
                 var jsonData = new
                 {
                     OrganicManures = model.OrganicManures.Select(orgManure => new
@@ -2244,6 +2250,21 @@ namespace NMP.Portal.Controllers
             }
             return View(model);
 
+        }
+        public IActionResult BackCheckAnswer()
+        {
+            OrganicManureViewModel? model = new OrganicManureViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+            model.IsCheckAnswer = false;
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+            return RedirectToAction("ConditionsAffectingNutrients");
         }
 
         [HttpGet]
