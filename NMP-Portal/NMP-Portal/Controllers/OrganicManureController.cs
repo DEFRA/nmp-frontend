@@ -1583,6 +1583,10 @@ namespace NMP.Portal.Controllers
                 }
             }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+            if (model.IsCheckAnswer && (!model.IsManureTypeChange))
+            {
+                return RedirectToAction("CheckAnswer");
+            }
             return RedirectToAction("IncorporationMethod");
         }
 
@@ -1655,8 +1659,12 @@ namespace NMP.Portal.Controllers
                     orgManure.ApplicationRate = model.ApplicationRate.Value;
                 }
             }
+          
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
-
+              if (model.IsCheckAnswer && (!model.IsManureTypeChange))
+            {
+                return RedirectToAction("CheckAnswer");
+            }
             return RedirectToAction("IncorporationMethod");
         }
         [HttpGet]
