@@ -387,7 +387,7 @@ namespace NMP.Portal.Controllers
                         Value = f.FieldId.ToString(),
                         Text = f.FieldName.ToString()
                     }).ToList();
-                    ViewBag.FieldList = selectListItem;
+                    ViewBag.FieldList = selectListItem.OrderBy(x => x.Text).ToList();
 
                     if (model.FieldList == null || model.FieldList.Count == 0)
                     {
@@ -515,7 +515,7 @@ namespace NMP.Portal.Controllers
                                 Value = f.Id.ToString(),
                                 Text = f.Name.ToString()
                             }).ToList();
-                            ViewBag.ManureGroupList = SelectListItem;
+                            ViewBag.ManureGroupList = SelectListItem.OrderBy(x => x.Text).ToList(); ;
                         }
                     }
                     else
@@ -620,7 +620,7 @@ namespace NMP.Portal.Controllers
                                 Value = f.Id.ToString(),
                                 Text = f.Name.ToString()
                             }).ToList();
-                            ViewBag.ManureTypeList = SelectListItem;
+                            ViewBag.ManureTypeList = SelectListItem.OrderBy(x => x.Text).ToList(); ;
 
                         }
                         return View(model);
@@ -952,7 +952,7 @@ namespace NMP.Portal.Controllers
 
                 string applicableFor = isLiquid ? Resource.lblL : Resource.lblB;
                 (List<ApplicationMethodResponse> applicationMethodList, error) = await _organicManureService.FetchApplicationMethodList(fieldType ?? 0, applicableFor);
-                ViewBag.ApplicationMethodList = applicationMethodList;
+                ViewBag.ApplicationMethodList = applicationMethodList.OrderBy(x => x.Name).ToList(); ;
                 model.ApplicationMethodCount = applicationMethodList.Count;
                 return View(model);
             }
