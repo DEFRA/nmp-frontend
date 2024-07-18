@@ -4088,6 +4088,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the application method for your {0} not set?.
+        /// </summary>
+        public static string MsgApplicationMethodNotSet {
+            get {
+                return ResourceManager.GetString("MsgApplicationMethodNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to application rate.
         /// </summary>
         public static string MsgApplicationRate {
@@ -4097,11 +4106,58 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How would you like to enter the application rate for your {0} not set?.
+        /// </summary>
+        public static string MsgApplicationRateMethodNotSet {
+            get {
+                return ResourceManager.GetString("MsgApplicationRateMethodNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application rate
+        ///t/ha
+        ///m3/ha  not set.
+        /// </summary>
+        public static string MsgApplicationRateNotSet {
+            get {
+                return ResourceManager.GetString("MsgApplicationRateNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When are you applying your {0} not set?.
+        /// </summary>
+        public static string MsgApplyingDateNotSet {
+            get {
+                return ResourceManager.GetString("MsgApplyingDateNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Area must be greater than zero.
         /// </summary>
         public static string MsgAreaMustBeGreaterThanZero {
             get {
                 return ResourceManager.GetString("MsgAreaMustBeGreaterThanZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Area not set.
+        /// </summary>
+        public static string MsgAreaNotSet {
+            get {
+                return ResourceManager.GetString("MsgAreaNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Autumn crop Nitrogen uptake not set.
+        /// </summary>
+        public static string MsgAutumnCropNitrogenUptakeNotSet {
+            get {
+                return ResourceManager.GetString("MsgAutumnCropNitrogenUptakeNotSet", resourceCulture);
             }
         }
         
@@ -4214,11 +4270,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you want to use these nutrient values from RB209 for {0} not set?.
+        /// </summary>
+        public static string MsgDefaultNutrientValuesNotSet {
+            get {
+                return ResourceManager.GetString("MsgDefaultNutrientValuesNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Defra Customer Identity Service is down, please re-visit after sometime..
         /// </summary>
         public static string MsgDefraIdentityServiceDown {
             get {
                 return ResourceManager.GetString("MsgDefraIdentityServiceDown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to End of soil drainage not set.
+        /// </summary>
+        public static string MsgEndOfSoilDrainageNotSet {
+            get {
+                return ResourceManager.GetString("MsgEndOfSoilDrainageNotSet", resourceCulture);
             }
         }
         
@@ -4574,6 +4648,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How long is the gap between application and incorporation for your {0} not set?.
+        /// </summary>
+        public static string MsgIncorporationDelayNotSet {
+            get {
+                return ResourceManager.GetString("MsgIncorporationDelayNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the incorporation method for your {0} not set?.
+        /// </summary>
+        public static string MsgIncorporationMethodNotSet {
+            get {
+                return ResourceManager.GetString("MsgIncorporationMethodNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a Land Parcel ID that is no more than 14 characters long.
         /// </summary>
         public static string MsgLandParcelIdMinMaxValidation {
@@ -4642,6 +4734,15 @@ namespace NMP.Portal.Resources {
         public static string MsgManureNonSpreadingAreaIsGreaterThanTotalArea {
             get {
                 return ResourceManager.GetString("MsgManureNonSpreadingAreaIsGreaterThanTotalArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What type of organic material are you using in this application not set?.
+        /// </summary>
+        public static string MsgManureTypeNotSet {
+            get {
+                return ResourceManager.GetString("MsgManureTypeNotSet", resourceCulture);
             }
         }
         
@@ -4750,6 +4851,24 @@ namespace NMP.Portal.Resources {
         public static string MsgQuantity {
             get {
                 return ResourceManager.GetString("MsgQuantity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quantity not set.
+        /// </summary>
+        public static string MsgQuantityNotSet {
+            get {
+                return ResourceManager.GetString("MsgQuantityNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rainfall within 6 hours of application not set.
+        /// </summary>
+        public static string MsgRainfallWithinSixHoursOfApplicationNotSet {
+            get {
+                return ResourceManager.GetString("MsgRainfallWithinSixHoursOfApplicationNotSet", resourceCulture);
             }
         }
         
@@ -4880,6 +4999,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to  Topsoil moisture not set.
+        /// </summary>
+        public static string MsgTopsoilMoistureNotSet {
+            get {
+                return ResourceManager.GetString("MsgTopsoilMoistureNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total rainfall since application not set.
+        /// </summary>
+        public static string MsgTotalRainfallSinceApplicationNotSet {
+            get {
+                return ResourceManager.GetString("MsgTotalRainfallSinceApplicationNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to uric acid.
         /// </summary>
         public static string MsgUricAcid {
@@ -4921,6 +5058,15 @@ namespace NMP.Portal.Resources {
         public static string MsgWeCounldNotAddOrganicManure {
             get {
                 return ResourceManager.GetString("MsgWeCounldNotAddOrganicManure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Windspeed at application not set.
+        /// </summary>
+        public static string MsgWindspeedAtApplicationNotSet {
+            get {
+                return ResourceManager.GetString("MsgWindspeedAtApplicationNotSet", resourceCulture);
             }
         }
         
