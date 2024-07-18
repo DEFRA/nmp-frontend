@@ -83,7 +83,14 @@
                         <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                             @(Model.CropGroupId == PotatoGroupId?Resource.lblPotatoForCropType:Resource.lblCropTypeForPlan)
                         </govuk-radios-fieldset-legend>
-                        <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
+                        @if (Model.CropGroupId == PotatoGroupId)
+                        {
+                            <govuk-radios-hint><a href="@Resource.UrlAHDBPotatoVarietyGroup" target="_blank">@Resource.lblHelpMeFindMyPotatoVarietyGroup</a> @Resource.lblOpensInANewTab</govuk-radios-hint>
+                        }
+                        else
+                        {
+                            <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
+                        }
                         @if (ViewBag.CropTypeList != null)
                         {
                             @foreach (var item in ViewBag.CropTypeList)
