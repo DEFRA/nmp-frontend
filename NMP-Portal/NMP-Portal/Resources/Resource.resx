@@ -1729,4 +1729,54 @@ kg/m³</value>
   <data name="MsgSelectAWindConditionBeforeContinuing" xml:space="preserve">
     <value>Select a wind condition before continuing</value>
   </data>
+  <data name="MsgApplicationMethodNotSet" xml:space="preserve">
+    <value>What is the application method for your {0} not set?</value>
+  </data>
+  <data name="MsgApplicationRateMethodNotSet" xml:space="preserve">
+    <value>How would you like to enter the application rate for your {0} not set?</value>
+  </data>
+  <data name="MsgApplicationRateNotSet" xml:space="preserve">
+    <value>Application rate
+t/ha
+m3/ha  not set</value>
+  </data>
+  <data name="MsgApplyingDateNotSet" xml:space="preserve">
+    <value>When are you applying your {0} not set?</value>
+  </data>
+  <data name="MsgAreaNotSet" xml:space="preserve">
+    <value>Area not set</value>
+  </data>
+  <data name="MsgAutumnCropNitrogenUptakeNotSet" xml:space="preserve">
+    <value>Autumn crop Nitrogen uptake not set</value>
+  </data>
+  <data name="MsgDefaultNutrientValuesNotSet" xml:space="preserve">
+    <value>Do you want to use these nutrient values from RB209 for {0} not set?</value>
+  </data>
+  <data name="MsgEndOfSoilDrainageNotSet" xml:space="preserve">
+    <value>End of soil drainage not set</value>
+  </data>
+  <data name="MsgIncorporationMethodNotSet" xml:space="preserve">
+    <value>What is the incorporation method for your {0} not set?</value>
+  </data>
+  <data name="MsgIncorporationDelayNotSet" xml:space="preserve">
+    <value>How long is the gap between application and incorporation for your {0} not set?</value>
+  </data>
+  <data name="MsgManureTypeNotSet" xml:space="preserve">
+    <value>What type of organic material are you using in this application not set?</value>
+  </data>
+  <data name="MsgQuantityNotSet" xml:space="preserve">
+    <value>Quantity not set</value>
+  </data>
+  <data name="MsgRainfallWithinSixHoursOfApplicationNotSet" xml:space="preserve">
+    <value>Rainfall within 6 hours of application not set</value>
+  </data>
+  <data name="MsgTopsoilMoistureNotSet" xml:space="preserve">
+    <value> Topsoil moisture not set</value>
+  </data>
+  <data name="MsgTotalRainfallSinceApplicationNotSet" xml:space="preserve">
+    <value>Total rainfall since application not set</value>
+  </data>
+  <data name="MsgWindspeedAtApplicationNotSet" xml:space="preserve">
+    <value>Windspeed at application not set</value>
+  </data>
 </root>
