@@ -70,22 +70,9 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherCropName"></govuk-input>
                 @if (Model.CropGroupId == potatoGroupId)
                 {
-                    <govuk-radios asp-for="@Model.Variety">
-                        <govuk-radios-fieldset>
-                            <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                                @Resource.lblWhichVarietyNameWouldYouLikeToPlanFor
-                            </govuk-radios-fieldset-legend>
-                            <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
-                            @if (ViewBag.PotatoVarietyList != null)
-                            {
-                                @foreach (var item in ViewBag.PotatoVarietyList)
-                                {
-                                    <govuk-radios-item value="@item.PotatoVariety">@item.PotatoVariety</govuk-radios-item>
-                                }
-                            }
-
-                        </govuk-radios-fieldset>
-                    </govuk-radios>
+                    <govuk-input asp-for="@Model.Variety">
+                        <govuk-input-label is-page-heading="true" class="govuk-label--l">@Resource.lblWhatIsThePotatoVarietyName</govuk-input-label>
+                    </govuk-input>
                 }
                 else
                 {

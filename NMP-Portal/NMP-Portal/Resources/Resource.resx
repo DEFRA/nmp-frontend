@@ -1779,4 +1779,22 @@ m3/ha  not set</value>
   <data name="MsgWindspeedAtApplicationNotSet" xml:space="preserve">
     <value>Windspeed at application not set</value>
   </data>
+  <data name="lblHelpMeFindMyPotatoVarietyGroup" xml:space="preserve">
+    <value>Help me find my potato variety group</value>
+  </data>
+  <data name="lblOpensInANewTab" xml:space="preserve">
+    <value>(opens in a new tab)</value>
+  </data>
+  <data name="lblWhatIsThePotatoVarietyName" xml:space="preserve">
+    <value>What is the potato variety name?</value>
+  </data>
+  <data name="MsgEnterAPotatoVarietyNameBeforeContinuing" xml:space="preserve">
+    <value>Enter a potato variety name before continuing</value>
+  </data>
+  <data name="MsgSelectAPotatoVarietyGroup" xml:space="preserve">
+    <value>Select a potato variety group before continuing</value>
+  </data>
+  <data name="UrlAHDBPotatoVarietyGroup" xml:space="preserve">
+    <value>https://potatoes.ahdb.org.uk/knowledge-library/potato-nitrogen-groups</value>
+  </data>
 </root>
