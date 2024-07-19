@@ -1521,6 +1521,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Help me find my potato variety group.
+        /// </summary>
+        public static string lblHelpMeFindMyPotatoVarietyGroup {
+            get {
+                return ResourceManager.GetString("lblHelpMeFindMyPotatoVarietyGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to help protect the environment.
         /// </summary>
         public static string lblHelpProtectTheEnvironment {
@@ -2347,6 +2356,15 @@ namespace NMP.Portal.Resources {
         public static string lblOpenGovernmentLicence {
             get {
                 return ResourceManager.GetString("lblOpenGovernmentLicence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (opens in a new tab).
+        /// </summary>
+        public static string lblOpensInANewTab {
+            get {
+                return ResourceManager.GetString("lblOpensInANewTab", resourceCulture);
             }
         }
         
@@ -3764,6 +3782,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the potato variety name?.
+        /// </summary>
+        public static string lblWhatIsThePotatoVarietyName {
+            get {
+                return ResourceManager.GetString("lblWhatIsThePotatoVarietyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What type of {0} are you using in this application?.
         /// </summary>
         public static string lblWhatTypeOfManureGroupAreYouUsingInThisApplication {
@@ -4351,6 +4378,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a potato variety name before continuing.
+        /// </summary>
+        public static string MsgEnterAPotatoVarietyNameBeforeContinuing {
+            get {
+                return ResourceManager.GetString("MsgEnterAPotatoVarietyNameBeforeContinuing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a town or city.
         /// </summary>
         public static string MsgEnterATownOrCity {
@@ -4882,6 +4918,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select a potato variety group before continuing.
+        /// </summary>
+        public static string MsgSelectAPotatoVarietyGroup {
+            get {
+                return ResourceManager.GetString("MsgSelectAPotatoVarietyGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select at least one field before continuing.
         /// </summary>
         public static string MsgSelectAtLeastOneField {
@@ -5031,6 +5076,15 @@ namespace NMP.Portal.Resources {
         public static string MsgYieldNotSet {
             get {
                 return ResourceManager.GetString("MsgYieldNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://potatoes.ahdb.org.uk/knowledge-library/potato-nitrogen-groups.
+        /// </summary>
+        public static string UrlAHDBPotatoVarietyGroup {
+            get {
+                return ResourceManager.GetString("UrlAHDBPotatoVarietyGroup", resourceCulture);
             }
         }
     }

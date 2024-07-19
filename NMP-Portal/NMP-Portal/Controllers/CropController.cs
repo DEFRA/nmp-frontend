@@ -299,11 +299,14 @@ namespace NMP.Portal.Controllers
                 {
                     model.CropTypeID = await _cropService.FetchCropTypeByGroupId(model.CropGroupId ?? 0);
                 }
-                if (model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Other && model.CropTypeID == null)
+                if (model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Other && model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Potatoes && model.CropTypeID == null)
                 {
                     ModelState.AddModelError("CropTypeID", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropType.ToLower()));
                 }
-
+                if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes && model.CropTypeID == null)
+                {
+                    ModelState.AddModelError("CropTypeID", Resource.MsgSelectAPotatoVarietyGroup);
+                }
                 //Other crop validation
                 if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other && model.OtherCropName == null)
                 {
@@ -381,13 +384,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                if (model != null && model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes)
-                {
-                    List<PotatoVarietyResponse> potatoVarieties = new List<PotatoVarietyResponse>();
-                    potatoVarieties = await _cropService.FetchPotatoVarieties();
-                    var country = model.IsEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
-                    ViewBag.PotatoVarietyList = potatoVarieties.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.All).ToList().OrderBy(c => c.PotatoVariety); ;
-                }
+                
             }
             catch (Exception ex)
             {
@@ -405,17 +402,10 @@ namespace NMP.Portal.Controllers
             {
                 if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes && model.Variety == null)
                 {
-                    ModelState.AddModelError("Variety", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblVarietyName.ToLower()));
+                    ModelState.AddModelError("Variety", Resource.MsgEnterAPotatoVarietyNameBeforeContinuing);
                 }
                 if (!ModelState.IsValid)
                 {
-                    if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes)
-                    {
-                        List<PotatoVarietyResponse> potatoVarieties = new List<PotatoVarietyResponse>();
-                        potatoVarieties = await _cropService.FetchPotatoVarieties();
-                        var country = model.IsEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
-                        ViewBag.PotatoVarietyList = potatoVarieties.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.All).ToList().OrderBy(c => c.PotatoVariety); ;
-                    }
                     return View(model);
                 }
                 int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
@@ -1536,7 +1526,7 @@ namespace NMP.Portal.Controllers
                     model.Year = harvestYear;
                     if (harvestYearPlanResponse != null && error.Message == null)
                     {
-                        model.LastModifiedOn = harvestYearPlanResponse.Max(x => x.LastModifiedOn).ToString("dd MMM yyyy");                        
+                        model.LastModifiedOn = harvestYearPlanResponse.Max(x => x.LastModifiedOn).ToString("dd MMM yyyy");
                         var groupedResult = harvestYearPlanResponse
                                             .GroupBy(h => new { h.CropTypeName, h.CropVariety })
                                             .Select(g => new
@@ -1567,7 +1557,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     EncryptedFieldId = _cropDataProtector.Protect(plan.FieldID.ToString()), // Assuming this returns a string
                                     FieldName = plan.FieldName,
-                                    OrganicManureCount=plan.OrganicManuresCount
+                                    OrganicManureCount = plan.OrganicManuresCount
                                 };
                                 harvestYearPlans.FieldData.Add(newField);
                                 //harvestYearPlans.FieldNames.Add(plan.FieldName);
@@ -1694,7 +1684,7 @@ namespace NMP.Portal.Controllers
                     (recommendations, error) = await _cropService.FetchRecommendationByFieldIdAndYear(decryptedFieldId, decryptedHarvestYear);
                     if (error == null)
                     {
-                     
+
                         if (model.Crops == null)
                         {
                             model.Crops = new List<CropViewModel>();
