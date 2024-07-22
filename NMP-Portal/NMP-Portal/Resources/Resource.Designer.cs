@@ -3764,6 +3764,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the length of the growing season for {0}?.
+        /// </summary>
+        public static string lblWhatIsTheLengthOfGrowingSeason {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheLengthOfGrowingSeason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the name of the crop?.
         /// </summary>
         public static string lblWhatIsTheNameOfTheCrop {
@@ -4347,6 +4356,15 @@ namespace NMP.Portal.Resources {
         public static string MsgEnterAnapplicationRateBeforeContinuing {
             get {
                 return ResourceManager.GetString("MsgEnterAnapplicationRateBeforeContinuing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a number which is greater than 0.
+        /// </summary>
+        public static string MsgEnterANumberWhichIsGreaterThanZero {
+            get {
+                return ResourceManager.GetString("MsgEnterANumberWhichIsGreaterThanZero", resourceCulture);
             }
         }
         
