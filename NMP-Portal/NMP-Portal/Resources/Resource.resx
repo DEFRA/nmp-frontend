@@ -1797,4 +1797,10 @@ m3/ha  not set</value>
   <data name="UrlAHDBPotatoVarietyGroup" xml:space="preserve">
     <value>https://potatoes.ahdb.org.uk/knowledge-library/potato-nitrogen-groups</value>
   </data>
+  <data name="lblWhatIsTheLengthOfGrowingSeason" xml:space="preserve">
+    <value>What is the length of the growing season for {0}?</value>
+  </data>
+  <data name="MsgEnterANumberWhichIsGreaterThanZero" xml:space="preserve">
+    <value>Enter a number which is greater than 0</value>
+  </data>
 </root>

@@ -74,8 +74,8 @@
                         <govuk-input asp-for=@Model.Crops[i].Yield input-class="govuk-input--width-5" type="number" step="any" spellcheck="false">
                             <govuk-input-label is-page-heading="true" class="govuk-label--l">
                                 @(Model.Crops.Count > 1 &&
-                                    Model.YieldQuestion == EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheExpectedYieldForSingle, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType)
-                                    : string.Format(Resource.lblWhatIsTheDifferentExpectedYield, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType, Model.Crops[i].FieldName))
+                                    Model.YieldQuestion == EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheExpectedYieldForSingle, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType)
+                                    : string.Format(Resource.lblWhatIsTheDifferentExpectedYield, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType, Model.Crops[i].FieldName))
 
                             </govuk-input-label>
                             <govuk-input-suffix>@Resource.lblTonnesAndHectare</govuk-input-suffix>

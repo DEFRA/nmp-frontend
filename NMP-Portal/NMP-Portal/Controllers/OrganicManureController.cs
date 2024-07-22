@@ -2863,6 +2863,10 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("TotalRainfall", Resource.MsgEnterRainfallAmountBeforeContinuing);
             }
+            if (model.TotalRainfall != null && model.TotalRainfall<0)
+            {
+                ModelState.AddModelError("TotalRainfall", Resource.MsgEnterANumberWhichIsGreaterThanZero);
+            }
 
             if (!ModelState.IsValid)
             {
