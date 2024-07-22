@@ -17,6 +17,7 @@ using Microsoft.IdentityModel.Abstractions;
 using System.Globalization;
 using System.Linq.Expressions;
 using Microsoft.VisualBasic.FileIO;
+using System.Collections.Immutable;
 
 namespace NMP.Portal.Controllers
 {
@@ -381,6 +382,67 @@ namespace NMP.Portal.Controllers
                                 TempData["FieldGroupError"] = error.Message;
                                 return View("FieldGroup", model);
                             }
+
+
+
+                            if (model.IsCheckAnswer && model.IsFieldGroupChange)
+                            {
+                                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
+                                {
+                                    OrganicManureViewModel organicManureViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+                                    if (organicManureViewModel != null&&organicManureViewModel.FieldList.Count>0)
+                                    {
+                                        var fieldListChange = organicManureViewModel.FieldList.Where(item1 => !model.FieldList.Any(item2 => item2 == item1)).ToList();
+
+                                        // Perform the required action for these items
+                                        if (fieldListChange != null&&fieldListChange.Count>0)
+                                        {
+                                            List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
+                                            var crop = cropsResponse.Where(x => x.Year == model.HarvestYear);
+                                            int cropTypeId = crop.Select(x => x.CropTypeID).FirstOrDefault() ?? 0;
+                                            int cropCategoryId = await _mannerService.FetchCategoryIdByCropTypeIdAsync(cropTypeId);
+
+                                            //check early and late for winter cereals and winter oilseed rape
+                                            //if sowing date after 15 sept then late
+                                            DateTime? sowingDate = crop.Select(x => x.SowingDate).FirstOrDefault();
+                                            if (cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal || cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlyStablishedWinterOilseedRape)
+                                            {
+                                                if (sowingDate != null)
+                                                {
+                                                    int day = sowingDate.Value.Day;
+                                                    int month = sowingDate.Value.Month;
+                                                    if (month == (int)NMP.Portal.Enums.Month.September && day > 15)
+                                                    {
+                                                        if (cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal)
+                                                        {
+                                                            cropCategoryId = (int)NMP.Portal.Enums.CropCategory.LateSownWinterCereal;
+                                                        }
+                                                        else
+                                                        {
+                                                            cropCategoryId = (int)NMP.Portal.Enums.CropCategory.LateStablishedWinterOilseedRape;
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                            if (model.ApplicationDate.Value.Month >= (int)NMP.Portal.Enums.Month.August && model.ApplicationDate.Value.Month <= (int)NMP.Portal.Enums.Month.October)
+                                            {
+
+                                                model.AutumnCropNitrogenUptake = await _mannerService.FetchCropNUptakeDefaultAsync(cropCategoryId);
+                                            }
+                                            else
+                                            {
+                                                model.AutumnCropNitrogenUptake = 0;
+                                            }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    return RedirectToAction("FarmList", "Farm");
+                                }
+
+                            }
                         }
                         _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
                         return RedirectToAction("ManureGroup");
@@ -540,12 +602,71 @@ namespace NMP.Portal.Controllers
                                     }
                                 }
                             }
+
                         }
                     }
                     else
                     {
                         TempData["FieldError"] = error.Message;
                         return View(model);
+                    }
+                    if (model.IsCheckAnswer && model.IsFieldGroupChange)
+                    {
+                        if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
+                        {
+                            OrganicManureViewModel organicManureViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+                            if (organicManureViewModel != null && organicManureViewModel.FieldList.Count > 0)
+                            {
+                                var fieldListChange = organicManureViewModel.FieldList.Where(item1 => !model.FieldList.Any(item2 => item2 == item1)).ToList();
+
+                                // Perform the required action for these items
+                                if (fieldListChange != null && fieldListChange.Count > 0)
+                                {
+                                    List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
+                                    var crop = cropsResponse.Where(x => x.Year == model.HarvestYear);
+                                    int cropTypeId = crop.Select(x => x.CropTypeID).FirstOrDefault() ?? 0;
+                                    int cropCategoryId = await _mannerService.FetchCategoryIdByCropTypeIdAsync(cropTypeId);
+
+                                    //check early and late for winter cereals and winter oilseed rape
+                                    //if sowing date after 15 sept then late
+                                    DateTime? sowingDate = crop.Select(x => x.SowingDate).FirstOrDefault();
+                                    if (cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal || cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlyStablishedWinterOilseedRape)
+                                    {
+                                        if (sowingDate != null)
+                                        {
+                                            int day = sowingDate.Value.Day;
+                                            int month = sowingDate.Value.Month;
+                                            if (month == (int)NMP.Portal.Enums.Month.September && day > 15)
+                                            {
+                                                if (cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal)
+                                                {
+                                                    cropCategoryId = (int)NMP.Portal.Enums.CropCategory.LateSownWinterCereal;
+                                                }
+                                                else
+                                                {
+                                                    cropCategoryId = (int)NMP.Portal.Enums.CropCategory.LateStablishedWinterOilseedRape;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    if (model.ApplicationDate.Value.Month >= (int)NMP.Portal.Enums.Month.August && model.ApplicationDate.Value.Month <= (int)NMP.Portal.Enums.Month.October)
+                                    {
+
+                                        model.AutumnCropNitrogenUptake = await _mannerService.FetchCropNUptakeDefaultAsync(cropCategoryId);
+                                    }
+                                    else
+                                    {
+                                        model.AutumnCropNitrogenUptake = 0;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            return RedirectToAction("FarmList", "Farm");
+                        }
+
                     }
                     _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
                 }
@@ -2548,6 +2669,7 @@ namespace NMP.Portal.Controllers
                 if (model.OrganicManures != null)
                 {
                     model.OrganicManures.ForEach(x => x.EndOfDrain = x.SoilDrainageEndDate);
+                    model.OrganicManures.ForEach(x => x.AutumnCropNitrogenUptake = model.AutumnCropNitrogenUptake.Value);
                 }
                 var jsonData = new
                 {
