@@ -76,9 +76,18 @@
 
             <govuk-radios asp-for="@Model.CropInfo1">
                 <govuk-radios-fieldset>
-                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblChooseTheOptionThatAppliesToYour,Model.CropGroupId==OtherGroupId?Model.OtherCropName: Model.CropType)
-                    </govuk-radios-fieldset-legend>
+                    @if (Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes)
+                    {
+                        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                            @string.Format(Resource.lblWhatIsTheLengthOfGrowingSeason, Model.Variety)
+                        </govuk-radios-fieldset-legend>
+                    }
+                    else
+                    {
+                        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                            @string.Format(Resource.lblChooseTheOptionThatAppliesToYour, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType)
+                        </govuk-radios-fieldset-legend>
+                    }
                     <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
 
                     @if (ViewBag.CropInfoOneList != null)
