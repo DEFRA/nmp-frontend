@@ -1001,8 +1001,14 @@ namespace NMP.Portal.Controllers
                         model.IncorporationDelayName = string.Empty;
                         model.IncorporationMethodName = string.Empty;
                     }
+                    if (!(model.IsFieldGroupChange && model.IsManureTypeChange))
+                    {
+                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                        return RedirectToAction("CheckAnswer");
+                    }
                 }
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                
                 if (model.IsDefaultNutrient.Value)
                 {
                     return RedirectToAction("ManureApplyingDate");
@@ -1010,6 +1016,12 @@ namespace NMP.Portal.Controllers
 
                 return RedirectToAction("DefaultNutrientValues");
             }
+
+            if (model.IsCheckAnswer && (!model.IsFieldGroupChange) && (!model.IsManureTypeChange))
+            {
+                model.IsApplicationMethodChange = true;
+            }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
             return View(model);
 
         }
@@ -1093,6 +1105,11 @@ namespace NMP.Portal.Controllers
                                             orgManure.IncorporationMethodID = model.IncorporationMethod.Value;
                                             orgManure.IncorporationDelayID = model.IncorporationDelay.Value;
                                         }
+                                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                                        if (model.IsCheckAnswer && model.IsApplicationMethodChange)
+                                        {
+                                            return RedirectToAction("CheckAnswer");
+                                        }
                                     }
                                 }
                                 else
@@ -1141,7 +1158,10 @@ namespace NMP.Portal.Controllers
                 }
             }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
-
+            if (model.IsCheckAnswer && model.IsApplicationMethodChange)
+            {
+                return RedirectToAction("IncorporationMethod");
+            }
             return RedirectToAction("DefaultNutrientValues");
 
         }
@@ -2002,6 +2022,11 @@ namespace NMP.Portal.Controllers
                     }
                 }
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                if ((!model.IsFieldGroupChange) && (!model.IsManureTypeChange) && model.IsCheckAnswer && model.IsApplicationMethodChange)
+                {
+                    return RedirectToAction("CheckAnswer");
+                }
+
                 return RedirectToAction("ConditionsAffectingNutrients");
             }
             catch (Exception ex)
@@ -2301,6 +2326,8 @@ namespace NMP.Portal.Controllers
                 }
                 model.IsCheckAnswer = true;
                 model.IsManureTypeChange = false;
+                model.IsApplicationMethodChange = false;
+                model.IsFieldGroupChange = false;
                 if (model.OrganicManures.Count > 0)
                 {
 

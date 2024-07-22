@@ -4,7 +4,7 @@
     ViewData["Title"] = Resource.lblApplicationRate;
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="ManureApplyingDate" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(Model.IsCheckAnswer&&Model.IsApplicationMethodChange?"CheckAnswer":"ManureApplyingDate") asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
 }
 
 
@@ -83,6 +83,8 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Windspeed"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MoistureType"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupIdForFilter"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsApplicationMethodChange" value="@Model.IsApplicationMethodChange"></govuk-input>
+
 
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {

@@ -4,17 +4,25 @@
     ViewData["Title"] = Resource.lblApplicationRate;
 }
 @section BeforeContent {
-    @if(Model.ApplicationRateMethod.HasValue&& Model.ApplicationRateMethod.Value==(int)NMP.Portal.Enums.ApplicationRate.EnterAnApplicationRate)
+    
+    @if(Model.IsCheckAnswer&&Model.IsApplicationMethodChange)
     {
-        <govuk-back-link asp-action="ManualApplicationRate" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
-    }
-    else if (Model.ApplicationRateMethod.HasValue && Model.ApplicationRateMethod.Value == (int)NMP.Portal.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
-    {
-        <govuk-back-link asp-action="AreaQuantity" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action="ApplicationMethod" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
     }
     else
     {
-        <govuk-back-link asp-action="ApplicationRateMethod" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+        @if (Model.ApplicationRateMethod.HasValue && Model.ApplicationRateMethod.Value == (int)NMP.Portal.Enums.ApplicationRate.EnterAnApplicationRate)
+        {
+            <govuk-back-link asp-action="ManualApplicationRate" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+        }
+        else if (Model.ApplicationRateMethod.HasValue && Model.ApplicationRateMethod.Value == (int)NMP.Portal.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
+        {
+            <govuk-back-link asp-action="AreaQuantity" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+        }
+        else
+        {
+            <govuk-back-link asp-action="ApplicationRateMethod" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+        }
     }
 
 }
@@ -95,6 +103,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Windspeed"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MoistureType"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupIdForFilter"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsApplicationMethodChange"></govuk-input>
 
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
