@@ -6,15 +6,17 @@
     var isDefaultNutrientValues = "";
     var howWouldYouEnterApplicationRate = "";
 
-    bool needToShowIncorporationsData = true;
+    bool needToShowIncorporationsBtn = true;
     @if (Model.ApplicationMethod != null)
     {
-       needToShowIncorporationsData= (Model.ApplicationMethod.Value == (int)NMP.Portal.Enums.ApplicationMethod.DeepInjection2530cm) || (Model.ApplicationMethod.Value == (int)NMP.Portal.Enums.ApplicationMethod.ShallowInjection57cm) ? false : true;
+        needToShowIncorporationsBtn = (Model.ApplicationMethod.Value == (int)NMP.Portal.Enums.ApplicationMethod.DeepInjection2530cm) || (Model.ApplicationMethod.Value == (int)NMP.Portal.Enums.ApplicationMethod.ShallowInjection57cm) ? false : true;
     }
-    bool needToShowIncorporationDelayData = true;
+    bool needToShowIncorporationDelayBtn = true;
     if (Model.IncorporationMethod != null)
     {
-        needToShowIncorporationDelayData= Model.IncorporationMethod.Value == (int)NMP.Portal.Enums.IncorporationMethod.NotIncorporated ? false : true;
+        needToShowIncorporationDelayBtn = (Model.IncorporationMethod.Value == (int)NMP.Portal.Enums.IncorporationMethod.NotIncorporated||
+        Model.IncorporationMethod.Value == (int)NMP.Portal.Enums.IncorporationMethod.ShallowInjection||
+        Model.IncorporationMethod.Value == (int)NMP.Portal.Enums.IncorporationMethod.DeepInjection) ? false : true;
     }
 
     switch (Model.IsDefaultNutrientValues)
@@ -174,7 +176,7 @@
                             @Model.FieldGroupName
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action  asp-action="FieldGroup" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="FieldGroup" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
@@ -200,7 +202,7 @@
                         <govuk-summary-list-row-action class=@((Model.ManureTypeId.HasValue)?"":"disabled") asp-action="ManureApplyingDate" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
-                @if (Model.IsManureTypeLiquid.HasValue&&Model.IsManureTypeLiquid.Value)
+                @if (Model.IsManureTypeLiquid.HasValue && Model.IsManureTypeLiquid.Value)
                 {
                     <govuk-summary-list-row class=@((!Model.ApplicationMethod.HasValue)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
@@ -210,7 +212,7 @@
                             @((Model.ApplicationMethod.HasValue) ? Model.ApplicationMethodName : Resource.lblNotSet)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action  asp-action="ApplicationMethod" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="ApplicationMethod" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
@@ -304,42 +306,47 @@
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
-
+                @*
                 @if (needToShowIncorporationsData)
-                {
-                    <govuk-summary-list-row class=@((!Model.IncorporationMethod.HasValue)?"govuk-error-message":"")>
-                        <govuk-summary-list-row-key>
-                            @string.Format(Resource.lblWhatIsTheIncorporationMethod, Model.ManureTypeName)
-                        </govuk-summary-list-row-key>
-                        <govuk-summary-list-row-value>
-                            @((Model.IncorporationMethod.HasValue) ?Model.IncorporationMethodName:Resource.lblNotSet)
-                        </govuk-summary-list-row-value>
+                { *@
+                <govuk-summary-list-row class=@((!Model.IncorporationMethod.HasValue)?"govuk-error-message":"")>
+                    <govuk-summary-list-row-key>
+                        @string.Format(Resource.lblWhatIsTheIncorporationMethod, Model.ManureTypeName)
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @((Model.IncorporationMethod.HasValue) ? Model.IncorporationMethodName : Resource.lblNotSet)
+                    </govuk-summary-list-row-value>
+                    @if (needToShowIncorporationsBtn)
+                    {
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action class="disabled" asp-action="IncorporationMethod" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
-                    </govuk-summary-list-row>
-                    @if (needToShowIncorporationDelayData)
-                    {
-                        <govuk-summary-list-row class=@((!Model.IncorporationDelay.HasValue)?"govuk-error-message":"")>
-                            <govuk-summary-list-row-key>
-                                @string.Format(Resource.lblHowLongIsTheGapBetweenApplicationAndIncorporation, Model.ManureTypeName)
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                                @((Model.IncorporationDelay.HasValue) ? Model.IncorporationDelayName : Resource.lblNotSet)
-                            </govuk-summary-list-row-value>
-                            <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action class="disabled" asp-action="IncorporationDelay" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
-                            </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row>
                     }
-                }
+                </govuk-summary-list-row>
+
+                <govuk-summary-list-row class=@((!Model.IncorporationDelay.HasValue)?"govuk-error-message":"")>
+                    <govuk-summary-list-row-key>
+                        @string.Format(Resource.lblHowLongIsTheGapBetweenApplicationAndIncorporation, Model.ManureTypeName)
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @((Model.IncorporationDelay.HasValue) ? Model.IncorporationDelayName : Resource.lblNotSet)
+                    </govuk-summary-list-row-value>
+                    @if (needToShowIncorporationDelayBtn)
+                    {
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action class="disabled" asp-action="IncorporationDelay" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    }
+                </govuk-summary-list-row>
+                @* } *@
+                @* } *@
                 <govuk-summary-list-row class=@((!Model.AutumnCropNitrogenUptake.HasValue)?"govuk-error-message":"")>
                     <govuk-summary-list-row-key>
                         @Resource.lblAutumnCropNitrogenUptake
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
                         @((Model.AutumnCropNitrogenUptake.HasValue) ? string.Format(Resource.lblAutumnCropNitrogenPerHectare, (Model.AutumnCropNitrogenUptake.Value == 0.0m ? 0 : Model.AutumnCropNitrogenUptake?.ToString("#.#"))) : Resource.lblNotSet)
-                       
+
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
                         <govuk-summary-list-row-action class="disabled" asp-action="AutumnCropNitrogenUptake" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>

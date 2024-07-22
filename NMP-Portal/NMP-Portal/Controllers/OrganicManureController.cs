@@ -2167,13 +2167,23 @@ namespace NMP.Portal.Controllers
                     if (error == null && incorporationDelaysList.Count == 1)
                     {
                         model.IncorporationDelay = incorporationDelaysList.FirstOrDefault().ID;
-                        if (model.OrganicManures.Count > 0)
+                        (model.IncorporationDelayName, error) = await _organicManureService.FetchIncorporationDelayById(model.IncorporationDelay.Value);
+                        if(error==null)
                         {
-                            foreach (var orgManure in model.OrganicManures)
+                            if (model.OrganicManures.Count > 0)
                             {
-                                orgManure.IncorporationDelayID = model.IncorporationDelay.Value;
+                                foreach (var orgManure in model.OrganicManures)
+                                {
+                                    orgManure.IncorporationDelayID = model.IncorporationDelay.Value;
+                                }
                             }
                         }
+                        else
+                        {
+                            TempData["IncorporationMethodError"] = error.Message;
+                            return View(model);
+                        }
+
                         _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
                     }
                     else if (error != null)
@@ -2186,6 +2196,10 @@ namespace NMP.Portal.Controllers
                 {
                     TempData["IncorporationMethodError"] = error.Message;
                     return View(model);
+                }
+                if (model.IsCheckAnswer && model.IsApplicationMethodChange)
+                {
+                    return RedirectToAction("CheckAnswer");
                 }
                 return RedirectToAction("ConditionsAffectingNutrients");
             }
