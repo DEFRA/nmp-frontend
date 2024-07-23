@@ -312,7 +312,7 @@ namespace NMP.Portal.Security
                             {
                                 if (responseWrapper != null && responseWrapper?.Error != null)
                                 {
-                                    throw new Exception(responseWrapper?.Error);
+                                    throw new Exception("NMPT API service is not available at the moment. Try after some time.");
                                 }
                             }
                         }
@@ -333,8 +333,8 @@ namespace NMP.Portal.Security
             {
                 var errorViewModel = new ErrorViewModel();
                 //errorViewModel.Code= (int)ex.StatusCode;
-                errorViewModel.Message = ex.StatusCode + " : " + ex.Message;                
-                errorViewModel.Stack = ex.StackTrace ?? string.Empty;
+                errorViewModel.Message = "NMPT API service is not available at the moment. Try after some time.";//ex.StatusCode + " : " + ex.Message;                
+                errorViewModel.Stack = string.Empty;
                 context.HttpContext.Session.SetObjectAsJson("Error", errorViewModel);
                 context.Response.Redirect("/Error");
                 context.HandleResponse(); // Suppress the exception 
@@ -343,7 +343,7 @@ namespace NMP.Portal.Security
             {
                 var errorViewModel = new ErrorViewModel();                
                 errorViewModel.Message = ex.Message;
-                errorViewModel.Stack = ex.StackTrace ?? string.Empty;
+                errorViewModel.Stack = string.Empty;
                 context.HttpContext.Session.SetObjectAsJson("Error", errorViewModel);
                 context.Response.Redirect("/Error");
                 context.HandleResponse(); // Suppress the exception                    

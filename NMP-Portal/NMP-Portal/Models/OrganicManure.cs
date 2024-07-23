@@ -13,16 +13,16 @@
         public decimal? MgO { get; set; }
         public decimal? SO3 { get; set; }
         public decimal AvailableN { get; set; }
-        public int ApplicationRate { get; set; }
+        public int? ApplicationRate { get; set; }
         public decimal? DryMatterPercent { get; set; }
         public decimal? UricAcid { get; set; }
         public DateTime EndOfDrain { get; set; }
         public int Rainfall { get; set; }
         public decimal? AreaSpread { get; set; }
         public decimal? ManureQuantity { get; set; }
-        public int ApplicationMethodID { get; set; }
-        public int IncorporationMethodID { get; set; }
-        public int IncorporationDelayID { get; set; }
+        public int? ApplicationMethodID { get; set; }
+        public int? IncorporationMethodID { get; set; }
+        public int? IncorporationDelayID { get; set; }
         public decimal? NH4N { get; set; }
         public decimal? NO3N { get; set; }
         public decimal AvailableP2O5 { get; set; }
