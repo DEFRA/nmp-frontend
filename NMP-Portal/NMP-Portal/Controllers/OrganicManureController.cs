@@ -1969,6 +1969,10 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("ApplicationRate", Resource.MsgEnterAnapplicationRateBeforeContinuing);
             }
+            if (model.ApplicationRate != null && model.ApplicationRate < 0)
+            {
+                ModelState.AddModelError("ApplicationRate", Resource.MsgEnterANumberWhichIsGreaterThanZero);
+            }
             if (!ModelState.IsValid)
             {
                 return View("ManualApplicationRate", model);
@@ -2046,6 +2050,14 @@ namespace NMP.Portal.Controllers
             if (model.Area != null && model.Area == 0)
             {
                 ModelState.AddModelError("Area", Resource.MsgAreaMustBeGreaterThanZero);
+            }
+            if (model.Area != null && model.Area < 0)
+            {
+                ModelState.AddModelError("Area", Resource.MsgEnterANumberWhichIsGreaterThanZero);
+            }
+            if (model.Quantity != null && model.Quantity < 0)
+            {
+                ModelState.AddModelError("Quantity", Resource.MsgEnterANumberWhichIsGreaterThanZero);
             }
             if (!ModelState.IsValid)
             {
@@ -2838,6 +2850,10 @@ namespace NMP.Portal.Controllers
             if (model.AutumnCropNitrogenUptake == null)
             {
                 ModelState.AddModelError("AutumnCropNitrogenUptake", Resource.MsgEnterAValueBeforeContinue);
+            }
+            if (model.AutumnCropNitrogenUptake != null && model.AutumnCropNitrogenUptake < 0)
+            {
+                ModelState.AddModelError("AutumnCropNitrogenUptake", Resource.MsgEnterANumberWhichIsGreaterThanZero);
             }
             if (!ModelState.IsValid)
             {
