@@ -62,6 +62,7 @@ namespace NMP.Portal.ViewModels
         
         public bool IsFieldGroupChange { get; set; } = false;
         public bool IsManureTypeChange { get; set; } = false;
+        public bool IsApplicationMethodChange { get; set; } = false;
         public bool? IsManureTypeLiquid { get; set; }
         public string? ApplicationMethodName { get; set; }
         public string? IncorporationMethodName { get; set; }
