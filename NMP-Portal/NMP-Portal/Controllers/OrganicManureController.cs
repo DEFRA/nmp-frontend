@@ -2353,7 +2353,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Error = ex.Message;
+                TempData["IncorporationDelayError"] = ex.Message;
                 return View(model);
             }
 
