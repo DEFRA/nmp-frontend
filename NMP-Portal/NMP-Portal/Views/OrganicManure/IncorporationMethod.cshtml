@@ -9,6 +9,10 @@
     {
         <govuk-back-link asp-action="ApplicationMethod" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
     }
+    else if (Model.IsCheckAnswer && (!Model.IsApplicationMethodChange) && (!Model.IsFieldGroupChange) && (!Model.IsManureTypeChange))
+    {
+        <govuk-back-link asp-action="CheckAnswer" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+    }
     else
     {
         @if (Model.ApplicationRateMethod.HasValue && Model.ApplicationRateMethod.Value == (int)NMP.Portal.Enums.ApplicationRate.EnterAnApplicationRate)
@@ -22,7 +26,7 @@
         else
         {
             <govuk-back-link asp-action="ApplicationRateMethod" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
-        }
+        }       
     }
 
 }
@@ -104,6 +108,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MoistureType"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupIdForFilter"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsApplicationMethodChange"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsIncorporationMethodChange" value="@Model.IsIncorporationMethodChange.ToString().ToLower()"></govuk-input>
 
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
