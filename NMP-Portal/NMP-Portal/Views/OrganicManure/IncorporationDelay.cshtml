@@ -4,7 +4,15 @@
     ViewData["Title"] = Resource.lblIncorprationDelay;
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="IncorporationMethod" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+
+    @if (Model.IsCheckAnswer && (!Model.IsIncorporationMethodChange)&&(!Model.IsApplicationMethodChange) && (!Model.IsFieldGroupChange) && (!Model.IsManureTypeChange))
+    {
+        <govuk-back-link asp-action="CheckAnswer" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+    }
+    else
+    {
+        <govuk-back-link asp-action="IncorporationMethod" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+    }
 
 }
 

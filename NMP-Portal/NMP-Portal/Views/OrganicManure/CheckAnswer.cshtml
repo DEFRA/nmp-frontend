@@ -14,8 +14,8 @@
     bool needToShowIncorporationDelayBtn = true;
     if (Model.IncorporationMethod != null)
     {
-        needToShowIncorporationDelayBtn = (Model.IncorporationMethod.Value == (int)NMP.Portal.Enums.IncorporationMethod.NotIncorporated||
-        Model.IncorporationMethod.Value == (int)NMP.Portal.Enums.IncorporationMethod.ShallowInjection||
+        needToShowIncorporationDelayBtn = (Model.IncorporationMethod.Value == (int)NMP.Portal.Enums.IncorporationMethod.NotIncorporated ||
+        Model.IncorporationMethod.Value == (int)NMP.Portal.Enums.IncorporationMethod.ShallowInjection ||
         Model.IncorporationMethod.Value == (int)NMP.Portal.Enums.IncorporationMethod.DeepInjection) ? false : true;
     }
 
@@ -120,6 +120,8 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MoistureType"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupIdForFilter"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsApplicationMethodChange"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsIncorporationMethodChange"></govuk-input>
+
 
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
@@ -316,10 +318,10 @@
                     <govuk-summary-list-row-value>
                         @((Model.IncorporationMethod.HasValue) ? Model.IncorporationMethodName : Resource.lblNotSet)
                     </govuk-summary-list-row-value>
-                    @if (needToShowIncorporationsBtn)
+                    @if (needToShowIncorporationsBtn && Model.ApplicationMethod != null)
                     {
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action class="disabled" asp-action="IncorporationMethod" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="IncorporationMethod" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     }
                 </govuk-summary-list-row>
@@ -331,10 +333,10 @@
                     <govuk-summary-list-row-value>
                         @((Model.IncorporationDelay.HasValue) ? Model.IncorporationDelayName : Resource.lblNotSet)
                     </govuk-summary-list-row-value>
-                    @if (needToShowIncorporationDelayBtn)
+                    @if (needToShowIncorporationDelayBtn&&Model.ApplicationMethod!=null)
                     {
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action class="disabled" asp-action="IncorporationDelay" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="IncorporationDelay" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     }
                 </govuk-summary-list-row>
