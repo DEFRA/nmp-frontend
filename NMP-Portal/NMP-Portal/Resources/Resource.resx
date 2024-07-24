@@ -1803,4 +1803,7 @@ m3/ha  not set</value>
   <data name="MsgEnterANumberWhichIsGreaterThanZero" xml:space="preserve">
     <value>Enter a number which is greater than 0</value>
   </data>
+  <data name="lblUseTheStandardFigure" xml:space="preserve">
+    <value>Use the standard figure of {0} tonnes per hectare for all these fields</value>
+  </data>
 </root>

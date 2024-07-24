@@ -986,6 +986,7 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("FarmList", "Farm");
             }
+            ViewBag.DefaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
             if (model.IsQuestionChange)
             {
                 model.IsQuestionChange = false;
@@ -1076,6 +1077,30 @@ namespace NMP.Portal.Controllers
                 model.FieldName = (await _fieldService.FetchFieldByFieldId(model.Crops[index].FieldID.Value)).Name;
                 model.YieldCurrentCounter = index;
                 model.YieldEncryptedCounter = _fieldDataProtector.Protect(model.YieldCurrentCounter.ToString());
+            }
+            if (model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields)
+            {
+                decimal defaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+                model.YieldCurrentCounter = 1;
+                for (int i = 0; i < model.Crops.Count; i++)
+                {
+                    model.Crops[i].Yield = defaultYield;
+                }
+                model.YieldEncryptedCounter = _fieldDataProtector.Protect(model.YieldCurrentCounter.ToString());
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other || (model.IsCheckAnswer))
+                {
+                    if (model.IsAnyChangeInField && (!model.IsCropGroupChange))
+                    {
+                        model.IsAnyChangeInField = false;
+                    }
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                    return RedirectToAction("CheckAnswer");
+                }
+                else
+                {
+                    return RedirectToAction("CropInfoOne");
+                }
             }
             return View(model);
         }
@@ -1350,6 +1375,7 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("FarmList", "Farm");
             }
             model.IsCheckAnswer = true;
+            ViewBag.DefaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("CropData", model);
             return View(model);
         }

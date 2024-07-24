@@ -3458,6 +3458,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use the standard figure of {0} tonnes per hectare for all these fields.
+        /// </summary>
+        public static string lblUseTheStandardFigure {
+            get {
+                return ResourceManager.GetString("lblUseTheStandardFigure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use the standard figure of 8 tonnes per hectare for all these fields.
         /// </summary>
         public static string lblUseTheStandardFigureOf8TonnesPerHectareForAllTheseFields {
