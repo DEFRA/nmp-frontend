@@ -4,7 +4,7 @@
     ViewData["Title"] = Resource.lblYieldQuestion;
     var EnterDifferentFiguresForEachField = (int)NMP.Portal.Enums.YieldQuestion.EnterDifferentFiguresForEachField;
     var EnterASingleFigureForAllTheseFields = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
-    var UseTheStandardFigureOf8TonnesPerHectareForAllTheseFields = (int)NMP.Portal.Enums.YieldQuestion.UseTheStandardFigureOf8TonnesPerHectareForAllTheseFields;
+    var UseTheStandardFigureForAllTheseFields = (int)NMP.Portal.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields;
     var bachAction = (Model.SowingDateQuestion == (int)NMP.Portal.Enums.SowingDateQuestion.NoIWillEnterTheDateLater) ? "SowingDateQuestion" :
      "SowingDate";
     int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
@@ -74,6 +74,10 @@
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-item value="@EnterASingleFigureForAllTheseFields">@(Model.Crops.Count > 1 ? Resource.lblEnterASingleFigureForAllTheseFields : Resource.lblEnterAFigure)</govuk-radios-item>
                     <govuk-radios-item value="@EnterDifferentFiguresForEachField">@Resource.lblEnterDifferentFiguresForEachField</govuk-radios-item>
+                    @if (ViewBag.DefaultYield != null && ViewBag.DefaultYield>0)
+                    {
+                        <govuk-radios-item value="@UseTheStandardFigureForAllTheseFields">@string.Format(Resource.lblUseTheStandardFigure, ViewBag.DefaultYield)</govuk-radios-item>
+                    }
                 </govuk-radios-fieldset>
             </govuk-radios>
             <govuk-button type="submit" class="margin-bottom-forty">
