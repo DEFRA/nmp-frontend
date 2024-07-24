@@ -20,10 +20,10 @@
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="IncorporationDelay" asp-controller="OrganicManure" method="post">
             @Html.AntiForgeryToken()
-            @if (ViewBag.Error != null)
+            @if (TempData["IncorporationDelayError"] != null)
             {
                 <govuk-error-summary>
-                    <govuk-error-summary-item href="#passport-issued-day">@ViewBag.Error</govuk-error-summary-item>
+                    <govuk-error-summary-item>@TempData["IncorporationDelayError"]</govuk-error-summary-item>
                 </govuk-error-summary>
             }
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
