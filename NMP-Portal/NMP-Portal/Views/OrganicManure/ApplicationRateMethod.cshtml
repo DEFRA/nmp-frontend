@@ -19,7 +19,7 @@
             @if (ViewBag.Error != null)
             {
                 <govuk-error-summary>
-                    <govuk-error-summary-item href="#passport-issued-day">@ViewBag.Error</govuk-error-summary-item>
+                    <govuk-error-summary-item>@ViewBag.Error</govuk-error-summary-item>
                 </govuk-error-summary>
             }
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>

@@ -6,7 +6,8 @@
     ViewData["Title"] = Resource.lblPlansAndRecordsOverview;
     var DefaultNutrientValues = true;
     var NotDefaultNutrientValues = false;
-    var backAction = Model.ApplicationMethodCount > 0 ? "ApplicationMethod" : "ManureApplyingDate";
+    var backAction = (Model.IsCheckAnswer && Model.IsDefaultNutrientOptionChange) ? "CheckAnswer" : Model.ApplicationMethodCount > 0 ? "ApplicationMethod" : "ManureApplyingDate";
+
     var unit = "";
     if (Model.IsManureTypeLiquid != null)
     {
@@ -39,7 +40,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules"></govuk-input>
-            
+
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationMethod"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationRateMethod"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Area"></govuk-input>
@@ -54,7 +55,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationMethod"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationMethodCount"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationDelay"></govuk-input>
-            
+
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.DryMatter"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.TotalN"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.NH4N"></govuk-input>
@@ -88,6 +89,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.P2O5Available" value="@Model.ManureType.P2O5Available"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyNeedToStoreNutrientValueForFuture"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDefaultNutrientOptionChange" value="@Model.IsDefaultNutrientOptionChange.ToString().ToLower()"></govuk-input>
 
 
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptake"></govuk-input>
@@ -142,7 +144,7 @@
                 }
 
             }
-            <h1 class="govuk-heading-l">@string.Format( Resource.lblStandardNutrientValues,Model.ManureTypeName)</h1>
+            <h1 class="govuk-heading-l">@string.Format(Resource.lblStandardNutrientValues, Model.ManureTypeName)</h1>
             <p class="govuk-body">@Resource.lblValuesAreSourcedFromAHDB</p>
             <table class="govuk-table">
                 <thead class="govuk-table__head">
