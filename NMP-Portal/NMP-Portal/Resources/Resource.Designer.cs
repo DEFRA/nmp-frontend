@@ -459,7 +459,7 @@ namespace NMP.Portal.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Application rate
         ///t/ha
-        ///m3/ha.
+        ///m³/ha.
         /// </summary>
         public static string lblApplicationRateRow {
             get {
@@ -612,7 +612,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Calculate based on the area and quantity you are spreading.
+        ///   Looks up a localized string similar to Calculate based on the area and quantity you are applying.
         /// </summary>
         public static string lblCalculateBasedOnTheAreaAndQuantity {
             get {
@@ -1098,7 +1098,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter an application rate in t/ha or m3/ha.
+        ///   Looks up a localized string similar to Enter an application rate in t/ha or m³/ha.
         /// </summary>
         public static string lblEnterAnApplicationRate {
             get {
@@ -1211,6 +1211,15 @@ namespace NMP.Portal.Resources {
         public static string lblEnterTheDateInCorrectFormat {
             get {
                 return ResourceManager.GetString("lblEnterTheDateInCorrectFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the values for your {0}.
+        /// </summary>
+        public static string lblEnterTheValuesForYour {
+            get {
+                return ResourceManager.GetString("lblEnterTheValuesForYour", resourceCulture);
             }
         }
         
@@ -1801,11 +1810,11 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No, I want to enter a recent manure analysis.
+        ///   Looks up a localized string similar to No, I want to enter a recent organic material analysis.
         /// </summary>
-        public static string lblIwantToEnterARecentManure {
+        public static string lblIwantToEnterARecentOrganicMaterialAnalysis {
             get {
-                return ResourceManager.GetString("lblIwantToEnterARecentManure", resourceCulture);
+                return ResourceManager.GetString("lblIwantToEnterARecentOrganicMaterialAnalysis", resourceCulture);
             }
         }
         
@@ -1833,6 +1842,24 @@ namespace NMP.Portal.Resources {
         public static string lblKgPerHectare {
             get {
                 return ResourceManager.GetString("lblKgPerHectare", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to kg/m³.
+        /// </summary>
+        public static string lblKgPerMeterCube {
+            get {
+                return ResourceManager.GetString("lblKgPerMeterCube", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to kg/t.
+        /// </summary>
+        public static string lblKgPerTon {
+            get {
+                return ResourceManager.GetString("lblKgPerTon", resourceCulture);
             }
         }
         
@@ -3485,11 +3512,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use the typical application rate of {0} t/ha.
+        ///   Looks up a localized string similar to Use the typical application rate of {0} m³/ha.
         /// </summary>
         public static string lblUseTypicalApplicationRate {
             get {
                 return ResourceManager.GetString("lblUseTypicalApplicationRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value.
+        /// </summary>
+        public static string lblValue {
+            get {
+                return ResourceManager.GetString("lblValue", resourceCulture);
             }
         }
         
@@ -3499,6 +3535,33 @@ namespace NMP.Portal.Resources {
         public static string lblValueKg {
             get {
                 return ResourceManager.GetString("lblValueKg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} kg/m³.
+        /// </summary>
+        public static string lblValueKgPerMeterCube {
+            get {
+                return ResourceManager.GetString("lblValueKgPerMeterCube", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} kg/t.
+        /// </summary>
+        public static string lblValueKgPerTon {
+            get {
+                return ResourceManager.GetString("lblValueKgPerTon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}%.
+        /// </summary>
+        public static string lblValuePercent {
+            get {
+                return ResourceManager.GetString("lblValuePercent", resourceCulture);
             }
         }
         
@@ -4207,15 +4270,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The date cannot be later than the harvest year you are planning for.
-        /// </summary>
-        public static string MsgDateCannotBeLaterThanHarvestYear {
-            get {
-                return ResourceManager.GetString("MsgDateCannotBeLaterThanHarvestYear", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to For example, 27 3 2007.
         /// </summary>
         public static string MsgDateExample {
@@ -4338,6 +4392,15 @@ namespace NMP.Portal.Resources {
         public static string MsgEnterADateBeforeContinuing {
             get {
                 return ResourceManager.GetString("MsgEnterADateBeforeContinuing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a date within 2 years of the harvest year you are planning for.
+        /// </summary>
+        public static string MsgEnterADateWithin2YearsOfTheHarvestYear {
+            get {
+                return ResourceManager.GetString("MsgEnterADateWithin2YearsOfTheHarvestYear", resourceCulture);
             }
         }
         
@@ -4738,7 +4801,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Based on your crop and soil type, your closed period for spreading manures with high readily available nitrogen is {0}..
+        ///   Looks up a localized string similar to Based on your crop and soil type, your closed period for applying manures with high readily available nitrogen is {0}..
         /// </summary>
         public static string MsgManureApplyingDateClosedPeriod {
             get {
