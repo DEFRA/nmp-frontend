@@ -1500,8 +1500,8 @@ namespace NMP.Portal.Controllers
             }
             if (!model.IsDefaultNutrientValues.Value)
             {
-                //if (model.DryMatterPercent == null)
-                //{
+                if (model.DryMatterPercent == null)
+                {
                     model.DryMatterPercent = model.ManureType.DryMatter;
                     model.N = model.ManureType.TotalN;
                     model.P2O5 = model.ManureType.P2O5;
@@ -1511,8 +1511,9 @@ namespace NMP.Portal.Controllers
                     model.K2O = model.ManureType.K2O;
                     model.MgO = model.ManureType.MgO;
                     model.NO3N = model.ManureType.NO3N;
-                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
-                //}
+                }
+
+                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
                 return RedirectToAction("ManualNutrientValues");
             }
             else
