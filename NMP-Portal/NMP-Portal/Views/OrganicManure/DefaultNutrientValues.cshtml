@@ -6,7 +6,7 @@
     ViewData["Title"] = Resource.lblPlansAndRecordsOverview;
     var DefaultNutrientValues = true;
     var NotDefaultNutrientValues = false;
-    var backAction = Model.ApplicationMethodCount > 0 ? "ApplicationMethod" : "ManureApplyingDate";
+    var backAction = (Model.IsCheckAnswer && Model.IsDefaultNutrientOptionChange) ? "CheckAnswer" : Model.ApplicationMethodCount > 0 ? "ApplicationMethod" : "ManureApplyingDate";
 
 }
 
@@ -34,7 +34,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules"></govuk-input>
-            
+
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationMethod"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationRateMethod"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Area"></govuk-input>
@@ -49,7 +49,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationMethod"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationMethodCount"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationDelay"></govuk-input>
-            
+
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.DryMatter"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.TotalN"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.NH4N"></govuk-input>
@@ -83,6 +83,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.P2O5Available" value="@Model.ManureType.P2O5Available"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyNeedToStoreNutrientValueForFuture"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDefaultNutrientOptionChange" value="@Model.IsDefaultNutrientOptionChange.ToString().ToLower()"></govuk-input>
 
 
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptake"></govuk-input>
@@ -137,7 +138,7 @@
                 }
 
             }
-            <h1 class="govuk-heading-l">@string.Format( Resource.lblStandardNutrientValues,Model.ManureTypeName)</h1>
+            <h1 class="govuk-heading-l">@string.Format(Resource.lblStandardNutrientValues, Model.ManureTypeName)</h1>
             <p class="govuk-body">@Resource.lblValuesAreSourcedFromAHDB</p>
             <table class="govuk-table">
                 <thead class="govuk-table__head">
@@ -150,39 +151,40 @@
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblDryMatter</td>
                         <td class="govuk-table__cell alignRight">
-                            @string.Format(Resource.lblValueKg, Model.ManureType.DryMatter) </td>
+                            @string.Format(Resource.lblValueKg, Model.ManureType.DryMatter)
+                        </td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblTotalNitrogen</td>
-                        <td class="govuk-table__cell alignRight">@(Model.ManureType.TotalN != null ?  string.Format(Resource.lblValueKg, Model.ManureType.TotalN):string.Empty)</td>
+                        <td class="govuk-table__cell alignRight">@(Model.ManureType.TotalN != null ? string.Format(Resource.lblValueKg, Model.ManureType.TotalN) : string.Empty)</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblAmmonium</td>
-                        <td class="govuk-table__cell alignRight">@(Model.ManureType.NH4N != null ? string.Format(Resource.lblValueKg, Model.ManureType.NH4N):string.Empty)</td>
+                        <td class="govuk-table__cell alignRight">@(Model.ManureType.NH4N != null ? string.Format(Resource.lblValueKg, Model.ManureType.NH4N) : string.Empty)</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblUricAcid</td>
-                        <td class="govuk-table__cell alignRight">@(Model.ManureType.Uric !=null ? string.Format(Resource.lblValueKg, Model.ManureType.Uric):string.Empty)</td>
+                        <td class="govuk-table__cell alignRight">@(Model.ManureType.Uric != null ? string.Format(Resource.lblValueKg, Model.ManureType.Uric) : string.Empty)</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblNitrate</td>
-                        <td class="govuk-table__cell alignRight">@(Model.ManureType.NO3N !=null ? string.Format(Resource.lblValueKg, Model.ManureType.NO3N):string.Empty)</td>
+                        <td class="govuk-table__cell alignRight">@(Model.ManureType.NO3N != null ? string.Format(Resource.lblValueKg, Model.ManureType.NO3N) : string.Empty)</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblTotalPhosphate</td>
-                        <td class="govuk-table__cell alignRight">@(Model.ManureType.P2O5 != null ? string.Format(Resource.lblValueKg, Model.ManureType.P2O5):string.Empty)</td>
+                        <td class="govuk-table__cell alignRight">@(Model.ManureType.P2O5 != null ? string.Format(Resource.lblValueKg, Model.ManureType.P2O5) : string.Empty)</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblTotalPotassium</td>
-                        <td class="govuk-table__cell alignRight">@(Model.ManureType.K2O != null ? string.Format(Resource.lblValueKg, Model.ManureType.K2O):string.Empty)</td>
+                        <td class="govuk-table__cell alignRight">@(Model.ManureType.K2O != null ? string.Format(Resource.lblValueKg, Model.ManureType.K2O) : string.Empty)</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblTotalSulphur</td>
-                        <td class="govuk-table__cell alignRight">@(Model.ManureType.SO3 != null? string.Format(Resource.lblValueKg, Model.ManureType.SO3) :string.Empty)</td>
+                        <td class="govuk-table__cell alignRight">@(Model.ManureType.SO3 != null ? string.Format(Resource.lblValueKg, Model.ManureType.SO3) : string.Empty)</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblTotalMagnesiumOxide</td>
-                        <td class="govuk-table__cell alignRight">@(Model.ManureType.MgO !=null ? string.Format(Resource.lblValueKg, Model.ManureType.MgO):string.Empty)</td>
+                        <td class="govuk-table__cell alignRight">@(Model.ManureType.MgO != null ? string.Format(Resource.lblValueKg, Model.ManureType.MgO) : string.Empty)</td>
                     </tr>
                 </tbody>
             </table>
