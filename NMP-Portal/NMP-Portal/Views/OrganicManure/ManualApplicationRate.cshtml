@@ -11,8 +11,13 @@
 <form asp-action="ManualApplicationRate" asp-controller="OrganicManure" method="post">
     @Html.AntiForgeryToken()
     <div class="govuk-grid-row">
+        @if (TempData["ManualApplicationRateError"] != null)
+        {
+            <govuk-error-summary>
+                <govuk-error-summary-item>@TempData["ManualApplicationRateError"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        }
         <div class="govuk-grid-column-two-thirds">
-
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>

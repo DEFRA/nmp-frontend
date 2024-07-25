@@ -107,6 +107,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.P2O5Available"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyNeedToStoreNutrientValueForFuture"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDefaultNutrientOptionChange" value="@Model.IsDefaultNutrientOptionChange.ToString().ToLower()"></govuk-input>
 
 
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptake"></govuk-input>
@@ -240,7 +241,7 @@
                         @((Model.IsDefaultNutrientValues.HasValue) ? isDefaultNutrientValues : Resource.lblNotSet)
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action class="disabled" asp-action="DefaultNutrientValues" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action  asp-action="DefaultNutrientValues" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
 
