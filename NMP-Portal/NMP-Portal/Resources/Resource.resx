@@ -1256,7 +1256,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>When are you applying {0} on these fields?</value>
   </data>
   <data name="MsgManureApplyingDateClosedPeriod" xml:space="preserve">
-    <value>Based on your crop and soil type, your closed period for spreading manures with high readily available nitrogen is {0}.</value>
+    <value>Based on your crop and soil type, your closed period for applying manures with high readily available nitrogen is {0}.</value>
   </data>
   <data name="MsgManureApplyingDateDontHaveExactDate" xml:space="preserve">
     <value>If you don't know the exact date, enter an estimated date. For example, </value>
@@ -1269,9 +1269,6 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
   <data name="lblDryMatter" xml:space="preserve">
     <value>Dry Matter</value>
-  </data>
-  <data name="lblIwantToEnterARecentManure" xml:space="preserve">
-    <value>No, I want to enter a recent manure analysis</value>
   </data>
   <data name="lblNitrate" xml:space="preserve">
     <value>Nitrate (N)</value>
@@ -1307,16 +1304,16 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Application Rate</value>
   </data>
   <data name="lblCalculateBasedOnTheAreaAndQuantity" xml:space="preserve">
-    <value>Calculate based on the area and quantity you are spreading</value>
+    <value>Calculate based on the area and quantity you are applying</value>
   </data>
   <data name="lblEnterAnApplicationRate" xml:space="preserve">
-    <value>Enter an application rate in t/ha or m3/ha</value>
+    <value>Enter an application rate in t/ha or m³/ha</value>
   </data>
   <data name="lblHowWouldYouLikeToEnterTheApplicationRate" xml:space="preserve">
     <value>How would you like to enter the application rate for your {0}?</value>
   </data>
   <data name="lblUseTypicalApplicationRate" xml:space="preserve">
-    <value>Use the typical application rate of {0} t/ha</value>
+    <value>Use the typical application rate of {0} m³/ha</value>
   </data>
   <data name="MsgSelectAMethodForEnteringApplicationRate" xml:space="preserve">
     <value>Select a method for entering the application rate before continuing.</value>
@@ -1354,8 +1351,8 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblWhatIsTheApplicationMethod" xml:space="preserve">
     <value>What is the application method for your {0}?</value>
   </data>
-  <data name="MsgDateCannotBeLaterThanHarvestYear" xml:space="preserve">
-    <value>The date cannot be later than the harvest year you are planning for</value>
+  <data name="MsgEnterADateWithin2YearsOfTheHarvestYear" xml:space="preserve">
+    <value>Enter a date within 2 years of the harvest year you are planning for</value>
   </data>
   <data name="MsgEnterAnapplicationRateBeforeContinuing" xml:space="preserve">
     <value>Enter an application rate before continuing.</value>
@@ -1537,7 +1534,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblApplicationRateRow" xml:space="preserve">
     <value>Application rate
 t/ha
-m3/ha</value>
+m³/ha</value>
   </data>
   <data name="MsgWeCounldNotAddOrganicManure" xml:space="preserve">
     <value>We couldn’t add your application, please try again later</value>
@@ -1805,5 +1802,29 @@ m3/ha  not set</value>
   </data>
   <data name="lblUseTheStandardFigure" xml:space="preserve">
     <value>Use the standard figure of {0} tonnes per hectare for all these fields</value>
+  </data>
+  <data name="lblEnterTheValuesForYour" xml:space="preserve">
+    <value>Enter the values for your {0}</value>
+  </data>
+  <data name="lblIwantToEnterARecentOrganicMaterialAnalysis" xml:space="preserve">
+    <value>No, I want to enter a recent organic material analysis</value>
+  </data>
+  <data name="lblKgPerMeterCube" xml:space="preserve">
+    <value>kg/m³</value>
+  </data>
+  <data name="lblKgPerTon" xml:space="preserve">
+    <value>kg/t</value>
+  </data>
+  <data name="lblValue" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="lblValueKgPerMeterCube" xml:space="preserve">
+    <value>{0} kg/m³</value>
+  </data>
+  <data name="lblValueKgPerTon" xml:space="preserve">
+    <value>{0} kg/t</value>
+  </data>
+  <data name="lblValuePercent" xml:space="preserve">
+    <value>{0}%</value>
   </data>
 </root>

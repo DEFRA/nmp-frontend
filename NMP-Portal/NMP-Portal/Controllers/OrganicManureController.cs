@@ -1112,9 +1112,9 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.ApplicationDate != null)
                 {
-                    if (model.ApplicationDate.Value.Date.Year > model.HarvestYear)
+                    if (model.ApplicationDate.Value.Date.Year > model.HarvestYear + 2 || model.ApplicationDate.Value.Date.Year < model.HarvestYear - 2)
                     {
-                        ModelState.AddModelError("ApplicationDate", Resource.MsgDateCannotBeLaterThanHarvestYear);
+                        ModelState.AddModelError("ApplicationDate", Resource.MsgEnterADateWithin2YearsOfTheHarvestYear);
                     }
                 }
 

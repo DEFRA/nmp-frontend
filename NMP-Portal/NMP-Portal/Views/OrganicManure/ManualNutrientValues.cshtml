@@ -2,6 +2,11 @@
 @model NMP.Portal.ViewModels.OrganicManureViewModel
 @{
     ViewData["Title"] = Resource.lblManureDefaultsValue;
+    var suffixUnit = "";
+    if (Model.IsManureTypeLiquid != null)
+    {
+        suffixUnit = Model.IsManureTypeLiquid.Value ? Resource.lblKgPerMeterCube : Resource.lblKgPerTon;
+    }
 }
 @section BeforeContent {
     <govuk-back-link asp-action="DefaultNutrientValues" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
@@ -111,44 +116,44 @@
             }
             <div class="govuk-form-group">
                 <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                    <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblAddAnalysisValues, Model.ManureTypeName)</h1>
+                    <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblEnterTheValuesForYour, Model.ManureTypeName)</h1>
                 </legand>
-                        <govuk-input asp-for=@Model.DryMatterPercent inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                            <govuk-input-label is-page-heading="true">@Resource.lblDryMatter</govuk-input-label>
-                            <govuk-input-suffix>@Resource.lblPercentage</govuk-input-suffix>
-                        </govuk-input>
-                        <govuk-input asp-for=@Model.N  inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                            <govuk-input-label is-page-heading="true">@Resource.lblTotalNitrogenN</govuk-input-label>
-                            <govuk-input-suffix>@Resource.lblKgPerTonneAndKgPerMeterCube</govuk-input-suffix>
-                        </govuk-input>
-                        <govuk-input asp-for=@Model.NH4N  inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                            <govuk-input-label is-page-heading="true">@Resource.lblAmmonium</govuk-input-label>
-                            <govuk-input-suffix>@Resource.lblKgPerTonneAndKgPerMeterCube</govuk-input-suffix>
-                        </govuk-input>
-                        <govuk-input asp-for=@Model.UricAcid  inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                            <govuk-input-label is-page-heading="true">@Resource.lblUricAcid</govuk-input-label>
-                            <govuk-input-suffix>@Resource.lblKgPerTonneAndKgPerMeterCube</govuk-input-suffix>
-                        </govuk-input>
-                        <govuk-input asp-for=@Model.NO3N  inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                            <govuk-input-label is-page-heading="true">@Resource.lblNitrate</govuk-input-label>
-                            <govuk-input-suffix>@Resource.lblKgPerTonneAndKgPerMeterCube</govuk-input-suffix>
-                        </govuk-input>
-                        <govuk-input asp-for=@Model.P2O5  inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                            <govuk-input-label is-page-heading="true">@Resource.lblTotalPhosphate</govuk-input-label>
-                            <govuk-input-suffix>@Resource.lblKgPerTonneAndKgPerMeterCube</govuk-input-suffix>
-                        </govuk-input>
-                        <govuk-input asp-for=@Model.K2O  inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                            <govuk-input-label is-page-heading="true">@Resource.lblTotalPotashK2O</govuk-input-label>
-                            <govuk-input-suffix>@Resource.lblKgPerTonneAndKgPerMeterCube</govuk-input-suffix>
-                        </govuk-input>
-                        <govuk-input asp-for=@Model.SO3  inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                            <govuk-input-label is-page-heading="true">@Resource.lblTotalSulphur</govuk-input-label>
-                            <govuk-input-suffix>@Resource.lblKgPerTonneAndKgPerMeterCube</govuk-input-suffix>
-                        </govuk-input>
-                        <govuk-input asp-for=@Model.MgO  inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                            <govuk-input-label is-page-heading="true">@Resource.lblTotalMagnesiumOxide</govuk-input-label>
-                            <govuk-input-suffix>@Resource.lblKgPerTonneAndKgPerMeterCube</govuk-input-suffix>
-                        </govuk-input>
+                <govuk-input asp-for=@Model.DryMatterPercent inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="true">@Resource.lblDryMatter</govuk-input-label>
+                    <govuk-input-suffix>@Resource.lblPercentage</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.N inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="true">@Resource.lblTotalNitrogenN</govuk-input-label>
+                    <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.NH4N inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="true">@Resource.lblAmmonium</govuk-input-label>
+                    <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.UricAcid inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="true">@Resource.lblUricAcid</govuk-input-label>
+                    <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.NO3N inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="true">@Resource.lblNitrate</govuk-input-label>
+                    <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.P2O5 inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="true">@Resource.lblTotalPhosphate</govuk-input-label>
+                    <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.K2O inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="true">@Resource.lblTotalPotashK2O</govuk-input-label>
+                    <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.SO3 inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="true">@Resource.lblTotalSulphur</govuk-input-label>
+                    <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.MgO inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="true">@Resource.lblTotalMagnesiumOxide</govuk-input-label>
+                    <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
+                </govuk-input>
             </div>
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
