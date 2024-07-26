@@ -109,6 +109,7 @@ builder.Services.AddSingleton<ICropService, CropService>();
 builder.Services.AddSingleton<IAuthService, AuthService>();
 builder.Services.AddSingleton<IOrganicManureService, OrganicManureService>();
 builder.Services.AddSingleton<IMannerService, MannerService>();
+builder.Services.AddSingleton<IFertiliserManureService, FertiliserManureService>();
 
 builder.Services.AddAntiforgery(options =>
 {

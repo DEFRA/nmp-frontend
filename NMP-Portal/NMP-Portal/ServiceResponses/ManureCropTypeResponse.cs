@@ -2,7 +2,7 @@
 
 namespace NMP.Portal.ServiceResponses
 {
-    public class OrganicManureCropTypeResponse
+    public class ManureCropTypeResponse
     {
         [JsonProperty("CropTypeID")]
         public int CropTypeId { get; set; }

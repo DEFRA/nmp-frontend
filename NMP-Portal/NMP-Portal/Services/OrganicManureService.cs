@@ -17,9 +17,9 @@ namespace NMP.Portal.Services
         {
             _logger = logger;
         }
-        public async Task<(List<OrganicManureCropTypeResponse>, Error)> FetchCropTypeByFarmIdAndHarvestYear(int farmId, int harvestYear)
+        public async Task<(List<ManureCropTypeResponse>, Error)> FetchCropTypeByFarmIdAndHarvestYear(int farmId, int harvestYear)
         {
-            List<OrganicManureCropTypeResponse> cropTypeList = new List<OrganicManureCropTypeResponse>();
+            List<ManureCropTypeResponse> cropTypeList = new List<ManureCropTypeResponse>();
             Error error = null;
             try
             {
@@ -31,7 +31,7 @@ namespace NMP.Portal.Services
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        var cropTypeResponseList = responseWrapper.Data.ToObject<List<OrganicManureCropTypeResponse>>();
+                        var cropTypeResponseList = responseWrapper.Data.ToObject<List<ManureCropTypeResponse>>();
                         cropTypeList.AddRange(cropTypeResponseList);
                     }
                 }

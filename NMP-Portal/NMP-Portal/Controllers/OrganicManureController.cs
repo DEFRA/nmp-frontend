@@ -137,7 +137,7 @@ namespace NMP.Portal.Controllers
 
 
                 }
-                (List<OrganicManureCropTypeResponse> cropTypeList, error) = await _organicManureService.FetchCropTypeByFarmIdAndHarvestYear(model.FarmId.Value, model.HarvestYear.Value);
+                (List<ManureCropTypeResponse> cropTypeList, error) = await _organicManureService.FetchCropTypeByFarmIdAndHarvestYear(model.FarmId.Value, model.HarvestYear.Value);
                 if (error == null)
                 {
                     var SelectListItem = cropTypeList.Select(f => new SelectListItem
@@ -164,7 +164,7 @@ namespace NMP.Portal.Controllers
                 model.IsFieldGroupChange = true;
             }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
-            return View(model);
+            return View("Views/OrganicManure/FieldGroup.cshtml", model);
         }
 
         [HttpPost]
@@ -178,7 +178,7 @@ namespace NMP.Portal.Controllers
             }
             try
             {
-                (List<OrganicManureCropTypeResponse> cropTypeList, error) = await _organicManureService.FetchCropTypeByFarmIdAndHarvestYear(model.FarmId.Value, model.HarvestYear.Value);
+                (List<ManureCropTypeResponse> cropTypeList, error) = await _organicManureService.FetchCropTypeByFarmIdAndHarvestYear(model.FarmId.Value, model.HarvestYear.Value);
                 if (!ModelState.IsValid)
                 {
                     if (error == null)
@@ -200,7 +200,7 @@ namespace NMP.Portal.Controllers
                     {
                         TempData["FieldGroupError"] = error.Message;
                     }
-                    return View(model);
+                    return View("Views/OrganicManure/FieldGroup.cshtml", model);
                 }
 
                 if (int.TryParse(model.FieldGroup, out int value))
@@ -225,7 +225,7 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 TempData["FieldGroupError"] = ex.Message;
-                return View(model);
+                return View("Views/OrganicManure/FieldGroup.cshtml", model);
             }
             return RedirectToAction("Fields");
 
