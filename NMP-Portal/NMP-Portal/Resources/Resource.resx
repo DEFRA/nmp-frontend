@@ -1827,4 +1827,16 @@ m3/ha  not set</value>
   <data name="lblValuePercent" xml:space="preserve">
     <value>{0}%</value>
   </data>
+  <data name="lblAddInorganicFertiliser" xml:space="preserve">
+    <value>Plan an application of inorganic fertiliser to one or more fields</value>
+  </data>
+  <data name="lblWhichFieldsWouldYouLikeToAddInorganicFertiliserApplications" xml:space="preserve">
+    <value>Which fields would you like to add inorganic fertiliser applications to?</value>
+  </data>
+  <data name="lblWhenAreYouApplyingInorganicFertiliser" xml:space="preserve">
+    <value>When are you applying inorganic fertiliser on the {0} Fields?</value>
+  </data>
+  <data name="lblFertiliserWhen" xml:space="preserve">
+    <value>Fertiliser when</value>
+  </data>
 </root>

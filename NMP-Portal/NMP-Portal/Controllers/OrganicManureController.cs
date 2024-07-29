@@ -137,7 +137,7 @@ namespace NMP.Portal.Controllers
 
 
                 }
-                (List<OrganicManureCropTypeResponse> cropTypeList, error) = await _organicManureService.FetchCropTypeByFarmIdAndHarvestYear(model.FarmId.Value, model.HarvestYear.Value);
+                (List<ManureCropTypeResponse> cropTypeList, error) = await _organicManureService.FetchCropTypeByFarmIdAndHarvestYear(model.FarmId.Value, model.HarvestYear.Value);
                 if (error == null)
                 {
                     var SelectListItem = cropTypeList.Select(f => new SelectListItem
@@ -164,7 +164,7 @@ namespace NMP.Portal.Controllers
                 model.IsFieldGroupChange = true;
             }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
-            return View(model);
+            return View("Views/OrganicManure/FieldGroup.cshtml", model);
         }
 
         [HttpPost]
@@ -178,7 +178,7 @@ namespace NMP.Portal.Controllers
             }
             try
             {
-                (List<OrganicManureCropTypeResponse> cropTypeList, error) = await _organicManureService.FetchCropTypeByFarmIdAndHarvestYear(model.FarmId.Value, model.HarvestYear.Value);
+                (List<ManureCropTypeResponse> cropTypeList, error) = await _organicManureService.FetchCropTypeByFarmIdAndHarvestYear(model.FarmId.Value, model.HarvestYear.Value);
                 if (!ModelState.IsValid)
                 {
                     if (error == null)
@@ -200,7 +200,7 @@ namespace NMP.Portal.Controllers
                     {
                         TempData["FieldGroupError"] = error.Message;
                     }
-                    return View(model);
+                    return View("Views/OrganicManure/FieldGroup.cshtml", model);
                 }
 
                 if (int.TryParse(model.FieldGroup, out int value))
@@ -225,7 +225,7 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 TempData["FieldGroupError"] = ex.Message;
-                return View(model);
+                return View("Views/OrganicManure/FieldGroup.cshtml", model);
             }
             return RedirectToAction("Fields");
 
@@ -246,7 +246,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                (List<OrganicManureFieldResponse> fieldList, error) = await _organicManureService.FetchFieldByFarmIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
+                (List<CommonResponse> fieldList, error) = await _organicManureService.FetchFieldByFarmIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
                 if (error == null)
                 {
                     if (model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
@@ -256,8 +256,8 @@ namespace NMP.Portal.Controllers
 
                             var SelectListItem = fieldList.Select(f => new SelectListItem
                             {
-                                Value = f.FieldId.ToString(),
-                                Text = f.FieldName.ToString()
+                                Value = f.Id.ToString(),
+                                Text = f.Name.ToString()
                             }).ToList();
                             ViewBag.FieldList = SelectListItem.OrderBy(x => x.Text).ToList();
                         }
@@ -267,7 +267,7 @@ namespace NMP.Portal.Controllers
                     {
                         if (fieldList.Count > 0)
                         {
-                            model.FieldList = fieldList.Select(x => x.FieldId.ToString()).ToList();
+                            model.FieldList = fieldList.Select(x => x.Id.ToString()).ToList();
                             string fieldIds = string.Join(",", model.FieldList);
                             (List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldIds, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
                             if (error == null)
@@ -470,13 +470,13 @@ namespace NMP.Portal.Controllers
             Error error = null;
             try
             {
-                (List<OrganicManureFieldResponse> fieldList, error) = await _organicManureService.FetchFieldByFarmIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
+                (List<CommonResponse> fieldList, error) = await _organicManureService.FetchFieldByFarmIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
                 if (error == null)
                 {
                     var selectListItem = fieldList.Select(f => new SelectListItem
                     {
-                        Value = f.FieldId.ToString(),
-                        Text = f.FieldName.ToString()
+                        Value = f.Id.ToString(),
+                        Text = f.Name.ToString()
                     }).ToList();
                     ViewBag.FieldList = selectListItem.OrderBy(x => x.Text).ToList();
 
@@ -2876,14 +2876,14 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    (List<OrganicManureFieldResponse> organicManureField, error) = await _organicManureService.FetchFieldByFarmIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
+                    (List<CommonResponse> organicManureField, error) = await _organicManureService.FetchFieldByFarmIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
                     if (error == null)
                     {
                         if (model.FieldGroup == Resource.lblSelectSpecificFields && model.FieldList.Count < organicManureField.Count)
                         {
 
                             List<string> fieldNames = model.FieldList
-                           .Select(id => organicManureField.FirstOrDefault(f => f.FieldId == Convert.ToInt64(id))?.FieldName).ToList();
+                           .Select(id => organicManureField.FirstOrDefault(f => f.Id == Convert.ToInt64(id))?.Name).ToList();
                             string concatenatedFieldNames = string.Join(", ", fieldNames);
                             successMsg = string.Format(Resource.lblOrganicManureCreatedSuccessfullyForSpecificField, concatenatedFieldNames);
 
