@@ -60,9 +60,9 @@ namespace NMP.Portal.Services
             }
             return (cropTypeList, error);
         }
-        public async Task<(List<OrganicManureFieldResponse>, Error)> FetchFieldByFarmIdAndHarvestYearAndCropTypeId(int harvestYear, int farmId, string? cropTypeId)
+        public async Task<(List<CommonResponse>, Error)> FetchFieldByFarmIdAndHarvestYearAndCropTypeId(int harvestYear, int farmId, string? cropTypeId)
         {
-            List<OrganicManureFieldResponse> organicManureFieldResponses = new List<OrganicManureFieldResponse>();
+            List<CommonResponse> fieldResponses = new List<CommonResponse>();
             Error error = null;
             try
             {
@@ -83,8 +83,8 @@ namespace NMP.Portal.Services
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        var organicManureFieldResponseList = responseWrapper.Data.ToObject<List<OrganicManureFieldResponse>>();
-                        organicManureFieldResponses.AddRange(organicManureFieldResponseList);
+                        var fieldResponseList = responseWrapper.Data.ToObject<List<CommonResponse>>();
+                        fieldResponses.AddRange(fieldResponseList);
                     }
                 }
                 else
@@ -110,7 +110,7 @@ namespace NMP.Portal.Services
                 _logger.LogError(ex.Message);
                 throw new Exception(error.Message, ex);
             }
-            return (organicManureFieldResponses, error);
+            return (fieldResponses, error);
         }
 
         public async Task<(List<int>, Error)> FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(int harvestYear, string fieldIds, string? cropTypeId)

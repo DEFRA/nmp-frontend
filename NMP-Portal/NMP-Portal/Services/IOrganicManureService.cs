@@ -6,7 +6,7 @@ namespace NMP.Portal.Services
     public interface IOrganicManureService
     {
         Task<(List<ManureCropTypeResponse>,Error)> FetchCropTypeByFarmIdAndHarvestYear(int farmId,int harvestYear);
-        Task<(List<OrganicManureFieldResponse>, Error)> FetchFieldByFarmIdAndHarvestYearAndCropTypeId(int harvestYear, int farmId, string? cropTypeId);
+        Task<(List<CommonResponse>, Error)> FetchFieldByFarmIdAndHarvestYearAndCropTypeId(int harvestYear, int farmId, string? cropTypeId);
         Task<(List<int>, Error)> FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(int harvestYear, string fieldIds, string? cropTypeId);
         Task<(List<CommonResponse>, Error)> FetchManureGroupList();
         Task<(List<ManureType>, Error)> FetchManureTypeList(int manureGroupId, int countryId);

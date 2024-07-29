@@ -1368,6 +1368,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fertiliser when.
+        /// </summary>
+        public static string lblFertiliserWhen {
+            get {
+                return ResourceManager.GetString("lblFertiliserWhen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Field.
         /// </summary>
         public static string lblField {
@@ -3940,6 +3949,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhatWasThePreviousCropTypeForCheckAnswere {
             get {
                 return ResourceManager.GetString("lblWhatWasThePreviousCropTypeForCheckAnswere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When are you applying inorganic fertiliser on the {0} Fields?.
+        /// </summary>
+        public static string lblWhenAreYouApplyingInorganicFertiliser {
+            get {
+                return ResourceManager.GetString("lblWhenAreYouApplyingInorganicFertiliser", resourceCulture);
             }
         }
         

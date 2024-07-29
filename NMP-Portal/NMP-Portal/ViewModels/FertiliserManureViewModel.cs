@@ -15,6 +15,7 @@ namespace NMP.Portal.ViewModels
 
         public List<string>? FieldList { get; set; }
         public bool IsComingFromRecommendation { get; set; } = false;
+        public bool IsCheckAnswer { get; set; } = false;
         public string? FieldGroupName { get; set; }
 
         public string? CropTypeName { get; set; }
