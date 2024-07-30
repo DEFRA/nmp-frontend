@@ -223,6 +223,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Plan an application of inorganic fertiliser to one or more fields.
+        /// </summary>
+        public static string lblAddInorganicFertiliser {
+            get {
+                return ResourceManager.GetString("lblAddInorganicFertiliser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add manures to this {0} plan.
         /// </summary>
         public static string lblAddManuresToThisPlan {
@@ -1400,6 +1409,15 @@ namespace NMP.Portal.Resources {
         public static string lblFarmSummary {
             get {
                 return ResourceManager.GetString("lblFarmSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fertiliser when.
+        /// </summary>
+        public static string lblFertiliserWhen {
+            get {
+                return ResourceManager.GetString("lblFertiliserWhen", resourceCulture);
             }
         }
         
@@ -4043,6 +4061,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When are you applying inorganic fertiliser on the {0} Fields?.
+        /// </summary>
+        public static string lblWhenAreYouApplyingInorganicFertiliser {
+            get {
+                return ResourceManager.GetString("lblWhenAreYouApplyingInorganicFertiliser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When are you applying {0} on these fields?.
         /// </summary>
         public static string lblWhenAreYouApplyingManureOnField {
@@ -4066,6 +4093,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhichFieldsDoYouPlanToGrow {
             get {
                 return ResourceManager.GetString("lblWhichFieldsDoYouPlanToGrow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which fields would you like to add inorganic fertiliser applications to?.
+        /// </summary>
+        public static string lblWhichFieldsWouldYouLikeToAddInorganicFertiliserApplications {
+            get {
+                return ResourceManager.GetString("lblWhichFieldsWouldYouLikeToAddInorganicFertiliserApplications", resourceCulture);
             }
         }
         

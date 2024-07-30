@@ -51,6 +51,8 @@
                     <p class="govuk-body"><a asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@string.Format(Resource.lblAddAnotherCrop, Model.Year)</a></p>
                 }
                 <p class="govuk-body"><a asp-action="FieldGroup" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@string.Format(Resource.lblAddManuresToThisPlan, Model.Year)</a></p>
+                <p class="govuk-body"><a asp-action="FieldGroup" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblAddInorganicFertiliser</a></p>
+                
             </div>
             <hr class="seperator_five">
 
@@ -68,7 +70,7 @@
                         <tr class="govuk-table__row">
                             <th id="field_name" scope="col" class="govuk-table__header">@Resource.lblField</th>
                             <th scope="col" class="govuk-table__header">@Resource.lblOrganicMaterialApplications</th>
-                            <th scope="col" class="govuk-table__header"> </th>
+                            <th scope="col" class="govuk-table__header"></th>
                         </tr>
                     </thead>
                     <tbody class="govuk-table__body">
