@@ -1,0 +1,69 @@
+﻿@using NMP.Portal.Resources
+@using NMP.Portal.ViewModels
+@model FarmViewModel
+@{
+    ViewData["Title"] = Resource.lblFarmDetails;
+}
+
+@if (TempData["Error"] != null)
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item href="#">@TempData["Error"]</govuk-error-summary-item>
+    </govuk-error-summary>
+}
+@if (Model != null)
+{
+    @section BeforeContent {
+    <govuk-back-link asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+    }
+
+
+    <h1 class="govuk-heading-l">@Model.Name</h1>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h2 class="govuk-heading-m plan_title">@Resource.lblFarmInformation</h2>
+
+            <table class="govuk-table">
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.lblAddress</td>
+                        <td class="govuk-table__cell">@Model.FullAddress</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.lblAverageAnnualRainfall</td>
+                        <td class="govuk-table__cell">@Model.Rainfall</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@string.Format(Resource.lblHowManyFieldsAtFarmAreInNVZ, Model.Name)</td>
+                        <td class="govuk-table__cell">@(ViewBag.NVZFieldCount == 0 ? Resource.lblNone : ViewBag.NVZFieldCount)</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@string.Format(Resource.lblHowManyFieldsAtFarmAreAbove300Meters, Model.Name)</td>
+                        <td class="govuk-table__cell">@(ViewBag.Above300FieldCount == 0 ? Resource.lblNone : ViewBag.Above300FieldCount)</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.lblRegisteredOrganicProducer</td>
+                        <td class="govuk-table__cell">@(Model.RegisteredOrganicProducer==true?Resource.lblYes:Resource.lblNo)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p class="govuk-body"><a asp-action="CheckAnswer" asp-controller="Farm" asp-route-q=@Model.EncryptedIsUpdate>@Resource.lblUpdateFarmInformation</a></p>
+
+            <p class="govuk-body margin-bottom-forty"><a href="#">@string.Format(Resource.lblRemoveFarm, Model.Name)</a></p>
+
+
+            <hr class="big_seperator">
+
+            <h2 class="govuk-heading-m">@Resource.lblBusinessInformation</h2>
+
+            <p class="govuk-body">@Resource.lblYouHaveNotAddedAnyBusinessInformation</p>
+            <p class="govuk-body"><a href="#">@Resource.lblAddBusinessInformation</a></p>
+
+        </div>
+    </div>
+
+
+}
+
