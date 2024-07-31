@@ -3,6 +3,34 @@
 @model FarmViewModel
 @{
     ViewData["Title"] = Resource.lblFarmDetails;
+
+    var fieldsAbove300m = "";
+    var fieldsInNVZ = "";
+    switch (Model.NVZFields)
+    {
+        case (int)NMP.Portal.Enums.NVZFields.NoFieldsInNVZ:
+            fieldsInNVZ = Resource.lblNoneOfTheFields;
+            break;
+        case (int)NMP.Portal.Enums.NVZFields.SomeFieldsInNVZ:
+            fieldsInNVZ = Resource.lblSomeOfTheFields;
+            break;
+        case (int)NMP.Portal.Enums.NVZFields.AllFieldsInNVZ:
+            fieldsInNVZ = Resource.lblAllOfTheFields;
+            break;
+    }
+    switch (Model.FieldsAbove300SeaLevel)
+    {
+        case (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.NoneAbove300m:
+            fieldsAbove300m = Resource.lblNoneOfTheFields;
+            break;
+        case (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.SomeFieldsAbove300m:
+            fieldsAbove300m = Resource.lblSomeOfTheFields;
+            break;
+        case (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m:
+            fieldsAbove300m = Resource.lblAllOfTheFields;
+            break;
+
+    }
 }
 
 @if (TempData["Error"] != null)
@@ -36,11 +64,11 @@
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@string.Format(Resource.lblHowManyFieldsAtFarmAreInNVZ, Model.Name)</td>
-                        <td class="govuk-table__cell">@(ViewBag.NVZFieldCount == 0 ? Resource.lblNone : ViewBag.NVZFieldCount)</td>
+                        <td class="govuk-table__cell">@fieldsInNVZ</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@string.Format(Resource.lblHowManyFieldsAtFarmAreAbove300Meters, Model.Name)</td>
-                        <td class="govuk-table__cell">@(ViewBag.Above300FieldCount == 0 ? Resource.lblNone : ViewBag.Above300FieldCount)</td>
+                        <td class="govuk-table__cell">@fieldsAbove300m</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblRegisteredOrganicProducer</td>
@@ -51,7 +79,7 @@
 
             <p class="govuk-body"><a asp-action="CheckAnswer" asp-controller="Farm" asp-route-q=@Model.EncryptedIsUpdate>@Resource.lblUpdateFarmInformation</a></p>
 
-            <p class="govuk-body margin-bottom-forty"><a href="#">@string.Format(Resource.lblRemoveFarm, Model.Name)</a></p>
+            <p class="govuk-body margin-bottom-forty"><a asp-action="FarmRemove" asp-controller="Farm">@string.Format(Resource.lblRemoveFarm, Model.Name)</a></p>
 
 
             <hr class="big_seperator">

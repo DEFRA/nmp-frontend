@@ -1881,4 +1881,25 @@ m3/ha  not set</value>
   <data name="lblYouHaveUpdated" xml:space="preserve">
     <value>You have updated {0}</value>
   </data>
+  <data name="lblAllOfTheFields" xml:space="preserve">
+    <value>All of the fields</value>
+  </data>
+  <data name="lblAreYouSureYouWantToContinue" xml:space="preserve">
+    <value>Are you sure you want to continue?</value>
+  </data>
+  <data name="lblFarmRemove" xml:space="preserve">
+    <value>Farm Remove</value>
+  </data>
+  <data name="lblNoneOfTheFields" xml:space="preserve">
+    <value>None of the fields</value>
+  </data>
+  <data name="lblSomeOfTheFields" xml:space="preserve">
+    <value>Some of the fields</value>
+  </data>
+  <data name="lblYouHaveRemoved" xml:space="preserve">
+    <value>You have removed {0} Farm</value>
+  </data>
+  <data name="MsgRemoveFarm" xml:space="preserve">
+    <value>This will remove all the data about this farm and its field. It will also remove this farm and its fields from your plans and records. You will not be able to get it back.</value>
+  </data>
 </root>

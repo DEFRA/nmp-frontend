@@ -13,5 +13,6 @@ namespace NMP.Portal.ViewModels
         public bool IsPostCodeChanged { get; set; } = false;
         public bool IsPlanExist { get; set; } = false;
         public string? EncryptedIsUpdate { get; set; } = string.Empty;
+        public bool? FarmRemove { get; set; }
     }
 }
