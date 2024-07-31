@@ -112,7 +112,7 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("Postcode", Resource.MsgEnterTheFarmPostcode);
             }
-            if (!string.IsNullOrWhiteSpace(farm.Postcode))
+            if (!string.IsNullOrWhiteSpace(farm.Postcode) && string.IsNullOrWhiteSpace(farm.EncryptedIsUpdate))
             {
                 bool IsFarmExist = await _farmService.IsFarmExistAsync(farm.Name, farm.Postcode);
                 if (IsFarmExist)
@@ -559,7 +559,7 @@ namespace NMP.Portal.Controllers
             return RedirectToAction("CheckAnswer");
         }
         [HttpGet]
-        public IActionResult CheckAnswer()
+        public IActionResult CheckAnswer(string? q)
         {
             FarmViewModel? model = null;
             if (HttpContext.Session.Keys.Contains("FarmData"))
@@ -582,6 +582,10 @@ namespace NMP.Portal.Controllers
 
             model.IsCheckAnswer = true;
             //model.OldPostcode = model.Postcode;
+            if (q != null)
+            {
+                model.EncryptedIsUpdate = q;
+            }
             HttpContext.Session.SetObjectAsJson("FarmData", model);
             return View(model);
 
@@ -656,13 +660,26 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-            model.IsCheckAnswer = false;
-            HttpContext.Session.SetObjectAsJson("FarmData", model);
-            return RedirectToAction("Organic");
+            bool isUpdate = false;
+            if (model.EncryptedIsUpdate != null)
+            {
+                isUpdate = Convert.ToBoolean(_dataProtector.Unprotect(model.EncryptedIsUpdate));
+            }
+            if (isUpdate)
+            {
+                return RedirectToAction("FarmDetails", new { id = model.EncryptedFarmId });
+            }
+            else
+            {
+                model.IsCheckAnswer = false;
+                HttpContext.Session.SetObjectAsJson("FarmData", model);
+                return RedirectToAction("Organic");
+            }
+
         }
 
         [HttpGet]
-        public async Task<IActionResult> FarmSummary(string id, string? q)
+        public async Task<IActionResult> FarmSummary(string id, string? q, string? u)
         {
             string farmId = string.Empty;
             if (!string.IsNullOrWhiteSpace(q))
@@ -703,6 +720,10 @@ namespace NMP.Portal.Controllers
                     {
                         farmData.IsPlanExist = true;
                     }
+                    if (u != null)
+                    {
+                        farmData.EncryptedIsUpdate = u;
+                    }
                 }
             }
             catch (Exception ex)
@@ -712,6 +733,146 @@ namespace NMP.Portal.Controllers
             return View(farmData);
 
         }
+        [HttpGet]
+        public async Task<IActionResult> FarmDetails(string id)
+        {
+            string farmId = string.Empty;
+            FarmViewModel? farmData = null;
+            Error error = null;
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(id))
+                {
+                    farmId = _dataProtector.Unprotect(id);
+                    (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+                    if (!string.IsNullOrWhiteSpace(error.Message))
+                    {
+                        TempData["Error"] = error.Message;
+                        return RedirectToAction("FarmList");
+                    }
+                    if (farm != null)
+                    {
+                        farmData = new FarmViewModel();
+                        farmData.FullAddress = string.Format("{0}, {1} {2}, {3} {4}", farm.Address1, farm.Address2 != null ? farm.Address2 + "," : string.Empty, farm.Address3, farm.Address4, farm.Postcode);
+                        farmData.EncryptedFarmId = _dataProtector.Protect(farm.ID.ToString());
+                        farmData.ID = farm.ID;
+                        farmData.Name = farm.Name;
+                        farmData.Address1 = farm.Address1;
+                        farmData.Address2 = farm.Address2;
+                        farmData.Address3 = farm.Address3;
+                        farmData.Address4 = farm.Address4;
+                        farmData.Postcode = farm.Postcode;
+                        farmData.CPH = farm.CPH;
+                        farmData.FarmerName = farm.FarmerName;
+                        farmData.BusinessName = farm.BusinessName;
+                        farmData.SBI = farm.SBI;
+                        farmData.STD = farm.STD;
+                        farmData.Telephone = farm.Telephone;
+                        farmData.Mobile = farm.Mobile;
+                        farmData.Email = farm.Email;
+                        farmData.Rainfall = farm.Rainfall;
+                        farmData.TotalFarmArea = farm.TotalFarmArea;
+                        farmData.AverageAltitude = farm.AverageAltitude;
+                        farmData.RegisteredOrganicProducer = farm.RegisteredOrganicProducer;
+                        farmData.MetricUnits = farm.MetricUnits;
+                        farmData.EnglishRules = farm.EnglishRules;
+                        farmData.NVZFields = farm.NVZFields;
+                        farmData.FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel;
+                        farmData.CreatedByID = farm.CreatedByID;
+                        farmData.CreatedOn = farm.CreatedOn;
 
+                        bool update = true;
+                        farmData.EncryptedIsUpdate = _dataProtector.Protect(update.ToString());
+                        HttpContext.Session.SetObjectAsJson("FarmData", farmData);
+                    }
+                    List<Field> fields = await _fieldService.FetchFieldsByFarmId(Convert.ToInt32(farmId));
+                    ViewBag.NVZFieldCount = fields.Count(x => x.IsWithinNVZ == true);
+                    ViewBag.Above300FieldCount = fields.Count(x => x.IsAbove300SeaLevel == true);
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+            }
+
+            return View(farmData);
+        }
+
+        public async Task<IActionResult> FarmUpdate(FarmViewModel farm)
+        {
+            int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
+            farm.AverageAltitude = farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.NoneAbove300m ? (int)NMP.Portal.Enums.AverageAltitude.below :
+                    farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m ? (int)NMP.Portal.Enums.AverageAltitude.above : 0;
+           
+            Guid organisationId = Guid.Parse(HttpContext.User.FindFirst("organisationId")?.Value);
+            int farmId = Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId));
+
+            int createdByID = 0;
+            DateTime createdOn = DateTime.Now;
+            (Farm farmDetail, Error apiError) = await _farmService.FetchFarmByIdAsync(farmId);
+            if (!string.IsNullOrWhiteSpace(apiError.Message))
+            {
+                TempData["Error"] = apiError.Message;
+                return RedirectToAction("FarmList");
+            }
+            if (farmDetail != null)
+            {
+                createdByID = farmDetail.CreatedByID ?? 0;
+                createdOn = farmDetail.CreatedOn;
+
+            }
+            var farmData = new FarmData
+            {
+                Farm = new Farm()
+                {
+                    ID = farmId,
+                    Name = farm.Name,
+                    Address1 = farm.Address1,
+                    Address2 = farm.Address2,
+                    Address3 = farm.Address3,
+                    Address4 = farm.Address4,
+                    Postcode = farm.Postcode,
+                    CPH = farm.CPH,
+                    FarmerName = farm.FarmerName,
+                    BusinessName = farm.BusinessName,
+                    SBI = farm.SBI,
+                    STD = farm.STD,
+                    Telephone = farm.Telephone,
+                    Mobile = farm.Mobile,
+                    Email = farm.Email,
+                    Rainfall = farm.Rainfall,
+                    OrganisationID = organisationId,
+                    TotalFarmArea = farm.TotalFarmArea,
+                    AverageAltitude = farm.AverageAltitude,
+                    RegisteredOrganicProducer = farm.RegisteredOrganicProducer,
+                    MetricUnits = farm.MetricUnits,
+                    EnglishRules = farm.EnglishRules,
+                    NVZFields = farm.NVZFields,
+                    FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
+                    CreatedByID = createdByID,
+                    CreatedOn = createdOn,
+                    ModifiedByID = userId,
+                    ModifiedOn = farm.ModifiedOn
+                },
+                UserID = userId,
+                RoleID = 2
+            };
+
+            (Farm farmResponse, Error error) = await _farmService.UpdateFarmAsync(farmData);
+
+            if (!string.IsNullOrWhiteSpace(error.Message))
+            {
+                ViewBag.AddFarmError = error.Message;
+                return View(farm);
+            }
+            string success = _dataProtector.Protect("true");
+            farmResponse.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());
+            HttpContext.Session.Remove("FarmData");
+            HttpContext.Session.Remove("AddressList");
+
+            string isUpdate = _dataProtector.Protect("true");
+            return RedirectToAction("FarmSummary", new { id = farmResponse.EncryptedFarmId, q = success, u = isUpdate });
+
+        }
     }
 }

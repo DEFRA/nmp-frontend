@@ -11,5 +11,6 @@ namespace NMP.Portal.Services
         Task<bool> IsFarmExistAsync(string farmName, string postcode);
 
         Task<decimal> FetchRainfallAverageAsync(string postcode);
+        Task<(Farm, Error)> UpdateFarmAsync(FarmData farmData);
     }
 }
