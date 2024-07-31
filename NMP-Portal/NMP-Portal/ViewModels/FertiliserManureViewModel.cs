@@ -19,6 +19,10 @@ namespace NMP.Portal.ViewModels
         public string? FieldGroupName { get; set; }
 
         public string? CropTypeName { get; set; }
+        public int? InOrgnaicManureDurationId { get; set; }
+        public string? InOrgnaicManureDuration { get; set; }
         public List<FertiliserManures>? FertiliserManures { get; set; }
+
+        public decimal? N { get; set; }
     }
 }

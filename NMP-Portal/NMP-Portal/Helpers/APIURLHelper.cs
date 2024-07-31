@@ -72,6 +72,9 @@ namespace NMP.Portal.Helpers
         public const string FetchCropTypeYieldByCropTypeIdAsyncAPI = "manner-crop-types/cropTypeYield/{0}";
 
         public const string UpdateFarmAsyncAPI = "farms/updateFarm";
+        public const string FetchInOrganicManureDurationsAsyncAPI = "inorganic-manure-durations";
+        public const string FetchInOrganicManureDurationsByIdAsyncAPI = "inorganic-manure-durations/{0}";
+
         public const string DeleteFarmByIdAPI = "farms/{0}";
     }
 }
