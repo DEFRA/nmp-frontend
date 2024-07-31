@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using NMP.Portal.Helpers;
+using NMP.Portal.Models;
 using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
 
@@ -158,6 +159,100 @@ namespace NMP.Portal.Services
                 throw new Exception(error.Message, ex);
             }
             return (fieldResponses, error);
+        }
+
+        public async Task<(List<InOrganicManureDurationResponse>, Error)> FetchInOrganicManureDurations()
+        {
+            List<InOrganicManureDurationResponse> inOrganicManureDurationList = new List<InOrganicManureDurationResponse>();
+            Error error = null;
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchInOrganicManureDurationsAsyncAPI));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode)
+                {
+                    if (responseWrapper != null && responseWrapper.Data != null)
+                    {
+                        var inOrganicManureDurationResponseList = responseWrapper.Data.InorganicManureDurations.ToObject<List<InOrganicManureDurationResponse>>();
+                        if (inOrganicManureDurationList != null)
+                        {
+                            inOrganicManureDurationList.AddRange(inOrganicManureDurationResponseList);
+                        }
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error = new Error();
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error = new Error();
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (inOrganicManureDurationList, error);
+        }
+        public async Task<(InOrganicManureDurationResponse, Error)> FetchInOrganicManureDurationsById(int id)
+        {
+            InOrganicManureDurationResponse inOrganicManureDuration = new InOrganicManureDurationResponse();
+            Error error = null;
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchInOrganicManureDurationsByIdAsyncAPI, id));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode)
+                {
+                    if (responseWrapper != null && responseWrapper.Data != null)
+                    {
+                        var inOrganicManureDurationResponse = responseWrapper.Data.InorganicManureDuration.ToObject<InOrganicManureDurationResponse>();
+                        if (inOrganicManureDurationResponse != null)
+                        {
+                            inOrganicManureDuration = inOrganicManureDurationResponse;
+                        }
+
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error = new Error();
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error = new Error();
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (inOrganicManureDuration, error);
         }
     }
 }

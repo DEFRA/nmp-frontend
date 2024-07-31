@@ -70,5 +70,8 @@ namespace NMP.Portal.Helpers
         public const string FetchWindspeedsAsyncAPI = "windspeeds";
         public const string FetchMoisterTypesAsyncAPI = "moisture-types";
         public const string FetchCropTypeYieldByCropTypeIdAsyncAPI = "manner-crop-types/cropTypeYield/{0}";
+        public const string FetchInOrganicManureDurationsAsyncAPI = "inorganic-manure-durations";
+        public const string FetchInOrganicManureDurationsByIdAsyncAPI = "inorganic-manure-durations/{0}";
+
     }
 }
