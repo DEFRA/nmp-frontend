@@ -1413,15 +1413,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fertiliser when.
-        /// </summary>
-        public static string lblFertiliserWhen {
-            get {
-                return ResourceManager.GetString("lblFertiliserWhen", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Field.
         /// </summary>
         public static string lblField {
@@ -1711,6 +1702,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How much of each nutrient are you using in this application?.
+        /// </summary>
+        public static string lblHowMuchOfEachNutrientAreYouUsing {
+            get {
+                return ResourceManager.GetString("lblHowMuchOfEachNutrientAreYouUsing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How wet was the topsoil at time of application?.
         /// </summary>
         public static string lblHowWetWasTheTopsoil {
@@ -1824,6 +1824,15 @@ namespace NMP.Portal.Resources {
         public static string lblInorganicFertiliserOrLime {
             get {
                 return ResourceManager.GetString("lblInorganicFertiliserOrLime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to InOrganic manure duration.
+        /// </summary>
+        public static string lblInOrganicManureDuration {
+            get {
+                return ResourceManager.GetString("lblInOrganicManureDuration", resourceCulture);
             }
         }
         
@@ -2410,6 +2419,15 @@ namespace NMP.Portal.Resources {
         public static string lblNutrientRecommendationsFor {
             get {
                 return ResourceManager.GetString("lblNutrientRecommendationsFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nutrient values.
+        /// </summary>
+        public static string lblNutrientValues {
+            get {
+                return ResourceManager.GetString("lblNutrientValues", resourceCulture);
             }
         }
         
