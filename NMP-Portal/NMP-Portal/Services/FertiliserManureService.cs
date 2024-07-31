@@ -176,7 +176,7 @@ namespace NMP.Portal.Services
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
                         var inOrganicManureDurationResponseList = responseWrapper.Data.InorganicManureDurations.ToObject<List<InOrganicManureDurationResponse>>();
-                        if (inOrganicManureDurationList != null)
+                        if (inOrganicManureDurationResponseList != null)
                         {
                             inOrganicManureDurationList.AddRange(inOrganicManureDurationResponseList);
                         }
