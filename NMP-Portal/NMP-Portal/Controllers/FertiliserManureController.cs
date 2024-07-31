@@ -59,27 +59,28 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("FarmList", "Farm");
             }
 
-            if (model.IsCheckAnswer)
-            {
-                return RedirectToAction("CheckAnswer");
-            }
+            //if (model.IsCheckAnswer)
+            //{
+            //    return RedirectToAction("CheckAnswer");
+            //}
 
 
-            if (model.FieldGroup == Resource.lblSelectSpecificFields && model.IsComingFromRecommendation)
-            {
-                if (model.FieldList.Count > 0 && model.FieldList.Count == 1)
-                {
-                    string fieldId = model.FieldList[0];
-                    return RedirectToAction("Recommendations", "Crop", new
-                    {
-                        q = model.EncryptedFarmId,
-                        r = _cropDataProtector.Protect(fieldId),
-                        s = model.EncryptedHarvestYear
+            //if (model.FieldGroup == Resource.lblSelectSpecificFields && model.IsComingFromRecommendation)
+            //{
+            //    if (model.FieldList.Count > 0 && model.FieldList.Count == 1)
+            //    {
+            //        string fieldId = model.FieldList[0];
+            //        return RedirectToAction("Recommendations", "Crop", new
+            //        {
+            //            q = model.EncryptedFarmId,
+            //            r = _cropDataProtector.Protect(fieldId),
+            //            s = model.EncryptedHarvestYear
 
-                    });
-                }
-            }
-            else if (model.FieldGroup == Resource.lblSelectSpecificFields && (!model.IsComingFromRecommendation))
+            //        });
+            //    }
+            //}
+            //else
+            if (model.FieldGroup == Resource.lblSelectSpecificFields && (!model.IsComingFromRecommendation))
             {
                 return RedirectToAction("Fields");
             }
