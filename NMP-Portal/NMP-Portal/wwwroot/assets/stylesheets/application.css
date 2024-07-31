@@ -191,3 +191,10 @@ a.disabled {
             min-width: 600px;
         }
 }
+
+hr.big_seperator {
+    margin: 40px 0 40px 0;
+    background-color: black;
+    height: 2px;
+    border: none;
+}

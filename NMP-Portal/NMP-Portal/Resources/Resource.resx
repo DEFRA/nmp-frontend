@@ -1670,7 +1670,7 @@ kg/m³</value>
     <value>The figure for Total nitrogen (N) must be equal to or greater than the sum of Ammonium (N), Uric acid (N) and Nitrate (N)</value>
   </data>
   <data name="lblTotalNitrogenN" xml:space="preserve">
-    <value>Total nitrogen (N)</value>
+    <value>Total nitrogen</value>
   </data>
   <data name="lblTotalPotashK2O" xml:space="preserve">
     <value>Total potash (K2O)</value>
@@ -1838,5 +1838,47 @@ m3/ha  not set</value>
   </data>
   <data name="lblFertiliserWhen" xml:space="preserve">
     <value>Fertiliser when</value>
+  </data>
+  <data name="lblAddBusinessInformation" xml:space="preserve">
+    <value>Add business information</value>
+  </data>
+  <data name="lblAddress" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="lblBusinessInformation" xml:space="preserve">
+    <value>Business information</value>
+  </data>
+  <data name="lblFarmDetails" xml:space="preserve">
+    <value>Farm Details</value>
+  </data>
+  <data name="lblFarmInformation" xml:space="preserve">
+    <value>Farm information</value>
+  </data>
+  <data name="lblHowManyFieldsAtFarmAreAbove300Meters" xml:space="preserve">
+    <value>How many fields at {0} are above 300 metres?</value>
+  </data>
+  <data name="lblHowManyFieldsAtFarmAreInNVZ" xml:space="preserve">
+    <value>How many fields at {0} are in a Nitrate Vulnerable Zone (NVZ)?</value>
+  </data>
+  <data name="lblNone" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="lblRemoveFarm" xml:space="preserve">
+    <value>Remove {0}</value>
+  </data>
+  <data name="lblUpdateFarmInformation" xml:space="preserve">
+    <value>Update farm information</value>
+  </data>
+  <data name="lblUpdateThisFarm" xml:space="preserve">
+    <value>Update this farm</value>
+  </data>
+  <data name="lblYouHaveNotAddedAnyBusinessInformation" xml:space="preserve">
+    <value>You have not added any business information.</value>
+  </data>
+  <data name="lblUpdateFarm" xml:space="preserve">
+    <value>Update {0}</value>
+  </data>
+  <data name="lblYouHaveUpdated" xml:space="preserve">
+    <value>You have updated {0}</value>
   </data>
 </root>

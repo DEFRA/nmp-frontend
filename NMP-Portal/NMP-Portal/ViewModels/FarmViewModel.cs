@@ -12,5 +12,6 @@ namespace NMP.Portal.ViewModels
         public bool IsCheckAnswer { get; set; } = false;
         public bool IsPostCodeChanged { get; set; } = false;
         public bool IsPlanExist { get; set; } = false;
+        public string? EncryptedIsUpdate { get; set; } = string.Empty;
     }
 }

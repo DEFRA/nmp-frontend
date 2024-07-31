@@ -45,7 +45,7 @@
 @section BeforeContent {
     <govuk-back-link asp-action="BackCheckAnswer" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="CheckAnswer" asp-controller="Farm" method="post">
+<form asp-action="@(!string.IsNullOrEmpty(Model.EncryptedIsUpdate) ? "FarmUpdate" : "CheckAnswer")" asp-controller="Farm" method="post">
     @Html.AntiForgeryToken()
     
     <div class="govuk-grid-row">
@@ -59,7 +59,7 @@
             }
             @* <button class="govuk-back-link back-link" type="submit" asp-action="Organic" asp-controller="Farm">@Resource.lblBack</button> *@
             <h1 class="govuk-heading-l">
-                @Resource.lblCheckYourAnswers
+                @(!string.IsNullOrEmpty(Model.EncryptedIsUpdate) ? string.Format(Resource.lblUpdateFarm, Model.Name) : Resource.lblCheckYourAnswers)
             </h1>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPostCodeChanged" value="@Model.IsPostCodeChanged"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
@@ -75,6 +75,9 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FullAddress"></govuk-input>
             @* <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer"></govuk-input> *@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsUpdate"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
 
             <govuk-summary-list>
                 <govuk-summary-list-row>
@@ -147,7 +150,7 @@
             </govuk-summary-list>
             
             <govuk-button type="submit" class="margin-bottom-forty">
-                @Resource.lblAddThisFarm
+                @(!string.IsNullOrEmpty(Model.EncryptedIsUpdate) ? Resource.lblUpdateThisFarm : Resource.lblAddThisFarm)
             </govuk-button>
             <p class="govuk-body cancel-link"><a asp-action="CreateFarmCancel" asp-controller="Farm">@Resource.lblCancel</a></p>
         </div>
