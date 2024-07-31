@@ -1670,7 +1670,7 @@ kg/m³</value>
     <value>The figure for Total nitrogen (N) must be equal to or greater than the sum of Ammonium (N), Uric acid (N) and Nitrate (N)</value>
   </data>
   <data name="lblTotalNitrogenN" xml:space="preserve">
-    <value>Total nitrogen (N)</value>
+    <value>Total nitrogen</value>
   </data>
   <data name="lblTotalPotashK2O" xml:space="preserve">
     <value>Total potash (K2O)</value>

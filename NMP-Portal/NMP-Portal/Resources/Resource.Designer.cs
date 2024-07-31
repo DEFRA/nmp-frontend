@@ -3458,7 +3458,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total nitrogen (N).
+        ///   Looks up a localized string similar to Total nitrogen.
         /// </summary>
         public static string lblTotalNitrogenN {
             get {
