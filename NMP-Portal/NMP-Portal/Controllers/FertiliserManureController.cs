@@ -651,8 +651,6 @@ namespace NMP.Portal.Controllers
                                     CropInfo2 = recommendation.Crops.CropInfo2,
                                     Yield = recommendation.Crops.Yield,
                                     SowingDate = recommendation.Crops.SowingDate,
-                                    CropTypeName = await _fieldService.FetchCropTypeById(recommendation.Crops.CropTypeID.Value),
-                                    CropInfo1Name = await _cropService.FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(recommendation.Crops.CropTypeID.Value, recommendation.Crops.CropInfo1.Value)
                                 };
                                 recommendationViewModel.Crops.Add(crop);
                                 if (recommendation.RecommendationData.Count > 0)
@@ -876,8 +874,6 @@ namespace NMP.Portal.Controllers
                                         CropInfo2 = recommendation.Crops.CropInfo2,
                                         Yield = recommendation.Crops.Yield,
                                         SowingDate = recommendation.Crops.SowingDate,
-                                        CropTypeName = await _fieldService.FetchCropTypeById(recommendation.Crops.CropTypeID.Value),
-                                        CropInfo1Name = await _cropService.FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(recommendation.Crops.CropTypeID.Value, recommendation.Crops.CropInfo1.Value)
                                     };
                                     recommendationViewModel.Crops.Add(crop);
                                     if (recommendation.RecommendationData.Count > 0)

@@ -80,7 +80,7 @@
             @* <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button> *@
-            <p class="govuk-body cancel-link"><a asp-action="CreateManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
+            <p class="govuk-body cancel-link"><a asp-action="CreateFertiliserManureCancel" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
 
         </div>
 
