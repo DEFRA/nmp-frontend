@@ -15,6 +15,16 @@
 
 <div class="govuk-grid-row">
     <div id="all-plans-table" class="govuk-grid-column-two-thirds">
+
+        @if (ViewBag.Success != null && ViewBag.Success == "true")
+        {
+            <govuk-notification-banner type="Success">
+                <div class="">
+                    <h3 class="govuk-notification-banner__heading"> @string.Format(Resource.lblYouHaveRemoved, ViewBag.FarmName)</h3>
+                </div>
+            </govuk-notification-banner>
+        }
+
         <h1 class="govuk-heading-l">
             @Resource.lblYourFarms
         </h1>

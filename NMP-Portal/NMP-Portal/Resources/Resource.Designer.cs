@@ -376,6 +376,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All of the fields.
+        /// </summary>
+        public static string lblAllOfTheFields {
+            get {
+                return ResourceManager.GetString("lblAllOfTheFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All the fields are above 300m.
         /// </summary>
         public static string lblAllTheFieldsAreAbove300m {
@@ -518,6 +527,15 @@ namespace NMP.Portal.Resources {
         public static string lblAreas {
             get {
                 return ResourceManager.GetString("lblAreas", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to continue?.
+        /// </summary>
+        public static string lblAreYouSureYouWantToContinue {
+            get {
+                return ResourceManager.GetString("lblAreYouSureYouWantToContinue", resourceCulture);
             }
         }
         
@@ -1400,6 +1418,15 @@ namespace NMP.Portal.Resources {
         public static string lblFarmName {
             get {
                 return ResourceManager.GetString("lblFarmName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Farm Remove.
+        /// </summary>
+        public static string lblFarmRemove {
+            get {
+                return ResourceManager.GetString("lblFarmRemove", resourceCulture);
             }
         }
         
@@ -2360,6 +2387,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to None of the fields.
+        /// </summary>
+        public static string lblNoneOfTheFields {
+            get {
+                return ResourceManager.GetString("lblNoneOfTheFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to None of the fields are above 300m.
         /// </summary>
         public static string lblNoneOfTheFieldsAreAbove300m {
@@ -3193,6 +3229,15 @@ namespace NMP.Portal.Resources {
         public static string lblSoilTypeForCheckAnswer {
             get {
                 return ResourceManager.GetString("lblSoilTypeForCheckAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Some of the fields.
+        /// </summary>
+        public static string lblSomeOfTheFields {
+            get {
+                return ResourceManager.GetString("lblSomeOfTheFields", resourceCulture);
             }
         }
         
@@ -4358,6 +4403,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have removed {0} Farm.
+        /// </summary>
+        public static string lblYouHaveRemoved {
+            get {
+                return ResourceManager.GetString("lblYouHaveRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have updated {0}.
         /// </summary>
         public static string lblYouHaveUpdated {
@@ -5193,6 +5247,15 @@ namespace NMP.Portal.Resources {
         public static string MsgRainfallWithinSixHoursOfApplicationNotSet {
             get {
                 return ResourceManager.GetString("MsgRainfallWithinSixHoursOfApplicationNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This will remove all the data about this farm and its fields. It will also remove this farm and its fields from your plans and records. You will not be able to get it back..
+        /// </summary>
+        public static string MsgRemoveFarm {
+            get {
+                return ResourceManager.GetString("MsgRemoveFarm", resourceCulture);
             }
         }
         
