@@ -1833,14 +1833,14 @@ m3/ha  not set</value>
   <data name="lblWhichFieldsWouldYouLikeToAddInorganicFertiliserApplications" xml:space="preserve">
     <value>Which fields would you like to add inorganic fertiliser applications to?</value>
   </data>
-  <data name="lblWhenAreYouApplyingInorganicFertiliser" xml:space="preserve">
-    <value>When are you applying inorganic fertiliser on the {0} Fields?</value>
+  <data name="lblWhenDoYouPlanToSpreadInOrganicfertiliser" xml:space="preserve">
+    <value>When do you plan to spread inorganic fertiliser on the {0} Fields?</value>
   </data>
   <data name="lblInOrganicManureDuration" xml:space="preserve">
     <value>InOrganic manure duration</value>
   </data>
-  <data name="lblHowMuchOfEachNutrientAreYouUsing" xml:space="preserve">
-    <value>How much of each nutrient are you using in this application?</value>
+  <data name="lblHowMuchOfEachNutrientDoYouPlan" xml:space="preserve">
+    <value>How much of each nutrient do you plan to include in this first application?</value>
   </data>
   <data name="lblNutrientValues" xml:space="preserve">
     <value>Nutrient values</value>
@@ -1886,5 +1886,23 @@ m3/ha  not set</value>
   </data>
   <data name="lblYouHaveUpdated" xml:space="preserve">
     <value>You have updated {0}</value>
+  </data>
+  <data name="lblDoYouPlanToSpreadMoreInorganicFertiliserOnTheFields" xml:space="preserve">
+    <value>Do you plan to spread more inorganic fertiliser on the Fields?</value>
+  </data>
+  <data name="lblQuestionForSpreadInorganicFertiliser" xml:space="preserve">
+    <value>Question for spread inorganic fertiliser</value>
+  </data>
+  <data name="MsgEnterValidAmountForEachNutrient" xml:space="preserve">
+    <value>Enter valid amounts for each nutrient before continuing.</value>
+  </data>
+  <data name="lblShowRecommendationsFor" xml:space="preserve">
+    <value>Show recommendations for {0}</value>
+  </data>
+  <data name="lblOutpurKgPerHectare" xml:space="preserve">
+    <value>kg per hectare</value>
+  </data>
+  <data name="lblWhenDoYouPlanToSpreadInorganicFertiliserForTheseFields" xml:space="preserve">
+    <value>When do you plan to spread inorganic fertiliser for these fields?</value>
   </data>
 </root>
