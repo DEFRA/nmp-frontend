@@ -1,0 +1,1890 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="lblAddAFarm" xml:space="preserve">
+    <value>Add a farm</value>
+  </data>
+  <data name="lblAddANewFarm" xml:space="preserve">
+    <value>Add a new farm</value>
+  </data>
+  <data name="lblAdddressFound" xml:space="preserve">
+    <value>{0} addresses found</value>
+  </data>
+  <data name="lblAddressFoundCondition" xml:space="preserve">
+    <value>addresses found</value>
+  </data>
+  <data name="lblAddressLine1" xml:space="preserve">
+    <value>Address line 1</value>
+  </data>
+  <data name="lblAddressLine2" xml:space="preserve">
+    <value>Address line 2 (optional)</value>
+  </data>
+  <data name="lblAllTheFieldsAreAbove300m" xml:space="preserve">
+    <value>All the fields are above 300m</value>
+  </data>
+  <data name="lblAllTheFieldsAreInAnNVZ" xml:space="preserve">
+    <value>All the fields are in an NVZ</value>
+  </data>
+  <data name="lblAverageAnnualRainfall" xml:space="preserve">
+    <value>Average annual rainfall</value>
+  </data>
+  <data name="lblAverageAnnualRainfallFor" xml:space="preserve">
+    <value>Average annual rainfall for {0}</value>
+  </data>
+  <data name="lblApplicationName" xml:space="preserve">
+    <value>Plan and record nutrient applications</value>
+  </data>
+  <data name="lblAvgAtitude" xml:space="preserve">
+    <value>AverageAltitude</value>
+  </data>
+  <data name="lblBack" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="lblBusinessName" xml:space="preserve">
+    <value>Business Name</value>
+  </data>
+  <data name="lblCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="lblChange" xml:space="preserve">
+    <value>Change</value>
+  </data>
+  <data name="lblContinue" xml:space="preserve">
+    <value>Continue</value>
+  </data>
+  <data name="lblCopyRight" xml:space="preserve">
+    <value>© Crown copyright</value>
+  </data>
+  <data name="lblCounty" xml:space="preserve">
+    <value>County</value>
+  </data>
+  <data name="lblCPHnumber" xml:space="preserve">
+    <value>CPH</value>
+  </data>
+  <data name="lblEnglishRules" xml:space="preserve">
+    <value>English Rules</value>
+  </data>
+  <data name="lblEnterAddressManually" xml:space="preserve">
+    <value>Enter address manually</value>
+  </data>
+  <data name="lblEnterAverageAnualRainfall" xml:space="preserve">
+    <value>Enter the average annual rainfall in millimetres for {0}</value>
+  </data>
+  <data name="lblEnterTheAddressFor" xml:space="preserve">
+    <value>Enter the address for {0}</value>
+  </data>
+  <data name="lblError" xml:space="preserve">
+    <value>Error:</value>
+  </data>
+  <data name="lblErrorMsgForFarmName" xml:space="preserve">
+    <value>Enter farm name</value>
+  </data>
+  <data name="lblFarmAvgAnnualRainfall" xml:space="preserve">
+    <value>Rainfall</value>
+  </data>
+  <data name="lblFarmersName" xml:space="preserve">
+    <value>Farmers Name</value>
+  </data>
+  <data name="lblFarmList" xml:space="preserve">
+    <value>Farm List</value>
+  </data>
+  <data name="lblFarmName" xml:space="preserve">
+    <value>Farm Name</value>
+  </data>
+  <data name="lblFarmSTDcode" xml:space="preserve">
+    <value>STD</value>
+  </data>
+  <data name="lblFieldsAbove300SeaLevel" xml:space="preserve">
+    <value>How many fields at {0} are more than 300 metres above sea level?</value>
+  </data>
+  <data name="lblHelpProtectTheEnvironment" xml:space="preserve">
+    <value>help protect the environment</value>
+  </data>
+  <data name="lblHelpYouComplyWithEnvironmentalRegulations" xml:space="preserve">
+    <value>help you comply with environmental regulations</value>
+  </data>
+  <data name="lblHomePage" xml:space="preserve">
+    <value>Home Page</value>
+  </data>
+  <data name="lblHowManyFieldsInNVZ" xml:space="preserve">
+    <value>How many fields at {0}
+are in a Nitrate Vulnerable Zone (NVZ)?</value>
+  </data>
+  <data name="lblIfYouhaveMoreThanOneHolding" xml:space="preserve">
+    <value>If you have more than one holding, it's best to add a separate farm for each.</value>
+  </data>
+  <data name="lblManualAddress" xml:space="preserve">
+    <value>Manual Address</value>
+  </data>
+  <data name="lblLicenseText" xml:space="preserve">
+    <value>All content is available under the</value>
+  </data>
+  <data name="lblLicenseTextExtra" xml:space="preserve">
+    <value>, except where otherwise stated</value>
+  </data>
+  <data name="lblMetricUnits" xml:space="preserve">
+    <value>Metric Units</value>
+  </data>
+  <data name="lblmm" xml:space="preserve">
+    <value>mm</value>
+  </data>
+  <data name="lblNoneOfTheFieldsAreAbove300m" xml:space="preserve">
+    <value>None of the fields are above 300m</value>
+  </data>
+  <data name="lblNoneOfTheFieldsAreInAnNVZ" xml:space="preserve">
+    <value>None of the fields are in an NVZ</value>
+  </data>
+  <data name="lblNVZ" xml:space="preserve">
+    <value>NVZ</value>
+  </data>
+  <data name="lblNVZField" xml:space="preserve">
+    <value>How many fields at Oaktree Lane Farm are in a Nitrate Vulnerable Zone (NVZ)</value>
+  </data>
+  <data name="lblOpenGovernmentLicence" xml:space="preserve">
+    <value>Open Government Licence v3.0</value>
+  </data>
+  <data name="lblPlanAndRecordNutrient applications" xml:space="preserve">
+    <value>Plan and record nutrient applications</value>
+  </data>
+  <data name="lblPlanAndRecordNutrientApplications" xml:space="preserve">
+    <value>Plan and record nutrient applications</value>
+  </data>
+  <data name="lblPlanningAndRecordingCan" xml:space="preserve">
+    <value>Planning and recording can:</value>
+  </data>
+  <data name="lblPleaseEnter" xml:space="preserve">
+    <value>Please Enter {0}</value>
+  </data>
+  <data name="lblPostCode" xml:space="preserve">
+    <value>Postcode</value>
+  </data>
+  <data name="lblRainfall" xml:space="preserve">
+    <value>Rainfall</value>
+  </data>
+  <data name="lblRainfallManual" xml:space="preserve">
+    <value>Rainfall Manual</value>
+  </data>
+  <data name="lblRegOrganicProducer" xml:space="preserve">
+    <value>RegisteredOrganicProducer</value>
+  </data>
+  <data name="lblSaveYouMoney" xml:space="preserve">
+    <value>save you money</value>
+  </data>
+  <data name="lblSBI" xml:space="preserve">
+    <value>SBI</value>
+  </data>
+  <data name="lblSelectTheAddressFor" xml:space="preserve">
+    <value>Select the address for {0}</value>
+  </data>
+  <data name="lblSelectTheFarmAddress" xml:space="preserve">
+    <value>Select the farm address</value>
+  </data>
+  <data name="lblSomeOfTheFieldsAreAbove300m" xml:space="preserve">
+    <value>Some of the fields are above 300m</value>
+  </data>
+  <data name="lblSomeOfTheFieldsAreInAnNVZ" xml:space="preserve">
+    <value>Some of the fields are in an NVZ</value>
+  </data>
+  <data name="lblSignout" xml:space="preserve">
+    <value>Sign out</value>
+  </data>
+  <data name="lblTheCropsYouGrow" xml:space="preserve">
+    <value>the crops you grow</value>
+  </data>
+  <data name="lblTheManuresAndFertilisersYouUseAndHowYouApplyThem" xml:space="preserve">
+    <value>the manures and fertilisers you use and how you apply them</value>
+  </data>
+  <data name="lblTheNutrientsInYourSoil" xml:space="preserve">
+    <value>the nutrients in your soil</value>
+  </data>
+  <data name="lblTotalFarmArea" xml:space="preserve">
+    <value>TotalFarmArea</value>
+  </data>
+  <data name="lblTownOrCity" xml:space="preserve">
+    <value>Town or city</value>
+  </data>
+  <data name="lblTrue" xml:space="preserve">
+    <value>true</value>
+  </data>
+  <data name="lblUseThisServiceToPlan" xml:space="preserve">
+    <value>Use this service to plan and record how you use nutrients on your farm.</value>
+  </data>
+  <data name="lblWhatIsTheFarmName" xml:space="preserve">
+    <value>What is the farm name?</value>
+  </data>
+  <data name="lblWhatIsTheFarmPostcode" xml:space="preserve">
+    <value>What is the farm postcode?</value>
+  </data>
+  <data name="lblYouHaveNotAddedAnyFarms" xml:space="preserve">
+    <value>You have not added any farms.</value>
+  </data>
+  <data name="lblYourAverageAnualRainfall" xml:space="preserve">
+    <value>This is your estimated average annual rainfall. If you think this is wrong, you can change it now or later.</value>
+  </data>
+  <data name="lblYourFarms" xml:space="preserve">
+    <value>Your farms</value>
+  </data>
+  <data name="lblYourPlanWillBasedOn" xml:space="preserve">
+    <value>Your plan will be based on:</value>
+  </data>
+  <data name="MsgEnterACounty" xml:space="preserve">
+    <value>Enter a county</value>
+  </data>
+  <data name="MsgEnterAnAddress" xml:space="preserve">
+    <value>Enter an address</value>
+  </data>
+  <data name="MsgEnterAPostcode" xml:space="preserve">
+    <value>Enter a postcode</value>
+  </data>
+  <data name="MsgEnterATownOrCity" xml:space="preserve">
+    <value>Enter a town or city</value>
+  </data>
+  <data name="MsgEnterAValidPostcode" xml:space="preserve">
+    <value>Enter a valid postcode</value>
+  </data>
+  <data name="MsgEnterAverageAnnualRainfall" xml:space="preserve">
+    <value>Enter the average annual rainfall</value>
+  </data>
+  <data name="MsgEnterValidAnnualRainfall" xml:space="preserve">
+    <value>Enter the valid annual rainfall</value>
+  </data>
+  <data name="MsgSelectAnOptionBeforeContinuing" xml:space="preserve">
+    <value>Select an option before continuing</value>
+  </data>
+  <data name="MsgEnterTheFarmName" xml:space="preserve">
+    <value>Enter the farm name</value>
+  </data>
+  <data name="MsgEnterTheFarmPostcode" xml:space="preserve">
+    <value>Enter the farm postcode</value>
+  </data>
+  <data name="lblChangeThisPostcode" xml:space="preserve">
+    <value>Change this postcode</value>
+  </data>
+  <data name="lblEnterTheAddressManually" xml:space="preserve">
+    <value>enter the address manually</value>
+  </data>
+  <data name="lblMessage" xml:space="preserve">
+    <value>success</value>
+  </data>
+  <data name="lblOr" xml:space="preserve">
+    <value>or</value>
+  </data>
+  <data name="lblWeCouldNotFindAnyAddressesFor" xml:space="preserve">
+    <value>We could not find any addresses for  {0}</value>
+  </data>
+  <data name="MsgPostcodeEnteredInWrongFomat" xml:space="preserve">
+    <value>The postcode entered is in the wrong format.</value>
+  </data>
+  <data name="MsgPostcodeMinMaxValidation" xml:space="preserve">
+    <value>Enter a valid postcode. Postcodes contain only letters and numbers and are between 6 and 8 characters long.</value>
+  </data>
+  <data name="MsgSelectAddress" xml:space="preserve">
+    <value>Select an address</value>
+  </data>
+  <data name="lblFalse" xml:space="preserve">
+    <value>false</value>
+  </data>
+  <data name="MsgFarmNameMinMaxValidation" xml:space="preserve">
+    <value>Enter a farm name that is no more than 250 characters long</value>
+  </data>
+  <data name="MsgEnterTheAverageAnnualRainfall" xml:space="preserve">
+    <value>Enter the average annual rainfall</value>
+  </data>
+  <data name="lblNo" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="lblYes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="lblOrganic" xml:space="preserve">
+    <value>Organic</value>
+  </data>
+  <data name="lblRegisteredOrganicProducer" xml:space="preserve">
+    <value>Are you a registered organic producer?</value>
+  </data>
+  <data name="lblCheckYourAnswers" xml:space="preserve">
+    <value>Check your answers</value>
+  </data>
+  <data name="lblFarmAddress" xml:space="preserve">
+    <value>Farm Address</value>
+  </data>
+  <data name="lblCheckAnswer" xml:space="preserve">
+    <value>Check Answer</value>
+  </data>
+  <data name="lblAddThisFarm" xml:space="preserve">
+    <value>Add this farm</value>
+  </data>
+  <data name="MsgEnterAddressLine1TypicallyTheBuildingAndSreet" xml:space="preserve">
+    <value>Enter address line 1, typically the building and street</value>
+  </data>
+  <data name="lblAddFieldFor" xml:space="preserve">
+    <value>Add fields for {0}</value>
+  </data>
+  <data name="lblAddYourFields" xml:space="preserve">
+    <value>add your fields</value>
+  </data>
+  <data name="lblAllFarm" xml:space="preserve">
+    <value>All farms</value>
+  </data>
+  <data name="lblCreateACropNutrientManagementPlan" xml:space="preserve">
+    <value>Create a crop nutrient management plan</value>
+  </data>
+  <data name="lblFarmAndFieldDetails" xml:space="preserve">
+    <value>Farm and field details</value>
+  </data>
+  <data name="lblFarmSummary" xml:space="preserve">
+    <value>FarmSummary</value>
+  </data>
+  <data name="lblToStartCreatingPlanAndRecords" xml:space="preserve">
+    <value>To start creating plans and records,</value>
+  </data>
+  <data name="lblUpdateFarmDetails" xml:space="preserve">
+    <value>Update farm details</value>
+  </data>
+  <data name="lblUpdateFieldsOrSoilAnalysis" xml:space="preserve">
+    <value>Update fields or soil analysis</value>
+  </data>
+  <data name="lblYouHaveAdded" xml:space="preserve">
+    <value> You have added {0}</value>
+  </data>
+  <data name="lblFieldsCount" xml:space="preserve">
+    <value>{0} field(s)</value>
+  </data>
+  <data name="lblFieldMeasurements" xml:space="preserve">
+    <value>Field measurements for {0}</value>
+  </data>
+  <data name="lblAddField" xml:space="preserve">
+    <value>Add a field</value>
+  </data>
+  <data name="lblCroppedArea" xml:space="preserve">
+    <value>Cropped area (optional)</value>
+  </data>
+  <data name="lblHectares" xml:space="preserve">
+    <value>Hectares</value>
+  </data>
+  <data name="lblManureNonSpreadingArea" xml:space="preserve">
+    <value>Manure non-spreading area (optional)</value>
+  </data>
+  <data name="lblTotalFieldArea" xml:space="preserve">
+    <value>Total field area</value>
+  </data>
+  <data name="lblFieldName" xml:space="preserve">
+    <value>Field name</value>
+  </data>
+  <data name="lblLandParcelID" xml:space="preserve">
+    <value>Land Parcel ID (optional)</value>
+  </data>
+  <data name="lblNationalGridReference" xml:space="preserve">
+    <value>National Grid Reference (optional)</value>
+  </data>
+  <data name="MsgEnterTheFieldName" xml:space="preserve">
+    <value>Enter the field name</value>
+  </data>
+  <data name="MsgEnterTotalFieldArea" xml:space="preserve">
+    <value>Enter the total field area</value>
+  </data>
+  <data name="MsgServiceNotAvailable" xml:space="preserve">
+    <value>Service not available at this moment. Please try after some time.</value>
+  </data>
+  <data name="MsgFarmAlreadyExist" xml:space="preserve">
+    <value>A farm with that name and postcode has already been added. You or someone else who works on the farm may have already added it.</value>
+  </data>
+  <data name="lblIsNVZField" xml:space="preserve">
+    <value>Is {0} in a Nitrate Vulnerable Zone (NVZ)?</value>
+  </data>
+  <data name="lblIsAbove300SeaLevel" xml:space="preserve">
+    <value>Is {0} more than 300 metres above sea level?</value>
+  </data>
+  <data name="lblSoilType" xml:space="preserve">
+    <value>Soil Type</value>
+  </data>
+  <data name="lblWhatIsSoilType" xml:space="preserve">
+    <value>What is the soil type in {0}?</value>
+  </data>
+  <data name="lblAddTheSoilAnalysisFor" xml:space="preserve">
+    <value>Add the soil analysis for {0}</value>
+  </data>
+  <data name="lblIsSoilDeficientInSulphur" xml:space="preserve">
+    <value>Is sulphur (S) deficiency expected in the soil?</value>
+  </data>
+  <data name="lblSoilReleasingClay" xml:space="preserve">
+    <value>Soil Releasing Clay</value>
+  </data>
+  <data name="lblSulpherDeficient" xml:space="preserve">
+    <value>Sulpher Deficient</value>
+  </data>
+  <data name="lblHowWouldYouLikeToEnterYourSoilNutrientValues" xml:space="preserve">
+    <value>How would you like to enter your soil nutrient values?</value>
+  </data>
+  <data name="lblAsAnIndex" xml:space="preserve">
+    <value>As an index</value>
+  </data>
+  <data name="lblInMilligramsPerLitre" xml:space="preserve">
+    <value>In milligrams per litre</value>
+  </data>
+  <data name="lblAddSoilAnalysis" xml:space="preserve">
+    <value>Add soil analysis for {0}</value>
+  </data>
+  <data name="lblAddSoilNutrientValue" xml:space="preserve">
+    <value>Add soil nutrient value</value>
+  </data>
+  <data name="lblSoilNutrientValueType" xml:space="preserve">
+    <value>Soil nutrient value Type</value>
+  </data>
+  <data name="lblMagnesiumIndex" xml:space="preserve">
+    <value>Magnesium (Mg) index</value>
+  </data>
+  <data name="lblMagnesiumPerLitreOfSoil" xml:space="preserve">
+    <value>Magnesium (Mg) per litre of soil</value>
+  </data>
+  <data name="lblMgL" xml:space="preserve">
+    <value>mg/l</value>
+  </data>
+  <data name="lblPhosphorusIndex" xml:space="preserve">
+    <value>Phosphorus (P) index</value>
+  </data>
+  <data name="lblPhosphorusPerLitreOfSoil" xml:space="preserve">
+    <value>Phosphorus (P) per litre of soil</value>
+  </data>
+  <data name="lblPotassiumIndex" xml:space="preserve">
+    <value>Potassium (K) index</value>
+  </data>
+  <data name="lblPotassiumPerLitreOfSoil" xml:space="preserve">
+    <value>Potassium (K) per litre of soil</value>
+  </data>
+  <data name="MsgMagnesiumIndex" xml:space="preserve">
+    <value>Enter the magnesium index before continuing</value>
+  </data>
+  <data name="MsgPhosphorusIndex" xml:space="preserve">
+    <value>Enter the phosphorus index before continuing</value>
+  </data>
+  <data name="MsgPotassiumIndex" xml:space="preserve">
+    <value>Enter the potassium index before continuing</value>
+  </data>
+  <data name="MsgMagnesiumPerLitreOfSoil" xml:space="preserve">
+    <value>Enter the amount of magnesium before continuing</value>
+  </data>
+  <data name="MsgPhosphorusPerLitreOfSoil" xml:space="preserve">
+    <value>Enter the amount of phosphorus before continuing</value>
+  </data>
+  <data name="MsgPotassiumPerLitreOfSoil" xml:space="preserve">
+    <value>Enter the amount of potassium before continuing</value>
+  </data>
+  <data name="lbllblAddSoilAnalysisTitle" xml:space="preserve">
+    <value>Add soil analysis</value>
+  </data>
+  <data name="lblPhosphorusAnalysisType" xml:space="preserve">
+    <value>What was the phosphorus (P) analysis type?</value>
+  </data>
+  <data name="lblMagnesium" xml:space="preserve">
+    <value>Magnesium</value>
+  </data>
+  <data name="lblPhosphate" xml:space="preserve">
+    <value>Phosphate</value>
+  </data>
+  <data name="lblPotash" xml:space="preserve">
+    <value>Potash</value>
+  </data>
+  <data name="MsgEnterValidValueForNutrient" xml:space="preserve">
+    <value>Enter an amount between 0 and 9999kg</value>
+  </data>
+  <data name="MsgEnterValidValueForNutrientIndex" xml:space="preserve">
+    <value>Enter an index between 0 and 9</value>
+  </data>
+  <data name="lblBasedOnRecentSNA" xml:space="preserve">
+    <value>Calculate based on a recent soil mineral nitrogen analysis result</value>
+  </data>
+  <data name="lblCropGroup" xml:space="preserve">
+    <value>Crop Group</value>
+  </data>
+  <data name="lblCropType" xml:space="preserve">
+    <value>Crop Type</value>
+  </data>
+  <data name="lblEstimateBasedOnPreviousCrop" xml:space="preserve">
+    <value>Estimate based on previous cropping, soil type, and average rainfall</value>
+  </data>
+  <data name="lblHowWouldYouLikeToCalculateSNS" xml:space="preserve">
+    <value>How would you like to calculate the soil nitrogen supply for {0}?</value>
+  </data>
+  <data name="lblWhatIsTheCurrentCropGroup" xml:space="preserve">
+    <value>What is the current crop group?</value>
+  </data>
+  <data name="lblWhatIsTheCurrentCropType" xml:space="preserve">
+    <value>What is the current crop type?</value>
+  </data>
+  <data name="lblWhatWasThePreviousCropGroupForCheckAnswere" xml:space="preserve">
+    <value>Previous crop group</value>
+  </data>
+  <data name="lblWhatWasThePreviousCropTypeForCheckAnswere" xml:space="preserve">
+    <value>Previous crop type</value>
+  </data>
+  <data name="btnStartNow" xml:space="preserve">
+    <value>Start now</value>
+  </data>
+  <data name="lblSoilPHLevel" xml:space="preserve">
+    <value>Soil pH level</value>
+  </data>
+  <data name="MsgDateExample" xml:space="preserve">
+    <value>For example, 27 3 2007</value>
+  </data>
+  <data name="MsgEnterADateBeforeContinuing" xml:space="preserve">
+    <value>Enter a date before continuing</value>
+  </data>
+  <data name="MsgEnterAPHBeforeContinuing" xml:space="preserve">
+    <value>Enter a pH before continuing</value>
+  </data>
+  <data name="MsgEnterAPH" xml:space="preserve">
+    <value>Enter a pH range between 0 and 9.9</value>
+  </data>
+  <data name="MsgEnterADateAfter" xml:space="preserve">
+    <value>Enter a date after DD/MM/YYYY</value>
+  </data>
+  <data name="MsgEnterTheDateInNumber" xml:space="preserve">
+    <value>Enter the date in numbers. For example, 27 3 2007</value>
+  </data>
+  <data name="lblAddThisField" xml:space="preserve">
+    <value>Add this field</value>
+  </data>
+  <data name="lblCroppedAreaForCheckAnswere" xml:space="preserve">
+    <value>Cropped area</value>
+  </data>
+  <data name="lblDateSampleTaken" xml:space="preserve">
+    <value>When was the soil sample taken?</value>
+  </data>
+  <data name="lblDoesPotashClayForCheckAnswere" xml:space="preserve">
+    <value>Does this field contain potash-releasing clay?</value>
+  </data>
+  <data name="lblFieldArea" xml:space="preserve">
+    <value>Field area</value>
+  </data>
+  <data name="lblIsThisFieldAboveForFieldCheckAnswere" xml:space="preserve">
+    <value>Is this field more than 300 metres above sea level?</value>
+  </data>
+  <data name="lblManureNonSpreadingAreaForCheckAnswere" xml:space="preserve">
+    <value>Manure non-spreading area</value>
+  </data>
+  <data name="lblNVZFieldForFieldCheckAnswere" xml:space="preserve">
+    <value>Is this field in a Nitrate Vulnerable Zone (NVZ)?</value>
+  </data>
+  <data name="lblNutrientValueTypeForCheckAnswere" xml:space="preserve">
+    <value>How would you like to enter your soil nutrient values?</value>
+  </data>
+  <data name="lblBasedOnARecentSoilNitrogenAnalysis" xml:space="preserve">
+    <value>Based on a recent soil nitrogen analysis</value>
+  </data>
+  <data name="lblBasedOnThePreviousCrop" xml:space="preserve">
+    <value>Based on the previous crop</value>
+  </data>
+  <data name="lblIndexValues" xml:space="preserve">
+    <value>Index values</value>
+  </data>
+  <data name="lblMiligramValues" xml:space="preserve">
+    <value>Milligram values</value>
+  </data>
+  <data name="MsgFieldAlreadyExist" xml:space="preserve">
+    <value>You have already added a field with that name. Enter a different field name.</value>
+  </data>
+  <data name="lblAddAnotherField" xml:space="preserve">
+    <value>Add another field</value>
+  </data>
+  <data name="lblCreateANutrientManagementPlan" xml:space="preserve">
+    <value>Create a nutrient management plan</value>
+  </data>
+  <data name="lblCurrentFields" xml:space="preserve">
+    <value>Current fields</value>
+  </data>
+  <data name="lblFarmFields" xml:space="preserve">
+    <value>{0} fields</value>
+  </data>
+  <data name="lblFieldAndSoilDetails" xml:space="preserve">
+    <value>Field and soil details</value>
+  </data>
+  <data name="lblManageFarmFields" xml:space="preserve">
+    <value>Manage Farm Fields</value>
+  </data>
+  <data name="lblManageFieldDetailsAndSoilAnalysis" xml:space="preserve">
+    <value>Manage field details and soil analysis</value>
+  </data>
+  <data name="lblOtherReference" xml:space="preserve">
+    <value>Other reference (optional)</value>
+  </data>
+  <data name="lblLandParcelIDForCheckAnswere" xml:space="preserve">
+    <value>Land Parcel ID</value>
+  </data>
+  <data name="lblNationalGridReferenceForCheckAnswere" xml:space="preserve">
+    <value>National Grid Reference</value>
+  </data>
+  <data name="lblOtherReferenceForCheckAnswere" xml:space="preserve">
+    <value>Other Reference</value>
+  </data>
+  <data name="MsgCroppedAreaIsGreaterThanTotalArea" xml:space="preserve">
+    <value>The cropped area cannot be larger than the total field area</value>
+  </data>
+  <data name="MsgManureNonSpreadingAreaIsGreaterThanTotalArea" xml:space="preserve">
+    <value>The manure non-spreading area cannot be larger than the total field area</value>
+  </data>
+  <data name="MsgIfCroppedAreaAndNonSpreadingArea" xml:space="preserve">
+    <value>The combined cropped area and manure non-spreading area cannot be larger than the total field area</value>
+  </data>
+  <data name="MsgLandParcelIdMinMaxValidation" xml:space="preserve">
+    <value>Enter a Land Parcel ID that is no more than 14 characters long</value>
+  </data>
+  <data name="MsgNationalGridReferenceMinMaxValidation" xml:space="preserve">
+    <value>Enter a National Grid Reference that is no more than 4 characters long</value>
+  </data>
+  <data name="lblNotSet" xml:space="preserve">
+    <value>Not set</value>
+  </data>
+  <data name="MsgPreviousCropTypeNotSet" xml:space="preserve">
+    <value>Previous crop type not set</value>
+  </data>
+  <data name="MsgMagnesiumNotSet" xml:space="preserve">
+    <value>Magnesium (Mg) per litre of soil not set</value>
+  </data>
+  <data name="MsgPhosphorusNotSet" xml:space="preserve">
+    <value>Phosphorus (P) per litre of soil not set</value>
+  </data>
+  <data name="MsgPotassiumNotSet" xml:space="preserve">
+    <value>Potassium (K) per litre of soil not set</value>
+  </data>
+  <data name="lblWhatWasThePreviousCropGroup" xml:space="preserve">
+    <value>What was the previous crop group?</value>
+  </data>
+  <data name="lblWhatWasThePreviousCropType" xml:space="preserve">
+    <value>What was the previous crop type?</value>
+  </data>
+  <data name="MsgSoilReleasingClayNotSet" xml:space="preserve">
+    <value>Potash-releasing clay not set</value>
+  </data>
+  <data name="MsgEnterNumericValue" xml:space="preserve">
+    <value>Enter the area only in numbers</value>
+  </data>
+  <data name="MsgSelectANameOfFieldBeforeContinuing" xml:space="preserve">
+    <value>Select a {0} before continuing</value>
+  </data>
+  <data name="lblIsSoilPostashReleasingClay" xml:space="preserve">
+    <value>Is the soil a potash-releasing clay?</value>
+  </data>
+  <data name="lblSelectOneOption" xml:space="preserve">
+    <value>Select one option</value>
+  </data>
+  <data name="MsgDateMustBeARealDate" xml:space="preserve">
+    <value>{0} must be a real date</value>
+  </data>
+  <data name="lblHowWouldYouLikeToCalculateSNSForCheckAnswer" xml:space="preserve">
+    <value>How would you like to calculate the soil nitrogen supply</value>
+  </data>
+  <data name="lblSoilDeficientInSulpurForCheckAnswer" xml:space="preserve">
+    <value>Is the soil deficient in sulphur (S)?</value>
+  </data>
+  <data name="lblSoilTypeForCheckAnswer" xml:space="preserve">
+    <value>Soil type</value>
+  </data>
+  <data name="MsgWeCouldNotAddYourFieldPleaseTryAgainLater" xml:space="preserve">
+    <value>We couldn’t add your field, please try again later</value>
+  </data>
+  <data name="lblArea" xml:space="preserve">
+    <value>area</value>
+  </data>
+  <data name="lblEnterNumericValue" xml:space="preserve">
+    <value>The value '{0}' is not valid for {1}.</value>
+  </data>
+  <data name="MsgEnterDataOnlyInNumber" xml:space="preserve">
+    <value>Enter the {0} only in numbers.</value>
+  </data>
+  <data name="lblAmount" xml:space="preserve">
+    <value>amount</value>
+  </data>
+  <data name="lblWhichHarvestWouldYouLikeToPlanFor" xml:space="preserve">
+    <value>Which harvest would you like to plan for?</value>
+  </data>
+  <data name="lblCropGroupForPlan" xml:space="preserve">
+    <value>Which crop group would you like to plan for?</value>
+  </data>
+  <data name="lblCropTypeForPlan" xml:space="preserve">
+    <value>Which crop type would you like to plan for?</value>
+  </data>
+  <data name="lblHarvestYear" xml:space="preserve">
+    <value>Harvest Year</value>
+  </data>
+  <data name="lblVarietyName" xml:space="preserve">
+    <value>Variety name</value>
+  </data>
+  <data name="lblVarietyNameWithOptional" xml:space="preserve">
+    <value>What is the variety name (optional)?</value>
+  </data>
+  <data name="lblWhatIsTheNameOfTheCrop" xml:space="preserve">
+    <value>What is the name of the crop?</value>
+  </data>
+  <data name="lblWhichVarietyNameWouldYouLikeToPlanFor" xml:space="preserve">
+    <value>Which variety name would you like to plan for?</value>
+  </data>
+  <data name="lblEnterTheCropName" xml:space="preserve">
+    <value>Enter the crop name</value>
+  </data>
+  <data name="lblSelectAll" xml:space="preserve">
+    <value>Select all</value>
+  </data>
+  <data name="lblSelectAllThatApply" xml:space="preserve">
+    <value>Select all that apply.</value>
+  </data>
+  <data name="lblWhichFieldsDoYouPlanToGrow" xml:space="preserve">
+    <value>Which fields do you plan to grow {0} in?</value>
+  </data>
+  <data name="lblField" xml:space="preserve">
+    <value>Field</value>
+  </data>
+  <data name="lblDoYouHaveADateForWhenYouPlantedYour" xml:space="preserve">
+    <value>Do you have a date for when you planted your {0} , or when you will plant it?</value>
+  </data>
+  <data name="lblNoIWillEnterTheDateLater" xml:space="preserve">
+    <value>No, I'll enter the date later</value>
+  </data>
+  <data name="lblSowingDateQuestion" xml:space="preserve">
+    <value>sowing date question</value>
+  </data>
+  <data name="lblYesIHaveASingleDateForAllTheseFields" xml:space="preserve">
+    <value>Yes, I have a single date for all these fields</value>
+  </data>
+  <data name="lblYesIHaveDifferentDatesForEachOfTheseFields" xml:space="preserve">
+    <value>Yes, I have different dates for each of these fields</value>
+  </data>
+  <data name="lblSowingDate" xml:space="preserve">
+    <value>Sowing date</value>
+  </data>
+  <data name="lblWhatIsThePlantingDate" xml:space="preserve">
+    <value>What is the planting date for {0} in {1}?</value>
+  </data>
+  <data name="lblEnterASingleFigureForAllTheseFields" xml:space="preserve">
+    <value>Enter a single figure for all these fields</value>
+  </data>
+  <data name="lblEnterDifferentFiguresForEachField" xml:space="preserve">
+    <value>Enter different figures for each field</value>
+  </data>
+  <data name="lblUseTheStandardFigureOf8TonnesPerHectareForAllTheseFields" xml:space="preserve">
+    <value>Use the standard figure of 8 tonnes per hectare for all these fields</value>
+  </data>
+  <data name="lblHowDoYouWantToEnterTheExpectedYieldForInTheseFields" xml:space="preserve">
+    <value>How do you want to enter the expected yield for {0} in these fields?</value>
+  </data>
+  <data name="lblPotatoForCropType" xml:space="preserve">
+    <value>Which potato variety group are you planning to grow?</value>
+  </data>
+  <data name="lblPotatoForField" xml:space="preserve">
+    <value>Which fields do you plan to grow {0} potato in?</value>
+  </data>
+  <data name="lblEnterSingleDateForAllField" xml:space="preserve">
+    <value>What is the planting date for {0} in these fields?</value>
+  </data>
+  <data name="lblYouCanChangeYourPlantingDateLater" xml:space="preserve">
+    <value>You can change your planting date later.</value>
+  </data>
+  <data name="lblPotato" xml:space="preserve">
+    <value> potato </value>
+  </data>
+  <data name="lblTonnesAndHectare" xml:space="preserve">
+    <value>tonnes/hectare</value>
+  </data>
+  <data name="lblWhatIsTheExpectedYieldForSingle" xml:space="preserve">
+    <value>What is the expected yield for {0} in these fields?</value>
+  </data>
+  <data name="lblWhatIsTheDifferentExpectedYield" xml:space="preserve">
+    <value>What is the expected yield for {0} in {1}?</value>
+  </data>
+  <data name="lblChooseTheOptionThatAppliesToYour" xml:space="preserve">
+    <value>Choose the option that applies to your {0}</value>
+  </data>
+  <data name="lblFigure" xml:space="preserve">
+    <value>Figure</value>
+  </data>
+  <data name="lbDoYouPlanToGrowAnyOtherCropsInTheseFields" xml:space="preserve">
+    <value>Do you plan to grow any other crops in these fields?</value>
+  </data>
+  <data name="lblAnotherCrop" xml:space="preserve">
+    <value>Another crop</value>
+  </data>
+  <data name="lblCropInfoOne" xml:space="preserve">
+    <value>Crop info 1</value>
+  </data>
+  <data name="lblHowDoYouPlanToUseTheStrawFromYourCropType" xml:space="preserve">
+    <value>How do you plan to use the straw from your {0}?</value>
+  </data>
+  <data name="lblCropInfoTwo" xml:space="preserve">
+    <value>Crop info two</value>
+  </data>
+  <data name="lblYield" xml:space="preserve">
+    <value>Yield</value>
+  </data>
+  <data name="lblYieldQuestion" xml:space="preserve">
+    <value>Yield question</value>
+  </data>
+  <data name="lblSowingDateForError" xml:space="preserve">
+    <value>SowingDate</value>
+  </data>
+  <data name="lblCreatePlan" xml:space="preserve">
+    <value>Create plan</value>
+  </data>
+  <data name="lblMainCropType" xml:space="preserve">
+    <value>Main crop type</value>
+  </data>
+  <data name="lblHaveYouPlantedYourCrop" xml:space="preserve">
+    <value>Have you planted your {0} yet?</value>
+  </data>
+  <data name="lblHowDoYouWantToEnterExpectedYield" xml:space="preserve">
+    <value>How do you want to enter the expected yield?</value>
+  </data>
+  <data name="lblWhatIsExpectedYieldForFields" xml:space="preserve">
+    <value>What is the expected yield for {0} per hectare in these fields?</value>
+  </data>
+  <data name="lblWhatIsLengthOfGrowingSeasonForCrop" xml:space="preserve">
+    <value>What is the length of growing season for Maris Piper potato?</value>
+  </data>
+  <data name="lblWhatIsSowingDateinFields" xml:space="preserve">
+    <value>What is the sowing date for {0} in these fields?</value>
+  </data>
+  <data name="MsgWeCouldNotCreateYourPlanPleaseTryAgainLater" xml:space="preserve">
+    <value>We couldn’t create your plan, please try again later</value>
+  </data>
+  <data name="lblAddAnotherCrop" xml:space="preserve">
+    <value>Add another crop to this {0} plan</value>
+  </data>
+  <data name="lblAddManuresToThisPlan" xml:space="preserve">
+    <value>Add manures to this {0} plan</value>
+  </data>
+  <data name="lblChangeThisPlan" xml:space="preserve">
+    <value>Change this {0} plan</value>
+  </data>
+  <data name="lblCropPlanFor" xml:space="preserve">
+    <value>Crop plan for {0}</value>
+  </data>
+  <data name="lblHarvestYearOverview" xml:space="preserve">
+    <value>Harvest Year Overview</value>
+  </data>
+  <data name="lblLastUpdated" xml:space="preserve">
+    <value>Last updated: {0}</value>
+  </data>
+  <data name="lblPlanCreated" xml:space="preserve">
+    <value>Plan created</value>
+  </data>
+  <data name="lblPlansAndRecords" xml:space="preserve">
+    <value>Plans and records</value>
+  </data>
+  <data name="lblSecondCrop" xml:space="preserve">
+    <value>Second crop</value>
+  </data>
+  <data name="lblThereAreFieldsInThisPlan" xml:space="preserve">
+    <value>There are {0} fields in this plan</value>
+  </data>
+  <data name="lblViewRecommendations" xml:space="preserve">
+    <value>View recommendations</value>
+  </data>
+  <data name="lblCreateAPlan" xml:space="preserve">
+    <value>Create a {0} plan</value>
+  </data>
+  <data name="lblLastModified" xml:space="preserve">
+    <value>Last modified</value>
+  </data>
+  <data name="lblPlans" xml:space="preserve">
+    <value>Plans</value>
+  </data>
+  <data name="lblPlansAndRecordsOverview" xml:space="preserve">
+    <value>Plans and records overview</value>
+  </data>
+  <data name="MsgSoilAnalysisOlderThanFiveYears" xml:space="preserve">
+    <value>Enter your soil nutrient values. As your soil sample is more than five years old, your crop need recommendations will be based on standard figures for your soil type.</value>
+  </data>
+  <data name="lblEnterAFigure" xml:space="preserve">
+    <value>Enter a figure</value>
+  </data>
+  <data name="lblYear" xml:space="preserve">
+    <value>Year</value>
+  </data>
+  <data name="lblYieldQuestionForSingleField" xml:space="preserve">
+    <value>How do you want to enter the expected yield for your {0}?</value>
+  </data>
+  <data name="MsgEnterFigureBeforeContinuing" xml:space="preserve">
+    <value>Enter a figure before continuing</value>
+  </data>
+  <data name="lblNotEntered" xml:space="preserve">
+    <value>Not entered</value>
+  </data>
+  <data name="lblCropInfo1ForCheckAnswer" xml:space="preserve">
+    <value>Which option applies to your {0}?</value>
+  </data>
+  <data name="lblCropInfo2ForCheckAnswer" xml:space="preserve">
+    <value>How do you plan to use the straw from your {0}?</value>
+  </data>
+  <data name="lblMainCropGroup" xml:space="preserve">
+    <value>Main crop group</value>
+  </data>
+  <data name="lblSowingDateQuestionForCheckAnswer" xml:space="preserve">
+    <value>Do you have a planting date for your {0}?</value>
+  </data>
+  <data name="lblSowingDiffrentDateForCheckAnswer" xml:space="preserve">
+    <value>When is the planting date for {0} in {1}?</value>
+  </data>
+  <data name="lblSowingSingleDateForCheckAnswer" xml:space="preserve">
+    <value>When is the planting date for your {0}?</value>
+  </data>
+  <data name="lblVarietyNameForCheckAnswer" xml:space="preserve">
+    <value>Variety name</value>
+  </data>
+  <data name="lblViewEdit" xml:space="preserve">
+    <value>View or edit</value>
+  </data>
+  <data name="MsgCropInfo1NotSet" xml:space="preserve">
+    <value>Which option applies to your {0} not set?</value>
+  </data>
+  <data name="MsgCropInfo2NotSet" xml:space="preserve">
+    <value>How do you plan to use the straw from your {0} not set?</value>
+  </data>
+  <data name="MsgMainCropTypeNotSet" xml:space="preserve">
+    <value>Main crop type not set</value>
+  </data>
+  <data name="MsgSowingDateNotSet" xml:space="preserve">
+    <value>Sowing date not set</value>
+  </data>
+  <data name="MsgYieldNotSet" xml:space="preserve">
+    <value>yield not set</value>
+  </data>
+  <data name="lblSowingDiffrentDateNotSet" xml:space="preserve">
+    <value>When is the planting date for {0} in {1} not set?</value>
+  </data>
+  <data name="lblSowingSingleDateNotSet" xml:space="preserve">
+    <value>When is the planting date for your {0} not set?</value>
+  </data>
+  <data name="lblWhatIsTheDifferentExpectedYieldNotSet" xml:space="preserve">
+    <value>What is the expected yield for {0} in {1} not set?</value>
+  </data>
+  <data name="MsgVarietyNameNotSet" xml:space="preserve">
+    <value>Variety name not set</value>
+  </data>
+  <data name="MsgDateMustIncludeAMonth" xml:space="preserve">
+    <value>{0} must include a month</value>
+  </data>
+  <data name="ErrorMsgForDate" xml:space="preserve">
+    <value>The date must include the day, the month and the year</value>
+  </data>
+  <data name="MsgDateMustIncludeADay" xml:space="preserve">
+    <value>{0} must include a day</value>
+  </data>
+  <data name="MsgDateMustIncludeADayAndMonth" xml:space="preserve">
+    <value>{0} must include a day and month</value>
+  </data>
+  <data name="MsgDateMustIncludeADayAndYear" xml:space="preserve">
+    <value>{0} must include a day and year</value>
+  </data>
+  <data name="MsgDateMustIncludeAMonthAndYear" xml:space="preserve">
+    <value>{0} must include a month and year</value>
+  </data>
+  <data name="MsgDateMustIncludeAYear" xml:space="preserve">
+    <value>{0} must include a year</value>
+  </data>
+  <data name="lblWhatIsTheExpectedYieldForSingleNotSet" xml:space="preserve">
+    <value>What is the expected yield for {0} per hectare in these fields not set?</value>
+  </data>
+  <data name="lblNitrogen" xml:space="preserve">
+    <value>Nitrogen (N)</value>
+  </data>
+  <data name="lblChangeLinkForRecommendation" xml:space="preserve">
+    <value>Change {0} details for {1}</value>
+  </data>
+  <data name="lblCropDetails" xml:space="preserve">
+    <value>Crop details</value>
+  </data>
+  <data name="lblCropNeed" xml:space="preserve">
+    <value>Crop need</value>
+  </data>
+  <data name="lblCropUse" xml:space="preserve">
+    <value>Crop use</value>
+  </data>
+  <data name="lblEstimatedYield" xml:space="preserve">
+    <value>Estimated yield</value>
+  </data>
+  <data name="lblIndexPH" xml:space="preserve">
+    <value>Index / pH</value>
+  </data>
+  <data name="lblNutrient" xml:space="preserve">
+    <value>Nutrient</value>
+  </data>
+  <data name="lblNutrientRecommendations" xml:space="preserve">
+    <value>{0} nutrient recommendations</value>
+  </data>
+  <data name="lblNutrientRecommendationsFor" xml:space="preserve">
+    <value>Nutrient recommendations for {0} {1}</value>
+  </data>
+  <data name="lblPerHectare" xml:space="preserve">
+    <value>per hectare</value>
+  </data>
+  <data name="lblRecommendations" xml:space="preserve">
+    <value>Recommendations</value>
+  </data>
+  <data name="lblStrawUse" xml:space="preserve">
+    <value>Straw use</value>
+  </data>
+  <data name="lblVariety" xml:space="preserve">
+    <value>Variety: {0}</value>
+  </data>
+  <data name="lblLime" xml:space="preserve">
+    <value>Lime</value>
+  </data>
+  <data name="lblPhosphateP2O5" xml:space="preserve">
+    <value>Phosphate (P2O5)</value>
+  </data>
+  <data name="lblPotashK2O" xml:space="preserve">
+    <value>Potash (K2O)</value>
+  </data>
+  <data name="lblSulphurSO3" xml:space="preserve">
+    <value>Sulphur (SO3)</value>
+  </data>
+  <data name="lblHyphen" xml:space="preserve">
+    <value>-</value>
+  </data>
+  <data name="lblkg" xml:space="preserve">
+    <value>kg</value>
+  </data>
+  <data name="lblType" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="lblViewOrCreateAPlanOrRecord" xml:space="preserve">
+    <value>View or create a plan or record</value>
+  </data>
+  <data name="lblChangeForReccomendation" xml:space="preserve">
+    <value>Change {0} plan for {1}</value>
+  </data>
+  <data name="lblVarietyForRecommendation" xml:space="preserve">
+    <value>Variety</value>
+  </data>
+  <data name="lblAddNewSoilAnalysis" xml:space="preserve">
+    <value>Add new soil analysis</value>
+  </data>
+  <data name="lblChangeFieldDetails" xml:space="preserve">
+    <value>Change field details</value>
+  </data>
+  <data name="lblCropedArea" xml:space="preserve">
+    <value>Cropped area</value>
+  </data>
+  <data name="lblDateSample" xml:space="preserve">
+    <value>Date sample taken</value>
+  </data>
+  <data name="lblFieldDetails" xml:space="preserve">
+    <value>Field details</value>
+  </data>
+  <data name="lblFields" xml:space="preserve">
+    <value>Fields</value>
+  </data>
+  <data name="lblFieldSoilAnalysisDetail" xml:space="preserve">
+    <value>Field soil analysis detail</value>
+  </data>
+  <data name="lblIsFieldAbove300Meters" xml:space="preserve">
+    <value>Is field above 300 meters</value>
+  </data>
+  <data name="lblIsFieldWithinNVZ" xml:space="preserve">
+    <value>Is field within an NVZ</value>
+  </data>
+  <data name="lblRemoveField" xml:space="preserve">
+    <value>Remove {0}</value>
+  </data>
+  <data name="lblSoilAnalysis" xml:space="preserve">
+    <value>Soil analysis</value>
+  </data>
+  <data name="lblSoilContainsPostashReleasingClay" xml:space="preserve">
+    <value>Soil contains potash releasing clay</value>
+  </data>
+  <data name="lblViewSoilAnalysis" xml:space="preserve">
+    <value>View soil analysis</value>
+  </data>
+  <data name="MsgRemoveField" xml:space="preserve">
+    <value>You can also remove {0}. This will remove all of the field data including soil analysis. It will also remove {0} from your plans. You will not be able to get it back.</value>
+  </data>
+  <data name="lblManureNonSpreadArea" xml:space="preserve">
+    <value>Manure non spreading area</value>
+  </data>
+  <data name="lblHectare" xml:space="preserve">
+    <value>{0} hectares</value>
+  </data>
+  <data name="lblAll" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="lblAllFieldsInTheYearPlan" xml:space="preserve">
+    <value>All fields in the {0} plan</value>
+  </data>
+  <data name="lblFieldGroup" xml:space="preserve">
+    <value>Field Group</value>
+  </data>
+  <data name="lblSelectSpecificFields" xml:space="preserve">
+    <value>Select specific fields</value>
+  </data>
+  <data name="lblTheCropTypeField" xml:space="preserve">
+    <value>The {0} fields</value>
+  </data>
+  <data name="lblWhichFieldsWouldYouLikeToPlanAnOrganic" xml:space="preserve">
+    <value>Which fields would you like to plan an organic material application for?</value>
+  </data>
+  <data name="lblManureGroup" xml:space="preserve">
+    <value>Manure Group</value>
+  </data>
+  <data name="lblWhatTypeOfOrganicMaterialAreYouUsingInThisApplication" xml:space="preserve">
+    <value>What type of organic material are you using in this application?</value>
+  </data>
+  <data name="lblManureType" xml:space="preserve">
+    <value>Manue Type</value>
+  </data>
+  <data name="lblWhatTypeOfManureGroupAreYouUsingInThisApplication" xml:space="preserve">
+    <value>What type of {0} are you using in this application?</value>
+  </data>
+  <data name="lblManureApplyingDate" xml:space="preserve">
+    <value>Manure Applying Date</value>
+  </data>
+  <data name="lblWhenAreYouApplyingManureOnField" xml:space="preserve">
+    <value>When are you applying {0} on these fields?</value>
+  </data>
+  <data name="MsgManureApplyingDateClosedPeriod" xml:space="preserve">
+    <value>Based on your crop and soil type, your closed period for applying manures with high readily available nitrogen is {0}.</value>
+  </data>
+  <data name="MsgManureApplyingDateDontHaveExactDate" xml:space="preserve">
+    <value>If you don't know the exact date, enter an estimated date. For example, </value>
+  </data>
+  <data name="lblSampleDate" xml:space="preserve">
+    <value>27 3 2023. You can change the date later.</value>
+  </data>
+  <data name="lblAmmonium" xml:space="preserve">
+    <value>Ammonium (N)</value>
+  </data>
+  <data name="lblDryMatter" xml:space="preserve">
+    <value>Dry Matter</value>
+  </data>
+  <data name="lblNitrate" xml:space="preserve">
+    <value>Nitrate (N)</value>
+  </data>
+  <data name="lblStandardNutrientValues" xml:space="preserve">
+    <value>Do you want to use these nutrient values from RB209 for {0}?</value>
+  </data>
+  <data name="lblTotalMagnesiumOxide" xml:space="preserve">
+    <value>Total magnesium oxide (Mg0)</value>
+  </data>
+  <data name="lblTotalNitrogen" xml:space="preserve">
+    <value>Total Nitrogen</value>
+  </data>
+  <data name="lblTotalPhosphate" xml:space="preserve">
+    <value>Total phosphate (P2O5)</value>
+  </data>
+  <data name="lblTotalPotassium" xml:space="preserve">
+    <value>Total potassium (K20)</value>
+  </data>
+  <data name="lblTotalSulphur" xml:space="preserve">
+    <value>Total Sulphur (SO3)</value>
+  </data>
+  <data name="lblUricAcid" xml:space="preserve">
+    <value>Uric Acid (N)</value>
+  </data>
+  <data name="lblValuesAreSourcedFromAHDB" xml:space="preserve">
+    <value>These values are taken from the AHDB Nutrient Management Guide (RB209).</value>
+  </data>
+  <data name="lblValuesKgPerTonne" xml:space="preserve">
+    <value>kg/t</value>
+  </data>
+  <data name="lblApplicationRate" xml:space="preserve">
+    <value>Application Rate</value>
+  </data>
+  <data name="lblCalculateBasedOnTheAreaAndQuantity" xml:space="preserve">
+    <value>Calculate based on the area and quantity you are applying</value>
+  </data>
+  <data name="lblEnterAnApplicationRate" xml:space="preserve">
+    <value>Enter an application rate in t/ha or m³/ha</value>
+  </data>
+  <data name="lblHowWouldYouLikeToEnterTheApplicationRate" xml:space="preserve">
+    <value>How would you like to enter the application rate for your {0}?</value>
+  </data>
+  <data name="lblUseTypicalApplicationRate" xml:space="preserve">
+    <value>Use the typical application rate of {0} m³/ha</value>
+  </data>
+  <data name="MsgSelectAMethodForEnteringApplicationRate" xml:space="preserve">
+    <value>Select a method for entering the application rate before continuing.</value>
+  </data>
+  <data name="lblApplicationDate" xml:space="preserve">
+    <value>Application Date</value>
+  </data>
+  <data name="lblEnterTheDateInCorrectFormat" xml:space="preserve">
+    <value>Enter the date in the correct format (DD/MM/YYYY).</value>
+  </data>
+  <data name="lblValueKg" xml:space="preserve">
+    <value>{0}kg</value>
+  </data>
+  <data name="lblEnterTheApplicationRate" xml:space="preserve">
+    <value>Enter the application rate</value>
+  </data>
+  <data name="lblManualApplicationRate" xml:space="preserve">
+    <value>Manual Application Rate</value>
+  </data>
+  <data name="lblTonnesPerHectare" xml:space="preserve">
+    <value>tonnes per hectare</value>
+  </data>
+  <data name="lblAreaAndQuantity" xml:space="preserve">
+    <value>Area and quantity</value>
+  </data>
+  <data name="lblEnterTheAreaAndQuantity" xml:space="preserve">
+    <value>Enter the area and quantity</value>
+  </data>
+  <data name="lblhectar" xml:space="preserve">
+    <value>hectares</value>
+  </data>
+  <data name="lbltonnes" xml:space="preserve">
+    <value>tonnes</value>
+  </data>
+  <data name="lblWhatIsTheApplicationMethod" xml:space="preserve">
+    <value>What is the application method for your {0}?</value>
+  </data>
+  <data name="MsgEnterADateWithin2YearsOfTheHarvestYear" xml:space="preserve">
+    <value>Enter a date within 2 years of the harvest year you are planning for</value>
+  </data>
+  <data name="MsgEnterAnapplicationRateBeforeContinuing" xml:space="preserve">
+    <value>Enter an application rate before continuing.</value>
+  </data>
+  <data name="MsgEnterAValidArea" xml:space="preserve">
+    <value>Enter a valid area</value>
+  </data>
+  <data name="MsgEnterAValidQuantity" xml:space="preserve">
+    <value>Enter a valid quantity</value>
+  </data>
+  <data name="lblDiscs" xml:space="preserve">
+    <value>Discs</value>
+  </data>
+  <data name="lblNotIncorporated" xml:space="preserve">
+    <value>Not incorporated</value>
+  </data>
+  <data name="lblPlough" xml:space="preserve">
+    <value>Plough</value>
+  </data>
+  <data name="lblRotaryCultivator" xml:space="preserve">
+    <value>Rotary cultivator</value>
+  </data>
+  <data name="lblTineCultivator" xml:space="preserve">
+    <value>Tine cultivator</value>
+  </data>
+  <data name="lblWhatIsTheIncorporationMethod" xml:space="preserve">
+    <value>What is the incorporation method for your {0}?</value>
+  </data>
+  <data name="MsgDefraIdentityServiceDown" xml:space="preserve">
+    <value>Defra Customer Identity Service is down, please re-visit after sometime.</value>
+  </data>
+  <data name="lblRainfallValueHint" xml:space="preserve">
+    <value>Value should be without decimal places</value>
+  </data>
+  <data name="MsgForRainfallManual" xml:space="preserve">
+    <value>Average annual rainfall must be a whole number, like 600.</value>
+  </data>
+  <data name="MsgSelectAtLeastOneField" xml:space="preserve">
+    <value>Select at least one field before continuing</value>
+  </data>
+  <data name="lblB" xml:space="preserve">
+    <value>B</value>
+  </data>
+  <data name="lblConditionsAffectingTheLossOfNutrients" xml:space="preserve">
+    <value>Conditions affecting the loss of nutrients from your organic materials</value>
+  </data>
+  <data name="lblHowLongIsTheGapBetweenApplicationAndIncoporation" xml:space="preserve">
+    <value>How long is the gap between application and incorporation for your {0}?</value>
+  </data>
+  <data name="lblIncorprationDelay" xml:space="preserve">
+    <value>Incorpration Delay</value>
+  </data>
+  <data name="lblL" xml:space="preserve">
+    <value>L</value>
+  </data>
+  <data name="lblP" xml:space="preserve">
+    <value>P</value>
+  </data>
+  <data name="lblPoultryManure" xml:space="preserve">
+    <value>Poultry manure</value>
+  </data>
+  <data name="lblS" xml:space="preserve">
+    <value>S</value>
+  </data>
+  <data name="lblAddAnalysisValues" xml:space="preserve">
+    <value>Add analysis values for {0}.</value>
+  </data>
+  <data name="lblKgPerTonne" xml:space="preserve">
+    <value>Kg per tonne</value>
+  </data>
+  <data name="lblManureDefaultsValue" xml:space="preserve">
+    <value>ManureDefaultsValue</value>
+  </data>
+  <data name="lblPerTonne" xml:space="preserve">
+    <value>% per tonne</value>
+  </data>
+  <data name="lblEnterValidValue" xml:space="preserve">
+    <value>Enter a valid {0} value</value>
+  </data>
+  <data name="lblDryMatterPercent" xml:space="preserve">
+    <value>DryMatterPercent</value>
+  </data>
+  <data name="lblK2O" xml:space="preserve">
+    <value>K2O</value>
+  </data>
+  <data name="lblMgO" xml:space="preserve">
+    <value>MgO</value>
+  </data>
+  <data name="lblN" xml:space="preserve">
+    <value>N</value>
+  </data>
+  <data name="lblNH4N" xml:space="preserve">
+    <value>NH4N</value>
+  </data>
+  <data name="lblNO3N" xml:space="preserve">
+    <value>NO3N</value>
+  </data>
+  <data name="lblP2O5" xml:space="preserve">
+    <value>P2O5</value>
+  </data>
+  <data name="lblSO3" xml:space="preserve">
+    <value>SO3</value>
+  </data>
+  <data name="lblUricAcidForError" xml:space="preserve">
+    <value>UricAcid</value>
+  </data>
+  <data name="lbl15Octto15Jan" xml:space="preserve">
+    <value>15 Oct to 15 Jan</value>
+  </data>
+  <data name="lbl1Augto31Dec" xml:space="preserve">
+    <value>1 Aug to 31 Dec</value>
+  </data>
+  <data name="lbl1Septo31Dec" xml:space="preserve">
+    <value>1 Sep to 31 Dec</value>
+  </data>
+  <data name="lbl16Septo31Dec" xml:space="preserve">
+    <value>16 Sep to 31 Dec</value>
+  </data>
+  <data name="lbl1Octto15Jan" xml:space="preserve">
+    <value>1 Oct to 15 Jan</value>
+  </data>
+  <data name="lblAreas" xml:space="preserve">
+    <value>Area</value>
+  </data>
+  <data name="lblQuantity" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="MsgIfUserEnterDecimalValueInRainfall" xml:space="preserve">
+    <value>Enter a whole number without a decimal point</value>
+  </data>
+  <data name="MsgApplicationRate" xml:space="preserve">
+    <value>application rate</value>
+  </data>
+  <data name="MsgQuantity" xml:space="preserve">
+    <value>quantity</value>
+  </data>
+  <data name="lblAddToPlan" xml:space="preserve">
+    <value>Add to plan</value>
+  </data>
+  <data name="lblAutumnCropNitrogenUptake" xml:space="preserve">
+    <value>Autumn crop Nitrogen uptake</value>
+  </data>
+  <data name="lblDoYouWantToUseTheseNutrientValuesFromRB209" xml:space="preserve">
+    <value>Do you want to use these nutrient values from RB209 for {0} ?</value>
+  </data>
+  <data name="lblEndOfSoilDrainage" xml:space="preserve">
+    <value>End of soil drainage</value>
+  </data>
+  <data name="lblHowLongIsTheGapBetweenApplicationAndIncorporation" xml:space="preserve">
+    <value>How long is the gap between application and incorporation for your {0} ?</value>
+  </data>
+  <data name="lblHowWouldYouLikeToEnterTheApplicationRateA" xml:space="preserve">
+    <value>What is the incorporation method for your {0} ?</value>
+  </data>
+  <data name="lblRainfallWithinSixHoursOfApplication" xml:space="preserve">
+    <value>Rainfall within 6 hours of application</value>
+  </data>
+  <data name="lblTopsoilMoisture" xml:space="preserve">
+    <value>Topsoil moisture</value>
+  </data>
+  <data name="lblTotalRainfallSinceApplication" xml:space="preserve">
+    <value>Total rainfall since application</value>
+  </data>
+  <data name="lblWhatIsTheApplicationMethodForYour" xml:space="preserve">
+    <value>What is the application method for your {0} ?</value>
+  </data>
+  <data name="lblWhatTypeOfOrganicMaterialAreYouUsing" xml:space="preserve">
+    <value>What type of organic material are you using in this application?</value>
+  </data>
+  <data name="lblWhenAreYouApplyingYourManureType" xml:space="preserve">
+    <value>When are you applying your {0} ?</value>
+  </data>
+  <data name="lblWhichFieldsWouldYouLikeToPlan" xml:space="preserve">
+    <value>Which fields would you like to plan an organic material application for?</value>
+  </data>
+  <data name="lblWindspeedAtApplication" xml:space="preserve">
+    <value>Windspeed at application</value>
+  </data>
+  <data name="lblApplicationRateRow" xml:space="preserve">
+    <value>Application rate
+t/ha
+m³/ha</value>
+  </data>
+  <data name="MsgWeCounldNotAddOrganicManure" xml:space="preserve">
+    <value>We couldn’t add your application, please try again later</value>
+  </data>
+  <data name="lblOrganicManureCreatedSuccessfullyForAllField" xml:space="preserve">
+    <value>Organic material application added for all fields in this plan</value>
+  </data>
+  <data name="lblOrganicMaterialApplications" xml:space="preserve">
+    <value>Organic material applications</value>
+  </data>
+  <data name="lblOrganicManureCreatedSuccessfullyForCropType" xml:space="preserve">
+    <value>Organic material application added for all {0} fields in this plan</value>
+  </data>
+  <data name="lblOrganicManureCreatedSuccessfullyForSpecificField" xml:space="preserve">
+    <value>Organic material application added for {0} in this plan</value>
+  </data>
+  <data name="lblAboutTheseValues" xml:space="preserve">
+    <value>About these values</value>
+  </data>
+  <data name="lblAmountOfNFromTheApplicationTaken" xml:space="preserve">
+    <value>Amount of N from the application taken up by the crop in the autumn</value>
+  </data>
+  <data name="lblAmountOfRainThatFallsInThe6Hours" xml:space="preserve">
+    <value>Amount of rain that falls in the 6 hours after the material is applied</value>
+  </data>
+  <data name="lblAverageRainfallBetweenManAppAndEndOfSoilDrainage" xml:space="preserve">
+    <value>Average rainfall between manure application and end of soil drainage</value>
+  </data>
+  <data name="lblConditionsAffectingNutrientLoss" xml:space="preserve">
+    <value>Conditions Affecting Nutrient Loss</value>
+  </data>
+  <data name="lblDateWhenSoilDrainageEnds" xml:space="preserve">
+    <value>Date when soil drainage ends and the soil begins to dry out</value>
+  </data>
+  <data name="lblEffectiveRainfallAfterApplication" xml:space="preserve">
+    <value>Effective rainfall after application</value>
+  </data>
+  <data name="lblHowMoistTheTopsoilIs" xml:space="preserve">
+    <value>How moist the topsoil is when the material is applied</value>
+  </data>
+  <data name="lblRainfallWithin6HoursOfApplication" xml:space="preserve">
+    <value>Rainfall within 6 hours of application</value>
+  </data>
+  <data name="lblTheEffectivenessOfYourOrganicMaterialApp" xml:space="preserve">
+    <value>The effectiveness of your organic material application, and the amount of inorganic fertiliser you need, will vary depending on these conditions.</value>
+  </data>
+  <data name="lblTheseAreApproximateValues" xml:space="preserve">
+    <value>These are approximate values. You can change them now or later.</value>
+  </data>
+  <data name="lblWindspeedDuringApplication" xml:space="preserve">
+    <value>Windspeed during application</value>
+  </data>
+  <data name="lblWindspeedWhenTheMaterialIsApplied" xml:space="preserve">
+    <value>Windspeed when the material is applied</value>
+  </data>
+  <data name="lblAutumnCropNitrogenPerHectare" xml:space="preserve">
+    <value>{0}kg per hectare</value>
+  </data>
+  <data name="lblRainfallMM" xml:space="preserve">
+    <value>{0}mm</value>
+  </data>
+  <data name="lblPlanOrEditAnApplicationOfOrganicMaterial" xml:space="preserve">
+    <value>Plan or edit an application of organic material to {0}</value>
+  </data>
+  <data name="lblViewFieldPlan" xml:space="preserve">
+    <value>View field plan</value>
+  </data>
+  <data name="MsgAreaMustBeGreaterThanZero" xml:space="preserve">
+    <value>Area must be greater than zero</value>
+  </data>
+  <data name="lblForExample" xml:space="preserve">
+    <value>For example, 27 3 2007</value>
+  </data>
+  <data name="lblKgPerHectare" xml:space="preserve">
+    <value>kg/ha</value>
+  </data>
+  <data name="lblWhatIsTheAutumnCropNitrogenUptake" xml:space="preserve">
+    <value>What is the Autumn crop Nitrogen uptake?</value>
+  </data>
+  <data name="lblWhatIsTheEndOfDrainageDate" xml:space="preserve">
+    <value>What is the end of drainage date?</value>
+  </data>
+  <data name="MsgEnterAValueBeforeContinue" xml:space="preserve">
+    <value>Enter a value before continuing</value>
+  </data>
+  <data name="MsgEnterValidNumericValueBeforeContinuing" xml:space="preserve">
+    <value>Enter a valid numeric value before continuing</value>
+  </data>
+  <data name="MsgSoilDrainageEndDate1stJan30Apr" xml:space="preserve">
+    <value>The date for End of soil drainage must be between 1st jan and 30th Apr</value>
+  </data>
+  <data name="lblApplicationMethod" xml:space="preserve">
+    <value>Application method</value>
+  </data>
+  <data name="lblDate" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="lblInorganicFertiliserOrLime" xml:space="preserve">
+    <value>Inorganic fertiliser or lime</value>
+  </data>
+  <data name="lblOrganicMaterial" xml:space="preserve">
+    <value>Organic material</value>
+  </data>
+  <data name="lblNutrientValuesUseForFuture" xml:space="preserve">
+    <value>Nutrient Values Use For Future</value>
+  </data>
+  <data name="lblWouldYouLikeToUseTheseAnalysisValuesForFutureApplications" xml:space="preserve">
+    <value>Would you like to use these analysis values for future applications of {0} on {1}?</value>
+  </data>
+  <data name="lblNutrientValuesStoreForFutureHint" xml:space="preserve">
+    <value>You can change these values later in your Farm and field details section.</value>
+  </data>
+  <data name="lblAmmoniumForError" xml:space="preserve">
+    <value>ammonium</value>
+  </data>
+  <data name="lblKgPerTonneAndKgPerMeterCube" xml:space="preserve">
+    <value>kg/t
+kg/m³</value>
+  </data>
+  <data name="lblNitrateForErrorMsg" xml:space="preserve">
+    <value>nitrate</value>
+  </data>
+  <data name="lblPercentage" xml:space="preserve">
+    <value>%</value>
+  </data>
+  <data name="lblSulphur" xml:space="preserve">
+    <value>sulphur</value>
+  </data>
+  <data name="MsgEnterTheValueBeforeContinuing" xml:space="preserve">
+    <value>Enter the {0} before continuing</value>
+  </data>
+  <data name="lblTotalNitrogenMustBeGreaterOrEqualToAmmoniumUricacidNitrate" xml:space="preserve">
+    <value>The figure for Total nitrogen (N) must be equal to or greater than the sum of Ammonium (N), Uric acid (N) and Nitrate (N)</value>
+  </data>
+  <data name="lblTotalNitrogenN" xml:space="preserve">
+    <value>Total nitrogen</value>
+  </data>
+  <data name="lblTotalPotashK2O" xml:space="preserve">
+    <value>Total potash (K2O)</value>
+  </data>
+  <data name="MsgMinMaxValidation" xml:space="preserve">
+    <value>Enter a value for {0} between 0 and {1}</value>
+  </data>
+  <data name="MsgUricAcid" xml:space="preserve">
+    <value>uric acid</value>
+  </data>
+  <data name="lblRainfallWithin6Hours" xml:space="preserve">
+    <value>Rainfall within 6 hours of application</value>
+  </data>
+  <data name="lblEffectiveRainfall" xml:space="preserve">
+    <value>Effective Rainfall</value>
+  </data>
+  <data name="lblEffectiveRainfallManual" xml:space="preserve">
+    <value>Effective Rainfall Manual</value>
+  </data>
+  <data name="lblThisIsTotalRainfall" xml:space="preserve">
+    <value>This is the total rainfall between x and y. If you think this is wrong, you can change it now or later.</value>
+  </data>
+  <data name="lblTotalRainfall" xml:space="preserve">
+    <value>Total rainfall</value>
+  </data>
+  <data name="lblEnterRainfallAmount" xml:space="preserve">
+    <value>Enter Rainfall Amount</value>
+  </data>
+  <data name="MsgEnterRainfallAmountBeforeContinuing" xml:space="preserve">
+    <value>Enter a rainfall amount before continuing</value>
+  </data>
+  <data name="MsgForEffectiveRainfallManual" xml:space="preserve">
+    <value>Rainfall amount must be a whole number, like 600..</value>
+  </data>
+  <data name="lblWindAtTheTimeOfApplication" xml:space="preserve">
+    <value>Wind at the time of application</value>
+  </data>
+  <data name="lblWindspeed" xml:space="preserve">
+    <value>Windspeed</value>
+  </data>
+  <data name="lblHowWetWasTheTopsoil" xml:space="preserve">
+    <value>How wet was the topsoil at time of application?</value>
+  </data>
+  <data name="lblTopsoilMoister" xml:space="preserve">
+    <value>Topsoil Moister</value>
+  </data>
+  <data name="MsgEnterValidDate" xml:space="preserve">
+    <value>Enter a valid date in the format dd/mm/yyyy before continuing</value>
+  </data>
+  <data name="MsgSelectATopsoilWetnessConditionBeforeContinuing" xml:space="preserve">
+    <value>Select a topsoil wetness condition before continuing</value>
+  </data>
+  <data name="MsgSelectAWindConditionBeforeContinuing" xml:space="preserve">
+    <value>Select a wind condition before continuing</value>
+  </data>
+  <data name="MsgApplicationMethodNotSet" xml:space="preserve">
+    <value>What is the application method for your {0} not set?</value>
+  </data>
+  <data name="MsgApplicationRateMethodNotSet" xml:space="preserve">
+    <value>How would you like to enter the application rate for your {0} not set?</value>
+  </data>
+  <data name="MsgApplicationRateNotSet" xml:space="preserve">
+    <value>Application rate
+t/ha
+m3/ha  not set</value>
+  </data>
+  <data name="MsgApplyingDateNotSet" xml:space="preserve">
+    <value>When are you applying your {0} not set?</value>
+  </data>
+  <data name="MsgAreaNotSet" xml:space="preserve">
+    <value>Area not set</value>
+  </data>
+  <data name="MsgAutumnCropNitrogenUptakeNotSet" xml:space="preserve">
+    <value>Autumn crop Nitrogen uptake not set</value>
+  </data>
+  <data name="MsgDefaultNutrientValuesNotSet" xml:space="preserve">
+    <value>Do you want to use these nutrient values from RB209 for {0} not set?</value>
+  </data>
+  <data name="MsgEndOfSoilDrainageNotSet" xml:space="preserve">
+    <value>End of soil drainage not set</value>
+  </data>
+  <data name="MsgIncorporationMethodNotSet" xml:space="preserve">
+    <value>What is the incorporation method for your {0} not set?</value>
+  </data>
+  <data name="MsgIncorporationDelayNotSet" xml:space="preserve">
+    <value>How long is the gap between application and incorporation for your {0} not set?</value>
+  </data>
+  <data name="MsgManureTypeNotSet" xml:space="preserve">
+    <value>What type of organic material are you using in this application not set?</value>
+  </data>
+  <data name="MsgQuantityNotSet" xml:space="preserve">
+    <value>Quantity not set</value>
+  </data>
+  <data name="MsgRainfallWithinSixHoursOfApplicationNotSet" xml:space="preserve">
+    <value>Rainfall within 6 hours of application not set</value>
+  </data>
+  <data name="MsgTopsoilMoistureNotSet" xml:space="preserve">
+    <value> Topsoil moisture not set</value>
+  </data>
+  <data name="MsgTotalRainfallSinceApplicationNotSet" xml:space="preserve">
+    <value>Total rainfall since application not set</value>
+  </data>
+  <data name="MsgWindspeedAtApplicationNotSet" xml:space="preserve">
+    <value>Windspeed at application not set</value>
+  </data>
+  <data name="lblHelpMeFindMyPotatoVarietyGroup" xml:space="preserve">
+    <value>Help me find my potato variety group</value>
+  </data>
+  <data name="lblOpensInANewTab" xml:space="preserve">
+    <value>(opens in a new tab)</value>
+  </data>
+  <data name="lblWhatIsThePotatoVarietyName" xml:space="preserve">
+    <value>What is the potato variety name?</value>
+  </data>
+  <data name="MsgEnterAPotatoVarietyNameBeforeContinuing" xml:space="preserve">
+    <value>Enter a potato variety name before continuing</value>
+  </data>
+  <data name="MsgSelectAPotatoVarietyGroup" xml:space="preserve">
+    <value>Select a potato variety group before continuing</value>
+  </data>
+  <data name="UrlAHDBPotatoVarietyGroup" xml:space="preserve">
+    <value>https://potatoes.ahdb.org.uk/knowledge-library/potato-nitrogen-groups</value>
+  </data>
+  <data name="lblWhatIsTheLengthOfGrowingSeason" xml:space="preserve">
+    <value>What is the length of the growing season for {0}?</value>
+  </data>
+  <data name="MsgEnterANumberWhichIsGreaterThanZero" xml:space="preserve">
+    <value>Enter a number which is greater than 0</value>
+  </data>
+  <data name="lblUseTheStandardFigure" xml:space="preserve">
+    <value>Use the standard figure of {0} tonnes per hectare for all these fields</value>
+  </data>
+  <data name="lblEnterTheValuesForYour" xml:space="preserve">
+    <value>Enter the values for your {0}</value>
+  </data>
+  <data name="lblIwantToEnterARecentOrganicMaterialAnalysis" xml:space="preserve">
+    <value>No, I want to enter a recent organic material analysis</value>
+  </data>
+  <data name="lblKgPerMeterCube" xml:space="preserve">
+    <value>kg/m³</value>
+  </data>
+  <data name="lblKgPerTon" xml:space="preserve">
+    <value>kg/t</value>
+  </data>
+  <data name="lblValue" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="lblValueKgPerMeterCube" xml:space="preserve">
+    <value>{0} kg/m³</value>
+  </data>
+  <data name="lblValueKgPerTon" xml:space="preserve">
+    <value>{0} kg/t</value>
+  </data>
+  <data name="lblValuePercent" xml:space="preserve">
+    <value>{0}%</value>
+  </data>
+  <data name="lblAddInorganicFertiliser" xml:space="preserve">
+    <value>Plan an application of inorganic fertiliser to one or more fields</value>
+  </data>
+  <data name="lblWhichFieldsWouldYouLikeToAddInorganicFertiliserApplications" xml:space="preserve">
+    <value>Which fields would you like to add inorganic fertiliser applications to?</value>
+  </data>
+  <data name="lblWhenAreYouApplyingInorganicFertiliser" xml:space="preserve">
+    <value>When are you applying inorganic fertiliser on the {0} Fields?</value>
+  </data>
+  <data name="lblInOrganicManureDuration" xml:space="preserve">
+    <value>InOrganic manure duration</value>
+  </data>
+  <data name="lblHowMuchOfEachNutrientAreYouUsing" xml:space="preserve">
+    <value>How much of each nutrient are you using in this application?</value>
+  </data>
+  <data name="lblNutrientValues" xml:space="preserve">
+    <value>Nutrient values</value>
+  </data>
+  <data name="lblAddBusinessInformation" xml:space="preserve">
+    <value>Add business information</value>
+  </data>
+  <data name="lblAddress" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="lblBusinessInformation" xml:space="preserve">
+    <value>Business information</value>
+  </data>
+  <data name="lblFarmDetails" xml:space="preserve">
+    <value>Farm Details</value>
+  </data>
+  <data name="lblFarmInformation" xml:space="preserve">
+    <value>Farm information</value>
+  </data>
+  <data name="lblHowManyFieldsAtFarmAreAbove300Meters" xml:space="preserve">
+    <value>How many fields at {0} are above 300 metres?</value>
+  </data>
+  <data name="lblHowManyFieldsAtFarmAreInNVZ" xml:space="preserve">
+    <value>How many fields at {0} are in a Nitrate Vulnerable Zone (NVZ)?</value>
+  </data>
+  <data name="lblNone" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="lblRemoveFarm" xml:space="preserve">
+    <value>Remove {0}</value>
+  </data>
+  <data name="lblUpdateFarmInformation" xml:space="preserve">
+    <value>Update farm information</value>
+  </data>
+  <data name="lblUpdateThisFarm" xml:space="preserve">
+    <value>Update this farm</value>
+  </data>
+  <data name="lblYouHaveNotAddedAnyBusinessInformation" xml:space="preserve">
+    <value>You have not added any business information.</value>
+  </data>
+  <data name="lblUpdateFarm" xml:space="preserve">
+    <value>Update {0}</value>
+  </data>
+  <data name="lblYouHaveUpdated" xml:space="preserve">
+    <value>You have updated {0}</value>
+  </data>
+</root>

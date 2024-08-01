@@ -1,0 +1,55 @@
+﻿@using NMP.Portal.Resources;
+
+@{
+    ViewData["Title"] = Resource.lblHomePage;
+}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-body">
+            <h1 class="govuk-heading-xl">
+                @if (ViewBag.Error != null)
+                {
+                    <govuk-error-summary>
+                        <govuk-error-summary-item href="#">@ViewBag.Error</govuk-error-summary-item>
+                    </govuk-error-summary>
+                }
+                <strong>
+                    @Resource.lblPlanAndRecordNutrientApplications
+                </strong>
+            </h1>
+            <p>@Resource.lblUseThisServiceToPlan</p>
+            <p>@Resource.lblPlanningAndRecordingCan</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>
+                    @Resource.lblSaveYouMoney
+                </li>
+                <li>
+                    @Resource.lblHelpYouComplyWithEnvironmentalRegulations
+                </li>
+                <li>
+                    @Resource.lblHelpProtectTheEnvironment
+                </li>
+            </ul>
+            <p>@Resource.lblYourPlanWillBasedOn</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>
+                    @Resource.lblTheCropsYouGrow
+                </li>
+                <li>
+                    @Resource.lblTheNutrientsInYourSoil
+                </li>
+                <li>
+                    @Resource.lblTheManuresAndFertilisersYouUseAndHowYouApplyThem
+                </li>
+            </ul>
+        </div>
+        <div class="govuk-body">
+            <br />
+            @if (ViewBag.IsDefraCustomerIdentifyConfigurationWorking)
+            {
+                <govuk-button-link asp-action="FarmList" asp-controller="Farm">@Resource.btnStartNow</govuk-button-link>
+            }
+        </div>
+    </div>
+</div>
+

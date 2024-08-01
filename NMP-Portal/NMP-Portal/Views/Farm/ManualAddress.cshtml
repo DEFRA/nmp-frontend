@@ -1,0 +1,59 @@
+﻿@using NMP.Portal.Resources;
+@using NMP.Portal.ViewModels;
+@model FarmViewModel
+@{
+    ViewData["Title"] = Resource.lblManualAddress;
+}
+
+
+@section BeforeContent {
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "Address")" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form method="post" asp-controller="Farm">
+            @Html.AntiForgeryToken()
+            <h1 class="govuk-heading-l">
+                @(string.Format(Resource.lblEnterTheAddressFor, Model.Name))
+            </h1>
+
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Rainfall"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegisteredOrganicProducer"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZFields"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FullAddress"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManualAddress" value="@Model.IsManualAddress.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPostCodeChanged" value="@Model.IsPostCodeChanged.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsUpdate"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+            <div class="govuk-form-group">
+                <govuk-input asp-for="@Model.Address1"></govuk-input>
+            </div>
+
+            <div class="govuk-form-group">
+                <govuk-input asp-for="@Model.Address2"></govuk-input>
+            </div>
+
+            <div class="govuk-form-group">
+                <govuk-input class="govuk-input--width-20" asp-for="@Model.Address3"></govuk-input>
+            </div>
+
+            <div class="govuk-form-group">
+                <govuk-input class="govuk-input--width-20" asp-for="@Model.Address4"></govuk-input>
+            </div>
+
+            <div class="govuk-form-group">
+                <govuk-input class="govuk-input--width-10" asp-for="@Model.Postcode">
+                    <govuk-input-label>@Resource.lblPostCode</govuk-input-label>
+                </govuk-input>
+            </div>
+
+            <div class="govuk-form-group">
+                <govuk-button type="submit" asp-action="ManualAddress">@Resource.lblContinue</govuk-button>
+            </div>
+        </form>
+    </div>
+</div>

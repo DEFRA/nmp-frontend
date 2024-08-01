@@ -1,0 +1,10 @@
+﻿namespace NMP.Portal.Models
+{
+    public class FieldData
+    {
+        public Field Field { get; set; }
+        public SoilAnalysis SoilAnalysis { get; set; }
+        public List<CropData> Crops { get; set; }
+        //public List<ManagementPeriod> ManagementPeriods { get; set; }
+    }
+}

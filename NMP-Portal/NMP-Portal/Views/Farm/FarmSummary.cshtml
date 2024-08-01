@@ -1,0 +1,102 @@
+﻿@using NMP.Portal.Resources
+@using NMP.Portal.ViewModels
+@model FarmViewModel
+@{
+    ViewData["Title"] = Resource.lblFarmSummary;
+}
+
+@if (TempData["Error"] != null)
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item href="#">@TempData["Error"]</govuk-error-summary-item>
+    </govuk-error-summary>
+}
+@if (Model != null)
+{
+    @section BeforeContent {
+    <govuk-breadcrumbs class="govuk-breadcrumbs-link">
+        <govuk-breadcrumbs-item asp-action="FarmList" asp-controller="Farm">
+            @Resource.lblAllFarm
+            </govuk-breadcrumbs-item>
+            <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
+                @Model.Name
+            </govuk-breadcrumbs-item>
+        </govuk-breadcrumbs>
+    }
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            @if (ViewBag.Success != null && ViewBag.Success=="true")
+            {
+                <govuk-notification-banner type="Success">
+                    <div class="">
+                        <h3 class="govuk-notification-banner__heading"> @string.Format(!string.IsNullOrEmpty(Model.EncryptedIsUpdate) ? Resource.lblYouHaveUpdated : Resource.lblYouHaveAdded, Model.Name)</h3>
+                        <p class="govuk-body"></p>
+                        <a class="govuk-notification-banner__link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@string.Format(Resource.lblAddFieldFor, Model.Name)</a>
+                    </div>
+                </govuk-notification-banner>
+            }
+            <div id="farm-title">
+                <h1 class="govuk-heading-xl">@Model.Name</h1>
+                <p class="govuk-body address">@Model.FullAddress</p>
+            </div>
+            @if (ViewBag.FieldCount != null && ViewBag.FieldCount == 0)
+            {
+                <p class="govuk-body">
+                    @Resource.lblToStartCreatingPlanAndRecords
+                    <a class="govuk-link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">
+                        @Resource.lblAddYourFields
+                    </a>
+                </p>
+            }
+            @if (ViewBag.FieldCount != null && (ViewBag.FieldCount > 0))
+            {
+
+                <p class="govuk-body">
+                    @string.Format(Resource.lblFieldsCount, ViewBag.FieldCount)
+                </p>
+                <div>
+
+                    <ul class="menu-list govuk-list">
+                        <li>
+                            @if(Model.IsPlanExist)
+                            {
+                                <a class="govuk-link" asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId">
+                                    @Resource.lblViewOrCreateAPlanOrRecord
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="govuk-link" asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">
+                                    @Resource.lblCreateACropNutrientManagementPlan
+                                </a>
+                            }
+                            
+                        </li>
+                    </ul>
+
+                </div>
+            }
+            <hr class="seperator_five" />
+            <div>
+                <h2 class="govuk-heading-m">@Resource.lblFarmAndFieldDetails</h2>
+                <ul class="menu-list govuk-list">
+                    <li>
+                        <a class="govuk-link" asp-action="FarmDetails" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblUpdateFarmDetails</a>
+                    </li>
+                    @if (ViewBag.FieldCount != null && ViewBag.FieldCount > 0)
+                    {
+                        <li>
+                            <a class="govuk-link" asp-action="ManageFarmFields" asp-controller="Field" asp-route-Id="@Model.EncryptedFarmId">
+                                @Resource.lblUpdateFieldsOrSoilAnalysis
+                            </a>
+                        </li>
+                    }
+
+                </ul>
+            </div>
+
+        </div>
+    </div>
+}
+
