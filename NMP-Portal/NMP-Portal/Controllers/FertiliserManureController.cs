@@ -949,7 +949,7 @@ namespace NMP.Portal.Controllers
                     fertManure.K2O = model.K2O;
                     fertManure.MgO = model.MgO;
                     fertManure.SO3 = model.SO3;
-                    fertManure.Lime=model.Lime
+                    fertManure.Lime = model.Lime;
                 }
             }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);

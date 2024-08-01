@@ -1902,4 +1902,7 @@ m3/ha  not set</value>
   <data name="lblOutpurKgPerHectare" xml:space="preserve">
     <value>kg per hectare</value>
   </data>
+  <data name="lblWhenDoYouPlanToSpreadInorganicFertiliserForTheseFields" xml:space="preserve">
+    <value>When do you plan to spread inorganic fertiliser for these fields?</value>
+  </data>
 </root>

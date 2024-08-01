@@ -4142,6 +4142,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When do you plan to spread inorganic fertiliser for these fields?.
+        /// </summary>
+        public static string lblWhenDoYouPlanToSpreadInorganicFertiliserForTheseFields {
+            get {
+                return ResourceManager.GetString("lblWhenDoYouPlanToSpreadInorganicFertiliserForTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which fields do you plan to grow {0} in?.
         /// </summary>
         public static string lblWhichFieldsDoYouPlanToGrow {

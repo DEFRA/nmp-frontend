@@ -66,7 +66,14 @@
             <govuk-radios asp-for="@Model.InOrgnaicManureDurationId">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblWhenDoYouPlanToSpreadInOrganicfertiliser, Model.FieldGroupName)
+                        @if (int.TryParse(Model.FieldGroup, out int value))
+                        {
+                            @string.Format(Resource.lblWhenDoYouPlanToSpreadInOrganicfertiliser, Model.CropTypeName)
+                        }
+                        else
+                        {
+                            @Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserForTheseFields
+                        }
                     </govuk-radios-fieldset-legend>
 
                     @if (ViewBag.InOrganicManureDurationsList != null)
