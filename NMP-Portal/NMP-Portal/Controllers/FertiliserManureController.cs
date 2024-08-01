@@ -22,9 +22,12 @@ namespace NMP.Portal.Controllers
         private readonly IDataProtector _cropDataProtector;
         private readonly IFarmService _farmService;
         private readonly IFertiliserManureService _fertiliserManureService;
+        private readonly ICropService _cropService;
+        private readonly IFieldService _fieldService;
+
 
         public FertiliserManureController(ILogger<FertiliserManureController> logger, IDataProtectionProvider dataProtectionProvider,
-            IHttpContextAccessor httpContextAccessor, IFarmService farmService, IFertiliserManureService fertiliserManureService)
+            IHttpContextAccessor httpContextAccessor, IFarmService farmService, IFertiliserManureService fertiliserManureService, ICropService cropService, IFieldService fieldService)
         {
             _logger = logger;
             _fertiliserManureProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FertiliserManureController");
@@ -33,6 +36,8 @@ namespace NMP.Portal.Controllers
             _cropDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.CropController");
             _farmService = farmService;
             _fertiliserManureService = fertiliserManureService;
+            _cropService = cropService;
+            _fieldService = fieldService;
         }
 
         public IActionResult Index()
@@ -375,7 +380,7 @@ namespace NMP.Portal.Controllers
                     {
                         TempData["FieldError"] = null;
                     }
-                    return RedirectToAction("FieldGroup", new {q=model.EncryptedFarmId,r=model.EncryptedHarvestYear});
+                    return RedirectToAction("FieldGroup", new { q = model.EncryptedFarmId, r = model.EncryptedHarvestYear });
                 }
             }
             catch (Exception ex)
@@ -500,11 +505,19 @@ namespace NMP.Portal.Controllers
                 if (model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
                 {
                     TempData["FieldError"] = ex.Message;
+                    if (TempData["InOrgnaicManureDurationError"] != null)
+                    {
+                        TempData["InOrgnaicManureDurationError"] = null;
+                    }
                     return RedirectToAction("Fields");
                 }
                 else
                 {
                     TempData["FieldGroupError"] = ex.Message;
+                    if (TempData["InOrgnaicManureDurationError"] != null)
+                    {
+                        TempData["InOrgnaicManureDurationError"] = null;
+                    }
                     return RedirectToAction("FieldGroup", new { q = model.EncryptedFarmId, r = model.EncryptedHarvestYear });
 
                 }
@@ -598,7 +611,369 @@ namespace NMP.Portal.Controllers
             }
 
 
+            if (model.FieldList.Count == 1)
+            {
+                RecommendationViewModel recommendationViewModel = new RecommendationViewModel();
+                Error error = null;
+                int fieldId;
+                try
+                {
+                    if (int.TryParse(model.FieldList[0], out fieldId))
+                    {
+                        model.FieldName = (await _fieldService.FetchFieldByFieldId(fieldId)).Name;
+                        List<RecommendationHeader> recommendationsHeader = null;
+
+                        (recommendationsHeader, error) = await _cropService.FetchRecommendationByFieldIdAndYear(fieldId, model.HarvestYear.Value);
+                        if (error == null)
+                        {
+                            if (recommendationViewModel.Crops == null)
+                            {
+                                recommendationViewModel.Crops = new List<CropViewModel>();
+                            }
+                            if (recommendationViewModel.ManagementPeriods == null)
+                            {
+                                recommendationViewModel.ManagementPeriods = new List<ManagementPeriod>();
+                            }
+                            if (recommendationViewModel.Recommendations == null)
+                            {
+                                recommendationViewModel.Recommendations = new List<Recommendation>();
+                            }
+                            foreach (var recommendation in recommendationsHeader)
+                            {
+                                var crop = new CropViewModel
+                                {
+                                    ID = recommendation.Crops.ID,
+                                    Year = recommendation.Crops.Year,
+                                    CropTypeID = recommendation.Crops.CropTypeID,
+                                    FieldID = recommendation.Crops.FieldID,
+                                    Variety = recommendation.Crops.Variety,
+                                    CropInfo1 = recommendation.Crops.CropInfo1,
+                                    CropInfo2 = recommendation.Crops.CropInfo2,
+                                    Yield = recommendation.Crops.Yield,
+                                    SowingDate = recommendation.Crops.SowingDate,
+                                    CropTypeName = await _fieldService.FetchCropTypeById(recommendation.Crops.CropTypeID.Value),
+                                    CropInfo1Name = await _cropService.FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(recommendation.Crops.CropTypeID.Value, recommendation.Crops.CropInfo1.Value)
+                                };
+                                recommendationViewModel.Crops.Add(crop);
+                                if (recommendation.RecommendationData.Count > 0)
+                                {
+                                    foreach (var recData in recommendation.RecommendationData)
+                                    {
+                                        var ManagementPeriods = new ManagementPeriod
+                                        {
+                                            ID = recData.ManagementPeriod.ID,
+                                            CropID = recData.ManagementPeriod.CropID,
+                                            DefoliationID = recData.ManagementPeriod.DefoliationID,
+                                            Utilisation1ID = recData.ManagementPeriod.Utilisation1ID,
+                                            Utilisation2ID = recData.ManagementPeriod.Utilisation2ID,
+                                            PloughedDown = recData.ManagementPeriod.PloughedDown
+                                        };
+                                        recommendationViewModel.ManagementPeriods.Add(ManagementPeriods);
+                                        var rec = new Recommendation
+                                        {
+                                            ID = recData.Recommendation.ID,
+                                            ManagementPeriodID = recData.Recommendation.ManagementPeriodID,
+                                            CropN = recData.Recommendation.CropN,
+                                            CropP2O5 = recData.Recommendation.CropP2O5,
+                                            CropK2O = recData.Recommendation.CropK2O,
+                                            CropSO3 = recData.Recommendation.CropSO3,
+                                            CropLime = recData.Recommendation.CropLime,
+                                            ManureN = recData.Recommendation.ManureN,
+                                            ManureP2O5 = recData.Recommendation.ManureP2O5,
+                                            ManureK2O = recData.Recommendation.ManureK2O,
+                                            ManureSO3 = recData.Recommendation.ManureSO3,
+                                            ManureLime = recData.Recommendation.ManureLime,
+                                            FertilizerN = recData.Recommendation.FertilizerN,
+                                            FertilizerP2O5 = recData.Recommendation.FertilizerP2O5,
+                                            FertilizerK2O = recData.Recommendation.FertilizerK2O,
+                                            FertilizerSO3 = recData.Recommendation.FertilizerSO3,
+                                            FertilizerLime = recData.Recommendation.FertilizerLime,
+                                            SNSIndex = recData.Recommendation.SNSIndex,
+                                            SIndex = recData.Recommendation.SIndex,
+                                            KIndex = recData.Recommendation.KIndex,
+                                            MgIndex = recData.Recommendation.MgIndex,
+                                            PIndex = recData.Recommendation.PIndex,
+                                            NaIndex = recData.Recommendation.NaIndex
+                                        };
+                                        recommendationViewModel.Recommendations.Add(rec);
+                                    }
+                                    model.RecommendationViewModel = recommendationViewModel;
+                                }
+
+                            }
+                        }
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    TempData["InOrgnaicManureDurationError"] = ex.Message;
+                    return RedirectToAction("InOrgnaicManureDuration", model);
+                }
+
+            }
+
+
             return View(model);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> NutrientValues(FertiliserManureViewModel model)
+        {
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("N"))
+            {
+                var totalNitrogenError = ModelState["N"].Errors.Count > 0 ?
+                                ModelState["N"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (totalNitrogenError != null && totalNitrogenError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["N"].RawValue, Resource.lblN)))
+                {
+                    ModelState["N"].Errors.Clear();
+                    ModelState["N"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblNitrogen));
+                }
+            }
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("P2O5"))
+            {
+                var totalPhosphateError = ModelState["P2O5"].Errors.Count > 0 ?
+                                ModelState["P2O5"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (totalPhosphateError != null && totalPhosphateError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["P2O5"].RawValue, Resource.lblP2O5)))
+                {
+                    ModelState["P2O5"].Errors.Clear();
+                    ModelState["P2O5"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblPhosphateP2O5));
+                }
+            }
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("K2O"))
+            {
+                var totalPotassiumError = ModelState["K2O"].Errors.Count > 0 ?
+                                ModelState["K2O"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (totalPotassiumError != null && totalPotassiumError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["K2O"].RawValue, Resource.lblK2O)))
+                {
+                    ModelState["K2O"].Errors.Clear();
+                    ModelState["K2O"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblPotashK2O));
+                }
+            }
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("SO3"))
+            {
+                var sulphurSO3Error = ModelState["SO3"].Errors.Count > 0 ?
+                                ModelState["SO3"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (sulphurSO3Error != null && sulphurSO3Error.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SO3"].RawValue, Resource.lblSO3)))
+                {
+                    ModelState["SO3"].Errors.Clear();
+                    ModelState["SO3"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblSulphurSO3));
+                }
+            }
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("Lime"))
+            {
+                var limeError = ModelState["Lime"].Errors.Count > 0 ?
+                                ModelState["Lime"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (limeError != null && limeError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["Lime"].RawValue, Resource.lblLime)))
+                {
+                    ModelState["Lime"].Errors.Clear();
+                    ModelState["Lime"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblLime));
+                }
+            }
+            if (model.N == null)
+            {
+                ModelState.AddModelError("N", Resource.MsgEnterValidAmountForEachNutrient);
+                //return View(model);
+            }
+            if (model.P2O5 == null)
+            {
+                ModelState.AddModelError("P2O5", Resource.MsgEnterValidAmountForEachNutrient);
+            }
+            if (model.K2O == null)
+            {
+                ModelState.AddModelError("K2O", Resource.MsgEnterValidAmountForEachNutrient);
+            }
+            if (model.SO3 == null)
+            {
+                ModelState.AddModelError("SO3", Resource.MsgEnterValidAmountForEachNutrient);
+            }
+            if (model.Lime == null)
+            {
+                ModelState.AddModelError("Lime", Resource.MsgEnterValidAmountForEachNutrient);
+            }
+
+            if (model.N != null)
+            {
+                if (model.N < 0 || model.N > 9999)
+                {
+                    ModelState.AddModelError("N", string.Format(Resource.MsgMinMaxValidation, Resource.lblNitrogen, 9999));
+                }
+            }
+            if (model.P2O5 != null)
+            {
+                if (model.P2O5 < 0 || model.P2O5 > 9999)
+                {
+                    ModelState.AddModelError("P2O5", string.Format(Resource.MsgMinMaxValidation, Resource.lblPhosphateP2O5, 9999));
+                }
+            }
+            if (model.K2O != null)
+            {
+                if (model.K2O < 0 || model.K2O > 9999)
+                {
+                    ModelState.AddModelError("K2O", string.Format(Resource.MsgMinMaxValidation, Resource.lblPotashK2O, 9999));
+                }
+            }
+            if (model.SO3 != null)
+            {
+                if (model.SO3 < 0 || model.SO3 > 9999)
+                {
+                    ModelState.AddModelError("SO3", string.Format(Resource.MsgMinMaxValidation, Resource.lblSulphurSO3, 9999));
+                }
+            }
+            if (model.Lime != null)
+            {
+                if (model.Lime < 0 || model.Lime > 99.9m)
+                {
+                    ModelState.AddModelError("Lime", string.Format(Resource.MsgMinMaxValidation, Resource.lblLime, 99.9));
+                }
+            }
+
+            if (!ModelState.IsValid)
+            {
+                if (model.FieldList.Count == 1)
+                {
+                    RecommendationViewModel recommendationViewModel = new RecommendationViewModel();
+                    Error error = null;
+                    int fieldId;
+                    try
+                    {
+                        if (int.TryParse(model.FieldList[0], out fieldId))
+                        {
+                            model.FieldName = (await _fieldService.FetchFieldByFieldId(fieldId)).Name;
+                            List<RecommendationHeader> recommendationsHeader = null;
+
+                            (recommendationsHeader, error) = await _cropService.FetchRecommendationByFieldIdAndYear(fieldId, model.HarvestYear.Value);
+                            if (error == null)
+                            {
+                                if (recommendationViewModel.Crops == null)
+                                {
+                                    recommendationViewModel.Crops = new List<CropViewModel>();
+                                }
+                                if (recommendationViewModel.ManagementPeriods == null)
+                                {
+                                    recommendationViewModel.ManagementPeriods = new List<ManagementPeriod>();
+                                }
+                                if (recommendationViewModel.Recommendations == null)
+                                {
+                                    recommendationViewModel.Recommendations = new List<Recommendation>();
+                                }
+                                foreach (var recommendation in recommendationsHeader)
+                                {
+                                    var crop = new CropViewModel
+                                    {
+                                        ID = recommendation.Crops.ID,
+                                        Year = recommendation.Crops.Year,
+                                        CropTypeID = recommendation.Crops.CropTypeID,
+                                        FieldID = recommendation.Crops.FieldID,
+                                        Variety = recommendation.Crops.Variety,
+                                        CropInfo1 = recommendation.Crops.CropInfo1,
+                                        CropInfo2 = recommendation.Crops.CropInfo2,
+                                        Yield = recommendation.Crops.Yield,
+                                        SowingDate = recommendation.Crops.SowingDate,
+                                        CropTypeName = await _fieldService.FetchCropTypeById(recommendation.Crops.CropTypeID.Value),
+                                        CropInfo1Name = await _cropService.FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(recommendation.Crops.CropTypeID.Value, recommendation.Crops.CropInfo1.Value)
+                                    };
+                                    recommendationViewModel.Crops.Add(crop);
+                                    if (recommendation.RecommendationData.Count > 0)
+                                    {
+                                        foreach (var recData in recommendation.RecommendationData)
+                                        {
+                                            var ManagementPeriods = new ManagementPeriod
+                                            {
+                                                ID = recData.ManagementPeriod.ID,
+                                                CropID = recData.ManagementPeriod.CropID,
+                                                DefoliationID = recData.ManagementPeriod.DefoliationID,
+                                                Utilisation1ID = recData.ManagementPeriod.Utilisation1ID,
+                                                Utilisation2ID = recData.ManagementPeriod.Utilisation2ID,
+                                                PloughedDown = recData.ManagementPeriod.PloughedDown
+                                            };
+                                            recommendationViewModel.ManagementPeriods.Add(ManagementPeriods);
+                                            var rec = new Recommendation
+                                            {
+                                                ID = recData.Recommendation.ID,
+                                                ManagementPeriodID = recData.Recommendation.ManagementPeriodID,
+                                                CropN = recData.Recommendation.CropN,
+                                                CropP2O5 = recData.Recommendation.CropP2O5,
+                                                CropK2O = recData.Recommendation.CropK2O,
+                                                CropSO3 = recData.Recommendation.CropSO3,
+                                                CropLime = recData.Recommendation.CropLime,
+                                                ManureN = recData.Recommendation.ManureN,
+                                                ManureP2O5 = recData.Recommendation.ManureP2O5,
+                                                ManureK2O = recData.Recommendation.ManureK2O,
+                                                ManureSO3 = recData.Recommendation.ManureSO3,
+                                                ManureLime = recData.Recommendation.ManureLime,
+                                                FertilizerN = recData.Recommendation.FertilizerN,
+                                                FertilizerP2O5 = recData.Recommendation.FertilizerP2O5,
+                                                FertilizerK2O = recData.Recommendation.FertilizerK2O,
+                                                FertilizerSO3 = recData.Recommendation.FertilizerSO3,
+                                                FertilizerLime = recData.Recommendation.FertilizerLime,
+                                                SNSIndex = recData.Recommendation.SNSIndex,
+                                                SIndex = recData.Recommendation.SIndex,
+                                                KIndex = recData.Recommendation.KIndex,
+                                                MgIndex = recData.Recommendation.MgIndex,
+                                                PIndex = recData.Recommendation.PIndex,
+                                                NaIndex = recData.Recommendation.NaIndex
+                                            };
+                                            recommendationViewModel.Recommendations.Add(rec);
+                                        }
+                                        model.RecommendationViewModel = recommendationViewModel;
+                                    }
+
+                                }
+                            }
+
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        TempData["NutrientValuesError"] = ex.Message;
+                        return View(model);
+                    }
+
+                }
+                return View(model);
+            }
+
+            if (model.FertiliserManures.Count > 0)
+            {
+                foreach (var fertManure in model.FertiliserManures)
+                {
+                    fertManure.N = model.N;
+                    fertManure.P2O5 = model.P2O5;
+                    fertManure.K2O = model.K2O;
+                    fertManure.MgO = model.MgO;
+                    fertManure.SO3 = model.SO3;
+                    fertManure.Lime=model.Lime
+                }
+            }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
+
+
+            return RedirectToAction("QuestionForSpreadInorganicFertiliser");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> QuestionForSpreadInorganicFertiliser()
+        {
+            FertiliserManureViewModel model = new FertiliserManureViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FertiliserManureViewModel>("FertiliserManure");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+
+
+            return View(model);
+        }
+
     }
 }
