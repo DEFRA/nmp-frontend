@@ -5197,7 +5197,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This will remove all the data about this farm and its field. It will also remove this farm and its fields from your plans and records. You will not be able to get it back..
+        ///   Looks up a localized string similar to This will remove all the data about this farm and its fields. It will also remove this farm and its fields from your plans and records. You will not be able to get it back..
         /// </summary>
         public static string MsgRemoveFarm {
             get {

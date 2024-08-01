@@ -1906,6 +1906,6 @@ m3/ha  not set</value>
     <value>You have removed {0} Farm</value>
   </data>
   <data name="MsgRemoveFarm" xml:space="preserve">
-    <value>This will remove all the data about this farm and its field. It will also remove this farm and its fields from your plans and records. You will not be able to get it back.</value>
+    <value>This will remove all the data about this farm and its fields. It will also remove this farm and its fields from your plans and records. You will not be able to get it back.</value>
   </data>
 </root>
