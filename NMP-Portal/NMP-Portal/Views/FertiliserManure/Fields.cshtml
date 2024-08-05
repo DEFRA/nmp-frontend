@@ -26,7 +26,9 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.K2O"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SO3"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Lime"></govuk-input>
-
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.QuestionForSpreadInorganicFertiliser" value="@Model.QuestionForSpreadInorganicFertiliser.ToString().ToLower()"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCounter" value="@Model.EncryptedCounter"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Counter" value="@Model.Counter"></govuk-input>
     @if (Model.FertiliserManures != null && Model.FertiliserManures.Count > 0)
     {
         @for (int i = 0; i < Model.FertiliserManures.Count; i++)
@@ -42,6 +44,9 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].N" value="@Model.FertiliserManures[i].N"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].Lime" value="@Model.FertiliserManures[i].Lime"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].ApplicationRate" value="@Model.FertiliserManures[i].ApplicationRate"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].EncryptedCounter" value="@Model.FertiliserManures[i].EncryptedCounter"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].Counter" value="@Model.FertiliserManures[i].Counter"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].InOrgnaicManureDurationId" value="@Model.FertiliserManures[i].InOrgnaicManureDurationId"></govuk-input>
         }
 
     }

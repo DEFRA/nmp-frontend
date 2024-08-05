@@ -8,6 +8,7 @@ using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
 using NMP.Portal.Services;
 using NMP.Portal.ViewModels;
+using System.Diagnostics.Metrics;
 using System.Reflection;
 
 namespace NMP.Portal.Controllers
@@ -85,11 +86,15 @@ namespace NMP.Portal.Controllers
             //    }
             //}
             //else
+           
+            if (model.Counter > 0)
+            {
+                return RedirectToAction("QuestionForSpreadInorganicFertiliser", new { q = model.EncryptedCounter });
+            }
             if (model.FieldGroup == Resource.lblSelectSpecificFields && (!model.IsComingFromRecommendation))
             {
                 return RedirectToAction("Fields");
             }
-
             return RedirectToAction("FieldGroup", new
             {
                 q = model.EncryptedFarmId,
@@ -155,7 +160,7 @@ namespace NMP.Portal.Controllers
                             {
                                 if (model.FertiliserManures == null)
                                 {
-                                    model.FertiliserManures = new List<FertiliserManures>();
+                                    model.FertiliserManures = new List<FertiliserManure>();
                                 }
                                 if (model.FertiliserManures.Count > 0)
                                 {
@@ -163,7 +168,7 @@ namespace NMP.Portal.Controllers
                                 }
                                 foreach (var manIds in managementIds)
                                 {
-                                    var fertiliserManures = new FertiliserManures
+                                    var fertiliserManures = new FertiliserManure
                                     {
                                         ManagementPeriodId = manIds
                                     };
@@ -332,6 +337,7 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
+                        int counter = 0;
                         if (fieldList.Count > 0)
                         {
                             model.FieldList = fieldList.Select(x => x.Id.ToString()).ToList();
@@ -343,7 +349,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     if (model.FertiliserManures == null)
                                     {
-                                        model.FertiliserManures = new List<FertiliserManures>();
+                                        model.FertiliserManures = new List<FertiliserManure>();
                                     }
                                     if (model.FertiliserManures.Count > 0)
                                     {
@@ -351,12 +357,15 @@ namespace NMP.Portal.Controllers
                                     }
                                     foreach (var manIds in managementIds)
                                     {
-                                        var fertiliserManure = new FertiliserManures
+                                        var fertiliserManure = new FertiliserManure
                                         {
-                                            ManagementPeriodId = manIds
+                                            ManagementPeriodId = manIds,
+                                            EncryptedCounter = _fertiliserManureProtector.Protect(counter.ToString()),
+                                            Counter = counter
                                         };
                                         model.FertiliserManures.Add(fertiliserManure);
                                     }
+                                    model.Counter = counter;
                                 }
                             }
                             else
@@ -421,6 +430,7 @@ namespace NMP.Portal.Controllers
                         return View(model);
 
                     }
+                    int counter = 0;
                     if (model.FieldList.Count == 1 && model.FieldList[0] == Resource.lblSelectAll)
                     {
                         model.FieldList = selectListItem.Select(item => item.Value).ToList();
@@ -433,7 +443,7 @@ namespace NMP.Portal.Controllers
                         {
                             if (model.FertiliserManures == null)
                             {
-                                model.FertiliserManures = new List<FertiliserManures>();
+                                model.FertiliserManures = new List<FertiliserManure>();
                             }
                             if (model.FertiliserManures.Count > 0)
                             {
@@ -441,13 +451,15 @@ namespace NMP.Portal.Controllers
                             }
                             foreach (var manIds in managementIds)
                             {
-                                var fertiliserManure = new FertiliserManures
+                                var fertiliserManure = new FertiliserManure
                                 {
-                                    ManagementPeriodId = manIds
+                                    ManagementPeriodId = manIds,
+                                    EncryptedCounter = _fertiliserManureProtector.Protect(counter.ToString()),
+                                    Counter = counter
                                 };
                                 model.FertiliserManures.Add(fertiliserManure);
                             }
-
+                            model.Counter = counter;
 
                         }
                     }
@@ -474,7 +486,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> InOrgnaicManureDuration()
+        public async Task<IActionResult> InOrgnaicManureDuration(string q)//counter
         {
             FertiliserManureViewModel model = new FertiliserManureViewModel();
             Error error = null;
@@ -522,7 +534,22 @@ namespace NMP.Portal.Controllers
 
                 }
             }
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                int currentCounter = Convert.ToInt32(_fertiliserManureProtector.Unprotect(q));
+                model.Counter = currentCounter;
+                model.EncryptedCounter = q;
+                foreach (var fertManure in model.FertiliserManures)
+                {
+                    if (currentCounter == fertManure.Counter)
+                    {
+                        model.InOrgnaicManureDurationId = fertManure.InOrgnaicManureDurationId;
+                        break;
+                    }
+                }
 
+                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
+            }
             return View(model);
         }
 
@@ -533,10 +560,9 @@ namespace NMP.Portal.Controllers
             Error error = null;
             try
             {
-                if (model.InOrgnaicManureDurationId == null)
+                if (model.FertiliserManures[model.Counter.Value].InOrgnaicManureDurationId == null)
                 {
-                    ModelState.AddModelError("InOrgnaicManureDurationId", Resource.MsgSelectAnOptionBeforeContinuing);
-
+                    ModelState.AddModelError("model.FertiliserManures[" + model.Counter.Value + "].InOrgnaicManureDurationId", Resource.MsgSelectAnOptionBeforeContinuing);
                 }
                 if (!ModelState.IsValid)
                 {
@@ -553,7 +579,7 @@ namespace NMP.Portal.Controllers
 
                     return View(model);
                 }
-
+                model.InOrgnaicManureDurationId = model.FertiliserManures[model.Counter.Value].InOrgnaicManureDurationId.Value;
                 (InOrganicManureDurationResponse OrganicManureDuration, error) = await _fertiliserManureService.FetchInOrganicManureDurationsById(model.InOrgnaicManureDurationId.Value);
                 if (error == null)
                 {
@@ -571,14 +597,33 @@ namespace NMP.Portal.Controllers
 
                     if (applicationDate != null)
                     {
-                        if (model.FertiliserManures.Count > 0)
+                        foreach (var fertManure in model.FertiliserManures)
                         {
-                            foreach (var fertManure in model.FertiliserManures)
+                            if (fertManure.ApplicationDate == null)
                             {
                                 fertManure.ApplicationDate = applicationDate;
                             }
                         }
+                        //if (model.QuestionForSpreadInorganicFertiliser.HasValue && model.QuestionForSpreadInorganicFertiliser.Value)
+                        //{
+                        //    foreach (var fertManure in model.FertiliserManures)
+                        //    {
+                        //        fertManure.ApplicationDate = applicationDate;
+                        //    }
+                        //    model.Counter = Convert.ToInt32(_fertiliserManureProtector.Unprotect(model.EncryptedCounter));
+                        //}
+                        //else
+                        //{
+                        //    if (model.FertiliserManures.Count > 0)
+                        //    {
+                        //        foreach (var fertManure in model.FertiliserManures)
+                        //        {
+                        //            fertManure.ApplicationDate = applicationDate;
+                        //        }
+                        //    }
+                        //}
                     }
+
                     _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
 
                 }
@@ -598,7 +643,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> NutrientValues()
+        public async Task<IActionResult> NutrientValues(string q)//counter
         {
             FertiliserManureViewModel model = new FertiliserManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
@@ -712,6 +757,27 @@ namespace NMP.Portal.Controllers
             }
 
 
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                int currentCounter = Convert.ToInt32(_fertiliserManureProtector.Unprotect(q));
+                model.Counter = currentCounter;
+                model.EncryptedCounter = q;
+                //foreach (var fertManure in model.FertiliserManures)
+                //{
+                //    if (currentCounter == fertManure.Counter)
+                //    {
+                //        model.N = fertManure.N;
+                //        model.SO3 = fertManure.SO3;
+                //        model.Lime = fertManure.Lime;
+                //        model.K2O = fertManure.K2O;
+                //        model.P2O5 = fertManure.P2O5;
+                //        break;
+                //    }
+                //}
+
+                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
+            }
+
             return View(model);
         }
 
@@ -774,61 +840,61 @@ namespace NMP.Portal.Controllers
                     ModelState["Lime"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblLime));
                 }
             }
-            if (model.N == null)
+            if (model.FertiliserManures[model.Counter.Value].N == null)
             {
-                ModelState.AddModelError("N", Resource.MsgEnterValidAmountForEachNutrient);
+                ModelState.AddModelError("model.FertiliserManures[" + model.Counter.Value + "].N", Resource.MsgEnterValidAmountForEachNutrient);
                 //return View(model);
             }
-            if (model.P2O5 == null)
+            if (model.FertiliserManures[model.Counter.Value].P2O5 == null)
             {
-                ModelState.AddModelError("P2O5", Resource.MsgEnterValidAmountForEachNutrient);
+                ModelState.AddModelError("model.FertiliserManures[" + model.Counter.Value + "].P2O5", Resource.MsgEnterValidAmountForEachNutrient);
             }
-            if (model.K2O == null)
+            if (model.FertiliserManures[model.Counter.Value].K2O == null)
             {
-                ModelState.AddModelError("K2O", Resource.MsgEnterValidAmountForEachNutrient);
+                ModelState.AddModelError("model.FertiliserManures[" + model.Counter.Value + "].K2O", Resource.MsgEnterValidAmountForEachNutrient);
             }
-            if (model.SO3 == null)
+            if (model.FertiliserManures[model.Counter.Value].SO3 == null)
             {
-                ModelState.AddModelError("SO3", Resource.MsgEnterValidAmountForEachNutrient);
+                ModelState.AddModelError("model.FertiliserManures[" + model.Counter.Value + "].SO3", Resource.MsgEnterValidAmountForEachNutrient);
             }
-            if (model.Lime == null)
+            if (model.FertiliserManures[model.Counter.Value].Lime == null)
             {
-                ModelState.AddModelError("Lime", Resource.MsgEnterValidAmountForEachNutrient);
+                ModelState.AddModelError("model.FertiliserManures[" + model.Counter.Value + "].Lime", Resource.MsgEnterValidAmountForEachNutrient);
             }
 
-            if (model.N != null)
+            if (model.FertiliserManures[model.Counter.Value].N != null)
             {
-                if (model.N < 0 || model.N > 9999)
+                if (model.FertiliserManures[model.Counter.Value].N < 0 || model.FertiliserManures[model.Counter.Value].N > 9999)
                 {
-                    ModelState.AddModelError("N", string.Format(Resource.MsgMinMaxValidation, Resource.lblNitrogen, 9999));
+                    ModelState.AddModelError("model.FertiliserManures[" + model.Counter.Value + "].N", string.Format(Resource.MsgMinMaxValidation, Resource.lblNitrogen, 9999));
                 }
             }
-            if (model.P2O5 != null)
+            if (model.FertiliserManures[model.Counter.Value].P2O5 != null)
             {
-                if (model.P2O5 < 0 || model.P2O5 > 9999)
+                if (model.FertiliserManures[model.Counter.Value].P2O5 < 0 || model.FertiliserManures[model.Counter.Value].P2O5 > 9999)
                 {
-                    ModelState.AddModelError("P2O5", string.Format(Resource.MsgMinMaxValidation, Resource.lblPhosphateP2O5, 9999));
+                    ModelState.AddModelError("model.FertiliserManures[" + model.Counter.Value + "].P2O5", string.Format(Resource.MsgMinMaxValidation, Resource.lblPhosphateP2O5, 9999));
                 }
             }
-            if (model.K2O != null)
+            if (model.FertiliserManures[model.Counter.Value].K2O != null)
             {
-                if (model.K2O < 0 || model.K2O > 9999)
+                if (model.FertiliserManures[model.Counter.Value].K2O < 0 || model.FertiliserManures[model.Counter.Value].K2O > 9999)
                 {
-                    ModelState.AddModelError("K2O", string.Format(Resource.MsgMinMaxValidation, Resource.lblPotashK2O, 9999));
+                    ModelState.AddModelError("model.FertiliserManures[" + model.Counter.Value + "].K2O", string.Format(Resource.MsgMinMaxValidation, Resource.lblPotashK2O, 9999));
                 }
             }
-            if (model.SO3 != null)
+            if (model.FertiliserManures[model.Counter.Value].SO3 != null)
             {
-                if (model.SO3 < 0 || model.SO3 > 9999)
+                if (model.FertiliserManures[model.Counter.Value].SO3 < 0 || model.FertiliserManures[model.Counter.Value].SO3 > 9999)
                 {
-                    ModelState.AddModelError("SO3", string.Format(Resource.MsgMinMaxValidation, Resource.lblSulphurSO3, 9999));
+                    ModelState.AddModelError("model.FertiliserManures[" + model.Counter.Value + "].SO3", string.Format(Resource.MsgMinMaxValidation, Resource.lblSulphurSO3, 9999));
                 }
             }
-            if (model.Lime != null)
+            if (model.FertiliserManures[model.Counter.Value].Lime != null)
             {
-                if (model.Lime < 0 || model.Lime > 99.9m)
+                if (model.FertiliserManures[model.Counter.Value].Lime < 0 || model.FertiliserManures[model.Counter.Value].Lime > 99.9m)
                 {
-                    ModelState.AddModelError("Lime", string.Format(Resource.MsgMinMaxValidation, Resource.lblLime, 99.9));
+                    ModelState.AddModelError("model.FertiliserManures[" + model.Counter.Value + "].Lime", string.Format(Resource.MsgMinMaxValidation, Resource.lblLime, 99.9));
                 }
             }
 
@@ -936,18 +1002,19 @@ namespace NMP.Portal.Controllers
                 return View(model);
             }
 
-            if (model.FertiliserManures.Count > 0)
+            for (int i = 0; i < model.FertiliserManures.Count; i++)
             {
-                foreach (var fertManure in model.FertiliserManures)
+                if (model.FertiliserManures[i].N == null && model.FertiliserManures[i].P2O5 == null
+                   && model.FertiliserManures[i].K2O == null && model.FertiliserManures[i].SO3 == null && model.FertiliserManures[i].Lime == null)
                 {
-                    fertManure.N = model.N;
-                    fertManure.P2O5 = model.P2O5;
-                    fertManure.K2O = model.K2O;
-                    fertManure.MgO = model.MgO;
-                    fertManure.SO3 = model.SO3;
-                    fertManure.Lime = model.Lime;
+                    model.FertiliserManures[i].N = model.FertiliserManures[model.Counter.Value].N;
+                    model.FertiliserManures[i].P2O5 = model.FertiliserManures[model.Counter.Value].P2O5;
+                    model.FertiliserManures[i].K2O = model.FertiliserManures[model.Counter.Value].K2O;
+                    model.FertiliserManures[i].Lime = model.FertiliserManures[model.Counter.Value].Lime;
+                    model.FertiliserManures[i].SO3 = model.FertiliserManures[model.Counter.Value].SO3;
                 }
             }
+
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
 
 
@@ -955,7 +1022,98 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> QuestionForSpreadInorganicFertiliser()
+        public async Task<IActionResult> QuestionForSpreadInorganicFertiliser(string q)//counter
+        {
+            FertiliserManureViewModel model = new FertiliserManureViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FertiliserManureViewModel>("FertiliserManure");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                int currentCounter = Convert.ToInt32(_fertiliserManureProtector.Unprotect(q));
+                if (currentCounter > 0)                                                                           
+                {
+                    model.EncryptedCounter = _fertiliserManureProtector.Protect((currentCounter - 1).ToString());
+                    model.Counter = currentCounter - 1;
+                }
+                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> QuestionForSpreadInorganicFertiliser(FertiliserManureViewModel model)
+        {
+            if (model.QuestionForSpreadInorganicFertiliser == null)
+            {
+                ModelState.AddModelError("QuestionForSpreadInorganicFertiliser", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
+            if (!model.QuestionForSpreadInorganicFertiliser.Value)
+            {
+
+                for (int i = 0; i < model.FertiliserManures.Count; i++)
+                {
+                    if (model.FertiliserManures[i].ApplicationDate == null && model.FertiliserManures[i].N == null && model.FertiliserManures[i].P2O5 == null
+                            && model.FertiliserManures[i].K2O == null && model.FertiliserManures[i].SO3 == null && model.FertiliserManures[i].Lime == null)
+                    {
+                        model.FertiliserManures.RemoveAt(i);
+                    }
+                }
+                return RedirectToAction("CheckYourAnswer");
+            }
+            else
+            {
+                string fieldIds = string.Join(",", model.FieldList);
+                (List<int> managementIds, Error error) = await _fertiliserManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldIds, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
+                if (model.EncryptedCounter == null)
+                {
+                    model.EncryptedCounter = _fertiliserManureProtector.Protect("1");
+                    model.Counter = 1;
+                }
+                else
+                {
+                    int counter = Convert.ToInt32(_fertiliserManureProtector.Unprotect(model.EncryptedCounter));
+                    model.EncryptedCounter = _fertiliserManureProtector.Protect((counter + managementIds.Count).ToString());
+                    model.Counter = counter + managementIds.Count;
+                }
+                foreach (var manIds in managementIds)
+                {
+                    var fertiliserManure = new FertiliserManure
+                    {
+                        ManagementPeriodId = manIds,
+                        EncryptedCounter = model.EncryptedCounter,
+                        Counter = model.Counter
+                    };
+                    model.FertiliserManures.Add(fertiliserManure);
+                }
+                model.InOrgnaicManureDuration = null;
+                model.InOrgnaicManureDurationId = null;
+                model.N = null;
+                model.SO3 = null;
+                model.K2O = null;
+                model.Lime = null;
+                model.P2O5 = null;
+
+
+                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
+                return RedirectToAction("InOrgnaicManureDuration");
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CheckYourAnswer()
         {
             FertiliserManureViewModel model = new FertiliserManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
@@ -970,6 +1128,7 @@ namespace NMP.Portal.Controllers
 
             return View(model);
         }
+
 
     }
 }

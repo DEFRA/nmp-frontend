@@ -21,7 +21,7 @@ namespace NMP.Portal.ViewModels
         public string? CropTypeName { get; set; }
         public int? InOrgnaicManureDurationId { get; set; }
         public string? InOrgnaicManureDuration { get; set; }
-        public List<FertiliserManures>? FertiliserManures { get; set; }
+        public List<FertiliserManure>? FertiliserManures { get; set; }
 
         public decimal? N { get; set; }
         public decimal? P2O5 { get; set; }
@@ -33,5 +33,7 @@ namespace NMP.Portal.ViewModels
         public bool? QuestionForSpreadInorganicFertiliser { get; set; }
         public string? FieldName { get; set; }
         public RecommendationViewModel? RecommendationViewModel { get; set; }
+        public string? EncryptedCounter { get; set; }
+        public int? Counter { get; set; }
     }
 }
