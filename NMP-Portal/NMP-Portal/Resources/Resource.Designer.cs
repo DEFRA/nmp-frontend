@@ -79,6 +79,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 20.
+        /// </summary>
+        public static string FieldGreaterThanX {
+            get {
+                return ResourceManager.GetString("FieldGreaterThanX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you plan to grow any other crops in these fields?.
         /// </summary>
         public static string lbDoYouPlanToGrowAnyOtherCropsInTheseFields {
@@ -3868,6 +3877,15 @@ namespace NMP.Portal.Resources {
         public static string lblViewFieldPlan {
             get {
                 return ResourceManager.GetString("lblViewFieldPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View fields.
+        /// </summary>
+        public static string lblViewFields {
+            get {
+                return ResourceManager.GetString("lblViewFields", resourceCulture);
             }
         }
         
