@@ -985,20 +985,20 @@ namespace NMP.Portal.Controllers
                             model.MgO = model.ManureType.MgO;
                             model.NO3N = model.ManureType.NO3N;
                         }
-                            foreach (var orgManure in model.OrganicManures)
-                            {
-                                orgManure.DryMatterPercent = manureType.DryMatter;
-                                orgManure.N = manureType.DryMatter;
-                                orgManure.NH4N = manureType.NH4N;
-                                orgManure.NO3N = manureType.NO3N;
-                                orgManure.K2O = manureType.K2O;
-                                orgManure.SO3 = manureType.SO3;
-                                orgManure.MgO = manureType.MgO;
-                                orgManure.P2O5 = manureType.P2O5;
-                                orgManure.UricAcid = manureType.Uric;
-                            }
+                        foreach (var orgManure in model.OrganicManures)
+                        {
+                            orgManure.DryMatterPercent = manureType.DryMatter;
+                            orgManure.N = manureType.DryMatter;
+                            orgManure.NH4N = manureType.NH4N;
+                            orgManure.NO3N = manureType.NO3N;
+                            orgManure.K2O = manureType.K2O;
+                            orgManure.SO3 = manureType.SO3;
+                            orgManure.MgO = manureType.MgO;
+                            orgManure.P2O5 = manureType.P2O5;
+                            orgManure.UricAcid = manureType.Uric;
                         }
-                    else 
+                    }
+                    else
                     {
                         TempData["ManureTypeError"] = error.Message;
                         return View(model);
@@ -2729,6 +2729,24 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
+
+                (List<CommonResponse> fieldList, Error error) = await _organicManureService.FetchFieldByFarmIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
+                if (error == null)
+                {
+                    if (model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) )
+                    {
+                        if (fieldList.Count > 0)
+                        {
+                            var fieldNames = fieldList
+                                             .Where(field => model.FieldList.Contains(field.Id.ToString())).OrderBy(field => field.Name)
+                                             .Select(field => field.Name)
+                                             .ToList();
+                            ViewBag.SelectedFields = fieldNames.OrderBy(name => name).ToList();
+                            ViewBag.Fields = fieldList;
+                        }
+                    }
+                }
+
                 model.IsCheckAnswer = true;
                 model.IsManureTypeChange = false;
                 model.IsApplicationMethodChange = false;

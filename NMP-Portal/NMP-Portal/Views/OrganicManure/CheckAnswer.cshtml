@@ -183,6 +183,51 @@
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
+
+                @if (!Model.IsComingFromRecommendation && ViewBag.SelectedFields != null)
+                {
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            @Resource.lblWhichFieldsWouldYouLikeToPlanAnOrganic
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @if (ViewBag.SelectedFields != null)
+                            {
+                                if (ViewBag.SelectedFields.Count <= Convert.ToInt32(Resource.FieldGreaterThanX))
+                                {
+                                    @foreach (var item in ViewBag.SelectedFields)
+                                    {
+                                        @item <br />
+                                    }
+                                }
+                                else
+                                {
+                                    @string.Format(Resource.lblFarmFields, ViewBag.SelectedFields.Count)
+                                    <govuk-details>
+                                        <govuk-details-summary>
+                                            @Resource.lblViewFields
+                                        </govuk-details-summary>
+                                        <govuk-details-text>
+
+                                            @foreach (var item in ViewBag.SelectedFields)
+                                            {
+                                                @item <br />
+                                            }
+                                        </govuk-details-text>
+                                    </govuk-details>
+                                }
+                                
+                            }
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            @if (ViewBag.Fields != null)
+                            {
+                                <govuk-summary-list-row-action class="@( (ViewBag.Fields.Count==1 || Model.FieldGroup.Equals(Resource.lblAll) )? "disabled": "")" asp-action="Fields" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
+                            }
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+                }
+
                 <govuk-summary-list-row class=@((!Model.ManureTypeId.HasValue)?"govuk-error-message":"")>
                     <govuk-summary-list-row-key>
                         @Resource.lblWhatTypeOfOrganicMaterialAreYouUsing
@@ -241,7 +286,7 @@
                         @((Model.IsDefaultNutrientValues.HasValue) ? isDefaultNutrientValues : Resource.lblNotSet)
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action  asp-action="DefaultNutrientValues" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action asp-action="DefaultNutrientValues" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
 
@@ -334,7 +379,7 @@
                     <govuk-summary-list-row-value>
                         @((Model.IncorporationDelay.HasValue) ? Model.IncorporationDelayName : Resource.lblNotSet)
                     </govuk-summary-list-row-value>
-                    @if (needToShowIncorporationDelayBtn&&Model.ApplicationMethod!=null)
+                    @if (needToShowIncorporationDelayBtn && Model.ApplicationMethod != null)
                     {
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="IncorporationDelay" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
