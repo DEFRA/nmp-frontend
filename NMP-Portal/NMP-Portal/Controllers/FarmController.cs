@@ -56,7 +56,7 @@ namespace NMP.Portal.Controllers
             return View();
         }
 
-        public async Task<IActionResult> FarmList()
+        public async Task<IActionResult> FarmList(string? q)
         {
             HttpContext?.Session.Remove("FarmData");
             HttpContext?.Session.Remove("AddressList");
@@ -78,6 +78,15 @@ namespace NMP.Portal.Controllers
             if (model.Farms.Count == 0)
             {
                 return RedirectToAction("Name", "Farm");
+            }
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                ViewBag.Success = "true";
+                ViewBag.FarmName = _dataProtector.Unprotect(q);
+            }
+            else
+            {
+                ViewBag.Success = "false";
             }
 
             return View(model);
@@ -112,9 +121,14 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("Postcode", Resource.MsgEnterTheFarmPostcode);
             }
-            if (!string.IsNullOrWhiteSpace(farm.Postcode) && string.IsNullOrWhiteSpace(farm.EncryptedIsUpdate))
+            if (!string.IsNullOrWhiteSpace(farm.Postcode))
             {
-                bool IsFarmExist = await _farmService.IsFarmExistAsync(farm.Name, farm.Postcode);
+                int id = 0;
+                if(farm.EncryptedFarmId != null)
+                {
+                    id = Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId));
+                }
+                bool IsFarmExist = await _farmService.IsFarmExistAsync(farm.Name, farm.Postcode, id);
                 if (IsFarmExist)
                 {
                     ModelState.AddModelError("Name", Resource.MsgFarmAlreadyExist);
@@ -305,7 +319,12 @@ namespace NMP.Portal.Controllers
             }
             if (!string.IsNullOrWhiteSpace(farm.Postcode))
             {
-                bool IsFarmExist = await _farmService.IsFarmExistAsync(farm.Name, farm.Postcode);
+                int id = 0;
+                if (farm.EncryptedFarmId != null)
+                {
+                    id = Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId));
+                }
+                bool IsFarmExist = await _farmService.IsFarmExistAsync(farm.Name, farm.Postcode, id);
                 if (IsFarmExist)
                 {
                     ModelState.AddModelError("Postcode", Resource.MsgFarmAlreadyExist);
@@ -785,9 +804,7 @@ namespace NMP.Portal.Controllers
                         farmData.EncryptedIsUpdate = _dataProtector.Protect(update.ToString());
                         HttpContext.Session.SetObjectAsJson("FarmData", farmData);
                     }
-                    List<Field> fields = await _fieldService.FetchFieldsByFarmId(Convert.ToInt32(farmId));
-                    ViewBag.NVZFieldCount = fields.Count(x => x.IsWithinNVZ == true);
-                    ViewBag.Above300FieldCount = fields.Count(x => x.IsAbove300SeaLevel == true);
+                    
                 }
             }
             catch (Exception ex)
@@ -798,12 +815,14 @@ namespace NMP.Portal.Controllers
             return View(farmData);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> FarmUpdate(FarmViewModel farm)
         {
             int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
             farm.AverageAltitude = farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.NoneAbove300m ? (int)NMP.Portal.Enums.AverageAltitude.below :
                     farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m ? (int)NMP.Portal.Enums.AverageAltitude.above : 0;
-           
+
             Guid organisationId = Guid.Parse(HttpContext.User.FindFirst("organisationId")?.Value);
             int farmId = Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId));
 
@@ -874,5 +893,60 @@ namespace NMP.Portal.Controllers
             return RedirectToAction("FarmSummary", new { id = farmResponse.EncryptedFarmId, q = success, u = isUpdate });
 
         }
+
+        [HttpGet]
+        public async Task<IActionResult> FarmRemove()
+        {
+            FarmViewModel? model = new FarmViewModel();
+            if (HttpContext.Session.Keys.Contains("FarmData"))
+            {
+                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+            
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> FarmRemove(FarmViewModel farm)
+        {
+            if (farm.FarmRemove == null)
+            {
+                ModelState.AddModelError("FarmRemove", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View("FarmRemove", farm);
+            }
+            if(!farm.FarmRemove.Value)
+            {
+                return RedirectToAction("FarmList");
+            }
+            else
+            {
+                int id = Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId));
+                (string message, Error error) = await _farmService.DeleteFarmByIdAsync(id);
+                if (!string.IsNullOrWhiteSpace(error.Message))
+                {
+                    ViewBag.AddFarmError = error.Message;
+                    return View(farm);
+                }
+                if(!string.IsNullOrWhiteSpace(message))
+                {
+                    //string success = _dataProtector.Protect("true");
+                    string name = _dataProtector.Protect(farm.Name);
+                    HttpContext.Session.Remove("FarmData");
+
+                    return RedirectToAction("FarmList", new { q = name });
+                }
+            }
+            return View(farm);
+
+        }
+
     }
 }
