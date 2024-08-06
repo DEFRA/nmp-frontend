@@ -551,15 +551,6 @@ namespace NMP.Portal.Controllers
                 int currentCounter = Convert.ToInt32(_fertiliserManureProtector.Unprotect(q));
                 model.Counter = currentCounter;
                 model.EncryptedCounter = q;
-                foreach (var AppForFertManure in model.ApplicationForFertiliserManures)
-                {
-                    if (currentCounter == AppForFertManure.Counter)
-                    {
-                        model.InOrgnaicManureDurationId = AppForFertManure.InOrgnaicManureDurationId;
-                        break;
-                    }
-                }
-
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
             }
             return View(model);
