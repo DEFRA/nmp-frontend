@@ -85,7 +85,7 @@
                         {
                             if (count == 0)
                             {
-                                <govuk-radios asp-for="@Model.ApplicationForFertiliserManures[i].QuestionForSpreadInorganicFertiliser">
+                                <govuk-radios class="govuk-radios--inline" asp-for="@Model.ApplicationForFertiliserManures[i].QuestionForSpreadInorganicFertiliser">
                                     <govuk-radios-fieldset>
                                         <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                                             @if (int.TryParse(Model.FieldGroup, out int value))
