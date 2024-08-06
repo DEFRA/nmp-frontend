@@ -573,7 +573,7 @@ namespace NMP.Portal.Controllers
             try
             {
                 int index = 0;
-                if (model.ApplicationForFertiliserManures.Count > 0)
+                if (model.ApplicationForFertiliserManures != null && model.ApplicationForFertiliserManures.Count > 0)
                 {
                     index = model.ApplicationForFertiliserManures.FindIndex(x => x.Counter == model.Counter);
                 }
@@ -774,7 +774,7 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> NutrientValues(FertiliserManureViewModel model)
         {
             int index = 0;
-            if (model.ApplicationForFertiliserManures.Count > 0)
+            if (model.ApplicationForFertiliserManures != null && model.ApplicationForFertiliserManures.Count > 0)
             {
                 index = model.ApplicationForFertiliserManures.FindIndex(x => x.Counter == model.Counter);
             }
@@ -1028,7 +1028,7 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> QuestionForSpreadInorganicFertiliser(FertiliserManureViewModel model)
         {
             int index = 0;
-            if (model.ApplicationForFertiliserManures != null && model.ApplicationForFertiliserManures.Count == 0)
+            if (model.ApplicationForFertiliserManures != null && model.ApplicationForFertiliserManures.Count > 0)
             {
                 index = model.ApplicationForFertiliserManures.FindIndex(x => x.Counter == model.Counter);
             }
@@ -1042,7 +1042,7 @@ namespace NMP.Portal.Controllers
             }
 
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
-            if (!model.ApplicationForFertiliserManures[model.Counter.Value].QuestionForSpreadInorganicFertiliser.Value)
+            if (!model.ApplicationForFertiliserManures[index].QuestionForSpreadInorganicFertiliser.Value)
             {
 
                 for (int i = 0; i < model.ApplicationForFertiliserManures.Count; i++)
