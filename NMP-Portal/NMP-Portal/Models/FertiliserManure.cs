@@ -22,9 +22,5 @@
         public decimal? Lime { get; set; }
         public decimal? NH4N { get; set; }
         public decimal? NO3N { get; set; }
-        public string? EncryptedCounter { get; set; }
-        public int? Counter { get; set; }
-        public int? InOrgnaicManureDurationId { get; set; }
-        public int? QuestionForSpreadInorganicFertiliser { get; set; }
     }
 }
