@@ -88,7 +88,14 @@
                                 <govuk-radios asp-for="@Model.ApplicationForFertiliserManures[i].QuestionForSpreadInorganicFertiliser">
                                     <govuk-radios-fieldset>
                                         <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                                            @Resource.lblDoYouPlanToSpreadMoreInorganicFertiliserOnTheFields
+                                            @if (int.TryParse(Model.FieldGroup, out int value))
+                                            {
+                                                @string.Format(Resource.lblDoYouPlanToSpreadMoreInorganicFertiliserOnCropTypeFields, Model.CropTypeName)
+                                            }
+                                            else
+                                            {
+                                                @Resource.lblDoYouPlanToSpreadMoreInorganicFertiliserOnTheseFields
+                                            }
                                         </govuk-radios-fieldset-legend>
                                         <govuk-radios-item value="@yes">@Resource.lblYes</govuk-radios-item>
                                         <govuk-radios-item value="@no">@Resource.lblNo</govuk-radios-item>
