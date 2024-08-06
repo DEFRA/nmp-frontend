@@ -1,10 +1,10 @@
 ﻿namespace NMP.Portal.Models
 {
-    public class FertiliserManures
+    public class FertiliserManure
     {
         public int Id { get; set; }
         public int ManagementPeriodId { get; set; }
-        public DateTime ApplicationDate { get; set; }
+        public DateTime? ApplicationDate { get; set; }
         public int? ApplicationRate { get; set; }
         public bool Confirm { get; set; }
         public decimal? N { get; set; }

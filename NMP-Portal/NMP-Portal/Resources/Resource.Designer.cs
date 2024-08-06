@@ -1071,11 +1071,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you plan to spread more inorganic fertiliser on the Fields?.
+        ///   Looks up a localized string similar to Do you plan to spread more inorganic fertiliser on the {0} Fields?.
         /// </summary>
-        public static string lblDoYouPlanToSpreadMoreInorganicFertiliserOnTheFields {
+        public static string lblDoYouPlanToSpreadMoreInorganicFertiliserOnCropTypeFields {
             get {
-                return ResourceManager.GetString("lblDoYouPlanToSpreadMoreInorganicFertiliserOnTheFields", resourceCulture);
+                return ResourceManager.GetString("lblDoYouPlanToSpreadMoreInorganicFertiliserOnCropTypeFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you plan to spread more inorganic fertiliser on these Fields?.
+        /// </summary>
+        public static string lblDoYouPlanToSpreadMoreInorganicFertiliserOnTheseFields {
+            get {
+                return ResourceManager.GetString("lblDoYouPlanToSpreadMoreInorganicFertiliserOnTheseFields", resourceCulture);
             }
         }
         
