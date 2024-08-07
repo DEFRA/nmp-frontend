@@ -1935,4 +1935,16 @@ m3/ha  not set</value>
   <data name="lblDoYouPlanToSpreadMoreInorganicFertiliserOnTheseFields" xml:space="preserve">
     <value>Do you plan to spread more inorganic fertiliser on these Fields?</value>
   </data>
+  <data name="lblDoYouPlanToSpreadMoreInorganicFertiliser" xml:space="preserve">
+    <value>Do you plan to spread more inorganic fertiliser?</value>
+  </data>
+  <data name="lblFertilisersHavebeenSuccessfullyAdded" xml:space="preserve">
+    <value>Fertilisers have been successfully added to your plan</value>
+  </data>
+  <data name="lblWhenDoYouFirstPlanToSpreadInOrganicFertiliser" xml:space="preserve">
+    <value>When do you first plan to spread inorganic fertiliser?</value>
+  </data>
+  <data name="lblWhichFieldsWouldYouLikeToAddAnOrganic" xml:space="preserve">
+    <value>Which fields would you like to add organic material applications to?</value>
+  </data>
 </root>

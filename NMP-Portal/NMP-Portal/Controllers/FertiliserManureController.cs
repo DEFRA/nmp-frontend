@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
 using NMP.Portal.Resources;
@@ -10,6 +11,7 @@ using NMP.Portal.Services;
 using NMP.Portal.ViewModels;
 using System.Diagnostics.Metrics;
 using System.Reflection;
+using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 
 namespace NMP.Portal.Controllers
 {
@@ -174,7 +176,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     var fertiliserManures = new FertiliserManure
                                     {
-                                        ManagementPeriodId = manIds
+                                        ManagementPeriodID = manIds
                                     };
                                     model.FertiliserManures.Add(fertiliserManures);
                                 }
@@ -364,7 +366,7 @@ namespace NMP.Portal.Controllers
                                     {
                                         var fertiliserManure = new FertiliserManure
                                         {
-                                            ManagementPeriodId = manIds
+                                            ManagementPeriodID = manIds
                                         };
                                         model.FertiliserManures.Add(fertiliserManure);
                                     }
@@ -455,7 +457,7 @@ namespace NMP.Portal.Controllers
                             {
                                 var fertiliserManure = new FertiliserManure
                                 {
-                                    ManagementPeriodId = manIds
+                                    ManagementPeriodID = manIds
                                 };
                                 model.FertiliserManures.Add(fertiliserManure);
                             }
@@ -1098,7 +1100,7 @@ namespace NMP.Portal.Controllers
                     {
                         var newFertiliserManure = new FertiliserManure
                         {
-                            ManagementPeriodId = fertiliserManure.ManagementPeriodId,
+                            ManagementPeriodID = fertiliserManure.ManagementPeriodID,
                             ApplicationDate = application.ApplicationDate,
                             N = application.N,
                             P2O5 = application.P2O5,
@@ -1111,10 +1113,70 @@ namespace NMP.Portal.Controllers
                 }
 
                 model.FertiliserManures = updatedFertiliserManures;
-        }
+            }
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CheckYourAnswer(FertiliserManureViewModel model)
+        {
+
+            if (model.FertiliserManures.Count > 0 && model.ApplicationForFertiliserManures.Count > 0)
+            {
+
+                List<FertiliserManure> fertiliserList = new List<FertiliserManure>();
+                foreach (FertiliserManure fertiliserManure in model.FertiliserManures)
+                {
+
+                    FertiliserManure FertiliserManure = new FertiliserManure
+                    {
+                        ManagementPeriodID = fertiliserManure.ManagementPeriodID,
+                        ApplicationDate = fertiliserManure.ApplicationDate,
+                        ApplicationRate = fertiliserManure.ApplicationRate??0,
+                        Confirm = fertiliserManure.Confirm,
+                        N = fertiliserManure.N??0,
+                        P2O5 = fertiliserManure.P2O5 ?? 0,
+                        K2O = fertiliserManure.K2O ?? 0,
+                        MgO = fertiliserManure.MgO ?? 0,
+                        SO3 = fertiliserManure.SO3 ?? 0,
+                        Na2O = fertiliserManure.Na2O ?? 0,
+                        NFertAnalysisPercent = fertiliserManure.NFertAnalysisPercent ?? 0,
+                        P2O5FertAnalysisPercent = fertiliserManure.P2O5FertAnalysisPercent ?? 0,
+                        K2OFertAnalysisPercent = fertiliserManure.K2OFertAnalysisPercent ?? 0,
+                        MgOFertAnalysisPercent = fertiliserManure.MgOFertAnalysisPercent ?? 0,
+                        SO3FertAnalysisPercent = fertiliserManure.SO3FertAnalysisPercent ?? 0,
+                        Na2OFertAnalysisPercent = fertiliserManure.Na2OFertAnalysisPercent ?? 0,
+                        Lime = fertiliserManure.Lime ?? 0,
+                        NH4N = fertiliserManure.NH4N ?? 0,
+                        NO3N = fertiliserManure.NO3N ?? 0,
+
+
+                    };
+                    fertiliserList.Add(FertiliserManure);
+
+                }
+                var result = new
+                {
+                    FertiliserManure = fertiliserList
+                };
+                string jsonString = JsonConvert.SerializeObject(result);
+                (List<FertiliserManure> fertiliserResponse, Error error) = await _fertiliserManureService.AddFertiliserManureAsync(jsonString);
+                if (error == null)
+                {
+                    string successMsg = Resource.lblFertilisersHavebeenSuccessfullyAdded;
+                    bool success = true;
+                    _httpContextAccessor.HttpContext?.Session.Remove("FertiliserManure");
+                    return RedirectToAction("HarvestYearOverview", "Crop", new
+                    {
+                        id = model.EncryptedFarmId,
+                        year = model.EncryptedHarvestYear,
+                        q = _farmDataProtector.Protect(success.ToString()),
+                        r = _cropDataProtector.Protect(successMsg)
+                    });
+                }
+            }
+            return View(model);
+        }
+
     }
-
-
-}
 }
