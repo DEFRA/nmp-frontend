@@ -63,32 +63,39 @@ namespace NMP.Portal.Controllers
 
             FarmsViewModel model = new FarmsViewModel();
             Error error = null;
-            Guid organisationId = Guid.Parse(HttpContext.User.FindFirst("organisationId").Value);
-            (List<Farm> farms, error) = await _farmService.FetchFarmByOrgIdAsync(organisationId);
-            if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
+            try
             {
-                ViewBag.Error = error.Message;
-                return View("~/Views/Home/Index.cshtml");
+                Guid organisationId = Guid.Parse(HttpContext.User.FindFirst("organisationId").Value);
+                (List<Farm> farms, error) = await _farmService.FetchFarmByOrgIdAsync(organisationId);
+                if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
+                {
+                    ViewBag.Error = error.Message;
+                    return View("~/Views/Home/Index.cshtml");
+                }
+                if (farms != null && farms.Count > 0)
+                {
+                    model.Farms.AddRange(farms);
+                    model.Farms.ForEach(m => m.EncryptedFarmId = _dataProtector.Protect(m.ID.ToString()));
+                }
+                if (model.Farms.Count == 0)
+                {
+                    return RedirectToAction("Name", "Farm");
+                }
+                if (!string.IsNullOrWhiteSpace(q))
+                {
+                    ViewBag.Success = "true";
+                    ViewBag.FarmName = _dataProtector.Unprotect(q);
+                }
+                else
+                {
+                    ViewBag.Success = "false";
+                }
             }
-            if (farms != null && farms.Count > 0)
+            catch (Exception ex)
             {
-                model.Farms.AddRange(farms);
-                model.Farms.ForEach(m => m.EncryptedFarmId = _dataProtector.Protect(m.ID.ToString()));
+                TempData["Error"] = ex.Message;
             }
-            if (model.Farms.Count == 0)
-            {
-                return RedirectToAction("Name", "Farm");
-            }
-            if (!string.IsNullOrWhiteSpace(q))
-            {
-                ViewBag.Success = "true";
-                ViewBag.FarmName = _dataProtector.Unprotect(q);
-            }
-            else
-            {
-                ViewBag.Success = "false";
-            }
-
+           
             return View(model);
         }
         public IActionResult CreateFarmCancel()
