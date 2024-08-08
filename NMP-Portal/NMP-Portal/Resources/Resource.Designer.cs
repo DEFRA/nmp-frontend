@@ -1494,6 +1494,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fertilisers have been successfully added to your plan.
+        /// </summary>
+        public static string lblFertilisersHavebeenSuccessfullyAdded {
+            get {
+                return ResourceManager.GetString("lblFertilisersHavebeenSuccessfullyAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Field.
         /// </summary>
         public static string lblField {
@@ -1896,6 +1905,15 @@ namespace NMP.Portal.Resources {
         public static string lblInMilligramsPerLitre {
             get {
                 return ResourceManager.GetString("lblInMilligramsPerLitre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inorganic applications.
+        /// </summary>
+        public static string lblInorganicApplications {
+            get {
+                return ResourceManager.GetString("lblInorganicApplications", resourceCulture);
             }
         }
         
