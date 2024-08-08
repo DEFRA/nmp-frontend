@@ -1891,6 +1891,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Inorganic applications.
+        /// </summary>
+        public static string lblInorganicApplications {
+            get {
+                return ResourceManager.GetString("lblInorganicApplications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Inorganic fertiliser or lime.
         /// </summary>
         public static string lblInorganicFertiliserOrLime {

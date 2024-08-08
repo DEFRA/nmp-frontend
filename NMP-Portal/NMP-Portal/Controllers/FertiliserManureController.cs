@@ -1118,16 +1118,14 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CheckYourAnswer(FertiliserManureViewModel model)
         {
-
             if (model.FertiliserManures.Count > 0 && model.ApplicationForFertiliserManures.Count > 0)
             {
-
                 List<FertiliserManure> fertiliserList = new List<FertiliserManure>();
                 foreach (FertiliserManure fertiliserManure in model.FertiliserManures)
                 {
-
                     FertiliserManure FertiliserManure = new FertiliserManure
                     {
                         ManagementPeriodID = fertiliserManure.ManagementPeriodID,
@@ -1149,11 +1147,8 @@ namespace NMP.Portal.Controllers
                         Lime = fertiliserManure.Lime ?? 0,
                         NH4N = fertiliserManure.NH4N ?? 0,
                         NO3N = fertiliserManure.NO3N ?? 0,
-
-
                     };
                     fertiliserList.Add(FertiliserManure);
-
                 }
                 var result = new
                 {
