@@ -1583,7 +1583,8 @@ namespace NMP.Portal.Controllers
                                 {
                                     EncryptedFieldId = _cropDataProtector.Protect(plan.FieldID.ToString()), // Assuming this returns a string
                                     FieldName = plan.FieldName,
-                                    OrganicManureCount = plan.OrganicManuresCount
+                                    OrganicManureCount = plan.OrganicManuresCount,
+                                    FertiliserManuresCount=plan.TotalFertiliserManures
                                 };
                                 harvestYearPlans.FieldData.Add(newField);
                                 //harvestYearPlans.FieldNames.Add(plan.FieldName);

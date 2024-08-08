@@ -1071,6 +1071,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you plan to spread more inorganic fertiliser?.
+        /// </summary>
+        public static string lblDoYouPlanToSpreadMoreInorganicFertiliser {
+            get {
+                return ResourceManager.GetString("lblDoYouPlanToSpreadMoreInorganicFertiliser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you plan to spread more inorganic fertiliser on the {0} Fields?.
         /// </summary>
         public static string lblDoYouPlanToSpreadMoreInorganicFertiliserOnCropTypeFields {
@@ -1463,6 +1472,15 @@ namespace NMP.Portal.Resources {
         public static string lblFarmSummary {
             get {
                 return ResourceManager.GetString("lblFarmSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fertilisers have been successfully added to your plan.
+        /// </summary>
+        public static string lblFertilisersHavebeenSuccessfullyAdded {
+            get {
+                return ResourceManager.GetString("lblFertilisersHavebeenSuccessfullyAdded", resourceCulture);
             }
         }
         
@@ -1869,6 +1887,15 @@ namespace NMP.Portal.Resources {
         public static string lblInMilligramsPerLitre {
             get {
                 return ResourceManager.GetString("lblInMilligramsPerLitre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inorganic applications.
+        /// </summary>
+        public static string lblInorganicApplications {
+            get {
+                return ResourceManager.GetString("lblInorganicApplications", resourceCulture);
             }
         }
         
@@ -4205,6 +4232,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When do you first plan to spread inorganic fertiliser?.
+        /// </summary>
+        public static string lblWhenDoYouFirstPlanToSpreadInOrganicFertiliser {
+            get {
+                return ResourceManager.GetString("lblWhenDoYouFirstPlanToSpreadInOrganicFertiliser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When do you plan to spread inorganic fertiliser on the {0} Fields?.
         /// </summary>
         public static string lblWhenDoYouPlanToSpreadInOrganicfertiliser {
@@ -4228,6 +4264,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhichFieldsDoYouPlanToGrow {
             get {
                 return ResourceManager.GetString("lblWhichFieldsDoYouPlanToGrow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which fields would you like to add organic material applications to?.
+        /// </summary>
+        public static string lblWhichFieldsWouldYouLikeToAddAnOrganic {
+            get {
+                return ResourceManager.GetString("lblWhichFieldsWouldYouLikeToAddAnOrganic", resourceCulture);
             }
         }
         

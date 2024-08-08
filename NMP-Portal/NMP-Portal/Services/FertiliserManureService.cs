@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
 using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
+using System.Text;
 
 namespace NMP.Portal.Services
 {
@@ -253,6 +255,52 @@ namespace NMP.Portal.Services
                 throw new Exception(error.Message, ex);
             }
             return (inOrganicManureDuration, error);
+        }
+
+        public async Task<(List<FertiliserManure>, Error)> AddFertiliserManureAsync(string fertiliserManure)
+        {
+            bool success = false;
+            Error error = null;
+            List<FertiliserManure> fertilisers =new List<FertiliserManure>();
+            try
+            {
+                //string jsonString = JsonConvert.SerializeObject(fertiliserManure);
+                HttpClient httpClient = await GetNMPAPIClient();
+
+                var response = await httpClient.PostAsync(string.Format(APIURLHelper.AddFertiliserManuresAsyncAPI), new StringContent(fertiliserManure, Encoding.UTF8, "application/json"));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+                {
+                    List<FertiliserManure> fertiliser = responseWrapper.Data.ToObject<List<FertiliserManure>>();
+                    if (fertiliser != null && fertiliser.Count > 0)
+                    {
+                        fertilisers.AddRange(fertiliser);
+                    }
+
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (fertilisers, error);
         }
     }
 }

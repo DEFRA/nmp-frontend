@@ -27,6 +27,8 @@ namespace NMP.Portal.ServiceResponses
         [JsonProperty("TotalOrganicManures")]
         public int OrganicManuresCount { get; set; }
 
+        [JsonProperty("totalFertiliserManures")]
+        public int TotalFertiliserManures { get; set; }
 
     }
 }

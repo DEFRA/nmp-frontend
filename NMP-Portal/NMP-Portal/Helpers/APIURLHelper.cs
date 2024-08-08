@@ -76,5 +76,6 @@ namespace NMP.Portal.Helpers
         public const string FetchInOrganicManureDurationsByIdAsyncAPI = "inorganic-manure-durations/{0}";
 
         public const string DeleteFarmByIdAPI = "farms/{0}";
+        public const string AddFertiliserManuresAsyncAPI = "fertiliser-manures";
     }
 }
