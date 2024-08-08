@@ -3,7 +3,7 @@
     public class FertiliserManure
     {
         public int Id { get; set; }
-        public int ManagementPeriodId { get; set; }
+        public int ManagementPeriodID { get; set; }
         public DateTime? ApplicationDate { get; set; }
         public int? ApplicationRate { get; set; }
         public bool Confirm { get; set; }
