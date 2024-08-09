@@ -1097,8 +1097,8 @@ namespace NMP.Portal.Controllers
                 {
                     if (model.Counter != totalCount - 1)
                     {
-                        //model.Counter = model.Counter + 1;
-                        model.ApplicationForFertiliserManures.RemoveAt(model.Counter.Value + 1);
+                        model.Counter = model.Counter + 1;
+                        model.ApplicationForFertiliserManures.RemoveAt(model.Counter.Value);
                     }
                 }
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
