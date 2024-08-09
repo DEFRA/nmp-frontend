@@ -204,14 +204,36 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("TotalArea", Resource.MsgEnterTotalFieldArea);
             }
+            if(field.TotalArea!=null)
+            {
+                if(field.TotalArea<0)
+                {
+                    ModelState.AddModelError("TotalArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
+                }
+            }
 
             if (field.CroppedArea > field.TotalArea)
             {
                 ModelState.AddModelError("CroppedArea", Resource.MsgCroppedAreaIsGreaterThanTotalArea);
             }
+            if (field.CroppedArea != null)
+            {
+                if (field.CroppedArea < 0)
+                {
+                    ModelState.AddModelError("CroppedArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
+                }
+            }            
+
             if (field.ManureNonSpreadingArea > field.TotalArea)
             {
                 ModelState.AddModelError("ManureNonSpreadingArea", Resource.MsgManureNonSpreadingAreaIsGreaterThanTotalArea);
+            }
+            if (field.ManureNonSpreadingArea != null)
+            {
+                if (field.ManureNonSpreadingArea < 0)
+                {
+                    ModelState.AddModelError("ManureNonSpreadingArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
+                }
             }
 
             if (!ModelState.IsValid)
