@@ -95,7 +95,7 @@ namespace NMP.Portal.Controllers
             {
                 TempData["Error"] = ex.Message;
             }
-           
+
             return View(model);
         }
         public IActionResult CreateFarmCancel()
@@ -131,7 +131,7 @@ namespace NMP.Portal.Controllers
             if (!string.IsNullOrWhiteSpace(farm.Postcode))
             {
                 int id = 0;
-                if(farm.EncryptedFarmId != null)
+                if (farm.EncryptedFarmId != null)
                 {
                     id = Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId));
                 }
@@ -463,6 +463,13 @@ namespace NMP.Portal.Controllers
             if (farm.Rainfall == null)
             {
                 ModelState.AddModelError("Rainfall", Resource.MsgEnterTheAverageAnnualRainfall);
+            }
+            if (farm.Rainfall != null)
+            {
+                if (farm.Rainfall < 0)
+                {
+                    ModelState.AddModelError("Rainfall", Resource.MsgEnterANumberWhichIsGreaterThanZero);
+                }
             }
             if (!ModelState.IsValid)
             {
@@ -811,7 +818,7 @@ namespace NMP.Portal.Controllers
                         farmData.EncryptedIsUpdate = _dataProtector.Protect(update.ToString());
                         HttpContext.Session.SetObjectAsJson("FarmData", farmData);
                     }
-                    
+
                 }
             }
             catch (Exception ex)
@@ -913,7 +920,7 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-            
+
             return View(model);
         }
 
@@ -929,7 +936,7 @@ namespace NMP.Portal.Controllers
             {
                 return View("FarmRemove", farm);
             }
-            if(!farm.FarmRemove.Value)
+            if (!farm.FarmRemove.Value)
             {
                 return RedirectToAction("FarmList");
             }
@@ -942,7 +949,7 @@ namespace NMP.Portal.Controllers
                     ViewBag.AddFarmError = error.Message;
                     return View(farm);
                 }
-                if(!string.IsNullOrWhiteSpace(message))
+                if (!string.IsNullOrWhiteSpace(message))
                 {
                     //string success = _dataProtector.Protect("true");
                     string name = _dataProtector.Protect(farm.Name);

@@ -386,7 +386,7 @@ namespace NMP.Portal.Controllers
                         _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
                         if (model.IsCheckAnswer)
                         {
-                           return RedirectToAction("CheckAnswer");
+                            return RedirectToAction("CheckAnswer");
                         }
                         return RedirectToAction("InOrgnaicManureDuration");
                     }
@@ -487,7 +487,7 @@ namespace NMP.Portal.Controllers
             }
             if (model.IsCheckAnswer)
             {
-              return  RedirectToAction("CheckAnswer");
+                return RedirectToAction("CheckAnswer");
             }
             return RedirectToAction("InOrgnaicManureDuration");
 
@@ -733,11 +733,11 @@ namespace NMP.Portal.Controllers
                                             ManureK2O = recData.Recommendation.ManureK2O,
                                             ManureSO3 = recData.Recommendation.ManureSO3,
                                             ManureLime = recData.Recommendation.ManureLime,
-                                            FertilizerN = recData.Recommendation.FertilizerN,
-                                            FertilizerP2O5 = recData.Recommendation.FertilizerP2O5,
-                                            FertilizerK2O = recData.Recommendation.FertilizerK2O,
-                                            FertilizerSO3 = recData.Recommendation.FertilizerSO3,
-                                            FertilizerLime = recData.Recommendation.FertilizerLime,
+                                            FertilizerN = recData.Recommendation.CropN ?? 0 - recData.Recommendation.ManureN ?? 0,//recData.Recommendation.FertilizerN,
+                                            FertilizerP2O5 = recData.Recommendation.CropP2O5 ?? 0 - recData.Recommendation.ManureP2O5 ?? 0, //recData.Recommendation.FertilizerP2O5,
+                                            FertilizerK2O = recData.Recommendation.CropK2O ?? 0 - recData.Recommendation.ManureK2O ?? 0,// recData.Recommendation.FertilizerK2O,
+                                            FertilizerSO3 = recData.Recommendation.CropSO3 ?? 0 - recData.Recommendation.ManureSO3 ?? 0,// recData.Recommendation.FertilizerSO3,
+                                            FertilizerLime = recData.Recommendation.CropLime ?? 0 - recData.Recommendation.ManureLime ?? 0,// recData.Recommendation.FertilizerLime,
                                             SNSIndex = recData.Recommendation.SNSIndex,
                                             SIndex = recData.Recommendation.SIndex,
                                             KIndex = recData.Recommendation.KIndex,
@@ -840,27 +840,42 @@ namespace NMP.Portal.Controllers
                 }
             }
 
-            if (model.ApplicationForFertiliserManures[index].N == null)
+            if (model.ApplicationForFertiliserManures[index].N == null && model.ApplicationForFertiliserManures[index].P2O5 == null
+                && model.ApplicationForFertiliserManures[index].K2O == null && model.ApplicationForFertiliserManures[index].SO3 == null
+                && model.ApplicationForFertiliserManures[index].Lime == null)
             {
-                ModelState.AddModelError("ApplicationForFertiliserManures[" + index + "].N", string.Format(Resource.MsgEnterTheValidValueOfNutrient, Resource.lblNutrient));
+                ModelState.AddModelError("CropTypeName", Resource.MsgEnterAnAmountForAMinimumOfOneNutrientBeforeContinuing);
                 //return View(model);
             }
-            if (model.ApplicationForFertiliserManures[index].P2O5 == null)
+
+
+            if (ModelState.IsValid)
             {
-                ModelState.AddModelError("ApplicationForFertiliserManures[" + index + "].P2O5", string.Format(Resource.MsgEnterTheValidValueOfNutrient, Resource.lblPhosphate));
+                decimal totalNutrientValue = (model.ApplicationForFertiliserManures[index].N ?? 0) + (model.ApplicationForFertiliserManures[index].P2O5 ?? 0) +
+                     (model.ApplicationForFertiliserManures[index].K2O ?? 0) + (model.ApplicationForFertiliserManures[index].SO3 ?? 0) +
+                     (model.ApplicationForFertiliserManures[index].Lime ?? 0);
+                if (totalNutrientValue == 0)
+                {
+                    ModelState.AddModelError("CropTypeName", Resource.MsgEnterANumberWhichIsGreaterThanZero);
+                }
             }
-            if (model.ApplicationForFertiliserManures[index].K2O == null)
-            {
-                ModelState.AddModelError("ApplicationForFertiliserManures[" + index + "].K2O", string.Format(Resource.MsgEnterTheValidValueOfNutrient, Resource.lblPotash));
-            }
-            if (model.ApplicationForFertiliserManures[index].SO3 == null)
-            {
-                ModelState.AddModelError("ApplicationForFertiliserManures[" + index + "].SO3", string.Format(Resource.MsgEnterTheValidValueOfNutrient, Resource.lblSulphur));
-            }
-            if (model.ApplicationForFertiliserManures[index].Lime == null)
-            {
-                ModelState.AddModelError("ApplicationForFertiliserManures[" + index + "].Lime", string.Format(Resource.MsgEnterTheValidValueOfNutrient, Resource.lblLime));
-            }
+
+            //if (model.ApplicationForFertiliserManures[index].P2O5 == null)
+            //{
+            //    ModelState.AddModelError("ApplicationForFertiliserManures[" + index + "].P2O5", string.Format(Resource.MsgEnterTheValidValueOfNutrient, Resource.lblPhosphate));
+            //}
+            //if (model.ApplicationForFertiliserManures[index].K2O == null)
+            //{
+            //    ModelState.AddModelError("ApplicationForFertiliserManures[" + index + "].K2O", string.Format(Resource.MsgEnterTheValidValueOfNutrient, Resource.lblPotash));
+            //}
+            //if (model.ApplicationForFertiliserManures[index].SO3 == null)
+            //{
+            //    ModelState.AddModelError("ApplicationForFertiliserManures[" + index + "].SO3", string.Format(Resource.MsgEnterTheValidValueOfNutrient, Resource.lblSulphur));
+            //}
+            //if (model.ApplicationForFertiliserManures[index].Lime == null)
+            //{
+            //    ModelState.AddModelError("ApplicationForFertiliserManures[" + index + "].Lime", string.Format(Resource.MsgEnterTheValidValueOfNutrient, Resource.lblLime));
+            //}
 
             if (model.ApplicationForFertiliserManures[index].N != null)
             {
@@ -970,11 +985,11 @@ namespace NMP.Portal.Controllers
                                                 ManureK2O = recData.Recommendation.ManureK2O,
                                                 ManureSO3 = recData.Recommendation.ManureSO3,
                                                 ManureLime = recData.Recommendation.ManureLime,
-                                                FertilizerN = recData.Recommendation.FertilizerN,
-                                                FertilizerP2O5 = recData.Recommendation.FertilizerP2O5,
-                                                FertilizerK2O = recData.Recommendation.FertilizerK2O,
-                                                FertilizerSO3 = recData.Recommendation.FertilizerSO3,
-                                                FertilizerLime = recData.Recommendation.FertilizerLime,
+                                                FertilizerN = recData.Recommendation.CropN ?? 0 - recData.Recommendation.ManureN ?? 0,//recData.Recommendation.FertilizerN,
+                                                FertilizerP2O5 = recData.Recommendation.CropP2O5 ?? 0 - recData.Recommendation.ManureP2O5 ?? 0, //recData.Recommendation.FertilizerP2O5,
+                                                FertilizerK2O = recData.Recommendation.CropK2O ?? 0 - recData.Recommendation.ManureK2O ?? 0,// recData.Recommendation.FertilizerK2O,
+                                                FertilizerSO3 = recData.Recommendation.CropSO3 ?? 0 - recData.Recommendation.ManureSO3 ?? 0,// recData.Recommendation.FertilizerSO3,
+                                                FertilizerLime = recData.Recommendation.CropLime ?? 0 - recData.Recommendation.ManureLime ?? 0,// recData.Recommendation.FertilizerLime,
                                                 SNSIndex = recData.Recommendation.SNSIndex,
                                                 SIndex = recData.Recommendation.SIndex,
                                                 KIndex = recData.Recommendation.KIndex,
@@ -1001,7 +1016,29 @@ namespace NMP.Portal.Controllers
                 }
                 return View(model);
             }
+
+            if (model.ApplicationForFertiliserManures[index].Lime == null)
+            {
+                model.ApplicationForFertiliserManures[index].Lime = 0;
+            }
+            if (model.ApplicationForFertiliserManures[index].N == null)
+            {
+                model.ApplicationForFertiliserManures[index].N = 0;
+            }
+            if (model.ApplicationForFertiliserManures[index].P2O5 == null)
+            {
+                model.ApplicationForFertiliserManures[index].P2O5 = 0;
+            }
+            if (model.ApplicationForFertiliserManures[index].K2O == null)
+            {
+                model.ApplicationForFertiliserManures[index].K2O = 0;
+            }
+            if (model.ApplicationForFertiliserManures[index].SO3 == null)
+            {
+                model.ApplicationForFertiliserManures[index].SO3 = 0;
+            }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
+
             if (model.IsCheckAnswer)
             {
                 return RedirectToAction("CheckAnswer");
@@ -1055,27 +1092,13 @@ namespace NMP.Portal.Controllers
 
             if (!model.ApplicationForFertiliserManures[index].QuestionForSpreadInorganicFertiliser.Value)
             {
-                if (model.IsCheckAnswer)
+                int totalCount = model.ApplicationForFertiliserManures.Count;
+                for (int i = 0; i < model.ApplicationForFertiliserManures.Count; i++)
                 {
-                    int totalCount = model.ApplicationForFertiliserManures.Count;
-                    for (int i = 0; i < model.ApplicationForFertiliserManures.Count; i++)
+                    if (model.Counter != totalCount - 1)
                     {
-                        if (model.Counter != totalCount - 1)
-                        {
-                            model.Counter = model.Counter + 1;
-                            model.ApplicationForFertiliserManures.RemoveAt(model.Counter.Value);
-                        }
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i < model.ApplicationForFertiliserManures.Count; i++)
-                    {
-                        if (model.ApplicationForFertiliserManures[i].ApplicationDate == null && model.ApplicationForFertiliserManures[i].N == null && model.ApplicationForFertiliserManures[i].P2O5 == null
-                                && model.ApplicationForFertiliserManures[i].K2O == null && model.ApplicationForFertiliserManures[i].SO3 == null && model.ApplicationForFertiliserManures[i].Lime == null)
-                        {
-                            model.ApplicationForFertiliserManures.RemoveAt(i);
-                        }
+                        //model.Counter = model.Counter + 1;
+                        model.ApplicationForFertiliserManures.RemoveAt(model.Counter.Value + 1);
                     }
                 }
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
@@ -1122,7 +1145,7 @@ namespace NMP.Portal.Controllers
                     _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
                     if (model.IsCheckAnswer)
                     {
-                      return  RedirectToAction("CheckAnswer");
+                        return RedirectToAction("CheckAnswer");
                     }
                 }
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
@@ -1193,11 +1216,9 @@ namespace NMP.Portal.Controllers
             }
             if (model.FertiliserManures.Count > 0 && model.ApplicationForFertiliserManures.Count > 0)
             {
-
                 List<FertiliserManure> fertiliserList = new List<FertiliserManure>();
                 foreach (FertiliserManure fertiliserManure in model.FertiliserManures)
                 {
-
                     FertiliserManure FertiliserManure = new FertiliserManure
                     {
                         ManagementPeriodID = fertiliserManure.ManagementPeriodID,
@@ -1205,77 +1226,6 @@ namespace NMP.Portal.Controllers
                         ApplicationRate = fertiliserManure.ApplicationRate ?? 0,
                         Confirm = fertiliserManure.Confirm,
                         N = fertiliserManure.N ?? 0,
-                        P2O5 = fertiliserManure.P2O5 ?? 0,
-                        K2O = fertiliserManure.K2O ?? 0,
-                        MgO = fertiliserManure.MgO ?? 0,
-                        SO3 = fertiliserManure.SO3 ?? 0,
-                        Na2O = fertiliserManure.Na2O ?? 0,
-                        NFertAnalysisPercent = fertiliserManure.NFertAnalysisPercent ?? 0,
-                        P2O5FertAnalysisPercent = fertiliserManure.P2O5FertAnalysisPercent ?? 0,
-                        K2OFertAnalysisPercent = fertiliserManure.K2OFertAnalysisPercent ?? 0,
-                        MgOFertAnalysisPercent = fertiliserManure.MgOFertAnalysisPercent ?? 0,
-                        SO3FertAnalysisPercent = fertiliserManure.SO3FertAnalysisPercent ?? 0,
-                        Na2OFertAnalysisPercent = fertiliserManure.Na2OFertAnalysisPercent ?? 0,
-                        Lime = fertiliserManure.Lime ?? 0,
-                        NH4N = fertiliserManure.NH4N ?? 0,
-                        NO3N = fertiliserManure.NO3N ?? 0,
-
-
-                    };
-                    fertiliserList.Add(FertiliserManure);
-
-                }
-                var result = new
-                {
-                    FertiliserManure = fertiliserList
-                };
-                string jsonString = JsonConvert.SerializeObject(result);
-                Error error = null;
-                //(List<FertiliserManure> fertiliserResponse, Error error) = await _fertiliserManureService.AddFertiliserManureAsync(jsonString);
-                if (error == null)
-                {
-                    //string successMsg = "";//Resource.lblFertilisersHavebeenSuccessfullyAdded;
-                    //bool success = true;
-                    //_httpContextAccessor.HttpContext?.Session.Remove("FertiliserManure");
-                    //return RedirectToAction("HarvestYearOverview", "Crop", new
-                    //{
-                    //    id = model.EncryptedFarmId,
-                    //    year = model.EncryptedHarvestYear,
-                    //    q = _farmDataProtector.Protect(success.ToString()),
-                    //    r = _cropDataProtector.Protect(successMsg)
-                    //});
-                }
-            }
-            return View(model);
-        }
-        public IActionResult BackCheckAnswer()
-        {
-            FertiliserManureViewModel model = new FertiliserManureViewModel();
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
-            {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FertiliserManureViewModel>("FertiliserManure");
-            }
-            else
-            {
-                return RedirectToAction("FarmList", "Farm");
-            }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CheckYourAnswer(FertiliserManureViewModel model)
-        {
-            if (model.FertiliserManures.Count > 0 && model.ApplicationForFertiliserManures.Count > 0)
-            {
-                List<FertiliserManure> fertiliserList = new List<FertiliserManure>();
-                foreach (FertiliserManure fertiliserManure in model.FertiliserManures)
-                {
-                    FertiliserManure FertiliserManure = new FertiliserManure
-                    {
-                        ManagementPeriodID = fertiliserManure.ManagementPeriodID,
-                        ApplicationDate = fertiliserManure.ApplicationDate,
-                        ApplicationRate = fertiliserManure.ApplicationRate??0,
-                        Confirm = fertiliserManure.Confirm,
-                        N = fertiliserManure.N??0,
                         P2O5 = fertiliserManure.P2O5 ?? 0,
                         K2O = fertiliserManure.K2O ?? 0,
                         MgO = fertiliserManure.MgO ?? 0,
@@ -1315,8 +1265,17 @@ namespace NMP.Portal.Controllers
             }
             return View(model);
         }
-
-    }
+        public IActionResult BackCheckAnswer()
+        {
+            FertiliserManureViewModel model = new FertiliserManureViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FertiliserManureViewModel>("FertiliserManure");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
             model.IsCheckAnswer = false;
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
             return RedirectToAction("QuestionForSpreadInorganicFertiliser", new { q = model.EncryptedCounter });

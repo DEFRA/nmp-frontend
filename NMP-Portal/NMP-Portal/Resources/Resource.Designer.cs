@@ -2026,15 +2026,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} kg Nitrogen(N).
-        /// </summary>
-        public static string lblKgNitrogen {
-            get {
-                return ResourceManager.GetString("lblKgNitrogen", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to kg/ha.
         /// </summary>
         public static string lblKgPerHectare {
@@ -2077,6 +2068,15 @@ namespace NMP.Portal.Resources {
         public static string lblKgPerTonneAndKgPerMeterCube {
             get {
                 return ResourceManager.GetString("lblKgPerTonneAndKgPerMeterCube", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} kg {1}.
+        /// </summary>
+        public static string lblKgWithNutrient {
+            get {
+                return ResourceManager.GetString("lblKgWithNutrient", resourceCulture);
             }
         }
         
@@ -4801,6 +4801,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter an amount for a minimum of one nutrient before continuing.
+        /// </summary>
+        public static string MsgEnterAnAmountForAMinimumOfOneNutrientBeforeContinuing {
+            get {
+                return ResourceManager.GetString("MsgEnterAnAmountForAMinimumOfOneNutrientBeforeContinuing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter an application rate before continuing..
         /// </summary>
         public static string MsgEnterAnapplicationRateBeforeContinuing {
@@ -5224,7 +5233,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter a value for {0} between 0 and {1}.
+        ///   Looks up a localized string similar to Enter a value for {0} between 1 and {1}.
         /// </summary>
         public static string MsgMinMaxValidation {
             get {
