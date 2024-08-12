@@ -582,7 +582,11 @@ namespace NMP.Portal.Controllers
             }
 
             HttpContext.Session.SetObjectAsJson("FarmData", farm);
-            return RedirectToAction("CheckAnswer");
+            if (farm.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
+            return RedirectToAction("LastHarvestYear");
         }
         [HttpGet]
         public IActionResult CheckAnswer(string? q)
@@ -653,6 +657,7 @@ namespace NMP.Portal.Controllers
                     EnglishRules = farm.EnglishRules,
                     NVZFields = farm.NVZFields,
                     FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
+                    LastHarvestYear=farm.LastHarvestYear,
                     CreatedByID = userId,
                     CreatedOn = System.DateTime.Now,
                     ModifiedByID = farm.ModifiedByID,
@@ -699,7 +704,7 @@ namespace NMP.Portal.Controllers
             {
                 model.IsCheckAnswer = false;
                 HttpContext.Session.SetObjectAsJson("FarmData", model);
-                return RedirectToAction("Organic");
+                return RedirectToAction("LastHarvestYear");
             }
 
         }
@@ -804,6 +809,7 @@ namespace NMP.Portal.Controllers
                         farmData.EnglishRules = farm.EnglishRules;
                         farmData.NVZFields = farm.NVZFields;
                         farmData.FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel;
+                        farmData.LastHarvestYear = farm.LastHarvestYear;
                         farmData.CreatedByID = farm.CreatedByID;
                         farmData.CreatedOn = farm.CreatedOn;
 
@@ -875,6 +881,7 @@ namespace NMP.Portal.Controllers
                     EnglishRules = farm.EnglishRules,
                     NVZFields = farm.NVZFields,
                     FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
+                    LastHarvestYear = farm.LastHarvestYear,
                     CreatedByID = createdByID,
                     CreatedOn = createdOn,
                     ModifiedByID = userId,
@@ -955,5 +962,37 @@ namespace NMP.Portal.Controllers
 
         }
 
+        [HttpGet]
+        public IActionResult LastHarvestYear()
+        {
+            FarmViewModel? model = new FarmViewModel();
+            if (HttpContext.Session.Keys.Contains("FarmData"))
+            {
+                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+            
+            return View(model);
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult LastHarvestYear(FarmViewModel farm)
+        {
+            if (farm.LastHarvestYear == null)
+            {
+                ModelState.AddModelError("LastHarvestYear", Resource.MsgSelectAHarvestYearBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View("LastHarvestYear", farm);
+            }
+
+            HttpContext.Session.SetObjectAsJson("FarmData", farm);
+            return RedirectToAction("CheckAnswer");
+        }
     }
 }

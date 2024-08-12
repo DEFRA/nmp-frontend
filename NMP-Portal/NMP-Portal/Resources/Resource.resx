@@ -1950,4 +1950,19 @@ m3/ha  not set</value>
   <data name="lblInorganicApplications" xml:space="preserve">
     <value>Inorganic applications</value>
   </data>
+  <data name="lblIfYouHaveHarvestedMostOfYourCrops" xml:space="preserve">
+    <value>If you have harvested most of your {0} crops you can set {1} as your last harvest year.</value>
+  </data>
+  <data name="lblLastHarvestYear" xml:space="preserve">
+    <value>Last harvest year</value>
+  </data>
+  <data name="lblToCreatePlansAndGiveRecommendation" xml:space="preserve">
+    <value>To create plans and give recommendations we need information about your last harvest year.</value>
+  </data>
+  <data name="lblWhatIsYourLastHarvestYear" xml:space="preserve">
+    <value>What is your last harvest year?</value>
+  </data>
+  <data name="MsgSelectAHarvestYearBeforeContinuing" xml:space="preserve">
+    <value>Please select a harvest year before continuing</value>
+  </data>
 </root>
