@@ -1962,4 +1962,10 @@ m3/ha  not set</value>
   <data name="MsgEnterAnAmountForAMinimumOfOneNutrientBeforeContinuing" xml:space="preserve">
     <value>Enter an amount for a minimum of one nutrient before continuing</value>
   </data>
+  <data name="lblDoYouHaveARecentSoilMineralNitrogenAnalysis" xml:space="preserve">
+    <value>Do you have a recent soil mineral nitrogen analysis result for {0}?</value>
+  </data>
+  <data name="lblSnsQuestion" xml:space="preserve">
+    <value>SNS question</value>
+  </data>
 </root>

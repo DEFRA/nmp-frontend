@@ -797,7 +797,7 @@ namespace NMP.Portal.Controllers
                 ViewBag.Error = string.Concat(error, ex.Message);
                 return View(model);
             }
-            return RedirectToAction("SNSCalculationMethod");
+            return RedirectToAction("CropGroups");
         }
 
         [HttpGet]
@@ -942,6 +942,40 @@ namespace NMP.Portal.Controllers
             }
             field.CropType = await _fieldService.FetchCropTypeById(field.CropTypeID.Value);
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", field);
+            if (field.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
+            return RedirectToAction("SNSQuestion");
+        }
+        [HttpGet]
+        public IActionResult SNSQuestion()
+        {
+            FieldViewModel? model = new FieldViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SNSQuestion(FieldViewModel field)
+        {
+            if (field.IsSnsBasedOnPreviousCrop == null)
+            {
+                ModelState.AddModelError("IsSnsBasedOnPreviousCrop", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(field);
+            }
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", field);
 
             return RedirectToAction("CheckAnswer");
         }
@@ -989,7 +1023,7 @@ namespace NMP.Portal.Controllers
             }
             model.IsCheckAnswer = false;
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
-            return RedirectToAction("CropTypes");
+            return RedirectToAction("SNSQuestion");
         }
 
         [HttpPost]
@@ -1027,11 +1061,11 @@ namespace NMP.Portal.Controllers
             int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);  // Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value);
             var farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
             //int farmId = model.FarmID;
-            if (model.IsSnsBasedOnPreviousCrop.Value)
-            {
+            //if (model.IsSnsBasedOnPreviousCrop.Value)
+            //{
                 model.SoilAnalyses.SoilNitrogenSupply = 0;
                 model.SoilAnalyses.SoilNitrogenSupplyIndex = 0;
-            }
+            //}
 
             (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
 
