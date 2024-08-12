@@ -5,7 +5,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" :"SNSCalculationMethod")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" :"SoilNutrientValue")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="CropGroups" asp-controller="Field" method="post">
     @Html.AntiForgeryToken()
@@ -73,7 +73,8 @@
             <govuk-radios asp-for="@Model.CropGroupId">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @(Model.IsSnsBasedOnPreviousCrop == true ? Resource.lblWhatWasThePreviousCropGroup : Resource.lblWhatIsTheCurrentCropGroup)
+                        @* @(Model.IsSnsBasedOnPreviousCrop == true ? Resource.lblWhatWasThePreviousCropGroup : Resource.lblWhatIsTheCurrentCropGroup) *@
+                        @string.Format(Resource.lblWhatWasThePreviousCropGroup,Model.HarvestYear)
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
 

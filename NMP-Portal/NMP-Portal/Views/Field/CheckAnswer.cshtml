@@ -9,8 +9,8 @@
     var sulphurDeficient = "";
     var isSoilNutrientValueTypeIndex = Model.IsSoilNutrientValueTypeIndex.Value ? Resource.lblIndexValues
                                         : Resource.lblMiligramValues;
-    var sNSCalculationMethod = Model.IsSnsBasedOnPreviousCrop.Value ?
-    Resource.lblBasedOnThePreviousCrop : Resource.lblBasedOnARecentSoilNitrogenAnalysis;
+    //  var sNSCalculationMethod = Model.IsSnsBasedOnPreviousCrop.Value ?
+    // Resource.lblBasedOnThePreviousCrop : Resource.lblBasedOnARecentSoilNitrogenAnalysis;
     var sampleDate = Model.SoilAnalyses.Date.Value.Date.ToString("dd MMMM yyyy");
     var changeAction = Model.IsSoilReleasingClay ? "SoilReleasingClay"
                         : "SulphurDeficient";
@@ -360,7 +360,7 @@
                     </govuk-summary-list-row>
 
                 }
-                <govuk-summary-list-row>
+                @* <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
                         @Resource.lblHowWouldYouLikeToCalculateSNSForCheckAnswer
                     </govuk-summary-list-row-key>
@@ -370,7 +370,7 @@
                     <govuk-summary-list-row-actions>
                         <govuk-summary-list-row-action asp-action="SNSCalculationMethod" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
-                </govuk-summary-list-row>
+                </govuk-summary-list-row> *@
                 <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
                         @Resource.lblWhatWasThePreviousCropGroupForCheckAnswere

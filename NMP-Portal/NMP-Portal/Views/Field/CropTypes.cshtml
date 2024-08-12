@@ -44,7 +44,7 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilReleasingClay" value="@Model.IsSoilReleasingClay.ToString().ToLower()"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAbove300SeaLevelForFarm" value="@Model.IsAbove300SeaLevelForFarm.ToString().ToLower()"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZForFarm" value="@Model.IsWithinNVZForFarm.ToString().ToLower()"></govuk-input>
-   
+
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
@@ -58,7 +58,8 @@
             <govuk-radios asp-for="@Model.CropTypeID">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @(Model.IsSnsBasedOnPreviousCrop == true ? Resource.lblWhatWasThePreviousCropType : Resource.lblWhatIsTheCurrentCropType)
+                        @* @(Model.IsSnsBasedOnPreviousCrop == true ? Resource.lblWhatWasThePreviousCropType : Resource.lblWhatIsTheCurrentCropType) *@
+                        @string.Format(Resource.lblWhatWasThePreviousCropType, Model.HarvestYear)
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
                     @if (ViewBag.CropTypeList != null)
