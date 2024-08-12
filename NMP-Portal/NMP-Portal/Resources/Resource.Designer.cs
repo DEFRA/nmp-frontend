@@ -340,6 +340,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add to application plan.
+        /// </summary>
+        public static string lblAddToApplicaionPlan {
+            get {
+                return ResourceManager.GetString("lblAddToApplicaionPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add to plan.
         /// </summary>
         public static string lblAddToPlan {
@@ -752,6 +761,15 @@ namespace NMP.Portal.Resources {
         public static string lblCheckAnswer {
             get {
                 return ResourceManager.GetString("lblCheckAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check Inorganic Fertiliser Details for Fields.
+        /// </summary>
+        public static string lblCheckInorganicFertiliserDetailsForFields {
+            get {
+                return ResourceManager.GetString("lblCheckInorganicFertiliserDetailsForFields", resourceCulture);
             }
         }
         
@@ -2059,6 +2077,15 @@ namespace NMP.Portal.Resources {
         public static string lblKgPerTonneAndKgPerMeterCube {
             get {
                 return ResourceManager.GetString("lblKgPerTonneAndKgPerMeterCube", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} kg {1}.
+        /// </summary>
+        public static string lblKgWithNutrient {
+            get {
+                return ResourceManager.GetString("lblKgWithNutrient", resourceCulture);
             }
         }
         
@@ -4810,6 +4837,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter an amount for a minimum of one nutrient before continuing.
+        /// </summary>
+        public static string MsgEnterAnAmountForAMinimumOfOneNutrientBeforeContinuing {
+            get {
+                return ResourceManager.GetString("MsgEnterAnAmountForAMinimumOfOneNutrientBeforeContinuing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter an application rate before continuing..
         /// </summary>
         public static string MsgEnterAnapplicationRateBeforeContinuing {
@@ -4999,6 +5035,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a valid amount of {0} before continuing.
+        /// </summary>
+        public static string MsgEnterTheValidValueOfNutrient {
+            get {
+                return ResourceManager.GetString("MsgEnterTheValidValueOfNutrient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the {0} before continuing.
         /// </summary>
         public static string MsgEnterTheValueBeforeContinuing {
@@ -5013,15 +5058,6 @@ namespace NMP.Portal.Resources {
         public static string MsgEnterTotalFieldArea {
             get {
                 return ResourceManager.GetString("MsgEnterTotalFieldArea", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Enter valid amounts for each nutrient before continuing..
-        /// </summary>
-        public static string MsgEnterValidAmountForEachNutrient {
-            get {
-                return ResourceManager.GetString("MsgEnterValidAmountForEachNutrient", resourceCulture);
             }
         }
         
@@ -5233,7 +5269,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter a value for {0} between 0 and {1}.
+        ///   Looks up a localized string similar to Enter a value for {0} between 1 and {1}.
         /// </summary>
         public static string MsgMinMaxValidation {
             get {

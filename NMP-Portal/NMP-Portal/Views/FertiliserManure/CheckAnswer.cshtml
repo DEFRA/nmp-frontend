@@ -5,9 +5,9 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="QuestionForSpreadInorganicFertiliser" asp-controller="FertiliserManure" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="BackCheckAnswer" asp-controller="FertiliserManure">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="CheckYourAnswer" asp-controller="FertiliserManure" method="post">
+<form asp-action="CheckAnswer" asp-controller="FertiliserManure" method="post">
     @Html.AntiForgeryToken()
 
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
@@ -88,20 +88,20 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <h1 class="govuk-heading-l">
-                @Resource.lblCheckYourAnswers
+                @Resource.lblCheckInorganicFertiliserDetailsForFields
             </h1>
             <govuk-summary-list>
                 @if (!Model.IsComingFromRecommendation)
                 {
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
-                            @Resource.lblWhichFieldsWouldYouLikeToPlan
+                            @Resource.lblWhichFieldsWouldYouLikeToAddAnOrganic
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
                             @Model.FieldGroupName
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="FieldGroup" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="FieldGroup" asp-controller="FertiliserManure">@Resource.lblChange</govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
@@ -165,12 +165,36 @@
                                 <govuk-summary-list-row-action asp-action="InOrgnaicManureDuration" asp-controller="FertiliserManure" asp-route-q="@appForFertliserManure.EncryptedCounter">@Resource.lblChange</govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
-                        <govuk-summary-list-row class=@((!appForFertliserManure.N.HasValue)?"govuk-error-message":"")>
+                        <govuk-summary-list-row>
                             <govuk-summary-list-row-key>
                                 @Resource.lblHowMuchOfEachNutrientDoYouPlan
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @((appForFertliserManure.N.HasValue) ? appForFertliserManure.N : Resource.lblNotSet)
+                                @if ((appForFertliserManure.N.HasValue) && appForFertliserManure.N.Value > 0)
+                                {
+                                    @string.Format(Resource.lblKgWithNutrient, appForFertliserManure.N.Value, Resource.lblNitrogen)
+                                    <br />
+                                }
+                                @if ((appForFertliserManure.P2O5.HasValue) && appForFertliserManure.P2O5.Value > 0)
+                                {
+                                    @string.Format(Resource.lblKgWithNutrient, appForFertliserManure.P2O5.Value, Resource.lblPhosphateP2O5)
+                                    <br />
+                                }
+                                @if ((appForFertliserManure.K2O.HasValue) && appForFertliserManure.K2O.Value > 0)
+                                {
+                                    @string.Format(Resource.lblKgWithNutrient, appForFertliserManure.K2O.Value, Resource.lblPotashK2O)
+                                    <br />
+                                }
+                                @if ((appForFertliserManure.SO3.HasValue) && appForFertliserManure.SO3.Value > 0)
+                                {
+                                    @string.Format(Resource.lblKgWithNutrient, appForFertliserManure.SO3.Value, Resource.lblSulphurSO3)
+                                    <br />
+                                }
+                                @if ((appForFertliserManure.Lime.HasValue) && appForFertliserManure.Lime.Value > 0)
+                                {
+                                    @(string.Format(Resource.lblKgWithNutrient, appForFertliserManure.Lime.Value, Resource.lblLime))
+                                    <br />
+                                }
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="NutrientValues" asp-controller="FertiliserManure" asp-route-q="@appForFertliserManure.EncryptedCounter">@Resource.lblChange</govuk-summary-list-row-action>
@@ -181,7 +205,7 @@
                                 @Resource.lblDoYouPlanToSpreadMoreInorganicFertiliser
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @((appForFertliserManure.QuestionForSpreadInorganicFertiliser.HasValue) ? appForFertliserManure.QuestionForSpreadInorganicFertiliser : Resource.lblNotSet)
+                                @((appForFertliserManure.QuestionForSpreadInorganicFertiliser.HasValue) ? ((appForFertliserManure.QuestionForSpreadInorganicFertiliser.Value ? Resource.lblYes : Resource.lblNo)) : Resource.lblNotSet)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="QuestionForSpreadInorganicFertiliser" asp-controller="FertiliserManure" asp-route-q="@appForFertliserManure.EncryptedCounter">@Resource.lblChange</govuk-summary-list-row-action>
@@ -193,7 +217,7 @@
             </govuk-summary-list>
 
             <govuk-button type="submit" class="margin-bottom-forty">
-                Add to applicaion plan
+                @Resource.lblAddToApplicaionPlan
             </govuk-button>
 
             <p class="govuk-body cancel-link"><a asp-action="CreateFertiliserManureCancel" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
