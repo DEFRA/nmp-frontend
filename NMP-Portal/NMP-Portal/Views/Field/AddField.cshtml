@@ -46,6 +46,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilType"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroup"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropType"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LastHarvestYear" value="@Model.LastHarvestYear"></govuk-input>
             @if (Model != null)
             {
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules" value="@Model.isEnglishRules.ToString().ToLower()"></govuk-input>

@@ -764,10 +764,10 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Potassium (K) per litre of soil not set</value>
   </data>
   <data name="lblWhatWasThePreviousCropGroup" xml:space="preserve">
-    <value>What was the previous crop group?</value>
+    <value>What was the previous crop group in {0}?</value>
   </data>
   <data name="lblWhatWasThePreviousCropType" xml:space="preserve">
-    <value>What was the previous crop type?</value>
+    <value>What was the previous crop type in {0}?</value>
   </data>
   <data name="MsgSoilReleasingClayNotSet" xml:space="preserve">
     <value>Potash-releasing clay not set</value>
