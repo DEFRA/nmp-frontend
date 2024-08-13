@@ -205,9 +205,9 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("TotalArea", Resource.MsgEnterTotalFieldArea);
             }
-            if(field.TotalArea!=null)
+            if (field.TotalArea != null)
             {
-                if(field.TotalArea<0)
+                if (field.TotalArea < 0)
                 {
                     ModelState.AddModelError("TotalArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
                 }
@@ -223,7 +223,7 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("CroppedArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
                 }
-            }            
+            }
 
             if (field.ManureNonSpreadingArea > field.TotalArea)
             {
@@ -802,38 +802,6 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public IActionResult SNSCalculationMethod()
-        {
-            FieldViewModel? model = new FieldViewModel();
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
-            {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
-            }
-            else
-            {
-                return RedirectToAction("FarmList", "Farm");
-            }
-            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
-            return View(model);
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult SNSCalculationMethod(FieldViewModel field)
-        {
-            if (field.IsSnsBasedOnPreviousCrop == null)
-            {
-                ModelState.AddModelError("IsSnsBasedOnPreviousCrop", Resource.MsgSelectAnOptionBeforeContinuing);
-            }
-            if (!ModelState.IsValid)
-            {
-                return View(field);
-            }
-            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", field);
-
-            return RedirectToAction("CropGroups");
-        }
-
-        [HttpGet]
         public async Task<IActionResult> CropGroups()
         {
             FieldViewModel model = new FieldViewModel();
@@ -947,10 +915,10 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("CheckAnswer");
             }
-            return RedirectToAction("SNSQuestion");
+            return RedirectToAction("SNSAppliedQuestion");
         }
         [HttpGet]
-        public IActionResult SNSQuestion()
+        public IActionResult SNSAppliedQuestion()
         {
             FieldViewModel? model = new FieldViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
@@ -966,11 +934,11 @@ namespace NMP.Portal.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult SNSQuestion(FieldViewModel field)
+        public IActionResult SNSAppliedQuestion(FieldViewModel field)
         {
-            if (field.IsSnsBasedOnPreviousCrop == null)
+            if (field.WantToApplySns == null)
             {
-                ModelState.AddModelError("IsSnsBasedOnPreviousCrop", Resource.MsgSelectAnOptionBeforeContinuing);
+                ModelState.AddModelError("WantToApplySns", Resource.MsgSelectAnOptionBeforeContinuing);
             }
             if (!ModelState.IsValid)
             {
@@ -1024,7 +992,7 @@ namespace NMP.Portal.Controllers
             }
             model.IsCheckAnswer = false;
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
-            return RedirectToAction("SNSQuestion");
+            return RedirectToAction("SNSAppliedQuestion");
         }
 
         [HttpPost]
@@ -1062,10 +1030,10 @@ namespace NMP.Portal.Controllers
             int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);  // Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value);
             var farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
             //int farmId = model.FarmID;
-            //if (model.IsSnsBasedOnPreviousCrop.Value)
+            //if (model.WantToApplySns.Value)
             //{
-                model.SoilAnalyses.SoilNitrogenSupply = 0;
-                model.SoilAnalyses.SoilNitrogenSupplyIndex = 0;
+            model.SoilAnalyses.SoilNitrogenSupply = 0;
+            model.SoilAnalyses.SoilNitrogenSupplyIndex = 0;
             //}
 
             (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
