@@ -1030,11 +1030,11 @@ namespace NMP.Portal.Controllers
             int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);  // Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value);
             var farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
             //int farmId = model.FarmID;
-            //if (model.WantToApplySns.Value)
-            //{
-            model.SoilAnalyses.SoilNitrogenSupply = 0;
-            model.SoilAnalyses.SoilNitrogenSupplyIndex = 0;
-            //}
+            if (model.WantToApplySns.HasValue && (!model.WantToApplySns.Value))
+            {
+                model.SoilAnalyses.SoilNitrogenSupply = 0;
+                model.SoilAnalyses.SoilNitrogenSupplyIndex = 0;
+            }
 
             (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
 
