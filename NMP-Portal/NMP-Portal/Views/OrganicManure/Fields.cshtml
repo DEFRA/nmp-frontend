@@ -5,7 +5,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@("FieldGroup")" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer": "FieldGroup")" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="Fields" asp-controller="OrganicManure" method="post">
     @Html.AntiForgeryToken()

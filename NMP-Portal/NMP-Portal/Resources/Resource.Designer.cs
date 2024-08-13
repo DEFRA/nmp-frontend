@@ -1864,6 +1864,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If you have harvested most of your {0} crops you can set {1} as your last harvest year..
+        /// </summary>
+        public static string lblIfYouHaveHarvestedMostOfYourCrops {
+            get {
+                return ResourceManager.GetString("lblIfYouHaveHarvestedMostOfYourCrops", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If you have more than one holding, it&apos;s best to add a separate farm for each..
         /// </summary>
         public static string lblIfYouhaveMoreThanOneHolding {
@@ -2104,6 +2113,15 @@ namespace NMP.Portal.Resources {
         public static string lblLandParcelIDForCheckAnswere {
             get {
                 return ResourceManager.GetString("lblLandParcelIDForCheckAnswere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last harvest year.
+        /// </summary>
+        public static string lblLastHarvestYear {
+            get {
+                return ResourceManager.GetString("lblLastHarvestYear", resourceCulture);
             }
         }
         
@@ -3530,6 +3548,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To create plans and give recommendations we need information about your last harvest year..
+        /// </summary>
+        public static string lblToCreatePlansAndGiveRecommendation {
+            get {
+                return ResourceManager.GetString("lblToCreatePlansAndGiveRecommendation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to tonnes.
         /// </summary>
         public static string lbltonnes {
@@ -4174,6 +4201,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhatIsThePotatoVarietyName {
             get {
                 return ResourceManager.GetString("lblWhatIsThePotatoVarietyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is your last harvest year?.
+        /// </summary>
+        public static string lblWhatIsYourLastHarvestYear {
+            get {
+                return ResourceManager.GetString("lblWhatIsYourLastHarvestYear", resourceCulture);
             }
         }
         
@@ -5382,6 +5418,15 @@ namespace NMP.Portal.Resources {
         public static string MsgSelectAddress {
             get {
                 return ResourceManager.GetString("MsgSelectAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select a harvest year before continuing.
+        /// </summary>
+        public static string MsgSelectAHarvestYearBeforeContinuing {
+            get {
+                return ResourceManager.GetString("MsgSelectAHarvestYearBeforeContinuing", resourceCulture);
             }
         }
         
