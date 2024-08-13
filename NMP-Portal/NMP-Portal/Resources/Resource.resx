@@ -764,10 +764,10 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Potassium (K) per litre of soil not set</value>
   </data>
   <data name="lblWhatWasThePreviousCropGroup" xml:space="preserve">
-    <value>What was the previous crop group?</value>
+    <value>What was the previous crop group in {0}?</value>
   </data>
   <data name="lblWhatWasThePreviousCropType" xml:space="preserve">
-    <value>What was the previous crop type?</value>
+    <value>What was the previous crop type in {0}?</value>
   </data>
   <data name="MsgSoilReleasingClayNotSet" xml:space="preserve">
     <value>Potash-releasing clay not set</value>
@@ -1961,6 +1961,21 @@ m3/ha  not set</value>
   </data>
   <data name="MsgEnterAnAmountForAMinimumOfOneNutrientBeforeContinuing" xml:space="preserve">
     <value>Enter an amount for a minimum of one nutrient before continuing</value>
+  </data>
+  <data name="lblIfYouHaveHarvestedMostOfYourCrops" xml:space="preserve">
+    <value>If you have harvested most of your {0} crops you can set {1} as your last harvest year.</value>
+  </data>
+  <data name="lblLastHarvestYear" xml:space="preserve">
+    <value>Last harvest year</value>
+  </data>
+  <data name="lblToCreatePlansAndGiveRecommendation" xml:space="preserve">
+    <value>To create plans and give recommendations we need information about your last harvest year.</value>
+  </data>
+  <data name="lblWhatIsYourLastHarvestYear" xml:space="preserve">
+    <value>What is your last harvest year?</value>
+  </data>
+  <data name="MsgSelectAHarvestYearBeforeContinuing" xml:space="preserve">
+    <value>Please select a harvest year before continuing</value>
   </data>
   <data name="lblDoYouHaveARecentSoilMineralNitrogenAnalysis" xml:space="preserve">
     <value>Do you have a recent soil mineral nitrogen analysis result for {0}?</value>

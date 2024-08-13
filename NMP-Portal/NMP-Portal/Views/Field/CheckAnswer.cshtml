@@ -9,7 +9,7 @@
     var sulphurDeficient = "";
     var isSoilNutrientValueTypeIndex = Model.IsSoilNutrientValueTypeIndex.Value ? Resource.lblIndexValues
                                         : Resource.lblMiligramValues;
-    // var sNSCalculationMethod = Model.IsSnsBasedOnPreviousCrop.Value ?
+    //  var sNSCalculationMethod = Model.IsSnsBasedOnPreviousCrop.Value ?
     // Resource.lblBasedOnThePreviousCrop : Resource.lblBasedOnARecentSoilNitrogenAnalysis;
     var sampleDate = Model.SoilAnalyses.Date.Value.Date.ToString("dd MMMM yyyy");
     var changeAction = Model.IsSoilReleasingClay ? "SoilReleasingClay"
@@ -105,6 +105,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSnsBasedOnPreviousCrop" value="@Model.IsSnsBasedOnPreviousCrop.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAbove300SeaLevelForFarm" value="@Model.IsAbove300SeaLevelForFarm.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZForFarm" value="@Model.IsWithinNVZForFarm.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LastHarvestYear"></govuk-input>
             <govuk-summary-list>
                 <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
@@ -360,7 +361,7 @@
                     </govuk-summary-list-row>
 
                 }
-               @*  <govuk-summary-list-row>
+                @* <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
                         @Resource.lblHowWouldYouLikeToCalculateSNSForCheckAnswer
                     </govuk-summary-list-row-key>
