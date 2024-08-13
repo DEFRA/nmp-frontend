@@ -108,7 +108,7 @@ namespace NMP.Portal.Controllers
                     (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmID);
                     model.isEnglishRules = farm.EnglishRules;
                     model.FarmName = farm.Name;
-                    //model.HarvestYear = farm.HarvestYear;
+                    model.LastHarvestYear = farm.LastHarvestYear;
                 }
             }
             catch (Exception ex)
