@@ -52,7 +52,7 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.Magnesium"></govuk-input>
 
 
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSnsBasedOnPreviousCrop" value="@Model.IsSnsBasedOnPreviousCrop.ToString().ToLower()"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.WantToApplySns" value="@Model.WantToApplySns.ToString().ToLower()"></govuk-input>
 
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroup"></govuk-input>
 
@@ -74,7 +74,7 @@
             <govuk-radios asp-for="@Model.CropGroupId">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @* @(Model.IsSnsBasedOnPreviousCrop == true ? Resource.lblWhatWasThePreviousCropGroup : Resource.lblWhatIsTheCurrentCropGroup) *@
+                        @* @(Model.WantToApplySns == true ? Resource.lblWhatWasThePreviousCropGroup : Resource.lblWhatIsTheCurrentCropGroup) *@
                         @string.Format(Resource.lblWhatWasThePreviousCropGroup, Model.LastHarvestYear)
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>

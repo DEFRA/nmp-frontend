@@ -21,7 +21,7 @@ namespace NMP.Portal.ViewModels
         public string? FarmName { get; set; } = string.Empty;
         public string EncryptedFarmId { get; set; } = string.Empty;
         public bool? IsSoilNutrientValueTypeIndex { get; set; }
-        public bool? IsSnsBasedOnPreviousCrop { get; set; }
+        public bool? WantToApplySns { get; set; }
         public int? CropGroupId { get; set; }
         public bool IsCheckAnswer { get; set; } = false;
         public string? SoilType { get; set; } = string.Empty;

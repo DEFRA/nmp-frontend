@@ -1089,6 +1089,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you have a recent soil mineral nitrogen analysis result for {0}?.
+        /// </summary>
+        public static string lblDoYouHaveARecentSoilMineralNitrogenAnalysis {
+            get {
+                return ResourceManager.GetString("lblDoYouHaveARecentSoilMineralNitrogenAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you plan to spread more inorganic fertiliser?.
         /// </summary>
         public static string lblDoYouPlanToSpreadMoreInorganicFertiliser {
@@ -3238,6 +3247,15 @@ namespace NMP.Portal.Resources {
         public static string lblSignout {
             get {
                 return ResourceManager.GetString("lblSignout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SNS question.
+        /// </summary>
+        public static string lblSnsQuestion {
+            get {
+                return ResourceManager.GetString("lblSnsQuestion", resourceCulture);
             }
         }
         
