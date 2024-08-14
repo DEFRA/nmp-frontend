@@ -33,6 +33,7 @@ namespace NMP.Portal.Services
         Task<(List<RainTypeResponse>, Error)> FetchRainTypeList();
         Task<(List<WindspeedResponse>, Error)> FetchWindspeedList();
         Task<(List<MoistureTypeResponse>, Error)> FetchMoisterTypeList();
+        Task<bool> FetchIsPerennialByCropTypeId(int cropTypeId);
 
     }
 }
