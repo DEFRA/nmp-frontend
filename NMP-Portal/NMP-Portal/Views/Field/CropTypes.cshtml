@@ -22,7 +22,7 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilNutrientValueTypeIndex" value="@Model.IsSoilNutrientValueTypeIndex.ToString().ToLower()"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilReleasingClay"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.SulphurDeficient"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSnsBasedOnPreviousCrop" value="@Model.IsSnsBasedOnPreviousCrop.ToString().ToLower()"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.WantToApplySns" value="@Model.WantToApplySns.ToString().ToLower()"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupId"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.PhosphorusIndex"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.PotassiumIndex"></govuk-input>
@@ -44,7 +44,8 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilReleasingClay" value="@Model.IsSoilReleasingClay.ToString().ToLower()"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAbove300SeaLevelForFarm" value="@Model.IsAbove300SeaLevelForFarm.ToString().ToLower()"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZForFarm" value="@Model.IsWithinNVZForFarm.ToString().ToLower()"></govuk-input>
-   
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LastHarvestYear"></govuk-input>
+
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
@@ -58,7 +59,8 @@
             <govuk-radios asp-for="@Model.CropTypeID">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @(Model.IsSnsBasedOnPreviousCrop == true ? Resource.lblWhatWasThePreviousCropType : Resource.lblWhatIsTheCurrentCropType)
+                        @* @(Model.WantToApplySns == true ? Resource.lblWhatWasThePreviousCropType : Resource.lblWhatIsTheCurrentCropType) *@
+                        @string.Format(Resource.lblWhatWasThePreviousCropType, Model.LastHarvestYear)
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
                     @if (ViewBag.CropTypeList != null)

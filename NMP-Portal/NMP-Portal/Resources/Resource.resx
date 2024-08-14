@@ -629,10 +629,10 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>What is the current crop type?</value>
   </data>
   <data name="lblWhatWasThePreviousCropGroupForCheckAnswere" xml:space="preserve">
-    <value>Previous crop group</value>
+    <value>Previous crop group in {0}</value>
   </data>
   <data name="lblWhatWasThePreviousCropTypeForCheckAnswere" xml:space="preserve">
-    <value>Previous crop type</value>
+    <value>Previous crop type in {0}</value>
   </data>
   <data name="btnStartNow" xml:space="preserve">
     <value>Start now</value>
@@ -764,10 +764,10 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Potassium (K) per litre of soil not set</value>
   </data>
   <data name="lblWhatWasThePreviousCropGroup" xml:space="preserve">
-    <value>What was the previous crop group?</value>
+    <value>What was the previous crop group in {0}?</value>
   </data>
   <data name="lblWhatWasThePreviousCropType" xml:space="preserve">
-    <value>What was the previous crop type?</value>
+    <value>What was the previous crop type in {0}?</value>
   </data>
   <data name="MsgSoilReleasingClayNotSet" xml:space="preserve">
     <value>Potash-releasing clay not set</value>
@@ -1976,6 +1976,12 @@ m3/ha  not set</value>
   </data>
   <data name="MsgSelectAHarvestYearBeforeContinuing" xml:space="preserve">
     <value>Please select a harvest year before continuing</value>
+  </data>
+  <data name="lblDoYouHaveARecentSoilMineralNitrogenAnalysis" xml:space="preserve">
+    <value>Do you have a recent soil mineral nitrogen analysis result for {0}?</value>
+  </data>
+  <data name="lblSnsQuestion" xml:space="preserve">
+    <value>SNS question</value>
   </data>
   <data name="lbl1Novto15Jan" xml:space="preserve">
     <value>1 Nov to 15 Jan</value>

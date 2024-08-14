@@ -5,7 +5,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" :"SNSCalculationMethod")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" :"SoilNutrientValue")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="CropGroups" asp-controller="Field" method="post">
     @Html.AntiForgeryToken()
@@ -52,14 +52,15 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.Magnesium"></govuk-input>
 
 
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSnsBasedOnPreviousCrop" value="@Model.IsSnsBasedOnPreviousCrop.ToString().ToLower()"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.WantToApplySns" value="@Model.WantToApplySns.ToString().ToLower()"></govuk-input>
 
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroup"></govuk-input>
 
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropType"></govuk-input>
 
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>     
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LastHarvestYear"></govuk-input>
      
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
@@ -73,7 +74,8 @@
             <govuk-radios asp-for="@Model.CropGroupId">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @(Model.IsSnsBasedOnPreviousCrop == true ? Resource.lblWhatWasThePreviousCropGroup : Resource.lblWhatIsTheCurrentCropGroup)
+                        @* @(Model.WantToApplySns == true ? Resource.lblWhatWasThePreviousCropGroup : Resource.lblWhatIsTheCurrentCropGroup) *@
+                        @string.Format(Resource.lblWhatWasThePreviousCropGroup, Model.LastHarvestYear)
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
 

@@ -1107,6 +1107,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you have a recent soil mineral nitrogen analysis result for {0}?.
+        /// </summary>
+        public static string lblDoYouHaveARecentSoilMineralNitrogenAnalysis {
+            get {
+                return ResourceManager.GetString("lblDoYouHaveARecentSoilMineralNitrogenAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you plan to spread more inorganic fertiliser?.
         /// </summary>
         public static string lblDoYouPlanToSpreadMoreInorganicFertiliser {
@@ -3260,6 +3269,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SNS question.
+        /// </summary>
+        public static string lblSnsQuestion {
+            get {
+                return ResourceManager.GetString("lblSnsQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SO3.
         /// </summary>
         public static string lblSO3 {
@@ -4259,7 +4277,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What was the previous crop group?.
+        ///   Looks up a localized string similar to What was the previous crop group in {0}?.
         /// </summary>
         public static string lblWhatWasThePreviousCropGroup {
             get {
@@ -4268,7 +4286,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Previous crop group.
+        ///   Looks up a localized string similar to Previous crop group in {0}.
         /// </summary>
         public static string lblWhatWasThePreviousCropGroupForCheckAnswere {
             get {
@@ -4277,7 +4295,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What was the previous crop type?.
+        ///   Looks up a localized string similar to What was the previous crop type in {0}?.
         /// </summary>
         public static string lblWhatWasThePreviousCropType {
             get {
@@ -4286,7 +4304,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Previous crop type.
+        ///   Looks up a localized string similar to Previous crop type in {0}.
         /// </summary>
         public static string lblWhatWasThePreviousCropTypeForCheckAnswere {
             get {
