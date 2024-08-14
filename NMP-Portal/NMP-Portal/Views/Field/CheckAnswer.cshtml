@@ -384,7 +384,7 @@
                 </govuk-summary-list-row> *@
                 <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
-                        @Resource.lblWhatWasThePreviousCropGroupForCheckAnswere
+                        @string.Format(Resource.lblWhatWasThePreviousCropGroupForCheckAnswere, Model.LastHarvestYear)
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
                         @Model.CropGroup
@@ -395,7 +395,7 @@
                 </govuk-summary-list-row>
                 <govuk-summary-list-row class=@((!Model.CropTypeID.HasValue)?"govuk-error-message":"")>
                     <govuk-summary-list-row-key>
-                        @Resource.lblWhatWasThePreviousCropTypeForCheckAnswere
+                        @string.Format(Resource.lblWhatWasThePreviousCropTypeForCheckAnswere,Model.LastHarvestYear)
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
                         @((!Model.CropTypeID.HasValue) ? @Resource.lblNotSet : Model.CropType)

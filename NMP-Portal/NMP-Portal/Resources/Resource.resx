@@ -629,10 +629,10 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>What is the current crop type?</value>
   </data>
   <data name="lblWhatWasThePreviousCropGroupForCheckAnswere" xml:space="preserve">
-    <value>Previous crop group</value>
+    <value>Previous crop group in {0}</value>
   </data>
   <data name="lblWhatWasThePreviousCropTypeForCheckAnswere" xml:space="preserve">
-    <value>Previous crop type</value>
+    <value>Previous crop type in {0}</value>
   </data>
   <data name="btnStartNow" xml:space="preserve">
     <value>Start now</value>
