@@ -864,15 +864,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a {0} plan.
-        /// </summary>
-        public static string lblCreateAPlan {
-            get {
-                return ResourceManager.GetString("lblCreateAPlan", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Create plan.
         /// </summary>
         public static string lblCreatePlan {
@@ -3449,6 +3440,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Start a {0} plan.
+        /// </summary>
+        public static string lblStartAPlan {
+            get {
+                return ResourceManager.GetString("lblStartAPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Straw use.
         /// </summary>
         public static string lblStrawUse {
@@ -3971,11 +3971,11 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to View or edit.
+        ///   Looks up a localized string similar to View or edit the {0} plan.
         /// </summary>
-        public static string lblViewEdit {
+        public static string lblViewEditThePlan {
             get {
-                return ResourceManager.GetString("lblViewEdit", resourceCulture);
+                return ResourceManager.GetString("lblViewEditThePlan", resourceCulture);
             }
         }
         
