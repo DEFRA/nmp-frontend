@@ -70,7 +70,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropInfo2"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropInfo1Name"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropInfo2Name"></govuk-input>            
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropInfo2Name"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -109,9 +109,12 @@
                     <govuk-summary-list-row-value>
                         @Model.Year
                     </govuk-summary-list-row-value>
-                    <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action class="@(Model.IsAddAnotherCrop? "disabled": "")" asp-action="HarvestYearForPlan" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
-                    </govuk-summary-list-row-actions>
+                    @if (Model.IsPlanRecord.HasValue && (!Model.IsPlanRecord.Value))
+                    {
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action class="@(Model.IsAddAnotherCrop? "disabled": "")" asp-action="HarvestYearForPlan" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    }
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
@@ -136,7 +139,7 @@
                         <govuk-summary-list-row-action asp-action="CropTypes" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
-                 @if (Model.SowingDateQuestion != (int)NMP.Portal.Enums.CropGroup.Potatoes)
+                @if (Model.SowingDateQuestion != (int)NMP.Portal.Enums.CropGroup.Potatoes)
                 {
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
@@ -152,17 +155,17 @@
                 }
                 else
                 {
-                <govuk-summary-list-row class=@((string.IsNullOrWhiteSpace(Model.Variety))?"govuk-error-message":"")>
-                    <govuk-summary-list-row-key>
-                        @Resource.lblVarietyNameForCheckAnswer
-                    </govuk-summary-list-row-key>
-                    <govuk-summary-list-row-value>
-                            @(string.IsNullOrWhiteSpace(Model.Variety)? Resource.lblNotSet : Model.Variety)
-                    </govuk-summary-list-row-value>
-                    <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="VarietyName" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
-                    </govuk-summary-list-row-actions>
-                </govuk-summary-list-row>
+                    <govuk-summary-list-row class=@((string.IsNullOrWhiteSpace(Model.Variety))?"govuk-error-message":"")>
+                        <govuk-summary-list-row-key>
+                            @Resource.lblVarietyNameForCheckAnswer
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @(string.IsNullOrWhiteSpace(Model.Variety) ? Resource.lblNotSet : Model.Variety)
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action asp-action="VarietyName" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
                 }
                 <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
@@ -222,7 +225,7 @@
                                 @string.Format(Resource.lblSowingDiffrentDateForCheckAnswer, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType, crop.FieldName)
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @(crop.SowingDate.HasValue?crop.SowingDate.Value.Date.ToString("dd MMMM yyyy"):Resource.lblNotSet)
+                                @(crop.SowingDate.HasValue ? crop.SowingDate.Value.Date.ToString("dd MMMM yyyy") : Resource.lblNotSet)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="SowingDate" asp-controller="Crop" asp-route-q="@crop.EncryptedCounter">@Resource.lblChange</govuk-summary-list-row-action>
@@ -277,7 +280,7 @@
                                 @string.Format(Resource.lblWhatIsTheDifferentExpectedYield, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType, crop.FieldName)
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @(crop.Yield.HasValue?crop.Yield:Resource.lblNotSet)
+                                @(crop.Yield.HasValue ? crop.Yield : Resource.lblNotSet)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="Yield" asp-controller="Crop" asp-route-q=@crop.EncryptedCounter>@Resource.lblChange</govuk-summary-list-row-action>
@@ -315,7 +318,7 @@
                             @string.Format(Resource.lblCropInfo1ForCheckAnswer, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @(Model.CropInfo1.HasValue? Model.CropInfo1Name:Resource.lblNotSet)
+                            @(Model.CropInfo1.HasValue ? Model.CropInfo1Name : Resource.lblNotSet)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="CropInfoOne" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
