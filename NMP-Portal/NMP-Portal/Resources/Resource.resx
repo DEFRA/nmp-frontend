@@ -1459,8 +1459,8 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblUricAcidForError" xml:space="preserve">
     <value>UricAcid</value>
   </data>
-  <data name="lbl15Octto15Jan" xml:space="preserve">
-    <value>15 Oct to 15 Jan</value>
+  <data name="lbl15Octto31Jan" xml:space="preserve">
+    <value>15 Oct to 31 Jan</value>
   </data>
   <data name="lbl1Augto31Dec" xml:space="preserve">
     <value>1 Aug to 31 Dec</value>
@@ -1471,8 +1471,8 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lbl16Septo31Dec" xml:space="preserve">
     <value>16 Sep to 31 Dec</value>
   </data>
-  <data name="lbl1Octto15Jan" xml:space="preserve">
-    <value>1 Oct to 15 Jan</value>
+  <data name="lbl1Octto31Jan" xml:space="preserve">
+    <value>1 Oct to 31 Jan</value>
   </data>
   <data name="lblAreas" xml:space="preserve">
     <value>Area</value>
@@ -1982,5 +1982,11 @@ m3/ha  not set</value>
   </data>
   <data name="lblSnsQuestion" xml:space="preserve">
     <value>SNS question</value>
+  </data>
+  <data name="lbl1Novto15Jan" xml:space="preserve">
+    <value>1 Nov to 15 Jan</value>
+  </data>
+  <data name="lbl1Novto31Dec" xml:space="preserve">
+    <value>1 Nov to 31 Dec</value>
   </data>
 </root>
