@@ -1059,11 +1059,12 @@ namespace NMP.Portal.Controllers
                 int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
                 (List<ManureType> manureTypeList, Error error) = await _organicManureService.FetchManureTypeList(model.ManureGroupId.Value, countryId);
                 model.ManureTypeName = (error == null && manureTypeList.Count > 0) ? manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId)?.Name : string.Empty;
-
+                bool isHighReadilyAvailableNitrogen = false;
                 if (error == null && manureTypeList.Count > 0)
                 {
                     var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
                     model.ManureTypeName = manureType.Name;
+                    isHighReadilyAvailableNitrogen = manureType.HighReadilyAvailableNitrogen??false;
                     ViewBag.HighReadilyAvailableNitrogen = manureType.HighReadilyAvailableNitrogen;
                 }
                 else
@@ -1081,38 +1082,18 @@ namespace NMP.Portal.Controllers
                 {
                     TempData["Error"] = error.Message;
                 }
-                if (farm != null)
+                if (farm != null && isHighReadilyAvailableNitrogen)
                 {
-                    //Closed Period for non organic farm
-                    if (!farm.RegisteredOrganicProducer.Value)
-                    {
-                        (FieldDetailResponse fieldDetail, Error error2) = await _fieldService.FetchFieldDetailByFieldIdAndHarvestYear(Convert.ToInt32(model.FieldList[0]), model.HarvestYear ?? 0, false);
+                    List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
+                    int cropTypeId = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.CropTypeID).FirstOrDefault()??0;
+                    bool isPerennial = await _organicManureService.FetchIsPerennialByCropTypeId(cropTypeId);
 
-                        DateTime september16 = new DateTime(model.HarvestYear ?? 0, 9, 16);
+                    (FieldDetailResponse fieldDetail, Error error2) = await _fieldService.FetchFieldDetailByFieldIdAndHarvestYear(Convert.ToInt32(model.FieldList[0]), model.HarvestYear ?? 0, false);
 
-                        if ((fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Sand || fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Shallow) && fieldDetail.FieldType == (int)NMP.Portal.Enums.FieldType.Grass)
-                        {
-                            ViewBag.ClosedPeriod = Resource.lbl1Septo31Dec;
-                        }
-                        else if (fieldDetail.FieldType == (int)NMP.Portal.Enums.FieldType.Grass)
-                        {
-                            ViewBag.ClosedPeriod = Resource.lbl15Octto15Jan;
-                        }
-                        else if ((fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Sand || fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Shallow) && fieldDetail.FieldType == (int)NMP.Portal.Enums.FieldType.Arable && fieldDetail.SowingDate >= september16)
-                        {
-                            ViewBag.ClosedPeriod = Resource.lbl1Augto31Dec;
-                        }
-                        else if ((fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Sand || fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Shallow) && fieldDetail.FieldType == (int)NMP.Portal.Enums.FieldType.Arable && fieldDetail.SowingDate < september16)
-                        {
-                            ViewBag.ClosedPeriod = Resource.lbl16Septo31Dec;
-                        }
-                        else if (fieldDetail.FieldType == (int)NMP.Portal.Enums.FieldType.Arable)
-                        {
-                            ViewBag.ClosedPeriod = Resource.lbl1Octto15Jan;
-                        }
-                    }
+                    WarningMessage warningMessage = new WarningMessage();
+                    string closedPeriod = warningMessage.ClosedPeriod(fieldDetail, model.HarvestYear ?? 0, farm.RegisteredOrganicProducer.Value, isPerennial);
 
-                    //Closed period for organic farm need to work
+                    ViewBag.ClosedPeriod = closedPeriod;
                 }
 
                 return View(model);
@@ -1158,36 +1139,16 @@ namespace NMP.Portal.Controllers
                     }
                     if (farm != null)
                     {
-                        //Closed Period for non organic farm
-                        if (!farm.RegisteredOrganicProducer.Value)
-                        {
-                            (FieldDetailResponse fieldDetail, Error error2) = await _fieldService.FetchFieldDetailByFieldIdAndHarvestYear(Convert.ToInt32(model.FieldList[0]), model.HarvestYear ?? 0, false);
+                        List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
+                        int cropTypeId = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.CropTypeID).FirstOrDefault() ?? 0;
+                        bool isPerennial = await _organicManureService.FetchIsPerennialByCropTypeId(cropTypeId);
 
-                            DateTime september16 = new DateTime(model.HarvestYear ?? 0, 9, 16);
+                        (FieldDetailResponse fieldDetail, Error error2) = await _fieldService.FetchFieldDetailByFieldIdAndHarvestYear(Convert.ToInt32(model.FieldList[0]), model.HarvestYear ?? 0, false);
 
-                            if ((fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Sand || fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Shallow) && fieldDetail.FieldType == (int)NMP.Portal.Enums.FieldType.Grass)
-                            {
-                                ViewBag.ClosedPeriod = Resource.lbl1Septo31Dec;
-                            }
-                            else if (fieldDetail.FieldType == (int)NMP.Portal.Enums.FieldType.Grass)
-                            {
-                                ViewBag.ClosedPeriod = Resource.lbl15Octto15Jan;
-                            }
-                            else if ((fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Sand || fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Shallow) && fieldDetail.FieldType == (int)NMP.Portal.Enums.FieldType.Arable && fieldDetail.SowingDate >= september16)
-                            {
-                                ViewBag.ClosedPeriod = Resource.lbl1Augto31Dec;
-                            }
-                            else if ((fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Sand || fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Shallow) && fieldDetail.FieldType == (int)NMP.Portal.Enums.FieldType.Arable && fieldDetail.SowingDate < september16)
-                            {
-                                ViewBag.ClosedPeriod = Resource.lbl16Septo31Dec;
-                            }
-                            else if (fieldDetail.FieldType == (int)NMP.Portal.Enums.FieldType.Arable)
-                            {
-                                ViewBag.ClosedPeriod = Resource.lbl1Octto15Jan;
-                            }
-                        }
-
-                        //Closed period for organic farm need to work
+                        WarningMessage warningMessage = new WarningMessage();
+                        string closedPeriod = warningMessage.ClosedPeriod(fieldDetail, model.HarvestYear ?? 0, farm.RegisteredOrganicProducer.Value, isPerennial);
+                        ViewBag.ClosedPeriod = closedPeriod;
+                        
                     }
                     return View(model);
                 }
