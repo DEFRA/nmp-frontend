@@ -384,7 +384,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -1584,7 +1584,7 @@ namespace NMP.Portal.Controllers
                                     EncryptedFieldId = _cropDataProtector.Protect(plan.FieldID.ToString()), // Assuming this returns a string
                                     FieldName = plan.FieldName,
                                     OrganicManureCount = plan.OrganicManuresCount,
-                                    FertiliserManuresCount=plan.TotalFertiliserManures
+                                    FertiliserManuresCount = plan.TotalFertiliserManures
                                 };
                                 harvestYearPlans.FieldData.Add(newField);
                                 //harvestYearPlans.FieldNames.Add(plan.FieldName);
@@ -1649,7 +1649,17 @@ namespace NMP.Portal.Controllers
                     {
                         yearList.Add(item.Year);
                     }
-
+                    for (int j = 0; j < planSummaryResponse.Count; j++)
+                    {
+                        var harvestNewYear = new HarvestYear
+                        {
+                            Year = planSummaryResponse[j].Year,
+                            EncryptedYear = _farmDataProtector.Protect(planSummaryResponse[j].Year.ToString()),
+                            LastModifiedOn = planSummaryResponse[j].LastModifiedOn,
+                            IsAnyPlan = true
+                        };
+                        model.HarvestYear.Add(harvestNewYear);
+                    }
                     int minYear = System.DateTime.Now.Year - 1;
                     int maxYear = System.DateTime.Now.Year + 1;
                     for (int i = minYear; i <= maxYear; i++)
@@ -1660,10 +1670,15 @@ namespace NMP.Portal.Controllers
                             {
                                 Year = i,
                                 EncryptedYear = _farmDataProtector.Protect(i.ToString()),
+                                IsAnyPlan = false
                             };
                             model.HarvestYear.Add(harvestYear);
                         }
                     }
+                }
+                if (model.HarvestYear.Count > 0)
+                {
+                    model.HarvestYear = model.HarvestYear.OrderByDescending(x => x.Year).ToList();
                 }
                 model.EncryptedFarmId = id;
             }

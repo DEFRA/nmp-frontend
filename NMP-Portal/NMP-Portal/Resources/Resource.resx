@@ -994,8 +994,8 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblViewRecommendations" xml:space="preserve">
     <value>View recommendations</value>
   </data>
-  <data name="lblCreateAPlan" xml:space="preserve">
-    <value>Create a {0} plan</value>
+  <data name="lblStartAPlan" xml:space="preserve">
+    <value>Start a {0} plan</value>
   </data>
   <data name="lblLastModified" xml:space="preserve">
     <value>Last modified</value>
@@ -1045,8 +1045,8 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblVarietyNameForCheckAnswer" xml:space="preserve">
     <value>Variety name</value>
   </data>
-  <data name="lblViewEdit" xml:space="preserve">
-    <value>View or edit</value>
+  <data name="lblViewEditThePlan" xml:space="preserve">
+    <value>View or edit the {0} plan</value>
   </data>
   <data name="MsgCropInfo1NotSet" xml:space="preserve">
     <value>Which option applies to your {0} not set?</value>
