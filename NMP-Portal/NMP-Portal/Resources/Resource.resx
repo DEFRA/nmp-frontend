@@ -1989,4 +1989,13 @@ m3/ha  not set</value>
   <data name="lbl1Novto31Dec" xml:space="preserve">
     <value>1 Nov to 31 Dec</value>
   </data>
+  <data name="lblImportant" xml:space="preserve">
+    <value>Important</value>
+  </data>
+  <data name="lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit" xml:space="preserve">
+    <value>This application may take you over the Organic Manure N Field Limit</value>
+  </data>
+  <data name="MsgIfOrganicManureNMaxLimitExceed" xml:space="preserve">
+    <value>The NVZ Action Programme states that the total amount of nitrogen from all organic manures you apply in any 12-month period on any single hectare of your land must not exceed 250kg. You can continue, but you should consider reducing the amount of nitrogen from organic manures you apply to avoid the risk of agricultural nitrate pollution.</value>
+  </data>
 </root>

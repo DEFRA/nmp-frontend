@@ -83,5 +83,6 @@ namespace NMP.Portal.ViewModels
         public int? RainWithin6Hours { get; set; }
         public bool IsComingFromRecommendation { get; set; } = false;
         public int? ManureGroupIdForFilter { get; set; }
+        public bool IsWarningMsgNeedToShow { get; set; } = false;
     }
 }

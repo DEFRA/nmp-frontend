@@ -19,6 +19,7 @@ using System.Linq.Expressions;
 using Microsoft.VisualBasic.FileIO;
 using System.Collections.Immutable;
 using System;
+using Microsoft.Identity.Client;
 
 namespace NMP.Portal.Controllers
 {
@@ -1064,7 +1065,7 @@ namespace NMP.Portal.Controllers
                 {
                     var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
                     model.ManureTypeName = manureType.Name;
-                    isHighReadilyAvailableNitrogen = manureType.HighReadilyAvailableNitrogen??false;
+                    isHighReadilyAvailableNitrogen = manureType.HighReadilyAvailableNitrogen ?? false;
                     ViewBag.HighReadilyAvailableNitrogen = manureType.HighReadilyAvailableNitrogen;
                 }
                 else
@@ -1176,7 +1177,7 @@ namespace NMP.Portal.Controllers
                             closedPeriod = warningMessage.ClosedPeriodOrganicFarm(fieldDetail, model.HarvestYear ?? 0, cropTypeId,cropInfo1);
                         }
                         ViewBag.ClosedPeriod = closedPeriod;
-                        
+
                     }
                     return View(model);
                 }
@@ -1890,6 +1891,8 @@ namespace NMP.Portal.Controllers
             {
                 ViewBag.Error = error1.Message;
             }
+            model.IsWarningMsgNeedToShow = false;
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
             return View(model);
 
         }
@@ -1899,12 +1902,13 @@ namespace NMP.Portal.Controllers
         {
             try
             {
+                Error error = null;
                 if (model.ApplicationRateMethod == null)
                 {
                     ModelState.AddModelError("ApplicationRate", Resource.MsgSelectAnOptionBeforeContinuing);
                 }
                 int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
-                (List<ManureType> manureTypeList, Error error) = await _organicManureService.FetchManureTypeList(model.ManureGroupId.Value, countryId);
+                (List<ManureType> manureTypeList, error) = await _organicManureService.FetchManureTypeList(model.ManureGroupId.Value, countryId);
                 if (!ModelState.IsValid)
                 {
                     if (error == null && manureTypeList.Count > 0)
@@ -1951,6 +1955,52 @@ namespace NMP.Portal.Controllers
                             orgManure.ApplicationRate = model.ApplicationRate.Value;
                         }
                     }
+                    if (!model.IsWarningMsgNeedToShow)
+                    {
+                        if (model.FieldList.Count > 0)
+                        {
+                            for (int i = 0; i < model.FieldList.Count; i++)
+                            {
+                                Field field = await _fieldService.FetchFieldByFieldId(Convert.ToInt32(model.FieldList[i]));
+                                for (int j = 0; j < model.OrganicManures.Count; j++)
+                                {
+                                    if (i == j)
+                                    {
+                                        if (field != null)
+                                        {
+                                            bool isFieldIsInNVZ = field.IsWithinNVZ.Value;
+                                            if (isFieldIsInNVZ)
+                                            {
+                                                int managId = model.OrganicManures[j].ManagementPeriodID;
+                                                DateTime startDate = model.ApplicationDate.Value.AddDays(-364);
+                                                DateTime endDate = model.ApplicationDate.Value;
+                                                (decimal totalN, error) = await _organicManureService.FetchTotalNBasedOnManIdAndAppDate(managId, startDate, endDate);
+                                                if (error == null)
+                                                {
+                                                    totalN = totalN + (model.OrganicManures[j].N.Value * model.ApplicationRate.Value);
+                                                    if (totalN > 250)
+                                                    {
+                                                        model.IsWarningMsgNeedToShow = true;
+                                                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                                                        return View(model);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    ViewBag.Error = error.Message;
+                                                    return View(model);
+                                                }
+
+                                            }
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                    model.IsWarningMsgNeedToShow = false;
                     _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
                 }
 
@@ -1990,7 +2040,8 @@ namespace NMP.Portal.Controllers
 
                 (List<CommonResponse> manureGroupList, Error error1) = await _organicManureService.FetchManureGroupList();
                 model.ManureGroupName = (error1 == null && manureGroupList.Count > 0) ? manureGroupList.FirstOrDefault(x => x.Id == model.ManureGroupId)?.Name : string.Empty;
-
+                model.IsWarningMsgNeedToShow = false;
+                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
                 return View(model);
             }
             catch (Exception ex)
@@ -2027,6 +2078,51 @@ namespace NMP.Portal.Controllers
             {
                 return View("ManualApplicationRate", model);
             }
+            if (!model.IsWarningMsgNeedToShow)
+            {
+                if (model.FieldList.Count > 0)
+                {
+                    for (int i = 0; i < model.FieldList.Count; i++)
+                    {
+                        Field field = await _fieldService.FetchFieldByFieldId(Convert.ToInt32(model.FieldList[i]));
+                        for (int j = 0; j < model.OrganicManures.Count; j++)
+                        {
+                            if (i == j)
+                            {
+                                if (field != null)
+                                {
+                                    bool isFieldIsInNVZ = field.IsWithinNVZ.Value;
+                                    if (isFieldIsInNVZ)
+                                    {
+                                        int managId = model.OrganicManures[j].ManagementPeriodID;
+                                        DateTime startDate = model.ApplicationDate.Value.AddDays(-364);
+                                        DateTime endDate = model.ApplicationDate.Value;
+                                        (decimal totalN, Error error) = await _organicManureService.FetchTotalNBasedOnManIdAndAppDate(managId, startDate, endDate);
+                                        if (error == null)
+                                        {
+                                            totalN = totalN + (model.OrganicManures[j].N.Value * model.ApplicationRate.Value);
+                                            if (totalN > 250)
+                                            {
+                                                model.IsWarningMsgNeedToShow = true;
+                                                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                                                return View(model);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            TempData["ManualApplicationRateError"] = error.Message;
+                                            return View(model);
+                                        }
+
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
             model.Area = null;
             model.Quantity = null;
             if (model.OrganicManures.Count > 0)
@@ -2038,6 +2134,7 @@ namespace NMP.Portal.Controllers
                     orgManure.ApplicationRate = model.ApplicationRate.Value;
                 }
             }
+            model.IsWarningMsgNeedToShow = false;
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
             if (model.IsCheckAnswer && (!model.IsManureTypeChange) && (!model.IsFieldGroupChange))
             {
@@ -2058,7 +2155,8 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-
+            model.IsWarningMsgNeedToShow = false;
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
             return View(model);
 
         }
@@ -2123,7 +2221,53 @@ namespace NMP.Portal.Controllers
                     orgManure.ApplicationRate = model.ApplicationRate.Value;
                 }
             }
+            if (!model.IsWarningMsgNeedToShow)
+            {
+                if (model.FieldList.Count > 0)
+                {
+                    for (int i = 0; i < model.FieldList.Count; i++)
+                    {
+                        Field field = await _fieldService.FetchFieldByFieldId(Convert.ToInt32(model.FieldList[i]));
+                        for (int j = 0; j < model.OrganicManures.Count; j++)
+                        {
+                            if (i == j)
+                            {
+                                if (field != null)
+                                {
+                                    bool isFieldIsInNVZ = field.IsWithinNVZ.Value;
+                                    if (isFieldIsInNVZ)
+                                    {
+                                        int managId = model.OrganicManures[j].ManagementPeriodID;
+                                        DateTime startDate = model.ApplicationDate.Value.AddDays(-364);
+                                        DateTime endDate = model.ApplicationDate.Value;
+                                        (decimal totalN, Error error) = await _organicManureService.FetchTotalNBasedOnManIdAndAppDate(managId, startDate, endDate);
+                                        if (error == null)
+                                        {
+                                            totalN = totalN + (model.OrganicManures[j].N.Value * model.ApplicationRate.Value);
+                                            if (totalN > 250)
+                                            {
+                                                model.IsWarningMsgNeedToShow = true;
+                                                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                                                return View(model);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            TempData["AreaAndQuantityError"] = error.Message;
+                                            return View(model);
+                                        }
 
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            model.IsWarningMsgNeedToShow = false;
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
             if (model.IsCheckAnswer && (!model.IsManureTypeChange) && (!model.IsFieldGroupChange))
             {
@@ -2722,7 +2866,7 @@ namespace NMP.Portal.Controllers
                 (List<CommonResponse> fieldList, Error error) = await _organicManureService.FetchFieldByFarmIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
                 if (error == null)
                 {
-                    if (model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) )
+                    if (model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll))
                     {
                         if (fieldList.Count > 0)
                         {
@@ -2735,7 +2879,53 @@ namespace NMP.Portal.Controllers
                         }
                     }
                 }
+                else
+                {
+                    TempData["ConditionsAffectingNutrientsError"] = error.Message;
+                    return RedirectToAction("ConditionsAffectingNutrients");
+                }
+                if (model.FieldList.Count > 0)
+                {
+                    for (int i = 0; i < model.FieldList.Count; i++)
+                    {
+                        Field field = await _fieldService.FetchFieldByFieldId(Convert.ToInt32(model.FieldList[i]));
+                        for (int j = 0; j < model.OrganicManures.Count; j++)
+                        {
+                            if (i == j)
+                            {
+                                if (field != null)
+                                {
+                                    bool isFieldIsInNVZ = field.IsWithinNVZ.Value;
+                                    if (isFieldIsInNVZ)
+                                    {
+                                        int managId = model.OrganicManures[j].ManagementPeriodID;
+                                        DateTime startDate = model.ApplicationDate.Value.AddDays(-364);
+                                        DateTime endDate = model.ApplicationDate.Value;
+                                        (decimal totalN, error) = await _organicManureService.FetchTotalNBasedOnManIdAndAppDate(managId, startDate, endDate);
+                                        if (error == null)
+                                        {
+                                            totalN = totalN + (model.OrganicManures[j].N.Value * model.ApplicationRate.Value);
+                                            if (totalN > 250)
+                                            {
+                                                model.IsWarningMsgNeedToShow = true;
+                                                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                                                //return View(model);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            TempData["ConditionsAffectingNutrientsError"] = error.Message;
+                                            return RedirectToAction("ConditionsAffectingNutrients");
+                                        }
 
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                }
                 model.IsCheckAnswer = true;
                 model.IsManureTypeChange = false;
                 model.IsApplicationMethodChange = false;
