@@ -2012,7 +2012,8 @@ namespace NMP.Portal.Controllers
 
                 (List<CommonResponse> manureGroupList, Error error1) = await _organicManureService.FetchManureGroupList();
                 model.ManureGroupName = (error1 == null && manureGroupList.Count > 0) ? manureGroupList.FirstOrDefault(x => x.Id == model.ManureGroupId)?.Name : string.Empty;
-
+                model.IsWarningMsgNeedToShow = false;
+                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
                 return View(model);
             }
             catch (Exception ex)
@@ -2126,7 +2127,8 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-
+            model.IsWarningMsgNeedToShow = false;
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
             return View(model);
 
         }
