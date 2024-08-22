@@ -78,5 +78,6 @@ namespace NMP.Portal.Helpers
         public const string DeleteFarmByIdAPI = "farms/{0}";
         public const string AddFertiliserManuresAsyncAPI = "fertiliser-manures";
         public const string FetchIsPerennialByCropTypeIdAsyncAPI = "manner-crop-types/isPerennial/{0}";
+        public const string FetchTotalNBasedOnManIdAndAppDateAsyncAPI = "organic-manures/total-nitrogen/{0}?fromDate={1}&toDate={2}";        
     }
 }
