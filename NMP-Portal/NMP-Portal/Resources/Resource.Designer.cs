@@ -1900,6 +1900,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Important.
+        /// </summary>
+        public static string lblImportant {
+            get {
+                return ResourceManager.GetString("lblImportant", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Incorpration Delay.
         /// </summary>
         public static string lblIncorprationDelay {
@@ -3566,6 +3575,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This application may take you over the Organic Manure N Field Limit.
+        /// </summary>
+        public static string lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit {
+            get {
+                return ResourceManager.GetString("lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This is the total rainfall between x and y. If you think this is wrong, you can change it now or later..
         /// </summary>
         public static string lblThisIsTotalRainfall {
@@ -5193,6 +5211,15 @@ namespace NMP.Portal.Resources {
         public static string MsgIfCroppedAreaAndNonSpreadingArea {
             get {
                 return ResourceManager.GetString("MsgIfCroppedAreaAndNonSpreadingArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The NVZ Action Programme states that the total amount of nitrogen from all organic manures you apply in any 12-month period on any single hectare of your land must not exceed 250kg. You can continue, but you should consider reducing the amount of nitrogen from organic manures you apply to avoid the risk of agricultural nitrate pollution..
+        /// </summary>
+        public static string MsgIfOrganicManureNMaxLimitExceed {
+            get {
+                return ResourceManager.GetString("MsgIfOrganicManureNMaxLimitExceed", resourceCulture);
             }
         }
         
