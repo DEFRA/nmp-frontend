@@ -1998,4 +1998,16 @@ m3/ha  not set</value>
   <data name="MsgIfOrganicManureNMaxLimitExceed" xml:space="preserve">
     <value>The NVZ Action Programme states that the total amount of nitrogen from all organic manures you apply in any 12-month period on any single hectare of your land must not exceed 250kg. You can continue, but you should consider reducing the amount of nitrogen from organic manures you apply to avoid the risk of agricultural nitrate pollution.</value>
   </data>
+  <data name="lblMilling" xml:space="preserve">
+    <value>Milling</value>
+  </data>
+  <data name="lblNMaxLimitTitle" xml:space="preserve">
+    <value>This application may take you over the N max limit for this crop</value>
+  </data>
+  <data name="lblShallow" xml:space="preserve">
+    <value>Shallow</value>
+  </data>
+  <data name="MsgNMaxLimit" xml:space="preserve">
+    <value>The NVZ Action Programme requires that the average nitrogen application rate (from manufactured nitrogen fertiliser and crop-available nitrogen from livestock manures) across the whole farm area of a specified crop type does not exceed the N max limit for that crop type.</value>
+  </data>
 </root>

@@ -36,6 +36,7 @@ namespace NMP.Portal.Services
         Task<bool> FetchIsPerennialByCropTypeId(int cropTypeId);
         Task<(decimal, Error)> FetchTotalNBasedOnManIdAndAppDate(int managementId, DateTime startDate, DateTime endDate);
         Task<(CropTypeResponse, Error)> FetchCropTypeByFieldIdAndHarvestYear(int fieldId, int year);
+        Task<(CropTypeLinkingResponse, Error)> FetchCropTypeLinkingByCropTypeId(int cropTypeId);
 
     }
 }

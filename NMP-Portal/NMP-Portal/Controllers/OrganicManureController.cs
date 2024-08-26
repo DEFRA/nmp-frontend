@@ -1085,7 +1085,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (farm != null)
                 {
-                    
+
                     (FieldDetailResponse fieldDetail, Error error2) = await _fieldService.FetchFieldDetailByFieldIdAndHarvestYear(Convert.ToInt32(model.FieldList[0]), model.HarvestYear ?? 0, false);
 
                     WarningMessage warningMessage = new WarningMessage();
@@ -1094,9 +1094,9 @@ namespace NMP.Portal.Controllers
                     if (!farm.RegisteredOrganicProducer.Value && isHighReadilyAvailableNitrogen)
                     {
                         (CropTypeResponse cropTypeResponse, Error error3) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(model.FieldList[0]), model.HarvestYear ?? 0);
-                        if(error3==null)
+                        if (error3 == null)
                         {
-                           isPerennial = await _organicManureService.FetchIsPerennialByCropTypeId(cropTypeResponse.CropTypeId);
+                            isPerennial = await _organicManureService.FetchIsPerennialByCropTypeId(cropTypeResponse.CropTypeId);
                         }
                         closedPeriod = warningMessage.ClosedPeriodNonOrganicFarm(fieldDetail, model.HarvestYear ?? 0, isPerennial);
                     }
@@ -2078,6 +2078,7 @@ namespace NMP.Portal.Controllers
             {
                 return View("ManualApplicationRate", model);
             }
+            Error error = null;
             if (!model.IsWarningMsgNeedToShow)
             {
                 if (model.FieldList.Count > 0)
@@ -2091,21 +2092,53 @@ namespace NMP.Portal.Controllers
                             {
                                 if (field != null)
                                 {
+                                    int nMaxLimit = 0;
                                     bool isFieldIsInNVZ = field.IsWithinNVZ.Value;
                                     if (isFieldIsInNVZ)
                                     {
                                         int managId = model.OrganicManures[j].ManagementPeriodID;
                                         DateTime startDate = model.ApplicationDate.Value.AddDays(-364);
                                         DateTime endDate = model.ApplicationDate.Value;
-                                        (decimal totalN, Error error) = await _organicManureService.FetchTotalNBasedOnManIdAndAppDate(managId, startDate, endDate);
+                                        (decimal totalN, error) = await _organicManureService.FetchTotalNBasedOnManIdAndAppDate(managId, startDate, endDate);
                                         if (error == null)
                                         {
+                                         
                                             totalN = totalN + (model.OrganicManures[j].N.Value * model.ApplicationRate.Value);
                                             if (totalN > 250)
                                             {
                                                 model.IsWarningMsgNeedToShow = true;
-                                                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
-                                                return View(model);
+                                            }
+                                            (FieldDetailResponse fieldDetail, error) = await _fieldService.FetchFieldDetailByFieldIdAndHarvestYear(field.ID.Value, model.HarvestYear.Value, true);
+                                            if (error == null)
+                                            {
+                                                List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
+                                                var crop = cropsResponse.Where(x => x.Year == model.HarvestYear&&x.Confirm==false).ToList();
+                                                if (crop != null)
+                                                {
+                                                    (CropTypeLinkingResponse cropTypeLinking, error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(crop[0].CropTypeID.Value);
+                                                    if (error == null)
+                                                    {
+                                                         nMaxLimit = cropTypeLinking.NMaxLimit??0;
+                                                        string cropInfo1 = await _cropService.FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(crop[0].CropTypeID.Value, crop[0].CropInfo1.Value);
+                                                        bool isManureTypeApplied = false;
+                                                        OrganicManureNMaxLimit organicManureNMaxLimit = new OrganicManureNMaxLimit();
+                                                        nMaxLimit = organicManureNMaxLimit.NMaxLimit(cropTypeLinking.NMaxLimit ?? 0, crop[0].Yield.Value, fieldDetail.SoilTypeName, cropInfo1, crop[0].CropTypeID.Value, isManureTypeApplied);
+                                                        model.IsWarningMsgNeedToShow = true;
+                                                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                                                        return View(model);
+                                                    }
+                                                    else
+                                                    {
+                                                        TempData["ManualApplicationRateError"] = error.Message;
+                                                        return View(model);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    TempData["ManualApplicationRateError"] = error.Message;
+                                                    return View(model);
+                                                }
+
                                             }
                                         }
                                         else
@@ -2113,6 +2146,13 @@ namespace NMP.Portal.Controllers
                                             TempData["ManualApplicationRateError"] = error.Message;
                                             return View(model);
                                         }
+                                        if (totalN > nMaxLimit)
+                                        {
+                                            ViewBag.nMaxLimitWarningTitle = Resource.lblNMaxLimitTitle;
+                                            ViewBag.nMaxLimitWarningMsg =Resource.MsgNMaxLimit;
+                                        }
+                                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                                        return View(model);
 
                                     }
                                     break;

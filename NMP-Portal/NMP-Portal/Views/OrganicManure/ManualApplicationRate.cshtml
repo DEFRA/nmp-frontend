@@ -127,19 +127,35 @@
             }
             @if (Model.IsWarningMsgNeedToShow != null && Model.IsWarningMsgNeedToShow)
             {
-                <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-                    <div class="govuk-notification-banner__header">
+                <govuk-notification-banner role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+                    <govuk-notification-banner class="govuk-notification-banner__header">
                         <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
                             @Resource.lblImportant
                         </h2>
-                    </div>
-                    <div class="govuk-notification-banner__content">
+                    </govuk-notification-banner>
+                    <govuk-notification-banner__content>
                         <p class="govuk-notification-banner__heading">
                             @Resource.lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit
                         </p>
                         @Resource.MsgIfOrganicManureNMaxLimitExceed
-                    </div>
-                </div>
+                    </govuk-notification-banner__content>
+                </govuk-notification-banner>
+                if (ViewBag.nMaxLimitWarningTitle != null && ViewBag.nMaxLimitWarningMsg != null)
+                {
+                    <govuk-notification-banner role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+                        <govuk-notification-banner class="govuk-notification-banner__header">
+                            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+                                @Resource.lblImportant
+                            </h2>
+                        </govuk-notification-banner>
+                        <govuk-notification-banner__content>
+                            <p class="govuk-notification-banner__heading">
+                                @ViewBag.nMaxLimitWarningTitle
+                            </p>
+                            @ViewBag.nMaxLimitWarningMsg
+                        </govuk-notification-banner__content>
+                    </govuk-notification-banner>
+                }
             }
             <div class="govuk-form-group">
 
