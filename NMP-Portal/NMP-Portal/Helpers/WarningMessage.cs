@@ -3,6 +3,7 @@ using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
 using System.Globalization;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace NMP.Portal.Helpers
 {
@@ -122,6 +123,41 @@ namespace NMP.Portal.Helpers
                 }
             }
             return closedPeriod;
+        }
+
+        public string ClosedPeriodWarningMessage(DateTime applicationDate,string closedPeriod,string cropType, FieldDetailResponse fieldDetail)
+        {
+            string message = string.Empty;
+            int day = applicationDate.Day;
+            int month = applicationDate.Month;
+
+
+            string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
+            Regex regex = new Regex(pattern);
+            Match match = regex.Match(closedPeriod);
+            if (match.Success)
+            {
+                int startDay = int.Parse(match.Groups[1].Value);
+                string startMonthStr = match.Groups[2].Value;
+                int endDay = int.Parse(match.Groups[3].Value);
+                string endMonthStr = match.Groups[4].Value;
+
+                DateTimeFormatInfo dtfi = DateTimeFormatInfo.CurrentInfo;
+                int startMonth = Array.IndexOf(dtfi.AbbreviatedMonthNames, startMonthStr) + 1;
+                int endMonth = Array.IndexOf(dtfi.AbbreviatedMonthNames, endMonthStr) + 1;
+
+                if (month >= startMonth && month <= endMonth)
+                {
+                    if (day >= startDay && day <= endDay)
+                    {
+                        //TempData["ClosedPeriodWarning"] = Resource.MsgApplicationDateEnteredIsInsideClosedPeriod;
+                        message = string.Format(Resource.MsgApplicationDateEnteredIsInsideClosedPeriodDetail, cropType, fieldDetail.SowingDate.Value.Date.ToString("dd MMM yyyy"), fieldDetail.SoilTypeName, closedPeriod);
+
+                        return message;
+                    }
+                }
+            }
+            return message;
         }
     }
 }

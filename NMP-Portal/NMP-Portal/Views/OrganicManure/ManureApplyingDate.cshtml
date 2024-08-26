@@ -81,6 +81,8 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MoistureType"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupIdForFilter"></govuk-input>
 
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWarningMsgNeedToShow" value="@Model.IsWarningMsgNeedToShow.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarning" value="@Model.IsClosedPeriodWarning"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -122,6 +124,21 @@
                 }
 
             }
+
+            @if (TempData["ClosedPeriodWarningDetail"] != null && Model.IsWarningMsgNeedToShow)
+            {
+                <govuk-notification-banner>
+                    <govuk-notification-banner-title>
+                        @Resource.lblImportant
+                    </govuk-notification-banner-title>
+                    <p class="govuk-notification-banner__heading">
+                        @Resource.MsgApplicationDateEnteredIsInsideClosedPeriod
+                    </p>
+                    <p class="govuk-body">@TempData["ClosedPeriodWarningDetail"]</p>
+                </govuk-notification-banner>
+
+            }
+            
             <div class="govuk-form-group">
                 <govuk-date-input asp-for="@Model.ApplicationDate" pattern="[0-9]*">
                     <govuk-date-input-fieldset>
@@ -133,9 +150,9 @@
                             <p>@Resource.MsgManureApplyingDateDontHaveExactDate <br> @Resource.lblSampleDate</p>
                             @if (ViewBag.HighReadilyAvailableNitrogen != null && ViewBag.HighReadilyAvailableNitrogen==true)
                             {
-                                @if (ViewBag.ClosedPeriod != null)
+                                @if (TempData["ClosedPeriod"] != null)
                                 {
-                                    <p>@string.Format(Resource.MsgManureApplyingDateClosedPeriod, ViewBag.ClosedPeriod)</p>
+                                    <p>@string.Format(Resource.MsgManureApplyingDateClosedPeriod, TempData["ClosedPeriod"])</p>
                                 }
                             }
                             
