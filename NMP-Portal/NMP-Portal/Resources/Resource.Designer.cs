@@ -4637,6 +4637,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The application date you entered is inside your closed period for applying high N organic manure..
+        /// </summary>
+        public static string MsgApplicationDateEnteredIsInsideClosedPeriod {
+            get {
+                return ResourceManager.GetString("MsgApplicationDateEnteredIsInsideClosedPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The NVZ Action Programme states that the closed period for {0} planted on non-organic farms {1} on {2} soil is {3}. You can continue, but you should consider applying outside the closed period to avoid the risk of agricultural nitrate pollution..
+        /// </summary>
+        public static string MsgApplicationDateEnteredIsInsideClosedPeriodDetail {
+            get {
+                return ResourceManager.GetString("MsgApplicationDateEnteredIsInsideClosedPeriodDetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the application method for your {0} not set?.
         /// </summary>
         public static string MsgApplicationMethodNotSet {
