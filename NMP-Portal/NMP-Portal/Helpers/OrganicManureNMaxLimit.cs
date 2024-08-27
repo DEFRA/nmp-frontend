@@ -4,9 +4,37 @@ namespace NMP.Portal.Helpers
 {
     public class OrganicManureNMaxLimit
     {
-        public int NMaxLimit(int nMaxLimit, decimal yield, string soilType, string cropInfo1, int cropTypeId, bool isManureTypeApplied)
+        public int NMaxLimit(int nMaxLimit, decimal yield, string soilType, string cropInfo1, int cropTypeId, List<int> currentYearManureTypeIds,
+            List<int> previousYearManureTypeIds, int manureTypeId)
         {
-            string warningMessage = Resource.MsgNMaxLimit;
+            bool manureTypeCondition = false;
+            if (currentYearManureTypeIds.Count > 0)
+            {
+                foreach (var Ids in currentYearManureTypeIds)
+                {
+                    if (Ids == (int)NMP.Portal.Enums.ManureTypes.StrawMulch || Ids == (int)NMP.Portal.Enums.ManureTypes.PaperCrumbleChemicallyPhysciallyTreated ||
+                        Ids == (int)NMP.Portal.Enums.ManureTypes.PaperCrumbleBiologicallyTreated)
+                    {
+                        manureTypeCondition = true;
+                    }
+                }
+            }
+            if (previousYearManureTypeIds.Count > 0)
+            {
+                foreach (var Ids in previousYearManureTypeIds)
+                {
+                    if (Ids == (int)NMP.Portal.Enums.ManureTypes.StrawMulch || Ids == (int)NMP.Portal.Enums.ManureTypes.PaperCrumbleChemicallyPhysciallyTreated ||
+                        Ids == (int)NMP.Portal.Enums.ManureTypes.PaperCrumbleBiologicallyTreated)
+                    {
+                        manureTypeCondition = true;
+                    }
+                }
+            }
+            if (manureTypeId == (int)NMP.Portal.Enums.ManureTypes.StrawMulch || manureTypeId == (int)NMP.Portal.Enums.ManureTypes.PaperCrumbleChemicallyPhysciallyTreated ||
+                        manureTypeId == (int)NMP.Portal.Enums.ManureTypes.PaperCrumbleBiologicallyTreated)
+            {
+                manureTypeCondition = true;
+            }
             if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterWheat)
             {
                 if (soilType == Resource.lblShallow)
@@ -68,11 +96,12 @@ namespace NMP.Portal.Helpers
                 || cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterBarley || cropTypeId == (int)NMP.Portal.Enums.CropTypes.SpringBarley
                 || cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape)
             {
-                if (isManureTypeApplied)
+                if (manureTypeCondition)
                 {
                     nMaxLimit = nMaxLimit + 80;
                 }
             }
+
 
 
 

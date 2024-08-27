@@ -85,5 +85,7 @@ namespace NMP.Portal.ViewModels
         public int? ManureGroupIdForFilter { get; set; }
         public bool IsWarningMsgNeedToShow { get; set; } = false;
         public bool IsClosedPeriodWarning { get; set; } = false;
+        public bool IsOrgManureNfieldLimitWarning { get; set; } = false;
+        public bool IsNMaxLimitWarning { get; set; } = false;
     }
 }

@@ -1196,8 +1196,10 @@ namespace NMP.Portal.Controllers
                 List<FertiliserManure> updatedFertiliserManures = new List<FertiliserManure>();
                 foreach (var fertiliserManure in model.FertiliserManures)
                 {
+                    
                     foreach (var application in model.ApplicationForFertiliserManures)
                     {
+                        application.ApplicationRate = 1;
                         var newFertiliserManure = new FertiliserManure
                         {
                             ManagementPeriodID = fertiliserManure.ManagementPeriodID,
@@ -1207,6 +1209,7 @@ namespace NMP.Portal.Controllers
                             K2O = application.K2O,
                             SO3 = application.SO3,
                             Lime = application.Lime,
+                            ApplicationRate = application.ApplicationRate
                         };
                         updatedFertiliserManures.Add(newFertiliserManure);
                     }

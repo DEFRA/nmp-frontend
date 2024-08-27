@@ -87,7 +87,8 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupIdForFilter"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWarningMsgNeedToShow" value="@Model.IsWarningMsgNeedToShow.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarning" value="@Model.IsClosedPeriodWarning"></govuk-input>
-
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNMaxLimitWarning" value="@Model.IsNMaxLimitWarning.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsOrgManureNfieldLimitWarning" value="@Model.IsOrgManureNfieldLimitWarning.ToString().ToLower()"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -131,19 +132,26 @@
             }
                @if (Model.IsWarningMsgNeedToShow != null && Model.IsWarningMsgNeedToShow)
             {
-                <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-                    <div class="govuk-notification-banner__header">
-                        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-                            @Resource.lblImportant
-                        </h2>
-                    </div>
-                    <div class="govuk-notification-banner__content">
+                <govuk-notification-banner>
+                    <govuk-notification-banner-title>
+                        @Resource.lblImportant
+                    </govuk-notification-banner-title>
+                    @if (Model.IsOrgManureNfieldLimitWarning)
+                    {
                         <p class="govuk-notification-banner__heading">
                             @Resource.lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit
                         </p>
-                        @Resource.MsgIfOrganicManureNMaxLimitExceed
-                    </div>
-                </div>
+                        <p class="govuk-body">@Resource.MsgIfOrganicManureNMaxLimitExceed</p>
+                    }
+                    @if (Model.IsNMaxLimitWarning)
+                    {
+                        <p class="govuk-notification-banner__heading">
+                            @Resource.lblNMaxLimitTitle
+                        </p>
+                        <p class="govuk-body">@Resource.MsgNMaxLimit</p>
+                    }
+                </govuk-notification-banner>
+
             }
 
             <govuk-radios asp-for="@Model.ApplicationRateMethod">

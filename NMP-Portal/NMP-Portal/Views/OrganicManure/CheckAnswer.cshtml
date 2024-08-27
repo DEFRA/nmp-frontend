@@ -57,29 +57,36 @@
                 </govuk-error-summary>
             }
 
-            @* @if (Model.IsWarningMsgNeedToShow != null && Model.IsWarningMsgNeedToShow)
-            { *@
-            @if(Model.IsClosedPeriodWarning)
+            @if (Model.IsWarningMsgNeedToShow != null && Model.IsWarningMsgNeedToShow)
             {
-                <govuk-notification-banner>
-                    <govuk-notification-banner-title>
-                        @Resource.lblImportant
-                    </govuk-notification-banner-title>
+                    <govuk-notification-banner>
+                        <govuk-notification-banner-title>
+                            @Resource.lblImportant
+                        </govuk-notification-banner-title>
 
-                    @* <p class="govuk-notification-banner__heading">
-                @Resource.lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit
-                </p> *@
+                        @if (Model.IsOrgManureNfieldLimitWarning)
+                        {
+                            <p class="govuk-notification-banner__heading">
+                                @Resource.lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit
+                            </p>
+                        }
+                        @if (Model.IsNMaxLimitWarning)
+                        {
+                            <p class="govuk-notification-banner__heading">
+                                @Resource.lblNMaxLimitTitle
+                            </p>
+                        }
 
-                    @if (Model.IsClosedPeriodWarning)
-                    {
-                        <p class="govuk-notification-banner__heading">
-                            @Resource.MsgApplicationDateEnteredIsInsideClosedPeriod
-                        </p>
-                    }
-                </govuk-notification-banner>
-            }
+                        @if (Model.IsClosedPeriodWarning)
+                        {
+                            <p class="govuk-notification-banner__heading">
+                                @Resource.MsgApplicationDateEnteredIsInsideClosedPeriod
+                            </p>
+                        }
+                    </govuk-notification-banner>
                 
-            @* } *@
+
+            }
             <h1 class="govuk-heading-l">
                 @Resource.lblCheckYourAnswers
             </h1>
@@ -147,7 +154,8 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsApplicationMethodChange"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsIncorporationMethodChange"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWarningMsgNeedToShow" value="@Model.IsWarningMsgNeedToShow.ToString().ToLower()"></govuk-input>
-
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNMaxLimitWarning" value="@Model.IsNMaxLimitWarning.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsOrgManureNfieldLimitWarning" value="@Model.IsOrgManureNfieldLimitWarning.ToString().ToLower()"></govuk-input>
 
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
@@ -241,7 +249,7 @@
                                         </govuk-details-text>
                                     </govuk-details>
                                 }
-                                
+
                             }
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
@@ -272,10 +280,10 @@
                         @((Model.ApplicationDate.HasValue) ? Model.ApplicationDate.Value.Date.ToString("dd MMMM yyyy") : Resource.lblNotSet)
                         @* @if(Model.IsClosedPeriodWarning)
                         {
-                            <br />
-                            <p class="govuk-body strong">@Resource.MsgApplicationDateEnteredIsInsideClosedPeriod</p>
+                        <br />
+                        <p class="govuk-body strong">@Resource.MsgApplicationDateEnteredIsInsideClosedPeriod</p>
                         } *@
-                        
+
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
                         <govuk-summary-list-row-action class=@((Model.ManureTypeId.HasValue)?"":"disabled") asp-action="ManureApplyingDate" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
