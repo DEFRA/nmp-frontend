@@ -131,25 +131,28 @@
             @if (Model.IsWarningMsgNeedToShow != null && Model.IsWarningMsgNeedToShow)
             {
 
-                <govuk-notification-banner>
-                    <govuk-notification-banner-title>
-                        @Resource.lblImportant
-                    </govuk-notification-banner-title>
-                    @if (Model.IsOrgManureNfieldLimitWarning)
-                    {
-                    <p class="govuk-notification-banner__heading">
-                        @Resource.lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit
-                    </p>
-                    <p class="govuk-body">@Resource.MsgIfOrganicManureNMaxLimitExceed</p>
-                    }
-                    @if (Model.IsNMaxLimitWarning)
-                    {
-                    <p class="govuk-notification-banner__heading">
-                        @Resource.lblNMaxLimitTitle
-                    </p>
-                    <p class="govuk-body">@Resource.MsgNMaxLimit</p>
-                    }
-                </govuk-notification-banner>
+                @if (Model.IsOrgManureNfieldLimitWarning || Model.IsNMaxLimitWarning)
+                {
+                    <govuk-notification-banner>
+                        <govuk-notification-banner-title>
+                            @Resource.lblImportant
+                        </govuk-notification-banner-title>
+                        @if (Model.IsOrgManureNfieldLimitWarning)
+                        {
+                            <p class="govuk-notification-banner__heading">
+                                @Resource.lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit
+                            </p>
+                            <p class="govuk-body">@Resource.MsgIfOrganicManureNMaxLimitExceed</p>
+                        }
+                        @if (Model.IsNMaxLimitWarning)
+                        {
+                            <p class="govuk-notification-banner__heading">
+                                @Resource.lblNMaxLimitTitle
+                            </p>
+                            <p class="govuk-body">@Resource.MsgNMaxLimit</p>
+                        }
+                    </govuk-notification-banner>
+                }
 
             }
             <div class="govuk-form-group">

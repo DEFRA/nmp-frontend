@@ -2048,6 +2048,10 @@ namespace NMP.Portal.Controllers
                                                         model.IsWarningMsgNeedToShow = true;
                                                         model.IsOrgManureNfieldLimitWarning = true;
                                                     }
+                                                    else
+                                                    {
+                                                        model.IsOrgManureNfieldLimitWarning = false;
+                                                    }
                                                     List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
                                                     var crop = cropsResponse.Where(x => x.Year == model.HarvestYear && x.Confirm == false).ToList();
                                                     if (crop != null)
@@ -2076,6 +2080,10 @@ namespace NMP.Portal.Controllers
                                                                             {
                                                                                 model.IsNMaxLimitWarning = true;
                                                                                 model.IsWarningMsgNeedToShow = true;
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                model.IsNMaxLimitWarning = false;
                                                                             }
                                                                         }
                                                                         else
@@ -2232,6 +2240,10 @@ namespace NMP.Portal.Controllers
                                                 model.IsWarningMsgNeedToShow = true;
                                                 model.IsOrgManureNfieldLimitWarning = true;
                                             }
+                                            else
+                                            {
+                                                model.IsOrgManureNfieldLimitWarning = false;
+                                            }
                                             List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
                                             var crop = cropsResponse.Where(x => x.Year == model.HarvestYear && x.Confirm == false).ToList();
                                             if (crop != null)
@@ -2261,6 +2273,10 @@ namespace NMP.Portal.Controllers
                                                                         model.IsNMaxLimitWarning = true;
                                                                         model.IsWarningMsgNeedToShow = true;
                                                                     }
+                                                                    else
+                                                                    {
+                                                                        model.IsNMaxLimitWarning = false;
+                                                                    }
                                                                 }
                                                                 else
                                                                 {
@@ -2286,7 +2302,7 @@ namespace NMP.Portal.Controllers
                                                     TempData["ManualApplicationRateError"] = error.Message;
                                                     return View(model);
                                                 }
-                                            }                                            
+                                            }
                                         }
                                         else
                                         {
@@ -2436,6 +2452,10 @@ namespace NMP.Portal.Controllers
                                                 model.IsWarningMsgNeedToShow = true;
                                                 model.IsOrgManureNfieldLimitWarning = true;
                                             }
+                                            else
+                                            {
+                                                model.IsOrgManureNfieldLimitWarning = false;
+                                            }
                                             List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
                                             var crop = cropsResponse.Where(x => x.Year == model.HarvestYear && x.Confirm == false).ToList();
                                             if (crop != null)
@@ -2464,6 +2484,10 @@ namespace NMP.Portal.Controllers
                                                                     {
                                                                         model.IsNMaxLimitWarning = true;
                                                                         model.IsWarningMsgNeedToShow = true;
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        model.IsNMaxLimitWarning = false;
                                                                     }
                                                                 }
                                                                 else
@@ -3129,7 +3153,10 @@ namespace NMP.Portal.Controllers
                     TempData["ConditionsAffectingNutrientsError"] = error.Message;
                     return RedirectToAction("ConditionsAffectingNutrients");
                 }
-               
+                if (model.IsNMaxLimitWarning || model.IsOrgManureNfieldLimitWarning || model.IsClosedPeriodWarning)
+                {
+                    model.IsWarningMsgNeedToShow = true;
+                }
                 model.IsCheckAnswer = true;
                 model.IsManureTypeChange = false;
                 model.IsApplicationMethodChange = false;
