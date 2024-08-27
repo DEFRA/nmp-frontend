@@ -2070,8 +2070,8 @@ namespace NMP.Portal.Controllers
                                                                         {
                                                                             nMaxLimit = cropTypeLinking.NMaxLimit ?? 0;
                                                                             string cropInfo1 = await _cropService.FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(crop[0].CropTypeID.Value, crop[0].CropInfo1.Value);
-                                                                            OrganicManureNMaxLimit organicManureNMaxLimit = new OrganicManureNMaxLimit();
-                                                                            nMaxLimit = organicManureNMaxLimit.NMaxLimit(cropTypeLinking.NMaxLimit ?? 0, crop[0].Yield.Value, fieldDetail.SoilTypeName, cropInfo1, crop[0].CropTypeID.Value, currentYearManureTypeIds, previousYearManureTypeIds, model.ManureTypeId.Value);
+                                                                            OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
+                                                                            nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(cropTypeLinking.NMaxLimit ?? 0, crop[0].Yield.Value, fieldDetail.SoilTypeName, cropInfo1, crop[0].CropTypeID.Value, currentYearManureTypeIds, previousYearManureTypeIds, model.ManureTypeId.Value);
                                                                             if (totalN > nMaxLimit)
                                                                             {
                                                                                 model.IsNMaxLimitWarning = true;
@@ -2254,8 +2254,8 @@ namespace NMP.Portal.Controllers
                                                                 {
                                                                     nMaxLimit = cropTypeLinking.NMaxLimit ?? 0;
                                                                     string cropInfo1 = await _cropService.FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(crop[0].CropTypeID.Value, crop[0].CropInfo1.Value);
-                                                                    OrganicManureNMaxLimit organicManureNMaxLimit = new OrganicManureNMaxLimit();
-                                                                    nMaxLimit = organicManureNMaxLimit.NMaxLimit(cropTypeLinking.NMaxLimit ?? 0, crop[0].Yield.Value, fieldDetail.SoilTypeName, cropInfo1, crop[0].CropTypeID.Value, currentYearManureTypeIds, previousYearManureTypeIds, model.ManureTypeId.Value);
+                                                                    OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
+                                                                    nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(cropTypeLinking.NMaxLimit ?? 0, crop[0].Yield.Value, fieldDetail.SoilTypeName, cropInfo1, crop[0].CropTypeID.Value, currentYearManureTypeIds, previousYearManureTypeIds, model.ManureTypeId.Value);
                                                                     if (totalN > nMaxLimit)
                                                                     {
                                                                         model.IsNMaxLimitWarning = true;
@@ -2458,8 +2458,8 @@ namespace NMP.Portal.Controllers
                                                                 {
                                                                     nMaxLimit = cropTypeLinking.NMaxLimit ?? 0;
                                                                     string cropInfo1 = await _cropService.FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(crop[0].CropTypeID.Value, crop[0].CropInfo1.Value);
-                                                                    OrganicManureNMaxLimit organicManureNMaxLimit = new OrganicManureNMaxLimit();
-                                                                    nMaxLimit = organicManureNMaxLimit.NMaxLimit(cropTypeLinking.NMaxLimit ?? 0, crop[0].Yield.Value, fieldDetail.SoilTypeName, cropInfo1, crop[0].CropTypeID.Value, currentYearManureTypeIds, previousYearManureTypeIds, model.ManureTypeId.Value);
+                                                                    OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
+                                                                    nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(cropTypeLinking.NMaxLimit ?? 0, crop[0].Yield.Value, fieldDetail.SoilTypeName, cropInfo1, crop[0].CropTypeID.Value, currentYearManureTypeIds, previousYearManureTypeIds, model.ManureTypeId.Value);
                                                                     if (totalN > nMaxLimit)
                                                                     {
                                                                         model.IsNMaxLimitWarning = true;

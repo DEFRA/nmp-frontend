@@ -2,7 +2,7 @@
 
 namespace NMP.Portal.Helpers
 {
-    public class OrganicManureNMaxLimit
+    public class OrganicManureNMaxLimitLogic
     {
         public int NMaxLimit(int nMaxLimit, decimal yield, string soilType, string cropInfo1, int cropTypeId, List<int> currentYearManureTypeIds,
             List<int> previousYearManureTypeIds, int manureTypeId)
