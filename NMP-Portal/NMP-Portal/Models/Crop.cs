@@ -28,6 +28,7 @@ namespace NMP.Portal.Models
         public decimal? StockingRate { get; set; }
         public int? DefoliationSequence { get; set; }
         public int? GrazingIntensity { get; set; }
+        public int? CropOrder { get; set; }
         public int? PreviousID { get; set; }
         public DateTime? CreatedOn { get; set; }
         public int? CreatedByID { get; set; }

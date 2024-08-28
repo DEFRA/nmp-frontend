@@ -1476,6 +1476,7 @@ namespace NMP.Portal.Controllers
                 crop.FieldName = null;
                 crop.EncryptedCounter = null;
                 crop.FieldType = model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass ? (int)NMP.Portal.Enums.FieldType.Grass : (int)NMP.Portal.Enums.FieldType.Arable;
+                crop.CropOrder = 1;
                 CropData cropEntry = new CropData
                 {
                     Crop = crop,
