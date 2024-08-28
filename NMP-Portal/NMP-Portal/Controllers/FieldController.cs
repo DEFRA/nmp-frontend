@@ -1100,6 +1100,7 @@ namespace NMP.Portal.Controllers
                             Confirm=true,
                             CropTypeID=model.CropTypeID,
                             FieldType = model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass ? (int)NMP.Portal.Enums.FieldType.Grass : (int)NMP.Portal.Enums.FieldType.Arable,
+                            CropOrder=1,
                             CreatedOn =DateTime.Now,
                             CreatedByID=userId
                         },
