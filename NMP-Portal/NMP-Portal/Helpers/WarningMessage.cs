@@ -125,7 +125,7 @@ namespace NMP.Portal.Helpers
             return closedPeriod;
         }
 
-        public string ClosedPeriodWarningMessage(DateTime applicationDate,string closedPeriod,string cropType, FieldDetailResponse fieldDetail)
+        public string ClosedPeriodWarningMessage(DateTime applicationDate, string closedPeriod, string cropType, FieldDetailResponse fieldDetail)
         {
             string message = string.Empty;
             int day = applicationDate.Day;
@@ -154,6 +154,42 @@ namespace NMP.Portal.Helpers
                         message = string.Format(Resource.MsgApplicationDateEnteredIsInsideClosedPeriodDetail, cropType, fieldDetail.SowingDate.Value.Date.ToString("dd MMM yyyy"), fieldDetail.SoilTypeName, closedPeriod);
 
                         return message;
+                    }
+                }
+            }
+            return message;
+        }
+
+        public string ClosedPeriodForFertiliserWarningMessage(DateTime applicationDate, int cropType, bool isFarmOragnic)
+        {
+            string message = string.Empty;
+            int day = applicationDate.Day;
+            int month = applicationDate.Month;
+            if (isFarmOragnic)
+            {
+                if (cropType == (int)NMP.Portal.Enums.CropTypes.Grass)
+                {
+                    if ((month == 9 && day >= 15) || (month > 9 && month < 12) || (month == 12) || (month == 1 && day <= 15))
+                    {
+
+                    }
+                }
+                else if (cropType == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape || cropType == (int)NMP.Portal.Enums.CropTypes.Asparagus ||
+                    cropType == (int)NMP.Portal.Enums.CropTypes.SaladOnions || cropType == (int)NMP.Portal.Enums.CropTypes.BulbOnions)
+                {
+                    if ((month > 9 || (month == 9 && day >= 1)) || (month < 1 || (month == 1 && day <= 15)))
+                    {
+
+                    }
+                }
+            }
+            else
+            {
+                if (cropType == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape || cropType == (int)NMP.Portal.Enums.CropTypes.Grass)
+                {
+                    if ((month > 10 || (month == 10 && day >= 31)) || (month < 1 || (month == 1 && day <= 15)))
+                    {
+
                     }
                 }
             }

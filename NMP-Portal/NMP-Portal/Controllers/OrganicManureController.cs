@@ -2049,7 +2049,7 @@ namespace NMP.Portal.Controllers
                                                     {
                                                         model.IsOrgManureNfieldLimitWarning = false;
                                                     }
-                                                    List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
+                                                    List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[i]));
                                                     var crop = cropsResponse.Where(x => x.Year == model.HarvestYear && x.Confirm == false).ToList();
                                                     if (crop != null)
                                                     {
@@ -2065,8 +2065,8 @@ namespace NMP.Portal.Controllers
                                                                     if (error == null)
                                                                     {
                                                                         totalN = totalN + (model.OrganicManures[j].N.Value * model.ApplicationRate.Value);
-                                                                        (List<int> currentYearManureTypeIds, error) = await _organicManureService.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(model.FieldList[0]), model.HarvestYear.Value, false);
-                                                                        (List<int> previousYearManureTypeIds, error) = await _organicManureService.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(model.FieldList[0]), model.HarvestYear.Value - 1, false);
+                                                                        (List<int> currentYearManureTypeIds, error) = await _organicManureService.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(model.FieldList[i]), model.HarvestYear.Value, false);
+                                                                        (List<int> previousYearManureTypeIds, error) = await _organicManureService.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(model.FieldList[i]), model.HarvestYear.Value - 1, false);
                                                                         if (error == null)
                                                                         {
                                                                             nMaxLimit = cropTypeLinking.NMaxLimit ?? 0;
@@ -2254,7 +2254,7 @@ namespace NMP.Portal.Controllers
                                         {
                                             model.IsOrgManureNfieldLimitWarning = false;
                                         }
-                                        List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
+                                        List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[i]));
                                         var crop = cropsResponse.Where(x => x.Year == model.HarvestYear && x.Confirm == false).ToList();
                                         if (crop != null)
                                         {
@@ -2270,8 +2270,8 @@ namespace NMP.Portal.Controllers
                                                         if (error == null)
                                                         {
                                                             totalN = totalN + (model.OrganicManures[j].N.Value * model.ApplicationRate.Value);
-                                                            (List<int> currentYearManureTypeIds, error) = await _organicManureService.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(model.FieldList[0]), model.HarvestYear.Value, false);
-                                                            (List<int> previousYearManureTypeIds, error) = await _organicManureService.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(model.FieldList[0]), model.HarvestYear.Value - 1, false);
+                                                            (List<int> currentYearManureTypeIds, error) = await _organicManureService.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(model.FieldList[i]), model.HarvestYear.Value, false);
+                                                            (List<int> previousYearManureTypeIds, error) = await _organicManureService.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(model.FieldList[i]), model.HarvestYear.Value - 1, false);
                                                             if (error == null)
                                                             {
                                                                 nMaxLimit = cropTypeLinking.NMaxLimit ?? 0;
@@ -2478,7 +2478,7 @@ namespace NMP.Portal.Controllers
                                             {
                                                 model.IsOrgManureNfieldLimitWarning = false;
                                             }
-                                            List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
+                                            List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[i]));
                                             var crop = cropsResponse.Where(x => x.Year == model.HarvestYear && x.Confirm == false).ToList();
                                             if (crop != null)
                                             {
@@ -2494,8 +2494,8 @@ namespace NMP.Portal.Controllers
                                                             if (error == null)
                                                             {
                                                                 totalN = totalN + (model.OrganicManures[j].N.Value * model.ApplicationRate.Value);
-                                                                (List<int> currentYearManureTypeIds, error) = await _organicManureService.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(model.FieldList[0]), model.HarvestYear.Value, false);
-                                                                (List<int> previousYearManureTypeIds, error) = await _organicManureService.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(model.FieldList[0]), model.HarvestYear.Value - 1, false);
+                                                                (List<int> currentYearManureTypeIds, error) = await _organicManureService.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(model.FieldList[i]), model.HarvestYear.Value, false);
+                                                                (List<int> previousYearManureTypeIds, error) = await _organicManureService.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(model.FieldList[i]), model.HarvestYear.Value - 1, false);
                                                                 if (error == null)
                                                                 {
                                                                     nMaxLimit = cropTypeLinking.NMaxLimit ?? 0;
