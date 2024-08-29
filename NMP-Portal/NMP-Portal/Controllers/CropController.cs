@@ -606,6 +606,13 @@ namespace NMP.Portal.Controllers
                     Value = f.ID.ToString(),
                     Text = f.Name
                 }).ToList();
+                (List<HarvestYearPlanResponse> harvestYearPlanResponse, Error error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
+                if (harvestYearPlanResponse.Count() > 0)
+                {
+                    var harvestFieldIds = harvestYearPlanResponse.Select(x => x.FieldID.ToString()).ToList();
+                    selectListItem = selectListItem.Where(x => !harvestFieldIds.Contains(x.Value)).ToList();
+                    
+                }
                 if (model.FieldList == null || model.FieldList.Count == 0)
                 {
                     ModelState.AddModelError("FieldList", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblField.ToLower()));
