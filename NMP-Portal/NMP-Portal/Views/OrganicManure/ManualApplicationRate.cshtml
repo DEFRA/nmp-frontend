@@ -134,8 +134,8 @@
                 }
             }
             
-            @if (Model.IsWarningMsgNeedToShow)
-            {
+           @*  @if (Model.IsWarningMsgNeedToShow)
+            { *@
 
                 @if (Model.IsOrgManureNfieldLimitWarning || Model.IsNMaxLimitWarning || Model.IsEndClosedPeriodFebruaryWarning)
                 {
@@ -167,7 +167,7 @@
                     </govuk-notification-banner>
                 }
 
-            }
+            @* } *@
 
             <div class="govuk-form-group">
 
