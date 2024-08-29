@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using NMP.Portal.Enums;
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
 using NMP.Portal.Resources;
@@ -27,10 +28,11 @@ namespace NMP.Portal.Controllers
         private readonly IFertiliserManureService _fertiliserManureService;
         private readonly ICropService _cropService;
         private readonly IFieldService _fieldService;
+        private readonly IOrganicManureService _organicManureService;
 
 
         public FertiliserManureController(ILogger<FertiliserManureController> logger, IDataProtectionProvider dataProtectionProvider,
-            IHttpContextAccessor httpContextAccessor, IFarmService farmService, IFertiliserManureService fertiliserManureService, ICropService cropService, IFieldService fieldService)
+            IHttpContextAccessor httpContextAccessor, IFarmService farmService, IFertiliserManureService fertiliserManureService, ICropService cropService, IFieldService fieldService, IOrganicManureService organicManureService)
         {
             _logger = logger;
             _fertiliserManureProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FertiliserManureController");
@@ -41,6 +43,7 @@ namespace NMP.Portal.Controllers
             _fertiliserManureService = fertiliserManureService;
             _cropService = cropService;
             _fieldService = fieldService;
+            _organicManureService = organicManureService;
         }
 
         public IActionResult Index()
@@ -55,7 +58,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> backActionForInOrganicManure()
+        public IActionResult backActionForInOrganicManure()
         {
             FertiliserManureViewModel? model = new FertiliserManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
@@ -71,23 +74,6 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("CheckAnswer");
             }
-
-
-            //if (model.FieldGroup == Resource.lblSelectSpecificFields && model.IsComingFromRecommendation)
-            //{
-            //    if (model.FieldList.Count > 0 && model.FieldList.Count == 1)
-            //    {
-            //        string fieldId = model.FieldList[0];
-            //        return RedirectToAction("Recommendations", "Crop", new
-            //        {
-            //            q = model.EncryptedFarmId,
-            //            r = _cropDataProtector.Protect(fieldId),
-            //            s = model.EncryptedHarvestYear
-
-            //        });
-            //    }
-            //}
-            //else
 
             if (model.Counter > 0)
             {
@@ -613,7 +599,32 @@ namespace NMP.Portal.Controllers
                     {
                         applicationDate = new DateTime(model.HarvestYear.Value, OrganicManureDuration.ApplicationMonth, OrganicManureDuration.ApplicationDate);
                     }
-
+                    (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
+                    if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
+                    {
+                        TempData["InOrgnaicManureDurationError"] = error.Message;
+                        return View(model);
+                    }
+                    if (farm != null)
+                    {
+                        if (model.FieldList.Count > 0)
+                        {
+                            for (int i = 0; i < model.FieldList.Count; i++)
+                            {
+                                (CropTypeResponse cropTypeResponse, error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(model.FieldList[i]), model.HarvestYear.Value, false);
+                                if (error == null)
+                                {
+                                    WarningMessage warningMessage = new WarningMessage();
+                                    string message = warningMessage.ClosedPeriodForFertiliserWarningMessage(applicationDate, cropTypeResponse.CropTypeId, farm.RegisteredOrganicProducer.Value);
+                                }
+                                else
+                                {
+                                    TempData["InOrgnaicManureDurationError"] = error.Message;
+                                    return RedirectToAction("InOrgnaicManureDuration", model);
+                                }
+                            }
+                        }
+                    }
 
                     if (applicationDate != null)
                     {
@@ -1037,6 +1048,82 @@ namespace NMP.Portal.Controllers
             {
                 model.ApplicationForFertiliserManures[index].SO3 = 0;
             }
+
+            DateTime applicationDate = DateTime.Now;
+            for (int j = 0; j < model.ApplicationForFertiliserManures.Count; j++)
+            {
+                applicationDate = model.ApplicationForFertiliserManures[j].ApplicationDate.Value;
+                break;
+            }
+            DateTime fourWeeksAgo = applicationDate.AddDays(-28);
+            if (model.FieldList.Count > 0)
+            {
+                foreach (var fieldId in model.FieldList)
+                {
+                    (CropTypeResponse cropTypeResponse, Error error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
+                    if (error == null)
+                    {
+                        if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape ||
+                            cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Asparagus || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.BrusselSprouts || 
+                            cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Cauliflower || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Calabrese ||
+                            cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.BulbOnions || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.SaladOnions||
+                            cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Cabbage )                            
+                        {
+
+                            (List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldId, null);
+                            if (error == null)
+                            {
+                                if (managementIds.Count > 0)
+                                {
+
+                                    DateTime startDate = new DateTime(applicationDate.Year, 9, 1); // 1st Sep
+                                    DateTime endDate = new DateTime(applicationDate.Year + 1, 1, 15); // 15th Jan
+                                    if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                    {
+                                        startDate = new DateTime(applicationDate.Year, 9, 15); // 15th Sep
+                                        endDate = new DateTime(applicationDate.Year, 10, 31); // 31st Oct
+                                    }
+                                    else if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape)
+                                    {
+                                        startDate = new DateTime(applicationDate.Year, 9, 1); // 1st Sep
+                                        endDate = new DateTime(applicationDate.Year, 10, 31); // 31st Oct
+                                    }
+                                    (decimal totalNitrogen, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementIds[0], startDate, endDate, false);
+                                    if (error == null)
+                                    {
+                                        (decimal fourWeekNitrogen, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementIds[0], fourWeeksAgo, applicationDate, false);
+                                        if (error == null)
+                                        {
+                                            WarningMessage warningMessage = new WarningMessage();
+                                            string message = warningMessage.NitrogenLimitForFertiliserWarningMessage(applicationDate, cropTypeResponse.CropTypeId, totalNitrogen, fourWeekNitrogen, model.ApplicationForFertiliserManures[index].N.Value);
+                                        }
+                                        else
+                                        {
+                                            TempData["NutrientValuesError"] = error.Message;
+                                            return RedirectToAction("NutrientValues", model);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        TempData["NutrientValuesError"] = error.Message;
+                                        return RedirectToAction("NutrientValues", model);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                TempData["NutrientValuesError"] = error.Message;
+                                return RedirectToAction("NutrientValues", model);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        TempData["NutrientValuesError"] = error.Message;
+                        return RedirectToAction("NutrientValues", model);
+                    }
+                }
+            }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
 
             if (model.IsCheckAnswer)
@@ -1196,7 +1283,7 @@ namespace NMP.Portal.Controllers
                 List<FertiliserManure> updatedFertiliserManures = new List<FertiliserManure>();
                 foreach (var fertiliserManure in model.FertiliserManures)
                 {
-                    
+
                     foreach (var application in model.ApplicationForFertiliserManures)
                     {
                         application.ApplicationRate = 1;
