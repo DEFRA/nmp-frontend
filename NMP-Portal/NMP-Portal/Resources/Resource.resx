@@ -2004,4 +2004,16 @@ m3/ha  not set</value>
   <data name="MsgApplicationDateEnteredIsInsideClosedPeriodDetail" xml:space="preserve">
     <value>The NVZ Action Programme states that the closed period for {0} planted on non-organic farms {1} on {2} soil is {3}. You can continue, but you should consider applying outside the closed period to avoid the risk of agricultural nitrate pollution.</value>
   </data>
+  <data name="lblApplicationRateOverTheMaximumRateForSlurry" xml:space="preserve">
+    <value>This application may take you over the maximum application rate for slurry.</value>
+  </data>
+  <data name="MsgApplicationRateForSlurryAndPoultryDetail" xml:space="preserve">
+    <value>The NVZ Action Programme states that the application rate of slurry between {0} and the end of February must not exceed 50 m³/ha or 8 t/ha for poultry manure in a single application. You must also allow at least 3 weeks between each individual application.</value>
+  </data>
+  <data name="lblEndClosedPeriod" xml:space="preserve">
+    <value>{0} {1}</value>
+  </data>
+  <data name="lblSlurry" xml:space="preserve">
+    <value>slurry</value>
+  </data>
 </root>

@@ -474,18 +474,15 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropTypeYieldByCropTypeIdAsyncAPI, cropTypeId));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropTypeLinkingsByCropTypeIdAsyncAPI, cropTypeId));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        defaultYield = responseWrapper.Data.CropTypeYield.ToObject<decimal?>();
-                        //if (cropTypeResponse != null)
-                        //{
-                        //    cropTypeId = cropTypeResponse[0].CropTypeId;
-                        //}
+                        CropTypeLinkingResponse cropTypeLinkingResponse = responseWrapper.Data.CropTypeLinking.ToObject<CropTypeLinkingResponse>();
+                        defaultYield = cropTypeLinkingResponse.DefaultYield;
                     }
                 }
                 else

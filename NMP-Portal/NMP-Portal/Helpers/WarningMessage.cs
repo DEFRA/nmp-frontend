@@ -125,12 +125,9 @@ namespace NMP.Portal.Helpers
             return closedPeriod;
         }
 
-        public string ClosedPeriodWarningMessage(DateTime applicationDate,string closedPeriod,string cropType, FieldDetailResponse fieldDetail)
+        public string ClosedPeriodWarningMessage(DateTime applicationDate, string closedPeriod, string cropType, FieldDetailResponse fieldDetail)
         {
             string message = string.Empty;
-            int day = applicationDate.Day;
-            int month = applicationDate.Month;
-
 
             string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
             Regex regex = new Regex(pattern);
@@ -146,18 +143,87 @@ namespace NMP.Portal.Helpers
                 int startMonth = Array.IndexOf(dtfi.AbbreviatedMonthNames, startMonthStr) + 1;
                 int endMonth = Array.IndexOf(dtfi.AbbreviatedMonthNames, endMonthStr) + 1;
 
-                if (month >= startMonth && month <= endMonth)
-                {
-                    if (day >= startDay && day <= endDay)
-                    {
-                        //TempData["ClosedPeriodWarning"] = Resource.MsgApplicationDateEnteredIsInsideClosedPeriod;
-                        message = string.Format(Resource.MsgApplicationDateEnteredIsInsideClosedPeriodDetail, cropType, fieldDetail.SowingDate.Value.Date.ToString("dd MMM yyyy"), fieldDetail.SoilTypeName, closedPeriod);
+                DateTime closedPeriodStart = new DateTime(applicationDate.Year, startMonth, startDay);
+                DateTime closedPeriodEnd = new DateTime(applicationDate.Year, endMonth, endDay);
+                
 
-                        return message;
-                    }
+                if (applicationDate >= closedPeriodStart && applicationDate <= closedPeriodEnd)
+                {
+                     message = string.Format(Resource.MsgApplicationDateEnteredIsInsideClosedPeriodDetail, cropType, fieldDetail.SowingDate.Value.Date.ToString("dd MMM yyyy"), fieldDetail.SoilTypeName, closedPeriod); 
                 }
+                
+                return message;
             }
             return message;
         }
+
+        public string EndClosedPeriodAndFebruaryWarningMessage(DateTime applicationDate, string closedPeriod, decimal? applicationRate,string manureTypeName)
+        {
+            string message = string.Empty;
+            string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
+            Regex regex = new Regex(pattern);
+            Match match = regex.Match(closedPeriod);
+            if (match.Success)
+            {
+                int startDay = int.Parse(match.Groups[1].Value);
+                string startMonthStr = match.Groups[2].Value;
+                int endDay = int.Parse(match.Groups[3].Value);
+                string endMonthStr = match.Groups[4].Value;
+
+                DateTimeFormatInfo dtfi = DateTimeFormatInfo.CurrentInfo;
+                int startMonth = Array.IndexOf(dtfi.AbbreviatedMonthNames, startMonthStr) + 1;
+                int endMonth = Array.IndexOf(dtfi.AbbreviatedMonthNames, endMonthStr) + 1;
+                string endMonthFullName = dtfi.MonthNames[endMonth-1];
+
+                DateTime? endDateFebruary = null;
+                endDateFebruary = new DateTime(applicationDate.Year, 3, 1);
+
+                DateTime fromDateYearMinusOne = new DateTime(applicationDate.Year - 1, startMonth, startDay);
+                DateTime toDateYear = new DateTime(applicationDate.Year, endDateFebruary.Value.Month, endDateFebruary.Value.Day);
+
+                if (applicationDate >= fromDateYearMinusOne && applicationDate <= toDateYear)
+                {
+                    if (manureTypeName.Contains(Resource.lblSlurry))
+                    {
+                        if (applicationRate > 50)
+                        {
+                            message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+                        }
+                    }
+                    if (manureTypeName.Contains(Resource.lblPoultryManure))
+                    {
+                        if (applicationRate > 8)
+                        {
+                            message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+                        }
+                    }
+                }
+
+                // Check with harvest year +1
+                DateTime fromDateYear = new DateTime(applicationDate.Year, startMonth, startDay);
+                DateTime toDateYearPlusOne = new DateTime(applicationDate.Year + 1, endDateFebruary.Value.Month, endDateFebruary.Value.Day);
+
+                if (applicationDate >= fromDateYear && applicationDate <= toDateYearPlusOne)
+                {
+                    if (manureTypeName.Contains(Resource.lblSlurry))
+                    {
+                        if (applicationRate > 50)
+                        {
+                            message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+                        }
+                    }
+                    if (manureTypeName.Contains(Resource.lblPoultryManure))
+                    {
+                        if (applicationRate > 8)
+                        {
+                            message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+                        }
+                    }
+                }
+
+            }
+            return message;
+        }
+        
     }
 }

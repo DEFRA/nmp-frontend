@@ -125,21 +125,29 @@
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].MoistureID" value="@Model.OrganicManures[i].MoistureID"></govuk-input>
                 }
             }
-            @if (Model.IsWarningMsgNeedToShow != null && Model.IsWarningMsgNeedToShow)
+            
+            @if (Model.IsWarningMsgNeedToShow)
             {
-                <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-                    <div class="govuk-notification-banner__header">
-                        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-                            @Resource.lblImportant
-                        </h2>
-                    </div>
-                    <div class="govuk-notification-banner__content">
+                <govuk-notification-banner>
+                    <govuk-notification-banner-title>
+                        @Resource.lblImportant
+                    </govuk-notification-banner-title>
+
+
+                    <p class="govuk-notification-banner__heading">
+                        @Resource.lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit
+                    </p>
+                    <p class="govuk-body">@Resource.MsgIfOrganicManureNMaxLimitExceed</p>
+
+                    @if (Model.IsEndClosedPeriodFebruaryWarning)
+                    {
                         <p class="govuk-notification-banner__heading">
-                            @Resource.lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit
+                            @Resource.lblApplicationRateOverTheMaximumRateForSlurry
                         </p>
-                        @Resource.MsgIfOrganicManureNMaxLimitExceed
-                    </div>
-                </div>
+                        <p class="govuk-body">@TempData["ApplicationRateOverTheLimitWarningDetail"]</p>
+                    }
+                </govuk-notification-banner>
+
             }
             <div class="govuk-form-group">
                 <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">

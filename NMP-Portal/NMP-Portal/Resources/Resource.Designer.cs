@@ -529,6 +529,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This application may take you over the maximum application rate for slurry..
+        /// </summary>
+        public static string lblApplicationRateOverTheMaximumRateForSlurry {
+            get {
+                return ResourceManager.GetString("lblApplicationRateOverTheMaximumRateForSlurry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application rate
         ///t/ha
         ///m³/ha.
@@ -1184,6 +1193,15 @@ namespace NMP.Portal.Resources {
         public static string lblEffectiveRainfallManual {
             get {
                 return ResourceManager.GetString("lblEffectiveRainfallManual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} {1}.
+        /// </summary>
+        public static string lblEndClosedPeriod {
+            get {
+                return ResourceManager.GetString("lblEndClosedPeriod", resourceCulture);
             }
         }
         
@@ -3269,6 +3287,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to slurry.
+        /// </summary>
+        public static string lblSlurry {
+            get {
+                return ResourceManager.GetString("lblSlurry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SNS question.
         /// </summary>
         public static string lblSnsQuestion {
@@ -4669,6 +4696,15 @@ namespace NMP.Portal.Resources {
         public static string MsgApplicationRate {
             get {
                 return ResourceManager.GetString("MsgApplicationRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The NVZ Action Programme states that the application rate of slurry between {0} and the end of February must not exceed 50 m³/ha or 8 t/ha for poultry manure in a single application. You must also allow at least 3 weeks between each individual application..
+        /// </summary>
+        public static string MsgApplicationRateForSlurryAndPoultryDetail {
+            get {
+                return ResourceManager.GetString("MsgApplicationRateForSlurryAndPoultryDetail", resourceCulture);
             }
         }
         

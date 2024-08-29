@@ -2,7 +2,11 @@
 @model NMP.Portal.ViewModels.OrganicManureViewModel
 @{
     ViewData["Title"] = Resource.lblManualApplicationRate;
-
+    var suffixUnit = "";
+    if (Model.IsManureTypeLiquid != null)
+    {
+        suffixUnit = Model.IsManureTypeLiquid.Value ? Resource.lblKgPerMeterCube : Resource.lblKgPerTon;
+    }
 }
 @section BeforeContent {
     <govuk-back-link asp-action=@((Model.IsCheckAnswer&&(!Model.IsManureTypeChange)&&(!Model.IsFieldGroupChange)) ? "CheckAnswer" : "ApplicationRateMethod") asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
@@ -85,6 +89,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupIdForFilter"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWarningMsgNeedToShow" value="@Model.IsWarningMsgNeedToShow.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarning" value="@Model.IsClosedPeriodWarning"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEndClosedPeriodFebruaryWarning" value="@Model.IsEndClosedPeriodFebruaryWarning"></govuk-input>
 
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
@@ -126,27 +131,36 @@
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].MoistureID" value="@Model.OrganicManures[i].MoistureID"></govuk-input>
                 }
             }
-            @if (Model.IsWarningMsgNeedToShow != null && Model.IsWarningMsgNeedToShow)
+            
+            @if (Model.IsWarningMsgNeedToShow)
             {
-                <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-                    <div class="govuk-notification-banner__header">
-                        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-                            @Resource.lblImportant
-                        </h2>
-                    </div>
-                    <div class="govuk-notification-banner__content">
+                <govuk-notification-banner>
+                    <govuk-notification-banner-title>
+                        @Resource.lblImportant
+                    </govuk-notification-banner-title>
+                    
+                    
+                    <p class="govuk-notification-banner__heading">
+                        @Resource.lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit
+                    </p>
+                    <p class="govuk-body">@Resource.MsgIfOrganicManureNMaxLimitExceed</p>
+
+                    @if (Model.IsEndClosedPeriodFebruaryWarning)
+                    {
                         <p class="govuk-notification-banner__heading">
-                            @Resource.lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit
+                            @Resource.lblApplicationRateOverTheMaximumRateForSlurry
                         </p>
-                        @Resource.MsgIfOrganicManureNMaxLimitExceed
-                    </div>
-                </div>
+                        <p class="govuk-body">@TempData["ApplicationRateOverTheLimitWarningDetail"]</p>
+                    }
+                </govuk-notification-banner>
+
             }
+
             <div class="govuk-form-group">
 
                 <govuk-input asp-for="@Model.ApplicationRate" inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                     <govuk-input-label is-page-heading="true" class="govuk-label--l">@Resource.lblEnterTheApplicationRate</govuk-input-label>
-                    <govuk-input-suffix>@Resource.lblTonnesPerHectare</govuk-input-suffix>
+                    <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
                 </govuk-input>
             </div>
             <govuk-button type="submit" class="margin-bottom-forty" asp-action="ManualApplicationRate">
