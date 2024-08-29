@@ -94,7 +94,11 @@ namespace NMP.Portal.Helpers
 
             if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterWheat || cropTypeId == (int)NMP.Portal.Enums.CropTypes.SpringWheat
                 || cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterBarley || cropTypeId == (int)NMP.Portal.Enums.CropTypes.SpringBarley
-                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape)
+                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape|| cropTypeId == (int)NMP.Portal.Enums.CropTypes.SugarBeet
+                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup1 || cropTypeId == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup2
+                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup3 || cropTypeId == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup4
+                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.ForageMaize || cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterBeans
+                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.SpringBeans || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Peas)
             {
                 if (manureTypeCondition)
                 {
