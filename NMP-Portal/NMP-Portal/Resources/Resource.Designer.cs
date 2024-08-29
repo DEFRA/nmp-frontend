@@ -2414,6 +2414,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Milling.
+        /// </summary>
+        public static string lblMilling {
+            get {
+                return ResourceManager.GetString("lblMilling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to mm.
         /// </summary>
         public static string lblmm {
@@ -2482,6 +2491,15 @@ namespace NMP.Portal.Resources {
         public static string lblNitrogen {
             get {
                 return ResourceManager.GetString("lblNitrogen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application may take you over the N max limit for this crop.
+        /// </summary>
+        public static string lblNMaxLimitTitle {
+            get {
+                return ResourceManager.GetString("lblNMaxLimitTitle", resourceCulture);
             }
         }
         
@@ -3265,6 +3283,15 @@ namespace NMP.Portal.Resources {
         public static string lblSelectTheFarmAddress {
             get {
                 return ResourceManager.GetString("lblSelectTheFarmAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shallow.
+        /// </summary>
+        public static string lblShallow {
+            get {
+                return ResourceManager.GetString("lblShallow", resourceCulture);
             }
         }
         
@@ -5400,6 +5427,15 @@ namespace NMP.Portal.Resources {
         public static string MsgNationalGridReferenceMinMaxValidation {
             get {
                 return ResourceManager.GetString("MsgNationalGridReferenceMinMaxValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The NVZ Action Programme requires that the average nitrogen application rate (from manufactured nitrogen fertiliser and crop-available nitrogen from livestock manures) across the whole farm area of a specified crop type does not exceed the N max limit for that crop type..
+        /// </summary>
+        public static string MsgNMaxLimit {
+            get {
+                return ResourceManager.GetString("MsgNMaxLimit", resourceCulture);
             }
         }
         

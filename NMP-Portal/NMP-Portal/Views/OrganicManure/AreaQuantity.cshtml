@@ -85,6 +85,8 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWarningMsgNeedToShow" value="@Model.IsWarningMsgNeedToShow.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarning" value="@Model.IsClosedPeriodWarning"></govuk-input>
 
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNMaxLimitWarning" value="@Model.IsNMaxLimitWarning.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsOrgManureNfieldLimitWarning" value="@Model.IsOrgManureNfieldLimitWarning.ToString().ToLower()"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -128,26 +130,35 @@
             
             @if (Model.IsWarningMsgNeedToShow)
             {
-                <govuk-notification-banner>
-                    <govuk-notification-banner-title>
-                        @Resource.lblImportant
-                    </govuk-notification-banner-title>
-
-
-                    <p class="govuk-notification-banner__heading">
-                        @Resource.lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit
-                    </p>
-                    <p class="govuk-body">@Resource.MsgIfOrganicManureNMaxLimitExceed</p>
-
-                    @if (Model.IsEndClosedPeriodFebruaryWarning)
-                    {
-                        <p class="govuk-notification-banner__heading">
-                            @Resource.lblApplicationRateOverTheMaximumRateForSlurry
-                        </p>
-                        <p class="govuk-body">@TempData["ApplicationRateOverTheLimitWarningDetail"]</p>
-                    }
-                </govuk-notification-banner>
-
+                @if (Model.IsOrgManureNfieldLimitWarning || Model.IsNMaxLimitWarning || Model.IsEndClosedPeriodFebruaryWarning)
+                {
+                    <govuk-notification-banner>
+                        <govuk-notification-banner-title>
+                            @Resource.lblImportant
+                        </govuk-notification-banner-title>
+                        @if (Model.IsOrgManureNfieldLimitWarning)
+                        {
+                            <p class="govuk-notification-banner__heading">
+                                @Resource.lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit
+                            </p>
+                            <p class="govuk-body">@Resource.MsgIfOrganicManureNMaxLimitExceed</p>
+                        }
+                        @if (Model.IsNMaxLimitWarning)
+                        {
+                            <p class="govuk-notification-banner__heading">
+                                @Resource.lblNMaxLimitTitle
+                            </p>
+                            <p class="govuk-body">@Resource.MsgNMaxLimit</p>
+                        }
+                        @if (Model.IsEndClosedPeriodFebruaryWarning)
+                        {
+                            <p class="govuk-notification-banner__heading">
+                                @Resource.lblApplicationRateOverTheMaximumRateForSlurry
+                            </p>
+                            <p class="govuk-body">@TempData["EndClosedPeriodAndFebruaryWarningMessage"]</p>
+                        }
+                    </govuk-notification-banner>
+                }
             }
             <div class="govuk-form-group">
                 <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">

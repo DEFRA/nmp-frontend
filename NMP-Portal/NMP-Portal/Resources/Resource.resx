@@ -2004,6 +2004,18 @@ m3/ha  not set</value>
   <data name="MsgApplicationDateEnteredIsInsideClosedPeriodDetail" xml:space="preserve">
     <value>The NVZ Action Programme states that the closed period for {0} planted on non-organic farms {1} on {2} soil is {3}. You can continue, but you should consider applying outside the closed period to avoid the risk of agricultural nitrate pollution.</value>
   </data>
+  <data name="lblMilling" xml:space="preserve">
+    <value>Milling</value>
+  </data>
+  <data name="lblNMaxLimitTitle" xml:space="preserve">
+    <value>This application may take you over the N max limit for this crop</value>
+  </data>
+  <data name="lblShallow" xml:space="preserve">
+    <value>Shallow</value>
+  </data>
+  <data name="MsgNMaxLimit" xml:space="preserve">
+    <value>The NVZ Action Programme requires that the average nitrogen application rate (from manufactured nitrogen fertiliser and crop-available nitrogen from livestock manures) across the whole farm area of a specified crop type does not exceed the N max limit for that crop type.</value>
+  </data>
   <data name="lblApplicationRateOverTheMaximumRateForSlurry" xml:space="preserve">
     <value>This application may take you over the maximum application rate for slurry.</value>
   </data>

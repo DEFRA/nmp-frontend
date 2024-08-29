@@ -989,7 +989,7 @@ namespace NMP.Portal.Services
             return isPerennial;
         }
 
-        public async Task<(decimal, Error)> FetchTotalNBasedOnManIdAndAppDate(int managementId, DateTime startDate, DateTime endDate)
+        public async Task<(decimal, Error)> FetchTotalNBasedOnManIdAndAppDate(int managementId, DateTime startDate, DateTime endDate, bool confirm)
         {
             Error error = null;
             decimal totalN = 0;
@@ -998,7 +998,7 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchTotalNBasedOnManIdAndAppDateAsyncAPI, managementId, fromdate, toDate));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchTotalNBasedOnManIdAndAppDateAsyncAPI, managementId, fromdate, toDate, confirm));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
@@ -1041,14 +1041,14 @@ namespace NMP.Portal.Services
             return (totalN, error);
         }
 
-        public async Task<(CropTypeResponse, Error)> FetchCropTypeByFieldIdAndHarvestYear(int fieldId, int year)
+        public async Task<(CropTypeResponse, Error)> FetchCropTypeByFieldIdAndHarvestYear(int fieldId, int year,bool confirm)
         {
             CropTypeResponse cropType = new CropTypeResponse();
             Error error = null;
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropTypeByFieldIdAndHarvestYearAsyncAPI,fieldId,year,false));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropTypeByFieldIdAndHarvestYearAsyncAPI,fieldId,year, confirm));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
@@ -1082,6 +1082,140 @@ namespace NMP.Portal.Services
                 throw new Exception(error.Message, ex);
             }
             return (cropType, error);
+        }
+        public async Task<(CropTypeLinkingResponse, Error)> FetchCropTypeLinkingByCropTypeId(int cropTypeId)
+        {
+            CropTypeLinkingResponse cropTypeLinking = new CropTypeLinkingResponse();
+            Error error = null;
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropTypeLinkingByCropTypeIdAsyncAPI, cropTypeId));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode)
+                {
+                    if (responseWrapper != null && responseWrapper.Data != null)
+                    {
+                        cropTypeLinking = responseWrapper.Data.CropTypeLinking.ToObject<CropTypeLinkingResponse>();
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error = new Error();
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error = new Error();
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (cropTypeLinking, error);
+        }
+        public async Task<(List<int>, Error)> FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(int fieldId, int year, bool confirm)
+        {
+            List<int> manureTypeIds = new List<int>();
+            Error error = null;
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManureAsyncAPI, fieldId,year,confirm));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode)
+                {
+                    if (responseWrapper != null && responseWrapper.Data != null)
+                    {
+                        manureTypeIds = responseWrapper.Data.manureTypeIds.ToObject<List<int>>();
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error = new Error();
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error = new Error();
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (manureTypeIds, error);
+        }
+
+        public async Task<(decimal, Error)> FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(int managementId,bool confirm)
+        {
+            Error error = null;
+            decimal totalN = 0;
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchTotalNBasedOnManIdFromOrgManureAndFertiliserAsyncAPI, managementId, confirm));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode)
+                {
+                    if (responseWrapper != null && responseWrapper.Data != null)
+                    {
+                        totalN = responseWrapper.Data.TotalN != null ? responseWrapper.Data.TotalN.ToObject<decimal>() : 0;
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = new Error();
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                if (error == null)
+                {
+                    error = new Error();
+                }
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                if (error == null)
+                {
+                    error = new Error();
+                }
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (totalN, error);
         }
     }
 }

@@ -17,6 +17,6 @@ namespace NMP.Portal.ServiceResponses
         public bool? IsPerennial { get; set; }
 
         [JsonProperty("nMaxLimit")]
-        public decimal? NMaxLimit { get; set; }
+        public int? NMaxLimit { get; set; }
     }
 }

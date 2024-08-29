@@ -34,8 +34,10 @@ namespace NMP.Portal.Services
         Task<(List<WindspeedResponse>, Error)> FetchWindspeedList();
         Task<(List<MoistureTypeResponse>, Error)> FetchMoisterTypeList();
         Task<bool> FetchIsPerennialByCropTypeId(int cropTypeId);
-        Task<(decimal, Error)> FetchTotalNBasedOnManIdAndAppDate(int managementId, DateTime startDate, DateTime endDate);
-        Task<(CropTypeResponse, Error)> FetchCropTypeByFieldIdAndHarvestYear(int fieldId, int year);
-
+        Task<(decimal, Error)> FetchTotalNBasedOnManIdAndAppDate(int managementId, DateTime startDate, DateTime endDate, bool confirm);
+        Task<(CropTypeResponse, Error)> FetchCropTypeByFieldIdAndHarvestYear(int fieldId, int year,bool confirm);
+        Task<(CropTypeLinkingResponse, Error)> FetchCropTypeLinkingByCropTypeId(int cropTypeId);
+        Task<(List<int>, Error)> FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(int fieldId, int year,bool confirm);
+        Task<(decimal, Error)> FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(int managementId, bool confirm);
     }
 }
