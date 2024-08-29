@@ -4,6 +4,7 @@ using NMP.Portal.ServiceResponses;
 using System.Globalization;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace NMP.Portal.Helpers
 {
@@ -165,35 +166,77 @@ namespace NMP.Portal.Helpers
             string message = string.Empty;
             int day = applicationDate.Day;
             int month = applicationDate.Month;
-            if (isFarmOragnic)
+            if (cropType == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape || cropType == (int)NMP.Portal.Enums.CropTypes.Grass)
             {
-                if (cropType == (int)NMP.Portal.Enums.CropTypes.Grass)
+                if ((month > 10 || (month == 10 && day >= 31)) || (month < 1 || (month == 1 && day <= 15)))
                 {
-                    if ((month == 9 && day >= 15) || (month > 9 && month < 12) || (month == 12) || (month == 1 && day <= 15))
-                    {
 
-                    }
-                }
-                else if (cropType == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape || cropType == (int)NMP.Portal.Enums.CropTypes.Asparagus ||
-                    cropType == (int)NMP.Portal.Enums.CropTypes.SaladOnions || cropType == (int)NMP.Portal.Enums.CropTypes.BulbOnions)
-                {
-                    if ((month > 9 || (month == 9 && day >= 1)) || (month < 1 || (month == 1 && day <= 15)))
-                    {
-
-                    }
                 }
             }
-            else
+            else if (cropType != (int)NMP.Portal.Enums.CropTypes.Asparagus || cropType != (int)NMP.Portal.Enums.CropTypes.BrusselSprouts || cropType != (int)NMP.Portal.Enums.CropTypes.Cabbage ||
+                cropType != (int)NMP.Portal.Enums.CropTypes.Cauliflower || cropType != (int)NMP.Portal.Enums.CropTypes.Calabrese ||
+                cropType != (int)NMP.Portal.Enums.CropTypes.BulbOnions || cropType != (int)NMP.Portal.Enums.CropTypes.SaladOnions)
             {
-                if (cropType == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape || cropType == (int)NMP.Portal.Enums.CropTypes.Grass)
+                if ((month > 9 || (month == 9 && day >= 1)) || (month < 1 || (month == 1 && day <= 15)))
                 {
-                    if ((month > 10 || (month == 10 && day >= 31)) || (month < 1 || (month == 1 && day <= 15)))
-                    {
 
-                    }
                 }
             }
             return message;
         }
+        public string NitrogenLimitForFertiliserWarningMessage(DateTime applicationDate, int cropType, decimal totalNitrogen, decimal fourWeekNitrogen, decimal nitrogenOfSingleApp)
+        {
+            string message = string.Empty;
+            int day = applicationDate.Day;
+            int month = applicationDate.Month;
+            if (cropType == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape)
+            {
+                if (totalNitrogen > 30.0m)
+                {
+
+                }
+            }
+            else if (cropType == (int)NMP.Portal.Enums.CropTypes.Asparagus)
+            {
+                if (totalNitrogen > 50.0m)
+                {
+
+                }
+            }
+            else if (cropType == (int)NMP.Portal.Enums.CropTypes.BrusselSprouts || cropType == (int)NMP.Portal.Enums.CropTypes.Cabbage ||
+                cropType == (int)NMP.Portal.Enums.CropTypes.Cauliflower || cropType == (int)NMP.Portal.Enums.CropTypes.Calabrese)
+            {
+                if (totalNitrogen > 100)
+                {
+                    // Exceeds max 100kg/ha during the closed period
+                }
+
+                else if (totalNitrogen > 50 || fourWeekNitrogen + totalNitrogen > 50)
+                {
+                    // Exceeds 50kg limit in any 4-week period
+                }
+            }
+            else if (cropType == (int)NMP.Portal.Enums.CropTypes.SaladOnions || cropType == (int)NMP.Portal.Enums.CropTypes.BulbOnions)
+            {
+                if (totalNitrogen > 40.0m)
+                {
+
+                }
+            }
+            else if (cropType == (int)NMP.Portal.Enums.CropTypes.Grass)
+            {
+                if (totalNitrogen > 80.0m)
+                {
+
+                }
+
+                if (nitrogenOfSingleApp > 40.0m)
+                {
+
+                }
+            }
+            return message;
+        }
+
     }
 }
