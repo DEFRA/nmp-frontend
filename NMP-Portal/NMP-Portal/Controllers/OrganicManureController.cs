@@ -2243,7 +2243,7 @@ namespace NMP.Portal.Controllers
             }
             model.IsNMaxLimitWarning = false;
             model.IsOrgManureNfieldLimitWarning = false;
-            Error error = null;
+            //Error error = null;
             decimal totalNitrogen = 0;
             for (int j = 0; j < model.OrganicManures.Count; j++)
             {
@@ -2549,7 +2549,7 @@ namespace NMP.Portal.Controllers
             }
             model.IsNMaxLimitWarning = false;
             model.IsOrgManureNfieldLimitWarning = false;
-            Error error = null;
+            //Error error = null;
             decimal totalNitrogen = 0;
             for (int j = 0; j < model.OrganicManures.Count; j++)
             {
