@@ -2016,4 +2016,16 @@ m3/ha  not set</value>
   <data name="MsgNMaxLimit" xml:space="preserve">
     <value>The NVZ Action Programme requires that the average nitrogen application rate (from manufactured nitrogen fertiliser and crop-available nitrogen from livestock manures) across the whole farm area of a specified crop type does not exceed the N max limit for that crop type.</value>
   </data>
+  <data name="lblApplicationRateOverTheMaximumRateForSlurry" xml:space="preserve">
+    <value>This application may take you over the maximum application rate for slurry.</value>
+  </data>
+  <data name="MsgApplicationRateForSlurryAndPoultryDetail" xml:space="preserve">
+    <value>The NVZ Action Programme states that the application rate of slurry between {0} and the end of February must not exceed 50 m³/ha or 8 t/ha for poultry manure in a single application. You must also allow at least 3 weeks between each individual application.</value>
+  </data>
+  <data name="lblEndClosedPeriod" xml:space="preserve">
+    <value>{0} {1}</value>
+  </data>
+  <data name="lblSlurry" xml:space="preserve">
+    <value>slurry</value>
+  </data>
 </root>

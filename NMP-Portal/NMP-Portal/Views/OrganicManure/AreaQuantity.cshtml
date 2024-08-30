@@ -87,6 +87,7 @@
 
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNMaxLimitWarning" value="@Model.IsNMaxLimitWarning.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsOrgManureNfieldLimitWarning" value="@Model.IsOrgManureNfieldLimitWarning.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEndClosedPeriodFebruaryWarning" value="@Model.IsEndClosedPeriodFebruaryWarning"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -127,9 +128,10 @@
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].MoistureID" value="@Model.OrganicManures[i].MoistureID"></govuk-input>
                 }
             }
-            @if (Model.IsWarningMsgNeedToShow != null && Model.IsWarningMsgNeedToShow)
+            
+            @if (Model.IsWarningMsgNeedToShow)
             {
-                @if (Model.IsOrgManureNfieldLimitWarning || Model.IsNMaxLimitWarning)
+                @if (Model.IsOrgManureNfieldLimitWarning || Model.IsNMaxLimitWarning || Model.IsEndClosedPeriodFebruaryWarning)
                 {
                     <govuk-notification-banner>
                         <govuk-notification-banner-title>
@@ -148,6 +150,13 @@
                                 @Resource.lblNMaxLimitTitle
                             </p>
                             <p class="govuk-body">@Resource.MsgNMaxLimit</p>
+                        }
+                        @if (Model.IsEndClosedPeriodFebruaryWarning)
+                        {
+                            <p class="govuk-notification-banner__heading">
+                                @Resource.lblApplicationRateOverTheMaximumRateForSlurry
+                            </p>
+                            <p class="govuk-body">@TempData["EndClosedPeriodAndFebruaryWarningMessage"]</p>
                         }
                     </govuk-notification-banner>
                 }

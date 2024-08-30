@@ -57,8 +57,8 @@
                 </govuk-error-summary>
             }
 
-            @if (Model.IsWarningMsgNeedToShow != null && Model.IsWarningMsgNeedToShow)
-            {
+            @* @if (Model.IsWarningMsgNeedToShow != null && Model.IsWarningMsgNeedToShow)
+            { *@
                 @if (Model.IsOrgManureNfieldLimitWarning || Model.IsNMaxLimitWarning || Model.IsClosedPeriodWarning)
                 {
                     <govuk-notification-banner>
@@ -85,11 +85,17 @@
                                 @Resource.MsgApplicationDateEnteredIsInsideClosedPeriod
                             </p>
                         }
+                        @if (Model.IsEndClosedPeriodFebruaryWarning)
+                        {
+                            <p class="govuk-notification-banner__heading">
+                                @Resource.lblApplicationRateOverTheMaximumRateForSlurry
+                            </p>
+                        }
                     </govuk-notification-banner>
                 }
 
 
-            }
+           @*  } *@
             <h1 class="govuk-heading-l">
                 @Resource.lblCheckYourAnswers
             </h1>

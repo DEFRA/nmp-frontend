@@ -4,16 +4,19 @@ namespace NMP.Portal.ServiceResponses
 {
     public class CropTypeLinkingResponse
     {
-        [JsonProperty("MannerCropTypeID")]
+        [JsonProperty("cropTypeId")]
+        public int CropTypeId { get; set; }
+
+        [JsonProperty("mannerCropTypeID")]
         public int MannerCropTypeID { get; set; }
 
-        [JsonProperty("DefaultYield")]
+        [JsonProperty("defaultYield")]
         public decimal? DefaultYield { get; set; }
 
-        [JsonProperty("IsPerennial")]
-        public bool IsPerennial { get; set; }
+        [JsonProperty("isPerennial")]
+        public bool? IsPerennial { get; set; }
 
-        [JsonProperty("NMaxLimit")]
+        [JsonProperty("nMaxLimit")]
         public int? NMaxLimit { get; set; }
     }
 }
