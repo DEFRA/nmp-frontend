@@ -2028,4 +2028,10 @@ m3/ha  not set</value>
   <data name="lblSlurry" xml:space="preserve">
     <value>slurry</value>
   </data>
+  <data name="MsgClosedPeriod" xml:space="preserve">
+    <value>CLOSED PERIOD</value>
+  </data>
+  <data name="MsgForFertiliserClosedPeriodWarning" xml:space="preserve">
+    <value>The application date you entered is inside your closed period for applying manufactured nitrogen fertiliser. The NVZ Action Programme states that the closed period for {0} planted on {1} soil is {2}. You can continue, but you should consider applying outside the closed period to avoid the risk of agricultural nitrate pollution.</value>
+  </data>
 </root>

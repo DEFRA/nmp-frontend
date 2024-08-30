@@ -4792,6 +4792,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CLOSED PERIOD.
+        /// </summary>
+        public static string MsgClosedPeriod {
+            get {
+                return ResourceManager.GetString("MsgClosedPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which option applies to your {0} not set?.
         /// </summary>
         public static string MsgCropInfo1NotSet {
@@ -5274,6 +5283,15 @@ namespace NMP.Portal.Resources {
         public static string MsgForEffectiveRainfallManual {
             get {
                 return ResourceManager.GetString("MsgForEffectiveRainfallManual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The application date you entered is inside your closed period for applying manufactured nitrogen fertiliser. The NVZ Action Programme states that the closed period for {0} planted on {1} soil is {2}. You can continue, but you should consider applying outside the closed period to avoid the risk of agricultural nitrate pollution..
+        /// </summary>
+        public static string MsgForFertiliserClosedPeriodWarning {
+            get {
+                return ResourceManager.GetString("MsgForFertiliserClosedPeriodWarning", resourceCulture);
             }
         }
         

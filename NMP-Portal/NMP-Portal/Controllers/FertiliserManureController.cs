@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using NMP.Portal.Enums;
 using NMP.Portal.Helpers;
@@ -599,13 +600,9 @@ namespace NMP.Portal.Controllers
                     {
                         applicationDate = new DateTime(model.HarvestYear.Value, OrganicManureDuration.ApplicationMonth, OrganicManureDuration.ApplicationDate);
                     }
-                    (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
-                    if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
-                    {
-                        TempData["InOrgnaicManureDurationError"] = error.Message;
-                        return View(model);
-                    }
-                    if (farm != null)
+
+
+                    if (int.TryParse(model.FieldGroup, out int value))
                     {
                         if (model.FieldList.Count > 0)
                         {
@@ -614,18 +611,37 @@ namespace NMP.Portal.Controllers
                                 (CropTypeResponse cropTypeResponse, error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(model.FieldList[i]), model.HarvestYear.Value, false);
                                 if (error == null)
                                 {
-                                    WarningMessage warningMessage = new WarningMessage();
-                                    string message = warningMessage.ClosedPeriodForFertiliserWarningMessage(applicationDate, cropTypeResponse.CropTypeId, farm.RegisteredOrganicProducer.Value);
+                                    (FieldDetailResponse fieldDetail, error) = await _fieldService.FetchFieldDetailByFieldIdAndHarvestYear(Convert.ToInt32(model.FieldList[i]), model.HarvestYear.Value, true);
+                                    if (error == null)
+                                    {
+                                        WarningMessage warningMessage = new WarningMessage();
+                                        string isMessageNeedToShow = warningMessage.ClosedPeriodForFertiliserWarningMessage(applicationDate, cropTypeResponse.CropTypeId, fieldDetail.SoilTypeName, cropTypeResponse.CropType);
+                                        if (!string.IsNullOrWhiteSpace(isMessageNeedToShow))
+                                        {
+                                            TempData["ClosedPeriodWarningMessage"] = isMessageNeedToShow;
+                                            model.IsClosedPeriodWarning = true;
+                                            if (!model.IsWarningMsgNeedToShow)
+                                            {
+                                                model.IsWarningMsgNeedToShow = true;
+                                                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
+                                                return RedirectToAction("InOrgnaicManureDuration", new { q = model.EncryptedCounter });
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        TempData["InOrgnaicManureDurationError"] = error.Message;
+                                        return RedirectToAction("InOrgnaicManureDuration", new { q = model.EncryptedCounter });
+                                    }
                                 }
                                 else
                                 {
                                     TempData["InOrgnaicManureDurationError"] = error.Message;
-                                    return RedirectToAction("InOrgnaicManureDuration", model);
+                                    return RedirectToAction("InOrgnaicManureDuration", new { q = model.EncryptedCounter });
                                 }
                             }
                         }
                     }
-
                     if (applicationDate != null)
                     {
                         for (int i = 0; i < model.ApplicationForFertiliserManures.Count; i++)
@@ -1064,10 +1080,10 @@ namespace NMP.Portal.Controllers
                     if (error == null)
                     {
                         if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape ||
-                            cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Asparagus || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.BrusselSprouts || 
+                            cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Asparagus || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.BrusselSprouts ||
                             cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Cauliflower || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Calabrese ||
-                            cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.BulbOnions || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.SaladOnions||
-                            cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Cabbage )                            
+                            cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.BulbOnions || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.SaladOnions ||
+                            cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Cabbage)
                         {
 
                             (List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldId, null);

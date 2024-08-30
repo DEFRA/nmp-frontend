@@ -35,7 +35,8 @@ namespace NMP.Portal.ViewModels
         public RecommendationViewModel? RecommendationViewModel { get; set; }
         public string? EncryptedCounter { get; set; }
         public int? Counter { get; set; }
-
         public List<ApplicationForFertiliserManure>? ApplicationForFertiliserManures { get; set; }
+        public bool IsWarningMsgNeedToShow { get; set; } = false;
+        public bool IsClosedPeriodWarning { get; set; } = false;
     }
 }

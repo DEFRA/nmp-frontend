@@ -146,13 +146,13 @@ namespace NMP.Portal.Helpers
 
                 DateTime closedPeriodStart = new DateTime(applicationDate.Year, startMonth, startDay);
                 DateTime closedPeriodEnd = new DateTime(applicationDate.Year, endMonth, endDay);
-                
+
 
                 if (applicationDate >= closedPeriodStart && applicationDate <= closedPeriodEnd)
                 {
-                     message = string.Format(Resource.MsgApplicationDateEnteredIsInsideClosedPeriodDetail, cropType, fieldDetail.SowingDate.Value.Date.ToString("dd MMM yyyy"), fieldDetail.SoilTypeName, closedPeriod); 
+                    message = string.Format(Resource.MsgApplicationDateEnteredIsInsideClosedPeriodDetail, cropType, fieldDetail.SowingDate.Value.Date.ToString("dd MMM yyyy"), fieldDetail.SoilTypeName, closedPeriod);
                 }
-                
+
                 return message;
             }
             return message;
@@ -226,25 +226,25 @@ namespace NMP.Portal.Helpers
             return message;
         }
 
-        public string ClosedPeriodForFertiliserWarningMessage(DateTime applicationDate, int cropType, bool isFarmOragnic)
+        public string ClosedPeriodForFertiliserWarningMessage(DateTime applicationDate, int cropTypeId, string soilType, string cropType)
         {
             string message = string.Empty;
             int day = applicationDate.Day;
             int month = applicationDate.Month;
-            if (cropType == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape || cropType == (int)NMP.Portal.Enums.CropTypes.Grass)
+            if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape)
             {
                 if ((month > 10 || (month == 10 && day >= 31)) || (month < 1 || (month == 1 && day <= 15)))
                 {
-
+                    message = string.Format(Resource.MsgForFertiliserClosedPeriodWarning, cropType, soilType, "31 Oct to 15 Jan");
                 }
             }
-            else if (cropType != (int)NMP.Portal.Enums.CropTypes.Asparagus || cropType != (int)NMP.Portal.Enums.CropTypes.BrusselSprouts || cropType != (int)NMP.Portal.Enums.CropTypes.Cabbage ||
-                cropType != (int)NMP.Portal.Enums.CropTypes.Cauliflower || cropType != (int)NMP.Portal.Enums.CropTypes.Calabrese ||
-                cropType != (int)NMP.Portal.Enums.CropTypes.BulbOnions || cropType != (int)NMP.Portal.Enums.CropTypes.SaladOnions)
+            else if (cropTypeId != (int)NMP.Portal.Enums.CropTypes.Asparagus || cropTypeId != (int)NMP.Portal.Enums.CropTypes.BrusselSprouts || cropTypeId != (int)NMP.Portal.Enums.CropTypes.Cabbage ||
+                cropTypeId != (int)NMP.Portal.Enums.CropTypes.Cauliflower || cropTypeId != (int)NMP.Portal.Enums.CropTypes.Calabrese ||
+                cropTypeId != (int)NMP.Portal.Enums.CropTypes.BulbOnions || cropTypeId != (int)NMP.Portal.Enums.CropTypes.SaladOnions)
             {
                 if ((month > 9 || (month == 9 && day >= 1)) || (month < 1 || (month == 1 && day <= 15)))
                 {
-
+                    message = string.Format(Resource.MsgForFertiliserClosedPeriodWarning, cropType, soilType, "01 Sep to 15 Jan");
                 }
             }
             return message;
