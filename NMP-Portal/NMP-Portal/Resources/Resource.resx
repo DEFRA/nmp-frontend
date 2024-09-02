@@ -2020,12 +2020,38 @@ m3/ha  not set</value>
     <value>This application may take you over the maximum application rate for slurry.</value>
   </data>
   <data name="MsgApplicationRateForSlurryAndPoultryDetail" xml:space="preserve">
-    <value>The NVZ Action Programme states that the application rate of slurry between {0} and the end of February must not exceed 50 m³/ha or 8 t/ha for poultry manure in a single application. You must also allow at least 3 weeks between each individual application.</value>
+    <value>The NVZ Action Programme states that the application rate of slurry between {0} and the end of February must not exceed 30 m³/ha.
+You can continue, but you should consider reducing the application rate of slurry to avoid the risk of agricultural nitrate pollution.</value>
   </data>
   <data name="lblEndClosedPeriod" xml:space="preserve">
     <value>{0} {1}</value>
   </data>
   <data name="lblSlurry" xml:space="preserve">
     <value>slurry</value>
+  </data>
+  <data name="lblTakeYouOverThe" xml:space="preserve">
+    <value>take you over the {0}</value>
+  </data>
+  <data name="lblThisApplicationCould" xml:space="preserve">
+    <value>This application could:</value>
+  </data>
+  <data name="lblThisApplicationMayBreachMoreThanOneNVZRule" xml:space="preserve">
+    <value>This application may breach more than one NVZ rule.</value>
+  </data>
+  <data name="lblMoreAboutTheseNVZRules" xml:space="preserve">
+    <value>More about these NVZ rules</value>
+  </data>
+  <data name="lblYouCanContinueButYouShouldConsiderAdjustingYour" xml:space="preserve">
+    <value>You can continue but you should consider adjusting your application rate to comply with NVZ rules.</value>
+  </data>
+  <data name="MsgTheNVZActionProgrammeStatesThatTheARPoultry" xml:space="preserve">
+    <value>The NVZ Action Programme states that the application rate of poultry manure between {0} and the end of February must not exceed 8 t/ha.
+You can continue, but you should consider reducing the application rate of poultry manure to avoid the risk of agricultural nitrate pollution.</value>
+  </data>
+  <data name="lblMeterCubePerHectare" xml:space="preserve">
+    <value>m³ per hectare</value>
+  </data>
+  <data name="lblThisApplicationMayTakeYouOverMaxARPoultryManure" xml:space="preserve">
+    <value>This application may take you over the maximum application rate for poultry manure.</value>
   </data>
 </root>

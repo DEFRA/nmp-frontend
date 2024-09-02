@@ -2378,6 +2378,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to m³ per hectare.
+        /// </summary>
+        public static string lblMeterCubePerHectare {
+            get {
+                return ResourceManager.GetString("lblMeterCubePerHectare", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Metric Units.
         /// </summary>
         public static string lblMetricUnits {
@@ -2428,6 +2437,15 @@ namespace NMP.Portal.Resources {
         public static string lblmm {
             get {
                 return ResourceManager.GetString("lblmm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to More about these NVZ rules.
+        /// </summary>
+        public static string lblMoreAboutTheseNVZRules {
+            get {
+                return ResourceManager.GetString("lblMoreAboutTheseNVZRules", resourceCulture);
             }
         }
         
@@ -3566,6 +3584,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to take you over the {0}.
+        /// </summary>
+        public static string lblTakeYouOverThe {
+            get {
+                return ResourceManager.GetString("lblTakeYouOverThe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to the crops you grow.
         /// </summary>
         public static string lblTheCropsYouGrow {
@@ -3625,6 +3652,33 @@ namespace NMP.Portal.Resources {
         public static string lblTheseAreApproximateValues {
             get {
                 return ResourceManager.GetString("lblTheseAreApproximateValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application could:.
+        /// </summary>
+        public static string lblThisApplicationCould {
+            get {
+                return ResourceManager.GetString("lblThisApplicationCould", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application may breach more than one NVZ rule..
+        /// </summary>
+        public static string lblThisApplicationMayBreachMoreThanOneNVZRule {
+            get {
+                return ResourceManager.GetString("lblThisApplicationMayBreachMoreThanOneNVZRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application may take you over the maximum application rate for poultry manure..
+        /// </summary>
+        public static string lblThisApplicationMayTakeYouOverMaxARPoultryManure {
+            get {
+                return ResourceManager.GetString("lblThisApplicationMayTakeYouOverMaxARPoultryManure", resourceCulture);
             }
         }
         
@@ -4619,6 +4673,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can continue but you should consider adjusting your application rate to comply with NVZ rules..
+        /// </summary>
+        public static string lblYouCanContinueButYouShouldConsiderAdjustingYour {
+            get {
+                return ResourceManager.GetString("lblYouCanContinueButYouShouldConsiderAdjustingYour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  You have added {0}.
         /// </summary>
         public static string lblYouHaveAdded {
@@ -4727,7 +4790,8 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The NVZ Action Programme states that the application rate of slurry between {0} and the end of February must not exceed 50 m³/ha or 8 t/ha for poultry manure in a single application. You must also allow at least 3 weeks between each individual application..
+        ///   Looks up a localized string similar to The NVZ Action Programme states that the application rate of slurry between {0} and the end of February must not exceed 30 m³/ha.
+        ///You can continue, but you should consider reducing the application rate of slurry to avoid the risk of agricultural nitrate pollution..
         /// </summary>
         public static string MsgApplicationRateForSlurryAndPoultryDetail {
             get {
@@ -5688,6 +5752,16 @@ namespace NMP.Portal.Resources {
         public static string MsgSowingDateNotSet {
             get {
                 return ResourceManager.GetString("MsgSowingDateNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The NVZ Action Programme states that the application rate of poultry manure between {0} and the end of February must not exceed 8 t/ha.
+        ///You can continue, but you should consider reducing the application rate of poultry manure to avoid the risk of agricultural nitrate pollution..
+        /// </summary>
+        public static string MsgTheNVZActionProgrammeStatesThatTheARPoultry {
+            get {
+                return ResourceManager.GetString("MsgTheNVZActionProgrammeStatesThatTheARPoultry", resourceCulture);
             }
         }
         

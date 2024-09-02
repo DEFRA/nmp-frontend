@@ -31,7 +31,7 @@ namespace NMP.Portal.Helpers
             }
             if (!isPerennial)
             {
-                if (isSandyShallowSoil && isFieldTypeArable && fieldDetail.SowingDate >= september16)
+                if (isSandyShallowSoil && isFieldTypeArable && (fieldDetail.SowingDate >= september16 || fieldDetail.SowingDate==null))
                 {
                     closedPeriod = Resource.lbl1Augto31Dec;
                 }
@@ -46,7 +46,7 @@ namespace NMP.Portal.Helpers
             }
             else
             {
-                if (isSandyShallowSoil && isFieldTypeArable && fieldDetail.SowingDate >= september16)
+                if (isSandyShallowSoil && isFieldTypeArable && (fieldDetail.SowingDate >= september16 || fieldDetail.SowingDate==null))
                 {
                     closedPeriod = Resource.lbl1Augto31Dec;
                 }
@@ -109,7 +109,7 @@ namespace NMP.Portal.Helpers
                     case (int)NMP.Portal.Enums.CropTypes.Cauliflower:            //Cauliflower
                     case (int)NMP.Portal.Enums.CropTypes.Calabrese:              //Calabrese
 
-                        closedPeriod = (isSandyShallowSoil && sowingDate >= september16) ||
+                        closedPeriod = (isSandyShallowSoil && (sowingDate >= september16 || sowingDate==null)) ||
                                        (!isSandyShallowSoil) ? null : closedPeriod;
                         break;
 
@@ -150,7 +150,7 @@ namespace NMP.Portal.Helpers
 
                 if (applicationDate >= closedPeriodStart && applicationDate <= closedPeriodEnd)
                 {
-                     message = string.Format(Resource.MsgApplicationDateEnteredIsInsideClosedPeriodDetail, cropType, fieldDetail.SowingDate.Value.Date.ToString("dd MMM yyyy"), fieldDetail.SoilTypeName, closedPeriod); 
+                     message = string.Format(Resource.MsgApplicationDateEnteredIsInsideClosedPeriodDetail, cropType, fieldDetail.SowingDate==null?"":fieldDetail.SowingDate.Value.Date.ToString("dd MMM yyyy"), fieldDetail.SoilTypeName, closedPeriod); 
                 }
                 
                 return message;
@@ -158,7 +158,7 @@ namespace NMP.Portal.Helpers
             return message;
         }
 
-        public string EndClosedPeriodAndFebruaryWarningMessage(DateTime applicationDate, string closedPeriod, decimal? applicationRate,string manureTypeName)
+        public string EndClosedPeriodAndFebruaryWarningMessage(DateTime applicationDate, string closedPeriod, decimal? applicationRate,bool isSlurry, bool isPoultryManure)
         {
             string message = string.Empty;
             string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
@@ -184,18 +184,19 @@ namespace NMP.Portal.Helpers
 
                 if (applicationDate >= fromDateYearMinusOne && applicationDate <= toDateYear)
                 {
-                    if (manureTypeName.Contains(Resource.lblSlurry))
+                    if (isSlurry)
                     {
-                        if (applicationRate > 50)
+                        if (applicationRate > 30)
                         {
                             message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
                         }
                     }
-                    if (manureTypeName.Contains(Resource.lblPoultryManure))
+                    if (isPoultryManure)
                     {
                         if (applicationRate > 8)
                         {
-                            message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+                            message = string.Format(Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultry, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+                            //message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
                         }
                     }
                 }
@@ -206,18 +207,18 @@ namespace NMP.Portal.Helpers
 
                 if (applicationDate >= fromDateYear && applicationDate <= toDateYearPlusOne)
                 {
-                    if (manureTypeName.Contains(Resource.lblSlurry))
+                    if (isSlurry)
                     {
-                        if (applicationRate > 50)
+                        if (applicationRate > 30)
                         {
                             message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
                         }
                     }
-                    if (manureTypeName.Contains(Resource.lblPoultryManure))
+                    if (isPoultryManure)
                     {
                         if (applicationRate > 8)
                         {
-                            message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+                            message = string.Format(Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultry, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
                         }
                     }
                 }
