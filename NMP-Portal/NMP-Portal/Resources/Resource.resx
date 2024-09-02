@@ -2048,4 +2048,10 @@ You can continue, but you should consider reducing the application rate of slurr
     <value>The NVZ Action Programme states that the application rate of poultry manure between {0} and the end of February must not exceed 8 t/ha.
 You can continue, but you should consider reducing the application rate of poultry manure to avoid the risk of agricultural nitrate pollution.</value>
   </data>
+  <data name="lblMeterCubePerHectare" xml:space="preserve">
+    <value>m³ per hectare</value>
+  </data>
+  <data name="lblThisApplicationMayTakeYouOverMaxARPoultryManure" xml:space="preserve">
+    <value>This application may take you over the maximum application rate for poultry manure.</value>
+  </data>
 </root>

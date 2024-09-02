@@ -2378,6 +2378,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to m³ per hectare.
+        /// </summary>
+        public static string lblMeterCubePerHectare {
+            get {
+                return ResourceManager.GetString("lblMeterCubePerHectare", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Metric Units.
         /// </summary>
         public static string lblMetricUnits {
@@ -3661,6 +3670,15 @@ namespace NMP.Portal.Resources {
         public static string lblThisApplicationMayBreachMoreThanOneNVZRule {
             get {
                 return ResourceManager.GetString("lblThisApplicationMayBreachMoreThanOneNVZRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application may take you over the maximum application rate for poultry manure..
+        /// </summary>
+        public static string lblThisApplicationMayTakeYouOverMaxARPoultryManure {
+            get {
+                return ResourceManager.GetString("lblThisApplicationMayTakeYouOverMaxARPoultryManure", resourceCulture);
             }
         }
         

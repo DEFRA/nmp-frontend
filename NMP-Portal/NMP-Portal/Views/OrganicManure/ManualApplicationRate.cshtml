@@ -5,7 +5,7 @@
     var suffixUnit = "";
     if (Model.IsManureTypeLiquid != null)
     {
-        suffixUnit = Model.IsManureTypeLiquid.Value ? Resource.lblKgPerMeterCube : Resource.lblKgPerTon;
+        suffixUnit = Model.IsManureTypeLiquid.Value ? Resource.lblMeterCubePerHectare : Resource.lblTonnesPerHectare;
     }
 
     int trueWarningCount = 0;
@@ -165,7 +165,7 @@
                         @if (Model.IsEndClosedPeriodFebruaryWarning)
                         {
                             <p class="govuk-notification-banner__heading">
-                                @Resource.lblApplicationRateOverTheMaximumRateForSlurry
+                                @(Model.ManureTypeId == 8 ? Resource.lblThisApplicationMayTakeYouOverMaxARPoultryManure : Resource.lblApplicationRateOverTheMaximumRateForSlurry)
                             </p>
                             <p class="govuk-body">@TempData["EndClosedPeriodAndFebruaryWarningMessage"]</p>
                         }
@@ -188,7 +188,7 @@
                                 }
                                 @if (Model.IsEndClosedPeriodFebruaryWarning)
                                 {
-                                    <li>@Resource.lblApplicationRateOverTheMaximumRateForSlurry</li>
+                                    <li>@(Model.ManureTypeId == 8 ? Resource.lblThisApplicationMayTakeYouOverMaxARPoultryManure : Resource.lblApplicationRateOverTheMaximumRateForSlurry)</li>
                                 }
                             </ul>
                             <govuk-details>
@@ -208,7 +208,7 @@
                                     }
                                     @if (Model.IsEndClosedPeriodFebruaryWarning)
                                     {
-                                        <h2 class="govuk-heading-s">@Resource.lblApplicationRateOverTheMaximumRateForSlurry</h2>
+                                        <h2 class="govuk-heading-s">@(Model.ManureTypeId == 8 ? Resource.lblThisApplicationMayTakeYouOverMaxARPoultryManure : Resource.lblApplicationRateOverTheMaximumRateForSlurry)</h2>
                                         <p class="govuk-body">@TempData["EndClosedPeriodAndFebruaryWarningMessage"]</p>
                                     }
                                </govuk-details-text>
