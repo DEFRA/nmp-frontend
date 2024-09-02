@@ -600,48 +600,6 @@ namespace NMP.Portal.Controllers
                     {
                         applicationDate = new DateTime(model.HarvestYear.Value, OrganicManureDuration.ApplicationMonth, OrganicManureDuration.ApplicationDate);
                     }
-
-
-                    if (int.TryParse(model.FieldGroup, out int value))
-                    {
-                        if (model.FieldList.Count > 0)
-                        {
-                            for (int i = 0; i < model.FieldList.Count; i++)
-                            {
-                                (CropTypeResponse cropTypeResponse, error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(model.FieldList[i]), model.HarvestYear.Value, false);
-                                if (error == null)
-                                {
-                                    (FieldDetailResponse fieldDetail, error) = await _fieldService.FetchFieldDetailByFieldIdAndHarvestYear(Convert.ToInt32(model.FieldList[i]), model.HarvestYear.Value, true);
-                                    if (error == null)
-                                    {
-                                        WarningMessage warningMessage = new WarningMessage();
-                                        string isMessageNeedToShow = warningMessage.ClosedPeriodForFertiliserWarningMessage(applicationDate, cropTypeResponse.CropTypeId, fieldDetail.SoilTypeName, cropTypeResponse.CropType);
-                                        if (!string.IsNullOrWhiteSpace(isMessageNeedToShow))
-                                        {
-                                            TempData["ClosedPeriodWarningMessage"] = isMessageNeedToShow;
-                                            model.IsClosedPeriodWarning = true;
-                                            if (!model.IsWarningMsgNeedToShow)
-                                            {
-                                                model.IsWarningMsgNeedToShow = true;
-                                                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
-                                                return RedirectToAction("InOrgnaicManureDuration", new { q = model.EncryptedCounter });
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        TempData["InOrgnaicManureDurationError"] = error.Message;
-                                        return RedirectToAction("InOrgnaicManureDuration", new { q = model.EncryptedCounter });
-                                    }
-                                }
-                                else
-                                {
-                                    TempData["InOrgnaicManureDurationError"] = error.Message;
-                                    return RedirectToAction("InOrgnaicManureDuration", new { q = model.EncryptedCounter });
-                                }
-                            }
-                        }
-                    }
                     if (applicationDate != null)
                     {
                         for (int i = 0; i < model.ApplicationForFertiliserManures.Count; i++)
@@ -652,6 +610,69 @@ namespace NMP.Portal.Controllers
                             }
                         }
                     }
+
+                    if (int.TryParse(model.FieldGroup, out int value))
+                    {
+                        FertiliserManureViewModel fertiliserManureViewModel = new FertiliserManureViewModel();
+                        if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
+                        {
+                            fertiliserManureViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FertiliserManureViewModel>("FertiliserManure");
+                        }
+                        else
+                        {
+                            return RedirectToAction("FarmList", "Farm");
+                        }
+                        if (fertiliserManureViewModel != null)
+                        {
+                            if (model.ApplicationForFertiliserManures[index].ApplicationDate != fertiliserManureViewModel.ApplicationForFertiliserManures[index].ApplicationDate)
+                            {
+                                model.IsWarningMsgNeedToShow = false;
+                            }
+                        }
+                        foreach (var fieldId in model.FieldList)
+                        {
+                            (CropTypeResponse cropTypeResponse, error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
+                            if (error == null)
+                            {
+                                (FieldDetailResponse fieldDetail, error) = await _fieldService.FetchFieldDetailByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
+                                if (error == null)
+                                {
+                                    WarningMessage warningMessage = new WarningMessage();
+                                    string isMessageNeedToShow = warningMessage.ClosedPeriodForFertiliserWarningMessage(applicationDate, cropTypeResponse.CropTypeId, fieldDetail.SoilTypeName, cropTypeResponse.CropType);
+                                    if (!string.IsNullOrWhiteSpace(isMessageNeedToShow))
+                                    {
+                                        TempData["ClosedPeriodWarningMessage"] = isMessageNeedToShow;
+                                        model.IsClosedPeriodWarning = true;
+                                    }
+                                }
+                                else
+                                {
+                                    TempData["InOrgnaicManureDurationError"] = error.Message;
+                                    return RedirectToAction("InOrgnaicManureDuration", new { q = model.EncryptedCounter });
+                                }
+                            }
+                            else
+                            {
+                                TempData["InOrgnaicManureDurationError"] = error.Message;
+                                return RedirectToAction("InOrgnaicManureDuration", new { q = model.EncryptedCounter });
+                            }
+                        }
+                    }
+                    if (model.IsClosedPeriodWarning)
+                    {
+                        if (!model.IsWarningMsgNeedToShow)
+                        {
+                            model.IsWarningMsgNeedToShow = true;
+                            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
+                            return RedirectToAction("InOrgnaicManureDuration", new { q = model.EncryptedCounter });
+                        }
+                    }
+                    else
+                    {
+                        model.IsClosedPeriodWarning = false;
+                        model.IsWarningMsgNeedToShow = false;
+                    }
+                   
 
                     _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
 

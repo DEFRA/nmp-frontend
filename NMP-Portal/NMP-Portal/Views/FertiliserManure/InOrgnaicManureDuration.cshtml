@@ -63,7 +63,7 @@
 
         }
     }
-    @if (Model.IsClosedPeriodWarning)
+    @if (Model.IsClosedPeriodWarning&&Model.IsWarningMsgNeedToShow)
     {
         @if (TempData["ClosedPeriodWarningMessage"] != null)
         {

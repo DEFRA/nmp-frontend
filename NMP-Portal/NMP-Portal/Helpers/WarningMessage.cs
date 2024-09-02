@@ -238,6 +238,13 @@ namespace NMP.Portal.Helpers
                     message = string.Format(Resource.MsgForFertiliserClosedPeriodWarning, cropType, soilType, "31 Oct to 15 Jan");
                 }
             }
+            else if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
+            {
+                if ((month > 9 && month <= 12) || (month == 9 && day >= 15) || (month == 1 && day <= 15))
+                {
+                    message = string.Format(Resource.MsgForFertiliserClosedPeriodWarning, cropType, soilType, "15 Sep to 15 Jan");
+                }
+            }
             else if (cropTypeId != (int)NMP.Portal.Enums.CropTypes.Asparagus || cropTypeId != (int)NMP.Portal.Enums.CropTypes.BrusselSprouts || cropTypeId != (int)NMP.Portal.Enums.CropTypes.Cabbage ||
                 cropTypeId != (int)NMP.Portal.Enums.CropTypes.Cauliflower || cropTypeId != (int)NMP.Portal.Enums.CropTypes.Calabrese ||
                 cropTypeId != (int)NMP.Portal.Enums.CropTypes.BulbOnions || cropTypeId != (int)NMP.Portal.Enums.CropTypes.SaladOnions)
