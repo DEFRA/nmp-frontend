@@ -31,7 +31,7 @@ namespace NMP.Portal.Helpers
             }
             if (!isPerennial)
             {
-                if (isSandyShallowSoil && isFieldTypeArable && (fieldDetail.SowingDate >= september16 || fieldDetail.SowingDate==null))
+                if (isSandyShallowSoil && isFieldTypeArable && (fieldDetail.SowingDate >= september16 || fieldDetail.SowingDate == null))
                 {
                     closedPeriod = Resource.lbl1Augto31Dec;
                 }
@@ -46,7 +46,7 @@ namespace NMP.Portal.Helpers
             }
             else
             {
-                if (isSandyShallowSoil && isFieldTypeArable && (fieldDetail.SowingDate >= september16 || fieldDetail.SowingDate==null))
+                if (isSandyShallowSoil && isFieldTypeArable && (fieldDetail.SowingDate >= september16 || fieldDetail.SowingDate == null))
                 {
                     closedPeriod = Resource.lbl1Augto31Dec;
                 }
@@ -109,7 +109,7 @@ namespace NMP.Portal.Helpers
                     case (int)NMP.Portal.Enums.CropTypes.Cauliflower:            //Cauliflower
                     case (int)NMP.Portal.Enums.CropTypes.Calabrese:              //Calabrese
 
-                        closedPeriod = (isSandyShallowSoil && (sowingDate >= september16 || sowingDate==null)) ||
+                        closedPeriod = (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null)) ||
                                        (!isSandyShallowSoil) ? null : closedPeriod;
                         break;
 
@@ -146,19 +146,31 @@ namespace NMP.Portal.Helpers
 
                 DateTime closedPeriodStart = new DateTime(applicationDate.Year, startMonth, startDay);
                 DateTime closedPeriodEnd = new DateTime(applicationDate.Year, endMonth, endDay);
-                
+
 
                 if (applicationDate >= closedPeriodStart && applicationDate <= closedPeriodEnd)
                 {
-                     message = string.Format(Resource.MsgApplicationDateEnteredIsInsideClosedPeriodDetail, cropType, fieldDetail.SowingDate==null?"":fieldDetail.SowingDate.Value.Date.ToString("dd MMM yyyy"), fieldDetail.SoilTypeName, closedPeriod); 
+                    message = string.Format(Resource.MsgApplicationDateEnteredIsInsideClosedPeriodDetail, cropType, fieldDetail.SowingDate == null ? "" : fieldDetail.SowingDate.Value.Date.ToString("dd MMM yyyy"), fieldDetail.SoilTypeName, closedPeriod);
                 }
-                
+                //check with next year
+                DateTime closedPeriodEndNextYear = new DateTime(applicationDate.Year + 1, endMonth, endDay);
+                if (applicationDate >= closedPeriodStart && applicationDate <= closedPeriodEndNextYear)
+                {
+                    message = string.Format(Resource.MsgApplicationDateEnteredIsInsideClosedPeriodDetail, cropType, fieldDetail.SowingDate == null ? "" : fieldDetail.SowingDate.Value.Date.ToString("dd MMM yyyy"), fieldDetail.SoilTypeName, closedPeriod);
+                }
+
+                closedPeriodStart = new DateTime(applicationDate.Year - 1, startMonth, startDay);
+                if (applicationDate >= closedPeriodStart && applicationDate <= closedPeriodEnd)
+                {
+                    message = string.Format(Resource.MsgApplicationDateEnteredIsInsideClosedPeriodDetail, cropType, fieldDetail.SowingDate == null ? "" : fieldDetail.SowingDate.Value.Date.ToString("dd MMM yyyy"), fieldDetail.SoilTypeName, closedPeriod);
+                }
+
                 return message;
             }
             return message;
         }
 
-        public string EndClosedPeriodAndFebruaryWarningMessage(DateTime applicationDate, string closedPeriod, decimal? applicationRate,bool isSlurry, bool isPoultryManure)
+        public string EndClosedPeriodAndFebruaryWarningMessage(DateTime applicationDate, string closedPeriod, decimal? applicationRate, bool isSlurry, bool isPoultryManure)
         {
             string message = string.Empty;
             string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
@@ -174,15 +186,15 @@ namespace NMP.Portal.Helpers
                 DateTimeFormatInfo dtfi = DateTimeFormatInfo.CurrentInfo;
                 int startMonth = Array.IndexOf(dtfi.AbbreviatedMonthNames, startMonthStr) + 1;
                 int endMonth = Array.IndexOf(dtfi.AbbreviatedMonthNames, endMonthStr) + 1;
-                string endMonthFullName = dtfi.MonthNames[endMonth-1];
+                string endMonthFullName = dtfi.MonthNames[endMonth - 1];
 
                 DateTime? endDateFebruary = null;
                 endDateFebruary = new DateTime(applicationDate.Year, 3, 1);
 
-                DateTime fromDateYearMinusOne = new DateTime(applicationDate.Year - 1, startMonth, startDay);
+                DateTime fromDateYearMinusOne = new DateTime(applicationDate.Year, endMonth, endDay);
                 DateTime toDateYear = new DateTime(applicationDate.Year, endDateFebruary.Value.Month, endDateFebruary.Value.Day);
 
-                if (applicationDate >= fromDateYearMinusOne && applicationDate <= toDateYear)
+                if (applicationDate > fromDateYearMinusOne && applicationDate < toDateYear)
                 {
                     if (isSlurry)
                     {
@@ -196,16 +208,14 @@ namespace NMP.Portal.Helpers
                         if (applicationRate > 8)
                         {
                             message = string.Format(Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultry, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
-                            //message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
                         }
                     }
                 }
 
                 // Check with harvest year +1
-                DateTime fromDateYear = new DateTime(applicationDate.Year, startMonth, startDay);
+                DateTime fromDateYear = new DateTime(applicationDate.Year + 1, endMonth, endDay);
                 DateTime toDateYearPlusOne = new DateTime(applicationDate.Year + 1, endDateFebruary.Value.Month, endDateFebruary.Value.Day);
-
-                if (applicationDate >= fromDateYear && applicationDate <= toDateYearPlusOne)
+                if (applicationDate > fromDateYear && applicationDate < toDateYearPlusOne)
                 {
                     if (isSlurry)
                     {
