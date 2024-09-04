@@ -1,4 +1,5 @@
-﻿using NMP.Portal.Models;
+﻿using NMP.Portal.Enums;
+using NMP.Portal.Models;
 using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
 using System.Globalization;
@@ -15,8 +16,8 @@ namespace NMP.Portal.Helpers
             string? closedPeriod = null;
             DateTime september16 = new DateTime(harvestYear, 9, 16);
 
-            var isSandyShallowSoil = fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Sand ||
-                                     fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Shallow;
+            var isSandyShallowSoil = fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.LightSand ||
+                                     fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.Shallow;
             var isFieldTypeGrass = fieldDetail.FieldType == (int)NMP.Portal.Enums.FieldType.Grass;
             var isFieldTypeArable = fieldDetail.FieldType == (int)NMP.Portal.Enums.FieldType.Arable;
             DateTime? sowingDate = fieldDetail.SowingDate?.ToLocalTime();
@@ -78,8 +79,8 @@ namespace NMP.Portal.Helpers
             string? closedPeriod = null;
             DateTime september16 = new DateTime(harvestYear, 9, 16);
 
-            var isSandyShallowSoil = fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Sand ||
-                                     fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Shallow;
+            var isSandyShallowSoil = fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.LightSand ||
+                                     fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.Shallow;
             var isFieldTypeGrass = fieldDetail.FieldType == (int)NMP.Portal.Enums.FieldType.Grass;
             var isFieldTypeArable = fieldDetail.FieldType == (int)NMP.Portal.Enums.FieldType.Arable;
             DateTime? sowingDate = fieldDetail.SowingDate?.ToLocalTime();
@@ -126,7 +127,7 @@ namespace NMP.Portal.Helpers
             return closedPeriod;
         }
 
-        public string ClosedPeriodWarningMessage(DateTime applicationDate, string closedPeriod, string cropType, FieldDetailResponse fieldDetail)
+        public string ClosedPeriodWarningMessage(DateTime applicationDate, string closedPeriod, string cropType, FieldDetailResponse fieldDetail,bool IsRegisteredOrganic)
         {
             string message = string.Empty;
 
@@ -147,24 +148,41 @@ namespace NMP.Portal.Helpers
                 DateTime closedPeriodStart = new DateTime(applicationDate.Year, startMonth, startDay);
                 DateTime closedPeriodEnd = new DateTime(applicationDate.Year, endMonth, endDay);
 
+                int applicationMonth = applicationDate.Month;
+                int applicationDay = applicationDate.Day;
 
-                if (applicationDate >= closedPeriodStart && applicationDate <= closedPeriodEnd)
+                if (startMonth < endMonth)
                 {
-                    message = string.Format(Resource.MsgApplicationDateEnteredIsInsideClosedPeriodDetail, cropType, fieldDetail.SowingDate == null ? "" : fieldDetail.SowingDate.Value.Date.ToString("dd MMM yyyy"), fieldDetail.SoilTypeName, closedPeriod);
+                    if (applicationMonth >= startMonth && applicationMonth <= endMonth)
+                    {
+                        if (applicationDate >= closedPeriodStart && applicationDate <= closedPeriodEnd)
+                        {
+                            message = string.Format(IsRegisteredOrganic? Resource.MsgApplicationDateEnteredIsInsideClosedPeriodDetailOrganic : Resource.MsgApplicationDateEnteredIsInsideClosedPeriodDetail, cropType, fieldDetail.SowingDate == null ? "" : fieldDetail.SowingDate.Value.Date.ToString("dd MMM yyyy"), fieldDetail.SoilTypeName, closedPeriod);
+                        }
+                    }
                 }
-                //check with next year
-                DateTime closedPeriodEndNextYear = new DateTime(applicationDate.Year + 1, endMonth, endDay);
-                if (applicationDate >= closedPeriodStart && applicationDate <= closedPeriodEndNextYear)
+                if (startMonth > endMonth)
                 {
-                    message = string.Format(Resource.MsgApplicationDateEnteredIsInsideClosedPeriodDetail, cropType, fieldDetail.SowingDate == null ? "" : fieldDetail.SowingDate.Value.Date.ToString("dd MMM yyyy"), fieldDetail.SoilTypeName, closedPeriod);
-                }
+                    if (applicationDate >= closedPeriodEnd)
+                    {
+                        DateTime closedPeriodEndNextYear = new DateTime(applicationDate.Year + 1, endMonth, endDay);
+                        if (applicationDate >= closedPeriodStart && applicationDate <= closedPeriodEndNextYear)
+                        {
+                            message = string.Format(Resource.MsgApplicationDateEnteredIsInsideClosedPeriodDetail, cropType, fieldDetail.SowingDate == null ? "" : fieldDetail.SowingDate.Value.Date.ToString("dd MMM yyyy"), fieldDetail.SoilTypeName, closedPeriod);
+                        }
+                    }
+                    if (applicationDate <= closedPeriodEnd)
+                    {
+                        DateTime closedPeriodStartPreviousYear = new DateTime(applicationDate.Year - 1, startMonth, startDay);
 
-                closedPeriodStart = new DateTime(applicationDate.Year - 1, startMonth, startDay);
-                if (applicationDate >= closedPeriodStart && applicationDate <= closedPeriodEnd)
-                {
-                    message = string.Format(Resource.MsgApplicationDateEnteredIsInsideClosedPeriodDetail, cropType, fieldDetail.SowingDate == null ? "" : fieldDetail.SowingDate.Value.Date.ToString("dd MMM yyyy"), fieldDetail.SoilTypeName, closedPeriod);
+                        if (applicationDate >= closedPeriodStartPreviousYear && applicationDate <= closedPeriodEnd)
+                        {
+                            message = string.Format(Resource.MsgApplicationDateEnteredIsInsideClosedPeriodDetail, cropType, fieldDetail.SowingDate == null ? "" : fieldDetail.SowingDate.Value.Date.ToString("dd MMM yyyy"), fieldDetail.SoilTypeName, closedPeriod);
+                        }
+                    }
+                    
+                    
                 }
-
                 return message;
             }
             return message;
@@ -191,46 +209,74 @@ namespace NMP.Portal.Helpers
                 DateTime? endDateFebruary = null;
                 endDateFebruary = new DateTime(applicationDate.Year, 3, 1);
 
-                DateTime fromDateYearMinusOne = new DateTime(applicationDate.Year, endMonth, endDay);
-                DateTime toDateYear = new DateTime(applicationDate.Year, endDateFebruary.Value.Month, endDateFebruary.Value.Day);
+                DateTime ClosedPeriodEndDate = new DateTime(applicationDate.Year, endMonth, endDay);
+                DateTime endOfFebruaryDate = new DateTime(applicationDate.Year, endDateFebruary.Value.Month, endDateFebruary.Value.Day);
 
-                if (applicationDate > fromDateYearMinusOne && applicationDate < toDateYear)
+
+                if (startMonth < endMonth)
                 {
-                    if (isSlurry)
+                    DateTime ClosedPeriodEndDateMinusOne= new DateTime(applicationDate.Year - 1, endMonth, endDay);
+                    if (applicationDate > ClosedPeriodEndDateMinusOne && applicationDate < endOfFebruaryDate)
                     {
-                        if (applicationRate > 30)
+                        if (isSlurry)
                         {
-                            message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+                            if (applicationRate > 30)
+                            {
+                                message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+                            }
                         }
-                    }
-                    if (isPoultryManure)
-                    {
-                        if (applicationRate > 8)
+                        if (isPoultryManure)
                         {
-                            message = string.Format(Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultry, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+                            if (applicationRate > 8)
+                            {
+                                message = string.Format(Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultry, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+                            }
                         }
                     }
                 }
-
-                // Check with harvest year +1
-                DateTime fromDateYear = new DateTime(applicationDate.Year + 1, endMonth, endDay);
-                DateTime toDateYearPlusOne = new DateTime(applicationDate.Year + 1, endDateFebruary.Value.Month, endDateFebruary.Value.Day);
-                if (applicationDate > fromDateYear && applicationDate < toDateYearPlusOne)
+                if (startMonth > endMonth)
                 {
-                    if (isSlurry)
+                    if (applicationDate > ClosedPeriodEndDate)
                     {
-                        if (applicationRate > 30)
+                        DateTime endOfFebruaryDatePlusOne = new DateTime(applicationDate.Year , endMonth, endDay);
+                        if (applicationDate > ClosedPeriodEndDate && applicationDate < endOfFebruaryDatePlusOne)
                         {
-                            message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+                            if (isSlurry)
+                            {
+                                if (applicationRate > 30)
+                                {
+                                    message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+                                }
+                            }
+                            if (isPoultryManure)
+                            {
+                                if (applicationRate > 8)
+                                {
+                                    message = string.Format(Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultry, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+                                }
+                            }
+                        }
+
+                        DateTime ClosedPeriodEndDateMinusOne = new DateTime(applicationDate.Year - 1, startMonth, startDay);
+                        if (applicationDate > ClosedPeriodEndDateMinusOne && applicationDate < endOfFebruaryDate)
+                        {
+                            if (isSlurry)
+                            {
+                                if (applicationRate > 30)
+                                {
+                                    message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+                                }
+                            }
+                            if (isPoultryManure)
+                            {
+                                if (applicationRate > 8)
+                                {
+                                    message = string.Format(Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultry, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+                                }
+                            }
                         }
                     }
-                    if (isPoultryManure)
-                    {
-                        if (applicationRate > 8)
-                        {
-                            message = string.Format(Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultry, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
-                        }
-                    }
+                    
                 }
 
             }

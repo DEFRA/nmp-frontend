@@ -2054,4 +2054,7 @@ You can continue, but you should consider reducing the application rate of poult
   <data name="lblThisApplicationMayTakeYouOverMaxARPoultryManure" xml:space="preserve">
     <value>This application may take you over the maximum application rate for poultry manure.</value>
   </data>
+  <data name="MsgApplicationDateEnteredIsInsideClosedPeriodDetailOrganic" xml:space="preserve">
+    <value>The NVZ Action Programme states that the closed period for {0} planted on organic farms {1} on {2} soil is {3}. You can continue, but you should consider applying outside the closed period to avoid the risk of agricultural nitrate pollution.</value>
+  </data>
 </root>

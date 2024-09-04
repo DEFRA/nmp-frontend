@@ -4772,6 +4772,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The NVZ Action Programme states that the closed period for {0} planted on organic farms {1} on {2} soil is {3}. You can continue, but you should consider applying outside the closed period to avoid the risk of agricultural nitrate pollution..
+        /// </summary>
+        public static string MsgApplicationDateEnteredIsInsideClosedPeriodDetailOrganic {
+            get {
+                return ResourceManager.GetString("MsgApplicationDateEnteredIsInsideClosedPeriodDetailOrganic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the application method for your {0} not set?.
         /// </summary>
         public static string MsgApplicationMethodNotSet {
