@@ -1110,7 +1110,8 @@ namespace NMP.Portal.Controllers
                     }
                     TempData["ClosedPeriod"] = closedPeriod;
                 }
-
+                model.IsWarningMsgNeedToShow = false;
+                model.IsClosedPeriodWarning = false;
                 return View(model);
             }
             catch (Exception ex)
@@ -1194,6 +1195,21 @@ namespace NMP.Portal.Controllers
                     }
                     return View(model);
                 }
+
+                //check for closed period warning.
+                if (model != null)
+                {
+                    OrganicManureViewModel organicManureViewModel = new OrganicManureViewModel();
+                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
+                    {
+                        organicManureViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+                    }
+                    
+                    if (model.ApplicationDate != organicManureViewModel.ApplicationDate)
+                    {
+                        model.IsWarningMsgNeedToShow = false;
+                    }
+                }
                 farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
                 (farm, error) = await _farmService.FetchFarmByIdAsync(farmId);
                 if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
@@ -1213,6 +1229,7 @@ namespace NMP.Portal.Controllers
                     {
                         var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
                         isHighReadilyAvailableNitrogen = manureType.HighReadilyAvailableNitrogen ?? false;
+                        ViewBag.HighReadilyAvailableNitrogen = manureType.HighReadilyAvailableNitrogen;
                     }
                     (FieldDetailResponse fieldDetail, Error error2) = await _fieldService.FetchFieldDetailByFieldIdAndHarvestYear(Convert.ToInt32(model.FieldList[0]), model.HarvestYear ?? 0, false);
 
@@ -1229,6 +1246,7 @@ namespace NMP.Portal.Controllers
                         closedPeriod = warningMessage.ClosedPeriodNonOrganicFarm(fieldDetail, model.HarvestYear ?? 0, isPerennial);
 
                         string message = warningMessage.ClosedPeriodWarningMessage(model.ApplicationDate.Value, closedPeriod, cropTypeResponse.CropType, fieldDetail);
+                        TempData["ClosedPeriod"] = closedPeriod;
                         if (!string.IsNullOrWhiteSpace(message))
                         {
                             if (!model.IsWarningMsgNeedToShow)
@@ -1244,7 +1262,7 @@ namespace NMP.Portal.Controllers
                                 }
                                 model.IsClosedPeriodWarning = true;
                                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
-                                return RedirectToAction("ManureApplyingDate");
+                                return View(model);
                             }
                         }
                         else
