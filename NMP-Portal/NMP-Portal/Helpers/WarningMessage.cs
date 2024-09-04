@@ -10,9 +10,9 @@ namespace NMP.Portal.Helpers
 {
     public class WarningMessage
     {
-        public string ClosedPeriodNonOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, bool isPerennial)
+        public string? ClosedPeriodNonOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, bool isPerennial)
         {
-            string closedPeriod = string.Empty;
+            string? closedPeriod = null;
             DateTime september16 = new DateTime(harvestYear, 9, 16);
 
             var isSandyShallowSoil = fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Sand ||
@@ -75,7 +75,7 @@ namespace NMP.Portal.Helpers
 
         public string? ClosedPeriodOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, int cropTypeId, int? cropInfo1)
         {
-            string? closedPeriod = string.Empty;
+            string? closedPeriod = null;
             DateTime september16 = new DateTime(harvestYear, 9, 16);
 
             var isSandyShallowSoil = fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilType.Sand ||
