@@ -2054,6 +2054,28 @@ You can continue, but you should consider reducing the application rate of poult
   <data name="lblThisApplicationMayTakeYouOverMaxARPoultryManure" xml:space="preserve">
     <value>This application may take you over the maximum application rate for poultry manure.</value>
   </data>
+  <data name="MsgClosedPeriod" xml:space="preserve">
+    <value>CLOSED PERIOD</value>
+  </data>
+  <data name="MsgForFertiliserClosedPeriodWarning" xml:space="preserve">
+    <value>The NVZ Action Programme states that the closed period for {0} planted on {1} soil is {2}.
+
+ You can continue, but you should consider applying outside the closed period to avoid the risk of agricultural nitrate pollution.</value>
+  </data>
+  <data name="MsgApplicationAfter31October" xml:space="preserve">
+    <value>APPLICATION AFTER 31 OCTOBER</value>
+  </data>
+  <data name="MsgClosedPeriodForFertliserExceptOilseedAndGrassTitle" xml:space="preserve">
+    <value>The application date you entered is inside your closed period for applying manufactured nitrogen fertiliser</value>
+  </data>
+  <data name="MsgClosedPeriodForGrassAndOilseedFertliserWarningMsgTitle" xml:space="preserve">
+    <value>Manufactured nitrogen fertiliser must not be applied on this crop after 31 October</value>
+  </data>
+  <data name="MsgForGrassAndOilseedRapeClosedPeriodForFertiliser" xml:space="preserve">
+    <value>The NVZ Action Programme states that manufactured nitrogen fertiliser must not be applied on {0} after 31 October.
+
+You can continue, but you should consider not applying manufactured nitrogen fertiliser at this time, to avoid the risk of agricultural nitrate pollution.</value>
+  </data>
   <data name="MsgApplicationDateEnteredIsInsideClosedPeriodDetailOrganic" xml:space="preserve">
     <value>The NVZ Action Programme states that the closed period for {0} planted on organic farms {1} on {2} soil is {3}. You can continue, but you should consider applying outside the closed period to avoid the risk of agricultural nitrate pollution.</value>
   </data>

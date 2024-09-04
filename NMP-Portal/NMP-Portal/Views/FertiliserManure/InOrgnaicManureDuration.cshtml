@@ -8,6 +8,9 @@
 @section BeforeContent {
     <govuk-back-link asp-action="backActionForInOrganicManure" asp-controller="FertiliserManure" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
 }
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
 <form asp-action="InOrgnaicManureDuration" asp-controller="FertiliserManure" method="post">
     @Html.AntiForgeryToken()
 
@@ -30,6 +33,9 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCounter" value="@Model.EncryptedCounter"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Counter" value="@Model.Counter"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarningExceptGrassAndOilseed" value="@Model.IsClosedPeriodWarningExceptGrassAndOilseed.ToString().ToLower()"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarningOnlyForGrassAndOilseed" value="@Model.IsClosedPeriodWarningOnlyForGrassAndOilseed.ToString().ToLower()"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWarningMsgNeedToShow" value="@Model.IsWarningMsgNeedToShow.ToString().ToLower()"></govuk-input>
     @if (Model != null)
     {
         @if (Model.FieldList != null && Model.FieldList.Count > 0)
@@ -55,10 +61,30 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].N" value="@Model.FertiliserManures[i].N"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].Lime" value="@Model.FertiliserManures[i].Lime"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].ApplicationRate" value="@Model.FertiliserManures[i].ApplicationRate"></govuk-input>
-               
-                
+
+
             }
 
+        }
+    }
+    @if (Model.IsWarningMsgNeedToShow && (Model.IsClosedPeriodWarningExceptGrassAndOilseed || Model.IsClosedPeriodWarningOnlyForGrassAndOilseed))
+    {
+        @if (TempData["ClosedPeriodWarningMessage"] != null)
+        {
+            <govuk-notification-banner>
+                <govuk-notification-banner-title>
+                    @Resource.lblImportant
+                </govuk-notification-banner-title>
+                @(Model.IsClosedPeriodWarningOnlyForGrassAndOilseed?
+                Resource.MsgApplicationAfter31October:Resource.MsgClosedPeriod)<br /><br />
+
+                <p class="govuk-notification-banner__heading">
+                    @(Model.IsClosedPeriodWarningOnlyForGrassAndOilseed?
+                    Resource.MsgClosedPeriodForGrassAndOilseedFertliserWarningMsgTitle:Resource.MsgClosedPeriodForFertliserExceptOilseedAndGrassTitle)                    
+                </p>
+                <p class="govuk-body">@TempData["ClosedPeriodWarningMessage"]</p>
+
+            </govuk-notification-banner>
         }
     }
     @if (Model.ApplicationForFertiliserManures != null && Model.ApplicationForFertiliserManures.Count > 0)
@@ -118,39 +144,14 @@
             <govuk-error-summary-item href="#">@TempData["InOrgnaicManureDurationError"]</govuk-error-summary-item>
         </govuk-error-summary>
     }
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-
-            @* <govuk-radios asp-for="@Model.InOrgnaicManureDurationId">
-            <govuk-radios-fieldset>
-            <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-            @if (int.TryParse(Model.FieldGroup, out int value))
-            {
-            @string.Format(Resource.lblWhenDoYouPlanToSpreadInOrganicfertiliser, Model.CropTypeName)
-            }
-            else
-            {
-            @Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserForTheseFields
-            }
-            </govuk-radios-fieldset-legend>
-
-            @if (ViewBag.InOrganicManureDurationsList != null)
-            {
-            @foreach (var item in ViewBag.InOrganicManureDurationsList)
-            {
-            <govuk-radios-item value="@item.Value">@item.Text</govuk-radios-item>
-
-            }
-            }
-
-            </govuk-radios-fieldset>
-            </govuk-radios> *@
+   
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
             <p class="govuk-body cancel-link"><a asp-action="CreateFertiliserManureCancel" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
 
-        </div>
-
-    </div>
+       
 </form>
+    </div>
+
+</div>
