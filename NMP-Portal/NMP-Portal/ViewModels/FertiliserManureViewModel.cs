@@ -37,6 +37,8 @@ namespace NMP.Portal.ViewModels
         public int? Counter { get; set; }
         public List<ApplicationForFertiliserManure>? ApplicationForFertiliserManures { get; set; }
         public bool IsWarningMsgNeedToShow { get; set; } = false;
-        public bool IsClosedPeriodWarning { get; set; } = false;
+        public bool IsClosedPeriodWarningExceptGrassAndOilseed { get; set; } = false;
+        public bool IsClosedPeriodWarningOnlyForGrassAndOilseed { get; set; } = false;
+        public bool IsNitrogenExceedWarning { get; set; } = false;
     }
 }

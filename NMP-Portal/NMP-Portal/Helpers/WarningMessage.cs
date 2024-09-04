@@ -231,82 +231,75 @@ namespace NMP.Portal.Helpers
             string message = string.Empty;
             int day = applicationDate.Day;
             int month = applicationDate.Month;
-            if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape)
+            if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
             {
-                if ((month > 10 || (month == 10 && day >= 31)) || (month < 1 || (month == 1 && day <= 15)))
+                if (month > (int)NMP.Portal.Enums.Month.October)
                 {
-                    message = string.Format(Resource.MsgForFertiliserClosedPeriodWarning, cropType, soilType, "31 Oct to 15 Jan");
+                    message = string.Format(Resource.MsgForGrassAndOilseedRapeClosedPeriodForFertiliser, cropType);
                 }
             }
-            else if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
+            else if (cropTypeId != (int)NMP.Portal.Enums.CropTypes.Asparagus && cropTypeId != (int)NMP.Portal.Enums.CropTypes.BrusselSprouts && cropTypeId != (int)NMP.Portal.Enums.CropTypes.Cabbage &&
+                cropTypeId != (int)NMP.Portal.Enums.CropTypes.Cauliflower && cropTypeId != (int)NMP.Portal.Enums.CropTypes.Calabrese &&
+                cropTypeId != (int)NMP.Portal.Enums.CropTypes.BulbOnions && cropTypeId != (int)NMP.Portal.Enums.CropTypes.SaladOnions)
             {
-                if ((month > 9 && month <= 12) || (month == 9 && day >= 15) || (month == 1 && day <= 15))
-                {
-                    message = string.Format(Resource.MsgForFertiliserClosedPeriodWarning, cropType, soilType, "15 Sep to 15 Jan");
-                }
-            }
-            else if (cropTypeId != (int)NMP.Portal.Enums.CropTypes.Asparagus || cropTypeId != (int)NMP.Portal.Enums.CropTypes.BrusselSprouts || cropTypeId != (int)NMP.Portal.Enums.CropTypes.Cabbage ||
-                cropTypeId != (int)NMP.Portal.Enums.CropTypes.Cauliflower || cropTypeId != (int)NMP.Portal.Enums.CropTypes.Calabrese ||
-                cropTypeId != (int)NMP.Portal.Enums.CropTypes.BulbOnions || cropTypeId != (int)NMP.Portal.Enums.CropTypes.SaladOnions)
-            {
-                if ((month > 9 || (month == 9 && day >= 1)) || (month < 1 || (month == 1 && day <= 15)))
+                if ((month >= (int)NMP.Portal.Enums.Month.September) || ((month == (int)NMP.Portal.Enums.Month.January && day <= 15)))
                 {
                     message = string.Format(Resource.MsgForFertiliserClosedPeriodWarning, cropType, soilType, "01 Sep to 15 Jan");
                 }
             }
             return message;
         }
-        public string NitrogenLimitForFertiliserWarningMessage(DateTime applicationDate, int cropType, decimal totalNitrogen, decimal fourWeekNitrogen, decimal nitrogenOfSingleApp)
+        public string NitrogenLimitForFertiliserExceptBrassicasWarningMessage(DateTime startDate, DateTime endDate, int cropType, string cropTypeName, decimal totalNitrogen, decimal nitrogenOfSingleApp)
         {
             string message = string.Empty;
-            int day = applicationDate.Day;
-            int month = applicationDate.Month;
+
             if (cropType == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape)
             {
                 if (totalNitrogen > 30.0m)
                 {
-
+                    //message = string.Format(Resource.MsgForMaxNitrogenForFertiliserExceptBrassicas, cropTypeName, startDate.ToString("dd/MMM/yyyy"), endDate.ToString("dd/MMM/yyyy"), nitrogenOfSingleApp);
                 }
             }
             else if (cropType == (int)NMP.Portal.Enums.CropTypes.Asparagus)
             {
                 if (totalNitrogen > 50.0m)
                 {
-
-                }
-            }
-            else if (cropType == (int)NMP.Portal.Enums.CropTypes.BrusselSprouts || cropType == (int)NMP.Portal.Enums.CropTypes.Cabbage ||
-                cropType == (int)NMP.Portal.Enums.CropTypes.Cauliflower || cropType == (int)NMP.Portal.Enums.CropTypes.Calabrese)
-            {
-                if (totalNitrogen > 100)
-                {
-                    // Exceeds max 100kg/ha during the closed period
-                }
-
-                else if (totalNitrogen > 50 || fourWeekNitrogen + totalNitrogen > 50)
-                {
-                    // Exceeds 50kg limit in any 4-week period
+                    // message = string.Format(Resource.MsgForMaxNitrogenForFertiliserExceptBrassicas, cropTypeName, startDate.ToString("dd/MMM/yyyy"), endDate.ToString("dd/MMM/yyyy"), nitrogenOfSingleApp);
                 }
             }
             else if (cropType == (int)NMP.Portal.Enums.CropTypes.SaladOnions || cropType == (int)NMP.Portal.Enums.CropTypes.BulbOnions)
             {
                 if (totalNitrogen > 40.0m)
                 {
-
+                    //message = string.Format(Resource.MsgForMaxNitrogenForFertiliserExceptBrassicas, cropTypeName, startDate.ToString("dd/MMM/yyyy"), endDate.ToString("dd/MMM/yyyy"), nitrogenOfSingleApp);
                 }
             }
             else if (cropType == (int)NMP.Portal.Enums.CropTypes.Grass)
             {
                 if (totalNitrogen > 80.0m)
                 {
-
+                    //message = string.Format(Resource.MsgForMaxNitrogenForFertiliserExceptBrassicas, cropTypeName, startDate.ToString("dd/MMM/yyyy"), endDate.ToString("dd/MMM/yyyy"), nitrogenOfSingleApp);
                 }
-
                 if (nitrogenOfSingleApp > 40.0m)
                 {
-
+                    //message = Resource.MsgForFertiliserForGrassCropType;
                 }
             }
+            return message;
+        }
+        public string NitrogenLimitForFertiliserForBrassicasWarningMessage(DateTime startDate, DateTime endDate, string cropTypeName, decimal totalNitrogen, decimal fourWeekNitrogen = 0)
+        {
+            string message = string.Empty;
+            if (totalNitrogen > 100)
+            {
+                //message = string.Format(Resource.MsgForMaxNitrogenForFertiliserForBrassicas, startDate.ToString("dd/MMM/yyyy"), endDate.ToString("dd/MMM/yyyy"), Resource.MsgForMaxNitrogenForFertiliserForBrassicasAdditionalMsg);
+            }
+
+            else if (totalNitrogen > 50 || fourWeekNitrogen + totalNitrogen > 50)
+            {
+                // Exceeds 50kg limit in any 4-week period
+            }
+
             return message;
         }
 
