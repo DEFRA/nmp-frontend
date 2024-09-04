@@ -4754,6 +4754,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to APPLICATION AFTER 31 OCTOBER.
+        /// </summary>
+        public static string MsgApplicationAfter31October {
+            get {
+                return ResourceManager.GetString("MsgApplicationAfter31October", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The application date you entered is inside your closed period for applying high N organic manure..
         /// </summary>
         public static string MsgApplicationDateEnteredIsInsideClosedPeriod {
@@ -4852,6 +4861,33 @@ namespace NMP.Portal.Resources {
         public static string MsgAutumnCropNitrogenUptakeNotSet {
             get {
                 return ResourceManager.GetString("MsgAutumnCropNitrogenUptakeNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CLOSED PERIOD.
+        /// </summary>
+        public static string MsgClosedPeriod {
+            get {
+                return ResourceManager.GetString("MsgClosedPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The application date you entered is inside your closed period for applying manufactured nitrogen fertiliser.
+        /// </summary>
+        public static string MsgClosedPeriodForFertliserExceptOilseedAndGrassTitle {
+            get {
+                return ResourceManager.GetString("MsgClosedPeriodForFertliserExceptOilseedAndGrassTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manufactured nitrogen fertiliser must not be applied on this crop after 31 October.
+        /// </summary>
+        public static string MsgClosedPeriodForGrassAndOilseedFertliserWarningMsgTitle {
+            get {
+                return ResourceManager.GetString("MsgClosedPeriodForGrassAndOilseedFertliserWarningMsgTitle", resourceCulture);
             }
         }
         
@@ -5338,6 +5374,28 @@ namespace NMP.Portal.Resources {
         public static string MsgForEffectiveRainfallManual {
             get {
                 return ResourceManager.GetString("MsgForEffectiveRainfallManual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The NVZ Action Programme states that the closed period for {0} planted on {1} soil is {2}.
+        ///
+        /// You can continue, but you should consider applying outside the closed period to avoid the risk of agricultural nitrate pollution..
+        /// </summary>
+        public static string MsgForFertiliserClosedPeriodWarning {
+            get {
+                return ResourceManager.GetString("MsgForFertiliserClosedPeriodWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The NVZ Action Programme states that manufactured nitrogen fertiliser must not be applied on {0} after 31 October.
+        ///
+        ///You can continue, but you should consider not applying manufactured nitrogen fertiliser at this time, to avoid the risk of agricultural nitrate pollution..
+        /// </summary>
+        public static string MsgForGrassAndOilseedRapeClosedPeriodForFertiliser {
+            get {
+                return ResourceManager.GetString("MsgForGrassAndOilseedRapeClosedPeriodForFertiliser", resourceCulture);
             }
         }
         
