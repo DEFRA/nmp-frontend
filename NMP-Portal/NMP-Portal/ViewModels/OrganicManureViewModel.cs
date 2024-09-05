@@ -88,5 +88,6 @@ namespace NMP.Portal.ViewModels
         public bool IsOrgManureNfieldLimitWarning { get; set; } = false;
         public bool IsNMaxLimitWarning { get; set; } = false;
         public bool IsEndClosedPeriodFebruaryWarning { get; set; } = false;
+        public bool IsEndClosedPeriodFebruaryExistWithinThreeWeeks { get; set; } = false;
     }
 }

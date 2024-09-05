@@ -1217,5 +1217,55 @@ namespace NMP.Portal.Services
             }
             return (totalN, error);
         }
+
+        public async Task<(bool, Error)> FetchOrganicManureExistanceByDateRange(string dateFrom, string dateTo, int manureTypeId, bool isLiquid)
+        {
+            Error error = null;
+            bool isOrganicManureExist = false;
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchOrganicManureExistanceByDateRangeAsyncAPI, dateFrom, dateTo, manureTypeId, isLiquid));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode)
+                {
+                    if (responseWrapper != null && responseWrapper.Data != null)
+                    {
+                        isOrganicManureExist = responseWrapper.Data.exists.ToObject<bool>();
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = new Error();
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                if (error == null)
+                {
+                    error = new Error();
+                }
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                if (error == null)
+                {
+                    error = new Error();
+                }
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (isOrganicManureExist, error);
+        }
     }
 }

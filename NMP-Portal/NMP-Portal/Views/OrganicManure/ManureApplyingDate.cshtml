@@ -86,6 +86,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNMaxLimitWarning" value="@Model.IsNMaxLimitWarning.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsOrgManureNfieldLimitWarning" value="@Model.IsOrgManureNfieldLimitWarning.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEndClosedPeriodFebruaryWarning" value="@Model.IsEndClosedPeriodFebruaryWarning"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks" value="@Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -128,16 +129,27 @@
 
             }
 
-            @if (TempData["ClosedPeriodWarningDetail"] != null && Model.IsWarningMsgNeedToShow)
+            @if ((TempData["ClosedPeriodWarningDetail"] != null || TempData["SlurryOrPoultryManureExistWithinLast20Days"] != null) && Model.IsWarningMsgNeedToShow)
             {
                 <govuk-notification-banner>
                     <govuk-notification-banner-title>
                         @Resource.lblImportant
                     </govuk-notification-banner-title>
-                    <p class="govuk-notification-banner__heading">
-                        @Resource.MsgApplicationDateEnteredIsInsideClosedPeriod
-                    </p>
-                    <p class="govuk-body">@TempData["ClosedPeriodWarningDetail"]</p>
+                    @if (Model.IsClosedPeriodWarning)
+                    {
+                        <p class="govuk-notification-banner__heading">
+                            @Resource.MsgApplicationDateEnteredIsInsideClosedPeriod
+                        </p>
+                        <p class="govuk-body">@TempData["ClosedPeriodWarningDetail"]</p>
+                    }
+                    @if(Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks)
+                    {
+                        <p class="govuk-notification-banner__heading">
+                            @Resource.lblYouMustAllowAtLeast3WeeksBetweenApplications
+                        </p>
+                        <p class="govuk-body">@TempData["SlurryOrPoultryManureExistWithinLast20Days"]</p>
+                    }
+
                 </govuk-notification-banner>
 
             }
