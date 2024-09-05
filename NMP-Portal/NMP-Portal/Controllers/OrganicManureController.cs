@@ -1234,8 +1234,10 @@ namespace NMP.Portal.Controllers
                     (FieldDetailResponse fieldDetail, Error error2) = await _fieldService.FetchFieldDetailByFieldIdAndHarvestYear(Convert.ToInt32(model.FieldList[0]), model.HarvestYear ?? 0, false);
 
                     WarningMessage warningMessage = new WarningMessage();
-                    string closedPeriod = string.Empty;
+                    string? closedPeriod = string.Empty;
                     bool isPerennial = false;
+                    string message= string.Empty;
+
                     if (!farm.RegisteredOrganicProducer.Value && isHighReadilyAvailableNitrogen && isWithinNVZ)
                     {
                         (CropTypeResponse cropTypeResponse, Error error3) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(model.FieldList[0]), model.HarvestYear ?? 0, false);
@@ -1245,32 +1247,46 @@ namespace NMP.Portal.Controllers
                         }
                         closedPeriod = warningMessage.ClosedPeriodNonOrganicFarm(fieldDetail, model.HarvestYear ?? 0, isPerennial);
 
-                        string message = warningMessage.ClosedPeriodWarningMessage(model.ApplicationDate.Value, closedPeriod, cropTypeResponse.CropType, fieldDetail);
+                        message = warningMessage.ClosedPeriodWarningMessage(model.ApplicationDate.Value, closedPeriod, cropTypeResponse.CropType, fieldDetail, false);
                         TempData["ClosedPeriod"] = closedPeriod;
-                        if (!string.IsNullOrWhiteSpace(message))
-                        {
-                            if (!model.IsWarningMsgNeedToShow)
-                            {
-                                TempData["ClosedPeriodWarningDetail"] = message;
-                                model.IsWarningMsgNeedToShow = true;
-                                if (model.OrganicManures.Count > 0)
-                                {
-                                    foreach (var orgManure in model.OrganicManures)
-                                    {
-                                        orgManure.ApplicationDate = model.ApplicationDate.Value;
-                                    }
-                                }
-                                model.IsClosedPeriodWarning = true;
-                                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
-                                return View(model);
-                            }
-                        }
-                        else
-                        {
-                            model.IsWarningMsgNeedToShow = false;
-                            model.IsClosedPeriodWarning = false;
-                        }
+                    }
 
+                    //Organic farm
+                    if (farm.RegisteredOrganicProducer.Value && isHighReadilyAvailableNitrogen && isWithinNVZ)
+                    {
+                        (CropTypeResponse cropTypeResponse, Error error3) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(model.FieldList[0]), model.HarvestYear ?? 0, false);
+
+                        List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
+                        int cropTypeId = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.CropTypeID).FirstOrDefault() ?? 0;
+                        int? cropInfo1 = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.CropInfo1).FirstOrDefault();
+                        closedPeriod = warningMessage.ClosedPeriodOrganicFarm(fieldDetail, model.HarvestYear ?? 0, cropTypeId, cropInfo1);
+
+                        message = warningMessage.ClosedPeriodWarningMessage(model.ApplicationDate.Value, closedPeriod, cropTypeResponse.CropType, fieldDetail,true);
+                        TempData["ClosedPeriod"] = closedPeriod;
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(message))
+                    {
+                        if (!model.IsWarningMsgNeedToShow)
+                        {
+                            TempData["ClosedPeriodWarningDetail"] = message;
+                            model.IsWarningMsgNeedToShow = true;
+                            if (model.OrganicManures.Count > 0)
+                            {
+                                foreach (var orgManure in model.OrganicManures)
+                                {
+                                    orgManure.ApplicationDate = model.ApplicationDate.Value;
+                                }
+                            }
+                            model.IsClosedPeriodWarning = true;
+                            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                            return View(model);
+                        }
+                    }
+                    else
+                    {
+                        model.IsWarningMsgNeedToShow = false;
+                        model.IsClosedPeriodWarning = false;
                     }
                 }
                 if (model.OrganicManures.Count > 0)

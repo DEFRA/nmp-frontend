@@ -2076,4 +2076,7 @@ You can continue, but you should consider reducing the application rate of poult
 
 You can continue, but you should consider not applying manufactured nitrogen fertiliser at this time, to avoid the risk of agricultural nitrate pollution.</value>
   </data>
+  <data name="MsgApplicationDateEnteredIsInsideClosedPeriodDetailOrganic" xml:space="preserve">
+    <value>The NVZ Action Programme states that the closed period for {0} planted on organic farms {1} on {2} soil is {3}. You can continue, but you should consider applying outside the closed period to avoid the risk of agricultural nitrate pollution.</value>
+  </data>
 </root>
