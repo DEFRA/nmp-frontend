@@ -85,5 +85,6 @@ namespace NMP.Portal.Helpers
         public const string FetchTotalNBasedOnManIdFromOrgManureAndFertiliserAsyncAPI = "fertiliser-manures/organic-manures/total-nitrogen/{0}?confirm={1}";
         public const string FetchTotalNFromFertiliserBasedOnManIdAndAppDateAsyncAPI = "fertiliser-manures/total-nitrogen/{0}?fromDate={1}&toDate={2}&confirm={3}";        
         public const string FetchCropTypeLinkingsByCropTypeIdAsyncAPI = "crop-type-linkings/{0}";
+        public const string FetchOrganicManureExistanceByDateRangeAsyncAPI = "organic-manures/check-existence?dateFrom={0}&dateTo={1}&manureTypeId={2}&isLiquid={3}";
     }
 }
