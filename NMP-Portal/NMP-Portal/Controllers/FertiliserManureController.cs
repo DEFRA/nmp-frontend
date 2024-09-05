@@ -617,7 +617,7 @@ namespace NMP.Portal.Controllers
                     }
                     model.IsClosedPeriodWarningExceptGrassAndOilseed = false;
                     model.IsClosedPeriodWarningOnlyForGrassAndOilseed = false;
-                    if (int.TryParse(model.FieldGroup, out int value))
+                    if (int.TryParse(model.FieldGroup, out int value) || (model.FieldGroup == Resource.lblSelectSpecificFields && model.FieldList.Count == 1))
                     {
                         FertiliserManureViewModel fertiliserManureViewModel = new FertiliserManureViewModel();
                         if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
@@ -1329,10 +1329,11 @@ namespace NMP.Portal.Controllers
 
             if (model.FieldList != null)
             {
-                if (int.TryParse(model.FieldGroup, out int value))
+                model.IsClosedPeriodWarningOnlyForGrassAndOilseed = false;
+                model.IsClosedPeriodWarningExceptGrassAndOilseed = false;
+                if (int.TryParse(model.FieldGroup, out int value) || (model.FieldGroup == Resource.lblSelectSpecificFields && model.FieldList.Count == 1))
                 {
-                    model.IsClosedPeriodWarningOnlyForGrassAndOilseed = false;
-                    model.IsClosedPeriodWarningExceptGrassAndOilseed = false;
+
                     foreach (var fieldId in model.FieldList)
                     {
                         Field field = await _fieldService.FetchFieldByFieldId(Convert.ToInt32(fieldId));
