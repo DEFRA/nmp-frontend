@@ -1112,6 +1112,7 @@ namespace NMP.Portal.Controllers
                 }
                 model.IsWarningMsgNeedToShow = false;
                 model.IsClosedPeriodWarning = false;
+                model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false;
                 return View(model);
             }
             catch (Exception ex)
@@ -1265,20 +1266,60 @@ namespace NMP.Portal.Controllers
                         TempData["ClosedPeriod"] = closedPeriod;
                     }
 
-                    if (!string.IsNullOrWhiteSpace(message))
+                    //if application date is between end of closed period and end of february.
+                    //check 20 days or less since the last application of slurry or poultry manure.
+                    bool isOrganicManureExist = false;
+                    bool? isWithinClosedPeriodAndFebruary = warningMessage.CheckEndClosedPeriodAndFebruary(model.ApplicationDate.Value,closedPeriod);
+
+                    if(isWithinClosedPeriodAndFebruary!=null && isWithinClosedPeriodAndFebruary==true)
+                    {
+                        
+                        (isOrganicManureExist, error) = await _organicManureService.FetchOrganicManureExistanceByDateRange(model.ApplicationDate.Value.AddDays(-20).ToString("yyyy-MM-dd"), model.ApplicationDate.Value.ToString("yyyy-MM-dd"), model.ManureTypeId.Value, model.IsManureTypeLiquid.Value);
+                        
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(message) || isOrganicManureExist)
                     {
                         if (!model.IsWarningMsgNeedToShow)
                         {
-                            TempData["ClosedPeriodWarningDetail"] = message;
+                            if(!string.IsNullOrWhiteSpace(message))
+                            {
+                                TempData["ClosedPeriodWarningDetail"] = message;
+                                model.IsClosedPeriodWarning = true;
+                            }
+                            if (isOrganicManureExist)
+                            {
+                                string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
+                                Regex regex = new Regex(pattern);
+                                Match match = regex.Match(closedPeriod);
+                                if (match.Success)
+                                {
+                                    int startDay = int.Parse(match.Groups[1].Value);
+                                    string startMonthStr = match.Groups[2].Value;
+                                    int endDay = int.Parse(match.Groups[3].Value);
+                                    string endMonthStr = match.Groups[4].Value;
+
+                                    DateTimeFormatInfo dtfi = DateTimeFormatInfo.CurrentInfo;
+                                    int startMonth = Array.IndexOf(dtfi.AbbreviatedMonthNames, startMonthStr) + 1;
+                                    int endMonth = Array.IndexOf(dtfi.AbbreviatedMonthNames, endMonthStr) + 1;
+                                    string endMonthFullName = dtfi.MonthNames[endMonth - 1];
+
+                                    TempData["SlurryOrPoultryManureExistWithinLast20Days"] = string.Format(Resource.lblEndClosederiodAndEndFebYouMustAllow3WeeksGap, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+                                    model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = true;
+                                }
+
+                            }
+
                             model.IsWarningMsgNeedToShow = true;
-                            //if (model.OrganicManures.Count > 0)
-                            //{
-                            //    foreach (var orgManure in model.OrganicManures)
-                            //    {
-                            //        orgManure.ApplicationDate = model.ApplicationDate.Value;
-                            //    }
-                            //}
-                            model.IsClosedPeriodWarning = true;
+                            
+                            if (model.OrganicManures.Count > 0)
+                            {
+                                foreach (var orgManure in model.OrganicManures)
+                                {
+                                    orgManure.ApplicationDate = model.ApplicationDate.Value;
+                                }
+                            }
+                            
                             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
                             return View(model);
                         }
@@ -1287,6 +1328,7 @@ namespace NMP.Portal.Controllers
                     {
                         model.IsWarningMsgNeedToShow = false;
                         model.IsClosedPeriodWarning = false;
+                        model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false;
                     }
                 }
                 if (model.OrganicManures.Count > 0)

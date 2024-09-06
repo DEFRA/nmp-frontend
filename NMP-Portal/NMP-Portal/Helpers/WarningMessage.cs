@@ -363,5 +363,60 @@ namespace NMP.Portal.Helpers
             return message;
         }
 
+        public bool? CheckEndClosedPeriodAndFebruary(DateTime applicationDate, string closedPeriod)
+        {
+            bool? isWithinClosedPeriodAndFebruary = null;
+            string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
+            Regex regex = new Regex(pattern);
+            Match match = regex.Match(closedPeriod);
+            if (match.Success)
+            {
+                int startDay = int.Parse(match.Groups[1].Value);
+                string startMonthStr = match.Groups[2].Value;
+                int endDay = int.Parse(match.Groups[3].Value);
+                string endMonthStr = match.Groups[4].Value;
+
+                DateTimeFormatInfo dtfi = DateTimeFormatInfo.CurrentInfo;
+                int startMonth = Array.IndexOf(dtfi.AbbreviatedMonthNames, startMonthStr) + 1;
+                int endMonth = Array.IndexOf(dtfi.AbbreviatedMonthNames, endMonthStr) + 1;
+                string endMonthFullName = dtfi.MonthNames[endMonth - 1];
+
+                DateTime? endDateFebruary = null;
+                endDateFebruary = new DateTime(applicationDate.Year, 3, 1);
+
+                DateTime ClosedPeriodEndDate = new DateTime(applicationDate.Year, endMonth, endDay);
+                DateTime endOfFebruaryDate = new DateTime(applicationDate.Year, endDateFebruary.Value.Month, endDateFebruary.Value.Day);
+
+
+                if (startMonth < endMonth)
+                {
+                    DateTime ClosedPeriodEndDateMinusOne = new DateTime(applicationDate.Year - 1, endMonth, endDay);
+                    if (applicationDate > ClosedPeriodEndDateMinusOne && applicationDate < endOfFebruaryDate)
+                    {
+                        isWithinClosedPeriodAndFebruary = true;
+                    }
+                }
+                if (startMonth > endMonth)
+                {
+                    if (applicationDate > ClosedPeriodEndDate)
+                    {
+                        DateTime endOfFebruaryDatePlusOne = new DateTime(applicationDate.Year, endMonth, endDay);
+                        if (applicationDate > ClosedPeriodEndDate && applicationDate < endOfFebruaryDatePlusOne)
+                        {
+                            isWithinClosedPeriodAndFebruary = true;
+                        }
+
+                        DateTime ClosedPeriodEndDateMinusOne = new DateTime(applicationDate.Year - 1, startMonth, startDay);
+                        if (applicationDate > ClosedPeriodEndDateMinusOne && applicationDate < endOfFebruaryDate)
+                        {
+                            isWithinClosedPeriodAndFebruary = true;
+                        }
+                    }
+
+                }
+
+            }
+            return isWithinClosedPeriodAndFebruary;
+        }
     }
 }

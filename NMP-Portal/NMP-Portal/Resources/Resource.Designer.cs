@@ -1197,6 +1197,17 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The NVZ Action Programme states that, between {0} and the end of February, you must allow at least 3 weeks between each individual application of slurry or poultry manure.
+        ///
+        ///You can continue, but you should consider allowing more time between applications to avoid the risk of agricultural nitrate pollution..
+        /// </summary>
+        public static string lblEndClosederiodAndEndFebYouMustAllow3WeeksGap {
+            get {
+                return ResourceManager.GetString("lblEndClosederiodAndEndFebYouMustAllow3WeeksGap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} {1}.
         /// </summary>
         public static string lblEndClosedPeriod {
@@ -4723,6 +4734,15 @@ namespace NMP.Portal.Resources {
         public static string lblYouHaveUpdated {
             get {
                 return ResourceManager.GetString("lblYouHaveUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must allow at least 3 weeks between applications..
+        /// </summary>
+        public static string lblYouMustAllowAtLeast3WeeksBetweenApplications {
+            get {
+                return ResourceManager.GetString("lblYouMustAllowAtLeast3WeeksBetweenApplications", resourceCulture);
             }
         }
         

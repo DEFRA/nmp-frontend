@@ -59,7 +59,7 @@
 
             @* @if (Model.IsWarningMsgNeedToShow != null && Model.IsWarningMsgNeedToShow)
             { *@
-            @if (Model.IsOrgManureNfieldLimitWarning || Model.IsNMaxLimitWarning || Model.IsClosedPeriodWarning || Model.IsEndClosedPeriodFebruaryWarning)
+            @if (Model.IsOrgManureNfieldLimitWarning || Model.IsNMaxLimitWarning || Model.IsClosedPeriodWarning || Model.IsEndClosedPeriodFebruaryWarning || Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks)
             {
                 <govuk-notification-banner>
                     <govuk-notification-banner-title>
@@ -89,6 +89,12 @@
                     {
                         <p class="govuk-notification-banner__heading">
                             @(Model.ManureTypeId == 8 ? Resource.lblThisApplicationMayTakeYouOverMaxARPoultryManure : Resource.lblApplicationRateOverTheMaximumRateForSlurry)
+                        </p>
+                    }
+                    @if (Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks)
+                    {
+                        <p class="govuk-notification-banner__heading">
+                            @Resource.lblYouMustAllowAtLeast3WeeksBetweenApplications
                         </p>
                     }
                 </govuk-notification-banner>
@@ -165,6 +171,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWarningMsgNeedToShow" value="@Model.IsWarningMsgNeedToShow.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNMaxLimitWarning" value="@Model.IsNMaxLimitWarning.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsOrgManureNfieldLimitWarning" value="@Model.IsOrgManureNfieldLimitWarning.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks" value="@Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks"></govuk-input>
 
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {

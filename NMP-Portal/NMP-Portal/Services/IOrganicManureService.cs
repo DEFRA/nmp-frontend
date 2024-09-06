@@ -39,5 +39,6 @@ namespace NMP.Portal.Services
         Task<(CropTypeLinkingResponse, Error)> FetchCropTypeLinkingByCropTypeId(int cropTypeId);
         Task<(List<int>, Error)> FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(int fieldId, int year,bool confirm);
         Task<(decimal, Error)> FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(int managementId, bool confirm);
+        Task<(bool, Error)> FetchOrganicManureExistanceByDateRange(string dateFrom, string dateTo, int manureTypeId, bool isLiquid);
     }
 }
