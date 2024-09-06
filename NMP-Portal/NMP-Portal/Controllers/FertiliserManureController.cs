@@ -635,51 +635,18 @@ namespace NMP.Portal.Controllers
                                 model.IsWarningMsgNeedToShow = false;
                             }
                         }
-                        foreach (var fieldId in model.FieldList)
+                        (model.IsClosedPeriodWarningOnlyForGrassAndOilseed, model.IsClosedPeriodWarningExceptGrassAndOilseed, string warningMsg, error) = await IsClosedPeriodWarningMessageShow(model, applicationDate);
+                        if (error == null)
                         {
-                            Field field = await _fieldService.FetchFieldByFieldId(Convert.ToInt32(fieldId));
-                            if (field != null)
+                            if (!string.IsNullOrWhiteSpace(warningMsg))
                             {
-                                bool isFieldIsInNVZ = field.IsWithinNVZ.Value;
-                                if (isFieldIsInNVZ)
-                                {
-                                    (CropTypeResponse cropTypeResponse, error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
-                                    if (error == null)
-                                    {
-                                        (FieldDetailResponse fieldDetail, error) = await _fieldService.FetchFieldDetailByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
-                                        if (error == null)
-                                        {
-                                            WarningMessage warningMessage = new WarningMessage();
-                                            string isMessageNeedToShow = warningMessage.ClosedPeriodForFertiliserWarningMessage(applicationDate, cropTypeResponse.CropTypeId, fieldDetail.SoilTypeName, cropTypeResponse.CropType);
-                                            if (!string.IsNullOrWhiteSpace(isMessageNeedToShow))
-                                            {
-                                                if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
-                                                {
-                                                    model.IsClosedPeriodWarningOnlyForGrassAndOilseed = true;
-                                                }
-                                                else if (cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Asparagus && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.BrusselSprouts && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Cabbage &&
-                                                cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Cauliflower && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Calabrese &&
-                                                cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.BulbOnions && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.SaladOnions)
-                                                {
-                                                    model.IsClosedPeriodWarningExceptGrassAndOilseed = true;
-                                                }
-                                                TempData["ClosedPeriodWarningMessage"] = isMessageNeedToShow;
-
-                                            }
-                                        }
-                                        else
-                                        {
-                                            TempData["InOrgnaicManureDurationError"] = error.Message;
-                                            return RedirectToAction("InOrgnaicManureDuration", new { q = model.EncryptedCounter });
-                                        }
-                                    }
-                                    else
-                                    {
-                                        TempData["InOrgnaicManureDurationError"] = error.Message;
-                                        return RedirectToAction("InOrgnaicManureDuration", new { q = model.EncryptedCounter });
-                                    }
-                                }
+                                TempData["ClosedPeriodWarningMessage"] = warningMsg;
                             }
+                        }
+                        else
+                        {
+                            TempData["InOrgnaicManureDurationError"] = error.Message;
+                            return RedirectToAction("InOrgnaicManureDuration", new { q = model.EncryptedCounter });
                         }
                     }
                     if (model.IsClosedPeriodWarningOnlyForGrassAndOilseed || model.IsClosedPeriodWarningExceptGrassAndOilseed)
@@ -1325,71 +1292,28 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-            Error error = null;
+            Error? error = null;
 
-            if (model.FieldList != null)
+            if (model != null && model.FieldList != null)
             {
                 model.IsClosedPeriodWarningOnlyForGrassAndOilseed = false;
                 model.IsClosedPeriodWarningExceptGrassAndOilseed = false;
                 if (int.TryParse(model.FieldGroup, out int value) || (model.FieldGroup == Resource.lblSelectSpecificFields && model.FieldList.Count == 1))
                 {
-
-                    foreach (var fieldId in model.FieldList)
+                    if (model != null && model.ApplicationForFertiliserManures != null && model.ApplicationForFertiliserManures.Count > 0)
                     {
-                        Field field = await _fieldService.FetchFieldByFieldId(Convert.ToInt32(fieldId));
-                        if (field != null)
+                        foreach (var application in model.ApplicationForFertiliserManures)
                         {
-                            bool isFieldIsInNVZ = field.IsWithinNVZ.Value;
-                            if (isFieldIsInNVZ)
+                            (model.IsClosedPeriodWarningOnlyForGrassAndOilseed, model.IsClosedPeriodWarningExceptGrassAndOilseed, string warningMsg, error) = await IsClosedPeriodWarningMessageShow(model, application.ApplicationDate.Value);
+                            if (error != null)
                             {
-                                (CropTypeResponse cropTypeResponse, error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
-                                if (error == null)
-                                {
-                                    (FieldDetailResponse fieldDetail, error) = await _fieldService.FetchFieldDetailByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
-                                    if (error == null)
-                                    {
-                                        WarningMessage warningMessage = new WarningMessage();
-                                        string message = string.Empty;
-                                        foreach (var applicationForFertiliserManure in model.ApplicationForFertiliserManures)
-                                        {
-                                            message = warningMessage.ClosedPeriodForFertiliserWarningMessage(applicationForFertiliserManure.ApplicationDate.Value, cropTypeResponse.CropTypeId, fieldDetail.SoilTypeName, cropTypeResponse.CropType);
-                                            if (!string.IsNullOrWhiteSpace(message))
-                                            {
-                                                if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
-                                                {
-                                                    model.IsClosedPeriodWarningOnlyForGrassAndOilseed = true;
-                                                }
-                                                else if (cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Asparagus && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.BrusselSprouts && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Cabbage &&
-                                                cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Cauliflower && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Calabrese &&
-                                                cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.BulbOnions && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.SaladOnions)
-                                                {
-                                                    {
-                                                        model.IsClosedPeriodWarningExceptGrassAndOilseed = true;
-                                                    }
-
-                                                }
-                                                break;
-                                            }
-
-                                        }
-                                    }
-                                    else
-                                    {
-                                        TempData["QuestionForSpreadInorganicError"] = error.Message;
-                                        return View("QuestionForSpreadInorganicFertiliser", model);
-                                    }
-                                }
-                                else
-                                {
-                                    TempData["QuestionForSpreadInorganicError"] = error.Message;
-                                    return View("QuestionForSpreadInorganicFertiliser", model);
-                                }
+                                TempData["QuestionForSpreadInorganicError"] = error.Message;
+                                return View("QuestionForSpreadInorganicFertiliser", model);
                             }
-                        }
-
-                        if (model.IsClosedPeriodWarningOnlyForGrassAndOilseed || model.IsClosedPeriodWarningExceptGrassAndOilseed)
-                        {
-                            break;
+                            else if(model.IsClosedPeriodWarningOnlyForGrassAndOilseed||model.IsClosedPeriodWarningExceptGrassAndOilseed)
+                            {
+                                break;
+                            }
                         }
                     }
                 }
@@ -1515,6 +1439,61 @@ namespace NMP.Portal.Controllers
             model.IsCheckAnswer = false;
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
             return RedirectToAction("QuestionForSpreadInorganicFertiliser", new { q = model.EncryptedCounter });
+        }
+
+        private async Task<(bool, bool, string, Error?)> IsClosedPeriodWarningMessageShow(FertiliserManureViewModel model, DateTime applicationDate)
+        {
+            Error? error = null;
+            bool IsClosedPeriodWarningOnlyForGrassAndOilseed = false;
+            bool IsClosedPeriodWarningExceptGrassAndOilseed = false;
+            string warningMsg = string.Empty;
+            foreach (var fieldId in model.FieldList)
+            {
+                Field field = await _fieldService.FetchFieldByFieldId(Convert.ToInt32(fieldId));
+                if (field != null)
+                {
+                    bool isFieldIsInNVZ = field.IsWithinNVZ.Value;
+                    if (isFieldIsInNVZ)
+                    {
+                        (CropTypeResponse cropTypeResponse, error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
+                        if (error == null)
+                        {
+                            (FieldDetailResponse fieldDetail, error) = await _fieldService.FetchFieldDetailByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
+                            if (error == null)
+                            {
+                                WarningMessage warningMessage = new WarningMessage();
+                                string message = warningMessage.ClosedPeriodForFertiliserWarningMessage(applicationDate, cropTypeResponse.CropTypeId, fieldDetail.SoilTypeName, cropTypeResponse.CropType);
+                                if (!string.IsNullOrWhiteSpace(message))
+                                {
+                                    if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                    {
+                                        IsClosedPeriodWarningOnlyForGrassAndOilseed = true;
+                                    }
+                                    else if (cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Asparagus && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.BrusselSprouts && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Cabbage &&
+                                    cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Cauliflower && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Calabrese &&
+                                    cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.BulbOnions && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.SaladOnions)
+                                    {
+                                        IsClosedPeriodWarningExceptGrassAndOilseed = true;
+                                    }
+                                    // TempData["ClosedPeriodWarningMessage"] = message;
+                                    warningMsg = message;
+
+                                }
+                            }
+                            else
+                            {
+                                return (IsClosedPeriodWarningOnlyForGrassAndOilseed, IsClosedPeriodWarningExceptGrassAndOilseed, warningMsg, error);
+                            }
+                        }
+                        else
+                        {
+                            return (IsClosedPeriodWarningOnlyForGrassAndOilseed, IsClosedPeriodWarningExceptGrassAndOilseed, warningMsg, error);
+                            
+                        }
+                    }
+                }
+            }
+            return (IsClosedPeriodWarningOnlyForGrassAndOilseed, IsClosedPeriodWarningExceptGrassAndOilseed, warningMsg, error);
         }
     }
 }
