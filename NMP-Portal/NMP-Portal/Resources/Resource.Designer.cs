@@ -3649,6 +3649,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The NVZ Action Programme states that the application rate of high available N manures on {0} between {1} must not exceed 150 kg/ha. You can continue, but you should consider reducing the application rate of high available N manures to avoid the risk of agricultural nitrate pollution..
+        /// </summary>
+        public static string lblTheNVZActionProgrammeAppRateExceeds150WithinClosedPeriodOrganic {
+            get {
+                return ResourceManager.GetString("lblTheNVZActionProgrammeAppRateExceeds150WithinClosedPeriodOrganic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There are {0} fields in this plan.
         /// </summary>
         public static string lblThereAreFieldsInThisPlan {
@@ -3699,6 +3708,15 @@ namespace NMP.Portal.Resources {
         public static string lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit {
             get {
                 return ResourceManager.GetString("lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application will take you over the maximum application rate for high N organic manure..
+        /// </summary>
+        public static string lblThisApplicationTakeOverMaxAppRate {
+            get {
+                return ResourceManager.GetString("lblThisApplicationTakeOverMaxAppRate", resourceCulture);
             }
         }
         

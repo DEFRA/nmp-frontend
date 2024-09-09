@@ -2087,4 +2087,10 @@ You can continue, but you should consider allowing more time between application
   <data name="lblYouMustAllowAtLeast3WeeksBetweenApplications" xml:space="preserve">
     <value>You must allow at least 3 weeks between applications.</value>
   </data>
+  <data name="lblTheNVZActionProgrammeAppRateExceeds150WithinClosedPeriodOrganic" xml:space="preserve">
+    <value>The NVZ Action Programme states that the application rate of high available N manures on {0} between {1} must not exceed 150 kg/ha. You can continue, but you should consider reducing the application rate of high available N manures to avoid the risk of agricultural nitrate pollution.</value>
+  </data>
+  <data name="lblThisApplicationTakeOverMaxAppRate" xml:space="preserve">
+    <value>This application will take you over the maximum application rate for high N organic manure.</value>
+  </data>
 </root>
