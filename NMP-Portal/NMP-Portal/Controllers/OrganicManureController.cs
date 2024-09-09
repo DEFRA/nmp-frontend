@@ -3193,7 +3193,7 @@ namespace NMP.Portal.Controllers
                                                 (model.IsEndClosedPeriodFebruaryWarning, string message, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, Convert.ToInt32(fieldId));
                                                 if (error != null)
                                                 {
-                                                    TempData["ConditionsAffectingNutrientsError"] = error.Message;
+                                                    TempData["ConditionsAffectingNutrientsError"] =  error.Message;
                                                     return RedirectToAction("ConditionsAffectingNutrients");
                                                 }
                                             }
@@ -3205,14 +3205,14 @@ namespace NMP.Portal.Controllers
                                         }
                                         else
                                         {
-                                            TempData["ConditionsAffectingNutrientsError"] = "abbb"; //error.Message;
+                                            TempData["ConditionsAffectingNutrientsError"] = error.Message;
                                             return RedirectToAction("ConditionsAffectingNutrients");
                                         }
                                     }
                                 }
                                 else
                                 {
-                                    TempData["ConditionsAffectingNutrientsError"] = "abbb"; //error.Message;
+                                    TempData["ConditionsAffectingNutrientsError"] = error.Message;
                                     return RedirectToAction("ConditionsAffectingNutrients");
                                 }
                             }
