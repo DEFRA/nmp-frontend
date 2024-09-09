@@ -59,13 +59,16 @@ namespace NMP.Portal.Helpers
                 {
                     closedPeriod = Resource.lbl1Octto31Jan;
                 }
-                if (isSandyShallowSoil && isFieldTypeArable && fieldDetail.SowingDate.Value.Year < harvestYear)
+                if (fieldDetail.SowingDate != null)
                 {
-                    closedPeriod = Resource.lbl16Septo31Dec;
-                }
-                else if (!isSandyShallowSoil && isFieldTypeArable && fieldDetail.SowingDate.Value.Year < harvestYear)
-                {
-                    closedPeriod = Resource.lbl1Octto31Jan;
+                    if (isSandyShallowSoil && isFieldTypeArable && fieldDetail.SowingDate.Value.Year < harvestYear)
+                    {
+                        closedPeriod = Resource.lbl16Septo31Dec;
+                    }
+                    else if (!isSandyShallowSoil && isFieldTypeArable && fieldDetail.SowingDate.Value.Year < harvestYear)
+                    {
+                        closedPeriod = Resource.lbl1Octto31Jan;
+                    }
                 }
 
             }
