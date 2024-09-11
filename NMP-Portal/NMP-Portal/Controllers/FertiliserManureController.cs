@@ -1118,66 +1118,80 @@ namespace NMP.Portal.Controllers
                 {
                     foreach (var fieldId in model.FieldList)
                     {
-                        (CropTypeResponse cropTypeResponse, error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
-                        if (error == null)
+                        Field field = await _fieldService.FetchFieldByFieldId(Convert.ToInt32(fieldId));
+                        if (field != null)
                         {
-                            if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape ||
-                                cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Asparagus || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.BrusselSprouts ||
-                                cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Cauliflower || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Calabrese ||
-                                cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.BulbOnions || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.SaladOnions ||
-                                cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Cabbage)
+                            bool isFieldIsInNVZ = field.IsWithinNVZ.Value;
+                            if (isFieldIsInNVZ)
                             {
-                                DateTime applicationDate = model.ApplicationForFertiliserManures[index].ApplicationDate.Value;
-                                int year = applicationDate.Year;
-                                if (model.ApplicationForFertiliserManures[index].InOrgnaicManureDurationId == (int)NMP.Portal.Enums.InOrganicManureDurations.AugustToSeptember ||
-                                    model.ApplicationForFertiliserManures[index].InOrgnaicManureDurationId == (int)NMP.Portal.Enums.InOrganicManureDurations.OctoberToDecember)
+                                (CropTypeResponse cropTypeResponse, error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
+                                if (error == null)
                                 {
-                                    year = applicationDate.Year;
-                                }
-                                else
-                                {
-                                    year = applicationDate.Year - 1;
-                                }
-                                DateTime startDate = new DateTime(year, 9, 1); // 1st Sep
-                                DateTime endDate = new DateTime(year + 1, 1, 15); // 15th Jan
-                                if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Cabbage || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.BrusselSprouts ||
-                                    cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Cauliflower || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Calabrese)
-                                {
-                                    int daysInFebruary = DateTime.DaysInMonth(year + 1, 2);
-                                    endDate = new DateTime(year + 1, 2, daysInFebruary);
-
-                                }
-                                if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
-                                {
-                                    startDate = new DateTime(applicationDate.Year, 9, 15); // 15th Sep
-                                    endDate = new DateTime(applicationDate.Year, 10, 31); // 31st Oct
-                                }
-                                else if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape)
-                                {
-                                    startDate = new DateTime(applicationDate.Year, 9, 1); // 1st Sep
-                                    endDate = new DateTime(applicationDate.Year, 10, 31); // 31st Oct
-                                }
-                                if (applicationDate >= startDate && applicationDate <= endDate)
-                                {
-                                    (List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldId, null);
-                                    if (error == null)
+                                    if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape ||
+                                        cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Asparagus || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.BrusselSprouts ||
+                                        cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Cauliflower || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Calabrese ||
+                                        cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.BulbOnions || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.SaladOnions ||
+                                        cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Cabbage)
                                     {
-                                        if (managementIds.Count > 0)
+                                        DateTime applicationDate = model.ApplicationForFertiliserManures[index].ApplicationDate.Value;
+                                        int year = applicationDate.Year;
+                                        if (model.ApplicationForFertiliserManures[index].InOrgnaicManureDurationId == (int)NMP.Portal.Enums.InOrganicManureDurations.AugustToSeptember ||
+                                            model.ApplicationForFertiliserManures[index].InOrgnaicManureDurationId == (int)NMP.Portal.Enums.InOrganicManureDurations.OctoberToDecember)
                                         {
-                                            (model.IsNitrogenExceedWarning, string nitrogenExceedMessageTitle, string warningMsg, string nitrogenExceedFirstAdditionalMessage, string nitrogenExceedSecondAdditionalMessage, error) = await isNitrogenExceedWarning(model, managementIds[0], cropTypeResponse.CropTypeId, model.ApplicationForFertiliserManures[index].N.Value, model.ApplicationForFertiliserManures[index].InOrgnaicManureDurationId.Value, startDate, endDate);
+                                            year = applicationDate.Year;
+                                        }
+                                        else
+                                        {
+                                            year = applicationDate.Year - 1;
+                                        }
+                                        DateTime startDate = new DateTime(year, 9, 1); // 1st Sep
+                                        DateTime endDate = new DateTime(year + 1, 1, 15); // 15th Jan
+                                        if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Cabbage || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.BrusselSprouts ||
+                                            cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Cauliflower || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Calabrese)
+                                        {
+                                            int daysInFebruary = DateTime.DaysInMonth(year + 1, 2);
+                                            endDate = new DateTime(year + 1, 2, daysInFebruary);
+
+                                        }
+                                        if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                        {
+                                            startDate = new DateTime(applicationDate.Year, 9, 15); // 15th Sep
+                                            endDate = new DateTime(applicationDate.Year, 10, 31); // 31st Oct
+                                        }
+                                        else if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape)
+                                        {
+                                            startDate = new DateTime(applicationDate.Year, 9, 1); // 1st Sep
+                                            endDate = new DateTime(applicationDate.Year, 10, 31); // 31st Oct
+                                        }
+                                        if (applicationDate >= startDate && applicationDate <= endDate)
+                                        {
+                                            (List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldId, null);
                                             if (error == null)
                                             {
-                                                if (!string.IsNullOrWhiteSpace(warningMsg))
+                                                if (managementIds.Count > 0)
                                                 {
-                                                    if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.BrusselSprouts ||
-                                                        cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Cauliflower ||
-                                                        cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Calabrese ||
-                                                        cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Cabbage)
+                                                    (model.IsNitrogenExceedWarning, string nitrogenExceedMessageTitle, string warningMsg, string nitrogenExceedFirstAdditionalMessage, string nitrogenExceedSecondAdditionalMessage, error) = await isNitrogenExceedWarning(model, managementIds[0], cropTypeResponse.CropTypeId, model.ApplicationForFertiliserManures[index].N.Value, model.ApplicationForFertiliserManures[index].InOrgnaicManureDurationId.Value, startDate, endDate);
+                                                    if (error == null)
                                                     {
-                                                        TempData["NitrogenExceedMessageTitle"] = nitrogenExceedMessageTitle;
-                                                        TempData["NitrogenExceedForFertiliser"] = warningMsg;
-                                                        TempData["NitrogenExceedFirstAdditionalMessage"] = nitrogenExceedFirstAdditionalMessage;
-                                                        TempData["NitrogenExceedSecondAdditionalMessage"] = nitrogenExceedSecondAdditionalMessage;
+                                                        if (!string.IsNullOrWhiteSpace(warningMsg))
+                                                        {
+                                                            if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.BrusselSprouts ||
+                                                                cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Cauliflower ||
+                                                                cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Calabrese ||
+                                                                cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Cabbage)
+                                                            {
+                                                                TempData["NitrogenExceedMessageTitle"] = nitrogenExceedMessageTitle;
+                                                                TempData["NitrogenExceedForFertiliser"] = warningMsg;
+                                                                TempData["NitrogenExceedFirstAdditionalMessage"] = nitrogenExceedFirstAdditionalMessage;
+                                                                TempData["NitrogenExceedSecondAdditionalMessage"] = nitrogenExceedSecondAdditionalMessage;
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        TempData["NutrientValuesError"] = error.Message;
+                                                        return RedirectToAction("NutrientValues", model);
+
                                                     }
                                                 }
                                             }
@@ -1185,23 +1199,17 @@ namespace NMP.Portal.Controllers
                                             {
                                                 TempData["NutrientValuesError"] = error.Message;
                                                 return RedirectToAction("NutrientValues", model);
-
                                             }
+
                                         }
                                     }
-                                    else
-                                    {
-                                        TempData["NutrientValuesError"] = error.Message;
-                                        return RedirectToAction("NutrientValues", model);
-                                    }
-
+                                }
+                                else
+                                {
+                                    TempData["NutrientValuesError"] = error.Message;
+                                    return RedirectToAction("NutrientValues", model);
                                 }
                             }
-                        }
-                        else
-                        {
-                            TempData["NutrientValuesError"] = error.Message;
-                            return RedirectToAction("NutrientValues", model);
                         }
                     }
                 }
@@ -1381,72 +1389,85 @@ namespace NMP.Portal.Controllers
                             }
                         }
                     }
-                    model.IsNitrogenExceedWarning = false;
+                    
                     foreach (var fieldId in model.FieldList)
                     {
-                        (CropTypeResponse cropTypeResponse, error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
-                        if (error == null)
+                        Field field = await _fieldService.FetchFieldByFieldId(Convert.ToInt32(fieldId));
+                        if (field != null)
                         {
-                            if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape ||
-                                cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Asparagus || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.BrusselSprouts ||
-                                cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Cauliflower || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Calabrese ||
-                                cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.BulbOnions || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.SaladOnions ||
-                                cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Cabbage)
+                            bool isFieldIsInNVZ = field.IsWithinNVZ.Value;
+                            if (isFieldIsInNVZ)
                             {
-                                DateTime applicationDate = DateTime.Now;
-                                foreach (var applicationForFertiliserManure in model.ApplicationForFertiliserManures)
+                                (CropTypeResponse cropTypeResponse, error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
+                                if (error == null)
                                 {
-                                    applicationDate = applicationForFertiliserManure.ApplicationDate.Value;
-                                    int year = applicationDate.Year;
-                                    if (applicationForFertiliserManure.InOrgnaicManureDurationId == (int)NMP.Portal.Enums.InOrganicManureDurations.AugustToSeptember ||
-                                        applicationForFertiliserManure.InOrgnaicManureDurationId == (int)NMP.Portal.Enums.InOrganicManureDurations.OctoberToDecember)
+                                    if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape ||
+                                        cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Asparagus || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.BrusselSprouts ||
+                                        cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Cauliflower || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Calabrese ||
+                                        cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.BulbOnions || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.SaladOnions ||
+                                        cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Cabbage)
                                     {
-                                        year = applicationDate.Year;
-                                    }
-                                    else
-                                    {
-                                        year = applicationDate.Year - 1;
-                                    }
-                                    DateTime startDate = new DateTime(year, 9, 1); // 1st Sep
-                                    DateTime endDate = new DateTime(year + 1, 1, 15); // 15th Jan
-                                    if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Cabbage || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.BrusselSprouts ||
-                                        cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Cauliflower || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Calabrese)
-                                    {
-                                        int daysInFebruary = DateTime.DaysInMonth(year + 1, 2);
-                                        endDate = new DateTime(year + 1, 2, daysInFebruary);
-                                    }
-                                    if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
-                                    {
-                                        startDate = new DateTime(applicationDate.Year, 9, 15); // 15th Sep
-                                        endDate = new DateTime(applicationDate.Year, 10, 31); // 31st Oct
-                                    }
-                                    else if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape)
-                                    {
-                                        startDate = new DateTime(applicationDate.Year, 9, 1); // 1st Sep
-                                        endDate = new DateTime(applicationDate.Year, 10, 31); // 31st Oct
-                                    }
-                                    if (applicationDate >= startDate && applicationDate <= endDate)
-                                    {
-                                        decimal nitrogen = 0;
-                                        if (applicationForFertiliserManure.N > 50)
+                                        DateTime applicationDate = DateTime.Now;
+                                        foreach (var applicationForFertiliserManure in model.ApplicationForFertiliserManures)
                                         {
-                                            model.IsNitrogenExceedWarning = true;
-                                            break;
-                                        }
-                                        else
-                                        {
-                                            (List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldId, null);
-                                            if (error == null)
+                                            applicationDate = applicationForFertiliserManure.ApplicationDate.Value;
+                                            int year = applicationDate.Year;
+                                            if (applicationForFertiliserManure.InOrgnaicManureDurationId == (int)NMP.Portal.Enums.InOrganicManureDurations.AugustToSeptember ||
+                                                applicationForFertiliserManure.InOrgnaicManureDurationId == (int)NMP.Portal.Enums.InOrganicManureDurations.OctoberToDecember)
                                             {
-                                                if (managementIds.Count > 0)
+                                                year = applicationDate.Year;
+                                            }
+                                            else
+                                            {
+                                                year = applicationDate.Year - 1;
+                                            }
+                                            DateTime startDate = new DateTime(year, 9, 1); // 1st Sep
+                                            DateTime endDate = new DateTime(year + 1, 1, 15); // 15th Jan
+                                            if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Cabbage || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.BrusselSprouts ||
+                                                cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Cauliflower || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Calabrese)
+                                            {
+                                                int daysInFebruary = DateTime.DaysInMonth(year + 1, 2);
+                                                endDate = new DateTime(year + 1, 2, daysInFebruary);
+                                            }
+                                            if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                            {
+                                                startDate = new DateTime(applicationDate.Year, 9, 15); // 15th Sep
+                                                endDate = new DateTime(applicationDate.Year, 10, 31); // 31st Oct
+                                            }
+                                            else if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape)
+                                            {
+                                                startDate = new DateTime(applicationDate.Year, 9, 1); // 1st Sep
+                                                endDate = new DateTime(applicationDate.Year, 10, 31); // 31st Oct
+                                            }
+                                            if (applicationDate >= startDate && applicationDate <= endDate)
+                                            {
+                                                decimal nitrogen = 0;
+                                                if (applicationForFertiliserManure.N > 50)
                                                 {
-                                                    (model.IsNitrogenExceedWarning, string nitrogenExceedMessageTitle, string warningMsg, string nitrogenExceedFirstAdditionalMessage, string nitrogenExceedSecondAdditionalMessage, error) = await isNitrogenExceedWarning(model, managementIds[0], cropTypeResponse.CropTypeId, 0, applicationForFertiliserManure.InOrgnaicManureDurationId.Value, startDate, endDate);
+                                                    model.IsNitrogenExceedWarning = true;
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    (List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldId, null);
                                                     if (error == null)
                                                     {
-                                                        if (!string.IsNullOrWhiteSpace(warningMsg))
+                                                        if (managementIds.Count > 0)
                                                         {
-                                                            model.IsNitrogenExceedWarning = true;
-                                                            break;
+                                                            (model.IsNitrogenExceedWarning, string nitrogenExceedMessageTitle, string warningMsg, string nitrogenExceedFirstAdditionalMessage, string nitrogenExceedSecondAdditionalMessage, error) = await isNitrogenExceedWarning(model, managementIds[0], cropTypeResponse.CropTypeId, 0, applicationForFertiliserManure.InOrgnaicManureDurationId.Value, startDate, endDate);
+                                                            if (error == null)
+                                                            {
+                                                                if (!string.IsNullOrWhiteSpace(warningMsg))
+                                                                {
+                                                                    model.IsNitrogenExceedWarning = true;
+                                                                    break;
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                TempData["QuestionForSpreadInorganicError"] = error.Message;
+                                                                return View("QuestionForSpreadInorganicFertiliser", model);
+                                                            }
                                                         }
                                                     }
                                                     else
@@ -1456,28 +1477,23 @@ namespace NMP.Portal.Controllers
                                                     }
                                                 }
                                             }
-                                            else
+                                            if (model.IsNitrogenExceedWarning)
                                             {
-                                                TempData["QuestionForSpreadInorganicError"] = error.Message;
-                                                return View("QuestionForSpreadInorganicFertiliser", model);
+                                                break;
                                             }
                                         }
                                     }
-                                    if (model.IsNitrogenExceedWarning)
-                                    {
-                                        break;
-                                    }
+                                }
+                                else
+                                {
+                                    TempData["QuestionForSpreadInorganicError"] = error.Message;
+                                    return View("QuestionForSpreadInorganicFertiliser", model);
+                                }
+                                if (model.IsNitrogenExceedWarning)
+                                {
+                                    break;
                                 }
                             }
-                        }
-                        else
-                        {
-                            TempData["QuestionForSpreadInorganicError"] = error.Message;
-                            return View("QuestionForSpreadInorganicFertiliser", model);
-                        }
-                        if (model.IsNitrogenExceedWarning)
-                        {
-                            break;
                         }
                     }
                 }
