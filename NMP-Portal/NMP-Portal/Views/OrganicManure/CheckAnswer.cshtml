@@ -59,7 +59,7 @@
 
             @* @if (Model.IsWarningMsgNeedToShow != null && Model.IsWarningMsgNeedToShow)
             { *@
-            @if (Model.IsOrgManureNfieldLimitWarning || Model.IsNMaxLimitWarning || Model.IsClosedPeriodWarning || Model.IsEndClosedPeriodFebruaryWarning || Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks)
+            @if (Model.IsOrgManureNfieldLimitWarning || Model.IsNMaxLimitWarning || Model.IsClosedPeriodWarning || Model.IsEndClosedPeriodFebruaryWarning || Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks || Model.IsClosedPeriodOrganicAppRateExceedMaxN)
             {
                 <govuk-notification-banner>
                     <govuk-notification-banner-title>
@@ -95,6 +95,12 @@
                     {
                         <p class="govuk-notification-banner__heading">
                             @Resource.lblYouMustAllowAtLeast3WeeksBetweenApplications
+                        </p>
+                    }
+                    @if (Model.IsClosedPeriodOrganicAppRateExceedMaxN)
+                    {
+                        <p class="govuk-notification-banner__heading">
+                            @Resource.lblThisApplicationTakeOverMaxAppRate
                         </p>
                     }
                 </govuk-notification-banner>
@@ -172,6 +178,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNMaxLimitWarning" value="@Model.IsNMaxLimitWarning.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsOrgManureNfieldLimitWarning" value="@Model.IsOrgManureNfieldLimitWarning.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks" value="@Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodOrganicAppRateExceedMaxN" value="@Model.IsClosedPeriodOrganicAppRateExceedMaxN"></govuk-input>
 
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
