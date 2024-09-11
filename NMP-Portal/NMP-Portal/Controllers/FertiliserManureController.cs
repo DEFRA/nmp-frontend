@@ -1277,14 +1277,22 @@ namespace NMP.Portal.Controllers
             if (!model.ApplicationForFertiliserManures[index].QuestionForSpreadInorganicFertiliser.Value)
             {
                 int totalCount = model.ApplicationForFertiliserManures.Count;
-                for (int i = 0; i < model.ApplicationForFertiliserManures.Count; i++)
+                int counter = model.Counter.Value;
+                for (int i = totalCount - 1; i > counter; i--)
                 {
-                    if (model.Counter != totalCount - 1)
-                    {
-                        model.Counter = model.Counter + 1;
-                        model.ApplicationForFertiliserManures.RemoveAt(model.Counter.Value);
-                    }
+                    model.ApplicationForFertiliserManures.RemoveAt(i);
                 }
+                //for (int i = 0; i < model.ApplicationForFertiliserManures.Count; i++)
+                //{
+
+                //    if (model.Counter != totalCount - 1)
+                //    {
+                //        counter = model.Counter.Value + 1;
+                //        model.ApplicationForFertiliserManures.RemoveAt(counter);
+                //        totalCount = model.ApplicationForFertiliserManures.Count;
+                //    }
+                //}
+                totalCount = model.ApplicationForFertiliserManures.Count;
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
                 return RedirectToAction("CheckAnswer");
             }
