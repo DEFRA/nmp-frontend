@@ -88,7 +88,7 @@
                     <govuk-error-summary-item href="#">@TempData["CheckYourAnswerError"]</govuk-error-summary-item>
                 </govuk-error-summary>
             }
-            @if (Model.IsWarningMsgNeedToShow && (Model.IsClosedPeriodWarningExceptGrassAndOilseed || Model.IsClosedPeriodWarningOnlyForGrassAndOilseed))
+            @if (Model.IsWarningMsgNeedToShow && (Model.IsClosedPeriodWarningExceptGrassAndOilseed || Model.IsClosedPeriodWarningOnlyForGrassAndOilseed || Model.IsNitrogenExceedWarning))
             {
                 <govuk-notification-banner>
                     <govuk-notification-banner-title>
@@ -105,6 +105,12 @@
                     {
                         <p class="govuk-notification-banner__heading">
                             @Resource.MsgClosedPeriodForGrassAndOilseedFertliserWarningMsgTitle
+                        </p>
+                    }
+                    @if (Model.IsNitrogenExceedWarning)
+                    {
+                        <p class="govuk-notification-banner__heading">
+                            @Resource.MsgForMaxNitrogenForFertiliserTitle
                         </p>
                     }
                 </govuk-notification-banner>

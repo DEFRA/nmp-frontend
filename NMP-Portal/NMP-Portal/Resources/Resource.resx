@@ -2093,4 +2093,19 @@ You can continue, but you should consider allowing more time between application
   <data name="lblThisApplicationTakeOverMaxAppRate" xml:space="preserve">
     <value>This application will take you over the maximum application rate for high N organic manure.</value>
   </data>
+  <data name="MsgForMaxNitrogenForFertiliserForBrassicasFirstAdditionalWarningMsg" xml:space="preserve">
+    <value>For brassicas, an additional 50 kg/ha may be applied every four weeks during the closed application period up to the end of feb.</value>
+  </data>
+  <data name="MsgForMaxNitrogenForFertiliserForBrassicasSecondAdditionalWarningMsg" xml:space="preserve">
+    <value>You can continue, but you should consider not exceeding the maximum application rate of manufactured nitrogen fertiliser to avoid the risk of agricultural nitrate pollution.</value>
+  </data>
+  <data name="MsgForMaxNitrogenForFertiliserForBrassicasTitle" xml:space="preserve">
+    <value>MAX APPLICATION RATE FOR BRASSICAS</value>
+  </data>
+  <data name="MsgForMaxNitrogenForFertiliserForBrassicasWarningMsg" xml:space="preserve">
+    <value>The NVZ Action Programme states that the application rate of manufactured nitrogen fertiliser on brassicas between {0} and {1} must not exceed 100 kg/ha.</value>
+  </data>
+  <data name="MsgForMaxNitrogenForFertiliserTitle" xml:space="preserve">
+    <value>This application will take you over the maximum application rate for manufactured nitrogen fertiliser</value>
+  </data>
 </root>

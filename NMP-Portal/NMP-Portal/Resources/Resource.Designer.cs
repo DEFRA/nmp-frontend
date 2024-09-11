@@ -5447,6 +5447,51 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For brassicas, an additional 50 kg/ha may be applied every four weeks during the closed application period up to the end of feb..
+        /// </summary>
+        public static string MsgForMaxNitrogenForFertiliserForBrassicasFirstAdditionalWarningMsg {
+            get {
+                return ResourceManager.GetString("MsgForMaxNitrogenForFertiliserForBrassicasFirstAdditionalWarningMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can continue, but you should consider not exceeding the maximum application rate of manufactured nitrogen fertiliser to avoid the risk of agricultural nitrate pollution..
+        /// </summary>
+        public static string MsgForMaxNitrogenForFertiliserForBrassicasSecondAdditionalWarningMsg {
+            get {
+                return ResourceManager.GetString("MsgForMaxNitrogenForFertiliserForBrassicasSecondAdditionalWarningMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MAX APPLICATION RATE FOR BRASSICAS.
+        /// </summary>
+        public static string MsgForMaxNitrogenForFertiliserForBrassicasTitle {
+            get {
+                return ResourceManager.GetString("MsgForMaxNitrogenForFertiliserForBrassicasTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The NVZ Action Programme states that the application rate of manufactured nitrogen fertiliser on brassicas between {0} and {1} must not exceed 100 kg/ha..
+        /// </summary>
+        public static string MsgForMaxNitrogenForFertiliserForBrassicasWarningMsg {
+            get {
+                return ResourceManager.GetString("MsgForMaxNitrogenForFertiliserForBrassicasWarningMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application will take you over the maximum application rate for manufactured nitrogen fertiliser.
+        /// </summary>
+        public static string MsgForMaxNitrogenForFertiliserTitle {
+            get {
+                return ResourceManager.GetString("MsgForMaxNitrogenForFertiliserTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Average annual rainfall must be a whole number, like 600..
         /// </summary>
         public static string MsgForRainfallManual {

@@ -186,8 +186,8 @@ namespace NMP.Portal.Helpers
                             //message = string.Format(Resource.MsgApplicationDateEnteredIsInsideClosedPeriodDetail, cropType, fieldDetail.SowingDate == null ? "" : fieldDetail.SowingDate.Value.Date.ToString("dd MMM yyyy"), fieldDetail.SoilTypeName, closedPeriod);
                         }
                     }
-                    
-                    
+
+
                 }
                 return isWithinClosedPeriod;
             }
@@ -221,7 +221,7 @@ namespace NMP.Portal.Helpers
 
                 if (startMonth < endMonth)
                 {
-                    DateTime ClosedPeriodEndDateMinusOne= new DateTime(applicationDate.Year - 1, endMonth, endDay);
+                    DateTime ClosedPeriodEndDateMinusOne = new DateTime(applicationDate.Year - 1, endMonth, endDay);
                     if (applicationDate > ClosedPeriodEndDateMinusOne && applicationDate < endOfFebruaryDate)
                     {
                         if (isSlurry)
@@ -244,7 +244,7 @@ namespace NMP.Portal.Helpers
                 {
                     if (applicationDate > ClosedPeriodEndDate)
                     {
-                        DateTime endOfFebruaryDatePlusOne = new DateTime(applicationDate.Year , endMonth, endDay);
+                        DateTime endOfFebruaryDatePlusOne = new DateTime(applicationDate.Year, endMonth, endDay);
                         if (applicationDate > ClosedPeriodEndDate && applicationDate < endOfFebruaryDatePlusOne)
                         {
                             if (isSlurry)
@@ -282,7 +282,7 @@ namespace NMP.Portal.Helpers
                             }
                         }
                     }
-                    
+
                 }
 
             }
@@ -350,17 +350,12 @@ namespace NMP.Portal.Helpers
             }
             return message;
         }
-        public string NitrogenLimitForFertiliserForBrassicasWarningMessage(DateTime startDate, DateTime endDate, string cropTypeName, decimal totalNitrogen, decimal fourWeekNitrogen = 0)
+        public string NitrogenLimitForFertiliserForBrassicasWarningMessage(decimal totalNitrogen, decimal nitrogenInOneDuration = 0, decimal singleApplicationNitrogen = 0)
         {
             string message = string.Empty;
-            if (totalNitrogen > 100)
+            if (totalNitrogen > 100 || singleApplicationNitrogen > 50 || nitrogenInOneDuration > 50)
             {
-                //message = string.Format(Resource.MsgForMaxNitrogenForFertiliserForBrassicas, startDate.ToString("dd/MMM/yyyy"), endDate.ToString("dd/MMM/yyyy"), Resource.MsgForMaxNitrogenForFertiliserForBrassicasAdditionalMsg);
-            }
-
-            else if (totalNitrogen > 50 || fourWeekNitrogen + totalNitrogen > 50)
-            {
-                // Exceeds 50kg limit in any 4-week period
+                message = string.Format(Resource.MsgForMaxNitrogenForFertiliserForBrassicasWarningMsg, "01 Sep", "End of Feb");
             }
 
             return message;
