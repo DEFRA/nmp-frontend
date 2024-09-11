@@ -3185,9 +3185,11 @@ namespace NMP.Portal.Controllers
                     TempData["ConditionsAffectingNutrientsError"] = error.Message;
                     return RedirectToAction("ConditionsAffectingNutrients");
                 }
+                string message = string.Empty;
                 model.IsOrgManureNfieldLimitWarning = false;
                 model.IsNMaxLimitWarning = false;
                 model.IsEndClosedPeriodFebruaryWarning = false;
+                model.IsClosedPeriodOrganicAppRateExceedMaxN = false;
                 if (model.FieldList != null && model.FieldList.Count > 0)
                 {
                     foreach (var fieldId in model.FieldList)
@@ -3209,7 +3211,7 @@ namespace NMP.Portal.Controllers
                                             (model.IsNMaxLimitWarning, error) = await IsNMaxWarningMessage(model, Convert.ToInt32(fieldId), managementIds[0]);
                                             if (error == null)
                                             {
-                                                (model.IsEndClosedPeriodFebruaryWarning, string message, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, Convert.ToInt32(fieldId));
+                                                (model.IsEndClosedPeriodFebruaryWarning, message, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, Convert.ToInt32(fieldId));
                                                 if (error != null)
                                                 {
                                                     TempData["ConditionsAffectingNutrientsError"] =  error.Message;
@@ -3220,6 +3222,21 @@ namespace NMP.Portal.Controllers
                                             {
                                                 TempData["ConditionsAffectingNutrientsError"] = error.Message;
                                                 return RedirectToAction("ConditionsAffectingNutrients");
+                                            }
+                                        }
+                                        else
+                                        {
+                                            TempData["ConditionsAffectingNutrientsError"] = error.Message;
+                                            return RedirectToAction("ConditionsAffectingNutrients");
+                                        }
+
+
+                                        (model.IsClosedPeriodOrganicAppRateExceedMaxN, message, error) = await IsApplicationWithinClosedPeriodExceedNRateWarningMessage(model, Convert.ToInt32(fieldId));
+                                        if (error == null)
+                                        {
+                                            if (!string.IsNullOrWhiteSpace(message))
+                                            {
+                                                TempData["AppRateExceeds150WithinClosedPeriodOrganic"] = message;
                                             }
                                         }
                                         else
