@@ -2088,7 +2088,7 @@ You can continue, but you should consider allowing more time between application
     <value>You must allow at least 3 weeks between applications.</value>
   </data>
   <data name="MsgForMaxNitrogenForFertiliserForBrassicasFirstAdditionalWarningMsg" xml:space="preserve">
-    <value>For brassicas, an additional 50 kg/ha may be applied every four weeks during the closed application period up to the date of harvest.</value>
+    <value>For brassicas, an additional 50 kg/ha may be applied every four weeks during the closed application period up to the end of feb.</value>
   </data>
   <data name="MsgForMaxNitrogenForFertiliserForBrassicasSecondAdditionalWarningMsg" xml:space="preserve">
     <value>You can continue, but you should consider not exceeding the maximum application rate of manufactured nitrogen fertiliser to avoid the risk of agricultural nitrate pollution.</value>

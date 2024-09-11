@@ -5429,7 +5429,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For brassicas, an additional 50 kg/ha may be applied every four weeks during the closed application period up to the date of harvest..
+        ///   Looks up a localized string similar to For brassicas, an additional 50 kg/ha may be applied every four weeks during the closed application period up to the end of feb..
         /// </summary>
         public static string MsgForMaxNitrogenForFertiliserForBrassicasFirstAdditionalWarningMsg {
             get {
