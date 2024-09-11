@@ -1381,7 +1381,7 @@ namespace NMP.Portal.Controllers
                             }
                         }
                     }
-
+                    model.IsNitrogenExceedWarning = false;
                     foreach (var fieldId in model.FieldList)
                     {
                         (CropTypeResponse cropTypeResponse, error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
