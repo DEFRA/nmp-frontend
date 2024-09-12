@@ -1217,6 +1217,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to End of Feb.
+        /// </summary>
+        public static string lblEndOfFeb {
+            get {
+                return ResourceManager.GetString("lblEndOfFeb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to End of soil drainage.
         /// </summary>
         public static string lblEndOfSoilDrainage {
@@ -1645,6 +1654,15 @@ namespace NMP.Portal.Resources {
         public static string lblFieldSoilAnalysisDetail {
             get {
                 return ResourceManager.GetString("lblFieldSoilAnalysisDetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 15 Jan.
+        /// </summary>
+        public static string lblFifteenJan {
+            get {
+                return ResourceManager.GetString("lblFifteenJan", resourceCulture);
             }
         }
         
@@ -2713,6 +2731,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 01 Sep.
+        /// </summary>
+        public static string lblOneSep {
+            get {
+                return ResourceManager.GetString("lblOneSep", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 01 Sep to 15 Jan.
+        /// </summary>
+        public static string lblOneSepToFifteenJan {
+            get {
+                return ResourceManager.GetString("lblOneSepToFifteenJan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open Government Licence v3.0.
         /// </summary>
         public static string lblOpenGovernmentLicence {
@@ -3672,6 +3708,15 @@ namespace NMP.Portal.Resources {
         public static string lblTheseAreApproximateValues {
             get {
                 return ResourceManager.GetString("lblTheseAreApproximateValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 31 Oct.
+        /// </summary>
+        public static string lblThirtyFirstOct {
+            get {
+                return ResourceManager.GetString("lblThirtyFirstOct", resourceCulture);
             }
         }
         
@@ -5447,6 +5492,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The NVZ Action Programme states that the application rate of manufactured nitrogen fertiliser on {0} between {1} and {2} must not exceed {3} kg/ha..
+        /// </summary>
+        public static string MsgForMaxNitrogenForFertiliserExceptBrassicas {
+            get {
+                return ResourceManager.GetString("MsgForMaxNitrogenForFertiliserExceptBrassicas", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to For brassicas, an additional 50 kg/ha may be applied every four weeks during the closed application period up to the end of feb..
         /// </summary>
         public static string MsgForMaxNitrogenForFertiliserForBrassicasFirstAdditionalWarningMsg {
@@ -5479,6 +5533,42 @@ namespace NMP.Portal.Resources {
         public static string MsgForMaxNitrogenForFertiliserForBrassicasWarningMsg {
             get {
                 return ResourceManager.GetString("MsgForMaxNitrogenForFertiliserForBrassicasWarningMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can continue, but you should consider reducing the application rate of manufactured nitrogen fertiliser to avoid the risk of agricultural nitrate pollution..
+        /// </summary>
+        public static string MsgForMaxNitrogenForFertiliserForExceptBrassicasFirstAdditionalWarningMsg {
+            get {
+                return ResourceManager.GetString("MsgForMaxNitrogenForFertiliserForExceptBrassicasFirstAdditionalWarningMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MAX APPLICATION RATE (EVERYTHING EXCEPT BRASSICAS).
+        /// </summary>
+        public static string MsgForMaxNitrogenForFertiliserForExceptBrassicasTitle {
+            get {
+                return ResourceManager.GetString("MsgForMaxNitrogenForFertiliserForExceptBrassicasTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to APPLICATION TO GRASS AT A RATE OF MORE THAN 40KG N/HA IN ONE GO.
+        /// </summary>
+        public static string MsgForMaxNitrogenForFertiliserForGrassTitle {
+            get {
+                return ResourceManager.GetString("MsgForMaxNitrogenForFertiliserForGrassTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The NVZ Action Programme states that manufactured nitrogen fertiliser must not be applied on grass at a rate of more than  40 kg N/ha in one go..
+        /// </summary>
+        public static string MsgForMaxNitrogenForFertiliserGrass {
+            get {
+                return ResourceManager.GetString("MsgForMaxNitrogenForFertiliserGrass", resourceCulture);
             }
         }
         

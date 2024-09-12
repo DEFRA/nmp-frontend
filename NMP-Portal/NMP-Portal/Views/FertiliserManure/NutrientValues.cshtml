@@ -30,15 +30,16 @@
                     <p class="govuk-notification-banner__heading">
                         @Resource.MsgForMaxNitrogenForFertiliserTitle
                     </p>
-                    <p class="govuk-body">@TempData["NitrogenExceedForFertiliser"]</p><br />
+                    <p class="govuk-body">@TempData["NitrogenExceedForFertiliser"]</p>
                     @if (TempData["NitrogenExceedFirstAdditionalMessage"] != null)
                     {
+                            <br />
                         <p class="govuk-body">@TempData["NitrogenExceedFirstAdditionalMessage"]</p>
 
-                        <br />
                     }
                     @if (TempData["NitrogenExceedSecondAdditionalMessage"] != null)
-                    {
+                        {
+                            <br />
                         <p class="govuk-body">@TempData["NitrogenExceedSecondAdditionalMessage"]</p>
 
                     }

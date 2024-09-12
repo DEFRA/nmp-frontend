@@ -2108,4 +2108,34 @@ You can continue, but you should consider allowing more time between application
   <data name="MsgForMaxNitrogenForFertiliserTitle" xml:space="preserve">
     <value>This application will take you over the maximum application rate for manufactured nitrogen fertiliser</value>
   </data>
+  <data name="MsgForMaxNitrogenForFertiliserExceptBrassicas" xml:space="preserve">
+    <value>The NVZ Action Programme states that the application rate of manufactured nitrogen fertiliser on {0} between {1} and {2} must not exceed {3} kg/ha.</value>
+  </data>
+  <data name="MsgForMaxNitrogenForFertiliserForExceptBrassicasFirstAdditionalWarningMsg" xml:space="preserve">
+    <value>You can continue, but you should consider reducing the application rate of manufactured nitrogen fertiliser to avoid the risk of agricultural nitrate pollution.</value>
+  </data>
+  <data name="MsgForMaxNitrogenForFertiliserForExceptBrassicasTitle" xml:space="preserve">
+    <value>MAX APPLICATION RATE (EVERYTHING EXCEPT BRASSICAS)</value>
+  </data>
+  <data name="MsgForMaxNitrogenForFertiliserForGrassTitle" xml:space="preserve">
+    <value>APPLICATION TO GRASS AT A RATE OF MORE THAN 40KG N/HA IN ONE GO</value>
+  </data>
+  <data name="MsgForMaxNitrogenForFertiliserGrass" xml:space="preserve">
+    <value>The NVZ Action Programme states that manufactured nitrogen fertiliser must not be applied on grass at a rate of more than  40 kg N/ha in one go.</value>
+  </data>
+  <data name="lblEndOfFeb" xml:space="preserve">
+    <value>End of Feb</value>
+  </data>
+  <data name="lblFifteenJan" xml:space="preserve">
+    <value>15 Jan</value>
+  </data>
+  <data name="lblOneSep" xml:space="preserve">
+    <value>01 Sep</value>
+  </data>
+  <data name="lblOneSepToFifteenJan" xml:space="preserve">
+    <value>01 Sep to 15 Jan</value>
+  </data>
+  <data name="lblThirtyFirstOct" xml:space="preserve">
+    <value>31 Oct</value>
+  </data>
 </root>
