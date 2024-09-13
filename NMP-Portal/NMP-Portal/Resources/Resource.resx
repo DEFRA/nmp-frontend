@@ -2138,4 +2138,28 @@ You can continue, but you should consider allowing more time between application
   <data name="lblThirtyFirstOct" xml:space="preserve">
     <value>31 Oct</value>
   </data>
+  <data name="lblSampleForSoilMineralNitrogen" xml:space="preserve">
+    <value>Sample for soil mineral nitrogen</value>
+  </data>
+  <data name="lblSoilDateAndPH" xml:space="preserve">
+    <value>Soil Date and PH</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value>What is the current crop group?</value>
+  </data>
+  <data name="lblWhenWasTheSampleForSoilMineralNitrogenTaken" xml:space="preserve">
+    <value>When was the sample for soil mineral nitrogen taken in {0}?</value>
+  </data>
+  <data name="MsgDateEnteredIsNotValid" xml:space="preserve">
+    <value>The date entered is not valid.</value>
+  </data>
+  <data name="MsgdateMustBeFilledBeforeProceeding" xml:space="preserve">
+    <value>The date must be filled before proceeding.</value>
+  </data>
+  <data name="MsgDateShouldNotBeInTheFuture" xml:space="preserve">
+    <value>Date should not be in the future</value>
+  </data>
+  <data name="MsgSampleForSoilMineralNitrogenForError" xml:space="preserve">
+    <value>SampleForSoilMineralNitrogen</value>
+  </data>
 </root>

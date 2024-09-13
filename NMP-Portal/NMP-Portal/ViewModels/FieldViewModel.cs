@@ -34,6 +34,8 @@ namespace NMP.Portal.ViewModels
         public bool? IsWithinNVZForFarm { get; set; }
         public bool? IsAbove300SeaLevelForFarm { get; set; }
         public int? LastHarvestYear { get; set; }
+        public DateTime? SampleForSoilMineralNitrogen { get; set; }
+        public int? CurrentCropGroup { get; set; }
 
     }
 }
