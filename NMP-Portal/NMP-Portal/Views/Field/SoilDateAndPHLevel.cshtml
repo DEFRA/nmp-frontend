@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.FieldViewModel
 @{
-    ViewData["Title"] = Resource.lblNVZField;
+    ViewData["Title"] = Resource.lblSoilDateAndPH;
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
     var backAction = Model.IsSoilReleasingClay == true ? "SoilReleasingClay" :
@@ -51,6 +51,7 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAbove300SeaLevelForFarm" value="@Model.IsAbove300SeaLevelForFarm.ToString().ToLower()"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZForFarm" value="@Model.IsWithinNVZForFarm.ToString().ToLower()"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LastHarvestYear"></govuk-input>
+    <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SampleForSoilMineralNitrogen" value="@Model.SampleForSoilMineralNitrogen"></govuk-date-input>
     <div class="govuk-grid-row">
 
         <div class="govuk-grid-column-two-thirds">
