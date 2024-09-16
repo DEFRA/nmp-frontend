@@ -2,7 +2,7 @@
 @model NMP.Portal.ViewModels.FieldViewModel
 
 @{
-    ViewData["Title"] = string.Format(Resource.lblFieldMeasurements, "");
+    ViewData["Title"] = string.Format(Resource.lblFieldMeasurements, Model.Name);
 }
 @section BeforeContent {
     <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "AddField")" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
@@ -46,6 +46,8 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZForFarm" value="@Model.IsWithinNVZForFarm.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LastHarvestYear"></govuk-input>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SampleForSoilMineralNitrogen" value="@Model.SampleForSoilMineralNitrogen"></govuk-date-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CurrentCropGroupId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CurrentCropGroup"></govuk-input>
             <div class="govuk-form-group">
                 <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
                     <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblFieldMeasurements, Model.Name)</h1>

@@ -1304,5 +1304,69 @@ namespace NMP.Portal.Controllers
             }
             return View(model);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CurrentCropGroups(FieldViewModel model)
+        {
+            if (model.CurrentCropGroupId == null)
+            {
+                ModelState.AddModelError("CurrentCropGroupId", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropGroup.ToLower()));
+            }
+            if (!ModelState.IsValid)
+            {
+                ViewBag.CropGroupList = await _fieldService.FetchCropGroups();
+                return View(model);
+            }
+
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+            {
+                FieldViewModel fieldData = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                if (model.CurrentCropGroupId != fieldData.CurrentCropGroupId)
+                {
+                    model.CurrentCropType = string.Empty;
+                    model.CurrentCropTypeId = null;
+                }
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+            model.CurrentCropGroup = await _fieldService.FetchCropGroupById(model.CurrentCropGroupId.Value);
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
+
+            return RedirectToAction("CurrentCropTypes");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CurrentCropTypes()
+        {
+            FieldViewModel model = new FieldViewModel();
+            List<CropTypeResponse> cropTypes = new List<CropTypeResponse>();
+
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+                cropTypes = await _fieldService.FetchCropTypes(model.CropGroupId ?? 0);
+                var country = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
+                var cropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.All).ToList();
+
+                ViewBag.CropTypeList = cropTypeList;
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+                return RedirectToAction("CurrentCropGroups");
+            }
+
+            return View(model);
+        }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using NMP.Portal.Models;
+using NMP.Portal.Resources;
+using System.ComponentModel.DataAnnotations;
 
 namespace NMP.Portal.ViewModels
 {
@@ -34,8 +36,12 @@ namespace NMP.Portal.ViewModels
         public bool? IsWithinNVZForFarm { get; set; }
         public bool? IsAbove300SeaLevelForFarm { get; set; }
         public int? LastHarvestYear { get; set; }
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblSampleForSoilMineralNitrogen))]
         public DateTime? SampleForSoilMineralNitrogen { get; set; }
-        public int? CurrentCropGroup { get; set; }
+        public int? CurrentCropGroupId { get; set; }
+        public string? CurrentCropGroup { get; set; }
+        public int? CurrentCropTypeId { get; set; }
+        public string? CurrentCropType { get; set; }
 
     }
 }
