@@ -2144,9 +2144,6 @@ You can continue, but you should consider allowing more time between application
   <data name="lblSoilDateAndPH" xml:space="preserve">
     <value>Soil Date and PH</value>
   </data>
-  <data name="String1" xml:space="preserve">
-    <value>What is the current crop group?</value>
-  </data>
   <data name="lblWhenWasTheSampleForSoilMineralNitrogenTaken" xml:space="preserve">
     <value>When was the sample for soil mineral nitrogen taken in {0}?</value>
   </data>
@@ -2190,5 +2187,8 @@ You can continue, but you should consider allowing more time between application
     <value>The NVZ Action Programme states that the application rate of high available N manures on {0} between {1} must not exceed {2}kg/ha at one time and you must not spread more than 150kg of total nitrogen per hectare.
  
 You can continue, but you should consider reducing the application rate of high available N manures to avoid the risk of agricultural nitrate pollution.</value>
+  </data>
+  <data name="lblCurrentCropType" xml:space="preserve">
+    <value>Current crop type</value>
   </data>
 </root>
