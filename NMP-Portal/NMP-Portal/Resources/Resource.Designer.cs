@@ -1289,6 +1289,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to End of Feb.
+        /// </summary>
+        public static string lblEndOfFeb {
+            get {
+                return ResourceManager.GetString("lblEndOfFeb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to End of soil drainage.
         /// </summary>
         public static string lblEndOfSoilDrainage {
@@ -1717,6 +1726,15 @@ namespace NMP.Portal.Resources {
         public static string lblFieldSoilAnalysisDetail {
             get {
                 return ResourceManager.GetString("lblFieldSoilAnalysisDetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 15 Jan.
+        /// </summary>
+        public static string lblFifteenJan {
+            get {
+                return ResourceManager.GetString("lblFifteenJan", resourceCulture);
             }
         }
         
@@ -2785,6 +2803,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 01 Sep.
+        /// </summary>
+        public static string lblOneSep {
+            get {
+                return ResourceManager.GetString("lblOneSep", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 01 Sep to 15 Jan.
+        /// </summary>
+        public static string lblOneSepToFifteenJan {
+            get {
+                return ResourceManager.GetString("lblOneSepToFifteenJan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open Government Licence v3.0.
         /// </summary>
         public static string lblOpenGovernmentLicence {
@@ -3307,6 +3343,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sample for soil mineral nitrogen.
+        /// </summary>
+        public static string lblSampleForSoilMineralNitrogen {
+            get {
+                return ResourceManager.GetString("lblSampleForSoilMineralNitrogen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to save you money.
         /// </summary>
         public static string lblSaveYouMoney {
@@ -3456,6 +3501,15 @@ namespace NMP.Portal.Resources {
         public static string lblSoilContainsPostashReleasingClay {
             get {
                 return ResourceManager.GetString("lblSoilContainsPostashReleasingClay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Soil Date and PH.
+        /// </summary>
+        public static string lblSoilDateAndPH {
+            get {
+                return ResourceManager.GetString("lblSoilDateAndPH", resourceCulture);
             }
         }
         
@@ -3755,6 +3809,15 @@ namespace NMP.Portal.Resources {
         public static string lblTheseAreApproximateValues {
             get {
                 return ResourceManager.GetString("lblTheseAreApproximateValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 31 Oct.
+        /// </summary>
+        public static string lblThirtyFirstOct {
+            get {
+                return ResourceManager.GetString("lblThirtyFirstOct", resourceCulture);
             }
         }
         
@@ -4596,6 +4659,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When was the sample for soil mineral nitrogen taken in {0}?.
+        /// </summary>
+        public static string lblWhenWasTheSampleForSoilMineralNitrogenTaken {
+            get {
+                return ResourceManager.GetString("lblWhenWasTheSampleForSoilMineralNitrogenTaken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which fields do you plan to grow {0} in?.
         /// </summary>
         public static string lblWhichFieldsDoYouPlanToGrow {
@@ -5049,6 +5121,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The date entered is not valid..
+        /// </summary>
+        public static string MsgDateEnteredIsNotValid {
+            get {
+                return ResourceManager.GetString("MsgDateEnteredIsNotValid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to For example, 27 3 2007.
         /// </summary>
         public static string MsgDateExample {
@@ -5063,6 +5144,15 @@ namespace NMP.Portal.Resources {
         public static string MsgDateMustBeARealDate {
             get {
                 return ResourceManager.GetString("MsgDateMustBeARealDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The date must be filled before proceeding..
+        /// </summary>
+        public static string MsgdateMustBeFilledBeforeProceeding {
+            get {
+                return ResourceManager.GetString("MsgdateMustBeFilledBeforeProceeding", resourceCulture);
             }
         }
         
@@ -5117,6 +5207,15 @@ namespace NMP.Portal.Resources {
         public static string MsgDateMustIncludeAYear {
             get {
                 return ResourceManager.GetString("MsgDateMustIncludeAYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date should not be in the future.
+        /// </summary>
+        public static string MsgDateShouldNotBeInTheFuture {
+            get {
+                return ResourceManager.GetString("MsgDateShouldNotBeInTheFuture", resourceCulture);
             }
         }
         
@@ -5530,6 +5629,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The NVZ Action Programme states that the application rate of manufactured nitrogen fertiliser on {0} between {1} and {2} must not exceed {3} kg/ha..
+        /// </summary>
+        public static string MsgForMaxNitrogenForFertiliserExceptBrassicas {
+            get {
+                return ResourceManager.GetString("MsgForMaxNitrogenForFertiliserExceptBrassicas", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to For brassicas, an additional 50 kg/ha may be applied every four weeks during the closed application period up to the end of feb..
         /// </summary>
         public static string MsgForMaxNitrogenForFertiliserForBrassicasFirstAdditionalWarningMsg {
@@ -5562,6 +5670,42 @@ namespace NMP.Portal.Resources {
         public static string MsgForMaxNitrogenForFertiliserForBrassicasWarningMsg {
             get {
                 return ResourceManager.GetString("MsgForMaxNitrogenForFertiliserForBrassicasWarningMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can continue, but you should consider reducing the application rate of manufactured nitrogen fertiliser to avoid the risk of agricultural nitrate pollution..
+        /// </summary>
+        public static string MsgForMaxNitrogenForFertiliserForExceptBrassicasFirstAdditionalWarningMsg {
+            get {
+                return ResourceManager.GetString("MsgForMaxNitrogenForFertiliserForExceptBrassicasFirstAdditionalWarningMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MAX APPLICATION RATE (EVERYTHING EXCEPT BRASSICAS).
+        /// </summary>
+        public static string MsgForMaxNitrogenForFertiliserForExceptBrassicasTitle {
+            get {
+                return ResourceManager.GetString("MsgForMaxNitrogenForFertiliserForExceptBrassicasTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to APPLICATION TO GRASS AT A RATE OF MORE THAN 40KG N/HA IN ONE GO.
+        /// </summary>
+        public static string MsgForMaxNitrogenForFertiliserForGrassTitle {
+            get {
+                return ResourceManager.GetString("MsgForMaxNitrogenForFertiliserForGrassTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The NVZ Action Programme states that manufactured nitrogen fertiliser must not be applied on grass at a rate of more than  40 kg N/ha in one go..
+        /// </summary>
+        public static string MsgForMaxNitrogenForFertiliserGrass {
+            get {
+                return ResourceManager.GetString("MsgForMaxNitrogenForFertiliserGrass", resourceCulture);
             }
         }
         
@@ -5863,6 +6007,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SampleForSoilMineralNitrogen.
+        /// </summary>
+        public static string MsgSampleForSoilMineralNitrogenForError {
+            get {
+                return ResourceManager.GetString("MsgSampleForSoilMineralNitrogenForError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select an address.
         /// </summary>
         public static string MsgSelectAddress {
@@ -6076,6 +6229,15 @@ namespace NMP.Portal.Resources {
         public static string MsgYieldNotSet {
             get {
                 return ResourceManager.GetString("MsgYieldNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the current crop group?.
+        /// </summary>
+        public static string String1 {
+            get {
+                return ResourceManager.GetString("String1", resourceCulture);
             }
         }
         

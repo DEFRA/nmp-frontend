@@ -934,17 +934,22 @@ namespace NMP.Portal.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult SNSAppliedQuestion(FieldViewModel field)
+        public IActionResult SNSAppliedQuestion(FieldViewModel model)
         {
-            if (field.WantToApplySns == null)
+            if (model.WantToApplySns == null)
             {
                 ModelState.AddModelError("WantToApplySns", Resource.MsgSelectAnOptionBeforeContinuing);
             }
             if (!ModelState.IsValid)
             {
-                return View(field);
+                return View(model);
             }
-            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", field);
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
+
+            if (model.WantToApplySns != null && model.WantToApplySns.Value)
+            {
+                return RedirectToAction("SampleForSoilMineralNitrogen");
+            }
 
             return RedirectToAction("CheckAnswer");
         }
@@ -1205,6 +1210,98 @@ namespace NMP.Portal.Controllers
             List<SoilAnalysisResponse> soilAnalysisResponse = await _fieldService.FetchSoilAnalysisByFieldId(fieldId);
             ViewBag.SampleDate = soilAnalysisResponse;
 
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> SampleForSoilMineralNitrogen()
+        {
+            FieldViewModel model = new FieldViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SampleForSoilMineralNitrogen(FieldViewModel model)
+        {
+
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("SampleForSoilMineralNitrogen"))
+            {
+                var dateError = ModelState["SampleForSoilMineralNitrogen"].Errors.Count > 0 ?
+                                ModelState["SampleForSoilMineralNitrogen"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, Resource.MsgSampleForSoilMineralNitrogenForError)))
+                {
+                    ModelState["SampleForSoilMineralNitrogen"].Errors.Clear();
+                    ModelState["SampleForSoilMineralNitrogen"].Errors.Add(Resource.MsgDateEnteredIsNotValid);
+                }
+            }
+
+            if (model.SampleForSoilMineralNitrogen == null)
+            {
+                ModelState.AddModelError("SampleForSoilMineralNitrogen", Resource.MsgdateMustBeFilledBeforeProceeding);
+            }
+            if (DateTime.TryParseExact(model.SampleForSoilMineralNitrogen.ToString(), "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out _))
+            {
+                ModelState.AddModelError("SampleForSoilMineralNitrogen", Resource.MsgDateEnteredIsNotValid);
+            }
+
+            if (model.SampleForSoilMineralNitrogen != null)
+            {
+                if (model.SampleForSoilMineralNitrogen.Value.Date > DateTime.Now)
+                {
+                    ModelState.AddModelError("SampleForSoilMineralNitrogen", Resource.MsgDateShouldNotBeInTheFuture);
+                }
+                if (model.SampleForSoilMineralNitrogen.Value.Date.Year < 1601)
+                {
+                    ModelState.AddModelError("SampleForSoilMineralNitrogen", Resource.MsgDateEnteredIsNotValid);
+                }
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
+            if (model.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
+
+            return RedirectToAction("CurrentCropGroups");
+        }
+        [HttpGet]
+        public async Task<IActionResult> CurrentCropGroups()
+        {
+            FieldViewModel model = new FieldViewModel();
+            List<CropGroupResponse> cropGroups = new List<CropGroupResponse>();
+
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+                cropGroups = await _fieldService.FetchCropGroups();
+                ViewBag.CropGroupList = cropGroups;
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+                return RedirectToAction("SampleForSoilMineralNitrogen");
+            }
             return View(model);
         }
     }
