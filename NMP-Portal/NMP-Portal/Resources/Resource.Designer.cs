@@ -106,6 +106,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 15 Oct to 31 Oct.
+        /// </summary>
+        public static string lbl15Octto31Oct {
+            get {
+                return ResourceManager.GetString("lbl15Octto31Oct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 16 Aug to {0} Feb.
+        /// </summary>
+        public static string lbl16Septo28Feb {
+            get {
+                return ResourceManager.GetString("lbl16Septo28Feb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 16 Sep to 31 Dec.
         /// </summary>
         public static string lbl16Septo31Dec {
@@ -115,11 +133,38 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 16 Sep to 31 Oct.
+        /// </summary>
+        public static string lbl16Septo31Oct {
+            get {
+                return ResourceManager.GetString("lbl16Septo31Oct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 Aug to {0} Feb.
+        /// </summary>
+        public static string lbl1Augto28Feb {
+            get {
+                return ResourceManager.GetString("lbl1Augto28Feb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 1 Aug to 31 Dec.
         /// </summary>
         public static string lbl1Augto31Dec {
             get {
                 return ResourceManager.GetString("lbl1Augto31Dec", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 Aug to 31 Oct.
+        /// </summary>
+        public static string lbl1Augto31Oct {
+            get {
+                return ResourceManager.GetString("lbl1Augto31Oct", resourceCulture);
             }
         }
         
@@ -142,6 +187,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 1 Oct to {0} Feb.
+        /// </summary>
+        public static string lbl1Octto28Feb {
+            get {
+                return ResourceManager.GetString("lbl1Octto28Feb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 1 Oct to 31 Jan.
         /// </summary>
         public static string lbl1Octto31Jan {
@@ -151,11 +205,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 1 Oct to 31 Oct.
+        /// </summary>
+        public static string lbl1Octto31Oct {
+            get {
+                return ResourceManager.GetString("lbl1Octto31Oct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 1 Sep to 31 Dec.
         /// </summary>
         public static string lbl1Septo31Dec {
             get {
                 return ResourceManager.GetString("lbl1Septo31Dec", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 Sep to 31 Oct.
+        /// </summary>
+        public static string lbl1Septo31Oct {
+            get {
+                return ResourceManager.GetString("lbl1Septo31Oct", resourceCulture);
             }
         }
         
@@ -1618,15 +1690,6 @@ namespace NMP.Portal.Resources {
         public static string lblFieldMeasurements {
             get {
                 return ResourceManager.GetString("lblFieldMeasurements", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to  Field Measurements.
-        /// </summary>
-        public static string lblFieldMeasurementTitle {
-            get {
-                return ResourceManager.GetString("lblFieldMeasurementTitle", resourceCulture);
             }
         }
         
@@ -3726,6 +3789,17 @@ namespace NMP.Portal.Resources {
         public static string lblTheNVZActionProgrammeAppRateExceeds150WithinClosedPeriodOrganic {
             get {
                 return ResourceManager.GetString("lblTheNVZActionProgrammeAppRateExceeds150WithinClosedPeriodOrganic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The NVZ Action Programme states that the application rate of high available N manures on {0} between {1} must not exceed {2}kg/ha at one time and you must not spread more than 150kg of total nitrogen per hectare.
+        /// 
+        ///You can continue, but you should consider reducing the application rate of high available N manures to avoid the risk of agricultural nitrate pollution..
+        /// </summary>
+        public static string lblTheNVZActionProgrammeAppRateExceedsHighNWithinWarningPeriodOrganic {
+            get {
+                return ResourceManager.GetString("lblTheNVZActionProgrammeAppRateExceedsHighNWithinWarningPeriodOrganic", resourceCulture);
             }
         }
         

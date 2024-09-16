@@ -89,6 +89,7 @@ namespace NMP.Portal.ViewModels
         public bool IsNMaxLimitWarning { get; set; } = false;
         public bool IsEndClosedPeriodFebruaryWarning { get; set; } = false;
         public bool IsEndClosedPeriodFebruaryExistWithinThreeWeeks { get; set; } = false;
-        public bool IsClosedPeriodOrganicAppRateExceedMaxN { get; set; } = false;
+        //public bool IsClosedPeriodOrganicAppRateExceedMaxN { get; set; } = false;
+        public bool IsStartPeriodEndFebOrganicAppRateExceedMaxN150 { get; set; } = false;
     }
 }

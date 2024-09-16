@@ -2159,8 +2159,34 @@ You can continue, but you should consider allowing more time between application
   <data name="MsgSampleForSoilMineralNitrogenForError" xml:space="preserve">
     <value>SampleForSoilMineralNitrogen</value>
   </data>
-  <data name="lblFieldMeasurementTitle" xml:space="preserve">
-    <value> Field Measurements</value>
+  <data name="lbl15Octto31Oct" xml:space="preserve">
+    <value>15 Oct to 31 Oct</value>
+  </data>
+  <data name="lbl16Septo28Feb" xml:space="preserve">
+    <value>16 Aug to {0} Feb</value>
+  </data>
+  <data name="lbl16Septo31Oct" xml:space="preserve">
+    <value>16 Sep to 31 Oct</value>
+  </data>
+  <data name="lbl1Augto28Feb" xml:space="preserve">
+    <value>1 Aug to {0} Feb</value>
+  </data>
+  <data name="lbl1Augto31Oct" xml:space="preserve">
+    <value>1 Aug to 31 Oct</value>
+  </data>
+  <data name="lbl1Octto28Feb" xml:space="preserve">
+    <value>1 Oct to {0} Feb</value>
+  </data>
+  <data name="lbl1Octto31Oct" xml:space="preserve">
+    <value>1 Oct to 31 Oct</value>
+  </data>
+  <data name="lbl1Septo31Oct" xml:space="preserve">
+    <value>1 Sep to 31 Oct</value>
+  </data>
+  <data name="lblTheNVZActionProgrammeAppRateExceedsHighNWithinWarningPeriodOrganic" xml:space="preserve">
+    <value>The NVZ Action Programme states that the application rate of high available N manures on {0} between {1} must not exceed {2}kg/ha at one time and you must not spread more than 150kg of total nitrogen per hectare.
+ 
+You can continue, but you should consider reducing the application rate of high available N manures to avoid the risk of agricultural nitrate pollution.</value>
   </data>
   <data name="lblCurrentCropType" xml:space="preserve">
     <value>Current crop type</value>

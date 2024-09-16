@@ -13,6 +13,7 @@
     if (Model.IsOrgManureNfieldLimitWarning) trueWarningCount++;
     if (Model.IsNMaxLimitWarning) trueWarningCount++;
     if (Model.IsEndClosedPeriodFebruaryWarning) trueWarningCount++;
+    if (Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150) trueWarningCount++;
 }
 @section BeforeContent {
     <govuk-back-link asp-action=@((Model.IsCheckAnswer&&(!Model.IsManureTypeChange)&&(!Model.IsFieldGroupChange)) ? "CheckAnswer" : "ApplicationRateMethod") asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
@@ -99,7 +100,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsOrgManureNfieldLimitWarning" value="@Model.IsOrgManureNfieldLimitWarning.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEndClosedPeriodFebruaryWarning" value="@Model.IsEndClosedPeriodFebruaryWarning"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks" value="@Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodOrganicAppRateExceedMaxN" value="@Model.IsClosedPeriodOrganicAppRateExceedMaxN"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150" value="@Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150"></govuk-input>
 
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
@@ -142,7 +143,7 @@
                 }
             }
 
-            @if (Model.IsOrgManureNfieldLimitWarning || Model.IsNMaxLimitWarning || Model.IsEndClosedPeriodFebruaryWarning)
+            @if (Model.IsOrgManureNfieldLimitWarning || Model.IsNMaxLimitWarning || Model.IsEndClosedPeriodFebruaryWarning || Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
             {
                 <govuk-notification-banner>
                     <govuk-notification-banner-title>
@@ -171,7 +172,7 @@
                             </p>
                             <p class="govuk-body">@TempData["EndClosedPeriodAndFebruaryWarningMessage"]</p>
                         }
-                        @if (Model.IsClosedPeriodOrganicAppRateExceedMaxN)
+                        @if (Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
                         {
                             <p class="govuk-notification-banner__heading">
                                 @Resource.lblThisApplicationTakeOverMaxAppRate
@@ -199,7 +200,7 @@
                                 {
                                     <li>@(Model.ManureTypeId == 8 ? Resource.lblThisApplicationMayTakeYouOverMaxARPoultryManure : Resource.lblApplicationRateOverTheMaximumRateForSlurry)</li>
                                 }
-                                @if (Model.IsClosedPeriodOrganicAppRateExceedMaxN)
+                                @if (Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
                                 {
                                     <li>@Resource.lblThisApplicationTakeOverMaxAppRate</li>
                                 }
@@ -224,7 +225,7 @@
                                         <h2 class="govuk-heading-s">@(Model.ManureTypeId == 8 ? Resource.lblThisApplicationMayTakeYouOverMaxARPoultryManure : Resource.lblApplicationRateOverTheMaximumRateForSlurry)</h2>
                                         <p class="govuk-body">@TempData["EndClosedPeriodAndFebruaryWarningMessage"]</p>
                                     }
-                                    @if (Model.IsClosedPeriodOrganicAppRateExceedMaxN)
+                                    @if (Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
                                     {
                                         <h2 class="govuk-heading-s">@Resource.lblThisApplicationTakeOverMaxAppRate</h2>
                                         <p class="govuk-body">@TempData["AppRateExceeds150WithinClosedPeriodOrganic"]</p>
