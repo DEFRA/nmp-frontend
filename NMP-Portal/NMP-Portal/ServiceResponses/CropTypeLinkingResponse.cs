@@ -18,5 +18,8 @@ namespace NMP.Portal.ServiceResponses
 
         [JsonProperty("nMaxLimit")]
         public int? NMaxLimit { get; set; }
+
+        [JsonProperty("sNSCategoryID")]
+        public int? SNSCategoryID { get; set; }
     }
 }

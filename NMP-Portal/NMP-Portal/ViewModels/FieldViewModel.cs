@@ -1,4 +1,6 @@
 ﻿using NMP.Portal.Models;
+using NMP.Portal.Resources;
+using System.ComponentModel.DataAnnotations;
 
 namespace NMP.Portal.ViewModels
 {
@@ -36,6 +38,12 @@ namespace NMP.Portal.ViewModels
         public int? LastHarvestYear { get; set; }
         public DateTime? SampleForSoilMineralNitrogen { get; set; }
         public int? CurrentCropGroup { get; set; }
+        public bool? IsCalculateNitrogen { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheNumberOfShootsPerSquareMetre))]
+        public int? NumberOfShoots { get; set; }
+        public int Season { get; set; }
+        public int GrowthAreaIndexOrCropHeight { get; set; }
 
     }
 }
