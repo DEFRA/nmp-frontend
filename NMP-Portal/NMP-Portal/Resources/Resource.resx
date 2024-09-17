@@ -2191,4 +2191,31 @@ You can continue, but you should consider reducing the application rate of high 
   <data name="lblCurrentCropType" xml:space="preserve">
     <value>Current crop type</value>
   </data>
+  <data name="lblSoilMineralNitrogenAnalysisResults" xml:space="preserve">
+    <value>Soil mineral nitrogen analysis results</value>
+  </data>
+  <data name="lblEnterTheSoilMineralNitrogenAnalysisResult" xml:space="preserve">
+    <value>Enter the soil mineral nitrogen analysis results for {0}</value>
+  </data>
+  <data name="lblKilogramsOfSoilMineralNitrogenAt030CM" xml:space="preserve">
+    <value>Kilograms of soil mineral nitrogen at 0-30cm</value>
+  </data>
+  <data name="lblKilogramsOfSoilMineralNitrogenAt3060CM" xml:space="preserve">
+    <value>Kilograms of soil mineral nitrogen at 30-60cm</value>
+  </data>
+  <data name="lblKilogramsOfSoilMineralNitrogenAt6090CM" xml:space="preserve">
+    <value>Kilograms of soil mineral nitrogen at 60-90cm</value>
+  </data>
+  <data name="lblAddSoilMineralNitrogen" xml:space="preserve">
+    <value>Add soil mineral nitrogen for {0}</value>
+  </data>
+  <data name="lblWhatWasTheSampleDepth" xml:space="preserve">
+    <value>What was the sample depth?</value>
+  </data>
+  <data name="lblSoilMineralNitrogen" xml:space="preserve">
+    <value>Soil mineral nitrogen</value>
+  </data>
+  <data name="lblSampleDepth" xml:space="preserve">
+    <value>Sample depth</value>
+  </data>
 </root>

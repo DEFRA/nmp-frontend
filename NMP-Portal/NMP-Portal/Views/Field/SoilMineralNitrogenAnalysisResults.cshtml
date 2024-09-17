@@ -3,22 +3,29 @@
 @model FieldViewModel
 
 @{
-    ViewData["Title"] = Resource.lblAddField;
+    ViewData["Title"] = Resource.lblSoilMineralNitrogenAnalysisResults;
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "BackActionForAddField")" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "CurrentCropTypes")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-l">@Resource.lblAddField</h1>
-        @if (TempData["ErrorOnBackButton"] != null)
+        @if (TempData["SoilMineralNitrogenAnalysisResultsError"] != null)
         {
             <govuk-error-summary>
-                <govuk-error-summary-item href="#passport-issued-day">@TempData["ErrorOnBackButton"]</govuk-error-summary-item>
+                <govuk-error-summary-item href="#passport-issued-day">@TempData["SoilMineralNitrogenAnalysisResultsError"]</govuk-error-summary-item>
             </govuk-error-summary>
         }
+        <govuk-notification-banner>
+            <govuk-notification-banner-title>
+                @Resource.lblImportant
+            </govuk-notification-banner-title>
+            <p>
+                This page is under construction.
+            </p>
+        </govuk-notification-banner>
         <form asp-action="AddField" method="post" asp-controller="Field">
             @Html.AntiForgeryToken()
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalArea"></govuk-input>
@@ -39,9 +46,9 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.PhosphorusMethodologyID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.Magnesium"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.Phosphorus"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.Potassium"></govuk-input>            
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.Potassium"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupId"></govuk-input>                        
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilType"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroup"></govuk-input>
@@ -60,27 +67,27 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilNutrientValueTypeIndex" value="@Model.IsSoilNutrientValueTypeIndex.ToString().ToLower()"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilReleasingClay" value="@Model.IsSoilReleasingClay.ToString().ToLower()"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAbove300SeaLevelForFarm" value="@Model.IsAbove300SeaLevelForFarm.ToString().ToLower()"></govuk-input>
-                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZForFarm" value="@Model.IsWithinNVZForFarm.ToString().ToLower()"></govuk-input>                
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZForFarm" value="@Model.IsWithinNVZForFarm.ToString().ToLower()"></govuk-input>
             }
-            <div class="govuk-form-group">
-                <govuk-input asp-for="@Model.Name"></govuk-input>
-            </div>
 
-            <div class="govuk-form-group margin-bottom-forty">
-                <govuk-input class="input-width-15" asp-for="@Model.NationalGridReference"></govuk-input>
-            </div>
-            <div class="govuk-form-group margin-bottom-forty">
-                <govuk-input class="input-width-15" asp-for="@Model.OtherReference"></govuk-input>
-            </div>
-            @if (Model.isEnglishRules != null && (!Model.isEnglishRules))
-            {
-                <div class="govuk-form-group margin-bottom-forty">
-                    <govuk-input class="input-width-15" asp-for="@Model.LPIDNumber"></govuk-input>
-                </div>
-            }
-            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
-                @Resource.lblContinue
-            </govuk-button>
+            <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblEnterTheSoilMineralNitrogenAnalysisResult, Model.Name)</h1>
+            </legand>
+            <govuk-input name="SoilMineralNitrogenAt030CM" asp-for=@Model.SoilMineralNitrogenAt030CM type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                <govuk-input-label is-page-heading="true">@Resource.lblKilogramsOfSoilMineralNitrogenAt030CM</govuk-input-label>
+                <govuk-input-suffix>@Resource.lblKgPerHectare</govuk-input-suffix>
+            </govuk-input>
+            <govuk-input name="SoilMineralNitrogenAt3060CM" asp-for=@Model.SoilMineralNitrogenAt3060CM type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                <govuk-input-label is-page-heading="true">@Resource.lblKilogramsOfSoilMineralNitrogenAt3060CM</govuk-input-label>
+                <govuk-input-suffix>@Resource.lblKgPerHectare</govuk-input-suffix>
+            </govuk-input>
+            <govuk-input name="SoilMineralNitrogenAt6090CM" asp-for=@Model.SoilMineralNitrogenAt6090CM type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                <govuk-input-label is-page-heading="true">@Resource.lblKilogramsOfSoilMineralNitrogenAt6090CM</govuk-input-label>
+                <govuk-input-suffix>@Resource.lblKgPerHectare</govuk-input-suffix>
+            </govuk-input>
+            @* <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
+            @Resource.lblContinue
+            </govuk-button> *@
         </form>
         <p class="govuk-body cancel-link"><a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
     </div>
