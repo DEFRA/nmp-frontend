@@ -1447,13 +1447,13 @@ namespace NMP.Portal.Controllers
             }
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
 
-            int snsCategoryId = await _fieldService.FetchSNSCategoryIdByCropTypeId(model.CropTypeID ?? 0);
+            int snsCategoryId = await _fieldService.FetchSNSCategoryIdByCropTypeId(model.CurrentCropTypeId ?? 0);
             if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterCereals || snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterOilseedRape)
             {
                 return RedirectToAction("CalculateNitrogenInCurrentCropQuestion");
             }
 
-            return RedirectToAction("SoilMineralNitrogenAnalysisResults");
+            return RedirectToAction("EstimateOfNitrogenMineralisationQuestion");
         }
 
 
@@ -1461,8 +1461,6 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> CalculateNitrogenInCurrentCropQuestion()
         {
             FieldViewModel model = new FieldViewModel();
-            List<CropGroupResponse> cropGroups = new List<CropGroupResponse>();
-
             try
             {
                 if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
@@ -1473,8 +1471,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                cropGroups = await _fieldService.FetchCropGroups();
-                ViewBag.CropGroupList = cropGroups;
+                
             }
             catch (Exception ex)
             {
@@ -1497,7 +1494,8 @@ namespace NMP.Portal.Controllers
                 return View(model);
             }
 
-            int snsCategoryId = await _fieldService.FetchSNSCategoryIdByCropTypeId(model.CropTypeID??0);
+            int snsCategoryId = await _fieldService.FetchSNSCategoryIdByCropTypeId(model.CurrentCropTypeId ?? 0);
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
 
             if (model.IsCalculateNitrogen==true)
             {
@@ -1515,17 +1513,17 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("EstimateOfNitrogenMineralisationQuestion");
             }
 
-            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
+            
 
 
-            return RedirectToAction("NumberOfShoots");
+            return RedirectToAction("EstimateOfNitrogenMineralisationQuestion");
         }
 
         [HttpGet]
         public async Task<IActionResult> NumberOfShoots()
         {
             FieldViewModel model = new FieldViewModel();
-            List<CropGroupResponse> cropGroups = new List<CropGroupResponse>();
+            List<SeasonResponse> seasons = new List<SeasonResponse>();
 
             try
             {
@@ -1537,8 +1535,8 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                cropGroups = await _fieldService.FetchCropGroups();
-                ViewBag.CropGroupList = cropGroups;
+                seasons = await _fieldService.FetchSeasons();
+                ViewBag.SeasonList = seasons;
             }
             catch (Exception ex)
             {
@@ -1556,9 +1554,9 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("NumberOfShoots", Resource.lblEnterAValidNumber);
             }
-            if (model.Season == 0)
+            if (model.SeasonId == 0)
             {
-                ModelState.AddModelError("Season", Resource.MsgSelectAnOptionBeforeContinuing);
+                ModelState.AddModelError("SeasonId", Resource.MsgSelectAnOptionBeforeContinuing);
             }
             if (!ModelState.IsValid)
             {

@@ -2,9 +2,26 @@
 @model NMP.Portal.ViewModels.FieldViewModel
 @{
     ViewData["Title"] = Resource.lblEstimateOfNitrogenMineralisationQuestion;
+    var actionMethod = "";
+    if (Model.IsCheckAnswer)
+    {
+        actionMethod = "CheckAnswer";
+    }
+    else
+    {
+        actionMethod = "CalculateNitrogenInCurrentCropQuestion";
+    }
+    // else if (Model.NumberOfShoots>0)
+    // {
+    //     actionMethod = "NumberOfShoots";
+    // }
+    // else if (Model.IsCalculateNitrogen ==false)
+    // {
+    //     actionMethod = "CalculateNitrogenInCurrentCropQuestion";
+    // }
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" :"CalculateNitrogenInCurrentCropQuestion")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@actionMethod" asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="NumberOfShoots" asp-controller="Field" method="post">
     @Html.AntiForgeryToken()
@@ -62,8 +79,15 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LastHarvestYear"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupId"></govuk-input>
     <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SampleForSoilMineralNitrogen" value="@Model.SampleForSoilMineralNitrogen"></govuk-date-input>
-    <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SampleForSoilMineralNitrogen" value="@Model.SampleForSoilMineralNitrogen"></govuk-date-input>
 
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CurrentCropGroupId"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CurrentCropGroup"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CurrentCropType"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CurrentCropTypeId"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCalculateNitrogen" value="@Model.IsCalculateNitrogen"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumberOfShoots"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SeasonId" value="@Model.SeasonId"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrowthAreaIndexOrCropHeight" value="@Model.GrowthAreaIndexOrCropHeight"></govuk-input>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             @if (TempData["Error"] != null)
@@ -86,7 +110,7 @@
             @* <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button> *@
-            <p class="govuk-body cancel-link"><a asp-action="CreateFarmCancel" asp-controller="Farm">@Resource.lblCancel</a></p>
+            <p class="govuk-body cancel-link"><a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
 
         </div>
 

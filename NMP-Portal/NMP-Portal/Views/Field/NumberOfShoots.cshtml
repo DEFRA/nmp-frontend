@@ -2,8 +2,6 @@
 @model NMP.Portal.ViewModels.FieldViewModel
 @{
     ViewData["Title"] = Resource.lblNumberOfShoots;
-    var autumn = (int)NMP.Portal.Enums.Season.Autumn;
-    var spring = (int)NMP.Portal.Enums.Season.Spring;
 }
 
 @section BeforeContent {
@@ -65,8 +63,15 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LastHarvestYear"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupId"></govuk-input>
     <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SampleForSoilMineralNitrogen" value="@Model.SampleForSoilMineralNitrogen"></govuk-date-input>
-    <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SampleForSoilMineralNitrogen" value="@Model.SampleForSoilMineralNitrogen"></govuk-date-input>
 
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CurrentCropGroupId"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CurrentCropGroup"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CurrentCropType"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CurrentCropTypeId"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCalculateNitrogen" value="@Model.IsCalculateNitrogen"></govuk-input>
+    @* <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumberOfShoots"></govuk-input> *@
+    @* <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SeasonId" value="@Model.SeasonId"></govuk-input> *@
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrowthAreaIndexOrCropHeight" value="@Model.GrowthAreaIndexOrCropHeight"></govuk-input>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             @if (TempData["Error"] != null)
@@ -82,20 +87,25 @@
             @* <govuk-govuk-input asp-for=@Model.NumberOfShoots input-class="govuk-input--width-5" inputmode="numeric" spellcheck="false">
             <govuk-input-label is-page-heading="true" class="govuk-label--l"> @Resource.lblWhatIsTheNumberOfShootsPerSquareMetre</govuk-input-label>
             </govuk-govuk-input> *@
-            <govuk-radios asp-for="@Model.Season">
+            <govuk-radios asp-for="@Model.SeasonId">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend>
                         @Resource.lblWhenWasThisMeasured
                     </govuk-radios-fieldset-legend>
-                    <govuk-radios-item value="@autumn">@Resource.lblAutumn</govuk-radios-item>
-                    <govuk-radios-item value="@spring">@Resource.lblSpring</govuk-radios-item>
+                    @if (ViewBag.SeasonList != null)
+                    {
+                        @foreach (var item in ViewBag.SeasonList)
+                        {
+                            <govuk-radios-item value="@item.SeasonId">@item.Season</govuk-radios-item>
+                        }
+                    }
 
                 </govuk-radios-fieldset>
             </govuk-radios>
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
-            <p class="govuk-body cancel-link"><a asp-action="CreateFarmCancel" asp-controller="Farm">@Resource.lblCancel</a></p>
+            <p class="govuk-body cancel-link"><a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
 
         </div>
 
