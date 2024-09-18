@@ -46,6 +46,10 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LastHarvestYear"></govuk-input>
     <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.Date"></govuk-date-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.PH"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CurrentCropGroupId"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CurrentCropGroup"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CurrentCropType"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CurrentCropTypeId"></govuk-input>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             @if (TempData["Error"] != null)

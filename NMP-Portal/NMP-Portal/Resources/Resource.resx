@@ -2144,9 +2144,6 @@ You can continue, but you should consider allowing more time between application
   <data name="lblSoilDateAndPH" xml:space="preserve">
     <value>Soil Date and PH</value>
   </data>
-  <data name="String1" xml:space="preserve">
-    <value>What is the current crop group?</value>
-  </data>
   <data name="lblWhenWasTheSampleForSoilMineralNitrogenTaken" xml:space="preserve">
     <value>When was the sample for soil mineral nitrogen taken in {0}?</value>
   </data>
@@ -2190,6 +2187,36 @@ You can continue, but you should consider allowing more time between application
     <value>The NVZ Action Programme states that the application rate of high available N manures on {0} between {1} must not exceed {2}kg/ha at one time and you must not spread more than 150kg of total nitrogen per hectare.
  
 You can continue, but you should consider reducing the application rate of high available N manures to avoid the risk of agricultural nitrate pollution.</value>
+  </data>
+  <data name="lblCurrentCropType" xml:space="preserve">
+    <value>Current crop type</value>
+  </data>
+  <data name="lblSoilMineralNitrogenAnalysisResults" xml:space="preserve">
+    <value>Soil mineral nitrogen analysis results</value>
+  </data>
+  <data name="lblEnterTheSoilMineralNitrogenAnalysisResult" xml:space="preserve">
+    <value>Enter the soil mineral nitrogen analysis results for {0}</value>
+  </data>
+  <data name="lblKilogramsOfSoilMineralNitrogenAt030CM" xml:space="preserve">
+    <value>Kilograms of soil mineral nitrogen at 0-30cm</value>
+  </data>
+  <data name="lblKilogramsOfSoilMineralNitrogenAt3060CM" xml:space="preserve">
+    <value>Kilograms of soil mineral nitrogen at 30-60cm</value>
+  </data>
+  <data name="lblKilogramsOfSoilMineralNitrogenAt6090CM" xml:space="preserve">
+    <value>Kilograms of soil mineral nitrogen at 60-90cm</value>
+  </data>
+  <data name="lblAddSoilMineralNitrogen" xml:space="preserve">
+    <value>Add soil mineral nitrogen for {0}</value>
+  </data>
+  <data name="lblWhatWasTheSampleDepth" xml:space="preserve">
+    <value>What was the sample depth?</value>
+  </data>
+  <data name="lblSoilMineralNitrogen" xml:space="preserve">
+    <value>Soil mineral nitrogen</value>
+  </data>
+  <data name="lblSampleDepth" xml:space="preserve">
+    <value>Sample depth</value>
   </data>
   <data name="lblWouldYouLikeUsToHelpYouCalculateTheNitrogen" xml:space="preserve">
     <value>Would you like us to help you calculate the nitrogen contained in the current crop?</value>

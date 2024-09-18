@@ -394,6 +394,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add soil mineral nitrogen for {0}.
+        /// </summary>
+        public static string lblAddSoilMineralNitrogen {
+            get {
+                return ResourceManager.GetString("lblAddSoilMineralNitrogen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add soil nutrient value.
         /// </summary>
         public static string lblAddSoilNutrientValue {
@@ -1125,6 +1134,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current crop type.
+        /// </summary>
+        public static string lblCurrentCropType {
+            get {
+                return ResourceManager.GetString("lblCurrentCropType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Current fields.
         /// </summary>
         public static string lblCurrentFields {
@@ -1483,6 +1501,15 @@ namespace NMP.Portal.Resources {
         public static string lblEnterTheDateInCorrectFormat {
             get {
                 return ResourceManager.GetString("lblEnterTheDateInCorrectFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the soil mineral nitrogen analysis results for {0}.
+        /// </summary>
+        public static string lblEnterTheSoilMineralNitrogenAnalysisResult {
+            get {
+                return ResourceManager.GetString("lblEnterTheSoilMineralNitrogenAnalysisResult", resourceCulture);
             }
         }
         
@@ -2304,6 +2331,33 @@ namespace NMP.Portal.Resources {
         public static string lblKgWithNutrient {
             get {
                 return ResourceManager.GetString("lblKgWithNutrient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kilograms of soil mineral nitrogen at 0-30cm.
+        /// </summary>
+        public static string lblKilogramsOfSoilMineralNitrogenAt030CM {
+            get {
+                return ResourceManager.GetString("lblKilogramsOfSoilMineralNitrogenAt030CM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kilograms of soil mineral nitrogen at 30-60cm.
+        /// </summary>
+        public static string lblKilogramsOfSoilMineralNitrogenAt3060CM {
+            get {
+                return ResourceManager.GetString("lblKilogramsOfSoilMineralNitrogenAt3060CM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kilograms of soil mineral nitrogen at 60-90cm.
+        /// </summary>
+        public static string lblKilogramsOfSoilMineralNitrogenAt6090CM {
+            get {
+                return ResourceManager.GetString("lblKilogramsOfSoilMineralNitrogenAt6090CM", resourceCulture);
             }
         }
         
@@ -3424,6 +3478,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sample depth.
+        /// </summary>
+        public static string lblSampleDepth {
+            get {
+                return ResourceManager.GetString("lblSampleDepth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sample for soil mineral nitrogen.
         /// </summary>
         public static string lblSampleForSoilMineralNitrogen {
@@ -3600,6 +3663,24 @@ namespace NMP.Portal.Resources {
         public static string lblSoilDeficientInSulpurForCheckAnswer {
             get {
                 return ResourceManager.GetString("lblSoilDeficientInSulpurForCheckAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Soil mineral nitrogen.
+        /// </summary>
+        public static string lblSoilMineralNitrogen {
+            get {
+                return ResourceManager.GetString("lblSoilMineralNitrogen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Soil mineral nitrogen analysis results.
+        /// </summary>
+        public static string lblSoilMineralNitrogenAnalysisResults {
+            get {
+                return ResourceManager.GetString("lblSoilMineralNitrogenAnalysisResults", resourceCulture);
             }
         }
         
@@ -4709,6 +4790,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhatWasThePreviousCropTypeForCheckAnswere {
             get {
                 return ResourceManager.GetString("lblWhatWasThePreviousCropTypeForCheckAnswere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What was the sample depth?.
+        /// </summary>
+        public static string lblWhatWasTheSampleDepth {
+            get {
+                return ResourceManager.GetString("lblWhatWasTheSampleDepth", resourceCulture);
             }
         }
         
@@ -6346,15 +6436,6 @@ namespace NMP.Portal.Resources {
         public static string MsgYieldNotSet {
             get {
                 return ResourceManager.GetString("MsgYieldNotSet", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to What is the current crop group?.
-        /// </summary>
-        public static string String1 {
-            get {
-                return ResourceManager.GetString("String1", resourceCulture);
             }
         }
         

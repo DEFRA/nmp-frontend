@@ -30,14 +30,23 @@ namespace NMP.Portal.ViewModels
         public string? CropType { get; set; } = string.Empty;
         public string? CropGroup { get; set; } = string.Empty;
         public string SampleDate { get; set; } = string.Empty;
-        public bool isEnglishRules { get; set; } 
+        public bool isEnglishRules { get; set; }
 
         public int FarmID { get; set; }
         public bool? IsWithinNVZForFarm { get; set; }
         public bool? IsAbove300SeaLevelForFarm { get; set; }
         public int? LastHarvestYear { get; set; }
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblSampleForSoilMineralNitrogen))]
         public DateTime? SampleForSoilMineralNitrogen { get; set; }
-        public int? CurrentCropGroup { get; set; }
+        public int? CurrentCropGroupId { get; set; }
+        public string? CurrentCropGroup { get; set; }
+        public int? CurrentCropTypeId { get; set; }
+        public string? CurrentCropType { get; set; }
+        public int? SoilMineralNitrogenAt030CM { get; set; }
+        public int? SoilMineralNitrogenAt3060CM { get; set; }
+        public int? SoilMineralNitrogenAt6090CM { get; set; }
+        public int? SampleDepth { get; set; }
+        public int? SoilMineralNitrogen { get; set; }
         public bool? IsCalculateNitrogen { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheNumberOfShootsPerSquareMetre))]
