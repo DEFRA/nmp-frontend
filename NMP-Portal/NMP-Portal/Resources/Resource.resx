@@ -1996,13 +1996,13 @@ m3/ha  not set</value>
     <value>This application may take you over the Organic Manure N Field Limit</value>
   </data>
   <data name="MsgIfOrganicManureNMaxLimitExceed" xml:space="preserve">
-    <value>The NVZ Action Programme states that the total amount of nitrogen from all organic manures you apply in any 12-month period on any single hectare of your land must not exceed 250kg. You can continue, but you should consider reducing the amount of nitrogen from organic manures you apply to avoid the risk of agricultural nitrate pollution.</value>
+    <value>The NVZ Action Programme states that the total amount of nitrogen from all organic manures you apply in any 12-month period on any single hectare of your land must not exceed 250kg. </value>
   </data>
   <data name="MsgApplicationDateEnteredIsInsideClosedPeriod" xml:space="preserve">
     <value>The application date you entered is inside your closed period for applying high N organic manure.</value>
   </data>
   <data name="MsgApplicationDateEnteredIsInsideClosedPeriodDetail" xml:space="preserve">
-    <value>The NVZ Action Programme states that the closed period for {0} planted on non-organic farms {1} on {2} soil is {3}. You can continue, but you should consider applying outside the closed period to avoid the risk of agricultural nitrate pollution.</value>
+    <value>The NVZ Action Programme states that the closed period for {0} planted on non-organic farms {1} for {2} soil is {3}.</value>
   </data>
   <data name="lblMilling" xml:space="preserve">
     <value>Milling</value>
@@ -2020,8 +2020,7 @@ m3/ha  not set</value>
     <value>This application may take you over the maximum application rate for slurry.</value>
   </data>
   <data name="MsgApplicationRateForSlurryAndPoultryDetail" xml:space="preserve">
-    <value>The NVZ Action Programme states that the application rate of slurry between {0} and the end of February must not exceed 30 m³/ha.
-You can continue, but you should consider reducing the application rate of slurry to avoid the risk of agricultural nitrate pollution.</value>
+    <value>The NVZ Action Programme states that the application rate of slurry between {0} and the end of February must not exceed 30 m³/ha.</value>
   </data>
   <data name="lblEndClosedPeriod" xml:space="preserve">
     <value>{0} {1}</value>
@@ -2045,8 +2044,7 @@ You can continue, but you should consider reducing the application rate of slurr
     <value>You can continue but you should consider adjusting your application rate to comply with NVZ rules.</value>
   </data>
   <data name="MsgTheNVZActionProgrammeStatesThatTheARPoultry" xml:space="preserve">
-    <value>The NVZ Action Programme states that the application rate of poultry manure between {0} and the end of February must not exceed 8 t/ha.
-You can continue, but you should consider reducing the application rate of poultry manure to avoid the risk of agricultural nitrate pollution.</value>
+    <value>The NVZ Action Programme states that the application rate of poultry manure between {0} and the end of February must not exceed 8 t/ha.</value>
   </data>
   <data name="lblMeterCubePerHectare" xml:space="preserve">
     <value>m³ per hectare</value>
@@ -2058,9 +2056,7 @@ You can continue, but you should consider reducing the application rate of poult
     <value>CLOSED PERIOD</value>
   </data>
   <data name="MsgForFertiliserClosedPeriodWarning" xml:space="preserve">
-    <value>The NVZ Action Programme states that the closed period for {0} planted on {1} soil is {2}.
-
- You can continue, but you should consider applying outside the closed period to avoid the risk of agricultural nitrate pollution.</value>
+    <value>The NVZ Action Programme states that the closed period for {0} planted on {1} soil is {2}.</value>
   </data>
   <data name="MsgApplicationAfter31October" xml:space="preserve">
     <value>APPLICATION AFTER 31 OCTOBER</value>
@@ -2072,29 +2068,25 @@ You can continue, but you should consider reducing the application rate of poult
     <value>Manufactured nitrogen fertiliser must not be applied on this crop after 31 October</value>
   </data>
   <data name="MsgForGrassAndOilseedRapeClosedPeriodForFertiliser" xml:space="preserve">
-    <value>The NVZ Action Programme states that manufactured nitrogen fertiliser must not be applied on {0} after 31 October.
-
-You can continue, but you should consider not applying manufactured nitrogen fertiliser at this time, to avoid the risk of agricultural nitrate pollution.</value>
+    <value>The NVZ Action Programme states that manufactured nitrogen fertiliser must not be applied on {0} after 31 October.</value>
   </data>
   <data name="MsgApplicationDateEnteredIsInsideClosedPeriodDetailOrganic" xml:space="preserve">
-    <value>The NVZ Action Programme states that the closed period for {0} planted on organic farms {1} on {2} soil is {3}. You can continue, but you should consider applying outside the closed period to avoid the risk of agricultural nitrate pollution.</value>
+    <value>The NVZ Action Programme states that the closed period for {0} planted on organic farms {1} for {2} soil is {3}.</value>
   </data>
   <data name="lblEndClosederiodAndEndFebYouMustAllow3WeeksGap" xml:space="preserve">
-    <value>The NVZ Action Programme states that, between {0} and the end of February, you must allow at least 3 weeks between each individual application of slurry or poultry manure.
-
-You can continue, but you should consider allowing more time between applications to avoid the risk of agricultural nitrate pollution.</value>
+    <value>The NVZ Action Programme states that, between {0} and the end of February, you must allow at least 3 weeks between each individual application of slurry or poultry manure.</value>
   </data>
   <data name="lblYouMustAllowAtLeast3WeeksBetweenApplications" xml:space="preserve">
     <value>You must allow at least 3 weeks between applications.</value>
   </data>
   <data name="lblTheNVZActionProgrammeAppRateExceeds150WithinClosedPeriodOrganic" xml:space="preserve">
-    <value>The NVZ Action Programme states that the application rate of high available N manures on {0} between {1} must not exceed 150 kg/ha. You can continue, but you should consider reducing the application rate of high available N manures to avoid the risk of agricultural nitrate pollution.</value>
+    <value>The NVZ Action Programme states that the application rate of high available N manures on {0} between {1} must not exceed 150 kg/ha.</value>
   </data>
   <data name="lblThisApplicationTakeOverMaxAppRate" xml:space="preserve">
     <value>This application will take you over the maximum application rate for high N organic manure.</value>
   </data>
   <data name="MsgForMaxNitrogenForFertiliserForBrassicasFirstAdditionalWarningMsg" xml:space="preserve">
-    <value>For brassicas, an additional 50 kg/ha may be applied every four weeks during the closed application period up to the end of feb.</value>
+    <value>For brassicas, an additional 50 kg/ha may be applied every four weeks during the closed application period up to the End of Feb.</value>
   </data>
   <data name="MsgForMaxNitrogenForFertiliserForBrassicasSecondAdditionalWarningMsg" xml:space="preserve">
     <value>You can continue, but you should consider not exceeding the maximum application rate of manufactured nitrogen fertiliser to avoid the risk of agricultural nitrate pollution.</value>
@@ -2184,9 +2176,7 @@ You can continue, but you should consider allowing more time between application
     <value>1 Sep to 31 Oct</value>
   </data>
   <data name="lblTheNVZActionProgrammeAppRateExceedsHighNWithinWarningPeriodOrganic" xml:space="preserve">
-    <value>The NVZ Action Programme states that the application rate of high available N manures on {0} between {1} must not exceed {2}kg/ha at one time and you must not spread more than 150kg of total nitrogen per hectare.
- 
-You can continue, but you should consider reducing the application rate of high available N manures to avoid the risk of agricultural nitrate pollution.</value>
+    <value>The NVZ Action Programme states that the application rate of high available N manures on {0} between {1} must not exceed {2}kg/ha at one time and you must not spread more than 150kg of total nitrogen per hectare.</value>
   </data>
   <data name="lblCurrentCropType" xml:space="preserve">
     <value>Current crop type</value>
@@ -2256,6 +2246,36 @@ You can continue, but you should consider reducing the application rate of high 
   </data>
   <data name="lblNumberOfShoots" xml:space="preserve">
     <value>Number of shoots</value>
+  </data>
+  <data name="lblSoilMineralNitrogenAt030CMForError" xml:space="preserve">
+    <value>SoilMineralNitrogenAt030CM</value>
+  </data>
+  <data name="lblSoilMineralNitrogenAt3060CMForError" xml:space="preserve">
+    <value>SoilMineralNitrogenAt3060CM</value>
+  </data>
+  <data name="lblSoilMineralNitrogenAt6090CMForError" xml:space="preserve">
+    <value>SoilMineralNitrogenAt6090CM</value>
+  </data>
+  <data name="MsgForGrassAndOilseedRapeClosedPeriodForFertiliserAdditional" xml:space="preserve">
+    <value>You can continue, but you should consider not applying manufactured nitrogen fertiliser at this time, to avoid the risk of agricultural nitrate pollution.</value>
+  </data>
+  <data name="MsgYouCanContinueButYouShouldConsider" xml:space="preserve">
+    <value>You can continue, but you should consider applying outside the closed period to avoid the risk of agricultural nitrate pollution.</value>
+  </data>
+  <data name="MsgIfOrganicManureNMaxLimitExceedAdditional" xml:space="preserve">
+    <value>You can continue, but you should consider reducing the amount of nitrogen from organic manures you apply to avoid the risk of agricultural nitrate pollution.</value>
+  </data>
+  <data name="lblTheNVZActionProgrammeAppRateExceeds150WithinClosedPeriodOrganicAdditional" xml:space="preserve">
+    <value>You can continue, but you should consider reducing the application rate of high available N manures to avoid the risk of agricultural nitrate pollution.</value>
+  </data>
+  <data name="lblEndClosederiodAndEndFebYouMustAllow3WeeksGapAdditional" xml:space="preserve">
+    <value>You can continue, but you should consider allowing more time between applications to avoid the risk of agricultural nitrate pollution.</value>
+  </data>
+  <data name="MsgApplicationRateForSlurryAndPoultryDetailAdditional" xml:space="preserve">
+    <value>You can continue, but you should consider reducing the application rate of slurry to avoid the risk of agricultural nitrate pollution.</value>
+  </data>
+  <data name="MsgTheNVZActionProgrammeStatesThatTheARPoultryAdditional" xml:space="preserve">
+    <value>You can continue, but you should consider reducing the application rate of poultry manure to avoid the risk of agricultural nitrate pollution.</value>
   </data>
   <data name="lblWhatIsTheCropHeight" xml:space="preserve">
     <value>What is the crop height?</value>
