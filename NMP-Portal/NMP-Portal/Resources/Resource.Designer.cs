@@ -675,6 +675,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Autumn.
+        /// </summary>
+        public static string lblAutumn {
+            get {
+                return ResourceManager.GetString("lblAutumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}kg per hectare.
         /// </summary>
         public static string lblAutumnCropNitrogenPerHectare {
@@ -1017,6 +1026,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Crop height.
+        /// </summary>
+        public static string lblCropHeight {
+            get {
+                return ResourceManager.GetString("lblCropHeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which option applies to your {0}?.
         /// </summary>
         public static string lblCropInfo1ForCheckAnswer {
@@ -1233,6 +1251,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do You Want to Enter Growth Area Index or the Crop Height?.
+        /// </summary>
+        public static string lblDoYouWantToEnterGAIOrCropHeight {
+            get {
+                return ResourceManager.GetString("lblDoYouWantToEnterGAIOrCropHeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you want to use these nutrient values from RB209 for {0} ?.
         /// </summary>
         public static string lblDoYouWantToUseTheseNutrientValuesFromRB209 {
@@ -1377,6 +1404,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to enter a valid number.
+        /// </summary>
+        public static string lblEnterAValidNumber {
+            get {
+                return ResourceManager.GetString("lblEnterAValidNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the average annual rainfall in millimetres for {0}.
         /// </summary>
         public static string lblEnterAverageAnualRainfall {
@@ -1485,6 +1521,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter the number of shoots per square metre.
+        /// </summary>
+        public static string lblEnterTheNumberOfShootsPerSquareMetre {
+            get {
+                return ResourceManager.GetString("lblEnterTheNumberOfShootsPerSquareMetre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the values for your {0}.
         /// </summary>
         public static string lblEnterTheValuesForYour {
@@ -1535,6 +1580,15 @@ namespace NMP.Portal.Resources {
         public static string lblEstimatedYield {
             get {
                 return ResourceManager.GetString("lblEstimatedYield", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Estimate of nitrogen mineralisation question.
+        /// </summary>
+        public static string lblEstimateOfNitrogenMineralisationQuestion {
+            get {
+                return ResourceManager.GetString("lblEstimateOfNitrogenMineralisationQuestion", resourceCulture);
             }
         }
         
@@ -1787,6 +1841,24 @@ namespace NMP.Portal.Resources {
         public static string lblForExample {
             get {
                 return ResourceManager.GetString("lblForExample", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Growth area index (GAI).
+        /// </summary>
+        public static string lblGrowthAreaIndex {
+            get {
+                return ResourceManager.GetString("lblGrowthAreaIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Growth area index or crop height.
+        /// </summary>
+        public static string lblGrowthAreaIndexOrCropHeight {
+            get {
+                return ResourceManager.GetString("lblGrowthAreaIndexOrCropHeight", resourceCulture);
             }
         }
         
@@ -2770,6 +2842,15 @@ namespace NMP.Portal.Resources {
         public static string lblNotSet {
             get {
                 return ResourceManager.GetString("lblNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of shoots.
+        /// </summary>
+        public static string lblNumberOfShoots {
+            get {
+                return ResourceManager.GetString("lblNumberOfShoots", resourceCulture);
             }
         }
         
@@ -3782,6 +3863,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Spring.
+        /// </summary>
+        public static string lblSpring {
+            get {
+                return ResourceManager.GetString("lblSpring", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you want to use these nutrient values from RB209 for {0}?.
         /// </summary>
         public static string lblStandardNutrientValues {
@@ -4646,6 +4736,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the number of shoots per square metre?.
+        /// </summary>
+        public static string lblWhatIsTheNumberOfShootsPerSquareMetre {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheNumberOfShootsPerSquareMetre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the planting date for {0} in {1}?.
         /// </summary>
         public static string lblWhatIsThePlantingDate {
@@ -4799,6 +4898,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When was this measured?.
+        /// </summary>
+        public static string lblWhenWasThisMeasured {
+            get {
+                return ResourceManager.GetString("lblWhenWasThisMeasured", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which fields do you plan to grow {0} in?.
         /// </summary>
         public static string lblWhichFieldsDoYouPlanToGrow {
@@ -4912,6 +5020,15 @@ namespace NMP.Portal.Resources {
         public static string lblWouldYouLikeToUseTheseAnalysisValuesForFutureApplications {
             get {
                 return ResourceManager.GetString("lblWouldYouLikeToUseTheseAnalysisValuesForFutureApplications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Would you like us to help you calculate the nitrogen contained in the current crop?.
+        /// </summary>
+        public static string lblWouldYouLikeUsToHelpYouCalculateTheNitrogen {
+            get {
+                return ResourceManager.GetString("lblWouldYouLikeUsToHelpYouCalculateTheNitrogen", resourceCulture);
             }
         }
         

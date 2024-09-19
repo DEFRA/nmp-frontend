@@ -2208,6 +2208,45 @@ m3/ha  not set</value>
   <data name="lblSampleDepth" xml:space="preserve">
     <value>Sample depth</value>
   </data>
+  <data name="lblWouldYouLikeUsToHelpYouCalculateTheNitrogen" xml:space="preserve">
+    <value>Would you like us to help you calculate the nitrogen contained in the current crop?</value>
+  </data>
+  <data name="lblAutumn" xml:space="preserve">
+    <value>Autumn</value>
+  </data>
+  <data name="lblEnterAValidNumber" xml:space="preserve">
+    <value>enter a valid number</value>
+  </data>
+  <data name="lblEnterTheNumberOfShootsPerSquareMetre" xml:space="preserve">
+    <value>Enter the number of shoots per square metre</value>
+  </data>
+  <data name="lblSpring" xml:space="preserve">
+    <value>Spring</value>
+  </data>
+  <data name="lblWhatIsTheNumberOfShootsPerSquareMetre" xml:space="preserve">
+    <value>What is the number of shoots per square metre?</value>
+  </data>
+  <data name="lblWhenWasThisMeasured" xml:space="preserve">
+    <value>When was this measured?</value>
+  </data>
+  <data name="lblCropHeight" xml:space="preserve">
+    <value>Crop height</value>
+  </data>
+  <data name="lblDoYouWantToEnterGAIOrCropHeight" xml:space="preserve">
+    <value>Do You Want to Enter Growth Area Index or the Crop Height?</value>
+  </data>
+  <data name="lblGrowthAreaIndex" xml:space="preserve">
+    <value>Growth area index (GAI)</value>
+  </data>
+  <data name="lblEstimateOfNitrogenMineralisationQuestion" xml:space="preserve">
+    <value>Estimate of nitrogen mineralisation question</value>
+  </data>
+  <data name="lblGrowthAreaIndexOrCropHeight" xml:space="preserve">
+    <value>Growth area index or crop height</value>
+  </data>
+  <data name="lblNumberOfShoots" xml:space="preserve">
+    <value>Number of shoots</value>
+  </data>
   <data name="lblSoilMineralNitrogenAt030CMForError" xml:space="preserve">
     <value>SoilMineralNitrogenAt030CM</value>
   </data>
