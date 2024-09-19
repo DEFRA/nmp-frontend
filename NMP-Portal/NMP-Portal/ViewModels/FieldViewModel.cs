@@ -47,5 +47,12 @@ namespace NMP.Portal.ViewModels
         public int? SoilMineralNitrogenAt6090CM { get; set; }
         public int? SampleDepth { get; set; }
         public int? SoilMineralNitrogen { get; set; }
+        public bool? IsCalculateNitrogen { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheNumberOfShootsPerSquareMetre))]
+        public int? NumberOfShoots { get; set; }
+        public int SeasonId { get; set; }
+        public int GrowthAreaIndexOrCropHeight { get; set; }
+
     }
 }

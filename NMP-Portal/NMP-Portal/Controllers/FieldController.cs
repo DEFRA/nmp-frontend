@@ -1437,8 +1437,28 @@ namespace NMP.Portal.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SoilMineralNitrogenAnalysisResults(FieldViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
+
+            int snsCategoryId = await _fieldService.FetchSNSCategoryIdByCropTypeId(model.CurrentCropTypeId ?? 0);
+            if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterCereals || snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterOilseedRape)
+            {
+                return RedirectToAction("CalculateNitrogenInCurrentCropQuestion");
+            }
+
+            return RedirectToAction("EstimateOfNitrogenMineralisationQuestion");
+        }
+
+
         [HttpGet]
-        public async Task<IActionResult> SampleDepth()
+        public async Task<IActionResult> CalculateNitrogenInCurrentCropQuestion()
         {
             FieldViewModel model = new FieldViewModel();
             try
@@ -1451,14 +1471,174 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
+                
             }
             catch (Exception ex)
             {
                 TempData["Error"] = ex.Message;
-                return RedirectToAction("CurrentCropTypes");
+                return RedirectToAction("SoilMineralNitrogenAnalysisResults");
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CalculateNitrogenInCurrentCropQuestion(FieldViewModel model)
+        {
+            if (model.IsCalculateNitrogen == null)
+            {
+                ModelState.AddModelError("IsCalculateNitrogen", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(model);
             }
 
-            return View("SampleDepth",model);
+            int snsCategoryId = await _fieldService.FetchSNSCategoryIdByCropTypeId(model.CurrentCropTypeId ?? 0);
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
+
+            if (model.IsCalculateNitrogen==true)
+            {
+                if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterCereals)
+                {
+                    return RedirectToAction("NumberOfShoots");
+                }
+                if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterOilseedRape)
+                {
+                    return RedirectToAction("GrowthAreaIndexOrCropHeight");
+                }
+            }
+            else
+            {
+                return RedirectToAction("EstimateOfNitrogenMineralisationQuestion");
+            }
+
+            
+
+
+            return RedirectToAction("EstimateOfNitrogenMineralisationQuestion");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> NumberOfShoots()
+        {
+            FieldViewModel model = new FieldViewModel();
+            List<SeasonResponse> seasons = new List<SeasonResponse>();
+
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+                seasons = await _fieldService.FetchSeasons();
+                ViewBag.SeasonList = seasons;
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+                return RedirectToAction("CalculateNitrogenInCurrentCropQuestion");
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult NumberOfShoots(FieldViewModel model)
+        {
+            if (model.NumberOfShoots==null)
+            {
+                ModelState.AddModelError("NumberOfShoots", Resource.lblEnterAValidNumber);
+            }
+            if (model.SeasonId == 0)
+            {
+                ModelState.AddModelError("SeasonId", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
+
+
+            return RedirectToAction("EstimateOfNitrogenMineralisationQuestion");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GrowthAreaIndexOrCropHeight()
+        {
+            FieldViewModel model = new FieldViewModel();
+            List<CropGroupResponse> cropGroups = new List<CropGroupResponse>();
+
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+                cropGroups = await _fieldService.FetchCropGroups();
+                ViewBag.CropGroupList = cropGroups;
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+                return RedirectToAction("CalculateNitrogenInCurrentCropQuestion");
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult GrowthAreaIndexOrCropHeight(FieldViewModel model)
+        {
+            if (model.GrowthAreaIndexOrCropHeight == 0)
+            {
+                ModelState.AddModelError("GrowthAreaIndexOrCropHeight", Resource.lblEnterAValidNumber);
+            }
+            
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
+
+
+            return RedirectToAction("GrowthAreaIndexOrCropHeight");
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> EstimateOfNitrogenMineralisationQuestion()
+        {
+            FieldViewModel model = new FieldViewModel();
+            List<CropGroupResponse> cropGroups = new List<CropGroupResponse>();
+
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+                return RedirectToAction("CalculateNitrogenInCurrentCropQuestion");
+            }
+            return View(model);
         }
     }
 }
