@@ -1251,7 +1251,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do You Want to Enter Growth Area Index or the Crop Height?.
+        ///   Looks up a localized string similar to Do You Want to Enter Green Area Index or the Crop Height?.
         /// </summary>
         public static string lblDoYouWantToEnterGAIOrCropHeight {
             get {
@@ -1505,20 +1505,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter the soil mineral nitrogen analysis results for {0}.
-        /// </summary>
-        public static string lblEnterTheSoilMineralNitrogenAnalysisResult {
-            get {
-                return ResourceManager.GetString("lblEnterTheSoilMineralNitrogenAnalysisResult", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Enter the number of shoots per square metre.
         /// </summary>
         public static string lblEnterTheNumberOfShootsPerSquareMetre {
             get {
                 return ResourceManager.GetString("lblEnterTheNumberOfShootsPerSquareMetre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the soil mineral nitrogen analysis results for {0}.
+        /// </summary>
+        public static string lblEnterTheSoilMineralNitrogenAnalysisResult {
+            get {
+                return ResourceManager.GetString("lblEnterTheSoilMineralNitrogenAnalysisResult", resourceCulture);
             }
         }
         
@@ -1838,20 +1838,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Growth area index (GAI).
+        ///   Looks up a localized string similar to Green area index (GAI).
         /// </summary>
-        public static string lblGrowthAreaIndex {
+        public static string lblGreenAreaIndex {
             get {
-                return ResourceManager.GetString("lblGrowthAreaIndex", resourceCulture);
+                return ResourceManager.GetString("lblGreenAreaIndex", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Growth area index or crop height.
+        ///   Looks up a localized string similar to Green area index or crop height.
         /// </summary>
-        public static string lblGrowthAreaIndexOrCropHeight {
+        public static string lblGreenAreaIndexOrCropHeight {
             get {
-                return ResourceManager.GetString("lblGrowthAreaIndexOrCropHeight", resourceCulture);
+                return ResourceManager.GetString("lblGreenAreaIndexOrCropHeight", resourceCulture);
             }
         }
         
@@ -4587,6 +4587,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the crop height?.
+        /// </summary>
+        public static string lblWhatIsTheCropHeight {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheCropHeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the current crop group?.
         /// </summary>
         public static string lblWhatIsTheCurrentCropGroup {
@@ -4664,6 +4673,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhatIsTheFarmPostcode {
             get {
                 return ResourceManager.GetString("lblWhatIsTheFarmPostcode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the green area index (GAI)?.
+        /// </summary>
+        public static string lblWhatIsTheGreenAreaIndexGAI {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheGreenAreaIndexGAI", resourceCulture);
             }
         }
         

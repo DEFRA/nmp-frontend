@@ -1,29 +1,14 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.FieldViewModel
 @{
-    ViewData["Title"] = Resource.lblEstimateOfNitrogenMineralisationQuestion;
-    var actionMethod = "";
-    if (Model.IsCheckAnswer)
-    {
-        actionMethod = "CheckAnswer";
-    }
-    else
-    {
-        actionMethod = "CalculateNitrogenInCurrentCropQuestion";
-    }
-    // else if (Model.NumberOfShoots>0)
-    // {
-    //     actionMethod = "NumberOfShoots";
-    // }
-    // else if (Model.IsCalculateNitrogen ==false)
-    // {
-    //     actionMethod = "CalculateNitrogenInCurrentCropQuestion";
-    // }
+    ViewData["Title"] = Resource.lblGreenAreaIndexOrCropHeight;
+    var greenAreaIndex = (int)NMP.Portal.Enums.GreenAreaIndexOrCropHeight.GAI;
+    var cropHeight = (int)NMP.Portal.Enums.GreenAreaIndexOrCropHeight.CropHeight;
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="@actionMethod" asp-controller="Field">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" :"CalculateNitrogenInCurrentCropQuestion")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="NumberOfShoots" asp-controller="Field" method="post">
+<form asp-action="GreenAreaIndexOrCropHeightQuestion" asp-controller="Field" method="post">
     @Html.AntiForgeryToken()
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference"></govuk-input>
@@ -87,7 +72,8 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCalculateNitrogen" value="@Model.IsCalculateNitrogen"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumberOfShoots"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SeasonId" value="@Model.SeasonId"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GreenAreaIndexOrCropHeight" value="@Model.GreenAreaIndexOrCropHeight"></govuk-input>
+    @* <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GreenAreaIndexOrCropHeight"></govuk-input> *@
+
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             @if (TempData["Error"] != null)
@@ -96,20 +82,20 @@
                     <govuk-error-summary-item href="#">@TempData["Error"]</govuk-error-summary-item>
                 </govuk-error-summary>
             }
-            <h1>Stage 3 task</h1>
-            @* <govuk-radios asp-for="@Model.GreenAreaIndexOrCropHeight">
+            
+            <govuk-radios asp-for="@Model.GreenAreaIndexOrCropHeight">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @Resource.lblDoYouWantToEnterGAIOrCropHeight
+                            @Resource.lblDoYouWantToEnterGAIOrCropHeight
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-item value="@greenAreaIndex">@Resource.lblGreenAreaIndex</govuk-radios-item>
                     <govuk-radios-item value="@cropHeight">@Resource.lblCropHeight</govuk-radios-item>
 
                 </govuk-radios-fieldset>
-            </govuk-radios> *@
-            @* <govuk-button type="submit" class="margin-bottom-forty">
+            </govuk-radios>
+            <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
-            </govuk-button> *@
+            </govuk-button>
             <p class="govuk-body cancel-link"><a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
 
         </div>

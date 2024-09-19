@@ -2243,18 +2243,24 @@ You can continue, but you should consider reducing the application rate of high 
     <value>Crop height</value>
   </data>
   <data name="lblDoYouWantToEnterGAIOrCropHeight" xml:space="preserve">
-    <value>Do You Want to Enter Growth Area Index or the Crop Height?</value>
+    <value>Do You Want to Enter Green Area Index or the Crop Height?</value>
   </data>
-  <data name="lblGrowthAreaIndex" xml:space="preserve">
-    <value>Growth area index (GAI)</value>
+  <data name="lblGreenAreaIndex" xml:space="preserve">
+    <value>Green area index (GAI)</value>
   </data>
   <data name="lblEstimateOfNitrogenMineralisationQuestion" xml:space="preserve">
     <value>Estimate of nitrogen mineralisation question</value>
   </data>
-  <data name="lblGrowthAreaIndexOrCropHeight" xml:space="preserve">
-    <value>Growth area index or crop height</value>
+  <data name="lblGreenAreaIndexOrCropHeight" xml:space="preserve">
+    <value>Green area index or crop height</value>
   </data>
   <data name="lblNumberOfShoots" xml:space="preserve">
     <value>Number of shoots</value>
+  </data>
+  <data name="lblWhatIsTheCropHeight" xml:space="preserve">
+    <value>What is the crop height?</value>
+  </data>
+  <data name="lblWhatIsTheGreenAreaIndexGAI" xml:space="preserve">
+    <value>What is the green area index (GAI)?</value>
   </data>
 </root>
