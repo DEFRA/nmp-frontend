@@ -1314,13 +1314,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The NVZ Action Programme states that, between {0} and the end of February, you must allow at least 3 weeks between each individual application of slurry or poultry manure.
-        ///
-        ///You can continue, but you should consider allowing more time between applications to avoid the risk of agricultural nitrate pollution..
+        ///   Looks up a localized string similar to The NVZ Action Programme states that, between {0} and the end of February, you must allow at least 3 weeks between each individual application of slurry or poultry manure..
         /// </summary>
         public static string lblEndClosederiodAndEndFebYouMustAllow3WeeksGap {
             get {
                 return ResourceManager.GetString("lblEndClosederiodAndEndFebYouMustAllow3WeeksGap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can continue, but you should consider allowing more time between applications to avoid the risk of agricultural nitrate pollution..
+        /// </summary>
+        public static string lblEndClosederiodAndEndFebYouMustAllow3WeeksGapAdditional {
+            get {
+                return ResourceManager.GetString("lblEndClosederiodAndEndFebYouMustAllow3WeeksGapAdditional", resourceCulture);
             }
         }
         
@@ -1505,20 +1512,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter the soil mineral nitrogen analysis results for {0}.
-        /// </summary>
-        public static string lblEnterTheSoilMineralNitrogenAnalysisResult {
-            get {
-                return ResourceManager.GetString("lblEnterTheSoilMineralNitrogenAnalysisResult", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Enter the number of shoots per square metre.
         /// </summary>
         public static string lblEnterTheNumberOfShootsPerSquareMetre {
             get {
                 return ResourceManager.GetString("lblEnterTheNumberOfShootsPerSquareMetre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the soil mineral nitrogen analysis results for {0}.
+        /// </summary>
+        public static string lblEnterTheSoilMineralNitrogenAnalysisResult {
+            get {
+                return ResourceManager.GetString("lblEnterTheSoilMineralNitrogenAnalysisResult", resourceCulture);
             }
         }
         
@@ -3685,6 +3692,33 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SoilMineralNitrogenAt030CM.
+        /// </summary>
+        public static string lblSoilMineralNitrogenAt030CMForError {
+            get {
+                return ResourceManager.GetString("lblSoilMineralNitrogenAt030CMForError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SoilMineralNitrogenAt3060CM.
+        /// </summary>
+        public static string lblSoilMineralNitrogenAt3060CMForError {
+            get {
+                return ResourceManager.GetString("lblSoilMineralNitrogenAt3060CMForError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SoilMineralNitrogenAt6090CM.
+        /// </summary>
+        public static string lblSoilMineralNitrogenAt6090CMForError {
+            get {
+                return ResourceManager.GetString("lblSoilMineralNitrogenAt6090CMForError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Soil nutrient value Type.
         /// </summary>
         public static string lblSoilNutrientValueType {
@@ -3946,7 +3980,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The NVZ Action Programme states that the application rate of high available N manures on {0} between {1} must not exceed 150 kg/ha. You can continue, but you should consider reducing the application rate of high available N manures to avoid the risk of agricultural nitrate pollution..
+        ///   Looks up a localized string similar to The NVZ Action Programme states that the application rate of high available N manures on {0} between {1} must not exceed 150 kg/ha..
         /// </summary>
         public static string lblTheNVZActionProgrammeAppRateExceeds150WithinClosedPeriodOrganic {
             get {
@@ -3955,9 +3989,16 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The NVZ Action Programme states that the application rate of high available N manures on {0} between {1} must not exceed {2}kg/ha at one time and you must not spread more than 150kg of total nitrogen per hectare.
-        /// 
-        ///You can continue, but you should consider reducing the application rate of high available N manures to avoid the risk of agricultural nitrate pollution..
+        ///   Looks up a localized string similar to You can continue, but you should consider reducing the application rate of high available N manures to avoid the risk of agricultural nitrate pollution..
+        /// </summary>
+        public static string lblTheNVZActionProgrammeAppRateExceeds150WithinClosedPeriodOrganicAdditional {
+            get {
+                return ResourceManager.GetString("lblTheNVZActionProgrammeAppRateExceeds150WithinClosedPeriodOrganicAdditional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The NVZ Action Programme states that the application rate of high available N manures on {0} between {1} must not exceed {2}kg/ha at one time and you must not spread more than 150kg of total nitrogen per hectare..
         /// </summary>
         public static string lblTheNVZActionProgrammeAppRateExceedsHighNWithinWarningPeriodOrganic {
             get {
@@ -5172,7 +5213,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The NVZ Action Programme states that the closed period for {0} planted on non-organic farms {1} on {2} soil is {3}. You can continue, but you should consider applying outside the closed period to avoid the risk of agricultural nitrate pollution..
+        ///   Looks up a localized string similar to The NVZ Action Programme states that the closed period for {0} planted on non-organic farms {1} for {2} soil is {3}..
         /// </summary>
         public static string MsgApplicationDateEnteredIsInsideClosedPeriodDetail {
             get {
@@ -5181,7 +5222,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The NVZ Action Programme states that the closed period for {0} planted on organic farms {1} on {2} soil is {3}. You can continue, but you should consider applying outside the closed period to avoid the risk of agricultural nitrate pollution..
+        ///   Looks up a localized string similar to The NVZ Action Programme states that the closed period for {0} planted on organic farms {1} for {2} soil is {3}..
         /// </summary>
         public static string MsgApplicationDateEnteredIsInsideClosedPeriodDetailOrganic {
             get {
@@ -5208,12 +5249,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The NVZ Action Programme states that the application rate of slurry between {0} and the end of February must not exceed 30 m³/ha.
-        ///You can continue, but you should consider reducing the application rate of slurry to avoid the risk of agricultural nitrate pollution..
+        ///   Looks up a localized string similar to The NVZ Action Programme states that the application rate of slurry between {0} and the end of February must not exceed 30 m³/ha..
         /// </summary>
         public static string MsgApplicationRateForSlurryAndPoultryDetail {
             get {
                 return ResourceManager.GetString("MsgApplicationRateForSlurryAndPoultryDetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can continue, but you should consider reducing the application rate of slurry to avoid the risk of agricultural nitrate pollution..
+        /// </summary>
+        public static string MsgApplicationRateForSlurryAndPoultryDetailAdditional {
+            get {
+                return ResourceManager.GetString("MsgApplicationRateForSlurryAndPoultryDetailAdditional", resourceCulture);
             }
         }
         
@@ -5814,9 +5863,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The NVZ Action Programme states that the closed period for {0} planted on {1} soil is {2}.
-        ///
-        /// You can continue, but you should consider applying outside the closed period to avoid the risk of agricultural nitrate pollution..
+        ///   Looks up a localized string similar to The NVZ Action Programme states that the closed period for {0} planted on {1} soil is {2}..
         /// </summary>
         public static string MsgForFertiliserClosedPeriodWarning {
             get {
@@ -5825,13 +5872,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The NVZ Action Programme states that manufactured nitrogen fertiliser must not be applied on {0} after 31 October.
-        ///
-        ///You can continue, but you should consider not applying manufactured nitrogen fertiliser at this time, to avoid the risk of agricultural nitrate pollution..
+        ///   Looks up a localized string similar to The NVZ Action Programme states that manufactured nitrogen fertiliser must not be applied on {0} after 31 October..
         /// </summary>
         public static string MsgForGrassAndOilseedRapeClosedPeriodForFertiliser {
             get {
                 return ResourceManager.GetString("MsgForGrassAndOilseedRapeClosedPeriodForFertiliser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can continue, but you should consider not applying manufactured nitrogen fertiliser at this time, to avoid the risk of agricultural nitrate pollution..
+        /// </summary>
+        public static string MsgForGrassAndOilseedRapeClosedPeriodForFertiliserAdditional {
+            get {
+                return ResourceManager.GetString("MsgForGrassAndOilseedRapeClosedPeriodForFertiliserAdditional", resourceCulture);
             }
         }
         
@@ -5845,7 +5899,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For brassicas, an additional 50 kg/ha may be applied every four weeks during the closed application period up to the end of feb..
+        ///   Looks up a localized string similar to For brassicas, an additional 50 kg/ha may be applied every four weeks during the closed application period up to the End of Feb..
         /// </summary>
         public static string MsgForMaxNitrogenForFertiliserForBrassicasFirstAdditionalWarningMsg {
             get {
@@ -5944,11 +5998,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The NVZ Action Programme states that the total amount of nitrogen from all organic manures you apply in any 12-month period on any single hectare of your land must not exceed 250kg. You can continue, but you should consider reducing the amount of nitrogen from organic manures you apply to avoid the risk of agricultural nitrate pollution..
+        ///   Looks up a localized string similar to The NVZ Action Programme states that the total amount of nitrogen from all organic manures you apply in any 12-month period on any single hectare of your land must not exceed 250kg. .
         /// </summary>
         public static string MsgIfOrganicManureNMaxLimitExceed {
             get {
                 return ResourceManager.GetString("MsgIfOrganicManureNMaxLimitExceed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can continue, but you should consider reducing the amount of nitrogen from organic manures you apply to avoid the risk of agricultural nitrate pollution..
+        /// </summary>
+        public static string MsgIfOrganicManureNMaxLimitExceedAdditional {
+            get {
+                return ResourceManager.GetString("MsgIfOrganicManureNMaxLimitExceedAdditional", resourceCulture);
             }
         }
         
@@ -6349,12 +6412,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The NVZ Action Programme states that the application rate of poultry manure between {0} and the end of February must not exceed 8 t/ha.
-        ///You can continue, but you should consider reducing the application rate of poultry manure to avoid the risk of agricultural nitrate pollution..
+        ///   Looks up a localized string similar to The NVZ Action Programme states that the application rate of poultry manure between {0} and the end of February must not exceed 8 t/ha..
         /// </summary>
         public static string MsgTheNVZActionProgrammeStatesThatTheARPoultry {
             get {
                 return ResourceManager.GetString("MsgTheNVZActionProgrammeStatesThatTheARPoultry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can continue, but you should consider reducing the application rate of poultry manure to avoid the risk of agricultural nitrate pollution..
+        /// </summary>
+        public static string MsgTheNVZActionProgrammeStatesThatTheARPoultryAdditional {
+            get {
+                return ResourceManager.GetString("MsgTheNVZActionProgrammeStatesThatTheARPoultryAdditional", resourceCulture);
             }
         }
         
@@ -6436,6 +6507,15 @@ namespace NMP.Portal.Resources {
         public static string MsgYieldNotSet {
             get {
                 return ResourceManager.GetString("MsgYieldNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can continue, but you should consider applying outside the closed period to avoid the risk of agricultural nitrate pollution..
+        /// </summary>
+        public static string MsgYouCanContinueButYouShouldConsider {
+            get {
+                return ResourceManager.GetString("MsgYouCanContinueButYouShouldConsider", resourceCulture);
             }
         }
         
