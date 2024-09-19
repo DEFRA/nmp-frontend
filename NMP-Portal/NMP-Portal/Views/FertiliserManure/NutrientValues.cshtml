@@ -22,28 +22,25 @@
             {
                 @if(Model.IsNitrogenExceedWarning)
                 {
-                <govuk-notification-banner>
-                    <govuk-notification-banner-title>
-                        @Resource.lblImportant
-                    </govuk-notification-banner-title>
-                    @TempData["NitrogenExceedMessageTitle"]<br />
-                    <p class="govuk-notification-banner__heading">
-                        @Resource.MsgForMaxNitrogenForFertiliserTitle
-                    </p>
-                    <p class="govuk-body">@TempData["NitrogenExceedForFertiliser"]</p>
-                    @if (TempData["NitrogenExceedFirstAdditionalMessage"] != null)
-                    {
-                            <br />
-                        <p class="govuk-body">@TempData["NitrogenExceedFirstAdditionalMessage"]</p>
-
-                    }
-                    @if (TempData["NitrogenExceedSecondAdditionalMessage"] != null)
+                    <govuk-notification-banner>
+                        <govuk-notification-banner-title>
+                            @Resource.lblImportant
+                        </govuk-notification-banner-title>
+                        @TempData["NitrogenExceedMessageTitle"]<br />
+                        <p class="govuk-notification-banner__heading">
+                            @Resource.MsgForMaxNitrogenForFertiliserTitle
+                        </p>
+                        <p class="govuk-body">@TempData["NitrogenExceedForFertiliser"]</p>
+                        @if (TempData["NitrogenExceedFirstAdditionalMessage"] != null)
                         {
-                            <br />
-                        <p class="govuk-body">@TempData["NitrogenExceedSecondAdditionalMessage"]</p>
+                            <p class="govuk-body">@TempData["NitrogenExceedFirstAdditionalMessage"]</p>
 
-                    }
-                </govuk-notification-banner>
+                        }
+                        @if (TempData["NitrogenExceedSecondAdditionalMessage"] != null)
+                        {
+                            <p class="govuk-body">@TempData["NitrogenExceedSecondAdditionalMessage"]</p>
+                        }
+                    </govuk-notification-banner>
                 }
             }
 

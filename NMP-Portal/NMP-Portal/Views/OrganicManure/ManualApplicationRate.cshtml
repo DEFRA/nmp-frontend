@@ -149,7 +149,7 @@
                     <govuk-notification-banner-title>
                         @Resource.lblImportant
                     </govuk-notification-banner-title>
-                    @if(trueWarningCount==1)
+                    @if (trueWarningCount == 1)
                     {
                         @if (Model.IsOrgManureNfieldLimitWarning)
                         {
@@ -157,6 +157,7 @@
                                 @Resource.lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit
                             </p>
                             <p class="govuk-body">@Resource.MsgIfOrganicManureNMaxLimitExceed</p>
+                            <p class="govuk-body">@Resource.MsgIfOrganicManureNMaxLimitExceedAdditional</p>
                         }
                         @if (Model.IsNMaxLimitWarning)
                         {
@@ -171,6 +172,7 @@
                                 @(Model.ManureTypeId == 8 ? Resource.lblThisApplicationMayTakeYouOverMaxARPoultryManure : Resource.lblApplicationRateOverTheMaximumRateForSlurry)
                             </p>
                             <p class="govuk-body">@TempData["EndClosedPeriodAndFebruaryWarningMessage"]</p>
+                            <p class="govuk-body">@(Model.ManureTypeId == 8 ? Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultryAdditional : Resource.MsgApplicationRateForSlurryAndPoultryDetailAdditional)</p>
                         }
                         @if (Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
                         {
@@ -178,9 +180,12 @@
                                 @Resource.lblThisApplicationTakeOverMaxAppRate
                             </p>
                             <p class="govuk-body">@TempData["AppRateExceeds150WithinClosedPeriodOrganic"]</p>
+                            <p class="govuk-body">
+                                @Resource.lblTheNVZActionProgrammeAppRateExceeds150WithinClosedPeriodOrganicAdditional
+                            </p>
                         }
                     }
-                    @if(trueWarningCount>1)
+                    @if (trueWarningCount > 1)
                     {
                         <div class="govuk-notification-banner__content">
                             <p class="govuk-notification-banner__heading">
@@ -206,10 +211,10 @@
                                 }
                             </ul>
                             <govuk-details>
-                               <govuk-details-summary>
+                                <govuk-details-summary>
                                     @Resource.lblMoreAboutTheseNVZRules
-                               </govuk-details-summary>
-                               <govuk-details-text>
+                                </govuk-details-summary>
+                                <govuk-details-text>
                                     @if (Model.IsOrgManureNfieldLimitWarning)
                                     {
                                         <h2 class="govuk-heading-s">@Resource.lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit</h2>
@@ -229,15 +234,15 @@
                                     {
                                         <h2 class="govuk-heading-s">@Resource.lblThisApplicationTakeOverMaxAppRate</h2>
                                         <p class="govuk-body">@TempData["AppRateExceeds150WithinClosedPeriodOrganic"]</p>
-                                        
+
                                     }
-                               </govuk-details-text>
+                                </govuk-details-text>
                             </govuk-details>
                             <p class="govuk-body">@Resource.lblYouCanContinueButYouShouldConsiderAdjustingYour</p>
 
                         </div>
                     }
-                    
+
                 </govuk-notification-banner>
             }
 

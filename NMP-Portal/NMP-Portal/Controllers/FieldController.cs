@@ -1410,6 +1410,11 @@ namespace NMP.Portal.Controllers
                     }
                 }
             }
+            else
+            {
+                TempData["Error"] = error.Message;
+                return View(model);
+            }
             return RedirectToAction("SoilMineralNitrogenAnalysisResults");
         }
         [HttpGet]
@@ -1436,7 +1441,88 @@ namespace NMP.Portal.Controllers
 
             return View(model);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SoilMineralNitrogenAnalysisResults(FieldViewModel model)
+        {
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilMineralNitrogenAt030CM"))
+            {
+                var InvalidFormatError = ModelState["SoilMineralNitrogenAt030CM"].Errors.Count > 0 ?
+                                ModelState["SoilMineralNitrogenAt030CM"].Errors[0].ErrorMessage.ToString() : null;
 
+                if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SoilMineralNitrogenAt030CM"].AttemptedValue, Resource.lblSoilMineralNitrogenAt030CMForError)))
+                {
+                    ModelState["SoilMineralNitrogenAt030CM"].Errors.Clear();
+                    ModelState["SoilMineralNitrogenAt030CM"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblKilogramsOfSoilMineralNitrogenAt030CM));
+                }
+            }
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilMineralNitrogenAt3060CM"))
+            {
+                var InvalidFormatError = ModelState["SoilMineralNitrogenAt3060CM"].Errors.Count > 0 ?
+                                ModelState["SoilMineralNitrogenAt3060CM"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SoilMineralNitrogenAt3060CM"].AttemptedValue, Resource.lblSoilMineralNitrogenAt3060CMForError)))
+                {
+                    ModelState["SoilMineralNitrogenAt3060CM"].Errors.Clear();
+                    ModelState["SoilMineralNitrogenAt3060CM"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblKilogramsOfSoilMineralNitrogenAt3060CM));
+                }
+            }
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilMineralNitrogenAt6090CM"))
+            {
+                var InvalidFormatError = ModelState["SoilMineralNitrogenAt6090CM"].Errors.Count > 0 ?
+                                ModelState["SoilMineralNitrogenAt6090CM"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SoilMineralNitrogenAt6090CM"].AttemptedValue, Resource.lblSoilMineralNitrogenAt6090CMForError)))
+                {
+                    ModelState["SoilMineralNitrogenAt6090CM"].Errors.Clear();
+                    ModelState["SoilMineralNitrogenAt6090CM"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblKilogramsOfSoilMineralNitrogenAt6090CM));
+                }
+            }
+            if (model.SoilMineralNitrogenAt030CM == null)
+            {
+                ModelState.AddModelError("SoilMineralNitrogenAt030CM",string.Format(Resource.MsgEnterTheValueBeforeContinuing,Resource.lblKilogramsOfSoilMineralNitrogenAt030CM));
+            }
+            if (model.SoilMineralNitrogenAt3060CM == null)
+            {
+                ModelState.AddModelError("SoilMineralNitrogenAt3060CM", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblKilogramsOfSoilMineralNitrogenAt3060CM));
+            }
+            if (model.SoilMineralNitrogenAt6090CM == null)
+            {
+                ModelState.AddModelError("SoilMineralNitrogenAt6090CM", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblKilogramsOfSoilMineralNitrogenAt6090CM));
+            }
+            if (model.SoilMineralNitrogenAt030CM != null)
+            {
+                if (model.SoilMineralNitrogenAt030CM<0)
+                {
+                    ModelState.AddModelError("SoilMineralNitrogenAt030CM", string.Format(Resource.lblEnterValidValue, Resource.lblKilogramsOfSoilMineralNitrogenAt030CM));
+                }
+            }
+            if (model.SoilMineralNitrogenAt3060CM != null)
+            {
+                if (model.SoilMineralNitrogenAt3060CM < 0)
+                {
+                    ModelState.AddModelError("SoilMineralNitrogenAt3060CM", string.Format(Resource.lblEnterValidValue, Resource.lblKilogramsOfSoilMineralNitrogenAt3060CM));
+                }
+            }
+            if (model.SoilMineralNitrogenAt6090CM != null)
+            {
+                if (model.SoilMineralNitrogenAt6090CM < 0)
+                {
+                    ModelState.AddModelError("SoilMineralNitrogenAt6090CM", string.Format(Resource.lblEnterValidValue, Resource.lblKilogramsOfSoilMineralNitrogenAt6090CM));
+                }
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
+            if (model.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
+
+            return RedirectToAction("SoilMineralNitrogenAnalysisResults");
+        }
         [HttpGet]
         public async Task<IActionResult> SampleDepth()
         {
