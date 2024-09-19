@@ -1480,7 +1480,7 @@ namespace NMP.Portal.Controllers
             }
             if (model.SoilMineralNitrogenAt030CM == null)
             {
-                ModelState.AddModelError("SoilMineralNitrogenAt030CM",string.Format(Resource.MsgEnterTheValueBeforeContinuing,Resource.lblKilogramsOfSoilMineralNitrogenAt030CM));
+                ModelState.AddModelError("SoilMineralNitrogenAt030CM", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblKilogramsOfSoilMineralNitrogenAt030CM));
             }
             if (model.SoilMineralNitrogenAt3060CM == null)
             {
@@ -1492,7 +1492,7 @@ namespace NMP.Portal.Controllers
             }
             if (model.SoilMineralNitrogenAt030CM != null)
             {
-                if (model.SoilMineralNitrogenAt030CM<0)
+                if (model.SoilMineralNitrogenAt030CM < 0)
                 {
                     ModelState.AddModelError("SoilMineralNitrogenAt030CM", string.Format(Resource.lblEnterValidValue, Resource.lblKilogramsOfSoilMineralNitrogenAt030CM));
                 }
@@ -1520,9 +1520,36 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("CheckAnswer");
             }
+            int snsCategoryId = await _fieldService.FetchSNSCategoryIdByCropTypeId(model.CurrentCropTypeId ?? 0);
+            if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterCereals || snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterOilseedRape)
+            {
+                return RedirectToAction("CalculateNitrogenInCurrentCropQuestion");
+            }
 
-        
-
+            return RedirectToAction("EstimateOfNitrogenMineralisationQuestion");
+        }
+        [HttpGet]
+        public async Task<IActionResult> SampleDepth()
+        {
+            FieldViewModel model = new FieldViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+                return RedirectToAction("CurrentCropTypes");
+            }
+            return View(model);
+        }
 
         [HttpGet]
         public async Task<IActionResult> CalculateNitrogenInCurrentCropQuestion()
@@ -1538,7 +1565,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -1564,7 +1591,7 @@ namespace NMP.Portal.Controllers
             int snsCategoryId = await _fieldService.FetchSNSCategoryIdByCropTypeId(model.CurrentCropTypeId ?? 0);
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
 
-            if (model.IsCalculateNitrogen==true)
+            if (model.IsCalculateNitrogen == true)
             {
                 if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterCereals)
                 {
@@ -1580,7 +1607,7 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("EstimateOfNitrogenMineralisationQuestion");
             }
 
-            
+
 
 
             return RedirectToAction("EstimateOfNitrogenMineralisationQuestion");
@@ -1615,9 +1642,9 @@ namespace NMP.Portal.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult NumberOfShoots(FieldViewModel model)
+        public async Task<IActionResult> NumberOfShoots(FieldViewModel model)
         {
-            if (model.NumberOfShoots==null)
+            if (model.NumberOfShoots == null)
             {
                 ModelState.AddModelError("NumberOfShoots", Resource.lblEnterAValidNumber);
             }
@@ -1627,6 +1654,9 @@ namespace NMP.Portal.Controllers
             }
             if (!ModelState.IsValid)
             {
+
+                List<SeasonResponse> seasons = await _fieldService.FetchSeasons();
+                ViewBag.SeasonList = seasons;
                 return View(model);
             }
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
@@ -1668,9 +1698,9 @@ namespace NMP.Portal.Controllers
         {
             if (model.GrowthAreaIndexOrCropHeight == 0)
             {
-                ModelState.AddModelError("GrowthAreaIndexOrCropHeight", Resource.lblEnterAValidNumber);
+                ModelState.AddModelError("GrowthAreaIndexOrCropHeight", Resource.MsgSelectAnOptionBeforeContinuing);
             }
-            
+
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -1698,7 +1728,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                
+
             }
             catch (Exception ex)
             {

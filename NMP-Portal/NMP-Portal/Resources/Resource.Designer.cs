@@ -1512,20 +1512,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter the soil mineral nitrogen analysis results for {0}.
-        /// </summary>
-        public static string lblEnterTheSoilMineralNitrogenAnalysisResult {
-            get {
-                return ResourceManager.GetString("lblEnterTheSoilMineralNitrogenAnalysisResult", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Enter the number of shoots per square metre.
         /// </summary>
         public static string lblEnterTheNumberOfShootsPerSquareMetre {
             get {
                 return ResourceManager.GetString("lblEnterTheNumberOfShootsPerSquareMetre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the soil mineral nitrogen analysis results for {0}.
+        /// </summary>
+        public static string lblEnterTheSoilMineralNitrogenAnalysisResult {
+            get {
+                return ResourceManager.GetString("lblEnterTheSoilMineralNitrogenAnalysisResult", resourceCulture);
             }
         }
         
