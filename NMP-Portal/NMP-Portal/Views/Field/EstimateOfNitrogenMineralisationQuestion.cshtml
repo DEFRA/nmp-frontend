@@ -7,18 +7,22 @@
     {
         actionMethod = "CheckAnswer";
     }
-    else
+    else if (Model.IsCalculateNitrogenNo == true)
     {
         actionMethod = "CalculateNitrogenInCurrentCropQuestion";
     }
-    // else if (Model.NumberOfShoots>0)
-    // {
-    //     actionMethod = "NumberOfShoots";
-    // }
-    // else if (Model.IsCalculateNitrogen ==false)
-    // {
-    //     actionMethod = "CalculateNitrogenInCurrentCropQuestion";
-    // }
+    else if (Model.IsNumberOfShoots==true)
+    {
+        actionMethod = "NumberOfShoots";
+    }
+    else if (Model.IsCropHeight ==true)
+    {
+        actionMethod = "CropHeight";
+    }
+    else if (Model.IsGreenAreaIndex == true)
+    {
+        actionMethod = "GreenAreaIndex";
+    }
 }
 @section BeforeContent {
     <govuk-back-link asp-action="@actionMethod" asp-controller="Field">@Resource.lblBack</govuk-back-link>
@@ -91,6 +95,8 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilMineralNitrogenAt030CM"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilMineralNitrogenAt3060CM"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilMineralNitrogenAt6090CM"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropHeight"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GreenAreaIndex"></govuk-input>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             @if (TempData["Error"] != null)

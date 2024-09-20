@@ -1368,6 +1368,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a crop height before continuing.
+        /// </summary>
+        public static string lblEnterACropHeightBeforeContinue {
+            get {
+                return ResourceManager.GetString("lblEnterACropHeightBeforeContinue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter address manually.
         /// </summary>
         public static string lblEnterAddressManually {
@@ -1427,6 +1436,15 @@ namespace NMP.Portal.Resources {
         public static string lblEnterDifferentFiguresForEachField {
             get {
                 return ResourceManager.GetString("lblEnterDifferentFiguresForEachField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a GAI value before continuing.
+        /// </summary>
+        public static string lblEnterGAIValueBeforeContinue {
+            get {
+                return ResourceManager.GetString("lblEnterGAIValueBeforeContinue", resourceCulture);
             }
         }
         
@@ -5656,6 +5674,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a valid numeric crop height before continuing (0-30).
+        /// </summary>
+        public static string MSGEnterAValidCropHeight {
+            get {
+                return ResourceManager.GetString("MSGEnterAValidCropHeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a valid numeric GAI value before continuing (0-3).
+        /// </summary>
+        public static string MsgEnterAValidNumericGAIvalue {
+            get {
+                return ResourceManager.GetString("MsgEnterAValidNumericGAIvalue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a valid postcode.
         /// </summary>
         public static string MsgEnterAValidPostcode {
@@ -5724,6 +5760,15 @@ namespace NMP.Portal.Resources {
         public static string MsgEnterRainfallAmountBeforeContinuing {
             get {
                 return ResourceManager.GetString("MsgEnterRainfallAmountBeforeContinuing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter shoot number between 0 to 1500.
+        /// </summary>
+        public static string MsgEnterShootNumberBetween0To1500 {
+            get {
+                return ResourceManager.GetString("MsgEnterShootNumberBetween0To1500", resourceCulture);
             }
         }
         

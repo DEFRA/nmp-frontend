@@ -1604,6 +1604,8 @@ namespace NMP.Portal.Controllers
             }
             else
             {
+                model.IsCalculateNitrogenNo = true;
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
                 return RedirectToAction("EstimateOfNitrogenMineralisationQuestion");
             }
 
@@ -1652,6 +1654,10 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("SeasonId", Resource.MsgSelectAnOptionBeforeContinuing);
             }
+            if (model.NumberOfShoots != null && (model.NumberOfShoots < 0 || model.NumberOfShoots > 1500))
+            {
+                ModelState.AddModelError("NumberOfShoots", Resource.MsgEnterShootNumberBetween0To1500);
+            }
             if (!ModelState.IsValid)
             {
                 List<SeasonResponse> seasons = new List<SeasonResponse>();
@@ -1659,6 +1665,7 @@ namespace NMP.Portal.Controllers
                 ViewBag.SeasonList = seasons;
                 return View(model);
             }
+            model.IsNumberOfShoots = true;
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
 
 
@@ -1707,7 +1714,7 @@ namespace NMP.Portal.Controllers
             }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
 
-            if(model.GreenAreaIndexOrCropHeight == (int)NMP.Portal.Enums.GreenAreaIndexOrCropHeight.CropHeight)
+            if (model.GreenAreaIndexOrCropHeight == (int)NMP.Portal.Enums.GreenAreaIndexOrCropHeight.CropHeight)
             {
                 return RedirectToAction("CropHeight");
             }
@@ -1778,11 +1785,15 @@ namespace NMP.Portal.Controllers
         {
             if (model.CropHeight == null)
             {
-                ModelState.AddModelError("CropHeight", Resource.lblEnterAValidNumber);
+                ModelState.AddModelError("CropHeight", Resource.lblEnterACropHeightBeforeContinue);
             }
             if (model.SeasonId == 0)
             {
                 ModelState.AddModelError("SeasonId", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (model.CropHeight != null && (model.CropHeight < 0 || model.CropHeight > 30))
+            {
+                ModelState.AddModelError("CropHeight", Resource.MSGEnterAValidCropHeight);  
             }
             if (!ModelState.IsValid)
             {
@@ -1791,6 +1802,7 @@ namespace NMP.Portal.Controllers
                 ViewBag.SeasonList = seasons;
                 return View(model);
             }
+            model.IsCropHeight = true;
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
 
 
@@ -1830,11 +1842,15 @@ namespace NMP.Portal.Controllers
         {
             if (model.GreenAreaIndex == null)
             {
-                ModelState.AddModelError("GreenAreaIndex", Resource.lblEnterAValidNumber);
+                ModelState.AddModelError("GreenAreaIndex", Resource.lblEnterGAIValueBeforeContinue);
             }
             if (model.SeasonId == 0)
             {
                 ModelState.AddModelError("SeasonId", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (model.GreenAreaIndex != null && (model.GreenAreaIndex < 0 || model.GreenAreaIndex > 3))
+            {
+                ModelState.AddModelError("GreenAreaIndex", Resource.MsgEnterAValidNumericGAIvalue); 
             }
             if (!ModelState.IsValid)
             {
@@ -1843,7 +1859,8 @@ namespace NMP.Portal.Controllers
                 ViewBag.SeasonList = seasons;
                 return View(model);
             }
-            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
+            model.IsGreenAreaIndex = true;
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
 
 
             return RedirectToAction("EstimateOfNitrogenMineralisationQuestion");

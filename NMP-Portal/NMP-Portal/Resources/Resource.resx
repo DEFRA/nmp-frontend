@@ -2283,4 +2283,19 @@ m3/ha  not set</value>
   <data name="lblWhatIsTheGreenAreaIndexGAI" xml:space="preserve">
     <value>What is the green area index (GAI)?</value>
   </data>
+  <data name="MsgEnterShootNumberBetween0To1500" xml:space="preserve">
+    <value>Enter shoot number between 0 to 1500</value>
+  </data>
+  <data name="lblEnterACropHeightBeforeContinue" xml:space="preserve">
+    <value>Enter a crop height before continuing</value>
+  </data>
+  <data name="lblEnterGAIValueBeforeContinue" xml:space="preserve">
+    <value>Enter a GAI value before continuing</value>
+  </data>
+  <data name="MSGEnterAValidCropHeight" xml:space="preserve">
+    <value>Enter a valid numeric crop height before continuing (0-30)</value>
+  </data>
+  <data name="MsgEnterAValidNumericGAIvalue" xml:space="preserve">
+    <value>Enter a valid numeric GAI value before continuing (0-3)</value>
+  </data>
 </root>
