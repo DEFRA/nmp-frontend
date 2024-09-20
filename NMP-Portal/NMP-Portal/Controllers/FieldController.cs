@@ -1538,14 +1538,17 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("CheckAnswer");
             }
             int snsCategoryId = await _fieldService.FetchSNSCategoryIdByCropTypeId(model.CurrentCropTypeId ?? 0);
-            if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterCereals || snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterOilseedRape ||
-                snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.OtherArableAndPotatoes)
+            if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterCereals || snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterOilseedRape)
             {
                 return RedirectToAction("CalculateNitrogenInCurrentCropQuestion");
             }
             else if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.Fruit)
             {
                 return RedirectToAction("CheckAnswer");
+            }
+            else if(snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.OtherArableAndPotatoes)
+            {
+                return RedirectToAction("EstimateOfNitrogenMineralisationQuestion");
             }
 
             return RedirectToAction("SoilMineralNitrogenAnalysisResults");
@@ -1584,7 +1587,7 @@ namespace NMP.Portal.Controllers
                 if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SampleDepth"].AttemptedValue, Resource.lblSamplelDepthForError)))
                 {
                     ModelState["SampleDepth"].Errors.Clear();
-                    ModelState["SampleDepth"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblSampleDepth));
+                    ModelState["SampleDepth"].Errors.Add(Resource.MsgEnterValidNumericValueBeforeContinuing);
                 }
             }
             if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilMineralNitrogen"))
@@ -1595,29 +1598,29 @@ namespace NMP.Portal.Controllers
                 if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SoilMineralNitrogen"].AttemptedValue, Resource.lblSoilMineralNitrogenForError)))
                 {
                     ModelState["SoilMineralNitrogen"].Errors.Clear();
-                    ModelState["SoilMineralNitrogen"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblSoilMineralNitrogen));
+                    ModelState["SoilMineralNitrogen"].Errors.Add(Resource.MsgEnterValidNumericValueBeforeContinuing);
                 }
             }
             if (model.SampleDepth == null)
             {
-                ModelState.AddModelError("SampleDepth", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblSampleDepth));
+                ModelState.AddModelError("SampleDepth", Resource.MsgEnterAValueBeforeContinue);
             }
             if (model.SoilMineralNitrogen == null)
             {
-                ModelState.AddModelError("SoilMineralNitrogen", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblSoilMineralNitrogen));
+                ModelState.AddModelError("SoilMineralNitrogen", Resource.MsgEnterAValueBeforeContinue);
             }
             if (model.SampleDepth != null)
             {
                 if (model.SampleDepth < 0)
                 {
-                    ModelState.AddModelError("SampleDepth", string.Format(Resource.lblEnterValidValue, Resource.lblSampleDepth));
+                    ModelState.AddModelError("SampleDepth", Resource.MsgEnterValidNumericValueBeforeContinuing);
                 }
             }
             if (model.SoilMineralNitrogen != null)
             {
                 if (model.SoilMineralNitrogen < 0)
                 {
-                    ModelState.AddModelError("SoilMineralNitrogen", string.Format(Resource.lblEnterValidValue, Resource.lblSoilMineralNitrogen));
+                    ModelState.AddModelError("SoilMineralNitrogen", Resource.MsgEnterValidNumericValueBeforeContinuing);
                 }
             }
             if (!ModelState.IsValid)
@@ -1630,7 +1633,7 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("CheckAnswer");
             }
-            return RedirectToAction("CalculateNitrogenInCurrentCropQuestion");
+            return RedirectToAction("EstimateOfNitrogenMineralisationQuestion");
         }
 
         [HttpGet]

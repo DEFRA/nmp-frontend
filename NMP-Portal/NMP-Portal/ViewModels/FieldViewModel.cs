@@ -53,6 +53,7 @@ namespace NMP.Portal.ViewModels
         public int? NumberOfShoots { get; set; }
         public int SeasonId { get; set; }
         public int GrowthAreaIndexOrCropHeight { get; set; }
+        public bool? IsEstimateOfNitrogenMineralisation { get; set; }
 
     }
 }

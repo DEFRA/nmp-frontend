@@ -5051,6 +5051,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Would you like to add an estimate of nitrogen mineralisation during the growing season?.
+        /// </summary>
+        public static string lblWouldYouLikeToAddAnEstimateOfNitrogenMineralisation {
+            get {
+                return ResourceManager.GetString("lblWouldYouLikeToAddAnEstimateOfNitrogenMineralisation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Would you like to use these analysis values for future applications of {0} on {1}?.
         /// </summary>
         public static string lblWouldYouLikeToUseTheseAnalysisValuesForFutureApplications {
