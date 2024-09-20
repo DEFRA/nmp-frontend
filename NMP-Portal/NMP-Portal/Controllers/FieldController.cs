@@ -986,7 +986,7 @@ namespace NMP.Portal.Controllers
 
         }
 
-        public IActionResult BackCheckAnswer()
+        public async Task<IActionResult> BackCheckAnswer()
         {
             FieldViewModel? model = null;
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
@@ -999,6 +999,15 @@ namespace NMP.Portal.Controllers
             }
             model.IsCheckAnswer = false;
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
+            if (model.WantToApplySns != null && model.WantToApplySns.Value)
+            {
+                int snsCategoryId = await _fieldService.FetchSNSCategoryIdByCropTypeId(model.CurrentCropTypeId ?? 0);
+
+                if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.Fruit)
+                {
+                    return RedirectToAction("SoilMineralNitrogenAnalysisResults");
+                }
+            }
             return RedirectToAction("SNSAppliedQuestion");
         }
 
@@ -1402,10 +1411,17 @@ namespace NMP.Portal.Controllers
                         cropTypeLinking.SNSCategoryID == (int)NMP.Portal.Enums.SNSCategories.WinterCereals ||
                         cropTypeLinking.SNSCategoryID == (int)NMP.Portal.Enums.SNSCategories.Fruit)
                     {
+                        model.SampleDepth = null;
+                        model.SoilMineralNitrogen = null;
+                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
                         return RedirectToAction("SoilMineralNitrogenAnalysisResults");
                     }
                     else if (cropTypeLinking.SNSCategoryID == (int)NMP.Portal.Enums.SNSCategories.Vegetables)
                     {
+                        model.SoilMineralNitrogenAt030CM = null;
+                        model.SoilMineralNitrogenAt3060CM = null;
+                        model.SoilMineralNitrogenAt6090CM = null;
+                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
                         return RedirectToAction("SampleDepth");
                     }
                 }
@@ -1515,18 +1531,24 @@ namespace NMP.Portal.Controllers
             {
                 return View(model);
             }
+
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
             if (model.IsCheckAnswer)
             {
                 return RedirectToAction("CheckAnswer");
             }
             int snsCategoryId = await _fieldService.FetchSNSCategoryIdByCropTypeId(model.CurrentCropTypeId ?? 0);
-            if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterCereals || snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterOilseedRape)
+            if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterCereals || snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterOilseedRape ||
+                snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.OtherArableAndPotatoes)
             {
                 return RedirectToAction("CalculateNitrogenInCurrentCropQuestion");
             }
+            else if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.Fruit)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
 
-            return RedirectToAction("EstimateOfNitrogenMineralisationQuestion");
+            return RedirectToAction("SoilMineralNitrogenAnalysisResults");
         }
         [HttpGet]
         public async Task<IActionResult> SampleDepth()
@@ -1549,6 +1571,66 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("CurrentCropTypes");
             }
             return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SampleDepth(FieldViewModel model)
+        {
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("SampleDepth"))
+            {
+                var InvalidFormatError = ModelState["SampleDepth"].Errors.Count > 0 ?
+                                ModelState["SampleDepth"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SampleDepth"].AttemptedValue, Resource.lblSamplelDepthForError)))
+                {
+                    ModelState["SampleDepth"].Errors.Clear();
+                    ModelState["SampleDepth"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblSampleDepth));
+                }
+            }
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilMineralNitrogen"))
+            {
+                var InvalidFormatError = ModelState["SoilMineralNitrogen"].Errors.Count > 0 ?
+                                ModelState["SoilMineralNitrogen"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SoilMineralNitrogen"].AttemptedValue, Resource.lblSoilMineralNitrogenForError)))
+                {
+                    ModelState["SoilMineralNitrogen"].Errors.Clear();
+                    ModelState["SoilMineralNitrogen"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblSoilMineralNitrogen));
+                }
+            }
+            if (model.SampleDepth == null)
+            {
+                ModelState.AddModelError("SampleDepth", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblSampleDepth));
+            }
+            if (model.SoilMineralNitrogen == null)
+            {
+                ModelState.AddModelError("SoilMineralNitrogen", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblSoilMineralNitrogen));
+            }
+            if (model.SampleDepth != null)
+            {
+                if (model.SampleDepth < 0)
+                {
+                    ModelState.AddModelError("SampleDepth", string.Format(Resource.lblEnterValidValue, Resource.lblSampleDepth));
+                }
+            }
+            if (model.SoilMineralNitrogen != null)
+            {
+                if (model.SoilMineralNitrogen < 0)
+                {
+                    ModelState.AddModelError("SoilMineralNitrogen", string.Format(Resource.lblEnterValidValue, Resource.lblSoilMineralNitrogen));
+                }
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
+            if (model.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
+            return RedirectToAction("CalculateNitrogenInCurrentCropQuestion");
         }
 
         [HttpGet]
@@ -1734,6 +1816,37 @@ namespace NMP.Portal.Controllers
             {
                 TempData["Error"] = ex.Message;
                 return RedirectToAction("CalculateNitrogenInCurrentCropQuestion");
+            }
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> BackActionForCalculateNitrogenCropQuestion()
+        {
+            FieldViewModel model = new FieldViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+            int snsCategoryId = await _fieldService.FetchSNSCategoryIdByCropTypeId(model.CurrentCropTypeId ?? 0);
+
+            if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterCereals || snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterOilseedRape ||
+                snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.OtherArableAndPotatoes)
+            {
+                return RedirectToAction("SoilMineralNitrogenAnalysisResults");
+            }
+            else if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.Vegetables)
+            {
+                return RedirectToAction("SampleDepth");
+            }
+
+            if (model.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
             }
             return View(model);
         }

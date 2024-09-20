@@ -102,7 +102,7 @@ namespace NMP.Portal.Services
             }
             return soilTypes;
         }
-        public async Task<(List<NutrientResponseWrapper>,Error)> FetchNutrientsAsync()
+        public async Task<(List<NutrientResponseWrapper>, Error)> FetchNutrientsAsync()
         {
             List<NutrientResponseWrapper> nutrients = new List<NutrientResponseWrapper>();
             Error error = null;
@@ -144,7 +144,7 @@ namespace NMP.Portal.Services
                 throw new Exception(error.Message, ex);
             }
 
-            return (nutrients,error);
+            return (nutrients, error);
         }
         public async Task<List<CropGroupResponse>> FetchCropGroups()
         {
@@ -305,7 +305,7 @@ namespace NMP.Portal.Services
             }
             return cropType;
         }
-        public async Task<(Field,Error)> AddFieldAsync(FieldData fieldData, int farmId, string farmName)
+        public async Task<(Field, Error)> AddFieldAsync(FieldData fieldData, int farmId, string farmName)
         {
             string jsonData = JsonConvert.SerializeObject(fieldData);
             Field field = null;
@@ -353,7 +353,7 @@ namespace NMP.Portal.Services
                 error.Message = ex.Message;
                 _logger.LogError(ex.Message);
             }
-            return (field,error);
+            return (field, error);
         }
         public async Task<bool> IsFieldExistAsync(int farmId, string name)
         {
@@ -391,7 +391,7 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchFieldsByFarmIdAsyncAPI,farmId));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchFieldsByFarmIdAsyncAPI, farmId));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
@@ -556,12 +556,12 @@ namespace NMP.Portal.Services
             {
 
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchSoilAnalysisByFieldIdAsyncAPI, fieldId,"true"));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchSoilAnalysisByFieldIdAsyncAPI, fieldId, "true"));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
                 {
-                      soilAnalysis = responseWrapper.Data.SoilAnalyses.records.ToObject<List<SoilAnalysisResponse>>();
+                    soilAnalysis = responseWrapper.Data.SoilAnalyses.records.ToObject<List<SoilAnalysisResponse>>();
                 }
                 else
                 {
@@ -632,7 +632,7 @@ namespace NMP.Portal.Services
 
         public async Task<int> FetchSNSCategoryIdByCropTypeId(int cropTypeId)
         {
-            int? sNSCategoryID =null;
+            int? sNSCategoryID = null;
             Error error = new Error();
             try
             {
@@ -645,7 +645,10 @@ namespace NMP.Portal.Services
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
                         CropTypeLinkingResponse cropTypeLinkingResponse = responseWrapper.Data.CropTypeLinking.ToObject<CropTypeLinkingResponse>();
-                        sNSCategoryID = cropTypeLinkingResponse.SNSCategoryID;
+                        if (cropTypeLinkingResponse != null)
+                        {
+                            sNSCategoryID = cropTypeLinkingResponse.SNSCategoryID;
+                        }
                     }
                 }
                 else
@@ -669,7 +672,7 @@ namespace NMP.Portal.Services
                 _logger.LogError(ex.Message);
                 throw new Exception(error.Message, ex);
             }
-            return sNSCategoryID??0;
+            return sNSCategoryID ?? 0;
         }
 
         public async Task<List<SeasonResponse>> FetchSeasons()

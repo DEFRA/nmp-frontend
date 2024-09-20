@@ -3503,6 +3503,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SampleDepth.
+        /// </summary>
+        public static string lblSamplelDepthForError {
+            get {
+                return ResourceManager.GetString("lblSamplelDepthForError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to save you money.
         /// </summary>
         public static string lblSaveYouMoney {
@@ -3674,6 +3683,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sample depth.
+        /// </summary>
+        public static string lblSoilDepth {
+            get {
+                return ResourceManager.GetString("lblSoilDepth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Soil mineral nitrogen.
         /// </summary>
         public static string lblSoilMineralNitrogen {
@@ -3715,6 +3733,15 @@ namespace NMP.Portal.Resources {
         public static string lblSoilMineralNitrogenAt6090CMForError {
             get {
                 return ResourceManager.GetString("lblSoilMineralNitrogenAt6090CMForError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SoilMineralNitrogen.
+        /// </summary>
+        public static string lblSoilMineralNitrogenForError {
+            get {
+                return ResourceManager.GetString("lblSoilMineralNitrogenForError", resourceCulture);
             }
         }
         
@@ -4840,6 +4867,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhatWasTheSampleDepth {
             get {
                 return ResourceManager.GetString("lblWhatWasTheSampleDepth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What was the soil mineral nitrogen kg/ha.
+        /// </summary>
+        public static string lblWhatWasTheSoilMineralNitrogen {
+            get {
+                return ResourceManager.GetString("lblWhatWasTheSoilMineralNitrogen", resourceCulture);
             }
         }
         
