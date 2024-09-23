@@ -3818,6 +3818,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Soil Nitrogen Supply Index for {0}.
+        /// </summary>
+        public static string lblSoilNitrogenSupplyIndex {
+            get {
+                return ResourceManager.GetString("lblSoilNitrogenSupplyIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Soil nutrient value Type.
         /// </summary>
         public static string lblSoilNutrientValueType {
