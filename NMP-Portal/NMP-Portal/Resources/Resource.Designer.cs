@@ -1251,7 +1251,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do You Want to Enter Growth Area Index or the Crop Height?.
+        ///   Looks up a localized string similar to Do You Want to Enter Green Area Index or the Crop Height?.
         /// </summary>
         public static string lblDoYouWantToEnterGAIOrCropHeight {
             get {
@@ -1368,6 +1368,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a crop height before continuing.
+        /// </summary>
+        public static string lblEnterACropHeightBeforeContinue {
+            get {
+                return ResourceManager.GetString("lblEnterACropHeightBeforeContinue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter address manually.
         /// </summary>
         public static string lblEnterAddressManually {
@@ -1427,6 +1436,15 @@ namespace NMP.Portal.Resources {
         public static string lblEnterDifferentFiguresForEachField {
             get {
                 return ResourceManager.GetString("lblEnterDifferentFiguresForEachField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a GAI value before continuing.
+        /// </summary>
+        public static string lblEnterGAIValueBeforeContinue {
+            get {
+                return ResourceManager.GetString("lblEnterGAIValueBeforeContinue", resourceCulture);
             }
         }
         
@@ -1845,20 +1863,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Growth area index (GAI).
+        ///   Looks up a localized string similar to Green area index (GAI).
         /// </summary>
-        public static string lblGrowthAreaIndex {
+        public static string lblGreenAreaIndex {
             get {
-                return ResourceManager.GetString("lblGrowthAreaIndex", resourceCulture);
+                return ResourceManager.GetString("lblGreenAreaIndex", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Growth area index or crop height.
+        ///   Looks up a localized string similar to Green area index or crop height.
         /// </summary>
-        public static string lblGrowthAreaIndexOrCropHeight {
+        public static string lblGreenAreaIndexOrCropHeight {
             get {
-                return ResourceManager.GetString("lblGrowthAreaIndexOrCropHeight", resourceCulture);
+                return ResourceManager.GetString("lblGreenAreaIndexOrCropHeight", resourceCulture);
             }
         }
         
@@ -4655,6 +4673,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the crop height?.
+        /// </summary>
+        public static string lblWhatIsTheCropHeight {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheCropHeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the current crop group?.
         /// </summary>
         public static string lblWhatIsTheCurrentCropGroup {
@@ -4732,6 +4759,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhatIsTheFarmPostcode {
             get {
                 return ResourceManager.GetString("lblWhatIsTheFarmPostcode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the green area index (GAI)?.
+        /// </summary>
+        public static string lblWhatIsTheGreenAreaIndexGAI {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheGreenAreaIndexGAI", resourceCulture);
             }
         }
         
@@ -5683,6 +5719,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a valid numeric crop height before continuing (0-30).
+        /// </summary>
+        public static string MSGEnterAValidCropHeight {
+            get {
+                return ResourceManager.GetString("MSGEnterAValidCropHeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a valid numeric GAI value before continuing (0-3).
+        /// </summary>
+        public static string MsgEnterAValidNumericGAIvalue {
+            get {
+                return ResourceManager.GetString("MsgEnterAValidNumericGAIvalue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a valid postcode.
         /// </summary>
         public static string MsgEnterAValidPostcode {
@@ -5751,6 +5805,15 @@ namespace NMP.Portal.Resources {
         public static string MsgEnterRainfallAmountBeforeContinuing {
             get {
                 return ResourceManager.GetString("MsgEnterRainfallAmountBeforeContinuing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter shoot number between 0 to 1500.
+        /// </summary>
+        public static string MsgEnterShootNumberBetween0To1500 {
+            get {
+                return ResourceManager.GetString("MsgEnterShootNumberBetween0To1500", resourceCulture);
             }
         }
         

@@ -2233,16 +2233,16 @@ m3/ha  not set</value>
     <value>Crop height</value>
   </data>
   <data name="lblDoYouWantToEnterGAIOrCropHeight" xml:space="preserve">
-    <value>Do You Want to Enter Growth Area Index or the Crop Height?</value>
+    <value>Do You Want to Enter Green Area Index or the Crop Height?</value>
   </data>
-  <data name="lblGrowthAreaIndex" xml:space="preserve">
-    <value>Growth area index (GAI)</value>
+  <data name="lblGreenAreaIndex" xml:space="preserve">
+    <value>Green area index (GAI)</value>
   </data>
   <data name="lblEstimateOfNitrogenMineralisationQuestion" xml:space="preserve">
     <value>Estimate of nitrogen mineralisation question</value>
   </data>
-  <data name="lblGrowthAreaIndexOrCropHeight" xml:space="preserve">
-    <value>Growth area index or crop height</value>
+  <data name="lblGreenAreaIndexOrCropHeight" xml:space="preserve">
+    <value>Green area index or crop height</value>
   </data>
   <data name="lblNumberOfShoots" xml:space="preserve">
     <value>Number of shoots</value>
@@ -2291,5 +2291,26 @@ m3/ha  not set</value>
   </data>
   <data name="lblWouldYouLikeToAddAnEstimateOfNitrogenMineralisation" xml:space="preserve">
     <value>Would you like to add an estimate of nitrogen mineralisation during the growing season?</value>
+  </data>
+  <data name="lblWhatIsTheCropHeight" xml:space="preserve">
+    <value>What is the crop height?</value>
+  </data>
+  <data name="lblWhatIsTheGreenAreaIndexGAI" xml:space="preserve">
+    <value>What is the green area index (GAI)?</value>
+  </data>
+  <data name="MsgEnterShootNumberBetween0To1500" xml:space="preserve">
+    <value>Enter shoot number between 0 to 1500</value>
+  </data>
+  <data name="lblEnterACropHeightBeforeContinue" xml:space="preserve">
+    <value>Enter a crop height before continuing</value>
+  </data>
+  <data name="lblEnterGAIValueBeforeContinue" xml:space="preserve">
+    <value>Enter a GAI value before continuing</value>
+  </data>
+  <data name="MSGEnterAValidCropHeight" xml:space="preserve">
+    <value>Enter a valid numeric crop height before continuing (0-30)</value>
+  </data>
+  <data name="MsgEnterAValidNumericGAIvalue" xml:space="preserve">
+    <value>Enter a valid numeric GAI value before continuing (0-3)</value>
   </data>
 </root>

@@ -52,8 +52,19 @@ namespace NMP.Portal.ViewModels
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheNumberOfShootsPerSquareMetre))]
         public int? NumberOfShoots { get; set; }
         public int SeasonId { get; set; }
-        public int GrowthAreaIndexOrCropHeight { get; set; }
         public bool? IsEstimateOfNitrogenMineralisation { get; set; }
+        public int GreenAreaIndexOrCropHeight { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheCropHeight))]
+        public decimal? CropHeight { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheGreenAreaIndexGAI))]
+        public int? GreenAreaIndex { get; set; }
+
+        public bool IsCropHeight { get; set; } = false;
+        public bool IsGreenAreaIndex { get; set; } = false;
+        public bool IsNumberOfShoots { get; set; } = false;
+        public bool IsCalculateNitrogenNo { get; set; } = false;
 
     }
 }
