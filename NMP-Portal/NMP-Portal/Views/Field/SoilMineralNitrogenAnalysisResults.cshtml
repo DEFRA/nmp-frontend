@@ -21,6 +21,9 @@
         <form asp-action="SoilMineralNitrogenAnalysisResults" method="post" asp-controller="Field">
             @Html.AntiForgeryToken()
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherReference"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LPIDNumber"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalArea"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CroppedArea"></govuk-input>
@@ -64,6 +67,7 @@
 
             @if (Model != null)
             {
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsBasedOnSoilOrganicMatter" value="@Model.IsBasedOnSoilOrganicMatter.ToString().ToLower()"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules" value="@Model.isEnglishRules.ToString().ToLower()"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.WantToApplySns" value="@Model.WantToApplySns.ToString().ToLower()"></govuk-input>

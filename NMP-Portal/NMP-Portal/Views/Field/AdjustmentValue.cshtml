@@ -3,24 +3,28 @@
 @model FieldViewModel
 
 @{
-    ViewData["Title"] = Resource.lblAddField;
+    ViewData["Title"] = Resource.lblAdjustmentValue;
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "BackActionForAddField")" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="IsBasedOnSoilOrganicMatter" asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-l">@Resource.lblAddField</h1>
-        @if (TempData["ErrorOnBackButton"] != null)
+        @if (TempData["Error"] != null)
         {
             <govuk-error-summary>
-                <govuk-error-summary-item href="#passport-issued-day">@TempData["ErrorOnBackButton"]</govuk-error-summary-item>
+                <govuk-error-summary-item href="#">@TempData["Error"]</govuk-error-summary-item>
             </govuk-error-summary>
         }
-        <form asp-action="AddField" method="post" asp-controller="Field">
+        <form asp-action="AdjustmentValue" method="post" asp-controller="Field">
             @Html.AntiForgeryToken()
+
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LPIDNumber"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherReference"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalArea"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CroppedArea"></govuk-input>
@@ -39,9 +43,9 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.PhosphorusMethodologyID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.Magnesium"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.Phosphorus"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.Potassium"></govuk-input>            
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.Potassium"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupId"></govuk-input>                        
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilType"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroup"></govuk-input>
@@ -63,7 +67,6 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilMineralNitrogen"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropHeight"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GreenAreaIndex"></govuk-input>
-            
             @if (Model != null)
             {
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsBasedOnSoilOrganicMatter" value="@Model.IsBasedOnSoilOrganicMatter.ToString().ToLower()"></govuk-input>
@@ -75,25 +78,24 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAbove300SeaLevelForFarm" value="@Model.IsAbove300SeaLevelForFarm.ToString().ToLower()"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZForFarm" value="@Model.IsWithinNVZForFarm.ToString().ToLower()"></govuk-input>
             }
-            <div class="govuk-form-group">
-                <govuk-input asp-for="@Model.Name"></govuk-input>
-            </div>
+            <govuk-notification-banner>
+                <govuk-notification-banner-title>
+                    @Resource.lblImportant
+                </govuk-notification-banner-title>
+                <p class="govuk-body">
+                    This page is under construction
+                </p>
+            </govuk-notification-banner>
+            <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">@Resource.lblWhatIsTheAdjustmentValuePerHectare</h1>
+            </legand>
+            <govuk-input asp-for=@Model.AdjustmentValue inputmode="number" input-class="govuk-input--width-5" spellcheck="false">
+                <govuk-input-suffix>@Resource.lblKgPerHectare</govuk-input-suffix>
+            </govuk-input>
 
-            <div class="govuk-form-group margin-bottom-forty">
-                <govuk-input class="input-width-15" asp-for="@Model.NationalGridReference"></govuk-input>
-            </div>
-            <div class="govuk-form-group margin-bottom-forty">
-                <govuk-input class="input-width-15" asp-for="@Model.OtherReference"></govuk-input>
-            </div>
-            @if (Model.isEnglishRules != null && (!Model.isEnglishRules))
-            {
-                <div class="govuk-form-group margin-bottom-forty">
-                    <govuk-input class="input-width-15" asp-for="@Model.LPIDNumber"></govuk-input>
-                </div>
-            }
-            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
-                @Resource.lblContinue
-            </govuk-button>
+            @* <govuk-button type="submit" class="margin-bottom-forty">
+            @Resource.lblContinue
+            </govuk-button> *@
         </form>
         <p class="govuk-body cancel-link"><a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
     </div>

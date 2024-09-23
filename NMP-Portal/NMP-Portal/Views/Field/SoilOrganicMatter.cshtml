@@ -1,18 +1,24 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.FieldViewModel
 @{
-    ViewData["Title"] = Resource.lblSulpherDeficient;
-    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
-    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+    ViewData["Title"] = Resource.lblSoilOrganicMatter;
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "SoilType")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="IsBasedOnSoilOrganicMatter" asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="SulphurDeficient" asp-controller="Field" method="post">
+<form asp-action="SoilOrganicMatter" asp-controller="Field" method="post">
+    @if (TempData["Error"] != null)
+    {
+        <govuk-error-summary>
+            <govuk-error-summary-item href="#">@TempData["Error"]</govuk-error-summary-item>
+        </govuk-error-summary>
+    }
     @Html.AntiForgeryToken()
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilType"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilTypeID"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LPIDNumber"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalArea"></govuk-input>
@@ -21,9 +27,9 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZ"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAbove300SeaLevel"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilTypeID"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilReleasingClay" value="@Model.IsSoilReleasingClay.ToString().ToLower()"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilReleasingClay"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilReleasingClay" value="@Model.IsSoilReleasingClay.ToString().ToLower()"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.SulphurDeficient"></govuk-input>
     <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.Date"></govuk-date-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.PH"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilNutrientValueTypeIndex" value="@Model.IsSoilNutrientValueTypeIndex.ToString().ToLower()"></govuk-input>
@@ -64,24 +70,28 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropHeight"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GreenAreaIndex"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsBasedOnSoilOrganicMatter" value="@Model.IsBasedOnSoilOrganicMatter.ToString().ToLower()"></govuk-input>
-    
+
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
+          
+            <govuk-notification-banner>
+                <govuk-notification-banner-title>
+                    @Resource.lblImportant
+                </govuk-notification-banner-title>
+                <p class="govuk-body">
+                    This page is under construction
+                </p>
+            </govuk-notification-banner>
+            <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">@Resource.lblWhatIsThePercentageOfOrganicMatter</h1>
+            </legand>
+            <govuk-input asp-for=@Model.SoilOrganicMatter is-page-heading="false" inputmode="number" input-class="govuk-input--width-5" spellcheck="false">
+                <govuk-input-suffix>@Resource.lblPercentage</govuk-input-suffix>
+            </govuk-input>
 
-            <govuk-radios class="govuk-radios--inline" asp-for="@Model.SoilAnalyses.SulphurDeficient">
-
-                <govuk-radios-fieldset>
-                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @Resource.lblIsSoilDeficientInSulphur
-                    </govuk-radios-fieldset-legend>
-
-                    <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>
-                    <govuk-radios-item value="@no">@Resource.lblNo</govuk-radios-item>
-                </govuk-radios-fieldset>
-            </govuk-radios>
-            <govuk-button type="submit" class="margin-bottom-forty">
-                @Resource.lblContinue
-            </govuk-button>
+            @* <govuk-button type="submit" class="margin-bottom-forty">
+            @Resource.lblContinue
+            </govuk-button> *@
             <p class="govuk-body cancel-link"><a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
 
         </div>

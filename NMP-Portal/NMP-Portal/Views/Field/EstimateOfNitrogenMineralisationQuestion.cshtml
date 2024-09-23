@@ -2,35 +2,13 @@
 @model NMP.Portal.ViewModels.FieldViewModel
 @{
     ViewData["Title"] = Resource.lblEstimateOfNitrogenMineralisationQuestion;
-    var actionMethod = "";
-    if (Model.IsCheckAnswer)
-    {
-        actionMethod = "CheckAnswer";
-    }
-    else if (Model.IsCalculateNitrogenNo == true)
-    {
-        actionMethod = "CalculateNitrogenInCurrentCropQuestion";
-    }
-    else if (Model.IsNumberOfShoots==true)
-    {
-        actionMethod = "NumberOfShoots";
-    }
-    else if (Model.IsCropHeight ==true)
-    {
-        actionMethod = "CropHeight";
-    }
-    else if (Model.IsGreenAreaIndex == true)
-    {
-        actionMethod = "GreenAreaIndex";
-    }
-
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="@actionMethod" asp-controller="Field">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="BackActionForEstimateOfNitrogenMineralisationQuestion" asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="NumberOfShoots" asp-controller="Field" method="post">
+<form asp-action="EstimateOfNitrogenMineralisationQuestion" asp-controller="Field" method="post">
     @Html.AntiForgeryToken()
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference"></govuk-input>
@@ -102,6 +80,7 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilMineralNitrogen"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropHeight"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GreenAreaIndex"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsBasedOnSoilOrganicMatter" value="@Model.IsBasedOnSoilOrganicMatter.ToString().ToLower()"></govuk-input>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             @if (TempData["Error"] != null)
@@ -109,15 +88,8 @@
                 <govuk-error-summary>
                     <govuk-error-summary-item href="#">@TempData["Error"]</govuk-error-summary-item>
                 </govuk-error-summary>
-            }
-            <govuk-notification-banner>
-                <govuk-notification-banner-title>
-                    @Resource.lblImportant
-                </govuk-notification-banner-title>
-                <p class="govuk-body">  This page is under construction.</p>
-            </govuk-notification-banner>
-            
-            <govuk-radios asp-for="@Model.IsEstimateOfNitrogenMineralisation">
+            }            
+            <govuk-radios asp-for="@Model.EstimateOfNitrogenMineralisationQuestion">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @Resource.lblWouldYouLikeToAddAnEstimateOfNitrogenMineralisation
@@ -127,9 +99,9 @@
 
                 </govuk-radios-fieldset>
             </govuk-radios>
-            @* <govuk-button type="submit" class="margin-bottom-forty">
+            <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
-            </govuk-button> *@
+            </govuk-button>
             <p class="govuk-body cancel-link"><a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
 
         </div>
