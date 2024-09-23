@@ -52,6 +52,7 @@ namespace NMP.Portal.ViewModels
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheNumberOfShootsPerSquareMetre))]
         public int? NumberOfShoots { get; set; }
         public int SeasonId { get; set; }
+        public bool? IsEstimateOfNitrogenMineralisation { get; set; }
         public int GreenAreaIndexOrCropHeight { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheCropHeight))]

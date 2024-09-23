@@ -15,17 +15,10 @@
         @if (TempData["SoilMineralNitrogenError"] != null)
         {
             <govuk-error-summary>
-                <govuk-error-summary-item href="#passport-issued-day">@TempData["SoilMineralNitrogenError"]</govuk-error-summary-item>
+                <govuk-error-summary-item>@TempData["SoilMineralNitrogenError"]</govuk-error-summary-item>
             </govuk-error-summary>
         }
-        <govuk-notification-banner>
-            <govuk-notification-banner-title>
-                @Resource.lblImportant
-            </govuk-notification-banner-title>
-            <p>
-                This page is under construction.
-            </p>
-        </govuk-notification-banner>
+
         <form asp-action="SampleDepth" method="post" asp-controller="Field">
             @Html.AntiForgeryToken()
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
@@ -83,15 +76,15 @@
             <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
                 <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblAddSoilMineralNitrogen, Model.Name)</h1>
             </legand>
-            <govuk-input name="SampleDepth" asp-for=@Model.SampleDepth type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+            <govuk-input name="SampleDepth" asp-for=@Model.SampleDepth inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="true">@Resource.lblWhatWasTheSampleDepth</govuk-input-label>
             </govuk-input>
-            <govuk-input name="SoilMineralNitrogen" asp-for=@Model.SoilMineralNitrogen type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
-                <govuk-input-label is-page-heading="true">@Resource.lblKilogramsOfSoilMineralNitrogenAt3060CM</govuk-input-label>
+            <govuk-input name="SoilMineralNitrogen" asp-for=@Model.SoilMineralNitrogen inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                <govuk-input-label is-page-heading="true">@Resource.lblWhatWasTheSoilMineralNitrogen</govuk-input-label>
             </govuk-input>
-            @* <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
-            @Resource.lblContinue
-            </govuk-button> *@
+            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
         </form>
         <p class="govuk-body cancel-link"><a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
     </div>

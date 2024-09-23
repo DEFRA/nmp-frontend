@@ -23,6 +23,9 @@
     {
         actionMethod = "GreenAreaIndex";
     }
+
+    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
 }
 @section BeforeContent {
     <govuk-back-link asp-action="@actionMethod" asp-controller="Field">@Resource.lblBack</govuk-back-link>
@@ -95,6 +98,8 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilMineralNitrogenAt030CM"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilMineralNitrogenAt3060CM"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilMineralNitrogenAt6090CM"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SampleDepth"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilMineralNitrogen"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropHeight"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GreenAreaIndex"></govuk-input>
     <div class="govuk-grid-row">
@@ -105,17 +110,23 @@
                     <govuk-error-summary-item href="#">@TempData["Error"]</govuk-error-summary-item>
                 </govuk-error-summary>
             }
-            <h1>Stage 3 task</h1>
-            @* <govuk-radios asp-for="@Model.GreenAreaIndexOrCropHeight">
+            <govuk-notification-banner>
+                <govuk-notification-banner-title>
+                    @Resource.lblImportant
+                </govuk-notification-banner-title>
+                <p class="govuk-body">  This page is under construction.</p>
+            </govuk-notification-banner>
+            
+            <govuk-radios asp-for="@Model.IsEstimateOfNitrogenMineralisation">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @Resource.lblDoYouWantToEnterGAIOrCropHeight
+                        @Resource.lblWouldYouLikeToAddAnEstimateOfNitrogenMineralisation
                     </govuk-radios-fieldset-legend>
-                    <govuk-radios-item value="@greenAreaIndex">@Resource.lblGreenAreaIndex</govuk-radios-item>
-                    <govuk-radios-item value="@cropHeight">@Resource.lblCropHeight</govuk-radios-item>
+                    <govuk-radios-item value="@yes">@Resource.lblYes</govuk-radios-item>
+                    <govuk-radios-item value="@no">@Resource.lblNo</govuk-radios-item>
 
                 </govuk-radios-fieldset>
-            </govuk-radios> *@
+            </govuk-radios>
             @* <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button> *@
