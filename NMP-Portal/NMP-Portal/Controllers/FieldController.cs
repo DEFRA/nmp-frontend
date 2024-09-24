@@ -1502,10 +1502,6 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("SoilMineralNitrogenAt3060CM", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblKilogramsOfSoilMineralNitrogenAt3060CM));
             }
-            if (model.SoilMineralNitrogenAt6090CM == null)
-            {
-                ModelState.AddModelError("SoilMineralNitrogenAt6090CM", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblKilogramsOfSoilMineralNitrogenAt6090CM));
-            }
             if (model.SoilMineralNitrogenAt030CM != null)
             {
                 if (model.SoilMineralNitrogenAt030CM < 0)
@@ -2128,6 +2124,40 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("IsBasedOnSoilOrganicMatter");
             }
             return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AdjustmentValue(FieldViewModel model)
+        {
+
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("AdjustmentValue"))
+            {
+                var InvalidFormatError = ModelState["AdjustmentValue"].Errors.Count > 0 ?
+                                ModelState["AdjustmentValue"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["AdjustmentValue"].AttemptedValue, Resource.lblAdjustmentValueForError)))
+                {
+                    ModelState["AdjustmentValue"].Errors.Clear();
+                    ModelState["AdjustmentValue"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblAdjustmentValue));
+                }
+            }
+            if (model.AdjustmentValue == null)
+            {
+                ModelState.AddModelError("AdjustmentValue", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblAdjustmentValue.ToLower()));
+            }
+            if (model.AdjustmentValue != null && (model.AdjustmentValue < 0))
+            {
+                ModelState.AddModelError("AdjustmentValue", Resource.lblEnterAValidNumber);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
+
+
+            return RedirectToAction("SoilNitrogenSupplyIndex");
         }
         [HttpGet]
         public async Task<IActionResult> SoilOrganicMatter()
