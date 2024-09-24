@@ -475,6 +475,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to AdjustmentValue.
+        /// </summary>
+        public static string lblAdjustmentValueForError {
+            get {
+                return ResourceManager.GetString("lblAdjustmentValueForError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All.
         /// </summary>
         public static string lblAll {
@@ -4718,7 +4727,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the Adjustment Value per Hectare?.
+        ///   Looks up a localized string similar to What is the adjustment value per hectare?.
         /// </summary>
         public static string lblWhatIsTheAdjustmentValuePerHectare {
             get {

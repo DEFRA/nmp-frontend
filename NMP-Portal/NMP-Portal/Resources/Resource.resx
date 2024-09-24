@@ -2323,7 +2323,7 @@ m3/ha  not set</value>
     <value>Soil organic matter</value>
   </data>
   <data name="lblWhatIsTheAdjustmentValuePerHectare" xml:space="preserve">
-    <value>What is the Adjustment Value per Hectare?</value>
+    <value>What is the adjustment value per hectare?</value>
   </data>
   <data name="lblWhatIsThePercentageOfOrganicMatter" xml:space="preserve">
     <value>What is the Percentage of Organic Matter in the Soil?</value>
@@ -2342,5 +2342,8 @@ m3/ha  not set</value>
   </data>
   <data name="lblHowWouldYouLikeToCalculateTheSoilNitrogenMineralisation" xml:space="preserve">
     <value>How would you like to calculate the soil nitrogen mineralisation for {0}?</value>
+  </data>
+  <data name="lblAdjustmentValueForError" xml:space="preserve">
+    <value>AdjustmentValue</value>
   </data>
 </root>
