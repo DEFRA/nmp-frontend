@@ -2316,4 +2316,31 @@ m3/ha  not set</value>
   <data name="lblSoilNitrogenSupplyIndex" xml:space="preserve">
     <value>Soil Nitrogen Supply Index for {0}</value>
   </data>
+  <data name="lblAdjustmentValue" xml:space="preserve">
+    <value>Adjustment value</value>
+  </data>
+  <data name="lblSoilOrganicMatter" xml:space="preserve">
+    <value>Soil organic matter</value>
+  </data>
+  <data name="lblWhatIsTheAdjustmentValuePerHectare" xml:space="preserve">
+    <value>What is the Adjustment Value per Hectare?</value>
+  </data>
+  <data name="lblWhatIsThePercentageOfOrganicMatter" xml:space="preserve">
+    <value>What is the Percentage of Organic Matter in the Soil?</value>
+  </data>
+  <data name="lblBasedOnSoilOrganicMatter" xml:space="preserve">
+    <value>Based on Soil organic matter</value>
+  </data>
+  <data name="lblEnterAValueForMineralisation" xml:space="preserve">
+    <value>Enter a value for mineralisation in kg/ha</value>
+  </data>
+  <data name="lblEstimateBasedOnSoilOrganicMatterContent" xml:space="preserve">
+    <value>Estimate based on soil organic matter content</value>
+  </data>
+  <data name="lblCalculateSoilNitrogenMineralisation" xml:space="preserve">
+    <value>Calculate based on soil nitrogenMineralisation</value>
+  </data>
+  <data name="lblHowWouldYouLikeToCalculateTheSoilNitrogenMineralisation" xml:space="preserve">
+    <value>How would you like to calculate the soil nitrogen mineralisation for {0}?</value>
+  </data>
 </root>

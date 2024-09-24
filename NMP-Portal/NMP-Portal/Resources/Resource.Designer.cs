@@ -466,6 +466,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Adjustment value.
+        /// </summary>
+        public static string lblAdjustmentValue {
+            get {
+                return ResourceManager.GetString("lblAdjustmentValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All.
         /// </summary>
         public static string lblAll {
@@ -774,6 +783,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Based on Soil organic matter.
+        /// </summary>
+        public static string lblBasedOnSoilOrganicMatter {
+            get {
+                return ResourceManager.GetString("lblBasedOnSoilOrganicMatter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Based on the previous crop.
         /// </summary>
         public static string lblBasedOnThePreviousCrop {
@@ -806,6 +824,15 @@ namespace NMP.Portal.Resources {
         public static string lblCalculateBasedOnTheAreaAndQuantity {
             get {
                 return ResourceManager.GetString("lblCalculateBasedOnTheAreaAndQuantity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Calculate based on soil nitrogenMineralisation.
+        /// </summary>
+        public static string lblCalculateSoilNitrogenMineralisation {
+            get {
+                return ResourceManager.GetString("lblCalculateSoilNitrogenMineralisation", resourceCulture);
             }
         }
         
@@ -1422,6 +1449,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a value for mineralisation in kg/ha.
+        /// </summary>
+        public static string lblEnterAValueForMineralisation {
+            get {
+                return ResourceManager.GetString("lblEnterAValueForMineralisation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the average annual rainfall in millimetres for {0}.
         /// </summary>
         public static string lblEnterAverageAnualRainfall {
@@ -1589,6 +1625,15 @@ namespace NMP.Portal.Resources {
         public static string lblEstimateBasedOnPreviousCrop {
             get {
                 return ResourceManager.GetString("lblEstimateBasedOnPreviousCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Estimate based on soil organic matter content.
+        /// </summary>
+        public static string lblEstimateBasedOnSoilOrganicMatterContent {
+            get {
+                return ResourceManager.GetString("lblEstimateBasedOnSoilOrganicMatterContent", resourceCulture);
             }
         }
         
@@ -2085,6 +2130,15 @@ namespace NMP.Portal.Resources {
         public static string lblHowWouldYouLikeToCalculateSNSForCheckAnswer {
             get {
                 return ResourceManager.GetString("lblHowWouldYouLikeToCalculateSNSForCheckAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How would you like to calculate the soil nitrogen mineralisation for {0}?.
+        /// </summary>
+        public static string lblHowWouldYouLikeToCalculateTheSoilNitrogenMineralisation {
+            get {
+                return ResourceManager.GetString("lblHowWouldYouLikeToCalculateTheSoilNitrogenMineralisation", resourceCulture);
             }
         }
         
@@ -3782,6 +3836,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Soil organic matter.
+        /// </summary>
+        public static string lblSoilOrganicMatter {
+            get {
+                return ResourceManager.GetString("lblSoilOrganicMatter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Soil pH level.
         /// </summary>
         public static string lblSoilPHLevel {
@@ -4655,6 +4718,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the Adjustment Value per Hectare?.
+        /// </summary>
+        public static string lblWhatIsTheAdjustmentValuePerHectare {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheAdjustmentValuePerHectare", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the application method for your {0}?.
         /// </summary>
         public static string lblWhatIsTheApplicationMethod {
@@ -4813,6 +4885,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhatIsTheNumberOfShootsPerSquareMetre {
             get {
                 return ResourceManager.GetString("lblWhatIsTheNumberOfShootsPerSquareMetre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the Percentage of Organic Matter in the Soil?.
+        /// </summary>
+        public static string lblWhatIsThePercentageOfOrganicMatter {
+            get {
+                return ResourceManager.GetString("lblWhatIsThePercentageOfOrganicMatter", resourceCulture);
             }
         }
         
