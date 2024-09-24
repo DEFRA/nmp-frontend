@@ -70,6 +70,7 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropHeight"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GreenAreaIndex"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsBasedOnSoilOrganicMatter" value="@Model.IsBasedOnSoilOrganicMatter.ToString().ToLower()"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEstimateOfNitrogenMineralisation" value="@Model.IsEstimateOfNitrogenMineralisation"></govuk-input>
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
@@ -82,10 +83,8 @@
                     This page is under construction
                 </p>
             </govuk-notification-banner>
-            <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                <h1 class="govuk-fieldset__heading">@Resource.lblWhatIsThePercentageOfOrganicMatter</h1>
-            </legand>
             <govuk-input asp-for=@Model.SoilOrganicMatter is-page-heading="false" inputmode="number" input-class="govuk-input--width-5" spellcheck="false">
+                <govuk-input-label is-page-heading="true" class="govuk-label--l">@Resource.lblWhatIsThePercentageOfOrganicMatter</govuk-input-label>
                 <govuk-input-suffix>@Resource.lblPercentage</govuk-input-suffix>
             </govuk-input>
 

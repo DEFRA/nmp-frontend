@@ -1999,7 +1999,7 @@ namespace NMP.Portal.Controllers
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             if(model.IsEstimateOfNitrogenMineralisation == true)
             {
-                return RedirectToAction("EstimateOfNitrogenMineralisationQuestion");
+                return RedirectToAction("IsBasedOnSoilOrganicMatter");
             }
             else
             {
@@ -2090,6 +2090,7 @@ namespace NMP.Portal.Controllers
                 {
                     return View("CalculateSoilNitrogenMineralisation", model);
                 }
+                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
                 if (model.IsBasedOnSoilOrganicMatter.Value)
                 {
                     return RedirectToAction("SoilOrganicMatter");
