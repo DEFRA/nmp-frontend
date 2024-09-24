@@ -2343,4 +2343,7 @@ m3/ha  not set</value>
   <data name="lblHowWouldYouLikeToCalculateTheSoilNitrogenMineralisation" xml:space="preserve">
     <value>How would you like to calculate the soil nitrogen mineralisation for {0}?</value>
   </data>
+  <data name="lblAdjustmentValueForError" xml:space="preserve">
+    <value>AdjustmentValue</value>
+  </data>
 </root>

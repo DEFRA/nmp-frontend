@@ -475,6 +475,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to AdjustmentValue.
+        /// </summary>
+        public static string lblAdjustmentValueForError {
+            get {
+                return ResourceManager.GetString("lblAdjustmentValueForError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All.
         /// </summary>
         public static string lblAll {
