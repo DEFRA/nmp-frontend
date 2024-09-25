@@ -2450,6 +2450,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Kilograms of soil mineral nitrogen at 60-90cm (optional).
+        /// </summary>
+        public static string lblKilogramsOfSoilMineralNitrogenAt6090CMOptional {
+            get {
+                return ResourceManager.GetString("lblKilogramsOfSoilMineralNitrogenAt6090CMOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to L.
         /// </summary>
         public static string lblL {

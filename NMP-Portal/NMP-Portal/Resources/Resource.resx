@@ -2346,4 +2346,7 @@ m3/ha  not set</value>
   <data name="lblAdjustmentValueForError" xml:space="preserve">
     <value>AdjustmentValue</value>
   </data>
+  <data name="lblKilogramsOfSoilMineralNitrogenAt6090CMOptional" xml:space="preserve">
+    <value>Kilograms of soil mineral nitrogen at 60-90cm (optional)</value>
+  </data>
 </root>
