@@ -1987,21 +1987,25 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("IsEstimateOfNitrogenMineralisation", Resource.MsgSelectAnOptionBeforeContinuing);
             }
-            
+
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
-            if(model.IsEstimateOfNitrogenMineralisation == true)
+            if (model.IsEstimateOfNitrogenMineralisation == true)
             {
                 return RedirectToAction("IsBasedOnSoilOrganicMatter");
             }
             else
             {
+                model.AdjustmentValue = null;
+                model.SoilOrganicMatter = null;
+                model.IsBasedOnSoilOrganicMatter = null;
+                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
                 return RedirectToAction("SoilNitrogenSupplyIndex");
             }
-            
+
         }
 
         [HttpGet]
@@ -2145,15 +2149,15 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("AdjustmentValue", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblAdjustmentValue.ToLower()));
             }
-            if (model.AdjustmentValue != null && (model.AdjustmentValue < 0))
+            if (model.AdjustmentValue != null && (model.AdjustmentValue < 0 || model.AdjustmentValue > 60))
             {
-                ModelState.AddModelError("AdjustmentValue", Resource.lblEnterAValidNumber);
+                ModelState.AddModelError("AdjustmentValue", string.Format(Resource.MsgEnterValueInBetween, Resource.lblValue.ToLower(), 0, 60));
             }
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-
+            model.SoilOrganicMatter = null;
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
 
 
@@ -2181,6 +2185,41 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("IsBasedOnSoilOrganicMatter");
             }
             return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SoilOrganicMatter(FieldViewModel model)
+        {
+
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilOrganicMatter"))
+            {
+                var InvalidFormatError = ModelState["SoilOrganicMatter"].Errors.Count > 0 ?
+                                ModelState["SoilOrganicMatter"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SoilOrganicMatter"].AttemptedValue, Resource.lblSoilOrganicMatterForError)))
+                {
+                    ModelState["SoilOrganicMatter"].Errors.Clear();
+                    ModelState["SoilOrganicMatter"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblSoilOrganicMatter));
+                }
+            }
+            if (model.SoilOrganicMatter == null)
+            {
+                ModelState.AddModelError("SoilOrganicMatter", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblPercentageValue));
+            }
+            if (model.SoilOrganicMatter != null && (model.SoilOrganicMatter < 4 || model.SoilOrganicMatter > 10))
+            {
+                ModelState.AddModelError("SoilOrganicMatter",string.Format(Resource.MsgEnterValueInBetween,Resource.lblPercentageLable.ToLower(),4,10));
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            model.AdjustmentValue = null;
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
+
+
+            return RedirectToAction("SoilNitrogenSupplyIndex");
         }
         [HttpGet]
         public async Task<IActionResult> BackActionForEstimateOfNitrogenMineralisationQuestion()

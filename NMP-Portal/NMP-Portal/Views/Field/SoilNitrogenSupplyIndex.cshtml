@@ -100,6 +100,7 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GreenAreaIndex"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEstimateOfNitrogenMineralisation" value="@Model.IsEstimateOfNitrogenMineralisation"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AdjustmentValue"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilOrganicMatter"></govuk-input>
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
@@ -119,7 +120,7 @@
             <govuk-radios asp-for="@Model.IsEstimateOfNitrogenMineralisation">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format( Resource.lblSoilNitrogenSupplyIndex,Model.Name)
+                        @string.Format(Resource.lblSoilNitrogenSupplyIndex, Model.Name)
                     </govuk-radios-fieldset-legend>
                     @* <govuk-radios-item value="@yes">@Resource.lblYes</govuk-radios-item>
                     <govuk-radios-item value="@no">@Resource.lblNo</govuk-radios-item> *@
@@ -127,7 +128,7 @@
                 </govuk-radios-fieldset>
             </govuk-radios>
             @* <govuk-button type="submit" class="margin-bottom-forty">
-                @Resource.lblContinue
+            @Resource.lblContinue
             </govuk-button> *@
             <p class="govuk-body cancel-link"><a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
 
