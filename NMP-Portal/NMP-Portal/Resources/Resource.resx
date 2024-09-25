@@ -2361,4 +2361,13 @@ m3/ha  not set</value>
   <data name="MsgEnterValueInBetween" xml:space="preserve">
     <value>Enter an {0} between {1} and {2} </value>
   </data>
+  <data name="lblIfYouThinkThisIsWrongYouCanChangeItNowOrLater" xml:space="preserve">
+    <value>If you think this is wrong, you can change it now or later.</value>
+  </data>
+  <data name="lblSnsIndex" xml:space="preserve">
+    <value>Soil Nitrogen Supply Index</value>
+  </data>
+  <data name="lblSnsDetail" xml:space="preserve">
+    <value>{0}({1}kg/ha)</value>
+  </data>
 </root>

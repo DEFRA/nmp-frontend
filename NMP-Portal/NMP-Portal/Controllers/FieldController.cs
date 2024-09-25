@@ -1007,6 +1007,10 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("SoilMineralNitrogenAnalysisResults");
                 }
+                else
+                {
+                    return RedirectToAction("SoilNitrogenSupplyIndex");
+                }
             }
             return RedirectToAction("SNSAppliedQuestion");
         }
@@ -2025,6 +2029,88 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmList", "Farm");
                 }
 
+                //sns logic
+                var postMeasurementData = new MeasurementData();
+                int snsCategoryId = await _fieldService.FetchSNSCategoryIdByCropTypeId(model.CurrentCropTypeId ?? 0);
+                if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterCereals || snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterOilseedRape)
+                {
+                   postMeasurementData = new MeasurementData
+                   {
+                        CropTypeId = model.CurrentCropTypeId ?? 0,
+                        SeasonId = model.SeasonId,
+                        Step1ArablePotato = new Step1ArablePotato
+                        {
+                            Depth0To30Cm = model.SoilMineralNitrogenAt030CM,
+                            Depth30To60Cm = model.SoilMineralNitrogenAt3060CM,
+                            Depth60To90Cm = model.SoilMineralNitrogenAt6090CM
+                        },
+                        Step2 = new Step2
+                        {
+                            ShootNumber = model.NumberOfShoots > 0 ? model.NumberOfShoots : null,
+                            GreenAreaIndex = model.GreenAreaIndex > 0 ? model.GreenAreaIndex : null,
+                            CropHeight = model.CropHeight > 0 ? model.CropHeight : null
+                        },
+                        Step3 = new Step3
+                        {
+                            Adjustment = model.AdjustmentValue > 0 ? model.AdjustmentValue : null,
+                            OrganicMatterPercentage = model.SoilOrganicMatter > 0 ? model.SoilOrganicMatter : null
+                        }
+                   };
+
+                }
+                else if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.OtherArableAndPotatoes)
+                {
+                    postMeasurementData = new MeasurementData
+                    {
+                        CropTypeId = model.CurrentCropTypeId ?? 0,
+                        SeasonId = 1,
+                        Step1ArablePotato = new Step1ArablePotato
+                        {
+                            Depth0To30Cm = model.SoilMineralNitrogenAt030CM,
+                            Depth30To60Cm = model.SoilMineralNitrogenAt3060CM,
+                            Depth60To90Cm = model.SoilMineralNitrogenAt6090CM
+                        },
+                        Step3 = new Step3
+                        {
+                            Adjustment = model.AdjustmentValue > 0 ? model.AdjustmentValue : null,
+                            OrganicMatterPercentage = model.SoilOrganicMatter > 0 ? model.SoilOrganicMatter : null
+                        }
+                    };
+
+                }
+                else if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.Vegetables)
+                {
+                    postMeasurementData = new MeasurementData
+                    {
+                        CropTypeId = model.CurrentCropTypeId ?? 0,
+                        SeasonId = 1,
+                        Step1Veg=new Step1Veg
+                        {
+                            DepthCm=model.SampleDepth,
+                            DepthValue=model.SoilMineralNitrogen
+                        },
+                        Step3 = new Step3
+                        {
+                            Adjustment = null,
+                            OrganicMatterPercentage = null
+                        }
+                    };
+
+                }
+                else
+                {
+                    return RedirectToAction("CheckAnswer");
+                }
+                if(postMeasurementData.CropTypeId>0)
+                {
+                    (SnsResponse snsResponse, Error error) = await _fieldService.FetchSNSIndexByMeasurementMethodAsync(postMeasurementData);
+                    if (error.Message == null)
+                    {
+                        model.SnsIndex = snsResponse.SnsIndex;
+                        model.SnsValue = snsResponse.SnsValue;
+                    }
+                }
+
             }
             catch (Exception ex)
             {
@@ -2035,20 +2121,9 @@ namespace NMP.Portal.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SoilNitrogenSupplyIndex(FieldViewModel model)
+        public IActionResult SoilNitrogenSupplyIndex(FieldViewModel model)
         {
-            //if (model.IsEstimateOfNitrogenMineralisation == null)
-            //{
-            //    ModelState.AddModelError("IsEstimateOfNitrogenMineralisation", Resource.MsgSelectAnOptionBeforeContinuing);
-            //}
-
-            //if (!ModelState.IsValid)
-            //{
-            //    return View(model);
-            //}
-            //_httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
-
-            return RedirectToAction("EstimateOfNitrogenMineralisationQuestion");
+            return RedirectToAction("CheckAnswer");
         }
 
         [HttpGet]

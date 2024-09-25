@@ -87,5 +87,6 @@ namespace NMP.Portal.Helpers
         public const string FetchCropTypeLinkingsByCropTypeIdAsyncAPI = "crop-type-linkings/{0}";
         public const string FetchOrganicManureExistanceByDateRangeAsyncAPI = "organic-manures/check-existence?dateFrom={0}&dateTo={1}&confirm={2}";
         public const string FetchSeasonsAsyncAPI = "vendors/rb209/Measurement/Seasons";
+        public const string FetchSNSIndexByMeasurementMethodAsyncAPI = "vendors/rb209/Measurement/MeasurementMethod";
     }
 }
