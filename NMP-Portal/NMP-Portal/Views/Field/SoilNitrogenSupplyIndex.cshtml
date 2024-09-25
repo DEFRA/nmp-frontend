@@ -7,22 +7,18 @@
     {
         actionMethod = "CheckAnswer";
     }
-    else if (Model.IsEstimateOfNitrogenMineralisation == false)
+    else if (Model.IsEstimateOfNitrogenMineralisation!=null&&Model.IsEstimateOfNitrogenMineralisation == false)
     {
         actionMethod = "EstimateOfNitrogenMineralisationQuestion";
     }
-    // else if (Model.IsNumberOfShoots == true)
-    // {
-    //     actionMethod = "NumberOfShoots";
-    // }
-    // else if (Model.IsCropHeight == true)
-    // {
-    //     actionMethod = "CropHeight";
-    // }
-    // else if (Model.IsGreenAreaIndex == true)
-    // {
-    //     actionMethod = "GreenAreaIndex";
-    // }
+    else if (Model.IsBasedOnSoilOrganicMatter != null && Model.IsBasedOnSoilOrganicMatter.Value)
+    {
+        actionMethod = "SoilOrganicMatter";
+    }
+    else if (Model.IsBasedOnSoilOrganicMatter != null && (!Model.IsBasedOnSoilOrganicMatter.Value))
+    {
+        actionMethod = "AdjustmentValue";
+    }
 
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
@@ -103,7 +99,13 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropHeight"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GreenAreaIndex"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEstimateOfNitrogenMineralisation" value="@Model.IsEstimateOfNitrogenMineralisation"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AdjustmentValue"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilOrganicMatter"></govuk-input>
 
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCalculateNitrogenNo" value="@Model.IsCalculateNitrogenNo"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNumberOfShoots" value="@Model.IsNumberOfShoots"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCropHeight" value="@Model.IsCropHeight"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsGreenAreaIndex" value="@Model.IsGreenAreaIndex"></govuk-input>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             @if (TempData["Error"] != null)

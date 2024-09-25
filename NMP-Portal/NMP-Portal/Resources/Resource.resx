@@ -2323,7 +2323,7 @@ m3/ha  not set</value>
     <value>Soil organic matter</value>
   </data>
   <data name="lblWhatIsTheAdjustmentValuePerHectare" xml:space="preserve">
-    <value>What is the Adjustment Value per Hectare?</value>
+    <value>What is the adjustment value per hectare?</value>
   </data>
   <data name="lblWhatIsThePercentageOfOrganicMatter" xml:space="preserve">
     <value>What is the Percentage of Organic Matter in the Soil?</value>
@@ -2342,6 +2342,24 @@ m3/ha  not set</value>
   </data>
   <data name="lblHowWouldYouLikeToCalculateTheSoilNitrogenMineralisation" xml:space="preserve">
     <value>How would you like to calculate the soil nitrogen mineralisation for {0}?</value>
+  </data>
+  <data name="lblAdjustmentValueForError" xml:space="preserve">
+    <value>AdjustmentValue</value>
+  </data>
+  <data name="lblKilogramsOfSoilMineralNitrogenAt6090CMOptional" xml:space="preserve">
+    <value>Kilograms of soil mineral nitrogen at 60-90cm (optional)</value>
+  </data>
+  <data name="lblSoilOrganicMatterForError" xml:space="preserve">
+    <value>SoilOrganicMatter</value>
+  </data>
+  <data name="lblPercentageLable" xml:space="preserve">
+    <value>Percentage</value>
+  </data>
+  <data name="lblPercentageValue" xml:space="preserve">
+    <value>percentage value</value>
+  </data>
+  <data name="MsgEnterValueInBetween" xml:space="preserve">
+    <value>Enter an {0} between {1} and {2} </value>
   </data>
   <data name="lblIfYouThinkThisIsWrongYouCanChangeItNowOrLater" xml:space="preserve">
     <value>If you think this is wrong, you can change it now or later.</value>

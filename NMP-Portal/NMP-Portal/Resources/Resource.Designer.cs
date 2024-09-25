@@ -475,6 +475,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to AdjustmentValue.
+        /// </summary>
+        public static string lblAdjustmentValueForError {
+            get {
+                return ResourceManager.GetString("lblAdjustmentValueForError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All.
         /// </summary>
         public static string lblAll {
@@ -2450,6 +2459,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Kilograms of soil mineral nitrogen at 60-90cm (optional).
+        /// </summary>
+        public static string lblKilogramsOfSoilMineralNitrogenAt6090CMOptional {
+            get {
+                return ResourceManager.GetString("lblKilogramsOfSoilMineralNitrogenAt6090CMOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to L.
         /// </summary>
         public static string lblL {
@@ -3179,6 +3197,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Percentage.
+        /// </summary>
+        public static string lblPercentageLable {
+            get {
+                return ResourceManager.GetString("lblPercentageLable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to percentage value.
+        /// </summary>
+        public static string lblPercentageValue {
+            get {
+                return ResourceManager.GetString("lblPercentageValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to per hectare.
         /// </summary>
         public static string lblPerHectare {
@@ -3868,6 +3904,15 @@ namespace NMP.Portal.Resources {
         public static string lblSoilOrganicMatter {
             get {
                 return ResourceManager.GetString("lblSoilOrganicMatter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SoilOrganicMatter.
+        /// </summary>
+        public static string lblSoilOrganicMatterForError {
+            get {
+                return ResourceManager.GetString("lblSoilOrganicMatterForError", resourceCulture);
             }
         }
         
@@ -4745,7 +4790,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the Adjustment Value per Hectare?.
+        ///   Looks up a localized string similar to What is the adjustment value per hectare?.
         /// </summary>
         public static string lblWhatIsTheAdjustmentValuePerHectare {
             get {
@@ -6048,6 +6093,15 @@ namespace NMP.Portal.Resources {
         public static string MsgEnterValidValueForNutrientIndex {
             get {
                 return ResourceManager.GetString("MsgEnterValidValueForNutrientIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter an {0} between {1} and {2} .
+        /// </summary>
+        public static string MsgEnterValueInBetween {
+            get {
+                return ResourceManager.GetString("MsgEnterValueInBetween", resourceCulture);
             }
         }
         
