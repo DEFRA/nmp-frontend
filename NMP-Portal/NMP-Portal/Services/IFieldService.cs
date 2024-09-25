@@ -23,5 +23,7 @@ namespace NMP.Portal.Services
         Task<(FieldDetailResponse, Error)> FetchFieldDetailByFieldIdAndHarvestYear(int fieldId, int year, bool confirm);
         Task<int> FetchSNSCategoryIdByCropTypeId(int cropTypeId);
         Task<List<SeasonResponse>> FetchSeasons();
+
+        Task<(SnsResponse, Error)> FetchSNSIndexByMeasurementMethodAsync(MeasurementData measurementData);
     }
 }

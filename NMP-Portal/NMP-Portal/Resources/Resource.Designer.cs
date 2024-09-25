@@ -2197,6 +2197,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If you think this is wrong, you can change it now or later..
+        /// </summary>
+        public static string lblIfYouThinkThisIsWrongYouCanChangeItNowOrLater {
+            get {
+                return ResourceManager.GetString("lblIfYouThinkThisIsWrongYouCanChangeItNowOrLater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Important.
         /// </summary>
         public static string lblImportant {
@@ -3697,6 +3706,24 @@ namespace NMP.Portal.Resources {
         public static string lblSlurry {
             get {
                 return ResourceManager.GetString("lblSlurry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}({1}kg/ha).
+        /// </summary>
+        public static string lblSnsDetail {
+            get {
+                return ResourceManager.GetString("lblSnsDetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Soil Nitrogen Supply Index.
+        /// </summary>
+        public static string lblSnsIndex {
+            get {
+                return ResourceManager.GetString("lblSnsIndex", resourceCulture);
             }
         }
         

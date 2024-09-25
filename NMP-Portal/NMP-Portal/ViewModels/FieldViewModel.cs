@@ -68,7 +68,8 @@ namespace NMP.Portal.ViewModels
         public bool IsCalculateNitrogenNo { get; set; } = false;
         public decimal? SoilOrganicMatter { get; set; }
         public decimal? AdjustmentValue { get; set; }
-        
+        public int SnsIndex { get; set; }
+        public int SnsValue { get; set; }
 
     }
 }

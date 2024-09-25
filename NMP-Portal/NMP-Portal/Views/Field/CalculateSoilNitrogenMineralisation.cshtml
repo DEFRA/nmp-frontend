@@ -82,6 +82,11 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropHeight"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GreenAreaIndex"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEstimateOfNitrogenMineralisation" value="@Model.IsEstimateOfNitrogenMineralisation"></govuk-input>
+
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCalculateNitrogenNo" value="@Model.IsCalculateNitrogenNo"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNumberOfShoots" value="@Model.IsNumberOfShoots"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCropHeight" value="@Model.IsCropHeight"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsGreenAreaIndex" value="@Model.IsGreenAreaIndex"></govuk-input>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             @if (TempData["Error"] != null)

@@ -30,7 +30,7 @@
 @section BeforeContent {
     <govuk-back-link asp-action="@actionMethod" asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="EstimateOfNitrogenMineralisationQuestion" asp-controller="Field" method="post">
+<form asp-action="SoilNitrogenSupplyIndex" asp-controller="Field" method="post">
     @Html.AntiForgeryToken()
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference"></govuk-input>
@@ -112,26 +112,18 @@
                     <govuk-error-summary-item href="#">@TempData["Error"]</govuk-error-summary-item>
                 </govuk-error-summary>
             }
-            <govuk-notification-banner>
-                <govuk-notification-banner-title>
-                    @Resource.lblImportant
-                </govuk-notification-banner-title>
-                <p class="govuk-body">  This page is under construction.</p>
-            </govuk-notification-banner>
 
-            <govuk-radios asp-for="@Model.IsEstimateOfNitrogenMineralisation">
-                <govuk-radios-fieldset>
-                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format( Resource.lblSoilNitrogenSupplyIndex,Model.Name)
-                    </govuk-radios-fieldset-legend>
-                    @* <govuk-radios-item value="@yes">@Resource.lblYes</govuk-radios-item>
-                    <govuk-radios-item value="@no">@Resource.lblNo</govuk-radios-item> *@
-
-                </govuk-radios-fieldset>
-            </govuk-radios>
-            @* <govuk-button type="submit" class="margin-bottom-forty">
+            <h1 class="govuk-heading-l">@string.Format(Resource.lblSoilNitrogenSupplyIndex, Model.Name)</h1>
+            <p class="govuk-body">@Resource.lblIfYouThinkThisIsWrongYouCanChangeItNowOrLater</p>
+            <h3 class="govuk-heading-s">@Resource.lblSnsIndex</h3>
+            @if (Model.SnsIndex != null)
+            {
+                <p class="govuk-body">@string.Format(Resource.lblSnsDetail, Model.SnsIndex, Model.SnsValue)</p>
+            }
+            
+            <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
-            </govuk-button> *@
+            </govuk-button>
             <p class="govuk-body cancel-link"><a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
 
         </div>

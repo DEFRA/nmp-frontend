@@ -716,5 +716,46 @@ namespace NMP.Portal.Services
             }
             return seasons;
         }
+
+        public async Task<(SnsResponse, Error)> FetchSNSIndexByMeasurementMethodAsync(MeasurementData measurementData)
+        {
+            string jsonData = JsonConvert.SerializeObject(measurementData);
+            SnsResponse snsResponse = new SnsResponse();
+            Error error = new Error();
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+
+                var response = await httpClient.PostAsync(APIURLHelper.FetchSNSIndexByMeasurementMethodAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+                {
+
+                    JObject farmDataJObject = responseWrapper.Data as JObject;
+                    snsResponse = farmDataJObject.ToObject<SnsResponse>();
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+            return (snsResponse, error);
+        }
     }
 }
