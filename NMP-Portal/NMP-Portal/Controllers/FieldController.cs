@@ -1400,12 +1400,17 @@ namespace NMP.Portal.Controllers
                 return View(model);
             }
             model.CurrentCropType = await _fieldService.FetchCropTypeById(model.CurrentCropTypeId.Value);
-            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
+            
+            (CropTypeLinkingResponse cropTypeLinking, Error error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(model.CurrentCropTypeId.Value);
+            if (cropTypeLinking != null && cropTypeLinking.SNSCategoryID != null)
+            {
+                model.SnsCategoryId = cropTypeLinking.SNSCategoryID;
+            }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             if (model.IsCheckAnswer)
             {
                 return RedirectToAction("CheckAnswer");
             }
-            (CropTypeLinkingResponse cropTypeLinking, Error error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(model.CurrentCropTypeId.Value);
             if (error == null)
             {
                 if (cropTypeLinking != null && cropTypeLinking.SNSCategoryID != null)
@@ -1823,7 +1828,10 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("FarmList", "Farm");
             }
             int snsCategoryId = await _fieldService.FetchSNSCategoryIdByCropTypeId(model.CurrentCropTypeId ?? 0);
-
+            if (model.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
             if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterCereals || snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterOilseedRape ||
                 snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.OtherArableAndPotatoes)
             {
@@ -1834,10 +1842,7 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("SampleDepth");
             }
 
-            if (model.IsCheckAnswer)
-            {
-                return RedirectToAction("CheckAnswer");
-            }
+            
             return View(model);
         }
 
@@ -2108,6 +2113,7 @@ namespace NMP.Portal.Controllers
                     {
                         model.SnsIndex = snsResponse.SnsIndex;
                         model.SnsValue = snsResponse.SnsValue;
+                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
                     }
                 }
 
