@@ -13,6 +13,7 @@ using NMP.Portal.Models;
 using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
 using NMP.Portal.Services;
+using System.Diagnostics.Metrics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Runtime.ConstrainedExecution;
@@ -304,15 +305,13 @@ namespace NMP.Portal.Security
                             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
                             {
                                 userId = responseWrapper?.Data?["UserID"];
-                                identity?.AddClaim(new Claim("userId", userId.ToString()));
-                                //var claimsPrincipal = new ClaimsPrincipal(identity);
-                                //await context.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+                                identity?.AddClaim(new Claim("userId", userId.ToString()));                                
                             }
                             else
                             {
                                 if (responseWrapper != null && responseWrapper?.Error != null)
                                 {
-                                    throw new Exception("NMPT API service is not available at the moment. Try after some time.");
+                                    throw new Exception("NMPT API service is not available at the moment.Try after some time.");
                                 }
                             }
                         }
