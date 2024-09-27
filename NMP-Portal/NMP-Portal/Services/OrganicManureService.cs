@@ -339,21 +339,21 @@ namespace NMP.Portal.Services
             return (manureType, error);
         }
 
-        public async Task<(List<ApplicationMethodResponse>, Error)> FetchApplicationMethodList(int fieldType, string applicableFor)
+        public async Task<(List<ApplicationMethodResponse>, Error)> FetchApplicationMethodList(int fieldType, bool isLiquid)
         {
             List<ApplicationMethodResponse> applicationMethodList = new List<ApplicationMethodResponse>();
             Error error = null;
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchApplicationMethodsByApplicableForAsyncAPI, fieldType, applicableFor));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerApplicationMethodsByApplicableForAsyncAPI, isLiquid, fieldType));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        var applicationMethods = responseWrapper.Data.ApplicationMethods.ToObject<List<ApplicationMethodResponse>>();
+                        var applicationMethods = responseWrapper.Data.data.ToObject<List<ApplicationMethodResponse>>();
                         applicationMethodList.AddRange(applicationMethods);
                     }
                 }
@@ -390,14 +390,14 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchIncorporationMethodsByApplicationIdAsyncAPI, appId, fieldType, applicableFor));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerIncorporationMethodsByApplicationIdAsyncAPI, appId));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        var methods = responseWrapper.Data.IncorporationMethods.ToObject<List<IncorporationMethodResponse>>();
+                        var methods = responseWrapper.Data.data.ToObject<List<IncorporationMethodResponse>>();
                         incorporationMethods.AddRange(methods);
                     }
                 }
@@ -433,14 +433,14 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchIncorporationDelaysByMethodIdAndApplicableForAsyncAPI, methodId, applicableFor));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerIncorporationDelaysByMethodIdAndApplicableForAsyncAPI, methodId));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        var delays = responseWrapper.Data.IncorporationDelays.ToObject<List<IncorprationDelaysResponse>>();
+                        var delays = responseWrapper.Data.data.ToObject<List<IncorprationDelaysResponse>>();
                         incorporationDelays.AddRange(delays);
                     }
                 }
@@ -476,14 +476,14 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchApplicationMethodByIdAsyncAPI, Id));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerApplicationMethodByIdAsyncAPI, Id));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
                 {
-                    if (responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.ApplicationMethod != null)
+                    if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        applicationMethod = responseWrapper.Data.ApplicationMethod.Name;
+                        applicationMethod = responseWrapper.Data.data.name;
 
                     }
                 }
@@ -524,9 +524,9 @@ namespace NMP.Portal.Services
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
                 {
-                    if (responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.IncorporationMethod != null)
+                    if (responseWrapper != null && responseWrapper.Data != null)// && responseWrapper.Data.IncorporationMethod != null
                     {
-                        incorporationMethod = responseWrapper.Data.IncorporationMethod.Name;
+                        incorporationMethod = responseWrapper.Data.data.name;//.IncorporationMethod.Name;
 
                     }
                 }
@@ -567,9 +567,9 @@ namespace NMP.Portal.Services
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
                 {
-                    if (responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.IncorporationDelay != null)
+                    if (responseWrapper != null && responseWrapper.Data != null)// && responseWrapper.Data.IncorporationDelay != null
                     {
-                        incorporationDelay = responseWrapper.Data.IncorporationDelay.Name;
+                        incorporationDelay = responseWrapper.Data.data.name;//.IncorporationDelay.Name;
 
                     }
                 }
@@ -873,7 +873,7 @@ namespace NMP.Portal.Services
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        var windspeed = responseWrapper.Data.records.ToObject<List<WindspeedResponse>>();
+                        var windspeed = responseWrapper.Data.data.ToObject<List<WindspeedResponse>>();
                         windspeeds.AddRange(windspeed);
                     }
                 }

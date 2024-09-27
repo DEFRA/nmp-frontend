@@ -51,14 +51,21 @@ namespace NMP.Portal.Helpers
         public const string FetchApplicationMethodsByApplicableForAsyncAPI = "application-method?fieldType={0}&applicableFor={1}";
         public const string FetchIncorporationMethodsByApplicationIdAsyncAPI = "incorporation-methods/application-methods/{0}?fieldType={1}&applicableFor={2}";
 
+        public const string FetchMannerIncorporationMethodsByApplicationIdAsyncAPI = "incorporation-methods/by-app-method/{0}";
+
+        public const string FetchMannerApplicationMethodsByApplicableForAsyncAPI = "application-methods?isLiquid={0}&fieldType={1}";
+
         public const string FetchCropsByFieldIdAsyncAPI = "crops/fields/{0}";
 
         public const string FetchIncorporationDelaysByMethodIdAndApplicableForAsyncAPI = "incorporation-delays/incorporation-methods/{0}?applicableFor={1}";
+        public const string FetchMannerIncorporationDelaysByMethodIdAndApplicableForAsyncAPI = "incorporation-delays/by-incorp-method/{0}";
 
         public const string FetchFieldDetailByFieldIdAndHarvestYearAsyncAPI = "fields/info/{0}?year={1}&confirm={2}";
         public const string FetchIncorporationDelayByIdAsyncAPI = "incorporation-delays/{0}";
         public const string FetchIncorporationMethodByIdAsyncAPI = "incorporation-methods/{0}";
-        public const string FetchApplicationMethodByIdAsyncAPI = "application-method/{0}";
+        public const string FetchApplicationMethodByIdAsyncAPI = "application-methods/{0}";
+
+        public const string FetchMannerApplicationMethodByIdAsyncAPI = "application-methods/{0}";
 
         public const string AddOrganicManuresAsyncAPI = "organic-manures";
         public const string FetchRainfallByPostcodeAndDateRange = "climates/total-rainfall?postcode={0}&startDate={1}&endDate={2}";
