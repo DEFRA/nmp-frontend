@@ -1050,9 +1050,15 @@ namespace NMP.Portal.Controllers
             int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);  // Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value);
             var farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
             //int farmId = model.FarmID;
-            if (model.WantToApplySns.HasValue && (!model.WantToApplySns.Value))
+            if (model.WantToApplySns==true)
             {
-                model.SoilAnalyses.SoilNitrogenSupply = 0;
+                model.SoilAnalyses.SoilNitrogenSupply = model.SnsValue;
+                model.SoilAnalyses.SoilNitrogenSupplyIndex = model.SnsIndex;
+                
+            }
+            else
+            {
+                model.SoilAnalyses.SoilNitrogenSupply =0;
                 model.SoilAnalyses.SoilNitrogenSupplyIndex = 0;
             }
 
@@ -1284,12 +1290,27 @@ namespace NMP.Portal.Controllers
             {
                 return View(model);
             }
-
-            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             if (model.IsCheckAnswer)
             {
-                return RedirectToAction("CheckAnswer");
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+                {
+                    FieldViewModel fieldViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                    if (fieldViewModel.SampleForSoilMineralNitrogen == model.SampleForSoilMineralNitrogen)
+                    {
+                        return RedirectToAction("CheckAnswer");
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
             }
+
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
+            //if (model.IsCheckAnswer)
+            //{
+            //    return RedirectToAction("CheckAnswer");
+            //}
 
             return RedirectToAction("CurrentCropGroups");
         }
@@ -1347,6 +1368,49 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("FarmList", "Farm");
             }
             model.CurrentCropGroup = await _fieldService.FetchCropGroupById(model.CurrentCropGroupId.Value);
+            if(model.IsCheckAnswer)
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+                {
+                    FieldViewModel fieldViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                    if (fieldViewModel.CurrentCropGroupId == model.CurrentCropGroupId)
+                    {
+                        return RedirectToAction("CheckAnswer");
+                    }
+                    else
+                    {
+                        model.CurrentCropTypeId = null;
+                        model.CurrentCropType = null;
+                        model.SoilMineralNitrogenAt030CM = null;
+                        model.SoilMineralNitrogenAt3060CM = null;
+                        model.SoilMineralNitrogenAt6090CM = null;
+                        model.SampleDepth = null;
+                        model.SoilMineralNitrogen = null;
+                        model.IsCalculateNitrogen = null;
+                        model.IsEstimateOfNitrogenMineralisation = null;
+                        model.IsBasedOnSoilOrganicMatter = null;
+                        model.NumberOfShoots = null;
+                        model.SeasonId = 0;
+                        model.GreenAreaIndexOrCropHeight = 0;
+                        model.CropHeight = null;
+                        model.GreenAreaIndex = null;
+                        model.IsCropHeight = false;
+                        model.IsGreenAreaIndex = false;
+                        model.IsNumberOfShoots = false;
+                        model.SoilOrganicMatter = null;
+                        model.AdjustmentValue= null;
+                        model.SnsIndex = 0;
+                        model.SnsValue = 0;
+                        model.SnsCategoryId = null;
+
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+            }
+
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
 
             return RedirectToAction("CurrentCropTypes");
@@ -1406,11 +1470,53 @@ namespace NMP.Portal.Controllers
             {
                 model.SnsCategoryId = cropTypeLinking.SNSCategoryID;
             }
-            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             if (model.IsCheckAnswer)
             {
-                return RedirectToAction("CheckAnswer");
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+                {
+                    FieldViewModel fieldViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                    if (fieldViewModel.CurrentCropTypeId == model.CurrentCropTypeId)
+                    {
+                        return RedirectToAction("CheckAnswer");
+                    }
+                    else
+                    {
+                        //model.CurrentCropTypeId = null;
+                        //model.CurrentCropType = null;
+                        model.SoilMineralNitrogenAt030CM = null;
+                        model.SoilMineralNitrogenAt3060CM = null;
+                        model.SoilMineralNitrogenAt6090CM = null;
+                        model.SampleDepth = null;
+                        model.SoilMineralNitrogen = null;
+                        model.IsCalculateNitrogen = null;
+                        model.IsEstimateOfNitrogenMineralisation = null;
+                        model.IsBasedOnSoilOrganicMatter = null;
+                        model.NumberOfShoots = null;
+                        model.SeasonId = 0;
+                        model.GreenAreaIndexOrCropHeight = 0;
+                        model.CropHeight = null;
+                        model.GreenAreaIndex = null;
+                        model.IsCropHeight = false;
+                        model.IsGreenAreaIndex = false;
+                        model.IsNumberOfShoots = false;
+                        model.SoilOrganicMatter = null;
+                        model.AdjustmentValue = null;
+                        model.SnsIndex = 0;
+                        model.SnsValue = 0;
+                        //model.SnsCategoryId = null;
+
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
             }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
+            //if (model.IsCheckAnswer)
+            //{
+            //    return RedirectToAction("CheckAnswer");
+            //}
             if (error == null)
             {
                 if (cropTypeLinking != null && cropTypeLinking.SNSCategoryID != null)
@@ -1536,12 +1642,54 @@ namespace NMP.Portal.Controllers
             {
                 return View(model);
             }
-
-            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
             if (model.IsCheckAnswer)
             {
-                return RedirectToAction("CheckAnswer");
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+                {
+                    FieldViewModel fieldViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                    if (fieldViewModel.SoilMineralNitrogenAt030CM == model.SoilMineralNitrogenAt030CM && fieldViewModel.SoilMineralNitrogenAt3060CM == model.SoilMineralNitrogenAt3060CM && fieldViewModel.SoilMineralNitrogenAt6090CM == model.SoilMineralNitrogenAt6090CM)
+                    {
+                        return RedirectToAction("CheckAnswer");
+                    }
+                    else
+                    {
+                        //model.CurrentCropTypeId = null;
+                        //model.CurrentCropType = null;
+                        //model.SoilMineralNitrogenAt030CM = null;
+                        //model.SoilMineralNitrogenAt3060CM = null;
+                        //model.SoilMineralNitrogenAt6090CM = null;
+                        model.SampleDepth = null;
+                        model.SoilMineralNitrogen = null;
+                        model.IsCalculateNitrogen = null;
+                        model.IsEstimateOfNitrogenMineralisation = null;
+                        model.IsBasedOnSoilOrganicMatter = null;
+                        model.NumberOfShoots = null;
+                        model.SeasonId = 0;
+                        model.GreenAreaIndexOrCropHeight = 0;
+                        model.CropHeight = null;
+                        model.GreenAreaIndex = null;
+                        model.IsCropHeight = false;
+                        model.IsGreenAreaIndex = false;
+                        model.IsNumberOfShoots = false;
+                        model.SoilOrganicMatter = null;
+                        model.AdjustmentValue = null;
+                        model.SnsIndex = 0;
+                        model.SnsValue = 0;
+                        //model.SnsCategoryId = null;
+
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
             }
+
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
+            //if (model.IsCheckAnswer)
+            //{
+            //    return RedirectToAction("CheckAnswer");
+            //}
             int snsCategoryId = await _fieldService.FetchSNSCategoryIdByCropTypeId(model.CurrentCropTypeId ?? 0);
             if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterCereals || snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterOilseedRape)
             {
@@ -1632,12 +1780,53 @@ namespace NMP.Portal.Controllers
             {
                 return View(model);
             }
-
-            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
             if (model.IsCheckAnswer)
             {
-                return RedirectToAction("CheckAnswer");
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+                {
+                    FieldViewModel fieldViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                    if (fieldViewModel.SampleDepth == model.SampleDepth && fieldViewModel.SoilMineralNitrogen == model.SoilMineralNitrogen)
+                    {
+                        return RedirectToAction("CheckAnswer");
+                    }
+                    else
+                    {
+                        //model.CurrentCropTypeId = null;
+                        //model.CurrentCropType = null;
+                        //model.SoilMineralNitrogenAt030CM = null;
+                        //model.SoilMineralNitrogenAt3060CM = null;
+                        //model.SoilMineralNitrogenAt6090CM = null;
+                        //model.SampleDepth = null;
+                        //model.SoilMineralNitrogen = null;
+                        model.IsCalculateNitrogen = null;
+                        model.IsEstimateOfNitrogenMineralisation = null;
+                        model.IsBasedOnSoilOrganicMatter = null;
+                        model.NumberOfShoots = null;
+                        model.SeasonId = 0;
+                        model.GreenAreaIndexOrCropHeight = 0;
+                        model.CropHeight = null;
+                        model.GreenAreaIndex = null;
+                        model.IsCropHeight = false;
+                        model.IsGreenAreaIndex = false;
+                        model.IsNumberOfShoots = false;
+                        model.SoilOrganicMatter = null;
+                        model.AdjustmentValue = null;
+                        model.SnsIndex = 0;
+                        model.SnsValue = 0;
+                        //model.SnsCategoryId = null;
+
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
             }
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
+            //if (model.IsCheckAnswer)
+            //{
+            //    return RedirectToAction("CheckAnswer");
+            //}
             return RedirectToAction("EstimateOfNitrogenMineralisationQuestion");
         }
 
@@ -1677,7 +1866,48 @@ namespace NMP.Portal.Controllers
             {
                 return View(model);
             }
+            if (model.IsCheckAnswer)
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+                {
+                    FieldViewModel fieldViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                    if (fieldViewModel.IsCalculateNitrogen == model.IsCalculateNitrogen)
+                    {
+                        return RedirectToAction("CheckAnswer");
+                    }
+                    else
+                    {
+                        //model.CurrentCropTypeId = null;
+                        //model.CurrentCropType = null;
+                        //model.SoilMineralNitrogenAt030CM = null;
+                        //model.SoilMineralNitrogenAt3060CM = null;
+                        //model.SoilMineralNitrogenAt6090CM = null;
+                        //model.SampleDepth = null;
+                        //model.SoilMineralNitrogen = null;
+                        //model.IsCalculateNitrogen = null;
+                        model.IsEstimateOfNitrogenMineralisation = null;
+                        model.IsBasedOnSoilOrganicMatter = null;
+                        model.NumberOfShoots = null;
+                        model.SeasonId = 0;
+                        model.GreenAreaIndexOrCropHeight = 0;
+                        model.CropHeight = null;
+                        model.GreenAreaIndex = null;
+                        model.IsCropHeight = false;
+                        model.IsGreenAreaIndex = false;
+                        model.IsNumberOfShoots = false;
+                        model.SoilOrganicMatter = null;
+                        model.AdjustmentValue = null;
+                        model.SnsIndex = 0;
+                        model.SnsValue = 0;
+                        //model.SnsCategoryId = null;
 
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+            }
             int snsCategoryId = await _fieldService.FetchSNSCategoryIdByCropTypeId(model.CurrentCropTypeId ?? 0);
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
 
@@ -1756,6 +1986,48 @@ namespace NMP.Portal.Controllers
                 return View(model);
             }
             model.IsNumberOfShoots = true;
+            if (model.IsCheckAnswer)
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+                {
+                    FieldViewModel fieldViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                    if (fieldViewModel.NumberOfShoots == model.NumberOfShoots && fieldViewModel.SeasonId == model.SeasonId)
+                    {
+                        return RedirectToAction("CheckAnswer");
+                    }
+                    else
+                    {
+                        //model.CurrentCropTypeId = null;
+                        //model.CurrentCropType = null;
+                        //model.SoilMineralNitrogenAt030CM = null;
+                        //model.SoilMineralNitrogenAt3060CM = null;
+                        //model.SoilMineralNitrogenAt6090CM = null;
+                        //model.SampleDepth = null;
+                        //model.SoilMineralNitrogen = null;
+                        //model.IsCalculateNitrogen = null;
+                        model.IsEstimateOfNitrogenMineralisation = null;
+                        model.IsBasedOnSoilOrganicMatter = null;
+                        //model.NumberOfShoots = null;
+                        //model.SeasonId = 0;
+                        model.GreenAreaIndexOrCropHeight = 0;
+                        model.CropHeight = null;
+                        model.GreenAreaIndex = null;
+                        model.IsCropHeight = false;
+                        model.IsGreenAreaIndex = false;
+                        //model.IsNumberOfShoots = false;
+                        model.SoilOrganicMatter = null;
+                        model.AdjustmentValue = null;
+                        model.SnsIndex = 0;
+                        model.SnsValue = 0;
+                        //model.SnsCategoryId = null;
+
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+            }
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
 
 
@@ -1801,6 +2073,48 @@ namespace NMP.Portal.Controllers
             if (!ModelState.IsValid)
             {
                 return View(model);
+            }
+            if (model.IsCheckAnswer)
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+                {
+                    FieldViewModel fieldViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                    if (fieldViewModel.GreenAreaIndexOrCropHeight == model.GreenAreaIndexOrCropHeight)
+                    {
+                        return RedirectToAction("CheckAnswer");
+                    }
+                    else
+                    {
+                        //model.CurrentCropTypeId = null;
+                        //model.CurrentCropType = null;
+                        //model.SoilMineralNitrogenAt030CM = null;
+                        //model.SoilMineralNitrogenAt3060CM = null;
+                        //model.SoilMineralNitrogenAt6090CM = null;
+                        //model.SampleDepth = null;
+                        //model.SoilMineralNitrogen = null;
+                        //model.IsCalculateNitrogen = null;
+                        model.IsEstimateOfNitrogenMineralisation = null;
+                        model.IsBasedOnSoilOrganicMatter = null;
+                        model.NumberOfShoots = null;
+                        model.SeasonId = 0;
+                        //model.GreenAreaIndexOrCropHeight = 0;
+                        model.CropHeight = null;
+                        model.GreenAreaIndex = null;
+                        model.IsCropHeight = false;
+                        model.IsGreenAreaIndex = false;
+                        model.IsNumberOfShoots = false;
+                        model.SoilOrganicMatter = null;
+                        model.AdjustmentValue = null;
+                        model.SnsIndex = 0;
+                        model.SnsValue = 0;
+                        //model.SnsCategoryId = null;
+
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
             }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
 
@@ -1898,6 +2212,48 @@ namespace NMP.Portal.Controllers
                 return View(model);
             }
             model.IsCropHeight = true;
+            if (model.IsCheckAnswer)
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+                {
+                    FieldViewModel fieldViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                    if (fieldViewModel.CropHeight == model.CropHeight && fieldViewModel.SeasonId == model.SeasonId)
+                    {
+                        return RedirectToAction("CheckAnswer");
+                    }
+                    else
+                    {
+                        //model.CurrentCropTypeId = null;
+                        //model.CurrentCropType = null;
+                        //model.SoilMineralNitrogenAt030CM = null;
+                        //model.SoilMineralNitrogenAt3060CM = null;
+                        //model.SoilMineralNitrogenAt6090CM = null;
+                        //model.SampleDepth = null;
+                        //model.SoilMineralNitrogen = null;
+                        //model.IsCalculateNitrogen = null;
+                        model.IsEstimateOfNitrogenMineralisation = null;
+                        model.IsBasedOnSoilOrganicMatter = null;
+                        //model.NumberOfShoots = null;
+                        //model.SeasonId = 0;
+                        //model.GreenAreaIndexOrCropHeight = 0;
+                        //model.CropHeight = null;
+                        model.GreenAreaIndex = null;
+                        //model.IsCropHeight = false;
+                        model.IsGreenAreaIndex = false;
+                        model.IsNumberOfShoots = false;
+                        model.SoilOrganicMatter = null;
+                        model.AdjustmentValue = null;
+                        model.SnsIndex = 0;
+                        model.SnsValue = 0;
+                        //model.SnsCategoryId = null;
+
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+            }
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
 
 
@@ -1955,6 +2311,48 @@ namespace NMP.Portal.Controllers
                 return View(model);
             }
             model.IsGreenAreaIndex = true;
+            if (model.IsCheckAnswer)
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+                {
+                    FieldViewModel fieldViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                    if (fieldViewModel.GreenAreaIndex == model.GreenAreaIndex && fieldViewModel.SeasonId == model.SeasonId)
+                    {
+                        return RedirectToAction("CheckAnswer");
+                    }
+                    else
+                    {
+                        //model.CurrentCropTypeId = null;
+                        //model.CurrentCropType = null;
+                        //model.SoilMineralNitrogenAt030CM = null;
+                        //model.SoilMineralNitrogenAt3060CM = null;
+                        //model.SoilMineralNitrogenAt6090CM = null;
+                        //model.SampleDepth = null;
+                        //model.SoilMineralNitrogen = null;
+                        //model.IsCalculateNitrogen = null;
+                        model.IsEstimateOfNitrogenMineralisation = null;
+                        model.IsBasedOnSoilOrganicMatter = null;
+                        //model.NumberOfShoots = null;
+                        //model.SeasonId = 0;
+                        //model.GreenAreaIndexOrCropHeight = 0;
+                        model.CropHeight = null;
+                        //model.GreenAreaIndex = null;
+                        model.IsCropHeight = false;
+                        //model.IsGreenAreaIndex = false;
+                        model.IsNumberOfShoots = false;
+                        model.SoilOrganicMatter = null;
+                        model.AdjustmentValue = null;
+                        model.SnsIndex = 0;
+                        model.SnsValue = 0;
+                        //model.SnsCategoryId = null;
+
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+            }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
 
 
@@ -2001,6 +2399,48 @@ namespace NMP.Portal.Controllers
             {
                 return View(model);
             }
+            if (model.IsCheckAnswer)
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+                {
+                    FieldViewModel fieldViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                    if (fieldViewModel.IsEstimateOfNitrogenMineralisation == model.IsEstimateOfNitrogenMineralisation)
+                    {
+                        return RedirectToAction("CheckAnswer");
+                    }
+                    else
+                    {
+                        //model.CurrentCropTypeId = null;
+                        //model.CurrentCropType = null;
+                        //model.SoilMineralNitrogenAt030CM = null;
+                        //model.SoilMineralNitrogenAt3060CM = null;
+                        //model.SoilMineralNitrogenAt6090CM = null;
+                        //model.SampleDepth = null;
+                        //model.SoilMineralNitrogen = null;
+                        //model.IsCalculateNitrogen = null;
+                        //model.IsEstimateOfNitrogenMineralisation = null;
+                        model.IsBasedOnSoilOrganicMatter = null;
+                        //model.NumberOfShoots = null;
+                        //model.SeasonId = 0;
+                        //model.GreenAreaIndexOrCropHeight = 0;
+                        //model.CropHeight = null;
+                        //model.GreenAreaIndex = null;
+                        //model.IsCropHeight = false;
+                        //model.IsGreenAreaIndex = false;
+                        //model.IsNumberOfShoots = false;
+                        model.SoilOrganicMatter = null;
+                        model.AdjustmentValue = null;
+                        model.SnsIndex = 0;
+                        model.SnsValue = 0;
+                        //model.SnsCategoryId = null;
+
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+            }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             if (model.IsEstimateOfNitrogenMineralisation == true)
             {
@@ -2042,7 +2482,7 @@ namespace NMP.Portal.Controllers
                    postMeasurementData = new MeasurementData
                    {
                         CropTypeId = model.CurrentCropTypeId ?? 0,
-                        SeasonId = model.SeasonId,
+                        SeasonId = model.SeasonId==0?1: model.SeasonId,
                         Step1ArablePotato = new Step1ArablePotato
                         {
                             Depth0To30Cm = model.SoilMineralNitrogenAt030CM,
@@ -2112,7 +2552,7 @@ namespace NMP.Portal.Controllers
                     if (error.Message == null)
                     {
                         model.SnsIndex = snsResponse.SnsIndex;
-                        model.SnsValue = snsResponse.SnsValue;
+                        model.SnsValue = snsResponse.SnsValue;                      
                         _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
                     }
                 }
@@ -2170,6 +2610,48 @@ namespace NMP.Portal.Controllers
                 if (!ModelState.IsValid)
                 {
                     return View("CalculateSoilNitrogenMineralisation", model);
+                }
+                if (model.IsCheckAnswer)
+                {
+                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+                    {
+                        FieldViewModel fieldViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                        if (fieldViewModel.IsBasedOnSoilOrganicMatter == model.IsBasedOnSoilOrganicMatter)
+                        {
+                            return RedirectToAction("CheckAnswer");
+                        }
+                        else
+                        {
+                            //model.CurrentCropTypeId = null;
+                            //model.CurrentCropType = null;
+                            //model.SoilMineralNitrogenAt030CM = null;
+                            //model.SoilMineralNitrogenAt3060CM = null;
+                            //model.SoilMineralNitrogenAt6090CM = null;
+                            //model.SampleDepth = null;
+                            //model.SoilMineralNitrogen = null;
+                            //model.IsCalculateNitrogen = null;
+                            //model.IsEstimateOfNitrogenMineralisation = null;
+                            //model.IsBasedOnSoilOrganicMatter = null;
+                            //model.NumberOfShoots = null;
+                            //model.SeasonId = 0;
+                            //model.GreenAreaIndexOrCropHeight = 0;
+                            //model.CropHeight = null;
+                            //model.GreenAreaIndex = null;
+                            //model.IsCropHeight = false;
+                            //model.IsGreenAreaIndex = false;
+                            //model.IsNumberOfShoots = false;
+                            model.SoilOrganicMatter = null;
+                            model.AdjustmentValue = null;
+                            model.SnsIndex = 0;
+                            model.SnsValue = 0;
+                            //model.SnsCategoryId = null;
+
+                        }
+                    }
+                    else
+                    {
+                        return RedirectToAction("FarmList", "Farm");
+                    }
                 }
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
                 if (model.IsBasedOnSoilOrganicMatter.Value)
@@ -2239,6 +2721,48 @@ namespace NMP.Portal.Controllers
                 return View(model);
             }
             model.SoilOrganicMatter = null;
+            if (model.IsCheckAnswer)
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+                {
+                    FieldViewModel fieldViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                    if (fieldViewModel.AdjustmentValue == model.AdjustmentValue)
+                    {
+                        return RedirectToAction("CheckAnswer");
+                    }
+                    else
+                    {
+                        //model.CurrentCropTypeId = null;
+                        //model.CurrentCropType = null;
+                        //model.SoilMineralNitrogenAt030CM = null;
+                        //model.SoilMineralNitrogenAt3060CM = null;
+                        //model.SoilMineralNitrogenAt6090CM = null;
+                        //model.SampleDepth = null;
+                        //model.SoilMineralNitrogen = null;
+                        //model.IsCalculateNitrogen = null;
+                        //model.IsEstimateOfNitrogenMineralisation = null;
+                        //model.IsBasedOnSoilOrganicMatter = null;
+                        //model.NumberOfShoots = null;
+                        //model.SeasonId = 0;
+                        //model.GreenAreaIndexOrCropHeight = 0;
+                        //model.CropHeight = null;
+                        //model.GreenAreaIndex = null;
+                        //model.IsCropHeight = false;
+                        //model.IsGreenAreaIndex = false;
+                        //model.IsNumberOfShoots = false;
+                        model.SoilOrganicMatter = null;
+                        //model.AdjustmentValue = null;
+                        model.SnsIndex = 0;
+                        model.SnsValue = 0;
+                        //model.SnsCategoryId = null;
+
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+            }
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
 
 
@@ -2297,6 +2821,48 @@ namespace NMP.Portal.Controllers
                 return View(model);
             }
             model.AdjustmentValue = null;
+            if (model.IsCheckAnswer)
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+                {
+                    FieldViewModel fieldViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                    if (fieldViewModel.SoilOrganicMatter == model.SoilOrganicMatter)
+                    {
+                        return RedirectToAction("CheckAnswer");
+                    }
+                    else
+                    {
+                        //model.CurrentCropTypeId = null;
+                        //model.CurrentCropType = null;
+                        //model.SoilMineralNitrogenAt030CM = null;
+                        //model.SoilMineralNitrogenAt3060CM = null;
+                        //model.SoilMineralNitrogenAt6090CM = null;
+                        //model.SampleDepth = null;
+                        //model.SoilMineralNitrogen = null;
+                        //model.IsCalculateNitrogen = null;
+                        //model.IsEstimateOfNitrogenMineralisation = null;
+                        //model.IsBasedOnSoilOrganicMatter = null;
+                        //model.NumberOfShoots = null;
+                        //model.SeasonId = 0;
+                        //model.GreenAreaIndexOrCropHeight = 0;
+                        //model.CropHeight = null;
+                        //model.GreenAreaIndex = null;
+                        //model.IsCropHeight = false;
+                        //model.IsGreenAreaIndex = false;
+                        //model.IsNumberOfShoots = false;
+                        //model.SoilOrganicMatter = null;
+                        model.AdjustmentValue = null;
+                        model.SnsIndex = 0;
+                        model.SnsValue = 0;
+                        //model.SnsCategoryId = null;
+
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+            }
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
 
 
