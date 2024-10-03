@@ -1101,6 +1101,7 @@ namespace NMP.Portal.Controllers
                     MagnesiumIndex = model.SoilAnalyses.MagnesiumIndex,
                     SoilNitrogenSupply = model.SoilAnalyses.SoilNitrogenSupply,
                     SoilNitrogenSupplyIndex = model.SoilAnalyses.SoilNitrogenSupplyIndex,
+                    SoilNitrogenSampleDate=model.SampleForSoilMineralNitrogen,
                     Sodium = model.SoilAnalyses.Sodium,
                     Lime = model.SoilAnalyses.Lime,
                     PhosphorusStatus = model.SoilAnalyses.PhosphorusStatus,
@@ -1307,11 +1308,7 @@ namespace NMP.Portal.Controllers
             }
 
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
-            //if (model.IsCheckAnswer)
-            //{
-            //    return RedirectToAction("CheckAnswer");
-            //}
-
+            
             return RedirectToAction("CurrentCropGroups");
         }
         [HttpGet]
@@ -1481,8 +1478,6 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        //model.CurrentCropTypeId = null;
-                        //model.CurrentCropType = null;
                         model.SoilMineralNitrogenAt030CM = null;
                         model.SoilMineralNitrogenAt3060CM = null;
                         model.SoilMineralNitrogenAt6090CM = null;
@@ -1503,7 +1498,6 @@ namespace NMP.Portal.Controllers
                         model.AdjustmentValue = null;
                         model.SnsIndex = 0;
                         model.SnsValue = 0;
-                        //model.SnsCategoryId = null;
 
                     }
                 }
@@ -1513,10 +1507,7 @@ namespace NMP.Portal.Controllers
                 }
             }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
-            //if (model.IsCheckAnswer)
-            //{
-            //    return RedirectToAction("CheckAnswer");
-            //}
+            
             if (error == null)
             {
                 if (cropTypeLinking != null && cropTypeLinking.SNSCategoryID != null)
@@ -1653,11 +1644,6 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        //model.CurrentCropTypeId = null;
-                        //model.CurrentCropType = null;
-                        //model.SoilMineralNitrogenAt030CM = null;
-                        //model.SoilMineralNitrogenAt3060CM = null;
-                        //model.SoilMineralNitrogenAt6090CM = null;
                         model.SampleDepth = null;
                         model.SoilMineralNitrogen = null;
                         model.IsCalculateNitrogen = null;
@@ -1675,7 +1661,6 @@ namespace NMP.Portal.Controllers
                         model.AdjustmentValue = null;
                         model.SnsIndex = 0;
                         model.SnsValue = 0;
-                        //model.SnsCategoryId = null;
 
                     }
                 }
@@ -1686,10 +1671,7 @@ namespace NMP.Portal.Controllers
             }
 
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
-            //if (model.IsCheckAnswer)
-            //{
-            //    return RedirectToAction("CheckAnswer");
-            //}
+            
             int snsCategoryId = await _fieldService.FetchSNSCategoryIdByCropTypeId(model.CurrentCropTypeId ?? 0);
             if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterCereals || snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterOilseedRape)
             {
@@ -1791,13 +1773,6 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        //model.CurrentCropTypeId = null;
-                        //model.CurrentCropType = null;
-                        //model.SoilMineralNitrogenAt030CM = null;
-                        //model.SoilMineralNitrogenAt3060CM = null;
-                        //model.SoilMineralNitrogenAt6090CM = null;
-                        //model.SampleDepth = null;
-                        //model.SoilMineralNitrogen = null;
                         model.IsCalculateNitrogen = null;
                         model.IsEstimateOfNitrogenMineralisation = null;
                         model.IsBasedOnSoilOrganicMatter = null;
@@ -1813,8 +1788,6 @@ namespace NMP.Portal.Controllers
                         model.AdjustmentValue = null;
                         model.SnsIndex = 0;
                         model.SnsValue = 0;
-                        //model.SnsCategoryId = null;
-
                     }
                 }
                 else
@@ -1823,10 +1796,7 @@ namespace NMP.Portal.Controllers
                 }
             }
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
-            //if (model.IsCheckAnswer)
-            //{
-            //    return RedirectToAction("CheckAnswer");
-            //}
+            
             return RedirectToAction("EstimateOfNitrogenMineralisationQuestion");
         }
 
@@ -1877,14 +1847,6 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        //model.CurrentCropTypeId = null;
-                        //model.CurrentCropType = null;
-                        //model.SoilMineralNitrogenAt030CM = null;
-                        //model.SoilMineralNitrogenAt3060CM = null;
-                        //model.SoilMineralNitrogenAt6090CM = null;
-                        //model.SampleDepth = null;
-                        //model.SoilMineralNitrogen = null;
-                        //model.IsCalculateNitrogen = null;
                         model.IsEstimateOfNitrogenMineralisation = null;
                         model.IsBasedOnSoilOrganicMatter = null;
                         model.NumberOfShoots = null;
@@ -1899,7 +1861,6 @@ namespace NMP.Portal.Controllers
                         model.AdjustmentValue = null;
                         model.SnsIndex = 0;
                         model.SnsValue = 0;
-                        //model.SnsCategoryId = null;
 
                     }
                 }
@@ -1997,29 +1958,17 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        //model.CurrentCropTypeId = null;
-                        //model.CurrentCropType = null;
-                        //model.SoilMineralNitrogenAt030CM = null;
-                        //model.SoilMineralNitrogenAt3060CM = null;
-                        //model.SoilMineralNitrogenAt6090CM = null;
-                        //model.SampleDepth = null;
-                        //model.SoilMineralNitrogen = null;
-                        //model.IsCalculateNitrogen = null;
                         model.IsEstimateOfNitrogenMineralisation = null;
                         model.IsBasedOnSoilOrganicMatter = null;
-                        //model.NumberOfShoots = null;
-                        //model.SeasonId = 0;
                         model.GreenAreaIndexOrCropHeight = 0;
                         model.CropHeight = null;
                         model.GreenAreaIndex = null;
                         model.IsCropHeight = false;
                         model.IsGreenAreaIndex = false;
-                        //model.IsNumberOfShoots = false;
                         model.SoilOrganicMatter = null;
                         model.AdjustmentValue = null;
                         model.SnsIndex = 0;
                         model.SnsValue = 0;
-                        //model.SnsCategoryId = null;
 
                     }
                 }
@@ -2085,19 +2034,10 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        //model.CurrentCropTypeId = null;
-                        //model.CurrentCropType = null;
-                        //model.SoilMineralNitrogenAt030CM = null;
-                        //model.SoilMineralNitrogenAt3060CM = null;
-                        //model.SoilMineralNitrogenAt6090CM = null;
-                        //model.SampleDepth = null;
-                        //model.SoilMineralNitrogen = null;
-                        //model.IsCalculateNitrogen = null;
                         model.IsEstimateOfNitrogenMineralisation = null;
                         model.IsBasedOnSoilOrganicMatter = null;
                         model.NumberOfShoots = null;
                         model.SeasonId = 0;
-                        //model.GreenAreaIndexOrCropHeight = 0;
                         model.CropHeight = null;
                         model.GreenAreaIndex = null;
                         model.IsCropHeight = false;
@@ -2107,8 +2047,6 @@ namespace NMP.Portal.Controllers
                         model.AdjustmentValue = null;
                         model.SnsIndex = 0;
                         model.SnsValue = 0;
-                        //model.SnsCategoryId = null;
-
                     }
                 }
                 else
@@ -2223,29 +2161,15 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        //model.CurrentCropTypeId = null;
-                        //model.CurrentCropType = null;
-                        //model.SoilMineralNitrogenAt030CM = null;
-                        //model.SoilMineralNitrogenAt3060CM = null;
-                        //model.SoilMineralNitrogenAt6090CM = null;
-                        //model.SampleDepth = null;
-                        //model.SoilMineralNitrogen = null;
-                        //model.IsCalculateNitrogen = null;
                         model.IsEstimateOfNitrogenMineralisation = null;
                         model.IsBasedOnSoilOrganicMatter = null;
-                        //model.NumberOfShoots = null;
-                        //model.SeasonId = 0;
-                        //model.GreenAreaIndexOrCropHeight = 0;
-                        //model.CropHeight = null;
                         model.GreenAreaIndex = null;
-                        //model.IsCropHeight = false;
                         model.IsGreenAreaIndex = false;
                         model.IsNumberOfShoots = false;
                         model.SoilOrganicMatter = null;
                         model.AdjustmentValue = null;
                         model.SnsIndex = 0;
                         model.SnsValue = 0;
-                        //model.SnsCategoryId = null;
 
                     }
                 }
@@ -2322,29 +2246,15 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        //model.CurrentCropTypeId = null;
-                        //model.CurrentCropType = null;
-                        //model.SoilMineralNitrogenAt030CM = null;
-                        //model.SoilMineralNitrogenAt3060CM = null;
-                        //model.SoilMineralNitrogenAt6090CM = null;
-                        //model.SampleDepth = null;
-                        //model.SoilMineralNitrogen = null;
-                        //model.IsCalculateNitrogen = null;
                         model.IsEstimateOfNitrogenMineralisation = null;
                         model.IsBasedOnSoilOrganicMatter = null;
-                        //model.NumberOfShoots = null;
-                        //model.SeasonId = 0;
-                        //model.GreenAreaIndexOrCropHeight = 0;
                         model.CropHeight = null;
-                        //model.GreenAreaIndex = null;
                         model.IsCropHeight = false;
-                        //model.IsGreenAreaIndex = false;
                         model.IsNumberOfShoots = false;
                         model.SoilOrganicMatter = null;
                         model.AdjustmentValue = null;
                         model.SnsIndex = 0;
                         model.SnsValue = 0;
-                        //model.SnsCategoryId = null;
 
                     }
                 }
@@ -2410,30 +2320,11 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        //model.CurrentCropTypeId = null;
-                        //model.CurrentCropType = null;
-                        //model.SoilMineralNitrogenAt030CM = null;
-                        //model.SoilMineralNitrogenAt3060CM = null;
-                        //model.SoilMineralNitrogenAt6090CM = null;
-                        //model.SampleDepth = null;
-                        //model.SoilMineralNitrogen = null;
-                        //model.IsCalculateNitrogen = null;
-                        //model.IsEstimateOfNitrogenMineralisation = null;
                         model.IsBasedOnSoilOrganicMatter = null;
-                        //model.NumberOfShoots = null;
-                        //model.SeasonId = 0;
-                        //model.GreenAreaIndexOrCropHeight = 0;
-                        //model.CropHeight = null;
-                        //model.GreenAreaIndex = null;
-                        //model.IsCropHeight = false;
-                        //model.IsGreenAreaIndex = false;
-                        //model.IsNumberOfShoots = false;
                         model.SoilOrganicMatter = null;
                         model.AdjustmentValue = null;
                         model.SnsIndex = 0;
                         model.SnsValue = 0;
-                        //model.SnsCategoryId = null;
-
                     }
                 }
                 else
@@ -2622,30 +2513,10 @@ namespace NMP.Portal.Controllers
                         }
                         else
                         {
-                            //model.CurrentCropTypeId = null;
-                            //model.CurrentCropType = null;
-                            //model.SoilMineralNitrogenAt030CM = null;
-                            //model.SoilMineralNitrogenAt3060CM = null;
-                            //model.SoilMineralNitrogenAt6090CM = null;
-                            //model.SampleDepth = null;
-                            //model.SoilMineralNitrogen = null;
-                            //model.IsCalculateNitrogen = null;
-                            //model.IsEstimateOfNitrogenMineralisation = null;
-                            //model.IsBasedOnSoilOrganicMatter = null;
-                            //model.NumberOfShoots = null;
-                            //model.SeasonId = 0;
-                            //model.GreenAreaIndexOrCropHeight = 0;
-                            //model.CropHeight = null;
-                            //model.GreenAreaIndex = null;
-                            //model.IsCropHeight = false;
-                            //model.IsGreenAreaIndex = false;
-                            //model.IsNumberOfShoots = false;
                             model.SoilOrganicMatter = null;
                             model.AdjustmentValue = null;
                             model.SnsIndex = 0;
                             model.SnsValue = 0;
-                            //model.SnsCategoryId = null;
-
                         }
                     }
                     else
@@ -2732,30 +2603,9 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        //model.CurrentCropTypeId = null;
-                        //model.CurrentCropType = null;
-                        //model.SoilMineralNitrogenAt030CM = null;
-                        //model.SoilMineralNitrogenAt3060CM = null;
-                        //model.SoilMineralNitrogenAt6090CM = null;
-                        //model.SampleDepth = null;
-                        //model.SoilMineralNitrogen = null;
-                        //model.IsCalculateNitrogen = null;
-                        //model.IsEstimateOfNitrogenMineralisation = null;
-                        //model.IsBasedOnSoilOrganicMatter = null;
-                        //model.NumberOfShoots = null;
-                        //model.SeasonId = 0;
-                        //model.GreenAreaIndexOrCropHeight = 0;
-                        //model.CropHeight = null;
-                        //model.GreenAreaIndex = null;
-                        //model.IsCropHeight = false;
-                        //model.IsGreenAreaIndex = false;
-                        //model.IsNumberOfShoots = false;
                         model.SoilOrganicMatter = null;
-                        //model.AdjustmentValue = null;
                         model.SnsIndex = 0;
                         model.SnsValue = 0;
-                        //model.SnsCategoryId = null;
-
                     }
                 }
                 else
@@ -2832,29 +2682,9 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        //model.CurrentCropTypeId = null;
-                        //model.CurrentCropType = null;
-                        //model.SoilMineralNitrogenAt030CM = null;
-                        //model.SoilMineralNitrogenAt3060CM = null;
-                        //model.SoilMineralNitrogenAt6090CM = null;
-                        //model.SampleDepth = null;
-                        //model.SoilMineralNitrogen = null;
-                        //model.IsCalculateNitrogen = null;
-                        //model.IsEstimateOfNitrogenMineralisation = null;
-                        //model.IsBasedOnSoilOrganicMatter = null;
-                        //model.NumberOfShoots = null;
-                        //model.SeasonId = 0;
-                        //model.GreenAreaIndexOrCropHeight = 0;
-                        //model.CropHeight = null;
-                        //model.GreenAreaIndex = null;
-                        //model.IsCropHeight = false;
-                        //model.IsGreenAreaIndex = false;
-                        //model.IsNumberOfShoots = false;
-                        //model.SoilOrganicMatter = null;
                         model.AdjustmentValue = null;
                         model.SnsIndex = 0;
                         model.SnsValue = 0;
-                        //model.SnsCategoryId = null;
 
                     }
                 }

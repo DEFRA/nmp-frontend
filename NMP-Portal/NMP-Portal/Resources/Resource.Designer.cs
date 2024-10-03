@@ -828,6 +828,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Calculate based on a recent soil mineral nitrogen analysis result.
+        /// </summary>
+        public static string lblCalculateBasedOnRecentSoilMineralNitrogenAnalysisResult {
+            get {
+                return ResourceManager.GetString("lblCalculateBasedOnRecentSoilMineralNitrogenAnalysisResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Calculate based on the area and quantity you are applying.
         /// </summary>
         public static string lblCalculateBasedOnTheAreaAndQuantity {
@@ -2148,6 +2157,15 @@ namespace NMP.Portal.Resources {
         public static string lblHowWouldYouLikeToCalculateSNSForCheckAnswer {
             get {
                 return ResourceManager.GetString("lblHowWouldYouLikeToCalculateSNSForCheckAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How would you like to calculate the soil nitrogen supply for {0}?.
+        /// </summary>
+        public static string lblHowWouldYouLikeToCalculateSoilNitrogenSupply {
+            get {
+                return ResourceManager.GetString("lblHowWouldYouLikeToCalculateSoilNitrogenSupply", resourceCulture);
             }
         }
         
