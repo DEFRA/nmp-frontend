@@ -2370,4 +2370,16 @@ m3/ha  not set</value>
   <data name="lblSnsDetail" xml:space="preserve">
     <value>{0}({1}kg/ha)</value>
   </data>
+  <data name="lblCalculateNitrogenInCurrentCrop" xml:space="preserve">
+    <value>Calculate nitrogen in crop question</value>
+  </data>
+  <data name="lblSnsDetailKgPerHectare" xml:space="preserve">
+    <value>{0}({1}kg per hectare)</value>
+  </data>
+  <data name="lblCalculateBasedOnRecentSoilMineralNitrogenAnalysisResult" xml:space="preserve">
+    <value>Calculate based on a recent soil mineral nitrogen analysis result</value>
+  </data>
+  <data name="lblHowWouldYouLikeToCalculateSoilNitrogenSupply" xml:space="preserve">
+    <value>How would you like to calculate the soil nitrogen supply for {0}?</value>
+  </data>
 </root>

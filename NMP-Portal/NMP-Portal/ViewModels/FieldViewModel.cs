@@ -70,6 +70,7 @@ namespace NMP.Portal.ViewModels
         public decimal? AdjustmentValue { get; set; }
         public int SnsIndex { get; set; }
         public int SnsValue { get; set; }
+        public int? SnsCategoryId { get; set; }
 
     }
 }

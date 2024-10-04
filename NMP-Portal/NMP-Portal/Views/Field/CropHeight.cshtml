@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.FieldViewModel
 @{
-    ViewData["Title"] = Resource.lblNumberOfShoots;
+    ViewData["Title"] = Resource.lblCropHeight;
 }
 
 @section BeforeContent {
@@ -80,6 +80,7 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsBasedOnSoilOrganicMatter" value="@Model.IsBasedOnSoilOrganicMatter.ToString().ToLower()"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AdjustmentValue"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilOrganicMatter"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SnsCategoryId"></govuk-input>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             @if (TempData["Error"] != null)

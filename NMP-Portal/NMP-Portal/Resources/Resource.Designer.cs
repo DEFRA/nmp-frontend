@@ -828,11 +828,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Calculate based on a recent soil mineral nitrogen analysis result.
+        /// </summary>
+        public static string lblCalculateBasedOnRecentSoilMineralNitrogenAnalysisResult {
+            get {
+                return ResourceManager.GetString("lblCalculateBasedOnRecentSoilMineralNitrogenAnalysisResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Calculate based on the area and quantity you are applying.
         /// </summary>
         public static string lblCalculateBasedOnTheAreaAndQuantity {
             get {
                 return ResourceManager.GetString("lblCalculateBasedOnTheAreaAndQuantity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Calculate nitrogen in crop question.
+        /// </summary>
+        public static string lblCalculateNitrogenInCurrentCrop {
+            get {
+                return ResourceManager.GetString("lblCalculateNitrogenInCurrentCrop", resourceCulture);
             }
         }
         
@@ -2139,6 +2157,15 @@ namespace NMP.Portal.Resources {
         public static string lblHowWouldYouLikeToCalculateSNSForCheckAnswer {
             get {
                 return ResourceManager.GetString("lblHowWouldYouLikeToCalculateSNSForCheckAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How would you like to calculate the soil nitrogen supply for {0}?.
+        /// </summary>
+        public static string lblHowWouldYouLikeToCalculateSoilNitrogenSupply {
+            get {
+                return ResourceManager.GetString("lblHowWouldYouLikeToCalculateSoilNitrogenSupply", resourceCulture);
             }
         }
         
@@ -3751,6 +3778,15 @@ namespace NMP.Portal.Resources {
         public static string lblSnsDetail {
             get {
                 return ResourceManager.GetString("lblSnsDetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}({1}kg per hectare).
+        /// </summary>
+        public static string lblSnsDetailKgPerHectare {
+            get {
+                return ResourceManager.GetString("lblSnsDetailKgPerHectare", resourceCulture);
             }
         }
         

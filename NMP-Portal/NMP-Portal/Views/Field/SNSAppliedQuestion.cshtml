@@ -67,16 +67,17 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsBasedOnSoilOrganicMatter" value="@Model.IsBasedOnSoilOrganicMatter.ToString().ToLower()"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AdjustmentValue"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilOrganicMatter"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SnsCategoryId"></govuk-input>
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <govuk-radios asp-for="@Model.WantToApplySns">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblDoYouHaveARecentSoilMineralNitrogenAnalysis, Model.Name)
+                        @string.Format(Resource.lblHowWouldYouLikeToCalculateSoilNitrogenSupply, Model.Name)
                     </govuk-radios-fieldset-legend>
-                    <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>
-                    <govuk-radios-item value=@no>@Resource.lblNo</govuk-radios-item>
+                    <govuk-radios-item value=@no>@Resource.lblEstimateBasedOnPreviousCrop</govuk-radios-item>
+                    <govuk-radios-item value=@yes>@Resource.lblCalculateBasedOnRecentSoilMineralNitrogenAnalysisResult</govuk-radios-item>
                 </govuk-radios-fieldset>
             </govuk-radios>
             <govuk-button type="submit" class="margin-bottom-forty">
