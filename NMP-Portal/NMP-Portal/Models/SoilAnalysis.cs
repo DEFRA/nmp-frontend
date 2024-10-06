@@ -44,6 +44,7 @@ namespace NMP.Portal.Models
         public int? MagnesiumIndex { get; set; }
         public int? SoilNitrogenSupply { get; set; }
         public int? SoilNitrogenSupplyIndex { get; set; }
+        public DateTime? SoilNitrogenSampleDate { get; set; }
         public int? Sodium { get; set; }
         public decimal? Lime { get; set; }
         public string? PhosphorusStatus { get; set; }
