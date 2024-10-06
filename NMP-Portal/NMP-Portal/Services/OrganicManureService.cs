@@ -353,7 +353,7 @@ namespace NMP.Portal.Services
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        var applicationMethods = responseWrapper.Data.data.ToObject<List<ApplicationMethodResponse>>();
+                        var applicationMethods = responseWrapper.Data.ToObject<List<ApplicationMethodResponse>>();
                         applicationMethodList.AddRange(applicationMethods);
                     }
                 }
@@ -397,7 +397,7 @@ namespace NMP.Portal.Services
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        var methods = responseWrapper.Data.data.ToObject<List<IncorporationMethodResponse>>();
+                        var methods = responseWrapper.Data.ToObject<List<IncorporationMethodResponse>>();
                         incorporationMethods.AddRange(methods);
                     }
                 }
@@ -440,7 +440,7 @@ namespace NMP.Portal.Services
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        var delays = responseWrapper.Data.data.ToObject<List<IncorprationDelaysResponse>>();
+                        var delays = responseWrapper.Data.ToObject<List<IncorprationDelaysResponse>>();
                         incorporationDelays.AddRange(delays);
                     }
                 }
@@ -483,7 +483,7 @@ namespace NMP.Portal.Services
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        applicationMethod = responseWrapper.Data.data.name;
+                        applicationMethod = responseWrapper.Data.name;
 
                     }
                 }
@@ -519,14 +519,14 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchIncorporationMethodByIdAsyncAPI, Id));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerIncorporationMethodByIdAsyncAPI, Id));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)// && responseWrapper.Data.IncorporationMethod != null
                     {
-                        incorporationMethod = responseWrapper.Data.data.name;//.IncorporationMethod.Name;
+                        incorporationMethod = responseWrapper.Data.name;//.IncorporationMethod.Name;
 
                     }
                 }
@@ -562,14 +562,14 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchIncorporationDelayByIdAsyncAPI, Id));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerIncorporationDelaysByIdAsyncAPI, Id));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)// && responseWrapper.Data.IncorporationDelay != null
                     {
-                        incorporationDelay = responseWrapper.Data.data.name;//.IncorporationDelay.Name;
+                        incorporationDelay = responseWrapper.Data.name;//.IncorporationDelay.Name;
 
                     }
                 }
@@ -786,7 +786,6 @@ namespace NMP.Portal.Services
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
                         moisterType = responseWrapper.Data.MoistureType.ToObject<MoistureTypeResponse>();
-                        //moisterType.Name = moister.Name;
                     }
                 }
                 else
@@ -822,14 +821,14 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(APIURLHelper.FetchRainTypesAsyncAPI);
+                var response = await httpClient.GetAsync(APIURLHelper.FetchMannerRainTypesAsyncAPI);
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        var rainTypes = responseWrapper.Data.RainTypes.ToObject<List<RainTypeResponse>>();
+                        var rainTypes = responseWrapper.Data.ToObject<List<RainTypeResponse>>();
                         rainType.AddRange(rainTypes);
                     }
                 }
@@ -866,14 +865,14 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(APIURLHelper.FetchWindspeedsAsyncAPI);
+                var response = await httpClient.GetAsync(APIURLHelper.FetchMannerWindspeedsAsyncAPI);
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        var windspeed = responseWrapper.Data.data.ToObject<List<WindspeedResponse>>();
+                        var windspeed = responseWrapper.Data.ToObject<List<WindspeedResponse>>();
                         windspeeds.AddRange(windspeed);
                     }
                 }
@@ -910,14 +909,14 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(APIURLHelper.FetchMoisterTypesAsyncAPI);
+                var response = await httpClient.GetAsync(APIURLHelper.FetchMannerMoistureTypesAsyncAPI);
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        var moisterType = responseWrapper.Data.MoistureTypes.ToObject<List<MoistureTypeResponse>>();
+                        var moisterType = responseWrapper.Data.ToObject<List<MoistureTypeResponse>>();
                         moisterTypes.AddRange(moisterType);
                     }
                 }
@@ -961,8 +960,8 @@ namespace NMP.Portal.Services
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        CropTypeLinkingResponse cropTypeLinkingResponse= responseWrapper.Data.CropTypeLinking.ToObject<CropTypeLinkingResponse>();
-                        isPerennial = cropTypeLinkingResponse.IsPerennial??false;
+                        CropTypeLinkingResponse cropTypeLinkingResponse = responseWrapper.Data.CropTypeLinking.ToObject<CropTypeLinkingResponse>();
+                        isPerennial = cropTypeLinkingResponse.IsPerennial ?? false;
                     }
                 }
                 else
@@ -1041,14 +1040,14 @@ namespace NMP.Portal.Services
             return (totalN, error);
         }
 
-        public async Task<(CropTypeResponse, Error)> FetchCropTypeByFieldIdAndHarvestYear(int fieldId, int year,bool confirm)
+        public async Task<(CropTypeResponse, Error)> FetchCropTypeByFieldIdAndHarvestYear(int fieldId, int year, bool confirm)
         {
             CropTypeResponse cropType = new CropTypeResponse();
             Error error = null;
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropTypeByFieldIdAndHarvestYearAsyncAPI,fieldId,year, confirm));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropTypeByFieldIdAndHarvestYearAsyncAPI, fieldId, year, confirm));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
@@ -1132,7 +1131,7 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManureAsyncAPI, fieldId,year,confirm));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManureAsyncAPI, fieldId, year, confirm));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
@@ -1168,7 +1167,7 @@ namespace NMP.Portal.Services
             return (manureTypeIds, error);
         }
 
-        public async Task<(decimal, Error)> FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(int managementId,bool confirm)
+        public async Task<(decimal, Error)> FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(int managementId, bool confirm)
         {
             Error error = null;
             decimal totalN = 0;
