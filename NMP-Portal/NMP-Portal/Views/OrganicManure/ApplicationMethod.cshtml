@@ -71,7 +71,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyNeedToStoreNutrientValueForFuture"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
-           
+
 
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptake"></govuk-input>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilDrainageEndDate" value="@Model.SoilDrainageEndDate"></govuk-date-input>
@@ -137,9 +137,12 @@
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @string.Format(Resource.lblWhatIsTheApplicationMethod, Model.ManureTypeName)
                     </govuk-radios-fieldset-legend>
-                    @foreach (var applicationMethod in ViewBag.ApplicationMethodList)
+                    @if (ViewBag.ApplicationMethodList != null && ViewBag.ApplicationMethodList.Count > 0)
                     {
-                        <govuk-radios-item value="@applicationMethod.ID">@applicationMethod.Name</govuk-radios-item>
+                        @foreach (var applicationMethod in ViewBag.ApplicationMethodList)
+                        {
+                            <govuk-radios-item value="@applicationMethod.ID">@applicationMethod.Name</govuk-radios-item>
+                        }
                     }
 
 
