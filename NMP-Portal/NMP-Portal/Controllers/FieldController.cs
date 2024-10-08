@@ -1124,6 +1124,27 @@ namespace NMP.Portal.Controllers
                     ModifiedOn = model.SoilAnalyses.ModifiedOn,
                     ModifiedByID = model.SoilAnalyses.ModifiedByID
                 },
+                SnsAnalysis = model.WantToApplySns == true ? new SnsAnalysis
+                {
+                    SampleDate = model.SampleForSoilMineralNitrogen,
+                    SnsAt0to30cm = model.SoilMineralNitrogenAt030CM,
+                    SnsAt30to60cm = model.SoilMineralNitrogenAt3060CM,
+                    SnsAt60to90cm = model.SoilMineralNitrogenAt6090CM,
+                    SampleDepth = model.SampleDepth,
+                    SoilMineralNitrogen = model.SoilMineralNitrogen,
+                    NumberOfShoots = model.NumberOfShoots,
+                    CropHeight = model.CropHeight,
+                    SeasonId = model.SeasonId,
+                    PercentageOfOrganicMatter = model.SoilOrganicMatter,
+                    AdjustmentValue = model.AdjustmentValue,
+                    SoilNitrogenSupplyValue = model.SnsValue,
+                    SoilNitrogenSupplyIndex=model.SnsIndex,
+                    CreatedOn= DateTime.Now,
+                    CreatedByID= userId,
+                    ModifiedOn=model.ModifiedOn,
+                    ModifiedByID=model.ModifiedByID
+
+                }:null,
                 Crops = new List<CropData>
                 {
                     new CropData
