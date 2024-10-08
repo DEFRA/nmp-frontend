@@ -2901,35 +2901,35 @@ namespace NMP.Portal.Controllers
                 DateTime? sowingDate = crop.Select(x => x.SowingDate).FirstOrDefault();
                 if (model.AutumnCropNitrogenUptake == null)
                 {
-                    if (cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal || cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlyStablishedWinterOilseedRape)
-                    {
-                        if (sowingDate != null)
-                        {
-                            int day = sowingDate.Value.Day;
-                            int month = sowingDate.Value.Month;
-                            if (month == (int)NMP.Portal.Enums.Month.September && day > 15)
-                            {
-                                if (cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal)
-                                {
-                                    cropCategoryId = (int)NMP.Portal.Enums.CropCategory.LateSownWinterCereal;
-                                }
-                                else
-                                {
-                                    cropCategoryId = (int)NMP.Portal.Enums.CropCategory.LateStablishedWinterOilseedRape;
-                                }
-                            }
-                        }
-                    }
+                    //if (cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal || cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlyStablishedWinterOilseedRape)
+                    //{
+                    //    if (sowingDate != null)
+                    //    {
+                    //        int day = sowingDate.Value.Day;
+                    //        int month = sowingDate.Value.Month;
+                    //        if (month == (int)NMP.Portal.Enums.Month.September && day > 15)
+                    //        {
+                    //            if (cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal)
+                    //            {
+                    //                cropCategoryId = (int)NMP.Portal.Enums.CropCategory.LateSownWinterCereal;
+                    //            }
+                    //            else
+                    //            {
+                    //                cropCategoryId = (int)NMP.Portal.Enums.CropCategory.LateStablishedWinterOilseedRape;
+                    //            }
+                    //        }
+                    //    }
+                    //}
 
-                    if (model.ApplicationDate.Value.Month >= (int)NMP.Portal.Enums.Month.August && model.ApplicationDate.Value.Month <= (int)NMP.Portal.Enums.Month.October)
-                    {
+                    //if (model.ApplicationDate.Value.Month >= (int)NMP.Portal.Enums.Month.August && model.ApplicationDate.Value.Month <= (int)NMP.Portal.Enums.Month.October)
+                    //{
 
-                        model.AutumnCropNitrogenUptake = await _mannerService.FetchCropNUptakeDefaultAsync(cropCategoryId);
-                    }
-                    else
-                    {
-                        model.AutumnCropNitrogenUptake = 0;
-                    }
+                    //    model.AutumnCropNitrogenUptake = await _mannerService.FetchCropNUptakeDefaultAsync(cropCategoryId);
+                    //}
+                    //else
+                    //{
+                    //    model.AutumnCropNitrogenUptake = 0;
+                    //}
                 }
 
 
