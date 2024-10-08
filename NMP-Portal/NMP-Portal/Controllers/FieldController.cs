@@ -1003,13 +1003,20 @@ namespace NMP.Portal.Controllers
             {
                 int snsCategoryId = await _fieldService.FetchSNSCategoryIdByCropTypeId(model.CurrentCropTypeId ?? 0);
 
-                if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.Fruit)
+                if (snsCategoryId>0)
                 {
-                    return RedirectToAction("SoilMineralNitrogenAnalysisResults");
+                    if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.Fruit)
+                    {
+                        return RedirectToAction("SoilMineralNitrogenAnalysisResults");
+                    }
+                    else
+                    {
+                        return RedirectToAction("SoilNitrogenSupplyIndex");
+                    }
                 }
                 else
                 {
-                    return RedirectToAction("SoilNitrogenSupplyIndex");
+                    return RedirectToAction("CurrentCropTypes");
                 }
             }
             return RedirectToAction("SNSAppliedQuestion");
@@ -1054,7 +1061,7 @@ namespace NMP.Portal.Controllers
             {
                 model.SoilAnalyses.SoilNitrogenSupply = model.SnsValue;
                 model.SoilAnalyses.SoilNitrogenSupplyIndex = model.SnsIndex;
-                
+
             }
             else
             {
@@ -1308,7 +1315,7 @@ namespace NMP.Portal.Controllers
             }
 
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
-            
+
             return RedirectToAction("CurrentCropGroups");
         }
         [HttpGet]
@@ -1461,7 +1468,7 @@ namespace NMP.Portal.Controllers
                 return View(model);
             }
             model.CurrentCropType = await _fieldService.FetchCropTypeById(model.CurrentCropTypeId.Value);
-            
+
             (CropTypeLinkingResponse cropTypeLinking, Error error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(model.CurrentCropTypeId.Value);
             if (cropTypeLinking != null && cropTypeLinking.SNSCategoryID != null)
             {
@@ -1507,7 +1514,7 @@ namespace NMP.Portal.Controllers
                 }
             }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
-            
+
             if (error == null)
             {
                 if (cropTypeLinking != null && cropTypeLinking.SNSCategoryID != null)
@@ -1530,6 +1537,10 @@ namespace NMP.Portal.Controllers
                         _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
                         return RedirectToAction("SampleDepth");
                     }
+                }
+                else if(cropTypeLinking.SNSCategoryID == null)
+                {
+                    return RedirectToAction("CheckAnswer");
                 }
             }
             else
@@ -1671,7 +1682,7 @@ namespace NMP.Portal.Controllers
             }
 
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
-            
+
             int snsCategoryId = await _fieldService.FetchSNSCategoryIdByCropTypeId(model.CurrentCropTypeId ?? 0);
             if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterCereals || snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterOilseedRape)
             {
@@ -1796,7 +1807,7 @@ namespace NMP.Portal.Controllers
                 }
             }
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
-            
+
             return RedirectToAction("EstimateOfNitrogenMineralisationQuestion");
         }
 
@@ -2094,7 +2105,7 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("SampleDepth");
             }
 
-            
+
             return View(model);
         }
 
@@ -2370,10 +2381,10 @@ namespace NMP.Portal.Controllers
                 int snsCategoryId = await _fieldService.FetchSNSCategoryIdByCropTypeId(model.CurrentCropTypeId ?? 0);
                 if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterCereals || snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterOilseedRape)
                 {
-                   postMeasurementData = new MeasurementData
-                   {
+                    postMeasurementData = new MeasurementData
+                    {
                         CropTypeId = model.CurrentCropTypeId ?? 0,
-                        SeasonId = model.SeasonId==0?1: model.SeasonId,
+                        SeasonId = model.SeasonId == 0 ? 1 : model.SeasonId,
                         Step1ArablePotato = new Step1ArablePotato
                         {
                             Depth0To30Cm = model.SoilMineralNitrogenAt030CM,
@@ -2391,7 +2402,7 @@ namespace NMP.Portal.Controllers
                             Adjustment = model.AdjustmentValue > 0 ? model.AdjustmentValue : null,
                             OrganicMatterPercentage = model.SoilOrganicMatter > 0 ? model.SoilOrganicMatter : null
                         }
-                   };
+                    };
 
                 }
                 else if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.OtherArableAndPotatoes)
@@ -2420,10 +2431,10 @@ namespace NMP.Portal.Controllers
                     {
                         CropTypeId = model.CurrentCropTypeId ?? 0,
                         SeasonId = 1,
-                        Step1Veg=new Step1Veg
+                        Step1Veg = new Step1Veg
                         {
-                            DepthCm=model.SampleDepth,
-                            DepthValue=model.SoilMineralNitrogen
+                            DepthCm = model.SampleDepth,
+                            DepthValue = model.SoilMineralNitrogen
                         },
                         Step3 = new Step3
                         {
@@ -2437,13 +2448,13 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("CheckAnswer");
                 }
-                if(postMeasurementData.CropTypeId>0)
+                if (postMeasurementData.CropTypeId > 0)
                 {
                     (SnsResponse snsResponse, Error error) = await _fieldService.FetchSNSIndexByMeasurementMethodAsync(postMeasurementData);
                     if (error.Message == null)
                     {
                         model.SnsIndex = snsResponse.SnsIndex;
-                        model.SnsValue = snsResponse.SnsValue;                      
+                        model.SnsValue = snsResponse.SnsValue;
                         _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
                     }
                 }
@@ -2664,7 +2675,7 @@ namespace NMP.Portal.Controllers
             }
             if (model.SoilOrganicMatter != null && (model.SoilOrganicMatter < 4 || model.SoilOrganicMatter > 10))
             {
-                ModelState.AddModelError("SoilOrganicMatter",string.Format(Resource.MsgEnterValueInBetween,Resource.lblPercentageLable.ToLower(),4,10));
+                ModelState.AddModelError("SoilOrganicMatter", string.Format(Resource.MsgEnterValueInBetween, Resource.lblPercentageLable.ToLower(), 4, 10));
             }
             if (!ModelState.IsValid)
             {
