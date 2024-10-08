@@ -1013,7 +1013,7 @@ namespace NMP.Portal.Controllers
                         List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
                         var fieldType = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.FieldType).FirstOrDefault();
 
-                        
+
                         (List<ApplicationMethodResponse> applicationMethodList, error) = await _organicManureService.FetchApplicationMethodList(fieldType ?? 0, model.IsManureTypeLiquid.Value);
                         if (error == null && applicationMethodList.Count > 0)
                         {
@@ -1439,7 +1439,7 @@ namespace NMP.Portal.Controllers
                 List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
                 var fieldType = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.FieldType).FirstOrDefault();
 
-                
+
                 (List<ApplicationMethodResponse> applicationMethodList, error) = await _organicManureService.FetchApplicationMethodList(fieldType ?? 0, isLiquid);
                 ViewBag.ApplicationMethodList = applicationMethodList.OrderBy(x => x.Name).ToList(); ;
                 model.ApplicationMethodCount = applicationMethodList.Count;
@@ -2901,6 +2901,26 @@ namespace NMP.Portal.Controllers
                 DateTime? sowingDate = crop.Select(x => x.SowingDate).FirstOrDefault();
                 if (model.AutumnCropNitrogenUptake == null)
                 {
+
+                    var uptakeData = new
+                    {
+                        cropTypeId = cropCategoryId,
+                        applicationMonth = model.ApplicationDate.Value.Month
+                    };
+
+
+                    string jsonString = JsonConvert.SerializeObject(uptakeData);
+                    (NitrogenUptakeResponse nitrogenUptakeResponse, error) = await _organicManureService.FetchAutumnCropNitrogenUptake(jsonString);
+                    if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
+                    {
+                        ViewBag.Error = error.Message;
+                        return View(model);
+                    }
+                    if (nitrogenUptakeResponse != null && error == null)
+                    {
+                        model.AutumnCropNitrogenUptake = nitrogenUptakeResponse.value;
+                    }
+
                     //if (cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal || cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlyStablishedWinterOilseedRape)
                     //{
                     //    if (sowingDate != null)
@@ -2924,7 +2944,7 @@ namespace NMP.Portal.Controllers
                     //if (model.ApplicationDate.Value.Month >= (int)NMP.Portal.Enums.Month.August && model.ApplicationDate.Value.Month <= (int)NMP.Portal.Enums.Month.October)
                     //{
 
-                    //    model.AutumnCropNitrogenUptake = await _mannerService.FetchCropNUptakeDefaultAsync(cropCategoryId);
+                       // model.AutumnCropNitrogenUptake = await _mannerService.FetchCropNUptakeDefaultAsync(cropCategoryId);
                     //}
                     //else
                     //{
@@ -2956,7 +2976,7 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    (List<RainTypeResponse> rainTypes, error) = await _organicManureService.FetchRainTypeList();
+                    (RainTypeResponse rainType, error) = await _organicManureService.FetchRainTypeById(model.RainfallWithinSixHoursID.Value);
                     if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
                     {
                         ViewBag.Error = error.Message;
@@ -2964,7 +2984,7 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        model.RainfallWithinSixHours = rainTypes.Where(x => x.ID == model.RainfallWithinSixHoursID).Select(x => x.Name).FirstOrDefault();
+                        model.RainfallWithinSixHours = rainType.Name;
                     }
                 }
 
@@ -2990,7 +3010,15 @@ namespace NMP.Portal.Controllers
                 {
                     if (model.TotalRainfall == null)
                     {
-                        model.TotalRainfall = await _organicManureService.FetchRainfallByPostcodeAndDateRange(halfPostCode, model.ApplicationDate.Value.ToString("yyyy-MM-ddTHH:mm:ss"), model.SoilDrainageEndDate.Value.ToString("yyyy-MM-ddTHH:mm:ss"));
+                        var rainfallPostCodeApplication = new
+                        {
+                            applicationDate = model.ApplicationDate.Value.ToString("yyyy-MM-dd"),
+                            endOfSoilDrainageDate = model.SoilDrainageEndDate.Value.ToString("yyyy-MM-dd"),
+                            climateDataPostcode = halfPostCode
+                        };
+
+                        string jsonString = JsonConvert.SerializeObject(rainfallPostCodeApplication);
+                        model.TotalRainfall = await _organicManureService.FetchRainfallByPostcodeAndDateRange(jsonString);
                     }
                 }
 
@@ -3011,7 +3039,7 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    (List<WindspeedResponse> windspeeds, error) = await _organicManureService.FetchWindspeedList();
+                    (WindspeedResponse windspeed, error) = await _organicManureService.FetchWindspeedById(model.WindspeedID.Value);
                     if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
                     {
                         ViewBag.Error = error.Message;
@@ -3019,7 +3047,7 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        model.Windspeed = windspeeds.Where(x => x.ID == model.WindspeedID).Select(x => x.Name).FirstOrDefault();
+                        model.Windspeed = windspeed.Name;
                     }
                 }
 
@@ -3040,7 +3068,7 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    (List<MoistureTypeResponse> moisterTypes, error) = await _organicManureService.FetchMoisterTypeList();
+                    (MoistureTypeResponse moisterType, error) = await _organicManureService.FetchMoisterTypeById(model.MoistureTypeId.Value);
                     if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
                     {
                         ViewBag.Error = error.Message;
@@ -3048,7 +3076,7 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        model.MoistureType = moisterTypes.Where(x => x.ID == model.MoistureTypeId).Select(x => x.Name).FirstOrDefault();
+                        model.MoistureType = moisterType.Name;
                     }
                 }
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
@@ -4291,7 +4319,7 @@ namespace NMP.Portal.Controllers
                                                     {
                                                         if (currentNitrogen > 40)
                                                         {
-                                                            warningMsg = string.Format(Resource.lblTheNVZActionProgrammeAppRateExceedsHighNWithinWarningPeriodOrganic, cropTypeResponse.CropType, warningPeriod,40);
+                                                            warningMsg = string.Format(Resource.lblTheNVZActionProgrammeAppRateExceedsHighNWithinWarningPeriodOrganic, cropTypeResponse.CropType, warningPeriod, 40);
                                                             model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = true;
                                                         }
                                                         else

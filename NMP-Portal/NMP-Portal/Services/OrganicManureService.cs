@@ -173,14 +173,14 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(APIURLHelper.FetchManureGroupListAsyncAPI);
+                var response = await httpClient.GetAsync(APIURLHelper.FetchMannerManureGroupListAsyncAPI);
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        var manureGroups = responseWrapper.Data.ManureGroups.ToObject<List<CommonResponse>>();
+                        var manureGroups = responseWrapper.Data.ToObject<List<CommonResponse>>();
                         manureGroupList.AddRange(manureGroups);
                     }
                 }
@@ -216,14 +216,14 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchManureTypeListByGroupIdAsyncAPI, manureGroupId, countryId));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerManureTypeListByGroupIdAndCountryAsyncAPI, manureGroupId, countryId));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        var manureTypes = responseWrapper.Data.ManureTypes.ToObject<List<ManureType>>();
+                        var manureTypes = responseWrapper.Data.ToObject<List<ManureType>>();
                         manureTypeList.AddRange(manureTypes);
                     }
                 }
@@ -259,14 +259,14 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchManureGroupByIdAsyncAPI, manureGroupId));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerManureGroupByIdAsyncAPI, manureGroupId));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        manureGroup = responseWrapper.Data.ManureGroup.ToObject<CommonResponse>();
+                        manureGroup = responseWrapper.Data.ToObject<CommonResponse>();
                     }
                 }
                 else
@@ -302,14 +302,14 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchManureTypeByManureTypeIdAsyncAPI, manureTypeId));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerManureTypeByManureTypeIdAsyncAPI, manureTypeId));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        manureType = responseWrapper.Data.ManureType.ToObject<ManureType>();
+                        manureType = responseWrapper.Data.ToObject<ManureType>();
                         //manureTypeList.AddRange(manureTypes);
                     }
                 }
@@ -685,21 +685,21 @@ namespace NMP.Portal.Services
             }
             return (rainType, error);
         }
-        public async Task<int> FetchRainfallByPostcodeAndDateRange(string postCode, string applicationDate, string soilDrainageDate)
+        public async Task<int> FetchRainfallByPostcodeAndDateRange(string jsonString)
         {
             int totalRainfall = 0;
             Error error = null;
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchRainfallByPostcodeAndDateRange, postCode, applicationDate, soilDrainageDate));
+                var response = await httpClient.PostAsync(string.Format(APIURLHelper.FetchMannerRainfallByPostcodeAndDateRangeAsyncAPI), new StringContent(jsonString, Encoding.UTF8, "application/json"));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        totalRainfall = responseWrapper.Data.totalRainfall.ToObject<int>();
+                        totalRainfall = responseWrapper.Data.rainfallPostApplication!=null? responseWrapper.Data.rainfallPostApplication.value.ToObject<int>():0;
                     }
                 }
                 else
@@ -857,6 +857,48 @@ namespace NMP.Portal.Services
             }
             return (rainType, error);
         }
+        public async Task<(RainTypeResponse, Error)> FetchRainTypeById(int rainTypeId)
+        {
+            RainTypeResponse rainType = new RainTypeResponse();
+            Error error = null;
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerRainTypeByIdAsyncAPI,rainTypeId));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode)
+                {
+                    if (responseWrapper != null && responseWrapper.Data != null)
+                    {
+                        rainType = responseWrapper.Data.ToObject<RainTypeResponse>();
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error = new Error();
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error = new Error();
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (rainType, error);
+        }
 
         public async Task<(List<WindspeedResponse>, Error)> FetchWindspeedList()
         {
@@ -901,7 +943,48 @@ namespace NMP.Portal.Services
             }
             return (windspeeds, error);
         }
-
+        public async Task<(WindspeedResponse, Error)> FetchWindspeedById(int windspeedId)
+        {
+            WindspeedResponse windspeedResponse = new WindspeedResponse();
+            Error error = null;
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerWindspeedByIdAsyncAPI, windspeedId));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode)
+                {
+                    if (responseWrapper != null && responseWrapper.Data != null)
+                    {
+                        windspeedResponse = responseWrapper.Data.ToObject<WindspeedResponse>();
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error = new Error();
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error = new Error();
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (windspeedResponse, error);
+        }
         public async Task<(List<MoistureTypeResponse>, Error)> FetchMoisterTypeList()
         {
             List<MoistureTypeResponse> moisterTypes = new List<MoistureTypeResponse>();
@@ -945,7 +1028,48 @@ namespace NMP.Portal.Services
             }
             return (moisterTypes, error);
         }
-
+        public async Task<(MoistureTypeResponse, Error)> FetchMoisterTypeById(int moisterTypeId)
+        {
+            MoistureTypeResponse moistureTypeResponse = new MoistureTypeResponse();
+            Error error = null;
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerMoistureTypeByIdAsyncAPI, moisterTypeId));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode)
+                {
+                    if (responseWrapper != null && responseWrapper.Data != null)
+                    {
+                        moistureTypeResponse = responseWrapper.Data.ToObject<MoistureTypeResponse>();
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error = new Error();
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error = new Error();
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (moistureTypeResponse, error);
+        }
         public async Task<bool> FetchIsPerennialByCropTypeId(int cropTypeId)
         {
             Error error = new Error();
@@ -1267,21 +1391,21 @@ namespace NMP.Portal.Services
             return (isOrganicManureExist, error);
         }
 
-        public async Task<(decimal, Error)> FetchAutumnCropNitrogenUptake(string jsonString)
+        public async Task<(NitrogenUptakeResponse, Error)> FetchAutumnCropNitrogenUptake(string jsonString)
         {
             Error error = null;
-            decimal totalN = 0;
+            NitrogenUptakeResponse nitrogenUptakeResponse = new NitrogenUptakeResponse();
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.PostAsync(string.Format(APIURLHelper.FetchTotalNBasedOnManIdFromOrgManureAndFertiliserAsyncAPI), new StringContent(jsonString, Encoding.UTF8, "application/json"));
+                var response = await httpClient.PostAsync(string.Format(APIURLHelper.FetchMannerAutumnCropNitrogenUptakeAsyncAPI), new StringContent(jsonString, Encoding.UTF8, "application/json"));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        totalN = responseWrapper.Data.TotalN != null ? responseWrapper.Data.TotalN.ToObject<decimal>() : 0;
+                        nitrogenUptakeResponse = responseWrapper.Data.nitrogenUptake != null ? responseWrapper.Data.nitrogenUptake.ToObject<NitrogenUptakeResponse>() : 0;
                     }
                 }
                 else
@@ -1314,7 +1438,7 @@ namespace NMP.Portal.Services
                 _logger.LogError(ex.Message);
                 throw new Exception(error.Message, ex);
             }
-            return (totalN, error);
+            return (nitrogenUptakeResponse, error);
         }
     }
 }
