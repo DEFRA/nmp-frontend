@@ -1559,7 +1559,7 @@ namespace NMP.Portal.Controllers
                         return RedirectToAction("SampleDepth");
                     }
                 }
-                else if(cropTypeLinking.SNSCategoryID == null)
+                else if(cropTypeLinking != null && cropTypeLinking.SNSCategoryID == null)
                 {
                     return RedirectToAction("CheckAnswer");
                 }
