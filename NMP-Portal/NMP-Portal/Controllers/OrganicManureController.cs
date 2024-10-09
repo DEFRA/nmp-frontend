@@ -2894,65 +2894,73 @@ namespace NMP.Portal.Controllers
                 List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
                 var crop = cropsResponse.Where(x => x.Year == model.HarvestYear);
                 int cropTypeId = crop.Select(x => x.CropTypeID).FirstOrDefault() ?? 0;
-                int cropCategoryId = await _mannerService.FetchCategoryIdByCropTypeIdAsync(cropTypeId);
-
-                //check early and late for winter cereals and winter oilseed rape
-                //if sowing date after 15 sept then late
-                DateTime? sowingDate = crop.Select(x => x.SowingDate).FirstOrDefault();
-                if (model.AutumnCropNitrogenUptake == null)
+                
+                (CropTypeLinkingResponse cropTypeLinkingResponse,error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(cropTypeId);
+                if (error == null && cropTypeLinkingResponse != null)
                 {
+                    int mannerCropTypeId = cropTypeLinkingResponse.MannerCropTypeID;
 
-                    var uptakeData = new
+                    //check early and late for winter cereals and winter oilseed rape
+                    //if sowing date after 15 sept then late
+                    //DateTime? sowingDate = crop.Select(x => x.SowingDate).FirstOrDefault();
+                    if (model.AutumnCropNitrogenUptake == null)
                     {
-                        cropTypeId = cropCategoryId,
-                        applicationMonth = model.ApplicationDate.Value.Month
-                    };
+                        var uptakeData = new
+                        {
+                            cropTypeId = mannerCropTypeId,
+                            applicationMonth = model.ApplicationDate.Value.Month
+                        };
 
 
-                    string jsonString = JsonConvert.SerializeObject(uptakeData);
-                    (NitrogenUptakeResponse nitrogenUptakeResponse, error) = await _organicManureService.FetchAutumnCropNitrogenUptake(jsonString);
-                    if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
-                    {
-                        ViewBag.Error = error.Message;
-                        return View(model);
+                        string jsonString = JsonConvert.SerializeObject(uptakeData);
+                        (NitrogenUptakeResponse nitrogenUptakeResponse, error) = await _organicManureService.FetchAutumnCropNitrogenUptake(jsonString);
+                        if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
+                        {
+                            ViewBag.Error = error.Message;
+                            return View(model);
+                        }
+                        if (nitrogenUptakeResponse != null && error == null)
+                        {
+                            model.AutumnCropNitrogenUptake = nitrogenUptakeResponse.value;
+                        }
+
+                        //if (cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal || cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlyStablishedWinterOilseedRape)
+                        //{
+                        //    if (sowingDate != null)
+                        //    {
+                        //        int day = sowingDate.Value.Day;
+                        //        int month = sowingDate.Value.Month;
+                        //        if (month == (int)NMP.Portal.Enums.Month.September && day > 15)
+                        //        {
+                        //            if (cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal)
+                        //            {
+                        //                cropCategoryId = (int)NMP.Portal.Enums.CropCategory.LateSownWinterCereal;
+                        //            }
+                        //            else
+                        //            {
+                        //                cropCategoryId = (int)NMP.Portal.Enums.CropCategory.LateStablishedWinterOilseedRape;
+                        //            }
+                        //        }
+                        //    }
+                        //}
+
+                        //if (model.ApplicationDate.Value.Month >= (int)NMP.Portal.Enums.Month.August && model.ApplicationDate.Value.Month <= (int)NMP.Portal.Enums.Month.October)
+                        //{
+
+                        // model.AutumnCropNitrogenUptake = await _mannerService.FetchCropNUptakeDefaultAsync(cropCategoryId);
+                        //}
+                        //else
+                        //{
+                        //    model.AutumnCropNitrogenUptake = 0;
+                        //}
                     }
-                    if (nitrogenUptakeResponse != null && error == null)
-                    {
-                        model.AutumnCropNitrogenUptake = nitrogenUptakeResponse.value;
-                    }
 
-                    //if (cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal || cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlyStablishedWinterOilseedRape)
-                    //{
-                    //    if (sowingDate != null)
-                    //    {
-                    //        int day = sowingDate.Value.Day;
-                    //        int month = sowingDate.Value.Month;
-                    //        if (month == (int)NMP.Portal.Enums.Month.September && day > 15)
-                    //        {
-                    //            if (cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal)
-                    //            {
-                    //                cropCategoryId = (int)NMP.Portal.Enums.CropCategory.LateSownWinterCereal;
-                    //            }
-                    //            else
-                    //            {
-                    //                cropCategoryId = (int)NMP.Portal.Enums.CropCategory.LateStablishedWinterOilseedRape;
-                    //            }
-                    //        }
-                    //    }
-                    //}
-
-                    //if (model.ApplicationDate.Value.Month >= (int)NMP.Portal.Enums.Month.August && model.ApplicationDate.Value.Month <= (int)NMP.Portal.Enums.Month.October)
-                    //{
-
-                       // model.AutumnCropNitrogenUptake = await _mannerService.FetchCropNUptakeDefaultAsync(cropCategoryId);
-                    //}
-                    //else
-                    //{
-                    //    model.AutumnCropNitrogenUptake = 0;
-                    //}
                 }
-
-
+                else if(error != null && (!string.IsNullOrWhiteSpace(error.Message)))
+                {
+                    ViewBag.Error = error.Message;
+                    return View(model);
+                }
                 //Soil drainage end date
                 if (model.SoilDrainageEndDate == null)
                 {
