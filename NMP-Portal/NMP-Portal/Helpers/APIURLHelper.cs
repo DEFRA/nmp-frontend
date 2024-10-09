@@ -98,7 +98,16 @@ namespace NMP.Portal.Helpers
         public const string FetchMannerIncorporationMethodsByApplicationIdAsyncAPI = "vendors/manner/incorporation-methods/by-app-method/{0}";
         public const string FetchMannerApplicationMethodsByApplicableForAsyncAPI = "vendors/manner/application-methods?isLiquid={0}&fieldType={1}";
         public const string FetchMannerWindspeedsAsyncAPI = "vendors/manner/windspeeds";
+        public const string FetchMannerWindspeedByIdAsyncAPI = "vendors/manner/windspeeds/{0}";
         public const string FetchMannerRainTypesAsyncAPI = "vendors/manner/rain-types";
+        public const string FetchMannerRainTypeByIdAsyncAPI = "vendors/manner/rain-types/{0}";
         public const string FetchMannerMoistureTypesAsyncAPI = "vendors/manner/moisture-types";
+        public const string FetchMannerMoistureTypeByIdAsyncAPI = "vendors/manner/moisture-types/{0}";
+        public const string FetchMannerManureGroupListAsyncAPI = "vendors/manner/manure-groups";
+        public const string FetchMannerManureGroupByIdAsyncAPI = "vendors/manner/manure-groups/{0}";
+        public const string FetchMannerAutumnCropNitrogenUptakeAsyncAPI = "vendors/manner/autumn-crop-nitrogen-uptake";
+        public const string FetchMannerRainfallByPostcodeAndDateRangeAsyncAPI = "vendors/manner/rainfall-post-application";
+        public const string FetchMannerManureTypeListByGroupIdAndCountryAsyncAPI = "vendors/manner/manure-types?manureGroupId={0}&countryId={1}";
+        public const string FetchMannerManureTypeByManureTypeIdAsyncAPI = "vendors/manner/manure-types/{0}";
     }
 }
