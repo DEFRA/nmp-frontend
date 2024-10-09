@@ -505,7 +505,7 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("CheckAnswer");
             }
-            return RedirectToAction("SoilDateAndPHLevel");
+            return RedirectToAction("RecentSoilAnalysisQuestion");
         }
 
         [HttpGet]
@@ -547,7 +547,7 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("CheckAnswer");
             }
-            return RedirectToAction("SoilDateAndPHLevel");
+            return RedirectToAction("RecentSoilAnalysisQuestion");
         }
         [HttpGet]
         public async Task<IActionResult> SoilDateAndPHLevel()
@@ -2778,6 +2778,51 @@ namespace NMP.Portal.Controllers
             }
             return RedirectToAction("SoilMineralNitrogenAnalysisResults");
         }
+        [HttpGet]
+        public async Task<IActionResult> RecentSoilAnalysisQuestion()
+        {
+            FieldViewModel model = new FieldViewModel();
 
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+                return RedirectToAction("IsBasedOnSoilOrganicMatter");
+            }
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RecentSoilAnalysisQuestion(FieldViewModel model)
+        {
+
+            if (model.RecentSoilAnalysisQuestion == null)
+            {
+                ModelState.AddModelError("RecentSoilAnalysisQuestion", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
+            if (model.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
+            
+
+
+            return RedirectToAction("SoilDateAndPHLevel");
+        }
     }
 }

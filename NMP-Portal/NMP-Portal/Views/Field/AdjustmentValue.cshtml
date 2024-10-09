@@ -85,6 +85,7 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilReleasingClay" value="@Model.IsSoilReleasingClay.ToString().ToLower()"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAbove300SeaLevelForFarm" value="@Model.IsAbove300SeaLevelForFarm.ToString().ToLower()"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZForFarm" value="@Model.IsWithinNVZForFarm.ToString().ToLower()"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RecentSoilAnalysisQuestion" value="@Model.RecentSoilAnalysisQuestion.ToString().ToLower()"></govuk-input>
             }
             <govuk-input asp-for=@Model.AdjustmentValue inputmode="number" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="true" class="govuk-label--l">@Resource.lblWhatIsTheAdjustmentValuePerHectare</govuk-input-label>

@@ -2382,4 +2382,16 @@ m3/ha  not set</value>
   <data name="lblHowWouldYouLikeToCalculateSoilNitrogenSupply" xml:space="preserve">
     <value>How would you like to calculate the soil nitrogen supply for {0}?</value>
   </data>
+  <data name="lblDoYouWantToAddARecentSoilAnalysis" xml:space="preserve">
+    <value>Do you want to add a recent soil analysis for {0}?</value>
+  </data>
+  <data name="MsgSoilAnalysisHint1" xml:space="preserve">
+    <value>We need a recent soil analysis to give the best results. Without a recent analysis from the last five years, any recommendations we give will be based on the RB209 default values.</value>
+  </data>
+  <data name="MsgSoilAnalysisHint2" xml:space="preserve">
+    <value>You can enter your soil analysis later.</value>
+  </data>
+  <data name="MsgSoilAnalysisHint3" xml:space="preserve">
+    <value>You should get a soil analysis every five years, according to the Environment Agency.</value>
+  </data>
 </root>

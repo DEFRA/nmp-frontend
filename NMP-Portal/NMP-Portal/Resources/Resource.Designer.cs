@@ -1305,6 +1305,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you want to add a recent soil analysis for {0}?.
+        /// </summary>
+        public static string lblDoYouWantToAddARecentSoilAnalysis {
+            get {
+                return ResourceManager.GetString("lblDoYouWantToAddARecentSoilAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do You Want to Enter Green Area Index or the Crop Height?.
         /// </summary>
         public static string lblDoYouWantToEnterGAIOrCropHeight {
@@ -6687,6 +6696,33 @@ namespace NMP.Portal.Resources {
         public static string MsgServiceNotAvailable {
             get {
                 return ResourceManager.GetString("MsgServiceNotAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We need a recent soil analysis to give the best results. Without a recent analysis from the last five years, any recommendations we give will be based on the RB209 default values..
+        /// </summary>
+        public static string MsgSoilAnalysisHint1 {
+            get {
+                return ResourceManager.GetString("MsgSoilAnalysisHint1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can enter your soil analysis later..
+        /// </summary>
+        public static string MsgSoilAnalysisHint2 {
+            get {
+                return ResourceManager.GetString("MsgSoilAnalysisHint2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You should get a soil analysis every five years, according to the Environment Agency..
+        /// </summary>
+        public static string MsgSoilAnalysisHint3 {
+            get {
+                return ResourceManager.GetString("MsgSoilAnalysisHint3", resourceCulture);
             }
         }
         
