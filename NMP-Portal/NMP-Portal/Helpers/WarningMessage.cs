@@ -195,9 +195,21 @@ namespace NMP.Portal.Helpers
                     int endDay = int.Parse(match.Groups[3].Value);
                     string endMonthStr = match.Groups[4].Value;
 
-                    DateTimeFormatInfo dtfi = DateTimeFormatInfo.CurrentInfo;
-                    int startMonth = Array.IndexOf(dtfi.AbbreviatedMonthNames, startMonthStr) + 1;
-                    int endMonth = Array.IndexOf(dtfi.AbbreviatedMonthNames, endMonthStr) + 1;
+                    Dictionary<int, string> dtfi = new Dictionary<int, string>();
+                    dtfi.Add(0, "Jan");
+                    dtfi.Add(1, "Feb");
+                    dtfi.Add(2, "Mar");
+                    dtfi.Add(3, "Apr");
+                    dtfi.Add(4, "May");
+                    dtfi.Add(5, "Jun");
+                    dtfi.Add(6, "Jul");
+                    dtfi.Add(7, "Aug");
+                    dtfi.Add(8, "Sep");
+                    dtfi.Add(9, "Oct");
+                    dtfi.Add(10, "Nov");
+                    dtfi.Add(11, "Dec");
+                    int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1; // Array.IndexOf(dtfi.Values, startMonthStr) + 1;
+                    int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;//Array.IndexOf(dtfi.AbbreviatedMonthNames, endMonthStr) + 1;
 
                     DateTime closedPeriodStart = new DateTime(applicationDate.Year, startMonth, startDay);
                     DateTime closedPeriodEnd = new DateTime(applicationDate.Year, endMonth, endDay);
