@@ -1097,7 +1097,7 @@ namespace NMP.Portal.Controllers
                     ModifiedOn = model.ModifiedOn,
                     ModifiedByID = model.ModifiedByID
                 },
-                SoilAnalysis = new SoilAnalysis
+                SoilAnalysis =(!model.RecentSoilAnalysisQuestion.Value)?null: new SoilAnalysis
                 {
                     Year = model.SoilAnalyses.Date.Value.Year,
                     SulphurDeficient = model.SoilAnalyses.SulphurDeficient,
@@ -2851,6 +2851,10 @@ namespace NMP.Portal.Controllers
                     model.SoilAnalyses.MagnesiumIndex = null;
                     model.SoilAnalyses.PhosphorusIndex = null;
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
+                    if(model.IsCheckAnswer)
+                    {
+                        return RedirectToAction("CheckAnswer");
+                    }
                     return RedirectToAction("CropGroups");
                 }
             }
