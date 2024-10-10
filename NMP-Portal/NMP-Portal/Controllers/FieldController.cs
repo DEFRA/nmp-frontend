@@ -425,16 +425,18 @@ namespace NMP.Portal.Controllers
                     return View(field);
                 }
                 field.SoilType = await _soilService.FetchSoilTypeById(field.SoilTypeID.Value);
-                SoilTypesResponse? soilType = soilTypes.FirstOrDefault(x => x.SoilTypeId == field.SoilTypeID);
+                //SoilTypesResponse? soilType = soilTypes.FirstOrDefault(x => x.SoilTypeId == field.SoilTypeID);
 
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
-                if (soilType != null && soilType.KReleasingClay)
-                {
-                    field.IsSoilReleasingClay = true;
-                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
-                    return RedirectToAction("SoilReleasingClay");
-                }
-                else if (field.IsCheckAnswer)
+                //if (soilType != null && soilType.KReleasingClay)
+                //{
+                //    field.IsSoilReleasingClay = true;
+                //    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
+                //    return RedirectToAction("SoilReleasingClay");
+                //}
+                //else 
+                
+                if (field.IsCheckAnswer)
                 {
                     field.IsSoilReleasingClay = false;
                     field.SoilReleasingClay = null;
@@ -445,9 +447,9 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 TempData["Error"] = ex.Message;
-                return RedirectToAction("ElevationField");
+                return View(field);
             }
-            return RedirectToAction("SulphurDeficient");
+            return RedirectToAction("RecentSoilAnalysisQuestion");
         }
 
         [HttpGet]
@@ -505,7 +507,7 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("CheckAnswer");
             }
-            return RedirectToAction("RecentSoilAnalysisQuestion");
+            return RedirectToAction("SoilDateAndPHLevel");
         }
 
         [HttpGet]
@@ -547,7 +549,7 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("CheckAnswer");
             }
-            return RedirectToAction("RecentSoilAnalysisQuestion");
+            return RedirectToAction("SoilDateAndPHLevel");
         }
         [HttpGet]
         public async Task<IActionResult> SoilDateAndPHLevel()
@@ -1030,26 +1032,28 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("CropTypeID", Resource.MsgPreviousCropTypeNotSet);
             }
-            if (model.IsSoilReleasingClay && (!model.SoilReleasingClay.HasValue))
+            if (model.RecentSoilAnalysisQuestion.Value)
             {
-                ModelState.AddModelError("SoilReleasingClay", Resource.MsgSoilReleasingClayNotSet);
+                if (model.IsSoilReleasingClay && (!model.SoilReleasingClay.HasValue))
+                {
+                    ModelState.AddModelError("SoilReleasingClay", Resource.MsgSoilReleasingClayNotSet);
+                }
+                if (!model.IsSoilNutrientValueTypeIndex.Value)
+                {
+                    if (!model.SoilAnalyses.Potassium.HasValue)
+                    {
+                        ModelState.AddModelError("SoilAnalyses.Potassium", Resource.MsgPotassiumNotSet);
+                    }
+                    if (!model.SoilAnalyses.Phosphorus.HasValue)
+                    {
+                        ModelState.AddModelError("SoilAnalyses.Phosphorus", Resource.MsgPhosphorusNotSet);
+                    }
+                    if (!model.SoilAnalyses.Magnesium.HasValue)
+                    {
+                        ModelState.AddModelError("SoilAnalyses.Magnesium", Resource.MsgMagnesiumNotSet);
+                    }
+                }
             }
-            if (!model.IsSoilNutrientValueTypeIndex.Value)
-            {
-                if (!model.SoilAnalyses.Potassium.HasValue)
-                {
-                    ModelState.AddModelError("SoilAnalyses.Potassium", Resource.MsgPotassiumNotSet);
-                }
-                if (!model.SoilAnalyses.Phosphorus.HasValue)
-                {
-                    ModelState.AddModelError("SoilAnalyses.Phosphorus", Resource.MsgPhosphorusNotSet);
-                }
-                if (!model.SoilAnalyses.Magnesium.HasValue)
-                {
-                    ModelState.AddModelError("SoilAnalyses.Magnesium", Resource.MsgMagnesiumNotSet);
-                }
-            }
-
             if (!ModelState.IsValid)
             {
                 return View("CheckAnswer", model);
@@ -2797,7 +2801,7 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 TempData["Error"] = ex.Message;
-                return RedirectToAction("IsBasedOnSoilOrganicMatter");
+                return RedirectToAction("SoilType");
             }
             return View(model);
         }
@@ -2805,7 +2809,6 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RecentSoilAnalysisQuestion(FieldViewModel model)
         {
-
             if (model.RecentSoilAnalysisQuestion == null)
             {
                 ModelState.AddModelError("RecentSoilAnalysisQuestion", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -2814,15 +2817,48 @@ namespace NMP.Portal.Controllers
             {
                 return View(model);
             }
-            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
-            if (model.IsCheckAnswer)
+            try
             {
-                return RedirectToAction("CheckAnswer");
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);            
+
+
+                if (model.RecentSoilAnalysisQuestion.Value)
+                {
+                    List<SoilTypesResponse> soilTypes = await _fieldService.FetchSoilTypes();
+                    if (soilTypes.Count > 0)
+                    {
+                        SoilTypesResponse? soilType = soilTypes.FirstOrDefault(x => x.SoilTypeId == model.SoilTypeID);
+
+                        if (soilType != null && soilType.KReleasingClay)
+                        {
+                            model.IsSoilReleasingClay = true;
+                            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
+                            return RedirectToAction("SoilReleasingClay");
+                        }
+                    }
+                    return RedirectToAction("SulphurDeficient");
+                }
+                else
+                {
+                    model.SoilAnalyses.SulphurDeficient = null;
+                    model.SoilReleasingClay = null;
+                    model.SoilAnalyses.Date = null;
+                    model.SoilAnalyses.PH = null;
+                    model.SoilAnalyses.Phosphorus = null;
+                    model.SoilAnalyses.Magnesium = null;
+                    model.SoilAnalyses.Potassium = null;
+                    model.SoilAnalyses.PotassiumIndex = null;
+                    model.SoilAnalyses.MagnesiumIndex = null;
+                    model.SoilAnalyses.PhosphorusIndex = null;
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
+                    return RedirectToAction("CropGroups");
+                }
             }
-            
-
-
-            return RedirectToAction("SoilDateAndPHLevel");
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+                return View(model);
+            }
         }
     }
 }

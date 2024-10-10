@@ -2998,12 +2998,16 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    string[] postCodeParts = farm.Postcode.Split(' ');
-
-                    if (postCodeParts.Length == 2)
-                    {
-                        halfPostCode = postCodeParts[0];
-                    }
+                    //string[] postCodeParts = farm.Postcode.Split(' ');
+                    halfPostCode = farm.Postcode.Substring(0, 4).Trim();
+                    //if (postCodeParts.Length == 2)
+                    //{
+                    //    halfPostCode = postCodeParts[0];
+                    //}
+                    //else
+                    //{
+                        
+                    //}
                 }
 
                 if (model.ApplicationDate.HasValue && model.SoilDrainageEndDate.HasValue)
