@@ -1459,27 +1459,20 @@ namespace NMP.Portal.Controllers
             {
                 if (manureTypeList.Count > 0)
                 {
-                    var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
-                    isLiquid = manureType.IsLiquid.Value;
-                    string applicableFor = isLiquid ? Resource.lblL : Resource.lblB;
+                    string applicableFor =Resource.lblNull;
                     List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
                     var fieldType = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.FieldType).FirstOrDefault();
-                    (List<IncorporationMethodResponse> incorporationMethods, error) = await _organicManureService.FetchIncorporationMethodsByApplicationId(fieldType ?? 0, applicableFor, model.ApplicationMethod ?? 0);
+
+                    (List<IncorporationMethodResponse> incorporationMethods, error) = await _organicManureService.FetchIncorporationMethodsByApplicationId(model.ApplicationMethod.Value, applicableFor);
                     if (error == null && incorporationMethods.Count == 1)
                     {
                         model.IncorporationMethod = incorporationMethods.FirstOrDefault().ID;
-                        applicableFor = isLiquid ? Resource.lblL : Resource.lblS;
-                        if (manureType.Id == (int)NMP.Portal.Enums.ManureTypes.PoultryManure)
-                        {
-                            applicableFor = Resource.lblP;
-                        }
                         (model.IncorporationMethodName, error) = await _organicManureService.FetchIncorporationMethodById(model.IncorporationMethod.Value);
                         if (error == null)
                         {
                             (List<IncorprationDelaysResponse> incorporationDelaysList, error) = await _organicManureService.FetchIncorporationDelaysByMethodIdAndApplicableFor(model.IncorporationMethod ?? 0, applicableFor);
                             if (error == null && incorporationDelaysList.Count == 1)
                             {
-
                                 model.IncorporationDelay = incorporationDelaysList.FirstOrDefault().ID;
                                 (model.IncorporationDelayName, error) = await _organicManureService.FetchIncorporationDelayById(model.IncorporationDelay.Value);
                                 if (error == null)
@@ -2610,8 +2603,8 @@ namespace NMP.Portal.Controllers
 
             List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
             var fieldType = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.FieldType).FirstOrDefault();
-
-            (List<IncorporationMethodResponse> incorporationMethods, error) = await _organicManureService.FetchIncorporationMethodsByApplicationId(fieldType ?? 0, applicableFor, model.ApplicationMethod ?? 0);
+            string applicableForArableOrGrass = fieldType == 1 ? Resource.lblA : Resource.lblG;
+            (List<IncorporationMethodResponse> incorporationMethods, error) = await _organicManureService.FetchIncorporationMethodsByApplicationId(model.ApplicationMethod.Value, applicableForArableOrGrass);
             if (error == null && incorporationMethods.Count > 0)
             {
                 ViewBag.IncorporationMethod = incorporationMethods;
@@ -2643,8 +2636,8 @@ namespace NMP.Portal.Controllers
                 string applicableFor = isLiquid ? Resource.lblL : Resource.lblB;
                 List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
                 var fieldType = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.FieldType).FirstOrDefault();
-
-                (List<IncorporationMethodResponse> incorporationMethods, error) = await _organicManureService.FetchIncorporationMethodsByApplicationId(fieldType ?? 0, applicableFor, model.ApplicationMethod ?? 0);
+                string applicableForArableOrGrass = fieldType == 1 ? Resource.lblA : Resource.lblG;
+                (List<IncorporationMethodResponse> incorporationMethods, error) = await _organicManureService.FetchIncorporationMethodsByApplicationId(model.ApplicationMethod.Value, applicableForArableOrGrass);
 
                 ViewBag.IncorporationMethod = incorporationMethods;
                 return View(model);
@@ -2672,11 +2665,11 @@ namespace NMP.Portal.Controllers
                 {
                     var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
                     bool isLiquid = manureType.IsLiquid.Value;
-                    string applicableFor = isLiquid ? Resource.lblL : Resource.lblS;
-                    if (manureType.Id == (int)NMP.Portal.Enums.ManureTypes.PoultryManure)
-                    {
-                        applicableFor = Resource.lblP;
-                    }
+                    string applicableFor = Resource.lblNull;// isLiquid ? Resource.lblL : Resource.lblS;
+                    //if (manureType.Id == (int)NMP.Portal.Enums.ManureTypes.PoultryManure)
+                    //{
+                    //    applicableFor = Resource.lblP;
+                    //}
                     (List<IncorprationDelaysResponse> incorporationDelaysList, error) = await _organicManureService.FetchIncorporationDelaysByMethodIdAndApplicableFor(model.IncorporationMethod ?? 0, applicableFor);
                     if (error == null && incorporationDelaysList.Count == 1)
                     {
@@ -2698,7 +2691,8 @@ namespace NMP.Portal.Controllers
                             applicableFor = isLiquid ? Resource.lblL : Resource.lblS;
                             List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
                             var fieldType = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.FieldType).FirstOrDefault();
-                            (List<IncorporationMethodResponse> incorporationMethods, error) = await _organicManureService.FetchIncorporationMethodsByApplicationId(fieldType ?? 0, applicableFor, model.ApplicationMethod ?? 0);
+                            string applicableForArableOrGrass = fieldType == 1 ? Resource.lblA : Resource.lblG;
+                            (List<IncorporationMethodResponse> incorporationMethods, error) = await _organicManureService.FetchIncorporationMethodsByApplicationId(model.ApplicationMethod.Value, applicableForArableOrGrass);
                             if (error == null && incorporationMethods.Count > 0)
                             {
                                 ViewBag.IncorporationMethod = incorporationMethods;
@@ -2714,7 +2708,8 @@ namespace NMP.Portal.Controllers
                         applicableFor = isLiquid ? Resource.lblL : Resource.lblB;
                         List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
                         var fieldType = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.FieldType).FirstOrDefault();
-                        (List<IncorporationMethodResponse> incorporationMethods, error) = await _organicManureService.FetchIncorporationMethodsByApplicationId(fieldType ?? 0, applicableFor, model.ApplicationMethod ?? 0);
+                        string applicableForArableOrGrass = fieldType == 1 ? Resource.lblA : Resource.lblG;
+                        (List<IncorporationMethodResponse> incorporationMethods, error) = await _organicManureService.FetchIncorporationMethodsByApplicationId(model.ApplicationMethod.Value, applicableForArableOrGrass);
                         if (error == null && incorporationMethods.Count > 0)
                         {
                             ViewBag.IncorporationMethod = incorporationMethods;
@@ -2730,7 +2725,8 @@ namespace NMP.Portal.Controllers
                     string applicableFor = isLiquid ? Resource.lblL : Resource.lblB;
                     List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
                     var fieldType = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.FieldType).FirstOrDefault();
-                    (List<IncorporationMethodResponse> incorporationMethods, error) = await _organicManureService.FetchIncorporationMethodsByApplicationId(fieldType ?? 0, applicableFor, model.ApplicationMethod ?? 0);
+                    string applicableForArableOrGrass = fieldType == 1 ? Resource.lblA : Resource.lblG;
+                    (List<IncorporationMethodResponse> incorporationMethods, error) = await _organicManureService.FetchIncorporationMethodsByApplicationId(model.ApplicationMethod.Value, applicableForArableOrGrass);
                     if (error == null && incorporationMethods.Count > 0)
                     {
                         ViewBag.IncorporationMethod = incorporationMethods;
@@ -2894,7 +2890,7 @@ namespace NMP.Portal.Controllers
                 List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
                 var crop = cropsResponse.Where(x => x.Year == model.HarvestYear);
                 int cropTypeId = crop.Select(x => x.CropTypeID).FirstOrDefault() ?? 0;
-                
+
                 (CropTypeLinkingResponse cropTypeLinkingResponse,error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(cropTypeId);
                 if (error == null && cropTypeLinkingResponse != null)
                 {
