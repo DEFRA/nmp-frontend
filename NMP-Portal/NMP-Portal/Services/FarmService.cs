@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Azure;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
@@ -199,11 +200,21 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var rainfall = await httpClient.GetAsync(string.Format(APIURLHelper.FetchRainfallAverageAsyncAPI, firstHalfPostcode));
-                string result = await rainfall.Content.ReadAsStringAsync();
-                ResponseWrapper? responseWrapperFarmExist = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-
-                rainfallAverage = responseWrapperFarmExist.Data["rainfallAverage"];
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerRainfallAverageAsyncAPI, firstHalfPostcode));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+                {
+                    rainfallAverage = responseWrapper.Data.avarageAnnualRainfall!=null? responseWrapper.Data.avarageAnnualRainfall.value:0;
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
             }
             catch (HttpRequestException hre)
             {
