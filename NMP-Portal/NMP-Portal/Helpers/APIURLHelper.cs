@@ -92,10 +92,10 @@ namespace NMP.Portal.Helpers
 
         //Manner APi Url
         public const string FetchMannerApplicationMethodByIdAsyncAPI = "vendors/manner/application-methods/{0}";
-        public const string FetchMannerIncorporationDelaysByMethodIdAndApplicableForAsyncAPI = "vendors/manner/incorporation-delays/by-incorp-method/{0}";
+        public const string FetchMannerIncorporationDelaysByMethodIdAndApplicableForAsyncAPI = "vendors/manner/incorporation-delays/by-incorp-method-and-applicable-for/{0}?applicableFor={1}";//    vendors/manner/incorporation-delays/by-incorp-method/{0}";
         public const string FetchMannerIncorporationDelaysByIdAsyncAPI = "vendors/manner/incorporation-delays/{0}";
         public const string FetchMannerIncorporationMethodByIdAsyncAPI = "vendors/manner/incorporation-methods/{0}";
-        public const string FetchMannerIncorporationMethodsByApplicationIdAsyncAPI = "vendors/manner/incorporation-methods/by-app-method/{0}";
+        public const string FetchMannerIncorporationMethodsByApplicationIdAsyncAPI = "vendors/manner/incorporation-methods/by-app-method-and-applicable-for/{0}?applicableFor={1}"; //"vendors/manner/incorporation-methods/by-app-method/{0}";
         public const string FetchMannerApplicationMethodsByApplicableForAsyncAPI = "vendors/manner/application-methods?isLiquid={0}&fieldType={1}";
         public const string FetchMannerWindspeedsAsyncAPI = "vendors/manner/windspeeds";
         public const string FetchMannerWindspeedByIdAsyncAPI = "vendors/manner/windspeeds/{0}";
