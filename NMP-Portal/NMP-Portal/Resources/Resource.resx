@@ -2382,6 +2382,15 @@ m3/ha  not set</value>
   <data name="lblHowWouldYouLikeToCalculateSoilNitrogenSupply" xml:space="preserve">
     <value>How would you like to calculate the soil nitrogen supply for {0}?</value>
   </data>
+  <data name="lblA" xml:space="preserve">
+    <value>A</value>
+  </data>
+  <data name="lblG" xml:space="preserve">
+    <value>G</value>
+  </data>
+  <data name="lblNull" xml:space="preserve">
+    <value>NULL</value>
+  </data>
   <data name="lblDoYouWantToAddARecentSoilAnalysis" xml:space="preserve">
     <value>Do you want to add a recent soil analysis for {0}?</value>
   </data>

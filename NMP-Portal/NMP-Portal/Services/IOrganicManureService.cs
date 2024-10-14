@@ -16,7 +16,7 @@ namespace NMP.Portal.Services
 
         Task<(List<ApplicationMethodResponse>, Error)> FetchApplicationMethodList(int fieldType,bool isLiquid);
 
-        Task<(List<IncorporationMethodResponse>, Error)> FetchIncorporationMethodsByApplicationId(int fieldType,string applicableFor,int appId);
+        Task<(List<IncorporationMethodResponse>, Error)> FetchIncorporationMethodsByApplicationId(int appId,string? applicableFor);
         Task<(List<IncorprationDelaysResponse>, Error)> FetchIncorporationDelaysByMethodIdAndApplicableFor(int methodId, string applicableFor);
                
         Task<(string, Error)> FetchApplicationMethodById(int Id);

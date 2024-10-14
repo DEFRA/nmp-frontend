@@ -232,6 +232,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A.
+        /// </summary>
+        public static string lblA {
+            get {
+                return ResourceManager.GetString("lblA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to About these values.
         /// </summary>
         public static string lblAboutTheseValues {
@@ -1944,6 +1953,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to G.
+        /// </summary>
+        public static string lblG {
+            get {
+                return ResourceManager.GetString("lblG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Green area index (GAI).
         /// </summary>
         public static string lblGreenAreaIndex {
@@ -2977,6 +2995,15 @@ namespace NMP.Portal.Resources {
         public static string lblNotSet {
             get {
                 return ResourceManager.GetString("lblNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NULL.
+        /// </summary>
+        public static string lblNull {
+            get {
+                return ResourceManager.GetString("lblNull", resourceCulture);
             }
         }
         
