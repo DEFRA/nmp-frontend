@@ -2403,4 +2403,25 @@ m3/ha  not set</value>
   <data name="MsgSoilAnalysisHint3" xml:space="preserve">
     <value>You should get a soil analysis every five years, according to the Environment Agency.</value>
   </data>
+  <data name="lblSoilDeficientInSulpurForCheckAnswerNotset" xml:space="preserve">
+    <value>Is the soil deficient in sulphur (S)? not set</value>
+  </data>
+  <data name="MsgMagnesiumIndexNotSet" xml:space="preserve">
+    <value>Magnesium (Mg) not set</value>
+  </data>
+  <data name="MsgNutrientValueTypeForCheckAnswereNotSet" xml:space="preserve">
+    <value>How would you like to enter your soil nutrient values? not set</value>
+  </data>
+  <data name="MsgPhNotSet" xml:space="preserve">
+    <value>Soil ph level not set</value>
+  </data>
+  <data name="MsgPhosphorusIndexNotSet" xml:space="preserve">
+    <value>Phosphorus (P) index not set</value>
+  </data>
+  <data name="MsgPotassiumIndexNotSet" xml:space="preserve">
+    <value>Potassium (K) not set</value>
+  </data>
+  <data name="MsgSampleDateNotSet" xml:space="preserve">
+    <value>Sample date not set</value>
+  </data>
 </root>

@@ -7,7 +7,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "RecentSoilAnalysisQuestion")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@((Model.IsCheckAnswer && (!Model.IsRecentSoilAnalysisQuestionChange)) ? "CheckAnswer": "RecentSoilAnalysisQuestion")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="SulphurDeficient" asp-controller="Field" method="post">
     @Html.AntiForgeryToken()
@@ -69,6 +69,7 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilOrganicMatter"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SnsCategoryId"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RecentSoilAnalysisQuestion" value="@Model.RecentSoilAnalysisQuestion.ToString().ToLower()"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsRecentSoilAnalysisQuestionChange" value="@Model.IsRecentSoilAnalysisQuestionChange.ToString().ToLower()"></govuk-input>
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">

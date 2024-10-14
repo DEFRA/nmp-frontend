@@ -3890,6 +3890,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Is the soil deficient in sulphur (S)? not set.
+        /// </summary>
+        public static string lblSoilDeficientInSulpurForCheckAnswerNotset {
+            get {
+                return ResourceManager.GetString("lblSoilDeficientInSulpurForCheckAnswerNotset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sample depth.
         /// </summary>
         public static string lblSoilDepth {
@@ -6412,6 +6421,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Magnesium (Mg) not set.
+        /// </summary>
+        public static string MsgMagnesiumIndexNotSet {
+            get {
+                return ResourceManager.GetString("MsgMagnesiumIndexNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Magnesium (Mg) per litre of soil not set.
         /// </summary>
         public static string MsgMagnesiumNotSet {
@@ -6502,11 +6520,38 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How would you like to enter your soil nutrient values? not set.
+        /// </summary>
+        public static string MsgNutrientValueTypeForCheckAnswereNotSet {
+            get {
+                return ResourceManager.GetString("MsgNutrientValueTypeForCheckAnswereNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Soil ph level not set.
+        /// </summary>
+        public static string MsgPhNotSet {
+            get {
+                return ResourceManager.GetString("MsgPhNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the phosphorus index before continuing.
         /// </summary>
         public static string MsgPhosphorusIndex {
             get {
                 return ResourceManager.GetString("MsgPhosphorusIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phosphorus (P) index not set.
+        /// </summary>
+        public static string MsgPhosphorusIndexNotSet {
+            get {
+                return ResourceManager.GetString("MsgPhosphorusIndexNotSet", resourceCulture);
             }
         }
         
@@ -6552,6 +6597,15 @@ namespace NMP.Portal.Resources {
         public static string MsgPotassiumIndex {
             get {
                 return ResourceManager.GetString("MsgPotassiumIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Potassium (K) not set.
+        /// </summary>
+        public static string MsgPotassiumIndexNotSet {
+            get {
+                return ResourceManager.GetString("MsgPotassiumIndexNotSet", resourceCulture);
             }
         }
         
@@ -6624,6 +6678,15 @@ namespace NMP.Portal.Resources {
         public static string MsgRemoveField {
             get {
                 return ResourceManager.GetString("MsgRemoveField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sample date not set.
+        /// </summary>
+        public static string MsgSampleDateNotSet {
+            get {
+                return ResourceManager.GetString("MsgSampleDateNotSet", resourceCulture);
             }
         }
         

@@ -72,6 +72,7 @@ namespace NMP.Portal.ViewModels
         public int SnsValue { get; set; }
         public int? SnsCategoryId { get; set; }
         public bool? RecentSoilAnalysisQuestion { get; set; }
+        public bool IsRecentSoilAnalysisQuestionChange { get; set; } = false;
 
     }
 }

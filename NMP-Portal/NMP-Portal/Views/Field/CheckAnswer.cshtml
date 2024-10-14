@@ -290,7 +290,7 @@
                                 @Resource.lblDoesPotashClayForCheckAnswere
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @((!Model.SoilReleasingClay.HasValue) ? @Resource.lblNotSet : @soilReleasingClay)
+                                @((!Model.SoilReleasingClay.HasValue) ? @Resource.lblNotSet : (Model.SoilReleasingClay.Value ? Resource.lblYes : Resource.lblNo))
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="SoilReleasingClay" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
@@ -303,7 +303,7 @@
                             @Resource.lblSoilDeficientInSulpurForCheckAnswer
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @(!Model.SoilAnalyses.SulphurDeficient.HasValue)? @Resource.lblNotSet:@(Model.SoilAnalyses.SulphurDeficient.Value ? Resource.lblYes : Resource.lblNo)
+                            @((!Model.SoilAnalyses.SulphurDeficient.HasValue)? Resource.lblNotSet:(Model.SoilAnalyses.SulphurDeficient.Value ? Resource.lblYes : Resource.lblNo))
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action=@(Model.IsSoilReleasingClay ? "SoilReleasingClay"
@@ -316,7 +316,7 @@
                             @Resource.lblDateSampleTaken
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @(!Model.SoilAnalyses.Date.HasValue)? @Resource.lblNotSet:@(Model.SoilAnalyses.Date.Value.Date.ToString("dd MMMM yyyy"))                            
+                            @((!Model.SoilAnalyses.Date.HasValue)? Resource.lblNotSet:(Model.SoilAnalyses.Date.Value.Date.ToString("dd MMMM yyyy")))                            
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="SoilDateAndPHLevel" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
@@ -327,7 +327,7 @@
                             @Resource.lblSoilPHLevel
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @(!Model.SoilAnalyses.PH.HasValue)? @Resource.lblNotSet:@(Model.SoilAnalyses.PH)
+                            @((!Model.SoilAnalyses.PH.HasValue)? Resource.lblNotSet:(Model.SoilAnalyses.PH))
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="SoilDateAndPHLevel" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
@@ -338,14 +338,16 @@
                             @Resource.lblNutrientValueTypeForCheckAnswere
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @(!Model.IsSoilNutrientValueTypeIndex.HasValue)? @Resource.lblNotSet:@(Model.IsSoilNutrientValueTypeIndex == true ? Resource.lblIndexValues
-                        : Resource.lblMiligramValues))                            
+                            @((!Model.IsSoilNutrientValueTypeIndex.HasValue)? Resource.lblNotSet:(Model.IsSoilNutrientValueTypeIndex == true ? Resource.lblIndexValues
+                        : Resource.lblMiligramValues))                           
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="SoilNutrientValueType" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
-                    @if (!Model.IsSoilNutrientValueTypeIndex == true)
+                    @if (Model.IsSoilNutrientValueTypeIndex.HasValue)
+                    {
+                    @if (!Model.IsSoilNutrientValueTypeIndex.Value)
                     {
                         <govuk-summary-list-row class=@((!Model.SoilAnalyses.Phosphorus.HasValue)?"govuk-error-message":"")>
                             <govuk-summary-list-row-key>
@@ -385,40 +387,44 @@
                     }
                     else
                     {
-                        <govuk-summary-list-row>
+                            <govuk-summary-list-row class=@((!Model.SoilAnalyses.PhosphorusIndex.HasValue)?"govuk-error-message":"")>
                             <govuk-summary-list-row-key>
                                 @Resource.lblPhosphorusIndex
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @Model.SoilAnalyses.PhosphorusIndex
+                                    @((!Model.SoilAnalyses.PhosphorusIndex.HasValue) ? @Resource.lblNotSet : @Model.SoilAnalyses.PhosphorusIndex)
+                                @* @Model.SoilAnalyses.PhosphorusIndex *@
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
-                        <govuk-summary-list-row>
+                            <govuk-summary-list-row class=@((!Model.SoilAnalyses.PotassiumIndex.HasValue)?"govuk-error-message":"")>
                             <govuk-summary-list-row-key>
                                 @Resource.lblPotassiumIndex
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @Model.SoilAnalyses.PotassiumIndex
+                                    @((!Model.SoilAnalyses.PotassiumIndex.HasValue) ? @Resource.lblNotSet : @Model.SoilAnalyses.PotassiumIndex)
+                                @* @Model.SoilAnalyses.PotassiumIndex *@
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
-                        <govuk-summary-list-row>
+                            <govuk-summary-list-row class=@((!Model.SoilAnalyses.MagnesiumIndex.HasValue)?"govuk-error-message":"")>
                             <govuk-summary-list-row-key>
                                 @Resource.lblMagnesiumIndex
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @Model.SoilAnalyses.MagnesiumIndex
+                                    @((!Model.SoilAnalyses.MagnesiumIndex.HasValue) ? @Resource.lblNotSet : @Model.SoilAnalyses.MagnesiumIndex)
+                                @* @Model.SoilAnalyses.MagnesiumIndex *@
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
 
+                    }
                     }
                 }
                 @* <govuk-summary-list-row>

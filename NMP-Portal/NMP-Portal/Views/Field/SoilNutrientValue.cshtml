@@ -6,7 +6,7 @@
     ViewData["Title"] = Resource.lbllblAddSoilAnalysisTitle;
     var isOlderThanFiveYears= false;
     var currentYear = System.DateTime.Now.Year;
-    if (Model.SoilAnalyses.Date.Value.Year<currentYear)
+    if (Model.SoilAnalyses.Date!=null&&Model.SoilAnalyses.Date.Value.Year < currentYear)
     {
         var yearGap=currentYear - Model.SoilAnalyses.Date.Value.Year;
         if (yearGap > 5)
@@ -17,7 +17,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" :"SoilNutrientValueType")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@((Model.IsCheckAnswer && (!Model.IsRecentSoilAnalysisQuestionChange)) ? "CheckAnswer" :"SoilNutrientValueType")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
 @if (ViewBag.Error != null)
 {
@@ -83,6 +83,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilOrganicMatter"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SnsCategoryId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RecentSoilAnalysisQuestion" value="@Model.RecentSoilAnalysisQuestion.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsRecentSoilAnalysisQuestionChange" value="@Model.IsRecentSoilAnalysisQuestionChange.ToString().ToLower()"></govuk-input>
             <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
                 <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblAddSoilAnalysis, Model.Name)</h1>
             </legand>
