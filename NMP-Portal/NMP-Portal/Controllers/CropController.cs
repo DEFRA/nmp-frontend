@@ -417,10 +417,14 @@ namespace NMP.Portal.Controllers
                 }).ToList();
 
                 (List<HarvestYearPlanResponse> harvestYearPlanResponse, Error error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
+
+                //Fetch fields allowed for second crop based on first crop
+                List<int> fieldsAllowedForSecondCrop = await FetchAllowedFieldsForSecondCrop(harvestYearPlanResponse, model.Year ?? 0, model.CropTypeID ?? 0);
+
                 if (harvestYearPlanResponse.Count() > 0)
                 {
                     var harvestFieldIds = harvestYearPlanResponse.Select(x => x.FieldID.ToString()).ToList();
-                    SelectListItem = SelectListItem.Where(x => !harvestFieldIds.Contains(x.Value)).ToList();
+                    SelectListItem = SelectListItem.Where(x => !harvestFieldIds.Contains(x.Value) || fieldsAllowedForSecondCrop.Contains(int.Parse(x.Value))).ToList();
                     if (SelectListItem.Count == 1)
                     {
                         model.FieldList = new List<string>();
@@ -448,7 +452,8 @@ namespace NMP.Portal.Controllers
                                         OtherCropName = model.OtherCropName,
                                         FieldID = fieldId,
                                         Variety = model.Variety,
-                                        EncryptedCounter = _fieldDataProtector.Protect(counter.ToString())
+                                        EncryptedCounter = _fieldDataProtector.Protect(counter.ToString()),
+                                        CropOrder = fieldsAllowedForSecondCrop.Contains(fieldId) ? 2 : 1
                                     };
                                     counter++;
                                     crop.FieldName = (await _fieldService.FetchFieldByFieldId(fieldId)).Name;
@@ -569,10 +574,14 @@ namespace NMP.Portal.Controllers
                     Text = f.Name
                 }).ToList();
                 (List<HarvestYearPlanResponse> harvestYearPlanResponse, Error error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
+
+                //Fetch fields allowed for second crop based on first crop
+                List<int> fieldsAllowedForSecondCrop =await FetchAllowedFieldsForSecondCrop(harvestYearPlanResponse,model.Year??0,model.CropTypeID??0);
+
                 if (harvestYearPlanResponse.Count() > 0)
                 {
                     var harvestFieldIds = harvestYearPlanResponse.Select(x => x.FieldID.ToString()).ToList();
-                    SelectListItem = SelectListItem.Where(x => !harvestFieldIds.Contains(x.Value)).ToList();
+                    SelectListItem = SelectListItem.Where(x => !harvestFieldIds.Contains(x.Value) || fieldsAllowedForSecondCrop.Contains(int.Parse( x.Value))).ToList();
                     if (SelectListItem.Count == 1)
                     {
                         return RedirectToAction("VarietyName");
@@ -607,10 +616,14 @@ namespace NMP.Portal.Controllers
                     Text = f.Name
                 }).ToList();
                 (List<HarvestYearPlanResponse> harvestYearPlanResponse, Error error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
+
+                //Fetch fields allowed for second crop based on first crop
+                List<int> fieldsAllowedForSecondCrop = await FetchAllowedFieldsForSecondCrop(harvestYearPlanResponse, model.Year ?? 0, model.CropTypeID ?? 0);
+
                 if (harvestYearPlanResponse.Count() > 0)
                 {
                     var harvestFieldIds = harvestYearPlanResponse.Select(x => x.FieldID.ToString()).ToList();
-                    selectListItem = selectListItem.Where(x => !harvestFieldIds.Contains(x.Value)).ToList();
+                    selectListItem = selectListItem.Where(x => !harvestFieldIds.Contains(x.Value) || fieldsAllowedForSecondCrop.Contains(int.Parse(x.Value))).ToList();
                     
                 }
                 if (model.FieldList == null || model.FieldList.Count == 0)
@@ -648,7 +661,8 @@ namespace NMP.Portal.Controllers
                                 OtherCropName = model.OtherCropName,
                                 FieldID = fieldId,
                                 Variety = model.Variety,
-                                EncryptedCounter = _fieldDataProtector.Protect(counter.ToString())
+                                EncryptedCounter = _fieldDataProtector.Protect(counter.ToString()),
+                                CropOrder= fieldsAllowedForSecondCrop.Contains(fieldId) ? 2 : 1
                             };
                             counter++;
                             crop.FieldName = (await _fieldService.FetchFieldByFieldId(fieldId)).Name;
@@ -1483,7 +1497,7 @@ namespace NMP.Portal.Controllers
                 crop.FieldName = null;
                 crop.EncryptedCounter = null;
                 crop.FieldType = model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass ? (int)NMP.Portal.Enums.FieldType.Grass : (int)NMP.Portal.Enums.FieldType.Arable;
-                crop.CropOrder = 1;
+                //crop.CropOrder = 1;
                 CropData cropEntry = new CropData
                 {
                     Crop = crop,
@@ -1882,6 +1896,34 @@ namespace NMP.Portal.Controllers
                 });
             }
             return View(model);
+        }
+
+        private async Task<List<int>> FetchAllowedFieldsForSecondCrop(List<HarvestYearPlanResponse> harvestYearPlanResponse,int harvestYear,int cropTypeId)
+        {
+            List<int> secondCropList = new List<int>();
+            List<int> fieldsAllowedForSecondCrop = new List<int>();
+            foreach (var firstCropPlans in harvestYearPlanResponse)
+            {
+                List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(firstCropPlans.FieldID);
+                int cropPlanCount = cropsResponse.Where(x => x.Year == harvestYear && x.Confirm == false).Count();
+
+                if (cropPlanCount == 1)
+                {
+                    secondCropList = await _cropService.FetchSecondCropListByFirstCropId(firstCropPlans.CropTypeID);
+                    if (secondCropList.Count > 0)
+                    {
+                        foreach (int secondCropTypeId in secondCropList)
+                        {
+                            if (secondCropTypeId == cropTypeId)
+                            {
+                                fieldsAllowedForSecondCrop.Add(firstCropPlans.FieldID);
+                            }
+                        }
+                    }
+                }
+
+            }
+            return fieldsAllowedForSecondCrop;
         }
     }
 }
