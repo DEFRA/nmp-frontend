@@ -4,10 +4,11 @@
     ViewData["Title"] = Resource.lblSoilReleasingClay;
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+    var backAction = ((Model.IsCheckAnswer && (!Model.IsRecentSoilAnalysisQuestionChange)) ? "CheckAnswer" : "RecentSoilAnalysisQuestion");
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "SoilType")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@backAction asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="SoilReleasingClay" asp-controller="Field" method="post">
     @Html.AntiForgeryToken()
@@ -67,6 +68,8 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AdjustmentValue"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilOrganicMatter"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SnsCategoryId"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RecentSoilAnalysisQuestion" value="@Model.RecentSoilAnalysisQuestion.ToString().ToLower()"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsRecentSoilAnalysisQuestionChange" value="@Model.IsRecentSoilAnalysisQuestionChange.ToString().ToLower()"></govuk-input>
     
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
