@@ -2391,6 +2391,39 @@ m3/ha  not set</value>
   <data name="lblNull" xml:space="preserve">
     <value>NULL</value>
   </data>
+  <data name="lblDoYouWantToAddARecentSoilAnalysis" xml:space="preserve">
+    <value>Do you want to add a recent soil analysis for {0}?</value>
+  </data>
+  <data name="MsgSoilAnalysisHint1" xml:space="preserve">
+    <value>We need a recent soil analysis to give the best results. Without a recent analysis from the last five years, any recommendations we give will be based on the RB209 default values.</value>
+  </data>
+  <data name="MsgSoilAnalysisHint2" xml:space="preserve">
+    <value>You can enter your soil analysis later.</value>
+  </data>
+  <data name="MsgSoilAnalysisHint3" xml:space="preserve">
+    <value>You should get a soil analysis every five years, according to the Environment Agency.</value>
+  </data>
+  <data name="lblSoilDeficientInSulpurForCheckAnswerNotset" xml:space="preserve">
+    <value>Is the soil deficient in sulphur (S)? not set</value>
+  </data>
+  <data name="MsgMagnesiumIndexNotSet" xml:space="preserve">
+    <value>Magnesium (Mg) not set</value>
+  </data>
+  <data name="MsgNutrientValueTypeForCheckAnswereNotSet" xml:space="preserve">
+    <value>How would you like to enter your soil nutrient values? not set</value>
+  </data>
+  <data name="MsgPhNotSet" xml:space="preserve">
+    <value>Soil ph level not set</value>
+  </data>
+  <data name="MsgPhosphorusIndexNotSet" xml:space="preserve">
+    <value>Phosphorus (P) index not set</value>
+  </data>
+  <data name="MsgPotassiumIndexNotSet" xml:space="preserve">
+    <value>Potassium (K) not set</value>
+  </data>
+  <data name="MsgSampleDateNotSet" xml:space="preserve">
+    <value>Sample date not set</value>
+  </data>
   <data name="lblNoFieldsAreAvailable" xml:space="preserve">
     <value>No fields are available for second crop planning</value>
   </data>
