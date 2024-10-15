@@ -46,7 +46,7 @@
                 <p class="govuk-body">
                     @string.Format(Resource.lblLastUpdated, Model.LastModifiedOn)
                 </p>
-                @if (ViewBag.PendingField.Count > 0)
+                @if (ViewBag.PendingField==true)
                 {
                     <p class="govuk-body"><a asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@string.Format(Resource.lblAddAnotherCrop, Model.Year)</a></p>
                 }

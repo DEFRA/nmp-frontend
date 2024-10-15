@@ -2918,6 +2918,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No fields are available for second crop planning.
+        /// </summary>
+        public static string lblNoFieldsAreAvailable {
+            get {
+                return ResourceManager.GetString("lblNoFieldsAreAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No, I&apos;ll enter the date later.
         /// </summary>
         public static string lblNoIWillEnterTheDateLater {
