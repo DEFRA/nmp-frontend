@@ -2457,4 +2457,19 @@ m3/ha  not set</value>
   <data name="MsgEnterAtLeastOneValue" xml:space="preserve">
     <value>Enter at least one nutrient value.</value>
   </data>
+  <data name="lblChangeTheSoilAnalysis" xml:space="preserve">
+    <value>Change the soil analysis</value>
+  </data>
+  <data name="lblPhLevel" xml:space="preserve">
+    <value>ph level</value>
+  </data>
+  <data name="lblPhosphorusAnalysisTypeForSoilDetail" xml:space="preserve">
+    <value>Phosphorus (P) analysis type</value>
+  </data>
+  <data name="lblSoilAnalysisForFieldName" xml:space="preserve">
+    <value>Soil analysis for {0}</value>
+  </data>
+  <data name="lblSoilSulphurDeficient" xml:space="preserve">
+    <value>Is the soil Sulphur (S) deficient?</value>
+  </data>
 </root>
