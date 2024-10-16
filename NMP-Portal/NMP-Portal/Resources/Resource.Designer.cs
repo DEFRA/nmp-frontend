@@ -4367,6 +4367,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This will be the first crop in these fields:.
+        /// </summary>
+        public static string lblThisWillBeTheFirstCropInTheseFields {
+            get {
+                return ResourceManager.GetString("lblThisWillBeTheFirstCropInTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This will be the second crop in these fields:.
+        /// </summary>
+        public static string lblThisWillBeTheSecondCropInTheseFields {
+            get {
+                return ResourceManager.GetString("lblThisWillBeTheSecondCropInTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tine cultivator.
         /// </summary>
         public static string lblTineCultivator {
