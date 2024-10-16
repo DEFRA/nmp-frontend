@@ -307,8 +307,7 @@
                             @((!Model.SoilAnalyses.SulphurDeficient.HasValue) ? Resource.lblNotSet : (Model.SoilAnalyses.SulphurDeficient.Value ? Resource.lblYes : Resource.lblNo))
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action=@(Model.IsSoilReleasingClay ? "SoilReleasingClay"
-                                                       : "SulphurDeficient") asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="SulphurDeficient" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
 
