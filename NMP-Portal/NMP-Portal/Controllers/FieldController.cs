@@ -456,6 +456,10 @@ namespace NMP.Portal.Controllers
                     _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
                     return RedirectToAction("SoilReleasingClay");
                 }
+                if (field.SoilTypeID== (int)NMP.Portal.Enums.SoilTypeEngland.Shallow)
+                {
+                    return RedirectToAction("SoilOverChalk");
+                }
                 field.SoilReleasingClay = null;
                 field.IsSoilReleasingClay = false;
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
@@ -501,10 +505,7 @@ namespace NMP.Portal.Controllers
                 return View(field);
             }
             List<SoilTypesResponse> soilTypes = new List<SoilTypesResponse>();
-            //if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("SoilTypes"))
-            //{
-            //    soilTypes = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<List<SoilTypesResponse>>("SoilTypes");
-            //}
+            
             soilTypes = await _fieldService.FetchSoilTypes();
             if (soilTypes.Count > 0 && soilTypes.Any())
             {
@@ -1149,6 +1150,7 @@ namespace NMP.Portal.Controllers
                     CroppedArea = model.CroppedArea,
                     ManureNonSpreadingArea = model.ManureNonSpreadingArea,
                     SoilReleasingClay = model.SoilReleasingClay,
+                    SoilOverChalk=model.SoilOverChalk,
                     IsWithinNVZ = model.IsWithinNVZ,
                     IsAbove300SeaLevel = model.IsAbove300SeaLevel,
                     IsActive = true,
@@ -2926,6 +2928,42 @@ namespace NMP.Portal.Controllers
                 TempData["Error"] = ex.Message;
                 return View(model);
             }
+        }
+
+        [HttpGet]
+        public IActionResult SoilOverChalk()
+        {
+            FieldViewModel model = new FieldViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SoilOverChalk(FieldViewModel field)
+        {
+            if (field.SoilOverChalk == null)
+            {
+                ModelState.AddModelError("SoilOverChalk", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(field);
+            }
+
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
+            if (field.IsCheckAnswer && (!field.IsRecentSoilAnalysisQuestionChange))
+            {
+                return RedirectToAction("CheckAnswer");
+            }
+            return RedirectToAction("RecentSoilAnalysisQuestion");
         }
     }
 }
