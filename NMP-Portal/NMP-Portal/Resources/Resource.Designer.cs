@@ -232,6 +232,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A.
+        /// </summary>
+        public static string lblA {
+            get {
+                return ResourceManager.GetString("lblA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to About these values.
         /// </summary>
         public static string lblAboutTheseValues {
@@ -1305,6 +1314,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you want to add a recent soil analysis for {0}?.
+        /// </summary>
+        public static string lblDoYouWantToAddARecentSoilAnalysis {
+            get {
+                return ResourceManager.GetString("lblDoYouWantToAddARecentSoilAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do You Want to Enter Green Area Index or the Crop Height?.
         /// </summary>
         public static string lblDoYouWantToEnterGAIOrCropHeight {
@@ -1931,6 +1949,15 @@ namespace NMP.Portal.Resources {
         public static string lblForExample {
             get {
                 return ResourceManager.GetString("lblForExample", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to G.
+        /// </summary>
+        public static string lblG {
+            get {
+                return ResourceManager.GetString("lblG", resourceCulture);
             }
         }
         
@@ -2603,11 +2630,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Magnesium (Mg) index (optional).
+        /// </summary>
+        public static string lblMagnesiumIndexOptional {
+            get {
+                return ResourceManager.GetString("lblMagnesiumIndexOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Magnesium (Mg) per litre of soil.
         /// </summary>
         public static string lblMagnesiumPerLitreOfSoil {
             get {
                 return ResourceManager.GetString("lblMagnesiumPerLitreOfSoil", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Magnesium (Mg) per litre of soil (optional).
+        /// </summary>
+        public static string lblMagnesiumPerLitreOfSoilOption {
+            get {
+                return ResourceManager.GetString("lblMagnesiumPerLitreOfSoilOption", resourceCulture);
             }
         }
         
@@ -2900,6 +2945,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No fields are available for second crop planning.
+        /// </summary>
+        public static string lblNoFieldsAreAvailable {
+            get {
+                return ResourceManager.GetString("lblNoFieldsAreAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No, I&apos;ll enter the date later.
         /// </summary>
         public static string lblNoIWillEnterTheDateLater {
@@ -2968,6 +3022,15 @@ namespace NMP.Portal.Resources {
         public static string lblNotSet {
             get {
                 return ResourceManager.GetString("lblNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NULL.
+        /// </summary>
+        public static string lblNull {
+            get {
+                return ResourceManager.GetString("lblNull", resourceCulture);
             }
         }
         
@@ -3260,6 +3323,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to pH level (optional).
+        /// </summary>
+        public static string lblPHLevelOption {
+            get {
+                return ResourceManager.GetString("lblPHLevelOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Phosphate.
         /// </summary>
         public static string lblPhosphate {
@@ -3296,11 +3368,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Phosphorus (P) index (optional).
+        /// </summary>
+        public static string lblPhosphorusIndexOptional {
+            get {
+                return ResourceManager.GetString("lblPhosphorusIndexOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Phosphorus (P) per litre of soil.
         /// </summary>
         public static string lblPhosphorusPerLitreOfSoil {
             get {
                 return ResourceManager.GetString("lblPhosphorusPerLitreOfSoil", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phosphorus (P) per litre of soil (optional).
+        /// </summary>
+        public static string lblPhosphorusPerLitreOfSoilOption {
+            get {
+                return ResourceManager.GetString("lblPhosphorusPerLitreOfSoilOption", resourceCulture);
             }
         }
         
@@ -3431,11 +3521,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Potassium (K) index (optional).
+        /// </summary>
+        public static string lblPotassiumIndexOptional {
+            get {
+                return ResourceManager.GetString("lblPotassiumIndexOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Potassium (K) per litre of soil.
         /// </summary>
         public static string lblPotassiumPerLitreOfSoil {
             get {
                 return ResourceManager.GetString("lblPotassiumPerLitreOfSoil", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Potassium (K) per litre of soil (optional).
+        /// </summary>
+        public static string lblPotassiumPerLitreOfSoilOption {
+            get {
+                return ResourceManager.GetString("lblPotassiumPerLitreOfSoilOption", resourceCulture);
             }
         }
         
@@ -3850,6 +3958,15 @@ namespace NMP.Portal.Resources {
         public static string lblSoilDeficientInSulpurForCheckAnswer {
             get {
                 return ResourceManager.GetString("lblSoilDeficientInSulpurForCheckAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is the soil deficient in sulphur (S)? not set.
+        /// </summary>
+        public static string lblSoilDeficientInSulpurForCheckAnswerNotset {
+            get {
+                return ResourceManager.GetString("lblSoilDeficientInSulpurForCheckAnswerNotset", resourceCulture);
             }
         }
         
@@ -4309,6 +4426,24 @@ namespace NMP.Portal.Resources {
         public static string lblThisIsTotalRainfall {
             get {
                 return ResourceManager.GetString("lblThisIsTotalRainfall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This will be the first crop in these fields:.
+        /// </summary>
+        public static string lblThisWillBeTheFirstCropInTheseFields {
+            get {
+                return ResourceManager.GetString("lblThisWillBeTheFirstCropInTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This will be the second crop in these fields:.
+        /// </summary>
+        public static string lblThisWillBeTheSecondCropInTheseFields {
+            get {
+                return ResourceManager.GetString("lblThisWillBeTheSecondCropInTheseFields", resourceCulture);
             }
         }
         
@@ -5899,6 +6034,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter at least one nutrient value..
+        /// </summary>
+        public static string MsgEnterAtLeastOneValue {
+            get {
+                return ResourceManager.GetString("MsgEnterAtLeastOneValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a town or city.
         /// </summary>
         public static string MsgEnterATownOrCity {
@@ -6075,6 +6219,24 @@ namespace NMP.Portal.Resources {
         public static string MsgEnterTheValueBeforeContinuing {
             get {
                 return ResourceManager.GetString("MsgEnterTheValueBeforeContinuing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the values of your soil analysis. You must enter at least one value..
+        /// </summary>
+        public static string MsgEnterTheValueOYourSoilAnalysisHint1 {
+            get {
+                return ResourceManager.GetString("MsgEnterTheValueOYourSoilAnalysisHint1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If your soil analysis does not include results for a particular nutrient, leave it blank..
+        /// </summary>
+        public static string MsgEnterTheValueOYourSoilAnalysisHint2 {
+            get {
+                return ResourceManager.GetString("MsgEnterTheValueOYourSoilAnalysisHint2", resourceCulture);
             }
         }
         
@@ -6376,6 +6538,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Magnesium (Mg) not set.
+        /// </summary>
+        public static string MsgMagnesiumIndexNotSet {
+            get {
+                return ResourceManager.GetString("MsgMagnesiumIndexNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Magnesium (Mg) per litre of soil not set.
         /// </summary>
         public static string MsgMagnesiumNotSet {
@@ -6466,11 +6637,38 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How would you like to enter your soil nutrient values? not set.
+        /// </summary>
+        public static string MsgNutrientValueTypeForCheckAnswereNotSet {
+            get {
+                return ResourceManager.GetString("MsgNutrientValueTypeForCheckAnswereNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Soil ph level not set.
+        /// </summary>
+        public static string MsgPhNotSet {
+            get {
+                return ResourceManager.GetString("MsgPhNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the phosphorus index before continuing.
         /// </summary>
         public static string MsgPhosphorusIndex {
             get {
                 return ResourceManager.GetString("MsgPhosphorusIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phosphorus (P) index not set.
+        /// </summary>
+        public static string MsgPhosphorusIndexNotSet {
+            get {
+                return ResourceManager.GetString("MsgPhosphorusIndexNotSet", resourceCulture);
             }
         }
         
@@ -6516,6 +6714,15 @@ namespace NMP.Portal.Resources {
         public static string MsgPotassiumIndex {
             get {
                 return ResourceManager.GetString("MsgPotassiumIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Potassium (K) not set.
+        /// </summary>
+        public static string MsgPotassiumIndexNotSet {
+            get {
+                return ResourceManager.GetString("MsgPotassiumIndexNotSet", resourceCulture);
             }
         }
         
@@ -6588,6 +6795,15 @@ namespace NMP.Portal.Resources {
         public static string MsgRemoveField {
             get {
                 return ResourceManager.GetString("MsgRemoveField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sample date not set.
+        /// </summary>
+        public static string MsgSampleDateNotSet {
+            get {
+                return ResourceManager.GetString("MsgSampleDateNotSet", resourceCulture);
             }
         }
         
@@ -6687,6 +6903,33 @@ namespace NMP.Portal.Resources {
         public static string MsgServiceNotAvailable {
             get {
                 return ResourceManager.GetString("MsgServiceNotAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We need a recent soil analysis to give the best results. Without a recent analysis from the last five years, any recommendations we give will be based on the RB209 default values..
+        /// </summary>
+        public static string MsgSoilAnalysisHint1 {
+            get {
+                return ResourceManager.GetString("MsgSoilAnalysisHint1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can enter your soil analysis later..
+        /// </summary>
+        public static string MsgSoilAnalysisHint2 {
+            get {
+                return ResourceManager.GetString("MsgSoilAnalysisHint2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You should get a soil analysis every five years, according to the Environment Agency..
+        /// </summary>
+        public static string MsgSoilAnalysisHint3 {
+            get {
+                return ResourceManager.GetString("MsgSoilAnalysisHint3", resourceCulture);
             }
         }
         
