@@ -2938,7 +2938,14 @@ namespace NMP.Portal.Controllers
                     //Soil drainage end date
                     if (model.SoilDrainageEndDate == null)
                     {
-                        model.SoilDrainageEndDate = new DateTime(model.ApplicationDate.Value.AddYears(1).Year, (int)NMP.Portal.Enums.Month.March, 31);
+                        if (model.ApplicationDate.Value.Month >= 8)
+                        {
+                            model.SoilDrainageEndDate = new DateTime(model.ApplicationDate.Value.AddYears(1).Year, (int)NMP.Portal.Enums.Month.March, 31);
+                        }
+                        else
+                        {
+                            model.SoilDrainageEndDate = new DateTime(model.ApplicationDate.Value.Year, (int)NMP.Portal.Enums.Month.March, 31);
+                        }
                     }
 
                     //Rainfall within 6 hours
