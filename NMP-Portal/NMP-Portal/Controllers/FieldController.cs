@@ -442,6 +442,10 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmList", "Farm");
                 }
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
+                if (field.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.Shallow)
+                {
+                    return RedirectToAction("SoilOverChalk");
+                }
                 if (field.IsCheckAnswer && (!isSoilTypeChange))
                 {
                     field.IsSoilReleasingClay = false;
@@ -456,10 +460,7 @@ namespace NMP.Portal.Controllers
                     _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
                     return RedirectToAction("SoilReleasingClay");
                 }
-                if (field.SoilTypeID== (int)NMP.Portal.Enums.SoilTypeEngland.Shallow)
-                {
-                    return RedirectToAction("SoilOverChalk");
-                }
+                
                 field.SoilReleasingClay = null;
                 field.IsSoilReleasingClay = false;
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
@@ -988,6 +989,10 @@ namespace NMP.Portal.Controllers
                 }
                 model.IsRecentSoilAnalysisQuestionChange = false;
                 model.IsCheckAnswer = true;
+                if(model.SoilOverChalk != null && model.SoilTypeID != (int)NMP.Portal.Enums.SoilTypeEngland.Shallow)
+                {
+                    model.SoilOverChalk = null;
+                }
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             }
             catch (Exception ex)
