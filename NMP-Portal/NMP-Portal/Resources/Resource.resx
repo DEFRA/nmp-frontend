@@ -2463,4 +2463,10 @@ m3/ha  not set</value>
   <data name="lblThisWillBeTheSecondCropInTheseFields" xml:space="preserve">
     <value>This will be the second crop in these fields:</value>
   </data>
+  <data name="lblIsTheSoilOverChalk" xml:space="preserve">
+    <value>Is the soil over chalk?</value>
+  </data>
+  <data name="lblSoilOverChalk" xml:space="preserve">
+    <value>Soil over chalk</value>
+  </data>
 </root>
