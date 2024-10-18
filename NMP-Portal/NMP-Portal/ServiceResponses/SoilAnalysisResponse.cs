@@ -26,6 +26,7 @@ namespace NMP.Portal.ServiceResponses
 
         [JsonProperty("phosphorusMethodologyID")]
         public int? PhosphorusMethodologyID { get; set; }
+        public string? PhosphorusMethodology { get; set; }
 
         [JsonProperty("phosphorus")]
         public int? Phosphorus { get; set; }
@@ -92,5 +93,6 @@ namespace NMP.Portal.ServiceResponses
 
         [JsonProperty("modifiedByID")]
         public int? ModifiedByID { get; set; }
+        public string? EncryptedSoilAnalysisId { get; set; }
     }
 }

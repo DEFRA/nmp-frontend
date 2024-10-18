@@ -918,6 +918,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change soil analysis.
+        /// </summary>
+        public static string lblChangeSoilAnalysis {
+            get {
+                return ResourceManager.GetString("lblChangeSoilAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change soil analysis from {0}.
+        /// </summary>
+        public static string lblChangeSoilAnalysisFromDate {
+            get {
+                return ResourceManager.GetString("lblChangeSoilAnalysisFromDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change the soil analysis.
         /// </summary>
         public static string lblChangeTheSoilAnalysis {

@@ -74,9 +74,10 @@
             <p class="govuk-body margin-bottom-forty"><a href="#">@Resource.lblChangeFieldDetails</a></p>
             <p class="govuk-body margin-bottom-forty">@string.Format(Resource.MsgRemoveField, Model.Name)</p>
             <p class="govuk-body margin-bottom-forty"><a href="#">@string.Format(Resource.lblRemoveField, Model.Name)</a></p>
-            <hr class="big_seperator">
+            
             @if (ViewBag.SampleDate != null && ViewBag.SampleDate.Count > 0)
             {
+                <hr class="big_seperator">
                 <h2 class="govuk-heading-m">@Resource.lblSoilAnalysis</h2>
 
                 <p class="govuk-body margin margin-bottom-forty"><a href="#">@Resource.lblAddNewSoilAnalysis</a></p>
@@ -94,7 +95,7 @@
                             <tr class="govuk-table__row right-last">
                                 <td class="govuk-table__cell">@soilAnalysis.Date.ToString("dd MMMM yyyy")</td>
                                 <td class="govuk-table__cell">
-                                    <a href="#">@Resource.lblViewSoilAnalysis</a>
+                                    <a asp-action="SoilAnalysisDetail" asp-controller="Field" asp-route-i="@Model.EncryptedFieldId" asp-route-j="@Model.EncryptedFarmId">@Resource.lblViewSoilAnalysis</a>
                                 </td>
                             </tr>
                         }
