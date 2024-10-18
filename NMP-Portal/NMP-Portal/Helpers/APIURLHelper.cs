@@ -90,6 +90,7 @@ namespace NMP.Portal.Helpers
         public const string FetchSeasonsAsyncAPI = "vendors/rb209/Measurement/Seasons";
         public const string FetchSNSIndexByMeasurementMethodAsyncAPI = "vendors/rb209/Measurement/MeasurementMethod";
         public const string FetchSecondCropListByFirstCropIdAsyncAPI = "second-crop-linkings/{0}";
+        public const string FetchSoilAnalysisByIdAsyncAPI = "soil-analyses/{0}";
 
         //Manner APi Url
         public const string FetchMannerApplicationMethodByIdAsyncAPI = "vendors/manner/application-methods/{0}";
@@ -110,6 +111,6 @@ namespace NMP.Portal.Helpers
         public const string FetchMannerRainfallByPostcodeAndDateRangeAsyncAPI = "vendors/manner/rainfall-post-application";
         public const string FetchMannerManureTypeListByGroupIdAndCountryAsyncAPI = "vendors/manner/manure-types?manureGroupId={0}&countryId={1}";
         public const string FetchMannerManureTypeByManureTypeIdAsyncAPI = "vendors/manner/manure-types/{0}";
-        public const string FetchMannerRainfallAverageAsyncAPI = "vendors/manner/climates/avarage-annual-rainfall/{0}";
+        public const string FetchMannerRainfallAverageAsyncAPI = "vendors/manner/climates/avarage-annual-rainfall/{0}";        
     }
 }

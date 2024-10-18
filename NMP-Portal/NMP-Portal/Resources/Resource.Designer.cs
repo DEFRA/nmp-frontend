@@ -918,6 +918,33 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change soil analysis.
+        /// </summary>
+        public static string lblChangeSoilAnalysis {
+            get {
+                return ResourceManager.GetString("lblChangeSoilAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change soil analysis from {0}.
+        /// </summary>
+        public static string lblChangeSoilAnalysisFromDate {
+            get {
+                return ResourceManager.GetString("lblChangeSoilAnalysisFromDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change the soil analysis.
+        /// </summary>
+        public static string lblChangeTheSoilAnalysis {
+            get {
+                return ResourceManager.GetString("lblChangeTheSoilAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change this {0} plan.
         /// </summary>
         public static string lblChangeThisPlan {
@@ -3332,6 +3359,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ph level.
+        /// </summary>
+        public static string lblPhLevel {
+            get {
+                return ResourceManager.GetString("lblPhLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to pH level (optional).
         /// </summary>
         public static string lblPHLevelOption {
@@ -3364,6 +3400,15 @@ namespace NMP.Portal.Resources {
         public static string lblPhosphorusAnalysisType {
             get {
                 return ResourceManager.GetString("lblPhosphorusAnalysisType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phosphorus (P) analysis type.
+        /// </summary>
+        public static string lblPhosphorusAnalysisTypeForSoilDetail {
+            get {
+                return ResourceManager.GetString("lblPhosphorusAnalysisTypeForSoilDetail", resourceCulture);
             }
         }
         
@@ -3944,6 +3989,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Soil analysis for {0}.
+        /// </summary>
+        public static string lblSoilAnalysisForFieldName {
+            get {
+                return ResourceManager.GetString("lblSoilAnalysisForFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Soil contains potash releasing clay.
         /// </summary>
         public static string lblSoilContainsPostashReleasingClay {
@@ -4102,6 +4156,15 @@ namespace NMP.Portal.Resources {
         public static string lblSoilReleasingClay {
             get {
                 return ResourceManager.GetString("lblSoilReleasingClay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is the soil Sulphur (S) deficient?.
+        /// </summary>
+        public static string lblSoilSulphurDeficient {
+            get {
+                return ResourceManager.GetString("lblSoilSulphurDeficient", resourceCulture);
             }
         }
         

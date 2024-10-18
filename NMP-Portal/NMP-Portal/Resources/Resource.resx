@@ -2469,4 +2469,25 @@ m3/ha  not set</value>
   <data name="lblSoilOverChalk" xml:space="preserve">
     <value>Soil over chalk</value>
   </data>
+  <data name="lblChangeTheSoilAnalysis" xml:space="preserve">
+    <value>Change the soil analysis</value>
+  </data>
+  <data name="lblPhLevel" xml:space="preserve">
+    <value>ph level</value>
+  </data>
+  <data name="lblPhosphorusAnalysisTypeForSoilDetail" xml:space="preserve">
+    <value>Phosphorus (P) analysis type</value>
+  </data>
+  <data name="lblSoilAnalysisForFieldName" xml:space="preserve">
+    <value>Soil analysis for {0}</value>
+  </data>
+  <data name="lblSoilSulphurDeficient" xml:space="preserve">
+    <value>Is the soil Sulphur (S) deficient?</value>
+  </data>
+  <data name="lblChangeSoilAnalysis" xml:space="preserve">
+    <value>Change soil analysis</value>
+  </data>
+  <data name="lblChangeSoilAnalysisFromDate" xml:space="preserve">
+    <value>Change soil analysis from {0}</value>
+  </data>
 </root>

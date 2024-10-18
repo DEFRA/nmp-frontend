@@ -30,23 +30,27 @@ namespace NMP.Portal.Controllers
     {
         private readonly ILogger<FieldController> _logger;
         private readonly IDataProtector _farmDataProtector;
+        private readonly IDataProtector _fieldDataProtector;
         private readonly IFarmService _farmService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IFieldService _fieldService;
         private readonly ISoilService _soilService;
         private readonly IOrganicManureService _organicManureService;
+        private readonly ISoilAnalysisService _soilAnalysisService;
 
         public FieldController(ILogger<FieldController> logger, IDataProtectionProvider dataProtectionProvider,
              IFarmService farmService, IHttpContextAccessor httpContextAccessor, ISoilService soilService,
-             IFieldService fieldService, IOrganicManureService organicManureService)
+             IFieldService fieldService, IOrganicManureService organicManureService, ISoilAnalysisService soilAnalysisService)
         {
             _logger = logger;
             _farmService = farmService;
             _httpContextAccessor = httpContextAccessor;
             _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
+            _fieldDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FieldController");
             _fieldService = fieldService;
             _soilService = soilService;
             _organicManureService = organicManureService;
+            _soilAnalysisService = soilAnalysisService;
         }
         public IActionResult Index()
         {
@@ -696,7 +700,7 @@ namespace NMP.Portal.Controllers
                     {
                         ModelState.AddModelError("CropType", Resource.MsgEnterAtLeastOneValue);
                     }
-                    
+
                 }
                 else
                 {
@@ -738,7 +742,7 @@ namespace NMP.Portal.Controllers
                     {
                         ModelState.AddModelError("CropType", Resource.MsgEnterAtLeastOneValue);
                     }
-                   
+
                 }
 
                 if (!ModelState.IsValid)
@@ -992,6 +996,11 @@ namespace NMP.Portal.Controllers
                 if(model.SoilOverChalk != null && model.SoilTypeID != (int)NMP.Portal.Enums.SoilTypeEngland.Shallow)
                 {
                     model.SoilOverChalk = null;
+                }
+                if (model.SoilReleasingClay != null && model.SoilTypeID != (int)NMP.Portal.Enums.SoilTypeEngland.DeepClayey)
+                {
+                    model.SoilReleasingClay = null;
+                    model.IsSoilReleasingClay = false;
                 }
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             }
@@ -1322,13 +1331,13 @@ namespace NMP.Portal.Controllers
             model.SoilReleasingClay = field.SoilReleasingClay ?? false;
             model.IsWithinNVZ = field.IsWithinNVZ ?? false;
             model.IsAbove300SeaLevel = field.IsAbove300SeaLevel ?? false;
-
+            model.EncryptedFieldId = _farmDataProtector.Protect(fieldId.ToString());
             var soilType = await _fieldService.FetchSoilTypeById(field.SoilTypeID.Value);
             model.SoilType = !string.IsNullOrWhiteSpace(soilType) ? soilType : string.Empty;
 
             model.EncryptedFarmId = farmId;
             model.FarmName = farm.Name;
-            List<SoilAnalysisResponse> soilAnalysisResponse = await _fieldService.FetchSoilAnalysisByFieldId(fieldId);
+            List<SoilAnalysisResponse> soilAnalysisResponse = await _fieldService.FetchSoilAnalysisByFieldId(fieldId, Resource.lblTrue);
             ViewBag.SampleDate = soilAnalysisResponse;
 
             return View(model);
@@ -2969,6 +2978,89 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("CheckAnswer");
             }
             return RedirectToAction("RecentSoilAnalysisQuestion");
+        }
+        [HttpGet]
+        public async Task<IActionResult> SoilAnalysisDetail(string i, string j)//i=EncryptedFieldId,j=EncryptedFarmId
+        {
+            FieldViewModel model = new FieldViewModel();
+
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(i))
+                {
+                    (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(j)));
+                    if (string.IsNullOrWhiteSpace(error.Message))
+                    {
+                        int fieldId = Convert.ToInt32(_farmDataProtector.Unprotect(i));
+                        var field = await _fieldService.FetchFieldByFieldId(fieldId);
+                        model.Name = field.Name;
+                        model.EncryptedFieldId = i;
+                        model.EncryptedFarmId = j;
+                        model.FarmName = farm.Name;
+                        List<SoilAnalysisResponse> soilAnalysisResponseList = await _fieldService.FetchSoilAnalysisByFieldId(fieldId, Resource.lblFalse);
+                        if (soilAnalysisResponseList.Count > 0)
+                        {
+                            foreach (var soilAnalysis in soilAnalysisResponseList)
+                            {
+                                soilAnalysis.PhosphorusMethodology = Enum.GetName(
+                                    typeof(PhosphorusMethodology), soilAnalysis.PhosphorusMethodologyID);
+                                soilAnalysis.EncryptedSoilAnalysisId = _fieldDataProtector.Protect(soilAnalysis.ID.ToString());
+                            }
+
+                            ViewBag.soilAnalysisList = soilAnalysisResponseList;
+                        }
+                    }
+                    else
+                    {
+                        ViewBag.Error = error.Message;
+                        return View(model);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.Message;
+                return View(model);
+            }
+            return View(model);
+        }
+        [HttpGet]
+        public async Task<IActionResult> ChangeSoilAnalysis(string i, string j, string k)//i= soilAnalysisId,j=EncryptedFieldId,k=EncryptedFarmId
+        {
+            FieldViewModel model = new FieldViewModel();
+
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(i))
+                {
+                    int decryptedSoilId = Convert.ToInt32(_fieldDataProtector.Unprotect(i));
+                    (SoilAnalysis soilAnalysis, Error error) = await _soilAnalysisService.FetchSoilAnalysisById(decryptedSoilId);
+                    if (error == null)
+                    {
+                        model.SoilAnalyses = soilAnalysis;
+                        if (!string.IsNullOrWhiteSpace(j))
+                        {
+                            model.EncryptedFieldId = j;
+                        }
+                        if (!string.IsNullOrWhiteSpace(k))
+                        {
+                            model.EncryptedFarmId = k;
+                        }
+                    }
+                    else
+                    {
+                        ViewBag.Error = error.Message;
+                        return View(model);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.Message;
+                return View(model);
+            }
+            return View(model);
         }
     }
 }
