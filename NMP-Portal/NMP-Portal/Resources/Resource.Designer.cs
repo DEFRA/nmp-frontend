@@ -2422,6 +2422,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Is the soil over chalk?.
+        /// </summary>
+        public static string lblIsTheSoilOverChalk {
+            get {
+                return ResourceManager.GetString("lblIsTheSoilOverChalk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Is this field more than 300 metres above sea level?.
         /// </summary>
         public static string lblIsThisFieldAboveForFieldCheckAnswere {
@@ -4120,6 +4129,15 @@ namespace NMP.Portal.Resources {
         public static string lblSoilOrganicMatterForError {
             get {
                 return ResourceManager.GetString("lblSoilOrganicMatterForError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Soil over chalk.
+        /// </summary>
+        public static string lblSoilOverChalk {
+            get {
+                return ResourceManager.GetString("lblSoilOverChalk", resourceCulture);
             }
         }
         
