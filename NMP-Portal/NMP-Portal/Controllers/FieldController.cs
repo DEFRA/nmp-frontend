@@ -997,6 +997,11 @@ namespace NMP.Portal.Controllers
                 {
                     model.SoilOverChalk = null;
                 }
+                if (model.SoilReleasingClay != null && model.SoilTypeID != (int)NMP.Portal.Enums.SoilTypeEngland.DeepClayey)
+                {
+                    model.SoilReleasingClay = null;
+                    model.IsSoilReleasingClay = false;
+                }
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             }
             catch (Exception ex)
