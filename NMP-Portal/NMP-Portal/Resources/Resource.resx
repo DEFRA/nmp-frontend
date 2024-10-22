@@ -2490,4 +2490,16 @@ m3/ha  not set</value>
   <data name="lblChangeSoilAnalysisFromDate" xml:space="preserve">
     <value>Change soil analysis from {0}</value>
   </data>
+  <data name="lblDateSampleTakenForChangePage" xml:space="preserve">
+    <value>Date sample taken</value>
+  </data>
+  <data name="lblSaveChanges" xml:space="preserve">
+    <value>Save changes</value>
+  </data>
+  <data name="lblChangesDone" xml:space="preserve">
+    <value>Changes done</value>
+  </data>
+  <data name="MsgWeCouldnNotChangeYourSoilAnalysisData" xml:space="preserve">
+    <value>We couldn’t change soil analysis data, please try again later</value>
+  </data>
 </root>

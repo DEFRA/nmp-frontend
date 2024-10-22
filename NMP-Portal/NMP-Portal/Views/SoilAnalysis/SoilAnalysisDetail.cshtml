@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @using NMP.Portal.ViewModels
 
-@model FieldViewModel
+@model SoilAnalysisViewModel
 @{
     ViewData["Title"] = Resource.lblSoilAnalysis;
 
@@ -27,7 +27,7 @@
             @Resource.lblFields
         </govuk-breadcrumbs-item>
         <govuk-breadcrumbs-item asp-controller="Field" asp-action="FieldSoilAnalysisDetail" asp-route-id="@Model.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">
-            @Model.Name
+            @Model.FieldName
         </govuk-breadcrumbs-item>
         <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
             @Resource.lblSoilAnalysis
@@ -37,8 +37,7 @@
     }
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-
-            <h1 class="govuk-heading-l">@string.Format(Resource.lblSoilAnalysisForFieldName, Model.Name)</h1>
+            <h1 class="govuk-heading-l">@string.Format(Resource.lblSoilAnalysisForFieldName, Model.FieldName)</h1>
             @{
                 if (ViewBag.soilAnalysisList != null && ViewBag.soilAnalysisList.Count > 0)
                 {
@@ -93,7 +92,7 @@
 
                         </table>
                         <p class="govuk-body margin-bottom-forty">
-                            <a asp-action="ChangeSoilAnalysis" asp-controller="Field" asp-route-i="@soilAnalysis.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId">@Resource.lblChangeTheSoilAnalysis</a>
+                            <a asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@soilAnalysis.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId">@Resource.lblChangeTheSoilAnalysis</a>
                         </p>
                     }
                 }
