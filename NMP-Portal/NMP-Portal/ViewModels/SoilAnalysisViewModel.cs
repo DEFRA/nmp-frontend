@@ -11,5 +11,6 @@ namespace NMP.Portal.ViewModels
         public string EncryptedFieldId { get; set; } = string.Empty;
         public string EncryptedSoilAnalysisId { get; set; } = string.Empty;
         public bool? IsSoilNutrientValueTypeIndex { get; set; }
+        public string IsSoilDataChanged { get; set; } = string.Empty;
     }
 }

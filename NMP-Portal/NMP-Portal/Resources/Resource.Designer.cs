@@ -918,15 +918,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Changes done.
-        /// </summary>
-        public static string lblChangesDone {
-            get {
-                return ResourceManager.GetString("lblChangesDone", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Change soil analysis.
         /// </summary>
         public static string lblChangeSoilAnalysis {
@@ -5713,6 +5704,15 @@ namespace NMP.Portal.Resources {
         public static string lblYourPlanWillBasedOn {
             get {
                 return ResourceManager.GetString("lblYourPlanWillBasedOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your soil analysis changes have been successfully saved..
+        /// </summary>
+        public static string lblYourSoilAnalysisChangesHaveBeenSuccessfullySaved {
+            get {
+                return ResourceManager.GetString("lblYourSoilAnalysisChangesHaveBeenSuccessfullySaved", resourceCulture);
             }
         }
         
