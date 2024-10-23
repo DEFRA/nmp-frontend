@@ -1,4 +1,5 @@
 ﻿@using NMP.Portal.Resources
+@using System.Globalization
 @using NMP.Portal.ViewModels
 
 @model SoilAnalysisViewModel
@@ -44,6 +45,9 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Potassium"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldID"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedSoilAnalysisId"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SulphurDeficient" value="@Model.SulphurDeficient.ToString().ToLower()"></govuk-input>
                 <govuk-summary-list>
@@ -52,7 +56,7 @@
                             @Resource.lblDateSampleTakenForChangePage
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @((!Model.Date.HasValue) ? Resource.lblNotSet : (Model.Date.Value.Date.ToString("dd MMMM yyyy")))
+                            @((!Model.Date.HasValue) ? Resource.lblNotSet : (Model.Date.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))))
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="Date" asp-controller="SoilAnalysis">@Resource.lblChange</govuk-summary-list-row-action>
