@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
@@ -35,7 +36,7 @@ namespace NMP.Portal.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IFieldService _fieldService;
         private readonly ICropService _cropService;
-
+        
         public CropController(ILogger<CropController> logger, IDataProtectionProvider dataProtectionProvider,
              IFarmService farmService, IHttpContextAccessor httpContextAccessor, IFieldService fieldService, ICropService cropService)
         {
@@ -50,11 +51,13 @@ namespace NMP.Portal.Controllers
         }
         public IActionResult Index()
         {
+            _logger.LogTrace("Crop Controller : Index() action called");
             return View();
         }
 
         public async Task<IActionResult> CreateCropPlanCancel(string q)
         {
+            _logger.LogTrace($"Crop Controller : CreateCropPlanCancel({q}) action called");
             _httpContextAccessor.HttpContext?.Session.Remove("CropData");
             if (!string.IsNullOrWhiteSpace(q))
             {
@@ -71,6 +74,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> HarvestYearForPlan(string q, string? year, bool? isPlanRecord)
         {
+            _logger.LogTrace($"Crop Controller : HarvestYearForPlan({q}, {year}, {isPlanRecord}) action called");
             PlanViewModel model = new PlanViewModel();
             Error? error = null;
             try
@@ -120,6 +124,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Crop Controller: Exception in HarvestYearForPlan() action : {ex.Message}", ex.StackTrace);
                 TempData["Error"] = string.Concat(error == null ? "" : error.Message, ex.Message);
                 return RedirectToAction("FarmSummary", "Farm", new { id = q });
             }
@@ -131,6 +136,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult HarvestYearForPlan(PlanViewModel model)
         {
+            _logger.LogTrace("Crop Controller : HarvestYearForPlan() action posted");
             if (model.Year == null)
             {
                 ModelState.AddModelError("Year", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblYear.ToLower()));
@@ -155,6 +161,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> CropGroups()
         {
+            _logger.LogTrace("Crop Controller : CropGroups() action called");
             PlanViewModel model = new PlanViewModel();
 
             try
@@ -180,6 +187,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Crop Controller: { ex.Message}", ex.StackTrace);
                 TempData["ErrorOnHarvestYear"] = ex.Message;
                 return RedirectToAction("HarvestYearForPlan");
             }
@@ -189,6 +197,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CropGroups(PlanViewModel model)
         {
+            _logger.LogTrace("Crop Controller : CropGroups() action posted");
             try
             {
                 if (model.CropGroupId == null)
@@ -249,6 +258,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Crop Controller: Exception in CropGroups() post action : {ex.Message} : {ex.StackTrace}");
                 TempData["CropGroupError"] = ex.Message;
                 return View(model);
             }
