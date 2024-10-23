@@ -918,6 +918,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Changes done.
+        /// </summary>
+        public static string lblChangesDone {
+            get {
+                return ResourceManager.GetString("lblChangesDone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change soil analysis.
         /// </summary>
         public static string lblChangeSoilAnalysis {
@@ -1265,6 +1274,15 @@ namespace NMP.Portal.Resources {
         public static string lblDateSampleTaken {
             get {
                 return ResourceManager.GetString("lblDateSampleTaken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date sample taken.
+        /// </summary>
+        public static string lblDateSampleTakenForChangePage {
+            get {
+                return ResourceManager.GetString("lblDateSampleTakenForChangePage", resourceCulture);
             }
         }
         
@@ -3814,6 +3832,15 @@ namespace NMP.Portal.Resources {
         public static string lblSamplelDepthForError {
             get {
                 return ResourceManager.GetString("lblSamplelDepthForError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save changes.
+        /// </summary>
+        public static string lblSaveChanges {
+            get {
+                return ResourceManager.GetString("lblSaveChanges", resourceCulture);
             }
         }
         
@@ -7101,6 +7128,15 @@ namespace NMP.Portal.Resources {
         public static string MsgVarietyNameNotSet {
             get {
                 return ResourceManager.GetString("MsgVarietyNameNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We couldn’t change soil analysis data, please try again later.
+        /// </summary>
+        public static string MsgWeCouldnNotChangeYourSoilAnalysisData {
+            get {
+                return ResourceManager.GetString("MsgWeCouldnNotChangeYourSoilAnalysisData", resourceCulture);
             }
         }
         

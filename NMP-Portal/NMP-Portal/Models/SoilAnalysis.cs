@@ -7,7 +7,7 @@ namespace NMP.Portal.Models
     public class SoilAnalysis
     {
         //public int? ID { get; set; }
-        //public int? FieldID { get; set; }
+        public int? FieldID { get; set; }
         public int? Year { get; set; }
         public bool? SulphurDeficient { get; set; }
 
