@@ -187,7 +187,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Crop Controller: { ex.Message}", ex.StackTrace);
+                _logger.LogError($"Crop Controller: Exception in CropGroups() action : { ex.Message}", ex.StackTrace);
                 TempData["ErrorOnHarvestYear"] = ex.Message;
                 return RedirectToAction("HarvestYearForPlan");
             }
@@ -269,6 +269,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> CropTypes()
         {
+            _logger.LogTrace("Crop Controller : CropTypes() action called");
             PlanViewModel model = new PlanViewModel();
             try
             {
@@ -293,6 +294,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Crop Controller: Exception in CropTypes() action : {ex.Message} : {ex.StackTrace}");
                 TempData["CropGroupError"] = ex.Message;
                 return RedirectToAction("CropGroups");
             }
@@ -303,6 +305,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CropTypes(PlanViewModel model)
         {
+            _logger.LogTrace("Crop Controller : CropTypes() post action called");
             try
             {
                 if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other)
@@ -397,6 +400,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Crop Controller: Exception in CropTypes() post action : {ex.Message} : {ex.StackTrace}");
                 TempData["CropTypeError"] = ex.Message;
                 return View(model);
             }
@@ -406,6 +410,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> VarietyName()
         {
+            _logger.LogTrace("Crop Controller : VarietyName() action called");
             PlanViewModel model = new PlanViewModel();
             try
             {
@@ -421,6 +426,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Crop Controller : Exception in VarietyName() post action : {ex.Message}, {ex.StackTrace}");
                 TempData["CropTypeError"] = ex.Message;
                 return RedirectToAction("CropTypes");
             }
