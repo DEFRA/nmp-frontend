@@ -6907,6 +6907,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For example, 11 February 2023.
+        /// </summary>
+        public static string MsgSampleDateExample {
+            get {
+                return ResourceManager.GetString("MsgSampleDateExample", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sample date not set.
         /// </summary>
         public static string MsgSampleDateNotSet {
