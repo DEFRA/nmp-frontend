@@ -7024,6 +7024,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your soil analysis changes could not be saved..
+        /// </summary>
+        public static string MsgSoilAnalysisChangesCouldNotSaved {
+            get {
+                return ResourceManager.GetString("MsgSoilAnalysisChangesCouldNotSaved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to We need a recent soil analysis to give the best results. Without a recent analysis from the last five years, any recommendations we give will be based on the RB209 default values..
         /// </summary>
         public static string MsgSoilAnalysisHint1 {
