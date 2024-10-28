@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.FieldViewModel
 @{
-    ViewData["Title"] = Resource.lblSoilDateAndPH;
+    ViewData["Title"] = Resource.lblSoilDate;
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
     var backAction = Model.IsSoilReleasingClay == true ? "SoilReleasingClay" :
@@ -11,7 +11,7 @@
 @section BeforeContent {
     <govuk-back-link asp-action="@((Model.IsCheckAnswer && (!Model.IsRecentSoilAnalysisQuestionChange)) ? "CheckAnswer" : "SulphurDeficient")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="SoilDateAndPHLevel" asp-controller="Field" method="post">
+<form asp-action="SoilDate" asp-controller="Field" method="post">
     @Html.AntiForgeryToken()
     <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
         <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblAddSoilAnalysis, Model.Name)</h1>

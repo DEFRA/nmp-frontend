@@ -571,10 +571,10 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("CheckAnswer");
             }
-            return RedirectToAction("SoilDateAndPHLevel");
+            return RedirectToAction("SoilDate");
         }
         [HttpGet]
-        public async Task<IActionResult> SoilDateAndPHLevel()
+        public async Task<IActionResult> SoilDate()
         {
             FieldViewModel model = new FieldViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
@@ -589,7 +589,7 @@ namespace NMP.Portal.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult SoilDateAndPHLevel(FieldViewModel model)
+        public IActionResult SoilDate(FieldViewModel model)
         {
 
             if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilAnalyses.Date"))
@@ -903,6 +903,20 @@ namespace NMP.Portal.Controllers
                 var cropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.All).ToList();
 
                 ViewBag.CropTypeList = cropTypeList;
+                if(cropTypeList.Count==1)
+                {
+                    if(cropTypeList[0].CropTypeId == (int)NMP.Portal.Enums.CropTypes.Other)
+                    {
+                        model.CropTypeID = cropTypeList[0].CropTypeId;
+                        model.CropType = cropTypeList[0].CropType;
+                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
+                        if(model.IsCheckAnswer)
+                        {
+                            return RedirectToAction("CheckAnswer");
+                        }
+                        return RedirectToAction("SNSAppliedQuestion");
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -1543,6 +1557,96 @@ namespace NMP.Portal.Controllers
                 var cropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.All).ToList();
 
                 ViewBag.CropTypeList = cropTypeList;
+                if (cropTypeList.Count == 1)
+                {
+                    if (cropTypeList[0].CropTypeId == (int)NMP.Portal.Enums.CropTypes.Other)
+                    {
+                        model.CurrentCropTypeId = cropTypeList[0].CropTypeId;
+                        model.CurrentCropType = cropTypeList[0].CropType;
+                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
+                        (CropTypeLinkingResponse cropTypeLinking, Error error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(model.CurrentCropTypeId.Value);
+                        if (cropTypeLinking != null)// && cropTypeLinking.SNSCategoryID != null
+                        {
+                            model.SnsCategoryId = cropTypeLinking.SNSCategoryID;
+                        }
+                        if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+                        {
+                            FieldViewModel fieldViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                            if (fieldViewModel != null && fieldViewModel.CurrentCropTypeId == model.CurrentCropTypeId)
+                            {
+                                if (model.IsCheckAnswer)
+                                {
+                                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
+                                    return RedirectToAction("CheckAnswer");
+                                }
+                            }
+                            else
+                            {
+                                model.SoilMineralNitrogenAt030CM = null;
+                                model.SoilMineralNitrogenAt3060CM = null;
+                                model.SoilMineralNitrogenAt6090CM = null;
+                                model.SampleDepth = null;
+                                model.SoilMineralNitrogen = null;
+                                model.IsCalculateNitrogen = null;
+                                model.IsEstimateOfNitrogenMineralisation = null;
+                                model.IsBasedOnSoilOrganicMatter = null;
+                                model.NumberOfShoots = null;
+                                model.SeasonId = 0;
+                                model.GreenAreaIndexOrCropHeight = 0;
+                                model.CropHeight = null;
+                                model.GreenAreaIndex = null;
+                                model.IsCropHeight = false;
+                                model.IsGreenAreaIndex = false;
+                                model.IsNumberOfShoots = false;
+                                model.SoilOrganicMatter = null;
+                                model.AdjustmentValue = null;
+                                model.SnsIndex = 0;
+                                model.SnsValue = 0;
+
+                            }
+                        }
+                        else
+                        {
+                            return RedirectToAction("FarmList", "Farm");
+                        }
+                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
+
+                        if (error == null)
+                        {
+                            if (cropTypeLinking != null && cropTypeLinking.SNSCategoryID != null)
+                            {
+                                if (cropTypeLinking.SNSCategoryID == (int)NMP.Portal.Enums.SNSCategories.OtherArableAndPotatoes ||
+                                    cropTypeLinking.SNSCategoryID == (int)NMP.Portal.Enums.SNSCategories.WinterOilseedRape ||
+                                    cropTypeLinking.SNSCategoryID == (int)NMP.Portal.Enums.SNSCategories.WinterCereals ||
+                                    cropTypeLinking.SNSCategoryID == (int)NMP.Portal.Enums.SNSCategories.Fruit)
+                                {
+                                    model.SampleDepth = null;
+                                    model.SoilMineralNitrogen = null;
+                                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
+                                    return RedirectToAction("SoilMineralNitrogenAnalysisResults");
+                                }
+                                else if (cropTypeLinking.SNSCategoryID == (int)NMP.Portal.Enums.SNSCategories.Vegetables)
+                                {
+                                    model.SoilMineralNitrogenAt030CM = null;
+                                    model.SoilMineralNitrogenAt3060CM = null;
+                                    model.SoilMineralNitrogenAt6090CM = null;
+                                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
+                                    return RedirectToAction("SampleDepth");
+                                }
+                            }
+                            else if (cropTypeLinking != null && cropTypeLinking.SNSCategoryID == null)
+                            {
+                                return RedirectToAction("CheckAnswer");
+                            }
+                        }
+                        else
+                        {
+                            TempData["Error"] = error.Message;
+                            return View(model);
+                        }
+                        return RedirectToAction("SoilMineralNitrogenAnalysisResults");
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -1575,8 +1679,6 @@ namespace NMP.Portal.Controllers
             {
                 model.SnsCategoryId = cropTypeLinking.SNSCategoryID;
             }
-
-
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
             {
                 FieldViewModel fieldViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
@@ -2213,7 +2315,6 @@ namespace NMP.Portal.Controllers
             return View(model);
         }
 
-
         [HttpGet]
         public async Task<IActionResult> CropHeight()
         {
@@ -2383,8 +2484,6 @@ namespace NMP.Portal.Controllers
 
             return RedirectToAction("EstimateOfNitrogenMineralisationQuestion");
         }
-
-
 
         [HttpGet]
         public async Task<IActionResult> EstimateOfNitrogenMineralisationQuestion()

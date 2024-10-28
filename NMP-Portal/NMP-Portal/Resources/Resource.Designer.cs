@@ -4025,6 +4025,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Soil date.
+        /// </summary>
+        public static string lblSoilDate {
+            get {
+                return ResourceManager.GetString("lblSoilDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Soil Date and PH.
         /// </summary>
         public static string lblSoilDateAndPH {
