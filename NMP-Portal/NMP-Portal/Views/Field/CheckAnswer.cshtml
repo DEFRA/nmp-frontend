@@ -638,6 +638,7 @@
                             <govuk-summary-list-row-action asp-action="CurrentCropGroups" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
+
                     <govuk-summary-list-row class=@((string.IsNullOrWhiteSpace(Model.CurrentCropType))?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
                             @Resource.lblWhatIsTheCurrentCropType
@@ -645,9 +646,12 @@
                         <govuk-summary-list-row-value>
                             @(!(string.IsNullOrWhiteSpace(Model.CurrentCropType)) ? Model.CurrentCropType : Resource.lblNotSet)
                         </govuk-summary-list-row-value>
+                        @if (Model.CurrentCropTypeId != (int)NMP.Portal.Enums.CropTypes.Other)
+                        {
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="CurrentCropTypes" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
+                        }
                     </govuk-summary-list-row>
                     @if (Model.SnsCategoryId != null)
                     {

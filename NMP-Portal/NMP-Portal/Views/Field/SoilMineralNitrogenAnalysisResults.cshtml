@@ -4,10 +4,11 @@
 
 @{
     ViewData["Title"] = Resource.lblSoilMineralNitrogenAnalysisResults;
+    var backAction = Model.IsCheckAnswer ? "CheckAnswer" : (Model.CurrentCropTypeId == (int)NMP.Portal.Enums.CropTypes.Other) ? "CurrentCropGroups" : "CurrentCropTypes";
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "CurrentCropTypes")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@backAction asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
