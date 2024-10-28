@@ -1,4 +1,5 @@
 ﻿@using NMP.Portal.Resources
+@using System.Globalization
 @using NMP.Portal.ViewModels
 
 @model SoilAnalysisViewModel
@@ -37,6 +38,22 @@
     }
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
+            @if (ViewBag.Success != null && ViewBag.Success == Resource.lblTrue)
+            {
+                <govuk-notification-banner type="Success">
+                    <div class="">
+                        <p class="govuk-body">
+                            @Resource.lblYourSoilAnalysisChangesHaveBeenSuccessfullySaved
+                        </p>
+                    </div>
+                </govuk-notification-banner>
+            }
+            else  @if (ViewBag.Success != null && ViewBag.Success == Resource.lblFalse)
+            {
+                <govuk-error-summary>
+                    <govuk-error-summary-item href="#"> @Resource.MsgSoilAnalysisChangesCouldNotSaved</govuk-error-summary-item>
+                </govuk-error-summary>
+            }
             <h1 class="govuk-heading-l">@string.Format(Resource.lblSoilAnalysisForFieldName, Model.FieldName)</h1>
             @{
                 if (ViewBag.soilAnalysisList != null && ViewBag.soilAnalysisList.Count > 0)
@@ -48,7 +65,9 @@
                             <tbody class="govuk-table__body">
                                 <tr class="govuk-table__row">
                                     <td class="govuk-table__cell">@Resource.lblDateSample</td>
-                                    <td class="govuk-table__cell">@(soilAnalysis.Date != null ? soilAnalysis.Date.ToString("dd MMMM yyyy") : Resource.lblNotEntered)</td>
+                                    <td class="govuk-table__cell">
+                                        @(soilAnalysis.Date != null ? soilAnalysis.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotEntered)
+                                    </td>
                                 </tr>
                                 <tr class="govuk-table__row">
                                     <td class="govuk-table__cell">@Resource.lblPhLevel</td>

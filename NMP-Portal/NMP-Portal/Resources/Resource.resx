@@ -2496,10 +2496,16 @@ m3/ha  not set</value>
   <data name="lblSaveChanges" xml:space="preserve">
     <value>Save changes</value>
   </data>
-  <data name="lblChangesDone" xml:space="preserve">
-    <value>Changes done</value>
+  <data name="lblYourSoilAnalysisChangesHaveBeenSuccessfullySaved" xml:space="preserve">
+    <value>Your soil analysis changes have been successfully saved.</value>
   </data>
   <data name="MsgWeCouldnNotChangeYourSoilAnalysisData" xml:space="preserve">
     <value>We couldn’t change soil analysis data, please try again later</value>
+  </data>
+  <data name="MsgSampleDateExample" xml:space="preserve">
+    <value>For example, 11 February 2023</value>
+  </data>
+  <data name="MsgSoilAnalysisChangesCouldNotSaved" xml:space="preserve">
+    <value>Your soil analysis changes could not be saved.</value>
   </data>
 </root>

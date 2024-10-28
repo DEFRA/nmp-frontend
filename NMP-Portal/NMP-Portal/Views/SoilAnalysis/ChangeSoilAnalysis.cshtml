@@ -1,4 +1,5 @@
 ﻿@using NMP.Portal.Resources
+@using System.Globalization
 @using NMP.Portal.ViewModels
 
 @model SoilAnalysisViewModel
@@ -44,47 +45,36 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Potassium"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldID"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedSoilAnalysisId"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SulphurDeficient" value="@Model.SulphurDeficient.ToString().ToLower()"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilNutrientValueTypeIndex" value="@Model.IsSoilNutrientValueTypeIndex.ToString().ToLower()"></govuk-input>
                 <govuk-summary-list>
                     <govuk-summary-list-row class=@((!Model.Date.HasValue)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
                             @Resource.lblDateSampleTakenForChangePage
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @((!Model.Date.HasValue) ? Resource.lblNotSet : (Model.Date.Value.Date.ToString("dd MMMM yyyy")))
+                            @((!Model.Date.HasValue) ? Resource.lblNotSet : (Model.Date.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))))
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="Date" asp-controller="SoilAnalysis">@Resource.lblChange</govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
-                    @if (Model.PH != null)
-                    {
-                        <govuk-summary-list-row class=@((!Model.PH.HasValue)?"govuk-error-message":"")>
-                            <govuk-summary-list-row-key>
-                                @Resource.lblPhLevel
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                                @((!Model.PH.HasValue) ? Resource.lblNotSet : (Model.PH))
-                            </govuk-summary-list-row-value>
-                            <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange</govuk-summary-list-row-action>
-                            </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row>
-                    }
-                    <govuk-summary-list-row class=@((!Model.SulphurDeficient.HasValue)?"govuk-error-message":"")>
+
+                    <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
                             @Resource.lblSoilDeficientInSulpurForCheckAnswer
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @((!Model.SulphurDeficient.HasValue) ? Resource.lblNotSet : (Model.SulphurDeficient.Value ? Resource.lblYes : Resource.lblNo))
+                            @((!Model.SulphurDeficient.HasValue) ? Resource.lblNotEntered : (Model.SulphurDeficient.Value ? Resource.lblYes : Resource.lblNo))
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="SulphurDeficient" asp-controller="SoilAnalysis">@Resource.lblChange</govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
-
-
 
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
@@ -108,45 +98,125 @@
 
                     @if (Model.IsSoilNutrientValueTypeIndex.Value)
                     {
-                        <govuk-summary-list-row>
-                            <govuk-summary-list-row-key>
-                                @Resource.lblPhosphorusIndex
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                                @((!Model.PhosphorusIndex.HasValue) ? Resource.lblNotEntered : @Model.PhosphorusIndex)
-                                @* @Model.PhosphorusIndex *@
-                            </govuk-summary-list-row-value>
-                            <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange</govuk-summary-list-row-action>
-                            </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row>
-                        <govuk-summary-list-row>
-                            <govuk-summary-list-row-key>
-                                @Resource.lblPotassiumIndex
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
+                        @if (Model.PH.HasValue || Model.PhosphorusIndex.HasValue ||
+                       Model.PotassiumIndex.HasValue || Model.MagnesiumIndex.HasValue)
+                        {
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    @Resource.lblPhLevel
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @((!Model.PH.HasValue) ? Resource.lblNotEntered : (Model.PH))
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange</govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    @Resource.lblPhosphorusIndex
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @((!Model.PhosphorusIndex.HasValue) ? Resource.lblNotEntered : @Model.PhosphorusIndex)
+                                    @* @Model.PhosphorusIndex *@
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange</govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    @Resource.lblPotassiumIndex
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
                                     @((!Model.PotassiumIndex.HasValue) ? Resource.lblNotEntered : @Model.PotassiumIndex)
-                                @* @Model.PotassiumIndex *@
-                            </govuk-summary-list-row-value>
-                            <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange</govuk-summary-list-row-action>
-                            </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row>
-                        <govuk-summary-list-row>
-                            <govuk-summary-list-row-key>
-                                @Resource.lblMagnesiumIndex
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
+                                    @* @Model.PotassiumIndex *@
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange</govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    @Resource.lblMagnesiumIndex
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
                                     @((!Model.MagnesiumIndex.HasValue) ? Resource.lblNotEntered : @Model.MagnesiumIndex)
-                                @* @Model.MagnesiumIndex *@
-                            </govuk-summary-list-row-value>
-                            <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange</govuk-summary-list-row-action>
-                            </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row>
+                                    @* @Model.MagnesiumIndex *@
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange</govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                        }
+                        else
+                        {
+
+                            <govuk-summary-list-row class=@((!Model.PH.HasValue)?"govuk-error-message":"")>
+                                <govuk-summary-list-row-key>
+                                    @Resource.lblPhLevel
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @((!Model.PH.HasValue) ? Resource.lblNotSet : (Model.PH))
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange</govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                            <govuk-summary-list-row class=@((!Model.PhosphorusIndex.HasValue)?"govuk-error-message":"")>
+                                <govuk-summary-list-row-key>
+                                    @Resource.lblPhosphorusIndex
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @((!Model.PhosphorusIndex.HasValue) ? Resource.lblNotSet : @Model.PhosphorusIndex)
+                                    @* @Model.PhosphorusIndex *@
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange</govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                            <govuk-summary-list-row class=@((!Model.PotassiumIndex.HasValue)?"govuk-error-message":"")>
+                                <govuk-summary-list-row-key>
+                                    @Resource.lblPotassiumIndex
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @((!Model.PotassiumIndex.HasValue) ? Resource.lblNotSet : @Model.PotassiumIndex)
+                                    @* @Model.PotassiumIndex *@
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange</govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                            <govuk-summary-list-row class=@((!Model.MagnesiumIndex.HasValue)?"govuk-error-message":"")>
+                                <govuk-summary-list-row-key>
+                                    @Resource.lblMagnesiumIndex
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @((!Model.MagnesiumIndex.HasValue) ? Resource.lblNotSet : @Model.MagnesiumIndex)
+                                    @* @Model.MagnesiumIndex *@
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange</govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                        }
                     }
                     else
                     {
+                        @if ((Model.PH.HasValue) || Model.Potassium.HasValue || 
+                        Model.Phosphorus.HasValue || Model.Magnesium.HasValue)
+                        {
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    @Resource.lblPhLevel
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @((!Model.PH.HasValue) ? Resource.lblNotEntered : (Model.PH))
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange</govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
                             <govuk-summary-list-row>
                                 <govuk-summary-list-row-key>
                                     @Resource.lblPhosphorusPerLitreOfSoil
@@ -171,7 +241,6 @@
                                     <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange</govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
-                       
                             <govuk-summary-list-row>
                                 <govuk-summary-list-row-key>
                                     @Resource.lblMagnesiumPerLitreOfSoil
@@ -184,6 +253,58 @@
                                     <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange</govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
+                        }
+                        else
+                        {
+                            <govuk-summary-list-row class=@((!Model.PH.HasValue)?"govuk-error-message":"")>
+                                <govuk-summary-list-row-key>
+                                    @Resource.lblPhLevel
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @((!Model.PH.HasValue) ? Resource.lblNotSet : (Model.PH))
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange</govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                            <govuk-summary-list-row class=@((!Model.Phosphorus.HasValue)?"govuk-error-message":"")>
+                                <govuk-summary-list-row-key>
+                                    @Resource.lblPhosphorusPerLitreOfSoil
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @((!Model.Phosphorus.HasValue) ? Resource.lblNotSet : @Model.Phosphorus)
+                                    @* @Model.PhosphorusIndex *@
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange</govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                            <govuk-summary-list-row class=@((!Model.Potassium.HasValue)?"govuk-error-message":"")>
+                                <govuk-summary-list-row-key>
+                                    @Resource.lblPotassiumPerLitreOfSoil
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @((!Model.Potassium.HasValue) ? Resource.lblNotSet : @Model.Potassium)
+                                    @* @Model.PotassiumIndex *@
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange</govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                            <govuk-summary-list-row class=@((!Model.Magnesium.HasValue)?"govuk-error-message":"")>
+                                <govuk-summary-list-row-key>
+                                    @Resource.lblMagnesiumPerLitreOfSoil
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @((!Model.Magnesium.HasValue) ? Resource.lblNotSet : @Model.Magnesium)
+                                    @* @Model.MagnesiumIndex *@
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange</govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                        }
+
                     }
 
                 </govuk-summary-list>
