@@ -1468,8 +1468,8 @@ namespace NMP.Portal.Controllers
                 {
                     var harvestFieldIds = harvestYearPlanResponse.Select(x => x.FieldID.ToString()).ToList();
                     fieldList = fieldList.Where(x => !harvestFieldIds.Contains(x.ID.ToString()) || fieldsAllowedForSecondCrop.Contains(x.ID??0)).ToList();
-                    ViewBag.FieldOptions = fieldList;
                 }
+                ViewBag.FieldOptions = fieldList;
             }
             else
             {

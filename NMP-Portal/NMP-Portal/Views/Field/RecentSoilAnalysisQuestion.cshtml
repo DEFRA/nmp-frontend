@@ -3,9 +3,21 @@
 @{
     ViewData["Title"] = Resource.lblSoilReleasingClay;
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
-    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False); 
-    var backAction = Model.IsSoilReleasingClay == true ? "SoilReleasingClay" :
-                   "SoilType";
+    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+    var backAction = "";
+    if (Model.IsSoilReleasingClay == true)
+    {
+        backAction = "SoilReleasingClay";
+    }
+    else if (Model.SoilOverChalk != null)
+    {
+        backAction = "SoilOverChalk";
+    }
+    else
+    {
+        backAction = "SoilType";
+    }
+    
 }
 
 @section BeforeContent {
@@ -74,6 +86,7 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsRecentSoilAnalysisQuestionChange" value="@Model.IsRecentSoilAnalysisQuestionChange.ToString().ToLower()"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SnsIndex"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SnsValue"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilOverChalk" value="@Model.SoilOverChalk.ToString().ToLower()"></govuk-input>
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">

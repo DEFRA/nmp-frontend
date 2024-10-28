@@ -918,6 +918,33 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change soil analysis.
+        /// </summary>
+        public static string lblChangeSoilAnalysis {
+            get {
+                return ResourceManager.GetString("lblChangeSoilAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change soil analysis from {0}.
+        /// </summary>
+        public static string lblChangeSoilAnalysisFromDate {
+            get {
+                return ResourceManager.GetString("lblChangeSoilAnalysisFromDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change the soil analysis.
+        /// </summary>
+        public static string lblChangeTheSoilAnalysis {
+            get {
+                return ResourceManager.GetString("lblChangeTheSoilAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change this {0} plan.
         /// </summary>
         public static string lblChangeThisPlan {
@@ -1238,6 +1265,15 @@ namespace NMP.Portal.Resources {
         public static string lblDateSampleTaken {
             get {
                 return ResourceManager.GetString("lblDateSampleTaken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date sample taken.
+        /// </summary>
+        public static string lblDateSampleTakenForChangePage {
+            get {
+                return ResourceManager.GetString("lblDateSampleTakenForChangePage", resourceCulture);
             }
         }
         
@@ -2395,6 +2431,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Is the soil over chalk?.
+        /// </summary>
+        public static string lblIsTheSoilOverChalk {
+            get {
+                return ResourceManager.GetString("lblIsTheSoilOverChalk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Is this field more than 300 metres above sea level?.
         /// </summary>
         public static string lblIsThisFieldAboveForFieldCheckAnswere {
@@ -3323,6 +3368,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ph level.
+        /// </summary>
+        public static string lblPhLevel {
+            get {
+                return ResourceManager.GetString("lblPhLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to pH level (optional).
         /// </summary>
         public static string lblPHLevelOption {
@@ -3355,6 +3409,15 @@ namespace NMP.Portal.Resources {
         public static string lblPhosphorusAnalysisType {
             get {
                 return ResourceManager.GetString("lblPhosphorusAnalysisType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phosphorus (P) analysis type.
+        /// </summary>
+        public static string lblPhosphorusAnalysisTypeForSoilDetail {
+            get {
+                return ResourceManager.GetString("lblPhosphorusAnalysisTypeForSoilDetail", resourceCulture);
             }
         }
         
@@ -3764,6 +3827,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save changes.
+        /// </summary>
+        public static string lblSaveChanges {
+            get {
+                return ResourceManager.GetString("lblSaveChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to save you money.
         /// </summary>
         public static string lblSaveYouMoney {
@@ -3935,6 +4007,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Soil analysis for {0}.
+        /// </summary>
+        public static string lblSoilAnalysisForFieldName {
+            get {
+                return ResourceManager.GetString("lblSoilAnalysisForFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Soil contains potash releasing clay.
         /// </summary>
         public static string lblSoilContainsPostashReleasingClay {
@@ -4070,6 +4151,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Soil over chalk.
+        /// </summary>
+        public static string lblSoilOverChalk {
+            get {
+                return ResourceManager.GetString("lblSoilOverChalk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Soil pH level.
         /// </summary>
         public static string lblSoilPHLevel {
@@ -4084,6 +4174,15 @@ namespace NMP.Portal.Resources {
         public static string lblSoilReleasingClay {
             get {
                 return ResourceManager.GetString("lblSoilReleasingClay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is the soil Sulphur (S) deficient?.
+        /// </summary>
+        public static string lblSoilSulphurDeficient {
+            get {
+                return ResourceManager.GetString("lblSoilSulphurDeficient", resourceCulture);
             }
         }
         
@@ -5609,6 +5708,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your soil analysis changes have been successfully saved..
+        /// </summary>
+        public static string lblYourSoilAnalysisChangesHaveBeenSuccessfullySaved {
+            get {
+                return ResourceManager.GetString("lblYourSoilAnalysisChangesHaveBeenSuccessfullySaved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to APPLICATION AFTER 31 OCTOBER.
         /// </summary>
         public static string MsgApplicationAfter31October {
@@ -6799,6 +6907,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For example, 11 February 2023.
+        /// </summary>
+        public static string MsgSampleDateExample {
+            get {
+                return ResourceManager.GetString("MsgSampleDateExample", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sample date not set.
         /// </summary>
         public static string MsgSampleDateNotSet {
@@ -6903,6 +7020,15 @@ namespace NMP.Portal.Resources {
         public static string MsgServiceNotAvailable {
             get {
                 return ResourceManager.GetString("MsgServiceNotAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your soil analysis changes could not be saved..
+        /// </summary>
+        public static string MsgSoilAnalysisChangesCouldNotSaved {
+            get {
+                return ResourceManager.GetString("MsgSoilAnalysisChangesCouldNotSaved", resourceCulture);
             }
         }
         
@@ -7020,6 +7146,15 @@ namespace NMP.Portal.Resources {
         public static string MsgVarietyNameNotSet {
             get {
                 return ResourceManager.GetString("MsgVarietyNameNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We couldn’t change soil analysis data, please try again later.
+        /// </summary>
+        public static string MsgWeCouldnNotChangeYourSoilAnalysisData {
+            get {
+                return ResourceManager.GetString("MsgWeCouldnNotChangeYourSoilAnalysisData", resourceCulture);
             }
         }
         

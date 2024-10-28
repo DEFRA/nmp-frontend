@@ -1,0 +1,124 @@
+﻿@using NMP.Portal.Resources
+@using System.Globalization
+@using NMP.Portal.ViewModels
+
+@model SoilAnalysisViewModel
+@{
+    ViewData["Title"] = Resource.lblSoilAnalysis;
+
+}
+
+@if (ViewBag.Error != null)
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item href="#">@ViewBag.Error</govuk-error-summary-item>
+    </govuk-error-summary>
+}
+@if (Model != null)
+{
+    @section BeforeContent {
+    <govuk-breadcrumbs class="govuk-breadcrumbs-link">
+        <govuk-breadcrumbs-item asp-action="FarmList" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+            @Resource.lblAllFarm
+        </govuk-breadcrumbs-item>
+        <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+            @Model.FarmName
+        </govuk-breadcrumbs-item>
+        <govuk-breadcrumbs-item asp-action="ManageFarmFields" asp-controller="Field" asp-route-Id="@Model.EncryptedFarmId">
+            @Resource.lblFields
+        </govuk-breadcrumbs-item>
+        <govuk-breadcrumbs-item asp-controller="Field" asp-action="FieldSoilAnalysisDetail" asp-route-id="@Model.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">
+            @Model.FieldName
+        </govuk-breadcrumbs-item>
+        <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
+            @Resource.lblSoilAnalysis
+        </govuk-breadcrumbs-item>
+
+    </govuk-breadcrumbs>
+    }
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            @if (ViewBag.Success != null && ViewBag.Success == Resource.lblTrue)
+            {
+                <govuk-notification-banner type="Success">
+                    <div class="">
+                        <p class="govuk-body">
+                            @Resource.lblYourSoilAnalysisChangesHaveBeenSuccessfullySaved
+                        </p>
+                    </div>
+                </govuk-notification-banner>
+            }
+            else  @if (ViewBag.Success != null && ViewBag.Success == Resource.lblFalse)
+            {
+                <govuk-error-summary>
+                    <govuk-error-summary-item href="#"> @Resource.MsgSoilAnalysisChangesCouldNotSaved</govuk-error-summary-item>
+                </govuk-error-summary>
+            }
+            <h1 class="govuk-heading-l">@string.Format(Resource.lblSoilAnalysisForFieldName, Model.FieldName)</h1>
+            @{
+                if (ViewBag.soilAnalysisList != null && ViewBag.soilAnalysisList.Count > 0)
+                {
+                    foreach (var soilAnalysis in ViewBag.soilAnalysisList)
+                    {
+                        <table class="govuk-table">
+
+                            <tbody class="govuk-table__body">
+                                <tr class="govuk-table__row">
+                                    <td class="govuk-table__cell">@Resource.lblDateSample</td>
+                                    <td class="govuk-table__cell">
+                                        @(soilAnalysis.Date != null ? soilAnalysis.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotEntered)
+                                    </td>
+                                </tr>
+                                <tr class="govuk-table__row">
+                                    <td class="govuk-table__cell">@Resource.lblPhLevel</td>
+                                    <td class="govuk-table__cell">@(soilAnalysis.PH != null ? soilAnalysis.PH : Resource.lblNotEntered)</td>
+                                </tr>
+                                <tr class="govuk-table__row">
+                                    <td class="govuk-table__cell">@Resource.lblSoilSulphurDeficient</td>
+                                    <td class="govuk-table__cell">@(soilAnalysis.SulphurDeficient != null ? (soilAnalysis.SulphurDeficient ? Resource.lblYes : Resource.lblNo) : Resource.lblNotEntered)</td>
+                                </tr>
+                                <tr class="govuk-table__row">
+                                    <td class="govuk-table__cell">@Resource.lblPhosphorusAnalysisTypeForSoilDetail</td>
+                                    <td class="govuk-table__cell">@(soilAnalysis.PhosphorusMethodology != null ? soilAnalysis.PhosphorusMethodology : Resource.lblNotEntered)</td>
+                                </tr>
+                                <tr class="govuk-table__row">
+                                    <td class="govuk-table__cell">@Resource.lblPhosphorusPerLitreOfSoil</td>
+                                    <td class="govuk-table__cell">@(soilAnalysis.Phosphorus != null ? soilAnalysis.Phosphorus : Resource.lblNotEntered)</td>
+                                </tr>
+                                <tr class="govuk-table__row">
+                                    <td class="govuk-table__cell">@Resource.lblPhosphorusIndex</td>
+                                    <td class="govuk-table__cell">@(soilAnalysis.PhosphorusIndex != null ? soilAnalysis.PhosphorusIndex : Resource.lblNotEntered)</td>
+                                </tr>
+                                <tr class="govuk-table__row">
+                                    <td class="govuk-table__cell">@Resource.lblMagnesiumPerLitreOfSoil</td>
+                                    <td class="govuk-table__cell">@(soilAnalysis.Magnesium != null ? soilAnalysis.Magnesium : Resource.lblNotEntered)</td>
+                                </tr>
+                                <tr class="govuk-table__row">
+                                    <td class="govuk-table__cell">@Resource.lblMagnesiumIndex</td>
+                                    <td class="govuk-table__cell">@(soilAnalysis.MagnesiumIndex != null ? soilAnalysis.MagnesiumIndex : Resource.lblNotEntered)</td>
+                                </tr>
+
+                                <tr class="govuk-table__row">
+                                    <td class="govuk-table__cell">@Resource.lblPotassiumPerLitreOfSoil</td>
+                                    <td class="govuk-table__cell">@(soilAnalysis.Potassium != null ? soilAnalysis.Potassium : Resource.lblNotEntered)</td>
+                                </tr>
+
+                                <tr class="govuk-table__row">
+                                    <td class="govuk-table__cell">@Resource.lblPotassiumIndex</td>
+                                    <td class="govuk-table__cell">@(soilAnalysis.PotassiumIndex != null ? soilAnalysis.PotassiumIndex : Resource.lblNotEntered)</td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                        <p class="govuk-body margin-bottom-forty">
+                            <a asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@soilAnalysis.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId">@Resource.lblChangeTheSoilAnalysis</a>
+                        </p>
+                    }
+                }
+            }
+
+
+        </div>
+    </div>
+}
+

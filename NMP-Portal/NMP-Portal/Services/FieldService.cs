@@ -548,7 +548,7 @@ namespace NMP.Portal.Services
             return soilType;
         }
 
-        public async Task<List<SoilAnalysisResponse>> FetchSoilAnalysisByFieldId(int fieldId)
+        public async Task<List<SoilAnalysisResponse>> FetchSoilAnalysisByFieldId(int fieldId,string shortSummary)
         {
             Error error = null;
             List<SoilAnalysisResponse> soilAnalysis = new List<SoilAnalysisResponse>();
@@ -556,7 +556,7 @@ namespace NMP.Portal.Services
             {
 
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchSoilAnalysisByFieldIdAsyncAPI, fieldId, "true"));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchSoilAnalysisByFieldIdAsyncAPI, fieldId, shortSummary));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)

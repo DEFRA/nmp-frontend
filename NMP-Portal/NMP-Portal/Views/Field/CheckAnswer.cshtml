@@ -150,6 +150,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SnsIndex"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SnsValue"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RecentSoilAnalysisQuestion" value="@Model.RecentSoilAnalysisQuestion.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilOverChalk" value="@Model.SoilOverChalk.ToString().ToLower()"></govuk-input>
             <govuk-summary-list>
                 <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
@@ -281,6 +282,21 @@
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="SoilReleasingClay" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+
+                }
+                @if (Model.SoilOverChalk != null)
+                {
+                    <govuk-summary-list-row class=@((!Model.SoilOverChalk.HasValue)?"govuk-error-message":"")>
+                        <govuk-summary-list-row-key>
+                            @Resource.lblIsTheSoilOverChalk
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @((!Model.SoilOverChalk.HasValue) ? @Resource.lblNotSet : (Model.SoilOverChalk.Value ? Resource.lblYes : Resource.lblNo))
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action asp-action="SoilOverChalk" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
 

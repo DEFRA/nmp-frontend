@@ -30,23 +30,27 @@ namespace NMP.Portal.Controllers
     {
         private readonly ILogger<FieldController> _logger;
         private readonly IDataProtector _farmDataProtector;
+        private readonly IDataProtector _fieldDataProtector;
         private readonly IFarmService _farmService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IFieldService _fieldService;
         private readonly ISoilService _soilService;
         private readonly IOrganicManureService _organicManureService;
+        private readonly ISoilAnalysisService _soilAnalysisService;
 
         public FieldController(ILogger<FieldController> logger, IDataProtectionProvider dataProtectionProvider,
              IFarmService farmService, IHttpContextAccessor httpContextAccessor, ISoilService soilService,
-             IFieldService fieldService, IOrganicManureService organicManureService)
+             IFieldService fieldService, IOrganicManureService organicManureService, ISoilAnalysisService soilAnalysisService)
         {
             _logger = logger;
             _farmService = farmService;
             _httpContextAccessor = httpContextAccessor;
             _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
+            _fieldDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FieldController");
             _fieldService = fieldService;
             _soilService = soilService;
             _organicManureService = organicManureService;
+            _soilAnalysisService = soilAnalysisService;
         }
         public IActionResult Index()
         {
@@ -442,6 +446,10 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmList", "Farm");
                 }
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
+                if (field.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.Shallow)
+                {
+                    return RedirectToAction("SoilOverChalk");
+                }
                 if (field.IsCheckAnswer && (!isSoilTypeChange))
                 {
                     field.IsSoilReleasingClay = false;
@@ -456,6 +464,7 @@ namespace NMP.Portal.Controllers
                     _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
                     return RedirectToAction("SoilReleasingClay");
                 }
+                
                 field.SoilReleasingClay = null;
                 field.IsSoilReleasingClay = false;
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
@@ -501,10 +510,7 @@ namespace NMP.Portal.Controllers
                 return View(field);
             }
             List<SoilTypesResponse> soilTypes = new List<SoilTypesResponse>();
-            //if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("SoilTypes"))
-            //{
-            //    soilTypes = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<List<SoilTypesResponse>>("SoilTypes");
-            //}
+            
             soilTypes = await _fieldService.FetchSoilTypes();
             if (soilTypes.Count > 0 && soilTypes.Any())
             {
@@ -694,7 +700,7 @@ namespace NMP.Portal.Controllers
                     {
                         ModelState.AddModelError("CropType", Resource.MsgEnterAtLeastOneValue);
                     }
-                    
+
                 }
                 else
                 {
@@ -736,7 +742,7 @@ namespace NMP.Portal.Controllers
                     {
                         ModelState.AddModelError("CropType", Resource.MsgEnterAtLeastOneValue);
                     }
-                   
+
                 }
 
                 if (!ModelState.IsValid)
@@ -987,6 +993,15 @@ namespace NMP.Portal.Controllers
                 }
                 model.IsRecentSoilAnalysisQuestionChange = false;
                 model.IsCheckAnswer = true;
+                if(model.SoilOverChalk != null && model.SoilTypeID != (int)NMP.Portal.Enums.SoilTypeEngland.Shallow)
+                {
+                    model.SoilOverChalk = null;
+                }
+                if (model.SoilReleasingClay != null && model.SoilTypeID != (int)NMP.Portal.Enums.SoilTypeEngland.DeepClayey)
+                {
+                    model.SoilReleasingClay = null;
+                    model.IsSoilReleasingClay = false;
+                }
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             }
             catch (Exception ex)
@@ -1149,6 +1164,7 @@ namespace NMP.Portal.Controllers
                     CroppedArea = model.CroppedArea,
                     ManureNonSpreadingArea = model.ManureNonSpreadingArea,
                     SoilReleasingClay = model.SoilReleasingClay,
+                    SoilOverChalk=model.SoilOverChalk,
                     IsWithinNVZ = model.IsWithinNVZ,
                     IsAbove300SeaLevel = model.IsAbove300SeaLevel,
                     IsActive = true,
@@ -1315,13 +1331,13 @@ namespace NMP.Portal.Controllers
             model.SoilReleasingClay = field.SoilReleasingClay ?? false;
             model.IsWithinNVZ = field.IsWithinNVZ ?? false;
             model.IsAbove300SeaLevel = field.IsAbove300SeaLevel ?? false;
-
+            model.EncryptedFieldId = _farmDataProtector.Protect(fieldId.ToString());
             var soilType = await _fieldService.FetchSoilTypeById(field.SoilTypeID.Value);
             model.SoilType = !string.IsNullOrWhiteSpace(soilType) ? soilType : string.Empty;
 
             model.EncryptedFarmId = farmId;
             model.FarmName = farm.Name;
-            List<SoilAnalysisResponse> soilAnalysisResponse = await _fieldService.FetchSoilAnalysisByFieldId(fieldId);
+            List<SoilAnalysisResponse> soilAnalysisResponse = await _fieldService.FetchSoilAnalysisByFieldId(fieldId, Resource.lblTrue);
             ViewBag.SampleDate = soilAnalysisResponse;
 
             return View(model);
@@ -2927,5 +2943,42 @@ namespace NMP.Portal.Controllers
                 return View(model);
             }
         }
+
+        [HttpGet]
+        public IActionResult SoilOverChalk()
+        {
+            FieldViewModel model = new FieldViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SoilOverChalk(FieldViewModel field)
+        {
+            if (field.SoilOverChalk == null)
+            {
+                ModelState.AddModelError("SoilOverChalk", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(field);
+            }
+
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
+            if (field.IsCheckAnswer && (!field.IsRecentSoilAnalysisQuestionChange))
+            {
+                return RedirectToAction("CheckAnswer");
+            }
+            return RedirectToAction("RecentSoilAnalysisQuestion");
+        }
+        
     }
 }

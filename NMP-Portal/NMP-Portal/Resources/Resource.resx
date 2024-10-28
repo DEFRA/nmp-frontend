@@ -2463,4 +2463,49 @@ m3/ha  not set</value>
   <data name="lblThisWillBeTheSecondCropInTheseFields" xml:space="preserve">
     <value>This will be the second crop in these fields:</value>
   </data>
+  <data name="lblIsTheSoilOverChalk" xml:space="preserve">
+    <value>Is the soil over chalk?</value>
+  </data>
+  <data name="lblSoilOverChalk" xml:space="preserve">
+    <value>Soil over chalk</value>
+  </data>
+  <data name="lblChangeTheSoilAnalysis" xml:space="preserve">
+    <value>Change the soil analysis</value>
+  </data>
+  <data name="lblPhLevel" xml:space="preserve">
+    <value>ph level</value>
+  </data>
+  <data name="lblPhosphorusAnalysisTypeForSoilDetail" xml:space="preserve">
+    <value>Phosphorus (P) analysis type</value>
+  </data>
+  <data name="lblSoilAnalysisForFieldName" xml:space="preserve">
+    <value>Soil analysis for {0}</value>
+  </data>
+  <data name="lblSoilSulphurDeficient" xml:space="preserve">
+    <value>Is the soil Sulphur (S) deficient?</value>
+  </data>
+  <data name="lblChangeSoilAnalysis" xml:space="preserve">
+    <value>Change soil analysis</value>
+  </data>
+  <data name="lblChangeSoilAnalysisFromDate" xml:space="preserve">
+    <value>Change soil analysis from {0}</value>
+  </data>
+  <data name="lblDateSampleTakenForChangePage" xml:space="preserve">
+    <value>Date sample taken</value>
+  </data>
+  <data name="lblSaveChanges" xml:space="preserve">
+    <value>Save changes</value>
+  </data>
+  <data name="lblYourSoilAnalysisChangesHaveBeenSuccessfullySaved" xml:space="preserve">
+    <value>Your soil analysis changes have been successfully saved.</value>
+  </data>
+  <data name="MsgWeCouldnNotChangeYourSoilAnalysisData" xml:space="preserve">
+    <value>We couldn’t change soil analysis data, please try again later</value>
+  </data>
+  <data name="MsgSampleDateExample" xml:space="preserve">
+    <value>For example, 11 February 2023</value>
+  </data>
+  <data name="MsgSoilAnalysisChangesCouldNotSaved" xml:space="preserve">
+    <value>Your soil analysis changes could not be saved.</value>
+  </data>
 </root>
