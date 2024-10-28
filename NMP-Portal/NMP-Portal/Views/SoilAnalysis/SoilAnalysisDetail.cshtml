@@ -51,7 +51,7 @@
             else  @if (ViewBag.Success != null && ViewBag.Success == Resource.lblFalse)
             {
                 <govuk-error-summary>
-                    <govuk-error-summary-item href="#"> @Resource.MsgWeCouldnNotChangeYourSoilAnalysisData</govuk-error-summary-item>
+                    <govuk-error-summary-item href="#"> @Resource.MsgSoilAnalysisChangesCouldNotSaved</govuk-error-summary-item>
                 </govuk-error-summary>
             }
             <h1 class="govuk-heading-l">@string.Format(Resource.lblSoilAnalysisForFieldName, Model.FieldName)</h1>
