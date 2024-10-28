@@ -79,14 +79,6 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("CheckAnswer");
             }
 
-            if (model.Counter > 0)
-            {
-                int currentCounter = Convert.ToInt32(_fertiliserManureProtector.Unprotect(model.EncryptedCounter));
-                model.EncryptedCounter = _fertiliserManureProtector.Protect((currentCounter - 1).ToString());
-                model.Counter = currentCounter - 1;
-                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
-                return RedirectToAction("QuestionForSpreadInorganicFertiliser", new { q = model.EncryptedCounter });
-            }
             if (model.FieldGroup == Resource.lblSelectSpecificFields && (!model.IsComingFromRecommendation))
             {
                 return RedirectToAction("Fields");
@@ -484,7 +476,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> InOrgnaicManureDuration(string q)//counter
+        public async Task<IActionResult> InOrgnaicManureDuration()
         {
             FertiliserManureViewModel model = new FertiliserManureViewModel();
             Error error = null;
@@ -546,13 +538,13 @@ namespace NMP.Portal.Controllers
                 model.ApplicationForFertiliserManures.Add(AppForFertManure);
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
             }
-            if (!string.IsNullOrWhiteSpace(q))
-            {
-                int currentCounter = Convert.ToInt32(_fertiliserManureProtector.Unprotect(q));
-                model.Counter = currentCounter;
-                model.EncryptedCounter = q;
-                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
-            }
+            //if (!string.IsNullOrWhiteSpace(q))
+            //{
+            //    int currentCounter = Convert.ToInt32(_fertiliserManureProtector.Unprotect(q));
+            //    model.Counter = currentCounter;
+            //    model.EncryptedCounter = q;
+            //    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
+            //}
             model.IsClosedPeriodWarningExceptGrassAndOilseed = false;
             model.IsClosedPeriodWarningOnlyForGrassAndOilseed = false;
             model.IsWarningMsgNeedToShow = false;
@@ -702,7 +694,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> NutrientValues(string q)//counter
+        public async Task<IActionResult> NutrientValues()
         {
             FertiliserManureViewModel model = new FertiliserManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
@@ -818,13 +810,13 @@ namespace NMP.Portal.Controllers
             model.IsNitrogenExceedWarning = false;
             model.IsWarningMsgNeedToShow = false;
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
-            if (!string.IsNullOrWhiteSpace(q))
-            {
-                int currentCounter = Convert.ToInt32(_fertiliserManureProtector.Unprotect(q));
-                model.Counter = currentCounter;
-                model.EncryptedCounter = q;
-                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
-            }
+            //if (!string.IsNullOrWhiteSpace(q))
+            //{
+            //    int currentCounter = Convert.ToInt32(_fertiliserManureProtector.Unprotect(q));
+            //    model.Counter = currentCounter;
+            //    model.EncryptedCounter = q;
+            //    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
+            //}
 
             return View(model);
         }
@@ -1227,127 +1219,14 @@ namespace NMP.Portal.Controllers
             }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
 
-            if (model.IsCheckAnswer)
-            {
-                return RedirectToAction("CheckAnswer");
-            }
+            //if (model.IsCheckAnswer)
+            //{
+            //    return RedirectToAction("CheckAnswer");
+            //}
 
 
 
-            return RedirectToAction("QuestionForSpreadInorganicFertiliser");
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> QuestionForSpreadInorganicFertiliser(string q)//counter
-        {
-            FertiliserManureViewModel model = new FertiliserManureViewModel();
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
-            {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FertiliserManureViewModel>("FertiliserManure");
-            }
-            else
-            {
-                return RedirectToAction("FarmList", "Farm");
-            }
-            if (!string.IsNullOrWhiteSpace(q))
-            {
-                int currentCounter = Convert.ToInt32(_fertiliserManureProtector.Unprotect(q));
-                model.Counter = currentCounter;
-                model.EncryptedCounter = q;
-                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
-            }
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> QuestionForSpreadInorganicFertiliser(FertiliserManureViewModel model)
-        {
-            int index = 0;
-            if (model.ApplicationForFertiliserManures != null && model.ApplicationForFertiliserManures.Count > 0)
-            {
-                index = model.ApplicationForFertiliserManures.FindIndex(x => x.Counter == model.Counter);
-            }
-            if (model.ApplicationForFertiliserManures[index].QuestionForSpreadInorganicFertiliser == null)
-            {
-                ModelState.AddModelError("ApplicationForFertiliserManures[" + index + "].QuestionForSpreadInorganicFertiliser", Resource.MsgSelectAnOptionBeforeContinuing);
-            }
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-
-
-            if (!model.ApplicationForFertiliserManures[index].QuestionForSpreadInorganicFertiliser.Value)
-            {
-                int totalCount = model.ApplicationForFertiliserManures.Count;
-                int counter = model.Counter.Value;
-                for (int i = totalCount - 1; i > counter; i--)
-                {
-                    model.ApplicationForFertiliserManures.RemoveAt(i);
-                }
-                //for (int i = 0; i < model.ApplicationForFertiliserManures.Count; i++)
-                //{
-
-                //    if (model.Counter != totalCount - 1)
-                //    {
-                //        counter = model.Counter.Value + 1;
-                //        model.ApplicationForFertiliserManures.RemoveAt(counter);
-                //        totalCount = model.ApplicationForFertiliserManures.Count;
-                //    }
-                //}
-                totalCount = model.ApplicationForFertiliserManures.Count;
-                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
-                return RedirectToAction("CheckAnswer");
-            }
-            else
-            {
-                var appForFertiliserManure = model.ApplicationForFertiliserManures.OrderByDescending(x => x.Counter).FirstOrDefault();
-                if (appForFertiliserManure != null)
-                {
-                    if (appForFertiliserManure.Counter == model.Counter)
-                    {
-                        int counter = Convert.ToInt32(_fertiliserManureProtector.Unprotect(model.EncryptedCounter));
-                        model.EncryptedCounter = _fertiliserManureProtector.Protect((counter + 1).ToString());
-                        model.Counter = counter + 1;
-                        // }
-                        var AppForFertManure = new ApplicationForFertiliserManure
-                        {
-                            EncryptedCounter = model.EncryptedCounter,
-                            Counter = model.Counter
-                        };
-                        model.ApplicationForFertiliserManures.Add(AppForFertManure);
-                    }
-                    else
-                    {
-                        model.EncryptedCounter = _fertiliserManureProtector.Protect((model.Counter + 1).ToString());
-                        model.Counter += 1;
-                    }
-                }
-                if (model.IsCheckAnswer)
-                {
-                    FertiliserManureViewModel fertiliserManureViewModel = new FertiliserManureViewModel();
-                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
-                    {
-                        fertiliserManureViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FertiliserManureViewModel>("FertiliserManure");
-                    }
-                    if (fertiliserManureViewModel != null)
-                    {
-                        if (!fertiliserManureViewModel.ApplicationForFertiliserManures[model.Counter.Value - 1].QuestionForSpreadInorganicFertiliser.Value)
-                        {
-                            model.IsCheckAnswer = false;
-                        }
-                    }
-                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
-                    if (model.IsCheckAnswer)
-                    {
-                        return RedirectToAction("CheckAnswer");
-                    }
-                }
-                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
-                return RedirectToAction("InOrgnaicManureDuration");
-            }
+            return RedirectToAction("CheckAnswer");
         }
 
         [HttpGet]
@@ -1377,8 +1256,8 @@ namespace NMP.Portal.Controllers
                             (model.IsClosedPeriodWarningOnlyForGrassAndOilseed, model.IsClosedPeriodWarningExceptGrassAndOilseed, string warningMsg, error) = await IsClosedPeriodWarningMessageShow(model, application.ApplicationDate.Value);
                             if (error != null)
                             {
-                                TempData["QuestionForSpreadInorganicError"] = error.Message;
-                                return View("QuestionForSpreadInorganicFertiliser", model);
+                                TempData["NutrientValuesError"] = error.Message;
+                                return RedirectToAction("NutrientValues", model);
                             }
                             else if (model.IsClosedPeriodWarningOnlyForGrassAndOilseed || model.IsClosedPeriodWarningExceptGrassAndOilseed)
                             {
@@ -1464,15 +1343,15 @@ namespace NMP.Portal.Controllers
                                                             }
                                                             else
                                                             {
-                                                                TempData["QuestionForSpreadInorganicError"] = error.Message;
-                                                                return View("QuestionForSpreadInorganicFertiliser", model);
+                                                                TempData["NutrientValuesError"] = error.Message;
+                                                                return RedirectToAction("NutrientValues", model);
                                                             }
                                                         }
                                                     }
                                                     else
                                                     {
-                                                        TempData["QuestionForSpreadInorganicError"] = error.Message;
-                                                        return View("QuestionForSpreadInorganicFertiliser", model);
+                                                        TempData["NutrientValuesError"] = error.Message;
+                                                        return RedirectToAction("NutrientValues", model);
                                                     }
                                                 }
                                             }
@@ -1485,8 +1364,8 @@ namespace NMP.Portal.Controllers
                                 }
                                 else
                                 {
-                                    TempData["QuestionForSpreadInorganicError"] = error.Message;
-                                    return View("QuestionForSpreadInorganicFertiliser", model);
+                                    TempData["NutrientValuesError"] = error.Message;
+                                    return RedirectToAction("NutrientValues", model);
                                 }
                                 if (model.IsNitrogenExceedWarning)
                                 {
@@ -1617,7 +1496,7 @@ namespace NMP.Portal.Controllers
             }
             model.IsCheckAnswer = false;
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
-            return RedirectToAction("QuestionForSpreadInorganicFertiliser", new { q = model.EncryptedCounter });
+            return RedirectToAction("NutrientValues");
         }
 
         private async Task<(bool, bool, string, Error?)> IsClosedPeriodWarningMessageShow(FertiliserManureViewModel model, DateTime applicationDate)

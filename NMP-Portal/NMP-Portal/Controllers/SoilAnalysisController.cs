@@ -45,10 +45,8 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> SoilAnalysisDetail(string i, string j, string k)//i=EncryptedFieldId,j=EncryptedFarmId,k=success
         {
             SoilAnalysisViewModel model = new SoilAnalysisViewModel();
-
             try
             {
-
                 if (!string.IsNullOrWhiteSpace(i))
                 {
                     _logger.LogTrace($"SoilAnalysisController: farms/{j} called.");
@@ -71,17 +69,14 @@ namespace NMP.Portal.Controllers
                                     typeof(PhosphorusMethodology), soilAnalysis.PhosphorusMethodologyID);
                                 soilAnalysis.EncryptedSoilAnalysisId = _soilAnalysisDataProtector.Protect(soilAnalysis.ID.ToString());
                             }
-
                             ViewBag.soilAnalysisList = soilAnalysisResponseList;
                         }
-
                     }
                     else
                     {
                         ViewBag.Error = error.Message;
                         return View(model);
                     }
-
                 }
 
                 if (!string.IsNullOrWhiteSpace(k))
@@ -590,29 +585,12 @@ namespace NMP.Portal.Controllers
             if (error.Message == null && soilAnalysis != null)
             {
                 success = _soilAnalysisDataProtector.Protect(Resource.lblTrue);
-
             }
             else
             {
                 success = _soilAnalysisDataProtector.Protect(Resource.lblFalse);
-
             }
             return RedirectToAction("SoilAnalysisDetail", new { i = model.EncryptedFieldId, j = model.EncryptedFarmId, k = success });
-        }
-        [HttpGet]
-        public async Task<IActionResult> SuccessPage(string i)
-        {
-            SoilAnalysisViewModel model = new SoilAnalysisViewModel();
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("SoilAnalysisData"))
-            {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<SoilAnalysisViewModel>("SoilAnalysisData");
-            }
-            else
-            {
-                return RedirectToAction("FarmList", "Farm");
-            }
-            ViewBag.success = _soilAnalysisDataProtector.Unprotect(i);
-            return View(model);
         }
     }
 }
