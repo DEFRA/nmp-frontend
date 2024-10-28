@@ -52,11 +52,13 @@ namespace NMP.Portal.Controllers
 
         public IActionResult Index()
         {
+            _logger.LogTrace($"Fertiliser Manure Controller : Index() action called");
             return View();
         }
 
         public IActionResult CreateFertiliserManureCancel(string q, string r)
         {
+            _logger.LogTrace($"Fertiliser Manure Controller : CreateFertiliserManureCancel({q}, {r}) action called");
             _httpContextAccessor.HttpContext?.Session.Remove("FertiliserManure");
             return RedirectToAction("HarvestYearOverview", "Crop", new { Id = q, year = r });
         }
@@ -64,6 +66,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public IActionResult backActionForInOrganicManure()
         {
+            _logger.LogTrace($"Fertiliser Manure Controller : backActionForInOrganicManure() action called");
             FertiliserManureViewModel? model = new FertiliserManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
             {
@@ -103,6 +106,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> FieldGroup(string q, string r, string? s)//q=FarmId,r=harvestYear,s=fieldId
         {
+            _logger.LogTrace($"Fertiliser Manure Controller : FieldGroup({q}, {r}, {s}) action called");
             FertiliserManureViewModel model = new FertiliserManureViewModel();
             Error error = null;
             try
@@ -219,6 +223,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Farm Controller : Exception in FieldGroup() action : {ex.Message}, {ex.StackTrace}");
                 TempData["ErrorOnHarvestYearOverview"] = ex.Message;
                 if (TempData["FieldGroupError"] != null)
                 {
@@ -243,6 +248,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> FieldGroup(FertiliserManureViewModel model)
         {
+            _logger.LogTrace($"Fertiliser Manure Controller : FieldGroup() post action called");
             Error error = null;
             if (model.FieldGroup == null)
             {
@@ -292,6 +298,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Farm Controller : Exception in FieldGroup() post action : {ex.Message}, {ex.StackTrace}");
                 TempData["FieldGroupError"] = ex.Message;
                 return View("Views/FertiliserManure/FieldGroup.cshtml", model);
             }
@@ -302,6 +309,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> Fields()
         {
+            _logger.LogTrace($"Fertiliser Manure Controller : Fields() action called");
             FertiliserManureViewModel model = new FertiliserManureViewModel();
             Error error = null;
             try
@@ -393,6 +401,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Farm Controller : Exception in Fields() action : {ex.Message}, {ex.StackTrace}");
                 TempData["FieldGroupError"] = ex.Message;
                 if (TempData["FieldError"] != null)
                 {
@@ -406,6 +415,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Fields(FertiliserManureViewModel model)
         {
+            _logger.LogTrace($"Fertiliser Manure Controller : Fields() post action called");
             Error error = null;
             try
             {
@@ -472,6 +482,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Farm Controller : Exception in Fields() post action : {ex.Message}, {ex.StackTrace}");
                 TempData["FieldError"] = ex.Message;
                 return View(model);
             }
