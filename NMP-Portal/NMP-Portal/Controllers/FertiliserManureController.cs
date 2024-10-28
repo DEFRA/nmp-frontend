@@ -79,14 +79,6 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("CheckAnswer");
             }
 
-            //if (model.Counter > 0)
-            //{
-            //    int currentCounter = Convert.ToInt32(_fertiliserManureProtector.Unprotect(model.EncryptedCounter));
-            //    model.EncryptedCounter = _fertiliserManureProtector.Protect((currentCounter - 1).ToString());
-            //    model.Counter = currentCounter - 1;
-            //    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
-            //    return RedirectToAction("QuestionForSpreadInorganicFertiliser", new { q = model.EncryptedCounter });
-            //}
             if (model.FieldGroup == Resource.lblSelectSpecificFields && (!model.IsComingFromRecommendation))
             {
                 return RedirectToAction("Fields");
@@ -484,7 +476,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> InOrgnaicManureDuration()//counter
+        public async Task<IActionResult> InOrgnaicManureDuration()
         {
             FertiliserManureViewModel model = new FertiliserManureViewModel();
             Error error = null;
