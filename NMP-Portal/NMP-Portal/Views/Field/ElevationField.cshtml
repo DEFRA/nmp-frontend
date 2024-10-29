@@ -4,11 +4,28 @@
     ViewData["Title"] = Resource.lblNVZField;
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+
+    var backAction = "";
+    if (Model.IsCheckAnswer)
+    {
+        backAction = "CheckAnswer";
+    }
+    else if (!string.IsNullOrWhiteSpace(Model.EncryptedIsUpdate))
+    {
+        backAction = "UpdateField";
+    }
+    else if (Model.IsWithinNVZForFarm.Value)
+    {
+        backAction = "NVZField";
+    }
+    else
+    {
+        backAction = "FieldMeasurements";
+    }
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : Model.IsWithinNVZForFarm.Value?"NVZField":
-            "FieldMeasurements")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@backAction asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="ElevationField" asp-controller="Field" method="post">
     @Html.AntiForgeryToken()
@@ -73,6 +90,10 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SnsIndex"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SnsValue"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilOverChalk" value="@Model.SoilOverChalk.ToString().ToLower()"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsUpdate"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ID"></govuk-input>
+
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             @if (ViewBag.SoilTypeError != null)

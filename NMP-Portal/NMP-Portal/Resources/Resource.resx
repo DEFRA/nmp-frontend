@@ -2490,4 +2490,13 @@ m3/ha  not set</value>
   <data name="lblChangeSoilAnalysisFromDate" xml:space="preserve">
     <value>Change soil analysis from {0}</value>
   </data>
+  <data name="lblUpdateThisField" xml:space="preserve">
+    <value>Update this field</value>
+  </data>
+  <data name="lblUpdateField" xml:space="preserve">
+    <value>Update Field</value>
+  </data>
+  <data name="lblUpdateXField" xml:space="preserve">
+    <value>Update {0}</value>
+  </data>
 </root>

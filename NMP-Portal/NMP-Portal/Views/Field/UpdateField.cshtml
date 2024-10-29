@@ -1,0 +1,223 @@
+﻿@using NMP.Portal.Resources;
+@model NMP.Portal.ViewModels.FieldViewModel
+
+@{
+    ViewData["Title"] = Resource.lblUpdateField;
+    var isWithinNVZ = "";
+    var isAbove300SeaLevel = "";
+    var soilReleasingClay = "";
+    var sulphurDeficient = "";
+    var WantToApplySns = "";
+
+    switch (Model.IsWithinNVZ)
+    {
+        case true:
+            isWithinNVZ = Resource.lblYes;
+            break;
+        case false:
+            isWithinNVZ = Resource.lblNo;
+            break;
+    }
+    switch (Model.IsAbove300SeaLevel)
+    {
+        case true:
+            isAbove300SeaLevel = Resource.lblYes;
+            break;
+        case false:
+            isAbove300SeaLevel = Resource.lblNo;
+            break;
+    }
+    
+}
+@section BeforeContent {
+    <govuk-back-link asp-action="FieldSoilAnalysisDetail" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+}
+<form asp-action="UpdateField" asp-controller="Field" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds-from-desktop">
+            @if (TempData["AddFieldError"] != null)
+            {
+                <govuk-error-summary>
+                    <govuk-error-summary-item href="#">@TempData["AddFieldError"]</govuk-error-summary-item>
+                </govuk-error-summary>
+            }
+            <h1 class="govuk-heading-l">
+                @string.Format( Resource.lblUpdateXField,Model.Name)
+            </h1>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherReference"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LPIDNumber"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalArea"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CroppedArea"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureNonSpreadingArea"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZ"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAbove300SeaLevel"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilTypeID"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilReleasingClay" value="@Model.SoilReleasingClay.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilOverChalk" value="@Model.SoilOverChalk.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId"></govuk-input>
+            <govuk-summary-list>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        @Resource.lblFieldName
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @Model.Name
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="AddField" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange</govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        @Resource.lblNationalGridReferenceForCheckAnswere
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @(string.IsNullOrWhiteSpace(Model.NationalGridReference) ? Resource.lblNotEntered : Model.NationalGridReference)
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="AddField" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange</govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        @Resource.lblOtherReferenceForCheckAnswere
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @(string.IsNullOrWhiteSpace(Model.OtherReference) ? Resource.lblNotEntered : Model.OtherReference)
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="AddField" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange</govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                @if (!Model.isEnglishRules)
+                {
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            @Resource.lblLandParcelIDForCheckAnswere
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @Model.LPIDNumber
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action asp-action="AddField" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange</govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+                }
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        @Resource.lblTotalFieldArea
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @Model.TotalArea
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="FieldMeasurements" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange</govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        @Resource.lblCroppedAreaForCheckAnswere
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @(Model.CroppedArea == null ? Resource.lblNotEntered : Model.CroppedArea)
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="FieldMeasurements" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange</govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        @Resource.lblManureNonSpreadingAreaForCheckAnswere
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @(Model.ManureNonSpreadingArea == null ? Resource.lblNotEntered : Model.ManureNonSpreadingArea)
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="FieldMeasurements" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange</govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                @if (Model.IsWithinNVZForFarm == true)
+                {
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            @Resource.lblNVZFieldForFieldCheckAnswere
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @isWithinNVZ
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action asp-action="NVZField" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange</govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+                }
+                @if (Model.IsAbove300SeaLevelForFarm == true)
+                {
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            @Resource.lblIsThisFieldAboveForFieldCheckAnswere
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @isAbove300SeaLevel
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action asp-action="ElevationField" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange</govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+                }
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        @Resource.lblSoilTypeForCheckAnswer
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @Model.SoilType
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="SoilType" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange</govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                @if (Model.SoilReleasingClay != null)
+                {
+                    <govuk-summary-list-row class=@((!Model.SoilReleasingClay.HasValue)?"govuk-error-message":"")>
+                        <govuk-summary-list-row-key>
+                            @Resource.lblDoesPotashClayForCheckAnswere
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @((!Model.SoilReleasingClay.HasValue) ? @Resource.lblNotSet : (Model.SoilReleasingClay.Value ? Resource.lblYes : Resource.lblNo))
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action asp-action="SoilReleasingClay" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange</govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+
+                }
+                @if (Model.SoilOverChalk != null)
+                {
+                    <govuk-summary-list-row class=@((!Model.SoilOverChalk.HasValue)?"govuk-error-message":"")>
+                        <govuk-summary-list-row-key>
+                            @Resource.lblIsTheSoilOverChalk
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @((!Model.SoilOverChalk.HasValue) ? @Resource.lblNotSet : (Model.SoilOverChalk.Value ? Resource.lblYes : Resource.lblNo))
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action asp-action="SoilOverChalk" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange</govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+
+                }
+
+            </govuk-summary-list>
+
+            <govuk-button type="submit" class="margin-bottom-forty">
+                @Resource.lblUpdateThisField
+            </govuk-button>
+            <p class="govuk-body cancel-link"><a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
+        </div>
+    </div>
+</form>

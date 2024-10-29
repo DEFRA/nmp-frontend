@@ -153,6 +153,10 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("CheckAnswer");
             }
+            if (!string.IsNullOrWhiteSpace(field.EncryptedIsUpdate))
+            {
+                return RedirectToAction("UpdateField");
+            }
 
             return RedirectToAction("FieldMeasurements");
         }
@@ -269,6 +273,10 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("CheckAnswer");
             }
+            if (!string.IsNullOrWhiteSpace(field.EncryptedIsUpdate))
+            {
+                return RedirectToAction("UpdateField");
+            }
             return RedirectToAction("NVZField");
         }
         [HttpGet]
@@ -313,6 +321,10 @@ namespace NMP.Portal.Controllers
             if (field.IsCheckAnswer)
             {
                 return RedirectToAction("CheckAnswer");
+            }
+            if (!string.IsNullOrWhiteSpace(field.EncryptedIsUpdate))
+            {
+                return RedirectToAction("UpdateField");
             }
             return RedirectToAction("ElevationField");
         }
@@ -360,6 +372,10 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("CheckAnswer");
             }
+            if (!string.IsNullOrWhiteSpace(field.EncryptedIsUpdate))
+            {
+                return RedirectToAction("UpdateField");
+            }
             return RedirectToAction("SoilType");
         }
         [HttpGet]
@@ -379,7 +395,7 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmList", "Farm");
                 }
 
-
+                
                 soilTypes = await _fieldService.FetchSoilTypes();
                 if (soilTypes.Count > 0 && soilTypes.Any())
                 {
@@ -468,6 +484,10 @@ namespace NMP.Portal.Controllers
                 field.SoilReleasingClay = null;
                 field.IsSoilReleasingClay = false;
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
+                if (!string.IsNullOrWhiteSpace(field.EncryptedIsUpdate))
+                {
+                    return RedirectToAction("UpdateField");
+                }
             }
             catch (Exception ex)
             {
@@ -528,6 +548,10 @@ namespace NMP.Portal.Controllers
             if (field.IsCheckAnswer && (!field.IsRecentSoilAnalysisQuestionChange))
             {
                 return RedirectToAction("CheckAnswer");
+            }
+            if (!string.IsNullOrWhiteSpace(field.EncryptedIsUpdate))
+            {
+                return RedirectToAction("UpdateField");
             }
             return RedirectToAction("RecentSoilAnalysisQuestion");
         }
@@ -1316,7 +1340,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> FieldSoilAnalysisDetail(string id, string farmId)
+        public async Task<IActionResult> FieldSoilAnalysisDetail(string id, string farmId, string? q)
         {
             FieldViewModel model = new FieldViewModel();
 
@@ -1334,11 +1358,29 @@ namespace NMP.Portal.Controllers
             model.EncryptedFieldId = _farmDataProtector.Protect(fieldId.ToString());
             var soilType = await _fieldService.FetchSoilTypeById(field.SoilTypeID.Value);
             model.SoilType = !string.IsNullOrWhiteSpace(soilType) ? soilType : string.Empty;
+            model.SoilTypeID = field.SoilTypeID;
+            model.EncryptedFieldId = id;
+            model.ID = fieldId;
+            model.isEnglishRules = farm.EnglishRules;
+            model.SoilOverChalk = field.SoilOverChalk;
 
             model.EncryptedFarmId = farmId;
             model.FarmName = farm.Name;
+            bool update = true;
+            model.EncryptedIsUpdate = _fieldDataProtector.Protect(update.ToString());
             List<SoilAnalysisResponse> soilAnalysisResponse = await _fieldService.FetchSoilAnalysisByFieldId(fieldId, Resource.lblTrue);
             ViewBag.SampleDate = soilAnalysisResponse;
+
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                ViewBag.Success = true;
+            }
+            else
+            {
+                ViewBag.Success = null;
+            }
+            
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
 
             return View(model);
         }
@@ -2977,6 +3019,10 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("CheckAnswer");
             }
+            if (!string.IsNullOrWhiteSpace(field.EncryptedIsUpdate))
+            {
+                return RedirectToAction("UpdateField");
+            }
             return RedirectToAction("RecentSoilAnalysisQuestion");
         }
         [HttpGet]
@@ -3061,6 +3107,99 @@ namespace NMP.Portal.Controllers
                 return View(model);
             }
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UpdateField()
+        {
+            FieldViewModel? model = null;
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+                if (model == null)
+                {
+                    model = new FieldViewModel();
+                }
+                //model.IsRecentSoilAnalysisQuestionChange = false;
+                bool isUpdateField = true;
+                model.EncryptedIsUpdate = _fieldDataProtector.Protect(isUpdateField.ToString());
+                if (model.SoilOverChalk != null && model.SoilTypeID != (int)NMP.Portal.Enums.SoilTypeEngland.Shallow)
+                {
+                    model.SoilOverChalk = null;
+                }
+                if (model.SoilReleasingClay != null && model.SoilTypeID != (int)NMP.Portal.Enums.SoilTypeEngland.DeepClayey)
+                {
+                    model.SoilReleasingClay = null;
+                    model.IsSoilReleasingClay = false;
+                }
+                //model.EncryptedFieldId = id;
+
+                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+                return RedirectToAction("CropTypes");
+            }
+            return View(model);
+
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateField(FieldViewModel model)
+        {
+            int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
+            
+            FieldData fieldData = new FieldData
+            {
+                Field = new Field
+                {
+                    SoilTypeID = model.SoilTypeID,
+                    NVZProgrammeID = model.IsWithinNVZ == true ? (int)NMP.Portal.Enums.NVZProgram.CurrentNVZRule : (int)NMP.Portal.Enums.NVZProgram.NotInNVZ,
+                    Name = model.Name,
+                    LPIDNumber = model.LPIDNumber,
+                    NationalGridReference = model.NationalGridReference,
+                    OtherReference = model.OtherReference,
+                    TotalArea = model.TotalArea,
+                    CroppedArea = model.CroppedArea,
+                    ManureNonSpreadingArea = model.ManureNonSpreadingArea,
+                    SoilReleasingClay = model.SoilReleasingClay,
+                    SoilOverChalk = model.SoilOverChalk,
+                    IsWithinNVZ = model.IsWithinNVZ,
+                    IsAbove300SeaLevel = model.IsAbove300SeaLevel,
+                    IsActive = true,
+                    CreatedOn = model.CreatedOn,
+                    CreatedByID = model.CreatedByID,
+                    ModifiedOn = DateTime.Now,
+                    ModifiedByID = userId
+                }
+            };
+            int fieldId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFieldId));
+            (Field fieldResponse, Error error1) = await _fieldService.UpdateFieldAsync(fieldData, fieldId);
+            if (error1.Message == null && fieldResponse != null)
+            {
+                string success = _farmDataProtector.Protect("true");
+                string fieldName = _farmDataProtector.Protect(fieldResponse.Name);
+                _httpContextAccessor.HttpContext?.Session.Remove("FieldData");
+
+                return RedirectToAction("FieldSoilAnalysisDetail", new { id = model.EncryptedFieldId, farmId = model.EncryptedFarmId, q = success });
+            }
+            else
+            {
+                TempData["AddFieldError"] = Resource.MsgWeCouldNotAddYourFieldPleaseTryAgainLater;
+                return RedirectToAction("UpdateField");
+            }
+
         }
     }
 }
