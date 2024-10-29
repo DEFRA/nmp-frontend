@@ -41,15 +41,17 @@ namespace NMP.Portal.Controllers
             _fieldService = fieldService;
             _soilAnalysisService = soilAnalysisService;
         }
+
         [HttpGet]
         public async Task<IActionResult> SoilAnalysisDetail(string i, string j, string k)//i=EncryptedFieldId,j=EncryptedFarmId,k=success
         {
+            _logger.LogTrace($"Soil Analysis Controller: SoilAnalysisDetail({i}, {j},{k}) action called.");
             SoilAnalysisViewModel model = new SoilAnalysisViewModel();
             try
             {
                 if (!string.IsNullOrWhiteSpace(i))
                 {
-                    _logger.LogTrace($"SoilAnalysisController: farms/{j} called.");
+                    
                     (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(j)));
                     if (string.IsNullOrWhiteSpace(error.Message))
                     {
@@ -87,6 +89,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Soil Analysis Controller : Exception in SoilAnalysisDetail() action : {ex.Message}, {ex.StackTrace}");
                 ViewBag.Error = ex.Message;
                 return View(model);
             }
@@ -95,6 +98,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> ChangeSoilAnalysis(string i, string j, string k, string l)//i= soilAnalysisId,j=EncryptedFieldId,k=EncryptedFarmId,l=IsSoilDataChanged
         {
+            _logger.LogTrace($"Soil Analysis Controller: ChangeSoilAnalysis({i}, {j},{k}, {l}) action called.");
             SoilAnalysisViewModel model = new SoilAnalysisViewModel();
 
             try
@@ -173,6 +177,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Soil Analysis Controller : Exception in ChangeSoilAnalysis() action : {ex.Message}, {ex.StackTrace}");
                 TempData["ChangeSoilAnalysisError"] = ex.Message;
                 return View(model);
             }
@@ -181,6 +186,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> Date()
         {
+            _logger.LogTrace($"Soil Analysis Controller: Date() action called.");
             SoilAnalysisViewModel model = new SoilAnalysisViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("SoilAnalysisData"))
             {
@@ -192,10 +198,12 @@ namespace NMP.Portal.Controllers
             }
             return View(model);
         }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Date(SoilAnalysisViewModel model)
         {
+            _logger.LogTrace($"Soil Analysis Controller: Date() post action called.");
 
             if ((!ModelState.IsValid) && ModelState.ContainsKey("Date"))
             {
@@ -236,9 +244,11 @@ namespace NMP.Portal.Controllers
 
             return RedirectToAction("ChangeSoilAnalysis", new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
         }
+
         [HttpGet]
         public async Task<IActionResult> SoilNutrientValueType()
         {
+            _logger.LogTrace($"Soil Analysis Controller: SoilNutrientValueType() action called.");
             SoilAnalysisViewModel model = new SoilAnalysisViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("SoilAnalysisData"))
             {
@@ -251,10 +261,12 @@ namespace NMP.Portal.Controllers
 
             return View(model);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult SoilNutrientValueType(SoilAnalysisViewModel model)
         {
+            _logger.LogTrace($"Soil Analysis Controller: SoilNutrientValueType() post action called.");
             if (model.IsSoilNutrientValueTypeIndex == null)
             {
                 ModelState.AddModelError("IsSoilNutrientValueTypeIndex", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -297,10 +309,11 @@ namespace NMP.Portal.Controllers
 
             return RedirectToAction("ChangeSoilAnalysis", new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
         }
+
         [HttpGet]
         public async Task<IActionResult> SoilNutrientValue()
         {
-
+            _logger.LogTrace($"Soil Analysis Controller: SoilNutrientValue() action called.");
             SoilAnalysisViewModel model = new SoilAnalysisViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("SoilAnalysisData"))
             {
@@ -317,6 +330,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SoilNutrientValue(SoilAnalysisViewModel model)
         {
+            _logger.LogTrace($"Soil Analysis Controller: SoilNutrientValue() post action called.");
             Error error = null;
             try
             {
@@ -445,6 +459,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Soil Analysis Controller : Exception in SoilNutrientValue() post action : {ex.Message}, {ex.StackTrace}");
                 ViewBag.Error = string.Concat(error, ex.Message);
                 return View(model);
             }
@@ -454,9 +469,11 @@ namespace NMP.Portal.Controllers
 
             return RedirectToAction("ChangeSoilAnalysis", new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
         }
+
         [HttpGet]
         public IActionResult SulphurDeficient()
         {
+            _logger.LogTrace($"Soil Analysis Controller: SulphurDeficient() action called.");
             SoilAnalysisViewModel model = new SoilAnalysisViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("SoilAnalysisData"))
             {
@@ -473,7 +490,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SulphurDeficient(SoilAnalysisViewModel model)
         {
-
+            _logger.LogTrace($"Soil Analysis Controller: SulphurDeficient() post action called.");
             if (model.SulphurDeficient == null)
             {
                 ModelState.AddModelError("SulphurDeficient", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -487,10 +504,12 @@ namespace NMP.Portal.Controllers
 
             return RedirectToAction("ChangeSoilAnalysis", new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
         }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateSoil(SoilAnalysisViewModel model)
         {
+            _logger.LogTrace($"Soil Analysis Controller: UpdateSoil() post action called.");
             if (model.IsSoilNutrientValueTypeIndex.HasValue)
             {
 

@@ -54,17 +54,20 @@ namespace NMP.Portal.Controllers
         }
         public IActionResult Index()
         {
+            _logger.LogTrace($"Field Controller : Index() action called");
             return View();
         }
 
         public IActionResult CreateFieldCancel(string id)
         {
+            _logger.LogTrace($"Field Controller : CreateFieldCancel({id}) action called");
             _httpContextAccessor.HttpContext?.Session.Remove("FieldData");
             return RedirectToAction("FarmSummary", "Farm", new { Id = id });
         }
 
         public async Task<IActionResult> BackActionForAddField(string id)
         {
+            _logger.LogTrace($"Field Controller : BackActionForAddField({id}) action called");
             FieldViewModel model = new FieldViewModel();
             try
             {
@@ -86,6 +89,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Field Controller : Exception in BackActionForAddField() action : {ex.Message}, {ex.StackTrace}");
                 TempData["ErrorOnBackButton"] = ex.Message;
                 return View("AddField", model);
             }
@@ -94,6 +98,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> AddField(string q)//EncryptedfarmId
         {
+            _logger.LogTrace($"Field Controller : AddField({q}) action called");
             FieldViewModel model = new FieldViewModel();
             Error error = null;
             try
@@ -119,6 +124,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Field Controller : Exception in BackActionForAddField() action : {ex.Message}, {ex.StackTrace}");
                 TempData["Error"] = string.Concat(error.Message == null ? "" : error.Message, ex.Message);
                 return RedirectToAction("FarmSummary", "Farm", new { id = q });
             }
@@ -131,7 +137,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddField(FieldViewModel field)
         {
-
+            _logger.LogTrace($"Field Controller : AddField() action called");
             if (string.IsNullOrWhiteSpace(field.Name))
             {
                 ModelState.AddModelError("Name", Resource.MsgEnterTheFieldName);
@@ -159,6 +165,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> FieldMeasurements()
         {
+            _logger.LogTrace($"Field Controller : FieldMeasurements() action called");
             FieldViewModel model = new FieldViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
             {
@@ -174,6 +181,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> FieldMeasurements(FieldViewModel field)
         {
+            _logger.LogTrace($"Field Controller : FieldMeasurements() post action called");
             if ((!ModelState.IsValid) && ModelState.ContainsKey("TotalArea"))
             {
                 var InvalidFormatError = ModelState["TotalArea"].Errors.Count > 0 ?
@@ -274,6 +282,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> NVZField()
         {
+            _logger.LogTrace($"Field Controller : NVZField() action called");
             Error error = new Error();
 
             FieldViewModel model = new FieldViewModel();
@@ -301,6 +310,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult NVZField(FieldViewModel field)
         {
+            _logger.LogTrace($"Field Controller : NVZField() post action called");
             if (field.IsWithinNVZ == null)
             {
                 ModelState.AddModelError("IsWithinNVZ", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -320,6 +330,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> ElevationField()
         {
+            _logger.LogTrace($"Field Controller : ElevationField() action called");
             Error error = new Error();
 
             FieldViewModel model = new FieldViewModel();
@@ -347,6 +358,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult ElevationField(FieldViewModel field)
         {
+            _logger.LogTrace($"Field Controller : ElevationField() post action called");
             if (field.IsAbove300SeaLevel == null)
             {
                 ModelState.AddModelError("IsAbove300SeaLevel", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -365,6 +377,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> SoilType()
         {
+            _logger.LogTrace($"Field Controller : SoilType() action called");
             Error error = new Error();
             FieldViewModel model = new FieldViewModel();
             List<SoilTypesResponse> soilTypes = new List<SoilTypesResponse>();
@@ -396,6 +409,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Field Controller : Exception in SoilType() action : {ex.Message}, {ex.StackTrace}");
                 TempData["Error"] = ex.Message;
                 return RedirectToAction("ElevationField");
             }
@@ -407,6 +421,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SoilType(FieldViewModel field)
         {
+            _logger.LogTrace($"Field Controller : SoilType() post action called");
             List<SoilTypesResponse> soilTypes = new List<SoilTypesResponse>();
             try
             {
@@ -471,6 +486,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Field Controller : Exception in SoilType() post action : {ex.Message}, {ex.StackTrace}");
                 TempData["Error"] = ex.Message;
                 return View(field);
             }
@@ -480,6 +496,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public IActionResult SoilReleasingClay()
         {
+            _logger.LogTrace($"Field Controller : SoilReleasingClay() action called");
             FieldViewModel model = new FieldViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
             {
@@ -496,6 +513,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SoilReleasingClay(FieldViewModel field)
         {
+            _logger.LogTrace($"Field Controller : SoilReleasingClay() post action called");
             if (field.SoilReleasingClay == null)
             {
                 ModelState.AddModelError("SoilReleasingClay", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -535,6 +553,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public IActionResult SulphurDeficient()
         {
+            _logger.LogTrace($"Field Controller : SulphurDeficient() action called");
             FieldViewModel model = new FieldViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
             {
@@ -552,7 +571,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SulphurDeficient(FieldViewModel field)
         {
-
+            _logger.LogTrace($"Field Controller : SulphurDeficient() action called");
             if (field.SoilAnalyses.SulphurDeficient == null)
             {
                 ModelState.AddModelError("SoilAnalyses.SulphurDeficient", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -573,9 +592,11 @@ namespace NMP.Portal.Controllers
             }
             return RedirectToAction("SoilDate");
         }
+        
         [HttpGet]
         public async Task<IActionResult> SoilDate()
         {
+            _logger.LogTrace($"Field Controller : SoilDateAndPHLevel() action called");
             FieldViewModel model = new FieldViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
             {
@@ -591,7 +612,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult SoilDate(FieldViewModel model)
         {
-
+            _logger.LogTrace($"Field Controller : SoilDateAndPHLevel() post action called");
             if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilAnalyses.Date"))
             {
                 var dateError = ModelState["SoilAnalyses.Date"].Errors.Count > 0 ?
@@ -641,6 +662,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> SoilNutrientValueType()
         {
+            _logger.LogTrace($"Field Controller : SoilNutrientValueType() action called");
             FieldViewModel model = new FieldViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
             {
@@ -653,10 +675,12 @@ namespace NMP.Portal.Controllers
 
             return View(model);
         }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult SoilNutrientValueType(FieldViewModel model)
         {
+            _logger.LogTrace($"Field Controller : SoilNutrientValueType() post action called");
             if (model.IsSoilNutrientValueTypeIndex == null)
             {
                 ModelState.AddModelError("IsSoilNutrientValueTypeIndex", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -674,6 +698,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> SoilNutrientValue()
         {
+            _logger.LogTrace($"Field Controller : SoilNutrientValue() action called");
             FieldViewModel model = new FieldViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
             {
@@ -690,6 +715,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SoilNutrientValue(FieldViewModel model)
         {
+            _logger.LogTrace($"Field Controller : SoilNutrientValue() post action called");
             Error error = null;
             try
             {
@@ -814,6 +840,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Field Controller : Exception in SoilNutrientValue() post action : {ex.Message}, {ex.StackTrace}");
                 ViewBag.Error = string.Concat(error, ex.Message);
                 return View(model);
             }
@@ -823,6 +850,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> CropGroups()
         {
+            _logger.LogTrace($"Field Controller : CropGroups() action called");
             FieldViewModel model = new FieldViewModel();
             List<CropGroupResponse> cropGroups = new List<CropGroupResponse>();
 
@@ -842,15 +870,18 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Field Controller : Exception in CropGroups() action : {ex.Message}, {ex.StackTrace}");
                 TempData["Error"] = ex.Message;
                 return RedirectToAction("SNSCalculationMethod");
             }
             return View(model);
         }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CropGroups(FieldViewModel field)
         {
+            _logger.LogTrace($"Field Controller : CropGroups() post action called");
             if (field.CropGroupId == null)
             {
                 ModelState.AddModelError("CropGroupId", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropGroup.ToLower()));
@@ -884,6 +915,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> CropTypes()
         {
+            _logger.LogTrace($"Field Controller : CropTypes() action called");
             FieldViewModel model = new FieldViewModel();
             List<CropTypeResponse> cropTypes = new List<CropTypeResponse>();
 
@@ -920,16 +952,19 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Field Controller : Exception in CropTypes() action : {ex.Message}, {ex.StackTrace}");
                 TempData["Error"] = ex.Message;
                 return RedirectToAction("CropGroups");
             }
 
             return View(model);
         }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CropTypes(FieldViewModel field)
         {
+            _logger.LogTrace($"Field Controller : CropTypes() post action called");
             if (field.CropTypeID == null)
             {
                 ModelState.AddModelError("CropTypeID", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropType.ToLower()));
@@ -950,9 +985,11 @@ namespace NMP.Portal.Controllers
             }
             return RedirectToAction("SNSAppliedQuestion");
         }
+        
         [HttpGet]
         public IActionResult SNSAppliedQuestion()
         {
+            _logger.LogTrace($"Field Controller : SNSAppliedQuestion() action called");
             FieldViewModel? model = new FieldViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
             {
@@ -969,6 +1006,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult SNSAppliedQuestion(FieldViewModel model)
         {
+            _logger.LogTrace($"Field Controller : SNSAppliedQuestion() action called");
             if (model.WantToApplySns == null)
             {
                 ModelState.AddModelError("WantToApplySns", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -989,6 +1027,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> CheckAnswer()
         {
+            _logger.LogTrace($"Field Controller : CheckAnswer() action called");
             FieldViewModel? model = null;
             try
             {
@@ -1020,6 +1059,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Field Controller : Exception in CheckAnswer() action : {ex.Message}, {ex.StackTrace}");
                 TempData["Error"] = ex.Message;
                 return RedirectToAction("CropTypes");
             }
@@ -1029,6 +1069,7 @@ namespace NMP.Portal.Controllers
 
         public async Task<IActionResult> BackCheckAnswer()
         {
+            _logger.LogTrace($"Field Controller : BackCheckAnswer() action called");
             FieldViewModel? model = null;
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
             {
@@ -1067,6 +1108,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CheckAnswer(FieldViewModel model)
         {
+            _logger.LogTrace($"Field Controller : CheckAnswer() post action called");
             if (!model.CropTypeID.HasValue)
             {
                 ModelState.AddModelError("CropTypeID", Resource.MsgPreviousCropTypeNotSet);
@@ -1291,6 +1333,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> ManageFarmFields(string id, string? q, string? name)
         {
+            _logger.LogTrace($"Field Controller : ManageFarmFields() action called");
             FarmFieldsViewModel model = new FarmFieldsViewModel();
             if (!string.IsNullOrWhiteSpace(q))
             {
@@ -1325,13 +1368,14 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult ManageFarmFields(FieldViewModel field)
         {
-
+            _logger.LogTrace($"Field Controller : ManageFarmFields() post action called");
             return RedirectToAction("ManageFarmFields");
         }
 
         [HttpGet]
         public async Task<IActionResult> FieldSoilAnalysisDetail(string id, string farmId)
         {
+            _logger.LogTrace($"Field Controller : FieldSoilAnalysisDetail() action called");
             FieldViewModel model = new FieldViewModel();
 
             (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(farmId)));
@@ -1360,6 +1404,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> SampleForSoilMineralNitrogen()
         {
+            _logger.LogTrace($"Field Controller : SampleForSoilMineralNitrogen() action called");
             FieldViewModel model = new FieldViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
             {
@@ -1375,7 +1420,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult SampleForSoilMineralNitrogen(FieldViewModel model)
         {
-
+            _logger.LogTrace($"Field Controller : SampleForSoilMineralNitrogen() post action called");
             if ((!ModelState.IsValid) && ModelState.ContainsKey("SampleForSoilMineralNitrogen"))
             {
                 var dateError = ModelState["SampleForSoilMineralNitrogen"].Errors.Count > 0 ?
@@ -1433,9 +1478,11 @@ namespace NMP.Portal.Controllers
 
             return RedirectToAction("CurrentCropGroups");
         }
+        
         [HttpGet]
         public async Task<IActionResult> CurrentCropGroups()
         {
+            _logger.LogTrace($"Field Controller : CurrentCropGroups() post action called");
             FieldViewModel model = new FieldViewModel();
             List<CropGroupResponse> cropGroups = new List<CropGroupResponse>();
 
@@ -1454,15 +1501,18 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Field Controller : Exception in CurrentCropGroups() action : {ex.Message}, {ex.StackTrace}");
                 TempData["Error"] = ex.Message;
                 return RedirectToAction("SampleForSoilMineralNitrogen");
             }
             return View(model);
         }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CurrentCropGroups(FieldViewModel model)
         {
+            _logger.LogTrace($"Field Controller : CurrentCropGroups() post action called");
             if (model.CurrentCropGroupId == null)
             {
                 ModelState.AddModelError("CurrentCropGroupId", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropGroup.ToLower()));
@@ -1538,6 +1588,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> CurrentCropTypes()
         {
+            _logger.LogTrace($"Field Controller : CurrentCropTypes() action called");
             FieldViewModel model = new FieldViewModel();
             List<CropTypeResponse> cropTypes = new List<CropTypeResponse>();
 
@@ -1650,16 +1701,19 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Field Controller : Exception in CurrentCropTypes() action : {ex.Message}, {ex.StackTrace}");
                 TempData["Error"] = ex.Message;
                 return RedirectToAction("CurrentCropGroups");
             }
 
             return View(model);
         }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CurrentCropTypes(FieldViewModel model)
         {
+            _logger.LogTrace($"Field Controller : CurrentCropTypes() post action called");
             if (model.CurrentCropTypeId == null)
             {
                 ModelState.AddModelError("CurrentCropTypeId", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropType.ToLower()));
@@ -1756,9 +1810,11 @@ namespace NMP.Portal.Controllers
             }
             return RedirectToAction("SoilMineralNitrogenAnalysisResults");
         }
+        
         [HttpGet]
         public async Task<IActionResult> SoilMineralNitrogenAnalysisResults()
         {
+            _logger.LogTrace($"Field Controller : SoilMineralNitrogenAnalysisResults() action called");
             FieldViewModel model = new FieldViewModel();
 
             try
@@ -1774,16 +1830,19 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Field Controller : Exception in SoilMineralNitrogenAnalysisResults() action : {ex.Message}, {ex.StackTrace}");
                 TempData["Error"] = ex.Message;
                 return RedirectToAction("CurrentCropTypes");
             }
 
             return View(model);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SoilMineralNitrogenAnalysisResults(FieldViewModel model)
         {
+            _logger.LogTrace($"Field Controller : SoilMineralNitrogenAnalysisResults() post action called");
             if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilMineralNitrogenAt030CM"))
             {
                 var InvalidFormatError = ModelState["SoilMineralNitrogenAt030CM"].Errors.Count > 0 ?
@@ -1905,9 +1964,11 @@ namespace NMP.Portal.Controllers
 
             return RedirectToAction("SoilMineralNitrogenAnalysisResults");
         }
+
         [HttpGet]
         public async Task<IActionResult> SampleDepth()
         {
+            _logger.LogTrace($"Field Controller : SampleDepth() action called");
             FieldViewModel model = new FieldViewModel();
             try
             {
@@ -1922,15 +1983,18 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Field Controller : Exception in SampleDepth() action : {ex.Message}, {ex.StackTrace}");
                 TempData["Error"] = ex.Message;
                 return RedirectToAction("CurrentCropTypes");
             }
             return View(model);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SampleDepth(FieldViewModel model)
         {
+            _logger.LogTrace($"Field Controller : SampleDepth() post action called");
             if ((!ModelState.IsValid) && ModelState.ContainsKey("SampleDepth"))
             {
                 var InvalidFormatError = ModelState["SampleDepth"].Errors.Count > 0 ?
@@ -2020,6 +2084,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> CalculateNitrogenInCurrentCropQuestion()
         {
+            _logger.LogTrace($"Field Controller : CalculateNitrogenInCurrentCropQuestion() action called");
             FieldViewModel model = new FieldViewModel();
             try
             {
@@ -2035,6 +2100,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Field Controller : Exception in CalculateNitrogenInCurrentCropQuestion() action : {ex.Message}, {ex.StackTrace}");
                 TempData["Error"] = ex.Message;
                 return RedirectToAction("SoilMineralNitrogenAnalysisResults");
             }
@@ -2045,6 +2111,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CalculateNitrogenInCurrentCropQuestion(FieldViewModel model)
         {
+            _logger.LogTrace($"Field Controller : CalculateNitrogenInCurrentCropQuestion() post action called");
             if (model.IsCalculateNitrogen == null)
             {
                 ModelState.AddModelError("IsCalculateNitrogen", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -2107,15 +2174,13 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("EstimateOfNitrogenMineralisationQuestion");
             }
 
-
-
-
             return RedirectToAction("EstimateOfNitrogenMineralisationQuestion");
         }
 
         [HttpGet]
         public async Task<IActionResult> NumberOfShoots()
         {
+            _logger.LogTrace($"Field Controller : NumberOfShoots() action called");
             FieldViewModel model = new FieldViewModel();
             List<SeasonResponse> seasons = new List<SeasonResponse>();
 
@@ -2134,6 +2199,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Field Controller : Exception in NumberOfShoots() action : {ex.Message}, {ex.StackTrace}");
                 TempData["Error"] = ex.Message;
                 return RedirectToAction("CalculateNitrogenInCurrentCropQuestion");
             }
@@ -2144,6 +2210,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> NumberOfShoots(FieldViewModel model)
         {
+            _logger.LogTrace($"Field Controller : NumberOfShoots() post action called");
             if (model.NumberOfShoots == null)
             {
                 ModelState.AddModelError("NumberOfShoots", Resource.lblEnterAValidNumber);
@@ -2203,6 +2270,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> GreenAreaIndexOrCropHeightQuestion()
         {
+            _logger.LogTrace($"Field Controller : GreenAreaIndexOrCropHeightQuestion() action called");
             FieldViewModel model = new FieldViewModel();
             List<CropGroupResponse> cropGroups = new List<CropGroupResponse>();
 
@@ -2221,6 +2289,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Field Controller : Exception in GreenAreaIndexOrCropHeightQuestion() action : {ex.Message}, {ex.StackTrace}");
                 TempData["Error"] = ex.Message;
                 return RedirectToAction("CalculateNitrogenInCurrentCropQuestion");
             }
@@ -2231,6 +2300,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult GreenAreaIndexOrCropHeightQuestion(FieldViewModel model)
         {
+            _logger.LogTrace($"Field Controller : GreenAreaIndexOrCropHeightQuestion() post action called");
             if (model.GreenAreaIndexOrCropHeight == 0)
             {
                 ModelState.AddModelError("GreenAreaIndexOrCropHeight", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -2287,6 +2357,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> BackActionForCalculateNitrogenCropQuestion()
         {
+            _logger.LogTrace($"Field Controller : BackActionForCalculateNitrogenCropQuestion() action called");
             FieldViewModel model = new FieldViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
             {
@@ -2318,6 +2389,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> CropHeight()
         {
+            _logger.LogTrace($"Field Controller : CropHeight() action called");
             FieldViewModel model = new FieldViewModel();
             List<SeasonResponse> seasons = new List<SeasonResponse>();
 
@@ -2336,6 +2408,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Field Controller : Exception in CropHeight() action : {ex.Message}, {ex.StackTrace}");
                 TempData["Error"] = ex.Message;
                 return RedirectToAction("GreenAreaIndexOrCropHeightQuestion");
             }
@@ -2346,6 +2419,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CropHeight(FieldViewModel model)
         {
+            _logger.LogTrace($"Field Controller : CropHeight() post action called");
             if (model.CropHeight == null)
             {
                 ModelState.AddModelError("CropHeight", Resource.lblEnterACropHeightBeforeContinue);
@@ -2403,6 +2477,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> GreenAreaIndex()
         {
+            _logger.LogTrace($"Field Controller : GreenAreaIndex() action called");
             FieldViewModel model = new FieldViewModel();
             List<SeasonResponse> seasons = new List<SeasonResponse>();
 
@@ -2421,6 +2496,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Field Controller : Exception in GreenAreaIndex() action : {ex.Message}, {ex.StackTrace}");
                 TempData["Error"] = ex.Message;
                 return RedirectToAction("GreenAreaIndexOrCropHeightQuestion");
             }
@@ -2431,6 +2507,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> GreenAreaIndex(FieldViewModel model)
         {
+            _logger.LogTrace($"Field Controller : GreenAreaIndex() post action called");
             if (model.GreenAreaIndex == null)
             {
                 ModelState.AddModelError("GreenAreaIndex", Resource.lblEnterGAIValueBeforeContinue);
@@ -2488,6 +2565,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> EstimateOfNitrogenMineralisationQuestion()
         {
+            _logger.LogTrace($"Field Controller : EstimateOfNitrogenMineralisationQuestion() action called");
             FieldViewModel model = new FieldViewModel();
             List<CropGroupResponse> cropGroups = new List<CropGroupResponse>();
 
@@ -2505,15 +2583,18 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Field Controller : Exception in EstimateOfNitrogenMineralisationQuestion() action : {ex.Message}, {ex.StackTrace}");
                 TempData["Error"] = ex.Message;
                 return RedirectToAction("CalculateNitrogenInCurrentCropQuestion");
             }
             return View(model);
         }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EstimateOfNitrogenMineralisationQuestion(FieldViewModel model)
         {
+            _logger.LogTrace($"Field Controller : EstimateOfNitrogenMineralisationQuestion() action called");
             if (model.IsEstimateOfNitrogenMineralisation == null)
             {
                 ModelState.AddModelError("IsEstimateOfNitrogenMineralisation", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -2565,6 +2646,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> SoilNitrogenSupplyIndex()
         {
+            _logger.LogTrace($"Field Controller : SoilNitrogenSupplyIndex() action called");
             FieldViewModel model = new FieldViewModel();
             List<CropGroupResponse> cropGroups = new List<CropGroupResponse>();
 
@@ -2665,21 +2747,25 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Field Controller : Exception in SoilNitrogenSupplyIndex() action : {ex.Message}, {ex.StackTrace}");
                 TempData["Error"] = ex.Message;
                 return RedirectToAction("CalculateNitrogenInCurrentCropQuestion");
             }
             return View(model);
         }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult SoilNitrogenSupplyIndex(FieldViewModel model)
         {
+            _logger.LogTrace($"Field Controller : SoilNitrogenSupplyIndex() post action called");
             return RedirectToAction("CheckAnswer");
         }
 
         [HttpGet]
         public async Task<IActionResult> IsBasedOnSoilOrganicMatter()
         {
+            _logger.LogTrace($"Field Controller : IsBasedOnSoilOrganicMatter() action called");
             FieldViewModel model = new FieldViewModel();
             List<CropGroupResponse> cropGroups = new List<CropGroupResponse>();
 
@@ -2697,6 +2783,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Field Controller : Exception in IsBasedOnSoilOrganicMatter() action : {ex.Message}, {ex.StackTrace}");
                 TempData["Error"] = ex.Message;
                 return RedirectToAction("EstimateOfNitrogenMineralisationQuestion");
             }
@@ -2706,6 +2793,7 @@ namespace NMP.Portal.Controllers
         [HttpPost]
         public async Task<IActionResult> IsBasedOnSoilOrganicMatter(FieldViewModel model)
         {
+            _logger.LogTrace($"Field Controller : IsBasedOnSoilOrganicMatter() post action called");
             try
             {
                 if (model.IsBasedOnSoilOrganicMatter == null)
@@ -2750,6 +2838,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Field Controller : Exception in IsBasedOnSoilOrganicMatter() post action : {ex.Message}, {ex.StackTrace}");
                 TempData["Error"] = ex.Message;
                 return RedirectToAction("IsBasedOnSoilOrganicMatter");
             }
@@ -2757,6 +2846,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> AdjustmentValue()
         {
+            _logger.LogTrace($"Field Controller : AdjustmentValue() action called");
             FieldViewModel model = new FieldViewModel();
 
             try
@@ -2772,6 +2862,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Field Controller : Exception in AdjustmentValue() action : {ex.Message}, {ex.StackTrace}");
                 TempData["Error"] = ex.Message;
                 return RedirectToAction("IsBasedOnSoilOrganicMatter");
             }
@@ -2781,7 +2872,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AdjustmentValue(FieldViewModel model)
         {
-
+            _logger.LogTrace($"Field Controller : AdjustmentValue() post action called");
             if ((!ModelState.IsValid) && ModelState.ContainsKey("AdjustmentValue"))
             {
                 var InvalidFormatError = ModelState["AdjustmentValue"].Errors.Count > 0 ?
@@ -2832,9 +2923,11 @@ namespace NMP.Portal.Controllers
 
             return RedirectToAction("SoilNitrogenSupplyIndex");
         }
+        
         [HttpGet]
         public async Task<IActionResult> SoilOrganicMatter()
         {
+            _logger.LogTrace($"Field Controller : SoilOrganicMatter() action called");
             FieldViewModel model = new FieldViewModel();
 
             try
@@ -2850,6 +2943,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Field Controller : Exception in SoilOrganicMatter() action : {ex.Message}, {ex.StackTrace}");
                 TempData["Error"] = ex.Message;
                 return RedirectToAction("IsBasedOnSoilOrganicMatter");
             }
@@ -2860,7 +2954,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SoilOrganicMatter(FieldViewModel model)
         {
-
+            _logger.LogTrace($"Field Controller : SoilOrganicMatter() post action called");
             if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilOrganicMatter"))
             {
                 var InvalidFormatError = ModelState["SoilOrganicMatter"].Errors.Count > 0 ?
@@ -2912,9 +3006,11 @@ namespace NMP.Portal.Controllers
 
             return RedirectToAction("SoilNitrogenSupplyIndex");
         }
+
         [HttpGet]
         public async Task<IActionResult> BackActionForEstimateOfNitrogenMineralisationQuestion()
         {
+            _logger.LogTrace($"Field Controller : BackActionForEstimateOfNitrogenMineralisationQuestion() action called");
             FieldViewModel model = new FieldViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
             {
@@ -2957,9 +3053,11 @@ namespace NMP.Portal.Controllers
             }
             return RedirectToAction("SoilMineralNitrogenAnalysisResults");
         }
+
         [HttpGet]
         public async Task<IActionResult> RecentSoilAnalysisQuestion()
         {
+            _logger.LogTrace($"Field Controller : RecentSoilAnalysisQuestion() action called");
             FieldViewModel model = new FieldViewModel();
 
             try
@@ -2975,6 +3073,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Field Controller : Exception in RecentSoilAnalysisQuestion() action : {ex.Message}, {ex.StackTrace}");
                 TempData["Error"] = ex.Message;
                 return RedirectToAction("SoilType");
             }
@@ -2984,6 +3083,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RecentSoilAnalysisQuestion(FieldViewModel model)
         {
+            _logger.LogTrace($"Field Controller : RecentSoilAnalysisQuestion() post action called");
             if (model.RecentSoilAnalysisQuestion == null)
             {
                 ModelState.AddModelError("RecentSoilAnalysisQuestion", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -3038,6 +3138,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Field Controller : Exception in RecentSoilAnalysisQuestion() post action : {ex.Message}, {ex.StackTrace}");
                 TempData["Error"] = ex.Message;
                 return View(model);
             }
@@ -3046,6 +3147,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public IActionResult SoilOverChalk()
         {
+            _logger.LogTrace($"Field Controller : SoilOverChalk() action called");
             FieldViewModel model = new FieldViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
             {
@@ -3062,6 +3164,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SoilOverChalk(FieldViewModel field)
         {
+            _logger.LogTrace($"Field Controller : SoilOverChalk() post action called");
             if (field.SoilOverChalk == null)
             {
                 ModelState.AddModelError("SoilOverChalk", Resource.MsgSelectAnOptionBeforeContinuing);

@@ -52,11 +52,13 @@ namespace NMP.Portal.Controllers
 
         public IActionResult Index()
         {
+            _logger.LogTrace($"Fertiliser Manure Controller : Index() action called");
             return View();
         }
 
         public IActionResult CreateFertiliserManureCancel(string q, string r)
         {
+            _logger.LogTrace($"Fertiliser Manure Controller : CreateFertiliserManureCancel({q}, {r}) action called");
             _httpContextAccessor.HttpContext?.Session.Remove("FertiliserManure");
             return RedirectToAction("HarvestYearOverview", "Crop", new { Id = q, year = r });
         }
@@ -64,6 +66,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public IActionResult backActionForInOrganicManure()
         {
+            _logger.LogTrace($"Fertiliser Manure Controller : backActionForInOrganicManure() action called");
             FertiliserManureViewModel? model = new FertiliserManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
             {
@@ -95,6 +98,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> FieldGroup(string q, string r, string? s)//q=FarmId,r=harvestYear,s=fieldId
         {
+            _logger.LogTrace($"Fertiliser Manure Controller : FieldGroup({q}, {r}, {s}) action called");
             FertiliserManureViewModel model = new FertiliserManureViewModel();
             Error error = null;
             try
@@ -211,6 +215,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Farm Controller : Exception in FieldGroup() action : {ex.Message}, {ex.StackTrace}");
                 TempData["ErrorOnHarvestYearOverview"] = ex.Message;
                 if (TempData["FieldGroupError"] != null)
                 {
@@ -235,6 +240,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> FieldGroup(FertiliserManureViewModel model)
         {
+            _logger.LogTrace($"Fertiliser Manure Controller : FieldGroup() post action called");
             Error error = null;
             if (model.FieldGroup == null)
             {
@@ -284,6 +290,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Farm Controller : Exception in FieldGroup() post action : {ex.Message}, {ex.StackTrace}");
                 TempData["FieldGroupError"] = ex.Message;
                 return View("Views/FertiliserManure/FieldGroup.cshtml", model);
             }
@@ -294,6 +301,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> Fields()
         {
+            _logger.LogTrace($"Fertiliser Manure Controller : Fields() action called");
             FertiliserManureViewModel model = new FertiliserManureViewModel();
             Error error = null;
             try
@@ -385,6 +393,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Farm Controller : Exception in Fields() action : {ex.Message}, {ex.StackTrace}");
                 TempData["FieldGroupError"] = ex.Message;
                 if (TempData["FieldError"] != null)
                 {
@@ -398,6 +407,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Fields(FertiliserManureViewModel model)
         {
+            _logger.LogTrace($"Fertiliser Manure Controller : Fields() post action called");
             Error error = null;
             try
             {
@@ -464,6 +474,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Farm Controller : Exception in Fields() post action : {ex.Message}, {ex.StackTrace}");
                 TempData["FieldError"] = ex.Message;
                 return View(model);
             }
@@ -478,6 +489,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> InOrgnaicManureDuration()
         {
+            _logger.LogTrace($"Fertiliser Manure Controller : InOrgnaicManureDuration() action called");
             FertiliserManureViewModel model = new FertiliserManureViewModel();
             Error error = null;
             try
@@ -504,6 +516,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Farm Controller : Exception in InOrgnaicManureDuration() action : {ex.Message}, {ex.StackTrace}");
                 if (model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
                 {
                     TempData["FieldError"] = ex.Message;
@@ -556,6 +569,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> InOrgnaicManureDuration(FertiliserManureViewModel model)
         {
+            _logger.LogTrace($"Fertiliser Manure Controller : InOrgnaicManureDuration() post action called");
             Error error = null;
             try
             {
@@ -681,6 +695,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Farm Controller : Exception in InOrgnaicManureDuration() post action : {ex.Message}, {ex.StackTrace}");
                 TempData["InOrgnaicManureDurationError"] = ex.Message;
                 return View(model);
             }
@@ -696,6 +711,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> NutrientValues()
         {
+            _logger.LogTrace($"Fertiliser Manure Controller : NutrientValues() action called");
             FertiliserManureViewModel model = new FertiliserManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
             {
@@ -801,6 +817,7 @@ namespace NMP.Portal.Controllers
                 }
                 catch (Exception ex)
                 {
+                    _logger.LogTrace($"Farm Controller : Exception in NutrientValues() action : {ex.Message}, {ex.StackTrace}");
                     TempData["InOrgnaicManureDurationError"] = ex.Message;
                     return RedirectToAction("InOrgnaicManureDuration", model);
                 }
@@ -825,6 +842,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> NutrientValues(FertiliserManureViewModel model)
         {
+            _logger.LogTrace($"Fertiliser Manure Controller : NutrientValues() post action called");
             int index = 0;
             Error error = null;
             if (model.ApplicationForFertiliserManures != null && model.ApplicationForFertiliserManures.Count > 0)
@@ -1056,6 +1074,7 @@ namespace NMP.Portal.Controllers
                     }
                     catch (Exception ex)
                     {
+                        _logger.LogTrace($"Farm Controller : Exception in NutrientValues() post action : {ex.Message}, {ex.StackTrace}");
                         TempData["NutrientValuesError"] = ex.Message;
                         return View(model);
                     }
@@ -1162,7 +1181,7 @@ namespace NMP.Portal.Controllers
                                             {
                                                 if (managementIds.Count > 0)
                                                 {
-                                                    (model.IsNitrogenExceedWarning, string nitrogenExceedMessageTitle, string warningMsg, string nitrogenExceedFirstAdditionalMessage, string nitrogenExceedSecondAdditionalMessage, error) = await isNitrogenExceedWarning(model, managementIds[0], cropTypeResponse.CropTypeId, model.ApplicationForFertiliserManures[index].N.Value, model.ApplicationForFertiliserManures[index].InOrgnaicManureDurationId.Value, startDate, endDate, cropTypeResponse.CropType);
+                                                    (model.IsNitrogenExceedWarning, string nitrogenExceedMessageTitle, string warningMsg, string nitrogenExceedFirstAdditionalMessage, string nitrogenExceedSecondAdditionalMessage, error) = await IsNitrogenExceedWarning(model, managementIds[0], cropTypeResponse.CropTypeId, model.ApplicationForFertiliserManures[index].N.Value, model.ApplicationForFertiliserManures[index].InOrgnaicManureDurationId.Value, startDate, endDate, cropTypeResponse.CropType);
                                                     if (error == null)
                                                     {
                                                         if (!string.IsNullOrWhiteSpace(warningMsg))
@@ -1219,19 +1238,15 @@ namespace NMP.Portal.Controllers
             }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
 
-            //if (model.IsCheckAnswer)
-            //{
-            //    return RedirectToAction("CheckAnswer");
-            //}
-
-
-
             return RedirectToAction("CheckAnswer");
         }
+
+
 
         [HttpGet]
         public async Task<IActionResult> CheckAnswer()
         {
+            _logger.LogTrace($"Fertiliser Manure Controller : CheckAnswer() action called");
             FertiliserManureViewModel model = new FertiliserManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
             {
@@ -1332,7 +1347,7 @@ namespace NMP.Portal.Controllers
                                                     {
                                                         if (managementIds.Count > 0)
                                                         {
-                                                            (model.IsNitrogenExceedWarning, string nitrogenExceedMessageTitle, string warningMsg, string nitrogenExceedFirstAdditionalMessage, string nitrogenExceedSecondAdditionalMessage, error) = await isNitrogenExceedWarning(model, managementIds[0], cropTypeResponse.CropTypeId, 0, applicationForFertiliserManure.InOrgnaicManureDurationId.Value, startDate, endDate, cropTypeResponse.CropType);
+                                                            (model.IsNitrogenExceedWarning, string nitrogenExceedMessageTitle, string warningMsg, string nitrogenExceedFirstAdditionalMessage, string nitrogenExceedSecondAdditionalMessage, error) = await IsNitrogenExceedWarning(model, managementIds[0], cropTypeResponse.CropTypeId, 0, applicationForFertiliserManure.InOrgnaicManureDurationId.Value, startDate, endDate, cropTypeResponse.CropType);
                                                             if (error == null)
                                                             {
                                                                 if (!string.IsNullOrWhiteSpace(warningMsg))
@@ -1406,6 +1421,8 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CheckAnswer(FertiliserManureViewModel model)
         {
+            _logger.LogTrace($"Fertiliser Manure Controller : CheckAnswer() post action called");
+
             if (model.FertiliserManures.Count > 0 && model.ApplicationForFertiliserManures.Count > 0)
             {
                 List<FertiliserManure> updatedFertiliserManures = new List<FertiliserManure>();
@@ -1485,6 +1502,7 @@ namespace NMP.Portal.Controllers
         }
         public IActionResult BackCheckAnswer()
         {
+            _logger.LogTrace($"Fertiliser Manure Controller : BackCheckAnswer() action called");
             FertiliserManureViewModel model = new FertiliserManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
             {
@@ -1553,7 +1571,7 @@ namespace NMP.Portal.Controllers
             }
             return (IsClosedPeriodWarningOnlyForGrassAndOilseed, IsClosedPeriodWarningExceptGrassAndOilseed, warningMsg, error);
         }
-        private async Task<(bool, string, string, string, string, Error?)> isNitrogenExceedWarning(FertiliserManureViewModel model, int managementId, int cropTypeId, decimal appNitrogen, int InOrgnaicManureDurationId, DateTime startDate, DateTime endDate, string cropType)
+        private async Task<(bool, string, string, string, string, Error?)> IsNitrogenExceedWarning(FertiliserManureViewModel model, int managementId, int cropTypeId, decimal appNitrogen, int InOrgnaicManureDurationId, DateTime startDate, DateTime endDate, string cropType)
         {
             Error? error = null;
             bool isNitrogenExceedWarning = false;
