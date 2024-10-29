@@ -88,6 +88,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The date format is &apos;21 06 2024&apos;..
+        /// </summary>
+        public static string hintTheDateFormat {
+            get {
+                return ResourceManager.GetString("hintTheDateFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you plan to grow any other crops in these fields?.
         /// </summary>
         public static string lbDoYouPlanToGrowAnyOtherCropsInTheseFields {
@@ -214,6 +223,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 1 September to 15 January.
+        /// </summary>
+        public static string lbl1SeptemberTo15January {
+            get {
+                return ResourceManager.GetString("lbl1SeptemberTo15January", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 1 Sep to 31 Dec.
         /// </summary>
         public static string lbl1Septo31Dec {
@@ -228,6 +246,15 @@ namespace NMP.Portal.Resources {
         public static string lbl1Septo31Oct {
             get {
                 return ResourceManager.GetString("lbl1Septo31Oct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 31 October to 15 January.
+        /// </summary>
+        public static string lbl31OctoberTo15January {
+            get {
+                return ResourceManager.GetString("lbl31OctoberTo15January", resourceCulture);
             }
         }
         
@@ -815,6 +842,15 @@ namespace NMP.Portal.Resources {
         public static string lblBasedOnThePreviousCrop {
             get {
                 return ResourceManager.GetString("lblBasedOnThePreviousCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Based on your crop, soil type and farm details..
+        /// </summary>
+        public static string lblBasedOnYourCropSoilTypeAndFarmDetails {
+            get {
+                return ResourceManager.GetString("lblBasedOnYourCropSoilTypeAndFarmDetails", resourceCulture);
             }
         }
         
@@ -1985,6 +2021,15 @@ namespace NMP.Portal.Resources {
         public static string lblForExample {
             get {
                 return ResourceManager.GetString("lblForExample", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you don&apos;t know the exact application date enter an estimate. You can change it later..
+        /// </summary>
+        public static string lblForFertiliserSecond {
+            get {
+                return ResourceManager.GetString("lblForFertiliserSecond", resourceCulture);
             }
         }
         
@@ -5695,6 +5740,15 @@ namespace NMP.Portal.Resources {
         public static string lblYourAverageAnualRainfall {
             get {
                 return ResourceManager.GetString("lblYourAverageAnualRainfall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your closed period for spreading inorganic fertilisers is:.
+        /// </summary>
+        public static string lblYourClosedPeriodForSpreading {
+            get {
+                return ResourceManager.GetString("lblYourClosedPeriodForSpreading", resourceCulture);
             }
         }
         

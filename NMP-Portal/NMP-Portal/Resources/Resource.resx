@@ -2511,4 +2511,22 @@ m3/ha  not set</value>
   <data name="lblSoilDate" xml:space="preserve">
     <value>Soil date</value>
   </data>
+  <data name="hintTheDateFormat" xml:space="preserve">
+    <value>The date format is '21 06 2024'.</value>
+  </data>
+  <data name="lblBasedOnYourCropSoilTypeAndFarmDetails" xml:space="preserve">
+    <value>Based on your crop, soil type and farm details.</value>
+  </data>
+  <data name="lblForFertiliserSecond" xml:space="preserve">
+    <value>If you don't know the exact application date enter an estimate. You can change it later.</value>
+  </data>
+  <data name="lblYourClosedPeriodForSpreading" xml:space="preserve">
+    <value>Your closed period for spreading inorganic fertilisers is:</value>
+  </data>
+  <data name="lbl1SeptemberTo15January" xml:space="preserve">
+    <value>1 September to 15 January</value>
+  </data>
+  <data name="lbl31OctoberTo15January" xml:space="preserve">
+    <value>31 October to 15 January</value>
+  </data>
 </root>
