@@ -1269,6 +1269,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Date sample taken.
+        /// </summary>
+        public static string lblDateSampleTakenForChangePage {
+            get {
+                return ResourceManager.GetString("lblDateSampleTakenForChangePage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Date when soil drainage ends and the soil begins to dry out.
         /// </summary>
         public static string lblDateWhenSoilDrainageEnds {
@@ -3818,6 +3827,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save changes.
+        /// </summary>
+        public static string lblSaveChanges {
+            get {
+                return ResourceManager.GetString("lblSaveChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to save you money.
         /// </summary>
         public static string lblSaveYouMoney {
@@ -4003,6 +4021,15 @@ namespace NMP.Portal.Resources {
         public static string lblSoilContainsPostashReleasingClay {
             get {
                 return ResourceManager.GetString("lblSoilContainsPostashReleasingClay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Soil date.
+        /// </summary>
+        public static string lblSoilDate {
+            get {
+                return ResourceManager.GetString("lblSoilDate", resourceCulture);
             }
         }
         
@@ -5717,6 +5744,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your soil analysis changes have been successfully saved..
+        /// </summary>
+        public static string lblYourSoilAnalysisChangesHaveBeenSuccessfullySaved {
+            get {
+                return ResourceManager.GetString("lblYourSoilAnalysisChangesHaveBeenSuccessfullySaved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to APPLICATION AFTER 31 OCTOBER.
         /// </summary>
         public static string MsgApplicationAfter31October {
@@ -6907,6 +6943,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For example, 11 February 2023.
+        /// </summary>
+        public static string MsgSampleDateExample {
+            get {
+                return ResourceManager.GetString("MsgSampleDateExample", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sample date not set.
         /// </summary>
         public static string MsgSampleDateNotSet {
@@ -7011,6 +7056,15 @@ namespace NMP.Portal.Resources {
         public static string MsgServiceNotAvailable {
             get {
                 return ResourceManager.GetString("MsgServiceNotAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your soil analysis changes could not be saved..
+        /// </summary>
+        public static string MsgSoilAnalysisChangesCouldNotSaved {
+            get {
+                return ResourceManager.GetString("MsgSoilAnalysisChangesCouldNotSaved", resourceCulture);
             }
         }
         
@@ -7128,6 +7182,15 @@ namespace NMP.Portal.Resources {
         public static string MsgVarietyNameNotSet {
             get {
                 return ResourceManager.GetString("MsgVarietyNameNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We couldn’t change soil analysis data, please try again later.
+        /// </summary>
+        public static string MsgWeCouldnNotChangeYourSoilAnalysisData {
+            get {
+                return ResourceManager.GetString("MsgWeCouldnNotChangeYourSoilAnalysisData", resourceCulture);
             }
         }
         

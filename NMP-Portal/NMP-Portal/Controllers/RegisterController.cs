@@ -16,6 +16,7 @@ namespace NMP.Portal.Controllers
         }
         public IActionResult Index()
         {
+            _logger.LogTrace($"Register Controller : Index() action called");
             //TODO: Need to comment below line of code in production.
             ViewBag.Token = HttpContext?.User.FindFirst("access_token").Value;
             return View();
