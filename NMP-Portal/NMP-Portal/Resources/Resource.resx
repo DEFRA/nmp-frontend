@@ -1833,8 +1833,8 @@ m3/ha  not set</value>
   <data name="lblWhichFieldsWouldYouLikeToAddInorganicFertiliserApplications" xml:space="preserve">
     <value>Which fields would you like to add inorganic fertiliser applications to?</value>
   </data>
-  <data name="lblWhenDoYouPlanToSpreadInOrganicfertiliser" xml:space="preserve">
-    <value>When do you plan to spread inorganic fertiliser on the {0} Fields?</value>
+  <data name="lblWhenDoYouApplyingInOrganicfertiliser" xml:space="preserve">
+    <value>When do you applying inorganic fertiliser on the {0} Fields?</value>
   </data>
   <data name="lblInOrganicManureDuration" xml:space="preserve">
     <value>InOrganic manure duration</value>
@@ -1899,8 +1899,8 @@ m3/ha  not set</value>
   <data name="lblOutpurKgPerHectare" xml:space="preserve">
     <value>kg per hectare</value>
   </data>
-  <data name="lblWhenDoYouPlanToSpreadInorganicFertiliserForTheseFields" xml:space="preserve">
-    <value>When do you plan to spread inorganic fertiliser for these fields?</value>
+  <data name="lblWhenDoYouApplyingInorganicFertiliserForTheseFields" xml:space="preserve">
+    <value>When are you applying inorganic fertiliser on these fields?</value>
   </data>
   <data name="lblAllOfTheFields" xml:space="preserve">
     <value>All of the fields</value>
@@ -2528,5 +2528,11 @@ m3/ha  not set</value>
   </data>
   <data name="lbl31OctoberTo15January" xml:space="preserve">
     <value>31 October to 15 January</value>
+  </data>
+  <data name="MsgDateShouldBeExceedFrom" xml:space="preserve">
+    <value>Date should be exceed from {0}</value>
+  </data>
+  <data name="MsgDateShouldNotBeExceed" xml:space="preserve">
+    <value>Date should not be exceed from {0}</value>
   </data>
 </root>

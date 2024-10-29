@@ -34,6 +34,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarningExceptGrassAndOilseed" value="@Model.IsClosedPeriodWarningExceptGrassAndOilseed.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarningOnlyForGrassAndOilseed" value="@Model.IsClosedPeriodWarningOnlyForGrassAndOilseed.ToString().ToLower()"></govuk-input>
+            <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Date"></govuk-date-input>
             @if (Model.FertiliserManures != null && Model.FertiliserManures.Count > 0)
             {
                 @for (int i = 0; i < Model.FertiliserManures.Count; i++)
