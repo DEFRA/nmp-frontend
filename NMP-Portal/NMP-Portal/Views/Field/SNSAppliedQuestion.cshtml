@@ -4,10 +4,11 @@
     ViewData["Title"] = Resource.lblSnsQuestion;
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+    var backAction = Model.IsCheckAnswer ? "CheckAnswer" : (Model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Other) ? "CropGroups" : "CropTypes";
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" :"CropTypes")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@backAction asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="SNSAppliedQuestion" asp-controller="Field" method="post">
     @Html.AntiForgeryToken()

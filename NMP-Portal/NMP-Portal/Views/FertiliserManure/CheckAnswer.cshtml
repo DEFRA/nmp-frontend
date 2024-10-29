@@ -191,7 +191,7 @@
                                 @((appForFertliserManure.ApplicationDate.HasValue) ? appForFertliserManure.ApplicationDate.Value.Date.ToString("dd MMMM yyyy") : Resource.lblNotSet)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="InOrgnaicManureDuration" asp-controller="FertiliserManure" asp-route-q="@appForFertliserManure.EncryptedCounter">@Resource.lblChange</govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="InOrgnaicManureDuration" asp-controller="FertiliserManure">@Resource.lblChange</govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                         <govuk-summary-list-row>
@@ -226,10 +226,10 @@
                                 }
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="NutrientValues" asp-controller="FertiliserManure" asp-route-q="@appForFertliserManure.EncryptedCounter">@Resource.lblChange</govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="NutrientValues" asp-controller="FertiliserManure">@Resource.lblChange</govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
-                        <govuk-summary-list-row class=@((!appForFertliserManure.QuestionForSpreadInorganicFertiliser.HasValue)?"govuk-error-message":"")>
+                        @* <govuk-summary-list-row class=@((!appForFertliserManure.QuestionForSpreadInorganicFertiliser.HasValue)?"govuk-error-message":"")>
                             <govuk-summary-list-row-key>
                                 @Resource.lblDoYouPlanToSpreadMoreInorganicFertiliser
                             </govuk-summary-list-row-key>
@@ -239,7 +239,7 @@
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="QuestionForSpreadInorganicFertiliser" asp-controller="FertiliserManure" asp-route-q="@appForFertliserManure.EncryptedCounter">@Resource.lblChange</govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row>
+                        </govuk-summary-list-row> *@
 
                     }
                 }
