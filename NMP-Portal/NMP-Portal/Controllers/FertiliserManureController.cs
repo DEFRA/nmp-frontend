@@ -1146,6 +1146,7 @@ namespace NMP.Portal.Controllers
                                             if (error == null)
                                             {
                                                 if (managementIds.Count > 0)
+                                                {
                                                     (model.IsNitrogenExceedWarning, string nitrogenExceedMessageTitle, string warningMsg, string nitrogenExceedFirstAdditionalMessage, string nitrogenExceedSecondAdditionalMessage, error) = await isNitrogenExceedWarning(model, managementIds[0], cropTypeResponse.CropTypeId, model.N.Value, startDate, endDate, cropTypeResponse.CropType);
                                                     if (error == null)
                                                     {
@@ -1186,6 +1187,7 @@ namespace NMP.Portal.Controllers
                         }
                     }
                 }
+            }
             if (model.IsNitrogenExceedWarning)
             {
                 if (!model.IsWarningMsgNeedToShow)
