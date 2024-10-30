@@ -19,7 +19,6 @@ namespace NMP.Portal.ViewModels
         public string? FieldGroupName { get; set; }
 
         public string? CropTypeName { get; set; }
-        public int? InOrgnaicManureDurationId { get; set; }
         public string? InOrgnaicManureDuration { get; set; }
         public List<FertiliserManure>? FertiliserManures { get; set; }
 
@@ -30,12 +29,11 @@ namespace NMP.Portal.ViewModels
         public decimal? SO3 { get; set; }
         public decimal? Na2O { get; set; }
         public decimal? Lime { get; set; }
+        public DateTime? Date { get; set; }
         public bool? QuestionForSpreadInorganicFertiliser { get; set; }
         public string? FieldName { get; set; }
         public RecommendationViewModel? RecommendationViewModel { get; set; }
         public string? EncryptedCounter { get; set; }
-        public int? Counter { get; set; }
-        public List<ApplicationForFertiliserManure>? ApplicationForFertiliserManures { get; set; }
         public bool IsWarningMsgNeedToShow { get; set; } = false;
         public bool IsClosedPeriodWarningExceptGrassAndOilseed { get; set; } = false;
         public bool IsClosedPeriodWarningOnlyForGrassAndOilseed { get; set; } = false;

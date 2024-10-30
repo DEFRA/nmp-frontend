@@ -36,9 +36,10 @@ namespace NMP.Portal.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IFieldService _fieldService;
         private readonly ICropService _cropService;
-        
+        private readonly IOrganicManureService _organicManureService;
+
         public CropController(ILogger<CropController> logger, IDataProtectionProvider dataProtectionProvider,
-             IFarmService farmService, IHttpContextAccessor httpContextAccessor, IFieldService fieldService, ICropService cropService)
+             IFarmService farmService, IHttpContextAccessor httpContextAccessor, IFieldService fieldService, ICropService cropService, IOrganicManureService organicManureService)
         {
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
@@ -48,6 +49,7 @@ namespace NMP.Portal.Controllers
             _farmService = farmService;
             _fieldService = fieldService;
             _cropService = cropService;
+            _organicManureService = organicManureService;
         }
         public IActionResult Index()
         {
@@ -396,7 +398,7 @@ namespace NMP.Portal.Controllers
                         }
                     }
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -618,7 +620,7 @@ namespace NMP.Portal.Controllers
                 (List<HarvestYearPlanResponse> harvestYearPlanResponse, Error error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
 
                 //Fetch fields allowed for second crop based on first crop
-                List<int> fieldsAllowedForSecondCrop =await FetchAllowedFieldsForSecondCrop(harvestYearPlanResponse,model.Year??0,model.CropTypeID??0);
+                List<int> fieldsAllowedForSecondCrop = await FetchAllowedFieldsForSecondCrop(harvestYearPlanResponse, model.Year ?? 0, model.CropTypeID ?? 0);
 
                 if (harvestYearPlanResponse.Count() > 0)
                 {
@@ -668,7 +670,7 @@ namespace NMP.Portal.Controllers
                 {
                     var harvestFieldIds = harvestYearPlanResponse.Select(x => x.FieldID.ToString()).ToList();
                     selectListItem = selectListItem.Where(x => !harvestFieldIds.Contains(x.Value) || fieldsAllowedForSecondCrop.Contains(int.Parse(x.Value))).ToList();
-                    
+
                 }
                 if (model.FieldList == null || model.FieldList.Count == 0)
                 {
@@ -974,9 +976,32 @@ namespace NMP.Portal.Controllers
                 ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", Resource.MsgEnterADateBeforeContinuing);
             }
 
-            if (model.Crops[model.SowingDateCurrentCounter].SowingDate != null)
+            //if (model.Crops[model.SowingDateCurrentCounter].SowingDate != null)
+            //{
+            //    if (model.Crops[model.SowingDateCurrentCounter].SowingDate.Value.Year < 1601 || model.Crops[model.SowingDateCurrentCounter].SowingDate.Value.Date.Year >= model.Year + 1)
+            //    {
+            //        ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", Resource.MsgEnterADateAfter);
+            //    }
+            //}
+            bool isPerennial = await _organicManureService.FetchIsPerennialByCropTypeId(model.CropTypeID.Value);
+
+            DateTime maxDate = new DateTime(model.Year.Value + 1, 7, 31);
+
+            if (model.Crops[model.SowingDateCurrentCounter].SowingDate > maxDate)
             {
-                if (model.Crops[model.SowingDateCurrentCounter].SowingDate.Value.Year < 1601 || model.Crops[model.SowingDateCurrentCounter].SowingDate.Value.Date.Year >= model.Year + 1)
+                ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", string.Format(Resource.MsgDateShouldNotBeExceed, maxDate.Date.ToString("dd MMMM yyyy")));
+            }
+            if (!isPerennial)
+            {
+                DateTime minDate = new DateTime(model.Year.Value, 8, 01);
+                if (model.Crops[model.SowingDateCurrentCounter].SowingDate < minDate)
+                {
+                    ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", string.Format(Resource.MsgDateShouldBeExceedFrom, minDate.Date.ToString("dd MMMM yyyy")));
+                }
+            }
+            else
+            {
+                if (model.Crops[model.SowingDateCurrentCounter].SowingDate.Value.Year < 1601)
                 {
                     ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", Resource.MsgEnterADateAfter);
                 }
@@ -997,8 +1022,6 @@ namespace NMP.Portal.Controllers
                         if (i + 1 < model.Crops.Count)
                         {
                             model.FieldID = model.Crops[i + 1].FieldID.Value;
-                            //model.Crops[i + 1].FieldName = (await _fieldService.FetchFieldByFieldId(model.Crops[i + 1].FieldId.Value)).Name;
-                            //model.Crops[i + 1].EncryptedCounter = _fieldDataProtector.Protect((model.SowingDateCurrentCounter + 1).ToString());
                         }
 
                         break;
@@ -1467,7 +1490,7 @@ namespace NMP.Portal.Controllers
                 if (harvestYearPlanResponse.Count() > 0 || fieldsAllowedForSecondCrop.Count() > 0)
                 {
                     var harvestFieldIds = harvestYearPlanResponse.Select(x => x.FieldID.ToString()).ToList();
-                    fieldList = fieldList.Where(x => !harvestFieldIds.Contains(x.ID.ToString()) || fieldsAllowedForSecondCrop.Contains(x.ID??0)).ToList();
+                    fieldList = fieldList.Where(x => !harvestFieldIds.Contains(x.ID.ToString()) || fieldsAllowedForSecondCrop.Contains(x.ID ?? 0)).ToList();
                 }
                 ViewBag.FieldOptions = fieldList;
             }
@@ -1995,7 +2018,7 @@ namespace NMP.Portal.Controllers
             return View(model);
         }
 
-        private async Task<List<int>> FetchAllowedFieldsForSecondCrop(List<HarvestYearPlanResponse> harvestYearPlanResponse,int harvestYear,int cropTypeId)
+        private async Task<List<int>> FetchAllowedFieldsForSecondCrop(List<HarvestYearPlanResponse> harvestYearPlanResponse, int harvestYear, int cropTypeId)
         {
             List<int> secondCropList = new List<int>();
             List<int> fieldsAllowedForSecondCrop = new List<int>();
@@ -2031,12 +2054,12 @@ namespace NMP.Portal.Controllers
             {
                 List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(firstCropPlans.FieldID);
 
-                
-                    secondCropList = await _cropService.FetchSecondCropListByFirstCropId(firstCropPlans.CropTypeID);
-                    if (secondCropList.Count > 0)
-                    {
+
+                secondCropList = await _cropService.FetchSecondCropListByFirstCropId(firstCropPlans.CropTypeID);
+                if (secondCropList.Count > 0)
+                {
                     isSecondCropAllowed = true;
-                    }
+                }
 
             }
             return isSecondCropAllowed;

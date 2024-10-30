@@ -1163,6 +1163,16 @@ namespace NMP.Portal.Controllers
                         ModelState.AddModelError("ApplicationDate", Resource.MsgEnterADateWithin2YearsOfTheHarvestYear);
                     }
                 }
+                DateTime maxDate = new DateTime(model.HarvestYear.Value + 1, 7, 31);
+                DateTime minDate = new DateTime(model.HarvestYear.Value, 8, 01);
+                if (model.ApplicationDate > maxDate)
+                {
+                    ModelState.AddModelError("ApplicationDate", string.Format(Resource.MsgDateShouldNotBeExceed, maxDate.Date.ToString("dd MMMM yyyy")));
+                }
+                if (model.ApplicationDate < minDate)
+                {
+                    ModelState.AddModelError("ApplicationDate", string.Format(Resource.MsgDateShouldBeExceedFrom, minDate.Date.ToString("dd MMMM yyyy")));
+                }
 
                 if (!ModelState.IsValid)
                 {
