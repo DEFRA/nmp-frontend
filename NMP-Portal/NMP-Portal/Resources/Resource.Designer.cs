@@ -4790,6 +4790,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update Field.
+        /// </summary>
+        public static string lblUpdateField {
+            get {
+                return ResourceManager.GetString("lblUpdateField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Update fields or soil analysis.
         /// </summary>
         public static string lblUpdateFieldsOrSoilAnalysis {
@@ -4804,6 +4813,24 @@ namespace NMP.Portal.Resources {
         public static string lblUpdateThisFarm {
             get {
                 return ResourceManager.GetString("lblUpdateThisFarm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update this field.
+        /// </summary>
+        public static string lblUpdateThisField {
+            get {
+                return ResourceManager.GetString("lblUpdateThisField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update {0}.
+        /// </summary>
+        public static string lblUpdateXField {
+            get {
+                return ResourceManager.GetString("lblUpdateXField", resourceCulture);
             }
         }
         

@@ -4,10 +4,23 @@
 
 @{
     ViewData["Title"] = Resource.lblAddField;
+    var backAction = "";
+    if (Model.IsCheckAnswer)
+    {
+        backAction = "CheckAnswer";
+    }
+    else if (!string.IsNullOrWhiteSpace(Model.EncryptedIsUpdate))
+    {
+        backAction = "UpdateField";
+    }
+    else
+    {
+        backAction = "BackActionForAddField";
+    }
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "BackActionForAddField")" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@backAction asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
@@ -69,6 +82,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SnsCategoryId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SnsIndex"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SnsValue"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsUpdate"></govuk-input>
             @if (Model != null)
             {
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsBasedOnSoilOrganicMatter" value="@Model.IsBasedOnSoilOrganicMatter.ToString().ToLower()"></govuk-input>
@@ -82,6 +96,8 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RecentSoilAnalysisQuestion" value="@Model.RecentSoilAnalysisQuestion.ToString().ToLower()"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilOverChalk" value="@Model.SoilOverChalk.ToString().ToLower()"></govuk-input>
             }
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ID"></govuk-input>
             <div class="govuk-form-group">
                 <govuk-input asp-for="@Model.Name"></govuk-input>
             </div>

@@ -35,6 +35,18 @@
     }
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
+            @if (ViewBag.Success != null)
+            {
+                @* if (ViewBag.Success == "true")
+                { *@
+                    <govuk-notification-banner type="Success">
+                        <div class="">
+                            <h3 class="govuk-notification-banner__heading"> @string.Format(Resource.lblYouHaveUpdated, Model.Name)</h3>
+                        </div>
+                    </govuk-notification-banner>
+                @* } *@
+                
+            }
 
             <h1 class="govuk-heading-l">@Model.Name</h1>
             <h2 class="govuk-heading-m plan_title">@Resource.lblFieldDetails</h2>
@@ -60,19 +72,23 @@
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblSoilContainsPostashReleasingClay</td>
-                        <td class="govuk-table__cell">@(Model.SoilReleasingClay.Value ? Resource.lblYes : Resource.lblNo)</td>
+                        <td class="govuk-table__cell">@(Model.SoilReleasingClay==true ? Resource.lblYes : Resource.lblNo)</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.lblIsTheSoilOverChalk</td>
+                        <td class="govuk-table__cell">@(Model.SoilOverChalk==true ? Resource.lblYes : Resource.lblNo)</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblIsFieldWithinNVZ</td>
-                        <td class="govuk-table__cell">@(Model.IsWithinNVZ.Value ? Resource.lblYes : Resource.lblNo)</td>
+                        <td class="govuk-table__cell">@(Model.IsWithinNVZ==true ? Resource.lblYes : Resource.lblNo)</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblIsFieldAbove300Meters</td>
-                        <td class="govuk-table__cell">@(Model.IsAbove300SeaLevel.Value ? Resource.lblYes : Resource.lblNo)</td>
+                        <td class="govuk-table__cell">@(Model.IsAbove300SeaLevel==true ? Resource.lblYes : Resource.lblNo)</td>
                     </tr>
                 </tbody>
             </table>
-            <p class="govuk-body margin-bottom-forty"><a href="#">@Resource.lblChangeFieldDetails</a></p>
+            <p class="govuk-body margin-bottom-forty"><a asp-action="UpdateField" asp-controller="Field">@Resource.lblChangeFieldDetails</a></p>
             <p class="govuk-body margin-bottom-forty">@string.Format(Resource.MsgRemoveField, Model.Name)</p>
             <p class="govuk-body margin-bottom-forty"><a href="#">@string.Format(Resource.lblRemoveField, Model.Name)</a></p>
             

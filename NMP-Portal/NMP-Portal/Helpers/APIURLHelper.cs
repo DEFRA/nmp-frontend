@@ -92,6 +92,7 @@ namespace NMP.Portal.Helpers
         public const string FetchSecondCropListByFirstCropIdAsyncAPI = "second-crop-linkings/{0}";
         public const string FetchSoilAnalysisByIdAsyncAPI = "soil-analyses/{0}";
         public const string UpdateSoilAnalysisAsyncAPI = "soil-analyses/{0}";
+        public const string UpdateFieldAsyncAPI = "fields/{0}";
 
         //Manner APi Url
         public const string FetchMannerApplicationMethodByIdAsyncAPI = "vendors/manner/application-methods/{0}";
