@@ -57,10 +57,12 @@ namespace NMP.Portal.Controllers
 
         public IActionResult Index()
         {
+            _logger.LogTrace($"Organic Manure Controller : Index() action called");
             return View();
         }
         public IActionResult CreateManureCancel(string q, string r)
         {
+            _logger.LogTrace($"Organic Manure Controller : CreateManureCancel({q}, {r}) action called");
             _httpContextAccessor.HttpContext?.Session.Remove("OrganicManure");
             return RedirectToAction("HarvestYearOverview", "Crop", new { Id = q, year = r });
         }
@@ -68,6 +70,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> FieldGroup(string q, string r, string? s)//q=FarmId,r=harvestYear,s=fieldId
         {
+            _logger.LogTrace($"Organic Manure Controller : FieldGroup({q}, {r}, {s}) action called");
             OrganicManureViewModel model = new OrganicManureViewModel();
             Error error = null;
             try
@@ -158,6 +161,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Organic Manure Controller : Exception in FieldGroup() action : {ex.Message}, {ex.StackTrace}");
                 TempData["FieldGroupError"] = ex.Message;
             }
 
@@ -173,6 +177,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> FieldGroup(OrganicManureViewModel model)
         {
+            _logger.LogTrace($"Organic Manure Controller : FieldGroup() post action called");
             Error error = null;
             if (model.FieldGroup == null)
             {
@@ -226,6 +231,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Organic Manure Controller : Exception in FieldGroup() post action : {ex.Message}, {ex.StackTrace}");
                 TempData["FieldGroupError"] = ex.Message;
                 return View("Views/OrganicManure/FieldGroup.cshtml", model);
             }
@@ -236,6 +242,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> Fields()
         {
+            _logger.LogTrace($"Organic Manure Controller : Fields() action called");
             OrganicManureViewModel model = new OrganicManureViewModel();
             Error error = null;
             try
@@ -459,6 +466,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Organic Manure Controller : Exception in Fields() action : {ex.Message}, {ex.StackTrace}");
                 TempData["FieldGroupError"] = ex.Message;
                 return RedirectToAction("FieldGroup", model);
             }
@@ -469,6 +477,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Fields(OrganicManureViewModel model)
         {
+            _logger.LogTrace($"Organic Manure Controller : Fields() post action called");
             Error error = null;
             try
             {
@@ -681,6 +690,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Organic Manure Controller : Exception in Fields() post action : {ex.Message}, {ex.StackTrace}");
                 TempData["FieldError"] = ex.Message;
                 return View(model);
             }
@@ -690,6 +700,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> ManureGroup()
         {
+            _logger.LogTrace($"Organic Manure Controller : ManureGroup() action called");
             OrganicManureViewModel model = new OrganicManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
             {
@@ -723,6 +734,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Organic Manure Controller : Exception in ManureGroup() action : {ex.Message}, {ex.StackTrace}");
                 TempData["FieldError"] = ex.Message;
             }
             return View(model);
@@ -733,6 +745,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ManureGroup(OrganicManureViewModel model)
         {
+            _logger.LogTrace($"Organic Manure Controller : ManureGroup() post action called");
             if (model.ManureGroupIdForFilter == null)
             {
                 ModelState.AddModelError("ManureGroupIdForFilter", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -786,6 +799,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Organic Manure Controller : Exception in ManureGroup() post action : {ex.Message}, {ex.StackTrace}");
                 TempData["ManureGroupError"] = ex.Message;
             }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
@@ -796,6 +810,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> ManureType()
         {
+            _logger.LogTrace($"Organic Manure Controller : ManureType() action called");
             Error error = null;
             OrganicManureViewModel model = new OrganicManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
@@ -832,16 +847,17 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Organic Manure Controller : Exception in ManureType() action : {ex.Message}, {ex.StackTrace}");
                 TempData["ManureGroupError"] = ex.Message;
                 return RedirectToAction("ManureGroup", model);
             }
-
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ManureType(OrganicManureViewModel model)
         {
+            _logger.LogTrace($"Organic Manure Controller : ManureType() post action called");
             Error error = null;
             if (model.ManureTypeId == null)
             {
@@ -857,7 +873,6 @@ namespace NMP.Portal.Controllers
                     {
                         if (manureTypeList.Count > 0)
                         {
-
                             var SelectListItem = manureTypeList.Select(f => new SelectListItem
                             {
                                 Value = f.Id.ToString(),
@@ -904,6 +919,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Organic Manure Controller : Exception in ManureType() post action : {ex.Message}, {ex.StackTrace}");
                 TempData["ManureTypeError"] = ex.Message;
             }
             OrganicManureViewModel organicManureViewModel = JsonConvert.DeserializeObject<OrganicManureViewModel>(HttpContext.Session.GetString("OrganicManure"));
@@ -1047,6 +1063,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> ManureApplyingDate()
         {
+            _logger.LogTrace($"Organic Manure Controller : ManureApplyingDate() action called");
             OrganicManureViewModel model = new OrganicManureViewModel();
             try
             {
@@ -1118,6 +1135,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Organic Manure Controller : Exception in ManureApplyingDate() action : {ex.Message}, {ex.StackTrace}");
                 ViewBag.Error = ex.Message;
                 return View(model);
             }
@@ -1128,6 +1146,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ManureApplyingDate(OrganicManureViewModel model)
         {
+            _logger.LogTrace($"Organic Manure Controller : ManureApplyingDate() post action called");
             try
             {
                 int farmId = 0;
@@ -1314,6 +1333,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Organic Manure Controller : Exception in ManureApplyingDate() post action : {ex.Message}, {ex.StackTrace}");
                 ViewBag.Error = ex.Message;
                 return View(model);
             }
@@ -1323,6 +1343,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> ApplicationMethod()
         {
+            _logger.LogTrace($"Organic Manure Controller : ApplicationMethod() action called");
             OrganicManureViewModel? model = new OrganicManureViewModel();
             Error error = null;
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
@@ -1421,10 +1442,12 @@ namespace NMP.Portal.Controllers
             return View(model);
 
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ApplicationMethod(OrganicManureViewModel model)
         {
+            _logger.LogTrace($"Organic Manure Controller : ApplicationMethod() post action called");
             Error error = null;
             if (model.ApplicationMethod == null)
             {
@@ -1552,12 +1575,12 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("IncorporationMethod");
             }
             return RedirectToAction("DefaultNutrientValues");
-
         }
 
         [HttpGet]
         public async Task<IActionResult> DefaultNutrientValues()
         {
+            _logger.LogTrace($"Organic Manure Controller : DefaultNutrientValues() action called");
             OrganicManureViewModel model = new OrganicManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
             {
@@ -1580,10 +1603,12 @@ namespace NMP.Portal.Controllers
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
             return View(model);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DefaultNutrientValues(OrganicManureViewModel model)
         {
+            _logger.LogTrace($"Organic Manure Controller : DefaultNutrientValues() post action called");
             if (model.IsDefaultNutrientValues == null)
             {
                 ModelState.AddModelError("IsDefaultNutrientValues", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -1647,14 +1672,13 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("CheckAnswer");
                 }
             }
-
-
             return RedirectToAction("ApplicationRateMethod");
         }
 
         [HttpGet]
         public async Task<IActionResult> ManualNutrientValues()
         {
+            _logger.LogTrace($"Organic Manure Controller : ManualNutrientValues() post action called");
             OrganicManureViewModel model = new OrganicManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
             {
@@ -1672,6 +1696,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ManualNutrientValues(OrganicManureViewModel model)
         {
+            _logger.LogTrace($"Organic Manure Controller : ManualNutrientValues() post action called");
             try
             {
                 if ((!ModelState.IsValid) && ModelState.ContainsKey("DryMatterPercent"))
@@ -1809,6 +1834,7 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("MgO", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblMagnesium.ToLower()));
                 }
+                
                 if (model.N != null && model.NH4N != null && model.UricAcid != null && model.NO3N != null)
                 {
                     decimal totalValue = model.NH4N.Value + model.UricAcid.Value + model.NO3N.Value;
@@ -1836,6 +1862,7 @@ namespace NMP.Portal.Controllers
                         }
                     }
                 }
+
                 if (model.N != null)
                 {
                     if (model.N < 0 || model.N > 297)
@@ -1843,6 +1870,7 @@ namespace NMP.Portal.Controllers
                         ModelState.AddModelError("N", string.Format(Resource.MsgMinMaxValidation, Resource.lblTotalNitrogenN, 297));
                     }
                 }
+
                 if (model.NH4N != null)
                 {
                     if (model.NH4N < 0 || model.NH4N > 99)
@@ -1850,6 +1878,7 @@ namespace NMP.Portal.Controllers
                         ModelState.AddModelError("NH4N", string.Format(Resource.MsgMinMaxValidation, Resource.lblAmmonium, 99));
                     }
                 }
+
                 if (model.UricAcid != null)
                 {
                     if (model.UricAcid < 0 || model.UricAcid > 99)
@@ -1857,6 +1886,7 @@ namespace NMP.Portal.Controllers
                         ModelState.AddModelError("UricAcid", string.Format(Resource.MsgMinMaxValidation, Resource.lblUricAcid, 99));
                     }
                 }
+
                 if (model.NO3N != null)
                 {
                     if (model.NO3N < 0 || model.NO3N > 99)
@@ -1864,6 +1894,7 @@ namespace NMP.Portal.Controllers
                         ModelState.AddModelError("NO3N", string.Format(Resource.MsgMinMaxValidation, Resource.lblNitrate, 99));
                     }
                 }
+
                 if (model.P2O5 != null)
                 {
                     if (model.P2O5 < 0 || model.P2O5 > 99)
@@ -1871,6 +1902,7 @@ namespace NMP.Portal.Controllers
                         ModelState.AddModelError("P2O5", string.Format(Resource.MsgMinMaxValidation, Resource.lblPhosphateP2O5, 99));
                     }
                 }
+
                 if (model.K2O != null)
                 {
                     if (model.K2O < 0 || model.K2O > 99)
@@ -1884,7 +1916,8 @@ namespace NMP.Portal.Controllers
                     {
                         ModelState.AddModelError("MgO", string.Format(Resource.MsgMinMaxValidation, Resource.lblTotalMagnesiumOxide, 99));
                     }
-                }
+                }                
+                
                 if (model.SO3 != null)
                 {
                     if (model.SO3 < 0 || model.SO3 > 99)
@@ -1892,7 +1925,6 @@ namespace NMP.Portal.Controllers
                         ModelState.AddModelError("SO3", string.Format(Resource.MsgMinMaxValidation, Resource.lblSulphurSO3, 99));
                     }
                 }
-
 
                 if (!ModelState.IsValid)
                 {
@@ -1920,6 +1952,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Organic Manure Controller : Exception in ManualNutrientValues() post action : {ex.Message}, {ex.StackTrace}");
                 ViewBag.Error = ex.Message;
                 return View(model);
             }
@@ -1945,6 +1978,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> NutrientValuesStoreForFuture(OrganicManureViewModel model)
         {
+            _logger.LogTrace($"Organic Manure Controller : NutrientValuesStoreForFuture() post action called");
             if (model.IsAnyNeedToStoreNutrientValueForFuture == null)
             {
                 ModelState.AddModelError("IsAnyNeedToStoreNutrientValueForFuture", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -1964,11 +1998,10 @@ namespace NMP.Portal.Controllers
             return RedirectToAction("ApplicationRateMethod");
         }
 
-
-
         [HttpGet]
         public async Task<IActionResult> ApplicationRateMethod()
         {
+            _logger.LogTrace($"Organic Manure Controller : ApplicationRateMethod() action called");
             OrganicManureViewModel? model = new OrganicManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
             {
@@ -2003,10 +2036,12 @@ namespace NMP.Portal.Controllers
             return View(model);
 
         }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ApplicationRateMethod(OrganicManureViewModel model)
         {
+            _logger.LogTrace($"Organic Manure Controller : ApplicationRateMethod() post action called");
             try
             {
                 Error error = null;
@@ -2174,16 +2209,16 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Organic Manure Controller : Exception in ApplicationRateMethod() post action : {ex.Message}, {ex.StackTrace}");
                 ViewBag.Error = ex.Message;
                 return View(model);
             }
-
         }
-
 
         [HttpGet]
         public async Task<IActionResult> ManualApplicationRate()
         {
+            _logger.LogTrace($"Organic Manure Controller : ManualApplicationRate() action called");
             OrganicManureViewModel? model = new OrganicManureViewModel();
             try
             {
@@ -2212,14 +2247,17 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Organic Manure Controller : Exception in ManualApplicationRate() action : {ex.Message}, {ex.StackTrace}");
                 ViewBag.Error = ex.Message;
                 return View(model);
             }
         }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ManualApplicationRate(OrganicManureViewModel model)
         {
+            _logger.LogTrace($"Organic Manure Controller : ManualApplicationRate() post action called");
             Error? error = null;
             if ((!ModelState.IsValid) && ModelState.ContainsKey("ApplicationRate"))
             {
@@ -2393,6 +2431,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> AreaQuantity()
         {
+            _logger.LogTrace($"Organic Manure Controller : AreaQuantity() action called");
             OrganicManureViewModel? model = new OrganicManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
             {
@@ -2414,6 +2453,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AreaQuantity(OrganicManureViewModel model)
         {
+            _logger.LogTrace($"Organic Manure Controller : AreaQuantity() post action called");
             int farmId = 0;
             Farm farm = new Farm();
             if ((!ModelState.IsValid) && ModelState.ContainsKey("Area"))
@@ -2582,9 +2622,11 @@ namespace NMP.Portal.Controllers
             }
             return RedirectToAction("IncorporationMethod");
         }
+
         [HttpGet]
         public async Task<IActionResult> IncorporationMethod()
         {
+            _logger.LogTrace($"Organic Manure Controller : IncorporationMethod() action called");
             OrganicManureViewModel? model = new OrganicManureViewModel();
             Error error = null;
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
@@ -2622,10 +2664,12 @@ namespace NMP.Portal.Controllers
             return View(model);
 
         }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> IncorporationMethod(OrganicManureViewModel model)
         {
+            _logger.LogTrace($"Organic Manure Controller : IncorporationMethod() post action called");
             Error error = null;
             if (model.IncorporationMethod == null)
             {
@@ -2775,6 +2819,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> IncorporationDelay()
         {
+            _logger.LogTrace($"Organic Manure Controller : IncorporationDelay() action called");
             OrganicManureViewModel? model = new OrganicManureViewModel();
             Error error = null;
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
@@ -2810,6 +2855,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Organic Manure Controller : Exception in IncorporationDelay() action : {ex.Message}, {ex.StackTrace}");
                 TempData["IncorporationMethodError"] = ex.Message;
                 return View(model);
             }
@@ -2817,10 +2863,12 @@ namespace NMP.Portal.Controllers
 
 
         }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> IncorporationDelay(OrganicManureViewModel model)
         {
+            _logger.LogTrace($"Organic Manure Controller : IncorporationDelay() post action called");
             Error error = null;
             try
             {
@@ -2875,6 +2923,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Organic Manure Controller : Exception in IncorporationDelay() post action : {ex.Message}, {ex.StackTrace}");
                 TempData["IncorporationDelayError"] = ex.Message;
                 return View(model);
             }
@@ -2884,6 +2933,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> ConditionsAffectingNutrients()
         {
+            _logger.LogTrace($"Organic Manure Controller : ConditionsAffectingNutrients() action called");
             OrganicManureViewModel? model = new OrganicManureViewModel();
             Error error = new Error();
             try
@@ -3079,6 +3129,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Organic Manure Controller : Exception in ConditionsAffectingNutrients() action : {ex.Message}, {ex.StackTrace}");
                 TempData["IncorporationDelayError"] = ex.Message;
                 return RedirectToAction("IncorporationDelay");
             }
@@ -3091,6 +3142,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ConditionsAffectingNutrients(OrganicManureViewModel model)
         {
+            _logger.LogTrace($"Organic Manure Controller : ConditionsAffectingNutrients() post action called");
             if (model.OrganicManures.Count > 0)
             {
                 foreach (var orgManure in model.OrganicManures)
@@ -3114,6 +3166,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> backActionForManureGroup()
         {
+            _logger.LogTrace($"Organic Manure Controller : BackActionForManureGroup() action called");
             OrganicManureViewModel? model = new OrganicManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
             {
@@ -3174,13 +3227,12 @@ namespace NMP.Portal.Controllers
                 q = model.EncryptedFarmId,
                 r = model.EncryptedHarvestYear
             });
-
-
-
         }
+
         [HttpGet]
         public async Task<IActionResult> CheckAnswer()
         {
+            _logger.LogTrace($"Organic Manure Controller : CheckAnswer() action called");
             OrganicManureViewModel model = new OrganicManureViewModel();
             try
             {
@@ -3361,6 +3413,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Organic Manure Controller : Exception in CheckAnswer() action : {ex.Message}, {ex.StackTrace}");
                 TempData["ConditionsAffectingNutrientsError"] = ex.Message;
                 return RedirectToAction("ConditionsAffectingNutrients");
             }
@@ -3371,6 +3424,7 @@ namespace NMP.Portal.Controllers
         [HttpPost]
         public async Task<IActionResult> CheckAnswer(OrganicManureViewModel model)
         {
+            _logger.LogTrace($"Organic Manure Controller : CheckAnswer() post action called");
             try
             {
                 if (model.ManureTypeId == null)
@@ -3515,14 +3569,17 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Organic Manure Controller : Exception in CheckAnswer() post action : {ex.Message}, {ex.StackTrace}");
                 TempData["AddOrganicManureError"] = Resource.MsgWeCounldNotAddOrganicManure;
                 return View(model);
             }
             return View(model);
 
         }
+        
         public IActionResult BackCheckAnswer()
         {
+            _logger.LogTrace($"Organic Manure Controller : BackCheckAnswer() post action called");
             OrganicManureViewModel? model = new OrganicManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
             {
@@ -3540,6 +3597,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> AutumnCropNitrogenUptake()
         {
+            _logger.LogTrace($"Organic Manure Controller : AutumnCropNitrogenUptake() action called");
             OrganicManureViewModel? model = new OrganicManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
             {
@@ -3553,10 +3611,12 @@ namespace NMP.Portal.Controllers
             return View(model);
 
         }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AutumnCropNitrogenUptake(OrganicManureViewModel model)
         {
+            _logger.LogTrace($"Organic Manure Controller : AutumnCropNitrogenUptake() post action called");
             if (!ModelState.IsValid && ModelState.ContainsKey("AutumnCropNitrogenUptake"))
             {
                 var autumnCropNitrogenUptakeState = ModelState["AutumnCropNitrogenUptake"];
@@ -3594,6 +3654,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> SoilDrainageEndDate()
         {
+            _logger.LogTrace($"Organic Manure Controller : SoilDrainageEndDate() action called");
             OrganicManureViewModel? model = new OrganicManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
             {
@@ -3611,6 +3672,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SoilDrainageEndDate(OrganicManureViewModel model)
         {
+            _logger.LogTrace($"Organic Manure Controller : SoilDrainageEndDate() post action called");
             if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilDrainageEndDate"))
             {
                 var dateError = ModelState["SoilDrainageEndDate"].Errors.Count > 0 ?
@@ -3656,6 +3718,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> RainfallWithinSixHour()
         {
+            _logger.LogTrace($"Organic Manure Controller : RainfallWithinSixHour() action called");
             OrganicManureViewModel? model = new OrganicManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
             {
@@ -3678,10 +3741,12 @@ namespace NMP.Portal.Controllers
             return View(model);
 
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RainfallWithinSixHour(OrganicManureViewModel model)
         {
+            _logger.LogTrace($"Organic Manure Controller : RainfallWithinSixHour() post action called");
             if (model.RainfallWithinSixHoursID == null)
             {
                 ModelState.AddModelError("RainfallWithinSixHoursID", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -3699,6 +3764,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> EffectiveRainfall()
         {
+            _logger.LogTrace($"Organic Manure Controller : EffectiveRainfall() action called");
             OrganicManureViewModel? model = new OrganicManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
             {
@@ -3715,6 +3781,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EffectiveRainfall(OrganicManureViewModel model)
         {
+            _logger.LogTrace($"Organic Manure Controller : EffectiveRainfall() post action called");
             if (!ModelState.IsValid)
             {
                 return View("EffectiveRainfall", model);
@@ -3727,6 +3794,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> EffectiveRainfallManual()
         {
+            _logger.LogTrace($"Organic Manure Controller : EffectiveRainfallManual() action called");
             OrganicManureViewModel? model = new OrganicManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
             {
@@ -3739,10 +3807,12 @@ namespace NMP.Portal.Controllers
             return View(model);
 
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EffectiveRainfallManual(OrganicManureViewModel model)
         {
+            _logger.LogTrace($"Organic Manure Controller : EffectiveRainfallManual() post action called");
             if ((!ModelState.IsValid) && ModelState.ContainsKey("TotalRainfall"))
             {
                 var RainfallError = ModelState["TotalRainfall"].Errors.Count > 0 ?
@@ -3784,6 +3854,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> Windspeed()
         {
+            _logger.LogTrace($"Organic Manure Controller : Windspeed() action called");
             OrganicManureViewModel? model = new OrganicManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
             {
@@ -3806,10 +3877,12 @@ namespace NMP.Portal.Controllers
             return View(model);
 
         }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Windspeed(OrganicManureViewModel model)
         {
+            _logger.LogTrace($"Organic Manure Controller : Windspeed() post action called");
             if (model.WindspeedID == null)
             {
                 ModelState.AddModelError("WindspeedID", Resource.MsgSelectAWindConditionBeforeContinuing);
@@ -3827,6 +3900,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> TopsoilMoisture()
         {
+            _logger.LogTrace($"Organic Manure Controller : TopsoilMoisture() action called");
             OrganicManureViewModel? model = new OrganicManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
             {
@@ -3849,10 +3923,12 @@ namespace NMP.Portal.Controllers
             return View(model);
 
         }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> TopsoilMoisture(OrganicManureViewModel model)
         {
+            _logger.LogTrace($"Organic Manure Controller : TopsoilMoisture() post action called");
             if (model.MoistureTypeId == null)
             {
                 ModelState.AddModelError("MoistureTypeId", Resource.MsgSelectATopsoilWetnessConditionBeforeContinuing);

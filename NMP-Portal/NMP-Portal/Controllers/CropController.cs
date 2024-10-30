@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
@@ -52,11 +53,13 @@ namespace NMP.Portal.Controllers
         }
         public IActionResult Index()
         {
+            _logger.LogTrace("Crop Controller : Index() action called");
             return View();
         }
 
         public async Task<IActionResult> CreateCropPlanCancel(string q)
         {
+            _logger.LogTrace($"Crop Controller : CreateCropPlanCancel({q}) action called");
             _httpContextAccessor.HttpContext?.Session.Remove("CropData");
             if (!string.IsNullOrWhiteSpace(q))
             {
@@ -73,6 +76,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> HarvestYearForPlan(string q, string? year, bool? isPlanRecord)
         {
+            _logger.LogTrace($"Crop Controller : HarvestYearForPlan({q}, {year}, {isPlanRecord}) action called");
             PlanViewModel model = new PlanViewModel();
             Error? error = null;
             try
@@ -122,6 +126,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Crop Controller: Exception in HarvestYearForPlan() action : {ex.Message}", ex.StackTrace);
                 TempData["Error"] = string.Concat(error == null ? "" : error.Message, ex.Message);
                 return RedirectToAction("FarmSummary", "Farm", new { id = q });
             }
@@ -133,6 +138,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult HarvestYearForPlan(PlanViewModel model)
         {
+            _logger.LogTrace("Crop Controller : HarvestYearForPlan() action posted");
             if (model.Year == null)
             {
                 ModelState.AddModelError("Year", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblYear.ToLower()));
@@ -157,6 +163,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> CropGroups()
         {
+            _logger.LogTrace("Crop Controller : CropGroups() action called");
             PlanViewModel model = new PlanViewModel();
 
             try
@@ -182,6 +189,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Crop Controller: Exception in CropGroups() action : { ex.Message}", ex.StackTrace);
                 TempData["ErrorOnHarvestYear"] = ex.Message;
                 return RedirectToAction("HarvestYearForPlan");
             }
@@ -191,6 +199,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CropGroups(PlanViewModel model)
         {
+            _logger.LogTrace("Crop Controller : CropGroups() action posted");
             try
             {
                 if (model.CropGroupId == null)
@@ -251,6 +260,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Crop Controller: Exception in CropGroups() post action : {ex.Message} : {ex.StackTrace}");
                 TempData["CropGroupError"] = ex.Message;
                 return View(model);
             }
@@ -261,6 +271,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> CropTypes()
         {
+            _logger.LogTrace("Crop Controller : CropTypes() action called");
             PlanViewModel model = new PlanViewModel();
             try
             {
@@ -285,6 +296,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Crop Controller: Exception in CropTypes() action : {ex.Message} : {ex.StackTrace}");
                 TempData["CropGroupError"] = ex.Message;
                 return RedirectToAction("CropGroups");
             }
@@ -295,6 +307,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CropTypes(PlanViewModel model)
         {
+            _logger.LogTrace("Crop Controller : CropTypes() post action called");
             try
             {
                 if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other)
@@ -389,6 +402,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Crop Controller: Exception in CropTypes() post action : {ex.Message} : {ex.StackTrace}");
                 TempData["CropTypeError"] = ex.Message;
                 return View(model);
             }
@@ -398,6 +412,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> VarietyName()
         {
+            _logger.LogTrace("Crop Controller : VarietyName() action called");
             PlanViewModel model = new PlanViewModel();
             try
             {
@@ -413,6 +428,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Crop Controller : Exception in VarietyName() post action : {ex.Message}, {ex.StackTrace}");
                 TempData["CropTypeError"] = ex.Message;
                 return RedirectToAction("CropTypes");
             }
@@ -423,6 +439,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> VarietyName(PlanViewModel model)
         {
+            _logger.LogTrace("Crop Controller : VarietyName() post action called");
             try
             {
                 if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes && model.Variety == null)
@@ -572,6 +589,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Crop Controller : Exception in VarietyName() post action : {ex.Message}, {ex.StackTrace}");
                 TempData["ErrorOnVariety"] = ex.Message;
                 return View(model);
             }
@@ -579,6 +597,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> CropFields()
         {
+            _logger.LogTrace("Crop Controller : CropFields() action called");
             PlanViewModel model = new PlanViewModel();
             try
             {
@@ -621,6 +640,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Crop Controller : Exception in CropFields() action : {ex.Message}, {ex.StackTrace}");
                 TempData["ErrorOnVariety"] = ex.Message;
                 return RedirectToAction("VarietyName");
             }
@@ -631,6 +651,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CropFields(PlanViewModel model)
         {
+            _logger.LogTrace("Crop Controller : CropFields() post action called");
             try
             {
                 int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
@@ -780,6 +801,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Crop Controller : Exception in CropFields() post action : {ex.Message}, {ex.StackTrace}");
                 TempData["ErrorOnSelectField"] = ex.Message;
                 return View(model);
             }
@@ -788,6 +810,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> SowingDateQuestion()
         {
+            _logger.LogTrace("Crop Controller : SowingDateQuestion() action called");
             PlanViewModel model = new PlanViewModel();
             try
             {
@@ -809,6 +832,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Crop Controller : Exception in SowingDateQuestion() action : {ex.Message}, {ex.StackTrace}");
                 TempData["ErrorOnSelectField"] = ex.Message;
                 return RedirectToAction("CropFields");
             }
@@ -819,6 +843,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult SowingDateQuestion(PlanViewModel model)
         {
+            _logger.LogTrace("Crop Controller : SowingDateQuestion() action called");
             if (model.SowingDateQuestion == null)
             {
                 ModelState.AddModelError("SowingDateQuestion", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -879,6 +904,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> SowingDate(string q)
         {
+            _logger.LogTrace($"Crop Controller : SowingDate({q}) action called");
             PlanViewModel model = new PlanViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
             {
@@ -923,7 +949,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SowingDate(PlanViewModel model)
         {
-
+            _logger.LogTrace("Crop Controller : SowingDate() post action called");
             if ((!ModelState.IsValid) && ModelState.ContainsKey("Crops[" + model.SowingDateCurrentCounter + "].SowingDate"))
             {
                 var dateError = ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Count > 0 ?
@@ -1044,6 +1070,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> YieldQuestion()
         {
+            _logger.LogTrace("Crop Controller : YieldQuestion() action called");
             PlanViewModel model = new PlanViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
             {
@@ -1073,6 +1100,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult YieldQuestion(PlanViewModel model)
         {
+            _logger.LogTrace("Crop Controller : YieldQuestion() post action called");
             if (model.YieldQuestion == null)
             {
                 ModelState.AddModelError("YieldQuestion", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -1109,6 +1137,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> Yield(string q)
         {
+            _logger.LogTrace($"Crop Controller : Yield({q}) action called");
             PlanViewModel model = new PlanViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
             {
@@ -1176,6 +1205,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Yield(PlanViewModel model)
         {
+            _logger.LogTrace("Crop Controller : Yield() post action called");
             if (model.Crops[model.YieldCurrentCounter].Yield == null)
             {
                 ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", Resource.MsgEnterFigureBeforeContinuing);
@@ -1258,6 +1288,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> CropInfoOne()
         {
+            _logger.LogTrace("Crop Controller : CropInfoOne() action called");
             PlanViewModel model = new PlanViewModel();
             try
             {
@@ -1277,6 +1308,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Crop Controller : Exception in CropInfoOne() action : {ex.Message}, {ex.StackTrace}");
                 TempData["ErrorOnYield"] = ex.Message;
                 return RedirectToAction("Yield");
             }
@@ -1288,6 +1320,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CropInfoOne(PlanViewModel model)
         {
+            _logger.LogTrace("Crop Controller : CropInfoOne() post action called");
             try
             {
                 List<CropInfoOneResponse> cropInfoOneResponse = await _cropService.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0);
@@ -1315,6 +1348,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Crop Controller : Exception in CropInfoOne() post action : {ex.Message}, {ex.StackTrace}");
                 TempData["CropInfoOneError"] = ex.Message;
                 return RedirectToAction("CropInfoOne");
             }
@@ -1341,6 +1375,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> AnotherCrop()
         {
+            _logger.LogTrace("Crop Controller : AnotherCrop() action called");
             PlanViewModel model = new PlanViewModel();
 
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
@@ -1358,12 +1393,15 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AnotherCrop(PlanViewModel model)
         {
+            _logger.LogTrace("Crop Controller : AnotherCrop() post action called");
+            //need to revisit for this functionality
             return View(model);
         }
 
         [HttpGet]
         public async Task<IActionResult> CropInfoTwo()
         {
+            _logger.LogTrace("Crop Controller : CropInfoTwo() action called");
             PlanViewModel model = new PlanViewModel();
             try
             {
@@ -1383,6 +1421,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Crop Controller : Exception in CropInfoTwo() action : {ex.Message}, {ex.StackTrace}");
                 TempData["CropInfoOneError"] = ex.Message;
                 return RedirectToAction("CropInfoOne");
             }
@@ -1394,6 +1433,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CropInfoTwo(PlanViewModel model)
         {
+            _logger.LogTrace("Crop Controller : CropInfoTwo() post action called");
             try
             {
                 List<CropInfoTwoResponse> cropInfoTwoResponse = await _cropService.FetchCropInfoTwoByCropTypeId();
@@ -1422,6 +1462,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Crop Controller : Exception in CropInfoTwo() post action : {ex.Message}, {ex.StackTrace}");
                 TempData["CropInfoTwoError"] = ex.Message;
                 return RedirectToAction("CropInfoTwo");
             }
@@ -1432,6 +1473,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> CheckAnswer()
         {
+            _logger.LogTrace("Crop Controller : CheckAnswer() action called");
             PlanViewModel model = new PlanViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
             {
@@ -1464,6 +1506,7 @@ namespace NMP.Portal.Controllers
 
         public IActionResult BackCheckAnswer()
         {
+            _logger.LogTrace("Crop Controller : BackCheckAnswer() action called");
             PlanViewModel? model = null;
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
             {
@@ -1485,6 +1528,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CheckAnswer(PlanViewModel model)
         {
+            _logger.LogTrace("Crop Controller : CheckAnswer() post action called");
             if (model != null)
             {
                 int i = 0;
@@ -1602,6 +1646,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> HarvestYearOverview(string id, string year, string? q, string? r)
         {
+            _logger.LogTrace($"Crop Controller : HarvestYearOverview({id}, {year}, {q}, {r}) action called");
             PlanViewModel model = new PlanViewModel();
             try
             {
@@ -1695,6 +1740,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Crop Controller : Exception in HarvestYearOverview() action : {ex.Message}, {ex.StackTrace}");
                 TempData["ErrorOnHarvestYearOverview"] = ex.Message;
                 model = null;
             }
@@ -1705,12 +1751,14 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> HarvestYearOverview(PlanViewModel model)
         {
+            _logger.LogTrace("Crop Controller : HarvestYearOverview() post action called");
             return View(model);
         }
 
         [HttpGet]
         public async Task<IActionResult> PlansAndRecordsOverview(string id, string? year)
         {
+            _logger.LogTrace($"Crop Controller : PlansAndRecordsOverview({id}, {year}) action called");
             PlanViewModel model = new PlanViewModel();
             if (!string.IsNullOrWhiteSpace(id))
             {
@@ -1780,12 +1828,14 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> PlansAndRecordsOverview(PlanViewModel model)
         {
+            _logger.LogTrace($"Crop Controller : PlansAndRecordsOverview() post action called");
             return View(model);
         }
 
         [HttpGet]
         public async Task<IActionResult> Recommendations(string q, string r, string? s)//q=farmId,r=fieldId,s=harvestYear
         {
+            _logger.LogTrace($"Crop Controller : Recommendations({q}, {r}, {s}) action called");
             RecommendationViewModel model = new RecommendationViewModel();
             Error error = null;
             int decryptedFarmId = 0;
@@ -1957,6 +2007,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Crop Controller : Exception in Recommendations() action : {ex.Message}, {ex.StackTrace}");
                 TempData["ErrorOnHarvestYearOverview"] = string.Concat(error != null ? error.Message : "", ex.Message);
                 return RedirectToAction("HarvestYearOverview", new
                 {

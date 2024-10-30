@@ -41,6 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Monitor.OpenTelemetry.AspNetCore" Version="1.2.0" />
     <PackageReference Include="GovUk.Frontend.AspNetCore" Version="1.5.0" />
     <PackageReference Include="Joonasw.AspNetCore.SecurityHeaders" Version="5.0.0" />
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.22.0" />

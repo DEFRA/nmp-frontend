@@ -25,5 +25,6 @@ namespace NMP.Portal.Services
         Task<List<SeasonResponse>> FetchSeasons();
 
         Task<(SnsResponse, Error)> FetchSNSIndexByMeasurementMethodAsync(MeasurementData measurementData);
+        Task<(Field, Error)> UpdateFieldAsync(FieldData field, int fieldId);
     }
 }
