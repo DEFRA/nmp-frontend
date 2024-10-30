@@ -1355,7 +1355,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ManageFarmFields(string id, string? q, string? name)
+        public async Task<IActionResult> ManageFarmFields(string id, string? q, string? name, string? isDeleted)
         {
             _logger.LogTrace($"Field Controller : ManageFarmFields() action called");
             FarmFieldsViewModel model = new FarmFieldsViewModel();
@@ -1367,6 +1367,12 @@ namespace NMP.Portal.Controllers
             {
                 ViewBag.Success = false;
             }
+            if(!string.IsNullOrWhiteSpace(isDeleted))
+            {
+                ViewBag.FieldName = _fieldDataProtector.Unprotect(name);
+                ViewBag.IsDeleted = true;
+            }
+            
             if (!string.IsNullOrWhiteSpace(id))
             {
                 int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
@@ -1378,10 +1384,14 @@ namespace NMP.Portal.Controllers
                 }
                 (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(farmId);
                 model.FarmName = farm.Name;
-                if (name != null)
+                if (string.IsNullOrWhiteSpace(isDeleted))
                 {
-                    model.FieldName = _farmDataProtector.Unprotect(name);
+                    if (name != null)
+                    {
+                        model.FieldName = _farmDataProtector.Unprotect(name);
+                    }
                 }
+                
                 ViewBag.FieldsList = model.Fields;
                 model.EncryptedFarmId = id;
             }
@@ -3233,6 +3243,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateField()
         {
+            _logger.LogTrace($"Field Controller : UpdateField() action called");
             FieldViewModel? model = null;
             try
             {
@@ -3279,6 +3290,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateField(FieldViewModel model)
         {
+            _logger.LogTrace($"Field Controller : UpdateField() post action called");
             try
             {
                 int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
@@ -3329,6 +3341,62 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("UpdateField");
             }
             
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> FieldRemove()
+        {
+            _logger.LogTrace($"Field Controller : FieldRemove() action called");
+            FieldViewModel? model = new FieldViewModel();
+            if (HttpContext.Session.Keys.Contains("FieldData"))
+            {
+                model = HttpContext.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+            }
+            else
+            {
+                return RedirectToAction("ManageFarmFields", "Farm");
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> FieldRemove(FieldViewModel field)
+        {
+            _logger.LogTrace($"Field Controller : FieldRemove() post action called");
+            if (field.FieldRemove == null)
+            {
+                ModelState.AddModelError("FieldRemove", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View("FieldRemove", field);
+            }
+            if (!field.FieldRemove.Value)
+            {
+                return RedirectToAction("FieldSoilAnalysisDetail", new { id = field.EncryptedFieldId, farmId = field.EncryptedFarmId});
+            }
+            else
+            {
+                int fieldId = Convert.ToInt32(_farmDataProtector.Unprotect(field.EncryptedFieldId));
+                (string message, Error error) = await _fieldService.DeleteFieldByIdAsync(fieldId);
+                if (!string.IsNullOrWhiteSpace(error.Message))
+                {
+                    ViewBag.DeleteFieldError = error.Message;
+                    return View(field);
+                }
+                if (!string.IsNullOrWhiteSpace(message))
+                {
+                    string isDeleted = _fieldDataProtector.Protect("true");
+                    string name = _fieldDataProtector.Protect(field.Name);
+                    //int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(field.EncryptedFarmId));
+                    HttpContext.Session.Remove("FieldData");
+
+                    return RedirectToAction("ManageFarmFields", new { id= field.EncryptedFarmId, name = name,isDeleted= isDeleted });
+                }
+            }
+            return View(field);
 
         }
     }

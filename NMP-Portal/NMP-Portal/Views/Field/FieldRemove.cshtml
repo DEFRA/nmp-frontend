@@ -1,0 +1,64 @@
+﻿@using NMP.Portal.Resources
+@using NMP.Portal.ViewModels
+@model FieldViewModel
+@{
+    ViewData["Title"] = Resource.lblFarmRemove;
+    var yesRemoveFarm = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
+    var noRemoveFarm = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+}
+
+@if (TempData["Error"] != null)
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item href="#">@TempData["Error"]</govuk-error-summary-item>
+    </govuk-error-summary>
+}
+@if (Model != null)
+{
+    @section BeforeContent {
+    <govuk-back-link asp-action="FieldSoilAnalysisDetail" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+    }
+
+    <form asp-action="FieldRemove" asp-controller="Field" method="post">
+        @Html.AntiForgeryToken()
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <h1 class="govuk-heading-l">@string.Format(Resource.lblRemoveField, Model.Name)</h1>
+                <p class="govuk-body">@Resource.MsgRemoveThisField</p>
+
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherReference"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LPIDNumber"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalArea"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CroppedArea"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureNonSpreadingArea"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZ"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAbove300SeaLevel"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilTypeID"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilReleasingClay" value="@Model.SoilReleasingClay.ToString().ToLower()"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilOverChalk" value="@Model.SoilOverChalk.ToString().ToLower()"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId"></govuk-input>
+
+                <govuk-radios class="govuk-radios--inline" asp-for="@Model.FieldRemove">
+                    <govuk-radios-fieldset>
+                        <govuk-radios-fieldset-legend>
+                            @Resource.lblAreYouSureYouWantToContinue
+                        </govuk-radios-fieldset-legend>
+                        <govuk-radios-item value="@yesRemoveFarm">@Resource.lblYes</govuk-radios-item>
+                        <govuk-radios-item value="@noRemoveFarm">@Resource.lblNo</govuk-radios-item>
+                    </govuk-radios-fieldset>
+                </govuk-radios>
+                <govuk-button type="submit" class="margin-bottom-forty">
+                    @Resource.lblContinue
+                </govuk-button>
+                <p class="govuk-body cancel-link"><a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
+
+            </div>
+        </div>
+    </form>
+
+}
+

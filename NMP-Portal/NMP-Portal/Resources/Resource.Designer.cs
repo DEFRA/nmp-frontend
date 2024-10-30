@@ -4475,6 +4475,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to These values are used to calculate how effective this organic material application is..
+        /// </summary>
+        public static string lblTheseValuesAreUsedToCalculateHowEffective {
+            get {
+                return ResourceManager.GetString("lblTheseValuesAreUsedToCalculateHowEffective", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 31 Oct.
         /// </summary>
         public static string lblThirtyFirstOct {
@@ -5695,6 +5704,15 @@ namespace NMP.Portal.Resources {
         public static string lblYouHaveRemoved {
             get {
                 return ResourceManager.GetString("lblYouHaveRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have removed {0} Field.
+        /// </summary>
+        public static string lblYouHaveRemovedField {
+            get {
+                return ResourceManager.GetString("lblYouHaveRemovedField", resourceCulture);
             }
         }
         
@@ -6939,6 +6957,15 @@ namespace NMP.Portal.Resources {
         public static string MsgRemoveField {
             get {
                 return ResourceManager.GetString("MsgRemoveField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This will remove all the data about this field, including any soil analysis. It will also remove this field from your plans and records. You will not be able to get it back..
+        /// </summary>
+        public static string MsgRemoveThisField {
+            get {
+                return ResourceManager.GetString("MsgRemoveThisField", resourceCulture);
             }
         }
         

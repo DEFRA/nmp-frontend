@@ -75,5 +75,6 @@ namespace NMP.Portal.ViewModels
         public bool IsRecentSoilAnalysisQuestionChange { get; set; } = false;
         //public bool SoilOverChalk { get; set; } = false;
         public string? EncryptedIsUpdate { get; set; } = string.Empty;
+        public bool? FieldRemove { get; set; }
     }
 }
