@@ -2544,4 +2544,13 @@ m3/ha  not set</value>
   <data name="MsgDateShouldNotBeExceed" xml:space="preserve">
     <value>Date should not be exceed from {0}</value>
   </data>
+  <data name="lblYouHaveRemovedField" xml:space="preserve">
+    <value>You have removed {0} Field</value>
+  </data>
+  <data name="MsgRemoveThisField" xml:space="preserve">
+    <value>This will remove all the data about this field, including any soil analysis. It will also remove this field from your plans and records. You will not be able to get it back.</value>
+  </data>
+  <data name="lblTheseValuesAreUsedToCalculateHowEffective" xml:space="preserve">
+    <value>These values are used to calculate how effective this organic material application is.</value>
+  </data>
 </root>

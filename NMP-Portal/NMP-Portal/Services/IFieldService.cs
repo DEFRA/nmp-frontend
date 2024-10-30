@@ -26,5 +26,6 @@ namespace NMP.Portal.Services
 
         Task<(SnsResponse, Error)> FetchSNSIndexByMeasurementMethodAsync(MeasurementData measurementData);
         Task<(Field, Error)> UpdateFieldAsync(FieldData field, int fieldId);
+        Task<(string, Error)> DeleteFieldByIdAsync(int fieldId);
     }
 }

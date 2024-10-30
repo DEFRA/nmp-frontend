@@ -799,5 +799,43 @@ namespace NMP.Portal.Services
             }
             return (field, error);
         }
+        public async Task<(string, Error)> DeleteFieldByIdAsync(int fieldId)
+        {
+            Error error = new Error();
+            string message = string.Empty;
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.DeleteAsync(string.Format(APIURLHelper.DeleteFieldByIdAPI, fieldId));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+                {
+                    message = responseWrapper.Data["message"].Value;
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+
+            return (message, error);
+        }
     }
 }
