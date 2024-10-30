@@ -1110,25 +1110,25 @@ namespace NMP.Portal.Controllers
                                         cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.BulbOnions || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.SaladOnions ||
                                         cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Cabbage)
                                     {
-                                        DateTime applicationDate = model.Date.Value;
-                                        int year = applicationDate.Year;
-                                        if (model.InOrgnaicManureDurationId == (int)NMP.Portal.Enums.InOrganicManureDurations.AugustToSeptember ||
-                                            model.InOrgnaicManureDurationId == (int)NMP.Portal.Enums.InOrganicManureDurations.OctoberToDecember)
-                                        {
-                                            year = applicationDate.Year;
-                                        }
-                                        else
-                                        {
-                                            year = applicationDate.Year - 1;
-                                        }
+                                        //DateTime applicationDate = model.Date.Value;
+                                        int year = model.Date.Value.Year;
                                         DateTime startDate = new DateTime(year, 9, 1); // 1st Sep
-                                        DateTime endDate = new DateTime(year + 1, 1, 15); // 15th Jan
+                                        DateTime endDate = new DateTime(year, 1, 15); // 15th Jan
+                                        if (model.Date.Value.Month>=8)
+                                        {
+                                            endDate = new DateTime(year+1, 1, 15); // 15th Jan
+                                        }
+                                        //DateTime startDate = new DateTime(year, 9, 1); // 1st Sep
+                                        //DateTime endDate = new DateTime(year, 1, 15); // 15th Jan
                                         if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Cabbage || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.BrusselSprouts ||
                                             cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Cauliflower || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Calabrese)
                                         {
-                                            int daysInFebruary = DateTime.DaysInMonth(year + 1, 2);
-                                            endDate = new DateTime(year + 1, 2, daysInFebruary);
-
+                                            if (model.Date.Value.Month >= 8)
+                                            {
+                                                year = year + 1;
+                                            }
+                                            int daysInFebruary = DateTime.DaysInMonth(year, 2);
+                                            endDate = new DateTime(year, 2, daysInFebruary);
                                         }
                                         if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
                                         {
@@ -1140,7 +1140,7 @@ namespace NMP.Portal.Controllers
                                             startDate = new DateTime(year, 9, 1); // 1st Sep
                                             endDate = new DateTime(year, 10, 31); // 31st Oct
                                         }
-                                        if (applicationDate >= startDate && applicationDate <= endDate)
+                                        if (model.Date >= startDate && model.Date <= endDate)
                                         {
                                             (List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldId, null);
                                             if (error == null)
@@ -1521,18 +1521,25 @@ namespace NMP.Portal.Controllers
                 if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.Cabbage || cropTypeId == (int)NMP.Portal.Enums.CropTypes.BrusselSprouts ||
                     cropTypeId == (int)NMP.Portal.Enums.CropTypes.Cauliflower || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Calabrese)
                 {
-                    decimal nitrogenInOneDuration = 0;
-                    nitrogenInOneDuration = Convert.ToDecimal(model.N);
-
-
-                    message = warningMessage.NitrogenLimitForFertiliserForBrassicasWarningMessage(totalNitrogen, nitrogenInOneDuration, appNitrogen);
-                    if (!string.IsNullOrWhiteSpace(message))
+                    DateTime fourWeekDate = model.Date.Value.AddDays(28);
+                    (decimal nitrogenInFourWeek, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, model.Date.Value, fourWeekDate, false);
+                    if (error == null)
                     {
-                        nitrogenExceedMessageTitle = Resource.MsgForMaxNitrogenForFertiliserForBrassicasTitle;
-                        warningMsg = message;
-                        nitrogenExceedFirstAdditionalMessage = Resource.MsgForMaxNitrogenForFertiliserForBrassicasFirstAdditionalWarningMsg;
-                        nitrogenExceedSecondAdditionalMessage = Resource.MsgForMaxNitrogenForFertiliserForBrassicasSecondAdditionalWarningMsg;
-                        isNitrogenExceedWarning = true;
+                        nitrogenInFourWeek = nitrogenInFourWeek + Convert.ToDecimal(model.N);
+
+                        message = warningMessage.NitrogenLimitForFertiliserForBrassicasWarningMessage(totalNitrogen, nitrogenInFourWeek, model.N.Value);
+                        if (!string.IsNullOrWhiteSpace(message))
+                        {
+                            nitrogenExceedMessageTitle = Resource.MsgForMaxNitrogenForFertiliserForBrassicasTitle;
+                            warningMsg = message;
+                            nitrogenExceedFirstAdditionalMessage = Resource.MsgForMaxNitrogenForFertiliserForBrassicasFirstAdditionalWarningMsg;
+                            nitrogenExceedSecondAdditionalMessage = Resource.MsgForMaxNitrogenForFertiliserForBrassicasSecondAdditionalWarningMsg;
+                            isNitrogenExceedWarning = true;
+                        }
+                    }
+                    else
+                    {
+                        return (isNitrogenExceedWarning, nitrogenExceedMessageTitle, warningMsg, nitrogenExceedFirstAdditionalMessage, nitrogenExceedSecondAdditionalMessage, error);
                     }
                 }
                 else
