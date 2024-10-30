@@ -950,13 +950,13 @@ namespace NMP.Portal.Controllers
                 ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", Resource.MsgEnterADateBeforeContinuing);
             }
 
-            if (model.Crops[model.SowingDateCurrentCounter].SowingDate != null)
-            {
-                if (model.Crops[model.SowingDateCurrentCounter].SowingDate.Value.Year < 1601 || model.Crops[model.SowingDateCurrentCounter].SowingDate.Value.Date.Year >= model.Year + 1)
-                {
-                    ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", Resource.MsgEnterADateAfter);
-                }
-            }
+            //if (model.Crops[model.SowingDateCurrentCounter].SowingDate != null)
+            //{
+            //    if (model.Crops[model.SowingDateCurrentCounter].SowingDate.Value.Year < 1601 || model.Crops[model.SowingDateCurrentCounter].SowingDate.Value.Date.Year >= model.Year + 1)
+            //    {
+            //        ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", Resource.MsgEnterADateAfter);
+            //    }
+            //}
             bool isPerennial = await _organicManureService.FetchIsPerennialByCropTypeId(model.CropTypeID.Value);
 
             DateTime maxDate = new DateTime(model.Year.Value + 1, 7, 31);
@@ -971,6 +971,13 @@ namespace NMP.Portal.Controllers
                 if (model.Crops[model.SowingDateCurrentCounter].SowingDate < minDate)
                 {
                     ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", string.Format(Resource.MsgDateShouldBeExceedFrom, minDate.Date.ToString("dd MMMM yyyy")));
+                }
+            }
+            else
+            {
+                if (model.Crops[model.SowingDateCurrentCounter].SowingDate.Value.Year < 1601)
+                {
+                    ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", Resource.MsgEnterADateAfter);
                 }
             }
 
