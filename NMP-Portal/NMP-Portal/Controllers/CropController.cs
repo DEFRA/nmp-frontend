@@ -1765,7 +1765,7 @@ namespace NMP.Portal.Controllers
                 int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
                 (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(farmId);
                 model.FarmName = farm.Name;
-                List<PlanSummaryResponse> planSummaryResponse = await _cropService.FetchPlanSummaryByFarmId(farmId, 0);
+                List<PlanSummaryResponse> planSummaryResponse = await _cropService.FetchPlanSummaryByFarmId(farmId, 1);
                 planSummaryResponse.RemoveAll(x => x.Year == 0);
                 planSummaryResponse = planSummaryResponse.OrderByDescending(x => x.Year).ToList();
                 model.EncryptedHarvestYearList = new List<string>();
