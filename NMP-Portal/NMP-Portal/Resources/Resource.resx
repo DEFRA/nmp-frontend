@@ -2556,4 +2556,7 @@ m3/ha  not set</value>
   <data name="lblPlanningAndRecording" xml:space="preserve">
     <value>Planning and recording</value>
   </data>
+  <data name="lblPlansAndRecords" xml:space="preserve">
+    <value>Plans and records</value>
+  </data>
 </root>

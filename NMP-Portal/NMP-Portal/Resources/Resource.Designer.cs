@@ -3575,6 +3575,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Plans and records.
+        /// </summary>
+        public static string lblPlansAndRecords {
+            get {
+                return ResourceManager.GetString("lblPlansAndRecords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Plans and records overview.
         /// </summary>
         public static string lblPlansAndRecordsOverview {

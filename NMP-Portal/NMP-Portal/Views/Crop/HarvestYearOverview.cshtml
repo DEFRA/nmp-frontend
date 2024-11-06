@@ -50,11 +50,18 @@
                 {
                     <p class="govuk-body"><a asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@string.Format(Resource.lblAddAnotherCrop, Model.Year)</a></p>
                 }
-                <p class="govuk-body"><a asp-action="FieldGroup" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@string.Format(Resource.lblAddManuresToThisPlan, Model.Year)</a></p>
+                @if (ViewBag.AddMannerDisabled != null && ViewBag.AddMannerDisabled)
+                {
+                    <p class="govuk-body"><a class="disabled" asp-action="FieldGroup" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@string.Format(Resource.lblAddManuresToThisPlan, Model.Year)</a></p>
+                }
+                else
+                {
+                    <p class="govuk-body"><a asp-action="FieldGroup" asp-controller="OrganicManure"  asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@string.Format(Resource.lblAddManuresToThisPlan, Model.Year)</a></p>
+                }
                 <p class="govuk-body"><a asp-action="FieldGroup" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblAddInorganicFertiliser</a></p>
 
             </div>
-           
+
         </div>
         <div class="govuk-grid-column-full">
             <hr class="seperator_five">
