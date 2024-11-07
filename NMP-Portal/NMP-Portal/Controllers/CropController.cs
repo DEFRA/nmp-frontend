@@ -1676,10 +1676,14 @@ namespace NMP.Portal.Controllers
                     List<string> fields = new List<string>();
 
                     (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropService.FetchHarvestYearPlansByFarmId(harvestYear, farmId);
-
                     model.Year = harvestYear;
                     if (harvestYearPlanResponse != null && error.Message == null)
                     {
+                        bool isAllCropInfo1NonNull = harvestYearPlanResponse.All(h => h.CropInfo1 != null);
+                        if (!isAllCropInfo1NonNull)
+                        {
+                            ViewBag.AddMannerDisabled = true;
+                        }
                         model.LastModifiedOn = harvestYearPlanResponse.Max(x => x.LastModifiedOn).ToString("dd MMM yyyy");
                         var groupedResult = harvestYearPlanResponse
                                             .GroupBy(h => new { h.CropTypeName, h.CropVariety })
@@ -1799,8 +1803,8 @@ namespace NMP.Portal.Controllers
                         };
                         model.HarvestYear.Add(harvestNewYear);
                     }
-                    int minYear = System.DateTime.Now.Year - 1;
-                    int maxYear = System.DateTime.Now.Year + 1;
+                    int minYear = planSummaryResponse.Min(x => x.Year) - 1;
+                    int maxYear = planSummaryResponse.Max(x => x.Year) + 1;
                     for (int i = minYear; i <= maxYear; i++)
                     {
                         if (!yearList.Contains(i))
@@ -1862,147 +1866,169 @@ namespace NMP.Portal.Controllers
                     decryptedHarvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(s));
                     model.EncryptedHarvestYear = s;
                 }
-                if (decryptedFieldId > 0 && decryptedHarvestYear > 0)
+                (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropService.FetchHarvestYearPlansByFarmId(decryptedHarvestYear, decryptedFarmId);
+                if (harvestYearPlanResponse != null && error.Message == null)
                 {
-                    (recommendations, error) = await _cropService.FetchRecommendationByFieldIdAndYear(decryptedFieldId, decryptedHarvestYear);
-                    if (error == null)
+                    bool isAllCropInfo1NonNull = harvestYearPlanResponse.All(h => h.CropInfo1 != null);
+                    if (!isAllCropInfo1NonNull)
                     {
+                        ViewBag.AddMannerDisabled = true;
+                    }
+                    if (decryptedFieldId > 0 && decryptedHarvestYear > 0)
+                    {
+                        (recommendations, error) = await _cropService.FetchRecommendationByFieldIdAndYear(decryptedFieldId, decryptedHarvestYear);
+                        if (error == null)
+                        {
 
-                        if (model.Crops == null)
-                        {
-                            model.Crops = new List<CropViewModel>();
-                        }
-                        if (model.ManagementPeriods == null)
-                        {
-                            model.ManagementPeriods = new List<ManagementPeriod>();
-                        }
-                        if (model.Recommendations == null)
-                        {
-                            model.Recommendations = new List<Recommendation>();
-                        }
-                        if (model.RecommendationComments == null)
-                        {
-                            model.RecommendationComments = new List<RecommendationComment>();
-                        }
-                        if (model.OrganicManures == null)
-                        {
-                            model.OrganicManures = new List<OrganicManureData>();
-                        }
-                        foreach (var recommendation in recommendations)
-                        {
-                            var crop = new CropViewModel
+                            if (model.Crops == null)
                             {
-                                ID = recommendation.Crops.ID,
-                                Year = recommendation.Crops.Year,
-                                CropTypeID = recommendation.Crops.CropTypeID,
-                                FieldID = recommendation.Crops.FieldID,
-                                Variety = recommendation.Crops.Variety,
-                                CropInfo1 = recommendation.Crops.CropInfo1,
-                                CropInfo2 = recommendation.Crops.CropInfo2,
-                                Yield = recommendation.Crops.Yield,
-                                SowingDate = recommendation.Crops.SowingDate,
-                                CropTypeName = await _fieldService.FetchCropTypeById(recommendation.Crops.CropTypeID.Value),
-                                CropInfo1Name = await _cropService.FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(recommendation.Crops.CropTypeID.Value, recommendation.Crops.CropInfo1.Value)
-                            };
-                            model.FieldName = (await _fieldService.FetchFieldByFieldId(recommendation.Crops.FieldID.Value)).Name;
-                            List<CropTypeResponse> cropTypeResponseList = (await _fieldService.FetchAllCropTypes());
-                            if (cropTypeResponseList != null)
+                                model.Crops = new List<CropViewModel>();
+                            }
+                            if (model.ManagementPeriods == null)
                             {
-                                CropTypeResponse cropTypeResponse = cropTypeResponseList.Where(x => x.CropTypeId == crop.CropTypeID).FirstOrDefault();
-                                if (cropTypeResponse != null)
+                                model.ManagementPeriods = new List<ManagementPeriod>();
+                            }
+                            if (model.Recommendations == null)
+                            {
+                                model.Recommendations = new List<Recommendation>();
+                            }
+                            if (model.RecommendationComments == null)
+                            {
+                                model.RecommendationComments = new List<RecommendationComment>();
+                            }
+                            if (model.OrganicManures == null)
+                            {
+                                model.OrganicManures = new List<OrganicManureData>();
+                            }
+                            foreach (var recommendation in recommendations)
+                            {
+                                var crop = new CropViewModel
                                 {
-                                    model.CropGroupID = cropTypeResponse.CropGroupId;
+                                    ID = recommendation.Crops.ID,
+                                    Year = recommendation.Crops.Year,
+                                    CropTypeID = recommendation.Crops.CropTypeID,
+                                    FieldID = recommendation.Crops.FieldID,
+                                    Variety = recommendation.Crops.Variety,
+                                    CropInfo1 = recommendation.Crops.CropInfo1,
+                                    CropInfo2 = recommendation.Crops.CropInfo2,
+                                    Yield = recommendation.Crops.Yield,
+                                    SowingDate = recommendation.Crops.SowingDate,
+                                    CropTypeName = await _fieldService.FetchCropTypeById(recommendation.Crops.CropTypeID.Value)
+
+                                };
+                                if (recommendation.Crops.CropInfo1 != null)
+                                {
+                                    crop.CropInfo1Name = await _cropService.FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(recommendation.Crops.CropTypeID.Value, recommendation.Crops.CropInfo1.Value);
                                 }
-                            }
-                            if (model.CropGroupID == (int)NMP.Portal.Enums.CropGroup.Cereals)
-                            {
-                                crop.CropInfo2Name = await _cropService.FetchCropInfo2NameByCropInfo2Id(crop.CropInfo2.Value);
-                            }
-
-                            model.Crops.Add(crop);
-
-
-                            if (recommendation.RecommendationData.Count > 0)
-                            {
-                                foreach (var recData in recommendation.RecommendationData)
+                                model.FieldName = (await _fieldService.FetchFieldByFieldId(recommendation.Crops.FieldID.Value)).Name;
+                                List<CropTypeResponse> cropTypeResponseList = (await _fieldService.FetchAllCropTypes());
+                                if (cropTypeResponseList != null)
                                 {
-                                    var ManagementPeriods = new ManagementPeriod
+                                    CropTypeResponse cropTypeResponse = cropTypeResponseList.Where(x => x.CropTypeId == crop.CropTypeID).FirstOrDefault();
+                                    if (cropTypeResponse != null)
                                     {
-                                        ID = recData.ManagementPeriod.ID,
-                                        CropID = recData.ManagementPeriod.CropID,
-                                        DefoliationID = recData.ManagementPeriod.DefoliationID,
-                                        Utilisation1ID = recData.ManagementPeriod.Utilisation1ID,
-                                        Utilisation2ID = recData.ManagementPeriod.Utilisation2ID,
-                                        PloughedDown = recData.ManagementPeriod.PloughedDown
-                                    };
-                                    model.ManagementPeriods.Add(ManagementPeriods);
-                                    var rec = new Recommendation
-                                    {
-                                        ID = recData.Recommendation.ID,
-                                        ManagementPeriodID = recData.Recommendation.ManagementPeriodID,
-                                        CropN = recData.Recommendation.CropN,
-                                        CropP2O5 = recData.Recommendation.CropP2O5,
-                                        CropK2O = recData.Recommendation.CropK2O,
-                                        CropSO3 = recData.Recommendation.CropSO3,
-                                        CropLime = recData.Recommendation.CropLime,
-                                        ManureN = recData.Recommendation.ManureN,
-                                        ManureP2O5 = recData.Recommendation.ManureP2O5,
-                                        ManureK2O = recData.Recommendation.ManureK2O,
-                                        ManureSO3 = recData.Recommendation.ManureSO3,
-                                        ManureLime = recData.Recommendation.ManureLime,
-                                        FertilizerN = recData.Recommendation.FertilizerN,
-                                        FertilizerP2O5 = recData.Recommendation.FertilizerP2O5,
-                                        FertilizerK2O = recData.Recommendation.FertilizerK2O,
-                                        FertilizerSO3 = recData.Recommendation.FertilizerSO3,
-                                        FertilizerLime = recData.Recommendation.FertilizerLime,
-                                        SNSIndex = recData.Recommendation.SNSIndex,
-                                        SIndex = recData.Recommendation.SIndex,
-                                        KIndex = recData.Recommendation.KIndex,
-                                        MgIndex = recData.Recommendation.MgIndex,
-                                        PIndex = recData.Recommendation.PIndex,
-                                        NaIndex = recData.Recommendation.NaIndex
-                                    };
-                                    model.Recommendations.Add(rec);
-
-                                    if (recData.RecommendationComments.Count > 0)
-                                    {
-                                        foreach (var item in recData.RecommendationComments)
-                                        {
-                                            var recCom = new RecommendationComment
-                                            {
-                                                ID = item.ID,
-                                                RecommendationID = item.RecommendationID,
-                                                Nutrient = item.Nutrient,
-                                                Comment = item.Comment
-                                            };
-                                            model.RecommendationComments.Add(recCom);
-                                        }
+                                        model.CropGroupID = cropTypeResponse.CropGroupId;
                                     }
-
-                                    if (recData.OrganicManures.Count > 0)
-                                    {
-                                        foreach (var item in recData.OrganicManures)
-                                        {
-                                            var orgManure = new OrganicManureData
-                                            {
-                                                ID = item.ID,
-                                                ManureTypeName = item.ManureTypeName,
-                                                ApplicationMethodName = item.ApplicationMethodName,
-                                                ApplicationDate = item.ApplicationDate,
-                                                ApplicationRate = item.ApplicationRate
-                                            };
-                                            model.OrganicManures.Add(orgManure);
-                                        }
-                                        model.OrganicManures = model.OrganicManures.OrderByDescending(x => x.ApplicationDate).ToList();
-                                    }
-
-
+                                }
+                                if (model.CropGroupID == (int)NMP.Portal.Enums.CropGroup.Cereals)
+                                {
+                                    crop.CropInfo2Name = await _cropService.FetchCropInfo2NameByCropInfo2Id(crop.CropInfo2.Value);
                                 }
 
-                            }
+                                model.Crops.Add(crop);
 
+
+                                if (recommendation.RecommendationData.Count > 0)
+                                {
+                                    foreach (var recData in recommendation.RecommendationData)
+                                    {
+                                        var ManagementPeriods = new ManagementPeriod
+                                        {
+                                            ID = recData.ManagementPeriod.ID,
+                                            CropID = recData.ManagementPeriod.CropID,
+                                            DefoliationID = recData.ManagementPeriod.DefoliationID,
+                                            Utilisation1ID = recData.ManagementPeriod.Utilisation1ID,
+                                            Utilisation2ID = recData.ManagementPeriod.Utilisation2ID,
+                                            PloughedDown = recData.ManagementPeriod.PloughedDown
+                                        };
+                                        model.ManagementPeriods.Add(ManagementPeriods);
+                                        var rec = new Recommendation
+                                        {
+                                            ID = recData.Recommendation.ID,
+                                            ManagementPeriodID = recData.Recommendation.ManagementPeriodID,
+                                            CropN = recData.Recommendation.CropN,
+                                            CropP2O5 = recData.Recommendation.CropP2O5,
+                                            CropK2O = recData.Recommendation.CropK2O,
+                                            CropSO3 = recData.Recommendation.CropSO3,
+                                            CropLime = recData.Recommendation.CropLime,
+                                            ManureN = recData.Recommendation.ManureN,
+                                            ManureP2O5 = recData.Recommendation.ManureP2O5,
+                                            ManureK2O = recData.Recommendation.ManureK2O,
+                                            ManureSO3 = recData.Recommendation.ManureSO3,
+                                            ManureLime = recData.Recommendation.ManureLime,
+                                            FertilizerN = recData.Recommendation.FertilizerN,
+                                            FertilizerP2O5 = recData.Recommendation.FertilizerP2O5,
+                                            FertilizerK2O = recData.Recommendation.FertilizerK2O,
+                                            FertilizerSO3 = recData.Recommendation.FertilizerSO3,
+                                            FertilizerLime = recData.Recommendation.FertilizerLime,
+                                            SNSIndex = recData.Recommendation.SNSIndex,
+                                            SIndex = recData.Recommendation.SIndex,
+                                            KIndex = recData.Recommendation.KIndex,
+                                            MgIndex = recData.Recommendation.MgIndex,
+                                            PIndex = recData.Recommendation.PIndex,
+                                            NaIndex = recData.Recommendation.NaIndex
+                                        };
+                                        model.Recommendations.Add(rec);
+
+                                        if (recData.RecommendationComments.Count > 0)
+                                        {
+                                            foreach (var item in recData.RecommendationComments)
+                                            {
+                                                var recCom = new RecommendationComment
+                                                {
+                                                    ID = item.ID,
+                                                    RecommendationID = item.RecommendationID,
+                                                    Nutrient = item.Nutrient,
+                                                    Comment = item.Comment
+                                                };
+                                                model.RecommendationComments.Add(recCom);
+                                            }
+                                        }
+
+                                        if (recData.OrganicManures.Count > 0)
+                                        {
+                                            foreach (var item in recData.OrganicManures)
+                                            {
+                                                var orgManure = new OrganicManureData
+                                                {
+                                                    ID = item.ID,
+                                                    ManureTypeName = item.ManureTypeName,
+                                                    ApplicationMethodName = item.ApplicationMethodName,
+                                                    ApplicationDate = item.ApplicationDate,
+                                                    ApplicationRate = item.ApplicationRate
+                                                };
+                                                model.OrganicManures.Add(orgManure);
+                                            }
+                                            model.OrganicManures = model.OrganicManures.OrderByDescending(x => x.ApplicationDate).ToList();
+                                        }
+
+
+                                    }
+
+                                }
+
+                            }
                         }
                     }
+                }
+                else
+                {
+                    TempData["ErrorOnHarvestYearOverview"] =error.Message;
+                    return RedirectToAction("HarvestYearOverview", new
+                    {
+                        id = q,
+                        year = s
+                    });
                 }
             }
             catch (Exception ex)

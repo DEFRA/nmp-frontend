@@ -3530,6 +3530,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Planning and recording.
+        /// </summary>
+        public static string lblPlaningndRecording {
+            get {
+                return ResourceManager.GetString("lblPlaningndRecording", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Planning and recording.
+        /// </summary>
+        public static string lblPlanningAndRecording {
+            get {
+                return ResourceManager.GetString("lblPlanningAndRecording", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Planning and recording can:.
         /// </summary>
         public static string lblPlanningAndRecordingCan {
@@ -5051,6 +5069,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View, create or update a plan.
+        /// </summary>
+        public static string lblViewCreateOrUpdateAPlan {
+            get {
+                return ResourceManager.GetString("lblViewCreateOrUpdateAPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to View or edit the {0} plan.
         /// </summary>
         public static string lblViewEditThePlan {
@@ -5074,15 +5101,6 @@ namespace NMP.Portal.Resources {
         public static string lblViewFields {
             get {
                 return ResourceManager.GetString("lblViewFields", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to View or create a plan or record.
-        /// </summary>
-        public static string lblViewOrCreateAPlanOrRecord {
-            get {
-                return ResourceManager.GetString("lblViewOrCreateAPlanOrRecord", resourceCulture);
             }
         }
         
