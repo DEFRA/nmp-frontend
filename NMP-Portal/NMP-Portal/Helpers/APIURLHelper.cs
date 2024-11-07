@@ -7,7 +7,7 @@ namespace NMP.Portal.Helpers
         public const string GetToken = "Token";
         public const string AddressLookupAPI = "vendors/address-lookup/addresses?postcode={0}&offset={1}";
         public const string AddFarmAPI = "farms/createFarm";
-        public const string IsFarmExist = "farms/exists?Name={0}&Postcode={1}";
+        public const string IsFarmExist = "farms/exists?Name={0}&Postcode={1}&Id={2}"; 
         public const string FetchFarmByUserIdAPI = "farms/users/{0}";
         public const string FetchFarmByOrgIdAPI = "farms/organisations/{0}";
         public const string FetchFarmByIdAPI = "farms/{0}";
@@ -51,14 +51,15 @@ namespace NMP.Portal.Helpers
         public const string FetchApplicationMethodsByApplicableForAsyncAPI = "application-method?fieldType={0}&applicableFor={1}";
         public const string FetchIncorporationMethodsByApplicationIdAsyncAPI = "incorporation-methods/application-methods/{0}?fieldType={1}&applicableFor={2}";
 
+
         public const string FetchCropsByFieldIdAsyncAPI = "crops/fields/{0}";
 
         public const string FetchIncorporationDelaysByMethodIdAndApplicableForAsyncAPI = "incorporation-delays/incorporation-methods/{0}?applicableFor={1}";
-
         public const string FetchFieldDetailByFieldIdAndHarvestYearAsyncAPI = "fields/info/{0}?year={1}&confirm={2}";
         public const string FetchIncorporationDelayByIdAsyncAPI = "incorporation-delays/{0}";
         public const string FetchIncorporationMethodByIdAsyncAPI = "incorporation-methods/{0}";
-        public const string FetchApplicationMethodByIdAsyncAPI = "application-method/{0}";
+        public const string FetchApplicationMethodByIdAsyncAPI = "application-methods/{0}";
+
 
         public const string AddOrganicManuresAsyncAPI = "organic-manures";
         public const string FetchRainfallByPostcodeAndDateRange = "climates/total-rainfall?postcode={0}&startDate={1}&endDate={2}";
@@ -75,5 +76,44 @@ namespace NMP.Portal.Helpers
         public const string FetchInOrganicManureDurationsAsyncAPI = "inorganic-manure-durations";
         public const string FetchInOrganicManureDurationsByIdAsyncAPI = "inorganic-manure-durations/{0}";
 
+        public const string DeleteFarmByIdAPI = "farms/{0}";
+        public const string AddFertiliserManuresAsyncAPI = "fertiliser-manures";
+        public const string FetchIsPerennialByCropTypeIdAsyncAPI = "manner-crop-types/isPerennial/{0}";
+        public const string FetchTotalNBasedOnManIdAndAppDateAsyncAPI = "organic-manures/total-nitrogen/{0}?fromDate={1}&toDate={2}&confirm={3}";        
+        public const string FetchCropTypeByFieldIdAndHarvestYearAsyncAPI = "crops/crop-type/{0}?year={1}&confirm={2}";
+        public const string FetchCropTypeLinkingByCropTypeIdAsyncAPI = "crop-type-linkings/{0}";
+        public const string FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManureAsyncAPI = "organic-manures/manure-type/{0}?year={1}&confirm={2}";
+        public const string FetchTotalNBasedOnManIdFromOrgManureAndFertiliserAsyncAPI = "fertiliser-manures/organic-manures/total-nitrogen/{0}?confirm={1}";
+        public const string FetchTotalNFromFertiliserBasedOnManIdAndAppDateAsyncAPI = "fertiliser-manures/total-nitrogen/{0}?fromDate={1}&toDate={2}&confirm={3}";        
+        public const string FetchCropTypeLinkingsByCropTypeIdAsyncAPI = "crop-type-linkings/{0}";
+        public const string FetchOrganicManureExistanceByDateRangeAsyncAPI = "organic-manures/check-existence?dateFrom={0}&dateTo={1}&confirm={2}";
+        public const string FetchSeasonsAsyncAPI = "vendors/rb209/Measurement/Seasons";
+        public const string FetchSNSIndexByMeasurementMethodAsyncAPI = "vendors/rb209/Measurement/MeasurementMethod";
+        public const string FetchSecondCropListByFirstCropIdAsyncAPI = "second-crop-linkings/{0}";
+        public const string FetchSoilAnalysisByIdAsyncAPI = "soil-analyses/{0}";
+        public const string UpdateSoilAnalysisAsyncAPI = "soil-analyses/{0}";
+        public const string UpdateFieldAsyncAPI = "fields/{0}";
+        public const string DeleteFieldByIdAPI = "fields/{0}";
+
+        //Manner APi Url
+        public const string FetchMannerApplicationMethodByIdAsyncAPI = "vendors/manner/application-methods/{0}";
+        public const string FetchMannerIncorporationDelaysByMethodIdAndApplicableForAsyncAPI = "vendors/manner/incorporation-delays/by-incorp-method-and-applicable-for/{0}?applicableFor={1}";//    vendors/manner/incorporation-delays/by-incorp-method/{0}";
+        public const string FetchMannerIncorporationDelaysByIdAsyncAPI = "vendors/manner/incorporation-delays/{0}";
+        public const string FetchMannerIncorporationMethodByIdAsyncAPI = "vendors/manner/incorporation-methods/{0}";
+        public const string FetchMannerIncorporationMethodsByApplicationIdAsyncAPI = "vendors/manner/incorporation-methods/by-app-method-and-applicable-for/{0}?applicableFor={1}"; //"vendors/manner/incorporation-methods/by-app-method/{0}";
+        public const string FetchMannerApplicationMethodsByApplicableForAsyncAPI = "vendors/manner/application-methods?isLiquid={0}&fieldType={1}";
+        public const string FetchMannerWindspeedsAsyncAPI = "vendors/manner/windspeeds";
+        public const string FetchMannerWindspeedByIdAsyncAPI = "vendors/manner/windspeeds/{0}";
+        public const string FetchMannerRainTypesAsyncAPI = "vendors/manner/rain-types";
+        public const string FetchMannerRainTypeByIdAsyncAPI = "vendors/manner/rain-types/{0}";
+        public const string FetchMannerMoistureTypesAsyncAPI = "vendors/manner/moisture-types";
+        public const string FetchMannerMoistureTypeByIdAsyncAPI = "vendors/manner/moisture-types/{0}";
+        public const string FetchMannerManureGroupListAsyncAPI = "vendors/manner/manure-groups";
+        public const string FetchMannerManureGroupByIdAsyncAPI = "vendors/manner/manure-groups/{0}";
+        public const string FetchMannerAutumnCropNitrogenUptakeAsyncAPI = "vendors/manner/autumn-crop-nitrogen-uptake";
+        public const string FetchMannerRainfallByPostcodeAndDateRangeAsyncAPI = "vendors/manner/rainfall-post-application";
+        public const string FetchMannerManureTypeListByGroupIdAndCountryAsyncAPI = "vendors/manner/manure-types?manureGroupId={0}&countryId={1}";
+        public const string FetchMannerManureTypeByManureTypeIdAsyncAPI = "vendors/manner/manure-types/{0}";
+        public const string FetchMannerRainfallAverageAsyncAPI = "vendors/manner/climates/avarage-annual-rainfall/{0}";        
     }
 }

@@ -11,13 +11,7 @@
 }
 <form asp-action="CropTypes" asp-controller="Crop" method="post">
     @Html.AntiForgeryToken()
-
-    @if (TempData["CropTypeError"] != null)
-    {
-        <govuk-error-summary>
-            <govuk-error-summary-item href="#">@TempData["CropTypeError"]</govuk-error-summary-item>
-        </govuk-error-summary>
-    }
+   
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupId"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroup"></govuk-input>
@@ -66,6 +60,12 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
+            @if (TempData["CropTypeError"] != null)
+            {
+                <govuk-error-summary>
+                    <govuk-error-summary-item href="#">@TempData["CropTypeError"]</govuk-error-summary-item>
+                </govuk-error-summary>
+            }
 
             @if (Model.CropGroupId == otherGroupId)
             {

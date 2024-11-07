@@ -46,16 +46,25 @@
                 <p class="govuk-body">
                     @string.Format(Resource.lblLastUpdated, Model.LastModifiedOn)
                 </p>
-                @if (ViewBag.PendingField.Count > 0)
+                @if (ViewBag.PendingField==true)
                 {
                     <p class="govuk-body"><a asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@string.Format(Resource.lblAddAnotherCrop, Model.Year)</a></p>
                 }
-                <p class="govuk-body"><a asp-action="FieldGroup" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@string.Format(Resource.lblAddManuresToThisPlan, Model.Year)</a></p>
+                @if (ViewBag.AddMannerDisabled != null && ViewBag.AddMannerDisabled)
+                {
+                    <p class="govuk-body"><a class="disabled" asp-action="FieldGroup" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@string.Format(Resource.lblAddManuresToThisPlan, Model.Year)</a></p>
+                }
+                else
+                {
+                    <p class="govuk-body"><a asp-action="FieldGroup" asp-controller="OrganicManure"  asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@string.Format(Resource.lblAddManuresToThisPlan, Model.Year)</a></p>
+                }
                 <p class="govuk-body"><a asp-action="FieldGroup" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblAddInorganicFertiliser</a></p>
-                
-            </div>
-            <hr class="seperator_five">
 
+            </div>
+
+        </div>
+        <div class="govuk-grid-column-full">
+            <hr class="seperator_five">
             @foreach (var harvestYearPlan in Model.HarvestYearPlans)
             {
                 <h2 class="govuk-heading-m">@harvestYearPlan.CropTypeName</h2>
@@ -70,6 +79,7 @@
                         <tr class="govuk-table__row">
                             <th id="field_name" scope="col" class="govuk-table__header">@Resource.lblField</th>
                             <th scope="col" class="govuk-table__header">@Resource.lblOrganicMaterialApplications</th>
+                            <th scope="col" class="govuk-table__header">@Resource.lblInorganicApplications</th>
                             <th scope="col" class="govuk-table__header"></th>
                         </tr>
                     </thead>
@@ -79,6 +89,7 @@
                             <tr class="govuk-table__row">
                                 <td class="govuk-table__cell">@field.FieldName</td>
                                 <td class="govuk-table__cell">@field.OrganicManureCount</td>
+                                <td class="govuk-table__cell">@field.FertiliserManuresCount</td>
                                 <td class="govuk-table__cell alignRight">
                                     <a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@field.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblViewFieldPlan</a>
                                 </td>

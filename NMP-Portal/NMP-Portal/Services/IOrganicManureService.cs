@@ -14,9 +14,9 @@ namespace NMP.Portal.Services
 
         Task<(ManureType, Error)> FetchManureTypeByManureTypeId(int manureTypeId);
 
-        Task<(List<ApplicationMethodResponse>, Error)> FetchApplicationMethodList(int fieldType,string applicableFor);
+        Task<(List<ApplicationMethodResponse>, Error)> FetchApplicationMethodList(int fieldType,bool isLiquid);
 
-        Task<(List<IncorporationMethodResponse>, Error)> FetchIncorporationMethodsByApplicationId(int fieldType,string applicableFor,int appId);
+        Task<(List<IncorporationMethodResponse>, Error)> FetchIncorporationMethodsByApplicationId(int appId,string? applicableFor);
         Task<(List<IncorprationDelaysResponse>, Error)> FetchIncorporationDelaysByMethodIdAndApplicableFor(int methodId, string applicableFor);
                
         Task<(string, Error)> FetchApplicationMethodById(int Id);
@@ -25,7 +25,7 @@ namespace NMP.Portal.Services
         Task<(bool, Error)> AddOrganicManuresAsync(string organicManureData);
 
         Task<(RainTypeResponse, Error)> FetchRainTypeDefault();
-        Task<int> FetchRainfallByPostcodeAndDateRange(string postCode, string applicationDate, string soilDrainageDate);
+        Task<int> FetchRainfallByPostcodeAndDateRange(string jsonString);
 
         Task<(WindspeedResponse, Error)> FetchWindspeedDataDefault();
         Task<(MoistureTypeResponse, Error)> FetchMoisterTypeDefaultByApplicationDate(string applicationDate);
@@ -33,6 +33,16 @@ namespace NMP.Portal.Services
         Task<(List<RainTypeResponse>, Error)> FetchRainTypeList();
         Task<(List<WindspeedResponse>, Error)> FetchWindspeedList();
         Task<(List<MoistureTypeResponse>, Error)> FetchMoisterTypeList();
-
+        Task<bool> FetchIsPerennialByCropTypeId(int cropTypeId);
+        Task<(decimal, Error)> FetchTotalNBasedOnManIdAndAppDate(int managementId, DateTime startDate, DateTime endDate, bool confirm);
+        Task<(CropTypeResponse, Error)> FetchCropTypeByFieldIdAndHarvestYear(int fieldId, int year,bool confirm);
+        Task<(CropTypeLinkingResponse, Error)> FetchCropTypeLinkingByCropTypeId(int cropTypeId);
+        Task<(List<int>, Error)> FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(int fieldId, int year,bool confirm);
+        Task<(decimal, Error)> FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(int managementId, bool confirm);
+        Task<(bool, Error)> FetchOrganicManureExistanceByDateRange(string dateFrom, string dateTo, bool isConfirm);
+        Task<(NitrogenUptakeResponse, Error)> FetchAutumnCropNitrogenUptake(string jsonString);
+        Task<(RainTypeResponse, Error)> FetchRainTypeById(int rainTypeId);
+        Task<(WindspeedResponse, Error)> FetchWindspeedById(int windspeedId);
+        Task<(MoistureTypeResponse, Error)> FetchMoisterTypeById(int moisterTypeId);
     }
 }

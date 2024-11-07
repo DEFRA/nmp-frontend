@@ -1,0 +1,67 @@
+﻿@using NMP.Portal.Resources
+@using NMP.Portal.ViewModels
+@model FarmViewModel
+@{
+    ViewData["Title"] = Resource.lblFarmRemove;
+    var yesRemoveFarm = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
+    var noRemoveFarm = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+}
+
+@if (TempData["Error"] != null)
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item href="#">@TempData["Error"]</govuk-error-summary-item>
+    </govuk-error-summary>
+}
+@if (Model != null)
+{
+    @section BeforeContent {
+    <govuk-back-link asp-action="FarmDetails" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+    }
+
+    <form asp-action="FarmRemove" asp-controller="Farm" method="post">
+        @Html.AntiForgeryToken()
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <h1 class="govuk-heading-l">@string.Format(Resource.lblRemoveFarm, Model.Name)</h1>
+                <p class="govuk-body">@Resource.MsgRemoveFarm</p>
+
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPostCodeChanged" value="@Model.IsPostCodeChanged"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address3"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Postcode"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Rainfall"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegisteredOrganicProducer"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZFields"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FullAddress"></govuk-input>
+                @* <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer"></govuk-input> *@
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsUpdate"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LastHarvestYear"></govuk-input>
+              
+                <govuk-radios class="govuk-radios--inline" asp-for="@Model.FarmRemove">
+                    <govuk-radios-fieldset>
+                        <govuk-radios-fieldset-legend>
+                            @Resource.lblAreYouSureYouWantToContinue
+                        </govuk-radios-fieldset-legend>
+                        <govuk-radios-item value="@yesRemoveFarm">@Resource.lblYes</govuk-radios-item>
+                        <govuk-radios-item value="@noRemoveFarm">@Resource.lblNo</govuk-radios-item>
+                    </govuk-radios-fieldset>
+                </govuk-radios>
+                <govuk-button type="submit" class="margin-bottom-forty">
+                    @Resource.lblContinue
+                </govuk-button>
+                <p class="govuk-body cancel-link"><a asp-action="CreateFarmCancel" asp-controller="Farm">@Resource.lblCancel</a></p>
+
+            </div>
+        </div>
+    </form>
+
+}
+

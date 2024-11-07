@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Azure;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
@@ -73,7 +74,7 @@ namespace NMP.Portal.Services
                 HttpClient httpClient = await GetNMPAPIClient();
 
                 // check if farm already exists or not
-                bool IsFarmExist = await IsFarmExistAsync(farmData.Farm.Name, farmData.Farm.Postcode);
+                bool IsFarmExist = await IsFarmExistAsync(farmData.Farm.Name, farmData.Farm.Postcode,farmData.Farm.ID);
                 if (!IsFarmExist)
                 {
                     // if new farm then save farm data
@@ -162,14 +163,14 @@ namespace NMP.Portal.Services
             return (farm, error);
         }
 
-        public async Task<bool> IsFarmExistAsync(string farmName, string postcode)
+        public async Task<bool> IsFarmExistAsync(string farmName, string postcode, int Id)
         {
             bool isFarmExist = false;
             Error error = new Error();
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var farmExist = await httpClient.GetAsync(string.Format(APIURLHelper.IsFarmExist, farmName, postcode.Trim()));
+                var farmExist = await httpClient.GetAsync(string.Format(APIURLHelper.IsFarmExist, farmName, postcode.Trim(),Id));
                 string resultFarmExist = await farmExist.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapperFarmExist = JsonConvert.DeserializeObject<ResponseWrapper>(resultFarmExist);
                 if (responseWrapperFarmExist.Data["exists"] == true)
@@ -199,11 +200,21 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var rainfall = await httpClient.GetAsync(string.Format(APIURLHelper.FetchRainfallAverageAsyncAPI, firstHalfPostcode));
-                string result = await rainfall.Content.ReadAsStringAsync();
-                ResponseWrapper? responseWrapperFarmExist = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-
-                rainfallAverage = responseWrapperFarmExist.Data["rainfallAverage"];
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerRainfallAverageAsyncAPI, firstHalfPostcode));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+                {
+                    rainfallAverage = responseWrapper.Data.avarageAnnualRainfall!=null? responseWrapper.Data.avarageAnnualRainfall.value:0;
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
             }
             catch (HttpRequestException hre)
             {
@@ -225,30 +236,37 @@ namespace NMP.Portal.Services
             Error error = new Error();
             try
             {
-                HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.PutAsync(APIURLHelper.UpdateFarmAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
-
-                string result = await response.Content.ReadAsStringAsync();
-                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+                bool IsFarmExist = await IsFarmExistAsync(farmData.Farm.Name, farmData.Farm.Postcode, farmData.Farm.ID);
+                if (!IsFarmExist)
                 {
+                    HttpClient httpClient = await GetNMPAPIClient();
+                    var response = await httpClient.PutAsync(APIURLHelper.UpdateFarmAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
 
-                    JObject farmDataJObject = responseWrapper.Data["Farm"] as JObject;
-                    if (farmData != null)
+                    string result = await response.Content.ReadAsStringAsync();
+                    ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                    if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
                     {
-                        farm = farmDataJObject.ToObject<Farm>();
-                    }
 
+                        JObject farmDataJObject = responseWrapper.Data["Farm"] as JObject;
+                        if (farmData != null)
+                        {
+                            farm = farmDataJObject.ToObject<Farm>();
+                        }
+                    }
+                    else
+                    {
+                        if (responseWrapper != null && responseWrapper.Error != null)
+                        {
+                            error = responseWrapper.Error.ToObject<Error>();
+                            _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                        }
+                    }
                 }
                 else
                 {
-                    if (responseWrapper != null && responseWrapper.Error != null)
-                    {
-                        error = responseWrapper.Error.ToObject<Error>();
-                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                    }
+                    error.Message =
+                        string.Format(Resource.MsgFarmAlreadyExist, farmData.Farm.Name, farmData.Farm.Postcode);
                 }
-
             }
             catch (HttpRequestException hre)
             {
@@ -263,6 +281,45 @@ namespace NMP.Portal.Services
                 throw new Exception(error.Message, ex);
             }
             return (farm, error);
+        }
+
+        public async Task<(string, Error)> DeleteFarmByIdAsync(int farmId)
+        {
+            Error error = new Error();
+            string message = string.Empty;
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.DeleteAsync(string.Format(APIURLHelper.DeleteFarmByIdAPI, farmId));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+                {
+                    message = responseWrapper.Data["message"].Value;
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+
+            return (message, error);
         }
     }
 }

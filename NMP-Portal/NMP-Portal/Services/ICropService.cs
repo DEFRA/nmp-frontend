@@ -20,5 +20,6 @@ namespace NMP.Portal.Services
         Task<List<Crop>> FetchCropsByFieldId(int fieldId);
 
         Task<decimal> FetchCropTypeDefaultYieldByCropTypeId(int cropTypeId);
+        Task<List<int>> FetchSecondCropListByFirstCropId(int firstCropTypeId);
     }
 }

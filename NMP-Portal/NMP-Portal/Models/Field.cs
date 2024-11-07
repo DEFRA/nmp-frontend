@@ -34,6 +34,7 @@ namespace NMP.Portal.Models
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblManureNonSpreadingArea))]
         public decimal? ManureNonSpreadingArea { get; set; }
         public bool? SoilReleasingClay { get; set; }
+        public bool? SoilOverChalk { get; set; }
         public bool? IsWithinNVZ { get; set; }
         public bool? IsAbove300SeaLevel { get; set; }
         public bool IsActive { get; set; }

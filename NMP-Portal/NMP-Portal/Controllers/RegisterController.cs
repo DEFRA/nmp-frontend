@@ -8,31 +8,18 @@ namespace NMP.Portal.Controllers
     [Authorize]
     public class RegisterController : Controller
     {
-        private readonly ILogger<RegisterController> _logger;
-        private readonly IDataProtector _dataProtector;
-        
-        private IHttpContextAccessor _httpContextAccessor;
-        public RegisterController(ILogger<RegisterController> logger, IDataProtectionProvider dataProtectionProvider, IHttpContextAccessor contextAccessor)
+        private readonly ILogger<RegisterController> _logger;       
+        public RegisterController(ILogger<RegisterController> logger)
         {
             _logger = logger;            
-            _dataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.RegisterController");
-            _httpContextAccessor = contextAccessor;
+            
         }
         public IActionResult Index()
-        {            
-            FarmsViewModel model = new FarmsViewModel();
-            //need to fetch user farms
-            if (model.Farms.Count > 0)
-            {
-                ViewBag.IsUserHaveAnyFarms = true;
-                return RedirectToAction("FarmList", "Farm",model);
-            }
-            else
-            {
-                ViewBag.IsUserHaveAnyFarms = false;
-                return RedirectToAction("Name", "Farm");
-            }
-
+        {
+            _logger.LogTrace($"Register Controller : Index() action called");
+            //TODO: Need to comment below line of code in production.
+            ViewBag.Token = HttpContext?.User.FindFirst("access_token").Value;
+            return View();
         }        
     }
 }

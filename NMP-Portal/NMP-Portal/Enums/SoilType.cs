@@ -1,6 +1,6 @@
 ﻿namespace NMP.Portal.Enums
 {
-    public enum SoilType
+    public enum SoilTypeEngland
     {
         LightSand = 0,
         Shallow = 1,
@@ -9,11 +9,6 @@
         DeepSilty=4,
         Organic=5,
         Peat=6,
-        Sand=10,
-        // Shallow=11,
-        SandyLoam=12,
-        OtherMineral=13,
-        Humose=14,
-        Peaty=15
+        
     }
 }

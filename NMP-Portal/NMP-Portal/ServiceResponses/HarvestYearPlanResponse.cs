@@ -18,6 +18,10 @@ namespace NMP.Portal.ServiceResponses
 
         [JsonProperty("otherCropName")]
         public string OtherCropName { get; set; }
+        [JsonProperty("CropInfo1")]
+        public string CropInfo1 { get; set; }
+        [JsonProperty("Yield")]
+        public string Yield { get; set; }
 
         [JsonProperty("lastModifiedOn")]
         public DateTime LastModifiedOn { get; set; }
@@ -27,6 +31,8 @@ namespace NMP.Portal.ServiceResponses
         [JsonProperty("TotalOrganicManures")]
         public int OrganicManuresCount { get; set; }
 
+        [JsonProperty("totalFertiliserManures")]
+        public int TotalFertiliserManures { get; set; }
 
     }
 }

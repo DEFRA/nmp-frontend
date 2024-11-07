@@ -24,7 +24,8 @@ namespace NMP.Portal.Controllers
         }
 
         public async Task<IActionResult> Index()
-        {            
+        {
+            _logger.LogTrace($"Home Controller : Index() action called");
             HttpClient client = _httpClientFactory.CreateClient("DefraIdentityConfiguration");
             var uri = new Uri($"{_configuration["CustomerIdentityInstance"]}{_configuration["CustomerIdentityDomain"]}/{_configuration["CustomerIdentityPolicyId"]}/v2.0/.well-known/openid-configuration");
             var response = await client.GetAsync(uri);

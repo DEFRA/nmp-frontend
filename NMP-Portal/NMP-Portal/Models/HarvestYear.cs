@@ -4,5 +4,7 @@
     {
         public int Year { get; set; }
         public string EncryptedYear { get; set; }
+        public DateTime? LastModifiedOn { get; set; }
+        public bool IsAnyPlan { get; set; }
     }
 }
