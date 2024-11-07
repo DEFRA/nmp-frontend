@@ -83,5 +83,13 @@ namespace NMP.Portal.ViewModels
         public int? RainWithin6Hours { get; set; }
         public bool IsComingFromRecommendation { get; set; } = false;
         public int? ManureGroupIdForFilter { get; set; }
+        public bool IsWarningMsgNeedToShow { get; set; } = false;
+        public bool IsClosedPeriodWarning { get; set; } = false;
+        public bool IsOrgManureNfieldLimitWarning { get; set; } = false;
+        public bool IsNMaxLimitWarning { get; set; } = false;
+        public bool IsEndClosedPeriodFebruaryWarning { get; set; } = false;
+        public bool IsEndClosedPeriodFebruaryExistWithinThreeWeeks { get; set; } = false;
+        //public bool IsClosedPeriodOrganicAppRateExceedMaxN { get; set; } = false;
+        public bool IsStartPeriodEndFebOrganicAppRateExceedMaxN150 { get; set; } = false;
     }
 }

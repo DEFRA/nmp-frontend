@@ -106,6 +106,13 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MoistureTypeId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MoistureType"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupIdForFilter"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarning" value="@Model.IsClosedPeriodWarning"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNMaxLimitWarning" value="@Model.IsNMaxLimitWarning.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsOrgManureNfieldLimitWarning" value="@Model.IsOrgManureNfieldLimitWarning.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEndClosedPeriodFebruaryWarning" value="@Model.IsEndClosedPeriodFebruaryWarning"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks" value="@Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150" value="@Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150"></govuk-input>
+
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -148,14 +155,36 @@
             }
             <h1 class="govuk-heading-l">@Resource.lblConditionsAffectingTheLossOfNutrients</h1>
             <p class="govuk-body">
-                @Resource.lblTheseAreApproximateValues
+                @Resource.lblTheseValuesAreUsedToCalculateHowEffective
             </p>
             <govuk-details>
                 <govuk-details-summary>
                     @Resource.lblAboutTheseValues
                 </govuk-details-summary>
-                <govuk-details-text>
-                    @Resource.lblTheEffectivenessOfYourOrganicMaterialApp
+                
+                <govuk-details-text class="explanations">
+                    @* @Resource.lblTheEffectivenessOfYourOrganicMaterialApp *@
+
+                    <h3 class="govuk-heading-s">@Resource.lblAutumnCropNitrogenUptake</h3>
+                    <p class="govuk-body">@Resource.lblAmountOfNFromTheApplicationTaken.</p>
+
+                    <h3 class="govuk-heading-s">@Resource.lblEndOfSoilDrainage</h3>
+                    <p class="govuk-body">@Resource.lblDateWhenSoilDrainageEnds.</p>
+
+
+                    <h3 class="govuk-heading-s">@Resource.lblRainfallWithin6HoursOfApplication</h3>
+                    <p class="govuk-body">@Resource.lblAmountOfRainThatFallsInThe6Hours.</p>
+
+
+                    <h3 class="govuk-heading-s">@Resource.lblEffectiveRainfallAfterApplication</h3>
+                    <p class="govuk-body">@Resource.lblAverageRainfallBetweenManAppAndEndOfSoilDrainage.</p>
+
+
+                    <h3 class="govuk-heading-s">@Resource.lblWindspeedDuringApplication</h3>
+                    <p class="govuk-body">@Resource.lblWindspeedWhenTheMaterialIsApplied.</p>
+
+                    <h3 class="govuk-heading-s">@Resource.lblTopsoilMoisture</h3>
+                    <p class="govuk-body"> @Resource.lblHowMoistTheTopsoilIs.</p">
                 </govuk-details-text>
             </govuk-details>
 

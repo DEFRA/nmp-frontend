@@ -4,8 +4,8 @@ namespace NMP.Portal.Models
 {
     public class Recommendation
     {
-        public int ID { get; set; }
-        public int ManagementPeriodID { get; set; }
+        public int? ID { get; set; }
+        public int? ManagementPeriodID { get; set; }
         public decimal? CropN { get; set; }
         public decimal? CropP2O5 { get; set; }
         public decimal? CropK2O { get; set; }
@@ -35,8 +35,8 @@ namespace NMP.Portal.Models
         public string? SIndex { get; set; }
         public string? NaIndex { get; set; }
         public string? Comments { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public int CreatedByID { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public int? CreatedByID { get; set; }
         public DateTime? ModifiedOn { get; set; }
         public int? ModifiedByID { get; set; }
     }

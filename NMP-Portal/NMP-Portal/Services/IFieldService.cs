@@ -18,8 +18,14 @@ namespace NMP.Portal.Services
         Task<Field> FetchFieldByFieldId(int fieldId);
         Task<List<CropTypeResponse>> FetchAllCropTypes();
         Task<string> FetchSoilTypeById(int soilTypeId);
-        Task<List<SoilAnalysisResponse>> FetchSoilAnalysisByFieldId(int fieldId);
+        Task<List<SoilAnalysisResponse>> FetchSoilAnalysisByFieldId(int fieldId, string shortSummary);
 
         Task<(FieldDetailResponse, Error)> FetchFieldDetailByFieldIdAndHarvestYear(int fieldId, int year, bool confirm);
+        Task<int> FetchSNSCategoryIdByCropTypeId(int cropTypeId);
+        Task<List<SeasonResponse>> FetchSeasons();
+
+        Task<(SnsResponse, Error)> FetchSNSIndexByMeasurementMethodAsync(MeasurementData measurementData);
+        Task<(Field, Error)> UpdateFieldAsync(FieldData field, int fieldId);
+        Task<(string, Error)> DeleteFieldByIdAsync(int fieldId);
     }
 }

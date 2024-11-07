@@ -9,6 +9,6 @@ namespace NMP.Portal.ServiceResponses
 
         [JsonProperty("lastModifiedOn")]
         public DateTime LastModifiedOn { get; set; }
-        
+
     }
 }

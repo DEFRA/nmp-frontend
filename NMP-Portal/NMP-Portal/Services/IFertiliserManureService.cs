@@ -10,5 +10,8 @@ namespace NMP.Portal.Services
         Task<(List<CommonResponse>, Error)> FetchFieldByFarmIdAndHarvestYearAndCropTypeId(int harvestYear, int farmId, string? cropTypeId);
         Task<(List<InOrganicManureDurationResponse>, Error)> FetchInOrganicManureDurations();
         Task<(InOrganicManureDurationResponse, Error)> FetchInOrganicManureDurationsById(int id);
+
+        Task<(List<FertiliserManure>, Error)> AddFertiliserManureAsync(string fertiliserManure);
+        Task<(decimal, Error)> FetchTotalNBasedOnManIdAndAppDate(int managementId, DateTime startDate, DateTime endDate, bool confirm);
     }
 }

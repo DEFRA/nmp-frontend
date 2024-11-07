@@ -474,18 +474,15 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropTypeYieldByCropTypeIdAsyncAPI, cropTypeId));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropTypeLinkingsByCropTypeIdAsyncAPI, cropTypeId));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        defaultYield = responseWrapper.Data.CropTypeYield.ToObject<decimal?>();
-                        //if (cropTypeResponse != null)
-                        //{
-                        //    cropTypeId = cropTypeResponse[0].CropTypeId;
-                        //}
+                        CropTypeLinkingResponse cropTypeLinkingResponse = responseWrapper.Data.CropTypeLinking.ToObject<CropTypeLinkingResponse>();
+                        defaultYield = cropTypeLinkingResponse.DefaultYield;
                     }
                 }
                 else
@@ -510,6 +507,48 @@ namespace NMP.Portal.Services
                 throw new Exception(error.Message, ex);
             }
             return defaultYield??0;
+        }
+
+        public async Task<List<int>> FetchSecondCropListByFirstCropId(int firstCropTypeId)
+        {
+            List<int> secondCropList=new List<int>();
+            Error error = new Error();
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchSecondCropListByFirstCropIdAsyncAPI, firstCropTypeId));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode)
+                {
+                    if (responseWrapper != null && responseWrapper.Data != null)
+                    {
+                        var secondCrops = responseWrapper.Data.SecondCropID.ToObject<List<int>>();
+                        secondCropList.AddRange(secondCrops);
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return secondCropList;
         }
     }
 }

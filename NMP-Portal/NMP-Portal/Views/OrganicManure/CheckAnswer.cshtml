@@ -56,6 +56,58 @@
                     <govuk-error-summary-item href="#">@TempData["AddOrganicManureError"]</govuk-error-summary-item>
                 </govuk-error-summary>
             }
+
+            @* @if (Model.IsWarningMsgNeedToShow != null && Model.IsWarningMsgNeedToShow)
+            { *@
+            @if (Model.IsOrgManureNfieldLimitWarning || Model.IsNMaxLimitWarning || Model.IsClosedPeriodWarning || Model.IsEndClosedPeriodFebruaryWarning || Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks || Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
+            {
+                <govuk-notification-banner>
+                    <govuk-notification-banner-title>
+                        @Resource.lblImportant
+                    </govuk-notification-banner-title>
+
+                    @if (Model.IsOrgManureNfieldLimitWarning)
+                    {
+                        <p class="govuk-notification-banner__heading">
+                            @Resource.lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit
+                        </p>
+                    }
+                    @if (Model.IsNMaxLimitWarning)
+                    {
+                        <p class="govuk-notification-banner__heading">
+                            @Resource.lblNMaxLimitTitle
+                        </p>
+                    }
+
+                    @if (Model.IsClosedPeriodWarning)
+                    {
+                        <p class="govuk-notification-banner__heading">
+                            @Resource.MsgApplicationDateEnteredIsInsideClosedPeriod
+                        </p>
+                    }
+                    @if (Model.IsEndClosedPeriodFebruaryWarning)
+                    {
+                        <p class="govuk-notification-banner__heading">
+                            @(Model.ManureTypeId == 8 ? Resource.lblThisApplicationMayTakeYouOverMaxARPoultryManure : Resource.lblApplicationRateOverTheMaximumRateForSlurry)
+                        </p>
+                    }
+                    @if (Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks)
+                    {
+                        <p class="govuk-notification-banner__heading">
+                            @Resource.lblYouMustAllowAtLeast3WeeksBetweenApplications
+                        </p>
+                    }
+                    @if (Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
+                    {
+                        <p class="govuk-notification-banner__heading">
+                            @Resource.lblThisApplicationTakeOverMaxAppRate
+                        </p>
+                    }
+                </govuk-notification-banner>
+            }
+
+
+            @*  } *@
             <h1 class="govuk-heading-l">
                 @Resource.lblCheckYourAnswers
             </h1>
@@ -122,7 +174,11 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupIdForFilter"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsApplicationMethodChange"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsIncorporationMethodChange"></govuk-input>
-
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWarningMsgNeedToShow" value="@Model.IsWarningMsgNeedToShow.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNMaxLimitWarning" value="@Model.IsNMaxLimitWarning.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsOrgManureNfieldLimitWarning" value="@Model.IsOrgManureNfieldLimitWarning.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks" value="@Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150" value="@Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150"></govuk-input>
 
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
@@ -183,6 +239,51 @@
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
+
+                @if (!Model.IsComingFromRecommendation && ViewBag.SelectedFields != null)
+                {
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            @Resource.lblWhichFieldsWouldYouLikeToPlanAnOrganic
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @if (ViewBag.SelectedFields != null)
+                            {
+                                if (ViewBag.SelectedFields.Count <= Convert.ToInt32(Resource.FieldGreaterThanX))
+                                {
+                                    @foreach (var item in ViewBag.SelectedFields)
+                                    {
+                                        @item <br />
+                                    }
+                                }
+                                else
+                                {
+                                    @string.Format(Resource.lblFarmFields, ViewBag.SelectedFields.Count)
+                                    <govuk-details>
+                                        <govuk-details-summary>
+                                            @Resource.lblViewFields
+                                        </govuk-details-summary>
+                                        <govuk-details-text>
+
+                                            @foreach (var item in ViewBag.SelectedFields)
+                                            {
+                                                @item <br />
+                                            }
+                                        </govuk-details-text>
+                                    </govuk-details>
+                                }
+
+                            }
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            @if (ViewBag.Fields != null)
+                            {
+                                <govuk-summary-list-row-action class="@( (ViewBag.Fields.Count==1 || Model.FieldGroup.Equals(Resource.lblAll) )? "disabled": "")" asp-action="Fields" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
+                            }
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+                }
+
                 <govuk-summary-list-row class=@((!Model.ManureTypeId.HasValue)?"govuk-error-message":"")>
                     <govuk-summary-list-row-key>
                         @Resource.lblWhatTypeOfOrganicMaterialAreYouUsing
@@ -200,6 +301,12 @@
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
                         @((Model.ApplicationDate.HasValue) ? Model.ApplicationDate.Value.Date.ToString("dd MMMM yyyy") : Resource.lblNotSet)
+                        @* @if(Model.IsClosedPeriodWarning)
+                        {
+                        <br />
+                        <p class="govuk-body strong">@Resource.MsgApplicationDateEnteredIsInsideClosedPeriod</p>
+                        } *@
+
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
                         <govuk-summary-list-row-action class=@((Model.ManureTypeId.HasValue)?"":"disabled") asp-action="ManureApplyingDate" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
@@ -241,7 +348,7 @@
                         @((Model.IsDefaultNutrientValues.HasValue) ? isDefaultNutrientValues : Resource.lblNotSet)
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action  asp-action="DefaultNutrientValues" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action asp-action="DefaultNutrientValues" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
 
@@ -334,7 +441,7 @@
                     <govuk-summary-list-row-value>
                         @((Model.IncorporationDelay.HasValue) ? Model.IncorporationDelayName : Resource.lblNotSet)
                     </govuk-summary-list-row-value>
-                    @if (needToShowIncorporationDelayBtn&&Model.ApplicationMethod!=null)
+                    @if (needToShowIncorporationDelayBtn && Model.ApplicationMethod != null)
                     {
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="IncorporationDelay" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>

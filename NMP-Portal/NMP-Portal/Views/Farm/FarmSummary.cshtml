@@ -17,16 +17,16 @@
     <govuk-breadcrumbs class="govuk-breadcrumbs-link">
         <govuk-breadcrumbs-item asp-action="FarmList" asp-controller="Farm">
             @Resource.lblAllFarm
-            </govuk-breadcrumbs-item>
-            <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
-                @Model.Name
-            </govuk-breadcrumbs-item>
-        </govuk-breadcrumbs>
+        </govuk-breadcrumbs-item>
+        <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
+            @Model.Name
+        </govuk-breadcrumbs-item>
+    </govuk-breadcrumbs>
     }
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
-            @if (ViewBag.Success != null && ViewBag.Success=="true")
+            @if (ViewBag.Success != null && ViewBag.Success == "true")
             {
                 <govuk-notification-banner type="Success">
                     <div class="">
@@ -59,19 +59,20 @@
 
                     <ul class="menu-list govuk-list">
                         <li>
-                            @if(Model.IsPlanExist)
-                            {
-                                <a class="govuk-link" asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId">
-                                    @Resource.lblViewOrCreateAPlanOrRecord
-                                </a>
-                            }
-                            else
-                            {
-                                <a class="govuk-link" asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">
-                                    @Resource.lblCreateACropNutrientManagementPlan
-                                </a>
-                            }
-                            
+                            <h2 class="govuk-heading-m">@Resource.lblPlanningAndRecording</h2>
+                            @*  @if(Model.IsPlanExist)
+                    { *@
+                            <a class="govuk-link" asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId">
+                                @Resource.lblViewCreateOrUpdateAPlan
+                            </a>
+                            @*  }
+                    else
+                    {
+                    <a class="govuk-link" asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">
+                    @Resource.lblCreateACropNutrientManagementPlan
+                    </a>
+                    } *@
+
                         </li>
                     </ul>
 

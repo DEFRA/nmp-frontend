@@ -12,36 +12,48 @@
         <govuk-error-summary-item href="#">@TempData["Error"]</govuk-error-summary-item>
     </govuk-error-summary>
 }
+else
+{
+    <div class="govuk-grid-row">
+        <div id="all-plans-table" class="govuk-grid-column-two-thirds">
 
-<div class="govuk-grid-row">
-    <div id="all-plans-table" class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-l">
-            @Resource.lblYourFarms
-        </h1>
-        @if (Model != null && Model.Farms.Count > 0)
-        {
-            @foreach (var farmList in Model.Farms)
+            @if (ViewBag.Success != null && ViewBag.Success == "true")
             {
-                <p class="govuk-body">
-                    <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@farmList.EncryptedFarmId">@farmList.Name</a>
-                </p>
+                <govuk-notification-banner type="Success">
+                    <div class="">
+                        <h3 class="govuk-notification-banner__heading"> @string.Format(Resource.lblYouHaveRemoved, ViewBag.FarmName)</h3>
+                    </div>
+                </govuk-notification-banner>
             }
 
+            <h1 class="govuk-heading-l">
+                @Resource.lblYourFarms
+            </h1>
+            @if (Model != null && Model.Farms.Count > 0)
+            {
+                @foreach (var farmList in Model.Farms)
+                {
+                    <p class="govuk-body">
+                        <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@farmList.EncryptedFarmId">@farmList.Name</a>
+                    </p>
+                }
 
-            <hr class="seperator_five" />
-            <div>
-                <h2 class="govuk-heading-m">
-                    @Resource.lblAddANewFarm
-                </h2>
-                <p class="govuk-body">
-                    <a class="govuk-link" asp-action="Name" asp-controller="Farm">@Resource.lblAddAFarm</a>
-                </p>
-            </div>
-        }
-        else
-        {
-            <p class="govuk-body">@Resource.lblYouHaveNotAddedAnyFarms</p>
-            <govuk-button-link asp-action="Name" asp-controller="Farm">@Resource.lblAddAFarm</govuk-button-link>
-        }
+
+                <hr class="seperator_five" />
+                <div>
+                    <h2 class="govuk-heading-m">
+                        @Resource.lblAddANewFarm
+                    </h2>
+                    <p class="govuk-body">
+                        <a class="govuk-link" asp-action="Name" asp-controller="Farm">@Resource.lblAddAFarm</a>
+                    </p>
+                </div>
+            }
+            else
+            {
+                <p class="govuk-body">@Resource.lblYouHaveNotAddedAnyFarms</p>
+                <govuk-button-link asp-action="Name" asp-controller="Farm">@Resource.lblAddAFarm</govuk-button-link>
+            }
+        </div>
     </div>
-</div>
+}

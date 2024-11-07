@@ -37,7 +37,15 @@
                         <p class="govuk-body">
                         <a class="govuk-notification-banner__link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@Resource.lblAddAnotherField</a>
                         @Resource.lblOr</p>
-                        <a class="govuk-notification-banner__link" asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCreateANutrientManagementPlan</a>
+                        <a class="govuk-notification-banner__link" asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId">@Resource.lblViewCreateOrUpdateAPlan</a>
+                    </div>
+                </govuk-notification-banner>
+            }
+            @if (ViewBag.IsDeleted != null && ViewBag.IsDeleted == true)
+            {
+                <govuk-notification-banner type="Success">
+                    <div class="">
+                        <h3 class="govuk-notification-banner__heading"> @string.Format(Resource.lblYouHaveRemovedField, ViewBag.FieldName)</h3>
                     </div>
                 </govuk-notification-banner>
             }
