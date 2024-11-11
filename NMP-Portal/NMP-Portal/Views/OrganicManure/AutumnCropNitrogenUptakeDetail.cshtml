@@ -1,24 +1,18 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.OrganicManureViewModel
 @{
-    ViewData["Title"] = Resource.lblWindspeed;
+    ViewData["Title"] = Resource.lblAutumnCropNitrogenUptakeDetail;
 
 }
 @section BeforeContent {
     <govuk-back-link asp-action="ConditionsAffectingNutrients" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
 }
 
+<form asp-action="AutumnCropNitrogenUptakeDetail" asp-controller="OrganicManure" method="post">
+    @Html.AntiForgeryToken()
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
 
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-        @if (ViewBag.Error != null)
-        {
-            <govuk-error-summary>
-                <govuk-error-summary-item href="#passport-issued-day">@ViewBag.Error</govuk-error-summary-item>
-            </govuk-error-summary>
-        }
-        <form asp-action="Windspeed" asp-controller="OrganicManure" method="post">
-            @Html.AntiForgeryToken()
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
@@ -77,13 +71,14 @@
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilDrainageEndDate" value="@Model.SoilDrainageEndDate"></govuk-date-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RainfallWithinSixHoursID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalRainfall"></govuk-input>
-           @*  <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.WindspeedID"></govuk-input> *@
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.WindspeedID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MoistureTypeId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RainfallWithinSixHours"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Windspeed"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MoistureType"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupIdForFilter"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarning" value="@Model.IsClosedPeriodWarning"></govuk-input>
+
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNMaxLimitWarning" value="@Model.IsNMaxLimitWarning.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsOrgManureNfieldLimitWarning" value="@Model.IsOrgManureNfieldLimitWarning.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEndClosedPeriodFebruaryWarning" value="@Model.IsEndClosedPeriodFebruaryWarning"></govuk-input>
@@ -117,10 +112,6 @@
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].ApplicationRate" value="@Model.OrganicManures[i].ApplicationRate"></govuk-input>
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].IncorporationDelayID" value="@Model.OrganicManures[i].IncorporationDelayID"></govuk-input>
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].IncorporationMethodID" value="@Model.OrganicManures[i].IncorporationMethodID"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].AvailableK2O" value="@Model.OrganicManures[i].AvailableK2O"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].AvailableP2O5" value="@Model.OrganicManures[i].AvailableP2O5"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].AreaSpread" value="@Model.OrganicManures[i].AreaSpread"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].ManureQuantity" value="@Model.OrganicManures[i].ManureQuantity"></govuk-input>
 
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].AutumnCropNitrogenUptake" value="@Model.OrganicManures[i].AutumnCropNitrogenUptake"></govuk-input>
                     <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].SoilDrainageEndDate" value="@Model.SoilDrainageEndDate"></govuk-date-input>
@@ -141,25 +132,43 @@
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptakes[i].AutumnCropNitrogenUptake" value="@Model.AutumnCropNitrogenUptakes[i].AutumnCropNitrogenUptake"></govuk-input>
                 }
             }
-            <govuk-radios asp-for="@Model.WindspeedID">
-                <govuk-radios-fieldset>
-                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @Resource.lblWindAtTheTimeOfApplication
-                    </govuk-radios-fieldset-legend>
-                    @if (ViewBag.Windspeeds != null && ViewBag.Windspeeds.Count > 0)
+            <h1 class="govuk-heading-l">
+                @Resource.lblAutumnCropNitrogenUptake
+            </h1>
+            <p class="govuk-body">@Resource.lblThisIsTheAmountOfNitrogenFromTheApplication</p>
+
+            <table class="govuk-table margin-bottom-forty">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">@Resource.lblFieldName</th>
+                        <th scope="col" class="govuk-table__header">@Resource.lblCrop</th>
+                        <th scope="col" class="govuk-table__header">@Resource.lblAutumnCropNitrogenNUptake</th>
+                        <th scope="col" class="govuk-table__header"> </th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                    @if (Model.AutumnCropNitrogenUptakes!= null && Model.AutumnCropNitrogenUptakes.Count > 0)
                     {
-                        @foreach (var item in ViewBag.Windspeeds)
+                        @foreach (var AutumnData in Model.AutumnCropNitrogenUptakes)
                         {
-                            <govuk-radios-item value="@item.ID">@item.Name</govuk-radios-item>
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell">@AutumnData.FieldName</td>
+                                <td class="govuk-table__cell">@AutumnData.CropTypeName</td>
+                                <td class="govuk-table__cell">@string.Format(Resource.lblAutumnKgPerHectare, (AutumnData.AutumnCropNitrogenUptake == 0.0m ? 0 : AutumnData.AutumnCropNitrogenUptake.ToString("#.#")))</td>
+                                <td class="govuk-table__cell"><a asp-action="AutumnCropNitrogenUptake" asp-controller="OrganicManure" asp-route-f="@AutumnData.EncryptedFieldId">@Resource.lblChange</a></td>
+                            </tr>
                         }
                     }
-                </govuk-radios-fieldset>
-            </govuk-radios>
+                    
+                </tbody>
+            </table>
+
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
-            <p class="govuk-body cancel-link"><a asp-action="CreateManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
-        </form>
-    </div>
+            <p class="govuk-body cancel-link"><a asp-action="ConditionsAffectingNutrients" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
 
-</div>
+        </div>
+
+    </div>
+</form>
