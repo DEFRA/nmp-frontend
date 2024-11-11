@@ -982,8 +982,8 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblPlanCreated" xml:space="preserve">
     <value>Plan created</value>
   </data>
-  <data name="lblPlansAndRecords" xml:space="preserve">
-    <value>Plans and records</value>
+  <data name="lblPlaningndRecording" xml:space="preserve">
+    <value>Planning and recording</value>
   </data>
   <data name="lblSecondCrop" xml:space="preserve">
     <value>Second crop</value>
@@ -1162,8 +1162,8 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblType" xml:space="preserve">
     <value>Type</value>
   </data>
-  <data name="lblViewOrCreateAPlanOrRecord" xml:space="preserve">
-    <value>View or create a plan or record</value>
+  <data name="lblViewCreateOrUpdateAPlan" xml:space="preserve">
+    <value>View, create or update a plan</value>
   </data>
   <data name="lblChangeForReccomendation" xml:space="preserve">
     <value>Change {0} plan for {1}</value>
@@ -2552,6 +2552,12 @@ m3/ha  not set</value>
   </data>
   <data name="lblTheseValuesAreUsedToCalculateHowEffective" xml:space="preserve">
     <value>These values are used to calculate how effective this organic material application is.</value>
+  </data>
+  <data name="lblPlanningAndRecording" xml:space="preserve">
+    <value>Planning and recording</value>
+  </data>
+  <data name="lblPlansAndRecords" xml:space="preserve">
+    <value>Plans and records</value>
   </data>
   <data name="lblTheAmountIsDifferentForEachOfTheseFields" xml:space="preserve">
     <value>The amount is different for each of these fields</value>

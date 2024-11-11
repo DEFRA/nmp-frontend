@@ -272,7 +272,7 @@ namespace NMP.Portal.Services
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
                 {
-                    List<FertiliserManure> fertiliser = responseWrapper.Data.ToObject<List<FertiliserManure>>();
+                    List<FertiliserManure> fertiliser = responseWrapper.Data.FertiliserManure.ToObject<List<FertiliserManure>>();
                     if (fertiliser != null && fertiliser.Count > 0)
                     {
                         fertilisers.AddRange(fertiliser);
