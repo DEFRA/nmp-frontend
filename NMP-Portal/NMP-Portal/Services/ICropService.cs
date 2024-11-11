@@ -21,5 +21,6 @@ namespace NMP.Portal.Services
 
         Task<decimal> FetchCropTypeDefaultYieldByCropTypeId(int cropTypeId);
         Task<List<int>> FetchSecondCropListByFirstCropId(int firstCropTypeId);
+        Task<(List<HarvestYearResponseHeader>, Error)> FetchHarvestYearPlansDetailsByFarmId(int harvestYear, int farmId);
     }
 }

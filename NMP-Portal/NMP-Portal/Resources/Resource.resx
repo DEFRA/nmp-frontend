@@ -2559,4 +2559,61 @@ m3/ha  not set</value>
   <data name="lblPlansAndRecords" xml:space="preserve">
     <value>Plans and records</value>
   </data>
+  <data name="lblAverageAnnualRainfallIsYouHaveNotEnteredAnyExcessWinterRainfall" xml:space="preserve">
+    <value>Average annual rainfall is {0}mm. You have not entered any excess winter rainfall.</value>
+  </data>
+  <data name="lblupdateRainfallFor" xml:space="preserve">
+    <value>Update rainfall for 2024</value>
+  </data>
+  <data name="blAllAmountsArePerHectare" xml:space="preserve">
+    <value>All amounts are per hectare</value>
+  </data>
+  <data name="lblAddACropGroup" xml:space="preserve">
+    <value>Add a crop group</value>
+  </data>
+  <data name="lblAddAnInorganicFertiliserApplication" xml:space="preserve">
+    <value>Add an inorganic fertiliser application</value>
+  </data>
+  <data name="lblAddAnOrganicMaterialApplication" xml:space="preserve">
+    <value>Add an organic material application</value>
+  </data>
+  <data name="lblAllInorganicFertiliserApplicationsForHarvestYear" xml:space="preserve">
+    <value>All inorganic fertiliser applications for harvest year 2024</value>
+  </data>
+  <data name="lblAllOrganicMaterialApplicationsForHarvestYear" xml:space="preserve">
+    <value>All organic material applications for harvest year {0}</value>
+  </data>
+  <data name="lblCrop" xml:space="preserve">
+    <value>Crop</value>
+  </data>
+  <data name="lblCropsAndFields" xml:space="preserve">
+    <value>Crops and fields</value>
+  </data>
+  <data name="lblDownloadPrintOrExportThisPlan" xml:space="preserve">
+    <value>Download, print, or export this plan</value>
+  </data>
+  <data name="lblInorganicFertiliserApplications" xml:space="preserve">
+    <value>Inorganic fertiliser applications</value>
+  </data>
+  <data name="lblPlantingDate" xml:space="preserve">
+    <value>Planting date</value>
+  </data>
+  <data name="lblRate" xml:space="preserve">
+    <value>Rate</value>
+  </data>
+  <data name="lblSortByApplicationDate" xml:space="preserve">
+    <value>sort by application date</value>
+  </data>
+  <data name="lblSortByFieldName" xml:space="preserve">
+    <value>Sort by field name</value>
+  </data>
+  <data name="lblTypeOfManure" xml:space="preserve">
+    <value>Type of manure</value>
+  </data>
+  <data name="lblYieldPerHectare" xml:space="preserve">
+    <value>Yield (per hectare)</value>
+  </data>
+  <data name="lblUpdateThisGroup" xml:space="preserve">
+    <value>Update this group</value>
+  </data>
 </root>
