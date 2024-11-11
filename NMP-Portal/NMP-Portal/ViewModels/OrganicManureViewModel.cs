@@ -55,6 +55,7 @@ namespace NMP.Portal.ViewModels
         public bool? IsDefaultNutrient { get; set; } = false;
         public bool IsCheckAnswer { get; set; } = false;
         public decimal? AutumnCropNitrogenUptake { get; set; }
+        public List<AutumnCropNitrogenUptakeDetail>? AutumnCropNitrogenUptakes { get; set; }
         public int? RainfallWithinSixHoursID { get; set; }
         public string? RainfallWithinSixHours { get; set; }
         public int? WindspeedID { get; set; }
@@ -91,5 +92,7 @@ namespace NMP.Portal.ViewModels
         public bool IsEndClosedPeriodFebruaryExistWithinThreeWeeks { get; set; } = false;
         //public bool IsClosedPeriodOrganicAppRateExceedMaxN { get; set; } = false;
         public bool IsStartPeriodEndFebOrganicAppRateExceedMaxN150 { get; set; } = false;
+        public int? CropOrder { get; set; }
+        public string? EncryptedFieldId { get; set; }
     }
 }

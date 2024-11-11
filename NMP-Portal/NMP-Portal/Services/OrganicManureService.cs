@@ -113,17 +113,21 @@ namespace NMP.Portal.Services
             return (fieldResponses, error);
         }
 
-        public async Task<(List<int>, Error)> FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(int harvestYear, string fieldIds, string? cropTypeId)
+        public async Task<(List<int>, Error)> FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(int harvestYear, string fieldIds, string? cropTypeId, int? cropOrder)
         {
             List<int> managementIds = new List<int>();
             Error error = null;
+            if(cropOrder==null)
+            {
+                cropOrder = 1;
+            }
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
                 string url = string.Empty;
                 if (cropTypeId != null)
                 {
-                    url = string.Format(APIURLHelper.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeIdAsyncAPI, harvestYear, cropTypeId, fieldIds);
+                    url = string.Format(APIURLHelper.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeIdAsyncAPI, harvestYear, cropTypeId, fieldIds,cropOrder);
                 }
                 else
                 {
@@ -1262,7 +1266,8 @@ namespace NMP.Portal.Services
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        manureTypeIds = responseWrapper.Data.manureTypeIds.ToObject<List<int>>();
+                        //manureTypeIds = responseWrapper.Data.manureTypeIds.ToObject<List<int>>();
+                        manureTypeIds = responseWrapper.Data.ManureTypeIds.ToObject<List<int>>();
                     }
                 }
                 else
