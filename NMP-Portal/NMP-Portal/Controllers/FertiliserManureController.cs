@@ -1142,7 +1142,7 @@ namespace NMP.Portal.Controllers
                                         }
                                         if (model.Date >= startDate && model.Date <= endDate)
                                         {
-                                            (List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldId, null);
+                                            (List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldId, null,null);
                                             if (error == null)
                                             {
                                                 if (managementIds.Count > 0)
@@ -1288,7 +1288,7 @@ namespace NMP.Portal.Controllers
                                         }
                                         else
                                         {
-                                            (List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldId, null);
+                                            (List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldId, null, null);
                                             if (error == null)
                                             {
                                                 if (managementIds.Count > 0)

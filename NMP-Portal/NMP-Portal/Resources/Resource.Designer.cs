@@ -601,7 +601,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Amount of N from the application taken up by the crop in the autumn.
+        ///   Looks up a localized string similar to Amount of nitrogen (N) from the application taken up by the crop in the autumn.
         /// </summary>
         public static string lblAmountOfNFromTheApplicationTaken {
             get {
@@ -610,7 +610,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Amount of rain that falls in the 6 hours after the material is applied.
+        ///   Looks up a localized string similar to Amount of rain (in mm) that falls in the 6 hours after the material is applied.
         /// </summary>
         public static string lblAmountOfRainThatFallsInThe6Hours {
             get {
@@ -738,6 +738,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Autumn crop nitrogen (N) uptake.
+        /// </summary>
+        public static string lblAutumnCropNitrogenNUptake {
+            get {
+                return ResourceManager.GetString("lblAutumnCropNitrogenNUptake", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}kg per hectare.
         /// </summary>
         public static string lblAutumnCropNitrogenPerHectare {
@@ -752,6 +761,24 @@ namespace NMP.Portal.Resources {
         public static string lblAutumnCropNitrogenUptake {
             get {
                 return ResourceManager.GetString("lblAutumnCropNitrogenUptake", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Autumn Crop Nitrogen Uptake Detail.
+        /// </summary>
+        public static string lblAutumnCropNitrogenUptakeDetail {
+            get {
+                return ResourceManager.GetString("lblAutumnCropNitrogenUptakeDetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} kg per hectare.
+        /// </summary>
+        public static string lblAutumnKgPerHectare {
+            get {
+                return ResourceManager.GetString("lblAutumnKgPerHectare", resourceCulture);
             }
         }
         
@@ -774,7 +801,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Average rainfall between manure application and end of soil drainage.
+        ///   Looks up a localized string similar to Average rainfall (in mm) between manure application and end of soil drainage.
         /// </summary>
         public static string lblAverageRainfallBetweenManAppAndEndOfSoilDrainage {
             get {
@@ -1112,6 +1139,15 @@ namespace NMP.Portal.Resources {
         public static string lblCreatePlan {
             get {
                 return ResourceManager.GetString("lblCreatePlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Crop.
+        /// </summary>
+        public static string lblCrop {
+            get {
+                return ResourceManager.GetString("lblCrop", resourceCulture);
             }
         }
         
@@ -4448,6 +4484,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The amount is different for each of these fields.
+        /// </summary>
+        public static string lblTheAmountIsDifferentForEachOfTheseFields {
+            get {
+                return ResourceManager.GetString("lblTheAmountIsDifferentForEachOfTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to the crops you grow.
         /// </summary>
         public static string lblTheCropsYouGrow {
@@ -4597,6 +4642,15 @@ namespace NMP.Portal.Resources {
         public static string lblThisApplicationTakeOverMaxAppRate {
             get {
                 return ResourceManager.GetString("lblThisApplicationTakeOverMaxAppRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This is the amount of Nitrogen (N) from the application taken up by the crop in the autumn..
+        /// </summary>
+        public static string lblThisIsTheAmountOfNitrogenFromTheApplication {
+            get {
+                return ResourceManager.GetString("lblThisIsTheAmountOfNitrogenFromTheApplication", resourceCulture);
             }
         }
         
@@ -5204,6 +5258,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the Autumn crop Nitrogen uptake for {0}?.
+        /// </summary>
+        public static string lblWhatIsTheAutumnCropNitrogenUptakeFor {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheAutumnCropNitrogenUptakeFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the crop height?.
         /// </summary>
         public static string lblWhatIsTheCropHeight {
@@ -5609,7 +5672,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Windspeed during application.
+        ///   Looks up a localized string similar to Wind speed during application.
         /// </summary>
         public static string lblWindspeedDuringApplication {
             get {
@@ -5618,7 +5681,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Windspeed when the material is applied.
+        ///   Looks up a localized string similar to Wind speed (on the Beaufort scale) when the material is applied.
         /// </summary>
         public static string lblWindspeedWhenTheMaterialIsApplied {
             get {

@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = Resource.lblConditionsAffectingNutrientLoss;
     var backAction = Model.IncorporationMethod == (int)NMP.Portal.Enums.IncorporationMethod.NotIncorporated ? "IncorporationMethod" : "IncorporationDelay";
+    bool isAutumnNUptakeZero = Model.AutumnCropNitrogenUptakes?.All(x => x.AutumnCropNitrogenUptake == 0) ?? true;
 }
 @section BeforeContent {
     @if((Model.ApplicationMethod== (int)NMP.Portal.Enums.ApplicationMethod.DeepInjection2530cm) || (Model.ApplicationMethod == (int)NMP.Portal.Enums.ApplicationMethod.ShallowInjection57cm))
@@ -112,7 +113,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEndClosedPeriodFebruaryWarning" value="@Model.IsEndClosedPeriodFebruaryWarning"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks" value="@Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150" value="@Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150"></govuk-input>
-
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropOrder"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -153,6 +154,17 @@
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].MoistureID" value="@Model.OrganicManures[i].MoistureID"></govuk-input>
                 }
             }
+            @if (Model.AutumnCropNitrogenUptakes != null && Model.AutumnCropNitrogenUptakes.Count > 0)
+            {
+                @for (int i = 0; i < Model.AutumnCropNitrogenUptakes.Count; i++)
+                {
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptakes[i].EncryptedFieldId" value="@Model.AutumnCropNitrogenUptakes[i].EncryptedFieldId"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptakes[i].FieldName" value="@Model.AutumnCropNitrogenUptakes[i].FieldName"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptakes[i].CropTypeId" value="@Model.AutumnCropNitrogenUptakes[i].CropTypeId"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptakes[i].CropTypeName" value="@Model.AutumnCropNitrogenUptakes[i].CropTypeName"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptakes[i].AutumnCropNitrogenUptake" value="@Model.AutumnCropNitrogenUptakes[i].AutumnCropNitrogenUptake"></govuk-input>
+                }
+            }
             <h1 class="govuk-heading-l">@Resource.lblConditionsAffectingTheLossOfNutrients</h1>
             <p class="govuk-body">
                 @Resource.lblTheseValuesAreUsedToCalculateHowEffective
@@ -165,7 +177,7 @@
                 <govuk-details-text class="explanations">
                     @* @Resource.lblTheEffectivenessOfYourOrganicMaterialApp *@
 
-                    <h3 class="govuk-heading-s">@Resource.lblAutumnCropNitrogenUptake</h3>
+                    <h3 class="govuk-heading-s">@Resource.lblAutumnCropNitrogenNUptake</h3>
                     <p class="govuk-body">@Resource.lblAmountOfNFromTheApplicationTaken.</p>
 
                     <h3 class="govuk-heading-s">@Resource.lblEndOfSoilDrainage</h3>
@@ -190,39 +202,48 @@
 
             <table class="govuk-table">
                 <tbody class="govuk-table__body">
+                    @if (!isAutumnNUptakeZero)
+                    {
+                        @if (Model.FieldList.Count > 1)
+                        {
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell">@Resource.lblAutumnCropNitrogenUptake</td>
+                                <td class="govuk-table__cell">@Resource.lblTheAmountIsDifferentForEachOfTheseFields</td>
+                                <td class="govuk-table__cell"><a asp-action="AutumnCropNitrogenUptakeDetail" asp-controller="OrganicManure">@Resource.lblChange</a></td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell">@Resource.lblAutumnCropNitrogenUptake</td>
+                                <td class="govuk-table__cell">@string.Format(Resource.lblAutumnCropNitrogenPerHectare, (Model.AutumnCropNitrogenUptakes[0].AutumnCropNitrogenUptake == 0.0m ? 0 : Model.AutumnCropNitrogenUptakes[0].AutumnCropNitrogenUptake.ToString("#.#")))</td>
+                                <td class="govuk-table__cell"><a asp-action="AutumnCropNitrogenUptake" asp-controller="OrganicManure">@Resource.lblChange</a></td>
+                            </tr>
+                        }
+                    }
+                    
                     <tr class="govuk-table__row">
-                        <th scope="row" class="govuk-table__header">@Resource.lblAutumnCropNitrogenUptake</th>
-                        <td class="govuk-table__cell">@Resource.lblAmountOfNFromTheApplicationTaken</td>
-                        <td class="govuk-table__cell">@string.Format(Resource.lblAutumnCropNitrogenPerHectare, (Model.AutumnCropNitrogenUptake.Value == 0.0m ? 0 : Model.AutumnCropNitrogenUptake?.ToString("#.#")))</td>
-                        <td class="govuk-table__cell"><a asp-action="AutumnCropNitrogenUptake" asp-controller="OrganicManure">@Resource.lblChange</a></td>
-                    </tr>
-                    <tr class="govuk-table__row">
-                        <th scope="row" class="govuk-table__header">@Resource.lblEndOfSoilDrainage</th>
-                        <td class="govuk-table__cell">@Resource.lblDateWhenSoilDrainageEnds</td>
+                        <td class="govuk-table__cell">@Resource.lblEndOfSoilDrainage</td>
                         <td class="govuk-table__cell">@Model.SoilDrainageEndDate.Value.Date.ToString("dd MMMM yyyy")</td>
                         <td class="govuk-table__cell"><a asp-action="SoilDrainageEndDate" asp-controller="OrganicManure">@Resource.lblChange</a></td>
                     </tr>
                     <tr class="govuk-table__row">
-                        <th scope="row" class="govuk-table__header">@Resource.lblRainfallWithin6HoursOfApplication</th>
-                        <td class="govuk-table__cell">@Resource.lblAmountOfRainThatFallsInThe6Hours</td>
+                        <td class="govuk-table__cell">@Resource.lblRainfallWithin6HoursOfApplication</td>
                         <td class="govuk-table__cell">@Model.RainfallWithinSixHours</td>
                         <td class="govuk-table__cell"><a asp-action="RainfallWithinSixHour" asp-controller="OrganicManure">@Resource.lblChange</a></td>
                     </tr>
                     <tr class="govuk-table__row">
-                        <th scope="row" class="govuk-table__header">@Resource.lblEffectiveRainfallAfterApplication</th>
-                        <td class="govuk-table__cell">@Resource.lblAverageRainfallBetweenManAppAndEndOfSoilDrainage</td>
+                        <td class="govuk-table__cell">@Resource.lblEffectiveRainfallAfterApplication</td>
                         <td class="govuk-table__cell">@string.Format(Resource.lblRainfallMM, Model.TotalRainfall)</td>
                         <td class="govuk-table__cell"><a asp-action="EffectiveRainfall" asp-controller="OrganicManure">@Resource.lblChange</a></td>
                     </tr>
                     <tr class="govuk-table__row">
-                        <th scope="row" class="govuk-table__header">@Resource.lblWindspeedDuringApplication</th>
-                        <td class="govuk-table__cell">@Resource.lblWindspeedWhenTheMaterialIsApplied</td>
+                        <td class="govuk-table__cell">@Resource.lblWindspeedDuringApplication</td>
                         <td class="govuk-table__cell">@Model.Windspeed</td>
                         <td class="govuk-table__cell"><a asp-action="Windspeed" asp-controller="OrganicManure">@Resource.lblChange</a></td>
                     </tr>
                     <tr class="govuk-table__row">
-                        <th scope="row" class="govuk-table__header">@Resource.lblTopsoilMoisture</th>
-                        <td class="govuk-table__cell">@Resource.lblHowMoistTheTopsoilIs</td>
+                        <td class="govuk-table__cell">@Resource.lblTopsoilMoisture</td>
                         <td class="govuk-table__cell">@Model.MoistureType</td>
                         <td class="govuk-table__cell"><a asp-action="TopsoilMoisture" asp-controller="OrganicManure">@Resource.lblChange</a></td>
                     </tr>
