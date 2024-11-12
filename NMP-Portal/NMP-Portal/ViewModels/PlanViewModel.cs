@@ -40,7 +40,7 @@ namespace NMP.Portal.ViewModels
         public string? EncryptedHarvestYear { get; set; } = string.Empty;
         public string? LastModifiedOn { get; set; }
         public List<string>? EncryptedHarvestYearList { get; set; }
-        public List<HarvestYearPlans> HarvestYearPlans { get; set; } = new List<HarvestYearPlans>();
+        public HarvestYearPlans? HarvestYearPlans { get; set; }
         public int FieldCount { get; set; }
         public List<HarvestYear> HarvestYear { get; set; } = new List<HarvestYear>();
         public bool IsAddAnotherCrop { get; set; }

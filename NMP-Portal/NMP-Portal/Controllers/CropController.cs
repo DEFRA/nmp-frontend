@@ -1679,19 +1679,17 @@ namespace NMP.Portal.Controllers
                     }
                     List<string> fields = new List<string>();
 
-                    (List<HarvestYearResponseHeader> harvestYearPlanResponse, error) = await _cropService.FetchHarvestYearPlansDetailsByFarmId(harvestYear, farmId);
+                    (HarvestYearResponseHeader harvestYearPlanResponse, error) = await _cropService.FetchHarvestYearPlansDetailsByFarmId(harvestYear, farmId);
                     model.Year = harvestYear;
                     if (harvestYearPlanResponse != null && error.Message == null)
                     {
-                        bool isAllCropInfo1NonNull = harvestYearPlanResponse.All(h => h.CropDetailsList.All(x => x.CropInfo1 != null));
+                        bool isAllCropInfo1NonNull = harvestYearPlanResponse.CropDetails.All(x => x.CropInfo1 != null);
                         if (!isAllCropInfo1NonNull)
                         {
                             ViewBag.AddMannerDisabled = true;
                         }
 
-                        List<CropDetailResponse> allCropDetails = harvestYearPlanResponse
-                        .SelectMany(header => header.CropDetailsList ?? new List<CropDetailResponse>())
-                        .ToList();
+                        List<CropDetailResponse> allCropDetails = harvestYearPlanResponse.CropDetails ?? new List<CropDetailResponse>().ToList();
                         if (allCropDetails != null)
                         {
                             model.LastModifiedOn = allCropDetails.Max(x => x.LastModifiedOn.Value.ToString("dd MMM yyyy"));
@@ -1703,19 +1701,11 @@ namespace NMP.Portal.Controllers
                                  CropVariety = g.Key.CropVariety,
                                  HarvestPlans = g.ToList()
                              })
-                         .OrderBy(g => g.CropTypeName);
-                            //var groupedResult = harvestYearPlanResponse
-                            //                    .GroupBy(h => new { h.CropTypeName, h.CropVariety })
-                            //                    .Select(g => new
-                            //                    {
-                            //                        CropTypeName = g.Key.CropTypeName,
-                            //                        CropVariety = g.Key.CropVariety,
-                            //                        HarvestPlans = g.ToList()
-                            //                    }).OrderBy(g => g.CropTypeName);
+                             .OrderBy(g => g.CropTypeName);
                             model.FieldCount = allCropDetails.Select(h => h.FieldID).Distinct().Count();
                             List<Field> fieldList = await _fieldService.FetchFieldsByFarmId(farmId);
                             bool isSecondCropAllowed = await IsSecondCropAllowed(allCropDetails);
-                            if (harvestYearPlanResponse.Count() > 0)
+                            if (harvestYearPlanResponse.CropDetails.Count() > 0)
                             {
                                 var harvestFieldIds = allCropDetails.Select(x => x.FieldID.ToString()).ToList();
                                 fieldList = fieldList.Where(x => !harvestFieldIds.Contains(x.ID.ToString())).ToList();
@@ -1728,28 +1718,52 @@ namespace NMP.Portal.Controllers
                                     ViewBag.PendingField = isSecondCropAllowed;
                                 }
                             }
+                            ViewBag.Rainfall = harvestYearPlanResponse.farmDetails.Rainfall;
+                            var harvestYearPlans = new HarvestYearPlans
+                            {
+
+                                FieldData = new List<HarvestYearPlanFields>(), // Initialize the list for field data
+                                OrganicManureList = new List<OrganicManureResponse>(), // Initialize organic manure list
+                                InorganicFertiliserList = new List<InorganicFertiliserResponse>(), // Initialize inorganic fertiliser list
+                            };
                             foreach (var group in groupedResult)
                             {
-                                var harvestYearPlans = new HarvestYearPlans
-                                {
-                                    CropTypeName = group.CropTypeName,
-                                    CropVariety = group.CropVariety,
-                                };
-                                harvestYearPlans.FieldData = new List<HarvestYearPlanFields>();
                                 foreach (var plan in group.HarvestPlans)
                                 {
                                     var newField = new HarvestYearPlanFields
                                     {
-                                        EncryptedFieldId = _cropDataProtector.Protect(plan.FieldID.ToString()), // Assuming this returns a string
-                                        FieldName = plan.FieldName
+                                        CropTypeName = group.CropTypeName,
+                                        CropVariety = group.CropVariety,
+                                        FieldData = new List<FieldDetails>()
                                     };
+
+                                    var fieldDetail = new FieldDetails
+                                    {
+                                        EncryptedFieldId = _cropDataProtector.Protect(plan.FieldID.ToString()), // Encrypt field ID
+                                        FieldName = plan.FieldName,
+                                        PlantingDate = plan.PlantingDate,
+                                        Yield=plan.Yield
+                                    };
+
+                                    newField.FieldData.Add(fieldDetail);
+
                                     harvestYearPlans.FieldData.Add(newField);
-                                    //harvestYearPlans.FieldNames.Add(plan.FieldName);
-                                }
-                                model.HarvestYearPlans.Add(harvestYearPlans);
+                                }                               
                             }
+
+                            if (harvestYearPlanResponse.OrganicMaterial.Count > 0)
+                            {
+                                harvestYearPlans.OrganicManureList = harvestYearPlanResponse.OrganicMaterial;
+                            }
+                            if (harvestYearPlanResponse.InorganicFertiliserApplication.Count > 0)
+                            {
+                                harvestYearPlans.InorganicFertiliserList = harvestYearPlanResponse.InorganicFertiliserApplication;
+                            }
+                            model.HarvestYearPlans = harvestYearPlans;
+                            //model.HarvestYearPlans
                             model.EncryptedFarmId = id;
                             model.EncryptedHarvestYear = year;
+                            model.Year = harvestYear;
                         }
                         else
                         {
@@ -1757,8 +1771,9 @@ namespace NMP.Portal.Controllers
                             model = null;
                         }
                     }
+                    //}
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
             }
             catch (Exception ex)
             {
@@ -1948,7 +1963,7 @@ namespace NMP.Portal.Controllers
                                         model.CropGroupID = cropTypeResponse.CropGroupId;
                                     }
                                 }
-                                if (model.CropGroupID == (int)NMP.Portal.Enums.CropGroup.Cereals)
+                                if (recommendation.Crops.CropInfo2 != null&&model.CropGroupID == (int)NMP.Portal.Enums.CropGroup.Cereals)
                                 {
                                     crop.CropInfo2Name = await _cropService.FetchCropInfo2NameByCropInfo2Id(crop.CropInfo2.Value);
                                 }
@@ -2129,11 +2144,11 @@ namespace NMP.Portal.Controllers
                 string decrypt = _cropDataProtector.Unprotect(q);
                 if (decrypt != null && decrypt == Resource.lblFieldName)
                 {
-                    model.HarvestYearPlans.ForEach(x => x.FieldData.OrderByDescending(s => s.FieldName));
+                    // model.HarvestYearPlans.ForEach(x => x.FieldData.OrderByDescending(s => s.FieldName));
                 }
                 else if (decrypt != null && decrypt == Resource.lblDate)
                 {
-                    model.HarvestYearPlans.ForEach(x => x.FieldData.OrderByDescending(s => s.FieldName));
+                    // model.HarvestYearPlans.ForEach(x => x.FieldData.OrderByDescending(s => s.FieldName));
                 }
             }
             return View(model);
@@ -2159,11 +2174,11 @@ namespace NMP.Portal.Controllers
                 string decrypt = _cropDataProtector.Unprotect(q);
                 if (decrypt != null && decrypt == Resource.lblFieldName)
                 {
-                    model.HarvestYearPlans.ForEach(x => x.FieldData.OrderByDescending(s => s.FieldName));
+                    // model.HarvestYearPlans.ForEach(x => x.FieldData.OrderByDescending(s => s.FieldName));
                 }
                 else if (decrypt != null && decrypt == Resource.lblDate)
                 {
-                    model.HarvestYearPlans.ForEach(x => x.FieldData.OrderByDescending(s => s.FieldName));
+                    // model.HarvestYearPlans.ForEach(x => x.FieldData.OrderByDescending(s => s.FieldName));
                 }
             }
             return View(model);

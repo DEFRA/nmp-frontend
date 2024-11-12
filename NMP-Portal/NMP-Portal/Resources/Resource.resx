@@ -1599,8 +1599,8 @@ m³/ha</value>
   <data name="lblPlanOrEditAnApplicationOfOrganicMaterial" xml:space="preserve">
     <value>Plan or edit an application of organic material to {0}</value>
   </data>
-  <data name="lblViewFieldPlan" xml:space="preserve">
-    <value>View field plan</value>
+  <data name="lblUpdateThisFieldOrViewRecommendations" xml:space="preserve">
+    <value>Update this field or view recommendations</value>
   </data>
   <data name="MsgAreaMustBeGreaterThanZero" xml:space="preserve">
     <value>Area must be greater than zero</value>
@@ -2578,7 +2578,7 @@ m3/ha  not set</value>
     <value>Add an organic material application</value>
   </data>
   <data name="lblAllInorganicFertiliserApplicationsForHarvestYear" xml:space="preserve">
-    <value>All inorganic fertiliser applications for harvest year 2024</value>
+    <value>All inorganic fertiliser applications for harvest year {0}</value>
   </data>
   <data name="lblAllOrganicMaterialApplicationsForHarvestYear" xml:space="preserve">
     <value>All organic material applications for harvest year {0}</value>
@@ -2615,5 +2615,17 @@ m3/ha  not set</value>
   </data>
   <data name="lblUpdateThisGroup" xml:space="preserve">
     <value>Update this group</value>
+  </data>
+  <data name="lblNutrients" xml:space="preserve">
+    <value>Nutrients</value>
+  </data>
+  <data name="lblBracketWithName" xml:space="preserve">
+    <value>( {0} )</value>
+  </data>
+  <data name="lblApplicationDateForBelowArrow" xml:space="preserve">
+    <value>Application Date ▼</value>
+  </data>
+  <data name="lblRateWithTonnes" xml:space="preserve">
+    <value>{0} tonnes</value>
   </data>
 </root>

@@ -21,7 +21,7 @@
             @Model.FarmName
         </govuk-breadcrumbs-item>
         <govuk-breadcrumbs-item asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">
-            @Resource.lblPlansAndRecords
+            @Resource.lblPlanningAndRecording
         </govuk-breadcrumbs-item>
         <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
             @Resource.lblHarvestYearOverview
@@ -47,160 +47,219 @@
                 @string.Format(Resource.lblThereAreFieldsInThisPlan, Model.FieldCount)
             </p>
             <p class="govuk-body">
-                @string.Format(Resource.lblAverageAnnualRainfallIsYouHaveNotEnteredAnyExcessWinterRainfall, Model.CropGroup)
-                <a href="#">@Resource.lblupdateRainfallFor</a>
+                @if (ViewBag.Rainfall != null)
+                {
+                    @string.Format(Resource.lblAverageAnnualRainfallIsYouHaveNotEnteredAnyExcessWinterRainfall, ViewBag.Rainfall)
+                    <a href="#">@Resource.lblupdateRainfallFor</a>
+                }
             </p>
             <p class="govuk-body">
                 <a href="#">@Resource.lblDownloadPrintOrExportThisPlan</a>
             </p>
-            @if (ViewBag.PendingField == true)
+            @if (Model.HarvestYearPlans != null)
             {
-                <p class="govuk-body"><a asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@string.Format(Resource.lblAddAnotherCrop, Model.Year)</a></p>
-            }
-            @*@if (ViewBag.AddMannerDisabled != null && ViewBag.AddMannerDisabled)
-        {
-        <p class="govuk-body"><a class="disabled" asp-action="FieldGroup" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@string.Format(Resource.lblAddManuresToThisPlan, Model.Year)</a></p>
-        }
-        else
-        {
-        <p class="govuk-body"><a asp-action="FieldGroup" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@string.Format(Resource.lblAddManuresToThisPlan, Model.Year)</a></p>
-        }
-        <p class="govuk-body"><a asp-action="FieldGroup" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblAddInorganicFertiliser</a></p>*@
+                <govuk-tabs>
+                    <govuk-tabs-item id="CropAndFields" label=@Resource.lblCropsAndFields>
+                        <h2 class="govuk-heading-m non-standard">@Resource.lblCropsAndFields</h2>
+                        <a class="govuk-button add-button" asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblAddACropGroup  </a>
+                        @* <govuk-button class="panel-button" asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblAddACropGroup</govuk-button> *@
+                        <hr class="seperator_five">
 
-            <govuk-tabs>
-                <govuk-tabs-item id="CropAndFields" label=@Resource.lblCropsAndFields>
-                    <h2 class="govuk-heading-m non-standard">@Resource.lblCropsAndFields</h2>
-                    <a class="govuk-button" asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblAddACropGroup  </a>
-                    @* <govuk-button class="panel-button" asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblAddACropGroup</govuk-button> *@
-                    <hr class="seperator_five">
+                        <!-- Crops Table -->
+                        @if (Model.HarvestYearPlans.FieldData != null)
+                        {
+                            @foreach (var harvestYearPlan in Model.HarvestYearPlans.FieldData)
+                            {
+                                <div class="tab-left">
+                                    <h2 class="govuk-heading-m margin-bottom-ten">
+                                        @harvestYearPlan.CropTypeName
+                                        @if (harvestYearPlan.CropVariety != null)
+                                        {
+                                            <span class="nonbold">@string.Format(Resource.lblBracketWithName, harvestYearPlan.CropVariety)</span>
+                                        }
+                                    </h2>
+                                    <p class="govuk-body"></p>
+                                </div>
+                                <div class="tab-right">
 
-                    <!-- Crops Table -->
-                    @foreach (var harvestYearPlan in Model.HarvestYearPlans)
-                    {
-                        <div class="tab-left">
-                            <h2 class="govuk-heading-m margin-bottom-ten">
-                                <span class="nonbold">@harvestYearPlan.CropVariety</span>
-                            </h2>
-                            <p class="govuk-body"></p>
-                        </div>
-                        <div class="tab-right">
-                            
-                           <govuk-button type="submit" class="govuk-button--secondary update-button">
-                                @Resource.lblUpdateThisGroup
-                            </govuk-button>
-                        </div>
-                        <table class="govuk-table big_crop_table_version_five margin-bottom-forty">
-                            <thead class="govuk-table__head">
-                                <tr class="govuk-table__row">
-                                    <th scope="col" class="govuk-table__header">@Resource.lblField</th>
-                                    <th scope="col" class="govuk-table__header">@Resource.lblPlantingDate</th>
-                                    <th scope="col" class="govuk-table__header">@Resource.lblYieldPerHectare</th>
-                                    <th scope="col" class="govuk-table__header"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @* @foreach (var field in harvestYearPlan.FieldData)
-                                {
-                                    <tr>
-                                        <td>@field.FieldName</td>
-                                        <td>@field.OrganicManureCount</td>
-                                        <td>@field.FertiliserManuresCount</td>
-                                        <td>
-                                            <a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@field.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">
-                                                @Resource.lblViewFieldPlan
-                                            </a>
-                                        </td>
+                                    <govuk-button type="submit" class="govuk-button--secondary update-button">
+                                        @Resource.lblUpdateThisGroup
+                                    </govuk-button>
+                                </div>
+                                <table class="govuk-table big_crop_table_version_five margin-bottom-forty">
+                                    <thead class="govuk-table__head">
+                                        <tr class="govuk-table__row">
+                                            <th scope="col" class="govuk-table__header">@Resource.lblField</th>
+                                            <th scope="col" class="govuk-table__header">@Resource.lblPlantingDate</th>
+                                            <th scope="col" class="govuk-table__header">@Resource.lblYieldPerHectare</th>
+                                            <th scope="col" class="govuk-table__header"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (harvestYearPlan.FieldData != null)
+                                        {
+                                            @foreach (var field in harvestYearPlan.FieldData)
+                                            {
+                                                <tr class="govuk-table__row">
+                                                    <td class="govuk-table__cell">@field.FieldName</td>
+                                                    <td class="govuk-table__cell">
+                                                        @if (field.PlantingDate != null)
+                                                        {
+                                                            @field.PlantingDate.Value.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB"))
+                                                        }
+                                                        else
+                                                        {
+                                                            @Resource.lblNotEntered
+                                                        }
+                                                    </td>
+
+                                                    <td class="govuk-table__cell">
+                                                        @if (field.Yield != null)
+                                                        {
+                                                            @field.Yield
+                                                        }
+                                                        else
+                                                        {
+                                                            @Resource.lblNotEntered
+                                                        }
+                                                    </td>
+                                                    <td class="govuk-table__cell">
+                                                        <a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@field.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">
+                                                            @Resource.lblUpdateThisFieldOrViewRecommendations
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                        }
+                    </govuk-tabs-item>
+                    <govuk-tabs-item id="OrganicMaterialApplications" label=@Resource.lblOrganicMaterialApplications>
+                        <h2 class="govuk-heading-m non-standard">@Resource.lblOrganicMaterialApplications</h2>
+                        @if (ViewBag.AddMannerDisabled != null && ViewBag.AddMannerDisabled)
+                        {
+                            <a class="govuk-button disabled add-button" asp-action="FieldGroup" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblAddAnOrganicMaterialApplication</a>
+                        }
+                        else
+                        {
+                            <a class="govuk-button add-button" asp-action="FieldGroup" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblAddAnOrganicMaterialApplication</a>
+                        }
+                        @if (Model.HarvestYearPlans != null && Model.HarvestYearPlans.OrganicManureList != null && Model.HarvestYearPlans.OrganicManureList.Any())
+                        {
+                            <hr class="seperator_five">
+                            <h2 class="govuk-heading-m">@string.Format(Resource.lblAllOrganicMaterialApplicationsForHarvestYear, Model.Year)</h2>
+                            <p class="govuk-body">@Resource.blAllAmountsArePerHectare</p>
+                            <p class="govuk-body">
+                                @*   <a asp-action="SortOrganicList" asp-controller="Crop" asp-route-q="@Model.IsSortOragnicListByFieldName">@Resource.lblSortByFieldName</a>
+                    <span>&nbsp;</span>  or <span>&nbsp;</span>
+                    <a asp-action="SortOrganicList" asp-controller="Crop" asp-route-q="@Model.IsSortOragnicListByDate">@Resource.lblSortByApplicationDate</a> *@
+                                <a href="#">@Resource.lblSortByFieldName</a>
+                                <span>&nbsp;</span>  or <span>&nbsp;</span>
+                                <a href="#">@Resource.lblSortByApplicationDate</a>
+                            </p>
+                            <!-- Organic Table -->
+
+                            <table class="govuk-table sortable-table recomendation-table data-table">
+                                <thead class="govuk-table__head">
+                                    <tr class="govuk-table__row">
+                                        <th scope="col" class="govuk-table__header">@Resource.lblApplicationDateForBelowArrow</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblField</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblCrop</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblType</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblRate</th>
+                                        <th scope="col" class="govuk-table__header"></th>
                                     </tr>
-                                } *@
-                            </tbody>
-                        </table>
-                    }
-                </govuk-tabs-item>
-                <govuk-tabs-item id="OrganicMaterialApplications" label=@Resource.lblOrganicMaterialApplications>
-                    <h2 class="govuk-heading-m non-standard">@Resource.lblOrganicMaterialApplications</h2>
-                    @if (ViewBag.AddMannerDisabled != null && ViewBag.AddMannerDisabled)
-                    {
-                        <a class="govuk-button disabled" asp-action="FieldGroup" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblAddAnOrganicMaterialApplication</a>
-                    }
-                    else
-                    {
-                        <a class="govuk-button" asp-action="FieldGroup" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblAddAnOrganicMaterialApplication</a>
-                    }
-                    <hr class="seperator_five">
-                    <h2 class="govuk-heading-m">@string.Format(Resource.lblAllOrganicMaterialApplicationsForHarvestYear, "")</h2>
-                    <p class="govuk-body">@Resource.blAllAmountsArePerHectare</p>
-                    <p class="govuk-body">
-                        <a asp-action="SortOrganicList" asp-controller="Crop" asp-route-q="@Model.IsSortOragnicListByFieldName">@Resource.lblSortByFieldName</a>
-                        <span>&nbsp;</span>  or <span>&nbsp;</span>
-                        <a asp-action="SortOrganicList" asp-controller="Crop" asp-route-q="@Model.IsSortOragnicListByDate">@Resource.lblSortByApplicationDate</a>
-                    </p>
-                    <!-- Organic Table -->
-                    @foreach (var harvestYearPlan in Model.HarvestYearPlans)
-                    {
-                        <table class="govuk-table sortable-table recomendation-table data-table">
-                            <thead class="govuk-table__head">
-                                <tr class="govuk-table__row">
-                                    <th scope="col" class="govuk-table__header">@Resource.lblApplicationDate</th>
-                                    <th scope="col" class="govuk-table__header">@Resource.lblField</th>
-                                    <th scope="col" class="govuk-table__header">@Resource.lblCrop</th>
-                                    <th scope="col" class="govuk-table__header">@Resource.lblTypeOfManure</th>
-                                    <th scope="col" class="govuk-table__header">@Resource.lblRate</th>
-                                    <th scope="col" class="govuk-table__header"></th>
-                                </tr>
-                            </thead>
-                            <tbody class="govuk-table__body">
-                                <tr class="govuk-table__row">
-                                    <td class="govuk-table__cell">09/02/2023</td>
-                                    <td class="govuk-table__cell">Poplar</td>
-                                    <td class="govuk-table__cell">Winter Wheat</td>
-                                    <td class="govuk-table__cell">Cattle FYM - old</td>
-                                    <td class="govuk-table__cell">20 tonnes</td>
-                                    <td class="govuk-table__cell"><a href="#">Change</a></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    }
-                </govuk-tabs-item>
-                <govuk-tabs-item id="InorganicFertiliserApplications" label=@Resource.lblInorganicFertiliserApplications>
-                    <h2 class="govuk-heading-m non-standard">@Resource.lblInorganicFertiliserApplications</h2>
-                    <a class="govuk-button" asp-action="FieldGroup" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblAddAnInorganicFertiliserApplication</a>
-                    <hr class="seperator_five">
-                    <h2 class="govuk-heading-m">@string.Format(Resource.lblAllInorganicFertiliserApplicationsForHarvestYear, "")</h2>
-                    <p class="govuk-body">@Resource.blAllAmountsArePerHectare</p>
-                    <p class="govuk-body">
-                        <a asp-action="SortInOrganicList" asp-controller="Crop" asp-route-q="@Model.IsSortInOragnicListByFieldName">@Resource.lblSortByFieldName</a>
-                        <span>&nbsp;</span>  or <span>&nbsp;</span>
-                        <a asp-action="SortInOrganicList" asp-controller="Crop" asp-route-q="@Model.IsSortInOragnicListByDate">@Resource.lblSortByApplicationDate</a>
-                    </p>
-                    @* <p class="govuk-body"><a href="#">@Resource.lblSortByFieldName</a> or <a href="#">@Resource.lblSortByApplicationDate</a></p> *@
-                    <!-- Inorganic Table -->
-                    @foreach (var harvestYearPlan in Model.HarvestYearPlans)
-                    {
-                        <table class="govuk-table sortable-table recomendation-table data-table">
-                            <thead class="govuk-table__head">
-                                <tr class="govuk-table__row">
-                                    <th scope="col" class="govuk-table__header">@Resource.lblApplicationDate</th>
-                                    <th scope="col" class="govuk-table__header">@Resource.lblField</th>
-                                    <th scope="col" class="govuk-table__header">@Resource.lblCrop</th>
-                                    <th scope="col" class="govuk-table__header">@Resource.lblTypeOfManure</th>
-                                    <th scope="col" class="govuk-table__header">@Resource.lblRate</th>
-                                    <th scope="col" class="govuk-table__header"></th>
-                                </tr>
-                            </thead>
-                            <tbody class="govuk-table__body">
-                                <tr class="govuk-table__row">
-                                    <td class="govuk-table__cell">09/02/2023</td>
-                                    <td class="govuk-table__cell">Poplar</td>
-                                    <td class="govuk-table__cell">Winter Wheat</td>
-                                    <td class="govuk-table__cell">Cattle FYM - old</td>
-                                    <td class="govuk-table__cell">20 tonnes</td>
-                                    <td class="govuk-table__cell"><a href="#">Change</a></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    }
-                </govuk-tabs-item>
-            </govuk-tabs>
+                                </thead>
+                                <tbody class="govuk-table__body">
+                                    @foreach (var organicManure in Model.HarvestYearPlans.OrganicManureList)
+                                    {
+                                        <tr class="govuk-table__row">
+                                            <td class="govuk-table__cell">@organicManure.ApplicationDate.Value.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB"))</td>
+                                            <td class="govuk-table__cell">@organicManure.Field</td>
+                                            <td class="govuk-table__cell">@organicManure.Crop</td>
+                                            <td class="govuk-table__cell">@organicManure.TypeOfManure</td>
+                                            <td class="govuk-table__cell">
+                                                @string.Format(Resource.lblRateWithTonnes, organicManure.Rate)
+                                            </td>
+                                            <td class="govuk-table__cell"><a href="#">Change</a></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+
+
+                    </govuk-tabs-item>
+                    <govuk-tabs-item id="InorganicFertiliserApplications" label=@Resource.lblInorganicFertiliserApplications>
+                        <h2 class="govuk-heading-m non-standard">@Resource.lblInorganicFertiliserApplications</h2>
+                        <a class="govuk-button add-button" asp-action="FieldGroup" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblAddAnInorganicFertiliserApplication</a>
+                        @if (Model.HarvestYearPlans != null && Model.HarvestYearPlans.InorganicFertiliserList != null && Model.HarvestYearPlans.InorganicFertiliserList.Any())
+                        {
+                            <hr class="seperator_five">
+                            <h2 class="govuk-heading-m">@string.Format(Resource.lblAllInorganicFertiliserApplicationsForHarvestYear, Model.Year)</h2>
+                            <p class="govuk-body">@Resource.blAllAmountsArePerHectare</p>
+                            <p class="govuk-body">
+                                @* <a asp-action="SortInOrganicList" asp-controller="Crop" asp-route-q="@Model.IsSortInOragnicListByFieldName">@Resource.lblSortByFieldName</a>
+                    <span>&nbsp;</span>  or <span>&nbsp;</span>
+                    <a asp-action="SortInOrganicList" asp-controller="Crop" asp-route-q="@Model.IsSortInOragnicListByDate">@Resource.lblSortByApplicationDate</a> *@
+                                <a href="#">@Resource.lblSortByFieldName</a>
+                                <span>&nbsp;</span>  or <span>&nbsp;</span>
+                                <a href="#">@Resource.lblSortByApplicationDate</a>
+                            </p>
+
+                            <!-- Inorganic Table -->
+
+                            <table class="govuk-table big_crop_table_version_three margin-bottom-forty">
+                                <thead class="govuk-table__head">
+                                    <tr class="govuk-table__row">
+                                        <th scope="col" class="govuk-table__header">@Resource.lblApplicationDateForBelowArrow</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblField</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblCrop</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblNutrients</th>
+                                        <th scope="col" class="govuk-table__header"></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="govuk-table__body">
+                                    @foreach (var inorganicFertiliser in Model.HarvestYearPlans.InorganicFertiliserList)
+                                    {
+                                        <tr class="govuk-table__row">
+                                            <td class="govuk-table__cell">@inorganicFertiliser.ApplicationDate.Value.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB"))</td>
+                                            <td class="govuk-table__cell">@inorganicFertiliser.Field</td>
+                                            <td class="govuk-table__cell">@inorganicFertiliser.Crop</td>
+                                            <td class="govuk-table__cell">
+                                                @if (inorganicFertiliser.N != null && inorganicFertiliser.N > 0)
+                                                {
+                                                    <span class="nutrient-list">@string.Format(Resource.lblKgWithNutrient, inorganicFertiliser.N, Resource.lblNitrogen)</span>
+                                                }
+                                                @if (inorganicFertiliser.P2O5 != null && inorganicFertiliser.P2O5 > 0)
+                                                {
+                                                    <span class="nutrient-list">@string.Format(Resource.lblKgWithNutrient, inorganicFertiliser.P2O5, Resource.lblPhosphateP2O5)</span>
+                                                }
+                                                @if (inorganicFertiliser.K2O != null && inorganicFertiliser.K2O > 0)
+                                                {
+                                                    <span class="nutrient-list">@string.Format(Resource.lblKgWithNutrient, inorganicFertiliser.K2O, Resource.lblPotashK2O)</span>
+                                                }
+                                                @if (inorganicFertiliser.SO3 != null && inorganicFertiliser.SO3 > 0)
+                                                {
+                                                    <span class="nutrient-list">@string.Format(Resource.lblKgWithNutrient, inorganicFertiliser.SO3, Resource.lblSulphurSO3)</span>
+                                                }
+                                                @if (inorganicFertiliser.Lime != null && inorganicFertiliser.Lime > 0)
+                                                {
+                                                    <span class="nutrient-list">@string.Format(Resource.lblKgWithNutrient, inorganicFertiliser.Lime, Resource.lblLime)</span>
+                                                }
+
+                                            </td>
+                                            <td class="govuk-table__cell"><a href="#">Change</a></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                    </govuk-tabs-item>
+                </govuk-tabs>
+            }
         </div>
 
     </div>

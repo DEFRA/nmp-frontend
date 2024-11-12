@@ -26,5 +26,7 @@ namespace NMP.Portal.ServiceResponses
         public decimal? DryMatterPercent { get; set; }
         [JsonProperty("UricAcid")]
         public decimal? UricAcid { get; set; }
+        [JsonProperty("Lime")]
+        public decimal? Lime { get; set; }
     }
 }

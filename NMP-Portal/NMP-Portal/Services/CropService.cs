@@ -550,22 +550,21 @@ namespace NMP.Portal.Services
             }
             return secondCropList;
         }
-        public async Task<(List<HarvestYearResponseHeader>, Error)> FetchHarvestYearPlansDetailsByFarmId(int harvestYear, int farmId)
+        public async Task<(HarvestYearResponseHeader, Error)> FetchHarvestYearPlansDetailsByFarmId(int harvestYear, int farmId)
         {
-            List<HarvestYearResponseHeader> harvestYearPlanList = new List<HarvestYearResponseHeader>();
+            HarvestYearResponseHeader harvestYearPlan = new HarvestYearResponseHeader();
             Error error = new Error();
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchHarvestYearPlansByFarmIdAsyncAPI, harvestYear, farmId));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropsOrganicinorganicdetailsByYearFarmIdAsyncAPI, harvestYear, farmId));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        var harvestYearPlanResponses = responseWrapper.Data.ToObject<List<HarvestYearResponseHeader>>();
-                        harvestYearPlanList.AddRange(harvestYearPlanResponses);
+                        harvestYearPlan = responseWrapper.Data.ToObject<HarvestYearResponseHeader>();
                     }
                 }
                 else
@@ -589,7 +588,7 @@ namespace NMP.Portal.Services
                 _logger.LogError(ex.Message);
                 throw new Exception(error.Message, ex);
             }
-            return (harvestYearPlanList, error);
+            return (harvestYearPlan, error);
         }
     }
 }
