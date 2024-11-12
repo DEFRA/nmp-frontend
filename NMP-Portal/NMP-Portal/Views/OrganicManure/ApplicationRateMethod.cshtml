@@ -5,7 +5,7 @@
     var enterAnApplicationRate = (int)NMP.Portal.Enums.ApplicationRate.EnterAnApplicationRate;
     var calculateBasedOnAreaAndQuantity = (int)NMP.Portal.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity;
     var useDefaultApplicationRate = (int)NMP.Portal.Enums.ApplicationRate.UseDefaultApplicationRate;
-    var backaction =(Model.IsCheckAnswer && (!Model.IsManureTypeChange)) ? "CheckAnswer" : (Model.IsDefaultNutrientValues != null && (!Model.IsDefaultNutrientValues.Value) ? "NutrientValuesStoreForFuture" : "DefaultNutrientValues");
+    var backaction = (Model.IsCheckAnswer && (!Model.IsManureTypeChange)) ? "CheckAnswer" : (Model.IsDefaultNutrientValues != null && (!Model.IsDefaultNutrientValues.Value) ? "NutrientValuesStoreForFuture" : "DefaultNutrientValues");
 
 }
 @section BeforeContent {
@@ -92,6 +92,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEndClosedPeriodFebruaryWarning" value="@Model.IsEndClosedPeriodFebruaryWarning"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks" value="@Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150" value="@Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropOrder"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -133,29 +134,40 @@
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].MoistureID" value="@Model.OrganicManures[i].MoistureID"></govuk-input>
                 }
             }
-               @if (Model.IsWarningMsgNeedToShow != null && Model.IsWarningMsgNeedToShow)
+            @if (Model.AutumnCropNitrogenUptakes != null && Model.AutumnCropNitrogenUptakes.Count > 0)
+            {
+                @for (int i = 0; i < Model.AutumnCropNitrogenUptakes.Count; i++)
+                {
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptakes[i].EncryptedFieldId" value="@Model.AutumnCropNitrogenUptakes[i].EncryptedFieldId"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptakes[i].FieldName" value="@Model.AutumnCropNitrogenUptakes[i].FieldName"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptakes[i].CropTypeId" value="@Model.AutumnCropNitrogenUptakes[i].CropTypeId"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptakes[i].CropTypeName" value="@Model.AutumnCropNitrogenUptakes[i].CropTypeName"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptakes[i].AutumnCropNitrogenUptake" value="@Model.AutumnCropNitrogenUptakes[i].AutumnCropNitrogenUptake"></govuk-input>
+                }
+            }
+            @if (Model.IsWarningMsgNeedToShow != null && Model.IsWarningMsgNeedToShow)
             {
                 @if (Model.IsOrgManureNfieldLimitWarning || Model.IsNMaxLimitWarning)
                 {
-                <govuk-notification-banner>
-                    <govuk-notification-banner-title>
-                        @Resource.lblImportant
-                    </govuk-notification-banner-title>
-                    @if (Model.IsOrgManureNfieldLimitWarning)
-                    {
-                        <p class="govuk-notification-banner__heading">
-                            @Resource.lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit
-                        </p>
-                        <p class="govuk-body">@Resource.MsgIfOrganicManureNMaxLimitExceed</p>
-                    }
-                    @if (Model.IsNMaxLimitWarning)
-                    {
-                        <p class="govuk-notification-banner__heading">
-                            @Resource.lblNMaxLimitTitle
-                        </p>
-                        <p class="govuk-body">@Resource.MsgNMaxLimit</p>
-                    }
-                </govuk-notification-banner>
+                    <govuk-notification-banner>
+                        <govuk-notification-banner-title>
+                            @Resource.lblImportant
+                        </govuk-notification-banner-title>
+                        @if (Model.IsOrgManureNfieldLimitWarning)
+                        {
+                            <p class="govuk-notification-banner__heading">
+                                @Resource.lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit
+                            </p>
+                            <p class="govuk-body">@Resource.MsgIfOrganicManureNMaxLimitExceed</p>
+                        }
+                        @if (Model.IsNMaxLimitWarning)
+                        {
+                            <p class="govuk-notification-banner__heading">
+                                @Resource.lblNMaxLimitTitle
+                            </p>
+                            <p class="govuk-body">@Resource.MsgNMaxLimit</p>
+                        }
+                    </govuk-notification-banner>
                 }
             }
 

@@ -9,5 +9,8 @@ namespace NMP.Portal.ServiceResponses
 
         [JsonProperty("CropTypeName")]
         public string CropType { get; set; }
+
+        [JsonProperty("cropOrder")]
+        public string CropOrder { get; set; }
     }
 }

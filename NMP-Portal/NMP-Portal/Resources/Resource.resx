@@ -1555,13 +1555,13 @@ m³/ha</value>
     <value>About these values</value>
   </data>
   <data name="lblAmountOfNFromTheApplicationTaken" xml:space="preserve">
-    <value>Amount of N from the application taken up by the crop in the autumn</value>
+    <value>Amount of nitrogen (N) from the application taken up by the crop in the autumn</value>
   </data>
   <data name="lblAmountOfRainThatFallsInThe6Hours" xml:space="preserve">
-    <value>Amount of rain that falls in the 6 hours after the material is applied</value>
+    <value>Amount of rain (in mm) that falls in the 6 hours after the material is applied</value>
   </data>
   <data name="lblAverageRainfallBetweenManAppAndEndOfSoilDrainage" xml:space="preserve">
-    <value>Average rainfall between manure application and end of soil drainage</value>
+    <value>Average rainfall (in mm) between manure application and end of soil drainage</value>
   </data>
   <data name="lblConditionsAffectingNutrientLoss" xml:space="preserve">
     <value>Conditions Affecting Nutrient Loss</value>
@@ -1585,10 +1585,10 @@ m³/ha</value>
     <value>These are approximate values. You can change them now or later.</value>
   </data>
   <data name="lblWindspeedDuringApplication" xml:space="preserve">
-    <value>Windspeed during application</value>
+    <value>Wind speed during application</value>
   </data>
   <data name="lblWindspeedWhenTheMaterialIsApplied" xml:space="preserve">
-    <value>Windspeed when the material is applied</value>
+    <value>Wind speed (on the Beaufort scale) when the material is applied</value>
   </data>
   <data name="lblAutumnCropNitrogenPerHectare" xml:space="preserve">
     <value>{0}kg per hectare</value>
@@ -2558,6 +2558,27 @@ m3/ha  not set</value>
   </data>
   <data name="lblPlansAndRecords" xml:space="preserve">
     <value>Plans and records</value>
+  </data>
+  <data name="lblTheAmountIsDifferentForEachOfTheseFields" xml:space="preserve">
+    <value>The amount is different for each of these fields</value>
+  </data>
+  <data name="lblAutumnCropNitrogenNUptake" xml:space="preserve">
+    <value>Autumn crop nitrogen (N) uptake</value>
+  </data>
+  <data name="lblAutumnCropNitrogenUptakeDetail" xml:space="preserve">
+    <value>Autumn Crop Nitrogen Uptake Detail</value>
+  </data>
+  <data name="lblCrop" xml:space="preserve">
+    <value>Crop</value>
+  </data>
+  <data name="lblThisIsTheAmountOfNitrogenFromTheApplication" xml:space="preserve">
+    <value>This is the amount of Nitrogen (N) from the application taken up by the crop in the autumn.</value>
+  </data>
+  <data name="lblAutumnKgPerHectare" xml:space="preserve">
+    <value>{0} kg per hectare</value>
+  </data>
+  <data name="lblWhatIsTheAutumnCropNitrogenUptakeFor" xml:space="preserve">
+    <value>What is the Autumn crop Nitrogen uptake for {0}?</value>
   </data>
   <data name="lblAverageAnnualRainfallIsYouHaveNotEnteredAnyExcessWinterRainfall" xml:space="preserve">
     <value>Average annual rainfall is {0}mm. You have not entered any excess winter rainfall.</value>
