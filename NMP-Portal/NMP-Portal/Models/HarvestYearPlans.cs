@@ -1,10 +1,11 @@
-﻿namespace NMP.Portal.Models
+﻿using NMP.Portal.ServiceResponses;
+
+namespace NMP.Portal.Models
 {
     public class HarvestYearPlans
     {
-        public string CropTypeName { get; set; }
-        public string CropVariety { get; set; }
-        //public List<string> FieldNames { get; set; } = new List<string>();
-       public List<HarvestYearPlanFields> FieldData { get; set; }
+        public List<HarvestYearPlanFields> FieldData { get; set; }
+        public List<OrganicManureResponse> OrganicManureList { get; set; }
+        public List<InorganicFertiliserResponse> InorganicFertiliserList { get; set; }
     }
 }

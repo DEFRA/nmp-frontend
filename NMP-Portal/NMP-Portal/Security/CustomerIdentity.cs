@@ -43,6 +43,7 @@ namespace NMP.Portal.Security
                         options.Domain = builder.Configuration["CustomerIdentityDomain"];
                         var extraQueryParameters = new Dictionary<string, string>();
                         extraQueryParameters.Add("serviceId", value: builder.Configuration["CustomerIdentityServiceId"].ToString());
+                        extraQueryParameters.Add("forceReselection", value: "true");
                         options.ExtraQueryParameters = extraQueryParameters;
                         //options.CallbackPath = builder.Configuration["CustomerIdentityCallbackPath"]; // signin-oidc";
                         //options.SignedOutCallbackPath = builder.Configuration["CustomerIdentitySignedOutCallbackPath"];
