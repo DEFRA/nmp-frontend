@@ -3650,6 +3650,7 @@ namespace NMP.Portal.Controllers
                 Field field = await _fieldService.FetchFieldByFieldId(fieldId);
                 model.EncryptedFieldId = f;
                 ViewBag.FieldName = field.Name;
+                model.AutumnCropNitrogenUptake = model.AutumnCropNitrogenUptakes?.FirstOrDefault(x => x.EncryptedFieldId == f)?.AutumnCropNitrogenUptake;
             }
             if(model.FieldList.Count==1)
             {
