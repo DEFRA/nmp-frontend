@@ -1395,6 +1395,10 @@ namespace NMP.Portal.Controllers
                 ViewBag.FieldsList = model.Fields;
                 model.EncryptedFarmId = id;
             }
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+            {
+                _httpContextAccessor.HttpContext?.Session.Remove("FieldData");
+            }
             return View(model);
         }
 
@@ -1423,7 +1427,6 @@ namespace NMP.Portal.Controllers
             model.SoilReleasingClay = field.SoilReleasingClay ?? false;
             model.IsWithinNVZ = field.IsWithinNVZ ?? false;
             model.IsAbove300SeaLevel = field.IsAbove300SeaLevel ?? false;
-            model.EncryptedFieldId = _farmDataProtector.Protect(fieldId.ToString());
             var soilType = await _fieldService.FetchSoilTypeById(field.SoilTypeID.Value);
             model.SoilType = !string.IsNullOrWhiteSpace(soilType) ? soilType : string.Empty;
             model.SoilTypeID = field.SoilTypeID;
@@ -1434,8 +1437,6 @@ namespace NMP.Portal.Controllers
 
             model.EncryptedFarmId = farmId;
             model.FarmName = farm.Name;
-            bool update = true;
-            model.EncryptedIsUpdate = _fieldDataProtector.Protect(update.ToString());
             List<SoilAnalysisResponse> soilAnalysisResponse = await _fieldService.FetchSoilAnalysisByFieldId(fieldId, Resource.lblTrue);
             ViewBag.SampleDate = soilAnalysisResponse;
 
@@ -1447,8 +1448,8 @@ namespace NMP.Portal.Controllers
             {
                 ViewBag.Success = null;
             }
-            
-            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
+
+            //_httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
 
             return View(model);
         }
@@ -3238,43 +3239,65 @@ namespace NMP.Portal.Controllers
             return RedirectToAction("RecentSoilAnalysisQuestion");
         }
 
-        
+
 
         [HttpGet]
-        public async Task<IActionResult> UpdateField()
+        public async Task<IActionResult> UpdateField(string? id, string? farmId)
         {
             _logger.LogTrace($"Field Controller : UpdateField() action called");
-            FieldViewModel? model = null;
+            FieldViewModel model = new FieldViewModel();
+
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+                if (!string.IsNullOrWhiteSpace(id))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                    (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(farmId)));
+                    int fieldId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
+                    var field = await _fieldService.FetchFieldByFieldId(fieldId);
+                    model.Name = field.Name;
+                    model.TotalArea = field.TotalArea ?? 0;
+                    model.CroppedArea = field.CroppedArea ?? 0;
+                    model.ManureNonSpreadingArea = field.ManureNonSpreadingArea ?? 0;
+                    model.SoilReleasingClay = field.SoilReleasingClay ?? false;
+                    model.IsWithinNVZ = field.IsWithinNVZ ?? false;
+                    model.IsAbove300SeaLevel = field.IsAbove300SeaLevel ?? false;
+                    var soilType = await _fieldService.FetchSoilTypeById(field.SoilTypeID.Value);
+                    model.SoilType = !string.IsNullOrWhiteSpace(soilType) ? soilType : string.Empty;
+                    model.SoilTypeID = field.SoilTypeID;
+                    model.EncryptedFieldId = id;
+                    model.ID = fieldId;
+                    model.isEnglishRules = farm.EnglishRules;
+                    model.SoilOverChalk = field.SoilOverChalk;
+
+                    model.EncryptedFarmId = farmId;
+                    model.FarmName = farm.Name;
+                    //model.FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(farmId));
+
+                    bool isUpdateField = true;
+                    model.EncryptedIsUpdate = _fieldDataProtector.Protect(isUpdateField.ToString());
+                    if (model.SoilOverChalk != null && model.SoilTypeID != (int)NMP.Portal.Enums.SoilTypeEngland.Shallow)
+                    {
+                        model.SoilOverChalk = null;
+                    }
+                    if (model.SoilReleasingClay != null && model.SoilTypeID != (int)NMP.Portal.Enums.SoilTypeEngland.DeepClayey)
+                    {
+                        model.SoilReleasingClay = null;
+                        model.IsSoilReleasingClay = false;
+                    }
+                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
                 }
                 else
                 {
-                    return RedirectToAction("FarmList", "Farm");
+                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+                    {
+                        model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                    }
+                    else
+                    {
+                        return RedirectToAction("FarmList", "Farm");
+                    }
                 }
 
-                if (model == null)
-                {
-                    model = new FieldViewModel();
-                }
-                //model.IsRecentSoilAnalysisQuestionChange = false;
-                bool isUpdateField = true;
-                model.EncryptedIsUpdate = _fieldDataProtector.Protect(isUpdateField.ToString());
-                if (model.SoilOverChalk != null && model.SoilTypeID != (int)NMP.Portal.Enums.SoilTypeEngland.Shallow)
-                {
-                    model.SoilOverChalk = null;
-                }
-                if (model.SoilReleasingClay != null && model.SoilTypeID != (int)NMP.Portal.Enums.SoilTypeEngland.DeepClayey)
-                {
-                    model.SoilReleasingClay = null;
-                    model.IsSoilReleasingClay = false;
-                }
-                //model.EncryptedFieldId = id;
-
-                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             }
             catch (Exception ex)
             {

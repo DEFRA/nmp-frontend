@@ -477,12 +477,12 @@
                 }
                 else
                 {
-                    <govuk-summary-list-row class=@(Model.AutumnCropNitrogenUptakes[0].AutumnCropNitrogenUptake==0 ?"govuk-error-message":"")>
+                    <govuk-summary-list-row class=@(Model.AutumnCropNitrogenUptakes[0].AutumnCropNitrogenUptake==null ?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
                             @Resource.lblAutumnCropNitrogenUptake
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @((Model.AutumnCropNitrogenUptakes[0].AutumnCropNitrogenUptake != 0) ? string.Format(Resource.lblAutumnCropNitrogenPerHectare, (Model.AutumnCropNitrogenUptakes[0].AutumnCropNitrogenUptake == 0.0m ? 0 : Model.AutumnCropNitrogenUptakes[0].AutumnCropNitrogenUptake.ToString("#.#"))) : Resource.lblNotSet)
+                            @((Model.AutumnCropNitrogenUptakes[0].AutumnCropNitrogenUptake != null) ? string.Format(Resource.lblAutumnCropNitrogenPerHectare, (Model.AutumnCropNitrogenUptakes[0].AutumnCropNitrogenUptake == 0.0m ? 0 : Model.AutumnCropNitrogenUptakes[0].AutumnCropNitrogenUptake.ToString("#.#"))) : Resource.lblNotSet)
 
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>

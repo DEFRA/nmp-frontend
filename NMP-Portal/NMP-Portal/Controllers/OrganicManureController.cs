@@ -3171,6 +3171,10 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> ConditionsAffectingNutrients(OrganicManureViewModel model)
         {
             _logger.LogTrace($"Organic Manure Controller : ConditionsAffectingNutrients() post action called");
+            if (!ModelState.IsValid)
+            {
+                return View("ConditionsAffectingNutrients", model);
+            }
             if (model.OrganicManures.Count > 0)
             {
                 int i = 0;
