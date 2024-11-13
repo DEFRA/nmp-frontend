@@ -567,7 +567,7 @@ namespace NMP.Portal.Controllers
             }
             var soilData = new
             {
-                soilAnalysis = new SoilAnalysis
+                SoilAnalysis = new SoilAnalysis
                 {
                     Year = model.Date.Value.Year,
                     SulphurDeficient = model.SulphurDeficient,
