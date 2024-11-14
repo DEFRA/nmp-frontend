@@ -15,7 +15,7 @@ namespace NMP.Portal.Services
         {
             _logger = logger;
         }
-        public async Task<(List<int>, Error)> FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(int harvestYear, string fieldIds, string? cropTypeId)
+        public async Task<(List<int>, Error)> FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(int harvestYear, string fieldIds, string? cropTypeId, int? cropOrder)
         {
             List<int> managementIds = new List<int>();
             Error error = null;
@@ -23,14 +23,26 @@ namespace NMP.Portal.Services
             {
                 HttpClient httpClient = await GetNMPAPIClient();
                 string url = string.Empty;
-                if (cropTypeId != null)
-                {
-                    url = string.Format(APIURLHelper.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeIdAsyncAPI, harvestYear, cropTypeId, fieldIds);
-                }
-                else
-                {
-                    url = string.Format(APIURLHelper.FetchManagementIdsByFieldIdAndHarvestYearAsyncAPI, harvestYear, fieldIds);
-                }
+                //if (cropTypeId != null)
+                //{
+                    url = string.Format(APIURLHelper.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeIdAsyncAPI, harvestYear, cropTypeId, fieldIds, cropOrder);
+                    if (cropOrder == null)
+                    {
+                        url = url.Replace("&cropOrder=", "");
+                    }
+                    if (cropTypeId == null)
+                    {
+                        url = url.Replace("cropTypeId=&", "");
+                    }
+                //}
+                //else
+                //{
+                //    url = string.Format(APIURLHelper.FetchManagementIdsByFieldIdAndHarvestYearAsyncAPI, harvestYear, fieldIds, cropOrder);
+                //    if (cropTypeId == null)
+                //    {
+                //        url = url.Replace("cropTypeId=&", "");
+                //    }
+                //}
                 var response = await httpClient.GetAsync(url);
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
