@@ -2580,4 +2580,79 @@ m3/ha  not set</value>
   <data name="lblWhatIsTheAutumnCropNitrogenUptakeFor" xml:space="preserve">
     <value>What is the Autumn crop Nitrogen uptake for {0}?</value>
   </data>
+  <data name="lblAmountsArePerHectare" xml:space="preserve">
+    <value>Amounts are per hectare.</value>
+  </data>
+  <data name="lblBalanceFromPreviousYear" xml:space="preserve">
+    <value>Balance from {0}</value>
+  </data>
+  <data name="lblCropDetailsForFieldInYear" xml:space="preserve">
+    <value>Crop details for {0} in {1}</value>
+  </data>
+  <data name="lblFertiliserOrLimeApplied" xml:space="preserve">
+    <value>Fertiliser or Lime applied</value>
+  </data>
+  <data name="lblFertiliserOrLimeRecommendation" xml:space="preserve">
+    <value>Fertiliser or Lime recommendation</value>
+  </data>
+  <data name="lblFertiliserPhosphateAndPotashRecommendations" xml:space="preserve">
+    <value>fertiliser phosphate and potash recommendations.</value>
+  </data>
+  <data name="lblFieldPlanYear" xml:space="preserve">
+    <value>{0} plan {1}</value>
+  </data>
+  <data name="lblGuidance" xml:space="preserve">
+    <value>Guidance</value>
+  </data>
+  <data name="lblMagnesiumMgO" xml:space="preserve">
+    <value>Magnesium (MgO)</value>
+  </data>
+  <data name="lblNutrientAndLimeRecommendations" xml:space="preserve">
+    <value>Nutrient and Lime recommendations</value>
+  </data>
+  <data name="lblNutrientAndLimeRecommendationsForCropInField" xml:space="preserve">
+    <value>Nutrient and Lime recommendations for {0} in {1}</value>
+  </data>
+  <data name="lblorganicAndInorganicMaterial" xml:space="preserve">
+    <value>Organic and inorganic material</value>
+  </data>
+  <data name="lblPhosphateP2O5AndPotashK2OBalance" xml:space="preserve">
+    <value>Phosphate (P2O5) and Potash (K2O) balance</value>
+  </data>
+  <data name="lblRate" xml:space="preserve">
+    <value>Rate</value>
+  </data>
+  <data name="lblSodium" xml:space="preserve">
+    <value>Sodium</value>
+  </data>
+  <data name="lblSodiumNa2O" xml:space="preserve">
+    <value>Sodium (Na2O)</value>
+  </data>
+  <data name="lblSupplyFromManures" xml:space="preserve">
+    <value>Supply from manures</value>
+  </data>
+  <data name="lblThisIsTheRollingBalanceAtTheStartOfTheYear" xml:space="preserve">
+    <value>This is the rolling balance at the start of the year and is included in the</value>
+  </data>
+  <data name="lblTotalCropNeed" xml:space="preserve">
+    <value>Total crop need</value>
+  </data>
+  <data name="lblTypeOfManure" xml:space="preserve">
+    <value>Type of manure</value>
+  </data>
+  <data name="lblChangeTheCropDetailsForField" xml:space="preserve">
+    <value>Change the {0} details for {1}</value>
+  </data>
+  <data name="lblGroup" xml:space="preserve">
+    <value>Group</value>
+  </data>
+  <data name="lblPlantingDate" xml:space="preserve">
+    <value>Planting date</value>
+  </data>
+  <data name="lblYieldTonnesPerHectare" xml:space="preserve">
+    <value>{0} tonnes per hectare</value>
+  </data>
+  <data name="lblYouHaveNoOrganicMaterialApplicationForFieldInYear" xml:space="preserve">
+    <value>You have no organic material applications planned for {0} in {1}.</value>
+  </data>
 </root>

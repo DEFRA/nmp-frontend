@@ -201,3 +201,9 @@ hr.big_seperator {
 .explanations h3 {
     margin-bottom: 0;
 }
+#balance table {
+    width: 50%;
+}
+.tabs-thirds {
+    width: 66%;
+}
