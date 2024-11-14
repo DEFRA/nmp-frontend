@@ -143,11 +143,12 @@ namespace NMP.Portal.Controllers
 
                 }
                 (List<ManureCropTypeResponse> cropTypeList, error) = await _organicManureService.FetchCropTypeByFarmIdAndHarvestYear(model.FarmId.Value, model.HarvestYear.Value);
+                cropTypeList = cropTypeList.DistinctBy(x => x.CropTypeId).ToList();
                 if (error == null)
                 {
                     var SelectListItem = cropTypeList.Select(f => new SelectListItem
                     {
-                        Value = $"{f.CropTypeId.ToString()}-{f.CropOrder}",
+                        Value = f.CropTypeId.ToString(),
                         Text = string.Format(Resource.lblTheCropTypeField, f.CropType.ToString())
                     }).ToList();
                     SelectListItem.Insert(0, new SelectListItem { Value = Resource.lblAll, Text = string.Format(Resource.lblAllFieldsInTheYearPlan, model.HarvestYear) });
@@ -190,6 +191,7 @@ namespace NMP.Portal.Controllers
                 {
                     if (error == null)
                     {
+                        cropTypeList = cropTypeList.DistinctBy(x => x.CropTypeId).ToList();
                         if (cropTypeList.Count > 0)
                         {
 
@@ -211,11 +213,23 @@ namespace NMP.Portal.Controllers
                 }
 
                 int cropTypeId=0;
-                if (model.FieldGroup.Contains("-"))
+                if (cropTypeList.Count > 0)
                 {
-                    string[] parts = model.FieldGroup.Split('-');
-                    model.FieldGroup = parts[0];
-                    model.CropOrder = int.Parse(parts[1]);
+                    if (int.TryParse(model.FieldGroup, out int fieldGroup))
+                    {
+                        List<string> cropOrderList = cropTypeList.Where(x => x.CropTypeId == fieldGroup).Select(x => x.CropOrder).ToList();
+                        if (cropOrderList.Count == 1)
+                        {
+                            model.CropOrder = Convert.ToInt32(cropOrderList.FirstOrDefault());
+                        }
+                        else
+                        {
+                            model.CropOrder = 1;
+                        }
+                        //string[] parts = model.FieldGroup.Split('-');
+                        //model.FieldGroup = parts[0];
+                        //model.CropOrder = int.Parse(parts[1]);
+                    }
                 }
                 if (int.TryParse(model.FieldGroup, out int value))
                 {
