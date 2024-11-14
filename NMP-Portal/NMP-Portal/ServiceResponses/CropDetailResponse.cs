@@ -1,0 +1,39 @@
+﻿using NMP.Portal.Enums;
+using NMP.Portal.Models;
+using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+
+namespace NMP.Portal.ServiceResponses
+{
+    public class CropDetailResponse
+    {
+        [JsonProperty("CropId")]
+        public int? CropId { get; set; }
+        [JsonProperty("CropTypeID")]
+        public int CropTypeID { get; set; }
+        [JsonProperty("CropTypeName")]
+        public string? CropTypeName { get; set; }
+        [JsonProperty("CropGroupID")]
+        public int? CropGroupID { get; set; }
+        [JsonProperty("CropGroupName")]
+        public string? CropGroupName { get; set; }
+        [JsonProperty("FieldID")]
+        public int FieldID { get; set; }
+        [JsonProperty("FieldName")]
+        public string? FieldName { get; set; }
+        [JsonProperty("CropVariety")]
+        public string? CropVariety { get; set; }
+        [JsonProperty("OtherCropName")]
+        public string? OtherCropName { get; set; }
+        [JsonProperty("CropInfo1")]
+        public int? CropInfo1 { get; set; }
+        [JsonProperty("Yield")]
+        public int? Yield { get; set; }
+        [JsonProperty("LastModifiedOn")]
+        public DateTime? LastModifiedOn { get; set; }
+        [JsonProperty("PlantingDate")]
+        public DateTime? PlantingDate { get; set; }
+
+
+    }
+}
