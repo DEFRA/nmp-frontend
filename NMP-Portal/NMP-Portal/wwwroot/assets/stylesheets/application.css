@@ -198,28 +198,45 @@ hr.big_seperator {
     height: 2px;
     border: none;
 }
+
 .explanations h3 {
     margin-bottom: 0;
 }
+
 .nutrient-list {
     display: block;
     width: 100%;
     padding-bottom: 6px;
 }
+
 .big_crop_table_version_five td {
     width: 17%;
 }
+
 .big_crop_table_version_three {
     font-size: 17px;
 }
+
 .add-button {
     margin-bottom: 0 !important;
 }
+
 .big_crop_table_version_five {
     font-size: 17px;
 }
+
     .big_crop_table_version_five td:last-child {
         padding-right: 0;
         text-align: right;
         width: 35%;
     }
+
+
+
+#balance table {
+    width: 50%;
+}
+
+.tabs-thirds {
+    width: 66%;
+}
