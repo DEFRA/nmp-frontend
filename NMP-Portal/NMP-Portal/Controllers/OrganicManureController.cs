@@ -3693,6 +3693,9 @@ namespace NMP.Portal.Controllers
             }
             if (!ModelState.IsValid)
             {
+                Field field = await _fieldService.FetchFieldByFieldId(Convert.ToInt32(_organicManureProtector.Unprotect(model.EncryptedFieldId)));
+                ViewBag.FieldName = field.Name;
+                model.AutumnCropNitrogenUptake = model.AutumnCropNitrogenUptakes?.FirstOrDefault(x => x.EncryptedFieldId == model.EncryptedFieldId)?.AutumnCropNitrogenUptake;
                 return View("AutumnCropNitrogenUptake", model);
             }
 
