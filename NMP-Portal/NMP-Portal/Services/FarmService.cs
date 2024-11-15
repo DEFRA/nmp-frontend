@@ -236,8 +236,9 @@ namespace NMP.Portal.Services
             Error error = new Error();
             try
             {
-                bool IsFarmExist = await IsFarmExistAsync(farmData.Farm.Name, farmData.Farm.Postcode, farmData.Farm.ID);
-                if (!IsFarmExist)
+                //check if Updated farm Name already exist or not in the Postcode...
+                bool IsFarmNameWithInPostCodeAlreadyExist = await IsFarmExistAsync(farmData.Farm.Name, farmData.Farm.Postcode, farmData.Farm.ID);
+                if (!IsFarmNameWithInPostCodeAlreadyExist)
                 {
                     HttpClient httpClient = await GetNMPAPIClient();
                     var response = await httpClient.PutAsync(APIURLHelper.UpdateFarmAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));

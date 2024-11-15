@@ -152,12 +152,10 @@
                             <h2 class="govuk-heading-m">@string.Format(Resource.lblAllOrganicMaterialApplicationsForHarvestYear, Model.Year)</h2>
                             <p class="govuk-body">@Resource.blAllAmountsArePerHectare</p>
                             <p class="govuk-body">
-                                @*   <a asp-action="SortOrganicList" asp-controller="Crop" asp-route-q="@Model.IsSortOragnicListByFieldName">@Resource.lblSortByFieldName</a>
-                    <span>&nbsp;</span>  or <span>&nbsp;</span>
-                    <a asp-action="SortOrganicList" asp-controller="Crop" asp-route-q="@Model.IsSortOragnicListByDate">@Resource.lblSortByApplicationDate</a> *@
-                                <a href="#">@Resource.lblSortByFieldName</a>
+                                <a asp-action="SortOrganicList" asp-controller="Crop" asp-route-q="@Model.IsSortOragnicListByFieldName" asp-route-r="@ViewBag.IsSortOragnicListByFieldNameOrderBy">@Resource.lblSortByFieldName</a>
                                 <span>&nbsp;</span>  or <span>&nbsp;</span>
-                                <a href="#">@Resource.lblSortByApplicationDate</a>
+                                <a asp-action="SortOrganicList" asp-controller="Crop" asp-route-q="@Model.IsSortOragnicListByDate" asp-route-r="@ViewBag.IsSortOragnicListByDateOrderBy">@Resource.lblSortByApplicationDate</a>
+
                             </p>
                             <!-- Organic Table -->
 
@@ -201,12 +199,10 @@
                             <h2 class="govuk-heading-m">@string.Format(Resource.lblAllInorganicFertiliserApplicationsForHarvestYear, Model.Year)</h2>
                             <p class="govuk-body">@Resource.blAllAmountsArePerHectare</p>
                             <p class="govuk-body">
-                                @* <a asp-action="SortInOrganicList" asp-controller="Crop" asp-route-q="@Model.IsSortInOragnicListByFieldName">@Resource.lblSortByFieldName</a>
-                    <span>&nbsp;</span>  or <span>&nbsp;</span>
-                    <a asp-action="SortInOrganicList" asp-controller="Crop" asp-route-q="@Model.IsSortInOragnicListByDate">@Resource.lblSortByApplicationDate</a> *@
-                                <a href="#">@Resource.lblSortByFieldName</a>
+                                <a asp-action="SortInOrganicList" asp-controller="Crop" asp-route-q="@Model.IsSortInOragnicListByFieldName" asp-route-r="@ViewBag.IsSortInOragnicListByFieldNameOrderBy">@Resource.lblSortByFieldName</a>
                                 <span>&nbsp;</span>  or <span>&nbsp;</span>
-                                <a href="#">@Resource.lblSortByApplicationDate</a>
+                                <a asp-action="SortInOrganicList" asp-controller="Crop" asp-route-q="@Model.IsSortInOragnicListByDate" asp-route-r="@ViewBag.IsSortInOragnicListByDateOrderBy">@Resource.lblSortByApplicationDate</a>
+
                             </p>
 
                             <!-- Inorganic Table -->

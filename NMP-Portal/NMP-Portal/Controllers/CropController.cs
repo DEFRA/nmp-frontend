@@ -1644,7 +1644,7 @@ namespace NMP.Portal.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> HarvestYearOverview(string id, string year, string? q, string? r)
+        public async Task<IActionResult> HarvestYearOverview(string id, string year, string? q, string? r, string? s, string? t, string? u)
         {
             _logger.LogTrace($"Crop Controller : HarvestYearOverview({id}, {year}, {q}, {r}) action called");
             PlanViewModel model = new PlanViewModel();
@@ -1722,9 +1722,9 @@ namespace NMP.Portal.Controllers
                             var harvestYearPlans = new HarvestYearPlans
                             {
 
-                                FieldData = new List<HarvestYearPlanFields>(), // Initialize the list for field data
-                                OrganicManureList = new List<OrganicManureResponse>(), // Initialize organic manure list
-                                InorganicFertiliserList = new List<InorganicFertiliserResponse>(), // Initialize inorganic fertiliser list
+                                FieldData = new List<HarvestYearPlanFields>(),
+                                OrganicManureList = new List<OrganicManureResponse>(),
+                                InorganicFertiliserList = new List<InorganicFertiliserResponse>(),
                             };
                             foreach (var group in groupedResult)
                             {
@@ -1742,28 +1742,110 @@ namespace NMP.Portal.Controllers
                                         EncryptedFieldId = _cropDataProtector.Protect(plan.FieldID.ToString()), // Encrypt field ID
                                         FieldName = plan.FieldName,
                                         PlantingDate = plan.PlantingDate,
-                                        Yield=plan.Yield
+                                        Yield = plan.Yield
                                     };
 
                                     newField.FieldData.Add(fieldDetail);
 
                                     harvestYearPlans.FieldData.Add(newField);
-                                }                               
+                                }
                             }
 
-                            if (harvestYearPlanResponse.OrganicMaterial.Count > 0)
+                            if(harvestYearPlanResponse.OrganicMaterial.Count>0)
                             {
-                                harvestYearPlans.OrganicManureList = harvestYearPlanResponse.OrganicMaterial;
+                                harvestYearPlans.OrganicManureList = harvestYearPlanResponse.OrganicMaterial.OrderByDescending(x => x.ApplicationDate).ToList();
                             }
+
+
                             if (harvestYearPlanResponse.InorganicFertiliserApplication.Count > 0)
                             {
-                                harvestYearPlans.InorganicFertiliserList = harvestYearPlanResponse.InorganicFertiliserApplication;
+                                harvestYearPlans.InorganicFertiliserList = harvestYearPlanResponse.InorganicFertiliserApplication.OrderByDescending(x => x.ApplicationDate).ToList();
                             }
+
+                            //if (!string.IsNullOrWhiteSpace(t))
+                            //{
+                            //    string decryptTabName = _cropDataProtector.Unprotect(t);
+                            //    if (!string.IsNullOrWhiteSpace(decryptTabName))
+                            //    {
+                            //        if (decryptTabName == Resource.lblOrganicMaterialApplicationsForSorting && model.HarvestYearPlans.OrganicManureList != null)
+                            //        {
+                            //            if (!string.IsNullOrWhiteSpace(s) && !string.IsNullOrWhiteSpace(u))
+                            //            {
+                            //                string decrypSortBy = _cropDataProtector.Unprotect(s);
+                            //                string decrypOrder = _cropDataProtector.Unprotect(u);
+                            //                if (!string.IsNullOrWhiteSpace(decrypSortBy) && !string.IsNullOrWhiteSpace(decrypOrder))
+                            //                {
+                            //                    //model.HarvestYearPlans.OrganicManureList = decrypOrder == Resource.lblDesc
+                            //                    //? model.HarvestYearPlans.OrganicManureList.OrderByDescending(x => sortBy == "Field" ? x.Field : x.ApplicationDate).ToList()
+                            //                    //: model.HarvestYearPlans.OrganicManureList.OrderBy(x => sortBy == "Field" ? x.Field : x.ApplicationDate).ToList();
+                            //                }
+                            //            }
+                            //        }
+
+                            //        // Handle Inorganic List Sorting
+                            //        if (decryptTabName == Resource.lblInorganicFertiliserApplicationsForSorting && model.HarvestYearPlans.InorganicFertiliserList != null)
+                            //        {
+                            //            //model.HarvestYearPlans.InorganicFertiliserList = order == "Desc"
+                            //            //    ? model.HarvestYearPlans.InorganicFertiliserList.OrderByDescending(x => sortBy == "Field" ? x.Field : x.ApplicationDate).ToList()
+                            //            //    : model.HarvestYearPlans.InorganicFertiliserList.OrderBy(x => sortBy == "Field" ? x.Field : x.ApplicationDate).ToList();
+                            //        }
+                            //    }
+                            //}
+                            //if (harvestYearPlanResponse.InorganicFertiliserApplication?.Count > 0)
+                            //{
+                            //    string decryptSortOnType = !string.IsNullOrWhiteSpace(s) ? _cropDataProtector.Unprotect(s) : null;
+                            //    string sortBy = !string.IsNullOrWhiteSpace(t) ? _cropDataProtector.Unprotect(t) : null;
+
+                            //    if (!string.IsNullOrWhiteSpace(decryptSortOnType) && !string.IsNullOrWhiteSpace(sortBy))
+                            //    {
+                            //        // Sorting by Field or ApplicationDate
+                            //        harvestYearPlans.InorganicFertiliserList = sortBy == Resource.lblField
+                            //            ? FilterAndSortList(harvestYearPlanResponse.InorganicFertiliserApplication, x => x.Field, decryptSortOnType)
+                            //            : FilterAndSortList(harvestYearPlanResponse.InorganicFertiliserApplication, x => x.ApplicationDate, decryptSortOnType);
+                            //    }
+                            //    else
+                            //    {
+                            //        // Default sorting
+                            //        harvestYearPlans.InorganicFertiliserList = FilterAndSortList(harvestYearPlanResponse.InorganicFertiliserApplication, x => x.ApplicationDate, Resource.lblAsc);
+                            //    }
+                            //}
                             model.HarvestYearPlans = harvestYearPlans;
                             //model.HarvestYearPlans
                             model.EncryptedFarmId = id;
                             model.EncryptedHarvestYear = year;
                             model.Year = harvestYear;
+                            //if (string.IsNullOrWhiteSpace(s) && string.IsNullOrWhiteSpace(s))
+                            //{
+                            //    ViewBag.IsSortInOragnicListByDateOrderBy = _cropDataProtector.Protect(Resource.lblAsc);
+                            //    ViewBag.IsSortInOragnicListByFieldNameOrderBy = _cropDataProtector.Protect(Resource.lblAsc);
+                            //    ViewBag.IsSortOragnicListByDateOrderBy = _cropDataProtector.Protect(Resource.lblAsc);
+                            //    ViewBag.IsSortOragnicListByFieldNameOrderBy = _cropDataProtector.Protect(Resource.lblAsc);
+                            //}
+                            //if (!string.IsNullOrWhiteSpace(t))
+                            //{
+                            //    string descrypt = _cropDataProtector.Unprotect(t);
+                            //    if (descrypt == Resource.lblField)
+                            //    {
+                            //        ViewBag.IsSortInOragnicListByDateOrderBy = _cropDataProtector.Protect(Resource.lblAsc);
+                            //    }
+                            //    else
+                            //    {
+                            //        ViewBag.IsSortInOragnicListByFieldNameOrderBy = _cropDataProtector.Protect(Resource.lblAsc);
+                            //    }
+                            //}
+                            //if (!string.IsNullOrWhiteSpace(s))
+                            //{
+                            //    string descrypt = _cropDataProtector.Unprotect(s);
+                            //    if (descrypt == Resource.lblField)
+                            //    {
+                            //        ViewBag.IsSortOragnicListByDateOrderBy = _cropDataProtector.Protect(Resource.lblAsc);
+                            //    }
+                            //    else
+                            //    {
+                            //        ViewBag.IsSortOragnicListByFieldNameOrderBy = _cropDataProtector.Protect(Resource.lblAsc);
+                            //    }
+                            //}
+
                         }
                         else
                         {
@@ -1963,7 +2045,7 @@ namespace NMP.Portal.Controllers
                                         model.CropGroupID = cropTypeResponse.CropGroupId;
                                     }
                                 }
-                                if (recommendation.Crops.CropInfo2 != null&&model.CropGroupID == (int)NMP.Portal.Enums.CropGroup.Cereals)
+                                if (recommendation.Crops.CropInfo2 != null && model.CropGroupID == (int)NMP.Portal.Enums.CropGroup.Cereals)
                                 {
                                     crop.CropInfo2Name = await _cropService.FetchCropInfo2NameByCropInfo2Id(crop.CropInfo2.Value);
                                 }
@@ -2125,7 +2207,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> SortOrganicList(string q)
+        public async Task<IActionResult> SortOrganicList(string q, string r)
         {
             _logger.LogTrace("Crop Controller : SortOrganicList() action called");
             PlanViewModel model = new PlanViewModel();
@@ -2142,20 +2224,53 @@ namespace NMP.Portal.Controllers
             if (!string.IsNullOrWhiteSpace(q) && model != null)
             {
                 string decrypt = _cropDataProtector.Unprotect(q);
-                if (decrypt != null && decrypt == Resource.lblFieldName)
+                if (decrypt != null && decrypt == Resource.lblField)
                 {
-                    // model.HarvestYearPlans.ForEach(x => x.FieldData.OrderByDescending(s => s.FieldName));
+                    if (!string.IsNullOrWhiteSpace(r))
+                    {
+                        string decryptOrderBy = _cropDataProtector.Unprotect(r);
+                        if (!string.IsNullOrWhiteSpace(decryptOrderBy) && decryptOrderBy == Resource.lblDesc)
+                        {
+                            model.HarvestYearPlans.OrganicManureList = model.HarvestYearPlans.OrganicManureList.OrderBy(x => x.Field).ToList();
+                            ViewBag.IsSortOragnicListByFieldNameOrderBy = _cropDataProtector.Protect(Resource.lblAsc);
+                        }
+                        if (!string.IsNullOrWhiteSpace(decryptOrderBy) && decryptOrderBy == Resource.lblAsc)
+                        {
+                            model.HarvestYearPlans.OrganicManureList = model.HarvestYearPlans.OrganicManureList.OrderByDescending(x => x.Field).ToList();
+                            ViewBag.IsSortOragnicListByFieldNameOrderBy = _cropDataProtector.Protect(Resource.lblDesc);
+                        }
+
+                    }
                 }
                 else if (decrypt != null && decrypt == Resource.lblDate)
                 {
-                    // model.HarvestYearPlans.ForEach(x => x.FieldData.OrderByDescending(s => s.FieldName));
+                    if (!string.IsNullOrWhiteSpace(r))
+                    {
+                        string decryptOrderBy = _cropDataProtector.Unprotect(r);
+                        if (!string.IsNullOrWhiteSpace(decryptOrderBy) && decryptOrderBy == Resource.lblDesc)
+                        {
+                            model.HarvestYearPlans.OrganicManureList = model.HarvestYearPlans.OrganicManureList.OrderBy(x => x.ApplicationDate).ToList();
+                            ViewBag.IsSortOragnicListByDateOrderBy = _cropDataProtector.Protect(Resource.lblAsc);
+                        }
+                        if (!string.IsNullOrWhiteSpace(decryptOrderBy) && decryptOrderBy == Resource.lblAsc)
+                        {
+                            model.HarvestYearPlans.OrganicManureList = model.HarvestYearPlans.OrganicManureList.OrderByDescending(x => x.ApplicationDate).ToList();
+                            ViewBag.IsSortOragnicListByDateOrderBy = _cropDataProtector.Protect(Resource.lblDesc);
+                        }
+
+                    }
                 }
             }
-            return View(model);
+            if (model == null)
+            {
+                return RedirectToAction("HarvestYearOverview");
+            }
+            return Redirect(Url.Action("HarvestYearOverview", new { year = model.EncryptedHarvestYear, id = model.EncryptedFarmId, s = q }) + Resource.lblOrganicMaterialApplicationsForSorting);
+            // return View("HarvestYearOverview", model);
         }
 
         [HttpGet]
-        public async Task<IActionResult> SortInOrganicList(string q)
+        public async Task<IActionResult> SortInOrganicList(string q, string r)
         {
             _logger.LogTrace("Crop Controller : SortInOrganicList() action called");
             PlanViewModel model = new PlanViewModel();
@@ -2172,16 +2287,50 @@ namespace NMP.Portal.Controllers
             if (!string.IsNullOrWhiteSpace(q) && model != null)
             {
                 string decrypt = _cropDataProtector.Unprotect(q);
-                if (decrypt != null && decrypt == Resource.lblFieldName)
+                if (decrypt != null && decrypt == Resource.lblField)
                 {
-                    // model.HarvestYearPlans.ForEach(x => x.FieldData.OrderByDescending(s => s.FieldName));
+                    if (!string.IsNullOrWhiteSpace(r))
+                    {
+                        string decryptOrderBy = _cropDataProtector.Unprotect(r);
+                        if (!string.IsNullOrWhiteSpace(decryptOrderBy) && decryptOrderBy == Resource.lblDesc)
+                        {
+                            model.HarvestYearPlans.InorganicFertiliserList = model.HarvestYearPlans.InorganicFertiliserList.OrderBy(x => x.Field).ToList();
+                            ViewBag.IsSortInOragnicListByFieldNameOrderBy = Resource.lblAsc;
+                        }
+                        if (!string.IsNullOrWhiteSpace(decryptOrderBy) && decryptOrderBy == Resource.lblAsc)
+                        {
+                            model.HarvestYearPlans.InorganicFertiliserList = model.HarvestYearPlans.InorganicFertiliserList.OrderByDescending(x => x.Field).ToList();
+                            ViewBag.IsSortInOragnicListByFieldNameOrderBy = Resource.lblDesc;
+                        }
+
+                    }
                 }
                 else if (decrypt != null && decrypt == Resource.lblDate)
                 {
-                    // model.HarvestYearPlans.ForEach(x => x.FieldData.OrderByDescending(s => s.FieldName));
+                    if (!string.IsNullOrWhiteSpace(r))
+                    {
+                        string decryptOrderBy = _cropDataProtector.Unprotect(r);
+                        if (!string.IsNullOrWhiteSpace(decryptOrderBy) && decryptOrderBy == Resource.lblDesc)
+                        {
+                            model.HarvestYearPlans.InorganicFertiliserList = model.HarvestYearPlans.InorganicFertiliserList.OrderBy(x => x.ApplicationDate).ToList();
+                            ViewBag.IsSortInOragnicListByDateOrderBy = Resource.lblAsc;
+                        }
+                        if (!string.IsNullOrWhiteSpace(decryptOrderBy) && decryptOrderBy == Resource.lblAsc)
+                        {
+                            model.HarvestYearPlans.InorganicFertiliserList = model.HarvestYearPlans.InorganicFertiliserList.OrderByDescending(x => x.ApplicationDate).ToList();
+
+                            ViewBag.IsSortInOragnicListByDateOrderBy = Resource.lblDesc;
+                        }
+                    }
+
                 }
             }
-            return View(model);
+            if (model == null)
+            {
+                return RedirectToAction("HarvestYearOverview");
+            }
+            return Redirect(Url.Action("HarvestYearOverview", new { year = model.EncryptedHarvestYear, id = model.EncryptedFarmId, t = q }) + Resource.lblInorganicFertiliserApplicationsForSorting);
+            return View("HarvestYearOverview", model);
         }
     }
 }
