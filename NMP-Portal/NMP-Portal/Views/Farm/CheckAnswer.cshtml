@@ -50,11 +50,11 @@
     
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds-from-desktop">
-            @if (ViewBag.AddFarmError != null)
+            @if (TempData["AddFarmError"] != null)
             {
                 @* <govuk-error-message>@ViewBag.AddFarmError</govuk-error-message> *@
                 <govuk-error-summary>
-                    <govuk-error-summary-item href="#passport-issued-day">@ViewBag.AddFarmError</govuk-error-summary-item>
+                    <govuk-error-summary-item href="#passport-issued-day">@TempData["AddFarmError"]</govuk-error-summary-item>
                 </govuk-error-summary>
             }
             @* <button class="govuk-back-link back-link" type="submit" asp-action="Organic" asp-controller="Farm">@Resource.lblBack</button> *@
