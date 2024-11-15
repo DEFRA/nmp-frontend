@@ -2072,6 +2072,10 @@ namespace NMP.Portal.Controllers
                             {
                                 model.OrganicManures = new List<OrganicManureData>();
                             }
+                            if (model.FertiliserManures == null)
+                            {
+                                model.FertiliserManures = new List<FertiliserManure>();
+                            }
                             foreach (var recommendation in recommendations)
                             {
                                 var crop = new CropViewModel
@@ -2183,7 +2187,31 @@ namespace NMP.Portal.Controllers
                                             }
                                             model.OrganicManures = model.OrganicManures.OrderByDescending(x => x.ApplicationDate).ToList();
                                         }
-
+                                        if (recData.FertiliserManures.Count > 0)
+                                        {
+                                            foreach (var item in recData.FertiliserManures)
+                                            {
+                                                var fertiliserManure = new FertiliserManure
+                                                {
+                                                    ID = item.ID,
+                                                    ManagementPeriodID = item.ManagementPeriodID,
+                                                    ApplicationDate = item.ApplicationDate,
+                                                    ApplicationRate = item.ApplicationRate,
+                                                    Confirm = item.Confirm,
+                                                    N = item.N,
+                                                    P2O5 = item.P2O5,
+                                                    K2O = item.K2O,
+                                                    MgO = item.MgO,
+                                                    SO3 = item.SO3,
+                                                    Na2O = item.Na2O,
+                                                    Lime = item.Lime,
+                                                    NH4N = item.NH4N,
+                                                    NO3N = item.NO3N
+                                                };
+                                                model.FertiliserManures.Add(fertiliserManure);
+                                            }
+                                            model.FertiliserManures = model.FertiliserManures.OrderByDescending(x => x.ApplicationDate).ToList();
+                                        }
 
                                     }
 

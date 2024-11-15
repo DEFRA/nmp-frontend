@@ -700,7 +700,7 @@ namespace NMP.Portal.Controllers
 
             if (!string.IsNullOrWhiteSpace(error.Message))
             {
-                ViewBag.AddFarmError = error.Message;
+                TempData["AddFarmError"] = error.Message;
                 return View(farm);
             }
             string success = _dataProtector.Protect("true");
@@ -931,7 +931,9 @@ namespace NMP.Portal.Controllers
 
             if (!string.IsNullOrWhiteSpace(error.Message))
             {
-                ViewBag.AddFarmError = error.Message;
+                TempData["AddFarmError"] =  error.Message;
+                string EncryptUpdateStatus = _dataProtector.Protect(Resource.lblTrue.ToString());
+                return RedirectToAction("CheckAnswer", new { q = EncryptUpdateStatus });
                 return View(farm);
             }
             string success = _dataProtector.Protect("true");
@@ -984,7 +986,7 @@ namespace NMP.Portal.Controllers
                 (string message, Error error) = await _farmService.DeleteFarmByIdAsync(id);
                 if (!string.IsNullOrWhiteSpace(error.Message))
                 {
-                    ViewBag.AddFarmError = error.Message;
+                    TempData["AddFarmError"] = error.Message;
                     return View(farm);
                 }
                 if (!string.IsNullOrWhiteSpace(message))

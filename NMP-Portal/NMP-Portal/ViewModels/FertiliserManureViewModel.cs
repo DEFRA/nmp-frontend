@@ -38,5 +38,6 @@ namespace NMP.Portal.ViewModels
         public bool IsClosedPeriodWarningExceptGrassAndOilseed { get; set; } = false;
         public bool IsClosedPeriodWarningOnlyForGrassAndOilseed { get; set; } = false;
         public bool IsNitrogenExceedWarning { get; set; } = false;
+        public int? CropOrder { get; set; }
     }
 }
