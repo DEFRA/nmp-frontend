@@ -240,3 +240,7 @@ hr.big_seperator {
 .tabs-thirds {
     width: 66%;
 }
+
+.nonbold {
+    font-weight: normal !important;
+}
