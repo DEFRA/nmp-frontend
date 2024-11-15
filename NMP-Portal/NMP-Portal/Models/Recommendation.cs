@@ -39,5 +39,15 @@ namespace NMP.Portal.Models
         public int? CreatedByID { get; set; }
         public DateTime? ModifiedOn { get; set; }
         public int? ModifiedByID { get; set; }
+
+        public decimal? FertiliserAppliedN { get; set; }
+        public decimal? FertiliserAppliedP2O5 { get; set; }
+        public decimal? FertiliserAppliedK2O { get; set; }
+        public decimal? FertiliserAppliedMgO { get; set; }
+        public decimal? FertiliserAppliedSO3 { get; set; }
+        public decimal? FertiliserAppliedNa2O { get; set; }
+        public decimal? FertiliserAppliedLime { get; set; }
+        public decimal? FertiliserAppliedNH4N { get; set; }
+        public decimal? FertiliserAppliedNO3N { get; set; }
     }
 }

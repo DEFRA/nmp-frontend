@@ -2013,7 +2013,19 @@ namespace NMP.Portal.Controllers
                                             KIndex = recData.Recommendation.KIndex,
                                             MgIndex = recData.Recommendation.MgIndex,
                                             PIndex = recData.Recommendation.PIndex,
-                                            NaIndex = recData.Recommendation.NaIndex
+                                            NaIndex = recData.Recommendation.NaIndex,
+                                            CreatedOn=recData.Recommendation.CreatedOn,
+                                            ModifiedOn=recData.Recommendation.ModifiedOn,
+                                            FertiliserAppliedN = recData.Recommendation.FertiliserAppliedN,
+                                            FertiliserAppliedP2O5 = recData.Recommendation.FertiliserAppliedP2O5,
+                                            FertiliserAppliedK2O = recData.Recommendation.FertiliserAppliedK2O,
+                                            FertiliserAppliedMgO = recData.Recommendation.FertiliserAppliedMgO,
+                                            FertiliserAppliedSO3 = recData.Recommendation.FertiliserAppliedSO3,
+                                            FertiliserAppliedNa2O = recData.Recommendation.FertiliserAppliedNa2O,
+                                            FertiliserAppliedLime = recData.Recommendation.FertiliserAppliedLime,
+                                            FertiliserAppliedNH4N = recData.Recommendation.FertiliserAppliedNH4N,
+                                            FertiliserAppliedNO3N = recData.Recommendation.FertiliserAppliedNO3N,
+
                                         };
                                         model.Recommendations.Add(rec);
 
