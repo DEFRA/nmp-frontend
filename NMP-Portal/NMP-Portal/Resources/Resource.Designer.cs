@@ -819,7 +819,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to asc.
+        ///   Looks up a localized string similar to Asc.
         /// </summary>
         public static string lblAsc {
             get {
@@ -1296,15 +1296,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to CropAndFields.
-        /// </summary>
-        public static string lblCropAndFieldsForSorting {
-            get {
-                return ResourceManager.GetString("lblCropAndFieldsForSorting", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Crop details.
         /// </summary>
         public static string lblCropDetails {
@@ -1530,7 +1521,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to desc.
+        ///   Looks up a localized string similar to Desc.
         /// </summary>
         public static string lblDesc {
             get {
