@@ -45,9 +45,11 @@ namespace NMP.Portal.ViewModels
         public List<HarvestYear> HarvestYear { get; set; } = new List<HarvestYear>();
         public bool IsAddAnotherCrop { get; set; }
         public bool? IsPlanRecord { get; set; } = false;
-        public string? IsSortOragnicListByDate { get; set; } = string.Empty;
-        public string? IsSortOragnicListByFieldName { get; set; } = string.Empty;
-        public string? IsSortInOragnicListByDate { get; set; } = string.Empty;
-        public string? IsSortInOragnicListByFieldName { get; set; } = string.Empty;
+        public string? encryptSortOrganicListOrderByDate { get; set; } = string.Empty;
+        public string? sortOrganicListOrderByDate { get; set; } = string.Empty;
+        public string? encryptSortOrganicListOrderByFieldName { get; set; } = string.Empty;
+        public string? encryptSortInOrganicListOrderByDate { get; set; } = string.Empty;
+        public string? sortInOrganicListOrderByDate { get; set; } = string.Empty;
+        public string? encryptSortInOrganicListOrderByFieldName { get; set; } = string.Empty;
     }
 }
