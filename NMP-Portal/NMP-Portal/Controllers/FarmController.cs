@@ -932,6 +932,8 @@ namespace NMP.Portal.Controllers
             if (!string.IsNullOrWhiteSpace(error.Message))
             {
                 ViewBag.AddFarmError = error.Message;
+                string EncryptUpdateStatus = _dataProtector.Protect(Resource.lblTrue.ToString());
+                return RedirectToAction("CheckAnswer", new { q = EncryptUpdateStatus });
                 return View(farm);
             }
             string success = _dataProtector.Protect("true");
