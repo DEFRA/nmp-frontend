@@ -718,11 +718,11 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application Date ▼.
+        ///   Looks up a localized string similar to Application Date {0}.
         /// </summary>
-        public static string lblApplicationDateForBelowArrow {
+        public static string lblApplicationDateWithArrow {
             get {
-                return ResourceManager.GetString("lblApplicationDateForBelowArrow", resourceCulture);
+                return ResourceManager.GetString("lblApplicationDateWithArrow", resourceCulture);
             }
         }
         
@@ -815,6 +815,24 @@ namespace NMP.Portal.Resources {
         public static string lblAsAnIndex {
             get {
                 return ResourceManager.GetString("lblAsAnIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Asc.
+        /// </summary>
+        public static string lblAsc {
+            get {
+                return ResourceManager.GetString("lblAsc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ▲.
+        /// </summary>
+        public static string lblAscSign {
+            get {
+                return ResourceManager.GetString("lblAscSign", resourceCulture);
             }
         }
         
@@ -1499,6 +1517,24 @@ namespace NMP.Portal.Resources {
         public static string lblDateWhenSoilDrainageEnds {
             get {
                 return ResourceManager.GetString("lblDateWhenSoilDrainageEnds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Desc.
+        /// </summary>
+        public static string lblDesc {
+            get {
+                return ResourceManager.GetString("lblDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ▼.
+        /// </summary>
+        public static string lblDescSign {
+            get {
+                return ResourceManager.GetString("lblDescSign", resourceCulture);
             }
         }
         
@@ -2656,6 +2692,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to #InorganicFertiliserApplications.
+        /// </summary>
+        public static string lblInorganicFertiliserApplicationsForSorting {
+            get {
+                return ResourceManager.GetString("lblInorganicFertiliserApplicationsForSorting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Inorganic fertiliser or lime.
         /// </summary>
         public static string lblInorganicFertiliserOrLime {
@@ -3688,6 +3733,15 @@ namespace NMP.Portal.Resources {
         public static string lblOrganicMaterialApplications {
             get {
                 return ResourceManager.GetString("lblOrganicMaterialApplications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #OrganicMaterialApplications.
+        /// </summary>
+        public static string lblOrganicMaterialApplicationsForSorting {
+            get {
+                return ResourceManager.GetString("lblOrganicMaterialApplicationsForSorting", resourceCulture);
             }
         }
         
