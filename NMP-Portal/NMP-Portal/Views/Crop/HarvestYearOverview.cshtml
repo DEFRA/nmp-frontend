@@ -150,21 +150,26 @@
                         {
                             <hr class="seperator_five">
                             <h2 class="govuk-heading-m">@string.Format(Resource.lblAllOrganicMaterialApplicationsForHarvestYear, Model.Year)</h2>
-                            <p class="govuk-body">@Resource.blAllAmountsArePerHectare</p>
+                            <p class="govuk-body">@Resource.lblAllAmountsArePerHectare</p>
                             <p class="govuk-body">
-                                @*   <a asp-action="SortOrganicList" asp-controller="Crop" asp-route-q="@Model.IsSortOragnicListByFieldName">@Resource.lblSortByFieldName</a>
-                    <span>&nbsp;</span>  or <span>&nbsp;</span>
-                    <a asp-action="SortOrganicList" asp-controller="Crop" asp-route-q="@Model.IsSortOragnicListByDate">@Resource.lblSortByApplicationDate</a> *@
-                                <a href="#">@Resource.lblSortByFieldName</a>
+                                <a asp-action="SortOrganicList" asp-controller="Crop" asp-route-q="@ViewBag.OrganicListSortByFieldName" asp-route-r="@Model.encryptSortOrganicListOrderByFieldName" asp-route-year="@Model.EncryptedHarvestYear" asp-route-id="@Model.EncryptedFarmId">@Resource.lblSortByFieldName</a>
                                 <span>&nbsp;</span>  or <span>&nbsp;</span>
-                                <a href="#">@Resource.lblSortByApplicationDate</a>
+                                <a asp-action="SortOrganicList" asp-controller="Crop" asp-route-q="@ViewBag.OrganicListSortByDate" asp-route-r="@Model.encryptSortOrganicListOrderByDate" asp-route-year="@Model.EncryptedHarvestYear" asp-route-id="@Model.EncryptedFarmId">@Resource.lblSortByApplicationDate</a>
+
                             </p>
                             <!-- Organic Table -->
 
                             <table class="govuk-table sortable-table recomendation-table data-table">
                                 <thead class="govuk-table__head">
                                     <tr class="govuk-table__row">
-                                        <th scope="col" class="govuk-table__header">@Resource.lblApplicationDateForBelowArrow</th>
+                                        @if (Model.sortOrganicListOrderByDate != null && Model.sortOrganicListOrderByDate == Resource.lblDesc)
+                                        {
+                                            <th scope="col" class="govuk-table__header">@string.Format(Resource.lblApplicationDateWithArrow, Resource.lblDescSign)</th>
+                                        }
+                                        else
+                                        {
+                                            <th scope="col" class="govuk-table__header">@string.Format(Resource.lblApplicationDateWithArrow, Resource.lblAscSign)</th>
+                                        }
                                         <th scope="col" class="govuk-table__header">@Resource.lblField</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblCrop</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblType</th>
@@ -194,19 +199,17 @@
                     </govuk-tabs-item>
                     <govuk-tabs-item id="InorganicFertiliserApplications" label=@Resource.lblInorganicFertiliserApplications>
                         <h2 class="govuk-heading-m non-standard">@Resource.lblInorganicFertiliserApplications</h2>
-                        <a class="govuk-button add-button" asp-action="FieldGroup" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblAddAnInorganicFertiliserApplication</a>
+                        <a class="govuk-button add-button" asp-action="FieldGroup" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear" >@Resource.lblAddAnInorganicFertiliserApplication</a>
                         @if (Model.HarvestYearPlans != null && Model.HarvestYearPlans.InorganicFertiliserList != null && Model.HarvestYearPlans.InorganicFertiliserList.Any())
                         {
                             <hr class="seperator_five">
                             <h2 class="govuk-heading-m">@string.Format(Resource.lblAllInorganicFertiliserApplicationsForHarvestYear, Model.Year)</h2>
-                            <p class="govuk-body">@Resource.blAllAmountsArePerHectare</p>
+                            <p class="govuk-body">@Resource.lblAllAmountsArePerHectare</p>
                             <p class="govuk-body">
-                                @* <a asp-action="SortInOrganicList" asp-controller="Crop" asp-route-q="@Model.IsSortInOragnicListByFieldName">@Resource.lblSortByFieldName</a>
-                    <span>&nbsp;</span>  or <span>&nbsp;</span>
-                    <a asp-action="SortInOrganicList" asp-controller="Crop" asp-route-q="@Model.IsSortInOragnicListByDate">@Resource.lblSortByApplicationDate</a> *@
-                                <a href="#">@Resource.lblSortByFieldName</a>
+                                <a asp-action="SortInOrganicList" asp-controller="Crop" asp-route-q="@ViewBag.InOrganicListSortByFieldName" asp-route-r="@Model.encryptSortInOrganicListOrderByFieldName" asp-route-year="@Model.EncryptedHarvestYear" asp-route-id="@Model.EncryptedFarmId">@Resource.lblSortByFieldName</a>
                                 <span>&nbsp;</span>  or <span>&nbsp;</span>
-                                <a href="#">@Resource.lblSortByApplicationDate</a>
+                                <a asp-action="SortInOrganicList" asp-controller="Crop" asp-route-q="@ViewBag.InOrganicListSortByDate" asp-route-r="@Model.encryptSortInOrganicListOrderByDate" asp-route-year="@Model.EncryptedHarvestYear" asp-route-id="@Model.EncryptedFarmId">@Resource.lblSortByApplicationDate</a>
+
                             </p>
 
                             <!-- Inorganic Table -->
@@ -214,7 +217,14 @@
                             <table class="govuk-table big_crop_table_version_three margin-bottom-forty">
                                 <thead class="govuk-table__head">
                                     <tr class="govuk-table__row">
-                                        <th scope="col" class="govuk-table__header">@Resource.lblApplicationDateForBelowArrow</th>
+                                        @if(Model.sortInOrganicListOrderByDate!=null&&Model.sortInOrganicListOrderByDate==Resource.lblDesc)
+                                        {
+                                            <th scope="col" class="govuk-table__header">@string.Format(Resource.lblApplicationDateWithArrow,Resource.lblDescSign)</th>
+                                        }
+                                        else
+                                        {
+                                            <th scope="col" class="govuk-table__header">@string.Format(Resource.lblApplicationDateWithArrow, Resource.lblAscSign)</th>
+                                        }
                                         <th scope="col" class="govuk-table__header">@Resource.lblField</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblCrop</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblNutrients</th>
@@ -256,6 +266,17 @@
                                     }
                                 </tbody>
                             </table>
+                            @if (Model.HarvestYearPlans.InorganicFertiliserList.Count>10)
+                            {
+                                <a class="govuk-link govuk-link--no-visited-state" href="#top">
+                                    <svg class="app-back-to-top__icon" xmlns="http://www.w3.org/2000/svg" width="13" height="17" viewBox="0 0 13 17">
+                                        <path fill="currentColor" d="M6.5 0L0 6.5 1.4 8l4-4v12.7h2V4l4.3 4L13 6.4z">
+                                        </path>
+                                    </svg>
+                                    Back to top
+                                </a>
+                            }
+                            
                         }
                     </govuk-tabs-item>
                 </govuk-tabs>

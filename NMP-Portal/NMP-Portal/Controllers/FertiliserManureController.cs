@@ -146,7 +146,7 @@ namespace NMP.Portal.Controllers
                         model.IsComingFromRecommendation = true;
                         string fieldId = _fertiliserManureProtector.Unprotect(s);
                         model.FieldList.Add(fieldId);
-                        (List<int> managementIds, error) = await _fertiliserManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldId, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup,1);// 1 id cropOrder
+                        (List<int> managementIds, error) = await _fertiliserManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldId, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup, null);// 1 id cropOrder
                         if (error == null)
                         {
                             if (managementIds.Count > 0)
@@ -189,6 +189,7 @@ namespace NMP.Portal.Controllers
 
                 }
                 (List<ManureCropTypeResponse> cropTypeList, error) = await _fertiliserManureService.FetchCropTypeByFarmIdAndHarvestYear(model.FarmId.Value, model.HarvestYear.Value);
+                cropTypeList = cropTypeList.DistinctBy(x => x.CropTypeId).ToList();
                 if (error == null && cropTypeList.Count > 0)
                 {
                     var SelectListItem = cropTypeList.Select(f => new SelectListItem
@@ -269,7 +270,24 @@ namespace NMP.Portal.Controllers
                     }
                     return View("Views/FertiliserManure/FieldGroup.cshtml", model);
                 }
-
+                if (cropTypeList.Count > 0)
+                {
+                    if (int.TryParse(model.FieldGroup, out int fieldGroup))
+                    {
+                        List<string> cropOrderList = cropTypeList.Where(x => x.CropTypeId == fieldGroup).Select(x => x.CropOrder).ToList();
+                        if (cropOrderList.Count == 1)
+                        {
+                            model.CropOrder = Convert.ToInt32(cropOrderList.FirstOrDefault());
+                        }
+                        else
+                        {
+                            model.CropOrder = 1;
+                        }
+                        //string[] parts = model.FieldGroup.Split('-');
+                        //model.FieldGroup = parts[0];
+                        //model.CropOrder = int.Parse(parts[1]);
+                    }
+                }
                 if (int.TryParse(model.FieldGroup, out int value))
                 {
                     model.CropTypeName = cropTypeList.FirstOrDefault(x => x.CropTypeId == value).CropType;
@@ -343,11 +361,11 @@ namespace NMP.Portal.Controllers
                             List<int> managementIds = new List<int>();
                             if (int.TryParse(model.FieldGroup, out int value))
                             {
-                                (managementIds, error) = await _fertiliserManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldIds, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup,null);//1 is CropOrder
+                                (managementIds, error) = await _fertiliserManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldIds, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup, model.CropOrder);//1 is CropOrder
                             }
                             else
                             {
-                                (managementIds, error) = await _fertiliserManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldIds, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup,1);//1 is CropOrder
+                                (managementIds, error) = await _fertiliserManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldIds, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup, null);
                             }
                             if (error == null)
                             {
@@ -444,7 +462,7 @@ namespace NMP.Portal.Controllers
                         model.FieldList = selectListItem.Select(item => item.Value).ToList();
                     }
                     string fieldIds = string.Join(",", model.FieldList);
-                    (List<int> managementIds, error) = await _fertiliserManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldIds, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup, 1);//1 is CropOrder
+                    (List<int> managementIds, error) = await _fertiliserManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldIds, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup, null);//1 is CropOrder
                     if (error == null)
                     {
                         if (managementIds.Count > 0)
@@ -620,7 +638,7 @@ namespace NMP.Portal.Controllers
                     ModelState.AddModelError("Date", Resource.MsgEnterADateBeforeContinuing);
                 }
                 DateTime maxDate = new DateTime(model.HarvestYear.Value + 1, 7, 31);
-                DateTime minDate = new DateTime(model.HarvestYear.Value,8, 01);
+                DateTime minDate = new DateTime(model.HarvestYear.Value, 8, 01);
                 if (model.Date > maxDate)
                 {
                     ModelState.AddModelError("Date", string.Format(Resource.MsgDateShouldNotBeExceed, maxDate.Date.ToString("dd MMMM yyyy")));
@@ -631,6 +649,28 @@ namespace NMP.Portal.Controllers
                 }
                 if (!ModelState.IsValid)
                 {
+                    if (int.TryParse(model.FieldGroup, out int fieldGroup) || (model.FieldGroup == Resource.lblSelectSpecificFields && model.FieldList.Count == 1))
+                    {
+                        foreach (var fieldId in model.FieldList)
+                        {
+                            (CropTypeResponse cropTypeResponse, error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
+                            if (error == null)
+                            {
+                                if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                {
+                                    ViewBag.closingPeriod = Resource.lbl31OctoberTo15January;
+
+                                }
+                                else if (cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Asparagus && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.BrusselSprouts && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Cabbage &&
+                                    cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Cauliflower && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Calabrese &&
+                                    cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.BulbOnions && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.SaladOnions)
+                                {
+                                    ViewBag.closingPeriod = Resource.lbl1SeptemberTo15January;
+
+                                }
+                            }
+                        }
+                    }
                     return View(model);
                 }
 
@@ -673,6 +713,25 @@ namespace NMP.Portal.Controllers
                     if (!model.IsWarningMsgNeedToShow)
                     {
                         model.IsWarningMsgNeedToShow = true;
+                        foreach (var fieldId in model.FieldList)
+                        {
+                            (CropTypeResponse cropTypeResponse, error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
+                            if (error == null)
+                            {
+                                if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                {
+                                    ViewBag.closingPeriod = Resource.lbl31OctoberTo15January;
+
+                                }
+                                else if (cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Asparagus && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.BrusselSprouts && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Cabbage &&
+                                    cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Cauliflower && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Calabrese &&
+                                    cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.BulbOnions && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.SaladOnions)
+                                {
+                                    ViewBag.closingPeriod = Resource.lbl1SeptemberTo15January;
+
+                                }
+                            }
+                        }
                         _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
                         return View("InOrgnaicManureDuration", model);
                     }
@@ -1122,9 +1181,9 @@ namespace NMP.Portal.Controllers
                                         int year = model.Date.Value.Year;
                                         DateTime startDate = new DateTime(year, 9, 1); // 1st Sep
                                         DateTime endDate = new DateTime(year, 1, 15); // 15th Jan
-                                        if (model.Date.Value.Month>=8)
+                                        if (model.Date.Value.Month >= 8)
                                         {
-                                            endDate = new DateTime(year+1, 1, 15); // 15th Jan
+                                            endDate = new DateTime(year + 1, 1, 15); // 15th Jan
                                         }
                                         //DateTime startDate = new DateTime(year, 9, 1); // 1st Sep
                                         //DateTime endDate = new DateTime(year, 1, 15); // 15th Jan
@@ -1153,11 +1212,11 @@ namespace NMP.Portal.Controllers
                                             List<int> managementIds = new List<int>();
                                             if (int.TryParse(model.FieldGroup, out int fieldGroup))
                                             {
-                                                (managementIds, error) = await _fertiliserManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldId, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup, null);//1 is CropOrder
+                                                (managementIds, error) = await _fertiliserManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldId, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup, model.CropOrder);//1 is CropOrder
                                             }
                                             else
                                             {
-                                                (managementIds, error) = await _fertiliserManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldId, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup, 1);//1 is CropOrder
+                                                (managementIds, error) = await _fertiliserManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldId, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup, null);//1 is CropOrder
                                             }
                                             //(List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldId, null,null);
                                             if (error == null)
@@ -1308,11 +1367,11 @@ namespace NMP.Portal.Controllers
                                             List<int> managementIds = new List<int>();
                                             if (int.TryParse(model.FieldGroup, out int fieldGroup))
                                             {
-                                                (managementIds, error) = await _fertiliserManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldId, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup, null);//1 is CropOrder
+                                                (managementIds, error) = await _fertiliserManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldId, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup, null);
                                             }
                                             else
                                             {
-                                                (managementIds, error) = await _fertiliserManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldId, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup, 1);//1 is CropOrder
+                                                (managementIds, error) = await _fertiliserManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldId, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup, model.CropOrder);//1 is CropOrder
                                             }
                                             //(List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldId, null, null);
                                             if (error == null)
