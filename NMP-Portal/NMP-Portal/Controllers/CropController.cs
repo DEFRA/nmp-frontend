@@ -2230,6 +2230,13 @@ namespace NMP.Portal.Controllers
                                 }
 
                             }
+                            (List<NutrientResponseWrapper> nutrients, error) = await _fieldService.FetchNutrientsAsync();
+                            if (error == null && nutrients.Count > 0)
+                            {
+                                model.Nutrients = new List<NutrientResponseWrapper>();
+                                model.Nutrients = nutrients;
+                            }
+                                
                         }
                     }
                 }
