@@ -51,7 +51,7 @@ namespace NMP.Portal.Controllers
             {
                 if (!string.IsNullOrWhiteSpace(i))
                 {
-                    
+
                     (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(j)));
                     if (string.IsNullOrWhiteSpace(error.Message))
                     {
@@ -198,7 +198,7 @@ namespace NMP.Portal.Controllers
             }
             return View(model);
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Date(SoilAnalysisViewModel model)
@@ -504,7 +504,7 @@ namespace NMP.Portal.Controllers
 
             return RedirectToAction("ChangeSoilAnalysis", new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateSoil(SoilAnalysisViewModel model)
@@ -565,6 +565,17 @@ namespace NMP.Portal.Controllers
             {
                 return View("ChangeSoilAnalysis", model);
             }
+
+            //api call for PKBalance .If we have no data against year and FieldID then we need to add
+            if (model.Potassium!=null&&model.Phosphorus!=null)
+            {
+                //model.PKBalance pKBalance = new PKBalance();
+                model.PKBalance.PBalance = 0;
+                model.PKBalance.KBalance = 0;
+                model.PKBalance.Year = model.Date.Value.Year;
+                model.PKBalance.FieldID = model.FieldID;
+            }
+
             var soilData = new
             {
                 SoilAnalysis = new SoilAnalysis
@@ -594,7 +605,9 @@ namespace NMP.Portal.Controllers
                     Comments = model.Comments,
                     PreviousID = model.PreviousID,
                     FieldID = model.FieldID
-                }
+                },
+                pKBalance = model.PKBalance != null ? model.PKBalance : null
+
             };
             int soilAnalysisId = Convert.ToInt32(_soilAnalysisDataProtector.Unprotect(model.EncryptedSoilAnalysisId));
             string jsonData = JsonConvert.SerializeObject(soilData);
