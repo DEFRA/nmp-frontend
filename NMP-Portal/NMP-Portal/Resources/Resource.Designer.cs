@@ -954,6 +954,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Back to {0} farm plan.
+        /// </summary>
+        public static string lblBackToYearFarmPlan {
+            get {
+                return ResourceManager.GetString("lblBackToYearFarmPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Balance from {0}.
         /// </summary>
         public static string lblBalanceFromPreviousYear {

@@ -11,22 +11,7 @@
 @if (Model != null)
 {
     @section BeforeContent {
-    <govuk-breadcrumbs class="govuk-breadcrumbs-link">
-
-        <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
-            @Model.FarmName
-        </govuk-breadcrumbs-item>
-        <govuk-breadcrumbs-item asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">
-            @Resource.lblPlanningAndRecording
-        </govuk-breadcrumbs-item>
-        <govuk-breadcrumbs-item asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">
-            @Resource.lblHarvestYearOverview
-        </govuk-breadcrumbs-item>
-        <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
-            @Model.FieldName
-        </govuk-breadcrumbs-item>
-    </govuk-breadcrumbs>
-
+    <govuk-back-link asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@string.Format(Resource.lblBackToYearFarmPlan, Model.Crops[0].Year)</govuk-back-link>
     }
     @Html.AntiForgeryToken()
    <div class="govuk-grid-row">
@@ -50,7 +35,7 @@
                 </div>
                 <govuk-tabs>
                     <govuk-tabs-item id="past-day" label="@Resource.lblNutrientAndLimeRecommendations">
-                        <h2 class="govuk-heading-l">@Resource.lblNutrientAndLimeRecommendations</h2>
+                        <h2 class="govuk-heading-m non-standard">@Resource.lblNutrientAndLimeRecommendations</h2>
                         <hr class="seperator_five">
                         @foreach (var crop in Model.Crops)
                         {
@@ -69,7 +54,7 @@
                                         </h2>
                                         <p class="govuk-body-s">@Resource.lblAmountsArePerHectare</p>
 
-                                        <table class="govuk-table recomendation-table data-table">
+                                        <table class="govuk-table new-recomendation-table data-table">
                                             <thead class="govuk-table__header">
                                                 <tr class="govuk-table__row">
                                                     <th class="govuk-table__header" scope="col">@Resource.lblNutrient</th>
@@ -207,7 +192,7 @@
 
                     </govuk-tabs-item>
                     <govuk-tabs-item id="past-week" label="@Resource.lblorganicAndInorganicMaterial">
-                        <h2 class="govuk-heading-l">@Resource.lblOrganicMaterialApplications</h2>
+                        <h2 class="govuk-heading-m non-standard">@Resource.lblOrganicMaterialApplications</h2>
 
                         @foreach (var crop in Model.Crops)
                         {
@@ -361,7 +346,7 @@
 
                     </govuk-tabs-item>
                     <govuk-tabs-item id="past-month" label="@Resource.lblCropDetails">
-                        <h2 class="govuk-heading-l">@string.Format(Resource.lblCropDetailsForFieldInYear, Model.FieldName, Model.Crops[0].Year)</h2>
+                        <h2 class="govuk-heading-m non-standard">@string.Format(Resource.lblCropDetailsForFieldInYear, Model.FieldName, Model.Crops[0].Year)</h2>
                         <hr class="seperator_five">
                         @foreach (var crop in Model.Crops)
                         {
