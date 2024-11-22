@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using NMP.Portal.Models;
 using NMP.Portal.Resources;
+using NMP.Portal.ServiceResponses;
 using System.Diagnostics;
 using System.Net.Http;
 
@@ -26,19 +27,26 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> Index()
         {
             _logger.LogTrace($"Home Controller : Index() action called");
-            HttpClient client = _httpClientFactory.CreateClient("DefraIdentityConfiguration");
-            var uri = new Uri($"{_configuration["CustomerIdentityInstance"]}{_configuration["CustomerIdentityDomain"]}/{_configuration["CustomerIdentityPolicyId"]}/v2.0/.well-known/openid-configuration");
-            var response = await client.GetAsync(uri);
-            if(response != null && response.IsSuccessStatusCode)
+            try
             {
-                ViewBag.IsDefraCustomerIdentifyConfigurationWorking = response.IsSuccessStatusCode;
+                HttpClient client = _httpClientFactory.CreateClient("DefraIdentityConfiguration");
+                var uri = new Uri($"{_configuration["CustomerIdentityInstance"]}{_configuration["CustomerIdentityDomain"]}/{_configuration["CustomerIdentityPolicyId"]}/v2.0/.well-known/openid-configuration");
+                var response = await client.GetAsync(uri);
+                if (response != null && response.IsSuccessStatusCode)
+                {
+                    ViewBag.IsDefraCustomerIdentifyConfigurationWorking = response.IsSuccessStatusCode;
+                }
+                else
+                {
+                    ViewBag.IsDefraCustomerIdentifyConfigurationWorking = false;
+                    ViewBag.Error = Resource.MsgDefraIdentityServiceDown;
+                }
             }
-            else
+            catch (Exception ex)
             {
                 ViewBag.IsDefraCustomerIdentifyConfigurationWorking = false;
                 ViewBag.Error = Resource.MsgDefraIdentityServiceDown;
             }
-            
 
             return View();
         }                
