@@ -12,5 +12,7 @@ namespace NMP.Portal.ViewModels
         public string EncryptedSoilAnalysisId { get; set; } = string.Empty;
         public bool? IsSoilNutrientValueTypeIndex { get; set; }
         public string IsSoilDataChanged { get; set; } = string.Empty;
+
+        public PKBalance? PKBalance { get; set; }
     }
 }

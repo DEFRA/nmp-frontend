@@ -6,6 +6,6 @@
         public SoilAnalysis SoilAnalysis { get; set; }
         public SnsAnalysis? SnsAnalysis { get; set; }
         public List<CropData> Crops { get; set; }
-        //public List<ManagementPeriod> ManagementPeriods { get; set; }
+        public PKBalance PKBalance { get; set; }
     }
 }
