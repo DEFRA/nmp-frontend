@@ -1,4 +1,5 @@
 ﻿using NMP.Portal.Models;
+using NMP.Portal.ServiceResponses;
 
 namespace NMP.Portal.ViewModels
 {
@@ -17,5 +18,6 @@ namespace NMP.Portal.ViewModels
         public string? EncryptedFieldId { get; set; } = string.Empty;
         public List<OrganicManureData> OrganicManures { get; set; }
         public List<FertiliserManure> FertiliserManures { get; set; }
+        public List<NutrientResponseWrapper> Nutrients { get; set; }
     }
 }
