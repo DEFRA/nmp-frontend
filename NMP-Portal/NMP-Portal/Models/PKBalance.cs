@@ -2,7 +2,7 @@
 {
     public class PKBalance
     {
-        public int? Id { get; set; }
+        //public int? Id { get; set; }
         public int? Year { get; set; }
         public int? FieldID { get; set; }
         public int? PBalance { get; set; }

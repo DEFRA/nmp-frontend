@@ -30,7 +30,6 @@ namespace NMP.Portal.Helpers
         public const string FetchCropInfoTwoByCropTypeIdAsyncAPI = "vendors/rb209/Arable/CropInfo2s";
         public const string FetchPlanSummaryByFarmIdAsyncAPI = "crops/plans?farmId={0}&type={1}";
         public const string FetchHarvestYearPlansByFarmIdAsyncAPI = "crops/plans/{0}?farmId={1}";
-        
         public const string FetchCropsOrganicinorganicdetailsByYearFarmIdAsyncAPI = "crops/organic-inorganic-details/{0}?farmId={1}";
         public const string AddCropNutrientManagementPlanAsyncAPI = "crops/plans";
         public const string FetchRecommendationByFieldIdAndYearAsyncAPI = "recommendations?fieldId={0}&harvestYear={1}";
@@ -96,6 +95,9 @@ namespace NMP.Portal.Helpers
         public const string UpdateSoilAnalysisAsyncAPI = "soil-analyses/{0}";
         public const string UpdateFieldAsyncAPI = "fields/{0}";
         public const string DeleteFieldByIdAPI = "fields/{0}";
+        public const string AddPKBalanceAsyncAPI = "pk-Balance";
+        public const string UpdatePKBalanceAsyncAPI = "pk-Balance/{0}&Field={1}";
+        public const string FetchPKBalanceByYearAndFieldIdAsyncAPI = "pk-balance/{0}?fieldId={1}";
 
         //Manner APi Url
         public const string FetchMannerApplicationMethodByIdAsyncAPI = "vendors/manner/application-methods/{0}";

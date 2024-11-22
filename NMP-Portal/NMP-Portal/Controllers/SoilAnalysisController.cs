@@ -27,9 +27,10 @@ namespace NMP.Portal.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ISoilAnalysisService _soilAnalysisService;
         private readonly ISoilService _soilService;
+        private readonly IPKBalanceService _pKBalanceService;
         public SoilAnalysisController(ILogger<FarmController> logger, IDataProtectionProvider dataProtectionProvider, IHttpContextAccessor httpContextAccessor,
              IUserFarmService userFarmService, IFarmService farmService, ISoilService soilService,
-            IFieldService fieldService, ISoilAnalysisService soilAnalysisService)
+            IFieldService fieldService, ISoilAnalysisService soilAnalysisService, IPKBalanceService pKBalanceService)
         {
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
@@ -40,6 +41,7 @@ namespace NMP.Portal.Controllers
             _soilService = soilService;
             _fieldService = fieldService;
             _soilAnalysisService = soilAnalysisService;
+            _pKBalanceService = pKBalanceService;
         }
 
         [HttpGet]
@@ -566,14 +568,17 @@ namespace NMP.Portal.Controllers
                 return View("ChangeSoilAnalysis", model);
             }
 
-            //api call for PKBalance .If we have no data against year and FieldID then we need to add
-            if (model.Potassium!=null&&model.Phosphorus!=null)
+            if (model.Potassium!=null||model.Phosphorus!=null)
             {
-                //model.PKBalance pKBalance = new PKBalance();
-                model.PKBalance.PBalance = 0;
-                model.PKBalance.KBalance = 0;
-                model.PKBalance.Year = model.Date.Value.Year;
-                model.PKBalance.FieldID = model.FieldID;
+                PKBalance pKBalance = await _pKBalanceService.FetchPKBalanceByYearAndFieldId(model.Date.Value.Year, model.FieldID.Value);
+                if (pKBalance == null)
+                {
+                    model.PKBalance = new PKBalance();
+                    model.PKBalance.PBalance = 0;
+                    model.PKBalance.KBalance = 0;
+                    model.PKBalance.Year = model.Date.Value.Year;
+                    model.PKBalance.FieldID = model.FieldID;
+                }
             }
 
             var soilData = new
@@ -606,7 +611,7 @@ namespace NMP.Portal.Controllers
                     PreviousID = model.PreviousID,
                     FieldID = model.FieldID
                 },
-                pKBalance = model.PKBalance != null ? model.PKBalance : null
+                PKBalance = model.PKBalance != null ? model.PKBalance : null
 
             };
             int soilAnalysisId = Convert.ToInt32(_soilAnalysisDataProtector.Unprotect(model.EncryptedSoilAnalysisId));

@@ -37,10 +37,11 @@ namespace NMP.Portal.Controllers
         private readonly ISoilService _soilService;
         private readonly IOrganicManureService _organicManureService;
         private readonly ISoilAnalysisService _soilAnalysisService;
+        private readonly IPKBalanceService _pKBalanceService;
 
         public FieldController(ILogger<FieldController> logger, IDataProtectionProvider dataProtectionProvider,
              IFarmService farmService, IHttpContextAccessor httpContextAccessor, ISoilService soilService,
-             IFieldService fieldService, IOrganicManureService organicManureService, ISoilAnalysisService soilAnalysisService)
+             IFieldService fieldService, IOrganicManureService organicManureService, ISoilAnalysisService soilAnalysisService, IPKBalanceService pKBalanceService)
         {
             _logger = logger;
             _farmService = farmService;
@@ -51,6 +52,7 @@ namespace NMP.Portal.Controllers
             _soilService = soilService;
             _organicManureService = organicManureService;
             _soilAnalysisService = soilAnalysisService;
+            _pKBalanceService = pKBalanceService;
         }
         public IActionResult Index()
         {
@@ -408,7 +410,7 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmList", "Farm");
                 }
 
-                
+
                 soilTypes = await _fieldService.FetchSoilTypes();
                 if (soilTypes.Count > 0 && soilTypes.Any())
                 {
@@ -616,7 +618,7 @@ namespace NMP.Portal.Controllers
             }
             return RedirectToAction("SoilDate");
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> SoilDate()
         {
@@ -699,7 +701,7 @@ namespace NMP.Portal.Controllers
 
             return View(model);
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult SoilNutrientValueType(FieldViewModel model)
@@ -900,7 +902,7 @@ namespace NMP.Portal.Controllers
             }
             return View(model);
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CropGroups(FieldViewModel field)
@@ -983,7 +985,7 @@ namespace NMP.Portal.Controllers
 
             return View(model);
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CropTypes(FieldViewModel field)
@@ -1009,7 +1011,7 @@ namespace NMP.Portal.Controllers
             }
             return RedirectToAction("SNSAppliedQuestion");
         }
-        
+
         [HttpGet]
         public IActionResult SNSAppliedQuestion()
         {
@@ -1227,7 +1229,17 @@ namespace NMP.Portal.Controllers
                 model.SoilAnalyses.SoilNitrogenSupply = 0;
                 model.SoilAnalyses.SoilNitrogenSupplyIndex = 0;
             }
-
+            
+            if (model.SoilAnalyses.Potassium != null || model.SoilAnalyses.Phosphorus != null)
+            {
+                model.PKBalance.PBalance = 0;
+                model.PKBalance.KBalance = 0;
+                model.PKBalance.Year = model.SoilAnalyses.Date.Value.Year;
+            }
+            else
+            {
+                model.PKBalance = null;
+            }
             (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
 
             FieldData fieldData = new FieldData
@@ -1244,7 +1256,7 @@ namespace NMP.Portal.Controllers
                     CroppedArea = model.CroppedArea,
                     ManureNonSpreadingArea = model.ManureNonSpreadingArea,
                     SoilReleasingClay = model.SoilReleasingClay,
-                    SoilOverChalk=model.SoilOverChalk,
+                    SoilOverChalk = model.SoilOverChalk,
                     IsWithinNVZ = model.IsWithinNVZ,
                     IsAbove300SeaLevel = model.IsAbove300SeaLevel,
                     IsActive = true,
@@ -1305,6 +1317,7 @@ namespace NMP.Portal.Controllers
                     ModifiedByID = model.ModifiedByID
 
                 } : null,
+                PKBalance = model.PKBalance != null ? model.PKBalance : null,
                 Crops = new List<CropData>
                 {
                     new CropData
@@ -1372,7 +1385,7 @@ namespace NMP.Portal.Controllers
                 ViewBag.FieldName = _fieldDataProtector.Unprotect(name);
                 ViewBag.IsDeleted = true;
             }
-            
+
             if (!string.IsNullOrWhiteSpace(id))
             {
                 int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
@@ -1391,7 +1404,7 @@ namespace NMP.Portal.Controllers
                         model.FieldName = _farmDataProtector.Unprotect(name);
                     }
                 }
-                
+
                 ViewBag.FieldsList = model.Fields;
                 model.EncryptedFarmId = id;
             }
@@ -1531,7 +1544,7 @@ namespace NMP.Portal.Controllers
 
             return RedirectToAction("CurrentCropGroups");
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> CurrentCropGroups()
         {
@@ -1560,7 +1573,7 @@ namespace NMP.Portal.Controllers
             }
             return View(model);
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CurrentCropGroups(FieldViewModel model)
@@ -1761,7 +1774,7 @@ namespace NMP.Portal.Controllers
 
             return View(model);
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CurrentCropTypes(FieldViewModel model)
@@ -1863,7 +1876,7 @@ namespace NMP.Portal.Controllers
             }
             return RedirectToAction("SoilMineralNitrogenAnalysisResults");
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> SoilMineralNitrogenAnalysisResults()
         {
@@ -2642,7 +2655,7 @@ namespace NMP.Portal.Controllers
             }
             return View(model);
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EstimateOfNitrogenMineralisationQuestion(FieldViewModel model)
@@ -2806,7 +2819,7 @@ namespace NMP.Portal.Controllers
             }
             return View(model);
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult SoilNitrogenSupplyIndex(FieldViewModel model)
@@ -2976,7 +2989,7 @@ namespace NMP.Portal.Controllers
 
             return RedirectToAction("SoilNitrogenSupplyIndex");
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> SoilOrganicMatter()
         {
@@ -3363,7 +3376,7 @@ namespace NMP.Portal.Controllers
                 TempData["Error"] = ex.Message;
                 return RedirectToAction("UpdateField");
             }
-            
+
 
         }
 

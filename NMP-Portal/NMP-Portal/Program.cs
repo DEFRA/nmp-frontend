@@ -120,6 +120,7 @@ builder.Services.AddSingleton<IOrganicManureService, OrganicManureService>();
 builder.Services.AddSingleton<IMannerService, MannerService>();
 builder.Services.AddSingleton<IFertiliserManureService, FertiliserManureService>();
 builder.Services.AddSingleton<ISoilAnalysisService, SoilAnalysisService>();
+builder.Services.AddSingleton<IPKBalanceService, PKBalanceService>();
 
 builder.Services.AddAntiforgery(options =>
 {
