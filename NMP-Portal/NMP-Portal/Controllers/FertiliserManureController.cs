@@ -82,8 +82,21 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("CheckAnswer");
             }
+            if (model.FieldGroup == Resource.lblSelectSpecificFields && model.IsComingFromRecommendation)
+            {
+                if (model.FieldList.Count > 0 && model.FieldList.Count == 1)
+                {
+                    string fieldId = model.FieldList[0];
+                    return RedirectToAction("Recommendations", "Crop", new
+                    {
+                        q = model.EncryptedFarmId,
+                        r = _cropDataProtector.Protect(fieldId),
+                        s = model.EncryptedHarvestYear
 
-            if (model.FieldGroup == Resource.lblSelectSpecificFields && (!model.IsComingFromRecommendation))
+                    });
+                }
+            }
+            else if (model.FieldGroup == Resource.lblSelectSpecificFields && (!model.IsComingFromRecommendation))
             {
                 return RedirectToAction("Fields");
             }
@@ -144,7 +157,7 @@ namespace NMP.Portal.Controllers
                         model.FieldGroup = Resource.lblSelectSpecificFields;
                         model.FieldGroupName = Resource.lblSelectSpecificFields;
                         model.IsComingFromRecommendation = true;
-                        string fieldId = _fertiliserManureProtector.Unprotect(s);
+                        string fieldId = _cropDataProtector.Unprotect(s);
                         model.FieldList.Add(fieldId);
                         (List<int> managementIds, error) = await _fertiliserManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldId, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup, null);// 1 id cropOrder
                         if (error == null)
