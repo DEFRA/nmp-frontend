@@ -347,11 +347,12 @@
                     </govuk-tabs-item>
                     <govuk-tabs-item id="past-month" label="@Resource.lblCropDetails">
                         <h2 class="govuk-heading-m non-standard">@string.Format(Resource.lblCropDetailsForFieldInYear, Model.FieldName, Model.Crops[0].Year)</h2>
-                        <hr class="seperator_five">
+                        
                         @foreach (var crop in Model.Crops)
                         {
-
                             @* Crop details *@
+
+                            <hr class="seperator_five">
                             <div class="tabs-thirds margin-bottom-forty">
                                 <h2 class="govuk-heading-m">
                                     @crop.CropTypeName
