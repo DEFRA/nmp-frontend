@@ -5,7 +5,12 @@
     ViewData["Title"] = Resource.lblRecommendations;
     int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
     int CerealsGroupId = (int)NMP.Portal.Enums.CropGroup.Cereals;
-    var lastUpdate = Model.Recommendations[0].ModifiedOn != null ? Model.Recommendations[0].ModifiedOn.Value.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Model.Recommendations[0].CreatedOn.Value.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"));
+    var lastUpdate = string.Empty;
+    if (Model != null && Model.Recommendations != null)
+    {
+        lastUpdate = Model.Recommendations[0].ModifiedOn != null ? Model.Recommendations[0].ModifiedOn.Value.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Model.Recommendations[0].CreatedOn.Value.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"));
+    }
+    bool isPkBalanceTableDisplay = false;
 }
 
 @if (Model != null)
@@ -140,35 +145,39 @@
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        <h3 class="govuk-heading-s">
-                                            @Resource.lblPhosphateP2O5AndPotashK2OBalance
-                                        </h3>
-                                        <div id="balance" class="margin-bottom-forty">
-                                            <table class="govuk-table data-table">
-                                                <thead class="govuk-table__head">
-                                                    <tr class="govuk-table__row">
-                                                        <th scope="col" class="govuk-table__header">@Resource.lblNutrient</th>
-                                                        <th scope="col" class="govuk-table__header">@string.Format(Resource.lblBalanceFromPreviousYear, Model.Crops[0].Year - 1)</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody class="govuk-table__body">
-                                                    <tr class="govuk-table__row">
-                                                        <td class="govuk-table__cell">@Resource.lblPhosphateP2O5</td>
-                                                        <td class="govuk-table__cell">0</td>
-                                                    </tr>
-                                                    <tr class="govuk-table__row">
-                                                        <td class="govuk-table__cell">@Resource.lblPotashK2O</td>
-                                                        <td class="govuk-table__cell">0</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                        @if (Model.PKBalance!=null&& !isPkBalanceTableDisplay)
+                                        {
+                                            <h3 class="govuk-heading-s">
+                                                @Resource.lblPhosphateP2O5AndPotashK2OBalance
+                                            </h3>
+                                            <div id="balance" class="margin-bottom-forty">
+                                                <table class="govuk-table data-table">
+                                                    <thead class="govuk-table__head">
+                                                        <tr class="govuk-table__row">
+                                                            <th scope="col" class="govuk-table__header">@Resource.lblNutrient</th>
+                                                            <th scope="col" class="govuk-table__header">@string.Format(Resource.lblBalanceFromPreviousYear, Model.Crops[0].Year - 1)</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="govuk-table__body">
+                                                        @{
+                                                        isPkBalanceTableDisplay = true;
+                                                        }
+                                                        <tr class="govuk-table__row">
+                                                            <td class="govuk-table__cell">@Resource.lblPhosphateP2O5</td>
+                                                            <td class="govuk-table__cell">@Model.PKBalance.PBalance</td>
+                                                        </tr>
+                                                        <tr class="govuk-table__row">
+                                                            <td class="govuk-table__cell">@Resource.lblPotashK2O</td>
+                                                            <td class="govuk-table__cell">@Model.PKBalance.KBalance</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
 
-
-                                            <p class="govuk-body">
-                                                @Resource.lblThisIsTheRollingBalanceAtTheStartOfTheYear <br>@Resource.lblFertiliserPhosphateAndPotashRecommendations
-                                            </p>
-                                        </div>
-
+                                                <p class="govuk-body">
+                                                    @Resource.lblThisIsTheRollingBalanceAtTheStartOfTheYear <br>@Resource.lblFertiliserPhosphateAndPotashRecommendations
+                                                </p>
+                                            </div>
+                                        }
                                         @if (Model.RecommendationComments != null && Model.RecommendationComments.Count > 0)
                                         {
                                             <h2 class="govuk-heading-m">@Resource.lblGuidance</h2>
@@ -184,6 +193,7 @@
                                                 }
                                             </div>
                                         }
+
 
                                     }
                                 }
