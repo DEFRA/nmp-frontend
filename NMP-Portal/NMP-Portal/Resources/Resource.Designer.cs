@@ -954,6 +954,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Back to the top.
+        /// </summary>
+        public static string lblBackToTheTop {
+            get {
+                return ResourceManager.GetString("lblBackToTheTop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back to {0} farm plan.
         /// </summary>
         public static string lblBackToYearFarmPlan {
@@ -1301,6 +1310,24 @@ namespace NMP.Portal.Resources {
         public static string lblCrop {
             get {
                 return ResourceManager.GetString("lblCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Crop 1 recommendations.
+        /// </summary>
+        public static string lblCrop1Recommendations {
+            get {
+                return ResourceManager.GetString("lblCrop1Recommendations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Crop 2 recommendations.
+        /// </summary>
+        public static string lblCrop2Recommendations {
+            get {
+                return ResourceManager.GetString("lblCrop2Recommendations", resourceCulture);
             }
         }
         
