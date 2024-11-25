@@ -2113,7 +2113,13 @@ namespace NMP.Portal.Controllers
 
                                 model.Crops.Add(crop);
 
-
+                                if (recommendation.PKBalance != null)
+                                {
+                                    model.PKBalance = new PKBalance();
+                                    model.PKBalance.PBalance = recommendation.PKBalance.PBalance;
+                                    model.PKBalance.KBalance = recommendation.PKBalance.KBalance;
+                                   
+                                }
                                 if (recommendation.RecommendationData.Count > 0)
                                 {
                                     foreach (var recData in recommendation.RecommendationData)
@@ -2167,7 +2173,7 @@ namespace NMP.Portal.Controllers
 
                                         };
                                         model.Recommendations.Add(rec);
-
+                                       
                                         if (recData.RecommendationComments.Count > 0)
                                         {
                                             foreach (var item in recData.RecommendationComments)
