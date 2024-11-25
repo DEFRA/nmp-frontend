@@ -19,5 +19,6 @@ namespace NMP.Portal.ViewModels
         public List<OrganicManureData> OrganicManures { get; set; }
         public List<FertiliserManure> FertiliserManures { get; set; }
         public List<NutrientResponseWrapper> Nutrients { get; set; }
+        public PKBalance? PKBalance { get; set; }
     }
 }

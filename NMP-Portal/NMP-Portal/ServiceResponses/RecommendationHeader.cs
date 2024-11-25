@@ -7,6 +7,9 @@ namespace NMP.Portal.ServiceResponses
     {
         [JsonProperty("Crop")]
         public Crop? Crops { get; set; }
+        [JsonProperty("PKbalance")]
+
+        public PKBalance? PKBalance { get; set; }
         [JsonProperty("Recommendations")]
         public List<RecommendationData>? RecommendationData { get; set; }
     }
