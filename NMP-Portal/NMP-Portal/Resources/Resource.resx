@@ -2772,4 +2772,13 @@ m3/ha  not set</value>
   <data name="lblBackToYearFarmPlan" xml:space="preserve">
     <value>Back to {0} farm plan</value>
   </data>
+  <data name="lblBackToTheTop" xml:space="preserve">
+    <value>Back to the top</value>
+  </data>
+  <data name="lblCrop1Recommendations" xml:space="preserve">
+    <value>Crop 1 recommendations</value>
+  </data>
+  <data name="lblCrop2Recommendations" xml:space="preserve">
+    <value>Crop 2 recommendations</value>
+  </data>
 </root>
