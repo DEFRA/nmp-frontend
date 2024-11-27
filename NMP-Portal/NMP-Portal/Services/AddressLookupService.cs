@@ -28,14 +28,11 @@ namespace NMP.Portal.Services
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower()!="string")
             {
-
-
-                if (responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.Count > 0)
+                if (responseWrapper != null && responseWrapper.Data != null)
                 {
                     AddressLookupResponseWrapper addressLookupResponseWrapper = responseWrapper.Data.ToObject<AddressLookupResponseWrapper>();
                     addresses.AddRange(addressLookupResponseWrapper.Results);
                 }
-
             }
             else
             {
