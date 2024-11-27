@@ -1230,7 +1230,7 @@ namespace NMP.Portal.Controllers
                 model.SoilAnalyses.SoilNitrogenSupplyIndex = 0;
             }
             
-            if (model.SoilAnalyses.Potassium != null || model.SoilAnalyses.Phosphorus != null)
+            if (model.SoilAnalyses.Potassium != null || model.SoilAnalyses.Phosphorus != null|| model.SoilAnalyses.PotassiumIndex != null || model.SoilAnalyses.PhosphorusIndex != null)
             {
                 model.PKBalance.PBalance = 0;
                 model.PKBalance.KBalance = 0;
