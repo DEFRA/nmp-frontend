@@ -567,10 +567,10 @@
                                             {
                                                 <td class="govuk-table__cell">@(crop.CropInfo1Name != null ? crop.CropInfo1Name : Resource.lblNotEntered)</td>
                                             }
-                                            @if (Model.CropGroupID == CerealsGroupId)
+                                            @* @if (Model.CropGroupID == CerealsGroupId)
                                             {
                                                 <td class="govuk-table__cell">@(crop.CropInfo2Name != null ? crop.CropInfo2Name : Resource.lblNotEntered)</td>
-                                            }
+                                            } *@
                                         </tr>
                                         <tr class="govuk-table__row">
                                             <th class="govuk-table__cell" scope="row">@Resource.lblPlantingDate</th>
