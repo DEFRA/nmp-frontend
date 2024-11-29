@@ -27,9 +27,10 @@ namespace NMP.Portal.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ISoilAnalysisService _soilAnalysisService;
         private readonly ISoilService _soilService;
+        private readonly IPKBalanceService _pKBalanceService;
         public SoilAnalysisController(ILogger<FarmController> logger, IDataProtectionProvider dataProtectionProvider, IHttpContextAccessor httpContextAccessor,
              IUserFarmService userFarmService, IFarmService farmService, ISoilService soilService,
-            IFieldService fieldService, ISoilAnalysisService soilAnalysisService)
+            IFieldService fieldService, ISoilAnalysisService soilAnalysisService, IPKBalanceService pKBalanceService)
         {
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
@@ -40,6 +41,7 @@ namespace NMP.Portal.Controllers
             _soilService = soilService;
             _fieldService = fieldService;
             _soilAnalysisService = soilAnalysisService;
+            _pKBalanceService = pKBalanceService;
         }
 
         [HttpGet]
@@ -51,7 +53,7 @@ namespace NMP.Portal.Controllers
             {
                 if (!string.IsNullOrWhiteSpace(i))
                 {
-                    
+
                     (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(j)));
                     if (string.IsNullOrWhiteSpace(error.Message))
                     {
@@ -198,7 +200,7 @@ namespace NMP.Portal.Controllers
             }
             return View(model);
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Date(SoilAnalysisViewModel model)
@@ -504,7 +506,7 @@ namespace NMP.Portal.Controllers
 
             return RedirectToAction("ChangeSoilAnalysis", new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateSoil(SoilAnalysisViewModel model)
@@ -565,6 +567,21 @@ namespace NMP.Portal.Controllers
             {
                 return View("ChangeSoilAnalysis", model);
             }
+
+            if (model.Potassium!=null||model.Phosphorus!=null||
+                model.PotassiumIndex != null || model.PhosphorusIndex != null)
+            {
+                PKBalance pKBalance = await _pKBalanceService.FetchPKBalanceByYearAndFieldId(model.Date.Value.Year, model.FieldID.Value);
+                if (pKBalance == null)
+                {
+                    model.PKBalance = new PKBalance();
+                    model.PKBalance.PBalance = 0;
+                    model.PKBalance.KBalance = 0;
+                    model.PKBalance.Year = model.Date.Value.Year;
+                    model.PKBalance.FieldID = model.FieldID;
+                }
+            }
+
             var soilData = new
             {
                 SoilAnalysis = new SoilAnalysis
@@ -594,7 +611,9 @@ namespace NMP.Portal.Controllers
                     Comments = model.Comments,
                     PreviousID = model.PreviousID,
                     FieldID = model.FieldID
-                }
+                },
+                PKBalance = model.PKBalance != null ? model.PKBalance : null
+
             };
             int soilAnalysisId = Convert.ToInt32(_soilAnalysisDataProtector.Unprotect(model.EncryptedSoilAnalysisId));
             string jsonData = JsonConvert.SerializeObject(soilData);

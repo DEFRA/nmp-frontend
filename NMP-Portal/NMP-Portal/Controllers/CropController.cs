@@ -1736,14 +1736,14 @@ namespace NMP.Portal.Controllers
                                 };
                                 foreach (var group in groupedResult)
                                 {
+                                    var newField = new HarvestYearPlanFields
+                                    {
+                                        CropTypeName = group.CropTypeName,
+                                        CropVariety = group.CropVariety,
+                                        FieldData = new List<FieldDetails>()
+                                    };
                                     foreach (var plan in group.HarvestPlans)
                                     {
-                                        var newField = new HarvestYearPlanFields
-                                        {
-                                            CropTypeName = group.CropTypeName,
-                                            CropVariety = group.CropVariety,
-                                            FieldData = new List<FieldDetails>()
-                                        };
 
                                         var fieldDetail = new FieldDetails
                                         {
@@ -1755,8 +1755,8 @@ namespace NMP.Portal.Controllers
 
                                         newField.FieldData.Add(fieldDetail);
 
-                                        harvestYearPlans.FieldData.Add(newField);
                                     }
+                                    harvestYearPlans.FieldData.Add(newField);
                                 }
 
                                 if (harvestYearPlanResponse.OrganicMaterial.Count > 0)
@@ -2113,7 +2113,13 @@ namespace NMP.Portal.Controllers
 
                                 model.Crops.Add(crop);
 
-
+                                if (recommendation.PKBalance != null)
+                                {
+                                    model.PKBalance = new PKBalance();
+                                    model.PKBalance.PBalance = recommendation.PKBalance.PBalance;
+                                    model.PKBalance.KBalance = recommendation.PKBalance.KBalance;
+                                   
+                                }
                                 if (recommendation.RecommendationData.Count > 0)
                                 {
                                     foreach (var recData in recommendation.RecommendationData)
@@ -2167,7 +2173,7 @@ namespace NMP.Portal.Controllers
 
                                         };
                                         model.Recommendations.Add(rec);
-
+                                       
                                         if (recData.RecommendationComments.Count > 0)
                                         {
                                             foreach (var item in recData.RecommendationComments)
@@ -2230,6 +2236,13 @@ namespace NMP.Portal.Controllers
                                 }
 
                             }
+                            (List<NutrientResponseWrapper> nutrients, error) = await _fieldService.FetchNutrientsAsync();
+                            if (error == null && nutrients.Count > 0)
+                            {
+                                model.Nutrients = new List<NutrientResponseWrapper>();
+                                model.Nutrients = nutrients;
+                            }
+                                
                         }
                     }
                 }
