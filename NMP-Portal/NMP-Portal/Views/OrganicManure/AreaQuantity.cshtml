@@ -7,6 +7,7 @@
     if (Model.IsOrgManureNfieldLimitWarning) trueWarningCount++;
     if (Model.IsNMaxLimitWarning) trueWarningCount++;
     if (Model.IsEndClosedPeriodFebruaryWarning) trueWarningCount++;
+    var isOtherManure = (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials) ? true : false;
 
 }
 @section BeforeContent {
@@ -96,6 +97,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks" value="@Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150" value="@Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropOrder"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherMaterialName"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)

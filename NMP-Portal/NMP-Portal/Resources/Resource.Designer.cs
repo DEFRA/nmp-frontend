@@ -304,6 +304,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add analysis values for Mixed manure.
+        /// </summary>
+        public static string lblAddAnalysisValuesForMixedManure {
+            get {
+                return ResourceManager.GetString("lblAddAnalysisValuesForMixedManure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add a new farm.
         /// </summary>
         public static string lblAddANewFarm {
@@ -3107,6 +3116,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to liquid.
+        /// </summary>
+        public static string lblLiquid {
+            get {
+                return ResourceManager.GetString("lblLiquid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Magnesium.
         /// </summary>
         public static string lblMagnesium {
@@ -3337,6 +3355,15 @@ namespace NMP.Portal.Resources {
         public static string lblMilling {
             get {
                 return ResourceManager.GetString("lblMilling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mixed manure.
+        /// </summary>
+        public static string lblMixedManure {
+            get {
+                return ResourceManager.GetString("lblMixedManure", resourceCulture);
             }
         }
         
@@ -3607,6 +3634,15 @@ namespace NMP.Portal.Resources {
         public static string lblNutrientValues {
             get {
                 return ResourceManager.GetString("lblNutrientValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nutrient values for {0}.
+        /// </summary>
+        public static string lblNutrientValuesForMixedManure {
+            get {
+                return ResourceManager.GetString("lblNutrientValuesForMixedManure", resourceCulture);
             }
         }
         
@@ -4799,6 +4835,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to solid.
+        /// </summary>
+        public static string lblSolid {
+            get {
+                return ResourceManager.GetString("lblSolid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Some of the fields.
         /// </summary>
         public static string lblSomeOfTheFields {
@@ -5969,6 +6014,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the name of the {0} material?.
+        /// </summary>
+        public static string lblWhatIsTheNameOfTheMaterial {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheNameOfTheMaterial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the number of shoots per square metre?.
         /// </summary>
         public static string lblWhatIsTheNumberOfShootsPerSquareMetre {
@@ -7047,6 +7101,15 @@ namespace NMP.Portal.Resources {
         public static string MsgEnterFigureBeforeContinuing {
             get {
                 return ResourceManager.GetString("MsgEnterFigureBeforeContinuing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter name of the material.
+        /// </summary>
+        public static string MsgEnterNameOfTheMaterial {
+            get {
+                return ResourceManager.GetString("MsgEnterNameOfTheMaterial", resourceCulture);
             }
         }
         

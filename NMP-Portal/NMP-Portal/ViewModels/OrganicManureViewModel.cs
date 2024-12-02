@@ -94,5 +94,6 @@ namespace NMP.Portal.ViewModels
         public bool IsStartPeriodEndFebOrganicAppRateExceedMaxN150 { get; set; } = false;
         public int? CropOrder { get; set; }
         public string? EncryptedFieldId { get; set; }
+        public string? OtherMaterialName { get; set; }
     }
 }

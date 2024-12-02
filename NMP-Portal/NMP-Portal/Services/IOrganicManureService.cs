@@ -44,5 +44,7 @@ namespace NMP.Portal.Services
         Task<(RainTypeResponse, Error)> FetchRainTypeById(int rainTypeId);
         Task<(WindspeedResponse, Error)> FetchWindspeedById(int windspeedId);
         Task<(MoistureTypeResponse, Error)> FetchMoisterTypeById(int moisterTypeId);
+
+        Task<(List<FarmManureTypeResponse>, Error)> FetchFarmManureTypeByFarmId(int farmId);
     }
 }
