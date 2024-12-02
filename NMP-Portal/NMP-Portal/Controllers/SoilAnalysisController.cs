@@ -568,7 +568,8 @@ namespace NMP.Portal.Controllers
                 return View("ChangeSoilAnalysis", model);
             }
 
-            if (model.Potassium!=null||model.Phosphorus!=null)
+            if (model.Potassium!=null||model.Phosphorus!=null||
+                model.PotassiumIndex != null || model.PhosphorusIndex != null)
             {
                 PKBalance pKBalance = await _pKBalanceService.FetchPKBalanceByYearAndFieldId(model.Date.Value.Year, model.FieldID.Value);
                 if (pKBalance == null)
