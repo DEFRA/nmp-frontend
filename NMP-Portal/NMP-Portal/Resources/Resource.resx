@@ -2781,4 +2781,25 @@ m3/ha  not set</value>
   <data name="lblCrop2Recommendations" xml:space="preserve">
     <value>Crop 2 recommendations</value>
   </data>
+  <data name="lblLiquid" xml:space="preserve">
+    <value>liquid</value>
+  </data>
+  <data name="lblSolid" xml:space="preserve">
+    <value>solid</value>
+  </data>
+  <data name="lblWhatIsTheNameOfTheMaterial" xml:space="preserve">
+    <value>What is the name of the {0} material?</value>
+  </data>
+  <data name="lblAddAnalysisValuesForMixedManure" xml:space="preserve">
+    <value>Add analysis values for Mixed manure</value>
+  </data>
+  <data name="lblMixedManure" xml:space="preserve">
+    <value>Mixed manure</value>
+  </data>
+  <data name="lblNutrientValuesForMixedManure" xml:space="preserve">
+    <value>Nutrient values for {0}</value>
+  </data>
+  <data name="MsgEnterNameOfTheMaterial" xml:space="preserve">
+    <value>Enter name of the material</value>
+  </data>
 </root>
