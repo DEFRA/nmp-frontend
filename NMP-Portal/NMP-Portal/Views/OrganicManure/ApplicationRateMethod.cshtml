@@ -6,6 +6,7 @@
     var calculateBasedOnAreaAndQuantity = (int)NMP.Portal.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity;
     var useDefaultApplicationRate = (int)NMP.Portal.Enums.ApplicationRate.UseDefaultApplicationRate;
     var backaction = (Model.IsCheckAnswer && (!Model.IsManureTypeChange)) ? "CheckAnswer" : (Model.IsDefaultNutrientValues != null && (!Model.IsDefaultNutrientValues.Value) ? "NutrientValuesStoreForFuture" : "DefaultNutrientValues");
+    var isOtherManure = (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials) ? true : false;
 
 }
 @section BeforeContent {
@@ -93,6 +94,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks" value="@Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150" value="@Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropOrder"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherMaterialName"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -174,12 +176,14 @@
             <govuk-radios asp-for="@Model.ApplicationRateMethod">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblHowWouldYouLikeToEnterTheApplicationRate, Model.ManureTypeName
-                                 )
+                        @string.Format(Resource.lblHowWouldYouLikeToEnterTheApplicationRate, isOtherManure? Model.OtherMaterialName: Model.ManureTypeName)
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-item value="@enterAnApplicationRate">@Resource.lblEnterAnApplicationRate</govuk-radios-item>
                     <govuk-radios-item value="@calculateBasedOnAreaAndQuantity">@Resource.lblCalculateBasedOnTheAreaAndQuantity</govuk-radios-item>
-                    <govuk-radios-item value="@useDefaultApplicationRate">@string.Format(Resource.lblUseTypicalApplicationRate, Model.ApplicationRateArable)</govuk-radios-item>
+                    @if (!isOtherManure)
+                    {
+                        <govuk-radios-item value="@useDefaultApplicationRate">@string.Format(Resource.lblUseTypicalApplicationRate, Model.ApplicationRateArable)</govuk-radios-item>
+                    }
                 </govuk-radios-fieldset>
             </govuk-radios>
             <govuk-button type="submit" class="margin-bottom-forty" asp-action="ApplicationRateMethod">
