@@ -1269,6 +1269,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Country.
+        /// </summary>
+        public static string lblCountry {
+            get {
+                return ResourceManager.GetString("lblCountry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to County.
         /// </summary>
         public static string lblCounty {
@@ -6226,6 +6235,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhenWasThisMeasured {
             get {
                 return ResourceManager.GetString("lblWhenWasThisMeasured", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which country is {0} in?.
+        /// </summary>
+        public static string lblWhichCountryIsIn {
+            get {
+                return ResourceManager.GetString("lblWhichCountryIsIn", resourceCulture);
             }
         }
         
