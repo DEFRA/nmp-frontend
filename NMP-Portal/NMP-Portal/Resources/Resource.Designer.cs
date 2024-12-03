@@ -1674,6 +1674,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you want to use existing nutrient values for {0}.
+        /// </summary>
+        public static string lblDoYouWantToUseExistingNutrientValuesFor {
+            get {
+                return ResourceManager.GetString("lblDoYouWantToUseExistingNutrientValuesFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you want to use these nutrient values from RB209 for {0} ?.
         /// </summary>
         public static string lblDoYouWantToUseTheseNutrientValuesFromRB209 {
@@ -3814,6 +3823,15 @@ namespace NMP.Portal.Resources {
         public static string lblOrganicMaterialApplicationsForSorting {
             get {
                 return ResourceManager.GetString("lblOrganicMaterialApplicationsForSorting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Other organic materials.
+        /// </summary>
+        public static string lblOtherOrganicMaterials {
+            get {
+                return ResourceManager.GetString("lblOtherOrganicMaterials", resourceCulture);
             }
         }
         

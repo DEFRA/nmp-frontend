@@ -9,6 +9,10 @@
     var backAction = (Model.IsCheckAnswer && Model.IsDefaultNutrientOptionChange) ? "CheckAnswer" : Model.ApplicationMethodCount > 0 ? "ApplicationMethod" : "ManureApplyingDate";
 
     var unit = "";
+    if(Model.IsManureTypeLiquid==null)
+    {
+        Model.IsManureTypeLiquid = false;
+    }
     if (Model.IsManureTypeLiquid != null)
     {
         unit = Model.IsManureTypeLiquid.Value ? Resource.lblValueKgPerMeterCube : Resource.lblValueKgPerTon;
@@ -162,8 +166,16 @@
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptakes[i].AutumnCropNitrogenUptake" value="@Model.AutumnCropNitrogenUptakes[i].AutumnCropNitrogenUptake"></govuk-input>
                 }
             }
-            <h1 class="govuk-heading-l">@string.Format(Resource.lblStandardNutrientValues, Model.ManureTypeName)</h1>
-            <p class="govuk-body">@Resource.lblValuesAreSourcedFromAHDB</p>
+            @if(Model.ManureTypeId==(int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+            {
+                <h1 class="govuk-heading-l">@string.Format(Resource.lblDoYouWantToUseExistingNutrientValuesFor, Model.OtherMaterialName)</h1>
+            }
+            else
+            {
+                <h1 class="govuk-heading-l">@string.Format(Resource.lblStandardNutrientValues, Model.ManureTypeName)</h1>
+                <p class="govuk-body">@Resource.lblValuesAreSourcedFromAHDB</p>
+
+            }
             <table class="govuk-table">
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
