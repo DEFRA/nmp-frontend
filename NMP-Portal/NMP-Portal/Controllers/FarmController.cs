@@ -130,23 +130,23 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("Name", Resource.MsgEnterTheFarmName);
             }
-            if (string.IsNullOrWhiteSpace(farm.Postcode))
-            {
-                ModelState.AddModelError("Postcode", Resource.MsgEnterTheFarmPostcode);
-            }
-            if (!string.IsNullOrWhiteSpace(farm.Postcode))
-            {
-                int id = 0;
-                if (farm.EncryptedFarmId != null)
-                {
-                    id = Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId));
-                }
-                bool IsFarmExist = await _farmService.IsFarmExistAsync(farm.Name, farm.Postcode, id);
-                if (IsFarmExist)
-                {
-                    ModelState.AddModelError("Name", Resource.MsgFarmAlreadyExist);
-                }
-            }
+            //if (string.IsNullOrWhiteSpace(farm.Postcode))
+            //{
+            //    ModelState.AddModelError("Postcode", Resource.MsgEnterTheFarmPostcode);
+            //}
+            //if (!string.IsNullOrWhiteSpace(farm.Postcode))
+            //{
+            //    int id = 0;
+            //    if (farm.EncryptedFarmId != null)
+            //    {
+            //        id = Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId));
+            //    }
+            //    bool IsFarmExist = await _farmService.IsFarmExistAsync(farm.Name, farm.Postcode, id);
+            //    if (IsFarmExist)
+            //    {
+            //        ModelState.AddModelError("Name", Resource.MsgFarmAlreadyExist);
+            //    }
+            //}
 
             if (!ModelState.IsValid)
             {
@@ -162,17 +162,17 @@ namespace NMP.Portal.Controllers
                 var updatedFarm = JsonConvert.SerializeObject(farm);
                 HttpContext?.Session.SetString("FarmData", updatedFarm);
 
-                if (farmView.Postcode == farm.Postcode)
-                {
-                    farm.IsPostCodeChanged = false;
-                    return RedirectToAction("CheckAnswer");
-                }
-                else
-                {
-                    farm.IsPostCodeChanged = true;
-                    farm.Rainfall = null;
-                    //return RedirectToAction("Address");
-                }
+                //if (farmView.Postcode == farm.Postcode)
+                //{
+                //    farm.IsPostCodeChanged = false;
+                //    return RedirectToAction("CheckAnswer");
+                //}
+                //else
+                //{
+                //    farm.IsPostCodeChanged = true;
+                //    farm.Rainfall = null;
+                //    //return RedirectToAction("Address");
+                //}
             }
             if (farmView != null)
             {
@@ -186,7 +186,41 @@ namespace NMP.Portal.Controllers
             var farmModel = JsonConvert.SerializeObject(farm);
             HttpContext?.Session.SetObjectAsJson("FarmData", farm);
 
-            return RedirectToAction("Address");
+            return RedirectToAction("Country");
+        }
+
+        [HttpGet]
+        public IActionResult Country()
+        {
+            _logger.LogTrace($"Farm Controller : Country() action called");
+            FarmViewModel? model = null;
+            if (HttpContext.Session.Keys.Contains("FarmData"))
+            {
+                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+            }
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Country(FarmViewModel farm)
+        {
+            _logger.LogTrace($"Farm Controller : Country() post action called");
+            if (farm.Country == null)
+            {
+                ModelState.AddModelError("Country", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View("Country", farm);
+            }
+
+            HttpContext.Session.SetObjectAsJson("FarmData", farm);
+            if (farm.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
+            return RedirectToAction("Elevation");
+
         }
         [HttpGet]
         public async Task<IActionResult> Address()
