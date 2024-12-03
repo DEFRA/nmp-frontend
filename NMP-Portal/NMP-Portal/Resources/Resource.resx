@@ -2802,4 +2802,10 @@ m3/ha  not set</value>
   <data name="MsgEnterNameOfTheMaterial" xml:space="preserve">
     <value>Enter name of the material</value>
   </data>
+  <data name="lblDoYouWantToUseExistingNutrientValuesFor" xml:space="preserve">
+    <value>Do you want to use existing nutrient values for {0}</value>
+  </data>
+  <data name="lblOtherOrganicMaterials" xml:space="preserve">
+    <value>Other organic materials</value>
+  </data>
 </root>
