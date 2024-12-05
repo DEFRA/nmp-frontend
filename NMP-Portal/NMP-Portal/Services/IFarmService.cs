@@ -13,5 +13,6 @@ namespace NMP.Portal.Services
         Task<decimal> FetchRainfallAverageAsync(string postcode);
         Task<(Farm, Error)> UpdateFarmAsync(FarmData farmData);
         Task<(string, Error)> DeleteFarmByIdAsync(int farmId);
+        Task<(List<Country>, Error)> FetchCountryAsync();
     }
 }

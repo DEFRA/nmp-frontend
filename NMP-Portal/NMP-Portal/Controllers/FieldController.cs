@@ -414,7 +414,7 @@ namespace NMP.Portal.Controllers
                 soilTypes = await _fieldService.FetchSoilTypes();
                 if (soilTypes.Count > 0 && soilTypes.Any())
                 {
-                    var country = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
+                    var country = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
                     var soilTypesList = soilTypes.Where(x => x.CountryId == country).ToList();
                     ViewBag.SoilTypesList = soilTypesList;
                 }
@@ -451,7 +451,7 @@ namespace NMP.Portal.Controllers
                 soilTypes = await _fieldService.FetchSoilTypes();
                 if (soilTypes.Count > 0 && soilTypes.Any())
                 {
-                    var country = field.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
+                    var country = field.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
                     var soilTypesList = soilTypes.Where(x => x.CountryId == country).ToList();
                     soilTypes = soilTypesList;
                 }
@@ -554,7 +554,7 @@ namespace NMP.Portal.Controllers
             soilTypes = await _fieldService.FetchSoilTypes();
             if (soilTypes.Count > 0 && soilTypes.Any())
             {
-                var country = field.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
+                var country = field.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
                 var soilTypesList = soilTypes.Where(x => x.CountryId == country).ToList();
                 soilTypes = soilTypesList;
             }
@@ -957,8 +957,8 @@ namespace NMP.Portal.Controllers
                 }
 
                 cropTypes = await _fieldService.FetchCropTypes(model.CropGroupId ?? 0);
-                var country = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
-                var cropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.All).ToList();
+                var country = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                var cropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.RB209Country.All).ToList();
 
                 ViewBag.CropTypeList = cropTypeList;
                 if (cropTypeList.Count == 1)
@@ -999,8 +999,8 @@ namespace NMP.Portal.Controllers
             {
                 List<CropTypeResponse> cropTypes = new List<CropTypeResponse>();
                 cropTypes = await _fieldService.FetchCropTypes(field.CropGroupId ?? 0);
-                var country = field.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
-                ViewBag.CropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.All).ToList();
+                var country = field.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                ViewBag.CropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.RB209Country.All).ToList();
                 return View(field);
             }
             field.CropType = await _fieldService.FetchCropTypeById(field.CropTypeID.Value);
@@ -1670,8 +1670,8 @@ namespace NMP.Portal.Controllers
                 }
 
                 cropTypes = await _fieldService.FetchCropTypes(model.CurrentCropGroupId ?? 0);
-                var country = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
-                var cropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.All).ToList();
+                var country = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                var cropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.RB209Country.All).ToList();
 
                 ViewBag.CropTypeList = cropTypeList;
                 if (cropTypeList.Count == 1)
@@ -1788,8 +1788,8 @@ namespace NMP.Portal.Controllers
             {
                 List<CropTypeResponse> cropTypes = new List<CropTypeResponse>();
                 cropTypes = await _fieldService.FetchCropTypes(model.CurrentCropGroupId ?? 0);
-                var country = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
-                ViewBag.CropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.All).ToList();
+                var country = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                ViewBag.CropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.RB209Country.All).ToList();
                 return View(model);
             }
             model.CurrentCropType = await _fieldService.FetchCropTypeById(model.CurrentCropTypeId.Value);
