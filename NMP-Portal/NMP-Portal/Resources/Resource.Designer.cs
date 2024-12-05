@@ -2133,6 +2133,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Farming Rules for Water.
+        /// </summary>
+        public static string lblFarmingRulesForWater {
+            get {
+                return ResourceManager.GetString("lblFarmingRulesForWater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Farm List.
         /// </summary>
         public static string lblFarmList {

@@ -1,6 +1,6 @@
 ﻿namespace NMP.Portal.Enums
 {
-    public enum Country
+    public enum RB209Country
     {
         England=1,
         Scotland=2,

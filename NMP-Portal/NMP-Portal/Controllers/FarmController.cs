@@ -190,10 +190,15 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public IActionResult Country()
+        public async Task<IActionResult> Country()
         {
             _logger.LogTrace($"Farm Controller : Country() action called");
             FarmViewModel? model = null;
+            (List<Country> countryList, Error error) = await _farmService.FetchCountryAsync();
+            if (error != null && countryList.Count > 0)
+            {
+                ViewBag.CountryList = countryList.OrderBy(c => c.Name);
+            }
             if (HttpContext.Session.Keys.Contains("FarmData"))
             {
                 model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
@@ -202,16 +207,30 @@ namespace NMP.Portal.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Country(FarmViewModel farm)
+        public async Task<IActionResult> Country(FarmViewModel farm)
         {
             _logger.LogTrace($"Farm Controller : Country() post action called");
-            if (farm.Country == null)
+            if (farm.CountryID == null)
             {
-                ModelState.AddModelError("Country", Resource.MsgSelectAnOptionBeforeContinuing);
+                ModelState.AddModelError("CountryID",string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing,Resource.lblCountry.ToLower()));
             }
             if (!ModelState.IsValid)
             {
+                (List<Country> countryList, Error error) = await _farmService.FetchCountryAsync();
+                if (error != null && countryList.Count > 0)
+                {
+                    ViewBag.CountryList = countryList.OrderBy(c => c.Name);
+                }
                 return View("Country", farm);
+            }
+            if(farm.CountryID==(int)NMP.Portal.Enums.FarmCountry.England||
+                farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.Wales)
+            {
+                farm.EnglishRules = true;
+            }
+            else
+            {
+                farm.EnglishRules = false;
             }
 
             HttpContext.Session.SetObjectAsJson("FarmData", farm);
@@ -219,8 +238,20 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("CheckAnswer");
             }
-            return RedirectToAction("Elevation");
+            return RedirectToAction("FarmingRules");
 
+        }
+
+        [HttpGet]
+        public IActionResult FarmingRules()
+        {
+            _logger.LogTrace($"Farm Controller : FarmingRules() action called");
+            FarmViewModel? model = null;
+            if (HttpContext.Session.Keys.Contains("FarmData"))
+            {
+                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+            }
+            return View(model);
         }
         [HttpGet]
         public async Task<IActionResult> Address()
@@ -721,7 +752,7 @@ namespace NMP.Portal.Controllers
                     EnglishRules = farm.EnglishRules,
                     NVZFields = farm.NVZFields,
                     FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
-                    LastHarvestYear=farm.LastHarvestYear,
+                    LastHarvestYear = farm.LastHarvestYear,
                     CreatedByID = userId,
                     CreatedOn = System.DateTime.Now,
                     ModifiedByID = farm.ModifiedByID,
@@ -965,7 +996,7 @@ namespace NMP.Portal.Controllers
 
             if (!string.IsNullOrWhiteSpace(error.Message))
             {
-                TempData["AddFarmError"] =  error.Message;
+                TempData["AddFarmError"] = error.Message;
                 string EncryptUpdateStatus = _dataProtector.Protect(Resource.lblTrue.ToString());
                 return RedirectToAction("CheckAnswer", new { q = EncryptUpdateStatus });
                 return View(farm);
@@ -1049,7 +1080,7 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-            
+
             return View(model);
 
         }
