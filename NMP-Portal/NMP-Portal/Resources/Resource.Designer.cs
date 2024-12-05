@@ -2430,6 +2430,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Has {0} been used for grass in any of the the last 3 years?.
+        /// </summary>
+        public static string lblHasBeenUsedForGrassInAnyOfTheLast3Year {
+            get {
+                return ResourceManager.GetString("lblHasBeenUsedForGrassInAnyOfTheLast3Year", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Has grass in last three year.
+        /// </summary>
+        public static string lblHasGrassInLastThreeYear {
+            get {
+                return ResourceManager.GetString("lblHasGrassInLastThreeYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Have you planted your {0} yet?.
         /// </summary>
         public static string lblHaveYouPlantedYourCrop {
@@ -2787,6 +2805,15 @@ namespace NMP.Portal.Resources {
         public static string lblInOrganicManureDuration {
             get {
                 return ResourceManager.GetString("lblInOrganicManureDuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In which years was {0} used for grass?.
+        /// </summary>
+        public static string lblInWhichYearsWasUsedForGrass {
+            get {
+                return ResourceManager.GetString("lblInWhichYearsWasUsedForGrass", resourceCulture);
             }
         }
         

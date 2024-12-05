@@ -14,11 +14,13 @@ namespace NMP.Portal.ViewModels
             Fields = new List<Field>();
             ManagementPeriods = new List<ManagementPeriod>();
             PKBalance = new PKBalance();
+            GrassSnsAnalyses=new GrassSnsAnalysis();
         }
         public List<Field> Fields { get; set; }
         public List<ManagementPeriod> ManagementPeriods { get; set; }
         public bool IsSoilReleasingClay { get; set; } = false;
         public SoilAnalysis SoilAnalyses { get; set; }
+        public GrassSnsAnalysis GrassSnsAnalyses { get; set; }
         public List<Crop> Crops { get; set; }
         public PKBalance PKBalance { get; set; }
         public int? CropTypeID { get; set; }
