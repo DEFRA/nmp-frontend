@@ -870,7 +870,7 @@ namespace NMP.Portal.Controllers
                 ViewBag.Error = string.Concat(error, ex.Message);
                 return View(model);
             }
-            return RedirectToAction("CropGroups");
+            return RedirectToAction("HasGrassInLastThreeYear");
         }
 
         [HttpGet]
@@ -3199,7 +3199,7 @@ namespace NMP.Portal.Controllers
                     {
                         return RedirectToAction("CheckAnswer");
                     }
-                    return RedirectToAction("CropGroups");
+                    return RedirectToAction("HasGrassInLastThreeYear");
                 }
             }
             catch (Exception ex)
@@ -3434,6 +3434,95 @@ namespace NMP.Portal.Controllers
             }
             return View(field);
 
+        }
+
+
+        //Grass journey
+
+        [HttpGet]
+        public async Task<IActionResult> HasGrassInLastThreeYear()
+        {
+            _logger.LogTrace($"Field Controller : HasGrassInLastThreeYear() action called");
+            Error error = new Error();
+
+            FieldViewModel model = new FieldViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult HasGrassInLastThreeYear(FieldViewModel model)
+        {
+            _logger.LogTrace($"Field Controller : HasGrassInLastThreeYear() post action called");
+            if (model.GrassSnsAnalyses.HasGrassInLastThreeYear == null)
+            {
+                ModelState.AddModelError("GrassSnsAnalyses.HasGrassInLastThreeYear", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
+            if (model.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
+            if (model.GrassSnsAnalyses.HasGrassInLastThreeYear.Value)
+            {
+
+                return RedirectToAction("GrassLastThreeHarvestYear");
+            }
+            else
+            {
+                model.GrassSnsAnalyses.HarvestYear = null;
+                model.GrassSnsAnalyses.GrassManagementOptionID = null;
+                model.GrassSnsAnalyses.GrassTypicalCutID = null;
+                model.GrassSnsAnalyses.HasGreaterThan30PercentClover = null;
+                model.GrassSnsAnalyses.SoilNitrogenSupplyItemID = null;
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
+                if (model.IsCheckAnswer)
+                {
+                    return RedirectToAction("CheckAnswer");
+                }
+                return RedirectToAction("CropGroups");
+            }
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GrassLastThreeHarvestYear()
+        {
+            _logger.LogTrace($"Field Controller : GrassLastThreeHarvestYear() action called");
+            Error error = new Error();
+
+            FieldViewModel model = new FieldViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult GrassLastThreeHarvestYear(FieldViewModel model)
+        {
+            _logger.LogTrace($"Field Controller : GrassLastThreeHarvestYear() post action called");
+            return View(model);
         }
     }
 }
