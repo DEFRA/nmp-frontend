@@ -98,6 +98,7 @@ namespace NMP.Portal.Helpers
         public const string AddPKBalanceAsyncAPI = "pk-Balance";
         public const string UpdatePKBalanceAsyncAPI = "pk-Balance/{0}&Field={1}";
         public const string FetchPKBalanceByYearAndFieldIdAsyncAPI = "pk-balance/{0}?fieldId={1}";
+        public const string FetchCountryListAsyncAPI = "countries/all-data";
 
         //Manner APi Url
         public const string FetchMannerApplicationMethodByIdAsyncAPI = "vendors/manner/application-methods/{0}";

@@ -2133,6 +2133,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Farming Rules for Water.
+        /// </summary>
+        public static string lblFarmingRulesForWater {
+            get {
+                return ResourceManager.GetString("lblFarmingRulesForWater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Farm List.
         /// </summary>
         public static string lblFarmList {
@@ -2417,6 +2426,24 @@ namespace NMP.Portal.Resources {
         public static string lblHarvestYearOverview {
             get {
                 return ResourceManager.GetString("lblHarvestYearOverview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Has {0} been used for grass in any of the the last 3 years?.
+        /// </summary>
+        public static string lblHasBeenUsedForGrassInAnyOfTheLast3Year {
+            get {
+                return ResourceManager.GetString("lblHasBeenUsedForGrassInAnyOfTheLast3Year", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Has grass in last three year.
+        /// </summary>
+        public static string lblHasGrassInLastThreeYear {
+            get {
+                return ResourceManager.GetString("lblHasGrassInLastThreeYear", resourceCulture);
             }
         }
         
@@ -2778,6 +2805,15 @@ namespace NMP.Portal.Resources {
         public static string lblInOrganicManureDuration {
             get {
                 return ResourceManager.GetString("lblInOrganicManureDuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In which years was {0} used for grass?.
+        /// </summary>
+        public static string lblInWhichYearsWasUsedForGrass {
+            get {
+                return ResourceManager.GetString("lblInWhichYearsWasUsedForGrass", resourceCulture);
             }
         }
         

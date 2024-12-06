@@ -414,7 +414,7 @@ namespace NMP.Portal.Controllers
                 soilTypes = await _fieldService.FetchSoilTypes();
                 if (soilTypes.Count > 0 && soilTypes.Any())
                 {
-                    var country = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
+                    var country = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
                     var soilTypesList = soilTypes.Where(x => x.CountryId == country).ToList();
                     ViewBag.SoilTypesList = soilTypesList;
                 }
@@ -451,7 +451,7 @@ namespace NMP.Portal.Controllers
                 soilTypes = await _fieldService.FetchSoilTypes();
                 if (soilTypes.Count > 0 && soilTypes.Any())
                 {
-                    var country = field.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
+                    var country = field.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
                     var soilTypesList = soilTypes.Where(x => x.CountryId == country).ToList();
                     soilTypes = soilTypesList;
                 }
@@ -554,7 +554,7 @@ namespace NMP.Portal.Controllers
             soilTypes = await _fieldService.FetchSoilTypes();
             if (soilTypes.Count > 0 && soilTypes.Any())
             {
-                var country = field.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
+                var country = field.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
                 var soilTypesList = soilTypes.Where(x => x.CountryId == country).ToList();
                 soilTypes = soilTypesList;
             }
@@ -870,7 +870,7 @@ namespace NMP.Portal.Controllers
                 ViewBag.Error = string.Concat(error, ex.Message);
                 return View(model);
             }
-            return RedirectToAction("CropGroups");
+            return RedirectToAction("HasGrassInLastThreeYear");
         }
 
         [HttpGet]
@@ -957,8 +957,8 @@ namespace NMP.Portal.Controllers
                 }
 
                 cropTypes = await _fieldService.FetchCropTypes(model.CropGroupId ?? 0);
-                var country = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
-                var cropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.All).ToList();
+                var country = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                var cropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.RB209Country.All).ToList();
 
                 ViewBag.CropTypeList = cropTypeList;
                 if (cropTypeList.Count == 1)
@@ -999,8 +999,8 @@ namespace NMP.Portal.Controllers
             {
                 List<CropTypeResponse> cropTypes = new List<CropTypeResponse>();
                 cropTypes = await _fieldService.FetchCropTypes(field.CropGroupId ?? 0);
-                var country = field.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
-                ViewBag.CropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.All).ToList();
+                var country = field.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                ViewBag.CropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.RB209Country.All).ToList();
                 return View(field);
             }
             field.CropType = await _fieldService.FetchCropTypeById(field.CropTypeID.Value);
@@ -1670,8 +1670,8 @@ namespace NMP.Portal.Controllers
                 }
 
                 cropTypes = await _fieldService.FetchCropTypes(model.CurrentCropGroupId ?? 0);
-                var country = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
-                var cropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.All).ToList();
+                var country = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                var cropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.RB209Country.All).ToList();
 
                 ViewBag.CropTypeList = cropTypeList;
                 if (cropTypeList.Count == 1)
@@ -1788,8 +1788,8 @@ namespace NMP.Portal.Controllers
             {
                 List<CropTypeResponse> cropTypes = new List<CropTypeResponse>();
                 cropTypes = await _fieldService.FetchCropTypes(model.CurrentCropGroupId ?? 0);
-                var country = model.isEnglishRules ? (int)NMP.Portal.Enums.Country.England : (int)NMP.Portal.Enums.Country.Scotland;
-                ViewBag.CropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.Country.All).ToList();
+                var country = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                ViewBag.CropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.RB209Country.All).ToList();
                 return View(model);
             }
             model.CurrentCropType = await _fieldService.FetchCropTypeById(model.CurrentCropTypeId.Value);
@@ -3199,7 +3199,7 @@ namespace NMP.Portal.Controllers
                     {
                         return RedirectToAction("CheckAnswer");
                     }
-                    return RedirectToAction("CropGroups");
+                    return RedirectToAction("HasGrassInLastThreeYear");
                 }
             }
             catch (Exception ex)
@@ -3434,6 +3434,95 @@ namespace NMP.Portal.Controllers
             }
             return View(field);
 
+        }
+
+
+        //Grass journey
+
+        [HttpGet]
+        public async Task<IActionResult> HasGrassInLastThreeYear()
+        {
+            _logger.LogTrace($"Field Controller : HasGrassInLastThreeYear() action called");
+            Error error = new Error();
+
+            FieldViewModel model = new FieldViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult HasGrassInLastThreeYear(FieldViewModel model)
+        {
+            _logger.LogTrace($"Field Controller : HasGrassInLastThreeYear() post action called");
+            if (model.GrassSnsAnalyses.HasGrassInLastThreeYear == null)
+            {
+                ModelState.AddModelError("GrassSnsAnalyses.HasGrassInLastThreeYear", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
+            if (model.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
+            if (model.GrassSnsAnalyses.HasGrassInLastThreeYear.Value)
+            {
+
+                return RedirectToAction("GrassLastThreeHarvestYear");
+            }
+            else
+            {
+                model.GrassSnsAnalyses.HarvestYear = null;
+                model.GrassSnsAnalyses.GrassManagementOptionID = null;
+                model.GrassSnsAnalyses.GrassTypicalCutID = null;
+                model.GrassSnsAnalyses.HasGreaterThan30PercentClover = null;
+                model.GrassSnsAnalyses.SoilNitrogenSupplyItemID = null;
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
+                if (model.IsCheckAnswer)
+                {
+                    return RedirectToAction("CheckAnswer");
+                }
+                return RedirectToAction("CropGroups");
+            }
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GrassLastThreeHarvestYear()
+        {
+            _logger.LogTrace($"Field Controller : GrassLastThreeHarvestYear() action called");
+            Error error = new Error();
+
+            FieldViewModel model = new FieldViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult GrassLastThreeHarvestYear(FieldViewModel model)
+        {
+            _logger.LogTrace($"Field Controller : GrassLastThreeHarvestYear() post action called");
+            return View(model);
         }
     }
 }

@@ -47,7 +47,7 @@ namespace NMP.Portal.Models
         public int? NVZFields { get; set; } = null;
         public int? FieldsAbove300SeaLevel { get; set; } = null;
         public string? EncryptedFarmId { get; set; }
-        public int Country { get; set; } 
+        public int? CountryID { get; set; } 
         public DateTime CreatedOn { get; set; }
         public int? CreatedByID { get; set; }
         public DateTime? ModifiedOn { get; set; } = null;
