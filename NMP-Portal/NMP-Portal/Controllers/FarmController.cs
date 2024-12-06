@@ -253,6 +253,30 @@ namespace NMP.Portal.Controllers
             }
             return View(model);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult FarmingRules(FarmViewModel farm)
+        {
+            HttpContext.Session.SetObjectAsJson("FarmData", farm);
+            if (farm.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
+            return RedirectToAction("PostCode");
+
+        }
+        [HttpGet]
+        public IActionResult PostCode()
+        {
+            _logger.LogTrace($"Farm Controller : PostCode() action called");
+            FarmViewModel? model = null;
+            if (HttpContext.Session.Keys.Contains("FarmData"))
+            {
+                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+            }
+            return View(model);
+        }
         [HttpGet]
         public async Task<IActionResult> Address()
         {

@@ -2133,6 +2133,69 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Further information is available from:.
+        /// </summary>
+        public static string lblFarmingRuleOfWaterFifth {
+            get {
+                return ResourceManager.GetString("lblFarmingRuleOfWaterFifth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All agricultural land in England is subject to the Farming Rules for Water..
+        /// </summary>
+        public static string lblFarmingRuleOfWaterFirst {
+            get {
+                return ResourceManager.GetString("lblFarmingRuleOfWaterFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creating a nutrient management plan will help you comply with these rules..
+        /// </summary>
+        public static string lblFarmingRuleOfWaterFourth {
+            get {
+                return ResourceManager.GetString("lblFarmingRuleOfWaterFourth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The rules aim to reduce and prevent diffuse water pollution from agricultural sources..
+        /// </summary>
+        public static string lblFarmingRuleOfWaterSecond {
+            get {
+                return ResourceManager.GetString("lblFarmingRuleOfWaterSecond", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (opens in a new window).
+        /// </summary>
+        public static string lblFarmingRuleOfWaterSeventh {
+            get {
+                return ResourceManager.GetString("lblFarmingRuleOfWaterSeventh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rules for farmers and land managers.
+        /// </summary>
+        public static string lblFarmingRuleOfWaterSixth {
+            get {
+                return ResourceManager.GetString("lblFarmingRuleOfWaterSixth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To comply with the rules a land manager must ensure that all applications of organic manure or manufactured fertiliser are planned so that they don’t exceed the needs of the soil and crop on that land or give rise to a significant risk of agricultural diffuse pollution..
+        /// </summary>
+        public static string lblFarmingRuleOfWaterThird {
+            get {
+                return ResourceManager.GetString("lblFarmingRuleOfWaterThird", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Farming Rules for Water.
         /// </summary>
         public static string lblFarmingRulesForWater {
@@ -5884,6 +5947,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhatIsLengthOfGrowingSeasonForCrop {
             get {
                 return ResourceManager.GetString("lblWhatIsLengthOfGrowingSeasonForCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is {0}&apos;s postcode?.
+        /// </summary>
+        public static string lblWhatIsPostcode {
+            get {
+                return ResourceManager.GetString("lblWhatIsPostcode", resourceCulture);
             }
         }
         
