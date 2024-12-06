@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.FieldViewModel
 @{
-    ViewData["Title"] = Resource.lblHasGrassInLastThreeYear;
+    ViewData["Title"] = Resource.lblGrassTypicalCut;
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
     var backAction = "";
@@ -9,20 +9,16 @@
     {
         backAction = "CheckAnswer";
     }
-    else if (Model.RecentSoilAnalysisQuestion.Value)
-    {
-        backAction = "SoilNutrientValue";
-    }
     else
     {
-        backAction = "RecentSoilAnalysisQuestion";
+        backAction = "GrassLastThreeHarvestYear";
     }
 }
 
 @section BeforeContent {
     <govuk-back-link asp-action=@backAction asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="HasGrassInLastThreeYear" asp-controller="Field" method="post">
+<form asp-action="GrassLastThreeHarvestYear" asp-controller="Field" method="post">
     @Html.AntiForgeryToken()
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference"></govuk-input>
@@ -88,10 +84,9 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsUpdate"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ID"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZ"></govuk-input>
 
-    @* <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassSnsAnalyses.HasGrassInLastThreeYear"></govuk-input> *@
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.HarvestYear"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.HasGrassInLastThreeYear"></govuk-input>
+    @* <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.HarvestYear"></govuk-input> *@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.GrassManagementOptionID"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.GrassTypicalCutID"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.HasGreaterThan30PercentClover"></govuk-input>
@@ -99,19 +94,19 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <govuk-radios class="govuk-radios--inline" asp-for="@Model.PreviousGrasses.HasGrassInLastThreeYear">
-
+            <govuk-radios class="govuk-radios--inline" asp-for="@Model.PreviousGrasses.GrassTypicalCutID">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblHasBeenUsedForGrassInAnyOfTheLast3Year,Model.Name)
+                        @Resource.lblHowWasTheGrassTypicallyManagedEachYear
                     </govuk-radios-fieldset-legend>
-                    <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>
-                    <govuk-radios-item value=@no>@Resource.lblNo</govuk-radios-item>
+                    @* <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>
+                    <govuk-radios-item value=@no>@Resource.lblNo</govuk-radios-item> *@
                 </govuk-radios-fieldset>
             </govuk-radios>
-            <govuk-button type="submit" class="margin-bottom-forty">
+
+            @* <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
-            </govuk-button>
+            </govuk-button> *@
             <p class="govuk-body cancel-link"><a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
 
         </div>

@@ -18,7 +18,7 @@
 @section BeforeContent {
     <govuk-back-link asp-action=@backAction asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="NVZField" asp-controller="Field" method="post">
+<form asp-action="GrassLastThreeHarvestYear" asp-controller="Field" method="post">
     @Html.AntiForgeryToken()
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference"></govuk-input>
@@ -85,21 +85,40 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ID"></govuk-input>
 
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassSnsAnalyses.HasGrassInLastThreeYear"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassSnsAnalyses.HarvestYear"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassSnsAnalyses.GrassManagementOptionID"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassSnsAnalyses.GrassTypicalCutID"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassSnsAnalyses.HasGreaterThan30PercentClover"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassSnsAnalyses.SoilNitrogenSupplyItemID"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.HasGrassInLastThreeYear"></govuk-input>
+    @* <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.HarvestYear"></govuk-input> *@
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.GrassManagementOptionID"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.GrassTypicalCutID"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.HasGreaterThan30PercentClover"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.SoilNitrogenSupplyItemID"></govuk-input>
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <h1 class="govuk-heading-l">
-                @string.Format(Resource.lblInWhichYearsWasUsedForGrass,Model.Name)
-            </h1>
-            @* <govuk-button type="submit" class="margin-bottom-forty">
+            <govuk-checkboxes name="PreviousGrassYears" asp-for="PreviousGrassYears">
+                <govuk-checkboxes-fieldset>
+                    <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @string.Format(Resource.lblInWhichYearsWasUsedForGrass, Model.Name)
+                    </govuk-checkboxes-fieldset-legend>
+
+                    <govuk-checkboxes-hint>
+                        @Resource.lblSelectAllThatApply
+                    </govuk-checkboxes-hint>
+                    @if (ViewBag.PreviousGrassesYear != null)
+                    {
+                        @foreach (var item in ViewBag.PreviousGrassesYear)
+                        {
+                            <govuk-checkboxes-item value="@item">@item</govuk-checkboxes-item>
+                        }
+                    }
+
+                    <govuk-checkboxes-divider>or</govuk-checkboxes-divider>
+                    <govuk-checkboxes-item value=@Resource.lblSelectAll behavior="Exclusive">@Resource.lblSelectAll</govuk-checkboxes-item>
+                </govuk-checkboxes-fieldset>
+            </govuk-checkboxes>
+            
+            <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
-            </govuk-button> *@
+            </govuk-button>
             <p class="govuk-body cancel-link"><a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
 
         </div>

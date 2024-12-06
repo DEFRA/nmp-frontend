@@ -2439,6 +2439,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Grass typical cut.
+        /// </summary>
+        public static string lblGrassTypicalCut {
+            get {
+                return ResourceManager.GetString("lblGrassTypicalCut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Green area index (GAI).
         /// </summary>
         public static string lblGreenAreaIndex {
@@ -2670,6 +2679,15 @@ namespace NMP.Portal.Resources {
         public static string lblHowMuchOfEachNutrientDoYouPlan {
             get {
                 return ResourceManager.GetString("lblHowMuchOfEachNutrientDoYouPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How was the grass typically managed each year?.
+        /// </summary>
+        public static string lblHowWasTheGrassTypicallyManagedEachYear {
+            get {
+                return ResourceManager.GetString("lblHowWasTheGrassTypicallyManagedEachYear", resourceCulture);
             }
         }
         
@@ -4606,6 +4624,15 @@ namespace NMP.Portal.Resources {
         public static string lblSelectAllThatApply {
             get {
                 return ResourceManager.GetString("lblSelectAllThatApply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select at least one year before continuing..
+        /// </summary>
+        public static string lblSelectAtLeastOneYearBeforeContinuing {
+            get {
+                return ResourceManager.GetString("lblSelectAtLeastOneYearBeforeContinuing", resourceCulture);
             }
         }
         

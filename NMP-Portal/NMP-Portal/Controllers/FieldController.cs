@@ -3463,7 +3463,7 @@ namespace NMP.Portal.Controllers
         public IActionResult HasGrassInLastThreeYear(FieldViewModel model)
         {
             _logger.LogTrace($"Field Controller : HasGrassInLastThreeYear() post action called");
-            if (model.GrassSnsAnalyses.HasGrassInLastThreeYear == null)
+            if (model.PreviousGrasses.HasGrassInLastThreeYear == null)
             {
                 ModelState.AddModelError("GrassSnsAnalyses.HasGrassInLastThreeYear", Resource.MsgSelectAnOptionBeforeContinuing);
             }
@@ -3476,18 +3476,18 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("CheckAnswer");
             }
-            if (model.GrassSnsAnalyses.HasGrassInLastThreeYear.Value)
+            if (model.PreviousGrasses.HasGrassInLastThreeYear.Value)
             {
 
                 return RedirectToAction("GrassLastThreeHarvestYear");
             }
             else
             {
-                model.GrassSnsAnalyses.HarvestYear = null;
-                model.GrassSnsAnalyses.GrassManagementOptionID = null;
-                model.GrassSnsAnalyses.GrassTypicalCutID = null;
-                model.GrassSnsAnalyses.HasGreaterThan30PercentClover = null;
-                model.GrassSnsAnalyses.SoilNitrogenSupplyItemID = null;
+                model.PreviousGrasses.HarvestYear = null;
+                model.PreviousGrasses.GrassManagementOptionID = null;
+                model.PreviousGrasses.GrassTypicalCutID = null;
+                model.PreviousGrasses.HasGreaterThan30PercentClover = null;
+                model.PreviousGrasses.SoilNitrogenSupplyItemID = null;
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
                 if (model.IsCheckAnswer)
                 {
@@ -3513,6 +3513,12 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("FarmList", "Farm");
             }
+            List<int> previousYears = new List<int>();
+            int currentYear=System.DateTime.Now.Year;
+            previousYears.Add(currentYear);
+            previousYears.Add(currentYear-1);
+            previousYears.Add(currentYear-2);
+            ViewBag.PreviousGrassesYear = previousYears;
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             return View(model);
         }
@@ -3522,6 +3528,69 @@ namespace NMP.Portal.Controllers
         public IActionResult GrassLastThreeHarvestYear(FieldViewModel model)
         {
             _logger.LogTrace($"Field Controller : GrassLastThreeHarvestYear() post action called");
+
+            if (model.PreviousGrassYears==null)
+            {
+                ModelState.AddModelError("PreviousGrassYears", Resource.lblSelectAtLeastOneYearBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                List<int> previousYears = new List<int>();
+                int currentYear = System.DateTime.Now.Year;
+                previousYears.Add(currentYear);
+                previousYears.Add(currentYear - 1);
+                previousYears.Add(currentYear - 2);
+                ViewBag.PreviousGrassesYear = previousYears;
+                return View(model);
+            }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
+            if (model.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
+
+            return RedirectToAction("GrassTypicalCuts");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GrassTypicalCuts()
+        {
+            _logger.LogTrace($"Field Controller : GrassTypicalCuts() action called");
+            Error error = new Error();
+
+            FieldViewModel model = new FieldViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult GrassTypicalCuts(FieldViewModel model)
+        {
+            _logger.LogTrace($"Field Controller : GrassTypicalCuts() post action called");
+
+            if (model.PreviousGrasses.GrassTypicalCutID == null)
+            {
+                ModelState.AddModelError("GrassSnsAnalyses.GrassTypicalCutID", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
+            if (model.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
+
             return View(model);
         }
     }
