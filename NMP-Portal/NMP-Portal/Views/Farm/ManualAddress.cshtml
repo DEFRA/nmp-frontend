@@ -17,7 +17,7 @@
             <h1 class="govuk-heading-l">
                 @(string.Format(Resource.lblEnterTheAddressFor, Model.Name))
             </h1>
-
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Rainfall"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegisteredOrganicProducer"></govuk-input>

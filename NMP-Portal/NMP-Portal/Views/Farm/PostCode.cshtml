@@ -38,16 +38,20 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsUpdate"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
             }
-            <govuk-notification-banner>
+          @*   <govuk-notification-banner>
                 <govuk-notification-banner-title>
                     @Resource.lblImportant
                 </govuk-notification-banner-title>
                 <p class="govuk-body">This page is in construction</p>
-            </govuk-notification-banner>
-           
-          @*   <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
+            </govuk-notification-banner> *@
+              <div class="govuk-form-group margin-bottom-forty">
+            <govuk-input class="input-width-15" asp-for="@Model.Postcode">
+                    <govuk-input-label is-page-heading="false"></govuk-input-label>
+            </govuk-input>
+            </div> 
+            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                 @Resource.lblContinue
-            </govuk-button> *@
+            </govuk-button>
         </form>
         <p class="govuk-body cancel-link"><a asp-action="CreateFarmCancel" asp-controller="Farm">@Resource.lblCancel</a></p>
     </div>
