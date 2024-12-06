@@ -2826,6 +2826,30 @@ m3/ha  not set</value>
   <data name="lblInWhichYearsWasUsedForGrass" xml:space="preserve">
     <value>In which years was {0} used for grass?</value>
   </data>
+  <data name="lblFarmingRuleOfWaterFifth" xml:space="preserve">
+    <value>Further information is available from:</value>
+  </data>
+  <data name="lblFarmingRuleOfWaterFirst" xml:space="preserve">
+    <value>All agricultural land in England is subject to the Farming Rules for Water.</value>
+  </data>
+  <data name="lblFarmingRuleOfWaterFourth" xml:space="preserve">
+    <value>Creating a nutrient management plan will help you comply with these rules.</value>
+  </data>
+  <data name="lblFarmingRuleOfWaterSecond" xml:space="preserve">
+    <value>The rules aim to reduce and prevent diffuse water pollution from agricultural sources.</value>
+  </data>
+  <data name="lblFarmingRuleOfWaterSeventh" xml:space="preserve">
+    <value>(opens in a new window)</value>
+  </data>
+  <data name="lblFarmingRuleOfWaterSixth" xml:space="preserve">
+    <value>Rules for farmers and land managers</value>
+  </data>
+  <data name="lblFarmingRuleOfWaterThird" xml:space="preserve">
+    <value>To comply with the rules a land manager must ensure that all applications of organic manure or manufactured fertiliser are planned so that they don’t exceed the needs of the soil and crop on that land or give rise to a significant risk of agricultural diffuse pollution.</value>
+  </data>
+  <data name="lblWhatIsPostcode" xml:space="preserve">
+    <value>What is {0}'s postcode?</value>
+  </data>
   <data name="lblGrassTypicalCut" xml:space="preserve">
     <value>Grass typical cut</value>
   </data>
