@@ -1,6 +1,6 @@
 ﻿namespace NMP.Portal.Models
 {
-    public class GrassSnsAnalysis
+    public class PreviousGrasse
     {
         public bool? HasGrassInLastThreeYear { get; set; }
         public int? HarvestYear { get; set; }
