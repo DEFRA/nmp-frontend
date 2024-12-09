@@ -2644,7 +2644,7 @@ m3/ha  not set</value>
     <value>Application Date {0}</value>
   </data>
   <data name="lblRateWithTonnes" xml:space="preserve">
-    <value>{0} tonnes</value>
+    <value>{0} Tonnes</value>
   </data>
   <data name="lblAmountsArePerHectare" xml:space="preserve">
     <value>Amounts are per hectare.</value>
@@ -2719,22 +2719,22 @@ m3/ha  not set</value>
     <value>{0} kg Lime</value>
   </data>
   <data name="lblKgMagnesium" xml:space="preserve">
-    <value>{0} kg Magnesium(Mgo)</value>
+    <value>{0} kg Magnesium (Mgo)</value>
   </data>
   <data name="lblKgNitrogen" xml:space="preserve">
-    <value>{0} kg Nitrogen(N)</value>
+    <value>{0} kg Nitrogen (N)</value>
   </data>
   <data name="lblKgPhosphate" xml:space="preserve">
-    <value>{0} kg Phasphate(P2O5)</value>
+    <value>{0} kg Phasphate (P2O5)</value>
   </data>
   <data name="lblKgPotash" xml:space="preserve">
-    <value>{0} kg Potash(K2O)</value>
+    <value>{0} kg Potash (K2O)</value>
   </data>
   <data name="lblKgSodium" xml:space="preserve">
-    <value>{0} kg Sodium(Na2O)</value>
+    <value>{0} kg Sodium (Na2O)</value>
   </data>
   <data name="lblKgSulphur" xml:space="preserve">
-    <value>{0} kg Sulphur(SO3)</value>
+    <value>{0} kg Sulphur (SO3)</value>
   </data>
   <data name="lblAddAnInOrganicFertiliserApplicationForField" xml:space="preserve">
     <value>Add an inorganic fertiliser application for {0}</value>
@@ -2858,5 +2858,8 @@ m3/ha  not set</value>
   </data>
   <data name="lblSelectAtLeastOneYearBeforeContinuing" xml:space="preserve">
     <value>Select at least one year before continuing.</value>
+  </data>
+  <data name="lblTonneWithNutrient" xml:space="preserve">
+    <value>{0} tonnes {1}</value>
   </data>
 </root>

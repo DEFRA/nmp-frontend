@@ -3016,7 +3016,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} kg Magnesium(Mgo).
+        ///   Looks up a localized string similar to {0} kg Magnesium (Mgo).
         /// </summary>
         public static string lblKgMagnesium {
             get {
@@ -3025,7 +3025,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} kg Nitrogen(N).
+        ///   Looks up a localized string similar to {0} kg Nitrogen (N).
         /// </summary>
         public static string lblKgNitrogen {
             get {
@@ -3080,7 +3080,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} kg Phasphate(P2O5).
+        ///   Looks up a localized string similar to {0} kg Phasphate (P2O5).
         /// </summary>
         public static string lblKgPhosphate {
             get {
@@ -3089,7 +3089,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} kg Potash(K2O).
+        ///   Looks up a localized string similar to {0} kg Potash (K2O).
         /// </summary>
         public static string lblKgPotash {
             get {
@@ -3098,7 +3098,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} kg Sodium(Na2O).
+        ///   Looks up a localized string similar to {0} kg Sodium (Na2O).
         /// </summary>
         public static string lblKgSodium {
             get {
@@ -3107,7 +3107,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} kg Sulphur(SO3).
+        ///   Looks up a localized string similar to {0} kg Sulphur (SO3).
         /// </summary>
         public static string lblKgSulphur {
             get {
@@ -4466,7 +4466,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} tonnes.
+        ///   Looks up a localized string similar to {0} Tonnes.
         /// </summary>
         public static string lblRateWithTonnes {
             get {
@@ -5461,6 +5461,15 @@ namespace NMP.Portal.Resources {
         public static string lblTonnesPerHectare {
             get {
                 return ResourceManager.GetString("lblTonnesPerHectare", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} tonnes {1}.
+        /// </summary>
+        public static string lblTonneWithNutrient {
+            get {
+                return ResourceManager.GetString("lblTonneWithNutrient", resourceCulture);
             }
         }
         
