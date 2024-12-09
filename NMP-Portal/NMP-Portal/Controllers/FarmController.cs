@@ -159,8 +159,8 @@ namespace NMP.Portal.Controllers
             }
             if (farm.IsCheckAnswer)
             {
-                var updatedFarm = JsonConvert.SerializeObject(farm);
-                HttpContext?.Session.SetString("FarmData", updatedFarm);
+                //var updatedFarm = JsonConvert.SerializeObject(farm);
+                //HttpContext?.Session.SetString("FarmData", updatedFarm);
 
                 //if (farmView.Postcode == farm.Postcode)
                 //{
@@ -174,18 +174,21 @@ namespace NMP.Portal.Controllers
                 //    //return RedirectToAction("Address");
                 //}
             }
-            if (farmView != null)
-            {
-                if (farmView.Postcode != farm.Postcode)
-                {
-                    farm.Rainfall = null;
-                }
-            }
+            //if (farmView != null)
+            //{
+            //    if (farmView.Postcode != farm.Postcode)
+            //    {
+            //        farm.Rainfall = null;
+            //    }
+            //}
 
 
-            var farmModel = JsonConvert.SerializeObject(farm);
+            //var farmModel = JsonConvert.SerializeObject(farm);
             HttpContext?.Session.SetObjectAsJson("FarmData", farm);
-
+            if (farm.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
             return RedirectToAction("Country");
         }
 
@@ -232,6 +235,10 @@ namespace NMP.Portal.Controllers
             {
                 farm.EnglishRules = false;
             }
+            if (Enum.IsDefined(typeof(NMP.Portal.Enums.FarmCountry), farm.CountryID))
+            {                
+                farm.Country = Enum.GetName(typeof(NMP.Portal.Enums.FarmCountry), farm.CountryID);
+            }
 
             HttpContext.Session.SetObjectAsJson("FarmData", farm);
             if (farm.IsCheckAnswer)
@@ -276,6 +283,69 @@ namespace NMP.Portal.Controllers
                 model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
             return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PostCode(FarmViewModel farm)
+        {
+            if (string.IsNullOrWhiteSpace(farm.Postcode))
+            {
+                ModelState.AddModelError("Postcode", Resource.MsgEnterTheFarmPostcode);
+            }
+            
+            if (!string.IsNullOrWhiteSpace(farm.Postcode))
+            {
+                int id = 0;
+                if (farm.EncryptedFarmId != null)
+                {
+                    id = Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId));
+                }
+                bool IsFarmExist = await _farmService.IsFarmExistAsync(farm.Name, farm.Postcode, id);
+                if (IsFarmExist)
+                {
+                    ModelState.AddModelError("Postcode", Resource.MsgFarmAlreadyExist);
+                }
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(farm);
+            }
+            FarmViewModel farmView = null;
+            if (HttpContext.Session.Keys.Contains("FarmData"))
+            {
+                farmView = JsonConvert.DeserializeObject<FarmViewModel>(HttpContext.Session.GetString("FarmData"));
+            }
+            if (farm.IsCheckAnswer)
+            {
+                var updatedFarm = JsonConvert.SerializeObject(farm);
+                HttpContext?.Session.SetString("FarmData", updatedFarm);
+
+                if (farmView.Postcode == farm.Postcode)
+                {
+                    farm.IsPostCodeChanged = false;
+                    return RedirectToAction("CheckAnswer");
+                }
+                else
+                {
+                    farm.IsPostCodeChanged = true;
+                    farm.Rainfall = null;
+                    //return RedirectToAction("Address");
+                }
+            }
+            if (farmView != null)
+            {
+                if (farmView.Postcode != farm.Postcode)
+                {
+                    farm.Rainfall = null;
+                }
+            }
+            HttpContext.Session.SetObjectAsJson("FarmData", farm);
+            //if (farm.IsCheckAnswer)
+            //{
+            //    return RedirectToAction("CheckAnswer");
+            //}
+            return RedirectToAction("Address");
+
         }
         [HttpGet]
         public async Task<IActionResult> Address()
@@ -777,6 +847,7 @@ namespace NMP.Portal.Controllers
                     NVZFields = farm.NVZFields,
                     FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
                     LastHarvestYear = farm.LastHarvestYear,
+                    CountryID=farm.CountryID,
                     CreatedByID = userId,
                     CreatedOn = System.DateTime.Now,
                     ModifiedByID = farm.ModifiedByID,
@@ -935,6 +1006,11 @@ namespace NMP.Portal.Controllers
                         farmData.LastHarvestYear = farm.LastHarvestYear;
                         farmData.CreatedByID = farm.CreatedByID;
                         farmData.CreatedOn = farm.CreatedOn;
+                        farmData.CountryID = farm.CountryID;
+                        if (Enum.IsDefined(typeof(NMP.Portal.Enums.FarmCountry), farm.CountryID))
+                        {
+                            farmData.Country = Enum.GetName(typeof(NMP.Portal.Enums.FarmCountry), farm.CountryID);
+                        }
 
                         bool update = true;
                         farmData.EncryptedIsUpdate = _dataProtector.Protect(update.ToString());
@@ -1007,6 +1083,7 @@ namespace NMP.Portal.Controllers
                     NVZFields = farm.NVZFields,
                     FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
                     LastHarvestYear = farm.LastHarvestYear,
+                    CountryID = farm.CountryID,
                     CreatedByID = createdByID,
                     CreatedOn = createdOn,
                     ModifiedByID = userId,
