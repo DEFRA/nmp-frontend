@@ -235,6 +235,10 @@ namespace NMP.Portal.Controllers
             {
                 farm.EnglishRules = false;
             }
+            if (Enum.IsDefined(typeof(NMP.Portal.Enums.FarmCountry), farm.CountryID))
+            {                
+                farm.Country = Enum.GetName(typeof(NMP.Portal.Enums.FarmCountry), farm.CountryID);
+            }
 
             HttpContext.Session.SetObjectAsJson("FarmData", farm);
             if (farm.IsCheckAnswer)
@@ -1003,6 +1007,10 @@ namespace NMP.Portal.Controllers
                         farmData.CreatedByID = farm.CreatedByID;
                         farmData.CreatedOn = farm.CreatedOn;
                         farmData.CountryID = farm.CountryID;
+                        if (Enum.IsDefined(typeof(NMP.Portal.Enums.FarmCountry), farm.CountryID))
+                        {
+                            farmData.Country = Enum.GetName(typeof(NMP.Portal.Enums.FarmCountry), farm.CountryID);
+                        }
 
                         bool update = true;
                         farmData.EncryptedIsUpdate = _dataProtector.Protect(update.ToString());
