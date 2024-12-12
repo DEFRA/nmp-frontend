@@ -1081,6 +1081,12 @@ namespace NMP.Portal.Controllers
                     model.SoilReleasingClay = null;
                     model.IsSoilReleasingClay = false;
                 }
+                List<CommonResponse> grassManagements = await _fieldService.GetGrassManagementOptions();
+                ViewBag.GrassManagementOptions = grassManagements?.FirstOrDefault(x => x.Id == model.PreviousGrasses.GrassManagementOptionID)?.Name;
+
+                List<CommonResponse> grassTypicalCuts = await _fieldService.GetGrassTypicalCuts();
+                ViewBag.GrassTypicalCuts = grassTypicalCuts?.FirstOrDefault(x => x.Id == model.PreviousGrasses.GrassTypicalCutID)?.Name; 
+
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             }
             catch (Exception ex)
@@ -1242,6 +1248,13 @@ namespace NMP.Portal.Controllers
             }
             (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
 
+            List<PreviousGrass> grass = new List<PreviousGrass>();
+            foreach (var year in model.PreviousGrassYears)
+            {
+                model.PreviousGrasses.HarvestYear = year;
+                grass.Add(model.PreviousGrasses);
+            }
+
             FieldData fieldData = new FieldData
             {
                 Field = new Field
@@ -1317,7 +1330,6 @@ namespace NMP.Portal.Controllers
                     ModifiedByID = model.ModifiedByID
 
                 } : null,
-                PKBalance = model.PKBalance != null ? model.PKBalance : null,
                 Crops = new List<CropData>
                 {
                     new CropData
@@ -1345,8 +1357,9 @@ namespace NMP.Portal.Controllers
                         }
                     },
 
-                }
-
+                },
+                PKBalance = model.PKBalance != null ? model.PKBalance : null,
+                PreviousGrasses = model.PreviousGrasses.HasGrassInLastThreeYear == true ? grass : null
 
             };
 
@@ -3465,7 +3478,7 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace($"Field Controller : HasGrassInLastThreeYear() post action called");
             if (model.PreviousGrasses.HasGrassInLastThreeYear == null)
             {
-                ModelState.AddModelError("GrassSnsAnalyses.HasGrassInLastThreeYear", Resource.MsgSelectAnOptionBeforeContinuing);
+                ModelState.AddModelError("PreviousGrasses.HasGrassInLastThreeYear", Resource.MsgSelectAnOptionBeforeContinuing);
             }
             if (!ModelState.IsValid)
             {
@@ -3549,6 +3562,52 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("CheckAnswer");
             }
 
+            return RedirectToAction("GrassManagementOptions");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GrassManagementOptions()
+        {
+            _logger.LogTrace($"Field Controller : GrassManagementOptions() action called");
+            Error error = new Error();
+
+            FieldViewModel model = new FieldViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+            List<CommonResponse> commonResponses = await _fieldService.GetGrassManagementOptions();
+            ViewBag.GrassManagementOptions = commonResponses;
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> GrassManagementOptions(FieldViewModel model)
+        {
+            _logger.LogTrace($"Field Controller : GrassManagementOptions() post action called");
+
+            if (model.PreviousGrasses.GrassManagementOptionID == null)
+            {
+                ModelState.AddModelError("PreviousGrasses.GrassManagementOptionID", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                List<CommonResponse> commonResponses = await _fieldService.GetGrassManagementOptions();
+                ViewBag.GrassManagementOptions = commonResponses;
+                return View(model);
+            }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
+            if (model.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
+
             return RedirectToAction("GrassTypicalCuts");
         }
 
@@ -3567,22 +3626,26 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("FarmList", "Farm");
             }
+            List<CommonResponse> commonResponses = await _fieldService.GetGrassTypicalCuts();
+            ViewBag.GrassTypicalCuts = commonResponses;
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult GrassTypicalCuts(FieldViewModel model)
+        public async Task<IActionResult> GrassTypicalCuts(FieldViewModel model)
         {
             _logger.LogTrace($"Field Controller : GrassTypicalCuts() post action called");
 
             if (model.PreviousGrasses.GrassTypicalCutID == null)
             {
-                ModelState.AddModelError("GrassSnsAnalyses.GrassTypicalCutID", Resource.MsgSelectAnOptionBeforeContinuing);
+                ModelState.AddModelError("PreviousGrasses.GrassTypicalCutID", Resource.MsgSelectAnOptionBeforeContinuing);
             }
             if (!ModelState.IsValid)
             {
+                List<CommonResponse> commonResponses = await _fieldService.GetGrassTypicalCuts();
+                ViewBag.GrassTypicalCuts = commonResponses;
                 return View(model);
             }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
@@ -3591,7 +3654,7 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("CheckAnswer");
             }
 
-            return View(model);
+            return RedirectToAction("CheckAnswer");
         }
     }
 }
