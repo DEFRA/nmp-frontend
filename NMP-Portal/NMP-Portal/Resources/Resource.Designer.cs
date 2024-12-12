@@ -2439,6 +2439,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Grass management options.
+        /// </summary>
+        public static string lblGrassManagementOptions {
+            get {
+                return ResourceManager.GetString("lblGrassManagementOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Grass typical cut.
         /// </summary>
         public static string lblGrassTypicalCut {
@@ -2525,6 +2534,15 @@ namespace NMP.Portal.Resources {
         public static string lblHaveYouPlantedYourCrop {
             get {
                 return ResourceManager.GetString("lblHaveYouPlantedYourCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How many cuts typically each year?.
+        /// </summary>
+        public static string lblHawManyCutsTypicallyEachYear {
+            get {
+                return ResourceManager.GetString("lblHawManyCutsTypicallyEachYear", resourceCulture);
             }
         }
         

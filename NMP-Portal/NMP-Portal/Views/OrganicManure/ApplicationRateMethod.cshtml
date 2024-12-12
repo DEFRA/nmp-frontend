@@ -5,7 +5,29 @@
     var enterAnApplicationRate = (int)NMP.Portal.Enums.ApplicationRate.EnterAnApplicationRate;
     var calculateBasedOnAreaAndQuantity = (int)NMP.Portal.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity;
     var useDefaultApplicationRate = (int)NMP.Portal.Enums.ApplicationRate.UseDefaultApplicationRate;
-    var backaction = (Model.IsCheckAnswer && (!Model.IsManureTypeChange)) ? "CheckAnswer" : (Model.IsDefaultNutrientValues != null && (!Model.IsDefaultNutrientValues.Value) ? "NutrientValuesStoreForFuture" : "DefaultNutrientValues");
+    // var backaction = (Model.IsCheckAnswer && (!Model.IsManureTypeChange)) ? "CheckAnswer" : (Model.IsDefaultNutrientValues != null && (!Model.IsDefaultNutrientValues.Value) ? "NutrientValuesStoreForFuture" : "DefaultNutrientValues");
+
+    var backaction = "";
+    if (Model.IsCheckAnswer && (!Model.IsManureTypeChange))
+    {
+        backaction = "CheckAnswer";
+    }
+    else if (Model.IsDefaultNutrientValues != null && (!Model.IsDefaultNutrientValues.Value))
+    {
+        if (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
+        {
+            backaction = "ManualNutrientValues";
+        }
+        else
+        {
+            backaction = "NutrientValuesStoreForFuture";
+        }
+    }
+    else
+    {
+        backaction = "DefaultNutrientValues";
+    }
+
     var isOtherManure = (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials) ? true : false;
 
 }

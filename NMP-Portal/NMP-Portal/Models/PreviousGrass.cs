@@ -1,7 +1,9 @@
 ﻿namespace NMP.Portal.Models
 {
-    public class PreviousGrasse
+    public class PreviousGrass
     {
+        public int ID { get; set; }
+        public int FieldID { get; set; }
         public bool? HasGrassInLastThreeYear { get; set; }
         public int? HarvestYear { get; set; }
         public int? GrassManagementOptionID { get; set; }

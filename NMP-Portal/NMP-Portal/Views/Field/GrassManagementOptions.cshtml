@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.FieldViewModel
 @{
-    ViewData["Title"] = Resource.lblGrassTypicalCut;
+    ViewData["Title"] = Resource.lblGrassManagementOptions;
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
     var backAction = "";
@@ -11,14 +11,14 @@
     }
     else
     {
-        backAction = "GrassManagementOptions";
+        backAction = "GrassLastThreeHarvestYear";
     }
 }
 
 @section BeforeContent {
     <govuk-back-link asp-action=@backAction asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="GrassTypicalCuts" asp-controller="Field" method="post">
+<form asp-action="GrassManagementOptions" asp-controller="Field" method="post">
     @Html.AntiForgeryToken()
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference"></govuk-input>
@@ -88,8 +88,8 @@
 
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.HasGrassInLastThreeYear"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.HarvestYear"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.GrassManagementOptionID"></govuk-input>
-    @* <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.GrassTypicalCutID"></govuk-input> *@
+    @* <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.GrassManagementOptionID"></govuk-input> *@
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.GrassTypicalCutID"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.HasGreaterThan30PercentClover"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.SoilNitrogenSupplyItemID"></govuk-input>
     @if (Model.PreviousGrassYears != null && Model.PreviousGrassYears.Count > 0)
@@ -102,14 +102,14 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <govuk-radios class="govuk-radios" asp-for="@Model.PreviousGrasses.GrassTypicalCutID">
+            <govuk-radios class="govuk-radios" asp-for="@Model.PreviousGrasses.GrassManagementOptionID">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @Resource.lblHowWasTheGrassTypicallyManagedEachYear
                     </govuk-radios-fieldset-legend>
-                    @if (ViewBag.GrassTypicalCuts != null)
+                    @if (ViewBag.GrassManagementOptions != null)
                     {
-                        @foreach (var item in ViewBag.GrassTypicalCuts)
+                        @foreach (var item in ViewBag.GrassManagementOptions)
                         {
                             <govuk-radios-item value="@item.Id">@item.Name</govuk-radios-item>
                         }
@@ -118,7 +118,7 @@
             </govuk-radios>
 
             <govuk-button type="submit" class="margin-bottom-forty">
-                @Resource.lblContinue
+            @Resource.lblContinue
             </govuk-button>
             <p class="govuk-body cancel-link"><a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
 
