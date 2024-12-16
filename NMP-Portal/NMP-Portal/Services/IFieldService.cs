@@ -29,5 +29,6 @@ namespace NMP.Portal.Services
         Task<(string, Error)> DeleteFieldByIdAsync(int fieldId);
         Task<List<CommonResponse>> GetGrassManagementOptions();
         Task<List<CommonResponse>> GetGrassTypicalCuts();
+        Task<List<CommonResponse>> GetSoilNitrogenSupplyItems();
     }
 }

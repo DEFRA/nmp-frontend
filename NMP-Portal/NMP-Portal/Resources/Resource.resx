@@ -2868,4 +2868,13 @@ m3/ha  not set</value>
   <data name="lblHawManyCutsTypicallyEachYear" xml:space="preserve">
     <value>How many cuts typically each year?</value>
   </data>
+  <data name="lblDoesFieldTypicallyHaveMoreThan30PercentClover" xml:space="preserve">
+    <value>Does {0} typically have more than 30% clover?</value>
+  </data>
+  <data name="lblHowMuchNitrogenHasBeenAppliedToFieldEachYear" xml:space="preserve">
+    <value>How much nitrogen (N) has been applied to {0} each year on average?</value>
+  </data>
+  <data name="lblSoilNitrogenSupplyItems" xml:space="preserve">
+    <value>Soil nitrogen supply items</value>
+  </data>
 </root>
