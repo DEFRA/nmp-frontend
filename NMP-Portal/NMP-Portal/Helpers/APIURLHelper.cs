@@ -124,5 +124,8 @@ namespace NMP.Portal.Helpers
         public const string FetchMannerManureTypeByManureTypeIdAsyncAPI = "vendors/manner/manure-types/{0}";
         public const string FetchMannerRainfallAverageAsyncAPI = "vendors/manner/climates/avarage-annual-rainfall/{0}";        
         public const string FetchFarmManureTypesByFarmIdAsyncAPI = "farm-manure-type/{0}";
+        public const string FetchGrassManagementOptionsAsyncAPI = "grassland/grassManagementOptions";
+        public const string FetchGrassTypicalCutsAsyncAPI = "grassland/grassTypicalCuts";
+        public const string FetchSoilNitrogenSupplyItemsAsyncAPI = "grassland/soilNitrogenSupply";
     }
 }

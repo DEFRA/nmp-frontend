@@ -1611,6 +1611,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Does {0} typically have more than 30% clover?.
+        /// </summary>
+        public static string lblDoesFieldTypicallyHaveMoreThan30PercentClover {
+            get {
+                return ResourceManager.GetString("lblDoesFieldTypicallyHaveMoreThan30PercentClover", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Does this field contain potash-releasing clay?.
         /// </summary>
         public static string lblDoesPotashClayForCheckAnswere {
@@ -2457,6 +2466,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Grass management options.
+        /// </summary>
+        public static string lblGrassManagementOptions {
+            get {
+                return ResourceManager.GetString("lblGrassManagementOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Grass typical cut.
         /// </summary>
         public static string lblGrassTypicalCut {
@@ -2543,6 +2561,15 @@ namespace NMP.Portal.Resources {
         public static string lblHaveYouPlantedYourCrop {
             get {
                 return ResourceManager.GetString("lblHaveYouPlantedYourCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How many cuts typically each year?.
+        /// </summary>
+        public static string lblHawManyCutsTypicallyEachYear {
+            get {
+                return ResourceManager.GetString("lblHawManyCutsTypicallyEachYear", resourceCulture);
             }
         }
         
@@ -2688,6 +2715,15 @@ namespace NMP.Portal.Resources {
         public static string lblHowMoistTheTopsoilIs {
             get {
                 return ResourceManager.GetString("lblHowMoistTheTopsoilIs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How much nitrogen (N) has been applied to {0} each year on average?.
+        /// </summary>
+        public static string lblHowMuchNitrogenHasBeenAppliedToFieldEachYear {
+            get {
+                return ResourceManager.GetString("lblHowMuchNitrogenHasBeenAppliedToFieldEachYear", resourceCulture);
             }
         }
         
@@ -4921,6 +4957,15 @@ namespace NMP.Portal.Resources {
         public static string lblSoilNitrogenSupplyIndex {
             get {
                 return ResourceManager.GetString("lblSoilNitrogenSupplyIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Soil nitrogen supply items.
+        /// </summary>
+        public static string lblSoilNitrogenSupplyItems {
+            get {
+                return ResourceManager.GetString("lblSoilNitrogenSupplyItems", resourceCulture);
             }
         }
         
