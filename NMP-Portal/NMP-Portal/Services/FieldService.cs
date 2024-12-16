@@ -878,14 +878,14 @@ namespace NMP.Portal.Services
             }
             return (error,fields);
         }
-        public async Task<(FieldResponse, Error)> FetchFieldSoilAnalysisAndSnsByIdAsync(int fieldId)
+        public async Task<(FieldResponse, Error)> FetchFieldSoilAnalysisAndSnsById(int fieldId)
         {
             FieldResponse fieldResponse = new FieldResponse();
             Error error = new Error();
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchFieldSoilAnalysisAndSnsByIdAsync, fieldId));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchFieldSoilAnalysisAndSnsByIdAsyncAPI, fieldId));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
