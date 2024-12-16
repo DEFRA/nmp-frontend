@@ -22,7 +22,7 @@ namespace NMP.Portal.Helpers
         public const string FetchCropGroupByIdAsyncAPI = "vendors/rb209/Arable/CropGroup/{0}";
         public const string FetchCropTypeByIdAsyncAPI = "vendors/rb209/Arable/CropType/{0}";
         public const string AddFieldAsyncAPI = "fields/farms/{0}";        
-        public const string IsFieldExistAsyncAPI = "fields/farms/{0}/exists?Name={1}";
+        public const string IsFieldExistAsyncAPI = "fields/farms/{0}/exists?name={1}";
         public const string FetchFieldsByFarmIdAsyncAPI = "fields/farms/{0}";
         public const string FetchPotatoVarietiesAsyncAPI = "vendors/rb209/Arable/PotatoVarieties";
         public const string FetchFieldByFieldIdAsyncAPI = "fields/{0}";
@@ -99,6 +99,9 @@ namespace NMP.Portal.Helpers
         public const string UpdatePKBalanceAsyncAPI = "pk-Balance/{0}&Field={1}";
         public const string FetchPKBalanceByYearAndFieldIdAsyncAPI = "pk-balance/{0}?fieldId={1}";
         public const string FetchCountryListAsyncAPI = "countries/all-data";
+        public const string FetchFieldByFarmIdAsyncAPI = "fields/farms/{0}?shortSummary={1}";
+        public const string FetchFieldSoilAnalysisAndSnsByIdAsync = "fields/fieldSoilSnsInfo/{0}";
+        public const string FetchInprogressCalculationsByFarmIdAsyncAPI = "inprogress-calculations/{0}";
 
         //Manner APi Url
         public const string FetchMannerApplicationMethodByIdAsyncAPI = "vendors/manner/application-methods/{0}";

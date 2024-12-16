@@ -46,14 +46,17 @@
     //         sulphurDeficient = Resource.lblNo;
     //         break;
     // }
-    switch (Model.RecentSoilAnalysisQuestion)
+    if (Model.RecentSoilAnalysisQuestion != null)
     {
-        case true:
-            addRecentSoilAnalysis = Resource.lblYes;
-            break;
-        case false:
-            addRecentSoilAnalysis = Resource.lblNo;
-            break;
+        switch (Model.RecentSoilAnalysisQuestion)
+        {
+            case true:
+                addRecentSoilAnalysis = Resource.lblYes;
+                break;
+            case false:
+                addRecentSoilAnalysis = Resource.lblNo;
+                break;
+        }
     }
     // switch (Model.WantToApplySns)
     // {
@@ -144,6 +147,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SnsValue"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RecentSoilAnalysisQuestion" value="@Model.RecentSoilAnalysisQuestion.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilOverChalk" value="@Model.SoilOverChalk.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingField" value="@Model.CopyExistingField.ToString().ToLower()"></govuk-input>
             <govuk-summary-list>
                 <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
@@ -307,7 +311,6 @@
                 </govuk-summary-list-row>
                 @if (Model.RecentSoilAnalysisQuestion.Value)
                 {
-
                     <govuk-summary-list-row class=@((!Model.SoilAnalyses.SulphurDeficient.HasValue)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
                             @Resource.lblSoilDeficientInSulpurForCheckAnswer
