@@ -77,7 +77,7 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> HarvestYearForPlan(string q, string? year, bool? isPlanRecord)
         {
             _logger.LogTrace($"Crop Controller : HarvestYearForPlan({q}, {year}, {isPlanRecord}) action called");
-            PlanViewModel model = new PlanViewModel();
+            PlanViewModel? model = new PlanViewModel();
             Error? error = null;
             try
             {
@@ -89,7 +89,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                if (!string.IsNullOrEmpty(q))
+                if (!string.IsNullOrEmpty(q) && model != null)
                 {
                     int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(q));
                     model.EncryptedFarmId = q;
@@ -115,11 +115,11 @@ namespace NMP.Portal.Controllers
 
                     _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("CropData", model);
                 }
-                if (model.IsPlanRecord.Value)
+                if (model != null &&  model.IsPlanRecord.Value)
                 {
                     return RedirectToAction("PlansAndRecordsOverview", "Crop", new { id = model.EncryptedFarmId, year = _farmDataProtector.Protect(model.Year.ToString()) });
                 }
-                if (model.IsAddAnotherCrop)
+                if (model != null && model.IsAddAnotherCrop)
                 {
                     return RedirectToAction("HarvestYearOverview", "Crop", new { id = model.EncryptedFarmId, year = _farmDataProtector.Protect(model.Year.ToString()) });
                 }

@@ -631,18 +631,18 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> InOrgnaicManureDuration(FertiliserManureViewModel model)
         {
             _logger.LogTrace($"Fertiliser Manure Controller : InOrgnaicManureDuration() post action called");
-            Error error = null;
+            Error? error = null;
             try
             {
                 if ((!ModelState.IsValid) && ModelState.ContainsKey("Date"))
                 {
-                    var dateError = ModelState["Date"].Errors.Count > 0 ?
-                                    ModelState["Date"].Errors[0].ErrorMessage.ToString() : null;
+                    var dateError = ModelState["Date"]?.Errors.Count > 0 ?
+                                    ModelState["Date"]?.Errors[0].ErrorMessage.ToString() : null;
 
                     if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, Resource.lblDate)))
                     {
-                        ModelState["Date"].Errors.Clear();
-                        ModelState["Date"].Errors.Add(Resource.MsgEnterTheDateInNumber);
+                        ModelState["Date"]?.Errors.Clear();
+                        ModelState["Date"]?.Errors.Add(Resource.MsgEnterTheDateInNumber);
                     }
                 }
 
