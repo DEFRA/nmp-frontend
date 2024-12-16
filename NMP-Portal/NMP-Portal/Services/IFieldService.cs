@@ -28,6 +28,6 @@ namespace NMP.Portal.Services
         Task<(Field, Error)> UpdateFieldAsync(FieldData field, int fieldId);
         Task<(string, Error)> DeleteFieldByIdAsync(int fieldId);
         Task<(Error, List<Field>)> FetchFieldByFarmId(int farmId, string shortSummary);
-        Task<(FieldResponse, Error)> FetchFieldSoilAnalysisAndSnsByIdAsync(int fieldId);
+        Task<(FieldResponse, Error)> FetchFieldSoilAnalysisAndSnsById(int fieldId);
     }
 }
