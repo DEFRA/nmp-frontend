@@ -8,5 +8,6 @@ namespace NMP.Portal.ServiceResponses
         public SoilAnalysis? SoilAnalysis { get; set; }
         public SnsAnalysis? SnsAnalyses { get; set; }
         public Crop? Crop { get; set; }
+        public List<PreviousGrass>? PreviousGrasses { get; set; }
     }
 }

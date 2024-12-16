@@ -179,7 +179,7 @@ namespace NMP.Portal.Controllers
 
             if (field.CopyExistingField != null && (field.CopyExistingField.Value))
             {
-                (FieldResponse fieldResponse, Error error) = await _fieldService.FetchFieldSoilAnalysisAndSnsByIdAsync(field.ID.Value);
+                (FieldResponse fieldResponse, Error error) = await _fieldService.FetchFieldSoilAnalysisAndSnsById(field.ID.Value);
                 if (fieldResponse != null && string.IsNullOrWhiteSpace(error.Message))
                 {
                     //field.Name = fieldData.Name;
@@ -206,23 +206,8 @@ namespace NMP.Portal.Controllers
                     {
                         field.IsSoilReleasingClay = false;
                     }
-                    field.SoilType = await _soilService.FetchSoilTypeById(field.SoilTypeID.Value);
-                    List<CropTypeResponse> cropTypeResponses = await _fieldService.FetchAllCropTypes();
-                    if (fieldResponse.Crop != null)
-                    {
-                        field.CropTypeID = fieldResponse.Crop.CropTypeID;
-                        field.CropType = Enum.GetName(typeof(NMP.Portal.Enums.CropTypes), field.CropTypeID);
-
-                        if (cropTypeResponses.Count > 0)
-                        {
-                            var cropType = cropTypeResponses.FirstOrDefault(x => x.CropTypeId == field.CropTypeID);
-                            if (cropType != null)
-                            {
-                                field.CropGroupId = cropType.CropGroupId;
-                                field.CropGroup = await _fieldService.FetchCropGroupById(field.CropGroupId.Value);
-                            }
-                        }
-                    }
+                    field.SoilType = await _soilService.FetchSoilTypeById(field.SoilTypeID.Value);                    
+                    
                     if (fieldResponse.SoilAnalysis != null)
                     {
                         field.SoilAnalyses.PH = fieldResponse.SoilAnalysis.PH;
@@ -251,110 +236,144 @@ namespace NMP.Portal.Controllers
                     {
                         field.RecentSoilAnalysisQuestion = false;
                     }
-                    if (fieldResponse.SnsAnalyses != null)
+                    
+                    if (fieldResponse.PreviousGrasses != null&& fieldResponse.PreviousGrasses.Count>0)
                     {
-                        field.CurrentCropTypeId = fieldResponse.SnsAnalyses.CurrentCropTypeID;
-                        field.SoilMineralNitrogen = fieldResponse.SnsAnalyses.SoilMineralNitrogen;
-                        field.SnsValue = fieldResponse.SnsAnalyses.SoilNitrogenSupplyValue.Value;
-                        field.SnsIndex = fieldResponse.SnsAnalyses.SoilNitrogenSupplyIndex.Value;
-                        field.SampleForSoilMineralNitrogen = fieldResponse.SnsAnalyses.SampleDate.Value;
-                        field.SoilMineralNitrogenAt030CM = fieldResponse.SnsAnalyses.SnsAt0to30cm;
-                        field.SoilMineralNitrogenAt3060CM = fieldResponse.SnsAnalyses.SnsAt30to60cm;
-                        field.SoilMineralNitrogenAt6090CM = fieldResponse.SnsAnalyses.SnsAt60to90cm;
-                        field.SampleDepth = fieldResponse.SnsAnalyses.SampleDepth;
-                        field.NumberOfShoots = fieldResponse.SnsAnalyses.NumberOfShoots;
-                        field.CropHeight = fieldResponse.SnsAnalyses.CropHeight;
-                        field.SeasonId = fieldResponse.SnsAnalyses.SeasonId.Value;
-                        field.SoilOrganicMatter = fieldResponse.SnsAnalyses.PercentageOfOrganicMatter;
-                        field.AdjustmentValue = fieldResponse.SnsAnalyses.AdjustmentValue;
-                        field.WantToApplySns = true;
-                        if (field.SoilOrganicMatter != null ||
-                            field.AdjustmentValue != null)
+                        List<int> PreviousGrassYears = new List<int>();
+                        foreach (var year in fieldResponse.PreviousGrasses)
                         {
-                            field.IsEstimateOfNitrogenMineralisation = true;
+                            PreviousGrassYears.Add(year.HarvestYear.Value);
                         }
-                        else
-                        {
-                            field.IsEstimateOfNitrogenMineralisation = false;
-                        }
-                        if (field.SoilOrganicMatter != null)
-                        {
-                            field.IsBasedOnSoilOrganicMatter = true;
-                        }
-                        if (field.AdjustmentValue != null)
-                        {
-                            field.IsBasedOnSoilOrganicMatter = false;
-                        }
-                        field.CurrentCropType = Enum.GetName(typeof(NMP.Portal.Enums.CropTypes), field.CurrentCropTypeId);
-
-                        if (cropTypeResponses.Count > 0)
-                        {
-                            var cropType = cropTypeResponses.FirstOrDefault(x => x.CropTypeId == field.CurrentCropTypeId);
-                            if (cropType != null)
-                            {
-                                field.CurrentCropGroupId = cropType.CropGroupId;
-                                field.CurrentCropGroup = await _fieldService.FetchCropGroupById(field.CurrentCropGroupId.Value);
-                            }
-                        }
-                        (CropTypeLinkingResponse cropTypeLinking, Error cropTypeError) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(field.CurrentCropTypeId.Value);
-                        if (cropTypeLinking != null && cropTypeError == null)// && cropTypeLinking.SNSCategoryID != null
-                        {
-                            field.SnsCategoryId = cropTypeLinking.SNSCategoryID;
-                        }
-                        if (field.SnsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterCereals ||
-                            field.SnsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterOilseedRape)
-                        {
-                            if (field.CropHeight != null)
-                            {
-                                field.GreenAreaIndexOrCropHeight = (int)NMP.Portal.Enums.GreenAreaIndexOrCropHeight.CropHeight;
-                                field.IsCropHeight = true;
-                                field.IsCalculateNitrogen = true;
-                            }
-                            else if (field.GreenAreaIndex != null)
-                            {
-                                field.GreenAreaIndexOrCropHeight = (int)NMP.Portal.Enums.GreenAreaIndexOrCropHeight.GAI;
-                                field.IsGreenAreaIndex = true;
-                                field.IsCalculateNitrogen = true;
-                            }
-                            else if (field.NumberOfShoots != null)
-                            {
-                                field.IsNumberOfShoots = true;
-                                field.IsCalculateNitrogen = true;
-                            }
-                            if (field.NumberOfShoots != null|| field.GreenAreaIndex != null
-                                || field.CropHeight != null)
-                            {
-                                field.IsCalculateNitrogen = true;
-                            }
-                            else
-                            {
-                                field.IsCalculateNitrogen = false;
-                                field.IsCalculateNitrogenNo = true;
-                            }
-                            //if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterCereals)
-                            //{
-                            //    return RedirectToAction("NumberOfShoots");
-                            //}
-                            //if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterOilseedRape)
-                            //{
-                            //    return RedirectToAction("GreenAreaIndexOrCropHeightQuestion");
-                            //}
-                        }
-                        field.PreviousGrasses.HasGrassInLastThreeYear = false;
-                        string farmId = _farmDataProtector.Unprotect(field.EncryptedFarmId);
-                        (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-                        if (string.IsNullOrWhiteSpace(error.Message))
-                        {
-                            field.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Portal.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
-                            field.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
-                        }
+                        field.PreviousGrasses.GrassManagementOptionID = fieldResponse.PreviousGrasses[0].GrassManagementOptionID;
+                        field.PreviousGrasses.GrassTypicalCutID = fieldResponse.PreviousGrasses[0].GrassTypicalCutID;
+                        field.PreviousGrasses.HasGreaterThan30PercentClover = fieldResponse.PreviousGrasses[0].HasGreaterThan30PercentClover;
+                        field.PreviousGrasses.SoilNitrogenSupplyItemID = fieldResponse.PreviousGrasses[0].SoilNitrogenSupplyItemID;
+                        field.PreviousGrasses.HasGrassInLastThreeYear = fieldResponse.PreviousGrasses[0].HasGrassInLastThreeYear;
+                        field.PreviousGrassYears = PreviousGrassYears;                        
+                        
                     }
                     else
                     {
-                        field.WantToApplySns = false;
+                        field.PreviousGrasses.HasGrassInLastThreeYear = false;
+                        List<CropTypeResponse> cropTypeResponses = await _fieldService.FetchAllCropTypes();
+                        if (fieldResponse.Crop != null)
+                        {
+                            field.CropTypeID = fieldResponse.Crop.CropTypeID;
+                            field.CropType = Enum.GetName(typeof(NMP.Portal.Enums.CropTypes), field.CropTypeID);
+
+                            if (cropTypeResponses.Count > 0)
+                            {
+                                var cropType = cropTypeResponses.FirstOrDefault(x => x.CropTypeId == field.CropTypeID);
+                                if (cropType != null)
+                                {
+                                    field.CropGroupId = cropType.CropGroupId;
+                                    field.CropGroup = await _fieldService.FetchCropGroupById(field.CropGroupId.Value);
+                                }
+                            }
+                        }
+                        if (fieldResponse.SnsAnalyses != null)
+                        {
+                            field.CurrentCropTypeId = fieldResponse.SnsAnalyses.CurrentCropTypeID;
+                            field.SoilMineralNitrogen = fieldResponse.SnsAnalyses.SoilMineralNitrogen;
+                            field.SnsValue = fieldResponse.SnsAnalyses.SoilNitrogenSupplyValue.Value;
+                            field.SnsIndex = fieldResponse.SnsAnalyses.SoilNitrogenSupplyIndex.Value;
+                            field.SampleForSoilMineralNitrogen = fieldResponse.SnsAnalyses.SampleDate.Value;
+                            field.SoilMineralNitrogenAt030CM = fieldResponse.SnsAnalyses.SnsAt0to30cm;
+                            field.SoilMineralNitrogenAt3060CM = fieldResponse.SnsAnalyses.SnsAt30to60cm;
+                            field.SoilMineralNitrogenAt6090CM = fieldResponse.SnsAnalyses.SnsAt60to90cm;
+                            field.SampleDepth = fieldResponse.SnsAnalyses.SampleDepth;
+                            field.NumberOfShoots = fieldResponse.SnsAnalyses.NumberOfShoots;
+                            field.CropHeight = fieldResponse.SnsAnalyses.CropHeight;
+                            field.SeasonId = fieldResponse.SnsAnalyses.SeasonId.Value;
+                            field.SoilOrganicMatter = fieldResponse.SnsAnalyses.PercentageOfOrganicMatter;
+                            field.AdjustmentValue = fieldResponse.SnsAnalyses.AdjustmentValue;
+                            field.WantToApplySns = true;
+                            if (field.SoilOrganicMatter != null ||
+                                field.AdjustmentValue != null)
+                            {
+                                field.IsEstimateOfNitrogenMineralisation = true;
+                            }
+                            else
+                            {
+                                field.IsEstimateOfNitrogenMineralisation = false;
+                            }
+                            if (field.SoilOrganicMatter != null)
+                            {
+                                field.IsBasedOnSoilOrganicMatter = true;
+                            }
+                            if (field.AdjustmentValue != null)
+                            {
+                                field.IsBasedOnSoilOrganicMatter = false;
+                            }
+                            field.CurrentCropType = Enum.GetName(typeof(NMP.Portal.Enums.CropTypes), field.CurrentCropTypeId);
+
+                            if (cropTypeResponses.Count > 0)
+                            {
+                                var cropType = cropTypeResponses.FirstOrDefault(x => x.CropTypeId == field.CurrentCropTypeId);
+                                if (cropType != null)
+                                {
+                                    field.CurrentCropGroupId = cropType.CropGroupId;
+                                    field.CurrentCropGroup = await _fieldService.FetchCropGroupById(field.CurrentCropGroupId.Value);
+                                }
+                            }
+                            (CropTypeLinkingResponse cropTypeLinking, Error cropTypeError) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(field.CurrentCropTypeId.Value);
+                            if (cropTypeLinking != null && cropTypeError == null)// && cropTypeLinking.SNSCategoryID != null
+                            {
+                                field.SnsCategoryId = cropTypeLinking.SNSCategoryID;
+                            }
+                            if (field.SnsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterCereals ||
+                                field.SnsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterOilseedRape)
+                            {
+                                if (field.CropHeight != null)
+                                {
+                                    field.GreenAreaIndexOrCropHeight = (int)NMP.Portal.Enums.GreenAreaIndexOrCropHeight.CropHeight;
+                                    field.IsCropHeight = true;
+                                    field.IsCalculateNitrogen = true;
+                                }
+                                else if (field.GreenAreaIndex != null)
+                                {
+                                    field.GreenAreaIndexOrCropHeight = (int)NMP.Portal.Enums.GreenAreaIndexOrCropHeight.GAI;
+                                    field.IsGreenAreaIndex = true;
+                                    field.IsCalculateNitrogen = true;
+                                }
+                                else if (field.NumberOfShoots != null)
+                                {
+                                    field.IsNumberOfShoots = true;
+                                    field.IsCalculateNitrogen = true;
+                                }
+                                if (field.NumberOfShoots != null || field.GreenAreaIndex != null
+                                    || field.CropHeight != null)
+                                {
+                                    field.IsCalculateNitrogen = true;
+                                }
+                                else
+                                {
+                                    field.IsCalculateNitrogen = false;
+                                    field.IsCalculateNitrogenNo = true;
+                                }
+                                //if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterCereals)
+                                //{
+                                //    return RedirectToAction("NumberOfShoots");
+                                //}
+                                //if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterOilseedRape)
+                                //{
+                                //    return RedirectToAction("GreenAreaIndexOrCropHeightQuestion");
+                                //}
+                            }
+                            field.PreviousGrasses.HasGrassInLastThreeYear = false;
+                            string farmId = _farmDataProtector.Unprotect(field.EncryptedFarmId);
+                            (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+                            if (string.IsNullOrWhiteSpace(error.Message))
+                            {
+                                field.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Portal.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
+                                field.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
+                            }
+                        }
+                        else
+                        {
+                            field.WantToApplySns = false;
+                        }
                     }
-
-
 
                     _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
                 }
@@ -1093,8 +1112,23 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogTrace($"Field Controller : Exception in CropGroups() action : {ex.Message}, {ex.StackTrace}");
-                TempData["Error"] = ex.Message;
-                return RedirectToAction("SNSCalculationMethod");
+                //TempData["Error"] = ex.Message;
+                if (model.RecentSoilAnalysisQuestion!=null&&model.RecentSoilAnalysisQuestion.Value == true)
+                {
+                    ViewBag.Error= ex.Message;
+                    return RedirectToAction("SoilNutrientValue");
+                }
+                else if (model.PreviousGrasses.HasGrassInLastThreeYear != null)
+                {
+                    TempData["Error"] = ex.Message;
+                    return RedirectToAction("HasGrassInLastThreeYear");
+                }
+                else
+                {
+                    TempData["Error"] = ex.Message;
+                    return RedirectToAction("RecentSoilAnalysisQuestion");
+                }
+                //return RedirectToAction("SNSCalculationMethod");
             }
             return View(model);
         }
@@ -1247,7 +1281,7 @@ namespace NMP.Portal.Controllers
             return RedirectToAction("CheckAnswer");
         }
         [HttpGet]
-        public IActionResult CheckAnswer()
+        public async Task<IActionResult> CheckAnswer()
         {
             _logger.LogTrace($"Field Controller : CheckAnswer() action called");
             FieldViewModel? model = null;
@@ -1537,7 +1571,7 @@ namespace NMP.Portal.Controllers
                 },
                 SnsAnalysis = model.WantToApplySns == true ? new SnsAnalysis
                 {
-                    CurrentCropTypeID = model.CurrentCropTypeId,
+                    CurrentCropTypeID = model.CurrentCropTypeId.Value,
                     SampleDate = model.SampleForSoilMineralNitrogen,
                     SnsAt0to30cm = model.SoilMineralNitrogenAt030CM,
                     SnsAt30to60cm = model.SoilMineralNitrogenAt3060CM,
@@ -2974,7 +3008,7 @@ namespace NMP.Portal.Controllers
                 {
                     postMeasurementData = new MeasurementData
                     {
-                        cropTypeId = model.CurrentCropTypeId ?? 0,
+                        CropTypeId = model.CurrentCropTypeId ?? 0,
                         SeasonId = model.SeasonId == 0 ? 1 : model.SeasonId,
                         Step1ArablePotato = new Step1ArablePotato
                         {
@@ -3000,7 +3034,7 @@ namespace NMP.Portal.Controllers
                 {
                     postMeasurementData = new MeasurementData
                     {
-                        cropTypeId = model.CurrentCropTypeId ?? 0,
+                        CropTypeId = model.CurrentCropTypeId ?? 0,
                         SeasonId = 1,
                         Step1ArablePotato = new Step1ArablePotato
                         {
@@ -3020,7 +3054,7 @@ namespace NMP.Portal.Controllers
                 {
                     postMeasurementData = new MeasurementData
                     {
-                        cropTypeId = model.CurrentCropTypeId ?? 0,
+                        CropTypeId = model.CurrentCropTypeId ?? 0,
                         SeasonId = 1,
                         Step1Veg = new Step1Veg
                         {
@@ -3039,8 +3073,8 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("CheckAnswer");
                 }
-                if (postMeasurementData.cropTypeId > 0)
-                {
+                //if (postMeasurementData.CropTypeId !=null)
+                //{
                     (SnsResponse snsResponse, Error error) = await _fieldService.FetchSNSIndexByMeasurementMethodAsync(postMeasurementData);
                     if (error.Message == null)
                     {
@@ -3048,7 +3082,7 @@ namespace NMP.Portal.Controllers
                         model.SnsValue = snsResponse.SnsValue;
                         _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
                     }
-                }
+                //}
 
             }
             catch (Exception ex)

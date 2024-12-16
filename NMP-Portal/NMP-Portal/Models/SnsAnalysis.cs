@@ -2,6 +2,7 @@
 {
     public class SnsAnalysis
     {
+        public int CurrentCropTypeID { get; set; }
         public DateTime? SampleDate { get; set; }
         public int? SnsAt0to30cm { get; set; }
         public int? SnsAt30to60cm { get; set; }

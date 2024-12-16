@@ -100,7 +100,7 @@ namespace NMP.Portal.Helpers
         public const string FetchPKBalanceByYearAndFieldIdAsyncAPI = "pk-balance/{0}?fieldId={1}";
         public const string FetchCountryListAsyncAPI = "countries/all-data";
         public const string FetchFieldByFarmIdAsyncAPI = "fields/farms/{0}?shortSummary={1}";
-        public const string FetchFieldSoilAnalysisAndSnsByIdAsync = "fields/fieldSoilSnsInfo/{0}";
+        public const string FetchFieldSoilAnalysisAndSnsByIdAsyncAPI = "fields/fieldSoilSnsInfo/{0}";
         public const string FetchInprogressCalculationsByFarmIdAsyncAPI = "inprogress-calculations/{0}";
 
         //Manner APi Url
