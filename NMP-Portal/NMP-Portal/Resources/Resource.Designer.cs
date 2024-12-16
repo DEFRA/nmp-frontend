@@ -2682,6 +2682,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How many cuts typically each year?.
+        /// </summary>
+        public static string lblHowManyCutsTypicallyEachYear {
+            get {
+                return ResourceManager.GetString("lblHowManyCutsTypicallyEachYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How many fields at {0} are above 300 metres?.
         /// </summary>
         public static string lblHowManyFieldsAtFarmAreAbove300Meters {
