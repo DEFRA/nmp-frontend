@@ -8,7 +8,7 @@
         public int? HarvestYear { get; set; }
         public int? GrassManagementOptionID { get; set; }
         public int? GrassTypicalCutID { get; set; }
-        public int? HasGreaterThan30PercentClover { get; set; }
+        public bool? HasGreaterThan30PercentClover { get; set; }
         public int? SoilNitrogenSupplyItemID { get; set; }
         public DateTime? CreatedOn { get; set; }
         public int? CreatedByID { get; set; }
