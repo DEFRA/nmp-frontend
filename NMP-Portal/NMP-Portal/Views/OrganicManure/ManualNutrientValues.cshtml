@@ -7,9 +7,25 @@
     {
         suffixUnit = Model.IsManureTypeLiquid.Value ? Resource.lblKgPerMeterCube : Resource.lblKgPerTon;
     }
+    var backAction = "";
+    if (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+    {
+        if (Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+        {
+            backAction = "DefaultNutrientValues";
+        }
+        else
+        {
+            backAction = "ManureApplyingDate";
+        }
+    }
+    else
+    {
+        backAction = "DefaultNutrientValues";
+    }
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="DefaultNutrientValues" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
 }
 
 <form asp-action="ManualNutrientValues" asp-controller="OrganicManure" method="post">

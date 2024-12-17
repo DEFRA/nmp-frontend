@@ -35,8 +35,16 @@
                     <div class="">
                         <h3 class="govuk-notification-banner__heading"> @string.Format(Resource.lblYouHaveAdded, Model.FieldName)</h3>
                         <p class="govuk-body">
-                        <a class="govuk-notification-banner__link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@Resource.lblAddAnotherField</a>
-                        @Resource.lblOr</p>
+                            @if (ViewBag.FieldsList != null && ViewBag.FieldsList.Count > 0)
+                            {
+                                <a class="govuk-notification-banner__link" asp-action="CopyExistingField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@Resource.lblAddAnotherField</a>
+                            }
+                            else
+                            {
+                                <a class="govuk-notification-banner__link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@Resource.lblAddAnotherField</a>
+                            }
+                            @Resource.lblOr
+                        </p>
                         <a class="govuk-notification-banner__link" asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId">@Resource.lblViewCreateOrUpdateAPlan</a>
                     </div>
                 </govuk-notification-banner>
@@ -50,9 +58,16 @@
                 </govuk-notification-banner>
             }
 
-            <h1 class="govuk-heading-l">@string.Format(Resource.lblFarmFields,Model.FarmName)</h1>
+            <h1 class="govuk-heading-l">@string.Format(Resource.lblFarmFields, Model.FarmName)</h1>
             <p class="govuk-body">
+                @if (ViewBag.FieldsList != null && ViewBag.FieldsList.Count > 0)
+                {
+                    <a class="govuk-notification-banner__link" asp-action="CopyExistingField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@Resource.lblAddAnotherField</a>
+                }
+                else
+                {
                 <a class="govuk-notification-banner__link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@Resource.lblAddAnotherField</a>
+                }
             </p>
             <h2 class="govuk-heading-m">
                 @Resource.lblCurrentFields
@@ -78,7 +93,7 @@
                             </tr>
                         }
                     }
-                    
+
 
                 </tbody>
             </table>
