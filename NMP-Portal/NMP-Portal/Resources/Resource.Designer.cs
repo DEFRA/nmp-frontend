@@ -1260,6 +1260,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy existing field.
+        /// </summary>
+        public static string lblCopyExistingField {
+            get {
+                return ResourceManager.GetString("lblCopyExistingField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to © Crown copyright.
         /// </summary>
         public static string lblCopyRight {
@@ -1679,6 +1688,15 @@ namespace NMP.Portal.Resources {
         public static string lblDoYouWantToAddARecentSoilAnalysis {
             get {
                 return ResourceManager.GetString("lblDoYouWantToAddARecentSoilAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to copy an existing field?.
+        /// </summary>
+        public static string lblDoYouWantToCopyAnExistingField {
+            get {
+                return ResourceManager.GetString("lblDoYouWantToCopyAnExistingField", resourceCulture);
             }
         }
         
@@ -6487,6 +6505,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhichFieldsWouldYouLikeToPlanAnOrganic {
             get {
                 return ResourceManager.GetString("lblWhichFieldsWouldYouLikeToPlanAnOrganic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which field would you like to copy?.
+        /// </summary>
+        public static string lblWhichFieldWouldYouLikeToCopy {
+            get {
+                return ResourceManager.GetString("lblWhichFieldWouldYouLikeToCopy", resourceCulture);
             }
         }
         

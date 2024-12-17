@@ -81,5 +81,6 @@ namespace NMP.Portal.ViewModels
         public string? EncryptedIsUpdate { get; set; } = string.Empty;
         public bool? FieldRemove { get; set; }
         public List<int>? PreviousGrassYears { get; set; }
+        public bool? CopyExistingField { get; set; }
     }
 }

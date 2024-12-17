@@ -30,5 +30,7 @@ namespace NMP.Portal.Services
         Task<List<CommonResponse>> GetGrassManagementOptions();
         Task<List<CommonResponse>> GetGrassTypicalCuts();
         Task<List<CommonResponse>> GetSoilNitrogenSupplyItems();
+        Task<(Error, List<Field>)> FetchFieldByFarmId(int farmId, string shortSummary);
+        Task<(FieldResponse, Error)> FetchFieldSoilAnalysisAndSnsById(int fieldId);
     }
 }
