@@ -2862,4 +2862,31 @@ m3/ha  not set</value>
   <data name="lblTonneWithNutrient" xml:space="preserve">
     <value>{0} tonnes {1}</value>
   </data>
+  <data name="lblGrassManagementOptions" xml:space="preserve">
+    <value>Grass management options</value>
+  </data>
+  <data name="lblHawManyCutsTypicallyEachYear" xml:space="preserve">
+    <value>How many cuts typically each year?</value>
+  </data>
+  <data name="lblDoesFieldTypicallyHaveMoreThan30PercentClover" xml:space="preserve">
+    <value>Does {0} typically have more than 30% clover?</value>
+  </data>
+  <data name="lblHowMuchNitrogenHasBeenAppliedToFieldEachYear" xml:space="preserve">
+    <value>How much nitrogen (N) has been applied to {0} each year on average?</value>
+  </data>
+  <data name="lblSoilNitrogenSupplyItems" xml:space="preserve">
+    <value>Soil nitrogen supply items</value>
+  </data>
+  <data name="lblHowManyCutsTypicallyEachYear" xml:space="preserve">
+    <value>How many cuts typically each year?</value>
+  </data>
+  <data name="lblCopyExistingField" xml:space="preserve">
+    <value>Copy existing field</value>
+  </data>
+  <data name="lblDoYouWantToCopyAnExistingField" xml:space="preserve">
+    <value>Do you want to copy an existing field?</value>
+  </data>
+  <data name="lblWhichFieldWouldYouLikeToCopy" xml:space="preserve">
+    <value>Which field would you like to copy?</value>
+  </data>
 </root>

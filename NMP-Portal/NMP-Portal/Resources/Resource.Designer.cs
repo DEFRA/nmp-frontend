@@ -1260,6 +1260,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy existing field.
+        /// </summary>
+        public static string lblCopyExistingField {
+            get {
+                return ResourceManager.GetString("lblCopyExistingField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to © Crown copyright.
         /// </summary>
         public static string lblCopyRight {
@@ -1602,6 +1611,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Does {0} typically have more than 30% clover?.
+        /// </summary>
+        public static string lblDoesFieldTypicallyHaveMoreThan30PercentClover {
+            get {
+                return ResourceManager.GetString("lblDoesFieldTypicallyHaveMoreThan30PercentClover", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Does this field contain potash-releasing clay?.
         /// </summary>
         public static string lblDoesPotashClayForCheckAnswere {
@@ -1670,6 +1688,15 @@ namespace NMP.Portal.Resources {
         public static string lblDoYouWantToAddARecentSoilAnalysis {
             get {
                 return ResourceManager.GetString("lblDoYouWantToAddARecentSoilAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to copy an existing field?.
+        /// </summary>
+        public static string lblDoYouWantToCopyAnExistingField {
+            get {
+                return ResourceManager.GetString("lblDoYouWantToCopyAnExistingField", resourceCulture);
             }
         }
         
@@ -2439,6 +2466,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Grass management options.
+        /// </summary>
+        public static string lblGrassManagementOptions {
+            get {
+                return ResourceManager.GetString("lblGrassManagementOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Grass typical cut.
         /// </summary>
         public static string lblGrassTypicalCut {
@@ -2525,6 +2561,15 @@ namespace NMP.Portal.Resources {
         public static string lblHaveYouPlantedYourCrop {
             get {
                 return ResourceManager.GetString("lblHaveYouPlantedYourCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How many cuts typically each year?.
+        /// </summary>
+        public static string lblHawManyCutsTypicallyEachYear {
+            get {
+                return ResourceManager.GetString("lblHawManyCutsTypicallyEachYear", resourceCulture);
             }
         }
         
@@ -2637,6 +2682,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How many cuts typically each year?.
+        /// </summary>
+        public static string lblHowManyCutsTypicallyEachYear {
+            get {
+                return ResourceManager.GetString("lblHowManyCutsTypicallyEachYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How many fields at {0} are above 300 metres?.
         /// </summary>
         public static string lblHowManyFieldsAtFarmAreAbove300Meters {
@@ -2670,6 +2724,15 @@ namespace NMP.Portal.Resources {
         public static string lblHowMoistTheTopsoilIs {
             get {
                 return ResourceManager.GetString("lblHowMoistTheTopsoilIs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How much nitrogen (N) has been applied to {0} each year on average?.
+        /// </summary>
+        public static string lblHowMuchNitrogenHasBeenAppliedToFieldEachYear {
+            get {
+                return ResourceManager.GetString("lblHowMuchNitrogenHasBeenAppliedToFieldEachYear", resourceCulture);
             }
         }
         
@@ -4907,6 +4970,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Soil nitrogen supply items.
+        /// </summary>
+        public static string lblSoilNitrogenSupplyItems {
+            get {
+                return ResourceManager.GetString("lblSoilNitrogenSupplyItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Soil nutrient value Type.
         /// </summary>
         public static string lblSoilNutrientValueType {
@@ -6433,6 +6505,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhichFieldsWouldYouLikeToPlanAnOrganic {
             get {
                 return ResourceManager.GetString("lblWhichFieldsWouldYouLikeToPlanAnOrganic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which field would you like to copy?.
+        /// </summary>
+        public static string lblWhichFieldWouldYouLikeToCopy {
+            get {
+                return ResourceManager.GetString("lblWhichFieldWouldYouLikeToCopy", resourceCulture);
             }
         }
         
