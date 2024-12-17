@@ -44,8 +44,8 @@ namespace NMP.Portal.Authorization
 
             if (context.HasFailed)
             {
-                httpContext.Session.Remove("token");
-                httpContext.Session.Clear();
+                httpContext?.Session.Remove("token");
+                httpContext?.Session.Clear();
             }
 
             return Task.CompletedTask;

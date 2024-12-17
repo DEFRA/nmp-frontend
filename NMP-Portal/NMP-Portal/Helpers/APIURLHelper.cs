@@ -22,7 +22,7 @@ namespace NMP.Portal.Helpers
         public const string FetchCropGroupByIdAsyncAPI = "vendors/rb209/Arable/CropGroup/{0}";
         public const string FetchCropTypeByIdAsyncAPI = "vendors/rb209/Arable/CropType/{0}";
         public const string AddFieldAsyncAPI = "fields/farms/{0}";        
-        public const string IsFieldExistAsyncAPI = "fields/farms/{0}/exists?Name={1}";
+        public const string IsFieldExistAsyncAPI = "fields/farms/{0}/exists?name={1}";
         public const string FetchFieldsByFarmIdAsyncAPI = "fields/farms/{0}";
         public const string FetchPotatoVarietiesAsyncAPI = "vendors/rb209/Arable/PotatoVarieties";
         public const string FetchFieldByFieldIdAsyncAPI = "fields/{0}";
@@ -98,6 +98,10 @@ namespace NMP.Portal.Helpers
         public const string AddPKBalanceAsyncAPI = "pk-Balance";
         public const string UpdatePKBalanceAsyncAPI = "pk-Balance/{0}&Field={1}";
         public const string FetchPKBalanceByYearAndFieldIdAsyncAPI = "pk-balance/{0}?fieldId={1}";
+        public const string FetchCountryListAsyncAPI = "countries/all-data";
+        public const string FetchFieldByFarmIdAsyncAPI = "fields/farms/{0}?shortSummary={1}";
+        public const string FetchFieldSoilAnalysisAndSnsByIdAsyncAPI = "fields/fieldSoilSnsInfo/{0}";
+        public const string FetchInprogressCalculationsByFarmIdAsyncAPI = "inprogress-calculations/{0}";
 
         //Manner APi Url
         public const string FetchMannerApplicationMethodByIdAsyncAPI = "vendors/manner/application-methods/{0}";
@@ -120,5 +124,8 @@ namespace NMP.Portal.Helpers
         public const string FetchMannerManureTypeByManureTypeIdAsyncAPI = "vendors/manner/manure-types/{0}";
         public const string FetchMannerRainfallAverageAsyncAPI = "vendors/manner/climates/avarage-annual-rainfall/{0}";        
         public const string FetchFarmManureTypesByFarmIdAsyncAPI = "farm-manure-type/{0}";
+        public const string FetchGrassManagementOptionsAsyncAPI = "grassland/grassManagementOptions";
+        public const string FetchGrassTypicalCutsAsyncAPI = "grassland/grassTypicalCuts";
+        public const string FetchSoilNitrogenSupplyItemsAsyncAPI = "grassland/soilNitrogenSupply";
     }
 }

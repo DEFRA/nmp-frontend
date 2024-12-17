@@ -7,7 +7,7 @@ namespace NMP.Portal.Models
     {
         public int ID { get; set; }
         [StringLength(250,ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgFarmNameMinMaxValidation))]
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheFarmName))]
+        //[Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheFarmName))]
         public string? Name { get; set; }
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblSelectTheFarmAddress))]
         public string? FullAddress { get; set; } = string.Empty;
@@ -47,6 +47,7 @@ namespace NMP.Portal.Models
         public int? NVZFields { get; set; } = null;
         public int? FieldsAbove300SeaLevel { get; set; } = null;
         public string? EncryptedFarmId { get; set; }
+        public int? CountryID { get; set; } 
         public DateTime CreatedOn { get; set; }
         public int? CreatedByID { get; set; }
         public DateTime? ModifiedOn { get; set; } = null;

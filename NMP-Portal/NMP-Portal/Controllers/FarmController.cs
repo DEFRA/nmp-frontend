@@ -123,17 +123,132 @@ namespace NMP.Portal.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Name(FarmViewModel farm)
+        public IActionResult Name(FarmViewModel farm)
         {
             _logger.LogTrace($"Farm Controller : Name() post action called");
             if (string.IsNullOrWhiteSpace(farm.Name))
             {
                 ModelState.AddModelError("Name", Resource.MsgEnterTheFarmName);
             }
+            if (!ModelState.IsValid)
+            {
+                return View(farm);
+            }
+            FarmViewModel farmView = null;
+            if (HttpContext.Session.Keys.Contains("FarmData"))
+            {
+                farmView = JsonConvert.DeserializeObject<FarmViewModel>(HttpContext.Session.GetString("FarmData"));
+            }
+            
+            HttpContext?.Session.SetObjectAsJson("FarmData", farm);
+            if (farm.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
+            return RedirectToAction("Country");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Country()
+        {
+            _logger.LogTrace($"Farm Controller : Country() action called");
+            FarmViewModel? model = null;
+            (List<Country> countryList, Error error) = await _farmService.FetchCountryAsync();
+            if (error != null && countryList.Count > 0)
+            {
+                ViewBag.CountryList = countryList.OrderBy(c => c.Name);
+            }
+            if (HttpContext.Session.Keys.Contains("FarmData"))
+            {
+                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+            }
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Country(FarmViewModel farm)
+        {
+            _logger.LogTrace($"Farm Controller : Country() post action called");
+            if (farm.CountryID == null)
+            {
+                ModelState.AddModelError("CountryID",string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing,Resource.lblCountry.ToLower()));
+            }
+            if (!ModelState.IsValid)
+            {
+                (List<Country> countryList, Error error) = await _farmService.FetchCountryAsync();
+                if (error != null && countryList.Count > 0)
+                {
+                    ViewBag.CountryList = countryList.OrderBy(c => c.Name);
+                }
+                return View("Country", farm);
+            }
+            if(farm.CountryID==(int)NMP.Portal.Enums.FarmCountry.England||
+                farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.Wales)
+            {
+                farm.EnglishRules = true;
+            }
+            else
+            {
+                farm.EnglishRules = false;
+            }
+            if (Enum.IsDefined(typeof(NMP.Portal.Enums.FarmCountry), farm.CountryID))
+            {                
+                farm.Country = Enum.GetName(typeof(NMP.Portal.Enums.FarmCountry), farm.CountryID);
+            }
+
+            HttpContext.Session.SetObjectAsJson("FarmData", farm);
+            if (farm.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
+            return RedirectToAction("FarmingRules");
+
+        }
+
+        [HttpGet]
+        public IActionResult FarmingRules()
+        {
+            _logger.LogTrace($"Farm Controller : FarmingRules() action called");
+            FarmViewModel? model = null;
+            if (HttpContext.Session.Keys.Contains("FarmData"))
+            {
+                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult FarmingRules(FarmViewModel farm)
+        {
+            HttpContext.Session.SetObjectAsJson("FarmData", farm);
+            if (farm.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
+            return RedirectToAction("PostCode");
+
+        }
+        [HttpGet]
+        public IActionResult PostCode()
+        {
+            _logger.LogTrace($"Farm Controller : PostCode() action called");
+            FarmViewModel? model = null;
+            if (HttpContext.Session.Keys.Contains("FarmData"))
+            {
+                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+            }
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PostCode(FarmViewModel farm)
+        {
             if (string.IsNullOrWhiteSpace(farm.Postcode))
             {
                 ModelState.AddModelError("Postcode", Resource.MsgEnterTheFarmPostcode);
             }
+            
             if (!string.IsNullOrWhiteSpace(farm.Postcode))
             {
                 int id = 0;
@@ -144,10 +259,9 @@ namespace NMP.Portal.Controllers
                 bool IsFarmExist = await _farmService.IsFarmExistAsync(farm.Name, farm.Postcode, id);
                 if (IsFarmExist)
                 {
-                    ModelState.AddModelError("Name", Resource.MsgFarmAlreadyExist);
+                    ModelState.AddModelError("Postcode", Resource.MsgFarmAlreadyExist);
                 }
             }
-
             if (!ModelState.IsValid)
             {
                 return View(farm);
@@ -181,12 +295,13 @@ namespace NMP.Portal.Controllers
                     farm.Rainfall = null;
                 }
             }
-
-
-            var farmModel = JsonConvert.SerializeObject(farm);
-            HttpContext?.Session.SetObjectAsJson("FarmData", farm);
-
+            HttpContext.Session.SetObjectAsJson("FarmData", farm);
+            //if (farm.IsCheckAnswer)
+            //{
+            //    return RedirectToAction("CheckAnswer");
+            //}
             return RedirectToAction("Address");
+
         }
         [HttpGet]
         public async Task<IActionResult> Address()
@@ -687,7 +802,8 @@ namespace NMP.Portal.Controllers
                     EnglishRules = farm.EnglishRules,
                     NVZFields = farm.NVZFields,
                     FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
-                    LastHarvestYear=farm.LastHarvestYear,
+                    LastHarvestYear = farm.LastHarvestYear,
+                    CountryID=farm.CountryID,
                     CreatedByID = userId,
                     CreatedOn = System.DateTime.Now,
                     ModifiedByID = farm.ModifiedByID,
@@ -846,6 +962,11 @@ namespace NMP.Portal.Controllers
                         farmData.LastHarvestYear = farm.LastHarvestYear;
                         farmData.CreatedByID = farm.CreatedByID;
                         farmData.CreatedOn = farm.CreatedOn;
+                        farmData.CountryID = farm.CountryID;
+                        if (Enum.IsDefined(typeof(NMP.Portal.Enums.FarmCountry), farm.CountryID))
+                        {
+                            farmData.Country = Enum.GetName(typeof(NMP.Portal.Enums.FarmCountry), farm.CountryID);
+                        }
 
                         bool update = true;
                         farmData.EncryptedIsUpdate = _dataProtector.Protect(update.ToString());
@@ -918,6 +1039,7 @@ namespace NMP.Portal.Controllers
                     NVZFields = farm.NVZFields,
                     FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
                     LastHarvestYear = farm.LastHarvestYear,
+                    CountryID = farm.CountryID,
                     CreatedByID = createdByID,
                     CreatedOn = createdOn,
                     ModifiedByID = userId,
@@ -931,7 +1053,7 @@ namespace NMP.Portal.Controllers
 
             if (!string.IsNullOrWhiteSpace(error.Message))
             {
-                TempData["AddFarmError"] =  error.Message;
+                TempData["AddFarmError"] = error.Message;
                 string EncryptUpdateStatus = _dataProtector.Protect(Resource.lblTrue.ToString());
                 return RedirectToAction("CheckAnswer", new { q = EncryptUpdateStatus });
                 return View(farm);
@@ -1015,7 +1137,7 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-            
+
             return View(model);
 
         }

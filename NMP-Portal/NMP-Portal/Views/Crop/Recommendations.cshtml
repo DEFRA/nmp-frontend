@@ -423,8 +423,8 @@
                                                             <td class="govuk-table__cell">
                                                                 @(orgManure.ApplicationDate.Date != null ? orgManure.ApplicationDate.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB")) : null)
                                                             </td>
-                                                            <td class="govuk-table__cell">
-                                                                @string.Format(Resource.lblRateInKg, orgManure.ApplicationRate)
+                                                            <td class="govuk-table__cell">                                                               
+                                                                @string.Format(Resource.lblRateWithTonnes, orgManure.ApplicationRate)
                                                             </td>
                                                             <td class="govuk-table__cell">
                                                                 @orgManure.ManureTypeName
@@ -482,8 +482,8 @@
                                                                 }
                                                                 @if (fertiliserManure.P2O5 > 0)
                                                                 {
-                                                                    <span class="nutrient-list">
-                                                                        @string.Format(Resource.lblKgPhosphate, fertiliserManure.P2O5)
+                                                                    <span class="nutrient-list">                                                                        
+                                                                        @string.Format(Resource.lblKgWithNutrient, fertiliserManure.P2O5, Resource.lblPhosphateP2O5)
                                                                     </span>
                                                                 }
                                                                 @if (fertiliserManure.K2O > 0)
@@ -513,7 +513,7 @@
                                                                 @if (fertiliserManure.Lime > 0)
                                                                 {
                                                                     <span class="nutrient-list">
-                                                                        @string.Format(Resource.lblKgLime, fertiliserManure.Lime)
+                                                                        @string.Format(Resource.lblTonneWithNutrient, fertiliserManure.Lime,Resource.lblLime)
                                                                     </span>
                                                                 }
                                                             </td>
