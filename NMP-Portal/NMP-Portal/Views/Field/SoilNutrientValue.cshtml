@@ -102,6 +102,7 @@
                     }
                 }
             }
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingField" value="@Model.CopyExistingField.ToString().ToLower()"></govuk-input>
             <div class="govuk-form-group">
             <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
                 <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblAddSoilAnalysis, Model.Name)</h1>

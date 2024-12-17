@@ -123,31 +123,13 @@ namespace NMP.Portal.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Name(FarmViewModel farm)
+        public IActionResult Name(FarmViewModel farm)
         {
             _logger.LogTrace($"Farm Controller : Name() post action called");
             if (string.IsNullOrWhiteSpace(farm.Name))
             {
                 ModelState.AddModelError("Name", Resource.MsgEnterTheFarmName);
             }
-            //if (string.IsNullOrWhiteSpace(farm.Postcode))
-            //{
-            //    ModelState.AddModelError("Postcode", Resource.MsgEnterTheFarmPostcode);
-            //}
-            //if (!string.IsNullOrWhiteSpace(farm.Postcode))
-            //{
-            //    int id = 0;
-            //    if (farm.EncryptedFarmId != null)
-            //    {
-            //        id = Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId));
-            //    }
-            //    bool IsFarmExist = await _farmService.IsFarmExistAsync(farm.Name, farm.Postcode, id);
-            //    if (IsFarmExist)
-            //    {
-            //        ModelState.AddModelError("Name", Resource.MsgFarmAlreadyExist);
-            //    }
-            //}
-
             if (!ModelState.IsValid)
             {
                 return View(farm);
@@ -157,33 +139,7 @@ namespace NMP.Portal.Controllers
             {
                 farmView = JsonConvert.DeserializeObject<FarmViewModel>(HttpContext.Session.GetString("FarmData"));
             }
-            if (farm.IsCheckAnswer)
-            {
-                //var updatedFarm = JsonConvert.SerializeObject(farm);
-                //HttpContext?.Session.SetString("FarmData", updatedFarm);
-
-                //if (farmView.Postcode == farm.Postcode)
-                //{
-                //    farm.IsPostCodeChanged = false;
-                //    return RedirectToAction("CheckAnswer");
-                //}
-                //else
-                //{
-                //    farm.IsPostCodeChanged = true;
-                //    farm.Rainfall = null;
-                //    //return RedirectToAction("Address");
-                //}
-            }
-            //if (farmView != null)
-            //{
-            //    if (farmView.Postcode != farm.Postcode)
-            //    {
-            //        farm.Rainfall = null;
-            //    }
-            //}
-
-
-            //var farmModel = JsonConvert.SerializeObject(farm);
+            
             HttpContext?.Session.SetObjectAsJson("FarmData", farm);
             if (farm.IsCheckAnswer)
             {

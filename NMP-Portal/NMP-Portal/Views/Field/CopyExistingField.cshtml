@@ -3,29 +3,26 @@
 @model FieldViewModel
 
 @{
-    ViewData["Title"] = Resource.lblSampleDepth;
-  var backAction = Model.IsCheckAnswer ? "CheckAnswer" : (Model.CurrentCropTypeId == (int)NMP.Portal.Enums.CropTypes.Other) ? "CurrentCropGroups" : "CurrentCropTypes";
+    ViewData["Title"] = Resource.lblCopyExistingField;
+    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);   
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@backAction asp-controller="Field">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="ManageFarmFields" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        @if (TempData["SoilMineralNitrogenError"] != null)
+        @* <h1 class="govuk-heading-l">@Resource.lblDoYouWantToCopyAnExistingField</h1> *@
+        @if (TempData["CopyExistingFieldError"] != null)
         {
             <govuk-error-summary>
-                <govuk-error-summary-item>@TempData["SoilMineralNitrogenError"]</govuk-error-summary-item>
+                <govuk-error-summary-item>@TempData["CopyExistingFieldError"]</govuk-error-summary-item>
             </govuk-error-summary>
         }
-
-        <form asp-action="SampleDepth" method="post" asp-controller="Field">
+        <form asp-action="CopyExistingField" method="post" asp-controller="Field">
             @Html.AntiForgeryToken()
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherReference"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LPIDNumber"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalArea"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CroppedArea"></govuk-input>
@@ -64,6 +61,8 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilMineralNitrogenAt030CM"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilMineralNitrogenAt3060CM"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilMineralNitrogenAt6090CM"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SampleDepth"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilMineralNitrogen"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropHeight"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GreenAreaIndex"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEstimateOfNitrogenMineralisation" value="@Model.IsEstimateOfNitrogenMineralisation"></govuk-input>
@@ -72,11 +71,9 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SnsCategoryId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SnsIndex"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SnsValue"></govuk-input>
-
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsUpdate"></govuk-input>
             @if (Model != null)
             {
-
-                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingField" value="@Model.CopyExistingField.ToString().ToLower()"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsBasedOnSoilOrganicMatter" value="@Model.IsBasedOnSoilOrganicMatter.ToString().ToLower()"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules" value="@Model.isEnglishRules.ToString().ToLower()"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
@@ -87,9 +84,7 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZForFarm" value="@Model.IsWithinNVZForFarm.ToString().ToLower()"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RecentSoilAnalysisQuestion" value="@Model.RecentSoilAnalysisQuestion.ToString().ToLower()"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilOverChalk" value="@Model.SoilOverChalk.ToString().ToLower()"></govuk-input>
-            }
-            @if (Model != null)
-            {
+
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.HasGrassInLastThreeYear"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.HarvestYear"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.GrassManagementOptionID"></govuk-input>
@@ -104,15 +99,19 @@
                     }
                 }
             }
-            <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblAddSoilMineralNitrogen, Model.Name)</h1>
-            </legand>
-            <govuk-input name="SampleDepth" asp-for=@Model.SampleDepth inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                <govuk-input-label is-page-heading="true">@Resource.lblWhatWasTheSampleDepth</govuk-input-label>
-            </govuk-input>
-            <govuk-input name="SoilMineralNitrogen" asp-for=@Model.SoilMineralNitrogen inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                <govuk-input-label is-page-heading="true">@Resource.lblWhatWasTheSoilMineralNitrogen</govuk-input-label>
-            </govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ID"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
+
+            <govuk-radios class="govuk-radios--inline" asp-for="@Model.CopyExistingField">
+                <govuk-radios-fieldset>
+                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @Resource.lblDoYouWantToCopyAnExistingField
+                    </govuk-radios-fieldset-legend>
+                    <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>
+                    <govuk-radios-item value=@no>@Resource.lblNo</govuk-radios-item>
+                </govuk-radios-fieldset>
+            </govuk-radios>
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>

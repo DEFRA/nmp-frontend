@@ -89,6 +89,7 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ID"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZ"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingField" value="@Model.CopyExistingField.ToString().ToLower()"></govuk-input>
 
     @if (Model != null)
     {
@@ -109,6 +110,12 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
+            @if (TempData["Error"] != null)
+            {
+                <govuk-error-summary>
+                    <govuk-error-summary-item href="#">@TempData["Error"]</govuk-error-summary-item>
+                </govuk-error-summary>
+            }
             <govuk-radios class="govuk-radios--inline" asp-for="@Model.PreviousGrasses.HasGreaterThan30PercentClover">
 
                 <govuk-radios-fieldset>
