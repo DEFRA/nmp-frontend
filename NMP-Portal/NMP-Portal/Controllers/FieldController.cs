@@ -3641,7 +3641,8 @@ namespace NMP.Portal.Controllers
                 ViewBag.GrassManagementOptions = commonResponses;
                 return View(model);
             }
-            if(model.PreviousGrasses.GrassManagementOptionID==(int)NMP.Portal.Enums.GrassManagementOption.GrazedOnly)
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
+            if (model.PreviousGrasses.GrassManagementOptionID==(int)NMP.Portal.Enums.GrassManagementOption.GrazedOnly)
             {
                 return RedirectToAction("HasGreaterThan30PercentClover");
             }
