@@ -54,7 +54,7 @@
                 }
             </p>
             <p class="govuk-body">
-                <a href="#">@Resource.lblDownloadPrintOrExportThisPlan</a>
+                <a asp-action="ExportFields" asp-controller="Report" asp-route-i="@Model.EncryptedFarmId" asp-route-j="@Model.EncryptedHarvestYear">@Resource.lblDownloadPrintOrExportThisPlan</a>
             </p>
             @if (Model.HarvestYearPlans != null)
             {

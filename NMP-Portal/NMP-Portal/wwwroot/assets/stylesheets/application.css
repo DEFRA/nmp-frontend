@@ -264,3 +264,6 @@ a:focus, .govuk-link:focus {
 .non-standard {
     font-size: 1.8rem;
 }
+.margin-bottom-sixty {
+    margin-bottom: 60px !important;
+}
