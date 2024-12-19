@@ -2728,7 +2728,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How much nitrogen (N) has been applied to {0} each year on average?.
+        ///   Looks up a localized string similar to How much nitrogen (N) has been applied to {0} each year (on average)?.
         /// </summary>
         public static string lblHowMuchNitrogenHasBeenAppliedToFieldEachYear {
             get {
