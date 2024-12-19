@@ -1691,11 +1691,11 @@ namespace NMP.Portal.Controllers
                         model.Year = harvestYear;
                         if (harvestYearPlanResponse != null && error.Message == null)
                         {
-                            bool isAllCropInfo1NonNull = harvestYearPlanResponse.CropDetails.All(x => x.CropInfo1 != null);
-                            if (!isAllCropInfo1NonNull)
-                            {
-                                ViewBag.AddMannerDisabled = true;
-                            }
+                            //bool isAllCropInfo1NonNull = harvestYearPlanResponse.CropDetails.All(x => x.CropInfo1 != null);
+                            //if (!isAllCropInfo1NonNull)
+                            //{
+                            //    ViewBag.AddMannerDisabled = true;
+                            //}
 
                             List<CropDetailResponse> allCropDetails = harvestYearPlanResponse.CropDetails ?? new List<CropDetailResponse>().ToList();
                             if (allCropDetails != null)
