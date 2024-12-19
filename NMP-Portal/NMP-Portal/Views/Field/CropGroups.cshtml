@@ -7,13 +7,35 @@
     // var backAction = Model.RecentSoilAnalysisQuestion.Value == true ? "SoilNutrientValue" :
     //                 "RecentSoilAnalysisQuestion";
     var backAction = "";
-    if (Model.RecentSoilAnalysisQuestion.Value == true)
+    if (Model.RecentSoilAnalysisQuestion.Value == true && Model.PreviousGrasses.HasGrassInLastThreeYear == false)
     {
         backAction = "SoilNutrientValue";
     }
     else if (Model.PreviousGrasses.HasGrassInLastThreeYear != null)
     {
-        backAction = "HasGrassInLastThreeYear";
+        if (Model.PreviousGrasses.HasGrassInLastThreeYear == true)
+        {
+            if (Model.IsPreviousYearGrass == false)
+            {
+                if (Model.PreviousGrasses.HasGreaterThan30PercentClover == false)
+                {
+                    backAction = "SoilNitrogenSupplyItems";
+                }
+                else
+                {
+                    backAction = "HasGreaterThan30PercentClover";
+                }
+            }
+            else
+            {
+                backAction = "RecentSoilAnalysisQuestion";
+            }
+        }
+        else
+        {
+            backAction = "HasGrassInLastThreeYear";
+        }
+
     }
     else
     {
@@ -118,6 +140,7 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrassYears[i]" value="@Model.PreviousGrassYears[i]"></govuk-input>
             }
         }
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPreviousYearGrass" value="@Model.IsPreviousYearGrass.ToString().ToLower()"></govuk-input>
     }
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingField" value="@Model.CopyExistingField.ToString().ToLower()"></govuk-input>
 
