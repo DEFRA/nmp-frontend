@@ -1710,7 +1710,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you have a date for when you planted your {0} , or when you will plant it?.
+        ///   Looks up a localized string similar to Do you have a date for when you planted your {0}, or when you will plant it?.
         /// </summary>
         public static string lblDoYouHaveADateForWhenYouPlantedYour {
             get {
@@ -2633,6 +2633,15 @@ namespace NMP.Portal.Resources {
         public static string lblHarvestYearOverview {
             get {
                 return ResourceManager.GetString("lblHarvestYearOverview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Harvest year.
+        /// </summary>
+        public static string lblHarvestYears {
+            get {
+                return ResourceManager.GetString("lblHarvestYears", resourceCulture);
             }
         }
         
