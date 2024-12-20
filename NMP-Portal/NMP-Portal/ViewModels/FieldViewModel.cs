@@ -82,5 +82,6 @@ namespace NMP.Portal.ViewModels
         public bool? FieldRemove { get; set; }
         public List<int>? PreviousGrassYears { get; set; }
         public bool? CopyExistingField { get; set; }
+        public bool? IsPreviousYearGrass { get; set; }
     }
 }
