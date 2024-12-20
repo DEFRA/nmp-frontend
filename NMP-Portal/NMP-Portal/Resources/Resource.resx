@@ -2997,4 +2997,13 @@ m3/ha  not set</value>
   <data name="lblHarvestYears" xml:space="preserve">
     <value>Harvest year</value>
   </data>
+  <data name="lblPhaseBannerContent" xml:space="preserve">
+    <value>Beta</value>
+  </data>
+  <data name="lblPhaseBannerText" xml:space="preserve">
+    <value>This is a new service. Help us improve it and if you have any issues or concerns you can contact us on (Phone number entered here) or email us on</value>
+  </data>
+  <data name="helpdeskemail" xml:space="preserve">
+    <value>helpdesk@rsk-bsl.co.uk</value>
+  </data>
 </root>
