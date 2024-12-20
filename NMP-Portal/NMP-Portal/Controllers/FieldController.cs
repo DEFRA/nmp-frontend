@@ -259,8 +259,8 @@ namespace NMP.Portal.Controllers
                         if (fieldResponse.Crop != null)
                         {
                             field.CropTypeID = fieldResponse.Crop.CropTypeID;
-                            field.CropType = Enum.GetName(typeof(NMP.Portal.Enums.CropTypes), field.CropTypeID);
 
+                            field.CropType = await _fieldService.FetchCropTypeById(field.CropTypeID??0);
                             if (cropTypeResponses.Count > 0)
                             {
                                 var cropType = cropTypeResponses.FirstOrDefault(x => x.CropTypeId == field.CropTypeID);
