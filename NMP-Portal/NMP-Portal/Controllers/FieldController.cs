@@ -259,8 +259,8 @@ namespace NMP.Portal.Controllers
                         if (fieldResponse.Crop != null)
                         {
                             field.CropTypeID = fieldResponse.Crop.CropTypeID;
-                            field.CropType = Enum.GetName(typeof(NMP.Portal.Enums.CropTypes), field.CropTypeID);
 
+                            field.CropType = await _fieldService.FetchCropTypeById(field.CropTypeID??0);
                             if (cropTypeResponses.Count > 0)
                             {
                                 var cropType = cropTypeResponses.FirstOrDefault(x => x.CropTypeId == field.CropTypeID);
@@ -1106,8 +1106,9 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmList", "Farm");
                 }
                 cropGroups = await _fieldService.FetchCropGroups();
+                List<CropGroupResponse> cropGroupArables = cropGroups.Where(x => x.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass).ToList();
                 //_httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropGroupList", cropGroups);
-                ViewBag.CropGroupList = cropGroups;
+                ViewBag.CropGroupList = cropGroupArables;
             }
             catch (Exception ex)
             {
@@ -1315,7 +1316,10 @@ namespace NMP.Portal.Controllers
                 ViewBag.GrassManagementOptions = grassManagements?.FirstOrDefault(x => x.Id == model.PreviousGrasses.GrassManagementOptionID)?.Name;
 
                 List<CommonResponse> grassTypicalCuts = await _fieldService.GetGrassTypicalCuts();
-                ViewBag.GrassTypicalCuts = grassTypicalCuts?.FirstOrDefault(x => x.Id == model.PreviousGrasses.GrassTypicalCutID)?.Name; 
+                ViewBag.GrassTypicalCuts = grassTypicalCuts?.FirstOrDefault(x => x.Id == model.PreviousGrasses.GrassTypicalCutID)?.Name;
+
+                List<CommonResponse> soilNitrogenSupplyItems = await _fieldService.GetSoilNitrogenSupplyItems();
+                ViewBag.SoilNitrogenSupplyItems = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == model.PreviousGrasses.GrassTypicalCutID)?.Name;
 
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             }
@@ -1362,6 +1366,10 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("CurrentCropTypes");
                 }
+            }
+            if(model.WantToApplySns != null && !model.WantToApplySns.Value)
+            {
+                return RedirectToAction("SNSAppliedQuestion");
             }
             if(model.PreviousGrasses.HasGrassInLastThreeYear != null && model.PreviousGrasses.HasGrassInLastThreeYear.Value)
             {
@@ -1513,6 +1521,12 @@ namespace NMP.Portal.Controllers
 
                     grass.Add(newGrass);
                 }
+                if(model.IsPreviousYearGrass==true)
+                {
+                    model.CropGroupId = (int)NMP.Portal.Enums.CropGroup.Grass;
+                    model.CropTypeID = (int)NMP.Portal.Enums.CropTypes.Grass;
+                }
+                
             }
 
             FieldData fieldData = new FieldData
@@ -3854,6 +3868,8 @@ namespace NMP.Portal.Controllers
                 model.PreviousGrasses.GrassTypicalCutID = null;
                 model.PreviousGrasses.HasGreaterThan30PercentClover = null;
                 model.PreviousGrasses.SoilNitrogenSupplyItemID = null;
+                model.PreviousGrassYears = null;
+                model.IsPreviousYearGrass = null;
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
                 if (model.IsCheckAnswer)
                 {
@@ -3918,6 +3934,7 @@ namespace NMP.Portal.Controllers
                 previousYears.Add(currentYear - 2);
                 model.PreviousGrassYears = previousYears;
             }
+            model.IsPreviousYearGrass = (model.PreviousGrassYears != null && model.PreviousGrassYears.Contains(System.DateTime.Now.Year-1)) ? true : false;
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             if (model.IsCheckAnswer)
             {
@@ -4062,7 +4079,10 @@ namespace NMP.Portal.Controllers
             }
             if (model.PreviousGrasses.HasGreaterThan30PercentClover.Value)
             {
-
+                if(model.IsPreviousYearGrass == false)
+                {
+                    return RedirectToAction("CropGroups");
+                }
                 return RedirectToAction("CheckAnswer");
             }
             else
@@ -4106,13 +4126,17 @@ namespace NMP.Portal.Controllers
             if (!ModelState.IsValid)
             {
                 List<CommonResponse> commonResponses = await _fieldService.GetSoilNitrogenSupplyItems();
-                ViewBag.GrassTypicalCuts = commonResponses.OrderByDescending(x => x.Id);
+                ViewBag.SoilNitrogenSupplyItems = commonResponses.OrderByDescending(x => x.Id);
                 return View(model);
             }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             if (model.IsCheckAnswer)
             {
                 return RedirectToAction("CheckAnswer");
+            }
+            if (model.IsPreviousYearGrass == false)
+            {
+                return RedirectToAction("CropGroups");
             }
 
             return RedirectToAction("CheckAnswer");
