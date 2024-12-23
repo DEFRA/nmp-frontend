@@ -88,6 +88,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to helpdesk@rsk-bsl.co.uk.
+        /// </summary>
+        public static string helpdeskemail {
+            get {
+                return ResourceManager.GetString("helpdeskemail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The date format is &apos;21 06 2024&apos;..
         /// </summary>
         public static string hintTheDateFormat {
@@ -1710,7 +1719,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you have a date for when you planted your {0} , or when you will plant it?.
+        ///   Looks up a localized string similar to Do you have a date for when you planted your {0}, or when you will plant it?.
         /// </summary>
         public static string lblDoYouHaveADateForWhenYouPlantedYour {
             get {
@@ -2655,6 +2664,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Harvest year.
+        /// </summary>
+        public static string lblHarvestYears {
+            get {
+                return ResourceManager.GetString("lblHarvestYears", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Has {0} been used for grass in any of the the last 3 years?.
         /// </summary>
         public static string lblHasBeenUsedForGrassInAnyOfTheLast3Year {
@@ -2845,7 +2863,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How much nitrogen (N) has been applied to {0} each year on average?.
+        ///   Looks up a localized string similar to How much nitrogen (N) has been applied to {0} each year (on average)?.
         /// </summary>
         public static string lblHowMuchNitrogenHasBeenAppliedToFieldEachYear {
             get {
@@ -4282,6 +4300,24 @@ namespace NMP.Portal.Resources {
         public static string lblPh {
             get {
                 return ResourceManager.GetString("lblPh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Beta.
+        /// </summary>
+        public static string lblPhaseBannerContent {
+            get {
+                return ResourceManager.GetString("lblPhaseBannerContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This is a new service. Help us improve it and if you have any issues or concerns you can contact us on (Phone number entered here) or email us on.
+        /// </summary>
+        public static string lblPhaseBannerText {
+            get {
+                return ResourceManager.GetString("lblPhaseBannerText", resourceCulture);
             }
         }
         
