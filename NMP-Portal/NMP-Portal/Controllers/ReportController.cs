@@ -148,7 +148,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public IActionResult CropAndFieldManagement()
+        public async Task<IActionResult> CropAndFieldManagement()
         {
             ReportViewModel model = new ReportViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
@@ -158,6 +158,12 @@ namespace NMP.Portal.Controllers
             else
             {
                 return RedirectToAction("FarmList", "Farm");
+            }
+            string fieldIds = string.Join(",", model.FieldList);
+            (CropAndFieldReportResponse cropAndFieldReportResponse, Error error) = await _fieldService.FetchCropAndFieldReportById(fieldIds, model.Year.Value);
+            if(string.IsNullOrWhiteSpace(error.Message))
+            {
+                model.CropAndFieldReport = cropAndFieldReportResponse;
             }
             _logger.LogTrace("Report Controller : CropAndFieldManagement() post action called");
             return View(model);
