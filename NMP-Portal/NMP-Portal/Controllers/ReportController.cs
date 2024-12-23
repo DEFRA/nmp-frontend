@@ -159,8 +159,8 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-
-            (CropAndFieldReportResponse cropAndFieldReportResponse, Error error) = await _fieldService.FetchCropAndFieldReportById("13",model.Year.Value);
+            string fieldIds = string.Join(",", model.FieldList);
+            (CropAndFieldReportResponse cropAndFieldReportResponse, Error error) = await _fieldService.FetchCropAndFieldReportById(fieldIds, model.Year.Value);
             if(string.IsNullOrWhiteSpace(error.Message))
             {
                 model.CropAndFieldReport = cropAndFieldReportResponse;
