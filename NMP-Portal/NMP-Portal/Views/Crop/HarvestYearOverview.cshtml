@@ -49,10 +49,10 @@
                 @string.Format(Resource.lblThereAreFieldsInThisPlan, Model.FieldCount)
             </p>
             <p class="govuk-body">
-                @if (ViewBag.Rainfall != null)
+                @if (Model.Rainfall != null)
                 {
-                    @string.Format(Resource.lblAverageAnnualRainfallIsYouHaveNotEnteredAnyExcessWinterRainfall, ViewBag.Rainfall)
-                    <a href="#">@Resource.lblupdateRainfallFor</a>
+                    @string.Format(Resource.lblAverageAnnualRainfallIsYouHaveNotEnteredAnyExcessWinterRainfall, Model.Rainfall)
+                    <a href="#">@Resource.lblUpdateRainfallFor</a>
                 }
             </p>
             <p class="govuk-body">
