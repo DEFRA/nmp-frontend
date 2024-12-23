@@ -1532,9 +1532,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Windspeed at application</value>
   </data>
   <data name="lblApplicationRateRow" xml:space="preserve">
-    <value>Application rate
-t/ha
-m³/ha</value>
+    <value>Application rate {0}</value>
   </data>
   <data name="MsgWeCounldNotAddOrganicManure" xml:space="preserve">
     <value>We couldn’t add your application, please try again later</value>
@@ -1840,7 +1838,7 @@ m3/ha  not set</value>
     <value>InOrganic manure duration</value>
   </data>
   <data name="lblHowMuchOfEachNutrientDoYouPlan" xml:space="preserve">
-    <value>How much of each nutrient do you plan to include in this first application?</value>
+    <value>How much of each nutrient do you plan to include in this application?</value>
   </data>
   <data name="lblNutrientValues" xml:space="preserve">
     <value>Nutrient values</value>
@@ -2833,7 +2831,7 @@ m3/ha  not set</value>
     <value>All agricultural land in England is subject to the Farming Rules for Water.</value>
   </data>
   <data name="lblFarmingRuleOfWaterFourth" xml:space="preserve">
-    <value>Creating a nutrient management plan will help you comply with these rules.</value>
+    <value>Creating and following a nutrient management plan will help you comply with these rules.</value>
   </data>
   <data name="lblFarmingRuleOfWaterSecond" xml:space="preserve">
     <value>The rules aim to reduce and prevent diffuse water pollution from agricultural sources.</value>
@@ -3005,5 +3003,14 @@ m3/ha  not set</value>
   </data>
   <data name="helpdeskemail" xml:space="preserve">
     <value>helpdesk@rsk-bsl.co.uk</value>
+  </data>
+  <data name="lblFieldWithArrow" xml:space="preserve">
+    <value>Field {0}</value>
+  </data>
+  <data name="lblMeterCubePerHa" xml:space="preserve">
+    <value>m³/ha</value>
+  </data>
+  <data name="lblTonPerHa" xml:space="preserve">
+    <value>t/ha</value>
   </data>
 </root>

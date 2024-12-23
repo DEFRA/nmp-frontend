@@ -799,9 +799,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application rate
-        ///t/ha
-        ///m³/ha.
+        ///   Looks up a localized string similar to Application rate {0}.
         /// </summary>
         public static string lblApplicationRateRow {
             get {
@@ -2259,7 +2257,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Creating a nutrient management plan will help you comply with these rules..
+        ///   Looks up a localized string similar to Creating and following a nutrient management plan will help you comply with these rules..
         /// </summary>
         public static string lblFarmingRuleOfWaterFourth {
             get {
@@ -2498,6 +2496,15 @@ namespace NMP.Portal.Resources {
         public static string lblFieldSoilAnalysisDetail {
             get {
                 return ResourceManager.GetString("lblFieldSoilAnalysisDetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Field {0}.
+        /// </summary>
+        public static string lblFieldWithArrow {
+            get {
+                return ResourceManager.GetString("lblFieldWithArrow", resourceCulture);
             }
         }
         
@@ -2854,7 +2861,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How much of each nutrient do you plan to include in this first application?.
+        ///   Looks up a localized string similar to How much of each nutrient do you plan to include in this application?.
         /// </summary>
         public static string lblHowMuchOfEachNutrientDoYouPlan {
             get {
@@ -3643,6 +3650,15 @@ namespace NMP.Portal.Resources {
         public static string lblMessage {
             get {
                 return ResourceManager.GetString("lblMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to m³/ha.
+        /// </summary>
+        public static string lblMeterCubePerHa {
+            get {
+                return ResourceManager.GetString("lblMeterCubePerHa", resourceCulture);
             }
         }
         
@@ -5857,6 +5873,15 @@ namespace NMP.Portal.Resources {
         public static string lblTonneWithNutrient {
             get {
                 return ResourceManager.GetString("lblTonneWithNutrient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to t/ha.
+        /// </summary>
+        public static string lblTonPerHa {
+            get {
+                return ResourceManager.GetString("lblTonPerHa", resourceCulture);
             }
         }
         
