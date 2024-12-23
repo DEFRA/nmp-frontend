@@ -1726,7 +1726,7 @@ namespace NMP.Portal.Controllers
                                         ViewBag.PendingField = isSecondCropAllowed;
                                     }
                                 }
-                                ViewBag.Rainfall = harvestYearPlanResponse.farmDetails.Rainfall;
+                                model.Rainfall = harvestYearPlanResponse.farmDetails.Rainfall;                                
                                 var harvestYearPlans = new HarvestYearPlans
                                 {
 

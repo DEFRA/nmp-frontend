@@ -1,4 +1,5 @@
 ﻿using NMP.Portal.Models;
+using NMP.Portal.ServiceResponses;
 
 namespace NMP.Portal.ViewModels
 {
@@ -11,5 +12,7 @@ namespace NMP.Portal.ViewModels
         public int? Year { get; set; }
         public int? FarmId { get; set; }
         public string? FarmName { get; set; } = string.Empty;
+
+        public CropAndFieldReportResponse? CropAndFieldReport { get; set; }
     }
 }
