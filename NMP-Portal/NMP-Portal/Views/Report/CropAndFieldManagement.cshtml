@@ -16,30 +16,31 @@
         <govuk-error-summary-item href="#">@TempData["ErrorOnCropReport"]</govuk-error-summary-item>
     </govuk-error-summary>
 }
-<div class="govuk-grid-row noprint margin-bottom-forty">
-    <div class="govuk-grid-column-two-thirds">
-        <h2 class="govuk-heading-m">@Resource.lblPrintOrSaveAsAPDF</h2>
-        <ol class="govuk-list govuk-list--number">
-            <li>@Resource.lblPrint1</li>
-            <li>@Resource.lblPrint2</li>
-            <li>@Resource.lblPrint3</li>
-        </ol>
-        <govuk-button id="cropReportPrintButton" type="button">
-            @Resource.lblPrintOrSaveAsAPDF
-        </govuk-button>
-        <hr>
+@if (Model != null&&Model.CropAndFieldReport != null)
+{
+    <div class="govuk-grid-row noprint margin-bottom-forty">
+        <div class="govuk-grid-column-two-thirds">
+            <h2 class="govuk-heading-m">@Resource.lblPrintOrSaveAsAPDF</h2>
+            <ol class="govuk-list govuk-list--number">
+                <li>@Resource.lblPrint1</li>
+                <li>@Resource.lblPrint2</li>
+                <li>@Resource.lblPrint3</li>
+            </ol>
+            <govuk-button id="cropReportPrintButton" type="button">
+                @Resource.lblPrintOrSaveAsAPDF
+            </govuk-button>
+            <hr>
+        </div>
     </div>
-</div>
-<form asp-action="ExportFields" asp-controller="Report" method="post">
-    @Html.AntiForgeryToken()
+    <form asp-action="ExportFields" asp-controller="Report" method="post">
+        @Html.AntiForgeryToken()
 
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full">
-            <h1 class="govuk-heading-xl">
-                @string.Format(Resource.lblCropAndFieldManagementReport, Model.Year, Model.FarmName)
-            </h1>
-            @if (Model.CropAndFieldReport != null)
-            {
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                <h1 class="govuk-heading-xl">
+                    @string.Format(Resource.lblCropAndFieldManagementReport, Model.Year, Model.FarmName)
+                </h1>
+
                 <h2 class="govuk-heading-l">@Resource.lblFarmInformation</h2>
                 <table class="govuk-table  govuk-table-small margin-bottom-sixty">
                     <thead class="govuk-table__head">
@@ -59,7 +60,7 @@
                         </tr>
                     </tbody>
                 </table>
-                if (Model.CropAndFieldReport.Farm.Fields != null && Model.CropAndFieldReport.Farm.Fields.Count > 0)
+                @if (Model.CropAndFieldReport.Farm.Fields != null && Model.CropAndFieldReport.Farm.Fields.Count > 0)
                 {
                     {
                         var count = Model.CropAndFieldReport.Farm.Fields.Count;
@@ -389,18 +390,17 @@
                                     </p>
                                 </div>
                             </div>
-                            @if(count!=0)
+                            @if (count != 0)
                             {
                                 <div id="printbreak"></div>
                             }
                         }
                     }
                 }
-            }
+
+            </div>
         </div>
-    </div>
 
-    @*    </div> *@
-
-</form>
+    </form>
+}
 

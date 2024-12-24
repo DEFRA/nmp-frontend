@@ -165,6 +165,11 @@ namespace NMP.Portal.Controllers
             {
                 model.CropAndFieldReport = cropAndFieldReportResponse;
             }
+            else
+            {
+                TempData["ErrorOnCropReport"] = error.Message;
+                return View(model);
+            }
             if (model.CropAndFieldReport != null && model.CropAndFieldReport.Farm != null)
             {
                 if (model.CropAndFieldReport.Farm.Fields != null && model.CropAndFieldReport.Farm.Fields.Count > 0)
