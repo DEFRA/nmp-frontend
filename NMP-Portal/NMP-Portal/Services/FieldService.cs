@@ -1058,7 +1058,7 @@ namespace NMP.Portal.Services
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        cropAndFieldReportResponse = responseWrapper.Data[0].ToObject<CropAndFieldReportResponse>();
+                        cropAndFieldReportResponse = responseWrapper.Data.ToObject<CropAndFieldReportResponse>();
                     }
                 }
                 else
