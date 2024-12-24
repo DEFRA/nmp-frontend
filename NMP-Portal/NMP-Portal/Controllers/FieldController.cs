@@ -3808,7 +3808,7 @@ namespace NMP.Portal.Controllers
                 {
                     ViewBag.FieldList = fieldList;
                 }
-                return View("CopyFields");
+                return View("CopyFields",field);
             }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
             if (field.IsCheckAnswer)
