@@ -380,3 +380,10 @@ a:focus, .govuk-link:focus {
         line-height: 1.15;
     }
 }
+
+@media print {
+    .govuk-footer {
+        font-size: 10pt !important;
+        line-height: 1.2;
+    }
+}
