@@ -308,6 +308,8 @@ a:focus, .govuk-link:focus {
     .govuk-heading-xl {
         font-size: 22pt !important;
         line-height: 1.15;
+        font-family: sans-serif;
+        margin-bottom: 30pt !important;
     }
 }
 
@@ -385,5 +387,13 @@ a:focus, .govuk-link:focus {
     .govuk-footer {
         font-size: 10pt !important;
         line-height: 1.2;
+    }
+}
+
+@media print {
+    .govuk-list {
+        font-size: 10pt !important;
+        line-height: 1.15;
+        color: #000000;
     }
 }

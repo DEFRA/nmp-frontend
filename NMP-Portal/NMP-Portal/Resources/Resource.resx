@@ -3037,4 +3037,10 @@ m3/ha  not set</value>
   <data name="lblTonPerHa" xml:space="preserve">
     <value>t/ha</value>
   </data>
+  <data name="lblCPHNumberSingleBusinessIdentifier" xml:space="preserve">
+    <value>CPH number: {0} . Single Business Identifier: {1}</value>
+  </data>
+  <data name="lblCreatedOnDate" xml:space="preserve">
+    <value>Created on {0}</value>
+  </data>
 </root>

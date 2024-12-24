@@ -8,6 +8,7 @@ using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
 using NMP.Portal.Services;
 using NMP.Portal.ViewModels;
+using System.Diagnostics.Metrics;
 using Error = NMP.Portal.ServiceResponses.Error;
 
 namespace NMP.Portal.Controllers
@@ -172,6 +173,19 @@ namespace NMP.Portal.Controllers
             }
             if (model.CropAndFieldReport != null && model.CropAndFieldReport.Farm != null)
             {
+                if (string.IsNullOrWhiteSpace(model.CropAndFieldReport.Farm.CPH))
+                {
+                    model.CropAndFieldReport.Farm.CPH = Resource.lblNotEntered;
+                }
+                if (string.IsNullOrWhiteSpace(model.CropAndFieldReport.Farm.BusinessName))
+                {
+                    model.CropAndFieldReport.Farm.BusinessName = Resource.lblNotEntered;
+                }
+                model.CropAndFieldReport.Farm.FullAddress = string.Format("{0}, {1} {2}, {3}, {4}", model.CropAndFieldReport.Farm.Address1, model.CropAndFieldReport.Farm.Address2 != null ? model.CropAndFieldReport.Farm.Address2 + "," : string.Empty, model.CropAndFieldReport.Farm.Address3, model.CropAndFieldReport.Farm.Address4, model.CropAndFieldReport.Farm.Postcode);
+                if ((!string.IsNullOrWhiteSpace(model.CropAndFieldReport.Farm.FullAddress)) && model.CropAndFieldReport.Farm.CountryID != null)
+                {
+                    model.CropAndFieldReport.Farm.FullAddress += ", " + Enum.GetName(typeof(NMP.Portal.Enums.FarmCountry), model.CropAndFieldReport.Farm.CountryID);
+                }
                 if (model.CropAndFieldReport.Farm.Fields != null && model.CropAndFieldReport.Farm.Fields.Count > 0)
                 {
 
@@ -194,10 +208,10 @@ namespace NMP.Portal.Controllers
                                 {
                                     totalArableArea += (int)Math.Round(fieldData.TotalArea.Value);
                                 }
-                                
-                            }                            
+
+                            }
                         }
-                        
+
                     }
                     model.CropAndFieldReport.Farm.GrassArea = totalGrassArea;
                     model.CropAndFieldReport.Farm.ArableArea = totalArableArea;

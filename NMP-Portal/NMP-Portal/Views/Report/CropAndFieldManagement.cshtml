@@ -16,7 +16,7 @@
         <govuk-error-summary-item href="#">@TempData["ErrorOnCropReport"]</govuk-error-summary-item>
     </govuk-error-summary>
 }
-@if (Model != null&&Model.CropAndFieldReport != null)
+@if (Model != null && Model.CropAndFieldReport != null)
 {
     <div class="govuk-grid-row noprint margin-bottom-forty">
         <div class="govuk-grid-column-two-thirds">
@@ -40,7 +40,13 @@
                 <h1 class="govuk-heading-xl">
                     @string.Format(Resource.lblCropAndFieldManagementReport, Model.Year, Model.FarmName)
                 </h1>
-
+                <ul class="govuk-list margin-bottom-thirty">
+                    <li>@Model.CropAndFieldReport.Farm.FullAddress</li>
+                    <li>
+                        @string.Format(Resource.lblCPHNumberSingleBusinessIdentifier, Model.CropAndFieldReport.Farm.CPH, Model.CropAndFieldReport.Farm.BusinessName)
+                        </li>
+                    <li>@string.Format(Resource.lblCreatedOnDate, Model.CropAndFieldReport.Farm.CreatedOn.Date.ToString("dd MMMM yyyy"))</li>
+                </ul>
                 <h2 class="govuk-heading-l">@Resource.lblFarmInformation</h2>
                 <table class="govuk-table  govuk-table-small margin-bottom-sixty">
                     <thead class="govuk-table__head">
@@ -60,13 +66,13 @@
                         </tr>
                     </tbody>
                 </table>
-                @if (Model.CropAndFieldReport.Farm.Fields != null && Model.CropAndFieldReport.Farm.Fields.Count > 0)
-                {
-                    {
-                        var count = Model.CropAndFieldReport.Farm.Fields.Count;
-                        foreach (var field in Model.CropAndFieldReport.Farm.Fields)
-                        {
-                            count--;
+    @if (Model.CropAndFieldReport.Farm.Fields != null && Model.CropAndFieldReport.Farm.Fields.Count > 0)
+    {
+        {
+            var count = Model.CropAndFieldReport.Farm.Fields.Count;
+            foreach (var field in Model.CropAndFieldReport.Farm.Fields)
+            {
+                count--;
                             <h2 class="govuk-heading-l">@field.Name</h2>
                             <table class="govuk-table  govuk-table-small margin-bottom-sixty">
                                 <thead class="govuk-table__head">
@@ -75,7 +81,7 @@
                                         <th scope="col" class="govuk-table__header">@Resource.lblCropedArea</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblManureNonSpreadArea</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblPreviousCrop</th>
-                                        @* if field is grass *@
+                            @* if field is grass *@
                                         <th scope="col" class="govuk-table__header">@Resource.lblManagement</th>
                                     </tr>
                                 </thead>
@@ -93,8 +99,8 @@
                                 <div class="govuk-grid-column-full">
                                     <h2 class="govuk-heading-m">@string.Format(Resource.lblRecommendationsForField, Resource.lblCropType, Resource.lblField)</h2>
 
-                                    @* if grass *@
-                                    @* <p class="govuk-body">Recommendations 1 - Cut</p> *@
+                        @* if grass *@
+                        @* <p class="govuk-body">Recommendations 1 - Cut</p> *@
 
 
                                     <table class="recs-table govuk-table govuk-table-small margin-bottom-sixty">
@@ -110,7 +116,7 @@
                                         <tbody class="govuk-table__body">
                                             <tr class="govuk-table__row">
                                                 <td class="govuk-table__cell">
-                                                    @Resource.lblNitrogen
+                                        @Resource.lblNitrogen
                                                 </td>
                                                 <td class="govuk-table__cell">@Resource.lblHyphen</td>
                                                 <td class="govuk-table__cell">@Resource.lblHyphen</td>
@@ -119,7 +125,7 @@
                                             </tr>
                                             <tr class="govuk-table__row">
                                                 <td class="govuk-table__cell">
-                                                    @Resource.lblPhosphateP2O5
+                                        @Resource.lblPhosphateP2O5
                                                 </td>
                                                 <td class="govuk-table__cell">@Resource.lblHyphen</td>
                                                 <td class="govuk-table__cell">@Resource.lblHyphen</td>
@@ -128,7 +134,7 @@
                                             </tr>
                                             <tr class="govuk-table__row">
                                                 <td class="govuk-table__cell">
-                                                    @Resource.lblPotashK2O
+                                        @Resource.lblPotashK2O
                                                 </td>
                                                 <td class="govuk-table__cell">@Resource.lblHyphen</td>
                                                 <td class="govuk-table__cell">@Resource.lblHyphen</td>
@@ -137,7 +143,7 @@
                                             </tr>
                                             <tr class="govuk-table__row">
                                                 <td class="govuk-table__cell">
-                                                    @Resource.lblMagnesiumMgO
+                                        @Resource.lblMagnesiumMgO
                                                 </td>
                                                 <td class="govuk-table__cell">@Resource.lblHyphen</td>
                                                 <td class="govuk-table__cell">@Resource.lblHyphen</td>
@@ -146,7 +152,7 @@
                                             </tr>
                                             <tr class="govuk-table__row">
                                                 <td class="govuk-table__cell">
-                                                    @Resource.lblLime
+                                        @Resource.lblLime
                                                 </td>
                                                 <td class="govuk-table__cell">@Resource.lblHyphen</td>
                                                 <td class="govuk-table__cell">@Resource.lblHyphen</td>
@@ -161,14 +167,14 @@
                                 <div class="govuk-grid-column-full">
                                     <table class="govuk-table govuk-table-small">
                                         <caption class="govuk-table__caption govuk-table__caption--m">@string.Format(Resource.lblGrassDetailsForField, Resource.lblField)</caption>
-                                        @* <caption class="govuk-table__caption govuk-table__caption--m">@Resource.lblCropDetails</caption> *@
+                            @* <caption class="govuk-table__caption govuk-table__caption--m">@Resource.lblCropDetails</caption> *@
                                         <thead class="govuk-table__head">
                                             <tr class="govuk-table__row">
-                                                @*    <th scope="col" class="govuk-table__header">@Resource.lblCrop</th>
+                                    @*    <th scope="col" class="govuk-table__header">@Resource.lblCrop</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblYieldPerHectare</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblCropInformation1</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblCropInformation2</th> *@
-                                                @* if crop is grass *@
+                                    @* if crop is grass *@
                                                 <th scope="col" class="govuk-table__header">@Resource.lblEstablishment</th>
                                                 <th scope="col" class="govuk-table__header">@Resource.lblSward</th>
                                                 <th scope="col" class="govuk-table__header">@Resource.lblManagement</th>
@@ -182,8 +188,8 @@
                                         <tbody class="govuk-table__body">
                                             <tr class="govuk-table__row">
                                                 <td class="govuk-table__cell">
-                                                    @* crop type pass *@
-                                                    @Resource.lblCropType
+                                        @* crop type pass *@
+                                        @Resource.lblCropType
                                                 </td>
                                                 <td class="govuk-table__cell">@Resource.lblHyphen</td>
                                                 <td class="govuk-table__cell">@Resource.lblHyphen</td>
@@ -198,7 +204,7 @@
                             <div class="govuk-grid-row">
                                 <div class="govuk-grid-column-full">
                                     <table class="govuk-table govuk-table-small margin-bottom-sixty">
-                                        @* pass filed name *@
+                            @* pass filed name *@
                                         <caption class="govuk-table__caption govuk-table__caption--m">@string.Format(Resource.lblInorganicFertiliserAndLimeApplicationsForField, Resource.lblField)</caption>
                                         <thead class="govuk-table__head">
                                             <tr class="govuk-table__row">
@@ -228,7 +234,7 @@
                             <div class="govuk-grid-row ">
                                 <div class="govuk-grid-column-full">
                                     <h2 class="govuk-heading-m">@Resource.lblOrganicManureApplications</h2>
-                                    @* passing date *@
+                        @* passing date *@
                                     <h3 class="govuk-heading-s">@string.Format(Resource.lblApplicationDateWithDate, Resource.lblHyphen)</h3>
                                 </div>
                             </div>
@@ -238,7 +244,7 @@
                                         <tbody class="govuk-table__body">
                                             <tr class="govuk-table__row">
                                                 <th scope="col" class="govuk-table__header">@Resource.lblManureType</th>
-                                                @* manure type *@
+                                    @* manure type *@
                                                 <td class="govuk-table__cell">@Resource.lblHyphen</td>
                                             </tr>
                                             <tr class="govuk-table__row">
@@ -291,7 +297,7 @@
                             </div>
                             <div class="govuk-grid-row">
                                 <div class="govuk-grid-column-full">
-                                    @* pass field name *@
+                        @* pass field name *@
                                     <h2 class="govuk-heading-m">@string.Format(Resource.lblSoilDetailsForField, Resource.lblField)</h2>
                                 </div>
                                 <div class="govuk-grid-column-one-half half-table-left">
@@ -336,7 +342,7 @@
                             </div>
                             <div class="govuk-grid-row">
                                 <div class="govuk-grid-column-full">
-                                    @* pass field *@
+                        @* pass field *@
                                     <h2 class="govuk-heading-m">@string.Format(Resource.lblSoilAnalysisForField, Resource.lblField)</h2>
                                     <p class="govuk-body">Last updated 9 December 2024</p>
 
@@ -369,34 +375,34 @@
                             </div>
                             <div class="govuk-grid-row margin-bottom-forty pagebreak">
                                 <div class="govuk-grid-column-full">
-                                    @* pass field *@
+                        @* pass field *@
                                     <h2 class="govuk-heading-m">@string.Format(Resource.lblGuidanceForField, Resource.lblField)</h2>
 
                                     <h2 class="govuk-heading-s">@Resource.lblNitrogen</h2>
                                     <p class="govuk-body">
-                                        @Resource.lblHyphen
+                            @Resource.lblHyphen
                                     </p>
                                     <h2 class="govuk-heading-s">@Resource.lblPhosphateP2O5</h2>
                                     <p class="govuk-body">
-                                        @Resource.lblHyphen
+                            @Resource.lblHyphen
                                     </p>
                                     <h2 class="govuk-heading-s">@Resource.lblSulphurSO3</h2>
                                     <p class="govuk-body">
-                                        @Resource.lblHyphen
+                            @Resource.lblHyphen
                                     </p>
                                     <h2 class="govuk-heading-s">@Resource.lblLime</h2>
                                     <p class="govuk-body">
-                                        @Resource.lblHyphen
+                            @Resource.lblHyphen
                                     </p>
                                 </div>
                             </div>
-                            @if (count != 0)
-                            {
+                @if (count != 0)
+                {
                                 <div id="printbreak"></div>
-                            }
-                        }
-                    }
                 }
+            }
+        }
+    }
 
             </div>
         </div>

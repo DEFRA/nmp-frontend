@@ -1348,6 +1348,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CPH number: {0} . Single Business Identifier: {1}.
+        /// </summary>
+        public static string lblCPHNumberSingleBusinessIdentifier {
+            get {
+                return ResourceManager.GetString("lblCPHNumberSingleBusinessIdentifier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create a crop nutrient management plan.
         /// </summary>
         public static string lblCreateACropNutrientManagementPlan {
@@ -1362,6 +1371,15 @@ namespace NMP.Portal.Resources {
         public static string lblCreateANutrientManagementPlan {
             get {
                 return ResourceManager.GetString("lblCreateANutrientManagementPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created on {0}.
+        /// </summary>
+        public static string lblCreatedOnDate {
+            get {
+                return ResourceManager.GetString("lblCreatedOnDate", resourceCulture);
             }
         }
         
