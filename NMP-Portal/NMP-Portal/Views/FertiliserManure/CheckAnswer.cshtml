@@ -98,7 +98,7 @@
             }
 
             <h1 class="govuk-heading-l">
-                @Resource.lblCheckInorganicFertiliserDetailsForFields
+                @Resource.lblCheckYourAnswers
             </h1>
             <govuk-summary-list>
                 @if (!Model.IsComingFromRecommendation)
@@ -221,7 +221,7 @@
             </govuk-summary-list>
 
             <govuk-button type="submit" class="margin-bottom-forty">
-                @Resource.lblAddToApplicaionPlan
+                @Resource.lblAddToPlan
             </govuk-button>
 
             <p class="govuk-body cancel-link"><a asp-action="CreateFertiliserManureCancel" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
