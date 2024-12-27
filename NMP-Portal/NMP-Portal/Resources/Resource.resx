@@ -3049,4 +3049,7 @@ m3/ha  not set</value>
   <data name="lblCropTypeRecommendationForField" xml:space="preserve">
     <value>{0} recommendations for {1} (per hectare)</value>
   </data>
+  <data name="lblCropDetailsForField" xml:space="preserve">
+    <value>Crop details for {0}</value>
+  </data>
 </root>

@@ -88,7 +88,7 @@ namespace NMP.Portal.Controllers
                             Value = f.FieldID.ToString(),
                             Text = f.FieldName
                         }).ToList();
-                        ViewBag.fieldList = SelectListItem.OrderBy(x=>x.Text).ToList();
+                        ViewBag.fieldList = SelectListItem.DistinctBy(x=>x.Text).OrderBy(x=>x.Text).ToList();
                     }
                 }
             }
@@ -127,7 +127,7 @@ namespace NMP.Portal.Controllers
                     }
                     if (!ModelState.IsValid)
                     {
-                        ViewBag.fieldList = selectListItem.OrderBy(x => x.Text).ToList();
+                        ViewBag.fieldList = selectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
                         return View("ExportFields", model);
                     }
                     if (model.FieldList.Count == 1 && model.FieldList[0] == Resource.lblSelectAll)
@@ -195,18 +195,22 @@ namespace NMP.Portal.Controllers
                     int totalArableArea = 0;
                     foreach (var fieldData in model.CropAndFieldReport.Farm.Fields)
                     {
+                        totalFarmArea += fieldData.TotalArea.Value;
                         if (fieldData.Crops != null && fieldData.Crops.Count > 0)
                         {
-                            totalFarmArea += fieldData.TotalArea.Value * fieldData.Crops.Count;
+                            // * fieldData.Crops.Count;
                             foreach (var cropData in fieldData.Crops)
                             {
-                                if (cropData.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                if (cropData.CropOrder == 1)
                                 {
-                                    totalGrassArea += (int)Math.Round(fieldData.TotalArea.Value);
-                                }
-                                else
-                                {
-                                    totalArableArea += (int)Math.Round(fieldData.TotalArea.Value);
+                                    if (cropData.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                    {
+                                        totalGrassArea += (int)Math.Round(fieldData.TotalArea.Value);
+                                    }
+                                    else
+                                    {
+                                        totalArableArea += (int)Math.Round(fieldData.TotalArea.Value);
+                                    }
                                 }
 
                             }
