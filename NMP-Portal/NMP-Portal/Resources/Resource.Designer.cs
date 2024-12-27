@@ -1600,6 +1600,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} recommendations for {1} (per hectare).
+        /// </summary>
+        public static string lblCropTypeRecommendationForField {
+            get {
+                return ResourceManager.GetString("lblCropTypeRecommendationForField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Crop use.
         /// </summary>
         public static string lblCropUse {
