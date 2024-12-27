@@ -74,6 +74,7 @@
             {
                 count--;
                             <h2 class="govuk-heading-l">@field.Name</h2>
+
                             <table class="govuk-table  govuk-table-small margin-bottom-sixty">
                                 <thead class="govuk-table__head">
                                     <tr class="govuk-table__row">
@@ -81,17 +82,22 @@
                                         <th scope="col" class="govuk-table__header">@Resource.lblCropedArea</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblManureNonSpreadArea</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblPreviousCrop</th>
-                            @* if field is grass *@
-                                        <th scope="col" class="govuk-table__header">@Resource.lblManagement</th>
+                                        @if (field.PreviousCropID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                        {
+                                            <th scope="col" class="govuk-table__header">@Resource.lblManagement</th>
+                                        }
                                     </tr>
                                 </thead>
                                 <tbody class="govuk-table__body">
                                     <tr class="govuk-table__row">
-                                        <td class="govuk-table__cell">@Resource.lblHyphen</td>
-                                        <td class="govuk-table__cell">@Resource.lblHyphen</td>
-                                        <td class="govuk-table__cell">@Resource.lblHyphen</td>
-                                        <td class="govuk-table__cell">@Resource.lblHyphen</td>
-                                        <td class="govuk-table__cell">@Resource.lblHyphen</td>
+                                        <td class="govuk-table__cell">@field.TotalArea</td>
+                                        <td class="govuk-table__cell">@field.CroppedArea</td>
+                                        <td class="govuk-table__cell">@(field.ManureNonSpreadingArea!=null?field.ManureNonSpreadingArea:Resource.lblNotEntered)</td>
+                                        <td class="govuk-table__cell">@field.PreviousCrop</td>
+                                        @if (field.PreviousCropID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                        {
+                                            <td class="govuk-table__cell">@field.Management</td>
+                                        }
                                     </tr>
                                 </tbody>
                             </table>

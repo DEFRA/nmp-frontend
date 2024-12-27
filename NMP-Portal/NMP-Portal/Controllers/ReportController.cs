@@ -88,7 +88,7 @@ namespace NMP.Portal.Controllers
                             Value = f.FieldID.ToString(),
                             Text = f.FieldName
                         }).ToList();
-                        ViewBag.fieldList = SelectListItem;
+                        ViewBag.fieldList = SelectListItem.OrderBy(x=>x.Text).ToList();
                     }
                 }
             }
@@ -127,7 +127,7 @@ namespace NMP.Portal.Controllers
                     }
                     if (!ModelState.IsValid)
                     {
-                        ViewBag.fieldList = selectListItem;
+                        ViewBag.fieldList = selectListItem.OrderBy(x => x.Text).ToList();
                         return View("ExportFields", model);
                     }
                     if (model.FieldList.Count == 1 && model.FieldList[0] == Resource.lblSelectAll)
@@ -172,7 +172,7 @@ namespace NMP.Portal.Controllers
                 return View(model);
             }
             if (model.CropAndFieldReport != null && model.CropAndFieldReport.Farm != null)
-            {
+            {      
                 if (string.IsNullOrWhiteSpace(model.CropAndFieldReport.Farm.CPH))
                 {
                     model.CropAndFieldReport.Farm.CPH = Resource.lblNotEntered;
@@ -188,7 +188,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.CropAndFieldReport.Farm.Fields != null && model.CropAndFieldReport.Farm.Fields.Count > 0)
                 {
-
+                    model.CropAndFieldReport.Farm.Fields = model.CropAndFieldReport.Farm.Fields.OrderBy(a => a.Name).ToList();
                     decimal totalFarmArea = 0;
 
                     int totalGrassArea = 0;

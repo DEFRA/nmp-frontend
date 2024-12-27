@@ -1920,6 +1920,10 @@ namespace NMP.Portal.Controllers
                         _httpContextAccessor.HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
                     }
                 }
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    _httpContextAccessor.HttpContext?.Session.Remove("ReportData");
+                }
             }
             catch (Exception ex)
             {
