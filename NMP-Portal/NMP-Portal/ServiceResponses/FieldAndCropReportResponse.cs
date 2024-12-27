@@ -1,13 +1,11 @@
 ﻿using Newtonsoft.Json;
 using NMP.Portal.Models;
+using NMP.Portal.ViewModels;
 
 namespace NMP.Portal.ServiceResponses
 {
-    public class FieldAndCropReportResponse :Field
+    public class FieldAndCropReportResponse :FieldViewModel
     {
-        //[JsonProperty("Fields")]
-        //public Field Fields { get; set; }
-
         [JsonProperty("Crops")]
 
         public List<CropReportResponse>? Crops { get; set; }
