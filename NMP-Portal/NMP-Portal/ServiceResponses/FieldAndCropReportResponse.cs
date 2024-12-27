@@ -4,10 +4,9 @@ using NMP.Portal.ViewModels;
 
 namespace NMP.Portal.ServiceResponses
 {
-    public class FieldAndCropReportResponse :FieldViewModel
+    public class FieldAndCropReportResponse : FieldViewModel
     {
         [JsonProperty("Crops")]
-
         public List<CropReportResponse>? Crops { get; set; }
         [JsonProperty("PreviousGrasses")]
         public List<PreviousGrass>? PreviousGrasses { get; set; }
