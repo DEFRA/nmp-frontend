@@ -15,5 +15,8 @@ namespace NMP.Portal.ViewModels
         public bool IsPlanExist { get; set; } = false;
         public string? EncryptedIsUpdate { get; set; } = string.Empty;
         public bool? FarmRemove { get; set; }
+        public int? ArableArea { get; set; }
+        public int? GrassArea { get; set; }
+
     }
 }

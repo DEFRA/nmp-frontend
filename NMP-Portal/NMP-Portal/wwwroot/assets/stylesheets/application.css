@@ -267,3 +267,133 @@ a:focus, .govuk-link:focus {
 .margin-bottom-sixty {
     margin-bottom: 60px !important;
 }
+@media print {
+    .pagebreak {
+        page-break-after: always;
+        clear: both;
+    }
+
+    .noprint {
+        display: none;
+    }
+}
+#printbreak {
+    height: 10px;
+    background-color: #505a5f;
+    margin-bottom: 40px;
+}
+
+.govuk-table-small {
+    font-size: 17px !important;
+}
+
+.half-table-left {
+    padding-right: 25px;
+}
+
+    .half-table-left th {
+        width: 60%;
+    }
+
+.half-table-right {
+    padding-left: 25px;
+}
+
+    .half-table-right th {
+        width: 65%;
+    }
+
+
+@media print {
+    .govuk-heading-xl {
+        font-size: 22pt !important;
+        line-height: 1.15;
+        font-family: sans-serif;
+        margin-bottom: 30pt !important;
+    }
+}
+
+@media print {
+    .govuk-heading-l {
+        font-size: 18pt !important;
+        line-height: 1.05;
+    }
+}
+
+@media print {
+    .govuk-table {
+        font-size: 10pt !important;
+        font-family: sans-serif !important;
+        line-height: 1.15;
+    }
+}
+
+@media print {
+    .govuk-body-lead, .govuk-body-l {
+        font-size: 18pt !important;
+        line-height: 1.15;
+    }
+}
+
+@media print {
+    .govuk-table__caption--m {
+        font-size: 18pt !important;
+        line-height: 1.15;
+    }
+}
+
+@media print {
+    .govuk-table__caption--s {
+        font-size: 14pt !important;
+        line-height: 1.15;
+    }
+}
+
+@media print {
+    p, .govuk-body, .govuk-body-m {
+        font-size: 10pt !important;
+        line-height: 1.15;
+    }
+}
+@media print {
+    .govuk-header {
+        font-size: 10pt !important;
+        line-height: 1.2;
+        font-family: sans-serif;
+    }
+}
+@media print {
+    .govuk-heading-m {
+        font-size: 13pt !important;
+        line-height: 1.15;
+    }
+}
+
+@media print {
+    .govuk-table__caption--m {
+        font-size: 13pt !important;
+        line-height: 1.15;
+    }
+}
+
+@media print {
+    .govuk-heading-s {
+        font-size: 10pt !important;
+        line-height: 1.15;
+    }
+}
+
+@media print {
+    .govuk-footer {
+        font-size: 10pt !important;
+        line-height: 1.2;
+    }
+}
+
+@media print {
+    .govuk-list {
+        font-size: 10pt !important;
+        line-height: 1.15;
+        color: #000000;
+    }
+}

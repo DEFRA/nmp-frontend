@@ -1010,7 +1010,7 @@
                     {
                         <govuk-summary-list-row class=@((!Model.PreviousGrasses.SoilNitrogenSupplyItemID.HasValue)?"govuk-error-message":"")>
                             <govuk-summary-list-row-key>
-                                @Resource.lblHawManyCutsTypicallyEachYear
+                                @string.Format(Resource.lblHowMuchNitrogenHasBeenAppliedToFieldEachYear, Model.Name)
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
                                 @ViewBag.SoilNitrogenSupplyItems

@@ -8,6 +8,7 @@ using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
 using NMP.Portal.Services;
 using NMP.Portal.ViewModels;
+using System.Diagnostics.Metrics;
 using Error = NMP.Portal.ServiceResponses.Error;
 
 namespace NMP.Portal.Controllers
@@ -87,7 +88,7 @@ namespace NMP.Portal.Controllers
                             Value = f.FieldID.ToString(),
                             Text = f.FieldName
                         }).ToList();
-                        ViewBag.fieldList = SelectListItem;
+                        ViewBag.fieldList = SelectListItem.DistinctBy(x=>x.Text).OrderBy(x=>x.Text).ToList();
                     }
                 }
             }
@@ -126,7 +127,7 @@ namespace NMP.Portal.Controllers
                     }
                     if (!ModelState.IsValid)
                     {
-                        ViewBag.fieldList = selectListItem;
+                        ViewBag.fieldList = selectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
                         return View("ExportFields", model);
                     }
                     if (model.FieldList.Count == 1 && model.FieldList[0] == Resource.lblSelectAll)
@@ -148,7 +149,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public IActionResult CropAndFieldManagement()
+        public async Task<IActionResult> CropAndFieldManagement()
         {
             ReportViewModel model = new ReportViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
@@ -158,6 +159,68 @@ namespace NMP.Portal.Controllers
             else
             {
                 return RedirectToAction("FarmList", "Farm");
+            }
+            string fieldIds = string.Join(",", model.FieldList);
+            (CropAndFieldReportResponse cropAndFieldReportResponse, Error error) = await _fieldService.FetchCropAndFieldReportById(fieldIds, model.Year.Value);
+            if (string.IsNullOrWhiteSpace(error.Message))
+            {
+                model.CropAndFieldReport = cropAndFieldReportResponse;
+            }
+            else
+            {
+                TempData["ErrorOnCropReport"] = error.Message;
+                return View(model);
+            }
+            if (model.CropAndFieldReport != null && model.CropAndFieldReport.Farm != null)
+            {      
+                if (string.IsNullOrWhiteSpace(model.CropAndFieldReport.Farm.CPH))
+                {
+                    model.CropAndFieldReport.Farm.CPH = Resource.lblNotEntered;
+                }
+                if (string.IsNullOrWhiteSpace(model.CropAndFieldReport.Farm.BusinessName))
+                {
+                    model.CropAndFieldReport.Farm.BusinessName = Resource.lblNotEntered;
+                }
+                model.CropAndFieldReport.Farm.FullAddress = string.Format("{0}, {1} {2}, {3}, {4}", model.CropAndFieldReport.Farm.Address1, model.CropAndFieldReport.Farm.Address2 != null ? model.CropAndFieldReport.Farm.Address2 + "," : string.Empty, model.CropAndFieldReport.Farm.Address3, model.CropAndFieldReport.Farm.Address4, model.CropAndFieldReport.Farm.Postcode);
+                if ((!string.IsNullOrWhiteSpace(model.CropAndFieldReport.Farm.FullAddress)) && model.CropAndFieldReport.Farm.CountryID != null)
+                {
+                    model.CropAndFieldReport.Farm.FullAddress += ", " + Enum.GetName(typeof(NMP.Portal.Enums.FarmCountry), model.CropAndFieldReport.Farm.CountryID);
+                }
+                if (model.CropAndFieldReport.Farm.Fields != null && model.CropAndFieldReport.Farm.Fields.Count > 0)
+                {
+                    model.CropAndFieldReport.Farm.Fields = model.CropAndFieldReport.Farm.Fields.OrderBy(a => a.Name).ToList();
+                    decimal totalFarmArea = 0;
+
+                    int totalGrassArea = 0;
+                    int totalArableArea = 0;
+                    foreach (var fieldData in model.CropAndFieldReport.Farm.Fields)
+                    {
+                        totalFarmArea += fieldData.TotalArea.Value;
+                        if (fieldData.Crops != null && fieldData.Crops.Count > 0)
+                        {
+                            // * fieldData.Crops.Count;
+                            foreach (var cropData in fieldData.Crops)
+                            {
+                                if (cropData.CropOrder == 1)
+                                {
+                                    if (cropData.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                    {
+                                        totalGrassArea += (int)Math.Round(fieldData.TotalArea.Value);
+                                    }
+                                    else
+                                    {
+                                        totalArableArea += (int)Math.Round(fieldData.TotalArea.Value);
+                                    }
+                                }
+
+                            }
+                        }
+
+                    }
+                    model.CropAndFieldReport.Farm.GrassArea = totalGrassArea;
+                    model.CropAndFieldReport.Farm.ArableArea = totalArableArea;
+                    model.CropAndFieldReport.Farm.TotalFarmArea = totalFarmArea;
+                }
             }
             _logger.LogTrace("Report Controller : CropAndFieldManagement() post action called");
             return View(model);
