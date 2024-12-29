@@ -162,6 +162,7 @@
                 }
             }
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingField" value="@Model.CopyExistingField.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPreviousYearGrass" value="@Model.IsPreviousYearGrass.ToString().ToLower()"></govuk-input>
             <govuk-summary-list>
                 <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
@@ -592,7 +593,7 @@
                 </govuk-summary-list-row-actions>
                 </govuk-summary-list-row> *@
 
-                @if (Model.PreviousGrasses.HasGrassInLastThreeYear != null && !Model.PreviousGrasses.HasGrassInLastThreeYear.Value)
+                @if (Model.PreviousGrasses.HasGrassInLastThreeYear != null && (Model.PreviousGrasses.HasGrassInLastThreeYear.Value==false || Model.IsPreviousYearGrass==false))
                 {
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
@@ -927,7 +928,7 @@
 
                 @if (Model.PreviousGrasses.HasGrassInLastThreeYear != null && Model.PreviousGrasses.HasGrassInLastThreeYear.Value)
                 {
-                    <govuk-summary-list-row>
+                    <govuk-summary-list-row class=@((Model.PreviousGrasses.HasGrassInLastThreeYear==null)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
                             @string.Format(Resource.lblHasBeenUsedForGrassInAnyOfTheLast3Year, Model.Name)
                         </govuk-summary-list-row-key>
@@ -978,18 +979,48 @@
                             <govuk-summary-list-row-action asp-action="GrassManagementOptions" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
+                    @if (Model.PreviousGrasses.GrassManagementOptionID != (int)NMP.Portal.Enums.GrassManagementOption.GrazedOnly)
+                    {
+                        <govuk-summary-list-row class=@((!Model.PreviousGrasses.GrassTypicalCutID.HasValue)?"govuk-error-message":"")>
+                            <govuk-summary-list-row-key>
+                                @Resource.lblHawManyCutsTypicallyEachYear
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @ViewBag.GrassTypicalCuts
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="GrassTypicalCuts" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+                    }
 
-                    <govuk-summary-list-row class=@((!Model.PreviousGrasses.GrassTypicalCutID.HasValue)?"govuk-error-message":"")>
+                    <govuk-summary-list-row class=@((Model.PreviousGrasses.HasGreaterThan30PercentClover==null)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
-                            @Resource.lblHawManyCutsTypicallyEachYear
+                            @string.Format(Resource.lblDoesFieldTypicallyHaveMoreThan30PercentClover, Model.Name)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @ViewBag.GrassTypicalCuts
+                            @(Model.PreviousGrasses.HasGreaterThan30PercentClover != null ? (Model.PreviousGrasses.HasGreaterThan30PercentClover.Value == true ? Resource.lblYes : Resource.lblNo) : Resource.lblNotSet)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="GrassTypicalCuts" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="HasGreaterThan30PercentClover" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
+
+                    @if(Model.PreviousGrasses.HasGreaterThan30PercentClover != null && Model.PreviousGrasses.HasGreaterThan30PercentClover==false)
+                    {
+                        <govuk-summary-list-row class=@((!Model.PreviousGrasses.SoilNitrogenSupplyItemID.HasValue)?"govuk-error-message":"")>
+                            <govuk-summary-list-row-key>
+                                @string.Format(Resource.lblHowMuchNitrogenHasBeenAppliedToFieldEachYear, Model.Name)
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @ViewBag.SoilNitrogenSupplyItems
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="SoilNitrogenSupplyItems" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+                    }
+                    
                 }
 
             </govuk-summary-list>

@@ -387,7 +387,6 @@
 
                     @* organic and inorganic material tab *@
                     <govuk-tabs-item id="organicAndInorganicMaterial" label="@Resource.lblorganicAndInorganicMaterial">
-                        <h2 class="govuk-heading-m non-standard">@Resource.lblOrganicMaterialApplications</h2>
 
                         @foreach (var crop in Model.Crops)
                         {
@@ -401,6 +400,7 @@
                                     @foreach (var recommendation in rec)
                                     {
                                         @* Organic material applications *@
+                                        <h2 class="govuk-heading-m non-standard">@Resource.lblOrganicMaterialApplications</h2>
                                         @if (Model.OrganicManures != null && Model.OrganicManures.Count > 0)
                                         {
                                             <p class="govuk-body">@string.Format(Resource.lblTheseAreTheOrganicMaterialApplicationsForField, Model.FieldName, Model.Crops[0].Year)</p>
@@ -423,7 +423,7 @@
                                                             <td class="govuk-table__cell">
                                                                 @(orgManure.ApplicationDate.Date != null ? orgManure.ApplicationDate.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB")) : null)
                                                             </td>
-                                                            <td class="govuk-table__cell">                                                               
+                                                            <td class="govuk-table__cell">
                                                                 @string.Format(Resource.lblRateWithTonnes, orgManure.ApplicationRate)
                                                             </td>
                                                             <td class="govuk-table__cell">
@@ -482,7 +482,7 @@
                                                                 }
                                                                 @if (fertiliserManure.P2O5 > 0)
                                                                 {
-                                                                    <span class="nutrient-list">                                                                        
+                                                                    <span class="nutrient-list">
                                                                         @string.Format(Resource.lblKgWithNutrient, fertiliserManure.P2O5, Resource.lblPhosphateP2O5)
                                                                     </span>
                                                                 }
@@ -537,6 +537,7 @@
                                     }
                                 }
                             }
+                            break;
                         }
 
                     </govuk-tabs-item>
@@ -550,11 +551,26 @@
                             <hr class="seperator_five">
                             <div class="tabs-thirds margin-bottom-forty">
                                 <h2 class="govuk-heading-m">
-                                    @crop.CropTypeName
+                                    @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Other)
+                                    {
+                                        @crop.OtherCropName
+                                    }
+                                    else
+                                    {
+                                        @crop.CropTypeName
+                                    }
                                 </h2>
 
                                 <table class="govuk-table">
                                     <tbody class="govuk-table__body">
+                                        @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Other)
+                                        {
+                                            <tr class="govuk-table__row">
+                                                <th class="govuk-table__cell" scope="row">@Resource.lblCropType</th>
+                                                <td class="govuk-table__cell">@crop.CropTypeName</td>
+                                            </tr>
+                                        }
+
                                         <tr class="govuk-table__row">
                                             <th class="govuk-table__cell" scope="row">@Resource.lblVarietyForRecommendation</th>
                                             <td class="govuk-table__cell">@(crop.Variety != null ? crop.Variety : Resource.lblNotEntered)</td>
@@ -563,14 +579,12 @@
                                             <th class="govuk-table__cell" scope="row">
                                                 @Resource.lblGroup
                                             </th>
-                                            @if (Model.CropGroupID != OtherGroupId)
-                                            {
-                                                <td class="govuk-table__cell">@(crop.CropInfo1Name != null ? crop.CropInfo1Name : Resource.lblNotEntered)</td>
-                                            }
+                                            <td class="govuk-table__cell">@Resource.lblNotEntered</td>
+
                                             @* @if (Model.CropGroupID == CerealsGroupId)
-                                            {
-                                                <td class="govuk-table__cell">@(crop.CropInfo2Name != null ? crop.CropInfo2Name : Resource.lblNotEntered)</td>
-                                            } *@
+                                {
+                                <td class="govuk-table__cell">@(crop.CropInfo2Name != null ? crop.CropInfo2Name : Resource.lblNotEntered)</td>
+                                } *@
                                         </tr>
                                         <tr class="govuk-table__row">
                                             <th class="govuk-table__cell" scope="row">@Resource.lblPlantingDate</th>

@@ -51,5 +51,8 @@ namespace NMP.Portal.ViewModels
         public string? encryptSortInOrganicListOrderByDate { get; set; } = string.Empty;
         public string? sortInOrganicListOrderByDate { get; set; } = string.Empty;
         public string? encryptSortInOrganicListOrderByFieldName { get; set; } = string.Empty;
+        public int? Rainfall { get; set; }
+        public string? SortInOrganicListOrderByFieldName { get; set; } = string.Empty;
+        public string? SortOrganicListOrderByFieldName { get; set; } = string.Empty;
     }
 }

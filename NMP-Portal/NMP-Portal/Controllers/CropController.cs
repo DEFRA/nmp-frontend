@@ -1691,11 +1691,11 @@ namespace NMP.Portal.Controllers
                         model.Year = harvestYear;
                         if (harvestYearPlanResponse != null && error.Message == null)
                         {
-                            bool isAllCropInfo1NonNull = harvestYearPlanResponse.CropDetails.All(x => x.CropInfo1 != null);
-                            if (!isAllCropInfo1NonNull)
-                            {
-                                ViewBag.AddMannerDisabled = true;
-                            }
+                            //bool isAllCropInfo1NonNull = harvestYearPlanResponse.CropDetails.All(x => x.CropInfo1 != null);
+                            //if (!isAllCropInfo1NonNull)
+                            //{
+                            //    ViewBag.AddMannerDisabled = true;
+                            //}
 
                             List<CropDetailResponse> allCropDetails = harvestYearPlanResponse.CropDetails ?? new List<CropDetailResponse>().ToList();
                             if (allCropDetails != null)
@@ -1726,7 +1726,7 @@ namespace NMP.Portal.Controllers
                                         ViewBag.PendingField = isSecondCropAllowed;
                                     }
                                 }
-                                ViewBag.Rainfall = harvestYearPlanResponse.farmDetails.Rainfall;
+                                model.Rainfall = harvestYearPlanResponse.farmDetails.Rainfall;                                
                                 var harvestYearPlans = new HarvestYearPlans
                                 {
 
@@ -1778,7 +1778,8 @@ namespace NMP.Portal.Controllers
                                 model.sortOrganicListOrderByDate = Resource.lblDesc;
                                 model.encryptSortInOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblDesc);
                                 model.encryptSortInOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblDesc);
-
+                                model.SortInOrganicListOrderByFieldName = null;
+                                model.SortOrganicListOrderByFieldName = null;
                                 ViewBag.InOrganicListSortByFieldName = _cropDataProtector.Protect(Resource.lblField);
                                 ViewBag.InOrganicListSortByDate = _cropDataProtector.Protect(Resource.lblDate);
                                 ViewBag.OrganicListSortByFieldName = _cropDataProtector.Protect(Resource.lblField);
@@ -1833,6 +1834,7 @@ namespace NMP.Portal.Controllers
                                                 {
                                                     model.HarvestYearPlans.OrganicManureList = model.HarvestYearPlans.OrganicManureList.OrderByDescending(x => x.Field).ToList();
                                                     model.encryptSortOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblDesc);
+                                                    model.SortOrganicListOrderByFieldName = Resource.lblDesc;
                                                 }
                                                 else if (decrypSortBy == Resource.lblDate)
                                                 {
@@ -1848,6 +1850,7 @@ namespace NMP.Portal.Controllers
                                                 {
                                                     model.HarvestYearPlans.OrganicManureList = model.HarvestYearPlans.OrganicManureList.OrderBy(x => x.Field).ToList();
                                                     model.encryptSortOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblAsc);
+                                                    model.SortOrganicListOrderByFieldName = Resource.lblAsc;
                                                 }
                                                 else if (decrypSortBy == Resource.lblDate)
                                                 {
@@ -1866,6 +1869,7 @@ namespace NMP.Portal.Controllers
                                                 {
                                                     model.HarvestYearPlans.InorganicFertiliserList = model.HarvestYearPlans.InorganicFertiliserList.OrderByDescending(x => x.Field).ToList();
                                                     model.encryptSortInOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblDesc);
+                                                    model.SortInOrganicListOrderByFieldName = Resource.lblDesc;
                                                 }
                                                 else if (decrypSortBy == Resource.lblDate)
                                                 {
@@ -1881,6 +1885,7 @@ namespace NMP.Portal.Controllers
                                                 {
                                                     model.HarvestYearPlans.InorganicFertiliserList = model.HarvestYearPlans.InorganicFertiliserList.OrderBy(x => x.Field).ToList();
                                                     model.encryptSortInOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblAsc);
+                                                    model.SortInOrganicListOrderByFieldName = Resource.lblAsc;
                                                 }
                                                 else if (decrypSortBy == Resource.lblDate)
                                                 {
@@ -1904,6 +1909,8 @@ namespace NMP.Portal.Controllers
                             model.encryptSortOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblDesc);
                             model.encryptSortInOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblDesc);
                             model.encryptSortInOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblDesc);
+                            model.SortOrganicListOrderByFieldName = Resource.lblDesc;
+                            model.SortInOrganicListOrderByFieldName = Resource.lblDesc;
                         }
                         ViewBag.InOrganicListSortByFieldName = _cropDataProtector.Protect(Resource.lblField);
                         ViewBag.InOrganicListSortByDate = _cropDataProtector.Protect(Resource.lblDate);
@@ -1912,6 +1919,10 @@ namespace NMP.Portal.Controllers
 
                         _httpContextAccessor.HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
                     }
+                }
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    _httpContextAccessor.HttpContext?.Session.Remove("ReportData");
                 }
             }
             catch (Exception ex)
@@ -2089,6 +2100,7 @@ namespace NMP.Portal.Controllers
                                     CropInfo2 = recommendation.Crops.CropInfo2,
                                     Yield = recommendation.Crops.Yield,
                                     SowingDate = recommendation.Crops.SowingDate,
+                                    OtherCropName=recommendation.Crops.OtherCropName,
                                     CropTypeName = await _fieldService.FetchCropTypeById(recommendation.Crops.CropTypeID.Value)
 
                                 };
@@ -2347,7 +2359,7 @@ namespace NMP.Portal.Controllers
                         {
                             r = _cropDataProtector.Protect(Resource.lblDesc);
                         }
-
+                        model.sortOrganicListOrderByDate = null;
                     }
                 }
                 else if (decrypt != null && decrypt == Resource.lblDate)
@@ -2363,7 +2375,7 @@ namespace NMP.Portal.Controllers
                         {
                             r = _cropDataProtector.Protect(Resource.lblDesc);
                         }
-
+                        model.SortOrganicListOrderByFieldName = null;
                     }
                 }
             }
@@ -2371,6 +2383,7 @@ namespace NMP.Portal.Controllers
             //{
             //    return RedirectToAction("HarvestYearOverview");
             //}
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("CropData", model);
             return Redirect(Url.Action("HarvestYearOverview", new { year = year, id = id, s = q, t = _cropDataProtector.Protect(Resource.lblOrganicMaterialApplicationsForSorting), u = r }) + Resource.lblOrganicMaterialApplicationsForSorting);
             // return View("HarvestYearOverview", model);
         }
@@ -2407,6 +2420,7 @@ namespace NMP.Portal.Controllers
                         {
                             r = _cropDataProtector.Protect(Resource.lblDesc);
                         }
+                        model.sortInOrganicListOrderByDate = null;
                     }
                 }
                 else if (decrypt != null && decrypt == Resource.lblDate)
@@ -2422,10 +2436,11 @@ namespace NMP.Portal.Controllers
                         {
                             r = _cropDataProtector.Protect(Resource.lblDesc);
                         }
-
+                        model.SortInOrganicListOrderByFieldName = null;
                     }
                 }
             }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("CropData", model);
             return Redirect(Url.Action("HarvestYearOverview", new { year = year, id = id, s = q, t = _cropDataProtector.Protect(Resource.lblInorganicFertiliserApplicationsForSorting), u = r }) + Resource.lblInorganicFertiliserApplicationsForSorting);
 
         }

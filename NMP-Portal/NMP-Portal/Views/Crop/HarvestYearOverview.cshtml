@@ -29,7 +29,7 @@
     </govuk-breadcrumbs>
     }
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds govuk-grid-column-full">
+        <div class="govuk-grid-column-two-thirds">
 
             @if (ViewBag.Success != null && ViewBag.Success == true && TempData["successMsg"] != null)
             {
@@ -39,22 +39,24 @@
                     </p>
                 </govuk-notification-banner>
             }
-
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds govuk-grid-column-full">
             <h1 class="govuk-heading-l">@string.Format(Resource.lblCropPlanFor, Model.Year)</h1>
-
             <p class="govuk-body">
                 @string.Format(Resource.lblLastUpdated, Model.LastModifiedOn)
                 @string.Format(Resource.lblThereAreFieldsInThisPlan, Model.FieldCount)
             </p>
             <p class="govuk-body">
-                @if (ViewBag.Rainfall != null)
+                @if (Model.Rainfall != null)
                 {
-                    @string.Format(Resource.lblAverageAnnualRainfallIsYouHaveNotEnteredAnyExcessWinterRainfall, ViewBag.Rainfall)
-                    <a href="#">@Resource.lblupdateRainfallFor</a>
+                    @string.Format(Resource.lblAverageAnnualRainfallIsYouHaveNotEnteredAnyExcessWinterRainfall, Model.Rainfall)
+                    <a href="#">@Resource.lblUpdateRainfallFor</a>
                 }
             </p>
             <p class="govuk-body">
-                <a href="#">@Resource.lblDownloadPrintOrExportThisPlan</a>
+                <a asp-action="ExportFields" asp-controller="Report" asp-route-i="@Model.EncryptedFarmId" asp-route-j="@Model.EncryptedHarvestYear">@Resource.lblDownloadPrintOrExportThisPlan</a>
             </p>
             @if (Model.HarvestYearPlans != null)
             {
@@ -170,7 +172,15 @@
                                         {
                                             <th scope="col" class="govuk-table__header">@string.Format(Resource.lblApplicationDateWithArrow, Resource.lblAscSign)</th>
                                         }
-                                        <th scope="col" class="govuk-table__header">@Resource.lblField</th>
+                                        @if (Model.SortOrganicListOrderByFieldName != null && Model.SortOrganicListOrderByFieldName == Resource.lblDesc)
+                                        {
+                                            <th scope="col" class="govuk-table__header">@string.Format(Resource.lblFieldWithArrow, Resource.lblDescSign)</th>
+                                        }
+                                        else
+                                        {
+                                            <th scope="col" class="govuk-table__header">@string.Format(Resource.lblFieldWithArrow, Resource.lblAscSign)</th>
+                                        }
+                                        @* <th scope="col" class="govuk-table__header">@Resource.lblField</th> *@
                                         <th scope="col" class="govuk-table__header">@Resource.lblCrop</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblType</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblRate</th>
@@ -199,7 +209,7 @@
                     </govuk-tabs-item>
                     <govuk-tabs-item id="InorganicFertiliserApplications" label=@Resource.lblInorganicFertiliserApplications>
                         <h2 class="govuk-heading-m non-standard">@Resource.lblInorganicFertiliserApplications</h2>
-                        <a class="govuk-button add-button" asp-action="FieldGroup" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear" >@Resource.lblAddAnInorganicFertiliserApplication</a>
+                        <a class="govuk-button add-button" asp-action="FieldGroup" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblAddAnInorganicFertiliserApplication</a>
                         @if (Model.HarvestYearPlans != null && Model.HarvestYearPlans.InorganicFertiliserList != null && Model.HarvestYearPlans.InorganicFertiliserList.Any())
                         {
                             <hr class="seperator_five">
@@ -217,15 +227,49 @@
                             <table class="govuk-table big_crop_table_version_three margin-bottom-forty">
                                 <thead class="govuk-table__head">
                                     <tr class="govuk-table__row">
-                                        @if(Model.sortInOrganicListOrderByDate!=null&&Model.sortInOrganicListOrderByDate==Resource.lblDesc)
+                                        @if (Model.sortInOrganicListOrderByDate != null)
                                         {
-                                            <th scope="col" class="govuk-table__header">@string.Format(Resource.lblApplicationDateWithArrow,Resource.lblDescSign)</th>
+                                            if (Model.sortInOrganicListOrderByDate == Resource.lblDesc)
+                                            {
+                                                <th scope="col" class="govuk-table__header">@string.Format(Resource.lblApplicationDateWithArrow, Resource.lblDescSign)</th>
+                                            }
+                                            else
+                                            {
+                                                <th scope="col" class="govuk-table__header">@string.Format(Resource.lblApplicationDateWithArrow, Resource.lblAscSign)</th>
+
+                                            }
+                                            <th scope="col" class="govuk-table__header">@Resource.lblField</th>
+                                        }
+                                        @if (Model.SortInOrganicListOrderByFieldName != null)
+                                        {
+                                            if (Model.SortInOrganicListOrderByFieldName == Resource.lblDesc)
+                                            {
+                                                <th scope="col" class="govuk-table__header">@string.Format(Resource.lblFieldWithArrow, Resource.lblDescSign)</th>
+
+                                            }
+                                            else
+                                            {
+                                                <th scope="col" class="govuk-table__header">@string.Format(Resource.lblFieldWithArrow, Resource.lblAscSign)</th>
+                                            }
+                                            <th scope="col" class="govuk-table__header">@Resource.lblApplicationDate</th>
+                                        }
+                                        @* @if (Model.sortInOrganicListOrderByDate != null && Model.sortInOrganicListOrderByDate == Resource.lblDesc)
+                                        {
+                                            <th scope="col" class="govuk-table__header">@string.Format(Resource.lblApplicationDateWithArrow, Resource.lblDescSign)</th>
                                         }
                                         else
                                         {
                                             <th scope="col" class="govuk-table__header">@string.Format(Resource.lblApplicationDateWithArrow, Resource.lblAscSign)</th>
+                                        } *@
+                                        @* @if (Model.SortInOrganicListOrderByFieldName != null && Model.SortInOrganicListOrderByFieldName == Resource.lblDesc)
+                                        {
+                                            <th scope="col" class="govuk-table__header">@string.Format(Resource.lblFieldWithArrow, Resource.lblDescSign)</th>
                                         }
-                                        <th scope="col" class="govuk-table__header">@Resource.lblField</th>
+                                        else
+                                        {
+                                            <th scope="col" class="govuk-table__header">@string.Format(Resource.lblFieldWithArrow, Resource.lblAscSign)</th>
+                                        } *@
+                                        @* <th scope="col" class="govuk-table__header">@Resource.lblField</th> *@
                                         <th scope="col" class="govuk-table__header">@Resource.lblCrop</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblNutrients</th>
                                         <th scope="col" class="govuk-table__header"></th>
@@ -266,11 +310,11 @@
                                     }
                                 </tbody>
                             </table>
-                            @if (Model.HarvestYearPlans.InorganicFertiliserList.Count>10)
+                            @if (Model.HarvestYearPlans.InorganicFertiliserList.Count > 10)
                             {
                                 <p class="govuk-body"><a class="govuk-link" href="#">@Resource.lblBackToTheTop</a></p>
                             }
-                            
+
                         }
                     </govuk-tabs-item>
                 </govuk-tabs>
