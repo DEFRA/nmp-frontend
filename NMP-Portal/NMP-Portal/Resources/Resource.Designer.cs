@@ -1438,6 +1438,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Crop details for {0}.
+        /// </summary>
+        public static string lblCropDetailsForField {
+            get {
+                return ResourceManager.GetString("lblCropDetailsForField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Crop details for {0} in {1}.
         /// </summary>
         public static string lblCropDetailsForFieldInYear {
