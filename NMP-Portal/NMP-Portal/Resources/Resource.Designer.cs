@@ -6120,6 +6120,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total Phosphate.
+        /// </summary>
+        public static string lblTotalPhosphateOnly {
+            get {
+                return ResourceManager.GetString("lblTotalPhosphateOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total Potash.
+        /// </summary>
+        public static string lblTotalPotash {
+            get {
+                return ResourceManager.GetString("lblTotalPotash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total potash (K2O).
         /// </summary>
         public static string lblTotalPotashK2O {

@@ -12,7 +12,7 @@ namespace NMP.Portal.ServiceResponses
         public List<PreviousGrass>? PreviousGrasses { get; set; }
         [JsonProperty("SoilAnalysis")]
         public SoilAnalysisReportResponse? SoilAnalysis { get; set; }
-        [JsonProperty("PKBalance")]
-        public PKBalance? PKBalance { get; set; }
+         [JsonProperty("SoilDetails")]
+        public SoilDetailsResponse? SoilDetails { get; set; }
     }
 }

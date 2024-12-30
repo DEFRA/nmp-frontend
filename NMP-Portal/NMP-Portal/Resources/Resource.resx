@@ -3052,4 +3052,10 @@ m3/ha  not set</value>
   <data name="lblCropDetailsForField" xml:space="preserve">
     <value>Crop details for {0}</value>
   </data>
+  <data name="lblTotalPhosphateOnly" xml:space="preserve">
+    <value>Total Phosphate</value>
+  </data>
+  <data name="lblTotalPotash" xml:space="preserve">
+    <value>Total Potash</value>
+  </data>
 </root>
