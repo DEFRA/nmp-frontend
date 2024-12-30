@@ -300,7 +300,8 @@
                                                                             @(fertManure.ApplicationDate != null ? fertManure.ApplicationDate.Value.ToLocalTime().Date.ToString("dd MMMM yyyy") : Resource.lblHyphen)
                                                                         </td>
                                                                         <td class="govuk-table__cell">
-                                                                            @(fertManure.N != null ? string.Format(Resource.lblValueKg, fertManure.N) : Resource.lblHyphen) </td>
+                                                                            @(fertManure.N != null ? string.Format(Resource.lblValueKg, fertManure.N) : Resource.lblHyphen)
+                                                                        </td>
                                                                         <td class="govuk-table__cell">@(fertManure.P2O5 != null ? fertManure.P2O5 : Resource.lblHyphen)</td>
                                                                         <td class="govuk-table__cell">@(fertManure.K2O != null ? fertManure.K2O : Resource.lblHyphen)</td>
                                                                         <td class="govuk-table__cell">@(fertManure.SO3 != null ? fertManure.SO3 : Resource.lblHyphen)</td>
@@ -397,7 +398,7 @@
                                 {
                                     <div class="govuk-grid-row">
                                         <div class="govuk-grid-column-full">
-                                            
+
                                             <h2 class="govuk-heading-m">@string.Format(Resource.lblSoilDetailsForField, field.Name)</h2>
                                         </div>
                                         <div class="govuk-grid-column-one-half half-table-left">
@@ -455,8 +456,8 @@
                                     <div class="govuk-grid-row">
                                         <div class="govuk-grid-column-full">
                                             @* pass field *@
-                                            <h2 class="govuk-heading-m">@string.Format(Resource.lblSoilAnalysisForField, Resource.lblField)</h2>
-                                            <p class="govuk-body">Last updated 9 December 2024</p>
+                                            <h2 class="govuk-heading-m">@string.Format(Resource.lblSoilAnalysisForField, field.Name)</h2>
+                                            <p class="govuk-body">@string.Format(Resource.lblLastUpdatedOnDate,field.SoilAnalysis.LastModify!=null?field.SoilAnalysis.LastModify.Value.ToLocalTime().Date.ToString("dd MMMM yyyy"):Resource.lblNotEntered)</p>
 
                                             <table class="govuk-table govuk-table-small margin-bottom-sixty">
                                                 <thead class="govuk-table__head">
@@ -472,15 +473,24 @@
                                                 </thead>
                                                 <tbody class="govuk-table__body">
                                                     <tr class="govuk-table__row">
-                                                        <td class="govuk-table__cell">2</td>
-                                                        <td class="govuk-table__cell">Not entered</td>
-                                                        <td class="govuk-table__cell">Not entered</td>
-                                                        <td class="govuk-table__cell">Not entered</td>
-                                                        <td class="govuk-table__cell">0kg per hectare</td>
-                                                        <td class="govuk-table__cell">Not entered</td>
-                                                        <td class="govuk-table__cell">Not entered</td>
+                                                        <td class="govuk-table__cell">@(field.SoilAnalysis.SoilAnalysisAndSNSanalysis.PH != null ? field.SoilAnalysis.SoilAnalysisAndSNSanalysis.PH : Resource.lblNotEntered)</td>
+                                                        <td class="govuk-table__cell">
+                                                            @(field.SoilAnalysis.SoilAnalysisAndSNSanalysis.Phosphorus != null ? field.SoilAnalysis.SoilAnalysisAndSNSanalysis.Phosphorus : Resource.lblNotEntered)
+                                                        </td>
+                                                        <td class="govuk-table__cell">
+                                                            @(field.SoilAnalysis.SoilAnalysisAndSNSanalysis.Potassium != null ? field.SoilAnalysis.SoilAnalysisAndSNSanalysis.Potassium : Resource.lblNotEntered)
+                                                        </td>
+                                                        <td class="govuk-table__cell">
+                                                            @(field.SoilAnalysis.SoilAnalysisAndSNSanalysis.Magnesium != null ? field.SoilAnalysis.SoilAnalysisAndSNSanalysis.Magnesium : Resource.lblNotEntered)
+                                                        </td>
+                                                        <td class="govuk-table__cell">
+                                                            @(field.SoilAnalysis.SoilAnalysisAndSNSanalysis.SNS != null ? field.SoilAnalysis.SoilAnalysisAndSNSanalysis.SNS : Resource.lblNotEntered)
+                                                        </td>
+                                                        <td class="govuk-table__cell">@(field.SoilAnalysis.SoilAnalysisAndSNSanalysis.SNSIndex != null ? field.SoilAnalysis.SoilAnalysisAndSNSanalysis.SNSIndex : Resource.lblNotEntered)</td>
+                                                        <td class="govuk-table__cell">@(field.SoilAnalysis.SoilAnalysisAndSNSanalysis.SNSMethod != null ? field.SoilAnalysis.SoilAnalysisAndSNSanalysis.SNSMethod : Resource.lblNotEntered)</td>
                                                     </tr>
                                                 </tbody>
+
 
                                             </table>
                                         </div>

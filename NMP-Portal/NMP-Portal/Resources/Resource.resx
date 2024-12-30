@@ -3058,4 +3058,7 @@ m3/ha  not set</value>
   <data name="lblTotalPotash" xml:space="preserve">
     <value>Total Potash</value>
   </data>
+  <data name="lblLastUpdatedOnDate" xml:space="preserve">
+    <value>Last updated {0}</value>
+  </data>
 </root>
