@@ -1375,6 +1375,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create a plan for efficient nutrient management.
+        /// </summary>
+        public static string lblCreateAPlanForEfficientNutrientManagement {
+            get {
+                return ResourceManager.GetString("lblCreateAPlanForEfficientNutrientManagement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Created on {0}.
         /// </summary>
         public static string lblCreatedOnDate {

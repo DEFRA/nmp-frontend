@@ -506,7 +506,7 @@
 
                                             <div class="govuk-grid-row margin-bottom-forty pagebreak">
                                                 <div class="govuk-grid-column-full">
-                                                    <h2 class="govuk-heading-m">@Resource.lblGuidance</h2>
+                                                    <h2 class="govuk-heading-m">@string.Format(Resource.lblGuidanceForField,field.Name)</h2>
                                                     <div class="guidance">
                                                         @if (mp.Recommendation != null && mp.Recommendation.RecommendationComments != null&&mp.Recommendation.RecommendationComments.Count>0)
                                                         {
