@@ -457,7 +457,7 @@
                                         <div class="govuk-grid-column-full">
                                             @* pass field *@
                                             <h2 class="govuk-heading-m">@string.Format(Resource.lblSoilAnalysisForField, field.Name)</h2>
-                                            <p class="govuk-body">@string.Format(Resource.lblLastUpdatedOnDate,field.SoilAnalysis.LastModify!=null?field.SoilAnalysis.LastModify.Value.ToLocalTime().Date.ToString("dd MMMM yyyy"):Resource.lblNotEntered)</p>
+                                            <p class="govuk-body">@string.Format(Resource.lblLastUpdatedOnDate, field.SoilAnalysis.LastModify != null ? field.SoilAnalysis.LastModify.Value.ToLocalTime().Date.ToString("dd MMMM yyyy") : Resource.lblNotEntered)</p>
 
                                             <table class="govuk-table govuk-table-small margin-bottom-sixty">
                                                 <thead class="govuk-table__head">
@@ -496,29 +496,109 @@
                                         </div>
                                     </div>
                                 }
-                                <div class="govuk-grid-row margin-bottom-forty pagebreak">
-                                    <div class="govuk-grid-column-full">
-                                        @* pass field *@
-                                        <h2 class="govuk-heading-m">@string.Format(Resource.lblGuidanceForField, Resource.lblField)</h2>
+                                @if (crop.ManagementPeriods != null && crop.ManagementPeriods.Count > 0)
+                                {
+                                    var cropManagementPeriods = crop.ManagementPeriods.Where(mp => mp.CropID == crop.ID);
+                                    @if (cropManagementPeriods != null)
+                                    {
+                                        @foreach (var mp in cropManagementPeriods)
+                                        {
 
-                                        <h2 class="govuk-heading-s">@Resource.lblNitrogen</h2>
-                                        <p class="govuk-body">
-                                            @Resource.lblHyphen
-                                        </p>
-                                        <h2 class="govuk-heading-s">@Resource.lblPhosphateP2O5</h2>
-                                        <p class="govuk-body">
-                                            @Resource.lblHyphen
-                                        </p>
-                                        <h2 class="govuk-heading-s">@Resource.lblSulphurSO3</h2>
-                                        <p class="govuk-body">
-                                            @Resource.lblHyphen
-                                        </p>
-                                        <h2 class="govuk-heading-s">@Resource.lblLime</h2>
-                                        <p class="govuk-body">
-                                            @Resource.lblHyphen
-                                        </p>
-                                    </div>
-                                </div>
+                                            <div class="govuk-grid-row margin-bottom-forty pagebreak">
+                                                <div class="govuk-grid-column-full">
+                                                    <h2 class="govuk-heading-m">@string.Format(Resource.lblGuidanceForField,field.Name)</h2>
+                                                    <div class="guidance">
+                                                        @if (mp.Recommendation != null && mp.Recommendation.RecommendationComments != null&&mp.Recommendation.RecommendationComments.Count>0)
+                                                        {
+                                                            @if (Model.Nutrients != null)
+                                                            {
+                                                                @foreach (var nutrient in Model.Nutrients)
+                                                                {
+                                                                    var commentsForNutrient = mp.Recommendation.RecommendationComments
+                                                                    .Where(rc => rc.Nutrient == nutrient.nutrientId)
+                                                                    .ToList();
+                                                                   // var commentsText = string.Join("<br />", commentsForNutrient.Select(rc => rc.Comment));  // rc.Comment is the comment text
+                                                                    if (commentsForNutrient != null && commentsForNutrient.Count > 0)
+                                                                    {
+                                                                    <h3 class="govuk-heading-s">
+                                                                        @if (nutrient.nutrientId == (int)NMP.Portal.Enums.Nutrients.Nitrogen)
+                                                                        {
+                                                                            @Resource.lblNitrogen
+                                                                        }
+                                                                        else if (nutrient.nutrientId == (int)NMP.Portal.Enums.Nutrients.Phosphate)
+                                                                        {
+                                                                            @Resource.lblPhosphateP2O5
+                                                                        }
+                                                                        else if (nutrient.nutrientId == (int)NMP.Portal.Enums.Nutrients.Sulphur)
+                                                                        {
+                                                                            @Resource.lblSulphurSO3
+                                                                        }
+                                                                        else if (nutrient.nutrientId == (int)NMP.Portal.Enums.Nutrients.Lime)
+                                                                        {
+                                                                            @Resource.lblLime
+                                                                        }
+                                                                        else if (nutrient.nutrientId == (int)NMP.Portal.Enums.Nutrients.Magnesium)
+                                                                        {
+                                                                            @Resource.lblMagnesiumMg
+                                                                        }
+                                                                        else if (nutrient.nutrientId == (int)NMP.Portal.Enums.Nutrients.Sodium)
+                                                                        {
+                                                                            @Resource.lblSodiumNa2O
+                                                                        }
+                                                                        else if (nutrient.nutrientId == (int)NMP.Portal.Enums.Nutrients.Potash)
+                                                                        {
+                                                                            @Resource.lblPotashK2O
+                                                                        }
+                                                                    </h3>
+                                                                    
+                                                                        @foreach (var comment in commentsForNutrient)
+                                                                        {
+                                                                            <p class="govuk-body">
+                                                                                @comment.Comment
+                                                                            </p>
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <h2 class="govuk-heading-s">@Resource.lblNitrogen</h2>
+                                                            <p class="govuk-body">
+                                                                @Resource.lblHyphen
+                                                            </p>
+                                                            <h2 class="govuk-heading-s">@Resource.lblPhosphateP2O5</h2>
+                                                            <p class="govuk-body">
+                                                                @Resource.lblHyphen
+                                                            </p>
+                                                            <h2 class="govuk-heading-s">@Resource.lblSulphurSO3</h2>
+                                                            <p class="govuk-body">
+                                                                @Resource.lblHyphen
+                                                            </p>
+                                                            <h2 class="govuk-heading-s">@Resource.lblLime</h2>
+                                                            <p class="govuk-body">
+                                                                @Resource.lblHyphen
+                                                            </p>
+                                                            <h2 class="govuk-heading-s">@Resource.lblMagnesiumMg</h2>
+                                                            <p class="govuk-body">
+                                                                @Resource.lblHyphen
+                                                            </p>
+                                                            <h2 class="govuk-heading-s">@Resource.lblPotashK2O</h2>
+                                                            <p class="govuk-body">
+                                                                @Resource.lblHyphen
+                                                            </p>
+                                                            <h2 class="govuk-heading-s">@Resource.lblSodiumNa2O</h2>
+                                                            <p class="govuk-body">
+                                                                @Resource.lblHyphen
+                                                            </p>
+
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                }
                                 @if (count != 0)
                                 {
                                     <div id="printbreak"></div>
