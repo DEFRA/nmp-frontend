@@ -3474,6 +3474,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Last updated {0}.
+        /// </summary>
+        public static string lblLastUpdatedOnDate {
+            get {
+                return ResourceManager.GetString("lblLastUpdatedOnDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add soil analysis.
         /// </summary>
         public static string lbllblAddSoilAnalysisTitle {
@@ -6116,6 +6125,24 @@ namespace NMP.Portal.Resources {
         public static string lblTotalPhosphate {
             get {
                 return ResourceManager.GetString("lblTotalPhosphate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total Phosphate.
+        /// </summary>
+        public static string lblTotalPhosphateOnly {
+            get {
+                return ResourceManager.GetString("lblTotalPhosphateOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total Potash.
+        /// </summary>
+        public static string lblTotalPotash {
+            get {
+                return ResourceManager.GetString("lblTotalPotash", resourceCulture);
             }
         }
         

@@ -548,7 +548,7 @@ namespace NMP.Portal.Services
             return soilType;
         }
 
-        public async Task<List<SoilAnalysisResponse>> FetchSoilAnalysisByFieldId(int fieldId,string shortSummary)
+        public async Task<List<SoilAnalysisResponse>> FetchSoilAnalysisByFieldId(int fieldId, string shortSummary)
         {
             Error error = null;
             List<SoilAnalysisResponse> soilAnalysis = new List<SoilAnalysisResponse>();
@@ -963,7 +963,7 @@ namespace NMP.Portal.Services
             }
             return soilNitrogenSupplyItems;
         }
-        public async Task<(Error,List<Field>)> FetchFieldByFarmId(int farmId, string shortSummary)
+        public async Task<(Error, List<Field>)> FetchFieldByFarmId(int farmId, string shortSummary)
         {
             List<Field> fields = new List<Field>();
             Error error = new Error();
@@ -1002,7 +1002,7 @@ namespace NMP.Portal.Services
                 _logger.LogError(ex.Message);
                 throw new Exception(error.Message, ex);
             }
-            return (error,fields);
+            return (error, fields);
         }
         public async Task<(FieldResponse, Error)> FetchFieldSoilAnalysisAndSnsById(int fieldId)
         {
@@ -1042,7 +1042,7 @@ namespace NMP.Portal.Services
                 _logger.LogError(ex.Message);
                 throw new Exception(error.Message, ex);
             }
-            return (fieldResponse,error);
+            return (fieldResponse, error);
         }
         public async Task<(CropAndFieldReportResponse, Error)> FetchCropAndFieldReportById(string fieldId, int year)
         {
