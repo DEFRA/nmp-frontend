@@ -205,6 +205,24 @@
                                                     </tr>
                                                     <tr class="govuk-table__row">
                                                         <td class="govuk-table__cell">
+                                                            @Resource.lblSulphurSO3
+                                                        </td>
+                                                        <td class="govuk-table__cell">@(mp.Recommendation.SIndex == null ? Resource.lblHyphen : mp.Recommendation.SIndex)</td>
+                                                        <td class="govuk-table__cell">@(mp.Recommendation.CropSO3 == null ? Resource.lblHyphen : mp.Recommendation.CropSO3 == 0 ? mp.Recommendation.CropSO3 : string.Concat(mp.Recommendation.CropSO3, Resource.lblkg))</td>
+                                                        <td class="govuk-table__cell">@(mp.Recommendation.ManureSO3 == null ? 0 : mp.Recommendation.ManureSO3 == 0 ? mp.Recommendation.ManureSO3 : string.Concat(mp.Recommendation.ManureSO3 , Resource.lblkg))</td>
+                                                        <td class="govuk-table__cell">@(mp.Recommendation.FertilizerSO3 == null ? Resource.lblHyphen : mp.Recommendation.FertilizerSO3 < 0 ? 0 : mp.Recommendation.FertilizerSO3 == 0 ? mp.Recommendation.FertilizerSO3 : string.Concat(mp.Recommendation.FertilizerSO3, Resource.lblkg))</td>
+                                                    </tr>
+                                                    <tr class="govuk-table__row">
+                                                        <td class="govuk-table__cell">
+                                                            @Resource.lblSodiumNa2O
+                                                        </td>
+                                                        <td class="govuk-table__cell">@(mp.Recommendation.NaIndex == null ? Resource.lblHyphen : mp.Recommendation.NaIndex)</td>
+                                                        <td class="govuk-table__cell">@(mp.Recommendation.CropNa2O == null ? Resource.lblHyphen : mp.Recommendation.CropNa2O == 0 ? mp.Recommendation.CropNa2O : string.Concat(mp.Recommendation.CropNa2O, Resource.lblkg))</td>
+                                                        <td class="govuk-table__cell">@(mp.Recommendation.ManureNa2O == null ? 0 : mp.Recommendation.ManureNa2O == 0 ? mp.Recommendation.ManureNa2O : string.Concat(mp.Recommendation.ManureNa2O, Resource.lblkg))</td>
+                                                        <td class="govuk-table__cell">@(mp.Recommendation.FertilizerNa2O == null ? Resource.lblHyphen : mp.Recommendation.FertilizerNa2O < 0 ? 0 : mp.Recommendation.FertilizerNa2O == 0 ? mp.Recommendation.FertilizerNa2O : string.Concat(mp.Recommendation.FertilizerNa2O, Resource.lblkg))</td>
+                                                    </tr>
+                                                    <tr class="govuk-table__row">
+                                                        <td class="govuk-table__cell">
                                                             @Resource.lblLime
                                                         </td>
                                                         <td class="govuk-table__cell">@(Resource.lblHyphen)</td>
@@ -213,7 +231,6 @@
                                                         <td class="govuk-table__cell">@(mp.Recommendation.FertilizerLime == null ? Resource.lblHyphen : mp.Recommendation.FertilizerLime < 0 ? 0 : mp.Recommendation.FertilizerLime == 0 ? mp.Recommendation.FertilizerLime : string.Concat(mp.Recommendation.FertilizerLime, Resource.lbltonnes))</td>
                                                     </tr>
                                                 </tbody>
-
                                             }
                                         </table>
 
