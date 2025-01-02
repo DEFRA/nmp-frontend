@@ -3064,4 +3064,7 @@ m3/ha  not set</value>
   <data name="lblCreateAPlanForEfficientNutrientManagement" xml:space="preserve">
     <value>Create a plan for efficient nutrient management</value>
   </data>
+  <data name="lblBackToYourPlan" xml:space="preserve">
+    <value>Back to your {0} plan</value>
+  </data>
 </root>
