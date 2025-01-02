@@ -171,6 +171,12 @@ namespace NMP.Portal.Controllers
                 TempData["ErrorOnCropReport"] = error.Message;
                 return View(model);
             }
+            (List<NutrientResponseWrapper> nutrients, error) = await _fieldService.FetchNutrientsAsync();
+            if (error == null && nutrients.Count > 0)
+            {
+                model.Nutrients = new List<NutrientResponseWrapper>();
+                model.Nutrients = nutrients;
+            }
             if (model.CropAndFieldReport != null && model.CropAndFieldReport.Farm != null)
             {      
                 if (string.IsNullOrWhiteSpace(model.CropAndFieldReport.Farm.CPH))
