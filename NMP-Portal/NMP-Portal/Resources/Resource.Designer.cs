@@ -1024,6 +1024,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Back to your {0} plan.
+        /// </summary>
+        public static string lblBackToYourPlan {
+            get {
+                return ResourceManager.GetString("lblBackToYourPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Balance from {0}.
         /// </summary>
         public static string lblBalanceFromPreviousYear {
@@ -1371,6 +1380,15 @@ namespace NMP.Portal.Resources {
         public static string lblCreateANutrientManagementPlan {
             get {
                 return ResourceManager.GetString("lblCreateANutrientManagementPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a plan for efficient nutrient management.
+        /// </summary>
+        public static string lblCreateAPlanForEfficientNutrientManagement {
+            get {
+                return ResourceManager.GetString("lblCreateAPlanForEfficientNutrientManagement", resourceCulture);
             }
         }
         
@@ -3470,6 +3488,15 @@ namespace NMP.Portal.Resources {
         public static string lblLastUpdated {
             get {
                 return ResourceManager.GetString("lblLastUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last updated {0}.
+        /// </summary>
+        public static string lblLastUpdatedOnDate {
+            get {
+                return ResourceManager.GetString("lblLastUpdatedOnDate", resourceCulture);
             }
         }
         
@@ -6116,6 +6143,24 @@ namespace NMP.Portal.Resources {
         public static string lblTotalPhosphate {
             get {
                 return ResourceManager.GetString("lblTotalPhosphate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total Phosphate.
+        /// </summary>
+        public static string lblTotalPhosphateOnly {
+            get {
+                return ResourceManager.GetString("lblTotalPhosphateOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total Potash.
+        /// </summary>
+        public static string lblTotalPotash {
+            get {
+                return ResourceManager.GetString("lblTotalPotash", resourceCulture);
             }
         }
         

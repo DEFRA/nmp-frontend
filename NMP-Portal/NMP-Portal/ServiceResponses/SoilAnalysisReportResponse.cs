@@ -2,6 +2,7 @@
 {
     public class SoilAnalysisReportResponse
     {
-        public SoilAnalysisAndSNSanalysisReportResponse? SoilAnalysisAndSNSanalysisReportResponse { get; set; }
+        public DateTime? LastModify { get; set; }
+        public SoilAnalysisAndSNSanalysisReportResponse? SoilAnalysisAndSNSanalysis { get; set; }
     }
 }
