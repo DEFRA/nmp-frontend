@@ -5,8 +5,8 @@
 }
 
 @section BeforeContent {
-    <div class="govuk-grid-row noprint">
-        <govuk-back-link asp-action="ExportFields" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <div class="noprint">
+        <govuk-back-link  asp-action="ExportFields" asp-controller="Report">@string.Format(Resource.lblBackToYourPlan, Model.Year)</govuk-back-link>
     </div>
 
 }
@@ -66,551 +66,526 @@
                         </tr>
                     </tbody>
                 </table>
-                @if (Model.CropAndFieldReport.Farm.Fields != null && Model.CropAndFieldReport.Farm.Fields.Count > 0)
-                {
-                    var count = Model.CropAndFieldReport.Farm.Fields.Count;
-                    foreach (var field in Model.CropAndFieldReport.Farm.Fields)
-                    {
-                        count--;
-                        <h2 class="govuk-heading-l">@field.Name</h2>
-                        <table class="govuk-table  govuk-table-small margin-bottom-sixty">
-                            <thead class="govuk-table__head">
-                                <tr class="govuk-table__row">
-                                    <th scope="col" class="govuk-table__header">@Resource.lblTotalFieldArea</th>
-                                    <th scope="col" class="govuk-table__header">@Resource.lblCropedArea</th>
-                                    <th scope="col" class="govuk-table__header">@Resource.lblManureNonSpreadArea</th>
-                                    <th scope="col" class="govuk-table__header">@Resource.lblPreviousCrop</th>
-                                    @if (field.PreviousCropID == (int)NMP.Portal.Enums.CropTypes.Grass)
-                                    {
-                                        <th scope="col" class="govuk-table__header">@Resource.lblManagement</th>
-                                    }
-                                </tr>
-                            </thead>
-                            <tbody class="govuk-table__body">
-                                <tr class="govuk-table__row">
-                                    <td class="govuk-table__cell">@field.TotalArea</td>
-                                    <td class="govuk-table__cell">@field.CroppedArea</td>
-                                    <td class="govuk-table__cell">
-                                        @(field.ManureNonSpreadingArea != null ? field.ManureNonSpreadingArea : Resource.lblNotEntered)
-                                    </td>
-                                    <td class="govuk-table__cell">@field.PreviousCrop</td>
-                                    @if (field.PreviousCropID == (int)NMP.Portal.Enums.CropTypes.Grass)
-                                    {
-                                        <td class="govuk-table__cell">@field.Management</td>
-                                    }
-                                </tr>
-                            </tbody>
-                        </table>
-                        @if (field.Crops != null && field.Crops.Count > 0)
-                        {
-                            @foreach (var crop in field.Crops)
+            </div>
+        </div>
+        @if (Model.CropAndFieldReport.Farm.Fields != null && Model.CropAndFieldReport.Farm.Fields.Count > 0)
+        {
+            var count = Model.CropAndFieldReport.Farm.Fields.Count;
+            foreach (var field in Model.CropAndFieldReport.Farm.Fields)
+            {
+                count--;
+                <h2 class="govuk-heading-l">@field.Name</h2>
+                <table class="govuk-table  govuk-table-small margin-bottom-sixty">
+                    <thead class="govuk-table__head">
+                        <tr class="govuk-table__row">
+                            <th scope="col" class="govuk-table__header">@Resource.lblTotalFieldArea</th>
+                            <th scope="col" class="govuk-table__header">@Resource.lblCropedArea</th>
+                            <th scope="col" class="govuk-table__header">@Resource.lblManureNonSpreadArea</th>
+                            <th scope="col" class="govuk-table__header">@Resource.lblPreviousCrop</th>
+                            @if (field.PreviousCropID == (int)NMP.Portal.Enums.CropTypes.Grass)
                             {
-                                @if (crop.CropOrder == 2)
+                                <th scope="col" class="govuk-table__header">@Resource.lblManagement</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody class="govuk-table__body">
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">@field.TotalArea</td>
+                            <td class="govuk-table__cell">@field.CroppedArea</td>
+                            <td class="govuk-table__cell">
+                                @(field.ManureNonSpreadingArea != null ? field.ManureNonSpreadingArea : Resource.lblNotEntered)
+                            </td>
+                            <td class="govuk-table__cell">@field.PreviousCrop</td>
+                            @if (field.PreviousCropID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                            {
+                                <td class="govuk-table__cell">@field.Management</td>
+                            }
+                        </tr>
+                    </tbody>
+                </table>
+                @if (field.Crops != null && field.Crops.Count > 0)
+                {
+                    @foreach (var crop in field.Crops)
+                    {
+                        @if (crop.CropOrder == 2)
+                        {
+                            <h2 class="govuk-heading-l">@field.Name</h2>
+                            <table class="govuk-table  govuk-table-small margin-bottom-sixty">
+                                <thead class="govuk-table__head">
+                                    <tr class="govuk-table__row">
+                                        <th scope="col" class="govuk-table__header">@Resource.lblTotalFieldArea</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblCropedArea</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblManureNonSpreadArea</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblPreviousCrop</th>
+                                        @if (field.PreviousCropID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                        {
+                                            <th scope="col" class="govuk-table__header">@Resource.lblManagement</th>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody class="govuk-table__body">
+                                    <tr class="govuk-table__row">
+                                        <td class="govuk-table__cell">@field.TotalArea</td>
+                                        <td class="govuk-table__cell">@field.CroppedArea</td>
+                                        <td class="govuk-table__cell">
+                                            @(field.ManureNonSpreadingArea != null ? field.ManureNonSpreadingArea : Resource.lblNotEntered)
+                                        </td>
+                                        <td class="govuk-table__cell">@field.PreviousCrop</td>
+                                        @if (field.PreviousCropID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                        {
+                                            <td class="govuk-table__cell">@field.Management</td>
+                                        }
+                                    </tr>
+                                </tbody>
+                            </table>
+                        }
+                        @if (crop.ManagementPeriods != null && crop.ManagementPeriods.Count > 0)
+                        {
+                            var cropManagementPeriods = crop.ManagementPeriods.Where(mp => mp.CropID == crop.ID);
+                            if (cropManagementPeriods != null)
+                            {
+                                <div class="govuk-grid-row">
+                                    <div class="govuk-grid-column-full">
+                                        <h2 class="govuk-heading-m">@string.Format(Resource.lblCropTypeRecommendationForField, crop.CropTypeName, field.Name)</h2>
+                                        @* @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+            { *@
+                                        @* <p class="govuk-body">@string.Format(Resource.lblRecommendationsOneWithGrass, field.Management)</p> *@
+                                        @* } *@
+                                        <table class="recs-table govuk-table govuk-table-small margin-bottom-sixty">
+                                            <thead class="govuk-table__head">
+                                                <tr class="govuk-table__row">
+                                                    <th scope="col" class="govuk-table__header">@Resource.lblNutrient</th>
+                                                    <th scope="col" class="govuk-table__header">@Resource.lblSoilIndex</th>
+                                                    <th scope="col" class="govuk-table__header">@Resource.lblCropNeed</th>
+                                                    <th scope="col" class="govuk-table__header">@Resource.lblFromManures</th>
+                                                    <th scope="col" class="govuk-table__header">@Resource.lblFromFertilisersOrLime</th>
+                                                </tr>
+                                            </thead>
+                                            @foreach (var mp in cropManagementPeriods)
+                                            {
+                                                <tbody class="govuk-table__body">
+                                                    <tr class="govuk-table__row">
+                                                        <td class="govuk-table__cell">
+                                                            @Resource.lblNitrogen
+                                                        </td>
+                                                        <td class="govuk-table__cell">@(mp.Recommendation.SNSIndex == null ? Resource.lblHyphen : mp.Recommendation.SNSIndex)</td>
+                                                        <td class="govuk-table__cell">@(mp.Recommendation.CropN == null ? Resource.lblHyphen : mp.Recommendation.CropN == 0 ? mp.Recommendation.CropN : string.Concat(mp.Recommendation.CropN, Resource.lblkg))</td>
+                                                        <td class="govuk-table__cell">@(mp.Recommendation.ManureN == null ? 0 : mp.Recommendation.ManureN == 0 ? mp.Recommendation.ManureN : string.Concat(mp.Recommendation.ManureN, Resource.lblkg))</td>
+                                                        <td class="govuk-table__cell">@(mp.Recommendation.FertilizerN == null ? Resource.lblHyphen : mp.Recommendation.FertilizerN < 0 ? 0 : mp.Recommendation.FertilizerN == 0 ? mp.Recommendation.FertilizerN : string.Concat(mp.Recommendation.FertilizerN, Resource.lblkg))</td>
+                                                    </tr>
+                                                    <tr class="govuk-table__row">
+                                                        <td class="govuk-table__cell">
+                                                            @Resource.lblPhosphateP2O5
+                                                        </td>
+                                                        <td class="govuk-table__cell">@(mp.Recommendation.PIndex == null ? Resource.lblHyphen : mp.Recommendation.PIndex)</td>
+                                                        <td class="govuk-table__cell">
+                                                            @(mp.Recommendation.CropP2O5 == null ? Resource.lblHyphen : mp.Recommendation.CropP2O5 == 0 ? mp.Recommendation.CropP2O5 : string.Concat(mp.Recommendation.CropP2O5, Resource.lblkg))
+
+                                                        </td>
+                                                        <td class="govuk-table__cell">@(mp.Recommendation.ManureP2O5 == null ? 0 : mp.Recommendation.ManureP2O5 == 0 ? mp.Recommendation.ManureP2O5 : string.Concat(mp.Recommendation.ManureP2O5, Resource.lblkg))</td>
+                                                        <td class="govuk-table__cell">@(mp.Recommendation.FertilizerP2O5 == null ? Resource.lblHyphen : mp.Recommendation.FertilizerP2O5 < 0 ? 0 : mp.Recommendation.FertilizerP2O5 == 0 ? mp.Recommendation.FertilizerP2O5 : string.Concat(mp.Recommendation.FertilizerP2O5, Resource.lblkg))</td>
+                                                    </tr>
+                                                    <tr class="govuk-table__row">
+                                                        <td class="govuk-table__cell">
+                                                            @Resource.lblPotashK2O
+                                                        </td>
+                                                        <td class="govuk-table__cell">@(mp.Recommendation.KIndex == null ? Resource.lblHyphen : mp.Recommendation.KIndex)</td>
+                                                        <td class="govuk-table__cell">@(mp.Recommendation.CropK2O == null ? Resource.lblHyphen : mp.Recommendation.CropK2O == 0 ? mp.Recommendation.CropK2O : string.Concat(mp.Recommendation.CropK2O, Resource.lblkg))</td>
+                                                        <td class="govuk-table__cell">@(mp.Recommendation.ManureK2O == null ? 0 : mp.Recommendation.ManureK2O == 0 ? mp.Recommendation.ManureK2O : string.Concat(mp.Recommendation.ManureK2O, Resource.lblkg))</td>
+                                                        <td class="govuk-table__cell">@(mp.Recommendation.FertilizerK2O == null ? Resource.lblHyphen : mp.Recommendation.FertilizerK2O < 0 ? 0 : mp.Recommendation.FertilizerK2O == 0 ? mp.Recommendation.FertilizerK2O : string.Concat(mp.Recommendation.FertilizerK2O, Resource.lblkg))</td>
+                                                    </tr>
+                                                    <tr class="govuk-table__row">
+                                                        <td class="govuk-table__cell">
+                                                            @Resource.lblMagnesiumMgO
+                                                        </td>
+                                                        <td class="govuk-table__cell">@(mp.Recommendation.MgIndex == null ? Resource.lblHyphen : mp.Recommendation.MgIndex)</td>
+                                                        <td class="govuk-table__cell">@(mp.Recommendation.CropMgO == null ? Resource.lblHyphen : mp.Recommendation.CropMgO == 0 ? mp.Recommendation.CropMgO : string.Concat(mp.Recommendation.CropMgO, Resource.lblkg))</td>
+                                                        <td class="govuk-table__cell">@(mp.Recommendation.ManureMgO == null ? 0 : mp.Recommendation.ManureMgO == 0 ? mp.Recommendation.ManureMgO : string.Concat(mp.Recommendation.ManureMgO, Resource.lblkg))</td>
+                                                        <td class="govuk-table__cell">@(mp.Recommendation.FertilizerMgO == null ? Resource.lblHyphen : mp.Recommendation.FertilizerMgO < 0 ? 0 : mp.Recommendation.FertilizerMgO == 0 ? mp.Recommendation.FertilizerMgO : string.Concat(mp.Recommendation.FertilizerMgO, Resource.lblkg))</td>
+                                                    </tr>
+                                                    <tr class="govuk-table__row">
+                                                        <td class="govuk-table__cell">
+                                                            @Resource.lblLime
+                                                        </td>
+                                                        <td class="govuk-table__cell">@(Resource.lblHyphen)</td>
+                                                        <td class="govuk-table__cell">@(mp.Recommendation.CropLime == null ? Resource.lblHyphen : mp.Recommendation.CropLime == 0 ? mp.Recommendation.CropLime : string.Concat(mp.Recommendation.CropLime, Resource.lbltonnes))</td>
+                                                        <td class="govuk-table__cell">@(mp.Recommendation.ManureLime == null ? 0 : mp.Recommendation.ManureLime == 0 ? mp.Recommendation.ManureLime : string.Concat(mp.Recommendation.ManureLime, Resource.lbltonnes))</td>
+                                                        <td class="govuk-table__cell">@(mp.Recommendation.FertilizerLime == null ? Resource.lblHyphen : mp.Recommendation.FertilizerLime < 0 ? 0 : mp.Recommendation.FertilizerLime == 0 ? mp.Recommendation.FertilizerLime : string.Concat(mp.Recommendation.FertilizerLime, Resource.lbltonnes))</td>
+                                                    </tr>
+                                                </tbody>
+
+                                            }
+                                        </table>
+
+                                        @* } *@
+                                    </div>
+                                </div>
+                                <div class="govuk-grid-row">
+                                    <div class="govuk-grid-column-full">
+                                        <table class="govuk-table govuk-table-small margin-bottom-sixty">
+                                            @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                            {
+                                                <caption class="govuk-table__caption govuk-table__caption--m">@string.Format(Resource.lblGrassDetailsForField, field.Name)</caption>
+                                            }
+                                            else
+                                            {
+                                                <caption class="govuk-table__caption govuk-table__caption--m">@string.Format(Resource.lblCropDetailsForField, field.Name)</caption>
+                                            }
+                                            <thead class="govuk-table__head">
+                                                <tr class="govuk-table__row">
+                                                    @* if crop is grass *@
+                                                    @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                                    {
+                                                        <th scope="col" class="govuk-table__header">@Resource.lblEstablishment</th>
+                                                        <th scope="col" class="govuk-table__header">@Resource.lblSward</th>
+                                                        <th scope="col" class="govuk-table__header">@Resource.lblManagement</th>
+                                                        <th scope="col" class="govuk-table__header">@Resource.lblTargetYield</th>
+                                                        <th scope="col" class="govuk-table__header">@Resource.lblUnits</th>
+                                                    }
+                                                    else
+                                                    {
+                                                        <th scope="col" class="govuk-table__header">@Resource.lblCrop</th>
+                                                        <th scope="col" class="govuk-table__header">@Resource.lblYieldPerHectare</th>
+                                                        <th scope="col" class="govuk-table__header">@Resource.lblCropInformation1</th>
+                                                        <th scope="col" class="govuk-table__header">@Resource.lblCropInformation2</th>
+                                                    }
+                                                </tr>
+                                            </thead>
+                                            <tbody class="govuk-table__body">
+                                                <tr class="govuk-table__row">
+                                                    <td class="govuk-table__cell">
+                                                        @crop.CropTypeName
+                                                    </td>
+                                                    @if (crop.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)
+                                                    {
+                                                        <td class="govuk-table__cell">@(crop.Yield != null ? crop.Yield : Resource.lblNotEntered)</td>
+                                                        <td class="govuk-table__cell">@(string.IsNullOrWhiteSpace(crop.CropInfo1Name) ? Resource.lblHyphen : crop.CropInfo1Name)</td>
+                                                        <td class="govuk-table__cell">@(string.IsNullOrWhiteSpace(crop.CropInfo2Name) ? Resource.lblHyphen : crop.CropInfo2Name)</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="govuk-table__cell">@(Resource.lblHyphen)</td>
+                                                        <td class="govuk-table__cell">@(Resource.lblHyphen)</td>
+                                                        <td class="govuk-table__cell">@(Resource.lblHyphen)</td>
+                                                        <td class="govuk-table__cell">@(Resource.lblHyphen)</td>
+                                                    }
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                @foreach (var mp in cropManagementPeriods)
                                 {
-                                    <h2 class="govuk-heading-l">@field.Name</h2>
-                                    <table class="govuk-table  govuk-table-small margin-bottom-sixty">
-                                        <thead class="govuk-table__head">
-                                            <tr class="govuk-table__row">
-                                                <th scope="col" class="govuk-table__header">@Resource.lblTotalFieldArea</th>
-                                                <th scope="col" class="govuk-table__header">@Resource.lblCropedArea</th>
-                                                <th scope="col" class="govuk-table__header">@Resource.lblManureNonSpreadArea</th>
-                                                <th scope="col" class="govuk-table__header">@Resource.lblPreviousCrop</th>
-                                                @if (field.PreviousCropID == (int)NMP.Portal.Enums.CropTypes.Grass)
-                                                {
-                                                    <th scope="col" class="govuk-table__header">@Resource.lblManagement</th>
-                                                }
-                                            </tr>
-                                        </thead>
-                                        <tbody class="govuk-table__body">
-                                            <tr class="govuk-table__row">
-                                                <td class="govuk-table__cell">@field.TotalArea</td>
-                                                <td class="govuk-table__cell">@field.CroppedArea</td>
-                                                <td class="govuk-table__cell">
-                                                    @(field.ManureNonSpreadingArea != null ? field.ManureNonSpreadingArea : Resource.lblNotEntered)
-                                                </td>
-                                                <td class="govuk-table__cell">@field.PreviousCrop</td>
-                                                @if (field.PreviousCropID == (int)NMP.Portal.Enums.CropTypes.Grass)
-                                                {
-                                                    <td class="govuk-table__cell">@field.Management</td>
-                                                }
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                }
-                                @if (crop.ManagementPeriods != null && crop.ManagementPeriods.Count > 0)
-                                {
-                                    var cropManagementPeriods = crop.ManagementPeriods.Where(mp => mp.CropID == crop.ID);
-                                    if (cropManagementPeriods != null)
+                                    @if (mp.FertiliserManures != null && mp.FertiliserManures.Count > 0)
                                     {
                                         <div class="govuk-grid-row">
                                             <div class="govuk-grid-column-full">
-                                                <h2 class="govuk-heading-m">@string.Format(Resource.lblCropTypeRecommendationForField, crop.CropTypeName, field.Name)</h2>
-                                                @* @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
-                    { *@
-                                                @* <p class="govuk-body">@string.Format(Resource.lblRecommendationsOneWithGrass, field.Management)</p> *@
-                                                @* } *@
-                                                <table class="recs-table govuk-table govuk-table-small margin-bottom-sixty">
+                                                <table class="govuk-table govuk-table-small margin-bottom-sixty">
+                                                    @* pass filed name *@
+                                                    <caption class="govuk-table__caption govuk-table__caption--m">@string.Format(Resource.lblInorganicFertiliserAndLimeApplicationsForField, Resource.lblField)</caption>
                                                     <thead class="govuk-table__head">
                                                         <tr class="govuk-table__row">
-                                                            <th scope="col" class="govuk-table__header">@Resource.lblNutrient</th>
-                                                            <th scope="col" class="govuk-table__header">@Resource.lblSoilIndex</th>
-                                                            <th scope="col" class="govuk-table__header">@Resource.lblCropNeed</th>
-                                                            <th scope="col" class="govuk-table__header">@Resource.lblFromManures</th>
-                                                            <th scope="col" class="govuk-table__header">@Resource.lblFromFertilisersOrLime</th>
+                                                            <th scope="col" class="govuk-table__header">@Resource.lblDate</th>
+                                                            <th scope="col" class="govuk-table__header">@Resource.lblNitrogen</th>
+                                                            <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5</th>
+                                                            <th scope="col" class="govuk-table__header">@Resource.lblPotashK2O</th>
+                                                            <th scope="col" class="govuk-table__header">@Resource.lblSulphurSO3</th>
+                                                            <th scope="col" class="govuk-table__header">@Resource.lblLime</th>
                                                         </tr>
                                                     </thead>
-                                                    @foreach (var mp in cropManagementPeriods)
+
+                                                    @foreach (var fertManure in mp.FertiliserManures)
                                                     {
                                                         <tbody class="govuk-table__body">
                                                             <tr class="govuk-table__row">
                                                                 <td class="govuk-table__cell">
-                                                                    @Resource.lblNitrogen
+                                                                    @(fertManure.ApplicationDate != null ? fertManure.ApplicationDate.Value.ToLocalTime().Date.ToString("dd MMMM yyyy") : Resource.lblHyphen)
                                                                 </td>
-                                                                <td class="govuk-table__cell">@(mp.Recommendation.SNSIndex == null ? Resource.lblHyphen : mp.Recommendation.SNSIndex)</td>
-                                                                <td class="govuk-table__cell">@(mp.Recommendation.CropN == null ? Resource.lblHyphen : mp.Recommendation.CropN == 0 ? mp.Recommendation.CropN : string.Concat(mp.Recommendation.CropN, Resource.lblkg))</td>
-                                                                <td class="govuk-table__cell">@(mp.Recommendation.ManureN == null ? 0 : mp.Recommendation.ManureN == 0 ? mp.Recommendation.ManureN : string.Concat(mp.Recommendation.ManureN, Resource.lblkg))</td>
-                                                                <td class="govuk-table__cell">@(mp.Recommendation.FertilizerN == null ? Resource.lblHyphen : mp.Recommendation.FertilizerN < 0 ? 0 : mp.Recommendation.FertilizerN == 0 ? mp.Recommendation.FertilizerN : string.Concat(mp.Recommendation.FertilizerN, Resource.lblkg))</td>
-                                                            </tr>
-                                                            <tr class="govuk-table__row">
                                                                 <td class="govuk-table__cell">
-                                                                    @Resource.lblPhosphateP2O5
+                                                                    @(fertManure.N != null ? string.Format(Resource.lblValueKg, fertManure.N) : Resource.lblHyphen)
                                                                 </td>
-                                                                <td class="govuk-table__cell">@(mp.Recommendation.PIndex == null ? Resource.lblHyphen : mp.Recommendation.PIndex)</td>
-                                                                <td class="govuk-table__cell">
-                                                                    @(mp.Recommendation.CropP2O5 == null ? Resource.lblHyphen : mp.Recommendation.CropP2O5 == 0 ? mp.Recommendation.CropP2O5 : string.Concat(mp.Recommendation.CropP2O5, Resource.lblkg))
-
-                                                                </td>
-                                                                <td class="govuk-table__cell">@(mp.Recommendation.ManureP2O5 == null ? 0 : mp.Recommendation.ManureP2O5 == 0 ? mp.Recommendation.ManureP2O5 : string.Concat(mp.Recommendation.ManureP2O5, Resource.lblkg))</td>
-                                                                <td class="govuk-table__cell">@(mp.Recommendation.FertilizerP2O5 == null ? Resource.lblHyphen : mp.Recommendation.FertilizerP2O5 < 0 ? 0 : mp.Recommendation.FertilizerP2O5 == 0 ? mp.Recommendation.FertilizerP2O5 : string.Concat(mp.Recommendation.FertilizerP2O5, Resource.lblkg))</td>
-                                                            </tr>
-                                                            <tr class="govuk-table__row">
-                                                                <td class="govuk-table__cell">
-                                                                    @Resource.lblPotashK2O
-                                                                </td>
-                                                                <td class="govuk-table__cell">@(mp.Recommendation.KIndex == null ? Resource.lblHyphen : mp.Recommendation.KIndex)</td>
-                                                                <td class="govuk-table__cell">@(mp.Recommendation.CropK2O == null ? Resource.lblHyphen : mp.Recommendation.CropK2O == 0 ? mp.Recommendation.CropK2O : string.Concat(mp.Recommendation.CropK2O, Resource.lblkg))</td>
-                                                                <td class="govuk-table__cell">@(mp.Recommendation.ManureK2O == null ? 0 : mp.Recommendation.ManureK2O == 0 ? mp.Recommendation.ManureK2O : string.Concat(mp.Recommendation.ManureK2O, Resource.lblkg))</td>
-                                                                <td class="govuk-table__cell">@(mp.Recommendation.FertilizerK2O == null ? Resource.lblHyphen : mp.Recommendation.FertilizerK2O < 0 ? 0 : mp.Recommendation.FertilizerK2O == 0 ? mp.Recommendation.FertilizerK2O : string.Concat(mp.Recommendation.FertilizerK2O, Resource.lblkg))</td>
-                                                            </tr>
-                                                            <tr class="govuk-table__row">
-                                                                <td class="govuk-table__cell">
-                                                                    @Resource.lblMagnesiumMgO
-                                                                </td>
-                                                                <td class="govuk-table__cell">@(mp.Recommendation.MgIndex == null ? Resource.lblHyphen : mp.Recommendation.MgIndex)</td>
-                                                                <td class="govuk-table__cell">@(mp.Recommendation.CropMgO == null ? Resource.lblHyphen : mp.Recommendation.CropMgO == 0 ? mp.Recommendation.CropMgO : string.Concat(mp.Recommendation.CropMgO, Resource.lblkg))</td>
-                                                                <td class="govuk-table__cell">@(mp.Recommendation.ManureMgO == null ? 0 : mp.Recommendation.ManureMgO == 0 ? mp.Recommendation.ManureMgO : string.Concat(mp.Recommendation.ManureMgO, Resource.lblkg))</td>
-                                                                <td class="govuk-table__cell">@(mp.Recommendation.FertilizerMgO == null ? Resource.lblHyphen : mp.Recommendation.FertilizerMgO < 0 ? 0 : mp.Recommendation.FertilizerMgO == 0 ? mp.Recommendation.FertilizerMgO : string.Concat(mp.Recommendation.FertilizerMgO, Resource.lblkg))</td>
-                                                            </tr>
-                                                            <tr class="govuk-table__row">
-                                                                <td class="govuk-table__cell">
-                                                                    @Resource.lblLime
-                                                                </td>
-                                                                <td class="govuk-table__cell">@(Resource.lblHyphen)</td>
-                                                                <td class="govuk-table__cell">@(mp.Recommendation.CropLime == null ? Resource.lblHyphen : mp.Recommendation.CropLime == 0 ? mp.Recommendation.CropLime : string.Concat(mp.Recommendation.CropLime, Resource.lbltonnes))</td>
-                                                                <td class="govuk-table__cell">@(mp.Recommendation.ManureLime == null ? 0 : mp.Recommendation.ManureLime == 0 ? mp.Recommendation.ManureLime : string.Concat(mp.Recommendation.ManureLime, Resource.lbltonnes))</td>
-                                                                <td class="govuk-table__cell">@(mp.Recommendation.FertilizerLime == null ? Resource.lblHyphen : mp.Recommendation.FertilizerLime < 0 ? 0 : mp.Recommendation.FertilizerLime == 0 ? mp.Recommendation.FertilizerLime : string.Concat(mp.Recommendation.FertilizerLime, Resource.lbltonnes))</td>
+                                                                <td class="govuk-table__cell">@(fertManure.P2O5 != null ? fertManure.P2O5 : Resource.lblHyphen)</td>
+                                                                <td class="govuk-table__cell">@(fertManure.K2O != null ? fertManure.K2O : Resource.lblHyphen)</td>
+                                                                <td class="govuk-table__cell">@(fertManure.SO3 != null ? fertManure.SO3 : Resource.lblHyphen)</td>
+                                                                <td class="govuk-table__cell">@(fertManure.Lime != null ? fertManure.Lime : Resource.lblHyphen)</td>
                                                             </tr>
                                                         </tbody>
-
                                                     }
                                                 </table>
-
-                                                @* } *@
                                             </div>
                                         </div>
-                                        <div class="govuk-grid-row margin-bottom-forty">
+                                    }
+                                }
+
+
+                                @foreach (var mp in cropManagementPeriods)
+                                {
+                                    @if (mp.OrganicManures != null && mp.OrganicManures.Count > 0)
+                                    {
+                                        <div class="govuk-grid-row ">
                                             <div class="govuk-grid-column-full">
-                                                <table class="govuk-table govuk-table-small">
-                                                    @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
-                                                    {
-                                                        <caption class="govuk-table__caption govuk-table__caption--m">@string.Format(Resource.lblGrassDetailsForField, field.Name)</caption>
-                                                    }
-                                                    else
-                                                    {
-                                                        <caption class="govuk-table__caption govuk-table__caption--m">@string.Format(Resource.lblCropDetailsForField, field.Name)</caption>
-                                                    }
-                                                    <thead class="govuk-table__head">
-                                                        <tr class="govuk-table__row">
-                                                            @* if crop is grass *@
-                                                            @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
-                                                            {
-                                                                <th scope="col" class="govuk-table__header">@Resource.lblEstablishment</th>
-                                                                <th scope="col" class="govuk-table__header">@Resource.lblSward</th>
-                                                                <th scope="col" class="govuk-table__header">@Resource.lblManagement</th>
-                                                                <th scope="col" class="govuk-table__header">@Resource.lblTargetYield</th>
-                                                                <th scope="col" class="govuk-table__header">@Resource.lblUnits</th>
-                                                            }
-                                                            else
-                                                            {
-                                                                <th scope="col" class="govuk-table__header">@Resource.lblCrop</th>
-                                                                <th scope="col" class="govuk-table__header">@Resource.lblYieldPerHectare</th>
-                                                                <th scope="col" class="govuk-table__header">@Resource.lblCropInformation1</th>
-                                                                <th scope="col" class="govuk-table__header">@Resource.lblCropInformation2</th>
-                                                            }
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody class="govuk-table__body">
-                                                        <tr class="govuk-table__row">
-                                                            <td class="govuk-table__cell">
-                                                                @crop.CropTypeName
-                                                            </td>
-                                                            @if (crop.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)
-                                                            {
-                                                                <td class="govuk-table__cell">@(crop.Yield != null ? crop.Yield : Resource.lblNotEntered)</td>
-                                                                <td class="govuk-table__cell">@(string.IsNullOrWhiteSpace(crop.CropInfo1Name) ? Resource.lblHyphen : crop.CropInfo1Name)</td>
-                                                                <td class="govuk-table__cell">@(string.IsNullOrWhiteSpace(crop.CropInfo2Name) ? Resource.lblHyphen : crop.CropInfo2Name)</td>
-                                                            }
-                                                            else
-                                                            {
-                                                                <td class="govuk-table__cell">@(Resource.lblHyphen)</td>
-                                                                <td class="govuk-table__cell">@(Resource.lblHyphen)</td>
-                                                                <td class="govuk-table__cell">@(Resource.lblHyphen)</td>
-                                                                <td class="govuk-table__cell">@(Resource.lblHyphen)</td>
-                                                            }
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
+                                                <h2 class="govuk-heading-m">@Resource.lblOrganicManureApplications</h2>
                                             </div>
                                         </div>
-                                        <div class="govuk-grid-row">
-                                            @foreach (var mp in cropManagementPeriods)
-                                            {
-                                                @if (mp.FertiliserManures != null && mp.FertiliserManures.Count > 0)
-                                                {
-                                                    <div class="govuk-grid-column-full">
-                                                        <table class="govuk-table govuk-table-small margin-bottom-sixty">
-                                                            @* pass filed name *@
-                                                            <caption class="govuk-table__caption govuk-table__caption--m">@string.Format(Resource.lblInorganicFertiliserAndLimeApplicationsForField, Resource.lblField)</caption>
-                                                            <thead class="govuk-table__head">
-                                                                <tr class="govuk-table__row">
-                                                                    <th scope="col" class="govuk-table__header">@Resource.lblDate</th>
-                                                                    <th scope="col" class="govuk-table__header">@Resource.lblNitrogen</th>
-                                                                    <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5</th>
-                                                                    <th scope="col" class="govuk-table__header">@Resource.lblPotashK2O</th>
-                                                                    <th scope="col" class="govuk-table__header">@Resource.lblSulphurSO3</th>
-                                                                    <th scope="col" class="govuk-table__header">@Resource.lblLime</th>
-                                                                </tr>
-                                                            </thead>
-
-                                                            @foreach (var fertManure in mp.FertiliserManures)
-                                                            {
-                                                                <tbody class="govuk-table__body">
-                                                                    <tr class="govuk-table__row">
-                                                                        <td class="govuk-table__cell">
-                                                                            @(fertManure.ApplicationDate != null ? fertManure.ApplicationDate.Value.ToLocalTime().Date.ToString("dd MMMM yyyy") : Resource.lblHyphen)
-                                                                        </td>
-                                                                        <td class="govuk-table__cell">
-                                                                            @(fertManure.N != null ? string.Format(Resource.lblValueKg, fertManure.N) : Resource.lblHyphen)
-                                                                        </td>
-                                                                        <td class="govuk-table__cell">@(fertManure.P2O5 != null ? fertManure.P2O5 : Resource.lblHyphen)</td>
-                                                                        <td class="govuk-table__cell">@(fertManure.K2O != null ? fertManure.K2O : Resource.lblHyphen)</td>
-                                                                        <td class="govuk-table__cell">@(fertManure.SO3 != null ? fertManure.SO3 : Resource.lblHyphen)</td>
-                                                                        <td class="govuk-table__cell">@(fertManure.Lime != null ? fertManure.Lime : Resource.lblHyphen)</td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            }
-                                                        </table>
-                                                    </div>
-                                                }
-                                            }
-                                        </div>
-
-                                        @foreach (var mp in cropManagementPeriods)
+                                        @foreach (var orgManure in mp.OrganicManures)
                                         {
-                                            @if (mp.OrganicManures != null && mp.OrganicManures.Count > 0)
-                                            {
-                                                <div class="govuk-grid-row ">
-                                                    <div class="govuk-grid-column-full">
-                                                        <h2 class="govuk-heading-m">@Resource.lblOrganicManureApplications</h2>
-                                                    </div>
+                                            <div class="govuk-grid-row ">
+                                                <div class="govuk-grid-column-full">
+                                                    @* passing date *@
+                                                    <h3 class="govuk-heading-s">@string.Format(Resource.lblApplicationDateWithDate, orgManure.ApplicationDate.ToLocalTime().Date.ToString("dd MMMM yyyy"))</h3>
                                                 </div>
-                                                @foreach (var orgManure in mp.OrganicManures)
-                                                {
-                                                    <div class="govuk-grid-row ">
-                                                        <div class="govuk-grid-column-full">
-                                                            @* passing date *@
-                                                            <h3 class="govuk-heading-s">@string.Format(Resource.lblApplicationDateWithDate, orgManure.ApplicationDate.ToLocalTime().Date.ToString("dd MMMM yyyy"))</h3>
-                                                        </div>
-                                                    </div>
-                                                    <div class="govuk-grid-row">
-                                                        <div class="govuk-grid-column-one-half half-table-left">
-                                                            <table class="govuk-table govuk-table-small margin-bottom-sixty">
-                                                                <tbody class="govuk-table__body">
-                                                                    <tr class="govuk-table__row">
-                                                                        <th scope="col" class="govuk-table__header">@Resource.lblManureType</th>
-                                                                        @* manure type *@
-                                                                        <td class="govuk-table__cell">@(orgManure.ManureTypeName != null ? orgManure.ManureTypeName : Resource.lblNotEntered)</td>
-                                                                    </tr>
-                                                                    <tr class="govuk-table__row">
-                                                                        <th scope="col" class="govuk-table__header">@Resource.lblApplicationMethod</th>
-                                                                        <td class="govuk-table__cell">@(orgManure.ApplicationMethodName != null ? orgManure.ApplicationMethodName : Resource.lblNotEntered) </td>
-                                                                    </tr>
-                                                                    <tr class="govuk-table__row">
-                                                                        <th scope="col" class="govuk-table__header">@Resource.lblApplicationRate</th>
-                                                                        <td class="govuk-table__cell">@(orgManure.ApplicationRate != null ? string.Format(Resource.lblYieldTonnesPerHectare, orgManure.ApplicationRate) : Resource.lblNotEntered)</td>
-                                                                    </tr>
-                                                                    <tr class="govuk-table__row">
-                                                                        <th scope="col" class="govuk-table__header">@Resource.lblIncorporationMethod</th>
-                                                                        <td class="govuk-table__cell">@(orgManure.IncorporationMethodName != null ? orgManure.IncorporationMethodName : Resource.lblNotEntered)</td>
-                                                                    </tr>
-                                                                    <tr class="govuk-table__row">
-                                                                        <th scope="col" class="govuk-table__header">@Resource.lblDelayToIncorporation</th>
-                                                                        <td class="govuk-table__cell">@(orgManure.IncorporationDelayName != null ? orgManure.IncorporationDelayName : Resource.lblNotEntered)</td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
+                                            </div>
+                                            <div class="govuk-grid-row">
+                                                <div class="govuk-grid-column-one-half half-table-left">
+                                                    <table class="govuk-table govuk-table-small margin-bottom-sixty">
+                                                        <tbody class="govuk-table__body">
+                                                            <tr class="govuk-table__row">
+                                                                <th scope="col" class="govuk-table__header">@Resource.lblManureType</th>
+                                                                @* manure type *@
+                                                                <td class="govuk-table__cell">@(orgManure.ManureTypeName != null ? orgManure.ManureTypeName : Resource.lblNotEntered)</td>
+                                                            </tr>
+                                                            <tr class="govuk-table__row">
+                                                                <th scope="col" class="govuk-table__header">@Resource.lblApplicationMethod</th>
+                                                                <td class="govuk-table__cell">@(orgManure.ApplicationMethodName != null ? orgManure.ApplicationMethodName : Resource.lblNotEntered) </td>
+                                                            </tr>
+                                                            <tr class="govuk-table__row">
+                                                                <th scope="col" class="govuk-table__header">@Resource.lblApplicationRate</th>
+                                                                <td class="govuk-table__cell">@(orgManure.ApplicationRate != null ? string.Format(Resource.lblYieldTonnesPerHectare, orgManure.ApplicationRate) : Resource.lblNotEntered)</td>
+                                                            </tr>
+                                                            <tr class="govuk-table__row">
+                                                                <th scope="col" class="govuk-table__header">@Resource.lblIncorporationMethod</th>
+                                                                <td class="govuk-table__cell">@(orgManure.IncorporationMethodName != null ? orgManure.IncorporationMethodName : Resource.lblNotEntered)</td>
+                                                            </tr>
+                                                            <tr class="govuk-table__row">
+                                                                <th scope="col" class="govuk-table__header">@Resource.lblDelayToIncorporation</th>
+                                                                <td class="govuk-table__cell">@(orgManure.IncorporationDelayName != null ? orgManure.IncorporationDelayName : Resource.lblNotEntered)</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
 
-                                                        <div class="govuk-grid-column-one-half half-table-right">
-                                                            <table class="govuk-table govuk-table-small">
-                                                                <tbody class="govuk-table__body">
-                                                                    <tr class="govuk-table__row">
-                                                                        <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
-                                                                        <td class="govuk-table__cell">@(orgManure.N != null ? string.Format(Resource.lblValueKg, orgManure.N) : Resource.lblNotEntered)</td>
-                                                                    </tr>
-                                                                    <tr class="govuk-table__row">
-                                                                        <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphateOnly</th>
-                                                                        <td class="govuk-table__cell">@(orgManure.P2O5 != null ? string.Format(Resource.lblValueKg, orgManure.P2O5) : Resource.lblNotEntered)</td>
-                                                                    </tr>
-                                                                    <tr class="govuk-table__row">
-                                                                        <th scope="col" class="govuk-table__header">@Resource.lblAvailablePhosphate</th>
-                                                                        <td class="govuk-table__cell">@(orgManure.AvailableP2O5 != null ? string.Format(Resource.lblValueKg, orgManure.AvailableP2O5) : Resource.lblNotEntered)</td>
-                                                                    </tr>
-                                                                    <tr class="govuk-table__row">
-                                                                        <th scope="col" class="govuk-table__header">@Resource.lblTotalPotash</th>
-                                                                        <td class="govuk-table__cell">@(orgManure.K2O != null ? string.Format(Resource.lblValueKg, orgManure.K2O) : Resource.lblNotEntered)</td>
-                                                                    </tr>
-                                                                    <tr class="govuk-table__row">
-                                                                        <th scope="col" class="govuk-table__header">@Resource.lblAvailablePotash</th>
-                                                                        <td class="govuk-table__cell">@(orgManure.AvailableK2O != null ? string.Format(Resource.lblValueKg, orgManure.AvailableK2O) : Resource.lblNotEntered)</td>
-                                                                    </tr>
+                                                <div class="govuk-grid-column-one-half half-table-right">
+                                                    <table class="govuk-table govuk-table-small">
+                                                        <tbody class="govuk-table__body">
+                                                            <tr class="govuk-table__row">
+                                                                <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
+                                                                <td class="govuk-table__cell">@(orgManure.N != null ? string.Format(Resource.lblValueKg, orgManure.N) : Resource.lblNotEntered)</td>
+                                                            </tr>
+                                                            <tr class="govuk-table__row">
+                                                                <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphateOnly</th>
+                                                                <td class="govuk-table__cell">@(orgManure.P2O5 != null ? string.Format(Resource.lblValueKg, orgManure.P2O5) : Resource.lblNotEntered)</td>
+                                                            </tr>
+                                                            <tr class="govuk-table__row">
+                                                                <th scope="col" class="govuk-table__header">@Resource.lblAvailablePhosphate</th>
+                                                                <td class="govuk-table__cell">@(orgManure.AvailableP2O5 != null ? string.Format(Resource.lblValueKg, orgManure.AvailableP2O5) : Resource.lblNotEntered)</td>
+                                                            </tr>
+                                                            <tr class="govuk-table__row">
+                                                                <th scope="col" class="govuk-table__header">@Resource.lblTotalPotash</th>
+                                                                <td class="govuk-table__cell">@(orgManure.K2O != null ? string.Format(Resource.lblValueKg, orgManure.K2O) : Resource.lblNotEntered)</td>
+                                                            </tr>
+                                                            <tr class="govuk-table__row">
+                                                                <th scope="col" class="govuk-table__header">@Resource.lblAvailablePotash</th>
+                                                                <td class="govuk-table__cell">@(orgManure.AvailableK2O != null ? string.Format(Resource.lblValueKg, orgManure.AvailableK2O) : Resource.lblNotEntered)</td>
+                                                            </tr>
 
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                }
-                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         }
                                     }
                                 }
-                                @if (field.SoilDetails != null)
+                            }
+                        }
+                        @if (field.SoilDetails != null)
+                        {
+                            <div class="govuk-grid-row">
+                                <div class="govuk-grid-column-full">
+
+                                    <h2 class="govuk-heading-m">@string.Format(Resource.lblSoilDetailsForField, field.Name)</h2>
+                                </div>
+                                <div class="govuk-grid-column-one-half half-table-left">
+
+                                    <table class="govuk-table govuk-table-small margin-bottom-sixty">
+                                        <thead class="govuk-table__head">
+                                            <tr class="govuk-table__row">
+                                                <th scope="col" class="govuk-table__header">@Resource.lblSoilType</th>
+                                                <td class="govuk-table__cell">
+                                                    @(field.SoilDetails.SoilTypeName != null ? field.SoilDetails.SoilTypeName : Resource.lblNotEntered)
+                                                </td>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="govuk-table__body">
+                                            <tr class="govuk-table__row">
+                                                <th scope="row" class="govuk-table__header">@Resource.lblPotashReleasingClay</th>
+                                                <td class="govuk-table__cell">
+                                                    @(field.SoilDetails.PotashReleasingClay != null ?
+                                                        (field.SoilDetails.PotashReleasingClay.Value ? Resource.lblYes : Resource.lblNo) : Resource.lblNotEntered)
+                                                </td>
+                                            </tr>
+                                            <tr class="govuk-table__row">
+                                                <th scope="row" class="govuk-table__header">@Resource.lblSulpherDeficient</th>
+                                                <td class="govuk-table__cell">
+                                                    @(field.SoilDetails.SulphurDeficient != null
+                                                        ? (field.SoilDetails.SulphurDeficient.Value ? Resource.lblYes : Resource.lblNo)
+                                                        : Resource.lblNotEntered)
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="govuk-grid-column-one-half half-table-right">
+
+                                    <table class="govuk-table govuk-table-small">
+                                        <thead class="govuk-table__head">
+                                            <tr class="govuk-table__row">
+                                                <th scope="col" class="govuk-table__header">@Resource.lblStartingPBalance</th>
+                                                <td class="govuk-table__cell">@(field.SoilDetails.StartingP != null ? string.Format(Resource.lblAutumnCropNitrogenPerHectare, field.SoilDetails.StartingP) : Resource.lblNotEntered)</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="govuk-table__body">
+                                            <tr class="govuk-table__row">
+                                                <th scope="row" class="govuk-table__header">@Resource.lblStartingKBalance</th>
+                                                <td class="govuk-table__cell">@(field.SoilDetails.StartingK != null ? string.Format(Resource.lblAutumnCropNitrogenPerHectare, field.SoilDetails.StartingK) : Resource.lblNotEntered)</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        }
+                        @if (field.SoilAnalysis != null && field.SoilAnalysis.SoilAnalysisAndSNSanalysis != null)
+                        {
+                            <div class="govuk-grid-row">
+                                <div class="govuk-grid-column-full">
+                                    @* pass field *@
+                                    <h2 class="govuk-heading-m">@string.Format(Resource.lblSoilAnalysisForField, field.Name)</h2>
+                                    <p class="govuk-body">@string.Format(Resource.lblLastUpdatedOnDate, field.SoilAnalysis.LastModify != null ? field.SoilAnalysis.LastModify.Value.ToLocalTime().Date.ToString("dd MMMM yyyy") : Resource.lblNotEntered)</p>
+
+                                    <table class="govuk-table govuk-table-small margin-bottom-sixty">
+                                        <thead class="govuk-table__head">
+                                            <tr class="govuk-table__row">
+                                                <th class="govuk-table__header">@Resource.lblPh</th>
+                                                <th class="govuk-table__header">@Resource.lblPhosphorusP</th>
+                                                <th class="govuk-table__header">@Resource.lblPotassium</th>
+                                                <th class="govuk-table__header">@Resource.lblMagnesiumMg</th>
+                                                <th class="govuk-table__header">@Resource.lblSNS</th>
+                                                <th class="govuk-table__header">@Resource.lblSNSIndexForReport</th>
+                                                <th class="govuk-table__header">@Resource.lblSNSMethod</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="govuk-table__body">
+                                            <tr class="govuk-table__row">
+                                                <td class="govuk-table__cell">@(field.SoilAnalysis.SoilAnalysisAndSNSanalysis.PH != null ? field.SoilAnalysis.SoilAnalysisAndSNSanalysis.PH : Resource.lblNotEntered)</td>
+                                                <td class="govuk-table__cell">
+                                                    @(field.SoilAnalysis.SoilAnalysisAndSNSanalysis.Phosphorus != null ? field.SoilAnalysis.SoilAnalysisAndSNSanalysis.Phosphorus : Resource.lblNotEntered)
+                                                </td>
+                                                <td class="govuk-table__cell">
+                                                    @(field.SoilAnalysis.SoilAnalysisAndSNSanalysis.Potassium != null ? field.SoilAnalysis.SoilAnalysisAndSNSanalysis.Potassium : Resource.lblNotEntered)
+                                                </td>
+                                                <td class="govuk-table__cell">
+                                                    @(field.SoilAnalysis.SoilAnalysisAndSNSanalysis.Magnesium != null ? field.SoilAnalysis.SoilAnalysisAndSNSanalysis.Magnesium : Resource.lblNotEntered)
+                                                </td>
+                                                <td class="govuk-table__cell">
+                                                    @(field.SoilAnalysis.SoilAnalysisAndSNSanalysis.SNS != null ? field.SoilAnalysis.SoilAnalysisAndSNSanalysis.SNS : Resource.lblNotEntered)
+                                                </td>
+                                                <td class="govuk-table__cell">@(field.SoilAnalysis.SoilAnalysisAndSNSanalysis.SNSIndex != null ? field.SoilAnalysis.SoilAnalysisAndSNSanalysis.SNSIndex : Resource.lblNotEntered)</td>
+                                                <td class="govuk-table__cell">@(field.SoilAnalysis.SoilAnalysisAndSNSanalysis.SNSMethod != null ? field.SoilAnalysis.SoilAnalysisAndSNSanalysis.SNSMethod : Resource.lblNotEntered)</td>
+                                            </tr>
+                                        </tbody>
+
+
+                                    </table>
+                                </div>
+                            </div>
+                        }
+                        @if (crop.ManagementPeriods != null && crop.ManagementPeriods.Count > 0)
+                        {
+                            var cropManagementPeriods = crop.ManagementPeriods.Where(mp => mp.CropID == crop.ID);
+                            @if (cropManagementPeriods != null)
+                            {
+                                @foreach (var mp in cropManagementPeriods)
                                 {
-                                    <div class="govuk-grid-row">
-                                        <div class="govuk-grid-column-full">
-
-                                            <h2 class="govuk-heading-m">@string.Format(Resource.lblSoilDetailsForField, field.Name)</h2>
-                                        </div>
-                                        <div class="govuk-grid-column-one-half half-table-left">
-
-                                            <table class="govuk-table govuk-table-small margin-bottom-sixty">
-                                                <thead class="govuk-table__head">
-                                                    <tr class="govuk-table__row">
-                                                        <th scope="col" class="govuk-table__header">@Resource.lblSoilType</th>
-                                                        <td class="govuk-table__cell">
-                                                            @(field.SoilDetails.SoilTypeName != null ? field.SoilDetails.SoilTypeName : Resource.lblNotEntered)
-                                                        </td>
-                                                    </tr>
-                                                </thead>
-                                                <tbody class="govuk-table__body">
-                                                    <tr class="govuk-table__row">
-                                                        <th scope="row" class="govuk-table__header">@Resource.lblPotashReleasingClay</th>
-                                                        <td class="govuk-table__cell">
-                                                            @(field.SoilDetails.PotashReleasingClay != null ?
-                                                                (field.SoilDetails.PotashReleasingClay.Value ? Resource.lblYes : Resource.lblNo) : Resource.lblNotEntered)
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="govuk-table__row">
-                                                        <th scope="row" class="govuk-table__header">@Resource.lblSulpherDeficient</th>
-                                                        <td class="govuk-table__cell">
-                                                            @(field.SoilDetails.SulphurDeficient != null
-                                                                ? (field.SoilDetails.SulphurDeficient.Value ? Resource.lblYes : Resource.lblNo)
-                                                                : Resource.lblNotEntered)
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="govuk-grid-column-one-half half-table-right">
-
-                                            <table class="govuk-table govuk-table-small">
-                                                <thead class="govuk-table__head">
-                                                    <tr class="govuk-table__row">
-                                                        <th scope="col" class="govuk-table__header">@Resource.lblStartingPBalance</th>
-                                                        <td class="govuk-table__cell">@(field.SoilDetails.StartingP != null ? string.Format(Resource.lblAutumnCropNitrogenPerHectare, field.SoilDetails.StartingP) : Resource.lblNotEntered)</td>
-                                                    </tr>
-                                                </thead>
-                                                <tbody class="govuk-table__body">
-                                                    <tr class="govuk-table__row">
-                                                        <th scope="row" class="govuk-table__header">@Resource.lblStartingKBalance</th>
-                                                        <td class="govuk-table__cell">@(field.SoilDetails.StartingK != null ? string.Format(Resource.lblAutumnCropNitrogenPerHectare, field.SoilDetails.StartingK) : Resource.lblNotEntered)</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-
-                                        </div>
-                                    </div>
-                                }
-                                @if (field.SoilAnalysis != null && field.SoilAnalysis.SoilAnalysisAndSNSanalysis != null)
-                                {
-                                    <div class="govuk-grid-row">
-                                        <div class="govuk-grid-column-full">
-                                            @* pass field *@
-                                            <h2 class="govuk-heading-m">@string.Format(Resource.lblSoilAnalysisForField, field.Name)</h2>
-                                            <p class="govuk-body">@string.Format(Resource.lblLastUpdatedOnDate, field.SoilAnalysis.LastModify != null ? field.SoilAnalysis.LastModify.Value.ToLocalTime().Date.ToString("dd MMMM yyyy") : Resource.lblNotEntered)</p>
-
-                                            <table class="govuk-table govuk-table-small margin-bottom-sixty">
-                                                <thead class="govuk-table__head">
-                                                    <tr class="govuk-table__row">
-                                                        <th class="govuk-table__header">@Resource.lblPh</th>
-                                                        <th class="govuk-table__header">@Resource.lblPhosphorusP</th>
-                                                        <th class="govuk-table__header">@Resource.lblPotassium</th>
-                                                        <th class="govuk-table__header">@Resource.lblMagnesiumMg</th>
-                                                        <th class="govuk-table__header">@Resource.lblSNS</th>
-                                                        <th class="govuk-table__header">@Resource.lblSNSIndexForReport</th>
-                                                        <th class="govuk-table__header">@Resource.lblSNSMethod</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody class="govuk-table__body">
-                                                    <tr class="govuk-table__row">
-                                                        <td class="govuk-table__cell">@(field.SoilAnalysis.SoilAnalysisAndSNSanalysis.PH != null ? field.SoilAnalysis.SoilAnalysisAndSNSanalysis.PH : Resource.lblNotEntered)</td>
-                                                        <td class="govuk-table__cell">
-                                                            @(field.SoilAnalysis.SoilAnalysisAndSNSanalysis.Phosphorus != null ? field.SoilAnalysis.SoilAnalysisAndSNSanalysis.Phosphorus : Resource.lblNotEntered)
-                                                        </td>
-                                                        <td class="govuk-table__cell">
-                                                            @(field.SoilAnalysis.SoilAnalysisAndSNSanalysis.Potassium != null ? field.SoilAnalysis.SoilAnalysisAndSNSanalysis.Potassium : Resource.lblNotEntered)
-                                                        </td>
-                                                        <td class="govuk-table__cell">
-                                                            @(field.SoilAnalysis.SoilAnalysisAndSNSanalysis.Magnesium != null ? field.SoilAnalysis.SoilAnalysisAndSNSanalysis.Magnesium : Resource.lblNotEntered)
-                                                        </td>
-                                                        <td class="govuk-table__cell">
-                                                            @(field.SoilAnalysis.SoilAnalysisAndSNSanalysis.SNS != null ? field.SoilAnalysis.SoilAnalysisAndSNSanalysis.SNS : Resource.lblNotEntered)
-                                                        </td>
-                                                        <td class="govuk-table__cell">@(field.SoilAnalysis.SoilAnalysisAndSNSanalysis.SNSIndex != null ? field.SoilAnalysis.SoilAnalysisAndSNSanalysis.SNSIndex : Resource.lblNotEntered)</td>
-                                                        <td class="govuk-table__cell">@(field.SoilAnalysis.SoilAnalysisAndSNSanalysis.SNSMethod != null ? field.SoilAnalysis.SoilAnalysisAndSNSanalysis.SNSMethod : Resource.lblNotEntered)</td>
-                                                    </tr>
-                                                </tbody>
-
-
-                                            </table>
-                                        </div>
-                                    </div>
-                                }
-                                @if (crop.ManagementPeriods != null && crop.ManagementPeriods.Count > 0)
-                                {
-                                    var cropManagementPeriods = crop.ManagementPeriods.Where(mp => mp.CropID == crop.ID);
-                                    @if (cropManagementPeriods != null)
+                                    @if (mp.Recommendation != null && mp.Recommendation.RecommendationComments != null && mp.Recommendation.RecommendationComments.Count > 0)
                                     {
-                                        @foreach (var mp in cropManagementPeriods)
-                                        {
-
-                                            <div class="govuk-grid-row margin-bottom-forty pagebreak">
-                                                <div class="govuk-grid-column-full">
-                                                    <h2 class="govuk-heading-m">@string.Format(Resource.lblGuidanceForField,field.Name)</h2>
-                                                    <div class="guidance">
-                                                        @if (mp.Recommendation != null && mp.Recommendation.RecommendationComments != null&&mp.Recommendation.RecommendationComments.Count>0)
+                                        <div class="govuk-grid-row margin-bottom-forty pagebreak">
+                                            <div class="govuk-grid-column-full">
+                                                <h2 class="govuk-heading-m">@string.Format(Resource.lblGuidanceForField, field.Name)</h2>
+                                                <div class="guidance">
+                                                    @if (Model.Nutrients != null)
+                                                    {
+                                                        @foreach (var nutrient in Model.Nutrients)
                                                         {
-                                                            @if (Model.Nutrients != null)
+                                                            var commentsForNutrient = mp.Recommendation.RecommendationComments
+                                                            .Where(rc => rc.Nutrient == nutrient.nutrientId)
+                                                            .ToList();
+                                                            // var commentsText = string.Join("<br />", commentsForNutrient.Select(rc => rc.Comment));  // rc.Comment is the comment text
+                                                            if (commentsForNutrient != null && commentsForNutrient.Count > 0)
                                                             {
-                                                                @foreach (var nutrient in Model.Nutrients)
-                                                                {
-                                                                    var commentsForNutrient = mp.Recommendation.RecommendationComments
-                                                                    .Where(rc => rc.Nutrient == nutrient.nutrientId)
-                                                                    .ToList();
-                                                                   // var commentsText = string.Join("<br />", commentsForNutrient.Select(rc => rc.Comment));  // rc.Comment is the comment text
-                                                                    if (commentsForNutrient != null && commentsForNutrient.Count > 0)
+                                                                <h3 class="govuk-heading-s">
+                                                                    @if (nutrient.nutrientId == (int)NMP.Portal.Enums.Nutrients.Nitrogen)
                                                                     {
-                                                                    <h3 class="govuk-heading-s">
-                                                                        @if (nutrient.nutrientId == (int)NMP.Portal.Enums.Nutrients.Nitrogen)
-                                                                        {
-                                                                            @Resource.lblNitrogen
-                                                                        }
-                                                                        else if (nutrient.nutrientId == (int)NMP.Portal.Enums.Nutrients.Phosphate)
-                                                                        {
-                                                                            @Resource.lblPhosphateP2O5
-                                                                        }
-                                                                        else if (nutrient.nutrientId == (int)NMP.Portal.Enums.Nutrients.Sulphur)
-                                                                        {
-                                                                            @Resource.lblSulphurSO3
-                                                                        }
-                                                                        else if (nutrient.nutrientId == (int)NMP.Portal.Enums.Nutrients.Lime)
-                                                                        {
-                                                                            @Resource.lblLime
-                                                                        }
-                                                                        else if (nutrient.nutrientId == (int)NMP.Portal.Enums.Nutrients.Magnesium)
-                                                                        {
-                                                                            @Resource.lblMagnesiumMg
-                                                                        }
-                                                                        else if (nutrient.nutrientId == (int)NMP.Portal.Enums.Nutrients.Sodium)
-                                                                        {
-                                                                            @Resource.lblSodiumNa2O
-                                                                        }
-                                                                        else if (nutrient.nutrientId == (int)NMP.Portal.Enums.Nutrients.Potash)
-                                                                        {
-                                                                            @Resource.lblPotashK2O
-                                                                        }
-                                                                    </h3>
-                                                                    
-                                                                        @foreach (var comment in commentsForNutrient)
-                                                                        {
-                                                                            <p class="govuk-body">
-                                                                                @comment.Comment
-                                                                            </p>
-                                                                        }
+                                                                        @Resource.lblNitrogen
                                                                     }
+                                                                    else if (nutrient.nutrientId == (int)NMP.Portal.Enums.Nutrients.Phosphate)
+                                                                    {
+                                                                        @Resource.lblPhosphateP2O5
+                                                                    }
+                                                                    else if (nutrient.nutrientId == (int)NMP.Portal.Enums.Nutrients.Sulphur)
+                                                                    {
+                                                                        @Resource.lblSulphurSO3
+                                                                    }
+                                                                    else if (nutrient.nutrientId == (int)NMP.Portal.Enums.Nutrients.Lime)
+                                                                    {
+                                                                        @Resource.lblLime
+                                                                    }
+                                                                    else if (nutrient.nutrientId == (int)NMP.Portal.Enums.Nutrients.Magnesium)
+                                                                    {
+                                                                        @Resource.lblMagnesiumMg
+                                                                    }
+                                                                    else if (nutrient.nutrientId == (int)NMP.Portal.Enums.Nutrients.Sodium)
+                                                                    {
+                                                                        @Resource.lblSodiumNa2O
+                                                                    }
+                                                                    else if (nutrient.nutrientId == (int)NMP.Portal.Enums.Nutrients.Potash)
+                                                                    {
+                                                                        @Resource.lblPotashK2O
+                                                                    }
+                                                                </h3>
+
+                                                                @foreach (var comment in commentsForNutrient)
+                                                                {
+                                                                    <p class="govuk-body">
+                                                                        @comment.Comment
+                                                                    </p>
                                                                 }
                                                             }
                                                         }
-                                                        else
-                                                        {
-                                                            <h2 class="govuk-heading-s">@Resource.lblNitrogen</h2>
-                                                            <p class="govuk-body">
-                                                                @Resource.lblHyphen
-                                                            </p>
-                                                            <h2 class="govuk-heading-s">@Resource.lblPhosphateP2O5</h2>
-                                                            <p class="govuk-body">
-                                                                @Resource.lblHyphen
-                                                            </p>
-                                                            <h2 class="govuk-heading-s">@Resource.lblSulphurSO3</h2>
-                                                            <p class="govuk-body">
-                                                                @Resource.lblHyphen
-                                                            </p>
-                                                            <h2 class="govuk-heading-s">@Resource.lblLime</h2>
-                                                            <p class="govuk-body">
-                                                                @Resource.lblHyphen
-                                                            </p>
-                                                            <h2 class="govuk-heading-s">@Resource.lblMagnesiumMg</h2>
-                                                            <p class="govuk-body">
-                                                                @Resource.lblHyphen
-                                                            </p>
-                                                            <h2 class="govuk-heading-s">@Resource.lblPotashK2O</h2>
-                                                            <p class="govuk-body">
-                                                                @Resource.lblHyphen
-                                                            </p>
-                                                            <h2 class="govuk-heading-s">@Resource.lblSodiumNa2O</h2>
-                                                            <p class="govuk-body">
-                                                                @Resource.lblHyphen
-                                                            </p>
-
-                                                        }
-                                                    </div>
+                                                    }
                                                 </div>
                                             </div>
-                                        }
+                                        </div>
                                     }
-                                }
-                                @if (count != 0)
-                                {
-                                    <div id="printbreak"></div>
-                                }
+                                    else
+                                    {
+                                        <div class="govuk-grid-row pagebreak"></div>
+                                    }
 
+                                }
                             }
-
                         }
-                    }
-                }
+                        @if (count != 0)
+                        {
+                            <div id="printbreak"></div>
+                        }
 
-            </div>
-        </div>
+                    }
+
+                }
+            }
+        }
+
+
     </form>
 }
