@@ -1319,7 +1319,7 @@ namespace NMP.Portal.Controllers
                 ViewBag.GrassTypicalCuts = grassTypicalCuts?.FirstOrDefault(x => x.Id == model.PreviousGrasses.GrassTypicalCutID)?.Name;
 
                 List<CommonResponse> soilNitrogenSupplyItems = await _fieldService.GetSoilNitrogenSupplyItems();
-                ViewBag.SoilNitrogenSupplyItems = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == model.PreviousGrasses.GrassTypicalCutID)?.Name;
+                ViewBag.SoilNitrogenSupplyItems = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == model.PreviousGrasses.SoilNitrogenSupplyItemID)?.Name;
 
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             }
