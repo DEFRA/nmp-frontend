@@ -2999,7 +2999,7 @@ m3/ha  not set</value>
     <value>Beta</value>
   </data>
   <data name="lblPhaseBannerText" xml:space="preserve">
-    <value>This is a new service. Help us improve it and if you have any issues or concerns you can contact us on (Phone number entered here) or email us on</value>
+    <value>Your feedback will help us to improve.</value>
   </data>
   <data name="helpdeskemail" xml:space="preserve">
     <value>helpdesk@rsk-bsl.co.uk</value>
