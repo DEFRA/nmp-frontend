@@ -3063,7 +3063,7 @@ namespace NMP.Portal.Controllers
                     {
                         model.AdjustmentValue = 0;
                     }
-                    if(model.CropHeight!=null)
+                    if (model.CropHeight != null)
                     {
                         model.GreenAreaIndex = null;
                     }
@@ -3094,14 +3094,14 @@ namespace NMP.Portal.Controllers
                         }
                     };
                 }
-                else if (model.GreenAreaIndexOrCropHeight == (int)NMP.Portal.Enums.GreenAreaIndexOrCropHeight.GAI && snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterOilseedRape)
+                else if (snsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterOilseedRape)
                 {
                     model.CropHeight = null;
-                    if(model.SoilOrganicMatter!=null)
+                    if (model.SoilOrganicMatter != null)
                     {
                         model.AdjustmentValue = null;
                     }
-                    if(model.SoilOrganicMatter==null&&model.AdjustmentValue==null)
+                    if (model.SoilOrganicMatter == null && model.AdjustmentValue == null)
                     {
                         model.AdjustmentValue = 0;
                     }
