@@ -3063,6 +3063,14 @@ namespace NMP.Portal.Controllers
                     {
                         model.AdjustmentValue = 0;
                     }
+                    if(model.CropHeight!=null)
+                    {
+                        model.GreenAreaIndex = null;
+                    }
+                    if (model.CropHeight == null && model.GreenAreaIndex == null)
+                    {
+                        model.GreenAreaIndex = 0;
+                    }
                     postMeasurementData = new MeasurementData
                     {
                         CropTypeId = model.CurrentCropTypeId ?? 0,
@@ -3076,7 +3084,7 @@ namespace NMP.Portal.Controllers
                         Step2 = new Step2
                         {
                             ShootNumber = model.NumberOfShoots > 0 ? model.NumberOfShoots : null,
-                            GreenAreaIndex = model.GreenAreaIndex > 0 ? model.GreenAreaIndex : 0,
+                            GreenAreaIndex = model.GreenAreaIndex,
                             CropHeight = model.CropHeight > 0 ? model.CropHeight : null
                         },
                         Step3 = new Step3
