@@ -3637,29 +3637,7 @@ namespace NMP.Portal.Controllers
                 model.IsApplicationMethodChange = false;
                 model.IsFieldGroupChange = false;
                 model.IsIncorporationMethodChange = false;
-                if (model.OrganicManures.Count > 0)
-                {
-
-                    if ((model.IsDefaultNutrientValues == null ? false : model.IsDefaultNutrientValues.Value) && model.ManureType.K2O.HasValue && model.ApplicationRate.HasValue && model.ManureType.K2OAvailable.HasValue)
-                    {
-                        foreach (var orgManure in model.OrganicManures)
-                        {
-                            orgManure.AvailableK2O = model.ManureType.K2O.Value * (model.ApplicationRate.Value * (model.ManureType.K2OAvailable.Value / 100));
-                            orgManure.AvailableP2O5 = model.ManureType.P2O5.Value * (model.ApplicationRate.Value * (model.ManureType.P2O5Available.Value / 100));
-                        }
-                    }
-                    else
-                    {
-                        if (model.K2O.HasValue && model.ApplicationRate.HasValue && model.ManureType.K2OAvailable.HasValue)
-                        {
-                            foreach (var orgManure in model.OrganicManures)
-                            {
-                                orgManure.AvailableK2O = model.K2O.Value * (model.ApplicationRate.Value * (model.ManureType.K2OAvailable.Value / 100));
-                                orgManure.AvailableP2O5 = model.P2O5.Value * (model.ApplicationRate.Value * (model.ManureType.P2O5Available.Value / 100));
-                            }
-                        }
-                    }
-                }
+               
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
             }
             catch (Exception ex)
@@ -3676,6 +3654,7 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> CheckAnswer(OrganicManureViewModel model)
         {
             _logger.LogTrace($"Organic Manure Controller : CheckAnswer() post action called");
+            Error error = null;
             try
             {
                 if (model.ManureTypeId == null)
@@ -3764,6 +3743,137 @@ namespace NMP.Portal.Controllers
                     {
                         model.OrganicManures.ForEach(x => x.ManureTypeName = model.ManureTypeName);
                     }
+
+                    //foreach (string field in model.FieldList)
+                    //{
+                    (Farm farmData, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
+                    if (farmData != null && (string.IsNullOrWhiteSpace(error.Message)))
+                    {
+                        //Field fieldData = await _fieldService.FetchFieldByFieldId(Convert.ToInt32(field));
+                        //if (fieldData != null)
+                        //{
+                        foreach (var organic in model.OrganicManures)
+                        {
+                            (ManagementPeriod managementPeriod, error) = await _cropService.FetchManagementperiodById(organic.ManagementPeriodID);
+                            if (string.IsNullOrWhiteSpace(error.Message) && managementPeriod != null)
+                            {
+                                (Crop crop, error) = await _cropService.FetchCropById(managementPeriod.CropID.Value);
+                                if (crop != null && string.IsNullOrWhiteSpace(error.Message))
+                                {
+                                    Field fieldData = await _fieldService.FetchFieldByFieldId(crop.FieldID.Value);
+                                    if (fieldData != null)
+                                    {
+                                        (CropTypeLinkingResponse cropTypeLinkingResponse, error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID.Value);
+                                        if (error == null && cropTypeLinkingResponse != null)
+                                        {
+                                            var mannerOutput = new
+                                            {
+                                                runType = farmData.EnglishRules ? 3 : 4,
+                                                postcode = farmData.Postcode,
+                                                countryID = farmData.CountryID,
+                                                field = new
+                                                {
+                                                    fieldID = fieldData.ID,
+                                                    fieldName = fieldData.Name,
+                                                    MannerCropTypeID = cropTypeLinkingResponse.MannerCropTypeID,
+                                                    topsoilID = fieldData.TopSoilID,
+                                                    subsoilID = fieldData.SubSoilID,
+                                                    isInNVZ =Convert.ToBoolean(farmData.NVZFields)
+                                                },
+                                                manureApplications = new[]
+                                                 {
+                                                        new
+                                                        {
+                                                            manureDetails = new
+                                                            {
+                                                                manureID = organic.ManureTypeID,
+                                                                name = organic.ManureTypeName,
+                                                                isLiquid = true,
+                                                                dryMatter = organic.DryMatterPercent,
+                                                                totalN = organic.N,
+                                                                nH4N = organic.NH4N,
+                                                                uric = organic.UricAcid,
+                                                                nO3N = organic.NO3N,
+                                                                p2O5 = organic.P2O5,
+                                                                k2O = organic.K2O,
+                                                                sO3 = organic.SO3,
+                                                                mgO = organic.MgO
+                                                            },
+                                                            applicationDate = organic.ApplicationDate.ToString("yyyy-MM-dd"),
+                                                            applicationRate = new
+                                                            {
+                                                                value = organic.ApplicationRate,
+                                                                unit = model.IsManureTypeLiquid.Value ? Resource.lblMeterCubePerHectare : Resource.lblTonnesPerHectare
+                                                            },
+                                                            applicationMethodID = organic.ApplicationMethodID,
+                                                            incorporationMethodID = organic.IncorporationMethodID,
+                                                            incorporationDelayID = organic.IncorporationDelayID,
+                                                            autumnCropNitrogenUptake = new
+                                                            {
+                                                                value = organic.AutumnCropNitrogenUptake,
+                                                                unit = Resource.lblKgPerHectare
+                                                            },
+                                                            endOfDrainageDate = organic.SoilDrainageEndDate.ToString("yyyy-MM-dd"),
+                                                            rainfallPostApplication = organic.Rainfall,
+                                                            cropNUptake = organic.AutumnCropNitrogenUptake,
+                                                            windspeedID = organic.WindspeedID,
+                                                            rainTypeID = organic.RainfallWithinSixHoursID,
+                                                            topsoilMoistureID = organic.MoistureID
+                                                        }
+                                                    }
+                                            };
+                                            //var mannerJsonData = new
+                                            //{
+                                            //    mannerOutput
+                                            //};
+                                            string mannerJsonString = JsonConvert.SerializeObject(mannerOutput);
+                                            (MannerCalculateNutrientResponse mannerCalculateNutrientResponse, error) = await _organicManureService.FetchMannerCalculateNutrient(mannerJsonString);
+                                            if (error == null && mannerCalculateNutrientResponse != null)
+                                            {
+                                                organic.AvailableN = mannerCalculateNutrientResponse.CurrentCropAvailableN;
+                                                organic.AvailableSO3 = mannerCalculateNutrientResponse.CropAvailableSO3;
+                                                organic.AvailableP2O5 = mannerCalculateNutrientResponse.CropAvailableP2O5;
+                                                organic.AvailableK2O = mannerCalculateNutrientResponse.CropAvailableK2O;
+
+                                            }
+                                            else
+                                            {
+                                                TempData["AddOrganicManureError"] = Resource.MsgWeCounldNotAddOrganicManure;
+                                                return View(model);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            TempData["AddOrganicManureError"] = Resource.MsgWeCounldNotAddOrganicManure;
+                                            return View(model);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        TempData["AddOrganicManureError"] = Resource.MsgWeCounldNotAddOrganicManure;
+                                        return View(model);
+                                    }
+                                }
+                                else
+                                {
+                                    TempData["AddOrganicManureError"] = Resource.MsgWeCounldNotAddOrganicManure;
+                                    return View(model);
+                                }
+                            }
+                            else
+                            {
+                                TempData["AddOrganicManureError"] = Resource.MsgWeCounldNotAddOrganicManure;
+                                return View(model);
+                            }
+                        }
+                        //}
+                    }
+                    else
+                    {
+                        TempData["AddOrganicManureError"] = Resource.MsgWeCounldNotAddOrganicManure;
+                        return View(model);
+                    }
+                    //}
                 }
                 var jsonData = new
                 {
@@ -3778,7 +3888,7 @@ namespace NMP.Portal.Controllers
 
 
                 string jsonString = JsonConvert.SerializeObject(jsonData);
-                (bool success, Error error) = await _organicManureService.AddOrganicManuresAsync(jsonString);
+                (bool success, error) = await _organicManureService.AddOrganicManuresAsync(jsonString);
                 if (!success || error != null)
                 {
                     TempData["AddOrganicManureError"] = Resource.MsgWeCounldNotAddOrganicManure;
