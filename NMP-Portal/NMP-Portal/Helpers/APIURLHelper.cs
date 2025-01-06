@@ -130,6 +130,7 @@ namespace NMP.Portal.Helpers
         public const string FetchGrassManagementOptionsAsyncAPI = "grassland/grassManagementOptions";
         public const string FetchGrassTypicalCutsAsyncAPI = "grassland/grassTypicalCuts";
         public const string FetchSoilNitrogenSupplyItemsAsyncAPI = "grassland/soilNitrogenSupply";
+        public const string FetchCropInfoOneQuestionByCropTypeIdAsyncAPI = "crop-info-questions/{0}";
         public const string FetchMannerCalculateNutrientAsyncAPI = "vendors/manner/calculate-nutrients";
     }
 }
