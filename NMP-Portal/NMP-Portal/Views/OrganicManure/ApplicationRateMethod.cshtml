@@ -14,14 +14,14 @@
     }
     else if (Model.IsDefaultNutrientValues != null && (!Model.IsDefaultNutrientValues.Value))
     {
-        if (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
-        {
+        // if (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
+        // {
             backaction = "ManualNutrientValues";
-        }
-        else
-        {
-            backaction = "NutrientValuesStoreForFuture";
-        }
+        //}
+        // else
+        // {
+        //     backaction = "NutrientValuesStoreForFuture";
+        // }
     }
     else
     {

@@ -762,18 +762,39 @@ namespace NMP.Portal.Controllers
                         ViewBag.ManureGroupList = SelectListItem.OrderBy(x => x.Text).ToList();
                     }
                 }
+
                 if (error1 == null)
                 {
                     if (farmManureTypeList.Count > 0)
                     {
-
-                        var SelectListItem = farmManureTypeList.Select(f => new SelectListItem
+                        //foreach (var farmManureType in farmManureTypeList)
+                        //{
+                        var filteredFarmManureTypes = farmManureTypeList
+                        .Where(farmManureType => farmManureType.ManureTypeID == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials ||
+                        farmManureType.ManureTypeID == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                        .ToList();
+                        if (filteredFarmManureTypes != null)
                         {
-                            Value = f.ManureTypeID.ToString(),
-                            Text = f.ManureTypeName.ToString()
-                        }).ToList();
-                        ViewBag.FarmManureTypeList = SelectListItem.OrderBy(x => x.Text).ToList();
+                            var selectListItems = filteredFarmManureTypes.Select(f => new SelectListItem
+                            {
+                                Value = f.ManureTypeID.ToString(),
+                                Text = f.ManureTypeName
+                            }).OrderBy(x => x.Text).ToList();
+                            //if (farmManureType.ManureTypeID == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials ||
+                            //    farmManureType.ManureTypeID == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                            //{
+                            //    var SelectListItem = farmManureTypeList.Select(f => new SelectListItem
+                            //    {
+                            //        Value = f.ManureTypeID.ToString(),
+                            //        Text = f.ManureTypeName.ToString()
+                            //    }).ToList();
+                            ViewBag.FarmManureTypeList = selectListItems;
+                        }
+                        //}
+                        //}
                     }
+
+
                 }
                 else
                 {
@@ -1862,7 +1883,7 @@ namespace NMP.Portal.Controllers
                         orgManure.MgO = model.ManureType.MgO;
                     }
                 }
-
+                model.IsAnyNeedToStoreNutrientValueForFuture = true;
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
                 if (model.IsCheckAnswer && model.IsDefaultNutrientOptionChange && (!model.IsApplicationMethodChange) && (!model.IsFieldGroupChange)
                 && (!model.IsManureTypeChange) && (!model.IsIncorporationMethodChange))
@@ -2143,10 +2164,11 @@ namespace NMP.Portal.Controllers
                         orgManure.MgO = model.MgO;
                     }
                 }
+                model.IsAnyNeedToStoreNutrientValueForFuture = true;
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
 
 
-                return RedirectToAction("NutrientValuesStoreForFuture");
+                return RedirectToAction("ApplicationRateMethod");
             }
             catch (Exception ex)
             {
