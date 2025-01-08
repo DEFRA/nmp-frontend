@@ -925,7 +925,16 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Available Phosphate.
+        ///   Looks up a localized string similar to Available Nitrogen (N).
+        /// </summary>
+        public static string lblAvailableNitrogen {
+            get {
+                return ResourceManager.GetString("lblAvailableNitrogen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Available Phosphate (P205).
         /// </summary>
         public static string lblAvailablePhosphate {
             get {
@@ -934,7 +943,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Available Potash.
+        ///   Looks up a localized string similar to Available Potash (K2O).
         /// </summary>
         public static string lblAvailablePotash {
             get {
@@ -6138,6 +6147,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total Nitrogen (N).
+        /// </summary>
+        public static string lblTotalNitrogenWithNutrient {
+            get {
+                return ResourceManager.GetString("lblTotalNitrogenWithNutrient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total phosphate (P2O5).
         /// </summary>
         public static string lblTotalPhosphate {
@@ -6147,7 +6165,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total Phosphate.
+        ///   Looks up a localized string similar to Total Phosphate (P2O5).
         /// </summary>
         public static string lblTotalPhosphateOnly {
             get {
@@ -6170,6 +6188,15 @@ namespace NMP.Portal.Resources {
         public static string lblTotalPotashK2O {
             get {
                 return ResourceManager.GetString("lblTotalPotashK2O", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total Potash (K2O).
+        /// </summary>
+        public static string lblTotalPotashWithNutrient {
+            get {
+                return ResourceManager.GetString("lblTotalPotashWithNutrient", resourceCulture);
             }
         }
         
