@@ -2900,10 +2900,10 @@ cubic metres per hectare  not set</value>
     <value>Application date {0}</value>
   </data>
   <data name="lblAvailablePhosphate" xml:space="preserve">
-    <value>Available Phosphate</value>
+    <value>Available Phosphate (P205)</value>
   </data>
   <data name="lblAvailablePotash" xml:space="preserve">
-    <value>Available Potash</value>
+    <value>Available Potash (K2O)</value>
   </data>
   <data name="lblCropInformation1" xml:space="preserve">
     <value>Crop information 1</value>
@@ -3053,7 +3053,7 @@ cubic metres per hectare  not set</value>
     <value>Crop details for {0}</value>
   </data>
   <data name="lblTotalPhosphateOnly" xml:space="preserve">
-    <value>Total Phosphate</value>
+    <value>Total Phosphate (P2O5)</value>
   </data>
   <data name="lblTotalPotash" xml:space="preserve">
     <value>Total Potash</value>
@@ -3066,5 +3066,14 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="lblBackToYourPlan" xml:space="preserve">
     <value>Back to your {0} plan</value>
+  </data>
+  <data name="lblAvailableNitrogen" xml:space="preserve">
+    <value>Available Nitrogen (N)</value>
+  </data>
+  <data name="lblTotalNitrogenWithNutrient" xml:space="preserve">
+    <value>Total Nitrogen (N)</value>
+  </data>
+  <data name="lblTotalPotashWithNutrient" xml:space="preserve">
+    <value>Total Potash (K2O)</value>
   </data>
 </root>
