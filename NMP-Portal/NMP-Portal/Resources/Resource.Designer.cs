@@ -115,7 +115,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 15 October to 31 January.
+        ///   Looks up a localized string similar to 15 {0} to 31 {1}.
         /// </summary>
         public static string lbl15Octto31Jan {
             get {
@@ -124,7 +124,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 15 October to 31 October.
+        ///   Looks up a localized string similar to 15 {0} to 31 {1}.
         /// </summary>
         public static string lbl15Octto31Oct {
             get {
@@ -133,7 +133,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 16 August to {0} February.
+        ///   Looks up a localized string similar to 16 {0} to {1} {2}.
         /// </summary>
         public static string lbl16Septo28Feb {
             get {
@@ -142,7 +142,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 16 September to 31 December.
+        ///   Looks up a localized string similar to 16 {0} to 31 {1}.
         /// </summary>
         public static string lbl16Septo31Dec {
             get {
@@ -151,7 +151,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 16 September to 31 October.
+        ///   Looks up a localized string similar to 16 {0} to 31 {1}.
         /// </summary>
         public static string lbl16Septo31Oct {
             get {
@@ -160,7 +160,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1 August to {0} February.
+        ///   Looks up a localized string similar to 1 {0} to {1} {2}.
         /// </summary>
         public static string lbl1Augto28Feb {
             get {
@@ -169,7 +169,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1 August to 31 December.
+        ///   Looks up a localized string similar to 1 {0} to 31 {1}.
         /// </summary>
         public static string lbl1Augto31Dec {
             get {
@@ -178,7 +178,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1 August to 31 October.
+        ///   Looks up a localized string similar to 1 {0} to 31 {1}.
         /// </summary>
         public static string lbl1Augto31Oct {
             get {
@@ -187,7 +187,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1 November to 15 January.
+        ///   Looks up a localized string similar to 1 {0} to 15 {1}.
         /// </summary>
         public static string lbl1Novto15Jan {
             get {
@@ -196,7 +196,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1 November to 31 December.
+        ///   Looks up a localized string similar to 1 {0} to 31 {1}.
         /// </summary>
         public static string lbl1Novto31Dec {
             get {
@@ -205,7 +205,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1 October to {0} February.
+        ///   Looks up a localized string similar to 1 {0} to {1} {2}.
         /// </summary>
         public static string lbl1Octto28Feb {
             get {
@@ -214,7 +214,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1 October to 31 January.
+        ///   Looks up a localized string similar to 1 {0} to 31 {1}.
         /// </summary>
         public static string lbl1Octto31Jan {
             get {
@@ -223,7 +223,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1 October to 31 October.
+        ///   Looks up a localized string similar to 1 {0} to 31 {1}.
         /// </summary>
         public static string lbl1Octto31Oct {
             get {
@@ -232,7 +232,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1 September to 15 January.
+        ///   Looks up a localized string similar to 1 {0} to 15 {1}.
         /// </summary>
         public static string lbl1SeptemberTo15January {
             get {
@@ -241,7 +241,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1 September to 31 December.
+        ///   Looks up a localized string similar to 1 {0} to 31 {1}.
         /// </summary>
         public static string lbl1Septo31Dec {
             get {
@@ -250,7 +250,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1 September to 31 October.
+        ///   Looks up a localized string similar to 1 {0} to 31 {1}.
         /// </summary>
         public static string lbl1Septo31Oct {
             get {
@@ -259,7 +259,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 31 October to 15 January.
+        ///   Looks up a localized string similar to 31 {0} to 15 {1}.
         /// </summary>
         public static string lbl31OctoberTo15January {
             get {
@@ -808,6 +808,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to April.
+        /// </summary>
+        public static string lblApril {
+            get {
+                return ResourceManager.GetString("lblApril", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to area.
         /// </summary>
         public static string lblArea {
@@ -867,6 +876,15 @@ namespace NMP.Portal.Resources {
         public static string lblAscSign {
             get {
                 return ResourceManager.GetString("lblAscSign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to August.
+        /// </summary>
+        public static string lblAugust {
+            get {
+                return ResourceManager.GetString("lblAugust", resourceCulture);
             }
         }
         
@@ -1717,6 +1735,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to December.
+        /// </summary>
+        public static string lblDecember {
+            get {
+                return ResourceManager.GetString("lblDecember", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delay to incorporation.
         /// </summary>
         public static string lblDelayToIncorporation {
@@ -2424,6 +2451,15 @@ namespace NMP.Portal.Resources {
         public static string lblFarmSummary {
             get {
                 return ResourceManager.GetString("lblFarmSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to February.
+        /// </summary>
+        public static string lblFebruary {
+            get {
+                return ResourceManager.GetString("lblFebruary", resourceCulture);
             }
         }
         
@@ -3266,6 +3302,33 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to January.
+        /// </summary>
+        public static string lblJanuary {
+            get {
+                return ResourceManager.GetString("lblJanuary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to July.
+        /// </summary>
+        public static string lblJuly {
+            get {
+                return ResourceManager.GetString("lblJuly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to June.
+        /// </summary>
+        public static string lblJune {
+            get {
+                return ResourceManager.GetString("lblJune", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to K2O.
         /// </summary>
         public static string lblK2O {
@@ -3744,6 +3807,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to March.
+        /// </summary>
+        public static string lblMarch {
+            get {
+                return ResourceManager.GetString("lblMarch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to May.
+        /// </summary>
+        public static string lblMay {
+            get {
+                return ResourceManager.GetString("lblMay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to success.
         /// </summary>
         public static string lblMessage {
@@ -4014,6 +4095,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to November.
+        /// </summary>
+        public static string lblNovember {
+            get {
+                return ResourceManager.GetString("lblNovember", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to NULL.
         /// </summary>
         public static string lblNull {
@@ -4154,6 +4244,15 @@ namespace NMP.Portal.Resources {
         public static string lblNVZFieldForFieldCheckAnswere {
             get {
                 return ResourceManager.GetString("lblNVZFieldForFieldCheckAnswere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to October.
+        /// </summary>
+        public static string lblOctober {
+            get {
+                return ResourceManager.GetString("lblOctober", resourceCulture);
             }
         }
         
@@ -5117,6 +5216,15 @@ namespace NMP.Portal.Resources {
         public static string lblSelectTheFarmAddress {
             get {
                 return ResourceManager.GetString("lblSelectTheFarmAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to September.
+        /// </summary>
+        public static string lblSeptember {
+            get {
+                return ResourceManager.GetString("lblSeptember", resourceCulture);
             }
         }
         
@@ -6201,7 +6309,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total potassium (K20).
+        ///   Looks up a localized string similar to Total potassium (K2O).
         /// </summary>
         public static string lblTotalPotassium {
             get {
