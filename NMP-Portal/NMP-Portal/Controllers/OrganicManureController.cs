@@ -3834,7 +3834,11 @@ namespace NMP.Portal.Controllers
                                                 organic.AvailableSO3 = mannerCalculateNutrientResponse.CropAvailableSO3;
                                                 organic.AvailableP2O5 = mannerCalculateNutrientResponse.CropAvailableP2O5;
                                                 organic.AvailableK2O = mannerCalculateNutrientResponse.CropAvailableK2O;
-
+                                                organic.TotalN = mannerCalculateNutrientResponse.TotalN;
+                                                organic.TotalP2O5 = mannerCalculateNutrientResponse.TotalP2O5;
+                                                organic.TotalSO3 = mannerCalculateNutrientResponse.TotalSO3;
+                                                organic.TotalK2O = mannerCalculateNutrientResponse.TotalK2O;
+                                                organic.TotalMgO = mannerCalculateNutrientResponse.TotalMgO;
                                             }
                                             else
                                             {

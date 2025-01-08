@@ -29,6 +29,11 @@
         public decimal AvailableP2O5 { get; set; }
         public decimal AvailableK2O { get; set; }
         public decimal? AvailableSO3 { get; set; }
+        public decimal? TotalP2O5 { get; set; }
+        public decimal? TotalK2O { get; set; }
+        public decimal? TotalSO3 { get; set; }
+        public decimal? TotalN { get; set; }
+        public decimal? TotalMgO { get; set; }
         public int WindspeedID { get; set; }
         public int RainfallWithinSixHoursID { get; set; }
         public int MoistureID { get; set; }
