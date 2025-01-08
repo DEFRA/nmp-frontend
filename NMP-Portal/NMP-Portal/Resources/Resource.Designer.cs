@@ -4392,7 +4392,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This is a new service. Help us improve it and if you have any issues or concerns you can contact us on (Phone number entered here) or email us on.
+        ///   Looks up a localized string similar to Your feedback will help us to improve..
         /// </summary>
         public static string lblPhaseBannerText {
             get {

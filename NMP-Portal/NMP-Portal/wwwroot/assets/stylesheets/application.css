@@ -267,8 +267,28 @@ a:focus, .govuk-link:focus {
 .margin-bottom-sixty {
     margin-bottom: 60px !important;
 }
-@media print {
-    .pagebreak {
+
+
+
+.govuk-phase-banner
+{
+    width:100%;
+}
+
+.govuk-phase-banner__content {
+    width: 100%;
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between !important;
+}
+
+.govuk-phase-banner__content__align {
+    display: inline-flex !important;
+    align-items: center;
+}
+
+    @media print {
+        .pagebreak {
         page-break-after: always;
         clear: both;
     }
@@ -277,6 +297,7 @@ a:focus, .govuk-link:focus {
         display: none;
     }
 }
+
 #printbreak {
     height: 10px;
     background-color: #505a5f;
