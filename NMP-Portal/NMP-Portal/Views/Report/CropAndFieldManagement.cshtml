@@ -6,7 +6,7 @@
 
 @section BeforeContent {
     <div class="noprint">
-        <govuk-back-link  asp-action="ExportFields" asp-controller="Report">@string.Format(Resource.lblBackToYourPlan, Model.Year)</govuk-back-link>
+        <govuk-back-link asp-action="ExportFields" asp-controller="Report">@string.Format(Resource.lblBackToYourPlan, Model.Year)</govuk-back-link>
     </div>
 
 }
@@ -209,18 +209,18 @@
                                                         </td>
                                                         <td class="govuk-table__cell">@(mp.Recommendation.SIndex == null ? Resource.lblHyphen : mp.Recommendation.SIndex)</td>
                                                         <td class="govuk-table__cell">@(mp.Recommendation.CropSO3 == null ? Resource.lblHyphen : mp.Recommendation.CropSO3 == 0 ? mp.Recommendation.CropSO3 : string.Concat(mp.Recommendation.CropSO3, Resource.lblkg))</td>
-                                                        <td class="govuk-table__cell">@(mp.Recommendation.ManureSO3 == null ? 0 : mp.Recommendation.ManureSO3 == 0 ? mp.Recommendation.ManureSO3 : string.Concat(mp.Recommendation.ManureSO3 , Resource.lblkg))</td>
+                                                        <td class="govuk-table__cell">@(mp.Recommendation.ManureSO3 == null ? 0 : mp.Recommendation.ManureSO3 == 0 ? mp.Recommendation.ManureSO3 : string.Concat(mp.Recommendation.ManureSO3, Resource.lblkg))</td>
                                                         <td class="govuk-table__cell">@(mp.Recommendation.FertilizerSO3 == null ? Resource.lblHyphen : mp.Recommendation.FertilizerSO3 < 0 ? 0 : mp.Recommendation.FertilizerSO3 == 0 ? mp.Recommendation.FertilizerSO3 : string.Concat(mp.Recommendation.FertilizerSO3, Resource.lblkg))</td>
                                                     </tr>
-                                                    <tr class="govuk-table__row">
-                                                        <td class="govuk-table__cell">
-                                                            @Resource.lblSodiumNa2O
-                                                        </td>
-                                                        <td class="govuk-table__cell">@(mp.Recommendation.NaIndex == null ? Resource.lblHyphen : mp.Recommendation.NaIndex)</td>
-                                                        <td class="govuk-table__cell">@(mp.Recommendation.CropNa2O == null ? Resource.lblHyphen : mp.Recommendation.CropNa2O == 0 ? mp.Recommendation.CropNa2O : string.Concat(mp.Recommendation.CropNa2O, Resource.lblkg))</td>
-                                                        <td class="govuk-table__cell">@(mp.Recommendation.ManureNa2O == null ? 0 : mp.Recommendation.ManureNa2O == 0 ? mp.Recommendation.ManureNa2O : string.Concat(mp.Recommendation.ManureNa2O, Resource.lblkg))</td>
-                                                        <td class="govuk-table__cell">@(mp.Recommendation.FertilizerNa2O == null ? Resource.lblHyphen : mp.Recommendation.FertilizerNa2O < 0 ? 0 : mp.Recommendation.FertilizerNa2O == 0 ? mp.Recommendation.FertilizerNa2O : string.Concat(mp.Recommendation.FertilizerNa2O, Resource.lblkg))</td>
-                                                    </tr>
+                                                    @*    <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">
+                    @Resource.lblSodiumNa2O
+                    </td>
+                    <td class="govuk-table__cell">@(mp.Recommendation.NaIndex == null ? Resource.lblHyphen : mp.Recommendation.NaIndex)</td>
+                    <td class="govuk-table__cell">@(mp.Recommendation.CropNa2O == null ? Resource.lblHyphen : mp.Recommendation.CropNa2O == 0 ? mp.Recommendation.CropNa2O : string.Concat(mp.Recommendation.CropNa2O, Resource.lblkg))</td>
+                    <td class="govuk-table__cell">@(mp.Recommendation.ManureNa2O == null ? 0 : mp.Recommendation.ManureNa2O == 0 ? mp.Recommendation.ManureNa2O : string.Concat(mp.Recommendation.ManureNa2O, Resource.lblkg))</td>
+                    <td class="govuk-table__cell">@(mp.Recommendation.FertilizerNa2O == null ? Resource.lblHyphen : mp.Recommendation.FertilizerNa2O < 0 ? 0 : mp.Recommendation.FertilizerNa2O == 0 ? mp.Recommendation.FertilizerNa2O : string.Concat(mp.Recommendation.FertilizerNa2O, Resource.lblkg))</td>
+                    </tr> *@
                                                     <tr class="govuk-table__row">
                                                         <td class="govuk-table__cell">
                                                             @Resource.lblLime
@@ -388,7 +388,7 @@
 
                                                 <div class="govuk-grid-column-one-half half-table-right">
                                                     <table class="govuk-table govuk-table-small">
-                                                        <tbody class="govuk-table__body">                                                           
+                                                        <tbody class="govuk-table__body">
                                                             <tr class="govuk-table__row">
                                                                 <th scope="col" class="govuk-table__header">@Resource.lblAvailableNitrogen</th>
                                                                 <td class="govuk-table__cell">@(orgManure.AvailableN != null ? string.Format(Resource.lblValueKg, orgManure.AvailableN) : Resource.lblNotEntered)</td>
@@ -565,21 +565,24 @@
                                                                     {
                                                                         @Resource.lblMagnesiumMg
                                                                     }
-                                                                    else if (nutrient.nutrientId == (int)NMP.Portal.Enums.Nutrients.Sodium)
-                                                                    {
-                                                                        @Resource.lblSodiumNa2O
-                                                                    }
+                                                                    // else if (nutrient.nutrientId == (int)NMP.Portal.Enums.Nutrients.Sodium)
+                                                                    // {
+                                                                    //     @Resource.lblSodiumNa2O
+                                                                    // }
                                                                     else if (nutrient.nutrientId == (int)NMP.Portal.Enums.Nutrients.Potash)
                                                                     {
                                                                         @Resource.lblPotashK2O
                                                                     }
                                                                 </h3>
 
-                                                                @foreach (var comment in commentsForNutrient)
+                                                                if (nutrient.nutrientId != (int)NMP.Portal.Enums.Nutrients.Sodium)
                                                                 {
-                                                                    <p class="govuk-body">
-                                                                        @comment.Comment
-                                                                    </p>
+                                                                    @foreach (var comment in commentsForNutrient)
+                                                                    {
+                                                                        <p class="govuk-body">
+                                                                            @comment.Comment
+                                                                        </p>
+                                                                    }
                                                                 }
                                                             }
                                                         }
