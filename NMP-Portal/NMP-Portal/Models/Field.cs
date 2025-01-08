@@ -38,6 +38,8 @@ namespace NMP.Portal.Models
         public bool? IsWithinNVZ { get; set; }
         public bool? IsAbove300SeaLevel { get; set; }
         public bool IsActive { get; set; }
+        public int? TopSoilID { get; set; }
+        public int? SubSoilID { get; set; }
         public DateTime? CreatedOn { get; set; }
         public int? CreatedByID { get; set; }
         public DateTime? ModifiedOn { get; set; }
