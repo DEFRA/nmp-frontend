@@ -196,18 +196,18 @@ namespace NMP.Portal.Helpers
                     string endMonthStr = match.Groups[4].Value;
 
                     Dictionary<int, string> dtfi = new Dictionary<int, string>();
-                    dtfi.Add(0, "Jan");
-                    dtfi.Add(1, "Feb");
-                    dtfi.Add(2, "Mar");
-                    dtfi.Add(3, "Apr");
+                    dtfi.Add(0, "January");
+                    dtfi.Add(1, "February");
+                    dtfi.Add(2, "March");
+                    dtfi.Add(3, "April");
                     dtfi.Add(4, "May");
-                    dtfi.Add(5, "Jun");
-                    dtfi.Add(6, "Jul");
-                    dtfi.Add(7, "Aug");
-                    dtfi.Add(8, "Sep");
-                    dtfi.Add(9, "Oct");
-                    dtfi.Add(10, "Nov");
-                    dtfi.Add(11, "Dec");
+                    dtfi.Add(5, "June");
+                    dtfi.Add(6, "July");
+                    dtfi.Add(7, "August");
+                    dtfi.Add(8, "September");
+                    dtfi.Add(9, "October");
+                    dtfi.Add(10, "November");
+                    dtfi.Add(11, "December");
                     int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1; // Array.IndexOf(dtfi.Values, startMonthStr) + 1;
                     int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;//Array.IndexOf(dtfi.AbbreviatedMonthNames, endMonthStr) + 1;
 
@@ -272,8 +272,8 @@ namespace NMP.Portal.Helpers
                     string endMonthStr = match.Groups[4].Value;
 
                     DateTimeFormatInfo dtfi = DateTimeFormatInfo.CurrentInfo;
-                    int startMonth = Array.IndexOf(dtfi.AbbreviatedMonthNames, startMonthStr) + 1;
-                    int endMonth = Array.IndexOf(dtfi.AbbreviatedMonthNames, endMonthStr) + 1;
+                    int startMonth = Array.IndexOf(dtfi.MonthNames, startMonthStr) + 1;
+                    int endMonth = Array.IndexOf(dtfi.MonthNames, endMonthStr) + 1;
                     string endMonthFullName = dtfi.MonthNames[endMonth - 1];
 
                     DateTime? endDateFebruary = null;
@@ -443,8 +443,8 @@ namespace NMP.Portal.Helpers
                     string endMonthStr = match.Groups[4].Value;
 
                     DateTimeFormatInfo dtfi = DateTimeFormatInfo.CurrentInfo;
-                    int startMonth = Array.IndexOf(dtfi.AbbreviatedMonthNames, startMonthStr) + 1;
-                    int endMonth = Array.IndexOf(dtfi.AbbreviatedMonthNames, endMonthStr) + 1;
+                    int startMonth = Array.IndexOf(dtfi.MonthNames, startMonthStr) + 1;
+                    int endMonth = Array.IndexOf(dtfi.MonthNames, endMonthStr) + 1;
                     string endMonthFullName = dtfi.MonthNames[endMonth - 1];
 
                     DateTime? endDateFebruary = null;
