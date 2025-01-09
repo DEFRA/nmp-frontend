@@ -638,7 +638,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Start now</value>
   </data>
   <data name="lblSoilPHLevel" xml:space="preserve">
-    <value>Soil pH level</value>
+    <value>Soil pH value</value>
   </data>
   <data name="MsgDateExample" xml:space="preserve">
     <value>For example, 27 3 2023</value>
@@ -1460,19 +1460,19 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Uric acid</value>
   </data>
   <data name="lbl15Octto31Jan" xml:space="preserve">
-    <value>15 October to 31 January</value>
+    <value>15 {0} to 31 {1}</value>
   </data>
   <data name="lbl1Augto31Dec" xml:space="preserve">
-    <value>1 August to 31 December</value>
+    <value>1 {0} to 31 {1}</value>
   </data>
   <data name="lbl1Septo31Dec" xml:space="preserve">
-    <value>1 September to 31 December</value>
+    <value>1 {0} to 31 {1}</value>
   </data>
   <data name="lbl16Septo31Dec" xml:space="preserve">
-    <value>16 September to 31 December</value>
+    <value>16 {0} to 31 {1}</value>
   </data>
   <data name="lbl1Octto31Jan" xml:space="preserve">
-    <value>1 October to 31 January</value>
+    <value>1 {0} to 31 {1}</value>
   </data>
   <data name="lblAreas" xml:space="preserve">
     <value>Area</value>
@@ -1982,10 +1982,10 @@ cubic metres per hectare  not set</value>
     <value>SNS question</value>
   </data>
   <data name="lbl1Novto15Jan" xml:space="preserve">
-    <value>1 November to 15 January</value>
+    <value>1 {0} to 15 {1}</value>
   </data>
   <data name="lbl1Novto31Dec" xml:space="preserve">
-    <value>1 November to 31 December</value>
+    <value>1 {0} to 31 {1}</value>
   </data>
   <data name="lblImportant" xml:space="preserve">
     <value>Important</value>
@@ -2150,28 +2150,28 @@ cubic metres per hectare  not set</value>
     <value>Sample for soil mineral nitrogen</value>
   </data>
   <data name="lbl15Octto31Oct" xml:space="preserve">
-    <value>15 October to 31 October</value>
+    <value>15 {0} to 31 {1}</value>
   </data>
   <data name="lbl16Septo28Feb" xml:space="preserve">
-    <value>16 August to {0} February</value>
+    <value>16 {0} to {1} {2}</value>
   </data>
   <data name="lbl16Septo31Oct" xml:space="preserve">
-    <value>16 September to 31 October</value>
+    <value>16 {0} to 31 {1}</value>
   </data>
   <data name="lbl1Augto28Feb" xml:space="preserve">
-    <value>1 August to {0} February</value>
+    <value>1 {0} to {1} {2}</value>
   </data>
   <data name="lbl1Augto31Oct" xml:space="preserve">
-    <value>1 August to 31 October</value>
+    <value>1 {0} to 31 {1}</value>
   </data>
   <data name="lbl1Octto28Feb" xml:space="preserve">
-    <value>1 October to {0} February</value>
+    <value>1 {0} to {1} {2}</value>
   </data>
   <data name="lbl1Octto31Oct" xml:space="preserve">
-    <value>1 October to 31 October</value>
+    <value>1 {0} to 31 {1}</value>
   </data>
   <data name="lbl1Septo31Oct" xml:space="preserve">
-    <value>1 September to 31 October</value>
+    <value>1 {0} to 31 {1}</value>
   </data>
   <data name="lblTheNVZActionProgrammeAppRateExceedsHighNWithinWarningPeriodOrganic" xml:space="preserve">
     <value>The NVZ Action Programme states that the application rate of high readily available nitrogen (N) manures on {0} between {1} must not exceed {2}kg per hectare at one time and you must not spread more than 150kg of total nitrogen per hectare.</value>
@@ -2411,7 +2411,7 @@ cubic metres per hectare  not set</value>
     <value>How would you like to enter your soil nutrient values? not set</value>
   </data>
   <data name="MsgPhNotSet" xml:space="preserve">
-    <value>Soil pH level not set</value>
+    <value>Soil pH value not set</value>
   </data>
   <data name="MsgPhosphorusIndexNotSet" xml:space="preserve">
     <value>Phosphorus (P) index not set</value>
@@ -2432,7 +2432,7 @@ cubic metres per hectare  not set</value>
     <value>Magnesium (Mg) per litre of soil (optional)</value>
   </data>
   <data name="lblPHLevelOption" xml:space="preserve">
-    <value>pH level (optional)</value>
+    <value>pH value (optional)</value>
   </data>
   <data name="lblPhosphorusIndexOptional" xml:space="preserve">
     <value>Phosphorus (P) index (optional)</value>
@@ -2471,7 +2471,7 @@ cubic metres per hectare  not set</value>
     <value>Change the soil analysis</value>
   </data>
   <data name="lblPhLevel" xml:space="preserve">
-    <value>pH level</value>
+    <value>pH value</value>
   </data>
   <data name="lblPhosphorusAnalysisTypeForSoilDetail" xml:space="preserve">
     <value>Phosphorus (P) analysis type</value>
@@ -2531,10 +2531,10 @@ cubic metres per hectare  not set</value>
     <value>Your closed period for spreading inorganic fertilisers is:</value>
   </data>
   <data name="lbl1SeptemberTo15January" xml:space="preserve">
-    <value>1 September to 15 January</value>
+    <value>1 {0} to 15 {1}</value>
   </data>
   <data name="lbl31OctoberTo15January" xml:space="preserve">
-    <value>31 October to 15 January</value>
+    <value>31 {0} to 15 {1}</value>
   </data>
   <data name="MsgDateShouldBeExceedFrom" xml:space="preserve">
     <value>Date should be exceed from {0}</value>
@@ -3075,6 +3075,42 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="lblTotalPotashWithNutrient" xml:space="preserve">
     <value>Total Potash (K2O)</value>
+  </data>
+  <data name="lblApril" xml:space="preserve">
+    <value>April</value>
+  </data>
+  <data name="lblAugust" xml:space="preserve">
+    <value>August</value>
+  </data>
+  <data name="lblDecember" xml:space="preserve">
+    <value>December</value>
+  </data>
+  <data name="lblFebruary" xml:space="preserve">
+    <value>February</value>
+  </data>
+  <data name="lblJanuary" xml:space="preserve">
+    <value>January</value>
+  </data>
+  <data name="lblJuly" xml:space="preserve">
+    <value>July</value>
+  </data>
+  <data name="lblJune" xml:space="preserve">
+    <value>June</value>
+  </data>
+  <data name="lblMarch" xml:space="preserve">
+    <value>March</value>
+  </data>
+  <data name="lblMay" xml:space="preserve">
+    <value>May</value>
+  </data>
+  <data name="lblNovember" xml:space="preserve">
+    <value>November</value>
+  </data>
+  <data name="lblOctober" xml:space="preserve">
+    <value>October</value>
+  </data>
+  <data name="lblSeptember" xml:space="preserve">
+    <value>September</value>
   </data>
   <data name="lblUseValuesFromRB209" xml:space="preserve">
     <value>Use values from RB209</value>

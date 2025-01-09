@@ -561,14 +561,14 @@ namespace NMP.Portal.Controllers
                         {
                             if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
                             {
-                                ViewBag.closingPeriod = Resource.lbl31OctoberTo15January;
+                                ViewBag.closingPeriod = string.Format(Resource.lbl31OctoberTo15January,Resource.lblOctober,Resource.lblJanuary);
 
                             }
                             else if (cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Asparagus && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.BrusselSprouts && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Cabbage &&
                                 cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Cauliflower && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Calabrese &&
                                 cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.BulbOnions && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.SaladOnions)
                             {
-                                ViewBag.closingPeriod = Resource.lbl1SeptemberTo15January;
+                                ViewBag.closingPeriod = string.Format(Resource.lbl1SeptemberTo15January,Resource.lblSeptember,Resource.lblJanuary);
 
                             }
                         }
@@ -671,14 +671,14 @@ namespace NMP.Portal.Controllers
                             {
                                 if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
                                 {
-                                    ViewBag.closingPeriod = Resource.lbl31OctoberTo15January;
+                                    ViewBag.closingPeriod = string.Format(Resource.lbl31OctoberTo15January, Resource.lblOctober, Resource.lblJanuary);
 
                                 }
                                 else if (cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Asparagus && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.BrusselSprouts && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Cabbage &&
                                     cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Cauliflower && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Calabrese &&
                                     cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.BulbOnions && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.SaladOnions)
                                 {
-                                    ViewBag.closingPeriod = Resource.lbl1SeptemberTo15January;
+                                    ViewBag.closingPeriod = string.Format(Resource.lbl1SeptemberTo15January, Resource.lblSeptember, Resource.lblJanuary); 
 
                                 }
                             }
@@ -733,14 +733,14 @@ namespace NMP.Portal.Controllers
                             {
                                 if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
                                 {
-                                    ViewBag.closingPeriod = Resource.lbl31OctoberTo15January;
+                                    ViewBag.closingPeriod = string.Format(Resource.lbl31OctoberTo15January, Resource.lblOctober, Resource.lblJanuary);
 
                                 }
                                 else if (cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Asparagus && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.BrusselSprouts && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Cabbage &&
                                     cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Cauliflower && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Calabrese &&
                                     cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.BulbOnions && cropTypeResponse.CropTypeId != (int)NMP.Portal.Enums.CropTypes.SaladOnions)
                                 {
-                                    ViewBag.closingPeriod = Resource.lbl1SeptemberTo15January;
+                                    ViewBag.closingPeriod = string.Format(Resource.lbl1SeptemberTo15January, Resource.lblSeptember, Resource.lblJanuary);
 
                                 }
                             }
