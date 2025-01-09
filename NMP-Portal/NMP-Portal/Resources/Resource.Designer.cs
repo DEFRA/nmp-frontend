@@ -6543,6 +6543,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use values from RB209.
+        /// </summary>
+        public static string lblUseValuesFromRB209 {
+            get {
+                return ResourceManager.GetString("lblUseValuesFromRB209", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Value.
         /// </summary>
         public static string lblValue {
@@ -7313,6 +7322,15 @@ namespace NMP.Portal.Resources {
         public static string lblYesIHaveDifferentDatesForEachOfTheseFields {
             get {
                 return ResourceManager.GetString("lblYesIHaveDifferentDatesForEachOfTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes, use these values.
+        /// </summary>
+        public static string lblYesUseTheseValues {
+            get {
+                return ResourceManager.GetString("lblYesUseTheseValues", resourceCulture);
             }
         }
         

@@ -3112,4 +3112,10 @@ cubic metres per hectare  not set</value>
   <data name="lblSeptember" xml:space="preserve">
     <value>September</value>
   </data>
+  <data name="lblUseValuesFromRB209" xml:space="preserve">
+    <value>Use values from RB209</value>
+  </data>
+  <data name="lblYesUseTheseValues" xml:space="preserve">
+    <value>Yes, use these values</value>
+  </data>
 </root>

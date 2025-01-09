@@ -22,7 +22,7 @@ namespace NMP.Portal.ViewModels
 
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblEnterTheDateInCorrectFormat))]
         public DateTime? ApplicationDate { get; set; }
-        public bool? IsDefaultNutrientValues { get; set; }
+        public string? DefaultNutrientValue { get; set; }
         public bool isEnglishRules { get; set; }
 
         public List<OrganicManure>? OrganicManures { get; set; }
