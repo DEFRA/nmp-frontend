@@ -6201,7 +6201,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total potassium (K20).
+        ///   Looks up a localized string similar to Total potassium (K2O).
         /// </summary>
         public static string lblTotalPotassium {
             get {
@@ -6431,6 +6431,15 @@ namespace NMP.Portal.Resources {
         public static string lblUseTypicalApplicationRate {
             get {
                 return ResourceManager.GetString("lblUseTypicalApplicationRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use values from RB209.
+        /// </summary>
+        public static string lblUseValuesFromRB209 {
+            get {
+                return ResourceManager.GetString("lblUseValuesFromRB209", resourceCulture);
             }
         }
         
@@ -7205,6 +7214,15 @@ namespace NMP.Portal.Resources {
         public static string lblYesIHaveDifferentDatesForEachOfTheseFields {
             get {
                 return ResourceManager.GetString("lblYesIHaveDifferentDatesForEachOfTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes, use these values.
+        /// </summary>
+        public static string lblYesUseTheseValues {
+            get {
+                return ResourceManager.GetString("lblYesUseTheseValues", resourceCulture);
             }
         }
         

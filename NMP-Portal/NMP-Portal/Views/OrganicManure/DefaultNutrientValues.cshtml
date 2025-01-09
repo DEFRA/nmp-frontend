@@ -224,12 +224,22 @@
                     </tr>
                 </tbody>
             </table>
-            <govuk-radios asp-for="@Model.IsDefaultNutrientValues">
+            <govuk-radios asp-for="@Model.DefaultNutrientValue">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                     </govuk-radios-fieldset-legend>
-                    <govuk-radios-item value="@DefaultNutrientValues">@Resource.lblYes</govuk-radios-item>
-                    <govuk-radios-item value="@NotDefaultNutrientValues">@Resource.lblIwantToEnterARecentOrganicMaterialAnalysis</govuk-radios-item>
+                    
+                    @if (ViewBag.RB209ApiOption != null && ViewBag.RB209ApiOption==Resource.lblTrue)
+                    {
+                        <govuk-radios-item value="@Resource.lblYesUseTheseValues">@Resource.lblYesUseTheseValues</govuk-radios-item>
+                        <govuk-radios-item value="@Resource.lblUseValuesFromRB209">@Resource.lblUseValuesFromRB209</govuk-radios-item>
+                    }
+                    else
+                    {
+                        <govuk-radios-item value="@Resource.lblYesUseTheseValues">@Resource.lblYes</govuk-radios-item>
+                        
+                    }
+                    <govuk-radios-item value="@Resource.lblIwantToEnterARecentOrganicMaterialAnalysis">@Resource.lblIwantToEnterARecentOrganicMaterialAnalysis</govuk-radios-item>
                 </govuk-radios-fieldset>
             </govuk-radios>
             <govuk-button type="submit" class="margin-bottom-forty">

@@ -3076,4 +3076,10 @@ cubic metres per hectare  not set</value>
   <data name="lblTotalPotashWithNutrient" xml:space="preserve">
     <value>Total Potash (K2O)</value>
   </data>
+  <data name="lblUseValuesFromRB209" xml:space="preserve">
+    <value>Use values from RB209</value>
+  </data>
+  <data name="lblYesUseTheseValues" xml:space="preserve">
+    <value>Yes, use these values</value>
+  </data>
 </root>
