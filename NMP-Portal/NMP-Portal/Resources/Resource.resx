@@ -638,7 +638,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Start now</value>
   </data>
   <data name="lblSoilPHLevel" xml:space="preserve">
-    <value>Soil pH level</value>
+    <value>Soil pH value</value>
   </data>
   <data name="MsgDateExample" xml:space="preserve">
     <value>For example, 27 3 2023</value>
@@ -2411,7 +2411,7 @@ cubic metres per hectare  not set</value>
     <value>How would you like to enter your soil nutrient values? not set</value>
   </data>
   <data name="MsgPhNotSet" xml:space="preserve">
-    <value>Soil pH level not set</value>
+    <value>Soil pH value not set</value>
   </data>
   <data name="MsgPhosphorusIndexNotSet" xml:space="preserve">
     <value>Phosphorus (P) index not set</value>
@@ -2432,7 +2432,7 @@ cubic metres per hectare  not set</value>
     <value>Magnesium (Mg) per litre of soil (optional)</value>
   </data>
   <data name="lblPHLevelOption" xml:space="preserve">
-    <value>pH level (optional)</value>
+    <value>pH value (optional)</value>
   </data>
   <data name="lblPhosphorusIndexOptional" xml:space="preserve">
     <value>Phosphorus (P) index (optional)</value>
@@ -2471,7 +2471,7 @@ cubic metres per hectare  not set</value>
     <value>Change the soil analysis</value>
   </data>
   <data name="lblPhLevel" xml:space="preserve">
-    <value>pH level</value>
+    <value>pH value</value>
   </data>
   <data name="lblPhosphorusAnalysisTypeForSoilDetail" xml:space="preserve">
     <value>Phosphorus (P) analysis type</value>

@@ -4509,7 +4509,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to pH level.
+        ///   Looks up a localized string similar to pH value.
         /// </summary>
         public static string lblPhLevel {
             get {
@@ -4518,7 +4518,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to pH level (optional).
+        ///   Looks up a localized string similar to pH value (optional).
         /// </summary>
         public static string lblPHLevelOption {
             get {
@@ -5562,7 +5562,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Soil pH level.
+        ///   Looks up a localized string similar to Soil pH value.
         /// </summary>
         public static string lblSoilPHLevel {
             get {
@@ -8561,7 +8561,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Soil pH level not set.
+        ///   Looks up a localized string similar to Soil pH value not set.
         /// </summary>
         public static string MsgPhNotSet {
             get {
