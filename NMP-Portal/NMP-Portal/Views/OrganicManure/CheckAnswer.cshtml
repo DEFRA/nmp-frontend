@@ -3,7 +3,7 @@
 
 @{
     ViewData["Title"] = Resource.lblCheckAnswer;
-    var isDefaultNutrientValues = "";
+    var DefaultNutrientValue = "";
     var howWouldYouEnterApplicationRate = "";
 
     bool needToShowIncorporationsBtn = true;
@@ -19,15 +19,15 @@
         Model.IncorporationMethod.Value == (int)NMP.Portal.Enums.IncorporationMethod.DeepInjection) ? false : true;
     }
 
-    switch (Model.IsDefaultNutrientValues)
-    {
-        case true:
-            isDefaultNutrientValues = Resource.lblYes;
-            break;
-        case false:
-            isDefaultNutrientValues = Resource.lblIwantToEnterARecentOrganicMaterialAnalysis;
-            break;
-    }
+    // switch (Model.DefaultNutrientValue)
+    // {
+    //     case true:
+    //         DefaultNutrientValue = Resource.lblYes;
+    //         break;
+    //     case false:
+    //         DefaultNutrientValue = Resource.lblIwantToEnterARecentOrganicMaterialAnalysis;
+    //         break;
+    // }
     switch (Model.ApplicationRateMethod)
     {
         case 0:
@@ -119,7 +119,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDefaultNutrientValues"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefaultNutrientValue"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupName"></govuk-input>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationDate"></govuk-date-input>
@@ -373,12 +373,12 @@
                 }
                 @if (!(Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials))
                 {
-                    <govuk-summary-list-row class=@((!Model.IsDefaultNutrientValues.HasValue)?"govuk-error-message":"")>
+                    <govuk-summary-list-row class=@(string.IsNullOrWhiteSpace(Model.DefaultNutrientValue)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
                             @string.Format(Resource.lblDoYouWantToUseTheseNutrientValuesFromRB209, Model.ManureTypeName)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @((Model.IsDefaultNutrientValues.HasValue) ? isDefaultNutrientValues : Resource.lblNotSet)
+                            @((!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue)) ? Model.DefaultNutrientValue : Resource.lblNotSet)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="DefaultNutrientValues" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
@@ -389,14 +389,14 @@
                 {
                     @if (Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
                     {
-                        @if(Model.IsDefaultNutrientValues==true)
+                        @if (Model.DefaultNutrientValue == Resource.lblYesUseTheseValues || Model.DefaultNutrientValue == Resource.lblUseValuesFromRB209)
                         {
-                            <govuk-summary-list-row class=@((!Model.IsDefaultNutrientValues.HasValue)?"govuk-error-message":"")>
+                            <govuk-summary-list-row class=@(string.IsNullOrWhiteSpace(Model.DefaultNutrientValue)?"govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
                                     @string.Format(Resource.lblDoYouWantToUseExistingNutrientValuesFor, Model.OtherMaterialName)
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @((Model.IsDefaultNutrientValues.HasValue) ? isDefaultNutrientValues : Resource.lblNotSet)
+                                    @(!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue) ? Model.DefaultNutrientValue : Resource.lblNotSet)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
                                     <govuk-summary-list-row-action asp-action="DefaultNutrientValues" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
