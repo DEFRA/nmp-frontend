@@ -777,7 +777,7 @@ namespace NMP.Portal.Controllers
                         .Where(farmManureType => farmManureType.ManureTypeID == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials ||
                         farmManureType.ManureTypeID == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
                         .ToList();
-                        if (filteredFarmManureTypes != null)
+                        if (filteredFarmManureTypes != null&&filteredFarmManureTypes.Count>0)
                         {
                             var selectListItems = filteredFarmManureTypes.Select(f => new SelectListItem
                             {
