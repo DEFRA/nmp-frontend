@@ -5877,6 +5877,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The date.
+        /// </summary>
+        public static string lblTheDate {
+            get {
+                return ResourceManager.GetString("lblTheDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The effectiveness of your organic material application, and the amount of inorganic fertiliser you need, will vary depending on these conditions..
         /// </summary>
         public static string lblTheEffectivenessOfYourOrganicMaterialApp {
