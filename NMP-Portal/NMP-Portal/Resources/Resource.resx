@@ -2453,7 +2453,7 @@ cubic metres per hectare  not set</value>
     <value>If your soil analysis does not include results for a particular nutrient, leave it blank.</value>
   </data>
   <data name="MsgEnterAtLeastOneValue" xml:space="preserve">
-    <value>Enter at least one nutrient value.</value>
+    <value>Enter at least one value.</value>
   </data>
   <data name="lblThisWillBeTheFirstCropInTheseFields" xml:space="preserve">
     <value>This will be the first crop in these fields:</value>
