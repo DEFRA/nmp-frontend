@@ -352,17 +352,25 @@
 
                 @if (Model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Other)
                 {
-                    <govuk-summary-list-row class=@((!Model.CropInfo1.HasValue)?"govuk-error-message":"")>
-                        <govuk-summary-list-row-key>
-                            @string.Format(Resource.lblCropInfo1ForCheckAnswer, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType)
-                        </govuk-summary-list-row-key>
-                        <govuk-summary-list-row-value>
-                            @(Model.CropInfo1.HasValue ? Model.CropInfo1Name : Resource.lblNotSet)
-                        </govuk-summary-list-row-value>
-                        <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="CropInfoOne" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
-                        </govuk-summary-list-row-actions>
-                    </govuk-summary-list-row>
+                    @if (Model.CropInfo1 != null && Model.CropInfo1 != 0)
+                    {
+                        <govuk-summary-list-row class=@((!Model.CropInfo1.HasValue)?"govuk-error-message":"")>
+                            <govuk-summary-list-row-key>
+                                @* @string.Format(Resource.lblCropInfo1ForCheckAnswer, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType) *@
+                                @if (ViewBag.CropInfoOneQuestion != null)
+                                {
+                                    @ViewBag.CropInfoOneQuestion
+                                }
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @(Model.CropInfo1.HasValue ? Model.CropInfo1Name : Resource.lblNotSet)
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="CropInfoOne" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+                    }
+                    
                 }
                 @if (Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Cereals)
                 {
