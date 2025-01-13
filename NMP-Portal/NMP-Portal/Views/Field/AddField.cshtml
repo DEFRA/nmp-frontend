@@ -120,12 +120,12 @@
                 <govuk-input asp-for="@Model.Name"></govuk-input>
             </div>
 
-            <div class="govuk-form-group margin-bottom-forty">
+           @*  <div class="govuk-form-group margin-bottom-forty">
                 <govuk-input class="input-width-15" asp-for="@Model.NationalGridReference"></govuk-input>
             </div>
             <div class="govuk-form-group margin-bottom-forty">
                 <govuk-input class="input-width-15" asp-for="@Model.OtherReference"></govuk-input>
-            </div>
+            </div> *@
             @if (Model.isEnglishRules != null && (!Model.isEnglishRules))
             {
                 <div class="govuk-form-group margin-bottom-forty">
