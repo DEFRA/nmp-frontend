@@ -3293,7 +3293,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No, I want to enter a recent organic material analysis.
+        ///   Looks up a localized string similar to No, I want to enter a recent manure analysis.
         /// </summary>
         public static string lblIwantToEnterARecentOrganicMaterialAnalysis {
             get {
@@ -4019,6 +4019,15 @@ namespace NMP.Portal.Resources {
         public static string lblNoFieldsAreAvailable {
             get {
                 return ResourceManager.GetString("lblNoFieldsAreAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No, I want to use the updated values from {0}.
+        /// </summary>
+        public static string lblNoIWantToUseTheUpdatedValuesFromDate {
+            get {
+                return ResourceManager.GetString("lblNoIWantToUseTheUpdatedValuesFromDate", resourceCulture);
             }
         }
         
@@ -6552,7 +6561,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use values from RB209.
+        ///   Looks up a localized string similar to No, update these values.
         /// </summary>
         public static string lblUseValuesFromRB209 {
             get {
@@ -7335,7 +7344,16 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Yes, use these values.
+        ///   Looks up a localized string similar to Yes, use these standard nutrient values.
+        /// </summary>
+        public static string lblYesUseTheseStandardNutrientValues {
+            get {
+                return ResourceManager.GetString("lblYesUseTheseStandardNutrientValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes, use these nutrient values.
         /// </summary>
         public static string lblYesUseTheseValues {
             get {
