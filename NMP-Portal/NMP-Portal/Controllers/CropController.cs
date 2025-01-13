@@ -1309,11 +1309,12 @@ namespace NMP.Portal.Controllers
                 ViewBag.CropInfoOneQuestion = cropInfoOneQuestion;
                 if(cropInfoOneQuestion==null)
                 {
-                    model.CropInfo1Name = cropInfoOneList.FirstOrDefault(x => x.CropInfo1Id == 0).CropInfo1Name;
+                    model.CropInfo1Name = cropInfoOneList.FirstOrDefault(x => x.CropInfo1Name == Resource.lblNone).CropInfo1Name;
+                    model.CropInfo1 = cropInfoOneList.FirstOrDefault(x => x.CropInfo1Name == Resource.lblNone).CropInfo1Id;
 
                     for (int i = 0; i < model.Crops.Count; i++)
                     {
-                        model.Crops[i].CropInfo1 = 0;
+                        model.Crops[i].CropInfo1 = model.CropInfo1;
                     }
 
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
@@ -1528,6 +1529,8 @@ namespace NMP.Portal.Controllers
             }
             model.IsCheckAnswer = true;
             ViewBag.DefaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+            string? cropInfoOneQuestion = await _cropService.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0);
+            ViewBag.CropInfoOneQuestion = cropInfoOneQuestion;
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("CropData", model);
             return View(model);
         }
