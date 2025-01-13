@@ -7985,7 +7985,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter at least one nutrient value..
+        ///   Looks up a localized string similar to Enter at least one value..
         /// </summary>
         public static string MsgEnterAtLeastOneValue {
             get {
