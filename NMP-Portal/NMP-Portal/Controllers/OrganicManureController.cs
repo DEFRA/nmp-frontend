@@ -1803,15 +1803,23 @@ namespace NMP.Portal.Controllers
                             if (farmManureTypeList.Count > 0)
                             {
                                 farmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == model.ManureGroupIdForFilter);
-                                model.ManureType.DryMatter = farmManure.DryMatter;
-                                model.ManureType.TotalN = farmManure.TotalN;
-                                model.ManureType.NH4N = farmManure.NH4N;
-                                model.ManureType.Uric = farmManure.Uric;
-                                model.ManureType.NO3N = farmManure.NO3N;
-                                model.ManureType.P2O5 = farmManure.P2O5;
-                                model.ManureType.K2O = farmManure.K2O;
-                                model.ManureType.SO3 = farmManure.SO3;
-                                model.ManureType.MgO = farmManure.MgO;
+                                if (farmManure != null)
+                                { 
+                                    model.ManureType.DryMatter = farmManure.DryMatter;
+                                    model.ManureType.TotalN = farmManure.TotalN;
+                                    model.ManureType.NH4N = farmManure.NH4N;
+                                    model.ManureType.Uric = farmManure.Uric;
+                                    model.ManureType.NO3N = farmManure.NO3N;
+                                    model.ManureType.P2O5 = farmManure.P2O5;
+                                    model.ManureType.K2O = farmManure.K2O;
+                                    model.ManureType.SO3 = farmManure.SO3;
+                                    model.ManureType.MgO = farmManure.MgO;
+                                    model.DefaultFarmManureValueDate = farmManure.ModifiedOn == null ? farmManure.CreatedOn : farmManure.ModifiedOn;
+                                }
+                                else
+                                {
+                                    model.DefaultFarmManureValueDate = null;
+                                }
                             }
                         }
                         if (manureTypeError == null)
@@ -2089,7 +2097,7 @@ namespace NMP.Portal.Controllers
 
                 if (organicManureViewModel != null && (!string.IsNullOrWhiteSpace(organicManureViewModel.DefaultNutrientValue)))
                 {
-                    if (!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblYesUseTheseValues)
+                    if (!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && (model.DefaultNutrientValue == Resource.lblYesUseTheseValues|| model.DefaultNutrientValue == Resource.lblYes))
                     {
                         (List<FarmManureTypeResponse> farmManureTypeList, Error error1) = await _organicManureService.FetchFarmManureTypeByFarmId(model.FarmId ?? 0);
                         if (error1 == null && farmManureTypeList.Count > 0)
@@ -2150,7 +2158,7 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    if (!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblYesUseTheseValues)
+                    if (!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && (model.DefaultNutrientValue == Resource.lblYesUseTheseValues|| model.DefaultNutrientValue == Resource.lblYes))
                     {
 
                         (List<FarmManureTypeResponse> farmManureTypeList, Error error1) = await _organicManureService.FetchFarmManureTypeByFarmId(model.FarmId ?? 0);
@@ -2169,9 +2177,13 @@ namespace NMP.Portal.Controllers
                                 model.ManureType.K2O = farmManure.K2O;
                                 model.ManureType.SO3 = farmManure.SO3;
                                 model.ManureType.MgO = farmManure.MgO;
-                                model.IsThisDefaultValueOfRB209 = false;
+                               
                             }
-                            ViewBag.FarmManureApiOption = Resource.lblTrue;
+                            if (model.DefaultNutrientValue == Resource.lblYesUseTheseValues)
+                            {
+                                model.IsThisDefaultValueOfRB209 = false;
+                                ViewBag.FarmManureApiOption = Resource.lblTrue;
+                            }
                         }
                     }
                     else

@@ -7362,6 +7362,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Yes, use these values from {0}.
+        /// </summary>
+        public static string lblYesUseTheseValuesFromDate {
+            get {
+                return ResourceManager.GetString("lblYesUseTheseValuesFromDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Yield.
         /// </summary>
         public static string lblYield {

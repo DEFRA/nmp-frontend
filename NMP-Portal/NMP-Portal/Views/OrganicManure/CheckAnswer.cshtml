@@ -1,4 +1,5 @@
 ﻿@using NMP.Portal.Resources;
+@using System.Globalization
 @model NMP.Portal.ViewModels.OrganicManureViewModel
 
 @{
@@ -160,7 +161,15 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyNeedToStoreNutrientValueForFuture"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDefaultNutrientOptionChange" value="@Model.IsDefaultNutrientOptionChange.ToString().ToLower()"></govuk-input>
-
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.DryMatter"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.TotalN"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.NH4N"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.NO3N"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.Uric"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.P2O5"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.K2O"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.MgO"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.SO3"></govuk-input>
 
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptake"></govuk-input>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilDrainageEndDate" value="@Model.SoilDrainageEndDate"></govuk-date-input>
@@ -392,17 +401,72 @@
                 {
                     @if (Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
                     {
-                        @if (Model.DefaultNutrientValue == Resource.lblYesUseTheseValues || Model.DefaultNutrientValue == Resource.lblUseValuesFromRB209)
+                        @if (Model.DefaultNutrientValue == Resource.lblYes)
                         {
                             <govuk-summary-list-row class=@(string.IsNullOrWhiteSpace(Model.DefaultNutrientValue)?"govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
                                     @string.Format(Resource.lblDoYouWantToUseExistingNutrientValuesFor, Model.OtherMaterialName)
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @(!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue) ? Model.DefaultNutrientValue : Resource.lblNotSet)
+                                    @(!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue) ? (Model.DefaultFarmManureValueDate!=null?string.Format(Resource.lblYesUseTheseValuesFromDate, Model.DefaultFarmManureValueDate.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))): Model.DefaultNutrientValue) : Resource.lblNotSet)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
                                     <govuk-summary-list-row-action asp-action="DefaultNutrientValues" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    @string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @if ((Model.ManureType.DryMatter.HasValue) && Model.ManureType.DryMatter.Value > 0)
+                                    {
+                                        @string.Format(Resource.lblKgWithNutrient, Model.ManureType.DryMatter.Value, Resource.lblDryMatterPercent)
+                                        <br />
+                                    }
+                                    @if ((Model.ManureType.TotalN.HasValue) && Model.ManureType.TotalN.Value > 0)
+                                    {
+                                        @string.Format(Resource.lblKgWithNutrient, Model.ManureType.TotalN.Value, Resource.lblNitrogen)
+                                        <br />
+                                    }
+                                    @if ((Model.ManureType.NH4N.HasValue) && Model.ManureType.NH4N.Value > 0)
+                                    {
+                                        @string.Format(Resource.lblKgWithNutrient, Model.ManureType.NH4N.Value, Resource.lblAmmonium)
+                                        <br />
+                                    }
+                                    @if ((Model.ManureType.Uric.HasValue) && Model.ManureType.Uric.Value > 0)
+                                    {
+                                        @string.Format(Resource.lblKgWithNutrient, Model.ManureType.Uric.Value, Resource.lblUricAcid)
+                                        <br />
+                                    }
+                                    @if ((Model.ManureType.NO3N.HasValue) && Model.ManureType.NO3N.Value > 0)
+                                    {
+                                        @string.Format(Resource.lblKgWithNutrient, Model.ManureType.NO3N.Value, Resource.lblNitrate)
+                                        <br />
+                                    }
+                                    @if ((Model.ManureType.P2O5.HasValue) && Model.ManureType.P2O5.Value > 0)
+                                    {
+                                        @string.Format(Resource.lblKgWithNutrient, Model.ManureType.P2O5.Value, Resource.lblPhosphateP2O5)
+                                        <br />
+                                    }
+                                    @if ((Model.ManureType.K2O.HasValue) && Model.ManureType.K2O.Value > 0)
+                                    {
+                                        @string.Format(Resource.lblKgWithNutrient, Model.ManureType.K2O.Value, Resource.lblPotashK2O)
+                                        <br />
+                                    }
+                                    @if ((Model.ManureType.SO3.HasValue) && Model.ManureType.SO3.Value > 0)
+                                    {
+                                        @string.Format(Resource.lblKgWithNutrient, Model.ManureType.SO3.Value, Resource.lblSulphurSO3)
+                                        <br />
+                                    }
+                                    @if ((Model.ManureType.MgO.HasValue) && Model.ManureType.MgO.Value > 0)
+                                    {
+                                        @string.Format(Resource.lblKgWithNutrient, Model.ManureType.MgO.Value, Resource.lblMagnesiumMgO)
+                                        <br />
+                                    }
+
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
                         }
@@ -527,7 +591,6 @@
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     }
-
                 }
                 else
                 {

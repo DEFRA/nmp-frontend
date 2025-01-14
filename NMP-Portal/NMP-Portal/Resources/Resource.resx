@@ -3127,4 +3127,7 @@ cubic metres per hectare  not set</value>
   <data name="lblYesUseTheseStandardNutrientValues" xml:space="preserve">
     <value>Yes, use these standard nutrient values</value>
   </data>
+  <data name="lblYesUseTheseValuesFromDate" xml:space="preserve">
+    <value>Yes, use these values from {0}</value>
+  </data>
 </root>
