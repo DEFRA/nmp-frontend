@@ -650,7 +650,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Enter a pH before continuing</value>
   </data>
   <data name="MsgEnterAPH" xml:space="preserve">
-    <value>Enter a pH range between 0 and 9.9</value>
+    <value>Enter a pH between 0 and 9.9, to 1 decimal place maximum</value>
   </data>
   <data name="MsgEnterADateAfter" xml:space="preserve">
     <value>Enter a date after DD/MM/YYYY</value>
@@ -1259,10 +1259,10 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Based on your crop and soil type, your closed period for applying manures with high readily available nitrogen (N) is {0}.</value>
   </data>
   <data name="MsgManureApplyingDateDontHaveExactDate" xml:space="preserve">
-    <value>If you don't know the exact date, enter an estimated date. For example, </value>
+    <value>If you do not know the exact application date enter an estimate. You can change it later.</value>
   </data>
   <data name="lblSampleDate" xml:space="preserve">
-    <value>27 3 2023. You can change the date later.</value>
+    <value>The date format is '27 3 2023'.</value>
   </data>
   <data name="lblAmmonium" xml:space="preserve">
     <value>Ammonium (N)</value>
@@ -3120,5 +3120,14 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="lblTheDate" xml:space="preserve">
     <value>The date</value>
+  </data>
+  <data name="lblBasedOnYourCropSoilTypeFarmDetails" xml:space="preserve">
+    <value>Based on your crop, soil type and farm details.</value>
+  </data>
+  <data name="lblYourClosedPeriodForSpreadingOrganicMaterials" xml:space="preserve">
+    <value>Your closed period for spreading organic materials with high readily available nitrogen is:</value>
+  </data>
+  <data name="lblTo" xml:space="preserve">
+    <value>{0} to {1}</value>
   </data>
 </root>

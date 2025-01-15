@@ -114,12 +114,12 @@
                     <govuk-summary-list-row-value>
                         @Model.Year
                     </govuk-summary-list-row-value>
-                    @if (Model.IsPlanRecord.HasValue && (!Model.IsPlanRecord.Value))
+                    @* @if (Model.IsPlanRecord.HasValue && (!Model.IsPlanRecord.Value))
                     {
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action class="@(Model.IsAddAnotherCrop? "disabled": "")" asp-action="HarvestYearForPlan" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
-                    }
+                    } *@
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
