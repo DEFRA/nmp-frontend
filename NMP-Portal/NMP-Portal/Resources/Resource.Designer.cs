@@ -2644,6 +2644,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 99999.
+        /// </summary>
+        public static string lblFiveDigit {
+            get {
+                return ResourceManager.GetString("lblFiveDigit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to For example, 27 3 2023.
         /// </summary>
         public static string lblForExample {
@@ -7524,7 +7533,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This is your estimated average annual rainfall. If you think this is wrong, you can change it now or later..
+        ///   Looks up a localized string similar to This is the average annual rainfall for your postcode area. If you have more accurate information for your farm, you can update it now or later..
         /// </summary>
         public static string lblYourAverageAnualRainfall {
             get {
@@ -8093,6 +8102,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a value of no more than 5 digits.
+        /// </summary>
+        public static string MsgEnterAValueOfNoMoreThan5Digits {
+            get {
+                return ResourceManager.GetString("MsgEnterAValueOfNoMoreThan5Digits", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the average annual rainfall.
         /// </summary>
         public static string MsgEnterAverageAnnualRainfall {
@@ -8273,7 +8291,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter an amount between 0 and 9999kg.
+        ///   Looks up a localized string similar to Enter an amount between 0 and 9,999 litres.
         /// </summary>
         public static string MsgEnterValidValueForNutrient {
             get {
