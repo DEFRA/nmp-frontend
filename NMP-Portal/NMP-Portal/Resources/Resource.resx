@@ -1805,7 +1805,7 @@ cubic metres per hectare  not set</value>
     <value>Enter the values for your {0}</value>
   </data>
   <data name="lblIwantToEnterARecentOrganicMaterialAnalysis" xml:space="preserve">
-    <value>No, I want to enter a recent organic material analysis</value>
+    <value>No, I want to enter a recent manure analysis</value>
   </data>
   <data name="lblKgPerMeterCube" xml:space="preserve">
     <value>kg per cubic metre</value>
@@ -3113,13 +3113,22 @@ cubic metres per hectare  not set</value>
     <value>September</value>
   </data>
   <data name="lblUseValuesFromRB209" xml:space="preserve">
-    <value>Use values from RB209</value>
+    <value>No, update these values</value>
   </data>
   <data name="lblYesUseTheseValues" xml:space="preserve">
-    <value>Yes, use these values</value>
+    <value>Yes, use these nutrient values</value>
   </data>
   <data name="lblTheDate" xml:space="preserve">
     <value>The date</value>
+  </data>
+  <data name="lblNoIWantToUseTheUpdatedValuesFromDate" xml:space="preserve">
+    <value>No, I want to use the updated values from {0}</value>
+  </data>
+  <data name="lblYesUseTheseStandardNutrientValues" xml:space="preserve">
+    <value>Yes, use these standard nutrient values</value>
+  </data>
+  <data name="lblYesUseTheseValuesFromDate" xml:space="preserve">
+    <value>Yes, use these values from {0}</value>
   </data>
   <data name="lblBasedOnYourCropSoilTypeFarmDetails" xml:space="preserve">
     <value>Based on your crop, soil type and farm details.</value>

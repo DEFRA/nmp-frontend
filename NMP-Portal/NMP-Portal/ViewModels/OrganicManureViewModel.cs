@@ -95,5 +95,7 @@ namespace NMP.Portal.ViewModels
         public int? CropOrder { get; set; }
         public string? EncryptedFieldId { get; set; }
         public string? OtherMaterialName { get; set; }
+        public DateTime? DefaultFarmManureValueDate { get; set; }
+        public bool? IsThisDefaultValueOfRB209 { get; set; }
     }
 }
