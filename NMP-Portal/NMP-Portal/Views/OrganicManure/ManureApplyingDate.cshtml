@@ -15,6 +15,23 @@
     {
         backAction = "ManureType";
     }
+
+    var closedPeriod = TempData["ClosedPeriod"] as string;
+    if (!string.IsNullOrEmpty(closedPeriod) && Model.HarvestYear != null)
+    {
+        int harvestYear = Model.HarvestYear??0;
+        var dates = closedPeriod.Split(new[] { " to " }, StringSplitOptions.RemoveEmptyEntries);
+        if (dates.Length == 2)
+        {
+            int startYear = harvestYear;
+            int endYear = harvestYear + 1;
+            string startDateWithYear = dates[0].Trim() + " " + startYear;
+            string endDateWithYear = dates[1].Trim() + " " + endYear;
+            closedPeriod = string.Format(Resource.lblTo, startDateWithYear, endDateWithYear);
+
+        }
+    }
+
 }
 @section BeforeContent {
     <govuk-back-link asp-action=@((Model.IsCheckAnswer&&(!Model.IsManureTypeChange)&&(!Model.IsFieldGroupChange)) ? "CheckAnswer" : backAction) asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
@@ -170,7 +187,7 @@
                         </p>
                         <p class="govuk-body">@TempData["ClosedPeriodWarningDetail"]</p>
                     }
-                    @if(Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks)
+                    @if (Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks)
                     {
                         <p class="govuk-notification-banner__heading">
                             @Resource.lblYouMustAllowAtLeast3WeeksBetweenApplications
@@ -192,23 +209,34 @@
                 </govuk-notification-banner>
 
             }
-
+            <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblWhenAreYouApplyingManureOnField, Model.ManureTypeName)</h1>
+            </legand>
             <div class="govuk-form-group">
                 <govuk-date-input asp-for="@Model.ApplicationDate" pattern="[0-9]*">
                     <govuk-date-input-fieldset>
-                        <govuk-date-input-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                            @string.Format(Resource.lblWhenAreYouApplyingManureOnField, Model.ManureTypeName)
-                        </govuk-date-input-fieldset-legend>
-
-                        <govuk-date-input-hint>
-                            <p>@Resource.MsgManureApplyingDateDontHaveExactDate <br> @Resource.lblSampleDate</p>
+                        <govuk-date-input-fieldset-legend is-page-heading="true" class="govuk-fieldset">
                             @if (ViewBag.HighReadilyAvailableNitrogen != null && ViewBag.HighReadilyAvailableNitrogen == true)
                             {
                                 @if (TempData["ClosedPeriod"] != null)
                                 {
-                                    <p>@string.Format(Resource.MsgManureApplyingDateClosedPeriod, TempData["ClosedPeriod"])</p>
+                                    <p>
+                                        @Resource.lblYourClosedPeriodForSpreadingOrganicMaterials
+                                    </p>
+
+                                    <p>
+                                        <b>@closedPeriod </b> <br />
+                                        @Resource.lblBasedOnYourCropSoilTypeFarmDetails
+                                    </p>
+
                                 }
                             }
+                            @Resource.MsgManureApplyingDateDontHaveExactDate
+                        </govuk-date-input-fieldset-legend>
+
+
+                        <govuk-date-input-hint>
+                            <p>@Resource.lblSampleDate</p>
 
                         </govuk-date-input-hint>
 
