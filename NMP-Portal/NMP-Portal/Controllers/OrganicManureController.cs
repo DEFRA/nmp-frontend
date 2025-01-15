@@ -1871,12 +1871,14 @@ namespace NMP.Portal.Controllers
                         {
                             if (farmManure != null)
                             {
+                                ViewBag.FarmManureApiOption = Resource.lblTrue;
                                 if ((!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblYesUseTheseValues) || (model.IsThisDefaultValueOfRB209 != null && (!model.IsThisDefaultValueOfRB209.Value)))
                                 {
                                     ViewBag.FarmManureApiOption = Resource.lblTrue;
                                 }
                                 else if ((!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblYesUseTheseStandardNutrientValues) || (model.IsThisDefaultValueOfRB209 != null && (model.IsThisDefaultValueOfRB209.Value)))
                                 {
+                                    ViewBag.FarmManureApiOption = null;
                                     ViewBag.RB209ApiOption = Resource.lblTrue;
                                 }
                             }
