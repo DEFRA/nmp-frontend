@@ -6975,6 +6975,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the nearest postcode?.
+        /// </summary>
+        public static string lblWhatIsTheNearestPostcode {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheNearestPostcode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the number of shoots per square metre?.
         /// </summary>
         public static string lblWhatIsTheNumberOfShootsPerSquareMetre {
