@@ -390,7 +390,7 @@
                             @string.Format(Resource.lblDoYouWantToUseTheseNutrientValuesFromRB209, Model.ManureTypeName)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @((!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue)) ? Model.DefaultNutrientValue : Resource.lblNotSet)
+                            @((!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue)) ? (Model.DefaultNutrientValue == Resource.lblYes ? Resource.lblYesUseTheseStandardNutrientValues : Model.DefaultNutrientValue) : Resource.lblNotSet)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="DefaultNutrientValues" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
@@ -408,7 +408,7 @@
                                     @string.Format(Resource.lblDoYouWantToUseExistingNutrientValuesFor, Model.OtherMaterialName)
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @(!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue) ? (Model.DefaultFarmManureValueDate!=null?string.Format(Resource.lblYesUseTheseValuesFromDate, Model.DefaultFarmManureValueDate.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))): Model.DefaultNutrientValue) : Resource.lblNotSet)
+                                    @(!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue) ? (Model.DefaultFarmManureValueDate != null ? string.Format(Resource.lblYesUseTheseValuesFromDate, Model.DefaultFarmManureValueDate.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))) : Resource.lblYesUseTheseStandardNutrientValues) : Resource.lblNotSet)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
                                     <govuk-summary-list-row-action asp-action="DefaultNutrientValues" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
