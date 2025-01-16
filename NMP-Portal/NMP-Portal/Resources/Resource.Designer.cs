@@ -1321,6 +1321,51 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to We can&apos;t find weather data for {0}.You can find rainfall and other weather information by entering a postcode near to {1} Farm..
+        /// </summary>
+        public static string lblClimateParagraphFirst {
+            get {
+                return ResourceManager.GetString("lblClimateParagraphFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (open in a new window).
+        /// </summary>
+        public static string lblClimateParagraphFourth {
+            get {
+                return ResourceManager.GetString("lblClimateParagraphFourth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can use the Post office lookup service to find a postcode in your location.
+        /// </summary>
+        public static string lblClimateParagraphSecond {
+            get {
+                return ResourceManager.GetString("lblClimateParagraphSecond", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Find a postcode in your location.
+        /// </summary>
+        public static string lblClimateParagraphThird {
+            get {
+                return ResourceManager.GetString("lblClimateParagraphThird", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Climate postcode.
+        /// </summary>
+        public static string lblClimatePostcode {
+            get {
+                return ResourceManager.GetString("lblClimatePostcode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Conditions affecting nutrient loss.
         /// </summary>
         public static string lblConditionsAffectingNutrientLoss {
@@ -2158,6 +2203,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter the climate postcode.
+        /// </summary>
+        public static string lblEnterTheClimatePostcode {
+            get {
+                return ResourceManager.GetString("lblEnterTheClimatePostcode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the crop name.
         /// </summary>
         public static string lblEnterTheCropName {
@@ -2640,6 +2694,15 @@ namespace NMP.Portal.Resources {
         public static string lblFigure {
             get {
                 return ResourceManager.GetString("lblFigure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Find weather data based on postcode.
+        /// </summary>
+        public static string lblFindWeatherDataBasedOnPostcode {
+            get {
+                return ResourceManager.GetString("lblFindWeatherDataBasedOnPostcode", resourceCulture);
             }
         }
         
@@ -6746,6 +6809,15 @@ namespace NMP.Portal.Resources {
         public static string lblViewSoilAnalysis {
             get {
                 return ResourceManager.GetString("lblViewSoilAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Weather data cannot be found for this postcode..
+        /// </summary>
+        public static string lblWeatherDataCannotBeFoundForTheCurrentPostcode {
+            get {
+                return ResourceManager.GetString("lblWeatherDataCannotBeFoundForTheCurrentPostcode", resourceCulture);
             }
         }
         

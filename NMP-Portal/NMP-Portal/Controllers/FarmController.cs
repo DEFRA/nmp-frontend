@@ -139,7 +139,7 @@ namespace NMP.Portal.Controllers
             {
                 farmView = JsonConvert.DeserializeObject<FarmViewModel>(HttpContext.Session.GetString("FarmData"));
             }
-            
+
             HttpContext?.Session.SetObjectAsJson("FarmData", farm);
             if (farm.IsCheckAnswer)
             {
@@ -171,7 +171,7 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace($"Farm Controller : Country() post action called");
             if (farm.CountryID == null)
             {
-                ModelState.AddModelError("CountryID",string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing,Resource.lblCountry.ToLower()));
+                ModelState.AddModelError("CountryID", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCountry.ToLower()));
             }
             if (!ModelState.IsValid)
             {
@@ -182,7 +182,7 @@ namespace NMP.Portal.Controllers
                 }
                 return View("Country", farm);
             }
-            if(farm.CountryID==(int)NMP.Portal.Enums.FarmCountry.England||
+            if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England ||
                 farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.Wales)
             {
                 farm.EnglishRules = true;
@@ -192,7 +192,7 @@ namespace NMP.Portal.Controllers
                 farm.EnglishRules = false;
             }
             if (Enum.IsDefined(typeof(NMP.Portal.Enums.FarmCountry), farm.CountryID))
-            {                
+            {
                 farm.Country = Enum.GetName(typeof(NMP.Portal.Enums.FarmCountry), farm.CountryID);
             }
 
@@ -248,7 +248,7 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("Postcode", Resource.MsgEnterTheFarmPostcode);
             }
-            
+
             if (!string.IsNullOrWhiteSpace(farm.Postcode))
             {
                 int id = 0;
@@ -391,7 +391,7 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("CheckAnswer");
             }
 
-            return RedirectToAction("Rainfall");
+            return RedirectToAction("ClimatePostCode");
         }
 
 
@@ -485,7 +485,79 @@ namespace NMP.Portal.Controllers
 
             HttpContext.Session.SetObjectAsJson("FarmData", farm);
 
+            return RedirectToAction("ClimatePostCode");
+        }
+        [HttpGet]
+        public async Task<IActionResult> ClimatePostCode()
+        {
+            _logger.LogTrace($"Farm Controller : ClimatePostCode() action called");
+            FarmViewModel? model = null;
+            if (HttpContext.Session.Keys.Contains("FarmData"))
+            {
+                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+            }
+            if (model.Rainfall == 0 || model.Rainfall == null)
+            {
+                string firstHalfPostcode = string.Empty;
+                if (!model.Postcode.Contains(" "))
+                {
+                    firstHalfPostcode = model.Postcode.Substring(0, model.Postcode.Length - 3);
+                }
+                else
+                {
+                    string[] postcode = model.Postcode.Split(' ');
+                    firstHalfPostcode = postcode[0];
+                }
+                var rainfall = await _farmService.FetchRainfallAverageAsync(firstHalfPostcode);
+                if (rainfall != null)
+                {
+                    model.Rainfall = (int)Math.Round(rainfall);
+                }
+                if (model.Rainfall > 0)
+                {
+                    return RedirectToAction("Rainfall");
+                }
+            }
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ClimatePostCode(FarmViewModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model.ClimatePostCode))
+            {
+                ModelState.AddModelError("ClimatePostCode", Resource.lblEnterTheClimatePostcode);
+            }
+
+            if ((!string.IsNullOrWhiteSpace(model.ClimatePostCode) && model.Rainfall == 0 || model.Rainfall == null))
+            {
+                string firstHalfPostcode = string.Empty;
+                if (!model.ClimatePostCode.Contains(" "))
+                {
+                    firstHalfPostcode = model.ClimatePostCode.Substring(0, model.ClimatePostCode.Length - 3);
+                }
+                else
+                {
+                    string[] climatePostCode = model.ClimatePostCode.Split(' ');
+                    firstHalfPostcode = climatePostCode[0];
+                }
+                var rainfall = await _farmService.FetchRainfallAverageAsync(firstHalfPostcode);
+                if (rainfall != null)
+                {
+                    model.Rainfall = (int)Math.Round(rainfall);
+                }
+                if (model.Rainfall == null || model.Rainfall == 0)
+                {
+                    ModelState.AddModelError("ClimatePostCode", Resource.lblWeatherDataCannotBeFoundForTheCurrentPostcode);
+                }
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            HttpContext.Session.SetObjectAsJson("FarmData", model);
             return RedirectToAction("Rainfall");
+
         }
         [HttpGet]
         public async Task<IActionResult> Rainfall()
@@ -775,6 +847,10 @@ namespace NMP.Portal.Controllers
             //var claim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "relationships").Value;
             //string[] relationshipData = claim.Split(":");
             Guid organisationId = Guid.Parse(HttpContext.User.FindFirst("organisationId")?.Value);
+            if (string.IsNullOrWhiteSpace(farm.ClimatePostCode))
+            {
+                farm.ClimatePostCode = farm.Postcode;
+            }
             var farmData = new FarmData
             {
                 Farm = new Farm()
@@ -803,7 +879,7 @@ namespace NMP.Portal.Controllers
                     NVZFields = farm.NVZFields,
                     FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
                     LastHarvestYear = farm.LastHarvestYear,
-                    CountryID=farm.CountryID,
+                    CountryID = farm.CountryID,
                     CreatedByID = userId,
                     CreatedOn = System.DateTime.Now,
                     ModifiedByID = farm.ModifiedByID,

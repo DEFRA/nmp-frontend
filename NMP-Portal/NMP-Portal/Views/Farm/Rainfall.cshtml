@@ -3,7 +3,7 @@
 
 @{
     ViewData["Title"] = Resource.lblRainfall;
-    var backAction = Model.IsManualAddress == true ? "ManualAddress" : "Address";
+    var backAction = (!string.IsNullOrWhiteSpace(Model.ClimatePostCode)) ? "ClimatePostCode" :(Model.IsManualAddress == true ? "ManualAddress" : "Address");
 }
 
 @section BeforeContent {
@@ -47,6 +47,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LastHarvestYear"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryID"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClimatePostCode"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country"></govuk-input>
             <govuk-button type="submit" class="margin-bottom-forty" asp-action="Rainfall">
                 @Resource.lblContinue
