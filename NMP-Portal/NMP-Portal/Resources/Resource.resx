@@ -335,7 +335,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>You have not added any farms.</value>
   </data>
   <data name="lblYourAverageAnualRainfall" xml:space="preserve">
-    <value>This is your estimated average annual rainfall. If you think this is wrong, you can change it now or later.</value>
+    <value>This is the average annual rainfall for your postcode area. If you have more accurate information for your farm, you can update it now or later.</value>
   </data>
   <data name="lblYourFarms" xml:space="preserve">
     <value>Your farms</value>
@@ -602,7 +602,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Potash</value>
   </data>
   <data name="MsgEnterValidValueForNutrient" xml:space="preserve">
-    <value>Enter an amount between 0 and 9999kg</value>
+    <value>Enter an amount between 0 and 9,999 litres</value>
   </data>
   <data name="MsgEnterValidValueForNutrientIndex" xml:space="preserve">
     <value>Enter an index between 0 and 9</value>
@@ -3138,6 +3138,12 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="lblTo" xml:space="preserve">
     <value>{0} to {1}</value>
+  </data>
+  <data name="lblFiveDigit" xml:space="preserve">
+    <value>99999</value>
+  </data>
+  <data name="MsgEnterAValueOfNoMoreThan5Digits" xml:space="preserve">
+    <value>Enter a value of no more than 5 digits</value>
   </data>
   <data name="lblWhatIsTheNearestPostcode" xml:space="preserve">
     <value>What is the nearest postcode?</value>
