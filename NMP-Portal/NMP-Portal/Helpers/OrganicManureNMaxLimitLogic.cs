@@ -4,7 +4,7 @@ namespace NMP.Portal.Helpers
 {
     public class OrganicManureNMaxLimitLogic
     {
-        public int NMaxLimit(int nMaxLimit, decimal yield, string soilType, string cropInfo1, int cropTypeId, List<int> currentYearManureTypeIds,
+        public int NMaxLimit(int nMaxLimit, decimal? yield, string soilType, int? cropInfo1, int cropTypeId, List<int> currentYearManureTypeIds,
             List<int> previousYearManureTypeIds, int manureTypeId)
         {
             bool manureTypeCondition = false;
@@ -41,49 +41,49 @@ namespace NMP.Portal.Helpers
                 {
                     nMaxLimit = nMaxLimit + 20;
                 }
-                if (cropInfo1 == Resource.lblMilling)
+                if (cropInfo1 ==(int)NMP.Portal.Enums.CropInfoOne.Milling)
                 {
                     nMaxLimit = nMaxLimit + 40;
                 }
                 if (yield > 8.0m)
                 {
-                    nMaxLimit = nMaxLimit + (int)Math.Round(((yield - 8.0m) / 0.1m) * 2);
+                    nMaxLimit = nMaxLimit + (int)Math.Round(((yield.Value - 8.0m) / 0.1m) * 2);
                 }
             }
             else if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.SpringWheat)
             {
-                if (cropInfo1 == Resource.lblMilling)
+                if (cropInfo1 == (int)NMP.Portal.Enums.CropInfoOne.Milling)
                 {
                     nMaxLimit = nMaxLimit + 40;
                 }
                 if (yield > 7.0m)
                 {
-                    nMaxLimit = nMaxLimit + (int)Math.Round(((yield - 7.0m) / 0.1m) * 2);
+                    nMaxLimit = nMaxLimit + (int)Math.Round(((yield.Value - 7.0m) / 0.1m) * 2);
                 }
             }
             else if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterBarley)
             {
-                if (cropInfo1 == Resource.lblShallow)
+                if (soilType == Resource.lblShallow)
                 {
                     nMaxLimit = nMaxLimit + 20;
                 }
                 if (yield > 6.5m)
                 {
-                    nMaxLimit = nMaxLimit + (int)Math.Round(((yield - 6.5m) / 0.1m) * 2);
+                    nMaxLimit = nMaxLimit + (int)Math.Round(((yield.Value - 6.5m) / 0.1m) * 2);
                 }
             }
             else if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.SpringBarley)
             {
                 if (yield > 5.5m)
                 {
-                    nMaxLimit = nMaxLimit + (int)Math.Round(((yield - 5.5m) / 0.1m) * 2);
+                    nMaxLimit = nMaxLimit + (int)Math.Round(((yield.Value - 5.5m) / 0.1m) * 2);
                 }
             }
             else if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape)
             {
                 if (yield > 3.5m)
                 {
-                    nMaxLimit = nMaxLimit + (int)Math.Round(((yield - 3.5m) / 0.1m) * 6);
+                    nMaxLimit = nMaxLimit + (int)Math.Round(((yield.Value - 3.5m) / 0.1m) * 6);
                 }
             }
             else if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
