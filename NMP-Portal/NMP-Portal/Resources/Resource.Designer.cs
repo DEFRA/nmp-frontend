@@ -286,6 +286,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Above 300 sea level.
+        /// </summary>
+        public static string lblAbove300SeaLevel {
+            get {
+                return ResourceManager.GetString("lblAbove300SeaLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add a crop group.
         /// </summary>
         public static string lblAddACropGroup {
@@ -1110,6 +1119,15 @@ namespace NMP.Portal.Resources {
         public static string lblBasedOnYourCropSoilTypeAndFarmDetails {
             get {
                 return ResourceManager.GetString("lblBasedOnYourCropSoilTypeAndFarmDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Based on your crop, soil type and farm details..
+        /// </summary>
+        public static string lblBasedOnYourCropSoilTypeFarmDetails {
+            get {
+                return ResourceManager.GetString("lblBasedOnYourCropSoilTypeFarmDetails", resourceCulture);
             }
         }
         
@@ -2635,6 +2653,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 99999.
+        /// </summary>
+        public static string lblFiveDigit {
+            get {
+                return ResourceManager.GetString("lblFiveDigit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to For example, 27 3 2023.
         /// </summary>
         public static string lblForExample {
@@ -3293,7 +3320,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No, I want to enter a recent organic material analysis.
+        ///   Looks up a localized string similar to No, I want to enter a recent manure analysis.
         /// </summary>
         public static string lblIwantToEnterARecentOrganicMaterialAnalysis {
             get {
@@ -3681,24 +3708,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Main crop group.
-        /// </summary>
-        public static string lblMainCropGroup {
-            get {
-                return ResourceManager.GetString("lblMainCropGroup", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Main crop type.
-        /// </summary>
-        public static string lblMainCropType {
-            get {
-                return ResourceManager.GetString("lblMainCropType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Manage farm fields.
         /// </summary>
         public static string lblManageFarmFields {
@@ -4023,6 +4032,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No, I want to use the updated values from {0}.
+        /// </summary>
+        public static string lblNoIWantToUseTheUpdatedValuesFromDate {
+            get {
+                return ResourceManager.GetString("lblNoIWantToUseTheUpdatedValuesFromDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No, I&apos;ll enter the date later.
         /// </summary>
         public static string lblNoIWillEnterTheDateLater {
@@ -4221,7 +4239,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NVZ.
+        ///   Looks up a localized string similar to Nitrate Vulnerable Zone (NVZ).
         /// </summary>
         public static string lblNVZ {
             get {
@@ -4230,7 +4248,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How many fields at Oaktree Lane Farm are in a Nitrate Vulnerable Zone (NVZ).
+        ///   Looks up a localized string similar to Nitrate Vulnerable Zone (NVZ) field.
         /// </summary>
         public static string lblNVZField {
             get {
@@ -5085,7 +5103,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 27 3 2023. You can change the date later..
+        ///   Looks up a localized string similar to The date format is &apos;27 3 2023&apos;..
         /// </summary>
         public static string lblSampleDate {
             get {
@@ -5634,7 +5652,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Some of the fields are in an NVZ.
+        ///   Looks up a localized string similar to Some of the fields are in a Nitrate Vulnerable Zone (NVZ).
         /// </summary>
         public static string lblSomeOfTheFieldsAreInAnNVZ {
             get {
@@ -6089,6 +6107,15 @@ namespace NMP.Portal.Resources {
         public static string lblTineCultivator {
             get {
                 return ResourceManager.GetString("lblTineCultivator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} to {1}.
+        /// </summary>
+        public static string lblTo {
+            get {
+                return ResourceManager.GetString("lblTo", resourceCulture);
             }
         }
         
@@ -6552,7 +6579,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use values from RB209.
+        ///   Looks up a localized string similar to No, update these values.
         /// </summary>
         public static string lblUseValuesFromRB209 {
             get {
@@ -7335,11 +7362,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Yes, use these values.
+        ///   Looks up a localized string similar to Yes, use these standard nutrient values.
+        /// </summary>
+        public static string lblYesUseTheseStandardNutrientValues {
+            get {
+                return ResourceManager.GetString("lblYesUseTheseStandardNutrientValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes, use these nutrient values.
         /// </summary>
         public static string lblYesUseTheseValues {
             get {
                 return ResourceManager.GetString("lblYesUseTheseValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes, use these values from {0}.
+        /// </summary>
+        public static string lblYesUseTheseValuesFromDate {
+            get {
+                return ResourceManager.GetString("lblYesUseTheseValuesFromDate", resourceCulture);
             }
         }
         
@@ -7479,7 +7524,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This is your estimated average annual rainfall. If you think this is wrong, you can change it now or later..
+        ///   Looks up a localized string similar to This is the average annual rainfall for your postcode area. If you have more accurate information for your farm, you can update it now or later..
         /// </summary>
         public static string lblYourAverageAnualRainfall {
             get {
@@ -7493,6 +7538,15 @@ namespace NMP.Portal.Resources {
         public static string lblYourClosedPeriodForSpreading {
             get {
                 return ResourceManager.GetString("lblYourClosedPeriodForSpreading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your closed period for spreading organic materials with high readily available nitrogen is:.
+        /// </summary>
+        public static string lblYourClosedPeriodForSpreadingOrganicMaterials {
+            get {
+                return ResourceManager.GetString("lblYourClosedPeriodForSpreadingOrganicMaterials", resourceCulture);
             }
         }
         
@@ -7931,7 +7985,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter a pH range between 0 and 9.9.
+        ///   Looks up a localized string similar to Enter a pH between 0 and 9.9, to 1 decimal place maximum.
         /// </summary>
         public static string MsgEnterAPH {
             get {
@@ -7967,7 +8021,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter at least one nutrient value..
+        ///   Looks up a localized string similar to Enter at least one value..
         /// </summary>
         public static string MsgEnterAtLeastOneValue {
             get {
@@ -8035,6 +8089,15 @@ namespace NMP.Portal.Resources {
         public static string MsgEnterAValueBeforeContinue {
             get {
                 return ResourceManager.GetString("MsgEnterAValueBeforeContinue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a value of no more than 5 digits.
+        /// </summary>
+        public static string MsgEnterAValueOfNoMoreThan5Digits {
+            get {
+                return ResourceManager.GetString("MsgEnterAValueOfNoMoreThan5Digits", resourceCulture);
             }
         }
         
@@ -8219,7 +8282,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter an amount between 0 and 9999kg.
+        ///   Looks up a localized string similar to Enter an amount between 0 and 9,998 litres.
         /// </summary>
         public static string MsgEnterValidValueForNutrient {
             get {
@@ -8525,7 +8588,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you don&apos;t know the exact date, enter an estimated date. For example, .
+        ///   Looks up a localized string similar to If you do not know the exact application date enter an estimate. You can change it later..
         /// </summary>
         public static string MsgManureApplyingDateDontHaveExactDate {
             get {

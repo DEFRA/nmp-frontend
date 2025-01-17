@@ -1750,7 +1750,7 @@ namespace NMP.Portal.Controllers
                 ViewBag.Success = null;
             }
 
-            //_httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
 
             return View(model);
         }

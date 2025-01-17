@@ -27,8 +27,9 @@ namespace NMP.Portal.ServiceResponses
         public string? OtherCropName { get; set; }
         [JsonProperty("CropInfo1")]
         public int? CropInfo1 { get; set; }
+
         [JsonProperty("Yield")]
-        public int? Yield { get; set; }
+        public decimal? Yield { get; set; }
         [JsonProperty("LastModifiedOn")]
         public DateTime? LastModifiedOn { get; set; }
         [JsonProperty("PlantingDate")]
