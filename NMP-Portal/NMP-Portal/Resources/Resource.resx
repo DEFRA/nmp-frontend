@@ -3142,6 +3142,18 @@ cubic metres per hectare  not set</value>
   <data name="lblAbove300SeaLevel" xml:space="preserve">
     <value>Above 300 sea level</value>
   </data>
+  <data name="lblhelpdesk" xml:space="preserve">
+    <value>helpdesk@rsk-bsl.co.uk</value>
+  </data>
+  <data name="lblIfYouHaveAnyProblemsOrIssuesWithThisService" xml:space="preserve">
+    <value>If you have any problems or issues with this service, email our helpdesk at </value>
+  </data>
+  <data name="lblMailtoHelpdesk" xml:space="preserve">
+    <value>mailto:helpdesk@rsk-bsl.co.uk</value>
+  </data>
+  <data name="lblWeWillAssistYou" xml:space="preserve">
+    <value> and we will assist you.</value>
+  </data>
   <data name="lblWhatIsTheNearestPostcode" xml:space="preserve">
     <value>What is the nearest postcode?</value>
   </data>

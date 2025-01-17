@@ -2932,6 +2932,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to helpdesk@rsk-bsl.co.uk.
+        /// </summary>
+        public static string lblhelpdesk {
+            get {
+                return ResourceManager.GetString("lblhelpdesk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Help me find my potato variety group.
         /// </summary>
         public static string lblHelpMeFindMyPotatoVarietyGroup {
@@ -3163,6 +3172,15 @@ namespace NMP.Portal.Resources {
         public static string lblHyphen {
             get {
                 return ResourceManager.GetString("lblHyphen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you have any problems or issues with this service, email our helpdesk at .
+        /// </summary>
+        public static string lblIfYouHaveAnyProblemsOrIssuesWithThisService {
+            get {
+                return ResourceManager.GetString("lblIfYouHaveAnyProblemsOrIssuesWithThisService", resourceCulture);
             }
         }
         
@@ -3767,6 +3785,15 @@ namespace NMP.Portal.Resources {
         public static string lblMagnesiumPerLitreOfSoilOption {
             get {
                 return ResourceManager.GetString("lblMagnesiumPerLitreOfSoilOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to mailto:helpdesk@rsk-bsl.co.uk.
+        /// </summary>
+        public static string lblMailtoHelpdesk {
+            get {
+                return ResourceManager.GetString("lblMailtoHelpdesk", resourceCulture);
             }
         }
         
@@ -6818,6 +6845,15 @@ namespace NMP.Portal.Resources {
         public static string lblWeCouldNotFindAnyAddressesFor {
             get {
                 return ResourceManager.GetString("lblWeCouldNotFindAnyAddressesFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  and we will assist you..
+        /// </summary>
+        public static string lblWeWillAssistYou {
+            get {
+                return ResourceManager.GetString("lblWeWillAssistYou", resourceCulture);
             }
         }
         
