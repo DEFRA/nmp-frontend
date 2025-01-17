@@ -2189,7 +2189,7 @@ namespace NMP.Portal.Controllers
                                             CropP2O5 = recData.Recommendation.CropP2O5,
                                             CropK2O = recData.Recommendation.CropK2O,
                                             CropSO3 = recData.Recommendation.CropSO3,
-                                            CropLime = recData.Recommendation.CropLime,
+                                            CropLime =(recData.Recommendation.PreviousAppliedLime!=null&& recData.Recommendation.PreviousAppliedLime>0)? recData.Recommendation.PreviousAppliedLime:recData.Recommendation.CropLime,
                                             ManureN = recData.Recommendation.ManureN,
                                             ManureP2O5 = recData.Recommendation.ManureP2O5,
                                             ManureK2O = recData.Recommendation.ManureK2O,
