@@ -47,7 +47,7 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.K2O"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MgO"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SO3"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDefaultNutrientValues" value="@Model.IsDefaultNutrientValues"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefaultNutrientValue"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsFieldGroupChange" value="@Model.IsFieldGroupChange.ToString().ToLower()"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationMethodName"></govuk-input>
@@ -79,6 +79,8 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150" value="@Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropOrder"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherMaterialName"></govuk-input>
+    <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefaultFarmManureValueDate" value="@Model.DefaultFarmManureValueDate"></govuk-date-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsThisDefaultValueOfRB209" value="@Model.IsThisDefaultValueOfRB209"></govuk-input>
     @if (Model != null)
     {
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules" value="@Model.isEnglishRules.ToString().ToLower()"></govuk-input>
