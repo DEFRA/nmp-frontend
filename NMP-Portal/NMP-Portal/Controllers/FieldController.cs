@@ -1611,7 +1611,7 @@ namespace NMP.Portal.Controllers
                     {
                         Crop = new Crop
                         {
-                            Year=DateTime.Now.Year-1,
+                            Year=model.LastHarvestYear??0,
                             Confirm=false,
                             CropTypeID=model.CropTypeID,
                             FieldType = model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass ? (int)NMP.Portal.Enums.FieldType.Grass : (int)NMP.Portal.Enums.FieldType.Arable,
