@@ -286,6 +286,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Above 300 sea level.
+        /// </summary>
+        public static string lblAbove300SeaLevel {
+            get {
+                return ResourceManager.GetString("lblAbove300SeaLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add a crop group.
         /// </summary>
         public static string lblAddACropGroup {
@@ -3762,24 +3771,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Main crop group.
-        /// </summary>
-        public static string lblMainCropGroup {
-            get {
-                return ResourceManager.GetString("lblMainCropGroup", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Main crop type.
-        /// </summary>
-        public static string lblMainCropType {
-            get {
-                return ResourceManager.GetString("lblMainCropType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Manage farm fields.
         /// </summary>
         public static string lblManageFarmFields {
@@ -4311,7 +4302,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NVZ.
+        ///   Looks up a localized string similar to Nitrate Vulnerable Zone (NVZ).
         /// </summary>
         public static string lblNVZ {
             get {
@@ -4320,7 +4311,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How many fields at Oaktree Lane Farm are in a Nitrate Vulnerable Zone (NVZ).
+        ///   Looks up a localized string similar to Nitrate Vulnerable Zone (NVZ) field.
         /// </summary>
         public static string lblNVZField {
             get {
@@ -5724,7 +5715,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Some of the fields are in an NVZ.
+        ///   Looks up a localized string similar to Some of the fields are in a Nitrate Vulnerable Zone (NVZ).
         /// </summary>
         public static string lblSomeOfTheFieldsAreInAnNVZ {
             get {
@@ -8372,7 +8363,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter an amount between 0 and 9,999 litres.
+        ///   Looks up a localized string similar to Enter an amount between 0 and 9,998 litres.
         /// </summary>
         public static string MsgEnterValidValueForNutrient {
             get {
