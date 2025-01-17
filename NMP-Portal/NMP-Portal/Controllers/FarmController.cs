@@ -515,8 +515,17 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.Rainfall > 0)
                 {
+                    if (model.IsPostCodeChanged)
+                    {
+                        model.ClimatePostCode = null;
+                    }
+                    HttpContext.Session.SetObjectAsJson("FarmData", model);
                     return RedirectToAction("Rainfall");
                 }
+            }
+            else
+            {
+                return RedirectToAction("Rainfall");
             }
             return View(model);
         }
@@ -880,6 +889,7 @@ namespace NMP.Portal.Controllers
                     FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
                     LastHarvestYear = farm.LastHarvestYear,
                     CountryID = farm.CountryID,
+                    ClimatePostCode=farm.ClimatePostCode,
                     CreatedByID = userId,
                     CreatedOn = System.DateTime.Now,
                     ModifiedByID = farm.ModifiedByID,

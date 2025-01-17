@@ -128,7 +128,7 @@
                         <govuk-summary-list-row-action asp-action="@(Model.IsManualAddress ? "ManualAddress" : "Address")" asp-controller="Farm">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
-                @if (string.IsNullOrWhiteSpace(Model.ClimatePostCode))
+                @if (!string.IsNullOrWhiteSpace(Model.ClimatePostCode))
                 {
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
