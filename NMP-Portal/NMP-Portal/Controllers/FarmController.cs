@@ -517,7 +517,7 @@ namespace NMP.Portal.Controllers
                 {
                     if (model.IsPostCodeChanged)
                     {
-                        model.ClimatePostCode = null;
+                        model.ClimateDataPostCode = null;
                     }
                     HttpContext.Session.SetObjectAsJson("FarmData", model);
                     return RedirectToAction("Rainfall");
@@ -533,21 +533,21 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ClimatePostCode(FarmViewModel model)
         {
-            if (string.IsNullOrWhiteSpace(model.ClimatePostCode))
+            if (string.IsNullOrWhiteSpace(model.ClimateDataPostCode))
             {
-                ModelState.AddModelError("ClimatePostCode", Resource.lblEnterTheClimatePostcode);
+                ModelState.AddModelError("ClimateDataPostCode", Resource.lblEnterTheClimatePostcode);
             }
 
-            if ((!string.IsNullOrWhiteSpace(model.ClimatePostCode) && model.Rainfall == 0 || model.Rainfall == null))
+            if ((!string.IsNullOrWhiteSpace(model.ClimateDataPostCode) && model.Rainfall == 0 || model.Rainfall == null))
             {
                 string firstHalfPostcode = string.Empty;
-                if (!model.ClimatePostCode.Contains(" "))
+                if (!model.ClimateDataPostCode.Contains(" "))
                 {
-                    firstHalfPostcode = model.ClimatePostCode.Substring(0, model.ClimatePostCode.Length - 3);
+                    firstHalfPostcode = model.ClimateDataPostCode.Substring(0, model.ClimateDataPostCode.Length - 3);
                 }
                 else
                 {
-                    string[] climatePostCode = model.ClimatePostCode.Split(' ');
+                    string[] climatePostCode = model.ClimateDataPostCode.Split(' ');
                     firstHalfPostcode = climatePostCode[0];
                 }
                 var rainfall = await _farmService.FetchRainfallAverageAsync(firstHalfPostcode);
@@ -557,7 +557,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.Rainfall == null || model.Rainfall == 0)
                 {
-                    ModelState.AddModelError("ClimatePostCode", Resource.lblWeatherDataCannotBeFoundForTheCurrentPostcode);
+                    ModelState.AddModelError("ClimateDataPostCode", Resource.lblWeatherDataCannotBeFoundForTheCurrentPostcode);
                 }
             }
             if (!ModelState.IsValid)
@@ -856,9 +856,9 @@ namespace NMP.Portal.Controllers
             //var claim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "relationships").Value;
             //string[] relationshipData = claim.Split(":");
             Guid organisationId = Guid.Parse(HttpContext.User.FindFirst("organisationId")?.Value);
-            if (string.IsNullOrWhiteSpace(farm.ClimatePostCode))
+            if (string.IsNullOrWhiteSpace(farm.ClimateDataPostCode))
             {
-                farm.ClimatePostCode = farm.Postcode;
+                farm.ClimateDataPostCode = farm.Postcode;
             }
             var farmData = new FarmData
             {
@@ -889,7 +889,7 @@ namespace NMP.Portal.Controllers
                     FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
                     LastHarvestYear = farm.LastHarvestYear,
                     CountryID = farm.CountryID,
-                    ClimatePostCode=farm.ClimatePostCode,
+                    ClimateDataPostCode=farm.ClimateDataPostCode,
                     CreatedByID = userId,
                     CreatedOn = System.DateTime.Now,
                     ModifiedByID = farm.ModifiedByID,

@@ -81,7 +81,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LastHarvestYear"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClimatePostCode"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClimateDataPostCode"></govuk-input>
 
             <govuk-summary-list>
                 <govuk-summary-list-row>
@@ -128,14 +128,14 @@
                         <govuk-summary-list-row-action asp-action="@(Model.IsManualAddress ? "ManualAddress" : "Address")" asp-controller="Farm">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
-                @if (!string.IsNullOrWhiteSpace(Model.ClimatePostCode))
+                @if (!string.IsNullOrWhiteSpace(Model.ClimateDataPostCode))
                 {
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
                             @Resource.lblClimatePostcode
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @Model.ClimatePostCode
+                            @Model.ClimateDataPostCode
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="ClimatePostCode" asp-controller="Farm">@Resource.lblChange</govuk-summary-list-row-action>

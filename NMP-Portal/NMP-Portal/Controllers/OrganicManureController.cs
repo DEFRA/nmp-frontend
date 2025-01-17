@@ -3637,7 +3637,7 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    halfPostCode = farm.ClimatePostCode.Substring(0, 4).Trim();
+                    halfPostCode = farm.ClimateDataPostCode.Substring(0, 4).Trim();
                 }
 
                 if (model.ApplicationDate.HasValue && model.SoilDrainageEndDate.HasValue)
@@ -4133,7 +4133,7 @@ namespace NMP.Portal.Controllers
                                                 var mannerOutput = new
                                                 {
                                                     runType = farmData.EnglishRules ? 3 : 4,
-                                                    postcode = farmData.ClimatePostCode.Split(" ")[0],
+                                                    postcode = farmData.ClimateDataPostCode.Split(" ")[0],
                                                     countryID = farmData.CountryID,
                                                     field = new
                                                     {
