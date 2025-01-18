@@ -523,7 +523,7 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("Rainfall");
                 }
             }
-            else
+            else if (string.IsNullOrWhiteSpace(model.ClimateDataPostCode))
             {
                 return RedirectToAction("Rainfall");
             }
@@ -889,7 +889,7 @@ namespace NMP.Portal.Controllers
                     FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
                     LastHarvestYear = farm.LastHarvestYear,
                     CountryID = farm.CountryID,
-                    ClimateDataPostCode=farm.ClimateDataPostCode,
+                    ClimateDataPostCode = farm.ClimateDataPostCode,
                     CreatedByID = userId,
                     CreatedOn = System.DateTime.Now,
                     ModifiedByID = farm.ModifiedByID,
