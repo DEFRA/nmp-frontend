@@ -6,7 +6,7 @@
     var organicProducer = "";
     var fieldsAbove300m = "";
     var fieldsInNVZ = "";
-    
+
     switch (Model.NVZFields)
     {
         case (int)NMP.Portal.Enums.NVZFields.NoFieldsInNVZ:
@@ -30,7 +30,7 @@
         case (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m:
             fieldsAbove300m = Resource.lblAllTheFieldsAreAbove300m;
             break;
-        
+
     }
     switch (Model.RegisteredOrganicProducer)
     {
@@ -47,7 +47,7 @@
 }
 <form asp-action="@(!string.IsNullOrEmpty(Model.EncryptedIsUpdate) ? "FarmUpdate" : "CheckAnswer")" asp-controller="Farm" method="post">
     @Html.AntiForgeryToken()
-    
+
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds-from-desktop">
             @if (TempData["AddFarmError"] != null)
@@ -81,6 +81,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LastHarvestYear"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClimateDataPostCode"></govuk-input>
 
             <govuk-summary-list>
                 <govuk-summary-list-row>
@@ -127,6 +128,20 @@
                         <govuk-summary-list-row-action asp-action="@(Model.IsManualAddress ? "ManualAddress" : "Address")" asp-controller="Farm">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
+                @if (!string.IsNullOrWhiteSpace(Model.ClimateDataPostCode))
+                {
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            @Resource.lblClimatePostcode
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @Model.ClimateDataPostCode
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action asp-action="ClimatePostCode" asp-controller="Farm">@Resource.lblChange</govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+                }
                 <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
                         @Resource.lblAverageAnnualRainfall
@@ -185,7 +200,7 @@
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
             </govuk-summary-list>
-            
+
             <govuk-button type="submit" class="margin-bottom-forty">
                 @(!string.IsNullOrEmpty(Model.EncryptedIsUpdate) ? Resource.lblUpdateThisFarm : Resource.lblAddThisFarm)
             </govuk-button>

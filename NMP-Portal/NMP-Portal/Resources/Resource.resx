@@ -3154,4 +3154,31 @@ cubic metres per hectare  not set</value>
   <data name="lblWeWillAssistYou" xml:space="preserve">
     <value> and we will assist you.</value>
   </data>
+  <data name="lblWhatIsTheNearestPostcode" xml:space="preserve">
+    <value>What is the nearest postcode?</value>
+  </data>
+  <data name="lblClimateParagraphFirst" xml:space="preserve">
+    <value>We can't find weather data for {0}.You can find rainfall and other weather information by entering a postcode near to {1} Farm.</value>
+  </data>
+  <data name="lblClimateParagraphFourth" xml:space="preserve">
+    <value>(open in a new window)</value>
+  </data>
+  <data name="lblClimateParagraphSecond" xml:space="preserve">
+    <value>You can use the Post office lookup service to find a postcode in your location</value>
+  </data>
+  <data name="lblClimateParagraphThird" xml:space="preserve">
+    <value>Find a postcode in your location</value>
+  </data>
+  <data name="lblFindWeatherDataBasedOnPostcode" xml:space="preserve">
+    <value>Find weather data based on postcode</value>
+  </data>
+  <data name="lblWeatherDataCannotBeFoundForTheCurrentPostcode" xml:space="preserve">
+    <value>Weather data cannot be found for this postcode.</value>
+  </data>
+  <data name="lblEnterTheClimatePostcode" xml:space="preserve">
+    <value>Enter the climate postcode</value>
+  </data>
+  <data name="lblClimatePostcode" xml:space="preserve">
+    <value>Climate postcode</value>
+  </data>
 </root>
