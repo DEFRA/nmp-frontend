@@ -446,7 +446,7 @@
                                         else
                                         {
                                             <p class="govuk-body">@string.Format(Resource.lblYouHaveNoOrganicMaterialApplicationForFieldInYear, Model.FieldName, Model.Crops[0].Year)</p>
-                                            <p class="govuk-body"><a href="#"> @string.Format(Resource.lblAddAnOrganicMaterialApplicationForField, Model.FieldName)</a></p>
+                                            <p class="govuk-body"><a asp-action="FieldGroup" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear" asp-route-s="@Model.EncryptedFieldId"> @string.Format(Resource.lblAddAnOrganicMaterialApplicationForField, Model.FieldName)</a></p>
                                             <hr class="seperator_five">
                                         }
 
@@ -534,7 +534,7 @@
                                         else
                                         {
                                             <p class="govuk-body">@string.Format(Resource.lblYouHaveNoOrganicMaterialApplicationForFieldInYear, Model.FieldName, Model.Crops[0].Year)</p>
-                                            <p class="govuk-body"><a href="#">@string.Format(Resource.lblAddAnInOrganicFertiliserApplicationForField, Model.FieldName)</a></p>
+                                            <p class="govuk-body"><a asp-action="FieldGroup" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear" asp-route-s="@Model.EncryptedFieldId">@string.Format(Resource.lblAddAnInOrganicFertiliserApplicationForField, Model.FieldName)</a></p>
                                             <hr class="seperator_five">
                                         }
 

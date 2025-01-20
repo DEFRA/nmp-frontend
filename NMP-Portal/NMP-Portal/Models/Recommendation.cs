@@ -49,5 +49,6 @@ namespace NMP.Portal.Models
         public decimal? FertiliserAppliedLime { get; set; }
         public decimal? FertiliserAppliedNH4N { get; set; }
         public decimal? FertiliserAppliedNO3N { get; set; }
+        public int? PreviousAppliedLime { get; set; }
     }
 }
