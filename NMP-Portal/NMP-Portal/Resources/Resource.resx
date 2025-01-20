@@ -3181,4 +3181,7 @@ cubic metres per hectare  not set</value>
   <data name="lblClimatePostcode" xml:space="preserve">
     <value>Climate postcode</value>
   </data>
+  <data name="MsgEnterValidValueForPhosphorus" xml:space="preserve">
+    <value>Enter an amount between 0 and 999 litres</value>
+  </data>
 </root>

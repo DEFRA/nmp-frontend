@@ -8417,6 +8417,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter an amount between 0 and 999 litres.
+        /// </summary>
+        public static string MsgEnterValidValueForPhosphorus {
+            get {
+                return ResourceManager.GetString("MsgEnterValidValueForPhosphorus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter an {0} between {1} and {2} .
         /// </summary>
         public static string MsgEnterValueInBetween {
