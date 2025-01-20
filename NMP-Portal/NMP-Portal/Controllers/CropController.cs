@@ -1210,6 +1210,10 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", Resource.MsgEnterFigureBeforeContinuing);
             }
+            if(model.Crops[model.YieldCurrentCounter].Yield> Convert.ToInt32(Resource.lblFiveDigit))
+            {
+                ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", Resource.MsgEnterAValueOfNoMoreThan5Digits);
+            }
 
             if (!ModelState.IsValid)
             {
@@ -1309,11 +1313,12 @@ namespace NMP.Portal.Controllers
                 ViewBag.CropInfoOneQuestion = cropInfoOneQuestion;
                 if(cropInfoOneQuestion==null)
                 {
-                    model.CropInfo1Name = cropInfoOneList.FirstOrDefault(x => x.CropInfo1Id == 0).CropInfo1Name;
+                    model.CropInfo1Name = cropInfoOneList.FirstOrDefault(x => x.CropInfo1Name == Resource.lblNone).CropInfo1Name;
+                    model.CropInfo1 = cropInfoOneList.FirstOrDefault(x => x.CropInfo1Name == Resource.lblNone).CropInfo1Id;
 
                     for (int i = 0; i < model.Crops.Count; i++)
                     {
-                        model.Crops[i].CropInfo1 = 0;
+                        model.Crops[i].CropInfo1 = model.CropInfo1;
                     }
 
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
@@ -1528,6 +1533,8 @@ namespace NMP.Portal.Controllers
             }
             model.IsCheckAnswer = true;
             ViewBag.DefaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+            string? cropInfoOneQuestion = await _cropService.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0);
+            ViewBag.CropInfoOneQuestion = cropInfoOneQuestion;
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("CropData", model);
             return View(model);
         }
@@ -2182,7 +2189,7 @@ namespace NMP.Portal.Controllers
                                             CropP2O5 = recData.Recommendation.CropP2O5,
                                             CropK2O = recData.Recommendation.CropK2O,
                                             CropSO3 = recData.Recommendation.CropSO3,
-                                            CropLime = recData.Recommendation.CropLime,
+                                            CropLime =(recData.Recommendation.PreviousAppliedLime!=null&& recData.Recommendation.PreviousAppliedLime>0)? recData.Recommendation.PreviousAppliedLime:recData.Recommendation.CropLime,
                                             ManureN = recData.Recommendation.ManureN,
                                             ManureP2O5 = recData.Recommendation.ManureP2O5,
                                             ManureK2O = recData.Recommendation.ManureK2O,

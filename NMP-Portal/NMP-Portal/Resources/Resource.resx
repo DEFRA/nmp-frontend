@@ -151,13 +151,13 @@
     <value>Plan and record nutrient applications</value>
   </data>
   <data name="lblAvgAtitude" xml:space="preserve">
-    <value>AverageAltitude</value>
+    <value>Average altitude</value>
   </data>
   <data name="lblBack" xml:space="preserve">
     <value>Back</value>
   </data>
   <data name="lblBusinessName" xml:space="preserve">
-    <value>Business Name</value>
+    <value>Business name</value>
   </data>
   <data name="lblCancel" xml:space="preserve">
     <value>Cancel</value>
@@ -178,7 +178,7 @@
     <value>CPH</value>
   </data>
   <data name="lblEnglishRules" xml:space="preserve">
-    <value>English Rules</value>
+    <value>English rules</value>
   </data>
   <data name="lblEnterAddressManually" xml:space="preserve">
     <value>Enter address manually</value>
@@ -199,13 +199,13 @@
     <value>Rainfall</value>
   </data>
   <data name="lblFarmersName" xml:space="preserve">
-    <value>Farmers Name</value>
+    <value>Farmer's name</value>
   </data>
   <data name="lblFarmList" xml:space="preserve">
-    <value>Farm List</value>
+    <value>Farm list</value>
   </data>
   <data name="lblFarmName" xml:space="preserve">
-    <value>Farm Name</value>
+    <value>Farm name</value>
   </data>
   <data name="lblFarmSTDcode" xml:space="preserve">
     <value>STD</value>
@@ -220,7 +220,7 @@
     <value>help you comply with environmental regulations</value>
   </data>
   <data name="lblHomePage" xml:space="preserve">
-    <value>Home Page</value>
+    <value>Home page</value>
   </data>
   <data name="lblHowManyFieldsInNVZ" xml:space="preserve">
     <value>How many fields at {0}
@@ -230,7 +230,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>If you have more than one holding, it's best to add a separate farm for each.</value>
   </data>
   <data name="lblManualAddress" xml:space="preserve">
-    <value>Manual Address</value>
+    <value>Manual address</value>
   </data>
   <data name="lblLicenseText" xml:space="preserve">
     <value>All content is available under the</value>
@@ -239,7 +239,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>, except where otherwise stated</value>
   </data>
   <data name="lblMetricUnits" xml:space="preserve">
-    <value>Metric Units</value>
+    <value>Metric units</value>
   </data>
   <data name="lblmm" xml:space="preserve">
     <value>mm</value>
@@ -251,10 +251,10 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>None of the fields are in an NVZ</value>
   </data>
   <data name="lblNVZ" xml:space="preserve">
-    <value>NVZ</value>
+    <value>Nitrate Vulnerable Zone (NVZ)</value>
   </data>
   <data name="lblNVZField" xml:space="preserve">
-    <value>How many fields at Oaktree Lane Farm are in a Nitrate Vulnerable Zone (NVZ)</value>
+    <value>Nitrate Vulnerable Zone (NVZ) field</value>
   </data>
   <data name="lblOpenGovernmentLicence" xml:space="preserve">
     <value>Open Government Licence v3.0</value>
@@ -269,7 +269,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Planning and recording can:</value>
   </data>
   <data name="lblPleaseEnter" xml:space="preserve">
-    <value>Please Enter {0}</value>
+    <value>Please enter {0}</value>
   </data>
   <data name="lblPostCode" xml:space="preserve">
     <value>Postcode</value>
@@ -278,7 +278,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Rainfall</value>
   </data>
   <data name="lblRainfallManual" xml:space="preserve">
-    <value>Rainfall Manual</value>
+    <value>Rainfall manual</value>
   </data>
   <data name="lblRegOrganicProducer" xml:space="preserve">
     <value>RegisteredOrganicProducer</value>
@@ -299,7 +299,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Some of the fields are above 300m</value>
   </data>
   <data name="lblSomeOfTheFieldsAreInAnNVZ" xml:space="preserve">
-    <value>Some of the fields are in an NVZ</value>
+    <value>Some of the fields are in a Nitrate Vulnerable Zone (NVZ)</value>
   </data>
   <data name="lblSignout" xml:space="preserve">
     <value>Sign out</value>
@@ -314,7 +314,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>the nutrients in your soil</value>
   </data>
   <data name="lblTotalFarmArea" xml:space="preserve">
-    <value>TotalFarmArea</value>
+    <value>Total farm area</value>
   </data>
   <data name="lblTownOrCity" xml:space="preserve">
     <value>Town or city</value>
@@ -335,7 +335,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>You have not added any farms.</value>
   </data>
   <data name="lblYourAverageAnualRainfall" xml:space="preserve">
-    <value>This is your estimated average annual rainfall. If you think this is wrong, you can change it now or later.</value>
+    <value>This is the average annual rainfall for your postcode area. If you have more accurate information for your farm, you can update it now or later.</value>
   </data>
   <data name="lblYourFarms" xml:space="preserve">
     <value>Your farms</value>
@@ -425,7 +425,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Farm Address</value>
   </data>
   <data name="lblCheckAnswer" xml:space="preserve">
-    <value>Check Answer</value>
+    <value>Check answer</value>
   </data>
   <data name="lblAddThisFarm" xml:space="preserve">
     <value>Add this farm</value>
@@ -437,7 +437,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Add fields for {0}</value>
   </data>
   <data name="lblAddYourFields" xml:space="preserve">
-    <value>add your fields</value>
+    <value>Add your fields</value>
   </data>
   <data name="lblAllFarm" xml:space="preserve">
     <value>All farms</value>
@@ -449,7 +449,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Farm and field details</value>
   </data>
   <data name="lblFarmSummary" xml:space="preserve">
-    <value>FarmSummary</value>
+    <value>Farm summary</value>
   </data>
   <data name="lblToStartCreatingPlanAndRecords" xml:space="preserve">
     <value>To start creating plans and records,</value>
@@ -491,7 +491,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Land Parcel ID (optional)</value>
   </data>
   <data name="lblNationalGridReference" xml:space="preserve">
-    <value>National Grid Reference (optional)</value>
+    <value>National Grid reference (optional)</value>
   </data>
   <data name="MsgEnterTheFieldName" xml:space="preserve">
     <value>Enter the field name</value>
@@ -512,7 +512,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Is {0} more than 300 metres above sea level?</value>
   </data>
   <data name="lblSoilType" xml:space="preserve">
-    <value>Soil Type</value>
+    <value>Soil type</value>
   </data>
   <data name="lblWhatIsSoilType" xml:space="preserve">
     <value>What is the soil type in {0}?</value>
@@ -524,10 +524,10 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Is sulphur (S) deficiency expected in the soil?</value>
   </data>
   <data name="lblSoilReleasingClay" xml:space="preserve">
-    <value>Soil Releasing Clay</value>
+    <value>Soil releasing clay</value>
   </data>
   <data name="lblSulpherDeficient" xml:space="preserve">
-    <value>Sulpher Deficient</value>
+    <value>Sulpher deficient</value>
   </data>
   <data name="lblHowWouldYouLikeToEnterYourSoilNutrientValues" xml:space="preserve">
     <value>How would you like to enter your soil nutrient values?</value>
@@ -554,7 +554,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Magnesium (Mg) per litre of soil</value>
   </data>
   <data name="lblMgL" xml:space="preserve">
-    <value>mg/l</value>
+    <value>mg per litre</value>
   </data>
   <data name="lblPhosphorusIndex" xml:space="preserve">
     <value>Phosphorus (P) index</value>
@@ -602,19 +602,19 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Potash</value>
   </data>
   <data name="MsgEnterValidValueForNutrient" xml:space="preserve">
-    <value>Enter an amount between 0 and 9999kg</value>
+    <value>Enter an amount between 0 and 9,998 litres</value>
   </data>
   <data name="MsgEnterValidValueForNutrientIndex" xml:space="preserve">
     <value>Enter an index between 0 and 9</value>
   </data>
   <data name="lblBasedOnRecentSNA" xml:space="preserve">
-    <value>Calculate based on a recent soil mineral nitrogen analysis result</value>
+    <value>Calculate based on a recent soil mineral nitrogen (N) analysis result</value>
   </data>
   <data name="lblCropGroup" xml:space="preserve">
-    <value>Crop Group</value>
+    <value>Crop group</value>
   </data>
   <data name="lblCropType" xml:space="preserve">
-    <value>Crop Type</value>
+    <value>Crop type</value>
   </data>
   <data name="lblEstimateBasedOnPreviousCrop" xml:space="preserve">
     <value>Estimate based on previous cropping, soil type, and average rainfall</value>
@@ -638,10 +638,10 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Start now</value>
   </data>
   <data name="lblSoilPHLevel" xml:space="preserve">
-    <value>Soil pH level</value>
+    <value>Soil pH value</value>
   </data>
   <data name="MsgDateExample" xml:space="preserve">
-    <value>For example, 27 3 2007</value>
+    <value>For example, 27 3 2023</value>
   </data>
   <data name="MsgEnterADateBeforeContinuing" xml:space="preserve">
     <value>Enter a date before continuing</value>
@@ -650,13 +650,13 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Enter a pH before continuing</value>
   </data>
   <data name="MsgEnterAPH" xml:space="preserve">
-    <value>Enter a pH range between 0 and 9.9</value>
+    <value>Enter a pH between 0 and 9.9, to 1 decimal place maximum</value>
   </data>
   <data name="MsgEnterADateAfter" xml:space="preserve">
     <value>Enter a date after DD/MM/YYYY</value>
   </data>
   <data name="MsgEnterTheDateInNumber" xml:space="preserve">
-    <value>Enter the date in numbers. For example, 27 3 2007</value>
+    <value>Enter the date in numbers. For example, 27 3 2023</value>
   </data>
   <data name="lblAddThisField" xml:space="preserve">
     <value>Add this field</value>
@@ -716,7 +716,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Field and soil details</value>
   </data>
   <data name="lblManageFarmFields" xml:space="preserve">
-    <value>Manage Farm Fields</value>
+    <value>Manage farm fields</value>
   </data>
   <data name="lblManageFieldDetailsAndSoilAnalysis" xml:space="preserve">
     <value>Manage field details and soil analysis</value>
@@ -728,7 +728,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Land Parcel ID</value>
   </data>
   <data name="lblNationalGridReferenceForCheckAnswere" xml:space="preserve">
-    <value>National Grid Reference</value>
+    <value>National Grid reference</value>
   </data>
   <data name="lblOtherReferenceForCheckAnswere" xml:space="preserve">
     <value>Other Reference</value>
@@ -821,7 +821,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Which crop type would you like to plan for?</value>
   </data>
   <data name="lblHarvestYear" xml:space="preserve">
-    <value>Harvest Year</value>
+    <value>Harvest year</value>
   </data>
   <data name="lblVarietyName" xml:space="preserve">
     <value>Variety name</value>
@@ -896,10 +896,10 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>You can change your planting date later.</value>
   </data>
   <data name="lblPotato" xml:space="preserve">
-    <value> potato </value>
+    <value>potato </value>
   </data>
   <data name="lblTonnesAndHectare" xml:space="preserve">
-    <value>tonnes/hectare</value>
+    <value>tonnes per hectare</value>
   </data>
   <data name="lblWhatIsTheExpectedYieldForSingle" xml:space="preserve">
     <value>What is the expected yield for {0} in these fields?</value>
@@ -940,9 +940,6 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblCreatePlan" xml:space="preserve">
     <value>Create plan</value>
   </data>
-  <data name="lblMainCropType" xml:space="preserve">
-    <value>Main crop type</value>
-  </data>
   <data name="lblHaveYouPlantedYourCrop" xml:space="preserve">
     <value>Have you planted your {0} yet?</value>
   </data>
@@ -974,7 +971,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Crop plan for {0}</value>
   </data>
   <data name="lblHarvestYearOverview" xml:space="preserve">
-    <value>Harvest Year Overview</value>
+    <value>Harvest year overview</value>
   </data>
   <data name="lblLastUpdated" xml:space="preserve">
     <value>Last updated: {0}</value>
@@ -1029,9 +1026,6 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
   <data name="lblCropInfo2ForCheckAnswer" xml:space="preserve">
     <value>How do you plan to use the straw from your {0}?</value>
-  </data>
-  <data name="lblMainCropGroup" xml:space="preserve">
-    <value>Main crop group</value>
   </data>
   <data name="lblSowingDateQuestionForCheckAnswer" xml:space="preserve">
     <value>Do you have a planting date for your {0}?</value>
@@ -1226,7 +1220,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>All fields in the {0} plan</value>
   </data>
   <data name="lblFieldGroup" xml:space="preserve">
-    <value>Field Group</value>
+    <value>Field group</value>
   </data>
   <data name="lblSelectSpecificFields" xml:space="preserve">
     <value>Select specific fields</value>
@@ -1238,37 +1232,37 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Which fields would you like to plan an organic material application for?</value>
   </data>
   <data name="lblManureGroup" xml:space="preserve">
-    <value>Manure Group</value>
+    <value>Manure group</value>
   </data>
   <data name="lblWhatTypeOfOrganicMaterialAreYouUsingInThisApplication" xml:space="preserve">
     <value>What type of organic material are you using in this application?</value>
   </data>
   <data name="lblManureType" xml:space="preserve">
-    <value>Manue Type</value>
+    <value>Manue type</value>
   </data>
   <data name="lblWhatTypeOfManureGroupAreYouUsingInThisApplication" xml:space="preserve">
     <value>What type of {0} are you using in this application?</value>
   </data>
   <data name="lblManureApplyingDate" xml:space="preserve">
-    <value>Manure Applying Date</value>
+    <value>Manure applying date</value>
   </data>
   <data name="lblWhenAreYouApplyingManureOnField" xml:space="preserve">
     <value>When are you applying {0} on these fields?</value>
   </data>
   <data name="MsgManureApplyingDateClosedPeriod" xml:space="preserve">
-    <value>Based on your crop and soil type, your closed period for applying manures with high readily available nitrogen is {0}.</value>
+    <value>Based on your crop and soil type, your closed period for applying manures with high readily available nitrogen (N) is {0}.</value>
   </data>
   <data name="MsgManureApplyingDateDontHaveExactDate" xml:space="preserve">
-    <value>If you don't know the exact date, enter an estimated date. For example, </value>
+    <value>If you do not know the exact application date enter an estimate. You can change it later.</value>
   </data>
   <data name="lblSampleDate" xml:space="preserve">
-    <value>27 3 2023. You can change the date later.</value>
+    <value>The date format is '27 3 2023'.</value>
   </data>
   <data name="lblAmmonium" xml:space="preserve">
     <value>Ammonium (N)</value>
   </data>
   <data name="lblDryMatter" xml:space="preserve">
-    <value>Dry Matter</value>
+    <value>Dry matter</value>
   </data>
   <data name="lblNitrate" xml:space="preserve">
     <value>Nitrate (N)</value>
@@ -1277,7 +1271,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Do you want to use these nutrient values from RB209 for {0}?</value>
   </data>
   <data name="lblTotalMagnesiumOxide" xml:space="preserve">
-    <value>Total magnesium oxide (Mg0)</value>
+    <value>Total magnesium oxide (MgO)</value>
   </data>
   <data name="lblTotalNitrogen" xml:space="preserve">
     <value>Total Nitrogen</value>
@@ -1286,43 +1280,43 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Total phosphate (P2O5)</value>
   </data>
   <data name="lblTotalPotassium" xml:space="preserve">
-    <value>Total potassium (K20)</value>
+    <value>Total potassium (K2O)</value>
   </data>
   <data name="lblTotalSulphur" xml:space="preserve">
-    <value>Total Sulphur (SO3)</value>
+    <value>Total sulphur (SO3)</value>
   </data>
   <data name="lblUricAcid" xml:space="preserve">
-    <value>Uric Acid (N)</value>
+    <value>Uric acid (N)</value>
   </data>
   <data name="lblValuesAreSourcedFromAHDB" xml:space="preserve">
     <value>These values are taken from the AHDB Nutrient Management Guide (RB209).</value>
   </data>
   <data name="lblValuesKgPerTonne" xml:space="preserve">
-    <value>kg/t</value>
+    <value>kg per tonne</value>
   </data>
   <data name="lblApplicationRate" xml:space="preserve">
-    <value>Application Rate</value>
+    <value>Application rate</value>
   </data>
   <data name="lblCalculateBasedOnTheAreaAndQuantity" xml:space="preserve">
     <value>Calculate based on the area and quantity you are applying</value>
   </data>
   <data name="lblEnterAnApplicationRate" xml:space="preserve">
-    <value>Enter an application rate in t/ha or m³/ha</value>
+    <value>Enter an application rate in tonnes per hectare or cubic meters per hectare</value>
   </data>
   <data name="lblHowWouldYouLikeToEnterTheApplicationRate" xml:space="preserve">
     <value>How would you like to enter the application rate for your {0}?</value>
   </data>
   <data name="lblUseTypicalApplicationRate" xml:space="preserve">
-    <value>Use the typical application rate of {0} m³/ha</value>
+    <value>Use the typical application rate of {0} cubic metres per hectare</value>
   </data>
   <data name="MsgSelectAMethodForEnteringApplicationRate" xml:space="preserve">
     <value>Select a method for entering the application rate before continuing.</value>
   </data>
   <data name="lblApplicationDate" xml:space="preserve">
-    <value>Application Date</value>
+    <value>Application date</value>
   </data>
   <data name="lblEnterTheDateInCorrectFormat" xml:space="preserve">
-    <value>Enter the date in the correct format (DD/MM/YYYY).</value>
+    <value>Enter the date in the format DD/MM/YYYY.</value>
   </data>
   <data name="lblValueKg" xml:space="preserve">
     <value>{0}kg</value>
@@ -1331,7 +1325,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Enter the application rate</value>
   </data>
   <data name="lblManualApplicationRate" xml:space="preserve">
-    <value>Manual Application Rate</value>
+    <value>Manual application rate</value>
   </data>
   <data name="lblTonnesPerHectare" xml:space="preserve">
     <value>tonnes per hectare</value>
@@ -1382,7 +1376,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>What is the incorporation method for your {0}?</value>
   </data>
   <data name="MsgDefraIdentityServiceDown" xml:space="preserve">
-    <value>Defra Customer Identity Service is down, please re-visit after sometime.</value>
+    <value>Defra Customer Identity Service is down, please try again later.</value>
   </data>
   <data name="lblRainfallValueHint" xml:space="preserve">
     <value>Value should be without decimal places</value>
@@ -1421,10 +1415,10 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Add analysis values for {0}.</value>
   </data>
   <data name="lblKgPerTonne" xml:space="preserve">
-    <value>Kg per tonne</value>
+    <value>kg per tonne</value>
   </data>
   <data name="lblManureDefaultsValue" xml:space="preserve">
-    <value>ManureDefaultsValue</value>
+    <value>Manure defaults value</value>
   </data>
   <data name="lblPerTonne" xml:space="preserve">
     <value>% per tonne</value>
@@ -1433,7 +1427,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Enter a valid {0} value</value>
   </data>
   <data name="lblDryMatterPercent" xml:space="preserve">
-    <value>DryMatterPercent</value>
+    <value>Dry matter percentage</value>
   </data>
   <data name="lblK2O" xml:space="preserve">
     <value>K2O</value>
@@ -1457,22 +1451,22 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>SO3</value>
   </data>
   <data name="lblUricAcidForError" xml:space="preserve">
-    <value>UricAcid</value>
+    <value>Uric acid</value>
   </data>
   <data name="lbl15Octto31Jan" xml:space="preserve">
-    <value>15 Oct to 31 Jan</value>
+    <value>15 {0} to 31 {1}</value>
   </data>
   <data name="lbl1Augto31Dec" xml:space="preserve">
-    <value>1 Aug to 31 Dec</value>
+    <value>1 {0} to 31 {1}</value>
   </data>
   <data name="lbl1Septo31Dec" xml:space="preserve">
-    <value>1 Sep to 31 Dec</value>
+    <value>1 {0} to 31 {1}</value>
   </data>
   <data name="lbl16Septo31Dec" xml:space="preserve">
-    <value>16 Sep to 31 Dec</value>
+    <value>16 {0} to 31 {1}</value>
   </data>
   <data name="lbl1Octto31Jan" xml:space="preserve">
-    <value>1 Oct to 31 Jan</value>
+    <value>1 {0} to 31 {1}</value>
   </data>
   <data name="lblAreas" xml:space="preserve">
     <value>Area</value>
@@ -1493,7 +1487,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Add to plan</value>
   </data>
   <data name="lblAutumnCropNitrogenUptake" xml:space="preserve">
-    <value>Autumn crop Nitrogen uptake</value>
+    <value>Autumn crop nitrogen (N) uptake</value>
   </data>
   <data name="lblDoYouWantToUseTheseNutrientValuesFromRB209" xml:space="preserve">
     <value>Do you want to use these nutrient values from RB209 for {0} ?</value>
@@ -1562,7 +1556,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Average rainfall (in mm) between manure application and end of soil drainage</value>
   </data>
   <data name="lblConditionsAffectingNutrientLoss" xml:space="preserve">
-    <value>Conditions Affecting Nutrient Loss</value>
+    <value>Conditions affecting nutrient loss</value>
   </data>
   <data name="lblDateWhenSoilDrainageEnds" xml:space="preserve">
     <value>Date when soil drainage ends and the soil begins to dry out</value>
@@ -1604,13 +1598,13 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Area must be greater than zero</value>
   </data>
   <data name="lblForExample" xml:space="preserve">
-    <value>For example, 27 3 2007</value>
+    <value>For example, 27 3 2023</value>
   </data>
   <data name="lblKgPerHectare" xml:space="preserve">
-    <value>kg/ha</value>
+    <value>kg per hectare</value>
   </data>
   <data name="lblWhatIsTheAutumnCropNitrogenUptake" xml:space="preserve">
-    <value>What is the Autumn crop Nitrogen uptake?</value>
+    <value>What is the autumn crop nitrogen (N) uptake?</value>
   </data>
   <data name="lblWhatIsTheEndOfDrainageDate" xml:space="preserve">
     <value>What is the end of drainage date?</value>
@@ -1622,7 +1616,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Enter a valid numeric value before continuing</value>
   </data>
   <data name="MsgSoilDrainageEndDate1stJan30Apr" xml:space="preserve">
-    <value>The date for End of soil drainage must be between 1st jan and 30th Apr</value>
+    <value>The date for end of soil drainage must be between 1 January and 30 April</value>
   </data>
   <data name="lblApplicationMethod" xml:space="preserve">
     <value>Application method</value>
@@ -1643,14 +1637,14 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Would you like to use these analysis values for future applications of {0} on {1}?</value>
   </data>
   <data name="lblNutrientValuesStoreForFutureHint" xml:space="preserve">
-    <value>You can change these values later in your Farm and field details section.</value>
+    <value>You can change these values later in your farm and field details section.</value>
   </data>
   <data name="lblAmmoniumForError" xml:space="preserve">
     <value>ammonium</value>
   </data>
   <data name="lblKgPerTonneAndKgPerMeterCube" xml:space="preserve">
-    <value>kg/t
-kg/m³</value>
+    <value>kg per tonne
+kg per cubic metre</value>
   </data>
   <data name="lblNitrateForErrorMsg" xml:space="preserve">
     <value>nitrate</value>
@@ -1665,7 +1659,7 @@ kg/m³</value>
     <value>Enter the {0} before continuing</value>
   </data>
   <data name="lblTotalNitrogenMustBeGreaterOrEqualToAmmoniumUricacidNitrate" xml:space="preserve">
-    <value>The figure for Total nitrogen (N) must be equal to or greater than the sum of Ammonium (N), Uric acid (N) and Nitrate (N)</value>
+    <value>The figure for Total nitrogen (N) must be equal to or greater than the sum of ammonium (N), uric acid (N) and nitrate (N)</value>
   </data>
   <data name="lblTotalNitrogenN" xml:space="preserve">
     <value>Total nitrogen</value>
@@ -1683,10 +1677,10 @@ kg/m³</value>
     <value>Rainfall within 6 hours of application</value>
   </data>
   <data name="lblEffectiveRainfall" xml:space="preserve">
-    <value>Effective Rainfall</value>
+    <value>Effective rainfall</value>
   </data>
   <data name="lblEffectiveRainfallManual" xml:space="preserve">
-    <value>Effective Rainfall Manual</value>
+    <value>Effective rainfall manual</value>
   </data>
   <data name="lblThisIsTotalRainfall" xml:space="preserve">
     <value>This is the total rainfall between x and y. If you think this is wrong, you can change it now or later.</value>
@@ -1695,13 +1689,13 @@ kg/m³</value>
     <value>Total rainfall</value>
   </data>
   <data name="lblEnterRainfallAmount" xml:space="preserve">
-    <value>Enter Rainfall Amount</value>
+    <value>Enter rainfall amount</value>
   </data>
   <data name="MsgEnterRainfallAmountBeforeContinuing" xml:space="preserve">
     <value>Enter a rainfall amount before continuing</value>
   </data>
   <data name="MsgForEffectiveRainfallManual" xml:space="preserve">
-    <value>Rainfall amount must be a whole number, like 600..</value>
+    <value>Rainfall amount must be a whole number, like 600.</value>
   </data>
   <data name="lblWindAtTheTimeOfApplication" xml:space="preserve">
     <value>Wind at the time of application</value>
@@ -1716,7 +1710,7 @@ kg/m³</value>
     <value>Topsoil Moister</value>
   </data>
   <data name="MsgEnterValidDate" xml:space="preserve">
-    <value>Enter a valid date in the format dd/mm/yyyy before continuing</value>
+    <value>Enter a valid date in the format DD/MM/YYYY before continuing</value>
   </data>
   <data name="MsgSelectATopsoilWetnessConditionBeforeContinuing" xml:space="preserve">
     <value>Select a topsoil wetness condition before continuing</value>
@@ -1732,8 +1726,8 @@ kg/m³</value>
   </data>
   <data name="MsgApplicationRateNotSet" xml:space="preserve">
     <value>Application rate
-t/ha
-m3/ha  not set</value>
+tonnes per hectare
+cubic metres per hectare  not set</value>
   </data>
   <data name="MsgApplyingDateNotSet" xml:space="preserve">
     <value>When are you applying your {0} not set?</value>
@@ -1742,7 +1736,7 @@ m3/ha  not set</value>
     <value>Area not set</value>
   </data>
   <data name="MsgAutumnCropNitrogenUptakeNotSet" xml:space="preserve">
-    <value>Autumn crop Nitrogen uptake not set</value>
+    <value>Autumn crop nitrogen (N) uptake not set</value>
   </data>
   <data name="MsgDefaultNutrientValuesNotSet" xml:space="preserve">
     <value>Do you want to use these nutrient values from RB209 for {0} not set?</value>
@@ -1805,22 +1799,22 @@ m3/ha  not set</value>
     <value>Enter the values for your {0}</value>
   </data>
   <data name="lblIwantToEnterARecentOrganicMaterialAnalysis" xml:space="preserve">
-    <value>No, I want to enter a recent organic material analysis</value>
+    <value>No, I want to enter a recent manure analysis</value>
   </data>
   <data name="lblKgPerMeterCube" xml:space="preserve">
-    <value>kg/m³</value>
+    <value>kg per cubic metre</value>
   </data>
   <data name="lblKgPerTon" xml:space="preserve">
-    <value>kg/t</value>
+    <value>kg per ton</value>
   </data>
   <data name="lblValue" xml:space="preserve">
     <value>Value</value>
   </data>
   <data name="lblValueKgPerMeterCube" xml:space="preserve">
-    <value>{0} kg/m³</value>
+    <value>{0} kg per cubic metre</value>
   </data>
   <data name="lblValueKgPerTon" xml:space="preserve">
-    <value>{0} kg/t</value>
+    <value>{0} kg per tonne</value>
   </data>
   <data name="lblValuePercent" xml:space="preserve">
     <value>{0}%</value>
@@ -1832,7 +1826,7 @@ m3/ha  not set</value>
     <value>Which fields would you like to add inorganic fertiliser applications to?</value>
   </data>
   <data name="lblWhenDoYouApplyingInOrganicfertiliser" xml:space="preserve">
-    <value>When do you applying inorganic fertiliser on the {0} Fields?</value>
+    <value>When do you applying inorganic fertiliser on the {0} fields?</value>
   </data>
   <data name="lblInOrganicManureDuration" xml:space="preserve">
     <value>InOrganic manure duration</value>
@@ -1886,7 +1880,7 @@ m3/ha  not set</value>
     <value>You have updated {0}</value>
   </data>
   <data name="lblDoYouPlanToSpreadMoreInorganicFertiliserOnCropTypeFields" xml:space="preserve">
-    <value>Do you plan to spread more inorganic fertiliser on the {0} Fields?</value>
+    <value>Do you plan to spread more inorganic fertiliser on the {0} fields?</value>
   </data>
   <data name="lblQuestionForSpreadInorganicFertiliser" xml:space="preserve">
     <value>Question for spread inorganic fertiliser</value>
@@ -1907,7 +1901,7 @@ m3/ha  not set</value>
     <value>Are you sure you want to continue?</value>
   </data>
   <data name="lblFarmRemove" xml:space="preserve">
-    <value>Farm Remove</value>
+    <value>Farm remove</value>
   </data>
   <data name="lblNoneOfTheFields" xml:space="preserve">
     <value>None of the fields</value>
@@ -1916,7 +1910,7 @@ m3/ha  not set</value>
     <value>Some of the fields</value>
   </data>
   <data name="lblYouHaveRemoved" xml:space="preserve">
-    <value>You have removed {0} Farm</value>
+    <value>You have removed {0} farm</value>
   </data>
   <data name="MsgRemoveFarm" xml:space="preserve">
     <value>This will remove all the data about this farm and its fields. It will also remove this farm and its fields from your plans and records. You will not be able to get it back.</value>
@@ -1928,7 +1922,7 @@ m3/ha  not set</value>
     <value>View fields</value>
   </data>
   <data name="lblDoYouPlanToSpreadMoreInorganicFertiliserOnTheseFields" xml:space="preserve">
-    <value>Do you plan to spread more inorganic fertiliser on these Fields?</value>
+    <value>Do you plan to spread more inorganic fertiliser on these fields?</value>
   </data>
   <data name="lblDoYouPlanToSpreadMoreInorganicFertiliser" xml:space="preserve">
     <value>Do you plan to spread more inorganic fertiliser?</value>
@@ -1952,7 +1946,7 @@ m3/ha  not set</value>
     <value>Enter a valid amount of {0} before continuing</value>
   </data>
   <data name="lblCheckInorganicFertiliserDetailsForFields" xml:space="preserve">
-    <value>Check Inorganic Fertiliser Details for Fields</value>
+    <value>Check inorganic fertiliser details for fields</value>
   </data>
   <data name="lblKgWithNutrient" xml:space="preserve">
     <value>{0} kg {1}</value>
@@ -1982,10 +1976,10 @@ m3/ha  not set</value>
     <value>SNS question</value>
   </data>
   <data name="lbl1Novto15Jan" xml:space="preserve">
-    <value>1 Nov to 15 Jan</value>
+    <value>1 {0} to 15 {1}</value>
   </data>
   <data name="lbl1Novto31Dec" xml:space="preserve">
-    <value>1 Nov to 31 Dec</value>
+    <value>1 {0} to 31 {1}</value>
   </data>
   <data name="lblImportant" xml:space="preserve">
     <value>Important</value>
@@ -1997,7 +1991,7 @@ m3/ha  not set</value>
     <value>The NVZ Action Programme states that the total amount of nitrogen from all organic manures you apply in any 12-month period on any single hectare of your land must not exceed 250kg. </value>
   </data>
   <data name="MsgApplicationDateEnteredIsInsideClosedPeriod" xml:space="preserve">
-    <value>The application date you entered is inside your closed period for applying high N organic manure.</value>
+    <value>The application date you entered is inside your closed period for applying high nitrogen (N) organic manure.</value>
   </data>
   <data name="MsgApplicationDateEnteredIsInsideClosedPeriodDetail" xml:space="preserve">
     <value>The NVZ Action Programme states that the closed period for {0} planted on non-organic farms {1} for {2} soil is {3}.</value>
@@ -2006,19 +2000,19 @@ m3/ha  not set</value>
     <value>Milling</value>
   </data>
   <data name="lblNMaxLimitTitle" xml:space="preserve">
-    <value>This application may take you over the N max limit for this crop</value>
+    <value>This application may take you over the N-max limit for this crop</value>
   </data>
   <data name="lblShallow" xml:space="preserve">
     <value>Shallow</value>
   </data>
   <data name="MsgNMaxLimit" xml:space="preserve">
-    <value>The NVZ Action Programme requires that the average nitrogen application rate (from manufactured nitrogen fertiliser and crop-available nitrogen from livestock manures) across the whole farm area of a specified crop type does not exceed the N max limit for that crop type.</value>
+    <value>The NVZ Action Programme requires that the average nitrogen application rate (from manufactured nitrogen fertiliser and crop-available nitrogen from livestock manures) across the whole farm area of a specified crop type does not exceed the N-max limit for that crop type.</value>
   </data>
   <data name="lblApplicationRateOverTheMaximumRateForSlurry" xml:space="preserve">
     <value>This application may take you over the maximum application rate for slurry.</value>
   </data>
   <data name="MsgApplicationRateForSlurryAndPoultryDetail" xml:space="preserve">
-    <value>The NVZ Action Programme states that the application rate of slurry between {0} and the end of February must not exceed 30 m³/ha.</value>
+    <value>The NVZ Action Programme states that the application rate of slurry between {0} and the end of February must not exceed 30 cubic metres per hectare.</value>
   </data>
   <data name="lblEndClosedPeriod" xml:space="preserve">
     <value>{0} {1}</value>
@@ -2042,7 +2036,7 @@ m3/ha  not set</value>
     <value>You can continue but you should consider adjusting your application rate to comply with NVZ rules.</value>
   </data>
   <data name="MsgTheNVZActionProgrammeStatesThatTheARPoultry" xml:space="preserve">
-    <value>The NVZ Action Programme states that the application rate of poultry manure between {0} and the end of February must not exceed 8 t/ha.</value>
+    <value>The NVZ Action Programme states that the application rate of poultry manure between {0} and the end of February must not exceed 8 tonnes per hectare.</value>
   </data>
   <data name="lblMeterCubePerHectare" xml:space="preserve">
     <value>m³ per hectare</value>
@@ -2078,13 +2072,13 @@ m3/ha  not set</value>
     <value>You must allow at least 3 weeks between applications.</value>
   </data>
   <data name="lblTheNVZActionProgrammeAppRateExceeds150WithinClosedPeriodOrganic" xml:space="preserve">
-    <value>The NVZ Action Programme states that the application rate of high available N manures on {0} between {1} must not exceed 150 kg/ha.</value>
+    <value>The NVZ Action Programme states that the application rate of high readily available nitrogen (N) manures on {0} between {1} must not exceed 150 kg per hectare.</value>
   </data>
   <data name="lblThisApplicationTakeOverMaxAppRate" xml:space="preserve">
-    <value>This application will take you over the maximum application rate for high N organic manure.</value>
+    <value>This application will take you over the maximum application rate for high nitrogen (N) organic manure.</value>
   </data>
   <data name="MsgForMaxNitrogenForFertiliserForBrassicasFirstAdditionalWarningMsg" xml:space="preserve">
-    <value>For brassicas, an additional 50 kg/ha may be applied every four weeks during the closed application period up to the End of Feb.</value>
+    <value>For brassicas, an additional 50kg per hectare may be applied every four weeks during the closed application period up to the end of February.</value>
   </data>
   <data name="MsgForMaxNitrogenForFertiliserForBrassicasSecondAdditionalWarningMsg" xml:space="preserve">
     <value>You can continue, but you should consider not exceeding the maximum application rate of manufactured nitrogen fertiliser to avoid the risk of agricultural nitrate pollution.</value>
@@ -2093,13 +2087,13 @@ m3/ha  not set</value>
     <value>MAX APPLICATION RATE FOR BRASSICAS</value>
   </data>
   <data name="MsgForMaxNitrogenForFertiliserForBrassicasWarningMsg" xml:space="preserve">
-    <value>The NVZ Action Programme states that the application rate of manufactured nitrogen fertiliser on brassicas between {0} and {1} must not exceed 100 kg/ha.</value>
+    <value>The NVZ Action Programme states that the application rate of manufactured nitrogen fertiliser on brassicas between {0} and {1} must not exceed 100kg per hectare</value>
   </data>
   <data name="MsgForMaxNitrogenForFertiliserTitle" xml:space="preserve">
     <value>This application will take you over the maximum application rate for manufactured nitrogen fertiliser</value>
   </data>
   <data name="MsgForMaxNitrogenForFertiliserExceptBrassicas" xml:space="preserve">
-    <value>The NVZ Action Programme states that the application rate of manufactured nitrogen fertiliser on {0} between {1} and {2} must not exceed {3} kg/ha.</value>
+    <value>The NVZ Action Programme states that the application rate of manufactured nitrogen (N) fertiliser on {0} between {1} and {2} must not exceed {3}kg per hectare</value>
   </data>
   <data name="MsgForMaxNitrogenForFertiliserForExceptBrassicasFirstAdditionalWarningMsg" xml:space="preserve">
     <value>You can continue, but you should consider reducing the application rate of manufactured nitrogen fertiliser to avoid the risk of agricultural nitrate pollution.</value>
@@ -2108,10 +2102,10 @@ m3/ha  not set</value>
     <value>MAX APPLICATION RATE (EVERYTHING EXCEPT BRASSICAS)</value>
   </data>
   <data name="MsgForMaxNitrogenForFertiliserForGrassTitle" xml:space="preserve">
-    <value>APPLICATION TO GRASS AT A RATE OF MORE THAN 40KG N/HA IN ONE GO</value>
+    <value>APPLICATION TO GRASS AT A RATE OF MORE THAN 40KG NITROGEN (N) PER HECTARE IN ONE GO</value>
   </data>
   <data name="MsgForMaxNitrogenForFertiliserGrass" xml:space="preserve">
-    <value>The NVZ Action Programme states that manufactured nitrogen fertiliser must not be applied on grass at a rate of more than  40 kg N/ha in one go.</value>
+    <value>The NVZ Action Programme states that manufactured nitrogen fertiliser must not be applied on grass at a rate of more than  40kg nitrogen (N) per hectare in one go.</value>
   </data>
   <data name="lblEndOfFeb" xml:space="preserve">
     <value>End of Feb</value>
@@ -2132,7 +2126,7 @@ m3/ha  not set</value>
     <value>Sample for soil mineral nitrogen</value>
   </data>
   <data name="lblSoilDateAndPH" xml:space="preserve">
-    <value>Soil Date and PH</value>
+    <value>Soil date and pH</value>
   </data>
   <data name="lblWhenWasTheSampleForSoilMineralNitrogenTaken" xml:space="preserve">
     <value>When was the sample for soil mineral nitrogen taken in {0}?</value>
@@ -2147,52 +2141,52 @@ m3/ha  not set</value>
     <value>Date should not be in the future</value>
   </data>
   <data name="MsgSampleForSoilMineralNitrogenForError" xml:space="preserve">
-    <value>SampleForSoilMineralNitrogen</value>
+    <value>Sample for soil mineral nitrogen</value>
   </data>
   <data name="lbl15Octto31Oct" xml:space="preserve">
-    <value>15 Oct to 31 Oct</value>
+    <value>15 {0} to 31 {1}</value>
   </data>
   <data name="lbl16Septo28Feb" xml:space="preserve">
-    <value>16 Aug to {0} Feb</value>
+    <value>16 {0} to {1} {2}</value>
   </data>
   <data name="lbl16Septo31Oct" xml:space="preserve">
-    <value>16 Sep to 31 Oct</value>
+    <value>16 {0} to 31 {1}</value>
   </data>
   <data name="lbl1Augto28Feb" xml:space="preserve">
-    <value>1 Aug to {0} Feb</value>
+    <value>1 {0} to {1} {2}</value>
   </data>
   <data name="lbl1Augto31Oct" xml:space="preserve">
-    <value>1 Aug to 31 Oct</value>
+    <value>1 {0} to 31 {1}</value>
   </data>
   <data name="lbl1Octto28Feb" xml:space="preserve">
-    <value>1 Oct to {0} Feb</value>
+    <value>1 {0} to {1} {2}</value>
   </data>
   <data name="lbl1Octto31Oct" xml:space="preserve">
-    <value>1 Oct to 31 Oct</value>
+    <value>1 {0} to 31 {1}</value>
   </data>
   <data name="lbl1Septo31Oct" xml:space="preserve">
-    <value>1 Sep to 31 Oct</value>
+    <value>1 {0} to 31 {1}</value>
   </data>
   <data name="lblTheNVZActionProgrammeAppRateExceedsHighNWithinWarningPeriodOrganic" xml:space="preserve">
-    <value>The NVZ Action Programme states that the application rate of high available N manures on {0} between {1} must not exceed {2}kg/ha at one time and you must not spread more than 150kg of total nitrogen per hectare.</value>
+    <value>The NVZ Action Programme states that the application rate of high readily available nitrogen (N) manures on {0} between {1} must not exceed {2}kg per hectare at one time and you must not spread more than 150kg of total nitrogen per hectare.</value>
   </data>
   <data name="lblCurrentCropType" xml:space="preserve">
     <value>Current crop type</value>
   </data>
   <data name="lblSoilMineralNitrogenAnalysisResults" xml:space="preserve">
-    <value>Soil mineral nitrogen analysis results</value>
+    <value>Soil mineral nitrogen (N) analysis results</value>
   </data>
   <data name="lblEnterTheSoilMineralNitrogenAnalysisResult" xml:space="preserve">
     <value>Enter the soil mineral nitrogen analysis results for {0}</value>
   </data>
   <data name="lblKilogramsOfSoilMineralNitrogenAt030CM" xml:space="preserve">
-    <value>Kilograms of soil mineral nitrogen at 0-30cm</value>
+    <value>Kilograms of soil mineral nitrogen (N) at 0-30cm</value>
   </data>
   <data name="lblKilogramsOfSoilMineralNitrogenAt3060CM" xml:space="preserve">
-    <value>Kilograms of soil mineral nitrogen at 30-60cm</value>
+    <value>Kilograms of soil mineral nitrogen (N) at 30-60cm</value>
   </data>
   <data name="lblKilogramsOfSoilMineralNitrogenAt6090CM" xml:space="preserve">
-    <value>Kilograms of soil mineral nitrogen at 60-90cm</value>
+    <value>Kilograms of soil mineral nitrogen (N) at 60-90cm</value>
   </data>
   <data name="lblAddSoilMineralNitrogen" xml:space="preserve">
     <value>Add soil mineral nitrogen for {0}</value>
@@ -2201,7 +2195,7 @@ m3/ha  not set</value>
     <value>What was the sample depth?</value>
   </data>
   <data name="lblSoilMineralNitrogen" xml:space="preserve">
-    <value>Soil mineral nitrogen</value>
+    <value>Soil mineral nitrogen (N)</value>
   </data>
   <data name="lblSampleDepth" xml:space="preserve">
     <value>Sample depth</value>
@@ -2213,7 +2207,7 @@ m3/ha  not set</value>
     <value>Autumn</value>
   </data>
   <data name="lblEnterAValidNumber" xml:space="preserve">
-    <value>enter a valid number</value>
+    <value>Enter a valid number</value>
   </data>
   <data name="lblEnterTheNumberOfShootsPerSquareMetre" xml:space="preserve">
     <value>Enter the number of shoots per square metre</value>
@@ -2231,7 +2225,7 @@ m3/ha  not set</value>
     <value>Crop height</value>
   </data>
   <data name="lblDoYouWantToEnterGAIOrCropHeight" xml:space="preserve">
-    <value>Do You Want to Enter Green Area Index or the Crop Height?</value>
+    <value>Do you want to enter green area index or the crop height?</value>
   </data>
   <data name="lblGreenAreaIndex" xml:space="preserve">
     <value>Green area index (GAI)</value>
@@ -2246,13 +2240,13 @@ m3/ha  not set</value>
     <value>Number of shoots</value>
   </data>
   <data name="lblSoilMineralNitrogenAt030CMForError" xml:space="preserve">
-    <value>SoilMineralNitrogenAt030CM</value>
+    <value>Soil mineral nitrogen (N) at 30cm</value>
   </data>
   <data name="lblSoilMineralNitrogenAt3060CMForError" xml:space="preserve">
-    <value>SoilMineralNitrogenAt3060CM</value>
+    <value>Soil mineral nitrogen (N) at 30cm to 60cm</value>
   </data>
   <data name="lblSoilMineralNitrogenAt6090CMForError" xml:space="preserve">
-    <value>SoilMineralNitrogenAt6090CM</value>
+    <value>Soil mineral nitrogen (N) at 60cm to 90cm</value>
   </data>
   <data name="MsgForGrassAndOilseedRapeClosedPeriodForFertiliserAdditional" xml:space="preserve">
     <value>You can continue, but you should consider not applying manufactured nitrogen fertiliser at this time, to avoid the risk of agricultural nitrate pollution.</value>
@@ -2264,7 +2258,7 @@ m3/ha  not set</value>
     <value>You can continue, but you should consider reducing the amount of nitrogen from organic manures you apply to avoid the risk of agricultural nitrate pollution.</value>
   </data>
   <data name="lblTheNVZActionProgrammeAppRateExceeds150WithinClosedPeriodOrganicAdditional" xml:space="preserve">
-    <value>You can continue, but you should consider reducing the application rate of high available N manures to avoid the risk of agricultural nitrate pollution.</value>
+    <value>You can continue, but you should consider reducing the application rate of high readily available nitrogen (N) manures to avoid the risk of agricultural nitrate pollution.</value>
   </data>
   <data name="lblEndClosederiodAndEndFebYouMustAllow3WeeksGapAdditional" xml:space="preserve">
     <value>You can continue, but you should consider allowing more time between applications to avoid the risk of agricultural nitrate pollution.</value>
@@ -2276,16 +2270,16 @@ m3/ha  not set</value>
     <value>You can continue, but you should consider reducing the application rate of poultry manure to avoid the risk of agricultural nitrate pollution.</value>
   </data>
   <data name="lblWhatWasTheSoilMineralNitrogen" xml:space="preserve">
-    <value>What was the soil mineral nitrogen kg/ha</value>
+    <value>What was the soil mineral nitrogen kg per hectare?</value>
   </data>
   <data name="lblSamplelDepthForError" xml:space="preserve">
-    <value>SampleDepth</value>
+    <value>Sample depth</value>
   </data>
   <data name="lblSoilDepth" xml:space="preserve">
     <value>Sample depth</value>
   </data>
   <data name="lblSoilMineralNitrogenForError" xml:space="preserve">
-    <value>SoilMineralNitrogen</value>
+    <value>Soil mineral nitrogen (N)</value>
   </data>
   <data name="lblWouldYouLikeToAddAnEstimateOfNitrogenMineralisation" xml:space="preserve">
     <value>Would you like to add an estimate of nitrogen mineralisation during the growing season?</value>
@@ -2312,7 +2306,7 @@ m3/ha  not set</value>
     <value>Enter a valid numeric GAI value before continuing (0-3)</value>
   </data>
   <data name="lblSoilNitrogenSupplyIndex" xml:space="preserve">
-    <value>Soil Nitrogen Supply Index for {0}</value>
+    <value>Soil nitrogen (N) supply index for {0}</value>
   </data>
   <data name="lblAdjustmentValue" xml:space="preserve">
     <value>Adjustment value</value>
@@ -2324,19 +2318,19 @@ m3/ha  not set</value>
     <value>What is the adjustment value per hectare?</value>
   </data>
   <data name="lblWhatIsThePercentageOfOrganicMatter" xml:space="preserve">
-    <value>What is the Percentage of Organic Matter in the Soil?</value>
+    <value>What is the percentage of organic matter in the soil?</value>
   </data>
   <data name="lblBasedOnSoilOrganicMatter" xml:space="preserve">
-    <value>Based on Soil organic matter</value>
+    <value>Based on soil organic matter</value>
   </data>
   <data name="lblEnterAValueForMineralisation" xml:space="preserve">
-    <value>Enter a value for mineralisation in kg/ha</value>
+    <value>Enter a value for mineralisation in kg per hectare</value>
   </data>
   <data name="lblEstimateBasedOnSoilOrganicMatterContent" xml:space="preserve">
     <value>Estimate based on soil organic matter content</value>
   </data>
   <data name="lblCalculateSoilNitrogenMineralisation" xml:space="preserve">
-    <value>Calculate based on soil nitrogenMineralisation</value>
+    <value>Calculate based on soil nitrogen (N) mineralisation</value>
   </data>
   <data name="lblHowWouldYouLikeToCalculateTheSoilNitrogenMineralisation" xml:space="preserve">
     <value>How would you like to calculate the soil nitrogen mineralisation for {0}?</value>
@@ -2345,10 +2339,10 @@ m3/ha  not set</value>
     <value>AdjustmentValue</value>
   </data>
   <data name="lblKilogramsOfSoilMineralNitrogenAt6090CMOptional" xml:space="preserve">
-    <value>Kilograms of soil mineral nitrogen at 60-90cm (optional)</value>
+    <value>Kilograms of soil mineral nitrogen (N) at 60-90cm (optional)</value>
   </data>
   <data name="lblSoilOrganicMatterForError" xml:space="preserve">
-    <value>SoilOrganicMatter</value>
+    <value>Soil organic matter</value>
   </data>
   <data name="lblPercentageLable" xml:space="preserve">
     <value>Percentage</value>
@@ -2363,10 +2357,10 @@ m3/ha  not set</value>
     <value>If you think this is wrong, you can change it now or later.</value>
   </data>
   <data name="lblSnsIndex" xml:space="preserve">
-    <value>Soil Nitrogen Supply Index</value>
+    <value>Soil nitrogen (N) supply index</value>
   </data>
   <data name="lblSnsDetail" xml:space="preserve">
-    <value>{0}({1}kg/ha)</value>
+    <value>{0}({1}kg per hectare)</value>
   </data>
   <data name="lblCalculateNitrogenInCurrentCrop" xml:space="preserve">
     <value>Calculate nitrogen in crop question</value>
@@ -2375,7 +2369,7 @@ m3/ha  not set</value>
     <value>{0}({1}kg per hectare)</value>
   </data>
   <data name="lblCalculateBasedOnRecentSoilMineralNitrogenAnalysisResult" xml:space="preserve">
-    <value>Calculate based on a recent soil mineral nitrogen analysis result</value>
+    <value>Calculate based on a recent soil mineral nitrogen (N) analysis result</value>
   </data>
   <data name="lblHowWouldYouLikeToCalculateSoilNitrogenSupply" xml:space="preserve">
     <value>How would you like to calculate the soil nitrogen supply for {0}?</value>
@@ -2411,7 +2405,7 @@ m3/ha  not set</value>
     <value>How would you like to enter your soil nutrient values? not set</value>
   </data>
   <data name="MsgPhNotSet" xml:space="preserve">
-    <value>Soil ph level not set</value>
+    <value>Soil pH value not set</value>
   </data>
   <data name="MsgPhosphorusIndexNotSet" xml:space="preserve">
     <value>Phosphorus (P) index not set</value>
@@ -2432,7 +2426,7 @@ m3/ha  not set</value>
     <value>Magnesium (Mg) per litre of soil (optional)</value>
   </data>
   <data name="lblPHLevelOption" xml:space="preserve">
-    <value>pH level (optional)</value>
+    <value>pH value (optional)</value>
   </data>
   <data name="lblPhosphorusIndexOptional" xml:space="preserve">
     <value>Phosphorus (P) index (optional)</value>
@@ -2453,7 +2447,7 @@ m3/ha  not set</value>
     <value>If your soil analysis does not include results for a particular nutrient, leave it blank.</value>
   </data>
   <data name="MsgEnterAtLeastOneValue" xml:space="preserve">
-    <value>Enter at least one nutrient value.</value>
+    <value>Enter at least one value.</value>
   </data>
   <data name="lblThisWillBeTheFirstCropInTheseFields" xml:space="preserve">
     <value>This will be the first crop in these fields:</value>
@@ -2471,7 +2465,7 @@ m3/ha  not set</value>
     <value>Change the soil analysis</value>
   </data>
   <data name="lblPhLevel" xml:space="preserve">
-    <value>ph level</value>
+    <value>pH value</value>
   </data>
   <data name="lblPhosphorusAnalysisTypeForSoilDetail" xml:space="preserve">
     <value>Phosphorus (P) analysis type</value>
@@ -2480,7 +2474,7 @@ m3/ha  not set</value>
     <value>Soil analysis for {0}</value>
   </data>
   <data name="lblSoilSulphurDeficient" xml:space="preserve">
-    <value>Is the soil Sulphur (S) deficient?</value>
+    <value>Is the soil sulphur (S) deficient?</value>
   </data>
   <data name="lblChangeSoilAnalysis" xml:space="preserve">
     <value>Change soil analysis</value>
@@ -2519,7 +2513,7 @@ m3/ha  not set</value>
     <value>Update {0}</value>
   </data>
   <data name="hintTheDateFormat" xml:space="preserve">
-    <value>The date format is '21 06 2024'.</value>
+    <value>The date format is 21 06 2024.</value>
   </data>
   <data name="lblBasedOnYourCropSoilTypeAndFarmDetails" xml:space="preserve">
     <value>Based on your crop, soil type and farm details.</value>
@@ -2531,10 +2525,10 @@ m3/ha  not set</value>
     <value>Your closed period for spreading inorganic fertilisers is:</value>
   </data>
   <data name="lbl1SeptemberTo15January" xml:space="preserve">
-    <value>1 September to 15 January</value>
+    <value>1 {0} to 15 {1}</value>
   </data>
   <data name="lbl31OctoberTo15January" xml:space="preserve">
-    <value>31 October to 15 January</value>
+    <value>31 {0} to 15 {1}</value>
   </data>
   <data name="MsgDateShouldBeExceedFrom" xml:space="preserve">
     <value>Date should be exceed from {0}</value>
@@ -2873,7 +2867,7 @@ m3/ha  not set</value>
     <value>How much nitrogen (N) has been applied to {0} each year (on average)?</value>
   </data>
   <data name="lblSoilNitrogenSupplyItems" xml:space="preserve">
-    <value>Soil nitrogen supply items</value>
+    <value>Soil nitrogen (N) supply items</value>
   </data>
   <data name="lblHowManyCutsTypicallyEachYear" xml:space="preserve">
     <value>How many cuts typically each year?</value>
@@ -2900,10 +2894,10 @@ m3/ha  not set</value>
     <value>Application date {0}</value>
   </data>
   <data name="lblAvailablePhosphate" xml:space="preserve">
-    <value>Available Phosphate</value>
+    <value>Available Phosphate (P205)</value>
   </data>
   <data name="lblAvailablePotash" xml:space="preserve">
-    <value>Available Potash</value>
+    <value>Available Potash (K2O)</value>
   </data>
   <data name="lblCropInformation1" xml:space="preserve">
     <value>Crop information 1</value>
@@ -3032,10 +3026,10 @@ m3/ha  not set</value>
     <value>Field {0}</value>
   </data>
   <data name="lblMeterCubePerHa" xml:space="preserve">
-    <value>m³/ha</value>
+    <value>cubic meters per hectare</value>
   </data>
   <data name="lblTonPerHa" xml:space="preserve">
-    <value>t/ha</value>
+    <value>tonnes per hectare</value>
   </data>
   <data name="lblCPHNumberSingleBusinessIdentifier" xml:space="preserve">
     <value>CPH number: {0} . Single Business Identifier: {1}</value>
@@ -3053,7 +3047,7 @@ m3/ha  not set</value>
     <value>Crop details for {0}</value>
   </data>
   <data name="lblTotalPhosphateOnly" xml:space="preserve">
-    <value>Total Phosphate</value>
+    <value>Total Phosphate (P2O5)</value>
   </data>
   <data name="lblTotalPotash" xml:space="preserve">
     <value>Total Potash</value>
@@ -3066,5 +3060,125 @@ m3/ha  not set</value>
   </data>
   <data name="lblBackToYourPlan" xml:space="preserve">
     <value>Back to your {0} plan</value>
+  </data>
+  <data name="lblAvailableNitrogen" xml:space="preserve">
+    <value>Available Nitrogen (N)</value>
+  </data>
+  <data name="lblTotalNitrogenWithNutrient" xml:space="preserve">
+    <value>Total Nitrogen (N)</value>
+  </data>
+  <data name="lblTotalPotashWithNutrient" xml:space="preserve">
+    <value>Total Potash (K2O)</value>
+  </data>
+  <data name="lblApril" xml:space="preserve">
+    <value>April</value>
+  </data>
+  <data name="lblAugust" xml:space="preserve">
+    <value>August</value>
+  </data>
+  <data name="lblDecember" xml:space="preserve">
+    <value>December</value>
+  </data>
+  <data name="lblFebruary" xml:space="preserve">
+    <value>February</value>
+  </data>
+  <data name="lblJanuary" xml:space="preserve">
+    <value>January</value>
+  </data>
+  <data name="lblJuly" xml:space="preserve">
+    <value>July</value>
+  </data>
+  <data name="lblJune" xml:space="preserve">
+    <value>June</value>
+  </data>
+  <data name="lblMarch" xml:space="preserve">
+    <value>March</value>
+  </data>
+  <data name="lblMay" xml:space="preserve">
+    <value>May</value>
+  </data>
+  <data name="lblNovember" xml:space="preserve">
+    <value>November</value>
+  </data>
+  <data name="lblOctober" xml:space="preserve">
+    <value>October</value>
+  </data>
+  <data name="lblSeptember" xml:space="preserve">
+    <value>September</value>
+  </data>
+  <data name="lblUseValuesFromRB209" xml:space="preserve">
+    <value>No, update these values</value>
+  </data>
+  <data name="lblYesUseTheseValues" xml:space="preserve">
+    <value>Yes, use these nutrient values</value>
+  </data>
+  <data name="lblTheDate" xml:space="preserve">
+    <value>The date</value>
+  </data>
+  <data name="lblNoIWantToUseTheUpdatedValuesFromDate" xml:space="preserve">
+    <value>No, I want to use the updated values from {0}</value>
+  </data>
+  <data name="lblYesUseTheseStandardNutrientValues" xml:space="preserve">
+    <value>Yes, use these standard nutrient values</value>
+  </data>
+  <data name="lblYesUseTheseValuesFromDate" xml:space="preserve">
+    <value>Yes, use these values from {0}</value>
+  </data>
+  <data name="lblBasedOnYourCropSoilTypeFarmDetails" xml:space="preserve">
+    <value>Based on your crop, soil type and farm details.</value>
+  </data>
+  <data name="lblYourClosedPeriodForSpreadingOrganicMaterials" xml:space="preserve">
+    <value>Your closed period for spreading organic materials with high readily available nitrogen is:</value>
+  </data>
+  <data name="lblTo" xml:space="preserve">
+    <value>{0} to {1}</value>
+  </data>
+  <data name="lblFiveDigit" xml:space="preserve">
+    <value>99999</value>
+  </data>
+  <data name="MsgEnterAValueOfNoMoreThan5Digits" xml:space="preserve">
+    <value>Enter a value of no more than 5 digits</value>
+  </data>
+  <data name="lblAbove300SeaLevel" xml:space="preserve">
+    <value>Above 300 sea level</value>
+  </data>
+  <data name="lblhelpdesk" xml:space="preserve">
+    <value>helpdesk@rsk-bsl.co.uk</value>
+  </data>
+  <data name="lblIfYouHaveAnyProblemsOrIssuesWithThisService" xml:space="preserve">
+    <value>If you have any problems or issues with this service, email our helpdesk at </value>
+  </data>
+  <data name="lblMailtoHelpdesk" xml:space="preserve">
+    <value>mailto:helpdesk@rsk-bsl.co.uk</value>
+  </data>
+  <data name="lblWeWillAssistYou" xml:space="preserve">
+    <value> and we will assist you.</value>
+  </data>
+  <data name="lblWhatIsTheNearestPostcode" xml:space="preserve">
+    <value>What is the nearest postcode?</value>
+  </data>
+  <data name="lblClimateParagraphFirst" xml:space="preserve">
+    <value>We can't find weather data for {0}.You can find rainfall and other weather information by entering a postcode near to {1} Farm.</value>
+  </data>
+  <data name="lblClimateParagraphFourth" xml:space="preserve">
+    <value>(open in a new window)</value>
+  </data>
+  <data name="lblClimateParagraphSecond" xml:space="preserve">
+    <value>You can use the Post office lookup service to find a postcode in your location</value>
+  </data>
+  <data name="lblClimateParagraphThird" xml:space="preserve">
+    <value>Find a postcode in your location</value>
+  </data>
+  <data name="lblFindWeatherDataBasedOnPostcode" xml:space="preserve">
+    <value>Find weather data based on postcode</value>
+  </data>
+  <data name="lblWeatherDataCannotBeFoundForTheCurrentPostcode" xml:space="preserve">
+    <value>Weather data cannot be found for this postcode.</value>
+  </data>
+  <data name="lblEnterTheClimatePostcode" xml:space="preserve">
+    <value>Enter the climate postcode</value>
+  </data>
+  <data name="lblClimatePostcode" xml:space="preserve">
+    <value>Climate postcode</value>
   </data>
 </root>

@@ -4,19 +4,20 @@
 
 @{
     ViewData["Title"] = Resource.lblPostCode;
+    var backAction = Model.IsManualAddress == true ? "ManualAddress" : "Address";
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "FarmingRules")" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : @backAction)" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
 }
 
 
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-l">@string.Format(Resource.lblWhatIsPostcode, Model.Name)</h1>
+        <h1 class="govuk-heading-l">@Resource.lblFindWeatherDataBasedOnPostcode</h1>
 
-        <form asp-action="PostCode" method="post" asp-controller="Farm">
+        <form asp-action="ClimatePostCode" method="post" asp-controller="Farm">
             @Html.AntiForgeryToken()
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
@@ -28,10 +29,10 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegisteredOrganicProducer"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZFields"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LastHarvestYear"></govuk-input>            
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LastHarvestYear"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClimateDataPostCode"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Postcode"></govuk-input>
             @if (Model != null)
             {
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManualAddress" value="@Model.IsManualAddress.ToString().ToLower()"></govuk-input>
@@ -40,18 +41,18 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsUpdate"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
             }
-          @*   <govuk-notification-banner>
-                <govuk-notification-banner-title>
-                    @Resource.lblImportant
-                </govuk-notification-banner-title>
-                <p class="govuk-body">This page is in construction</p>
-            </govuk-notification-banner> *@
-             <div class="govuk-form-group"> 
-                <govuk-input input-class="govuk-input--width-5" asp-for="@Model.Postcode">
-                    <govuk-input-label is-page-heading="false"></govuk-input-label>
-            </govuk-input>
-               </div>    
-                 <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
+            <p class="govuk-body">@string.Format(Resource.lblClimateParagraphFirst, Model.Postcode, Model.Name)</p>
+            <p class="govuk-body">@Resource.lblClimateParagraphSecond</p>
+            <p class="govuk-body">
+                <a href="#">@Resource.lblClimateParagraphThird</a>
+                @Resource.lblClimateParagraphFourth
+            </p>
+            <div class="govuk-form-group">
+                <govuk-input input-class="govuk-input--width-5" asp-for="@Model.ClimateDataPostCode">
+                    @* <govuk-input-label is-page-heading="true"></govuk-input-label> *@
+                </govuk-input>
+            </div>
+            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
         </form>

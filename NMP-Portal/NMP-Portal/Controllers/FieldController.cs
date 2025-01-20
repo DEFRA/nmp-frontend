@@ -1611,7 +1611,7 @@ namespace NMP.Portal.Controllers
                     {
                         Crop = new Crop
                         {
-                            Year=DateTime.Now.Year-1,
+                            Year=model.LastHarvestYear??0,
                             Confirm=false,
                             CropTypeID=model.CropTypeID,
                             FieldType = model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass ? (int)NMP.Portal.Enums.FieldType.Grass : (int)NMP.Portal.Enums.FieldType.Arable,
@@ -1750,7 +1750,7 @@ namespace NMP.Portal.Controllers
                 ViewBag.Success = null;
             }
 
-            //_httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
 
             return View(model);
         }
@@ -3987,11 +3987,12 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("FarmList", "Farm");
             }
+            
             List<int> previousYears = new List<int>();
-            int currentYear = System.DateTime.Now.Year;
-            previousYears.Add(currentYear);
-            previousYears.Add(currentYear - 1);
-            previousYears.Add(currentYear - 2);
+            int lastHarvestYear = model.LastHarvestYear??0;
+            previousYears.Add(lastHarvestYear);
+            previousYears.Add(lastHarvestYear - 1);
+            previousYears.Add(lastHarvestYear - 2);
             ViewBag.PreviousGrassesYear = previousYears;
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             return View(model);
@@ -4010,20 +4011,20 @@ namespace NMP.Portal.Controllers
             if (!ModelState.IsValid)
             {
                 List<int> previousYears = new List<int>();
-                int currentYear = System.DateTime.Now.Year;
-                previousYears.Add(currentYear);
-                previousYears.Add(currentYear - 1);
-                previousYears.Add(currentYear - 2);
+                int lastHarvestYear = model.LastHarvestYear??0;
+                previousYears.Add(lastHarvestYear);
+                previousYears.Add(lastHarvestYear - 1);
+                previousYears.Add(lastHarvestYear - 2);
                 ViewBag.PreviousGrassesYear = previousYears;
                 return View(model);
             }
             if (model.PreviousGrassYears?.Count == 1 && model.PreviousGrassYears[0] == 0)
             {
                 List<int> previousYears = new List<int>();
-                int currentYear = System.DateTime.Now.Year;
-                previousYears.Add(currentYear);
-                previousYears.Add(currentYear - 1);
-                previousYears.Add(currentYear - 2);
+                int lastHarvestYear = model.LastHarvestYear ?? 0;
+                previousYears.Add(lastHarvestYear);
+                previousYears.Add(lastHarvestYear - 1);
+                previousYears.Add(lastHarvestYear - 2);
                 model.PreviousGrassYears = previousYears;
             }
             model.IsPreviousYearGrass = (model.PreviousGrassYears != null && model.PreviousGrassYears.Contains(System.DateTime.Now.Year - 1)) ? true : false;
