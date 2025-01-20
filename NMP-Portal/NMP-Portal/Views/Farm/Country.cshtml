@@ -26,6 +26,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Postcode"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country" value="@Model.Country"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClimateDataPostCode"></govuk-input>
             @if (Model != null)
             {
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EnglishRules" value="@Model.EnglishRules.ToString().ToLower()"></govuk-input>

@@ -3637,7 +3637,7 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    halfPostCode = farm.Postcode.Substring(0, 4).Trim();
+                    halfPostCode = farm.ClimateDataPostCode.Substring(0, 4).Trim();
                 }
 
                 if (model.ApplicationDate.HasValue && model.SoilDrainageEndDate.HasValue)
@@ -4011,6 +4011,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CheckAnswer(OrganicManureViewModel model)
         {
             _logger.LogTrace($"Organic Manure Controller : CheckAnswer() post action called");
@@ -4132,7 +4133,7 @@ namespace NMP.Portal.Controllers
                                                 var mannerOutput = new
                                                 {
                                                     runType = farmData.EnglishRules ? 3 : 4,
-                                                    postcode = farmData.Postcode.Split(" ")[0],
+                                                    postcode = farmData.ClimateDataPostCode.Split(" ")[0],
                                                     countryID = farmData.CountryID,
                                                     field = new
                                                     {
