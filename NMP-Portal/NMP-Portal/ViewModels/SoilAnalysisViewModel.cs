@@ -14,5 +14,6 @@ namespace NMP.Portal.ViewModels
         public string IsSoilDataChanged { get; set; } = string.Empty;
 
         public PKBalance? PKBalance { get; set; }
+        public bool? isSoilAnalysisAdded { get; set; }
     }
 }

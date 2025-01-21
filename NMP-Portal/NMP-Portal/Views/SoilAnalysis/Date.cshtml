@@ -7,13 +7,36 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId" asp-route-l="@Model.IsSoilDataChanged">@Resource.lblBack</govuk-back-link>
+    @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value)
+    {
+        <govuk-back-link asp-action="FieldSoilAnalysisDetail" asp-controller="Field"  asp-route-id="@Model.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+    }
+    else
+    {
+        <govuk-back-link asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId" asp-route-l="@Model.IsSoilDataChanged">@Resource.lblBack</govuk-back-link>
+      
+    }
 }
 <form asp-action="Date" asp-controller="SoilAnalysis" method="post">
     @Html.AntiForgeryToken()
+    @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value)
+    {
+        <govuk-notification-banner>
+            <p class="govuk-notification-banner__heading">
+                Work is under construction.
+            </p>
+        </govuk-notification-banner>
+    }
     <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
-        <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblAddSoilAnalysis, Model.FieldName)</h1>
-    </legand>    
+        @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value)
+        {
+            <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblWhenWasTheSoilAnalysisForTaken, Model.FieldName)</h1>
+        }
+        else
+        {
+            <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblAddSoilAnalysis, Model.FieldName)</h1>
+        }
+    </legand>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PH"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MagnesiumIndex"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphorusIndex"></govuk-input>
@@ -36,6 +59,9 @@
             <div class="govuk-form-group">
                 <govuk-date-input asp-for="@Model.Date" pattern="[0-9]*">
                     <govuk-date-input-fieldset>
+                        <govuk-date-input-fieldset-legend is-page-heading="false" class="govuk-fieldset">
+
+                        </govuk-date-input-fieldset-legend>
                         <govuk-date-input-hint>
                             @Resource.MsgSampleDateExample
                         </govuk-date-input-hint>
@@ -43,10 +69,21 @@
 
                 </govuk-date-input>
             </div>
-            <govuk-button type="submit" class="margin-bottom-forty">
-                @Resource.lblContinue
-            </govuk-button> 
-            <p class="govuk-body cancel-link"><a asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId" asp-route-l="@Model.IsSoilDataChanged">@Resource.lblCancel</a></p>
+            @if (Model.isSoilAnalysisAdded == null)
+            {
+                <govuk-button type="submit" class="margin-bottom-forty">
+                    @Resource.lblContinue
+                </govuk-button>
+            }
+            @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value)
+            {
+                <p class="govuk-body cancel-link"><a asp-action="FieldSoilAnalysisDetail" asp-controller="Field"  asp-route-id="@Model.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
+                
+            }
+            else
+            {
+                <p class="govuk-body cancel-link"><a asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId" asp-route-l="@Model.IsSoilDataChanged">@Resource.lblCancel</a></p>
+            }
         </div>
 
     </div>

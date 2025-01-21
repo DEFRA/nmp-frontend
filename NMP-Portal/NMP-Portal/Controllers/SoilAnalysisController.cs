@@ -186,7 +186,7 @@ namespace NMP.Portal.Controllers
             return View(model);
         }
         [HttpGet]
-        public async Task<IActionResult> Date()
+        public IActionResult Date()
         {
             _logger.LogTrace($"Soil Analysis Controller: Date() action called.");
             SoilAnalysisViewModel model = new SoilAnalysisViewModel();
@@ -198,6 +198,11 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("FarmList", "Farm");
             }
+            //if (model.isSoilAnalysisAdded != null && model.isSoilAnalysisAdded.Value)
+            //{
+            //    ViewBag.Inprocess = Resource.lblTrue;
+            //    //return RedirectToAction("SoilNutrientValueType")
+            //}
             return View(model);
         }
 
@@ -568,7 +573,7 @@ namespace NMP.Portal.Controllers
                 return View("ChangeSoilAnalysis", model);
             }
 
-            if (model.Potassium!=null||model.Phosphorus!=null||
+            if (model.Potassium != null || model.Phosphorus != null ||
                 model.PotassiumIndex != null || model.PhosphorusIndex != null)
             {
                 PKBalance pKBalance = await _pKBalanceService.FetchPKBalanceByYearAndFieldId(model.Date.Value.Year, model.FieldID.Value);
@@ -630,5 +635,27 @@ namespace NMP.Portal.Controllers
             }
             return RedirectToAction("SoilAnalysisDetail", new { i = model.EncryptedFieldId, j = model.EncryptedFarmId, k = success });
         }
+        [HttpGet]
+        public async Task<IActionResult> IsSoilAnalysisAdded(string i, string j)
+        {
+            _logger.LogTrace($"Soil Analysis Controller: IsSoilAnalysisAdded() action called.");
+            SoilAnalysisViewModel model = new SoilAnalysisViewModel();
+            model.isSoilAnalysisAdded = true;
+            if (!string.IsNullOrWhiteSpace(i) && !string.IsNullOrWhiteSpace(j))
+            {
+                model.EncryptedFarmId = j;
+                int fieldId = Convert.ToInt32(_farmDataProtector.Unprotect(i));
+                var field = await _fieldService.FetchFieldByFieldId(fieldId);
+                if (field != null)
+                {
+                    model.EncryptedFieldId = i;
+                    model.FieldName = field.Name;
+                }
+
+            }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("SoilAnalysisData", model);
+            return RedirectToAction("Date", model);
+        }
+
     }
 }

@@ -3401,7 +3401,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No, I want to enter a recent manure analysis.
+        ///   Looks up a localized string similar to No, enter a recent manure analysis.
         /// </summary>
         public static string lblIwantToEnterARecentOrganicMaterialAnalysis {
             get {
@@ -4131,7 +4131,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No, I want to use the updated values from {0}.
+        ///   Looks up a localized string similar to No, use the values entered on {0}.
         /// </summary>
         public static string lblNoIWantToUseTheUpdatedValuesFromDate {
             get {
@@ -5859,11 +5859,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to use these nutrient values from RB209 for {0}?.
+        ///   Looks up a localized string similar to Do you want to use these standard nutrient values for {0}?.
         /// </summary>
         public static string lblStandardNutrientValues {
             get {
                 return ResourceManager.GetString("lblStandardNutrientValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to use the nutrient values for {0} you added on {1}?.
+        /// </summary>
+        public static string lblStandardNutrientValuesWhwnWeHaveValues {
+            get {
+                return ResourceManager.GetString("lblStandardNutrientValuesWhwnWeHaveValues", resourceCulture);
             }
         }
         
@@ -6678,7 +6687,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No, update these values.
+        ///   Looks up a localized string similar to No, use the standard nutrient values from RB209.
         /// </summary>
         public static string lblUseValuesFromRB209 {
             get {
@@ -7281,6 +7290,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When was the soil analysis for {0} taken?.
+        /// </summary>
+        public static string lblWhenWasTheSoilAnalysisForTaken {
+            get {
+                return ResourceManager.GetString("lblWhenWasTheSoilAnalysisForTaken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When was this measured?.
         /// </summary>
         public static string lblWhenWasThisMeasured {
@@ -7497,7 +7515,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Yes, use these nutrient values.
+        ///   Looks up a localized string similar to Yes, use these values.
         /// </summary>
         public static string lblYesUseTheseValues {
             get {
