@@ -3960,6 +3960,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to mg.
+        /// </summary>
+        public static string lblMg {
+            get {
+                return ResourceManager.GetString("lblMg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to mg per litre.
         /// </summary>
         public static string lblMgL {
