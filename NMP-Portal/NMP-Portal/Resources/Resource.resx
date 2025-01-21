@@ -3184,4 +3184,7 @@ cubic metres per hectare  not set</value>
   <data name="MsgEnterValidValueForPhosphorus" xml:space="preserve">
     <value>Enter an amount between 0 and 999 litres</value>
   </data>
+  <data name="lblMg" xml:space="preserve">
+    <value>mg</value>
+  </data>
 </root>
