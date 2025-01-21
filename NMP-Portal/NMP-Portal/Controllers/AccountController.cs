@@ -13,7 +13,8 @@ namespace NMP.Portal.Controllers
     public class AccountController : Controller
     {
         private readonly ILogger _logger;
-        public AccountController(ILogger<AccountController> logger) {
+        public AccountController(ILogger<AccountController> logger)
+        {
 
             _logger = logger;
         }
@@ -23,13 +24,18 @@ namespace NMP.Portal.Controllers
         //    return Redirect(returnUrl ?? "/");
         //}
 
-        public async Task<IActionResult>logout()
+        public async Task<IActionResult> logout()
         {
             _logger.LogTrace("Account Controller : Logout action called");
             base.SignOut();
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);            
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             HttpContext?.Session.Clear();
-            return RedirectToAction("SignOut","Account", new { Area = "MicrosoftIdentity" });            
+            return RedirectToAction("SignOut", "Account", new { Area = "MicrosoftIdentity" });
+        }
+
+        public IActionResult ChangeOrganisation()
+        {
+            return RedirectToAction("SignIn", "Account", new { Area = "MicrosoftIdentity", redirectUri = "/Farm/FarmList" });
         }
     }
 }
