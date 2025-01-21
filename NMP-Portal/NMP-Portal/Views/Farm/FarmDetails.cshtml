@@ -66,13 +66,10 @@
                         <td class="govuk-table__cell">@Resource.lblPostCode</td>
                         <td class="govuk-table__cell">@Model.Postcode</td>
                     </tr>
-                    @if(!string.IsNullOrWhiteSpace(Model.ClimateDataPostCode))
-                    {
-                        <tr class="govuk-table__row">
-                            <td class="govuk-table__cell">@Resource.lblClimatePostcode</td>
-                            <td class="govuk-table__cell">@Model.ClimateDataPostCode</td>
-                        </tr>
-                    }
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.lblClimatePostcode</td>
+                        <td class="govuk-table__cell">@Model.ClimateDataPostCode</td>
+                    </tr>
 
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblAverageAnnualRainfall</td>
@@ -88,7 +85,7 @@
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblRegisteredOrganicProducer</td>
-                        <td class="govuk-table__cell">@(Model.RegisteredOrganicProducer==true?Resource.lblYes:Resource.lblNo)</td>
+                        <td class="govuk-table__cell">@(Model.RegisteredOrganicProducer == true ? Resource.lblYes : Resource.lblNo)</td>
                     </tr>
                 </tbody>
             </table>

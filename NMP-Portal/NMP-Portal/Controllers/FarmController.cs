@@ -538,7 +538,17 @@ namespace NMP.Portal.Controllers
                 ModelState.AddModelError("ClimateDataPostCode", Resource.lblEnterTheClimatePostcode);
             }
 
-            if ((!string.IsNullOrWhiteSpace(model.ClimateDataPostCode) && model.Rainfall == 0 || model.Rainfall == null))
+            FarmViewModel farmView = null;
+            if (HttpContext.Session.Keys.Contains("FarmData"))
+            {
+                farmView = JsonConvert.DeserializeObject<FarmViewModel>(HttpContext.Session.GetString("FarmData"));
+            }
+            bool ClimateDataPostCodeChange = false;
+            if (farmView != null && model.ClimateDataPostCode != farmView.ClimateDataPostCode)
+            {
+                ClimateDataPostCodeChange = true;
+            }
+            if ((ClimateDataPostCodeChange) || (model.Rainfall == 0 || model.Rainfall == null))
             {
                 string firstHalfPostcode = string.Empty;
                 if (!model.ClimateDataPostCode.Contains(" "))
@@ -707,7 +717,7 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-            if(model != null)
+            if (model != null)
             {
                 if (model.CountryID == (int)NMP.Portal.Enums.FarmCountry.Wales)
                 {
@@ -716,7 +726,7 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("Elevation");
                 }
             }
-            
+
             return View(model);
 
         }
@@ -981,17 +991,6 @@ namespace NMP.Portal.Controllers
                         TempData["Error"] = error.Message;
                         return RedirectToAction("FarmList");
                     }
-                    string firstHalfPostcode = string.Empty;
-                    if (!farm.Postcode.Contains(" "))
-                    {
-                        firstHalfPostcode = farm.Postcode.Substring(0, farm.Postcode.Length - 3);
-                    }
-                    else
-                    {
-                        string[] postcode = farm.Postcode.Split(' ');
-                        firstHalfPostcode = postcode[0];
-                    }
-                    var rainfall = await _farmService.FetchRainfallAverageAsync(firstHalfPostcode);
 
                     if (farm != null)
                     {
@@ -999,14 +998,7 @@ namespace NMP.Portal.Controllers
                         farmData.Name = farm.Name;
                         farmData.FullAddress = string.Format("{0}, {1} {2}, {3} {4}", farm.Address1, farm.Address2 != null ? farm.Address2 + "," : string.Empty, farm.Address3, farm.Address4, farm.Postcode);
                         farmData.EncryptedFarmId = _dataProtector.Protect(farm.ID.ToString());
-                        if(rainfall > 0)
-                        {
-                            farmData.ClimateDataPostCode = null;
-                        }
-                        else
-                        {
-                            farmData.ClimateDataPostCode = farm.ClimateDataPostCode;
-                        }
+                        farmData.ClimateDataPostCode = farm.ClimateDataPostCode;
                         ViewBag.FieldCount = await _fieldService.FetchFieldCountByFarmIdAsync(Convert.ToInt32(farmId));
                     }
                     List<PlanSummaryResponse> planSummaryResponse = await _cropService.FetchPlanSummaryByFarmId(Convert.ToInt32(farmId), 0);
@@ -1047,17 +1039,6 @@ namespace NMP.Portal.Controllers
                         TempData["Error"] = error.Message;
                         return RedirectToAction("FarmList");
                     }
-                    string firstHalfPostcode = string.Empty;
-                    if (!farm.Postcode.Contains(" "))
-                    {
-                        firstHalfPostcode = farm.Postcode.Substring(0, farm.Postcode.Length - 3);
-                    }
-                    else
-                    {
-                        string[] postcode = farm.Postcode.Split(' ');
-                        firstHalfPostcode = postcode[0];
-                    }
-                    var rainfall = await _farmService.FetchRainfallAverageAsync(firstHalfPostcode);
 
                     if (farm != null)
                     {
@@ -1087,15 +1068,7 @@ namespace NMP.Portal.Controllers
                         farmData.EnglishRules = farm.EnglishRules;
                         farmData.NVZFields = farm.NVZFields;
                         farmData.FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel;
-                        if (rainfall >0)
-                        {
-                            farmData.ClimateDataPostCode = null;
-                        }
-                        else
-                        {
-                            farmData.ClimateDataPostCode=farm.ClimateDataPostCode;
-                        }
-
+                        farmData.ClimateDataPostCode = farm.ClimateDataPostCode;
                         farmData.LastHarvestYear = farm.LastHarvestYear;
                         farmData.CreatedByID = farm.CreatedByID;
                         farmData.CreatedOn = farm.CreatedOn;
