@@ -695,7 +695,7 @@ namespace NMP.Portal.Controllers
             return RedirectToAction("NVZ");
         }
         [HttpGet]
-        public IActionResult NVZ()
+        public async Task<IActionResult> NVZ()
         {
             _logger.LogTrace($"Farm Controller : NVZ() action called");
             FarmViewModel? model = new FarmViewModel();
@@ -707,6 +707,16 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("FarmList", "Farm");
             }
+            if(model != null)
+            {
+                if (model.CountryID == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                {
+                    model.NVZFields = (int)NMP.Portal.Enums.NVZFields.AllFieldsInNVZ;
+                    HttpContext.Session.SetObjectAsJson("FarmData", model);
+                    return RedirectToAction("Elevation");
+                }
+            }
+            
             return View(model);
 
         }
