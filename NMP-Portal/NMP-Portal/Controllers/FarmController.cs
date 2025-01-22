@@ -538,36 +538,39 @@ namespace NMP.Portal.Controllers
                 ModelState.AddModelError("ClimateDataPostCode", Resource.lblEnterTheClimatePostcode);
             }
 
-            FarmViewModel farmView = null;
-            if (HttpContext.Session.Keys.Contains("FarmData"))
+            if (!string.IsNullOrWhiteSpace(model.ClimateDataPostCode))
             {
-                farmView = JsonConvert.DeserializeObject<FarmViewModel>(HttpContext.Session.GetString("FarmData"));
-            }
-            bool ClimateDataPostCodeChange = false;
-            if (farmView != null && model.ClimateDataPostCode != farmView.ClimateDataPostCode)
-            {
-                ClimateDataPostCodeChange = true;
-            }
-            if ((ClimateDataPostCodeChange) || (model.Rainfall == 0 || model.Rainfall == null))
-            {
-                string firstHalfPostcode = string.Empty;
-                if (!model.ClimateDataPostCode.Contains(" "))
+                FarmViewModel? farmView = null;
+                if (HttpContext.Session.Keys.Contains("FarmData"))
                 {
-                    firstHalfPostcode = model.ClimateDataPostCode.Substring(0, model.ClimateDataPostCode.Length - 3);
+                    farmView = JsonConvert.DeserializeObject<FarmViewModel>(HttpContext.Session.GetString("FarmData"));
                 }
-                else
+                bool ClimateDataPostCodeChange = false;
+                if (farmView != null && model.ClimateDataPostCode != farmView.ClimateDataPostCode)
                 {
-                    string[] climatePostCode = model.ClimateDataPostCode.Split(' ');
-                    firstHalfPostcode = climatePostCode[0];
+                    ClimateDataPostCodeChange = true;
                 }
-                var rainfall = await _farmService.FetchRainfallAverageAsync(firstHalfPostcode);
-                if (rainfall != null)
+                if ((ClimateDataPostCodeChange) || (model.Rainfall == 0 || model.Rainfall == null))
                 {
-                    model.Rainfall = (int)Math.Round(rainfall);
-                }
-                if (model.Rainfall == null || model.Rainfall == 0)
-                {
-                    ModelState.AddModelError("ClimateDataPostCode", Resource.lblWeatherDataCannotBeFoundForTheCurrentPostcode);
+                    string firstHalfPostcode = string.Empty;
+                    if (!model.ClimateDataPostCode.Contains(" "))
+                    {
+                        firstHalfPostcode = model.ClimateDataPostCode.Substring(0, model.ClimateDataPostCode.Length - 3);
+                    }
+                    else
+                    {
+                        string[] climatePostCode = model.ClimateDataPostCode.Split(' ');
+                        firstHalfPostcode = climatePostCode[0];
+                    }
+                    var rainfall = await _farmService.FetchRainfallAverageAsync(firstHalfPostcode);
+                    if (rainfall != null)
+                    {
+                        model.Rainfall = (int)Math.Round(rainfall);
+                    }
+                    if (model.Rainfall == null || model.Rainfall == 0)
+                    {
+                        ModelState.AddModelError("ClimateDataPostCode", Resource.lblWeatherDataCannotBeFoundForTheCurrentPostcode);
+                    }
                 }
             }
             if (!ModelState.IsValid)
