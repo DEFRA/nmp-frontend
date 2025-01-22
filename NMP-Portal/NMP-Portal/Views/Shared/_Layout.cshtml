@@ -38,7 +38,7 @@
     </header>
     <div class="govuk-width-container noprint">
         <div class="govuk-phase-banner">
-            <div class="govuk-phase-banner__content">
+            <div class="govuk-phase-banner__content govuk-phase-banner__content__top">
                 <div class="govuk-phase-banner__content__align">
                     <strong class="govuk-tag govuk-phase-banner__content__tag">
                         @Resource.lblPhaseBannerContent
@@ -47,13 +47,27 @@
                         @Resource.lblPhaseBannerText
                     </div>
                 </div>
-                <div class="govuk-phase-banner__text">
+                <div class="govuk-phase-banner__text govuk-phase-banner__text__right">
                     @if (User.Identity?.IsAuthenticated == true)
                     {
                         var firstName = User.Claims.FirstOrDefault(c => c.Type == "firstName")?.Value;
                         var lastName = User.Claims.FirstOrDefault(c => c.Type == "lastName")?.Value;
-                        var organisationName = User.Claims.FirstOrDefault(c => c.Type == "organisationName")?.Value;
-                        <span class="cancel-link">@firstName @lastName | @organisationName <a asp-controller="Account" asp-action="ChangeOrganisation">@Resource.lblChange </a> | <a asp-controller="Account" asp-action="logout">@Resource.lblSignout</a></span>
+                        var name = $"{firstName} {lastName}";
+                        int enrolmentCount = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "enrolmentCount")?.Value);
+                        @if (enrolmentCount > 1)
+                        {
+                            var organisationName = User.Claims.FirstOrDefault(c => c.Type == "organisationName")?.Value;
+                            @if (organisationName?.Length > 20)
+                            {
+                                <div class="cancel-link cancel-link__bottom_padding">@organisationName <a asp-controller="Account" asp-action="ChangeOrganisation">@Resource.lblChange</a>  </div>
+                            }
+                            else
+                            {
+                                <span class="cancel-link">@organisationName <a asp-controller="Account" asp-action="ChangeOrganisation">@Resource.lblChange</a> | </span>
+                            }
+                        }
+                        
+                        <span class="cancel-link"> @name <a asp-controller="Account" asp-action="logout">@Resource.lblSignout</a></span>
 
                     }
                 </div>
