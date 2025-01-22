@@ -185,7 +185,7 @@ namespace NMP.Portal.Security
                         string lastName = string.Empty;
                         string email = string.Empty;
                         string currentRelationShipId = string.Empty;
-                        string organisationName = string.Empty;
+                        string organisationName = string.Empty;                       
                         Guid? organisationId = null;
 
                         foreach (var claim in jsonToken.Claims)
@@ -235,8 +235,8 @@ namespace NMP.Portal.Security
                                     {
                                         relationShipDetails.AddRange(rs.Split(":"));
                                         if (relationShipDetails[4] == "Citizen")
-                                        {
-                                            organisationName = $"{firstName} {lastName}";
+                                        {                                            
+                                            organisationName = relationShipDetails[4];
                                             organisationId = Guid.Parse(relationShipDetails[0]);
                                         }
                                         else
@@ -244,6 +244,7 @@ namespace NMP.Portal.Security
                                             organisationName = relationShipDetails[2];
                                             organisationId = Guid.Parse(relationShipDetails[1]);
                                         }
+                                        //identity?.AddClaim(new Claim("isCitizen", isCitizen.ToString()));
                                         identity?.AddClaim(new Claim("organisationName", organisationName));
                                         identity?.AddClaim(new Claim("organisationId", organisationId.ToString() ?? string.Empty));
                                     }
