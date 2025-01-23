@@ -180,6 +180,7 @@ namespace NMP.Portal.Security
                     if (jsonToken != null)
                     {
                         int userId = 0;
+                        
                         Guid? userIdentifier = null;
                         string firstName = string.Empty;
                         string lastName = string.Empty;
@@ -219,6 +220,9 @@ namespace NMP.Portal.Security
                                     currentRelationShipId = claim.Value;
                                     //identity?.AddClaim(claim);
                                     break;
+                                case "enrolmentCount":
+                                    identity?.AddClaim(new Claim("enrolmentCount", claim.Value));
+                                    break;
                                 case "relationships":
                                     List<string> relationShipsArray = new List<string>();
                                     List<string> relationShipDetails = new List<string>();
@@ -236,7 +240,7 @@ namespace NMP.Portal.Security
                                         relationShipDetails.AddRange(rs.Split(":"));
                                         if (relationShipDetails[4] == "Citizen")
                                         {                                            
-                                            organisationName = relationShipDetails[4];
+                                            organisationName = $"{firstName} {lastName}";
                                             organisationId = Guid.Parse(relationShipDetails[0]);
                                         }
                                         else
@@ -271,6 +275,7 @@ namespace NMP.Portal.Security
                                     }
                                     //identity?.RemoveClaim(claim);
                                     break;
+
                                 default:
                                     //identity?.AddClaim(claim);
                                     break;

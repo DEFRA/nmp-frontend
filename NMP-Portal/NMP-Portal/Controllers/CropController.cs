@@ -985,27 +985,32 @@ namespace NMP.Portal.Controllers
             //}
             bool isPerennial = await _organicManureService.FetchIsPerennialByCropTypeId(model.CropTypeID.Value);
 
-            DateTime maxDate = new DateTime(model.Year.Value + 1, 7, 31);
+            //Anil Yadav 23.01.2025 : NMPT1070 NMPT Date Validation Rules​: If perennial flag is true = no minimum date validation.Max date = end of calendar
+            DateTime maxDate = new DateTime(model.Year.Value, 12, 31);
 
             if (model.Crops[model.SowingDateCurrentCounter].SowingDate > maxDate)
             {
-                ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", string.Format(Resource.MsgDateShouldNotBeExceed, maxDate.Date.ToString("dd MMMM yyyy")));
+                //Anil Yadav 23.01.2025 : NMPT1070 NMPT Date Validation Rules​: If perennial flag is true = no minimum date validation.Max date = end of calendar
+                ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", Resource.MsgPlantingDateAfterHarvestYear);
             }
+
             if (!isPerennial)
             {
-                DateTime minDate = new DateTime(model.Year.Value, 8, 01);
+                DateTime minDate = new DateTime(model.Year.Value -1, 01, 01);
                 if (model.Crops[model.SowingDateCurrentCounter].SowingDate < minDate)
                 {
-                    ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", string.Format(Resource.MsgDateShouldBeExceedFrom, minDate.Date.ToString("dd MMMM yyyy")));
+                    //Anil Yadav 23.01.2025 : NMPT1070 NMPT Date Validation Rules​: If perennial flag is true = no minimum date validation.Max date = end of calendar
+                    ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", string.Format(Resource.MsgPlantingDateBetween, minDate.Date.ToString("dd MMMM yyyy"), maxDate.Date.ToString("dd MMMM yyyy")));
                 }
             }
-            else
-            {
-                if (model.Crops[model.SowingDateCurrentCounter].SowingDate.Value.Year < 1601)
-                {
-                    ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", Resource.MsgEnterADateAfter);
-                }
-            }
+            // Removed by Anil Yadav 23.01.2025 : NMPT1070 NMPT Date Validation Rules​ : If perennial flag is true =  no minimum date validation. Max date = end of calendar
+            //else
+            //{
+            //    if (model.Crops[model.SowingDateCurrentCounter].SowingDate.Value.Year < 1601)
+            //    {
+            //        ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", Resource.MsgEnterADateAfter);
+            //    }
+            //}
 
             if (!ModelState.IsValid)
             {

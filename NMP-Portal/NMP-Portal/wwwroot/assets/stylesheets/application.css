@@ -284,9 +284,21 @@ a:focus, .govuk-link:focus {
     justify-content: space-between !important;
 }
 
+.govuk-phase-banner__content__top {
+    align-items: flex-start !important;
+}
+
 .govuk-phase-banner__content__align {
     display: inline-flex !important;
     align-items: center;
+}
+
+.govuk-phase-banner__text__right {
+    text-align: right !important;
+}
+
+.cancel-link__bottom_padding {
+    padding-bottom: 2% !important;
 }
 
 @media print {
