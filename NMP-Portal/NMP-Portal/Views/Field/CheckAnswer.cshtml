@@ -479,7 +479,7 @@
                         else
                         {
                             @if (Model.SoilAnalyses.PH == null && Model.SoilAnalyses.PhosphorusIndex == null &&
-                           Model.PotassiumIndexValue == null && Model.SoilAnalyses.MagnesiumIndex == null)
+                         string.IsNullOrWhiteSpace(Model.PotassiumIndexValue) && Model.SoilAnalyses.MagnesiumIndex == null)
                             {
                                 <govuk-summary-list-row class=@((!Model.SoilAnalyses.PH.HasValue)?"govuk-error-message":"")>
                                     <govuk-summary-list-row-key>
@@ -530,7 +530,7 @@
                                 </govuk-summary-list-row>
                             }
                             @if (Model.SoilAnalyses.PhosphorusIndex != null ||
-                           Model.PotassiumIndexValue != null || Model.SoilAnalyses.MagnesiumIndex != null)
+                           (!string.IsNullOrWhiteSpace(Model.PotassiumIndexValue)) || Model.SoilAnalyses.MagnesiumIndex != null)
                             {
                                 @if (Model.SoilAnalyses.PhosphorusIndex != null)
                                 {

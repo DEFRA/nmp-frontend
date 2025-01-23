@@ -1500,7 +1500,7 @@ namespace NMP.Portal.Controllers
                             {
                                 ModelState.AddModelError("SoilAnalyses.PH", Resource.MsgPhNotSet);
                             }
-                            if (!string.IsNullOrWhiteSpace(model.PotassiumIndexValue))
+                            if (string.IsNullOrWhiteSpace(model.PotassiumIndexValue))
                             {
                                 ModelState.AddModelError("PotassiumIndexValue", Resource.MsgPotassiumIndexNotSet);
                             }

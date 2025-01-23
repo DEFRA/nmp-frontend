@@ -105,7 +105,7 @@
 
                                 <tr class="govuk-table__row">
                                     <td class="govuk-table__cell">@Resource.lblPotassiumIndex</td>
-                                    <td class="govuk-table__cell">@(soilAnalysis.PotassiumIndexValue != null ? soilAnalysis.PotassiumIndexValue : Resource.lblNotEntered)</td>
+                                    <td class="govuk-table__cell">@((!string.IsNullOrWhiteSpace(soilAnalysis.PotassiumIndexValue)) ? soilAnalysis.PotassiumIndexValue : Resource.lblNotEntered)</td>
                                 </tr>
                             </tbody>
 

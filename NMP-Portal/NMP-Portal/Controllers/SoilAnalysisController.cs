@@ -72,7 +72,10 @@ namespace NMP.Portal.Controllers
                                 soilAnalysis.PhosphorusMethodology = Enum.GetName(
                                     typeof(PhosphorusMethodology), soilAnalysis.PhosphorusMethodologyID);
                                 soilAnalysis.EncryptedSoilAnalysisId = _soilAnalysisDataProtector.Protect(soilAnalysis.ID.ToString());
-                                soilAnalysis.PotassiumIndexValue= soilAnalysis.PotassiumIndex.ToString() == Resource.lblMinusTwo ? Resource.lblTwoMinus : (soilAnalysis.PotassiumIndex.ToString() == Resource.lblPlusTwo ? Resource.lblTwoPlus : soilAnalysis.PotassiumIndex.ToString());
+                                if (soilAnalysis.PotassiumIndex != null)
+                                {
+                                    soilAnalysis.PotassiumIndexValue = soilAnalysis.PotassiumIndex.ToString() == Resource.lblMinusTwo ? Resource.lblTwoMinus : (soilAnalysis.PotassiumIndex.ToString() == Resource.lblPlusTwo ? Resource.lblTwoPlus : soilAnalysis.PotassiumIndex.ToString());
+                                }
                             }
                             ViewBag.soilAnalysisList = soilAnalysisResponseList;
                         }
