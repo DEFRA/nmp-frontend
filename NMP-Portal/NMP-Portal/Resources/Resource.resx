@@ -1157,7 +1157,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Type</value>
   </data>
   <data name="lblViewCreateOrUpdateAPlan" xml:space="preserve">
-    <value>View, create or update a plan</value>
+    <value>View, create or update a nutrient management plan</value>
   </data>
   <data name="lblChangeForReccomendation" xml:space="preserve">
     <value>Change {0} plan for {1}</value>
@@ -3189,8 +3189,20 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="lblWhenWasTheSoilAnalysisForTaken" xml:space="preserve">
     <value>When was the soil analysis for {0} taken?</value>
- </data>
+  </data>
   <data name="lblMg" xml:space="preserve">
     <value>mg</value>
+  </data>
+  <data name="MsgManureApplicationMaxDate" xml:space="preserve">
+    <value>The application date specified is too late and should be added against your next harvest year’s plan</value>
+  </data>
+  <data name="MsgManureApplicationMinDate" xml:space="preserve">
+    <value>The application date specified is too early and should be added against your last harvest year’s plan</value>
+  </data>
+  <data name="MsgPlantingDateAfterHarvestYear" xml:space="preserve">
+    <value>The planting date specified is too late and should be added against your next harvest year’s plan</value>
+  </data>
+  <data name="MsgPlantingDateBetween" xml:space="preserve">
+    <value>The planting date must be between {0} and {1}</value>
   </data>
 </root>

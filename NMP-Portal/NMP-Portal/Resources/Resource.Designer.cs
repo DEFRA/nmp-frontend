@@ -6804,7 +6804,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to View, create or update a plan.
+        ///   Looks up a localized string similar to View, create or update a nutrient management plan.
         /// </summary>
         public static string lblViewCreateOrUpdateAPlan {
             get {
@@ -8732,6 +8732,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The application date specified is too late and should be added against your next harvest year’s plan.
+        /// </summary>
+        public static string MsgManureApplicationMaxDate {
+            get {
+                return ResourceManager.GetString("MsgManureApplicationMaxDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The application date specified is too early and should be added against your last harvest year’s plan.
+        /// </summary>
+        public static string MsgManureApplicationMinDate {
+            get {
+                return ResourceManager.GetString("MsgManureApplicationMinDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Based on your crop and soil type, your closed period for applying manures with high readily available nitrogen (N) is {0}..
         /// </summary>
         public static string MsgManureApplyingDateClosedPeriod {
@@ -8845,6 +8863,24 @@ namespace NMP.Portal.Resources {
         public static string MsgPhosphorusPerLitreOfSoil {
             get {
                 return ResourceManager.GetString("MsgPhosphorusPerLitreOfSoil", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The planting date specified is too late and should be added against your next harvest year’s plan.
+        /// </summary>
+        public static string MsgPlantingDateAfterHarvestYear {
+            get {
+                return ResourceManager.GetString("MsgPlantingDateAfterHarvestYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The planting date must be between {0} and {1}.
+        /// </summary>
+        public static string MsgPlantingDateBetween {
+            get {
+                return ResourceManager.GetString("MsgPlantingDateBetween", resourceCulture);
             }
         }
         
