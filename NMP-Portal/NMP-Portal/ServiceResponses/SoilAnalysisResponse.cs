@@ -75,6 +75,7 @@ namespace NMP.Portal.ServiceResponses
 
         [JsonProperty("nitrogenResidueGroup")]
         public string? NitrogenResidueGroup { get; set; }
+        public string? PotassiumIndexValue { get; set; }
 
         [JsonProperty("comments")]
         public string? Comments { get; set; }

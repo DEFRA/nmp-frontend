@@ -3189,8 +3189,23 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="lblWhenWasTheSoilAnalysisForTaken" xml:space="preserve">
     <value>When was the soil analysis for {0} taken?</value>
- </data>
+  </data>
   <data name="lblMg" xml:space="preserve">
     <value>mg</value>
+  </data>
+  <data name="lblMinusTwo" xml:space="preserve">
+    <value>-2</value>
+  </data>
+  <data name="lblPlusTwo" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="lblTwoMinus" xml:space="preserve">
+    <value>2-</value>
+  </data>
+  <data name="lblTwoPlus" xml:space="preserve">
+    <value>2+</value>
+  </data>
+  <data name="lblTheDateCannotBeInTheFuture" xml:space="preserve">
+    <value>The date cannot be in the future.</value>
   </data>
 </root>

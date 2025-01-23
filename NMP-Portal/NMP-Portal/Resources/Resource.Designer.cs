@@ -4005,6 +4005,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to -2.
+        /// </summary>
+        public static string lblMinusTwo {
+            get {
+                return ResourceManager.GetString("lblMinusTwo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mixed manure.
         /// </summary>
         public static string lblMixedManure {
@@ -4847,6 +4856,15 @@ namespace NMP.Portal.Resources {
         public static string lblPlough {
             get {
                 return ResourceManager.GetString("lblPlough", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 2.
+        /// </summary>
+        public static string lblPlusTwo {
+            get {
+                return ResourceManager.GetString("lblPlusTwo", resourceCulture);
             }
         }
         
@@ -6012,6 +6030,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The date cannot be in the future..
+        /// </summary>
+        public static string lblTheDateCannotBeInTheFuture {
+            get {
+                return ResourceManager.GetString("lblTheDateCannotBeInTheFuture", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The effectiveness of your organic material application, and the amount of inorganic fertiliser you need, will vary depending on these conditions..
         /// </summary>
         public static string lblTheEffectivenessOfYourOrganicMaterialApp {
@@ -6503,6 +6530,24 @@ namespace NMP.Portal.Resources {
         public static string lblTrue {
             get {
                 return ResourceManager.GetString("lblTrue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 2-.
+        /// </summary>
+        public static string lblTwoMinus {
+            get {
+                return ResourceManager.GetString("lblTwoMinus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 2+.
+        /// </summary>
+        public static string lblTwoPlus {
+            get {
+                return ResourceManager.GetString("lblTwoPlus", resourceCulture);
             }
         }
         

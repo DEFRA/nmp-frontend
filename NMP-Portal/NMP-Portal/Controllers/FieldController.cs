@@ -221,7 +221,10 @@ namespace NMP.Portal.Controllers
                         field.SoilAnalyses.SulphurDeficient = fieldResponse.SoilAnalysis.SulphurDeficient;
                         field.SoilAnalyses.Date = fieldResponse.SoilAnalysis.Date;
                         field.RecentSoilAnalysisQuestion = true;
-
+                        if (fieldResponse.SoilAnalysis.PotassiumIndex != null)
+                        {
+                            field.PotassiumIndexValue = fieldResponse.SoilAnalysis.PotassiumIndex.ToString() == Resource.lblMinusTwo ? Resource.lblTwoMinus : (fieldResponse.SoilAnalysis.PotassiumIndex.ToString() == Resource.lblPlusTwo ? Resource.lblTwoPlus : fieldResponse.SoilAnalysis.PotassiumIndex.ToString());
+                        }
                         if (field.SoilAnalyses.Potassium != null || field.SoilAnalyses.Phosphorus != null
                             || field.SoilAnalyses.Magnesium != null)
                         {
@@ -962,8 +965,28 @@ namespace NMP.Portal.Controllers
             {
                 if (model.IsSoilNutrientValueTypeIndex != null && model.IsSoilNutrientValueTypeIndex.Value)
                 {
-                    if (model.SoilAnalyses.PH == null && model.SoilAnalyses.PotassiumIndex == null &&
-                        model.SoilAnalyses.PhosphorusIndex == null && model.SoilAnalyses.MagnesiumIndex == null)
+                    if (!string.IsNullOrEmpty(model.PotassiumIndexValue))
+                    {
+                        if (int.TryParse(model.PotassiumIndexValue, out int value))
+                        {
+                            if (value > 9 || value < 0)
+                            {
+                                ModelState.AddModelError("PotassiumIndexValue", Resource.MsgEnterValidValueForNutrientIndex);
+                            }
+                        }
+                        else
+                        {
+                            if ((model.PotassiumIndexValue.ToString() != Resource.lblTwoMinus) &&
+                                                   (model.PotassiumIndexValue.ToString() != Resource.lblTwoPlus))
+                            {
+                                ModelState.AddModelError("PotassiumIndexValue", Resource.MsgEnterValidValueForNutrientIndex);
+                            }
+                        }
+
+
+                    }
+                    if (model.SoilAnalyses.PH == null && (string.IsNullOrWhiteSpace(model.PotassiumIndexValue)) &&
+                    model.SoilAnalyses.PhosphorusIndex == null && model.SoilAnalyses.MagnesiumIndex == null)
                     {
                         ModelState.AddModelError("CropType", Resource.MsgEnterAtLeastOneValue);
                     }
@@ -1016,7 +1039,6 @@ namespace NMP.Portal.Controllers
                 {
                     return View(model);
                 }
-
                 model.SoilAnalyses.PhosphorusMethodologyID = (int)PhosphorusMethodology.Olsens;
 
                 if (model.SoilAnalyses.Phosphorus != null || model.SoilAnalyses.Potassium != null ||
@@ -1033,33 +1055,61 @@ namespace NMP.Portal.Controllers
 
                             if (model.SoilAnalyses.Phosphorus != null)
                             {
-                                var phosphorusNuetrient = nutrients.FirstOrDefault(a => a.nutrient.Equals(Resource.lblPhosphate));
-                                if (phosphorusNuetrient != null)
+                                var phosphorusNutrient = nutrients.FirstOrDefault(a => a.nutrient.Equals(Resource.lblPhosphate));
+                                if (phosphorusNutrient != null)
                                 {
-                                    phosphorusId = phosphorusNuetrient.nutrientId;
+                                    phosphorusId = phosphorusNutrient.nutrientId;
                                 }
-                                (model.SoilAnalyses.PhosphorusIndex, error) = await _soilService.FetchSoilNutrientIndex(phosphorusId, model.SoilAnalyses.Phosphorus, (int)PhosphorusMethodology.Olsens);
+                                (string phosphorusIndexValue, error) = await _soilService.FetchSoilNutrientIndex(phosphorusId, model.SoilAnalyses.Phosphorus, (int)PhosphorusMethodology.Olsens);
+                                if (!string.IsNullOrWhiteSpace(phosphorusIndexValue) && error == null)
+                                {
+                                    model.SoilAnalyses.PhosphorusIndex = Convert.ToInt32(phosphorusIndexValue.Trim());
+
+                                }
+                                else if (error != null)
+                                {
+                                    ViewBag.Error = error.Message;
+                                    return View(model);
+                                }
                             }
                             if (model.SoilAnalyses.Magnesium != null)
                             {
-                                var magnesiumNuetrient = nutrients.FirstOrDefault(a => a.nutrient.Equals(Resource.lblMagnesium));
-                                if (magnesiumNuetrient != null)
+                                var magnesiumNutrient = nutrients.FirstOrDefault(a => a.nutrient.Equals(Resource.lblMagnesium));
+                                if (magnesiumNutrient != null)
                                 {
-                                    magnesiumId = magnesiumNuetrient.nutrientId;
+                                    magnesiumId = magnesiumNutrient.nutrientId;
                                 }
-                                (model.SoilAnalyses.MagnesiumIndex, error) = await _soilService.FetchSoilNutrientIndex(magnesiumId, model.SoilAnalyses.Magnesium, (int)MagnesiumMethodology.None);
+                                (string magnesiumIndexValue, error) = await _soilService.FetchSoilNutrientIndex(magnesiumId, model.SoilAnalyses.Magnesium, (int)MagnesiumMethodology.None);
+                                if (!string.IsNullOrWhiteSpace(magnesiumIndexValue) && error == null)
+                                {
+                                    model.SoilAnalyses.MagnesiumIndex = Convert.ToInt32(magnesiumIndexValue.Trim());
+                                }
+                                else if (error != null)
+                                {
+                                    ViewBag.Error = error.Message;
+                                    return View(model);
+                                }
                             }
                             if (model.SoilAnalyses.Potassium != null)
                             {
-                                var potassiumNuetrient = nutrients.FirstOrDefault(a => a.nutrient.Equals(Resource.lblPotash));
-                                if (potassiumNuetrient != null)
+                                var potassiumNutrient = nutrients.FirstOrDefault(a => a.nutrient.Equals(Resource.lblPotash));
+                                if (potassiumNutrient != null)
                                 {
-                                    potassiumId = potassiumNuetrient.nutrientId;
+                                    potassiumId = potassiumNutrient.nutrientId;
                                 }
-                                (model.SoilAnalyses.PotassiumIndex, error) = await _soilService.FetchSoilNutrientIndex(potassiumId, model.SoilAnalyses.Potassium, (int)PotassiumMethodology.None);
+                                (string potassiumIndexValue, error) = await _soilService.FetchSoilNutrientIndex(potassiumId, model.SoilAnalyses.Potassium, (int)PotassiumMethodology.None);
+                                if (!string.IsNullOrWhiteSpace(potassiumIndexValue) && error == null)
+                                {
+                                    model.PotassiumIndexValue = potassiumIndexValue.Trim();
+                                }
+                                else if (error != null)
+                                {
+                                    ViewBag.Error = error.Message;
+                                    return View(model);
+                                }
                             }
                         }
-                        if (error != null && error.Message != null)
+                        if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
                         {
                             ViewBag.Error = error.Message;
                             return View(model);
@@ -1070,6 +1120,7 @@ namespace NMP.Portal.Controllers
                         model.SoilAnalyses.Phosphorus = null;
                         model.SoilAnalyses.Magnesium = null;
                         model.SoilAnalyses.Potassium = null;
+
                     }
                 }
 
@@ -1442,16 +1493,16 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        if (!model.SoilAnalyses.PH.HasValue && !model.SoilAnalyses.PotassiumIndex.HasValue &&
+                        if (!model.SoilAnalyses.PH.HasValue && string.IsNullOrWhiteSpace(model.PotassiumIndexValue) &&
                             !model.SoilAnalyses.MagnesiumIndex.HasValue && !model.SoilAnalyses.PhosphorusIndex.HasValue)
                         {
                             if (!model.SoilAnalyses.PH.HasValue)
                             {
                                 ModelState.AddModelError("SoilAnalyses.PH", Resource.MsgPhNotSet);
                             }
-                            if (!model.SoilAnalyses.PotassiumIndex.HasValue)
+                            if (!string.IsNullOrWhiteSpace(model.PotassiumIndexValue))
                             {
-                                ModelState.AddModelError("SoilAnalyses.PotassiumIndex", Resource.MsgPotassiumIndexNotSet);
+                                ModelState.AddModelError("PotassiumIndexValue", Resource.MsgPotassiumIndexNotSet);
                             }
                             if (!model.SoilAnalyses.PhosphorusIndex.HasValue)
                             {
@@ -1488,7 +1539,7 @@ namespace NMP.Portal.Controllers
                 model.SoilAnalyses.SoilNitrogenSupplyIndex = 0;
             }
 
-            if (model.SoilAnalyses.Potassium != null || model.SoilAnalyses.Phosphorus != null || model.SoilAnalyses.PotassiumIndex != null || model.SoilAnalyses.PhosphorusIndex != null)
+            if (model.SoilAnalyses.Potassium != null || model.SoilAnalyses.Phosphorus != null || (!string.IsNullOrWhiteSpace(model.PotassiumIndexValue)) || model.SoilAnalyses.PhosphorusIndex != null)
             {
                 model.PKBalance.PBalance = 0;
                 model.PKBalance.KBalance = 0;
@@ -1528,7 +1579,22 @@ namespace NMP.Portal.Controllers
                 }
 
             }
-
+            if (!string.IsNullOrWhiteSpace(model.PotassiumIndexValue))
+            {
+                if (model.PotassiumIndexValue == Resource.lblTwoMinus)
+                {
+                    model.SoilAnalyses.PotassiumIndex = Convert.ToInt32(Resource.lblMinusTwo);
+                }
+                else if (model.PotassiumIndexValue == Resource.lblTwoPlus)
+                {
+                    model.SoilAnalyses.PotassiumIndex = Convert.ToInt32(Resource.lblPlusTwo);
+                }
+                else
+                {
+                    model.SoilAnalyses.PotassiumIndex = Convert.ToInt32(model.PotassiumIndexValue.Trim());
+                }
+            }
+            //model.SoilAnalyses.PotassiumIndex = Convert.ToInt32(model.PotassiumIndexValue);
             FieldData fieldData = new FieldData
             {
                 Field = new Field
@@ -3987,9 +4053,9 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-            
+
             List<int> previousYears = new List<int>();
-            int lastHarvestYear = model.LastHarvestYear??0;
+            int lastHarvestYear = model.LastHarvestYear ?? 0;
             previousYears.Add(lastHarvestYear);
             previousYears.Add(lastHarvestYear - 1);
             previousYears.Add(lastHarvestYear - 2);
@@ -4011,7 +4077,7 @@ namespace NMP.Portal.Controllers
             if (!ModelState.IsValid)
             {
                 List<int> previousYears = new List<int>();
-                int lastHarvestYear = model.LastHarvestYear??0;
+                int lastHarvestYear = model.LastHarvestYear ?? 0;
                 previousYears.Add(lastHarvestYear);
                 previousYears.Add(lastHarvestYear - 1);
                 previousYears.Add(lastHarvestYear - 2);
@@ -4233,6 +4299,6 @@ namespace NMP.Portal.Controllers
             }
 
             return RedirectToAction("CheckAnswer");
-        }       
+        }
     }
 }
