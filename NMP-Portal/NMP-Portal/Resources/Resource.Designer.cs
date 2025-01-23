@@ -3582,7 +3582,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Kilograms of soil mineral nitrogen (N) at 0-30cm.
+        ///   Looks up a localized string similar to Kilograms of soil mineral nitrogen (N) at 0 to 30cm.
         /// </summary>
         public static string lblKilogramsOfSoilMineralNitrogenAt030CM {
             get {
@@ -3591,7 +3591,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Kilograms of soil mineral nitrogen (N) at 30-60cm.
+        ///   Looks up a localized string similar to Kilograms of soil mineral nitrogen (N) at 30 to 60cm.
         /// </summary>
         public static string lblKilogramsOfSoilMineralNitrogenAt3060CM {
             get {
@@ -3600,7 +3600,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Kilograms of soil mineral nitrogen (N) at 60-90cm.
+        ///   Looks up a localized string similar to Kilograms of soil mineral nitrogen (N) at 60 to 90cm.
         /// </summary>
         public static string lblKilogramsOfSoilMineralNitrogenAt6090CM {
             get {
@@ -3609,7 +3609,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Kilograms of soil mineral nitrogen (N) at 60-90cm (optional).
+        ///   Looks up a localized string similar to Kilograms of soil mineral nitrogen (N) at 60 to 90cm (optional).
         /// </summary>
         public static string lblKilogramsOfSoilMineralNitrogenAt6090CMOptional {
             get {

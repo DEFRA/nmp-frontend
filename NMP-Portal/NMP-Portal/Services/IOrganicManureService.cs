@@ -47,5 +47,6 @@ namespace NMP.Portal.Services
 
         Task<(List<FarmManureTypeResponse>, Error)> FetchFarmManureTypeByFarmId(int farmId);
         Task<(MannerCalculateNutrientResponse, Error)> FetchMannerCalculateNutrient(string jsonData);
+        Task<(SoilTypeSoilTextureResponse, Error)> FetchSoilTypeSoilTextureBySoilTypeId(int soilTypeId);
     }
 }
