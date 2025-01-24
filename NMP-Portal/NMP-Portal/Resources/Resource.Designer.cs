@@ -808,7 +808,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application rate {0}.
+        ///   Looks up a localized string similar to Application rate in {0}.
         /// </summary>
         public static string lblApplicationRateRow {
             get {
@@ -5130,7 +5130,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} Tonnes.
+        ///   Looks up a localized string similar to {0} tonnes.
         /// </summary>
         public static string lblRateWithTonnes {
             get {
@@ -5940,7 +5940,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sulpher deficient.
+        ///   Looks up a localized string similar to Sulphur deficient.
         /// </summary>
         public static string lblSulpherDeficient {
             get {
@@ -6417,7 +6417,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The figure for Total nitrogen (N) must be equal to or greater than the sum of ammonium (N), uric acid (N) and nitrate (N).
+        ///   Looks up a localized string similar to Total nitrogen (N) must be equal to or greater than sum of ammonium (N), uric acid (N) and nitrate (N).
         /// </summary>
         public static string lblTotalNitrogenMustBeGreaterOrEqualToAmmoniumUricacidNitrate {
             get {
@@ -8795,7 +8795,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The application date specified is too late and should be added against your next harvest year’s plan.
+        ///   Looks up a localized string similar to Latest possible application date for harvest year {0} is {1}.
         /// </summary>
         public static string MsgManureApplicationMaxDate {
             get {
@@ -8804,7 +8804,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The application date specified is too early and should be added against your last harvest year’s plan.
+        ///   Looks up a localized string similar to Earliest possible application date for harvest year {0} is {1}.
         /// </summary>
         public static string MsgManureApplicationMinDate {
             get {
@@ -8930,7 +8930,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The planting date specified is too late and should be added against your next harvest year’s plan.
+        ///   Looks up a localized string similar to Latest possible planting date for harvest year {0} is {1}.
         /// </summary>
         public static string MsgPlantingDateAfterHarvestYear {
             get {
@@ -8939,11 +8939,11 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The planting date must be between {0} and {1}.
+        ///   Looks up a localized string similar to Earliest possible planting date for harvest year {0} is {1}.
         /// </summary>
-        public static string MsgPlantingDateBetween {
+        public static string MsgPlantingDateBeforeHarvestYear {
             get {
-                return ResourceManager.GetString("MsgPlantingDateBetween", resourceCulture);
+                return ResourceManager.GetString("MsgPlantingDateBeforeHarvestYear", resourceCulture);
             }
         }
         

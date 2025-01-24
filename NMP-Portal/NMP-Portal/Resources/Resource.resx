@@ -527,7 +527,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Soil releasing clay</value>
   </data>
   <data name="lblSulpherDeficient" xml:space="preserve">
-    <value>Sulpher deficient</value>
+    <value>Sulphur deficient</value>
   </data>
   <data name="lblHowWouldYouLikeToEnterYourSoilNutrientValues" xml:space="preserve">
     <value>How would you like to enter your soil nutrient (N) values?</value>
@@ -1526,7 +1526,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Windspeed at application</value>
   </data>
   <data name="lblApplicationRateRow" xml:space="preserve">
-    <value>Application rate {0}</value>
+    <value>Application rate in {0}</value>
   </data>
   <data name="MsgWeCounldNotAddOrganicManure" xml:space="preserve">
     <value>We couldn’t add your application, please try again later</value>
@@ -1659,7 +1659,7 @@ kg per cubic metre</value>
     <value>Enter the {0} before continuing</value>
   </data>
   <data name="lblTotalNitrogenMustBeGreaterOrEqualToAmmoniumUricacidNitrate" xml:space="preserve">
-    <value>The figure for Total nitrogen (N) must be equal to or greater than the sum of ammonium (N), uric acid (N) and nitrate (N)</value>
+    <value>Total nitrogen (N) must be equal to or greater than sum of ammonium (N), uric acid (N) and nitrate (N)</value>
   </data>
   <data name="lblTotalNitrogenN" xml:space="preserve">
     <value>Total nitrogen (N)</value>
@@ -2636,7 +2636,7 @@ cubic metres per hectare  not set</value>
     <value>Application Date {0}</value>
   </data>
   <data name="lblRateWithTonnes" xml:space="preserve">
-    <value>{0} Tonnes</value>
+    <value>{0} tonnes</value>
   </data>
   <data name="lblAmountsArePerHectare" xml:space="preserve">
     <value>Amounts are per hectare.</value>
@@ -3194,16 +3194,16 @@ cubic metres per hectare  not set</value>
     <value>mg</value>
   </data>
   <data name="MsgManureApplicationMaxDate" xml:space="preserve">
-    <value>The application date specified is too late and should be added against your next harvest year’s plan</value>
+    <value>Latest possible application date for harvest year {0} is {1}</value>
   </data>
   <data name="MsgManureApplicationMinDate" xml:space="preserve">
-    <value>The application date specified is too early and should be added against your last harvest year’s plan</value>
+    <value>Earliest possible application date for harvest year {0} is {1}</value>
   </data>
   <data name="MsgPlantingDateAfterHarvestYear" xml:space="preserve">
-    <value>The planting date specified is too late and should be added against your next harvest year’s plan</value>
+    <value>Latest possible planting date for harvest year {0} is {1}</value>
   </data>
-  <data name="MsgPlantingDateBetween" xml:space="preserve">
-    <value>The planting date must be between {0} and {1}</value>
+  <data name="MsgPlantingDateBeforeHarvestYear" xml:space="preserve">
+    <value>Earliest possible planting date for harvest year {0} is {1}</value>
   </data>
   <data name="lblMinusTwo" xml:space="preserve">
     <value>-2</value>
