@@ -2449,14 +2449,14 @@ namespace NMP.Portal.Controllers
             {
                 if (model.SampleDepth < 0)
                 {
-                    ModelState.AddModelError("SampleDepth", Resource.MsgEnterValidNumericValueBeforeContinuing);
+                    ModelState.AddModelError("SampleDepth",string.Format(Resource.lblSampleDepth,Resource.lblValueMustBeGreaterThanZero));
                 }
             }
             if (model.SoilMineralNitrogen != null)
             {
                 if (model.SoilMineralNitrogen < 0)
                 {
-                    ModelState.AddModelError("SoilMineralNitrogen", Resource.MsgEnterValidNumericValueBeforeContinuing);
+                    ModelState.AddModelError("SoilMineralNitrogen", string.Format(Resource.lblSoilMineralNitrogen, Resource.lblValueMustBeGreaterThanZero));
                 }
             }
             if (!ModelState.IsValid)

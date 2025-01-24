@@ -319,7 +319,7 @@ namespace NMP.Portal.Controllers
             }
             if (model.IsSoilNutrientValueTypeIndex.Value)
             {
-                if (soilAnalysisViewModel != null && (!soilAnalysisViewModel.IsSoilNutrientValueTypeIndex.Value))
+                if (soilAnalysisViewModel != null && soilAnalysisViewModel.IsSoilNutrientValueTypeIndex.HasValue&&(!soilAnalysisViewModel.IsSoilNutrientValueTypeIndex.Value))
                 {
                     model.Magnesium = null;
                     model.Potassium = null;
@@ -329,14 +329,17 @@ namespace NMP.Portal.Controllers
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("SoilAnalysisData", model);
             if (soilAnalysisViewModel != null)
             {
-                if (model.IsSoilNutrientValueTypeIndex.Value != soilAnalysisViewModel.IsSoilNutrientValueTypeIndex.Value)
+                if (soilAnalysisViewModel.IsSoilNutrientValueTypeIndex.HasValue&&model.IsSoilNutrientValueTypeIndex.Value != soilAnalysisViewModel.IsSoilNutrientValueTypeIndex.Value)
                 {
                     return RedirectToAction("SoilNutrientValue");
                 }
             }
 
 
-
+            if (model.isSoilAnalysisAdded != null && model.isSoilAnalysisAdded.Value)
+            {
+                return RedirectToAction("SoilNutrientValue");
+            }
             return RedirectToAction("ChangeSoilAnalysis", new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
         }
 

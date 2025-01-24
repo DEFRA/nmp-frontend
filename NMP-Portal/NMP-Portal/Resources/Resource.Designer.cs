@@ -5184,6 +5184,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove.
+        /// </summary>
+        public static string lblRemove {
+            get {
+                return ResourceManager.GetString("lblRemove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove {0}.
         /// </summary>
         public static string lblRemoveFarm {
@@ -6773,6 +6782,15 @@ namespace NMP.Portal.Resources {
         public static string lblValueKgPerTon {
             get {
                 return ResourceManager.GetString("lblValueKgPerTon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} must be greater than zero..
+        /// </summary>
+        public static string lblValueMustBeGreaterThanZero {
+            get {
+                return ResourceManager.GetString("lblValueMustBeGreaterThanZero", resourceCulture);
             }
         }
         

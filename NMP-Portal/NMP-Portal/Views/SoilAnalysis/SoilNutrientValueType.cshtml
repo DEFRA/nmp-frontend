@@ -36,14 +36,7 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SulphurDeficient" value="@Model.SulphurDeficient.ToString().ToLower()"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isSoilAnalysisAdded" value="@Model.isSoilAnalysisAdded.ToString().ToLower()"></govuk-input>
     <div class="govuk-grid-row">
-        @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value)
-        {
-            <govuk-notification-banner>
-                <p class="govuk-notification-banner__heading">
-                    Work is under construction.
-                </p>
-            </govuk-notification-banner>
-        }
+      
         <div class="govuk-grid-column-two-thirds">
             <govuk-radios class="govuk-radios" asp-for="@Model.IsSoilNutrientValueTypeIndex">
                 <govuk-radios-fieldset>
@@ -54,12 +47,11 @@
                     <govuk-radios-item value=@InMilligramsPerLitre>@Resource.lblInMilligramsPerLitre</govuk-radios-item>
                 </govuk-radios-fieldset>
             </govuk-radios>
-            @if (Model.isSoilAnalysisAdded == null)
-            {
+          
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>
-            }
+          
 
              @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value)
             {
