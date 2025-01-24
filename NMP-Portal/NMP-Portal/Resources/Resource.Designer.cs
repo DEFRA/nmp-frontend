@@ -2095,6 +2095,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a positive value of {0}.
+        /// </summary>
+        public static string lblEnterAPositiveValueOfPropertyName {
+            get {
+                return ResourceManager.GetString("lblEnterAPositiveValueOfPropertyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a single figure for all these fields.
         /// </summary>
         public static string lblEnterASingleFigureForAllTheseFields {

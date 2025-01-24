@@ -3226,4 +3226,7 @@ cubic metres per hectare  not set</value>
   <data name="lblValueMustBeGreaterThanZero" xml:space="preserve">
     <value>{0} must be greater than zero.</value>
   </data>
+  <data name="lblEnterAPositiveValueOfPropertyName" xml:space="preserve">
+    <value>Enter a positive value of {0}</value>
+  </data>
 </root>
