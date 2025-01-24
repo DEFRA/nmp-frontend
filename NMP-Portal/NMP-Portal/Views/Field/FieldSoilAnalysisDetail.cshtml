@@ -97,7 +97,7 @@
                 <hr class="big_seperator">
                 <h2 class="govuk-heading-m">@Resource.lblSoilAnalysis</h2>
 
-                <p class="govuk-body margin margin-bottom-forty"><a href="#">@Resource.lblAddNewSoilAnalysis</a></p>
+                <p class="govuk-body margin margin-bottom-forty"><a asp-controller="SoilAnalysis" asp-action="IsSoilAnalysisAdded" asp-route-i="@Model.EncryptedFieldId" asp-route-j="@Model.EncryptedFarmId">@Resource.lblAddNewSoilAnalysis</a></p>
 
                 <table class="govuk-table field-table">
                     <thead class="govuk-table__head">

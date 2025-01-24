@@ -128,7 +128,7 @@
                         <govuk-summary-list-row-action asp-action="@(Model.IsManualAddress ? "ManualAddress" : "Address")" asp-controller="Farm">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
-                @if (!string.IsNullOrWhiteSpace(Model.ClimateDataPostCode))
+                @if (!string.IsNullOrWhiteSpace(Model.ClimateDataPostCode)&& Model.ClimateDataPostCode != Model.Postcode)
                 {
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
@@ -147,24 +147,29 @@
                         @Resource.lblAverageAnnualRainfall
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
-                        @Model.Rainfall
+                      @string.Format("{0}{1}",Model.Rainfall, Resource.lblmm)
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
                         <govuk-summary-list-row-action asp-action="Rainfall" asp-controller="Farm">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
-                <govuk-summary-list-row>
-                    <govuk-summary-list-row-key>
-                        @string.Format(Resource.lblHowManyFieldsInNVZ, Model.Name)
-                    </govuk-summary-list-row-key>
-                    <govuk-summary-list-row-value>
-                        @fieldsInNVZ
-                    </govuk-summary-list-row-value>
 
-                    <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="NVZ" asp-controller="Farm">@Resource.lblChange</govuk-summary-list-row-action>
-                    </govuk-summary-list-row-actions>
-                </govuk-summary-list-row>
+                @if (Model.CountryID != (int)NMP.Portal.Enums.FarmCountry.Wales)
+                {
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            @string.Format(Resource.lblHowManyFieldsInNVZ, Model.Name)
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @fieldsInNVZ
+                        </govuk-summary-list-row-value>
+
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action asp-action="NVZ" asp-controller="Farm">@Resource.lblChange</govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+                }
+                
                 <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
                         @string.Format(Resource.lblFieldsAbove300SeaLevel, Model.Name)
