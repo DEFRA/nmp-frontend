@@ -991,7 +991,7 @@ namespace NMP.Portal.Controllers
             if (model.Crops[model.SowingDateCurrentCounter].SowingDate > maxDate)
             {
                 //Anil Yadav 23.01.2025 : NMPT1070 NMPT Date Validation Rules​: If perennial flag is true = no minimum date validation.Max date = end of calendar
-                ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", Resource.MsgPlantingDateAfterHarvestYear);
+                ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate",string.Format(Resource.MsgPlantingDateAfterHarvestYear, model.Year.Value, maxDate.Date.ToString("dd MMMM yyyy")));
             }
 
             if (!isPerennial)
@@ -1000,7 +1000,7 @@ namespace NMP.Portal.Controllers
                 if (model.Crops[model.SowingDateCurrentCounter].SowingDate < minDate)
                 {
                     //Anil Yadav 23.01.2025 : NMPT1070 NMPT Date Validation Rules​: If perennial flag is true = no minimum date validation.Max date = end of calendar
-                    ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", string.Format(Resource.MsgPlantingDateBetween, minDate.Date.ToString("dd MMMM yyyy"), maxDate.Date.ToString("dd MMMM yyyy")));
+                    ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", string.Format(Resource.MsgPlantingDateBeforeHarvestYear, model.Year.Value, minDate.Date.ToString("dd MMMM yyyy")));
                 }
             }
             // Removed by Anil Yadav 23.01.2025 : NMPT1070 NMPT Date Validation Rules​ : If perennial flag is true =  no minimum date validation. Max date = end of calendar

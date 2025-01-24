@@ -1289,11 +1289,11 @@ namespace NMP.Portal.Controllers
                 
                 if (model.ApplicationDate > maxDate)
                 {
-                    ModelState.AddModelError("ApplicationDate", Resource.MsgManureApplicationMaxDate);
+                    ModelState.AddModelError("ApplicationDate", string.Format(Resource.MsgManureApplicationMaxDate, model.HarvestYear.Value, maxDate.Date.ToString("dd MMMM yyyy")));
                 }
                 if (model.ApplicationDate < minDate)
                 {
-                    ModelState.AddModelError("ApplicationDate", Resource.MsgManureApplicationMinDate);
+                    ModelState.AddModelError("ApplicationDate", string.Format(Resource.MsgManureApplicationMinDate, model.HarvestYear.Value, minDate.Date.ToString("dd MMMM yyyy")));
                 }
 
                 if (!ModelState.IsValid)

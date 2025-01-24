@@ -8777,7 +8777,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The application date specified is too late and should be added against your next harvest year’s plan.
+        ///   Looks up a localized string similar to Latest possible application date for harvest year {0} is {1}.
         /// </summary>
         public static string MsgManureApplicationMaxDate {
             get {
@@ -8786,7 +8786,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The application date specified is too early and should be added against your last harvest year’s plan.
+        ///   Looks up a localized string similar to Earliest possible application date for harvest year {0} is {1}.
         /// </summary>
         public static string MsgManureApplicationMinDate {
             get {
@@ -8912,7 +8912,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The planting date specified is too late and should be added against your next harvest year’s plan.
+        ///   Looks up a localized string similar to Latest possible planting date for harvest year {0} is {1}.
         /// </summary>
         public static string MsgPlantingDateAfterHarvestYear {
             get {
@@ -8921,11 +8921,11 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The planting date must be between {0} and {1}.
+        ///   Looks up a localized string similar to Earliest possible planting date for harvest year {0} is {1}.
         /// </summary>
-        public static string MsgPlantingDateBetween {
+        public static string MsgPlantingDateBeforeHarvestYear {
             get {
-                return ResourceManager.GetString("MsgPlantingDateBetween", resourceCulture);
+                return ResourceManager.GetString("MsgPlantingDateBeforeHarvestYear", resourceCulture);
             }
         }
         
