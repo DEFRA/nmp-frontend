@@ -4126,6 +4126,14 @@ namespace NMP.Portal.Controllers
                                     Field fieldData = await _fieldService.FetchFieldByFieldId(crop.FieldID.Value);
                                     if (fieldData != null)
                                     {
+                                        (SoilTypeSoilTextureResponse soilTexture,error) = await _organicManureService.FetchSoilTypeSoilTextureBySoilTypeId(fieldData.SoilTypeID??0);
+                                        int topSoilID = 0;
+                                        int subSoilID = 0;
+                                        if(error == null && soilTexture != null)
+                                        {
+                                            topSoilID = soilTexture.TopSoilID;
+                                            subSoilID = soilTexture.SubSoilID;
+                                        }
                                         (CropTypeLinkingResponse cropTypeLinkingResponse, error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID.Value);
                                         if (error == null && cropTypeLinkingResponse != null)
                                         {
@@ -4142,8 +4150,8 @@ namespace NMP.Portal.Controllers
                                                         fieldID = fieldData.ID,
                                                         fieldName = fieldData.Name,
                                                         MannerCropTypeID = cropTypeLinkingResponse.MannerCropTypeID,
-                                                        topsoilID = fieldData.TopSoilID,
-                                                        subsoilID = fieldData.SubSoilID,
+                                                        topsoilID = topSoilID,
+                                                        subsoilID = subSoilID,
                                                         isInNVZ = Convert.ToBoolean(fieldData.IsWithinNVZ)
                                                     },
                                                     manureApplications = new[]
