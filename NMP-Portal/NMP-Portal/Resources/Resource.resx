@@ -3205,4 +3205,19 @@ cubic metres per hectare  not set</value>
   <data name="MsgPlantingDateBetween" xml:space="preserve">
     <value>The planting date must be between {0} and {1}</value>
   </data>
+  <data name="lblMinusTwo" xml:space="preserve">
+    <value>-2</value>
+  </data>
+  <data name="lblPlusTwo" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="lblTwoMinus" xml:space="preserve">
+    <value>2-</value>
+  </data>
+  <data name="lblTwoPlus" xml:space="preserve">
+    <value>2+</value>
+  </data>
+  <data name="lblTheDateCannotBeInTheFuture" xml:space="preserve">
+    <value>The date cannot be in the future.</value>
+  </data>
 </root>
