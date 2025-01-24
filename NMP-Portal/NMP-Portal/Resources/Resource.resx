@@ -2180,13 +2180,13 @@ cubic metres per hectare  not set</value>
     <value>Enter the soil mineral nitrogen (N) analysis results for {0}</value>
   </data>
   <data name="lblKilogramsOfSoilMineralNitrogenAt030CM" xml:space="preserve">
-    <value>Kilograms of soil mineral nitrogen (N) at 0-30cm</value>
+    <value>Kilograms of soil mineral nitrogen (N) at 0 to 30cm</value>
   </data>
   <data name="lblKilogramsOfSoilMineralNitrogenAt3060CM" xml:space="preserve">
-    <value>Kilograms of soil mineral nitrogen (N) at 30-60cm</value>
+    <value>Kilograms of soil mineral nitrogen (N) at 30 to 60cm</value>
   </data>
   <data name="lblKilogramsOfSoilMineralNitrogenAt6090CM" xml:space="preserve">
-    <value>Kilograms of soil mineral nitrogen (N) at 60-90cm</value>
+    <value>Kilograms of soil mineral nitrogen (N) at 60 to 90cm</value>
   </data>
   <data name="lblAddSoilMineralNitrogen" xml:space="preserve">
     <value>Add soil mineral nitrogen (N) for {0}</value>
@@ -2339,7 +2339,7 @@ cubic metres per hectare  not set</value>
     <value>AdjustmentValue</value>
   </data>
   <data name="lblKilogramsOfSoilMineralNitrogenAt6090CMOptional" xml:space="preserve">
-    <value>Kilograms of soil mineral nitrogen (N) at 60-90cm (optional)</value>
+    <value>Kilograms of soil mineral nitrogen (N) at 60 to 90cm (optional)</value>
   </data>
   <data name="lblSoilOrganicMatterForError" xml:space="preserve">
     <value>Soil organic matter</value>
