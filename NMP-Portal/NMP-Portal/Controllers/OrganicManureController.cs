@@ -2383,7 +2383,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.SO3 == null)
                 {
-                    ModelState.AddModelError("SO3", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblSulphur));
+                    ModelState.AddModelError("SO3", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblSulphur.ToLower()));
                 }
                 if (model.MgO == null)
                 {

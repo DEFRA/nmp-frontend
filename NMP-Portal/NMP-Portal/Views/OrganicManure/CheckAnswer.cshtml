@@ -725,7 +725,7 @@
                             @string.Format(Resource.lblApplicationRateRow, (Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblMeterCubePerHa : Resource.lblTonPerHa)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @((Model.ApplicationRate.HasValue) ? Model.ApplicationRate : Resource.lblNotSet)
+                            @((Model.ApplicationRate.HasValue) ? string.Format("{0} {1}", Model.ApplicationRate, (Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblMeterCubePerHa : Resource.lblTonPerHa) : Resource.lblNotSet)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action class=@((Model.ManureTypeId.HasValue)?"":"disabled") asp-action="ManualApplicationRate" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
@@ -741,7 +741,7 @@
                                 @Resource.lblAreas
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @((Model.Area.HasValue) ? Model.Area : Resource.lblNotSet)
+                                @((Model.Area.HasValue) ? string.Format(Resource.lblHectare, Model.Area) : Resource.lblNotSet)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action class=@((Model.ManureTypeId.HasValue)?"":"disabled") asp-action="AreaQuantity" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
@@ -764,7 +764,7 @@
                             @string.Format(Resource.lblApplicationRateRow, (Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblMeterCubePerHa : Resource.lblTonPerHa)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @((Model.ApplicationRate.HasValue) ? Model.ApplicationRate : Resource.lblNotSet)
+                            @((Model.ApplicationRate.HasValue) ? string.Format("{0} {1}", Model.ApplicationRate, (Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblMeterCubePerHa : Resource.lblTonPerHa): Resource.lblNotSet)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             @* <govuk-summary-list-row-action asp-action="ManualApplicationRate" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action> *@

@@ -808,7 +808,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application rate {0}.
+        ///   Looks up a localized string similar to Application rate in {0}.
         /// </summary>
         public static string lblApplicationRateRow {
             get {
@@ -5130,7 +5130,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} Tonnes.
+        ///   Looks up a localized string similar to {0} tonnes.
         /// </summary>
         public static string lblRateWithTonnes {
             get {
@@ -5931,7 +5931,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sulpher deficient.
+        ///   Looks up a localized string similar to Sulphur deficient.
         /// </summary>
         public static string lblSulpherDeficient {
             get {
@@ -6408,7 +6408,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The figure for Total nitrogen (N) must be equal to or greater than the sum of ammonium (N), uric acid (N) and nitrate (N).
+        ///   Looks up a localized string similar to Total nitrogen (N) must be equal to or greater than sum of ammonium (N), uric acid (N) and nitrate (N).
         /// </summary>
         public static string lblTotalNitrogenMustBeGreaterOrEqualToAmmoniumUricacidNitrate {
             get {
