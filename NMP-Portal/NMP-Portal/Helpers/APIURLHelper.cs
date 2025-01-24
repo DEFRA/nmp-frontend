@@ -105,6 +105,7 @@ namespace NMP.Portal.Helpers
         public const string FetchCropAndFieldReportByIdAsyncAPI = "fields/fieldRelatedData/{0}?year={1}";
         public const string FetchManagementperiodByIdAsyncAPI = "management-periods/{0}";
         public const string FetchCropByIdAsyncAPI = "crops/{0}";
+        public const string FetchSoilNutrientIndexValueAsyncAPI = "vendors/rb209/Soil/NutrientIndices/{0}/{1}/{2}";
 
         //Manner APi Url
         public const string FetchMannerApplicationMethodByIdAsyncAPI = "vendors/manner/application-methods/{0}";

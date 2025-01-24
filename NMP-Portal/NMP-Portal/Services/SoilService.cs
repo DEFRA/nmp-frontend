@@ -14,10 +14,10 @@ namespace NMP.Portal.Services
         {
             _logger = logger;
         }
-        public async Task<(int, Error)> FetchSoilNutrientIndex(int nutrientId, int? nutrientValue, int methodologyId)
+        public async Task<(string, Error)> FetchSoilNutrientIndex(int nutrientId, int? nutrientValue, int methodologyId)
         {
             Error error = null;
-            int nutrientIndex = 0;
+            string nutrientIndex = string.Empty;
             try
             {
 
@@ -90,5 +90,6 @@ namespace NMP.Portal.Services
             }
             return soilType;
         }
+   
     }
 }
