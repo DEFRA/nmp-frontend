@@ -797,7 +797,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Soil type</value>
   </data>
   <data name="MsgWeCouldNotAddYourFieldPleaseTryAgainLater" xml:space="preserve">
-    <value>We couldn’t add your field, please try again later</value>
+    <value>We could not add a field, please try again later</value>
   </data>
   <data name="lblArea" xml:space="preserve">
     <value>area</value>

@@ -9254,7 +9254,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to We couldn’t add your field, please try again later.
+        ///   Looks up a localized string similar to We could not add a field, please try again later.
         /// </summary>
         public static string MsgWeCouldNotAddYourFieldPleaseTryAgainLater {
             get {
