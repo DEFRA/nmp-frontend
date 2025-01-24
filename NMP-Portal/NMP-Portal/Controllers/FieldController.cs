@@ -2308,21 +2308,21 @@ namespace NMP.Portal.Controllers
             {
                 if (model.SoilMineralNitrogenAt030CM < 0)
                 {
-                    ModelState.AddModelError("SoilMineralNitrogenAt030CM", string.Format(Resource.lblEnterValidValue, Resource.lblKilogramsOfSoilMineralNitrogenAt030CM));
+                    ModelState.AddModelError("SoilMineralNitrogenAt030CM", string.Format(Resource.lblEnterAPositiveValueOfPropertyName, Resource.lblKilogramsOfSoilMineralNitrogenAt030CM));
                 }
             }
             if (model.SoilMineralNitrogenAt3060CM != null)
             {
                 if (model.SoilMineralNitrogenAt3060CM < 0)
                 {
-                    ModelState.AddModelError("SoilMineralNitrogenAt3060CM", string.Format(Resource.lblEnterValidValue, Resource.lblKilogramsOfSoilMineralNitrogenAt3060CM));
+                    ModelState.AddModelError("SoilMineralNitrogenAt3060CM", string.Format(Resource.lblEnterAPositiveValueOfPropertyName, Resource.lblKilogramsOfSoilMineralNitrogenAt3060CM));
                 }
             }
             if (model.SoilMineralNitrogenAt6090CM != null)
             {
                 if (model.SoilMineralNitrogenAt6090CM < 0)
                 {
-                    ModelState.AddModelError("SoilMineralNitrogenAt6090CM", string.Format(Resource.lblEnterValidValue, Resource.lblKilogramsOfSoilMineralNitrogenAt6090CM));
+                    ModelState.AddModelError("SoilMineralNitrogenAt6090CM", string.Format(Resource.lblEnterAPositiveValueOfPropertyName, Resource.lblKilogramsOfSoilMineralNitrogenAt6090CM));
                 }
             }
             if (!ModelState.IsValid)
@@ -2449,14 +2449,14 @@ namespace NMP.Portal.Controllers
             {
                 if (model.SampleDepth < 0)
                 {
-                    ModelState.AddModelError("SampleDepth", Resource.MsgEnterValidNumericValueBeforeContinuing);
+                    ModelState.AddModelError("SampleDepth",string.Format(Resource.lblSampleDepth,Resource.lblValueMustBeGreaterThanZero));
                 }
             }
             if (model.SoilMineralNitrogen != null)
             {
                 if (model.SoilMineralNitrogen < 0)
                 {
-                    ModelState.AddModelError("SoilMineralNitrogen", Resource.MsgEnterValidNumericValueBeforeContinuing);
+                    ModelState.AddModelError("SoilMineralNitrogen", string.Format(Resource.lblSoilMineralNitrogen, Resource.lblValueMustBeGreaterThanZero));
                 }
             }
             if (!ModelState.IsValid)

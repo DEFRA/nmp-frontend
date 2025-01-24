@@ -994,35 +994,35 @@ namespace NMP.Portal.Controllers
             {
                 if (model.N < 0 || model.N > 9999)
                 {
-                    ModelState.AddModelError("ApplicationForFertiliserManures[" + index + "].N", string.Format(Resource.MsgMinMaxValidation, Resource.lblNitrogen, 9999));
+                    ModelState.AddModelError("N", string.Format(Resource.MsgMinMaxValidation, Resource.lblNitrogen, 9999));
                 }
             }
             if (model.P2O5 != null)
             {
                 if (model.P2O5 < 0 || model.P2O5 > 9999)
                 {
-                    ModelState.AddModelError("ApplicationForFertiliserManures[" + index + "].P2O5", string.Format(Resource.MsgMinMaxValidation, Resource.lblPhosphateP2O5, 9999));
+                    ModelState.AddModelError("P2O5", string.Format(Resource.MsgMinMaxValidation, Resource.lblPhosphateP2O5, 9999));
                 }
             }
             if (model.K2O != null)
             {
                 if (model.K2O < 0 || model.K2O > 9999)
                 {
-                    ModelState.AddModelError("ApplicationForFertiliserManures[" + index + "].K2O", string.Format(Resource.MsgMinMaxValidation, Resource.lblPotashK2O, 9999));
+                    ModelState.AddModelError("K2O", string.Format(Resource.MsgMinMaxValidation, Resource.lblPotashK2O, 9999));
                 }
             }
             if (model.SO3 != null)
             {
                 if (model.SO3 < 0 || model.SO3 > 9999)
                 {
-                    ModelState.AddModelError("ApplicationForFertiliserManures[" + index + "].SO3", string.Format(Resource.MsgMinMaxValidation, Resource.lblSulphurSO3, 9999));
+                    ModelState.AddModelError("SO3", string.Format(Resource.MsgMinMaxValidation, Resource.lblSulphurSO3, 9999));
                 }
             }
             if (model.Lime != null)
             {
                 if (model.Lime < 0 || model.Lime > 99.9m)
                 {
-                    ModelState.AddModelError("ApplicationForFertiliserManures[" + index + "].Lime", string.Format(Resource.MsgMinMaxValidation, Resource.lblLime, 99.9));
+                    ModelState.AddModelError("Lime", string.Format(Resource.MsgMinMaxValidation, Resource.lblLime, 99.9));
                 }
             }
 

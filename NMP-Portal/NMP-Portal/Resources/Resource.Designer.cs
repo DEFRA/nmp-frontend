@@ -2095,6 +2095,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a positive value of {0}.
+        /// </summary>
+        public static string lblEnterAPositiveValueOfPropertyName {
+            get {
+                return ResourceManager.GetString("lblEnterAPositiveValueOfPropertyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a single figure for all these fields.
         /// </summary>
         public static string lblEnterASingleFigureForAllTheseFields {
@@ -5184,6 +5193,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove.
+        /// </summary>
+        public static string lblRemove {
+            get {
+                return ResourceManager.GetString("lblRemove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove {0}.
         /// </summary>
         public static string lblRemoveFarm {
@@ -6773,6 +6791,15 @@ namespace NMP.Portal.Resources {
         public static string lblValueKgPerTon {
             get {
                 return ResourceManager.GetString("lblValueKgPerTon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} must be greater than zero..
+        /// </summary>
+        public static string lblValueMustBeGreaterThanZero {
+            get {
+                return ResourceManager.GetString("lblValueMustBeGreaterThanZero", resourceCulture);
             }
         }
         

@@ -19,16 +19,7 @@
 }
 <form asp-action="Date" asp-controller="SoilAnalysis" method="post">
     @Html.AntiForgeryToken()  
-    <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
-        @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value)
-        {
-            <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblWhenWasTheSoilAnalysisForTaken, Model.FieldName)</h1>
-        }
-        else
-        {
-            <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblAddSoilAnalysis, Model.FieldName)</h1>
-        }
-    </legand>
+    
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PH"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MagnesiumIndex"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphorusIndex"></govuk-input>
@@ -49,6 +40,16 @@
     <div class="govuk-grid-row">
 
         <div class="govuk-grid-column-two-thirds">
+            <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value)
+                {
+                    <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblWhenWasTheSoilAnalysisForTaken, Model.FieldName)</h1>
+                }
+                else
+                {
+                    <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblAddSoilAnalysis, Model.FieldName)</h1>
+                }
+            </legand>
             <div class="govuk-form-group">
                 <govuk-date-input asp-for="@Model.Date" pattern="[0-9]*">
                     <govuk-date-input-fieldset>
