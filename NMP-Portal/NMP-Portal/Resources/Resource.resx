@@ -3256,4 +3256,22 @@ cubic metres per hectare  not set</value>
   <data name="MsgRrefreshTokenNotReceived" xml:space="preserve">
     <value>Refresh Token not received</value>
   </data>
+  <data name="lblAnyChangesYouMakeMayAffectTheNutrientRecommendation" xml:space="preserve">
+    <value>Any changes you make may affect the nutrient recommendations for any harvest years where this analysis applies.</value>
+  </data>
+  <data name="lblRemoveThisSoilAnalysis" xml:space="preserve">
+    <value>remove this soil analysis.</value>
+  </data>
+  <data name="lblYouCanAlso" xml:space="preserve">
+    <value>You can also</value>
+  </data>
+  <data name="lblThisMayChangeYourNutrientRecommendations" xml:space="preserve">
+    <value>This may change your nutrient recommendations. Select the field in your</value>
+  </data>
+  <data name="lblCropPlan" xml:space="preserve">
+    <value>crop plans</value>
+  </data>
+  <data name="lblToSeeItsRecommendations" xml:space="preserve">
+    <value>to see its recommendations.</value>
+  </data>
 </root>
