@@ -16,6 +16,7 @@ using NMP.Portal.Services;
 using NMP.Portal.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Globalization;
 using System.Reflection;
 using System.Security.Claims;
@@ -31,6 +32,7 @@ namespace NMP.Portal.Controllers
         private readonly ILogger<FieldController> _logger;
         private readonly IDataProtector _farmDataProtector;
         private readonly IDataProtector _fieldDataProtector;
+        private readonly IDataProtector _soilAnalysisDataProtector;
         private readonly IFarmService _farmService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IFieldService _fieldService;
@@ -49,6 +51,7 @@ namespace NMP.Portal.Controllers
             _httpContextAccessor = httpContextAccessor;
             _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
             _fieldDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FieldController");
+            _soilAnalysisDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.SoilAnalysisController");
             _fieldService = fieldService;
             _soilService = soilService;
             _organicManureService = organicManureService;
@@ -1778,7 +1781,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> FieldSoilAnalysisDetail(string id, string farmId, string? q)
+        public async Task<IActionResult> FieldSoilAnalysisDetail(string id, string farmId, string? q, string? r)
         {
             _logger.LogTrace($"Field Controller : FieldSoilAnalysisDetail() action called");
             FieldViewModel model = new FieldViewModel();
@@ -1804,12 +1807,59 @@ namespace NMP.Portal.Controllers
 
             model.EncryptedFarmId = farmId;
             model.FarmName = farm.Name;
-            List<SoilAnalysisResponse> soilAnalysisResponse = await _fieldService.FetchSoilAnalysisByFieldId(fieldId, Resource.lblTrue);
-            ViewBag.SampleDate = soilAnalysisResponse;
-
+            List<SoilAnalysisResponse> soilAnalysisResponse = (await _fieldService.FetchSoilAnalysisByFieldId(fieldId, Resource.lblFalse)).OrderByDescending(x => x.CreatedOn).ToList();
+            if (soilAnalysisResponse != null && soilAnalysisResponse.Count > 0)
+            {
+                soilAnalysisResponse.ForEach(m => m.EncryptedSoilAnalysisId = _fieldDataProtector.Protect(m.ID.ToString()));
+                ViewBag.SoilAnalysisList = soilAnalysisResponse;
+            }
             if (!string.IsNullOrWhiteSpace(q))
             {
-                ViewBag.Success = true;
+                
+                if (!string.IsNullOrWhiteSpace(r))
+                {
+                    string statusFor = _fieldDataProtector.Unprotect(r);
+                    if (!string.IsNullOrWhiteSpace(statusFor))
+                    {
+                        if (statusFor == Resource.lblField)
+                        {
+                            ViewBag.Success = Resource.lblTrue;
+                            ViewBag.SuccessMsgContent = string.Format(Resource.lblYouHaveUpdated, model.Name);
+                        }
+                        else if (statusFor == Resource.lblSoilAnalysis)
+                        {
+                            if (_soilAnalysisDataProtector.Unprotect(q) == Resource.lblFalse)
+                            {
+                                ViewBag.Success = Resource.lblFalse;
+                                ViewBag.Error = Resource.MsgSoilAnalysisChangesCouldNotAdded;
+                            }
+                            else
+                            {
+                                ViewBag.Success = Resource.lblTrue;
+                                ViewBag.SuccessMsgContent = string.Format(Resource.lblYouHaveAddedANewSoilAnalysisForFieldName, model.Name);
+                                if (soilAnalysisResponse.Count > 0)
+                                {
+                                    List<Crop> crop = (await _iCropService.FetchCropsByFieldId(soilAnalysisResponse.FirstOrDefault().FieldID.Value)).ToList();
+                                    if (crop != null && crop.Count > 0)
+                                    {
+                                        bool anyPlan = crop.Any(x => x.Year >= (soilAnalysisResponse.FirstOrDefault()?.Year ?? 0));
+                                        if (anyPlan)
+                                        {
+                                            ViewBag.SuccessMsgAdditionalContent = string.Format(Resource.lblAddNewSoilAnalysisSuccessMsgContent, soilAnalysisResponse.FirstOrDefault().Year);
+                                            int cropYear=crop.FirstOrDefault(x => x.Year >= soilAnalysisResponse.FirstOrDefault().Year).Year;
+                                            ViewBag.CropYear = _farmDataProtector.Protect(cropYear.ToString());
+                                            ViewBag.SuccessMsgAdditionalContentSecond=string.Format(Resource.lblYearCropPlan, cropYear);
+                                            ViewBag.SuccessMsgAdditionalContentThird = Resource.lblToSeeItsRecommendations;
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+
+                    }
+                }
+
             }
             else
             {
@@ -2449,14 +2499,14 @@ namespace NMP.Portal.Controllers
             {
                 if (model.SampleDepth < 0)
                 {
-                    ModelState.AddModelError("SampleDepth",string.Format(Resource.lblSampleDepth,Resource.lblValueMustBeGreaterThanZero));
+                    ModelState.AddModelError("SampleDepth", string.Format(Resource.lblValueMustBeGreaterThanZero, Resource.lblSampleDepth));
                 }
             }
             if (model.SoilMineralNitrogen != null)
             {
                 if (model.SoilMineralNitrogen < 0)
                 {
-                    ModelState.AddModelError("SoilMineralNitrogen", string.Format(Resource.lblSoilMineralNitrogen, Resource.lblValueMustBeGreaterThanZero));
+                    ModelState.AddModelError("SoilMineralNitrogen", string.Format(Resource.lblValueMustBeGreaterThanZero, Resource.lblSoilMineralNitrogen));
                 }
             }
             if (!ModelState.IsValid)
@@ -3805,11 +3855,11 @@ namespace NMP.Portal.Controllers
                 (Field fieldResponse, Error error1) = await _fieldService.UpdateFieldAsync(fieldData, fieldId);
                 if (error1.Message == null && fieldResponse != null)
                 {
-                    string success = _farmDataProtector.Protect("true");
+                    string success = _farmDataProtector.Protect(Resource.lblTrue);
                     string fieldName = _farmDataProtector.Protect(fieldResponse.Name);
                     _httpContextAccessor.HttpContext?.Session.Remove("FieldData");
 
-                    return RedirectToAction("FieldSoilAnalysisDetail", new { id = model.EncryptedFieldId, farmId = model.EncryptedFarmId, q = success });
+                    return RedirectToAction("FieldSoilAnalysisDetail", new { id = model.EncryptedFieldId, farmId = model.EncryptedFarmId, q = success, r = _fieldDataProtector.Protect(Resource.lblField) });
                 }
                 else
                 {

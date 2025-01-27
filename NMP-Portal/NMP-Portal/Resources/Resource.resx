@@ -3229,4 +3229,19 @@ cubic metres per hectare  not set</value>
   <data name="lblEnterAPositiveValueOfPropertyName" xml:space="preserve">
     <value>Enter a positive value of {0}</value>
   </data>
+  <data name="lblAddNewSoilAnalysisSuccessMsgContent" xml:space="preserve">
+    <value>This may change your nutrient recommendations for {0}. Select a field from your </value>
+  </data>
+  <data name="lblYouHaveAddedANewSoilAnalysisForFieldName" xml:space="preserve">
+    <value>You have added a new soil analysis for {0}</value>
+  </data>
+  <data name="MsgSoilAnalysisChangesCouldNotAdded" xml:space="preserve">
+    <value>Your soil analysis changes could not be added.</value>
+  </data>
+  <data name="lblToSeeItsRecommendations" xml:space="preserve">
+    <value>to see its recommendations</value>
+  </data>
+  <data name="lblYearCropPlan" xml:space="preserve">
+    <value>{0} crop plan</value>
+  </data>
 </root>
