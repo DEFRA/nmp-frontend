@@ -4122,6 +4122,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to nitrogen (N).
+        /// </summary>
+        public static string lblNitrogenLowercase {
+            get {
+                return ResourceManager.GetString("lblNitrogenLowercase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This application may take you over the N-max limit for this crop.
         /// </summary>
         public static string lblNMaxLimitTitle {
@@ -4698,6 +4707,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to phosphate (P2O5).
+        /// </summary>
+        public static string lblPhosphateP2O5Lowercase {
+            get {
+                return ResourceManager.GetString("lblPhosphateP2O5Lowercase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What was the phosphorus (P) analysis type?.
         /// </summary>
         public static string lblPhosphorusAnalysisType {
@@ -4910,6 +4928,15 @@ namespace NMP.Portal.Resources {
         public static string lblPotashK2O {
             get {
                 return ResourceManager.GetString("lblPotashK2O", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to potash (K2O).
+        /// </summary>
+        public static string lblPotashK2OLowecase {
+            get {
+                return ResourceManager.GetString("lblPotashK2OLowecase", resourceCulture);
             }
         }
         
@@ -5981,6 +6008,15 @@ namespace NMP.Portal.Resources {
         public static string lblSulphurSO3 {
             get {
                 return ResourceManager.GetString("lblSulphurSO3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to sulphur (SO3).
+        /// </summary>
+        public static string lblSulphurSO3Lowercase {
+            get {
+                return ResourceManager.GetString("lblSulphurSO3Lowercase", resourceCulture);
             }
         }
         
@@ -7830,6 +7866,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Access token not received from Customer Identity.
+        /// </summary>
+        public static string MsgAccessTokenNotReceived {
+            get {
+                return ResourceManager.GetString("MsgAccessTokenNotReceived", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to APPLICATION AFTER 31 OCTOBER.
         /// </summary>
         public static string MsgApplicationAfter31October {
@@ -8786,6 +8831,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid authentication.
+        /// </summary>
+        public static string MsgInvalidAuthentication {
+            get {
+                return ResourceManager.GetString("MsgInvalidAuthentication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a Land Parcel ID that is no more than 14 characters long.
         /// </summary>
         public static string MsgLandParcelIdMinMaxValidation {
@@ -8917,6 +8971,24 @@ namespace NMP.Portal.Resources {
         public static string MsgNMaxLimit {
             get {
                 return ResourceManager.GetString("MsgNMaxLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NMPT API service has blocked your access, try again later..
+        /// </summary>
+        public static string MsgNmptApiServiceBlockedAccess {
+            get {
+                return ResourceManager.GetString("MsgNmptApiServiceBlockedAccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NMPT API service is not available at the moment, try again later ..
+        /// </summary>
+        public static string MsgNmptServiceNotAvailable {
+            get {
+                return ResourceManager.GetString("MsgNmptServiceNotAvailable", resourceCulture);
             }
         }
         
@@ -9106,6 +9178,15 @@ namespace NMP.Portal.Resources {
         public static string MsgRemoveThisField {
             get {
                 return ResourceManager.GetString("MsgRemoveThisField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh Token not received.
+        /// </summary>
+        public static string MsgRrefreshTokenNotReceived {
+            get {
+                return ResourceManager.GetString("MsgRrefreshTokenNotReceived", resourceCulture);
             }
         }
         
@@ -9362,7 +9443,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to We couldn’t change soil analysis data, please try again later.
+        ///   Looks up a localized string similar to We could not change soil analysis data, try again later.
         /// </summary>
         public static string MsgWeCouldnNotChangeYourSoilAnalysisData {
             get {
@@ -9380,7 +9461,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to We couldn’t create your plan, please try again later.
+        ///   Looks up a localized string similar to We could not create your plan, please try again later.
         /// </summary>
         public static string MsgWeCouldNotCreateYourPlanPleaseTryAgainLater {
             get {
@@ -9389,7 +9470,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to We couldn’t add your application, please try again later.
+        ///   Looks up a localized string similar to We could not add your application, try again later.
         /// </summary>
         public static string MsgWeCounldNotAddOrganicManure {
             get {

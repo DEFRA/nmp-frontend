@@ -48,7 +48,7 @@ namespace NMP.Portal.Security
                         //options.CallbackPath = builder.Configuration["CustomerIdentityCallbackPath"]; // signin-oidc";
                         //options.SignedOutCallbackPath = builder.Configuration["CustomerIdentitySignedOutCallbackPath"];
                         options.SignUpSignInPolicyId = builder.Configuration["CustomerIdentityPolicyId"];
-                        options.ErrorPath = "/Error/index";
+                        options.ErrorPath = "/Error/Index";
                         
                     })                    
                     .EnableTokenAcquisitionToCallDownstreamApi(new string[] { "openid", "profile", "offline_access", builder.Configuration["CustomerIdentityClientId"] })
@@ -159,7 +159,7 @@ namespace NMP.Portal.Security
                     }
                     else
                     {
-                        throw new AuthenticationFailureException("Access Token not received");
+                        throw new AuthenticationFailureException(Resource.MsgAccessTokenNotReceived);
                     }
 
                     if (!string.IsNullOrEmpty(refreshToken))
@@ -168,7 +168,7 @@ namespace NMP.Portal.Security
                     }
                     else
                     {
-                        throw new AuthenticationFailureException("Refresh Token not received");
+                        throw new AuthenticationFailureException(Resource.MsgRrefreshTokenNotReceived);
                     }
 
                 }
@@ -307,31 +307,39 @@ namespace NMP.Portal.Security
                             httpClient.BaseAddress = new Uri(configuration["NMPApiUrl"] ?? "http://localhost:3000/");
                             httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
                             var response = await httpClient.PostAsync(APIURLHelper.AddOrUpdateUserAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
-                            string result = await response.Content.ReadAsStringAsync();
-                            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-                            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
+                            
+                            if (response.IsSuccessStatusCode)
                             {
-                                userId = responseWrapper?.Data?["UserID"];
-                                identity?.AddClaim(new Claim("userId", userId.ToString()));                                
-                            }
-                            else
-                            {
-                                if (responseWrapper != null && responseWrapper?.Error != null)
+                                string result = await response.Content.ReadAsStringAsync();
+                                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                                if(responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
                                 {
-                                    throw new Exception("NMPT API service is not available at the moment.Try after some time.");
+                                    userId = responseWrapper?.Data?["UserID"];
+                                    identity?.AddClaim(new Claim("userId", userId.ToString()));
                                 }
-                            }
-                        }
+                                else
+                                {
+                                    if (responseWrapper != null && responseWrapper?.Error != null)
+                                    {
+                                        throw new Exception(Resource.MsgNmptServiceNotAvailable);
+                                    }
+                                }
 
+                            }
+                            else if(response.StatusCode == HttpStatusCode.Forbidden)
+                            {
+                                throw new Exception(Resource.MsgNmptApiServiceBlockedAccess);
+                            }                            
+                        }
                     }
                     else
                     {
-                        throw new Exception("Invalid authentication");
+                        throw new Exception(Resource.MsgInvalidAuthentication);
                     }
                 }
                 else
                 {
-                    throw new Exception("Access token not received from Customer Identity");
+                    throw new AuthenticationFailureException(Resource.MsgAccessTokenNotReceived);
                 }
 
             }
@@ -339,20 +347,20 @@ namespace NMP.Portal.Security
             {
                 var errorViewModel = new ErrorViewModel();
                 //errorViewModel.Code= (int)ex.StatusCode;
-                errorViewModel.Message = "NMPT API service is not available at the moment. Try after some time.";//ex.StatusCode + " : " + ex.Message;                
+                errorViewModel.Message = Resource.MsgNmptServiceNotAvailable;               
                 errorViewModel.Stack = string.Empty;
-                context.HttpContext.Session.SetObjectAsJson("Error", errorViewModel);
-                context.Response.Redirect("/Error");
-                context.HandleResponse(); // Suppress the exception 
+                context?.HttpContext.Session.SetObjectAsJson("Error", errorViewModel);
+                context?.Response.Redirect("/Error");
+                context?.HandleResponse(); // Suppress the exception 
             }
             catch (Exception ex)
             {
                 var errorViewModel = new ErrorViewModel();                
                 errorViewModel.Message = ex.Message;
                 errorViewModel.Stack = string.Empty;
-                context.HttpContext.Session.SetObjectAsJson("Error", errorViewModel);
-                context.Response.Redirect("/Error");
-                context.HandleResponse(); // Suppress the exception                    
+                context?.HttpContext.Session.SetObjectAsJson("Error", errorViewModel);
+                context?.Response.Redirect("/Error");
+                context?.HandleResponse(); // Suppress the exception                    
             }
             // Don't remove this line
             await Task.CompletedTask.ConfigureAwait(false);
