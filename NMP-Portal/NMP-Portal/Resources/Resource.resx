@@ -3232,4 +3232,13 @@ cubic metres per hectare  not set</value>
   <data name="lblSulphurSO3Lowercase" xml:space="preserve">
     <value>sulphur (SO3)</value>
   </data>
+  <data name="lblNitrogenLowercase" xml:space="preserve">
+    <value>nitrogen (N)</value>
+  </data>
+  <data name="lblPhosphateP2O5Lowercase" xml:space="preserve">
+    <value>phosphate (P2O5)</value>
+  </data>
+  <data name="lblPotashK2OLowecase" xml:space="preserve">
+    <value>potash (K2O)</value>
+  </data>
 </root>

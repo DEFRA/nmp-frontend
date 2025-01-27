@@ -994,21 +994,21 @@ namespace NMP.Portal.Controllers
             {
                 if (model.N < 0 || model.N > 9999)
                 {
-                    ModelState.AddModelError("N", string.Format(Resource.MsgMinMaxValidation, Resource.lblNitrogen, 9999));
+                    ModelState.AddModelError("N", string.Format(Resource.MsgMinMaxValidation, Resource.lblNitrogenLowercase, 9999));
                 }
             }
             if (model.P2O5 != null)
             {
                 if (model.P2O5 < 0 || model.P2O5 > 9999)
                 {
-                    ModelState.AddModelError("P2O5", string.Format(Resource.MsgMinMaxValidation, Resource.lblPhosphateP2O5, 9999));
+                    ModelState.AddModelError("P2O5", string.Format(Resource.MsgMinMaxValidation, Resource.lblPhosphateP2O5Lowercase, 9999));
                 }
             }
             if (model.K2O != null)
             {
                 if (model.K2O < 0 || model.K2O > 9999)
                 {
-                    ModelState.AddModelError("K2O", string.Format(Resource.MsgMinMaxValidation, Resource.lblPotashK2O, 9999));
+                    ModelState.AddModelError("K2O", string.Format(Resource.MsgMinMaxValidation, Resource.lblPotashK2OLowecase, 9999));
                 }
             }
             if (model.SO3 != null)
@@ -1022,7 +1022,7 @@ namespace NMP.Portal.Controllers
             {
                 if (model.Lime < 0 || model.Lime > 99.9m)
                 {
-                    ModelState.AddModelError("Lime", string.Format(Resource.MsgMinMaxValidation, Resource.lblLime, 99.9));
+                    ModelState.AddModelError("Lime", string.Format(Resource.MsgMinMaxValidation, Resource.lblLime.ToLower(), 99.9));
                 }
             }
 

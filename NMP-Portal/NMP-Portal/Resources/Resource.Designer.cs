@@ -4113,6 +4113,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to nitrogen (N).
+        /// </summary>
+        public static string lblNitrogenLowercase {
+            get {
+                return ResourceManager.GetString("lblNitrogenLowercase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This application may take you over the N-max limit for this crop.
         /// </summary>
         public static string lblNMaxLimitTitle {
@@ -4689,6 +4698,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to phosphate (P2O5).
+        /// </summary>
+        public static string lblPhosphateP2O5Lowercase {
+            get {
+                return ResourceManager.GetString("lblPhosphateP2O5Lowercase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What was the phosphorus (P) analysis type?.
         /// </summary>
         public static string lblPhosphorusAnalysisType {
@@ -4901,6 +4919,15 @@ namespace NMP.Portal.Resources {
         public static string lblPotashK2O {
             get {
                 return ResourceManager.GetString("lblPotashK2O", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to potash (K2O).
+        /// </summary>
+        public static string lblPotashK2OLowecase {
+            get {
+                return ResourceManager.GetString("lblPotashK2OLowecase", resourceCulture);
             }
         }
         
