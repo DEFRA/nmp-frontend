@@ -5976,6 +5976,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to sulphur (SO3).
+        /// </summary>
+        public static string lblSulphurSO3Lowercase {
+            get {
+                return ResourceManager.GetString("lblSulphurSO3Lowercase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Supply from manures.
         /// </summary>
         public static string lblSupplyFromManures {

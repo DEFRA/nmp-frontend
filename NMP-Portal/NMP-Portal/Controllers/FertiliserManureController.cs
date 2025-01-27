@@ -1015,7 +1015,7 @@ namespace NMP.Portal.Controllers
             {
                 if (model.SO3 < 0 || model.SO3 > 9999)
                 {
-                    ModelState.AddModelError("SO3", string.Format(Resource.MsgMinMaxValidation, Resource.lblSulphurSO3, 9999));
+                    ModelState.AddModelError("SO3", string.Format(Resource.MsgMinMaxValidation, Resource.lblSulphurSO3Lowercase, 9999));
                 }
             }
             if (model.Lime != null)

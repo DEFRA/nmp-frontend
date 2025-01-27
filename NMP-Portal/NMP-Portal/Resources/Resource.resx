@@ -3229,4 +3229,7 @@ cubic metres per hectare  not set</value>
   <data name="lblEnterAPositiveValueOfPropertyName" xml:space="preserve">
     <value>Enter a positive value of {0}</value>
   </data>
+  <data name="lblSulphurSO3Lowercase" xml:space="preserve">
+    <value>sulphur (SO3)</value>
+  </data>
 </root>

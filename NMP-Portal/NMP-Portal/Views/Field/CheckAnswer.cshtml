@@ -644,7 +644,7 @@
                             @string.Format(Resource.lblWhenWasTheSampleForSoilMineralNitrogenTaken, Model.Name)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @(Model.SampleForSoilMineralNitrogen.HasValue ? Model.SampleForSoilMineralNitrogen.Value.Date.ToString("dd MMM yyyy") : Resource.lblNotSet)
+                            @(Model.SampleForSoilMineralNitrogen.HasValue ? Model.SampleForSoilMineralNitrogen.Value.Date.ToString("dd MMMM yyyy") : Resource.lblNotSet)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="SampleForSoilMineralNitrogen" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
