@@ -862,14 +862,25 @@ namespace NMP.Portal.Controllers
                 var dateError = ModelState["SoilAnalyses.Date"].Errors.Count > 0 ?
                                 ModelState["SoilAnalyses.Date"].Errors[0].ErrorMessage.ToString() : null;
 
-                if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, Resource.lblDateSampleTaken)))
+                //if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, Resource.lblDateSampleTaken)))
+                //{
+                //    ModelState["SoilAnalyses.Date"].Errors.Clear();
+                //    ModelState["SoilAnalyses.Date"].Errors.Add(Resource.MsgEnterTheDateInNumber);
+                //}
+
+                if (dateError != null && (dateError.Equals(Resource.MsgDateMustBeARealDate) ||
+                    dateError.Equals(Resource.MsgDateMustIncludeAMonth) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeAMonthAndYear) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeADayAndYear) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeAYear) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeADay) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeADayAndMonth)))
                 {
                     ModelState["SoilAnalyses.Date"].Errors.Clear();
-                    ModelState["SoilAnalyses.Date"].Errors.Add(Resource.MsgEnterTheDateInNumber);
+                    ModelState["SoilAnalyses.Date"].Errors.Add(Resource.MsgTheDateMustInclude);
                 }
             }
-
-            if (model.SoilAnalyses.Date == null)
+                if (model.SoilAnalyses.Date == null)
             {
                 ModelState.AddModelError("SoilAnalyses.Date", Resource.MsgEnterADateBeforeContinuing);
             }
@@ -1846,10 +1857,21 @@ namespace NMP.Portal.Controllers
                 var dateError = ModelState["SampleForSoilMineralNitrogen"].Errors.Count > 0 ?
                                 ModelState["SampleForSoilMineralNitrogen"].Errors[0].ErrorMessage.ToString() : null;
 
-                if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, Resource.MsgSampleForSoilMineralNitrogenForError)))
+                //if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, Resource.MsgSampleForSoilMineralNitrogenForError)))
+                //{
+                //    ModelState["SampleForSoilMineralNitrogen"].Errors.Clear();
+                //    ModelState["SampleForSoilMineralNitrogen"].Errors.Add(Resource.MsgDateEnteredIsNotValid);
+                //}
+                if (dateError != null && (dateError.Equals(Resource.MsgDateMustBeARealDate) ||
+                    dateError.Equals(Resource.MsgDateMustIncludeAMonth) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeAMonthAndYear) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeADayAndYear) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeAYear) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeADay) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeADayAndMonth)))
                 {
                     ModelState["SampleForSoilMineralNitrogen"].Errors.Clear();
-                    ModelState["SampleForSoilMineralNitrogen"].Errors.Add(Resource.MsgDateEnteredIsNotValid);
+                    ModelState["SampleForSoilMineralNitrogen"].Errors.Add(Resource.MsgTheDateMustInclude);
                 }
             }
 
@@ -2308,21 +2330,21 @@ namespace NMP.Portal.Controllers
             {
                 if (model.SoilMineralNitrogenAt030CM < 0)
                 {
-                    ModelState.AddModelError("SoilMineralNitrogenAt030CM", string.Format(Resource.lblEnterValidValue, Resource.lblKilogramsOfSoilMineralNitrogenAt030CM));
+                    ModelState.AddModelError("SoilMineralNitrogenAt030CM", string.Format(Resource.lblEnterAPositiveValueOfPropertyName, Resource.lblKilogramsOfSoilMineralNitrogenAt030CM));
                 }
             }
             if (model.SoilMineralNitrogenAt3060CM != null)
             {
                 if (model.SoilMineralNitrogenAt3060CM < 0)
                 {
-                    ModelState.AddModelError("SoilMineralNitrogenAt3060CM", string.Format(Resource.lblEnterValidValue, Resource.lblKilogramsOfSoilMineralNitrogenAt3060CM));
+                    ModelState.AddModelError("SoilMineralNitrogenAt3060CM", string.Format(Resource.lblEnterAPositiveValueOfPropertyName, Resource.lblKilogramsOfSoilMineralNitrogenAt3060CM));
                 }
             }
             if (model.SoilMineralNitrogenAt6090CM != null)
             {
                 if (model.SoilMineralNitrogenAt6090CM < 0)
                 {
-                    ModelState.AddModelError("SoilMineralNitrogenAt6090CM", string.Format(Resource.lblEnterValidValue, Resource.lblKilogramsOfSoilMineralNitrogenAt6090CM));
+                    ModelState.AddModelError("SoilMineralNitrogenAt6090CM", string.Format(Resource.lblEnterAPositiveValueOfPropertyName, Resource.lblKilogramsOfSoilMineralNitrogenAt6090CM));
                 }
             }
             if (!ModelState.IsValid)
@@ -2449,14 +2471,14 @@ namespace NMP.Portal.Controllers
             {
                 if (model.SampleDepth < 0)
                 {
-                    ModelState.AddModelError("SampleDepth", Resource.MsgEnterValidNumericValueBeforeContinuing);
+                    ModelState.AddModelError("SampleDepth",string.Format(Resource.lblSampleDepth,Resource.lblValueMustBeGreaterThanZero));
                 }
             }
             if (model.SoilMineralNitrogen != null)
             {
                 if (model.SoilMineralNitrogen < 0)
                 {
-                    ModelState.AddModelError("SoilMineralNitrogen", Resource.MsgEnterValidNumericValueBeforeContinuing);
+                    ModelState.AddModelError("SoilMineralNitrogen", string.Format(Resource.lblSoilMineralNitrogen, Resource.lblValueMustBeGreaterThanZero));
                 }
             }
             if (!ModelState.IsValid)
