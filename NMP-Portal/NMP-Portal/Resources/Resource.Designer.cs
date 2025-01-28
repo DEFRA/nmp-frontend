@@ -7821,6 +7821,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have updated a soil analysis for {0}..
+        /// </summary>
+        public static string lblYouHaveUpdatedASoilAnalysisForFieldName {
+            get {
+                return ResourceManager.GetString("lblYouHaveUpdatedASoilAnalysisForFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You must allow at least 3 weeks between applications..
         /// </summary>
         public static string lblYouMustAllowAtLeast3WeeksBetweenApplications {
