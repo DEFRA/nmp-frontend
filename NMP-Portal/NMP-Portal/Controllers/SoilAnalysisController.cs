@@ -47,7 +47,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> SoilAnalysisDetail(string i, string j, string l, string k)//i=EncryptedFieldId,j=EncryptedFarmId,k=success
+        public async Task<IActionResult> SoilAnalysisDetail(string i, string j, string l, string k)//i=EncryptedFieldId,j=EncryptedFarmId,l=EncryptedSoilAnalysisId,k=success
         {
             _logger.LogTrace($"Soil Analysis Controller: SoilAnalysisDetail({i}, {j},{k}) action called.");
             SoilAnalysisViewModel model = new SoilAnalysisViewModel();

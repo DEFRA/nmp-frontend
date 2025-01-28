@@ -457,15 +457,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This may change your nutrient recommendations for {0}. Select a field from your .
-        /// </summary>
-        public static string lblAddNewSoilAnalysisSuccessMsgContent {
-            get {
-                return ResourceManager.GetString("lblAddNewSoilAnalysisSuccessMsgContent", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Address.
         /// </summary>
         public static string lblAddress {
@@ -750,6 +741,15 @@ namespace NMP.Portal.Resources {
         public static string lblAnotherCrop {
             get {
                 return ResourceManager.GetString("lblAnotherCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Any changes you make may affect the nutrient recommendations for any harvest years where this analysis applies..
+        /// </summary>
+        public static string lblAnyChangesYouMakeMayAffectTheNutrientRecommendation {
+            get {
+                return ResourceManager.GetString("lblAnyChangesYouMakeMayAffectTheNutrientRecommendation", resourceCulture);
             }
         }
         
@@ -1686,6 +1686,15 @@ namespace NMP.Portal.Resources {
         public static string lblCroppedAreaForCheckAnswere {
             get {
                 return ResourceManager.GetString("lblCroppedAreaForCheckAnswere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to crop plans.
+        /// </summary>
+        public static string lblCropPlan {
+            get {
+                return ResourceManager.GetString("lblCropPlan", resourceCulture);
             }
         }
         
@@ -5256,6 +5265,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to remove this soil analysis..
+        /// </summary>
+        public static string lblRemoveThisSoilAnalysis {
+            get {
+                return ResourceManager.GetString("lblRemoveThisSoilAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rotary cultivator.
         /// </summary>
         public static string lblRotaryCultivator {
@@ -6282,6 +6300,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This may change your nutrient recommendations. Select the field in your.
+        /// </summary>
+        public static string lblThisMayChangeYourNutrientRecommendations {
+            get {
+                return ResourceManager.GetString("lblThisMayChangeYourNutrientRecommendations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This will be the first crop in these fields:.
         /// </summary>
         public static string lblThisWillBeTheFirstCropInTheseFields {
@@ -6390,7 +6417,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to to see its recommendations.
+        ///   Looks up a localized string similar to to see its recommendations..
         /// </summary>
         public static string lblToSeeItsRecommendations {
             get {
@@ -6957,20 +6984,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View or change.
+        /// </summary>
+        public static string lblViewOrChange {
+            get {
+                return ResourceManager.GetString("lblViewOrChange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to View recommendations.
         /// </summary>
         public static string lblViewRecommendations {
             get {
                 return ResourceManager.GetString("lblViewRecommendations", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to View soil analysis.
-        /// </summary>
-        public static string lblViewSoilAnalysis {
-            get {
-                return ResourceManager.GetString("lblViewSoilAnalysis", resourceCulture);
             }
         }
         
@@ -7605,15 +7632,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} crop plan.
-        /// </summary>
-        public static string lblYearCropPlan {
-            get {
-                return ResourceManager.GetString("lblYearCropPlan", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Yes.
         /// </summary>
         public static string lblYes {
@@ -7713,6 +7731,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can also.
+        /// </summary>
+        public static string lblYouCanAlso {
+            get {
+                return ResourceManager.GetString("lblYouCanAlso", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You can change your planting date later..
         /// </summary>
         public static string lblYouCanChangeYourPlantingDateLater {
@@ -7736,15 +7763,6 @@ namespace NMP.Portal.Resources {
         public static string lblYouHaveAdded {
             get {
                 return ResourceManager.GetString("lblYouHaveAdded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to You have added a new soil analysis for {0}.
-        /// </summary>
-        public static string lblYouHaveAddedANewSoilAnalysisForFieldName {
-            get {
-                return ResourceManager.GetString("lblYouHaveAddedANewSoilAnalysisForFieldName", resourceCulture);
             }
         }
         
@@ -7799,6 +7817,15 @@ namespace NMP.Portal.Resources {
         public static string lblYouHaveUpdated {
             get {
                 return ResourceManager.GetString("lblYouHaveUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have updated a soil analysis for {0}..
+        /// </summary>
+        public static string lblYouHaveUpdatedASoilAnalysisForFieldName {
+            get {
+                return ResourceManager.GetString("lblYouHaveUpdatedASoilAnalysisForFieldName", resourceCulture);
             }
         }
         
@@ -9304,15 +9331,6 @@ namespace NMP.Portal.Resources {
         public static string MsgServiceNotAvailable {
             get {
                 return ResourceManager.GetString("MsgServiceNotAvailable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Your soil analysis changes could not be added..
-        /// </summary>
-        public static string MsgSoilAnalysisChangesCouldNotAdded {
-            get {
-                return ResourceManager.GetString("MsgSoilAnalysisChangesCouldNotAdded", resourceCulture);
             }
         }
         

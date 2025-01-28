@@ -1831,12 +1831,12 @@ namespace NMP.Portal.Controllers
                             if (_soilAnalysisDataProtector.Unprotect(q) == Resource.lblFalse)
                             {
                                 ViewBag.Success = Resource.lblFalse;
-                                ViewBag.Error = Resource.MsgSoilAnalysisChangesCouldNotAdded;
+                                //ViewBag.Error = Resource.MsgSoilAnalysisChangesCouldNotAdded;
                             }
                             else
                             {
                                 ViewBag.Success = Resource.lblTrue;
-                                ViewBag.SuccessMsgContent = string.Format(Resource.lblYouHaveAddedANewSoilAnalysisForFieldName, model.Name);
+                                //ViewBag.SuccessMsgContent = string.Format(Resource.lblYouHaveAddedANewSoilAnalysisForFieldName, model.Name);
                                 if (soilAnalysisResponse.Count > 0)
                                 {
                                     List<Crop> crop = (await _iCropService.FetchCropsByFieldId(soilAnalysisResponse.FirstOrDefault().FieldID.Value)).ToList();
@@ -1845,10 +1845,10 @@ namespace NMP.Portal.Controllers
                                         bool anyPlan = crop.Any(x => x.Year >= (soilAnalysisResponse.FirstOrDefault()?.Year ?? 0));
                                         if (anyPlan)
                                         {
-                                            ViewBag.SuccessMsgAdditionalContent = string.Format(Resource.lblAddNewSoilAnalysisSuccessMsgContent, soilAnalysisResponse.FirstOrDefault().Year);
+                                  //          ViewBag.SuccessMsgAdditionalContent = string.Format(Resource.lblAddNewSoilAnalysisSuccessMsgContent, soilAnalysisResponse.FirstOrDefault().Year);
                                             int cropYear=crop.FirstOrDefault(x => x.Year >= soilAnalysisResponse.FirstOrDefault().Year).Year;
                                             ViewBag.CropYear = _farmDataProtector.Protect(cropYear.ToString());
-                                            ViewBag.SuccessMsgAdditionalContentSecond=string.Format(Resource.lblYearCropPlan, cropYear);
+                                        //    ViewBag.SuccessMsgAdditionalContentSecond=string.Format(Resource.lblYearCropPlan, cropYear);
                                             ViewBag.SuccessMsgAdditionalContentThird = Resource.lblToSeeItsRecommendations;
                                         }
                                     }

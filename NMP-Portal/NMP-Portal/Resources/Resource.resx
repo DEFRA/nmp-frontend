@@ -1201,8 +1201,8 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblSoilContainsPostashReleasingClay" xml:space="preserve">
     <value>Soil contains potash releasing clay</value>
   </data>
-  <data name="lblViewSoilAnalysis" xml:space="preserve">
-    <value>View soil analysis</value>
+  <data name="lblViewOrChange" xml:space="preserve">
+    <value>View or change</value>
   </data>
   <data name="MsgRemoveField" xml:space="preserve">
     <value>You can also remove {0}. This will remove all of the field data including soil analysis. It will also remove {0} from your plans. You will not be able to get it back.</value>
@@ -3256,19 +3256,25 @@ cubic metres per hectare  not set</value>
   <data name="MsgRrefreshTokenNotReceived" xml:space="preserve">
     <value>Refresh Token not received</value>
   </data>
-  <data name="lblAddNewSoilAnalysisSuccessMsgContent" xml:space="preserve">
-    <value>This may change your nutrient recommendations for {0}. Select a field from your </value>
+  <data name="lblAnyChangesYouMakeMayAffectTheNutrientRecommendation" xml:space="preserve">
+    <value>Any changes you make may affect the nutrient recommendations for any harvest years where this analysis applies.</value>
   </data>
-  <data name="lblYouHaveAddedANewSoilAnalysisForFieldName" xml:space="preserve">
-    <value>You have added a new soil analysis for {0}</value>
+  <data name="lblRemoveThisSoilAnalysis" xml:space="preserve">
+    <value>remove this soil analysis.</value>
   </data>
-  <data name="MsgSoilAnalysisChangesCouldNotAdded" xml:space="preserve">
-    <value>Your soil analysis changes could not be added.</value>
+  <data name="lblYouCanAlso" xml:space="preserve">
+    <value>You can also</value>
+  </data>
+  <data name="lblThisMayChangeYourNutrientRecommendations" xml:space="preserve">
+    <value>This may change your nutrient recommendations. Select the field in your</value>
+  </data>
+  <data name="lblCropPlan" xml:space="preserve">
+    <value>crop plans</value>
   </data>
   <data name="lblToSeeItsRecommendations" xml:space="preserve">
-    <value>to see its recommendations</value>
+    <value>to see its recommendations.</value>
   </data>
-  <data name="lblYearCropPlan" xml:space="preserve">
-    <value>{0} crop plan</value>
+  <data name="lblYouHaveUpdatedASoilAnalysisForFieldName" xml:space="preserve">
+    <value>You have updated a soil analysis for {0}.</value>
   </data>
 </root>
