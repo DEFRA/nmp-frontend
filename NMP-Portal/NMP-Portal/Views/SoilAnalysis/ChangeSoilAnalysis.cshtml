@@ -49,6 +49,10 @@
                 {
                     <h1 class="govuk-heading-l">@(string.Format(Resource.lblChangeSoilAnalysisFromDate, Model.Date != null ? Model.Date.Value.ToString("dd MMMM yyyy") : ""))</h1>
                 }
+                            @if (Model.isSoilAnalysisAdded == null)
+            {
+            <p class="govuk-body">@Resource.lblAnyChangesYouMakeMayAffectTheNutrientRecommendation</p>
+            }
                 <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Date"></govuk-date-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PH"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MagnesiumIndex"></govuk-input>
@@ -115,7 +119,7 @@
                     @if (Model.IsSoilNutrientValueTypeIndex.Value)
                     {
                         @if (Model.PH.HasValue || Model.PhosphorusIndex.HasValue ||
-                       (!string.IsNullOrWhiteSpace(Model.PotassiumIndexValue)) || Model.MagnesiumIndex.HasValue)
+                      (!string.IsNullOrWhiteSpace(Model.PotassiumIndexValue)) || Model.MagnesiumIndex.HasValue)
                         {
                             <govuk-summary-list-row>
                                 <govuk-summary-list-row-key>
@@ -219,7 +223,7 @@
                     }
                     else
                     {
-                        @if ((Model.PH.HasValue) || Model.Potassium.HasValue ||
+                        @if ((Model.PH.HasValue) || Model.Potassium.HasValue || 
                        Model.Phosphorus.HasValue || Model.Magnesium.HasValue)
                         {
                             <govuk-summary-list-row>
@@ -325,6 +329,15 @@
 
                 </govuk-summary-list>
 
+                @if (Model.isSoilAnalysisAdded == null)
+                {
+                    <p class="govuk-body">
+                        @Resource.lblYouCanAlso
+                    <a href="#">
+                        @Resource.lblRemoveThisSoilAnalysis
+                    </a>
+                </p>
+                }
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>

@@ -785,7 +785,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Select one option</value>
   </data>
   <data name="MsgDateMustBeARealDate" xml:space="preserve">
-    <value>{0} must be a real date</value>
+    <value>The date must be a real date</value>
   </data>
   <data name="lblHowWouldYouLikeToCalculateSNSForCheckAnswer" xml:space="preserve">
     <value>How would you like to calculate the soil nitrogen (N) supply</value>
@@ -1070,25 +1070,25 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Variety name not set</value>
   </data>
   <data name="MsgDateMustIncludeAMonth" xml:space="preserve">
-    <value>{0} must include a month</value>
+    <value>The date must include a month</value>
   </data>
   <data name="ErrorMsgForDate" xml:space="preserve">
     <value>The date must include the day, the month and the year</value>
   </data>
   <data name="MsgDateMustIncludeADay" xml:space="preserve">
-    <value>{0} must include a day</value>
+    <value>The date must include a day</value>
   </data>
   <data name="MsgDateMustIncludeADayAndMonth" xml:space="preserve">
-    <value>{0} must include a day and month</value>
+    <value>The date must include a day and month</value>
   </data>
   <data name="MsgDateMustIncludeADayAndYear" xml:space="preserve">
-    <value>{0} must include a day and year</value>
+    <value>The date must include a day and year</value>
   </data>
   <data name="MsgDateMustIncludeAMonthAndYear" xml:space="preserve">
-    <value>{0} must include a month and year</value>
+    <value>The date must include a month and year</value>
   </data>
   <data name="MsgDateMustIncludeAYear" xml:space="preserve">
-    <value>{0} must include a year</value>
+    <value>The date must include a year</value>
   </data>
   <data name="lblWhatIsTheExpectedYieldForSingleNotSet" xml:space="preserve">
     <value>What is the expected yield for {0} per hectare in these fields not set?</value>
@@ -3276,5 +3276,17 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="lblYouHaveUpdatedASoilAnalysisForFieldName" xml:space="preserve">
     <value>You have updated a soil analysis for {0}.</value>
+  </data>
+  <data name="MsgTheDateMustInclude" xml:space="preserve">
+    <value>The date must include the day/month/year</value>
+  </data>
+  <data name="lblRemoveThisSoilAnalysis" xml:space="preserve">
+    <value>remove this soil analysis.</value>
+  </data>
+  <data name="lblThisMayChangeYourNutrientRecommendations" xml:space="preserve">
+    <value>This may change your nutrient recommendations. Select the field in your</value>
+  </data>
+  <data name="lblCropPlan" xml:space="preserve">
+    <value>crop plans</value>
   </data>
 </root>
