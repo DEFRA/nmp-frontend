@@ -3274,4 +3274,7 @@ cubic metres per hectare  not set</value>
   <data name="lblToSeeItsRecommendations" xml:space="preserve">
     <value>to see its recommendations.</value>
   </data>
+  <data name="lblYouHaveUpdatedASoilAnalysisForFieldName" xml:space="preserve">
+    <value>You have updated a soil analysis for {0}.</value>
+  </data>
 </root>
