@@ -19,7 +19,7 @@ namespace NMP.Portal.Models
         public decimal? PH { get; set; }
         public int? PhosphorusMethodologyID { get; set; }
 
-        [RegularExpression(@"^(?:[0-9]{1,3}|999[0-8])$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterValidValueForNutrient))]
+        [Range(0, 999, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterValidValueForPhosphorus))]
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblPhosphorusPerLitreOfSoil))]
         public int? Phosphorus { get; set; }
 
@@ -27,15 +27,17 @@ namespace NMP.Portal.Models
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblPhosphorusIndex))]
         public int? PhosphorusIndex { get; set; }
 
-        [RegularExpression(@"^(?:[0-9]{1,3}|999[0-8])$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterValidValueForNutrient))]
+        [Range(0, 9998, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterValidValueForNutrient))]
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblPotassiumPerLitreOfSoil))]
         public int? Potassium { get; set; }
 
-        [RegularExpression(@"^[0-9]$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterValidValueForNutrientIndex))]
+        //[RegularExpression(@"^[0-9]$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterValidValueForNutrientIndex))]
+       
+        
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblPotassiumIndex))]
         public int? PotassiumIndex { get; set; }
-
-        [RegularExpression(@"^(?:[0-9]{1,3}|999[0-8])$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterValidValueForNutrient))]
+        
+        [Range(0, 9998, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterValidValueForNutrient))]
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblMagnesiumPerLitreOfSoil))]
         public int? Magnesium { get; set; }
 

@@ -42,8 +42,12 @@
             {
                 <govuk-notification-banner type="Success">
                     <div class="">
+                        <h3 class="govuk-notification-banner__heading">
+                            @string.Format(Resource.lblYouHaveUpdatedASoilAnalysisForFieldName,Model.FieldName)</h3>
                         <p class="govuk-body">
-                            @Resource.lblYourSoilAnalysisChangesHaveBeenSuccessfullySaved
+                            @Resource.lblThisMayChangeYourNutrientRecommendations
+                            <a asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblCropPlan</a>
+                            @Resource.lblToSeeItsRecommendations
                         </p>
                     </div>
                 </govuk-notification-banner>
@@ -105,7 +109,7 @@
 
                                 <tr class="govuk-table__row">
                                     <td class="govuk-table__cell">@Resource.lblPotassiumIndex</td>
-                                    <td class="govuk-table__cell">@(soilAnalysis.PotassiumIndex != null ? soilAnalysis.PotassiumIndex : Resource.lblNotEntered)</td>
+                                    <td class="govuk-table__cell">@((!string.IsNullOrWhiteSpace(soilAnalysis.PotassiumIndexValue)) ? soilAnalysis.PotassiumIndexValue : Resource.lblNotEntered)</td>
                                 </tr>
                             </tbody>
 

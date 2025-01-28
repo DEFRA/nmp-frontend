@@ -955,20 +955,22 @@ namespace NMP.Portal.Controllers
                 var dateError = ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Count > 0 ?
                                 ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors[0].ErrorMessage.ToString() : null;
 
-                if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, Resource.lblSowingDateForError)))
+                //if (dateError != null && dateError.Equals(Resource.MsgDateMustBeARealDate))
+                //{
+                //    ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Clear();
+                //    ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Add(Resource.MsgTheDateMustInclude);
+                //}
+                //else 
+                if (dateError != null && (dateError.Equals(Resource.MsgDateMustBeARealDate) || 
+                    dateError.Equals(Resource.MsgDateMustIncludeAMonth) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeAMonthAndYear) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeADayAndYear) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeAYear) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeADay) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeADayAndMonth)))
                 {
                     ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Clear();
-                    ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Add(Resource.MsgEnterTheDateInNumber);
-                }
-                else if (dateError != null && (dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonth, Resource.lblSowingDateForError)) ||
-                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonthAndYear, Resource.lblSowingDateForError)) ||
-                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndYear, Resource.lblSowingDateForError)) ||
-                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeAYear, Resource.lblSowingDateForError)) ||
-                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADay, Resource.lblSowingDateForError)) ||
-                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndMonth, Resource.lblSowingDateForError))))
-                {
-                    ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Clear();
-                    ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Add(Resource.ErrorMsgForDate);
+                    ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Add(Resource.MsgTheDateMustInclude);
                 }
             }
             if (model.Crops[model.SowingDateCurrentCounter].SowingDate == null)
@@ -985,27 +987,32 @@ namespace NMP.Portal.Controllers
             //}
             bool isPerennial = await _organicManureService.FetchIsPerennialByCropTypeId(model.CropTypeID.Value);
 
-            DateTime maxDate = new DateTime(model.Year.Value + 1, 7, 31);
+            //Anil Yadav 23.01.2025 : NMPT1070 NMPT Date Validation Rules​: If perennial flag is true = no minimum date validation.Max date = end of calendar
+            DateTime maxDate = new DateTime(model.Year.Value, 12, 31);
 
             if (model.Crops[model.SowingDateCurrentCounter].SowingDate > maxDate)
             {
-                ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", string.Format(Resource.MsgDateShouldNotBeExceed, maxDate.Date.ToString("dd MMMM yyyy")));
+                //Anil Yadav 23.01.2025 : NMPT1070 NMPT Date Validation Rules​: If perennial flag is true = no minimum date validation.Max date = end of calendar
+                ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate",string.Format(Resource.MsgPlantingDateAfterHarvestYear, model.Year.Value, maxDate.Date.ToString("dd MMMM yyyy")));
             }
+
             if (!isPerennial)
             {
-                DateTime minDate = new DateTime(model.Year.Value, 8, 01);
+                DateTime minDate = new DateTime(model.Year.Value -1, 01, 01);
                 if (model.Crops[model.SowingDateCurrentCounter].SowingDate < minDate)
                 {
-                    ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", string.Format(Resource.MsgDateShouldBeExceedFrom, minDate.Date.ToString("dd MMMM yyyy")));
+                    //Anil Yadav 23.01.2025 : NMPT1070 NMPT Date Validation Rules​: If perennial flag is true = no minimum date validation.Max date = end of calendar
+                    ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", string.Format(Resource.MsgPlantingDateBeforeHarvestYear, model.Year.Value, minDate.Date.ToString("dd MMMM yyyy")));
                 }
             }
-            else
-            {
-                if (model.Crops[model.SowingDateCurrentCounter].SowingDate.Value.Year < 1601)
-                {
-                    ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", Resource.MsgEnterADateAfter);
-                }
-            }
+            // Removed by Anil Yadav 23.01.2025 : NMPT1070 NMPT Date Validation Rules​ : If perennial flag is true =  no minimum date validation. Max date = end of calendar
+            //else
+            //{
+            //    if (model.Crops[model.SowingDateCurrentCounter].SowingDate.Value.Year < 1601)
+            //    {
+            //        ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", Resource.MsgEnterADateAfter);
+            //    }
+            //}
 
             if (!ModelState.IsValid)
             {
@@ -2189,16 +2196,19 @@ namespace NMP.Portal.Controllers
                                             CropP2O5 = recData.Recommendation.CropP2O5,
                                             CropK2O = recData.Recommendation.CropK2O,
                                             CropSO3 = recData.Recommendation.CropSO3,
-                                            CropLime =(recData.Recommendation.PreviousAppliedLime!=null&& recData.Recommendation.PreviousAppliedLime>0)? recData.Recommendation.PreviousAppliedLime:recData.Recommendation.CropLime,
+                                            CropMgO = recData.Recommendation.CropMgO,
+                                            CropLime = (recData.Recommendation.PreviousAppliedLime != null && recData.Recommendation.PreviousAppliedLime > 0) ? recData.Recommendation.PreviousAppliedLime : recData.Recommendation.CropLime,
                                             ManureN = recData.Recommendation.ManureN,
                                             ManureP2O5 = recData.Recommendation.ManureP2O5,
                                             ManureK2O = recData.Recommendation.ManureK2O,
                                             ManureSO3 = recData.Recommendation.ManureSO3,
+                                            ManureMgO = recData.Recommendation.ManureMgO,
                                             ManureLime = recData.Recommendation.ManureLime,
                                             FertilizerN = recData.Recommendation.FertilizerN,
                                             FertilizerP2O5 = recData.Recommendation.FertilizerP2O5,
                                             FertilizerK2O = recData.Recommendation.FertilizerK2O,
                                             FertilizerSO3 = recData.Recommendation.FertilizerSO3,
+                                            FertilizerMgO = recData.Recommendation.FertilizerMgO,
                                             FertilizerLime = recData.Recommendation.FertilizerLime,
                                             SNSIndex = recData.Recommendation.SNSIndex,
                                             SIndex = recData.Recommendation.SIndex,
@@ -2206,8 +2216,8 @@ namespace NMP.Portal.Controllers
                                             MgIndex = recData.Recommendation.MgIndex,
                                             PIndex = recData.Recommendation.PIndex,
                                             NaIndex = recData.Recommendation.NaIndex,
-                                            CreatedOn=recData.Recommendation.CreatedOn,
-                                            ModifiedOn=recData.Recommendation.ModifiedOn,
+                                            CreatedOn = recData.Recommendation.CreatedOn,
+                                            ModifiedOn = recData.Recommendation.ModifiedOn,
                                             FertiliserAppliedN = recData.Recommendation.FertiliserAppliedN,
                                             FertiliserAppliedP2O5 = recData.Recommendation.FertiliserAppliedP2O5,
                                             FertiliserAppliedK2O = recData.Recommendation.FertiliserAppliedK2O,

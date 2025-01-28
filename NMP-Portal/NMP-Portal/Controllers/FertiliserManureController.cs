@@ -639,10 +639,21 @@ namespace NMP.Portal.Controllers
                     var dateError = ModelState["Date"]?.Errors.Count > 0 ?
                                     ModelState["Date"]?.Errors[0].ErrorMessage.ToString() : null;
 
-                    if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, Resource.lblDate)))
+                    //if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, Resource.lblDate)))
+                    //{
+                    //    ModelState["Date"]?.Errors.Clear();
+                    //    ModelState["Date"]?.Errors.Add(Resource.MsgEnterTheDateInNumber);
+                    //}
+                    if (dateError != null && (dateError.Equals(Resource.MsgDateMustBeARealDate) ||
+                    dateError.Equals(Resource.MsgDateMustIncludeAMonth) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeAMonthAndYear) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeADayAndYear) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeAYear) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeADay) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeADayAndMonth)))
                     {
-                        ModelState["Date"]?.Errors.Clear();
-                        ModelState["Date"]?.Errors.Add(Resource.MsgEnterTheDateInNumber);
+                        ModelState["Date"].Errors.Clear();
+                        ModelState["Date"].Errors.Add(Resource.MsgTheDateMustInclude);
                     }
                 }
 
@@ -650,15 +661,17 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("Date", Resource.MsgEnterADateBeforeContinuing);
                 }
-                DateTime maxDate = new DateTime(model.HarvestYear.Value + 1, 7, 31);
-                DateTime minDate = new DateTime(model.HarvestYear.Value, 8, 01);
+
+                DateTime maxDate = new DateTime(model.HarvestYear.Value + 1, 12, 31);
+                DateTime minDate = new DateTime(model.HarvestYear.Value -1, 01, 01);
+
                 if (model.Date > maxDate)
                 {
-                    ModelState.AddModelError("Date", string.Format(Resource.MsgDateShouldNotBeExceed, maxDate.Date.ToString("dd MMMM yyyy")));
+                    ModelState.AddModelError("Date", string.Format(Resource.MsgManureApplicationMaxDate, model.HarvestYear.Value, maxDate.Date.ToString("dd MMMM yyyy")));
                 }
                 if (model.Date < minDate)
                 {
-                    ModelState.AddModelError("Date", string.Format(Resource.MsgDateShouldBeExceedFrom, minDate.Date.ToString("dd MMMM yyyy")));
+                    ModelState.AddModelError("Date", string.Format(Resource.MsgManureApplicationMinDate, model.HarvestYear.Value, minDate.Date.ToString("dd MMMM yyyy")));
                 }
                 if (!ModelState.IsValid)
                 {
@@ -992,35 +1005,35 @@ namespace NMP.Portal.Controllers
             {
                 if (model.N < 0 || model.N > 9999)
                 {
-                    ModelState.AddModelError("ApplicationForFertiliserManures[" + index + "].N", string.Format(Resource.MsgMinMaxValidation, Resource.lblNitrogen, 9999));
+                    ModelState.AddModelError("N", string.Format(Resource.MsgMinMaxValidation, Resource.lblNitrogenLowercase, 9999));
                 }
             }
             if (model.P2O5 != null)
             {
                 if (model.P2O5 < 0 || model.P2O5 > 9999)
                 {
-                    ModelState.AddModelError("ApplicationForFertiliserManures[" + index + "].P2O5", string.Format(Resource.MsgMinMaxValidation, Resource.lblPhosphateP2O5, 9999));
+                    ModelState.AddModelError("P2O5", string.Format(Resource.MsgMinMaxValidation, Resource.lblPhosphateP2O5Lowercase, 9999));
                 }
             }
             if (model.K2O != null)
             {
                 if (model.K2O < 0 || model.K2O > 9999)
                 {
-                    ModelState.AddModelError("ApplicationForFertiliserManures[" + index + "].K2O", string.Format(Resource.MsgMinMaxValidation, Resource.lblPotashK2O, 9999));
+                    ModelState.AddModelError("K2O", string.Format(Resource.MsgMinMaxValidation, Resource.lblPotashK2OLowecase, 9999));
                 }
             }
             if (model.SO3 != null)
             {
                 if (model.SO3 < 0 || model.SO3 > 9999)
                 {
-                    ModelState.AddModelError("ApplicationForFertiliserManures[" + index + "].SO3", string.Format(Resource.MsgMinMaxValidation, Resource.lblSulphurSO3, 9999));
+                    ModelState.AddModelError("SO3", string.Format(Resource.MsgMinMaxValidation, Resource.lblSulphurSO3Lowercase, 9999));
                 }
             }
             if (model.Lime != null)
             {
                 if (model.Lime < 0 || model.Lime > 99.9m)
                 {
-                    ModelState.AddModelError("ApplicationForFertiliserManures[" + index + "].Lime", string.Format(Resource.MsgMinMaxValidation, Resource.lblLime, 99.9));
+                    ModelState.AddModelError("Lime", string.Format(Resource.MsgMinMaxValidation, Resource.lblLime.ToLower(), 99.9));
                 }
             }
 

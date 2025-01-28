@@ -1283,15 +1283,17 @@ namespace NMP.Portal.Controllers
                         ModelState.AddModelError("ApplicationDate", Resource.MsgEnterADateWithin2YearsOfTheHarvestYear);
                     }
                 }
-                DateTime maxDate = new DateTime(model.HarvestYear.Value + 1, 7, 31);
-                DateTime minDate = new DateTime(model.HarvestYear.Value, 8, 01);
+
+                DateTime minDate = new DateTime(model.HarvestYear.Value - 1, 8, 01);
+                DateTime maxDate = new DateTime(model.HarvestYear.Value, 7, 31);
+                
                 if (model.ApplicationDate > maxDate)
                 {
-                    ModelState.AddModelError("ApplicationDate", string.Format(Resource.MsgDateShouldNotBeExceed, maxDate.Date.ToString("dd MMMM yyyy")));
+                    ModelState.AddModelError("ApplicationDate", string.Format(Resource.MsgManureApplicationMaxDate, model.HarvestYear.Value, maxDate.Date.ToString("dd MMMM yyyy")));
                 }
                 if (model.ApplicationDate < minDate)
                 {
-                    ModelState.AddModelError("ApplicationDate", string.Format(Resource.MsgDateShouldBeExceedFrom, minDate.Date.ToString("dd MMMM yyyy")));
+                    ModelState.AddModelError("ApplicationDate", string.Format(Resource.MsgManureApplicationMinDate, model.HarvestYear.Value, minDate.Date.ToString("dd MMMM yyyy")));
                 }
 
                 if (!ModelState.IsValid)
@@ -2381,7 +2383,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.SO3 == null)
                 {
-                    ModelState.AddModelError("SO3", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblSulphur));
+                    ModelState.AddModelError("SO3", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblSulphur.ToLower()));
                 }
                 if (model.MgO == null)
                 {
@@ -4124,6 +4126,14 @@ namespace NMP.Portal.Controllers
                                     Field fieldData = await _fieldService.FetchFieldByFieldId(crop.FieldID.Value);
                                     if (fieldData != null)
                                     {
+                                        (SoilTypeSoilTextureResponse soilTexture,error) = await _organicManureService.FetchSoilTypeSoilTextureBySoilTypeId(fieldData.SoilTypeID??0);
+                                        int topSoilID = 0;
+                                        int subSoilID = 0;
+                                        if(error == null && soilTexture != null)
+                                        {
+                                            topSoilID = soilTexture.TopSoilID;
+                                            subSoilID = soilTexture.SubSoilID;
+                                        }
                                         (CropTypeLinkingResponse cropTypeLinkingResponse, error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID.Value);
                                         if (error == null && cropTypeLinkingResponse != null)
                                         {
@@ -4140,8 +4150,8 @@ namespace NMP.Portal.Controllers
                                                         fieldID = fieldData.ID,
                                                         fieldName = fieldData.Name,
                                                         MannerCropTypeID = cropTypeLinkingResponse.MannerCropTypeID,
-                                                        topsoilID = fieldData.TopSoilID,
-                                                        subsoilID = fieldData.SubSoilID,
+                                                        topsoilID = topSoilID,
+                                                        subsoilID = subSoilID,
                                                         isInNVZ = Convert.ToBoolean(fieldData.IsWithinNVZ)
                                                     },
                                                     manureApplications = new[]
@@ -4454,11 +4464,24 @@ namespace NMP.Portal.Controllers
                 var dateError = ModelState["SoilDrainageEndDate"].Errors.Count > 0 ?
                                 ModelState["SoilDrainageEndDate"].Errors[0].ErrorMessage.ToString() : null;
 
-                if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, "SoilDrainageEndDate")))
+                //if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, "SoilDrainageEndDate")))
+                //{
+                //    ModelState["SoilDrainageEndDate"].Errors.Clear();
+                //    ModelState["SoilDrainageEndDate"].Errors.Add(Resource.MsgEnterValidDate);
+                //}
+                if (dateError != null && (dateError.Equals(Resource.MsgDateMustBeARealDate) ||
+                    dateError.Equals(Resource.MsgDateMustIncludeAMonth) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeAMonthAndYear) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeADayAndYear) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeAYear) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeADay) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeADayAndMonth)))
                 {
                     ModelState["SoilDrainageEndDate"].Errors.Clear();
-                    ModelState["SoilDrainageEndDate"].Errors.Add(Resource.MsgEnterValidDate);
+                    ModelState["SoilDrainageEndDate"].Errors.Add(Resource.MsgTheDateMustInclude);
                 }
+
+
             }
 
             if (model.SoilDrainageEndDate == null)
