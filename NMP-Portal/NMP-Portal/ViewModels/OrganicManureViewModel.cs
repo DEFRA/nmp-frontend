@@ -97,5 +97,12 @@ namespace NMP.Portal.ViewModels
         public string? OtherMaterialName { get; set; }
         public DateTime? DefaultFarmManureValueDate { get; set; }
         public bool? IsThisDefaultValueOfRB209 { get; set; }
+        public string? NmaxWarningHeading { get; set; }
+        public string? NmaxWarningPara1 { get; set; }
+        public string? NmaxWarningPara2 { get; set; }
+        public string? CropNmaxLimitWarningHeading { get; set; }
+        public string? CropNmaxLimitWarningPara1 { get; set; }
+        public string? CropNmaxLimitWarningPara2 { get; set; }
+        public int? FarmCountryId { get; set; }
     }
 }

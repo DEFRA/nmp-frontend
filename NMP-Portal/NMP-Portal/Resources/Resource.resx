@@ -1985,16 +1985,16 @@ cubic metres per hectare  not set</value>
     <value>Important</value>
   </data>
   <data name="lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit" xml:space="preserve">
-    <value>This application may take you over the Organic Manure N Field Limit</value>
+    <value>This application may take you over the organic manure nitrogen field limit</value>
   </data>
   <data name="MsgIfOrganicManureNMaxLimitExceed" xml:space="preserve">
-    <value>The NVZ Action Programme states that the total amount of nitrogen (N) from all organic manures you apply in any 12-month period on any single hectare of your land must not exceed 250kg. </value>
+    <value>The Nitrate Vulnerable Zone (NVZ) rules state that the total amount of nitrogen from all organic manures you apply in any 12 month period on any single hectare of your land must not exceed 250kg. </value>
   </data>
   <data name="MsgApplicationDateEnteredIsInsideClosedPeriod" xml:space="preserve">
-    <value>The application date you entered is inside your closed period for applying high nitrogen (N) organic manure.</value>
+    <value>The application date you entered is inside your closed period for applying high readily available nitrogen organic manure</value>
   </data>
   <data name="MsgApplicationDateEnteredIsInsideClosedPeriodDetail" xml:space="preserve">
-    <value>The NVZ Action Programme states that the closed period for {0} planted on non-organic farms {1} for {2} soil is {3}.</value>
+    <value>The Nitrate Vulnerable Zone (NVZ) rules state that the closed period for {0} planted on non-organic farms {1} on {2} soil is {3}.</value>
   </data>
   <data name="lblMilling" xml:space="preserve">
     <value>Milling</value>
@@ -2255,7 +2255,7 @@ cubic metres per hectare  not set</value>
     <value>You can continue, but you should consider applying outside the closed period to avoid the risk of agricultural nitrate pollution.</value>
   </data>
   <data name="MsgIfOrganicManureNMaxLimitExceedAdditional" xml:space="preserve">
-    <value>You can continue, but you should consider reducing the amount of nitrogen (N) from organic manures you apply to avoid the risk of agricultural nitrate pollution.</value>
+    <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the amount of nitrogen from organic manures.</value>
   </data>
   <data name="lblTheNVZActionProgrammeAppRateExceeds150WithinClosedPeriodOrganicAdditional" xml:space="preserve">
     <value>You can continue, but you should consider reducing the application rate of high readily available nitrogen (N) manures to avoid the risk of agricultural nitrate pollution.</value>
@@ -3219,5 +3219,56 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="lblTheDateCannotBeInTheFuture" xml:space="preserve">
     <value>The date cannot be in the future.</value>
+  </data>
+  <data name="lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimitWales" xml:space="preserve">
+    <value>This application may take you over the individual hectare limit for spreading of organic manure</value>
+  </data>
+  <data name="MsgIfOrganicManureNMaxLimitExceedWales" xml:space="preserve">
+    <value>The Water Resource Regulations apply a limit of 250kg of total Nitrogen per individual hectare to the spreading of organic manure for any 12 month rolling period.</value>
+  </data>
+  <data name="MsgApplicationDateEnteredIsInsideClosedPeriodDetailWales" xml:space="preserve">
+    <value>The Water Resources Regulations state that the closed period for {0} planted on non-organic farms {1} on {2} soil is {3}.</value>
+  </data>
+  <data name="MsgCropNmaxLimitWarningHeadingEngland" xml:space="preserve">
+    <value>This application may take you over the maximum nitrogen rate limit (N-max) for this crop</value>
+  </data>
+  <data name="MsgCropNmaxLimitWarningHeadingWales" xml:space="preserve">
+    <value>This application may take you over the maximum nitrogen limit for this crop</value>
+  </data>
+  <data name="MsgCropNmaxLimitWarningPara1England" xml:space="preserve">
+    <value>The Nitrate Vulnerable Zone (NVZ) rules state that the average amount of crop available nitrogen from manufactured fertilisers and organic manures that you apply on your {0} across your whole farm must not exceed {1} kg per hectare.</value>
+  </data>
+  <data name="MsgCropNmaxLimitWarningPara1Wales" xml:space="preserve">
+    <value>The Water Resources Regulations state that the maximum amount of nitrogen from fertilisers and crop available nitrogen from organic manures that you apply on your {0} across your whole farm must not exceed {1} kg/ha.</value>
+  </data>
+  <data name="MsgCropNmaxLimitWarningPara2England" xml:space="preserve">
+    <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the amount of crop available nitrogen from manufactured fertilisers and organic manures you apply.</value>
+  </data>
+  <data name="MsgNmaxWarningHeadingEngland" xml:space="preserve">
+    <value>This application may take you over the organic manure nitrogen field limit for compost</value>
+  </data>
+  <data name="MsgNmaxWarningHeadingGreaterThan1000England" xml:space="preserve">
+    <value>This application may take you over the organic manure nitrogen field limit for compost applied to orchard land</value>
+  </data>
+  <data name="MsgNmaxWarningHeadingGreaterThan1000Wales" xml:space="preserve">
+    <value>This application may take you over the individual hectare limit for spreading certified green and green/food compost as a mulch to orchard land</value>
+  </data>
+  <data name="MsgNmaxWarningHeadingWales" xml:space="preserve">
+    <value>This application may take you over the individual hectare limit for spreading certified green and green/food compost</value>
+  </data>
+  <data name="MsgNmaxWarningPara1England" xml:space="preserve">
+    <value>The Nitrate Vulnerable Zone (NVZ) rules state that the total amount of nitrogen from all green and green/food compost you apply in any 2-year period on any single hectare of your land must not exceed 500kg.</value>
+  </data>
+  <data name="MsgNmaxWarningPara1GreaterThan1000England" xml:space="preserve">
+    <value>The Nitrate Vulnerable Zone (NVZ) rules state that the total amount of nitrogen from all green and green/food compost you apply in any 4-year period on any single hectare of orchard land must not exceed 1000kg.</value>
+  </data>
+  <data name="MsgNmaxWarningPara1GreaterThan1000Wales" xml:space="preserve">
+    <value>The Water Resource Regulations apply a limit of 1000kg of total Nitrogen per individual hectare to the spreading of certified green and green/food compost to orchard land in any rolling four year period.</value>
+  </data>
+  <data name="MsgNmaxWarningPara1Wales" xml:space="preserve">
+    <value>The Water Resource Regulations apply a limit of 500kg of total Nitrogen per individual hectare to the spreading of certified green and green/food compost in any rolling two year period.</value>
+  </data>
+  <data name="MsgNmaxWarningPara2England" xml:space="preserve">
+    <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the amount of nitrogen from organic manures.</value>
   </data>
 </root>

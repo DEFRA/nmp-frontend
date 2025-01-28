@@ -134,5 +134,6 @@ namespace NMP.Portal.Helpers
         public const string FetchCropInfoOneQuestionByCropTypeIdAsyncAPI = "crop-info-questions/{0}";
         public const string FetchMannerCalculateNutrientAsyncAPI = "vendors/manner/calculate-nutrients";
         public const string FetchSoilTypeSoilTextureBySoilTypeIdAsyncAPI = "soil-type-soil-texture/{0}";
+        public const string FetchTotalNBasedByManIdAppDateAndIsGreenCompostAsyncAPI = "organic-manures/total-nitrogen-if-green-food-compost/{0}?fromDate={1}&toDate={2}&confirm={3}&isGreenFoodCompost={4}";
     }
 }
