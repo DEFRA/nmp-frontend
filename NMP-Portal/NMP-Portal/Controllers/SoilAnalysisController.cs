@@ -225,10 +225,21 @@ namespace NMP.Portal.Controllers
                 var dateError = ModelState["Date"].Errors.Count > 0 ?
                                 ModelState["Date"].Errors[0].ErrorMessage.ToString() : null;
 
-                if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, Resource.lblDateSampleTaken)))
+                //if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, Resource.lblDateSampleTaken)))
+                //{
+                //    ModelState["Date"].Errors.Clear();
+                //    ModelState["Date"].Errors.Add(Resource.MsgEnterTheDateInNumber);
+                //}
+                if (dateError != null && (dateError.Equals(Resource.MsgDateMustBeARealDate) ||
+                    dateError.Equals(Resource.MsgDateMustIncludeAMonth) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeAMonthAndYear) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeADayAndYear) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeAYear) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeADay) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeADayAndMonth)))
                 {
                     ModelState["Date"].Errors.Clear();
-                    ModelState["Date"].Errors.Add(Resource.MsgEnterTheDateInNumber);
+                    ModelState["Date"].Errors.Add(Resource.MsgTheDateMustInclude);
                 }
             }
 
@@ -319,7 +330,7 @@ namespace NMP.Portal.Controllers
             }
             if (model.IsSoilNutrientValueTypeIndex.Value)
             {
-                if (soilAnalysisViewModel != null && (!soilAnalysisViewModel.IsSoilNutrientValueTypeIndex.Value))
+                if (soilAnalysisViewModel != null && soilAnalysisViewModel.IsSoilNutrientValueTypeIndex.HasValue&&(!soilAnalysisViewModel.IsSoilNutrientValueTypeIndex.Value))
                 {
                     model.Magnesium = null;
                     model.Potassium = null;
@@ -329,14 +340,17 @@ namespace NMP.Portal.Controllers
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("SoilAnalysisData", model);
             if (soilAnalysisViewModel != null)
             {
-                if (model.IsSoilNutrientValueTypeIndex.Value != soilAnalysisViewModel.IsSoilNutrientValueTypeIndex.Value)
+                if (soilAnalysisViewModel.IsSoilNutrientValueTypeIndex.HasValue&&model.IsSoilNutrientValueTypeIndex.Value != soilAnalysisViewModel.IsSoilNutrientValueTypeIndex.Value)
                 {
                     return RedirectToAction("SoilNutrientValue");
                 }
             }
 
 
-
+            if (model.isSoilAnalysisAdded != null && model.isSoilAnalysisAdded.Value)
+            {
+                return RedirectToAction("SoilNutrientValue");
+            }
             return RedirectToAction("ChangeSoilAnalysis", new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
         }
 

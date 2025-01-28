@@ -395,7 +395,9 @@
                 {
                     <govuk-summary-list-row class=@(string.IsNullOrWhiteSpace(Model.DefaultNutrientValue)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
-                            @string.Format(Resource.lblDoYouWantToUseTheseNutrientValuesFromRB209, Model.ManureTypeName)
+                            @(Model.DefaultNutrientValue==Resource.lblYesUseTheseValues?string.Format(Resource.lblStandardNutrientValuesWhwnWeHaveValues, Model.ManureTypeName, Model.DefaultFarmManureValueDate.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))):
+                                string.Format(Resource.lblDoYouWantToUseTheseNutrientValuesFromRB209, Model.ManureTypeName))
+                            @* @string.Format(Resource.lblDoYouWantToUseTheseNutrientValuesFromRB209, Model.ManureTypeName) *@
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
                             @((!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue)) ? (Model.DefaultNutrientValue == Resource.lblYes ? Resource.lblYesUseTheseStandardNutrientValues : Model.DefaultNutrientValue) : Resource.lblNotSet)

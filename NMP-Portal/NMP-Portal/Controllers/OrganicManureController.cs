@@ -4493,11 +4493,24 @@ namespace NMP.Portal.Controllers
                 var dateError = ModelState["SoilDrainageEndDate"].Errors.Count > 0 ?
                                 ModelState["SoilDrainageEndDate"].Errors[0].ErrorMessage.ToString() : null;
 
-                if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, "SoilDrainageEndDate")))
+                //if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, "SoilDrainageEndDate")))
+                //{
+                //    ModelState["SoilDrainageEndDate"].Errors.Clear();
+                //    ModelState["SoilDrainageEndDate"].Errors.Add(Resource.MsgEnterValidDate);
+                //}
+                if (dateError != null && (dateError.Equals(Resource.MsgDateMustBeARealDate) ||
+                    dateError.Equals(Resource.MsgDateMustIncludeAMonth) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeAMonthAndYear) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeADayAndYear) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeAYear) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeADay) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeADayAndMonth)))
                 {
                     ModelState["SoilDrainageEndDate"].Errors.Clear();
-                    ModelState["SoilDrainageEndDate"].Errors.Add(Resource.MsgEnterValidDate);
+                    ModelState["SoilDrainageEndDate"].Errors.Add(Resource.MsgTheDateMustInclude);
                 }
+
+
             }
 
             if (model.SoilDrainageEndDate == null)
