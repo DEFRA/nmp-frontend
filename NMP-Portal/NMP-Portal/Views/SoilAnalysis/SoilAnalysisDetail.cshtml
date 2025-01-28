@@ -43,7 +43,9 @@
                 <govuk-notification-banner type="Success">
                     <div class="">
                         <p class="govuk-body">
-                            @Resource.lblYourSoilAnalysisChangesHaveBeenSuccessfullySaved
+                            @Resource.lblThisMayChangeYourNutrientRecommendations
+                            <a asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblCropPlan</a>
+                            @Resource.lblToSeeItsRecommendations
                         </p>
                     </div>
                 </govuk-notification-banner>
