@@ -23,7 +23,7 @@
         }
         else
         {
-            <govuk-back-link asp-action="SoilAnalysisDetail" asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedFieldId" asp-route-j="@Model.EncryptedFarmId" asp-route-l="@Model.EncryptedSoilAnalysisId">
+            <govuk-back-link asp-action="FieldSoilAnalysisDetail" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">
                 @Resource.lblBack
             </govuk-back-link>
         }
@@ -345,14 +345,14 @@
                 @* <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblSaveChanges
                 </govuk-button> *@
-                @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value)
-                {
+               @*  @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value)
+                { *@
                     <p class="govuk-body cancel-link"><a asp-action="FieldSoilAnalysisDetail" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
-                }
+               @*  }
                 else
                 {
                     <p class="govuk-body cancel-link"><a asp-action="SoilAnalysisDetail" asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedFieldId" asp-route-j="@Model.EncryptedFarmId" asp-route-l="@Model.EncryptedSoilAnalysisId">@Resource.lblCancel</a></p>
-                }
+                } *@
 
             </div>
         </div>

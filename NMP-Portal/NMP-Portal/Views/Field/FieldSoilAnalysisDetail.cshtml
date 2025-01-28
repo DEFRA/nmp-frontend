@@ -49,9 +49,13 @@
                             <div>
                                 <p class="govuk-body">
                                     @string.Format(ViewBag.SuccessMsgAdditionalContent)
-                                    @if (ViewBag.SuccessMsgAdditionalContentSecond != null)
+                                    @if (ViewBag.SuccessMsgAdditionalContentSecondForAdd != null)
                                     {
-                                        <a class="govuk-link" asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@ViewBag.CropYear">@ViewBag.SuccessMsgAdditionalContentSecond</a>
+                                        <a class="govuk-link" asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@ViewBag.CropYear">@ViewBag.SuccessMsgAdditionalContentSecondForAdd</a>
+                                    }
+                                    else @if (ViewBag.SuccessMsgAdditionalContentSecondForUpdate != null)
+                                    {
+                                        <a class="govuk-link" asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId">@ViewBag.SuccessMsgAdditionalContentSecondForUpdate</a>
                                     }
                                     @if (ViewBag.SuccessMsgAdditionalContentThird != null)
                                     {
@@ -114,7 +118,7 @@
                 <hr class="big_seperator">
                 <h2 class="govuk-heading-m">@Resource.lblSoilAnalysis</h2>
 
-                <p class="govuk-body margin margin-bottom-forty"><a asp-controller="SoilAnalysis" asp-action="IsSoilAnalysisAdded" asp-route-i="@Model.EncryptedFieldId" asp-route-j="@Model.EncryptedFarmId">@Resource.lblViewOrChange</a></p>
+                <p class="govuk-body margin margin-bottom-forty"><a asp-controller="SoilAnalysis" asp-action="IsSoilAnalysisAdded" asp-route-i="@Model.EncryptedFieldId" asp-route-j="@Model.EncryptedFarmId">@Resource.lblAddNewSoilAnalysis</a></p>
 
                 <table class="govuk-table field-table">
                     <thead class="govuk-table__head">
@@ -129,12 +133,15 @@
                             <tr class="govuk-table__row right-last">
                                 <td class="govuk-table__cell">@soilAnalysis.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))</td>
                                 <td class="govuk-table__cell">
-                                    <a asp-action="SoilAnalysisDetail" asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedFieldId" asp-route-j="@Model.EncryptedFarmId" asp-route-l="@soilAnalysis.EncryptedSoilAnalysisId">@Resource.lblViewOrChange</a>
+                                    <a asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@soilAnalysis.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId">@Resource.lblViewOrChange</a>
                                 </td>
                             </tr>
                         }
                     </tbody>
                 </table>
+            }
+            else{
+                <p class="govuk-body">@Resource.lblContentIfSoilAnalysisNotApplied</p>
             }
         </div>
     </div>

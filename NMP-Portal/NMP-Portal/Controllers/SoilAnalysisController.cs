@@ -46,79 +46,79 @@ namespace NMP.Portal.Controllers
             _pKBalanceService = pKBalanceService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> SoilAnalysisDetail(string i, string j, string l, string k)//i=EncryptedFieldId,j=EncryptedFarmId,l=EncryptedSoilAnalysisId,k=success
-        {
-            _logger.LogTrace($"Soil Analysis Controller: SoilAnalysisDetail({i}, {j},{k}) action called.");
-            SoilAnalysisViewModel model = new SoilAnalysisViewModel();
-            try
-            {
-                if (!string.IsNullOrWhiteSpace(i))
-                {
+        //[HttpGet]
+        //public async Task<IActionResult> SoilAnalysisDetail(string i, string j, string l, string k)//i=EncryptedFieldId,j=EncryptedFarmId,l=EncryptedSoilAnalysisId,k=success
+        //{
+        //    _logger.LogTrace($"Soil Analysis Controller: SoilAnalysisDetail({i}, {j},{k}) action called.");
+        //    SoilAnalysisViewModel model = new SoilAnalysisViewModel();
+        //    try
+        //    {
+        //        if (!string.IsNullOrWhiteSpace(i))
+        //        {
 
-                    (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(j)));
-                    if (string.IsNullOrWhiteSpace(error.Message))
-                    {
-                        int fieldId = Convert.ToInt32(_farmDataProtector.Unprotect(i));
-                        var field = await _fieldService.FetchFieldByFieldId(fieldId);
-                        model.FieldName = field.Name;
-                        model.EncryptedFieldId = i;
-                        model.EncryptedFarmId = j;
-                        model.FarmName = farm.Name;
-                        _logger.LogTrace($"SoilAnalysisController: soil-analyses/fields/{fieldId}?shortSummary={Resource.lblFalse} called.");
-                        if (!string.IsNullOrWhiteSpace(l))
-                        {
-                            string soilAnalysisId = _fieldDataProtector.Unprotect(l);
-                            (SoilAnalysis soilAnalysis, error) = await _soilAnalysisService.FetchSoilAnalysisById(Convert.ToInt32(soilAnalysisId));
-                            if (soilAnalysis != null && error == null)
-                            {
+        //            (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(j)));
+        //            if (string.IsNullOrWhiteSpace(error.Message))
+        //            {
+        //                int fieldId = Convert.ToInt32(_farmDataProtector.Unprotect(i));
+        //                var field = await _fieldService.FetchFieldByFieldId(fieldId);
+        //                model.FieldName = field.Name;
+        //                model.EncryptedFieldId = i;
+        //                model.EncryptedFarmId = j;
+        //                model.FarmName = farm.Name;
+        //                _logger.LogTrace($"SoilAnalysisController: soil-analyses/fields/{fieldId}?shortSummary={Resource.lblFalse} called.");
+        //                if (!string.IsNullOrWhiteSpace(l))
+        //                {
+        //                    string soilAnalysisId = _fieldDataProtector.Unprotect(l);
+        //                    (SoilAnalysis soilAnalysis, error) = await _soilAnalysisService.FetchSoilAnalysisById(Convert.ToInt32(soilAnalysisId));
+        //                    if (soilAnalysis != null && error == null)
+        //                    {
                                 
-                                model.PhosphorusMethodology = Enum.GetName(
-                                   typeof(PhosphorusMethodology), soilAnalysis.PhosphorusMethodologyID);
-                                //soilAnalysis. = Enum.GetName(
-                                //    typeof(PhosphorusMethodology), soilAnalysis.PhosphorusMethodologyID);
-                                //soilAnalysis.EncryptedSoilAnalysisId = _soilAnalysisDataProtector.Protect(soilAnalysis.ID.ToString());
-                                if (soilAnalysis.PotassiumIndex != null)
-                                {
-                                    model.PotassiumIndexValue = soilAnalysis.PotassiumIndex.ToString() == Resource.lblMinusTwo ? Resource.lblTwoMinus : (soilAnalysis.PotassiumIndex.ToString() == Resource.lblPlusTwo ? Resource.lblTwoPlus : soilAnalysis.PotassiumIndex.ToString());
-                                }
-                                model.Date = soilAnalysis.Date;
-                                model.Phosphorus=soilAnalysis.Phosphorus;
-                                model.PhosphorusMethodologyID = soilAnalysis.PhosphorusMethodologyID;
-                                model.PhosphorusIndex = soilAnalysis.PhosphorusIndex;
-                                model.Potassium = soilAnalysis.Potassium;
-                                model.PotassiumIndex = soilAnalysis.PotassiumIndex;
-                                model.Magnesium= soilAnalysis.Magnesium;
-                                model.MagnesiumIndex= soilAnalysis.MagnesiumIndex;
-                                model.FieldID= soilAnalysis.FieldID;
-                                model.SulphurDeficient = soilAnalysis.SulphurDeficient;
-                                model.PH=soilAnalysis.PH;
-                                model.EncryptedSoilAnalysisId = l;
-                                //ViewBag.soilAnalysisList = soilAnalysisResponseList;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        ViewBag.Error = error.Message;
-                        return View(model);
-                    }
-                }
+        //                        model.PhosphorusMethodology = Enum.GetName(
+        //                           typeof(PhosphorusMethodology), soilAnalysis.PhosphorusMethodologyID);
+        //                        //soilAnalysis. = Enum.GetName(
+        //                        //    typeof(PhosphorusMethodology), soilAnalysis.PhosphorusMethodologyID);
+        //                        //soilAnalysis.EncryptedSoilAnalysisId = _soilAnalysisDataProtector.Protect(soilAnalysis.ID.ToString());
+        //                        if (soilAnalysis.PotassiumIndex != null)
+        //                        {
+        //                            model.PotassiumIndexValue = soilAnalysis.PotassiumIndex.ToString() == Resource.lblMinusTwo ? Resource.lblTwoMinus : (soilAnalysis.PotassiumIndex.ToString() == Resource.lblPlusTwo ? Resource.lblTwoPlus : soilAnalysis.PotassiumIndex.ToString());
+        //                        }
+        //                        model.Date = soilAnalysis.Date;
+        //                        model.Phosphorus=soilAnalysis.Phosphorus;
+        //                        model.PhosphorusMethodologyID = soilAnalysis.PhosphorusMethodologyID;
+        //                        model.PhosphorusIndex = soilAnalysis.PhosphorusIndex;
+        //                        model.Potassium = soilAnalysis.Potassium;
+        //                        model.PotassiumIndex = soilAnalysis.PotassiumIndex;
+        //                        model.Magnesium= soilAnalysis.Magnesium;
+        //                        model.MagnesiumIndex= soilAnalysis.MagnesiumIndex;
+        //                        model.FieldID= soilAnalysis.FieldID;
+        //                        model.SulphurDeficient = soilAnalysis.SulphurDeficient;
+        //                        model.PH=soilAnalysis.PH;
+        //                        model.EncryptedSoilAnalysisId = l;
+        //                        //ViewBag.soilAnalysisList = soilAnalysisResponseList;
+        //                    }
+        //                }
+        //            }
+        //            else
+        //            {
+        //                ViewBag.Error = error.Message;
+        //                return View(model);
+        //            }
+        //        }
 
-                if (!string.IsNullOrWhiteSpace(k))
-                {
-                    ViewBag.Success = _soilAnalysisDataProtector.Unprotect(k);
-                    _httpContextAccessor.HttpContext?.Session.Remove("SoilAnalysisData");
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogTrace($"Soil Analysis Controller : Exception in SoilAnalysisDetail() action : {ex.Message}, {ex.StackTrace}");
-                ViewBag.Error = ex.Message;
-                return View(model);
-            }
-            return View(model);
-        }
+        //        if (!string.IsNullOrWhiteSpace(k))
+        //        {
+        //            ViewBag.Success = _soilAnalysisDataProtector.Unprotect(k);
+        //            _httpContextAccessor.HttpContext?.Session.Remove("SoilAnalysisData");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogTrace($"Soil Analysis Controller : Exception in SoilAnalysisDetail() action : {ex.Message}, {ex.StackTrace}");
+        //        ViewBag.Error = ex.Message;
+        //        return View(model);
+        //    }
+        //    return View(model);
+        //}
         [HttpGet]
         public async Task<IActionResult> ChangeSoilAnalysis(string i, string j, string k, string l)//i= soilAnalysisId,j=EncryptedFieldId,k=EncryptedFarmId,l=IsSoilDataChanged
         {
@@ -776,23 +776,24 @@ namespace NMP.Portal.Controllers
             if (error.Message == null && soilAnalysis != null)
             {
                 success = _soilAnalysisDataProtector.Protect(Resource.lblTrue);
-                if (model.isSoilAnalysisAdded != null && model.isSoilAnalysisAdded.Value)
-                {
-                    return RedirectToAction("FieldSoilAnalysisDetail", "Field", new { id = model.EncryptedFieldId, farmId = model.EncryptedFarmId, q = success, r = _fieldDataProtector.Protect(Resource.lblSoilAnalysis) });
-                }
-                return RedirectToAction("SoilAnalysisDetail", new { i = model.EncryptedFieldId, j = model.EncryptedFarmId, k = success, l = model.EncryptedSoilAnalysisId });
+                //if (model.isSoilAnalysisAdded != null && model.isSoilAnalysisAdded.Value)
+                //{
+                  //  return RedirectToAction("FieldSoilAnalysisDetail", "Field", new { id = model.EncryptedFieldId, farmId = model.EncryptedFarmId, q = success, r = _fieldDataProtector.Protect(Resource.lblSoilAnalysis) });
+                //}
+                //return RedirectToAction("SoilAnalysisDetail", new { i = model.EncryptedFieldId, j = model.EncryptedFarmId, k = success, l = model.EncryptedSoilAnalysisId });
             }
             else
             {
                 success = _soilAnalysisDataProtector.Protect(Resource.lblFalse);
-                if (model.isSoilAnalysisAdded != null && model.isSoilAnalysisAdded.Value)
+                if (model.isSoilAnalysisAdded == null)
                 {
-                    return RedirectToAction("FieldSoilAnalysisDetail", "Field", new { id = model.EncryptedFieldId, farmId = model.EncryptedFarmId, q = success, r = _fieldDataProtector.Protect(Resource.lblSoilAnalysis) });
+                    TempData["ChangeSoilAnalysisError"] = Resource.MsgSoilAnalysisChangesCouldNotSaved;
+                    return View("ChangeSoilAnalysis", model);
                 }
             }
 
-
-            return RedirectToAction("SoilAnalysisDetail", new { i = model.EncryptedFieldId, j = model.EncryptedFarmId, k = success ,l=model.EncryptedSoilAnalysisId});
+            return RedirectToAction("FieldSoilAnalysisDetail", "Field", new { id = model.EncryptedFieldId, farmId = model.EncryptedFarmId, q = success, r = _fieldDataProtector.Protect(Resource.lblSoilAnalysis),s=(model.isSoilAnalysisAdded!=null&&model.isSoilAnalysisAdded.Value)?_soilAnalysisDataProtector.Protect(Resource.lblAdd):_soilAnalysisDataProtector.Protect(Resource.lblUpdate) });
+            //return RedirectToAction("SoilAnalysisDetail", new { i = model.EncryptedFieldId, j = model.EncryptedFarmId, k = success ,l=model.EncryptedSoilAnalysisId});
         }
         [HttpGet]
         public async Task<IActionResult> IsSoilAnalysisAdded(string i, string j)
