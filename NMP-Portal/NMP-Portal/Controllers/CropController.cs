@@ -955,20 +955,22 @@ namespace NMP.Portal.Controllers
                 var dateError = ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Count > 0 ?
                                 ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors[0].ErrorMessage.ToString() : null;
 
-                if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, Resource.lblSowingDateForError)))
+                //if (dateError != null && dateError.Equals(Resource.MsgDateMustBeARealDate))
+                //{
+                //    ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Clear();
+                //    ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Add(Resource.MsgTheDateMustInclude);
+                //}
+                //else 
+                if (dateError != null && (dateError.Equals(Resource.MsgDateMustBeARealDate) || 
+                    dateError.Equals(Resource.MsgDateMustIncludeAMonth) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeAMonthAndYear) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeADayAndYear) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeAYear) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeADay) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeADayAndMonth)))
                 {
                     ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Clear();
-                    ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Add(Resource.MsgEnterTheDateInNumber);
-                }
-                else if (dateError != null && (dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonth, Resource.lblSowingDateForError)) ||
-                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonthAndYear, Resource.lblSowingDateForError)) ||
-                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndYear, Resource.lblSowingDateForError)) ||
-                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeAYear, Resource.lblSowingDateForError)) ||
-                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADay, Resource.lblSowingDateForError)) ||
-                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndMonth, Resource.lblSowingDateForError))))
-                {
-                    ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Clear();
-                    ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Add(Resource.ErrorMsgForDate);
+                    ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Add(Resource.MsgTheDateMustInclude);
                 }
             }
             if (model.Crops[model.SowingDateCurrentCounter].SowingDate == null)

@@ -8102,7 +8102,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} must be a real date.
+        ///   Looks up a localized string similar to The date must be a real date.
         /// </summary>
         public static string MsgDateMustBeARealDate {
             get {
@@ -8120,7 +8120,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} must include a day.
+        ///   Looks up a localized string similar to The date must include a day.
         /// </summary>
         public static string MsgDateMustIncludeADay {
             get {
@@ -8129,7 +8129,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} must include a day and month.
+        ///   Looks up a localized string similar to The date must include a day and month.
         /// </summary>
         public static string MsgDateMustIncludeADayAndMonth {
             get {
@@ -8138,7 +8138,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} must include a day and year.
+        ///   Looks up a localized string similar to The date must include a day and year.
         /// </summary>
         public static string MsgDateMustIncludeADayAndYear {
             get {
@@ -8147,7 +8147,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} must include a month.
+        ///   Looks up a localized string similar to The date must include a month.
         /// </summary>
         public static string MsgDateMustIncludeAMonth {
             get {
@@ -8156,7 +8156,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} must include a month and year.
+        ///   Looks up a localized string similar to The date must include a month and year.
         /// </summary>
         public static string MsgDateMustIncludeAMonthAndYear {
             get {
@@ -8165,7 +8165,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} must include a year.
+        ///   Looks up a localized string similar to The date must include a year.
         /// </summary>
         public static string MsgDateMustIncludeAYear {
             get {
@@ -9403,6 +9403,15 @@ namespace NMP.Portal.Resources {
         public static string MsgSowingDateNotSet {
             get {
                 return ResourceManager.GetString("MsgSowingDateNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The date must include the day/month/year.
+        /// </summary>
+        public static string MsgTheDateMustInclude {
+            get {
+                return ResourceManager.GetString("MsgTheDateMustInclude", resourceCulture);
             }
         }
         

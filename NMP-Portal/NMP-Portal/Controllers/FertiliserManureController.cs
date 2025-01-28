@@ -639,10 +639,21 @@ namespace NMP.Portal.Controllers
                     var dateError = ModelState["Date"]?.Errors.Count > 0 ?
                                     ModelState["Date"]?.Errors[0].ErrorMessage.ToString() : null;
 
-                    if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, Resource.lblDate)))
+                    //if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, Resource.lblDate)))
+                    //{
+                    //    ModelState["Date"]?.Errors.Clear();
+                    //    ModelState["Date"]?.Errors.Add(Resource.MsgEnterTheDateInNumber);
+                    //}
+                    if (dateError != null && (dateError.Equals(Resource.MsgDateMustBeARealDate) ||
+                    dateError.Equals(Resource.MsgDateMustIncludeAMonth) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeAMonthAndYear) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeADayAndYear) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeAYear) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeADay) ||
+                     dateError.Equals(Resource.MsgDateMustIncludeADayAndMonth)))
                     {
-                        ModelState["Date"]?.Errors.Clear();
-                        ModelState["Date"]?.Errors.Add(Resource.MsgEnterTheDateInNumber);
+                        ModelState["Date"].Errors.Clear();
+                        ModelState["Date"].Errors.Add(Resource.MsgTheDateMustInclude);
                     }
                 }
 
