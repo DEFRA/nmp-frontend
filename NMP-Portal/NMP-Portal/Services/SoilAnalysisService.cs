@@ -112,7 +112,7 @@ namespace NMP.Portal.Services
             {
                 HttpClient httpClient = await GetNMPAPIClient();
 
-                // if new farm then save farm data
+                
                 var response = await httpClient.PostAsync(APIURLHelper.AddSoilAnalysisAsyncAPI, new StringContent(soilAnalysisData, Encoding.UTF8, "application/json"));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
