@@ -16,5 +16,6 @@ namespace NMP.Portal.ViewModels
         public PKBalance? PKBalance { get; set; }
         public bool? isSoilAnalysisAdded { get; set; }
         public string? PotassiumIndexValue { get; set; } = string.Empty;
+        public string? PhosphorusMethodology { get; set; } = string.Empty;
     }
 }

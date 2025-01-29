@@ -37,13 +37,18 @@ else
                         <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@farmList.EncryptedFarmId">@farmList.Name</a>
                     </p>
                 }
-
-
                 <hr class="seperator_five" />
                 <div>
                     <h2 class="govuk-heading-m">
                         @Resource.lblAddANewFarm
                     </h2>
+                    <p class="govuk-body">
+                        @Resource.ContentHowToolWorks                        
+                    </p>
+                    <p class="govuk-body">
+                        @Resource.ContentHowToolWorks2
+                    </p>
+
                     <p class="govuk-body">
                         <a class="govuk-link" asp-action="Name" asp-controller="Farm">@Resource.lblAddAFarm</a>
                     </p>
