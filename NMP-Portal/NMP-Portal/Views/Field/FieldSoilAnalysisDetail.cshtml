@@ -113,13 +113,12 @@
             <p class="govuk-body margin-bottom-forty">@string.Format(Resource.MsgRemoveField, Model.Name)</p>
             <p class="govuk-body margin-bottom-forty"><a asp-action="FieldRemove" asp-controller="Field">@string.Format(Resource.lblRemoveField, Model.Name)</a></p>
 
+            <hr class="big_seperator">
+            <h2 class="govuk-heading-m">@Resource.lblSoilAnalysis</h2>
+            
             @if (ViewBag.SoilAnalysisList != null && ViewBag.SoilAnalysisList.Count > 0)
             {
-                <hr class="big_seperator">
-                <h2 class="govuk-heading-m">@Resource.lblSoilAnalysis</h2>
-
                 <p class="govuk-body margin margin-bottom-forty"><a asp-controller="SoilAnalysis" asp-action="IsSoilAnalysisAdded" asp-route-i="@Model.EncryptedFieldId" asp-route-j="@Model.EncryptedFarmId">@Resource.lblAddNewSoilAnalysis</a></p>
-
                 <table class="govuk-table field-table">
                     <thead class="govuk-table__head">
                         <tr class="govuk-table__row">
@@ -141,7 +140,8 @@
                 </table>
             }
             else{
-                <p class="govuk-body">@Resource.lblContentIfSoilAnalysisNotApplied</p>
+                <p class="govuk-body">@string.Format(Resource.lblContentIfSoilAnalysisNotApplied,Model.Name)</p>
+                <p class="govuk-body margin margin-bottom-forty"><a asp-controller="SoilAnalysis" asp-action="IsSoilAnalysisAdded" asp-route-i="@Model.EncryptedFieldId" asp-route-j="@Model.EncryptedFarmId">@Resource.lblAddNewSoilAnalysis</a></p>
             }
         </div>
     </div>

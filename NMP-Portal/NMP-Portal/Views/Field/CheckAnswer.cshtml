@@ -216,7 +216,7 @@
                         @Resource.lblTotalFieldArea
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
-                        @string.Format("{0} {1}",Model.TotalArea, Resource.lblhectar)
+                        @string.Format("{0} {1}", Model.TotalArea % 1 == 0 ? ((int)Model.TotalArea) : Model.TotalArea, Resource.lblhectar)
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
                         <govuk-summary-list-row-action asp-action="FieldMeasurements" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
@@ -227,7 +227,7 @@
                         @Resource.lblCroppedAreaForCheckAnswere
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
-                        @(Model.CroppedArea == null ? Resource.lblNotEntered : string.Format("{0} {1}", Model.CroppedArea, Resource.lblhectar))
+                        @(Model.CroppedArea == null ? Resource.lblNotEntered : string.Format("{0} {1}", Model.CroppedArea % 1 == 0 ? ((int)Model.CroppedArea) : Model.CroppedArea, Resource.lblhectar))
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
                         <govuk-summary-list-row-action asp-action="FieldMeasurements" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
@@ -238,7 +238,7 @@
                         @Resource.lblManureNonSpreadingAreaForCheckAnswere
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
-                        @(Model.ManureNonSpreadingArea == null ? Resource.lblNotEntered : string.Format("{0} {1}", Model.ManureNonSpreadingArea, Resource.lblhectar))
+                        @(Model.ManureNonSpreadingArea == null ? Resource.lblNotEntered : string.Format("{0} {1}", Model.ManureNonSpreadingArea % 1 == 0 ? ((int)Model.ManureNonSpreadingArea) : Model.ManureNonSpreadingArea, Resource.lblhectar))
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
                         <govuk-summary-list-row-action asp-action="FieldMeasurements" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>

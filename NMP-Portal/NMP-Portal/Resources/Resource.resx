@@ -2522,7 +2522,7 @@ cubic metres per hectare  not set</value>
     <value>If you don't know the exact application date enter an estimate. You can change it later.</value>
   </data>
   <data name="lblYourClosedPeriodForSpreading" xml:space="preserve">
-    <value>Your closed period for spreading inorganic fertilisers is:</value>
+    <value>Your closed period for spreading inorganic niytrogen (N) fertilisers is:</value>
   </data>
   <data name="lbl1SeptemberTo15January" xml:space="preserve">
     <value>1 {0} to 15 {1}</value>
