@@ -98,7 +98,18 @@ namespace NMP.Portal.Helpers
                 || cropTypeId == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup1 || cropTypeId == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup2
                 || cropTypeId == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup3 || cropTypeId == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup4
                 || cropTypeId == (int)NMP.Portal.Enums.CropTypes.ForageMaize || cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterBeans
-                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.SpringBeans || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Peas)
+                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.SpringBeans || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Peas
+                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Asparagus || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Carrots
+                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Radish || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Swedes
+                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.CelerySelfBlanching || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Courgettes
+                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.DwarfBeans || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Lettuce
+                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.BulbOnions || cropTypeId == (int)NMP.Portal.Enums.CropTypes.SaladOnions
+                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Parsnips || cropTypeId == (int)NMP.Portal.Enums.CropTypes.RunnerBeans
+                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Sweetcorn || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Turnips
+                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Beetroot || cropTypeId == (int)NMP.Portal.Enums.CropTypes.BrusselSprouts
+                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Cabbage || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Calabrese
+                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Cauliflower || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Leeks
+                || cropTypeId== (int)NMP.Portal.Enums.CropTypes.Grass)
             {
                 if (manureTypeCondition)
                 {
