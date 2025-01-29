@@ -6307,7 +6307,18 @@ namespace NMP.Portal.Resources {
                 return ResourceManager.GetString("lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to This application may take you over the individual hectare limit for spreading of organic manure.
+        /// </summary>
+        public static string lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimitWales
+        {
+            get
+            {
+                return ResourceManager.GetString("lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimitWales", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to This application will take you over the maximum application rate for high nitrogen (N) organic manure..
         /// </summary>
@@ -8017,7 +8028,17 @@ namespace NMP.Portal.Resources {
                 return ResourceManager.GetString("MsgApplicationDateEnteredIsInsideClosedPeriodDetailOrganic", resourceCulture);
             }
         }
-        
+        /// <summary>
+        ///   Looks up a localized string similar to The Water Resources Regulations state that the closed period for {0} planted on non-organic farms {1} on {2} soil is {3}..
+        /// </summary>
+        public static string MsgApplicationDateEnteredIsInsideClosedPeriodDetailWales
+        {
+            get
+            {
+                return ResourceManager.GetString("MsgApplicationDateEnteredIsInsideClosedPeriodDetailWales", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to What is the application method for your {0} not set?.
         /// </summary>
@@ -8154,7 +8175,61 @@ namespace NMP.Portal.Resources {
                 return ResourceManager.GetString("MsgCropInfo2NotSet", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to This application may take you over the maximum nitrogen rate limit (N-max) for this crop.
+        /// </summary>
+        public static string MsgCropNmaxLimitWarningHeadingEngland
+        {
+            get
+            {
+                return ResourceManager.GetString("MsgCropNmaxLimitWarningHeadingEngland", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to This application may take you over the maximum nitrogen limit for this crop.
+        /// </summary>
+        public static string MsgCropNmaxLimitWarningHeadingWales
+        {
+            get
+            {
+                return ResourceManager.GetString("MsgCropNmaxLimitWarningHeadingWales", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that the average amount of crop available nitrogen from manufactured fertilisers and organic manures that you apply on your {0} across your whole farm must not exceed {1} kg per hectare..
+        /// </summary>
+        public static string MsgCropNmaxLimitWarningPara1England
+        {
+            get
+            {
+                return ResourceManager.GetString("MsgCropNmaxLimitWarningPara1England", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The Water Resources Regulations state that the maximum amount of nitrogen from fertilisers and crop available nitrogen from organic manures that you apply on your {0} across your whole farm must not exceed {1} kg/ha..
+        /// </summary>
+        public static string MsgCropNmaxLimitWarningPara1Wales
+        {
+            get
+            {
+                return ResourceManager.GetString("MsgCropNmaxLimitWarningPara1Wales", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the amount of crop available nitrogen from manufactured fertilisers and organic manures you apply..
+        /// </summary>
+        public static string MsgCropNmaxLimitWarningPara2England
+        {
+            get
+            {
+                return ResourceManager.GetString("MsgCropNmaxLimitWarningPara2England", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to The cropped area cannot be larger than the total field area.
         /// </summary>
@@ -8910,7 +8985,17 @@ namespace NMP.Portal.Resources {
                 return ResourceManager.GetString("MsgIfOrganicManureNMaxLimitExceedAdditional", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to The Water Resource Regulations apply a limit of 250kg of total Nitrogen per individual hectare to the spreading of organic manure for any 12 month rolling period..
+        /// </summary>
+        public static string MsgIfOrganicManureNMaxLimitExceedWales
+        {
+            get
+            {
+                return ResourceManager.GetString("MsgIfOrganicManureNMaxLimitExceedWales", resourceCulture);
+            }
+        }
         /// <summary>
         ///   Looks up a localized string similar to Enter a whole number without a decimal point.
         /// </summary>
@@ -9081,7 +9166,106 @@ namespace NMP.Portal.Resources {
                 return ResourceManager.GetString("MsgNMaxLimit", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to This application may take you over the organic manure nitrogen field limit for compost.
+        /// </summary>
+        public static string MsgNmaxWarningHeadingEngland
+        {
+            get
+            {
+                return ResourceManager.GetString("MsgNmaxWarningHeadingEngland", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to This application may take you over the organic manure nitrogen field limit for compost applied to orchard land.
+        /// </summary>
+        public static string MsgNmaxWarningHeadingGreaterThan1000England
+        {
+            get
+            {
+                return ResourceManager.GetString("MsgNmaxWarningHeadingGreaterThan1000England", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to This application may take you over the individual hectare limit for spreading certified green and green/food compost as a mulch to orchard land.
+        /// </summary>
+        public static string MsgNmaxWarningHeadingGreaterThan1000Wales
+        {
+            get
+            {
+                return ResourceManager.GetString("MsgNmaxWarningHeadingGreaterThan1000Wales", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to This application may take you over the individual hectare limit for spreading certified green and green/food compost.
+        /// </summary>
+        public static string MsgNmaxWarningHeadingWales
+        {
+            get
+            {
+                return ResourceManager.GetString("MsgNmaxWarningHeadingWales", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that the total amount of nitrogen from all green and green/food compost you apply in any 2-year period on any single hectare of your land must not exceed 500kg..
+        /// </summary>
+        public static string MsgNmaxWarningPara1England
+        {
+            get
+            {
+                return ResourceManager.GetString("MsgNmaxWarningPara1England", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that the total amount of nitrogen from all green and green/food compost you apply in any 4-year period on any single hectare of orchard land must not exceed 1000kg..
+        /// </summary>
+        public static string MsgNmaxWarningPara1GreaterThan1000England
+        {
+            get
+            {
+                return ResourceManager.GetString("MsgNmaxWarningPara1GreaterThan1000England", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The Water Resource Regulations apply a limit of 1000kg of total Nitrogen per individual hectare to the spreading of certified green and green/food compost to orchard land in any rolling four year period..
+        /// </summary>
+        public static string MsgNmaxWarningPara1GreaterThan1000Wales
+        {
+            get
+            {
+                return ResourceManager.GetString("MsgNmaxWarningPara1GreaterThan1000Wales", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The Water Resource Regulations apply a limit of 500kg of total Nitrogen per individual hectare to the spreading of certified green and green/food compost in any rolling two year period..
+        /// </summary>
+        public static string MsgNmaxWarningPara1Wales
+        {
+            get
+            {
+                return ResourceManager.GetString("MsgNmaxWarningPara1Wales", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the amount of nitrogen from organic manures..
+        /// </summary>
+        public static string MsgNmaxWarningPara2England
+        {
+            get
+            {
+                return ResourceManager.GetString("MsgNmaxWarningPara2England", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to NMPT API service has blocked your access, try again later..
         /// </summary>

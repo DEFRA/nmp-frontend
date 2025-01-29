@@ -1842,7 +1842,7 @@ namespace NMP.Portal.Controllers
                             if (_soilAnalysisDataProtector.Unprotect(q) == Resource.lblFalse)
                             {
                                 ViewBag.Success = Resource.lblFalse;
-                                ViewBag.Error = Resource.MsgSoilAnalysisCouldNotAdded;                                
+                                ViewBag.Error = Resource.MsgSoilAnalysisCouldNotAdded;
                             }
                             else
                             {
@@ -1859,10 +1859,10 @@ namespace NMP.Portal.Controllers
                                 {
                                     ViewBag.SuccessMsgContent = string.Format(Resource.lblYouHaveRemovedASoilAnalysisForFieldName, model.Name);
                                 }
-                                if (soilAnalysisResponse.Count > 0)
+                                List<Crop> crop = (await _iCropService.FetchCropsByFieldId(model.ID.Value)).ToList();
+                                if (crop != null && crop.Count > 0)
                                 {
-                                    List<Crop> crop = (await _iCropService.FetchCropsByFieldId(soilAnalysisResponse.FirstOrDefault().FieldID.Value)).ToList();
-                                    if (crop != null && crop.Count > 0)
+                                    if (soilAnalysisResponse.Count > 0)
                                     {
                                         bool anyPlan = crop.Any(x => x.Year >= (soilAnalysisResponse.FirstOrDefault()?.Year ?? 0));
                                         if (anyPlan)
@@ -1874,9 +1874,9 @@ namespace NMP.Portal.Controllers
                                             }
                                             else
                                             {
-                                                ViewBag.SuccessMsgAdditionalContent = string.Format(Resource.lblThisMayChangeYourNutrientRecommendations, soilAnalysisResponse.FirstOrDefault().Year);
+                                                ViewBag.SuccessMsgAdditionalContent = string.Format(Resource.lblThisMayChangeYourNutrientRecommendations);
                                             }
-                                            
+
                                             ViewBag.CropYear = _farmDataProtector.Protect(cropYear.ToString());
                                             if (!string.IsNullOrWhiteSpace(s) && _soilAnalysisDataProtector.Unprotect(s) == Resource.lblAdd)
                                             {
@@ -1888,6 +1888,12 @@ namespace NMP.Portal.Controllers
                                             }
                                             ViewBag.SuccessMsgAdditionalContentThird = Resource.lblToSeeItsRecommendations;
                                         }
+                                    }
+                                   else if (!string.IsNullOrWhiteSpace(s) && (_soilAnalysisDataProtector.Unprotect(s) == Resource.lblUpdate|| _soilAnalysisDataProtector.Unprotect(s) == Resource.lblRemove))
+                                    {
+                                        ViewBag.SuccessMsgAdditionalContent = string.Format(Resource.lblThisMayChangeYourNutrientRecommendations);
+                                        ViewBag.SuccessMsgAdditionalContentSecondForUpdate = string.Format(Resource.lblCropPlan);
+                                        ViewBag.SuccessMsgAdditionalContentThird = Resource.lblToSeeItsRecommendations;
                                     }
 
                                 }

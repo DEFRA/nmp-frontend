@@ -333,13 +333,19 @@
                 {
                     <p class="govuk-body">
                         @Resource.lblYouCanAlso
-                    <a href="#">
+                        <a asp-action="RemoveSoilAnalysis" asp-controller="SoilAnalysis">
                         @Resource.lblRemoveThisSoilAnalysis
                     </a>
                 </p>
                 }
+
                 <govuk-button type="submit" class="margin-bottom-forty">
-                    @Resource.lblContinue
+                      @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value)
+                {   @Resource.lblContinue
+                }
+                else{
+                        @Resource.lblSaveChanges
+                }
                 </govuk-button>
 
                 @* <govuk-button type="submit" class="margin-bottom-forty">

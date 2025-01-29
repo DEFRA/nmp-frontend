@@ -820,7 +820,22 @@ namespace NMP.Portal.Controllers
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("SoilAnalysisData", model);
             return RedirectToAction("SulphurDeficient", model);
         }
-        [HttpPost]
+        [HttpGet]
+        public IActionResult RemoveSoilAnalysis()
+        {
+            _logger.LogTrace($"Soil Analysis Controller: RemoveSoilAnalysis() action called.");
+            SoilAnalysisViewModel model = new SoilAnalysisViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("SoilAnalysisData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<SoilAnalysisViewModel>("SoilAnalysisData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+            return View(model);
+        }
+            [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveSoilAnalysis(SoilAnalysisViewModel model)
         {

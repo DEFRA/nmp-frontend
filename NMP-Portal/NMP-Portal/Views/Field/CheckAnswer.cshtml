@@ -1,4 +1,5 @@
 ﻿@using NMP.Portal.Resources;
+@using System.Globalization
 @model NMP.Portal.ViewModels.FieldViewModel
 
 @{
@@ -343,7 +344,7 @@
                             @Resource.lblDateSampleTaken
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @((!Model.SoilAnalyses.Date.HasValue) ? Resource.lblNotSet : (Model.SoilAnalyses.Date.Value.Date.ToString("dd MMMM yyyy")))
+                            @((!Model.SoilAnalyses.Date.HasValue) ? Resource.lblNotSet : (Model.SoilAnalyses.Date.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))))
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="SoilDate" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
@@ -644,7 +645,7 @@
                             @string.Format(Resource.lblWhenWasTheSampleForSoilMineralNitrogenTaken, Model.Name)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @(Model.SampleForSoilMineralNitrogen.HasValue ? Model.SampleForSoilMineralNitrogen.Value.Date.ToString("dd MMMM yyyy") : Resource.lblNotSet)
+                            @(Model.SampleForSoilMineralNitrogen.HasValue ? Model.SampleForSoilMineralNitrogen.Value.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotSet)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="SampleForSoilMineralNitrogen" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
