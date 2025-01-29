@@ -45,7 +45,8 @@ namespace NMP.Portal.Security
                         extraQueryParameters.Add("serviceId", value: builder.Configuration["CustomerIdentityServiceId"].ToString());
                         extraQueryParameters.Add("forceReselection", value: "true");
                         options.ExtraQueryParameters = extraQueryParameters;
-                        //options.CallbackPath = builder.Configuration["CustomerIdentityCallbackPath"]; // signin-oidc";
+                        options.CallbackPath = "/signin-oidc";
+                        //options.CallbackPath = builder.Configuration["CustomerIdentityCallbackPath"]; // "/signin-oidc";
                         //options.SignedOutCallbackPath = builder.Configuration["CustomerIdentitySignedOutCallbackPath"];
                         options.SignUpSignInPolicyId = builder.Configuration["CustomerIdentityPolicyId"];
                         options.ErrorPath = "/Error/Index";
