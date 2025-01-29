@@ -48,14 +48,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphorusMethodologyID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isSoilAnalysisAdded" value="@Model.isSoilAnalysisAdded.ToString().ToLower()"></govuk-input>
-            @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value)
-            {
-                <govuk-notification-banner>
-                    <p class="govuk-notification-banner__heading">
-                        Work is under construction.
-                    </p>
-                </govuk-notification-banner>
-            }
+           
             <div class="govuk-form-group">
                 <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
                     <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblAddSoilAnalysis, Model.FieldName)</h1>
@@ -118,12 +111,11 @@
                 </div>
             }
 
-            @if (Model.isSoilAnalysisAdded == null)
-            {
+            
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>
-            }
+            
 
             @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value)
             {

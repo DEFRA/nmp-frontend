@@ -106,6 +106,7 @@ namespace NMP.Portal.Helpers
         public const string FetchManagementperiodByIdAsyncAPI = "management-periods/{0}";
         public const string FetchCropByIdAsyncAPI = "crops/{0}";
         public const string FetchSoilNutrientIndexValueAsyncAPI = "vendors/rb209/Soil/NutrientIndices/{0}/{1}/{2}";
+        public const string AddSoilAnalysisAsyncAPI = "soil-analyses";
 
         //Manner APi Url
         public const string FetchMannerApplicationMethodByIdAsyncAPI = "vendors/manner/application-methods/{0}";
@@ -134,5 +135,6 @@ namespace NMP.Portal.Helpers
         public const string FetchCropInfoOneQuestionByCropTypeIdAsyncAPI = "crop-info-questions/{0}";
         public const string FetchMannerCalculateNutrientAsyncAPI = "vendors/manner/calculate-nutrients";
         public const string FetchSoilTypeSoilTextureBySoilTypeIdAsyncAPI = "soil-type-soil-texture/{0}";
+        public const string FetchTotalNBasedByManIdAppDateAndIsGreenCompostAsyncAPI = "organic-manures/total-nitrogen-if-green-food-compost/{0}?fromDate={1}&toDate={2}&confirm={3}&isGreenFoodCompost={4}";
     }
 }
