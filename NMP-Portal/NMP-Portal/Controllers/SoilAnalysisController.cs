@@ -720,11 +720,14 @@ namespace NMP.Portal.Controllers
                     model.PotassiumIndex = Convert.ToInt32(model.PotassiumIndexValue.Trim());
                 }
             }
+
+            model.Year= model.Date.Value.Month>=8?model.Date.Value.Year+1:model.Date.Value.Year;
+
             var soilData = new
             {
                 SoilAnalysis = new SoilAnalysis
                 {
-                    Year = model.Date.Value.Year,
+                    Year = model.Year,
                     SulphurDeficient = model.SulphurDeficient,
                     Date = model.Date,
                     PH = model.PH,
