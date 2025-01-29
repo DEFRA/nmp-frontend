@@ -266,7 +266,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Plan and record nutrient applications</value>
   </data>
   <data name="lblPlanningAndRecordingCan" xml:space="preserve">
-    <value>Planning and recording can:</value>
+    <value>This service will:</value>
   </data>
   <data name="lblPleaseEnter" xml:space="preserve">
     <value>Please enter {0}</value>
@@ -284,7 +284,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>RegisteredOrganicProducer</value>
   </data>
   <data name="lblSaveYouMoney" xml:space="preserve">
-    <value>save you money</value>
+    <value>save you time and money</value>
   </data>
   <data name="lblSBI" xml:space="preserve">
     <value>SBI</value>
@@ -308,7 +308,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>the crops you grow</value>
   </data>
   <data name="lblTheManuresAndFertilisersYouUseAndHowYouApplyThem" xml:space="preserve">
-    <value>the manures and fertilisers you use and how you apply them</value>
+    <value>the organic materials and inorganic fertilisers you use and how you apply them</value>
   </data>
   <data name="lblTheNutrientsInYourSoil" xml:space="preserve">
     <value>the nutrients in your soil</value>
@@ -323,7 +323,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>true</value>
   </data>
   <data name="lblUseThisServiceToPlan" xml:space="preserve">
-    <value>Use this service to plan and record how you use nutrients on your farm.</value>
+    <value>This is a free service, provided by Defra, to help farmers plan and record nutrient use on their farms. It gives you guidance only - there is no legal requirement to use it.</value>
   </data>
   <data name="lblWhatIsTheFarmName" xml:space="preserve">
     <value>What is the farm name?</value>
@@ -3357,5 +3357,74 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="ContentHowToolWorks2" xml:space="preserve">
     <value>You will get better recommendations if you have a recent soil analysis. You will be asked to enter the data from the analysis as you progress through the service.</value>
+  </data>
+  <data name="ContentReplacePlanetandManner" xml:space="preserve">
+    <value>It replaces earlier services such as PLANET and MANNER. The service will allow you to import your data from PLANET.</value>
+  </data>
+  <data name="ContentSustainableFarmingIncentiveEnd" xml:space="preserve">
+    <value>, you will need a nutrient plan. This service will create a plan that you can use for this purpose.</value>
+  </data>
+  <data name="ContentSustainableFarmingIncentiveStart" xml:space="preserve">
+    <value>In order to apply for the</value>
+  </data>
+  <data name="contentYourDataLine1" xml:space="preserve">
+    <value>We only gather the data required to provide you with the appropriate recommendations.</value>
+  </data>
+  <data name="contentYourDataLine2" xml:space="preserve">
+    <value>This service will never share your data with any other organisations.</value>
+  </data>
+  <data name="contentYourDataLine3" xml:space="preserve">
+    <value>In particular, please note that this service does not share data with the</value>
+  </data>
+  <data name="contentYourDataLine4" xml:space="preserve">
+    <value>This service was developed in conjunction with ADAS and AHDB.</value>
+  </data>
+  <data name="lbldownloadablePdftext" xml:space="preserve">
+    <value>It creates downloadable plans in PDF.</value>
+  </data>
+  <data name="lblFarmingRuleOfWater" xml:space="preserve">
+    <value>Farming rules for water</value>
+  </data>
+  <data name="lblFollowFarmingRules" xml:space="preserve">
+    <value>You must follow the</value>
+  </data>
+  <data name="lblHowitworks" xml:space="preserve">
+    <value>How it works</value>
+  </data>
+  <data name="lblNUM1PaymentOfTheSFI" xml:space="preserve">
+    <value>NUM1 payment of the SFI</value>
+  </data>
+  <data name="lblRb209NutrientManagementGuide" xml:space="preserve">
+    <value>RB209 (Nutrient Management Guide)</value>
+  </data>
+  <data name="lblRecommendationFromthisService" xml:space="preserve">
+    <value>The recommendations from this service come from</value>
+  </data>
+  <data name="lblRpa" xml:space="preserve">
+    <value>Rural Payments Agency</value>
+  </data>
+  <data name="lblRpaInitial" xml:space="preserve">
+    <value>(RPA)</value>
+  </data>
+  <data name="lblSustainableFarmingIncentive" xml:space="preserve">
+    <value>Sustainable Farming Incentive (SFI)</value>
+  </data>
+  <data name="lblTheServiceWill" xml:space="preserve">
+    <value>This service will:</value>
+  </data>
+  <data name="lblYourData" xml:space="preserve">
+    <value>Your data</value>
+  </data>
+  <data name="lnkFarmingRuleOfWater" xml:space="preserve">
+    <value>https://www.gov.uk/government/publications/applying-the-farming-rules-for-water/applying-the-farming-rules-for-water</value>
+  </data>
+  <data name="lnkNUM1PaymentOfTheSFI" xml:space="preserve">
+    <value>https://www.gov.uk/government/publications/sfi-handbook-for-the-sfi-2023-offer</value>
+  </data>
+  <data name="lnkRpa" xml:space="preserve">
+    <value>https://www.gov.uk/government/organisations/rural-payments-agency</value>
+  </data>
+  <data name="lnkToRb209NutrientManagementGuide" xml:space="preserve">
+    <value>https://ahdb.org.uk/nutrient-management-guide-rb209</value>
   </data>
 </root>

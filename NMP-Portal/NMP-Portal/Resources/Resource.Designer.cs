@@ -88,6 +88,69 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to It replaces earlier services such as PLANET and MANNER. The service will allow you to import your data from PLANET..
+        /// </summary>
+        public static string ContentReplacePlanetandManner {
+            get {
+                return ResourceManager.GetString("ContentReplacePlanetandManner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to , you will need a nutrient plan. This service will create a plan that you can use for this purpose..
+        /// </summary>
+        public static string ContentSustainableFarmingIncentiveEnd {
+            get {
+                return ResourceManager.GetString("ContentSustainableFarmingIncentiveEnd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In order to apply for the.
+        /// </summary>
+        public static string ContentSustainableFarmingIncentiveStart {
+            get {
+                return ResourceManager.GetString("ContentSustainableFarmingIncentiveStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We only gather the data required to provide you with the appropriate recommendations..
+        /// </summary>
+        public static string contentYourDataLine1 {
+            get {
+                return ResourceManager.GetString("contentYourDataLine1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This service will never share your data with any other organisations..
+        /// </summary>
+        public static string contentYourDataLine2 {
+            get {
+                return ResourceManager.GetString("contentYourDataLine2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In particular, please note that this service does not share data with the.
+        /// </summary>
+        public static string contentYourDataLine3 {
+            get {
+                return ResourceManager.GetString("contentYourDataLine3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This service was developed in conjunction with ADAS and AHDB..
+        /// </summary>
+        public static string contentYourDataLine4 {
+            get {
+                return ResourceManager.GetString("contentYourDataLine4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The date must include the day, the month and the year.
         /// </summary>
         public static string ErrorMsgForDate {
@@ -1924,6 +1987,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to It creates downloadable plans in PDF..
+        /// </summary>
+        public static string lbldownloadablePdftext {
+            get {
+                return ResourceManager.GetString("lbldownloadablePdftext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Download, print, or export this plan.
         /// </summary>
         public static string lblDownloadPrintOrExportThisPlan {
@@ -2482,6 +2554,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Farming rules for water.
+        /// </summary>
+        public static string lblFarmingRuleOfWater {
+            get {
+                return ResourceManager.GetString("lblFarmingRuleOfWater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Further information is available from:.
         /// </summary>
         public static string lblFarmingRuleOfWaterFifth {
@@ -2797,6 +2878,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You must follow the.
+        /// </summary>
+        public static string lblFollowFarmingRules {
+            get {
+                return ResourceManager.GetString("lblFollowFarmingRules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to For example, 27 3 2023.
         /// </summary>
         public static string lblForExample {
@@ -3072,6 +3162,15 @@ namespace NMP.Portal.Resources {
         public static string lblHowDoYouWantToEnterTheExpectedYieldForInTheseFields {
             get {
                 return ResourceManager.GetString("lblHowDoYouWantToEnterTheExpectedYieldForInTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How it works.
+        /// </summary>
+        public static string lblHowitworks {
+            get {
+                return ResourceManager.GetString("lblHowitworks", resourceCulture);
             }
         }
         
@@ -4320,6 +4419,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to NUM1 payment of the SFI.
+        /// </summary>
+        public static string lblNUM1PaymentOfTheSFI {
+            get {
+                return ResourceManager.GetString("lblNUM1PaymentOfTheSFI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Number of shoots.
         /// </summary>
         public static string lblNumberOfShoots {
@@ -4878,7 +4986,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Planning and recording can:.
+        ///   Looks up a localized string similar to This service will:.
         /// </summary>
         public static string lblPlanningAndRecordingCan {
             get {
@@ -5238,6 +5346,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to RB209 (Nutrient Management Guide).
+        /// </summary>
+        public static string lblRb209NutrientManagementGuide {
+            get {
+                return ResourceManager.GetString("lblRb209NutrientManagementGuide", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The recommendations from this service come from.
+        /// </summary>
+        public static string lblRecommendationFromthisService {
+            get {
+                return ResourceManager.GetString("lblRecommendationFromthisService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Recommendations.
         /// </summary>
         public static string lblRecommendations {
@@ -5328,6 +5454,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rural Payments Agency.
+        /// </summary>
+        public static string lblRpa {
+            get {
+                return ResourceManager.GetString("lblRpa", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (RPA).
+        /// </summary>
+        public static string lblRpaInitial {
+            get {
+                return ResourceManager.GetString("lblRpaInitial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to S.
         /// </summary>
         public static string lblS {
@@ -5382,7 +5526,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to save you money.
+        ///   Looks up a localized string similar to save you time and money.
         /// </summary>
         public static string lblSaveYouMoney {
             get {
@@ -6093,6 +6237,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sustainable Farming Incentive (SFI).
+        /// </summary>
+        public static string lblSustainableFarmingIncentive {
+            get {
+                return ResourceManager.GetString("lblSustainableFarmingIncentive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sward.
         /// </summary>
         public static string lblSward {
@@ -6174,7 +6327,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to the manures and fertilisers you use and how you apply them.
+        ///   Looks up a localized string similar to the organic materials and inorganic fertilisers you use and how you apply them.
         /// </summary>
         public static string lblTheManuresAndFertilisersYouUseAndHowYouApplyThem {
             get {
@@ -6251,6 +6404,15 @@ namespace NMP.Portal.Resources {
         public static string lblTheseAreTheOrganicMaterialApplicationsForField {
             get {
                 return ResourceManager.GetString("lblTheseAreTheOrganicMaterialApplicationsForField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This service will:.
+        /// </summary>
+        public static string lblTheServiceWill {
+            get {
+                return ResourceManager.GetString("lblTheServiceWill", resourceCulture);
             }
         }
         
@@ -6876,7 +7038,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use this service to plan and record how you use nutrients on your farm..
+        ///   Looks up a localized string similar to This is a free service, provided by Defra, to help farmers plan and record nutrient use on their farms. It gives you guidance only - there is no legal requirement to use it..
         /// </summary>
         public static string lblUseThisServiceToPlan {
             get {
@@ -7947,6 +8109,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your data.
+        /// </summary>
+        public static string lblYourData {
+            get {
+                return ResourceManager.GetString("lblYourData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your farms.
         /// </summary>
         public static string lblYourFarms {
@@ -7970,6 +8141,42 @@ namespace NMP.Portal.Resources {
         public static string lblYourSoilAnalysisChangesHaveBeenSuccessfullySaved {
             get {
                 return ResourceManager.GetString("lblYourSoilAnalysisChangesHaveBeenSuccessfullySaved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.gov.uk/government/publications/applying-the-farming-rules-for-water/applying-the-farming-rules-for-water.
+        /// </summary>
+        public static string lnkFarmingRuleOfWater {
+            get {
+                return ResourceManager.GetString("lnkFarmingRuleOfWater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.gov.uk/government/publications/sfi-handbook-for-the-sfi-2023-offer.
+        /// </summary>
+        public static string lnkNUM1PaymentOfTheSFI {
+            get {
+                return ResourceManager.GetString("lnkNUM1PaymentOfTheSFI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.gov.uk/government/organisations/rural-payments-agency.
+        /// </summary>
+        public static string lnkRpa {
+            get {
+                return ResourceManager.GetString("lnkRpa", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://ahdb.org.uk/nutrient-management-guide-rb209.
+        /// </summary>
+        public static string lnkToRb209NutrientManagementGuide {
+            get {
+                return ResourceManager.GetString("lnkToRb209NutrientManagementGuide", resourceCulture);
             }
         }
         
