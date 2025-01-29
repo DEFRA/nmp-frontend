@@ -70,6 +70,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The first step is to set up your farm. The farm will contain your fields, and the fields will have the crops and nutrients applied to them. If you have more than one holding, it&apos;s best to add a separate farm for each one..
+        /// </summary>
+        public static string ContentHowToolWorks {
+            get {
+                return ResourceManager.GetString("ContentHowToolWorks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You will get better recommendations if you have a recent soil analysis. You will be asked to enter the data from the analysis as you progress through the service..
+        /// </summary>
+        public static string ContentHowToolWorks2 {
+            get {
+                return ResourceManager.GetString("ContentHowToolWorks2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The date must include the day, the month and the year.
         /// </summary>
         public static string ErrorMsgForDate {
@@ -6282,11 +6300,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This application may take you over the Organic Manure N Field Limit.
+        ///   Looks up a localized string similar to This application may take you over the organic manure nitrogen field limit.
         /// </summary>
         public static string lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit {
             get {
                 return ResourceManager.GetString("lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application may take you over the individual hectare limit for spreading of organic manure.
+        /// </summary>
+        public static string lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimitWales {
+            get {
+                return ResourceManager.GetString("lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimitWales", resourceCulture);
             }
         }
         
@@ -7965,7 +7992,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The application date you entered is inside your closed period for applying high nitrogen (N) organic manure..
+        ///   Looks up a localized string similar to The application date you entered is inside your closed period for applying high readily available nitrogen organic manure.
         /// </summary>
         public static string MsgApplicationDateEnteredIsInsideClosedPeriod {
             get {
@@ -7974,7 +8001,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The NVZ Action Programme states that the closed period for {0} planted on non-organic farms {1} for {2} soil is {3}..
+        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that the closed period for {0} planted on non-organic farms {1} on {2} soil is {3}..
         /// </summary>
         public static string MsgApplicationDateEnteredIsInsideClosedPeriodDetail {
             get {
@@ -7988,6 +8015,15 @@ namespace NMP.Portal.Resources {
         public static string MsgApplicationDateEnteredIsInsideClosedPeriodDetailOrganic {
             get {
                 return ResourceManager.GetString("MsgApplicationDateEnteredIsInsideClosedPeriodDetailOrganic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Water Resources Regulations state that the closed period for {0} planted on non-organic farms {1} on {2} soil is {3}..
+        /// </summary>
+        public static string MsgApplicationDateEnteredIsInsideClosedPeriodDetailWales {
+            get {
+                return ResourceManager.GetString("MsgApplicationDateEnteredIsInsideClosedPeriodDetailWales", resourceCulture);
             }
         }
         
@@ -8125,6 +8161,51 @@ namespace NMP.Portal.Resources {
         public static string MsgCropInfo2NotSet {
             get {
                 return ResourceManager.GetString("MsgCropInfo2NotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application may take you over the maximum nitrogen rate limit (N-max) for this crop.
+        /// </summary>
+        public static string MsgCropNmaxLimitWarningHeadingEngland {
+            get {
+                return ResourceManager.GetString("MsgCropNmaxLimitWarningHeadingEngland", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application may take you over the maximum nitrogen limit for this crop.
+        /// </summary>
+        public static string MsgCropNmaxLimitWarningHeadingWales {
+            get {
+                return ResourceManager.GetString("MsgCropNmaxLimitWarningHeadingWales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that the average amount of crop available nitrogen from manufactured fertilisers and organic manures that you apply on your {0} across your whole farm must not exceed {1} kg per hectare..
+        /// </summary>
+        public static string MsgCropNmaxLimitWarningPara1England {
+            get {
+                return ResourceManager.GetString("MsgCropNmaxLimitWarningPara1England", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Water Resources Regulations state that the maximum amount of nitrogen from fertilisers and crop available nitrogen from organic manures that you apply on your {0} across your whole farm must not exceed {1} kg/ha..
+        /// </summary>
+        public static string MsgCropNmaxLimitWarningPara1Wales {
+            get {
+                return ResourceManager.GetString("MsgCropNmaxLimitWarningPara1Wales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the amount of crop available nitrogen from manufactured fertilisers and organic manures you apply..
+        /// </summary>
+        public static string MsgCropNmaxLimitWarningPara2England {
+            get {
+                return ResourceManager.GetString("MsgCropNmaxLimitWarningPara2England", resourceCulture);
             }
         }
         
@@ -8867,7 +8948,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The NVZ Action Programme states that the total amount of nitrogen (N) from all organic manures you apply in any 12-month period on any single hectare of your land must not exceed 250kg. .
+        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that the total amount of nitrogen from all organic manures you apply in any 12 month period on any single hectare of your land must not exceed 250kg. .
         /// </summary>
         public static string MsgIfOrganicManureNMaxLimitExceed {
             get {
@@ -8876,11 +8957,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can continue, but you should consider reducing the amount of nitrogen (N) from organic manures you apply to avoid the risk of agricultural nitrate pollution..
+        ///   Looks up a localized string similar to It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the amount of nitrogen from organic manures..
         /// </summary>
         public static string MsgIfOrganicManureNMaxLimitExceedAdditional {
             get {
                 return ResourceManager.GetString("MsgIfOrganicManureNMaxLimitExceedAdditional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Water Resource Regulations apply a limit of 250kg of total Nitrogen per individual hectare to the spreading of organic manure for any 12 month rolling period..
+        /// </summary>
+        public static string MsgIfOrganicManureNMaxLimitExceedWales {
+            get {
+                return ResourceManager.GetString("MsgIfOrganicManureNMaxLimitExceedWales", resourceCulture);
             }
         }
         
@@ -9052,6 +9142,87 @@ namespace NMP.Portal.Resources {
         public static string MsgNMaxLimit {
             get {
                 return ResourceManager.GetString("MsgNMaxLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application may take you over the organic manure nitrogen field limit for compost.
+        /// </summary>
+        public static string MsgNmaxWarningHeadingEngland {
+            get {
+                return ResourceManager.GetString("MsgNmaxWarningHeadingEngland", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application may take you over the organic manure nitrogen field limit for compost applied to orchard land.
+        /// </summary>
+        public static string MsgNmaxWarningHeadingGreaterThan1000England {
+            get {
+                return ResourceManager.GetString("MsgNmaxWarningHeadingGreaterThan1000England", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application may take you over the individual hectare limit for spreading certified green and green/food compost as a mulch to orchard land.
+        /// </summary>
+        public static string MsgNmaxWarningHeadingGreaterThan1000Wales {
+            get {
+                return ResourceManager.GetString("MsgNmaxWarningHeadingGreaterThan1000Wales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application may take you over the individual hectare limit for spreading certified green and green/food compost.
+        /// </summary>
+        public static string MsgNmaxWarningHeadingWales {
+            get {
+                return ResourceManager.GetString("MsgNmaxWarningHeadingWales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that the total amount of nitrogen from all green and green/food compost you apply in any 2-year period on any single hectare of your land must not exceed 500kg..
+        /// </summary>
+        public static string MsgNmaxWarningPara1England {
+            get {
+                return ResourceManager.GetString("MsgNmaxWarningPara1England", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that the total amount of nitrogen from all green and green/food compost you apply in any 4-year period on any single hectare of orchard land must not exceed 1000kg..
+        /// </summary>
+        public static string MsgNmaxWarningPara1GreaterThan1000England {
+            get {
+                return ResourceManager.GetString("MsgNmaxWarningPara1GreaterThan1000England", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Water Resource Regulations apply a limit of 1000kg of total Nitrogen per individual hectare to the spreading of certified green and green/food compost to orchard land in any rolling four year period..
+        /// </summary>
+        public static string MsgNmaxWarningPara1GreaterThan1000Wales {
+            get {
+                return ResourceManager.GetString("MsgNmaxWarningPara1GreaterThan1000Wales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Water Resource Regulations apply a limit of 500kg of total Nitrogen per individual hectare to the spreading of certified green and green/food compost in any rolling two year period..
+        /// </summary>
+        public static string MsgNmaxWarningPara1Wales {
+            get {
+                return ResourceManager.GetString("MsgNmaxWarningPara1Wales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the amount of nitrogen from organic manures..
+        /// </summary>
+        public static string MsgNmaxWarningPara2England {
+            get {
+                return ResourceManager.GetString("MsgNmaxWarningPara2England", resourceCulture);
             }
         }
         
