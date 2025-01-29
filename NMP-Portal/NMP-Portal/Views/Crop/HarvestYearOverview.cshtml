@@ -118,7 +118,7 @@
                                                     <td class="govuk-table__cell">
                                                         @if (field.Yield != null)
                                                         {
-                                                            @field.Yield
+                                                            @(field.Yield % 1 == 0 ? (int)field.Yield : field.Yield);
                                                         }
                                                         else
                                                         {
