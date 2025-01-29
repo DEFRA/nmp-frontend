@@ -7929,7 +7929,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your closed period for spreading inorganic fertilisers is:.
+        ///   Looks up a localized string similar to Your closed period for spreading inorganic niytrogen (N) fertilisers is:.
         /// </summary>
         public static string lblYourClosedPeriodForSpreading {
             get {
