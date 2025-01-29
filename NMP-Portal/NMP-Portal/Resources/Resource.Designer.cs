@@ -70,6 +70,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The first step is to set up your farm. The farm will contain your fields, and the fields will have the crops and nutrients applied to them. If you have more than one holding, it&apos;s best to add a separate farm for each one..
+        /// </summary>
+        public static string ContentHowToolWorks {
+            get {
+                return ResourceManager.GetString("ContentHowToolWorks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You will get better recommendations if you have a recent soil analysis. You will be asked to enter the data from the analysis as you progress through the service..
+        /// </summary>
+        public static string ContentHowToolWorks2 {
+            get {
+                return ResourceManager.GetString("ContentHowToolWorks2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The date must include the day, the month and the year.
         /// </summary>
         public static string ErrorMsgForDate {
@@ -9128,24 +9146,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NMPT API service has blocked your access, try again later..
-        /// </summary>
-        public static string MsgNmptApiServiceBlockedAccess {
-            get {
-                return ResourceManager.GetString("MsgNmptApiServiceBlockedAccess", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to NMPT API service is not available at the moment, try again later ..
-        /// </summary>
-        public static string MsgNmptServiceNotAvailable {
-            get {
-                return ResourceManager.GetString("MsgNmptServiceNotAvailable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to This application may take you over the organic manure nitrogen field limit for compost.
         /// </summary>
         public static string MsgNmaxWarningHeadingEngland {
@@ -9223,6 +9223,24 @@ namespace NMP.Portal.Resources {
         public static string MsgNmaxWarningPara2England {
             get {
                 return ResourceManager.GetString("MsgNmaxWarningPara2England", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NMPT API service has blocked your access, try again later..
+        /// </summary>
+        public static string MsgNmptApiServiceBlockedAccess {
+            get {
+                return ResourceManager.GetString("MsgNmptApiServiceBlockedAccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NMPT API service is not available at the moment, try again later ..
+        /// </summary>
+        public static string MsgNmptServiceNotAvailable {
+            get {
+                return ResourceManager.GetString("MsgNmptServiceNotAvailable", resourceCulture);
             }
         }
         

@@ -3352,4 +3352,10 @@ cubic metres per hectare  not set</value>
   <data name="MsgNmaxWarningPara2England" xml:space="preserve">
     <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the amount of nitrogen from organic manures.</value>
   </data>
+  <data name="ContentHowToolWorks" xml:space="preserve">
+    <value>The first step is to set up your farm. The farm will contain your fields, and the fields will have the crops and nutrients applied to them. If you have more than one holding, it's best to add a separate farm for each one.</value>
+  </data>
+  <data name="ContentHowToolWorks2" xml:space="preserve">
+    <value>You will get better recommendations if you have a recent soil analysis. You will be asked to enter the data from the analysis as you progress through the service.</value>
+  </data>
 </root>
