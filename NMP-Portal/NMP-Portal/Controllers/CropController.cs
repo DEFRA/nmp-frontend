@@ -1221,6 +1221,10 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", Resource.MsgEnterAValueOfNoMoreThan5Digits);
             }
+            if (model.Crops[model.YieldCurrentCounter].Yield <0)
+            {
+                ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield",string.Format(Resource.lblEnterAPositiveValueOfPropertyName,Resource.lblYield));
+            }
 
             if (!ModelState.IsValid)
             {
