@@ -35,17 +35,38 @@
     }
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            @if (ViewBag.Success != null)
+            @if (ViewBag.Success != null && ViewBag.Success == Resource.lblTrue)
             {
-                @* if (ViewBag.Success == "true")
-                { *@
+                @if (ViewBag.SuccessMsgContent != null)
+                {
+
                     <govuk-notification-banner type="Success">
                         <div class="">
-                            <h3 class="govuk-notification-banner__heading"> @string.Format(Resource.lblYouHaveUpdated, Model.Name)</h3>
+                            <h3 class="govuk-notification-banner__heading">@ViewBag.SuccessMsgContent</h3>
                         </div>
+                        @if (ViewBag.SuccessMsgAdditionalContent != null)
+                        {
+                            <div>
+                                <p class="govuk-body">
+                                    @string.Format(ViewBag.SuccessMsgAdditionalContent)
+                                    @if (ViewBag.SuccessMsgAdditionalContentSecondForAdd != null)
+                                    {
+                                        <a class="govuk-link" asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@ViewBag.CropYear">@ViewBag.SuccessMsgAdditionalContentSecondForAdd</a>
+                                    }
+                                    else @if (ViewBag.SuccessMsgAdditionalContentSecondForUpdate != null)
+                                    {
+                                        <a class="govuk-link" asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId">@ViewBag.SuccessMsgAdditionalContentSecondForUpdate</a>
+                                    }
+                                    @if (ViewBag.SuccessMsgAdditionalContentThird != null)
+                                    {
+                                        @ViewBag.SuccessMsgAdditionalContentThird
+                                    }
+                                </p>
+                            </div>
+                        }
                     </govuk-notification-banner>
-                @* } *@
-                
+                }
+
             }
 
             <h1 class="govuk-heading-l">@Model.Name</h1>
@@ -72,27 +93,27 @@
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblSoilContainsPostashReleasingClay</td>
-                        <td class="govuk-table__cell">@(Model.SoilReleasingClay==true ? Resource.lblYes : Resource.lblNo)</td>
+                        <td class="govuk-table__cell">@(Model.SoilReleasingClay == true ? Resource.lblYes : Resource.lblNo)</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblIsTheSoilOverChalk</td>
-                        <td class="govuk-table__cell">@(Model.SoilOverChalk==true ? Resource.lblYes : Resource.lblNo)</td>
+                        <td class="govuk-table__cell">@(Model.SoilOverChalk == true ? Resource.lblYes : Resource.lblNo)</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblIsFieldWithinNVZ</td>
-                        <td class="govuk-table__cell">@(Model.IsWithinNVZ==true ? Resource.lblYes : Resource.lblNo)</td>
+                        <td class="govuk-table__cell">@(Model.IsWithinNVZ == true ? Resource.lblYes : Resource.lblNo)</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblIsFieldAbove300Meters</td>
-                        <td class="govuk-table__cell">@(Model.IsAbove300SeaLevel==true ? Resource.lblYes : Resource.lblNo)</td>
+                        <td class="govuk-table__cell">@(Model.IsAbove300SeaLevel == true ? Resource.lblYes : Resource.lblNo)</td>
                     </tr>
                 </tbody>
             </table>
             <p class="govuk-body margin-bottom-forty"><a asp-action="UpdateField" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">@Resource.lblChangeFieldDetails</a></p>
             <p class="govuk-body margin-bottom-forty">@string.Format(Resource.MsgRemoveField, Model.Name)</p>
             <p class="govuk-body margin-bottom-forty"><a asp-action="FieldRemove" asp-controller="Field">@string.Format(Resource.lblRemoveField, Model.Name)</a></p>
-            
-            @if (ViewBag.SampleDate != null && ViewBag.SampleDate.Count > 0)
+
+            @if (ViewBag.SoilAnalysisList != null && ViewBag.SoilAnalysisList.Count > 0)
             {
                 <hr class="big_seperator">
                 <h2 class="govuk-heading-m">@Resource.lblSoilAnalysis</h2>
@@ -107,17 +128,20 @@
                         </tr>
                     </thead>
                     <tbody class="govuk-table__body">
-                        @foreach (var soilAnalysis in ViewBag.SampleDate)
+                        @foreach (var soilAnalysis in ViewBag.SoilAnalysisList)
                         {
                             <tr class="govuk-table__row right-last">
                                 <td class="govuk-table__cell">@soilAnalysis.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))</td>
                                 <td class="govuk-table__cell">
-                                    <a asp-action="SoilAnalysisDetail" asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedFieldId" asp-route-j="@Model.EncryptedFarmId">@Resource.lblViewSoilAnalysis</a>
+                                    <a asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@soilAnalysis.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId">@Resource.lblViewOrChange</a>
                                 </td>
                             </tr>
                         }
                     </tbody>
                 </table>
+            }
+            else{
+                <p class="govuk-body">@Resource.lblContentIfSoilAnalysisNotApplied</p>
             }
         </div>
     </div>

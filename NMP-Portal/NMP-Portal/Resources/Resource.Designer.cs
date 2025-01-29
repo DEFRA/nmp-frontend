@@ -295,6 +295,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to add.
+        /// </summary>
+        public static string lblAdd {
+            get {
+                return ResourceManager.GetString("lblAdd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add a crop group.
         /// </summary>
         public static string lblAddACropGroup {
@@ -498,6 +507,15 @@ namespace NMP.Portal.Resources {
         public static string lblAddSoilAnalysis {
             get {
                 return ResourceManager.GetString("lblAddSoilAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This may change your nutrient recommendations for {0} . Select the field from your.
+        /// </summary>
+        public static string lblAddSoilAnalysisSuccessMsg {
+            get {
+                return ResourceManager.GetString("lblAddSoilAnalysisSuccessMsg", resourceCulture);
             }
         }
         
@@ -1398,6 +1416,15 @@ namespace NMP.Portal.Resources {
         public static string lblConditionsAffectingTheLossOfNutrients {
             get {
                 return ResourceManager.GetString("lblConditionsAffectingTheLossOfNutrients", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have not entered a soil analysis for {0} . Without this, any recommendations we give will be based on the RB209 default values instead..
+        /// </summary>
+        public static string lblContentIfSoilAnalysisNotApplied {
+            get {
+                return ResourceManager.GetString("lblContentIfSoilAnalysisNotApplied", resourceCulture);
             }
         }
         
@@ -6678,6 +6705,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to update.
+        /// </summary>
+        public static string lblUpdate {
+            get {
+                return ResourceManager.GetString("lblUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Update {0}.
         /// </summary>
         public static string lblUpdateFarm {
@@ -6984,20 +7020,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View or change.
+        /// </summary>
+        public static string lblViewOrChange {
+            get {
+                return ResourceManager.GetString("lblViewOrChange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to View recommendations.
         /// </summary>
         public static string lblViewRecommendations {
             get {
                 return ResourceManager.GetString("lblViewRecommendations", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to View soil analysis.
-        /// </summary>
-        public static string lblViewSoilAnalysis {
-            get {
-                return ResourceManager.GetString("lblViewSoilAnalysis", resourceCulture);
             }
         }
         
@@ -7632,6 +7668,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} crop plan.
+        /// </summary>
+        public static string lblYearCropPlan {
+            get {
+                return ResourceManager.GetString("lblYearCropPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Yes.
         /// </summary>
         public static string lblYes {
@@ -7763,6 +7808,15 @@ namespace NMP.Portal.Resources {
         public static string lblYouHaveAdded {
             get {
                 return ResourceManager.GetString("lblYouHaveAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have added a new soil analysis for {0}.
+        /// </summary>
+        public static string lblYouHaveAddedANewSoilAnalysisForFieldName {
+            get {
+                return ResourceManager.GetString("lblYouHaveAddedANewSoilAnalysisForFieldName", resourceCulture);
             }
         }
         
@@ -8102,7 +8156,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The date must be a real date.
+        ///   Looks up a localized string similar to {0} must be a real date.
         /// </summary>
         public static string MsgDateMustBeARealDate {
             get {
@@ -8120,7 +8174,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The date must include a day.
+        ///   Looks up a localized string similar to {0} must include a day.
         /// </summary>
         public static string MsgDateMustIncludeADay {
             get {
@@ -8129,7 +8183,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The date must include a day and month.
+        ///   Looks up a localized string similar to {0} must include a day and month.
         /// </summary>
         public static string MsgDateMustIncludeADayAndMonth {
             get {
@@ -8138,7 +8192,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The date must include a day and year.
+        ///   Looks up a localized string similar to {0} must include a day and year.
         /// </summary>
         public static string MsgDateMustIncludeADayAndYear {
             get {
@@ -8147,7 +8201,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The date must include a month.
+        ///   Looks up a localized string similar to {0} must include a month.
         /// </summary>
         public static string MsgDateMustIncludeAMonth {
             get {
@@ -8156,7 +8210,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The date must include a month and year.
+        ///   Looks up a localized string similar to {0} must include a month and year.
         /// </summary>
         public static string MsgDateMustIncludeAMonthAndYear {
             get {
@@ -8165,7 +8219,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The date must include a year.
+        ///   Looks up a localized string similar to {0} must include a year.
         /// </summary>
         public static string MsgDateMustIncludeAYear {
             get {
@@ -9344,6 +9398,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your soil analysis could not be added..
+        /// </summary>
+        public static string MsgSoilAnalysisCouldNotAdded {
+            get {
+                return ResourceManager.GetString("MsgSoilAnalysisCouldNotAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to We need a recent soil analysis to give the best results. Without a recent analysis from the last five years, any recommendations we give will be based on the RB209 default values..
         /// </summary>
         public static string MsgSoilAnalysisHint1 {
@@ -9407,7 +9470,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The date must include the day/month/year.
+        ///   Looks up a localized string similar to The date must include the day/month/year..
         /// </summary>
         public static string MsgTheDateMustInclude {
             get {
