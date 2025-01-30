@@ -51,14 +51,15 @@ namespace NMP.Portal.Security
                         options.SignUpSignInPolicyId = builder.Configuration["CustomerIdentityPolicyId"];
                         options.ErrorPath = "/Error/Index";
                         
+                        
                     })                    
                     .EnableTokenAcquisitionToCallDownstreamApi(new string[] { "openid", "profile", "offline_access", builder.Configuration["CustomerIdentityClientId"] })
                     .AddInMemoryTokenCaches();
 
             services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
-            {                
+            {
                 //options.ResponseType = OpenIdConnectResponseType.CodeToken;
-                options.ResponseType = OpenIdConnectResponseType.Code;
+                options.ResponseType = OpenIdConnectResponseType.Code;                
                 options.SaveTokens = true;  // Save tokens in the authentication session
                 options.Scope.Add("openid profile offline_access");
                 options.Events ??= new OpenIdConnectEvents();
@@ -133,6 +134,11 @@ namespace NMP.Portal.Security
 
         private static async Task OnRedirectToIdentityProvider(RedirectContext context)
         {
+            if(!string.IsNullOrWhiteSpace(configuration?["CustomerIdentityReturnURI"]?.ToString()))
+            {
+                context.ProtocolMessage.RedirectUri = configuration?["CustomerIdentityReturnURI"]?.ToString(); // "https://your-gateway.com/signin-oidc";
+            }
+            
             //context.ProtocolMessage.Parameters.Add("serviceId", configuration["CustomerIdentityServiceId"].ToString());
             // Don't remove this line
             await Task.CompletedTask.ConfigureAwait(false);
