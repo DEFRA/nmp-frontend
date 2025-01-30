@@ -3427,4 +3427,19 @@ cubic metres per hectare  not set</value>
   <data name="lnkToRb209NutrientManagementGuide" xml:space="preserve">
     <value>https://ahdb.org.uk/nutrient-management-guide-rb209</value>
   </data>
+  <data name="lblRemoveSoilAnalysisContentFirst" xml:space="preserve">
+    <value>Any recommandations for {0} will be based on previous soil analysis, where they exist. Without any soil analysis the recommendations will be based on the RB209 default values instead.</value>
+  </data>
+  <data name="lblRemoveSoilAnalysisFromFieldName" xml:space="preserve">
+    <value>Remove soil analysis from {0}</value>
+  </data>
+  <data name="lblYouHaveRemovedASoilAnalysisForFieldName" xml:space="preserve">
+    <value>You have removed a soil analysis for {0}</value>
+  </data>
+  <data name="lblSulphurDeficiencyStatus" xml:space="preserve">
+    <value>Sulphur (S) deficiency status</value>
+  </data>
+  <data name="lblHowValuesAreEntered" xml:space="preserve">
+    <value>How values are entered (e.g., Index values)</value>
+  </data>
 </root>
