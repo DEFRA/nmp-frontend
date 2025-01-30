@@ -3257,6 +3257,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How values are entered (e.g., Index values).
+        /// </summary>
+        public static string lblHowValuesAreEntered {
+            get {
+                return ResourceManager.GetString("lblHowValuesAreEntered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How was the grass typically managed each year?.
         /// </summary>
         public static string lblHowWasTheGrassTypicallyManagedEachYear {
@@ -5436,6 +5445,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Any recommandations for {0} will be based on previous soil analysis, where they exist. Without any soil analysis the recommendations will be based on the RB209 default values instead..
+        /// </summary>
+        public static string lblRemoveSoilAnalysisContentFirst {
+            get {
+                return ResourceManager.GetString("lblRemoveSoilAnalysisContentFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove soil analysis from {0}.
+        /// </summary>
+        public static string lblRemoveSoilAnalysisFromFieldName {
+            get {
+                return ResourceManager.GetString("lblRemoveSoilAnalysisFromFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to remove this soil analysis..
         /// </summary>
         public static string lblRemoveThisSoilAnalysis {
@@ -6206,6 +6233,15 @@ namespace NMP.Portal.Resources {
         public static string lblSulphur {
             get {
                 return ResourceManager.GetString("lblSulphur", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sulphur (S) deficiency status.
+        /// </summary>
+        public static string lblSulphurDeficiencyStatus {
+            get {
+                return ResourceManager.GetString("lblSulphurDeficiencyStatus", resourceCulture);
             }
         }
         
@@ -8042,6 +8078,15 @@ namespace NMP.Portal.Resources {
         public static string lblYouHaveRemoved {
             get {
                 return ResourceManager.GetString("lblYouHaveRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have removed a soil analysis for {0}.
+        /// </summary>
+        public static string lblYouHaveRemovedASoilAnalysisForFieldName {
+            get {
+                return ResourceManager.GetString("lblYouHaveRemovedASoilAnalysisForFieldName", resourceCulture);
             }
         }
         

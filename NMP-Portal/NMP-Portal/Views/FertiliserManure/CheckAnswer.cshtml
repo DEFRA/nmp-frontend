@@ -1,4 +1,5 @@
-﻿@using NMP.Portal.Resources
+﻿﻿@using NMP.Portal.Resources
+@using System.Globalization
 @model NMP.Portal.ViewModels.FertiliserManureViewModel
 @{
     ViewData["Title"] = Resource.lblCheckYourAnswers;
@@ -9,7 +10,7 @@
 }
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-<form asp-action="CheckAnswer" asp-controller="FertiliserManure" method="post">
+        <form asp-action="CheckAnswer" asp-controller="FertiliserManure" method="post">
 
             @Html.AntiForgeryToken()
 
@@ -160,10 +161,10 @@
                     </govuk-summary-list-row>
                 }
 
-                
-                    
-                        <govuk-summary-list-row class=@((!Model.Date.HasValue)?"govuk-error-message":"")>
-                            <govuk-summary-list-row-key>
+
+
+                <govuk-summary-list-row class=@((!Model.Date.HasValue)?"govuk-error-message":"")>
+                    <govuk-summary-list-row-key>
                         @if (int.TryParse(Model.FieldGroup, out int value))
                         {
                             @string.Format(Resource.lblWhenDoYouApplyingInOrganicfertiliser, Model.CropTypeName)
@@ -172,52 +173,52 @@
                         {
                             @Resource.lblWhenDoYouApplyingInorganicFertiliserForTheseFields
                         }
-                                @* @Resource.lblWhenDoYouFirstPlanToSpreadInOrganicFertiliser *@
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                        @((Model.Date.HasValue) ? Model.Date.Value.Date.ToString("dd MMMM yyyy") : Resource.lblNotSet)
-                            </govuk-summary-list-row-value>
-                            <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="InOrgnaicManureDuration" asp-controller="FertiliserManure">@Resource.lblChange</govuk-summary-list-row-action>
-                            </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row>
-                        <govuk-summary-list-row>
-                            <govuk-summary-list-row-key>
-                                @Resource.lblHowMuchOfEachNutrientDoYouPlan
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                                @if ((Model.N.HasValue) && Model.N.Value > 0)
-                                {
-                                    @string.Format(Resource.lblKgWithNutrient, Model.N.Value, Resource.lblNitrogen)
-                                    <br />
-                                }
-                                @if ((Model.P2O5.HasValue) && Model.P2O5.Value > 0)
-                                {
-                                    @string.Format(Resource.lblKgWithNutrient, Model.P2O5.Value, Resource.lblPhosphateP2O5)
-                                    <br />
-                                }
-                                @if ((Model.K2O.HasValue) && Model.K2O.Value > 0)
-                                {
-                                    @string.Format(Resource.lblKgWithNutrient, Model.K2O.Value, Resource.lblPotashK2O)
-                                    <br />
-                                }
-                                @if ((Model.SO3.HasValue) && Model.SO3.Value > 0)
-                                {
-                                    @string.Format(Resource.lblKgWithNutrient, Model.SO3.Value, Resource.lblSulphurSO3)
-                                    <br />
-                                }
-                                @if ((Model.Lime.HasValue) && Model.Lime.Value > 0)
-                                {
-                                    @(string.Format(Resource.lblKgWithNutrient, Model.Lime.Value, Resource.lblLime))
-                                    <br />
-                                }
-                            </govuk-summary-list-row-value>
-                            <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="NutrientValues" asp-controller="FertiliserManure">@Resource.lblChange</govuk-summary-list-row-action>
-                            </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row>
-                     
-               
+                        @* @Resource.lblWhenDoYouFirstPlanToSpreadInOrganicFertiliser *@
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @((Model.Date.HasValue) ? Model.Date.Value.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotSet)
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="InOrgnaicManureDuration" asp-controller="FertiliserManure">@Resource.lblChange</govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        @Resource.lblHowMuchOfEachNutrientDoYouPlan
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @if ((Model.N.HasValue) && Model.N.Value > 0)
+                        {
+                            @string.Format(Resource.lblKgWithNutrient, Model.N.Value, Resource.lblNitrogen)
+                            <br />
+                        }
+                        @if ((Model.P2O5.HasValue) && Model.P2O5.Value > 0)
+                        {
+                            @string.Format(Resource.lblKgWithNutrient, Model.P2O5.Value, Resource.lblPhosphateP2O5)
+                            <br />
+                        }
+                        @if ((Model.K2O.HasValue) && Model.K2O.Value > 0)
+                        {
+                            @string.Format(Resource.lblKgWithNutrient, Model.K2O.Value, Resource.lblPotashK2O)
+                            <br />
+                        }
+                        @if ((Model.SO3.HasValue) && Model.SO3.Value > 0)
+                        {
+                            @string.Format(Resource.lblKgWithNutrient, Model.SO3.Value, Resource.lblSulphurSO3)
+                            <br />
+                        }
+                        @if ((Model.Lime.HasValue) && Model.Lime.Value > 0)
+                        {
+                            @(string.Format(Resource.lblKgWithNutrient, Model.Lime.Value, Resource.lblLime))
+                            <br />
+                        }
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="NutrientValues" asp-controller="FertiliserManure">@Resource.lblChange</govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+
+
             </govuk-summary-list>
 
             <govuk-button type="submit" class="margin-bottom-forty">
@@ -225,8 +226,8 @@
             </govuk-button>
 
             <p class="govuk-body cancel-link"><a asp-action="CreateFertiliserManureCancel" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
-     
-</form>
+
+        </form>
     </div>
 
 </div>
