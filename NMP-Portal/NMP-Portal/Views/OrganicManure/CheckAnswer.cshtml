@@ -348,12 +348,7 @@
                         @string.Format(Resource.lblWhenAreYouApplyingYourManureType, Model.ManureTypeName)
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
-                        @((Model.ApplicationDate.HasValue) ? Model.ApplicationDate.Value.Date.ToString("dd MMMM yyyy") : Resource.lblNotSet)
-                        @* @if(Model.IsClosedPeriodWarning)
-                        {
-                        <br />
-                        <p class="govuk-body strong">@Resource.MsgApplicationDateEnteredIsInsideClosedPeriod</p>
-                        } *@
+                        @((Model.ApplicationDate.HasValue) ? Model.ApplicationDate.Value.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotSet)
 
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
