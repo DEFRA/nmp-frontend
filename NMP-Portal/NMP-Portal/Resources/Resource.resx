@@ -2942,13 +2942,13 @@ cubic metres per hectare  not set</value>
     <value>Previous crop</value>
   </data>
   <data name="lblPrint1" xml:space="preserve">
-    <value>To save as a PDF choose 'Print or save as a PDF',</value>
+    <value>Select the &lt;strong&gt;Print or save as PDF&lt;/strong&gt; button below - or, in your desktop browser, open the menu and select &lt;strong&gt;Print&lt;/strong&gt;.</value>
   </data>
   <data name="lblPrint2" xml:space="preserve">
-    <value>Select, 'Save as PDF', where you are asked to select a printer,</value>
+    <value>In the box where it asks you to choose a printer, select &lt;strong&gt;Print to PDF&lt;/strong&gt;. This will create a PDF instead of a printed copy.</value>
   </data>
   <data name="lblPrint3" xml:space="preserve">
-    <value>Select, 'Print', then choose where to save the PDF.</value>
+    <value>Select &lt;strong&gt;Print&lt;/strong&gt;, then choose where on your computer you want to save the new PDF.</value>
   </data>
   <data name="lblPrintOrSaveAsAPDF" xml:space="preserve">
     <value>Print or save as a PDF</value>
@@ -3441,5 +3441,8 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="lblHowValuesAreEntered" xml:space="preserve">
     <value>How values are entered (e.g., Index values)</value>
+  </data>
+  <data name="lblHowtosaveyourplanasaPDF" xml:space="preserve">
+    <value>How to save your plan as a PDF</value>
   </data>
 </root>
