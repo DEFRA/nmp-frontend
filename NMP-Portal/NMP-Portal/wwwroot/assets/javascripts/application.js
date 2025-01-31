@@ -9,4 +9,11 @@ document.addEventListener("DOMContentLoaded", function () {
             window.print();
         });
     }
+
+    const backButton = document.getElementById("BackToPreviousPage");
+    if (backButton) {
+        backButton.addEventListener("click", function () {
+            window.history.back();
+        });
+    }
 });
