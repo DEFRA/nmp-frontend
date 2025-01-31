@@ -222,7 +222,7 @@ namespace NMP.Portal.Controllers
                         field.SoilAnalyses.MagnesiumIndex = fieldResponse.SoilAnalysis.MagnesiumIndex;
                         field.SoilAnalyses.PhosphorusMethodologyID = fieldResponse.SoilAnalysis.PhosphorusMethodologyID;
                         field.SoilAnalyses.SulphurDeficient = fieldResponse.SoilAnalysis.SulphurDeficient;
-                        field.SoilAnalyses.Date = fieldResponse.SoilAnalysis.Date;
+                        field.SoilAnalyses.Date = fieldResponse.SoilAnalysis.Date.Value.ToLocalTime().Date;
                         field.RecentSoilAnalysisQuestion = true;
                         if (fieldResponse.SoilAnalysis.PotassiumIndex != null)
                         {
@@ -1842,7 +1842,7 @@ namespace NMP.Portal.Controllers
                             if (_soilAnalysisDataProtector.Unprotect(q) == Resource.lblFalse)
                             {
                                 ViewBag.Success = Resource.lblFalse;
-                                ViewBag.Error = Resource.MsgSoilAnalysisCouldNotAdded;                                
+                                ViewBag.Error = Resource.MsgSoilAnalysisCouldNotAdded;
                             }
                             else
                             {
@@ -1851,14 +1851,18 @@ namespace NMP.Portal.Controllers
                                 {
                                     ViewBag.SuccessMsgContent = string.Format(Resource.lblYouHaveAddedANewSoilAnalysisForFieldName, model.Name);
                                 }
-                                else
+                                else if (!string.IsNullOrWhiteSpace(s) && _soilAnalysisDataProtector.Unprotect(s) == Resource.lblUpdate)
                                 {
                                     ViewBag.SuccessMsgContent = string.Format(Resource.lblYouHaveUpdatedASoilAnalysisForFieldName, model.Name);
                                 }
-                                if (soilAnalysisResponse.Count > 0)
+                                else if (!string.IsNullOrWhiteSpace(s) && _soilAnalysisDataProtector.Unprotect(s) == Resource.lblRemove)
                                 {
-                                    List<Crop> crop = (await _iCropService.FetchCropsByFieldId(soilAnalysisResponse.FirstOrDefault().FieldID.Value)).ToList();
-                                    if (crop != null && crop.Count > 0)
+                                    ViewBag.SuccessMsgContent = string.Format(Resource.lblYouHaveRemovedASoilAnalysisForFieldName, model.Name);
+                                }
+                                List<Crop> crop = (await _iCropService.FetchCropsByFieldId(model.ID.Value)).ToList();
+                                if (crop != null && crop.Count > 0)
+                                {
+                                    if (soilAnalysisResponse.Count > 0)
                                     {
                                         bool anyPlan = crop.Any(x => x.Year >= (soilAnalysisResponse.FirstOrDefault()?.Year ?? 0));
                                         if (anyPlan)
@@ -1870,9 +1874,9 @@ namespace NMP.Portal.Controllers
                                             }
                                             else
                                             {
-                                                ViewBag.SuccessMsgAdditionalContent = string.Format(Resource.lblThisMayChangeYourNutrientRecommendations, soilAnalysisResponse.FirstOrDefault().Year);
+                                                ViewBag.SuccessMsgAdditionalContent = string.Format(Resource.lblThisMayChangeYourNutrientRecommendations);
                                             }
-                                            
+
                                             ViewBag.CropYear = _farmDataProtector.Protect(cropYear.ToString());
                                             if (!string.IsNullOrWhiteSpace(s) && _soilAnalysisDataProtector.Unprotect(s) == Resource.lblAdd)
                                             {
@@ -1884,6 +1888,12 @@ namespace NMP.Portal.Controllers
                                             }
                                             ViewBag.SuccessMsgAdditionalContentThird = Resource.lblToSeeItsRecommendations;
                                         }
+                                    }
+                                    else if (!string.IsNullOrWhiteSpace(s) && (_soilAnalysisDataProtector.Unprotect(s) == Resource.lblUpdate || _soilAnalysisDataProtector.Unprotect(s) == Resource.lblRemove))
+                                    {
+                                        ViewBag.SuccessMsgAdditionalContent = string.Format(Resource.lblThisMayChangeYourNutrientRecommendations);
+                                        ViewBag.SuccessMsgAdditionalContentSecondForUpdate = string.Format(Resource.lblCropPlan);
+                                        ViewBag.SuccessMsgAdditionalContentThird = Resource.lblToSeeItsRecommendations;
                                     }
 
                                 }

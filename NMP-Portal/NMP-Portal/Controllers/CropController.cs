@@ -115,7 +115,7 @@ namespace NMP.Portal.Controllers
 
                     _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("CropData", model);
                 }
-                if (model != null &&  model.IsPlanRecord.Value)
+                if (model != null && model.IsPlanRecord.Value)
                 {
                     return RedirectToAction("PlansAndRecordsOverview", "Crop", new { id = model.EncryptedFarmId, year = _farmDataProtector.Protect(model.Year.ToString()) });
                 }
@@ -568,6 +568,20 @@ namespace NMP.Portal.Controllers
                         _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                         return RedirectToAction("SowingDateQuestion");
                     }
+                    else
+                    {
+                        if (model.Crops != null && model.Crops.Count > 0)
+                        {
+                            foreach (var crop in model.Crops)
+                            {
+                                if (crop.FieldID != null)
+                                {
+                                    crop.CropOrder = fieldsAllowedForSecondCrop.Contains(crop.FieldID.Value) ? 2 : 1;
+                                }
+                            }
+                        }
+
+                    }
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
 
@@ -961,7 +975,7 @@ namespace NMP.Portal.Controllers
                 //    ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Add(Resource.MsgTheDateMustInclude);
                 //}
                 //else 
-                if (dateError != null && (dateError.Equals(Resource.MsgDateMustBeARealDate) || 
+                if (dateError != null && (dateError.Equals(Resource.MsgDateMustBeARealDate) ||
                     dateError.Equals(Resource.MsgDateMustIncludeAMonth) ||
                      dateError.Equals(Resource.MsgDateMustIncludeAMonthAndYear) ||
                      dateError.Equals(Resource.MsgDateMustIncludeADayAndYear) ||
@@ -993,12 +1007,12 @@ namespace NMP.Portal.Controllers
             if (model.Crops[model.SowingDateCurrentCounter].SowingDate > maxDate)
             {
                 //Anil Yadav 23.01.2025 : NMPT1070 NMPT Date Validation Rules​: If perennial flag is true = no minimum date validation.Max date = end of calendar
-                ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate",string.Format(Resource.MsgPlantingDateAfterHarvestYear, model.Year.Value, maxDate.Date.ToString("dd MMMM yyyy")));
+                ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", string.Format(Resource.MsgPlantingDateAfterHarvestYear, model.Year.Value, maxDate.Date.ToString("dd MMMM yyyy")));
             }
 
             if (!isPerennial)
             {
-                DateTime minDate = new DateTime(model.Year.Value -1, 01, 01);
+                DateTime minDate = new DateTime(model.Year.Value - 1, 01, 01);
                 if (model.Crops[model.SowingDateCurrentCounter].SowingDate < minDate)
                 {
                     //Anil Yadav 23.01.2025 : NMPT1070 NMPT Date Validation Rules​: If perennial flag is true = no minimum date validation.Max date = end of calendar
@@ -1217,13 +1231,13 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", Resource.MsgEnterFigureBeforeContinuing);
             }
-            if(model.Crops[model.YieldCurrentCounter].Yield> Convert.ToInt32(Resource.lblFiveDigit))
+            if (model.Crops[model.YieldCurrentCounter].Yield > Convert.ToInt32(Resource.lblFiveDigit))
             {
                 ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", Resource.MsgEnterAValueOfNoMoreThan5Digits);
             }
-            if (model.Crops[model.YieldCurrentCounter].Yield <0)
+            if (model.Crops[model.YieldCurrentCounter].Yield < 0)
             {
-                ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield",string.Format(Resource.lblEnterAPositiveValueOfPropertyName,Resource.lblYield));
+                ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", string.Format(Resource.lblEnterAPositiveValueOfPropertyName, Resource.lblYield));
             }
 
             if (!ModelState.IsValid)
@@ -1322,7 +1336,7 @@ namespace NMP.Portal.Controllers
 
                 string? cropInfoOneQuestion = await _cropService.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0);
                 ViewBag.CropInfoOneQuestion = cropInfoOneQuestion;
-                if(cropInfoOneQuestion==null)
+                if (cropInfoOneQuestion == null)
                 {
                     model.CropInfo1Name = cropInfoOneList.FirstOrDefault(x => x.CropInfo1Name == Resource.lblNone).CropInfo1Name;
                     model.CropInfo1 = cropInfoOneList.FirstOrDefault(x => x.CropInfo1Name == Resource.lblNone).CropInfo1Id;
@@ -1347,7 +1361,7 @@ namespace NMP.Portal.Controllers
                         return RedirectToAction("CheckAnswer");
                     }
                 }
-                
+
 
             }
             catch (Exception ex)
@@ -1550,7 +1564,7 @@ namespace NMP.Portal.Controllers
             return View(model);
         }
 
-        public IActionResult BackCheckAnswer()
+        public async Task<IActionResult> BackCheckAnswer()
         {
             _logger.LogTrace("Crop Controller : BackCheckAnswer() action called");
             PlanViewModel? model = null;
@@ -1562,10 +1576,29 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-            string action = model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other ? "Yield" : model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Cereals ?
-                "CropInfoTwo" : "CropInfoOne";
-            model.IsCheckAnswer = false;
-            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("CropData", model);
+            //string action = model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other ? "Yield" : model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Cereals ?
+            //    "CropInfoTwo" : "CropInfoOne";
+            string action = "YieldQuestion";
+            try
+            {
+                List<CropInfoOneResponse> cropInfoOneResponse = await _cropService.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0);
+                var country = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                List<CropInfoOneResponse> cropInfoOneList = cropInfoOneResponse.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.RB209Country.All).ToList();
+
+                 action = model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Cereals ?
+                    "CropInfoTwo" : (((model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other)
+                    || cropInfoOneList.Count == 1) ?
+                    ((model.YieldQuestion != (int)NMP.Portal.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields) ?
+                "Yield" : "YieldQuestion") : "CropInfoOne");
+                model.IsCheckAnswer = false;
+                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("CropData", model);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogTrace($"Crop Controller : Exception in BackCheckAnswer() action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorCreatePlan"] = ex.Message;
+                return View("CheckAnswer",model);
+            }
             return RedirectToAction(action, new { q = model.YieldEncryptedCounter });
         }
 
@@ -1772,7 +1805,7 @@ namespace NMP.Portal.Controllers
                                         ViewBag.PendingField = isSecondCropAllowed;
                                     }
                                 }
-                                model.Rainfall = harvestYearPlanResponse.farmDetails.Rainfall;                                
+                                model.Rainfall = harvestYearPlanResponse.farmDetails.Rainfall;
                                 var harvestYearPlans = new HarvestYearPlans
                                 {
 
@@ -2146,7 +2179,7 @@ namespace NMP.Portal.Controllers
                                     CropInfo2 = recommendation.Crops.CropInfo2,
                                     Yield = recommendation.Crops.Yield,
                                     SowingDate = recommendation.Crops.SowingDate,
-                                    OtherCropName=recommendation.Crops.OtherCropName,
+                                    OtherCropName = recommendation.Crops.OtherCropName,
                                     CropTypeName = await _fieldService.FetchCropTypeById(recommendation.Crops.CropTypeID.Value)
 
                                 };
@@ -2176,7 +2209,7 @@ namespace NMP.Portal.Controllers
                                     model.PKBalance = new PKBalance();
                                     model.PKBalance.PBalance = recommendation.PKBalance.PBalance;
                                     model.PKBalance.KBalance = recommendation.PKBalance.KBalance;
-                                   
+
                                 }
                                 if (recommendation.RecommendationData.Count > 0)
                                 {
@@ -2234,7 +2267,7 @@ namespace NMP.Portal.Controllers
 
                                         };
                                         model.Recommendations.Add(rec);
-                                       
+
                                         if (recData.RecommendationComments.Count > 0)
                                         {
                                             foreach (var item in recData.RecommendationComments)
@@ -2303,7 +2336,7 @@ namespace NMP.Portal.Controllers
                                 model.Nutrients = new List<NutrientResponseWrapper>();
                                 model.Nutrients = nutrients;
                             }
-                                
+
                         }
                     }
                 }
