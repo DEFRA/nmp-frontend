@@ -70,6 +70,42 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If you experience a technical problem with any of the functionality in this service, you can email: &lt;a  href=&quot;mailto:helpdesk@rsk-bsl.co.uk&quot;&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt;..
+        /// </summary>
+        public static string contentGettingHelp1 {
+            get {
+                return ResourceManager.GetString("contentGettingHelp1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please tell us what you were trying to do, what happened, and what you expected. This will help us to identify the problem..
+        /// </summary>
+        public static string contentGettingHelp2 {
+            get {
+                return ResourceManager.GetString("contentGettingHelp2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We will reply to your email as quickly as we can, where possible..
+        /// </summary>
+        public static string contentGettingHelp3 {
+            get {
+                return ResourceManager.GetString("contentGettingHelp3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you would like to give us feedback about this service, then please email: &lt;a  href=&quot;mailto:nmpt@defra.gov.uk&quot;&gt;nmpt@defra.gov.uk&lt;/a&gt;..
+        /// </summary>
+        public static string contentGivingFeedbackAboutThisService1 {
+            get {
+                return ResourceManager.GetString("contentGivingFeedbackAboutThisService1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The first step is to set up your farm. The farm will contain your fields, and the fields will have the crops and nutrients applied to them. If you have more than one holding, it&apos;s best to add a separate farm for each one..
         /// </summary>
         public static string ContentHowToolWorks {
@@ -354,6 +390,42 @@ namespace NMP.Portal.Resources {
         public static string lblA {
             get {
                 return ResourceManager.GetString("lblA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Create a plan for efficient nutrient management service (&apos;this service&apos;) is currently in a private beta phase. This means that we are testing this service by invitation only. Some functionality may not work as expected and some features have not yet been developed..
+        /// </summary>
+        public static string lblAboutGetHelpAndFeedback {
+            get {
+                return ResourceManager.GetString("lblAboutGetHelpAndFeedback", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to About recommendations, guidance, and advice in private beta.
+        /// </summary>
+        public static string lblAboutRecommendationGuidenceAdvice {
+            get {
+                return ResourceManager.GetString("lblAboutRecommendationGuidenceAdvice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Department for Environment, Food &amp; Rural Affairs (DEFRA), the Agriculture and Horticulture Development Board (AHDB), ADAS and the RSK group take no responsibility for any recommendations, guidance, or advice given during the private beta phase of this service..
+        /// </summary>
+        public static string lblAboutRecommendationGuidenceAdviceContent1 {
+            get {
+                return ResourceManager.GetString("lblAboutRecommendationGuidenceAdviceContent1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Any recommendations and advice given in the current version of this service (private beta) can not be used to demonstrate compliance with any regulation or legislation, or as evidence for any government scheme. This includes the Sustainable Farming Incentive (SFI)..
+        /// </summary>
+        public static string lblAboutRecommendationGuidenceAdviceContent2 {
+            get {
+                return ResourceManager.GetString("lblAboutRecommendationGuidenceAdviceContent2", resourceCulture);
             }
         }
         
@@ -2932,6 +3004,33 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Get help or give feedback.
+        /// </summary>
+        public static string lblGetHelpAndFeedback {
+            get {
+                return ResourceManager.GetString("lblGetHelpAndFeedback", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Getting help.
+        /// </summary>
+        public static string lblGettingHelp {
+            get {
+                return ResourceManager.GetString("lblGettingHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Giving feedback about this service.
+        /// </summary>
+        public static string lblGivingFeedbackAboutThisService {
+            get {
+                return ResourceManager.GetString("lblGivingFeedbackAboutThisService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Grass details for {0}.
         /// </summary>
         public static string lblGrassDetailsForField {
@@ -3257,20 +3356,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How values are entered (e.g., Index values).
-        /// </summary>
-        public static string lblHowValuesAreEntered {
-            get {
-                return ResourceManager.GetString("lblHowValuesAreEntered", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to How to save your plan as a PDF.
         /// </summary>
         public static string lblHowtosaveyourplanasaPDF {
             get {
                 return ResourceManager.GetString("lblHowtosaveyourplanasaPDF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How values are entered (e.g., Index values).
+        /// </summary>
+        public static string lblHowValuesAreEntered {
+            get {
+                return ResourceManager.GetString("lblHowValuesAreEntered", resourceCulture);
             }
         }
         
@@ -4833,7 +4932,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your feedback will help us to improve..
+        ///   Looks up a localized string similar to This is a new service. &lt;a href=&quot;/HelpAndFeedback&quot;&gt;Get help or give your feedback&lt;/a&gt;..
         /// </summary>
         public static string lblPhaseBannerText {
             get {
@@ -8177,6 +8276,15 @@ namespace NMP.Portal.Resources {
         public static string lblYourFarms {
             get {
                 return ResourceManager.GetString("lblYourFarms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your feedback will help us improve this service..
+        /// </summary>
+        public static string lblYourFeedbackWillHelpUsImproveThisService {
+            get {
+                return ResourceManager.GetString("lblYourFeedbackWillHelpUsImproveThisService", resourceCulture);
             }
         }
         
