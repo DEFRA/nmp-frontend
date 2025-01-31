@@ -72,7 +72,7 @@ namespace NMP.Portal.Controllers
         //                    (SoilAnalysis soilAnalysis, error) = await _soilAnalysisService.FetchSoilAnalysisById(Convert.ToInt32(soilAnalysisId));
         //                    if (soilAnalysis != null && error == null)
         //                    {
-                                
+
         //                        model.PhosphorusMethodology = Enum.GetName(
         //                           typeof(PhosphorusMethodology), soilAnalysis.PhosphorusMethodologyID);
         //                        //soilAnalysis. = Enum.GetName(
@@ -721,7 +721,7 @@ namespace NMP.Portal.Controllers
                 }
             }
 
-            model.Year= model.Date.Value.Month>=8?model.Date.Value.Year+1:model.Date.Value.Year;
+            model.Year = model.Date.Value.Month >= 8 ? model.Date.Value.Year + 1 : model.Date.Value.Year;
 
             var soilData = new
             {
@@ -781,7 +781,7 @@ namespace NMP.Portal.Controllers
                 success = _soilAnalysisDataProtector.Protect(Resource.lblTrue);
                 //if (model.isSoilAnalysisAdded != null && model.isSoilAnalysisAdded.Value)
                 //{
-                  //  return RedirectToAction("FieldSoilAnalysisDetail", "Field", new { id = model.EncryptedFieldId, farmId = model.EncryptedFarmId, q = success, r = _fieldDataProtector.Protect(Resource.lblSoilAnalysis) });
+                //  return RedirectToAction("FieldSoilAnalysisDetail", "Field", new { id = model.EncryptedFieldId, farmId = model.EncryptedFarmId, q = success, r = _fieldDataProtector.Protect(Resource.lblSoilAnalysis) });
                 //}
                 //return RedirectToAction("SoilAnalysisDetail", new { i = model.EncryptedFieldId, j = model.EncryptedFarmId, k = success, l = model.EncryptedSoilAnalysisId });
             }
@@ -795,7 +795,7 @@ namespace NMP.Portal.Controllers
                 }
             }
 
-            return RedirectToAction("FieldSoilAnalysisDetail", "Field", new { id = model.EncryptedFieldId, farmId = model.EncryptedFarmId, q = success, r = _fieldDataProtector.Protect(Resource.lblSoilAnalysis),s=(model.isSoilAnalysisAdded!=null&&model.isSoilAnalysisAdded.Value)?_soilAnalysisDataProtector.Protect(Resource.lblAdd):_soilAnalysisDataProtector.Protect(Resource.lblUpdate) });
+            return RedirectToAction("FieldSoilAnalysisDetail", "Field", new { id = model.EncryptedFieldId, farmId = model.EncryptedFarmId, q = success, r = _fieldDataProtector.Protect(Resource.lblSoilAnalysis), s = (model.isSoilAnalysisAdded != null && model.isSoilAnalysisAdded.Value) ? _soilAnalysisDataProtector.Protect(Resource.lblAdd) : _soilAnalysisDataProtector.Protect(Resource.lblUpdate) });
             //return RedirectToAction("SoilAnalysisDetail", new { i = model.EncryptedFieldId, j = model.EncryptedFarmId, k = success ,l=model.EncryptedSoilAnalysisId});
         }
         [HttpGet]
@@ -819,6 +819,57 @@ namespace NMP.Portal.Controllers
             }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("SoilAnalysisData", model);
             return RedirectToAction("SulphurDeficient", model);
+        }
+        [HttpGet]
+        public IActionResult RemoveSoilAnalysis()
+        {
+            _logger.LogTrace($"Soil Analysis Controller: RemoveSoilAnalysis() action called.");
+            SoilAnalysisViewModel model = new SoilAnalysisViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("SoilAnalysisData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<SoilAnalysisViewModel>("SoilAnalysisData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveSoilAnalysis(SoilAnalysisViewModel model)
+        {
+            _logger.LogTrace($"Soil Analysis Controller: RemoveSoilAnalysis() post action called.");
+            if (model.SoilAnalysisRemove == null)
+            {
+                ModelState.AddModelError("SoilAnalysisRemove", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View("RemoveSoilAnalysis", model);
+            }
+
+            if (model.SoilAnalysisRemove.Value)
+            {
+                int soilAnalysisId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedSoilAnalysisId));
+
+                _logger.LogTrace($"SoilAnalysisController: soil-analyses/{soilAnalysisId} called.");
+                (string success, Error error) = await _soilAnalysisService.DeleteSoilAnalysisByIdAsync(soilAnalysisId);
+
+                if (!string.IsNullOrWhiteSpace(error.Message))
+                {
+                    success = _soilAnalysisDataProtector.Protect(Resource.lblFalse);
+                    TempData["RemoveSoilAnalysisError"] = error.Message;
+                    return View(model);
+                }
+                success = _soilAnalysisDataProtector.Protect(Resource.lblTrue);
+                return RedirectToAction("FieldSoilAnalysisDetail", "Field", new { id = model.EncryptedFieldId, farmId = model.EncryptedFarmId, q = success, r = _fieldDataProtector.Protect(Resource.lblSoilAnalysis), s = _soilAnalysisDataProtector.Protect(Resource.lblRemove) });
+            }
+            else
+            {
+                return RedirectToAction("ChangeSoilAnalysis", new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
+            }
+            //return RedirectToAction("SoilAnalysisDetail", new { i = model.EncryptedFieldId, j = model.EncryptedFarmId, k = success ,l=model.EncryptedSoilAnalysisId});
         }
 
     }

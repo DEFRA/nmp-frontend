@@ -3257,6 +3257,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How values are entered (e.g., Index values).
+        /// </summary>
+        public static string lblHowValuesAreEntered {
+            get {
+                return ResourceManager.GetString("lblHowValuesAreEntered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How to save your plan as a PDF.
+        /// </summary>
+        public static string lblHowtosaveyourplanasaPDF {
+            get {
+                return ResourceManager.GetString("lblHowtosaveyourplanasaPDF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How was the grass typically managed each year?.
         /// </summary>
         public static string lblHowWasTheGrassTypicallyManagedEachYear {
@@ -5202,7 +5220,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To save as a PDF choose &apos;Print or save as a PDF&apos;,.
+        ///   Looks up a localized string similar to Select the &lt;strong&gt;Print or save as PDF&lt;/strong&gt; button below - or, in your desktop browser, open the menu and select &lt;strong&gt;Print&lt;/strong&gt;..
         /// </summary>
         public static string lblPrint1 {
             get {
@@ -5211,7 +5229,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select, &apos;Save as PDF&apos;, where you are asked to select a printer,.
+        ///   Looks up a localized string similar to In the box where it asks you to choose a printer, select &lt;strong&gt;Print to PDF&lt;/strong&gt;. This will create a PDF instead of a printed copy..
         /// </summary>
         public static string lblPrint2 {
             get {
@@ -5220,7 +5238,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select, &apos;Print&apos;, then choose where to save the PDF..
+        ///   Looks up a localized string similar to Select &lt;strong&gt;Print&lt;/strong&gt;, then choose where on your computer you want to save the new PDF..
         /// </summary>
         public static string lblPrint3 {
             get {
@@ -5432,6 +5450,24 @@ namespace NMP.Portal.Resources {
         public static string lblRemoveField {
             get {
                 return ResourceManager.GetString("lblRemoveField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Any recommandations for {0} will be based on previous soil analysis, where they exist. Without any soil analysis the recommendations will be based on the RB209 default values instead..
+        /// </summary>
+        public static string lblRemoveSoilAnalysisContentFirst {
+            get {
+                return ResourceManager.GetString("lblRemoveSoilAnalysisContentFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove soil analysis from {0}.
+        /// </summary>
+        public static string lblRemoveSoilAnalysisFromFieldName {
+            get {
+                return ResourceManager.GetString("lblRemoveSoilAnalysisFromFieldName", resourceCulture);
             }
         }
         
@@ -6206,6 +6242,15 @@ namespace NMP.Portal.Resources {
         public static string lblSulphur {
             get {
                 return ResourceManager.GetString("lblSulphur", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sulphur (S) deficiency status.
+        /// </summary>
+        public static string lblSulphurDeficiencyStatus {
+            get {
+                return ResourceManager.GetString("lblSulphurDeficiencyStatus", resourceCulture);
             }
         }
         
@@ -8042,6 +8087,15 @@ namespace NMP.Portal.Resources {
         public static string lblYouHaveRemoved {
             get {
                 return ResourceManager.GetString("lblYouHaveRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have removed a soil analysis for {0}.
+        /// </summary>
+        public static string lblYouHaveRemovedASoilAnalysisForFieldName {
+            get {
+                return ResourceManager.GetString("lblYouHaveRemovedASoilAnalysisForFieldName", resourceCulture);
             }
         }
         
