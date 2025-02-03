@@ -8516,6 +8516,42 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The application date you entered is inside your closed period for applying manure with a high readily available nitrogen content.
+        /// </summary>
+        public static string MsgClosedPeriodWarningHeadingWales {
+            get {
+                return ResourceManager.GetString("MsgClosedPeriodWarningHeadingWales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that the closed period for {0} planted on organic farms {1} on {2} soil is {3}..
+        /// </summary>
+        public static string MsgClosedPeriodWarningPara1England {
+            get {
+                return ResourceManager.GetString("MsgClosedPeriodWarningPara1England", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Water Resources Regulations state that the closed period for {0} planted on organic farms {1} on {2} soil is {3}..
+        /// </summary>
+        public static string MsgClosedPeriodWarningPara1Wales {
+            get {
+                return ResourceManager.GetString("MsgClosedPeriodWarningPara1Wales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider applying outside the closed period..
+        /// </summary>
+        public static string MsgClosedPeriodWarningPara2England {
+            get {
+                return ResourceManager.GetString("MsgClosedPeriodWarningPara2England", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which option applies to your {0} not set?.
         /// </summary>
         public static string MsgCropInfo1NotSet {
@@ -8728,6 +8764,168 @@ namespace NMP.Portal.Resources {
         public static string MsgEndOfSoilDrainageNotSet {
             get {
                 return ResourceManager.GetString("MsgEndOfSoilDrainageNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application will take you over the maximum application rate for slurry between the end of the closed spreading period and the end of February.
+        /// </summary>
+        public static string MsgEndPeriodEndFebWarningHeading30SlurryEngland {
+            get {
+                return ResourceManager.GetString("MsgEndPeriodEndFebWarningHeading30SlurryEngland", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application will take you over the maximum application rate for slurry between the end of the closed spreading period and the end of February.
+        /// </summary>
+        public static string MsgEndPeriodEndFebWarningHeading30SlurryWales {
+            get {
+                return ResourceManager.GetString("MsgEndPeriodEndFebWarningHeading30SlurryWales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application will take you over the maximum application rate for poultry manure between the end of the closed spreading period and the end of February.
+        /// </summary>
+        public static string MsgEndPeriodEndFebWarningHeading8PoultryEngland {
+            get {
+                return ResourceManager.GetString("MsgEndPeriodEndFebWarningHeading8PoultryEngland", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application will take you over the maximum application rate for poultry manure between the end of the closed spreading period and the end of February.
+        /// </summary>
+        public static string MsgEndPeriodEndFebWarningHeading8PoultryWales {
+            get {
+                return ResourceManager.GetString("MsgEndPeriodEndFebWarningHeading8PoultryWales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must allow at least 3 weeks between applications from the end of the closed spreading period to the end of February.
+        /// </summary>
+        public static string MsgEndPeriodEndFebWarningHeadingWithin20DaysEngland {
+            get {
+                return ResourceManager.GetString("MsgEndPeriodEndFebWarningHeadingWithin20DaysEngland", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must allow at least 3 weeks between applications from the end of the closed spreading period to the end of February.
+        /// </summary>
+        public static string MsgEndPeriodEndFebWarningHeadingWithin20DaysWales {
+            get {
+                return ResourceManager.GetString("MsgEndPeriodEndFebWarningHeadingWithin20DaysWales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state you must not spread more than 30 cubic meters per hectare of slurry in a single application from the end of the closed spreading period until the end of February..
+        /// </summary>
+        public static string MsgEndPeriodEndFebWarningPara1st30SlurryEngland {
+            get {
+                return ResourceManager.GetString("MsgEndPeriodEndFebWarningPara1st30SlurryEngland", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state you must not spread more than 8 tonnes per hectare of poultry manure in a single application from the end of the closed spreading period until the end of February..
+        /// </summary>
+        public static string MsgEndPeriodEndFebWarningPara1st8PoultryEngland {
+            get {
+                return ResourceManager.GetString("MsgEndPeriodEndFebWarningPara1st8PoultryEngland", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that, between the end of the closed spreading period and the end of February, you must allow at least 3 weeks between each individual application of slurry or poultry manure..
+        /// </summary>
+        public static string MsgEndPeriodEndFebWarningPara1Within20DaysEngland {
+            get {
+                return ResourceManager.GetString("MsgEndPeriodEndFebWarningPara1Within20DaysEngland", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Water Resources Regulations state that, between the end of the closed spreading period and the end of February, you must allow at least 3 weeks between each individual application of slurry or poultry manure..
+        /// </summary>
+        public static string MsgEndPeriodEndFebWarningPara1Within20DaysWales {
+            get {
+                return ResourceManager.GetString("MsgEndPeriodEndFebWarningPara1Within20DaysWales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider allowing more time between applications..
+        /// </summary>
+        public static string MsgEndPeriodEndFebWarningPara2nd30SlurryEngland {
+            get {
+                return ResourceManager.GetString("MsgEndPeriodEndFebWarningPara2nd30SlurryEngland", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources Regulations, and you should consider reducing the application rate of slurry..
+        /// </summary>
+        public static string MsgEndPeriodEndFebWarningPara2nd30SlurryWales {
+            get {
+                return ResourceManager.GetString("MsgEndPeriodEndFebWarningPara2nd30SlurryWales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the application rate of poultry manure..
+        /// </summary>
+        public static string MsgEndPeriodEndFebWarningPara2nd8PoultryEngland {
+            get {
+                return ResourceManager.GetString("MsgEndPeriodEndFebWarningPara2nd8PoultryEngland", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources Regulations, and you should consider reducing the application rate of poultry manure..
+        /// </summary>
+        public static string MsgEndPeriodEndFebWarningPara2nd8PoultryWales {
+            get {
+                return ResourceManager.GetString("MsgEndPeriodEndFebWarningPara2nd8PoultryWales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources Regulations, and you should consider allowing more time between applications..
+        /// </summary>
+        public static string MsgEndPeriodEndFebWarningPara2ndWithin20DaysWales {
+            get {
+                return ResourceManager.GetString("MsgEndPeriodEndFebWarningPara2ndWithin20DaysWales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider allowing more time between applications..
+        /// </summary>
+        public static string MsgEndPeriodEndFebWarningPara2Within20DaysEngland {
+            get {
+                return ResourceManager.GetString("MsgEndPeriodEndFebWarningPara2Within20DaysEngland", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Water Resources Regulations state you must not spread more than 30 cubic meters per hectare of slurry in a single application from the end of the closed spreading period until the end of February..
+        /// </summary>
+        public static string MsgEndPeriodEndFebWarningPara30SlurryWales {
+            get {
+                return ResourceManager.GetString("MsgEndPeriodEndFebWarningPara30SlurryWales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Water Resources Regulations state you must not spread more than 8 tonnes per hectare of poultry manure in a single application from the end of the closed spreading period until the end of February..
+        /// </summary>
+        public static string MsgEndPeriodEndFebWarningPara8PoultryWales {
+            get {
+                return ResourceManager.GetString("MsgEndPeriodEndFebWarningPara8PoultryWales", resourceCulture);
             }
         }
         

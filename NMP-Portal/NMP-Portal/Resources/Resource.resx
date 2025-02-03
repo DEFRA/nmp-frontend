@@ -3352,6 +3352,63 @@ cubic metres per hectare  not set</value>
   <data name="MsgNmaxWarningPara2England" xml:space="preserve">
     <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the amount of nitrogen from organic manures.</value>
   </data>
+  <data name="MsgClosedPeriodWarningHeadingWales" xml:space="preserve">
+    <value>The application date you entered is inside your closed period for applying manure with a high readily available nitrogen content</value>
+  </data>
+  <data name="MsgClosedPeriodWarningPara1England" xml:space="preserve">
+    <value>The Nitrate Vulnerable Zone (NVZ) rules state that the closed period for {0} planted on organic farms {1} on {2} soil is {3}.</value>
+  </data>
+  <data name="MsgClosedPeriodWarningPara1Wales" xml:space="preserve">
+    <value>The Water Resources Regulations state that the closed period for {0} planted on organic farms {1} on {2} soil is {3}.</value>
+  </data>
+  <data name="MsgClosedPeriodWarningPara2England" xml:space="preserve">
+    <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider applying outside the closed period.</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningHeading30SlurryEngland" xml:space="preserve">
+    <value>This application will take you over the maximum application rate for slurry between the end of the closed spreading period and the end of February</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningHeading30SlurryWales" xml:space="preserve">
+    <value>This application will take you over the maximum application rate for slurry between the end of the closed spreading period and the end of February</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningHeading8PoultryEngland" xml:space="preserve">
+    <value>This application will take you over the maximum application rate for poultry manure between the end of the closed spreading period and the end of February</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningHeading8PoultryWales" xml:space="preserve">
+    <value>This application will take you over the maximum application rate for poultry manure between the end of the closed spreading period and the end of February</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningHeadingWithin20DaysEngland" xml:space="preserve">
+    <value>You must allow at least 3 weeks between applications from the end of the closed spreading period to the end of February</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningHeadingWithin20DaysWales" xml:space="preserve">
+    <value>You must allow at least 3 weeks between applications from the end of the closed spreading period to the end of February</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningPara1st30SlurryEngland" xml:space="preserve">
+    <value>The Nitrate Vulnerable Zone (NVZ) rules state you must not spread more than 30 cubic meters per hectare of slurry in a single application from the end of the closed spreading period until the end of February.</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningPara1st8PoultryEngland" xml:space="preserve">
+    <value>The Nitrate Vulnerable Zone (NVZ) rules state you must not spread more than 8 tonnes per hectare of poultry manure in a single application from the end of the closed spreading period until the end of February.</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningPara1Within20DaysEngland" xml:space="preserve">
+    <value>The Nitrate Vulnerable Zone (NVZ) rules state that, between the end of the closed spreading period and the end of February, you must allow at least 3 weeks between each individual application of slurry or poultry manure.</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningPara1Within20DaysWales" xml:space="preserve">
+    <value>The Water Resources Regulations state that, between the end of the closed spreading period and the end of February, you must allow at least 3 weeks between each individual application of slurry or poultry manure.</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningPara2nd30SlurryEngland" xml:space="preserve">
+    <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider allowing more time between applications.</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningPara2nd8PoultryEngland" xml:space="preserve">
+    <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the application rate of poultry manure.</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningPara2Within20DaysEngland" xml:space="preserve">
+    <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider allowing more time between applications.</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningPara30SlurryWales" xml:space="preserve">
+    <value>The Water Resources Regulations state you must not spread more than 30 cubic meters per hectare of slurry in a single application from the end of the closed spreading period until the end of February.</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningPara8PoultryWales" xml:space="preserve">
+    <value>The Water Resources Regulations state you must not spread more than 8 tonnes per hectare of poultry manure in a single application from the end of the closed spreading period until the end of February.</value>
+  </data>
   <data name="ContentHowToolWorks" xml:space="preserve">
     <value>The first step is to set up your farm. The farm will contain your fields, and the fields will have the crops and nutrients applied to them. If you have more than one holding, it's best to add a separate farm for each one.</value>
   </data>
@@ -3426,6 +3483,15 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="lnkToRb209NutrientManagementGuide" xml:space="preserve">
     <value>https://ahdb.org.uk/nutrient-management-guide-rb209</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningPara2nd30SlurryWales" xml:space="preserve">
+    <value>It is an offence to breach the Water Resources Regulations, and you should consider reducing the application rate of slurry.</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningPara2nd8PoultryWales" xml:space="preserve">
+    <value>It is an offence to breach the Water Resources Regulations, and you should consider reducing the application rate of poultry manure.</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningPara2ndWithin20DaysWales" xml:space="preserve">
+    <value>It is an offence to breach the Water Resources Regulations, and you should consider allowing more time between applications.</value>
   </data>
   <data name="lblRemoveSoilAnalysisContentFirst" xml:space="preserve">
     <value>Any recommandations for {0} will be based on previous soil analysis, where they exist. Without any soil analysis the recommendations will be based on the RB209 default values instead.</value>
