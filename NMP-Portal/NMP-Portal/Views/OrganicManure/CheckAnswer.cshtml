@@ -96,7 +96,7 @@
                     @if (Model.IsEndClosedPeriodFebruaryWarning)
                     {
                         <p class="govuk-notification-banner__heading">
-                            @(Model.ManureTypeId == 8 ? Resource.lblThisApplicationMayTakeYouOverMaxARPoultryManure : Resource.lblApplicationRateOverTheMaximumRateForSlurry)
+                            @Model.EndClosedPeriodEndFebWarningHeading
                         </p>
                     }
                     @if (Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks)

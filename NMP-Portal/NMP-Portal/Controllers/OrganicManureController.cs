@@ -1402,27 +1402,10 @@ namespace NMP.Portal.Controllers
                                         {
                                             if (!(model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials))
                                             {
-                                                (string closedPeriod, string warningMsg, string SlurryOrPoultryManureExistWithinLast20Days, model.IsClosedPeriodWarning, model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks, error) = await IsClosedPeriodWarningMessage(model, field.IsWithinNVZ.Value, farm.RegisteredOrganicProducer.Value);
-                                                if (error == null)
-                                                {
-                                                    if (!string.IsNullOrWhiteSpace(closedPeriod))
-                                                    {
-                                                        TempData["ClosedPeriod"] = closedPeriod;
-                                                    }
-                                                    if (!string.IsNullOrWhiteSpace(warningMsg))
-                                                    {
-                                                        TempData["ClosedPeriodWarningDetail"] = warningMsg;
-                                                    }
-                                                    if (!string.IsNullOrWhiteSpace(SlurryOrPoultryManureExistWithinLast20Days))
-                                                    {
-                                                        TempData["SlurryOrPoultryManureExistWithinLast20Days"] = SlurryOrPoultryManureExistWithinLast20Days;
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    TempData["ManureApplyingDateError"] = error.Message;
-                                                    return View(model);
-                                                }
+                                                //(string closedPeriod, string warningMsg, string SlurryOrPoultryManureExistWithinLast20Days, model.IsClosedPeriodWarning, model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks, error) = await IsClosedPeriodWarningMessage(model, field.IsWithinNVZ.Value, farm.RegisteredOrganicProducer.Value);
+
+                                                (model, error) = await IsClosedPeriodWarningMessage(model, field.IsWithinNVZ.Value, farm.RegisteredOrganicProducer.Value, false);
+                                                
                                             }
 
                                         }
@@ -2705,19 +2688,8 @@ namespace NMP.Portal.Controllers
                                                 (model, error) = await IsNMaxWarningMessage(model, Convert.ToInt32(fieldId), managementIds[0], false);
                                                 if (error == null)
                                                 {
-                                                    (model.IsEndClosedPeriodFebruaryWarning, string message, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, Convert.ToInt32(fieldId));
-                                                    if (error == null)
-                                                    {
-                                                        if (!string.IsNullOrWhiteSpace(message))
-                                                        {
-                                                            TempData["EndClosedPeriodAndFebruaryWarningMessage"] = message;
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        ViewBag.Error = error.Message;
-                                                        return View(model);
-                                                    }
+                                                    (model, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, Convert.ToInt32(fieldId), false);
+                                                    
                                                 }
                                                 else
                                                 {
@@ -2897,19 +2869,8 @@ namespace NMP.Portal.Controllers
                                         {
                                             if (!(model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials))
                                             {
-                                                (model.IsEndClosedPeriodFebruaryWarning, message, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, Convert.ToInt32(fieldId));
-                                                if (error == null)
-                                                {
-                                                    if (!string.IsNullOrWhiteSpace(message))
-                                                    {
-                                                        TempData["EndClosedPeriodAndFebruaryWarningMessage"] = message;
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    TempData["ManualApplicationRateError"] = error.Message;
-                                                    return View(model);
-                                                }
+                                                (model, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, Convert.ToInt32(fieldId), false);
+                                                
                                             }
 
                                         }
@@ -3129,19 +3090,8 @@ namespace NMP.Portal.Controllers
                                         (model, error) = await IsNMaxWarningMessage(model, Convert.ToInt32(fieldId), managementIds[0], false);
                                         if (error == null)
                                         {
-                                            (model.IsEndClosedPeriodFebruaryWarning, string message, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, Convert.ToInt32(fieldId));
-                                            if (error == null)
-                                            {
-                                                if (!string.IsNullOrWhiteSpace(message))
-                                                {
-                                                    TempData["EndClosedPeriodAndFebruaryWarningMessage"] = message;
-                                                }
-                                            }
-                                            else
-                                            {
-                                                TempData["AreaAndQuantityError"] = error.Message;
-                                                return View(model);
-                                            }
+                                            (model, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, Convert.ToInt32(fieldId), false);
+                                            
                                         }
                                         else
                                         {
@@ -3898,7 +3848,7 @@ namespace NMP.Portal.Controllers
                                             {
                                                 if (!(model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials))
                                                 {
-                                                    (model.IsEndClosedPeriodFebruaryWarning, message, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, Convert.ToInt32(fieldId));
+                                                    (model, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, Convert.ToInt32(fieldId), true);
                                                     if (error != null)
                                                     {
                                                         TempData["ConditionsAffectingNutrientsError"] = error.Message;
@@ -3977,7 +3927,7 @@ namespace NMP.Portal.Controllers
                                         {
                                             if (!(model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials))
                                             {
-                                                (string closedPeriod, string warningMsg, string SlurryOrPoultryManureExistWithinLast20Days, model.IsClosedPeriodWarning, model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks, error) = await IsClosedPeriodWarningMessage(model, field.IsWithinNVZ.Value, farm.RegisteredOrganicProducer.Value);
+                                                (model, error) = await IsClosedPeriodWarningMessage(model, field.IsWithinNVZ.Value, farm.RegisteredOrganicProducer.Value, true);
                                                 if (error != null)
                                                 {
                                                     TempData["ConditionsAffectingNutrientsError"] = error.Message;
@@ -4848,7 +4798,7 @@ namespace NMP.Portal.Controllers
                             {
                                 (decimal? availableNFromMannerOutput, error) = await GetAvailableNFromMannerOutput(model);
                                 //decimal? currentApplicationN = totalNitrogen * model.ApplicationRate.Value;
-                                if(error==null)
+                                if (error == null)
                                 {
                                     if ((previousAppliedTotalN + availableNFromMannerOutput) > 250)
                                     {
@@ -4923,7 +4873,7 @@ namespace NMP.Portal.Controllers
                                 if (isGetCheckAnswer)
                                 {
                                     (decimal? availableNFromMannerOutput, error) = await GetAvailableNFromMannerOutput(model);
-                                    if(error ==null)
+                                    if (error == null)
                                     {
                                         if ((previousAppliedTotalN + availableNFromMannerOutput) > 500)
                                         {
@@ -4934,7 +4884,7 @@ namespace NMP.Portal.Controllers
                                             }
                                             else
                                             {
-                                                model.NmaxWarningHeading = Resource.MsgNmaxWarningHeadingEngland; 
+                                                model.NmaxWarningHeading = Resource.MsgNmaxWarningHeadingEngland;
                                             }
                                         }
                                     }
@@ -4991,7 +4941,7 @@ namespace NMP.Portal.Controllers
                                 if (isGetCheckAnswer)
                                 {
                                     (decimal? availableNFromMannerOutput, error) = await GetAvailableNFromMannerOutput(model);
-                                    if(error == null)
+                                    if (error == null)
                                     {
                                         if ((previousAppliedTotalN + availableNFromMannerOutput) > 1000)
                                         {
@@ -5073,7 +5023,7 @@ namespace NMP.Portal.Controllers
                                                 if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.Wales)
                                                 {
                                                     model.CropNmaxLimitWarningHeading = Resource.MsgCropNmaxLimitWarningHeadingWales;
-                                                    model.CropNmaxLimitWarningPara1= string.Format(Resource.MsgCropNmaxLimitWarningPara1Wales,model.CropTypeName, nMaxLimit);
+                                                    model.CropNmaxLimitWarningPara1 = string.Format(Resource.MsgCropNmaxLimitWarningPara1Wales, model.CropTypeName, nMaxLimit);
                                                 }
                                                 else
                                                 {
@@ -5122,7 +5072,7 @@ namespace NMP.Portal.Controllers
             }
             return (model, error);
         }
-        private async Task<(bool, string, Error?)> IsEndClosedPeriodFebruaryWarningMessage(OrganicManureViewModel model, int fieldId)
+        private async Task<(OrganicManureViewModel, Error?)> IsEndClosedPeriodFebruaryWarningMessage(OrganicManureViewModel model, int fieldId, bool isGetCheckAnswer)
         {
             Error? error = null;
             string warningMsg = string.Empty;
@@ -5132,7 +5082,7 @@ namespace NMP.Portal.Controllers
             (Farm farm, error) = await _farmService.FetchFarmByIdAsync(farmId);
             if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
             {
-                return (model.IsEndClosedPeriodFebruaryWarning, warningMsg, error);
+                return (model, error);
             }
             if (farm != null)
             {
@@ -5142,7 +5092,7 @@ namespace NMP.Portal.Controllers
                 bool isHighReadilyAvailableNitrogen = false;
                 if (error != null)
                 {
-                    return (model.IsEndClosedPeriodFebruaryWarning, warningMsg, error);
+                    return (model, error);
                 }
                 else
                 {
@@ -5154,13 +5104,15 @@ namespace NMP.Portal.Controllers
                     (FieldDetailResponse fieldDetail, error) = await _fieldService.FetchFieldDetailByFieldIdAndHarvestYear(fieldId, model.HarvestYear.Value, false);
                     if (error != null)
                     {
-                        return (model.IsEndClosedPeriodFebruaryWarning, warningMsg, error);
+                        return (model, error);
                     }
                     else
                     {
                         WarningMessage warningMessage = new WarningMessage();
                         string closedPeriod = string.Empty;
                         bool isPerennial = false;
+
+                        //Non Organic farm closed period
                         if (!farm.RegisteredOrganicProducer.Value && isHighReadilyAvailableNitrogen)
                         {
                             (CropTypeResponse cropTypeResponse, error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear ?? 0, false);
@@ -5170,11 +5122,12 @@ namespace NMP.Portal.Controllers
                             }
                             else
                             {
-                                return (model.IsEndClosedPeriodFebruaryWarning, warningMsg, error);
+                                return (model, error);
                             }
                             closedPeriod = warningMessage.ClosedPeriodNonOrganicFarm(fieldDetail, model.HarvestYear ?? 0, isPerennial);
                         }
 
+                        //Organic farm closed period
                         if (farm.RegisteredOrganicProducer.Value && isHighReadilyAvailableNitrogen)
                         {
                             List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(fieldId));
@@ -5189,31 +5142,145 @@ namespace NMP.Portal.Controllers
                         }
                         bool isSlurry = false;
                         bool isPoultryManure = false;
-                        if (model.IsManureTypeLiquid == true)
+
+                        if (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.PigSlurry || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.CattleSlurry || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.SeparatedCattleSlurryStrainerBox || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.SeparatedCattleSlurryWeepingWall || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.SeparatedCattleSlurryMechanicalSeparator || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.SeparatedPigSlurryLiquidPortion)
                         {
                             isSlurry = true;
                         }
-                        if (model.ManureTypeId == 8)
+                        if (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.PoultryManure)
                         {
                             isPoultryManure = true;
                         }
                         string message = warningMessage.EndClosedPeriodAndFebruaryWarningMessage(model.ApplicationDate.Value, closedPeriod, model.ApplicationRate, isSlurry, isPoultryManure);
-                        if (!string.IsNullOrWhiteSpace(message))
+                        bool? isWithinClosedPeriodAndFebruary = warningMessage.CheckEndClosedPeriodAndFebruary(model.ApplicationDate.Value, closedPeriod);
+                        (bool? isSlurryOrPoultryExistWithing20Days, error) = await _organicManureService.FetchOrganicManureExistanceByDateRange(model.ApplicationDate.Value.AddDays(-20).ToString("yyyy-MM-dd"), model.ApplicationDate.Value.ToString("yyyy-MM-dd"), false);
+
+                        if (isWithinClosedPeriodAndFebruary == true)
                         {
-                            if (!model.IsEndClosedPeriodFebruaryWarning)
+                            if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
                             {
-                                warningMsg = message;
-                                model.IsEndClosedPeriodFebruaryWarning = true;
+                                if (isSlurry)
+                                {
+                                    if (model.ApplicationRate.Value > 30)
+                                    {
+                                        if (!isGetCheckAnswer)
+                                        {
+                                            model.IsEndClosedPeriodFebruaryWarning = true;
+                                            model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeading30SlurryEngland;
+                                            model.EndClosedPeriodEndFebWarningPara1 = Resource.MsgEndPeriodEndFebWarningPara1st30SlurryEngland;
+                                            model.EndClosedPeriodEndFebWarningPara2 = Resource.MsgEndPeriodEndFebWarningPara2nd30SlurryEngland;
+                                        }
+                                        else
+                                        {
+                                            model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeading30SlurryEngland;
+                                        }
+
+                                    }
+                                }
+                                if (isPoultryManure)
+                                {
+                                    if (model.ApplicationRate.Value > 8)
+                                    {
+                                        model.IsEndClosedPeriodFebruaryWarning = true;
+                                        if (!isGetCheckAnswer)
+                                        {
+                                            model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeading8PoultryEngland;
+                                            model.EndClosedPeriodEndFebWarningPara1 = Resource.MsgEndPeriodEndFebWarningPara1st8PoultryEngland;
+                                            model.EndClosedPeriodEndFebWarningPara2 = Resource.MsgEndPeriodEndFebWarningPara2nd8PoultryEngland;
+                                        }
+                                        else
+                                        {
+                                            model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeading8PoultryEngland;
+                                        }
+
+                                    }
+                                }
+                                if (isSlurryOrPoultryExistWithing20Days == true)
+                                {
+                                    if (isSlurry || isPoultryManure)
+                                    {
+                                        model.IsEndClosedPeriodFebruaryWarning = true;
+                                        if (!isGetCheckAnswer)
+                                        {
+                                            model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeadingWithin20DaysEngland;
+                                            model.EndClosedPeriodEndFebWarningPara1 = Resource.MsgEndPeriodEndFebWarningPara1Within20DaysEngland;
+                                            model.EndClosedPeriodEndFebWarningPara2 = Resource.MsgEndPeriodEndFebWarningPara2Within20DaysEngland;
+                                        }
+                                        else
+                                        {
+                                            model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeadingWithin20DaysEngland;
+                                        }
+                                    }
+                                }
+
                             }
+                            if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                            {
+                                if (isSlurry)
+                                {
+                                    if (model.ApplicationRate.Value > 30)
+                                    {
+                                        model.IsEndClosedPeriodFebruaryWarning = true;
+                                        if (!isGetCheckAnswer)
+                                        {
+                                            model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeading30SlurryWales;
+                                            model.EndClosedPeriodEndFebWarningPara1 = Resource.MsgEndPeriodEndFebWarningPara30SlurryWales;
+                                            model.EndClosedPeriodEndFebWarningPara2 = Resource.MsgEndPeriodEndFebWarningPara2nd30SlurryWales;
+                                        }
+                                        else
+                                        {
+                                            model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeading30SlurryWales;
+                                        }
+
+                                    }
+                                }
+                                if (isPoultryManure)
+                                {
+                                    if (model.ApplicationRate.Value > 8)
+                                    {
+                                        model.IsEndClosedPeriodFebruaryWarning = true;
+                                        if (!isGetCheckAnswer)
+                                        {
+                                            model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeading8PoultryWales;
+                                            model.EndClosedPeriodEndFebWarningPara1 = Resource.MsgEndPeriodEndFebWarningPara8PoultryWales;
+                                            model.EndClosedPeriodEndFebWarningPara2 = Resource.MsgEndPeriodEndFebWarningPara2nd8PoultryWales;
+                                        }
+                                        else
+                                        {
+                                            model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeading8PoultryWales;
+                                        }
+                                    }
+                                }
+
+                                if (isSlurryOrPoultryExistWithing20Days == true)
+                                {
+                                    if (isSlurry || isPoultryManure)
+                                    {
+                                        model.IsEndClosedPeriodFebruaryWarning = true;
+                                        if (!isGetCheckAnswer)
+                                        {
+                                            model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeadingWithin20DaysWales;
+                                            model.EndClosedPeriodEndFebWarningPara1 = Resource.MsgEndPeriodEndFebWarningPara1Within20DaysWales;
+                                            model.EndClosedPeriodEndFebWarningPara2 = Resource.MsgEndPeriodEndFebWarningPara2ndWithin20DaysWales;
+                                        }
+                                        else
+                                        {
+                                            model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeadingWithin20DaysWales; 
+                                        }
+                                    }
+                                }
+                            }
+
                         }
+
                     }
                 }
 
 
             }
-            return (model.IsEndClosedPeriodFebruaryWarning, warningMsg, error);
+            return (model, error);
         }
-        private async Task<(string, string, string, bool, bool, Error?)> IsClosedPeriodWarningMessage(OrganicManureViewModel model, bool isWithinNVZ, bool registeredOrganicProducer)
+        private async Task<(OrganicManureViewModel, Error?)> IsClosedPeriodWarningMessage(OrganicManureViewModel model, bool isWithinNVZ, bool registeredOrganicProducer, bool isGetCheckAnswer)
         {
             Error? error = null;
             string warningMsg = string.Empty;
@@ -5225,7 +5292,7 @@ namespace NMP.Portal.Controllers
             (List<ManureType> manureTypeList, error) = await _organicManureService.FetchManureTypeList(model.ManureGroupId.Value, countryId);
             if (error != null)
             {
-                return (closedPeriod, warningMsg, SlurryOrPoultryManureExistWithinLast20Days, model.IsClosedPeriodWarning, model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks, error);
+                return (model, error);
             }
             else
             {
@@ -5239,7 +5306,7 @@ namespace NMP.Portal.Controllers
                 (FieldDetailResponse fieldDetail, error) = await _fieldService.FetchFieldDetailByFieldIdAndHarvestYear(Convert.ToInt32(model.FieldList[0]), model.HarvestYear ?? 0, false);
                 if (error != null)
                 {
-                    return (closedPeriod, warningMsg, SlurryOrPoultryManureExistWithinLast20Days, model.IsClosedPeriodWarning, model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks, error);
+                    return (model, error);
                 }
                 else
                 {
@@ -5251,7 +5318,7 @@ namespace NMP.Portal.Controllers
                         (CropTypeResponse cropTypeResponse, error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(model.FieldList[0]), model.HarvestYear ?? 0, false);
                         if (error != null)
                         {
-                            return (closedPeriod, warningMsg, SlurryOrPoultryManureExistWithinLast20Days, model.IsClosedPeriodWarning, model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks, error);
+                            return (model, error);
                         }
                         else
                         {
@@ -5279,12 +5346,25 @@ namespace NMP.Portal.Controllers
                     }
 
                     //Organic farm
+                    var cropTypeIdsForTrigger = new HashSet<int> { (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape, (int)NMP.Portal.Enums.CropTypes.Asparagus, (int)NMP.Portal.Enums.CropTypes.ForageRape, (int)NMP.Portal.Enums.CropTypes.ForageSwedes, (int)NMP.Portal.Enums.CropTypes.KaleGrazed, (int)NMP.Portal.Enums.CropTypes.StubbleTurnips, (int)NMP.Portal.Enums.CropTypes.Swedes, (int)NMP.Portal.Enums.CropTypes.Turnips, (int)NMP.Portal.Enums.CropTypes.BrusselSprouts, (int)NMP.Portal.Enums.CropTypes.Cabbage, (int)NMP.Portal.Enums.CropTypes.Calabrese, (int)NMP.Portal.Enums.CropTypes.Cauliflower, (int)NMP.Portal.Enums.CropTypes.Radish, (int)NMP.Portal.Enums.CropTypes.WildRocket, (int)NMP.Portal.Enums.CropTypes.BulbOnions, (int)NMP.Portal.Enums.CropTypes.SaladOnions, (int)NMP.Portal.Enums.CropTypes.Grass };
+
+                    decimal totalNitrogen = 0;
+                    if (model.OrganicManures != null && model.OrganicManures.Any())
+                    {
+                        foreach (var organicManure in model.OrganicManures)
+                        {
+                            totalNitrogen = organicManure.N != null ? organicManure.N.Value : 0;
+                            break;
+                        }
+                    }
+                    //decimal totalManureNitrogen = totalNitrogen * model.ApplicationRate.Value;
+
                     if (registeredOrganicProducer && isHighReadilyAvailableNitrogen && isWithinNVZ)
                     {
                         (CropTypeResponse cropTypeResponse, error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(model.FieldList[0]), model.HarvestYear ?? 0, false);
                         if (error != null)
                         {
-                            return (closedPeriod, warningMsg, SlurryOrPoultryManureExistWithinLast20Days, model.IsClosedPeriodWarning, model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks, error);
+                            return (model, error);
                         }
                         else
                         {
@@ -5297,8 +5377,41 @@ namespace NMP.Portal.Controllers
                             isWithinClosedPeriod = warningMessage.ClosedPeriodWarningMessage(model.ApplicationDate.Value, closedPeriod, cropTypeResponse.CropType, fieldDetail, true);
                             if (isWithinClosedPeriod)
                             {
-                                warningMsg = string.Format(Resource.MsgApplicationDateEnteredIsInsideClosedPeriodDetailOrganic, cropTypeResponse.CropType, fieldDetail.SowingDate == null ? "" : fieldDetail.SowingDate.Value.Date.ToString("dd MMM yyyy"), fieldDetail.SoilTypeName, closedPeriod);
-                                model.IsClosedPeriodWarning = true;
+
+                                if (!cropTypeIdsForTrigger.Contains(cropTypeResponse.CropTypeId))
+                                {
+                                    if (!isGetCheckAnswer)
+                                    {
+                                        if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                                        {
+                                            model.ClosedPeriodWarningHeading = Resource.MsgClosedPeriodWarningHeadingWales;
+                                            model.ClosedPeriodWarningPara1 = string.Format(Resource.MsgClosedPeriodWarningPara1Wales, cropTypeResponse.CropType, fieldDetail.SowingDate == null ? "" : fieldDetail.SowingDate.Value.Date.ToString("dd MMM yyyy"), fieldDetail.SoilTypeName, closedPeriod);
+                                        }
+
+                                        if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
+                                        {
+                                            model.ClosedPeriodWarningHeading = Resource.MsgApplicationDateEnteredIsInsideClosedPeriod;
+                                            model.ClosedPeriodWarningPara1 = string.Format(Resource.MsgClosedPeriodWarningPara1England, cropTypeResponse.CropType, fieldDetail.SowingDate == null ? "" : fieldDetail.SowingDate.Value.Date.ToString("dd MMM yyyy"), fieldDetail.SoilTypeName, closedPeriod);
+                                            model.ClosedPeriodWarningPara2 = Resource.MsgClosedPeriodWarningPara2England;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                                        {
+                                            model.ClosedPeriodWarningHeading = Resource.MsgClosedPeriodWarningHeadingWales;
+                                        }
+                                        if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
+                                        {
+                                            model.ClosedPeriodWarningHeading = Resource.MsgApplicationDateEnteredIsInsideClosedPeriod;
+                                        }
+
+                                    }
+
+                                    model.IsClosedPeriodWarning = true;
+
+                                }
+                                
                             }
                         }
                         //TempData["ClosedPeriod"] = closedPeriod;
@@ -5314,7 +5427,7 @@ namespace NMP.Portal.Controllers
                         (isOrganicManureExist, error) = await _organicManureService.FetchOrganicManureExistanceByDateRange(model.ApplicationDate.Value.AddDays(-20).ToString("yyyy-MM-dd"), model.ApplicationDate.Value.ToString("yyyy-MM-dd"), false);
                         if (error != null)
                         {
-                            return (closedPeriod, warningMsg, SlurryOrPoultryManureExistWithinLast20Days, model.IsClosedPeriodWarning, model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks, error);
+                            return (model, error);
                         }
                     }
                     if (!string.IsNullOrWhiteSpace(warningMsg) || isOrganicManureExist)
@@ -5349,7 +5462,11 @@ namespace NMP.Portal.Controllers
                     }
                 }
             }
-            return (closedPeriod, warningMsg, SlurryOrPoultryManureExistWithinLast20Days, model.IsClosedPeriodWarning, model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks, error);
+
+            model.ClosedPeriod = closedPeriod;
+            model.SlurryOrPoultryManureExistWithinLast20Days = SlurryOrPoultryManureExistWithinLast20Days;
+            model.IsWithinClosedPeriod = isWithinClosedPeriod;
+            return (model, error);
         }
 
         private async Task<(bool, string, Error?)> IsClosedPeriodStartAndEndFebExceedNRateException(OrganicManureViewModel model, int fieldId)
