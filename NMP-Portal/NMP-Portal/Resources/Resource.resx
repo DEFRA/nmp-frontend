@@ -2993,7 +2993,7 @@ cubic metres per hectare  not set</value>
     <value>Beta</value>
   </data>
   <data name="lblPhaseBannerText" xml:space="preserve">
-    <value>Your feedback will help us to improve.</value>
+    <value>This is a new service. &lt;a href="/HelpAndFeedback"&gt;Get help or give your feedback&lt;/a&gt;.</value>
   </data>
   <data name="helpdeskemail" xml:space="preserve">
     <value>helpdesk@rsk-bsl.co.uk</value>
@@ -3444,5 +3444,41 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="lblHowtosaveyourplanasaPDF" xml:space="preserve">
     <value>How to save your plan as a PDF</value>
+  </data>
+  <data name="contentGettingHelp1" xml:space="preserve">
+    <value>If you experience a technical problem with any of the functionality in this service, you can email: &lt;a  href="mailto:helpdesk@rsk-bsl.co.uk"&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt;.</value>
+  </data>
+  <data name="contentGettingHelp2" xml:space="preserve">
+    <value>Please tell us what you were trying to do, what happened, and what you expected. This will help us to identify the problem.</value>
+  </data>
+  <data name="contentGettingHelp3" xml:space="preserve">
+    <value>We will reply to your email as quickly as we can, where possible.</value>
+  </data>
+  <data name="contentGivingFeedbackAboutThisService1" xml:space="preserve">
+    <value>If you would like to give us feedback about this service, then please email: &lt;a  href="mailto:nmpt@defra.gov.uk"&gt;nmpt@defra.gov.uk&lt;/a&gt;.</value>
+  </data>
+  <data name="lblAboutGetHelpAndFeedback" xml:space="preserve">
+    <value>The Create a plan for efficient nutrient management service ('this service') is currently in a private beta phase. This means that we are testing this service by invitation only. Some functionality may not work as expected and some features have not yet been developed.</value>
+  </data>
+  <data name="lblAboutRecommendationGuidenceAdvice" xml:space="preserve">
+    <value>About recommendations, guidance, and advice in private beta</value>
+  </data>
+  <data name="lblAboutRecommendationGuidenceAdviceContent1" xml:space="preserve">
+    <value>The Department for Environment, Food &amp; Rural Affairs (DEFRA), the Agriculture and Horticulture Development Board (AHDB), ADAS and the RSK group take no responsibility for any recommendations, guidance, or advice given during the private beta phase of this service.</value>
+  </data>
+  <data name="lblAboutRecommendationGuidenceAdviceContent2" xml:space="preserve">
+    <value>Any recommendations and advice given in the current version of this service (private beta) can not be used to demonstrate compliance with any regulation or legislation, or as evidence for any government scheme. This includes the Sustainable Farming Incentive (SFI).</value>
+  </data>
+  <data name="lblGetHelpAndFeedback" xml:space="preserve">
+    <value>Get help or give feedback</value>
+  </data>
+  <data name="lblGettingHelp" xml:space="preserve">
+    <value>Getting help</value>
+  </data>
+  <data name="lblGivingFeedbackAboutThisService" xml:space="preserve">
+    <value>Giving feedback about this service</value>
+  </data>
+  <data name="lblYourFeedbackWillHelpUsImproveThisService" xml:space="preserve">
+    <value>Your feedback will help us improve this service.</value>
   </data>
 </root>

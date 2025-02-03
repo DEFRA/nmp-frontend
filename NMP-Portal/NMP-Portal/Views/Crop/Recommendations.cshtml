@@ -20,7 +20,6 @@
     }
     @Html.AntiForgeryToken()
     <div class="govuk-grid-row">
-
         @if (TempData["NutrientRecommendationsError"] != null)
         {
             <govuk-error-summary>
@@ -30,13 +29,11 @@
         @if (Model.Crops != null && Model.Crops.Count > 0)
         {
             <div class="govuk-grid-column-full">
-
                 <div class="margin-bottom-forty">
                     <h1 class="govuk-heading-l">
                         @string.Format(Resource.lblFieldPlanYear, Model.FieldName, Model.Crops[0].Year)
                     </h1>
                     <p class="govuk-body"> @string.Format(Resource.lblLastUpdated, lastUpdate)</p>
-
                 </div>
             </div>
             <div class="govuk-grid-column-full">
@@ -46,13 +43,14 @@
                     @if (Model.Crops.Count > 0)
                     {
                         var cropNumber = 1;
-
                         @foreach (var crop in Model.Crops)
                         {
                             @if (cropNumber == 1)
                             {
                                 <govuk-tabs-item id="crop-1" label="@(Model.Crops.Count==1?Resource.lblNutrientAndLimeRecommendations:Resource.lblCrop1Recommendations)">
                                     <h2 class="govuk-heading-m non-standard">@Resource.lblNutrientAndLimeRecommendations</h2>
+                                    <p class="govuk-body">@Resource.lblAboutRecommendationGuidenceAdviceContent1</p>
+                                    <p class="govuk-body">@Resource.lblAboutRecommendationGuidenceAdviceContent2</p>
                                     <hr class="seperator_five">
 
                                     @if (Model.ManagementPeriods != null && Model.Recommendations != null && Model.ManagementPeriods.Count > 0
@@ -216,12 +214,12 @@
 
                                 </govuk-tabs-item>
                             }
-
-
                             @if (cropNumber == 2)
                             {
                                 <govuk-tabs-item id="crop-2" label="@Resource.lblCrop2Recommendations">
                                     <h2 class="govuk-heading-m non-standard">@Resource.lblNutrientAndLimeRecommendations</h2>
+                                    <p class="govuk-body">@Resource.lblAboutRecommendationGuidenceAdviceContent1</p>
+                                    <p class="govuk-body">@Resource.lblAboutRecommendationGuidenceAdviceContent2</p>
                                     <hr class="seperator_five">
 
                                     @if (Model.ManagementPeriods != null && Model.Recommendations != null && Model.ManagementPeriods.Count > 0
@@ -375,7 +373,6 @@
                                                         }
                                                     </div>
                                                 }
-
                                             }
                                         }
                                         <p class="govuk-body"><a class="govuk-link" href="#">@Resource.lblBackToTheTop</a></p>
@@ -385,13 +382,9 @@
                             }
                             cropNumber++;
                         }
-
-
                     }
-
                     @* organic and inorganic material tab *@
                     <govuk-tabs-item id="organicAndInorganicMaterial" label="@Resource.lblorganicAndInorganicMaterial">
-
                         @foreach (var crop in Model.Crops)
                         {
                             @if (Model.ManagementPeriods != null && Model.Recommendations != null && Model.ManagementPeriods.Count > 0
@@ -441,7 +434,6 @@
                                                     }
                                                 </tbody>
                                             </table>
-
                                         }
                                         else
                                         {
@@ -449,7 +441,6 @@
                                             <p class="govuk-body"><a asp-action="FieldGroup" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear" asp-route-s="@Model.EncryptedFieldId"> @string.Format(Resource.lblAddAnOrganicMaterialApplicationForField, Model.FieldName)</a></p>
                                             <hr class="seperator_five">
                                         }
-
                                         @* Fertiliser manure applications *@
                                         <h2 class="govuk-heading-m non-standard">@Resource.lblInorganicFertiliserApplications</h2>
                                         @if (Model.FertiliserManures != null && Model.FertiliserManures.Count > 0)
@@ -529,7 +520,6 @@
                                                     }
                                                 </tbody>
                                             </table>
-
                                         }
                                         else
                                         {
@@ -543,13 +533,11 @@
                             }
                             break;
                         }
-
                     </govuk-tabs-item>
 
                     @* Crop details tab *@
                     <govuk-tabs-item id="cropDetails" label="@Resource.lblCropDetails">
                         <h2 class="govuk-heading-m non-standard">@string.Format(Resource.lblCropDetailsForFieldInYear, Model.FieldName, Model.Crops[0].Year)</h2>
-
                         @foreach (var crop in Model.Crops)
                         {
                             <hr class="seperator_five">
@@ -610,8 +598,6 @@
                     </govuk-tabs-item>
                 </govuk-tabs>
             </div>
-
         }
-
     </div>
 }
