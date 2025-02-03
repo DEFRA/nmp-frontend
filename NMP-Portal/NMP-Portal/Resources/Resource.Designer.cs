@@ -3464,15 +3464,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you have any problems or issues with this service, email our helpdesk at .
-        /// </summary>
-        public static string lblIfYouHaveAnyProblemsOrIssuesWithThisService {
-            get {
-                return ResourceManager.GetString("lblIfYouHaveAnyProblemsOrIssuesWithThisService", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to If you have harvested most of your {0} crops you can set {1} as your last harvest year..
         /// </summary>
         public static string lblIfYouHaveHarvestedMostOfYourCrops {
@@ -10330,6 +10321,15 @@ namespace NMP.Portal.Resources {
         public static string MsgYouCanContinueButYouShouldConsider {
             get {
                 return ResourceManager.GetString("MsgYouCanContinueButYouShouldConsider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to lblWeWillAssistYou.
+        /// </summary>
+        public static string String {
+            get {
+                return ResourceManager.GetString("String", resourceCulture);
             }
         }
         
