@@ -2942,13 +2942,13 @@ cubic metres per hectare  not set</value>
     <value>Previous crop</value>
   </data>
   <data name="lblPrint1" xml:space="preserve">
-    <value>Select the &lt;strong&gt;Print or save as PDF&lt;/strong&gt; button below - or, in your desktop browser, open the menu and select &lt;strong&gt;Print&lt;/strong&gt;.</value>
+    <value>To save as a PDF choose 'Print or save as a PDF',</value>
   </data>
   <data name="lblPrint2" xml:space="preserve">
-    <value>In the box where it asks you to choose a printer, select &lt;strong&gt;Print to PDF&lt;/strong&gt;. This will create a PDF instead of a printed copy.</value>
+    <value>Select, 'Save as PDF', where you are asked to select a printer,</value>
   </data>
   <data name="lblPrint3" xml:space="preserve">
-    <value>Select &lt;strong&gt;Print&lt;/strong&gt;, then choose where on your computer you want to save the new PDF.</value>
+    <value>Select, 'Print', then choose where to save the PDF.</value>
   </data>
   <data name="lblPrintOrSaveAsAPDF" xml:space="preserve">
     <value>Print or save as a PDF</value>
@@ -3440,9 +3440,12 @@ cubic metres per hectare  not set</value>
     <value>Sulphur (S) deficiency status</value>
   </data>
   <data name="lblHowValuesAreEntered" xml:space="preserve">
-    <value>How values are entered (e.g., Index values)</value>
+    <value>How values are entered (e.g. Index values)</value>
   </data>
-  <data name="lblHowtosaveyourplanasaPDF" xml:space="preserve">
-    <value>How to save your plan as a PDF</value>
+  <data name="lblWhatWouldYouLikeToCallThisCropGroup" xml:space="preserve">
+    <value>What would you like to call this crop group (optional)?</value>
+  </data>
+  <data name="lblCropGroupName" xml:space="preserve">
+    <value>Crop Group Name</value>
   </data>
 </root>

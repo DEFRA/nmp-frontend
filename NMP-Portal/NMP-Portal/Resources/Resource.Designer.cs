@@ -1708,6 +1708,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Crop Group Name.
+        /// </summary>
+        public static string lblCropGroupName {
+            get {
+                return ResourceManager.GetString("lblCropGroupName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Crop height.
         /// </summary>
         public static string lblCropHeight {
@@ -3257,23 +3266,23 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How values are entered (e.g., Index values).
+        ///   Looks up a localized string similar to How values are entered (e.g. Index values).
         /// </summary>
         public static string lblHowValuesAreEntered {
             get {
                 return ResourceManager.GetString("lblHowValuesAreEntered", resourceCulture);
             }
         }
-        
         /// <summary>
         ///   Looks up a localized string similar to How to save your plan as a PDF.
         /// </summary>
-        public static string lblHowtosaveyourplanasaPDF {
-            get {
+        public static string lblHowtosaveyourplanasaPDF
+        {
+            get
+            {
                 return ResourceManager.GetString("lblHowtosaveyourplanasaPDF", resourceCulture);
             }
         }
-        
         /// <summary>
         ///   Looks up a localized string similar to How was the grass typically managed each year?.
         /// </summary>
@@ -5220,7 +5229,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select the &lt;strong&gt;Print or save as PDF&lt;/strong&gt; button below - or, in your desktop browser, open the menu and select &lt;strong&gt;Print&lt;/strong&gt;..
+        ///   Looks up a localized string similar to To save as a PDF choose &apos;Print or save as a PDF&apos;,.
         /// </summary>
         public static string lblPrint1 {
             get {
@@ -5229,7 +5238,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In the box where it asks you to choose a printer, select &lt;strong&gt;Print to PDF&lt;/strong&gt;. This will create a PDF instead of a printed copy..
+        ///   Looks up a localized string similar to Select, &apos;Save as PDF&apos;, where you are asked to select a printer,.
         /// </summary>
         public static string lblPrint2 {
             get {
@@ -5238,7 +5247,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select &lt;strong&gt;Print&lt;/strong&gt;, then choose where on your computer you want to save the new PDF..
+        ///   Looks up a localized string similar to Select, &apos;Print&apos;, then choose where to save the PDF..
         /// </summary>
         public static string lblPrint3 {
             get {
@@ -7655,6 +7664,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhatWasTheSoilMineralNitrogen {
             get {
                 return ResourceManager.GetString("lblWhatWasTheSoilMineralNitrogen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What would you like to call this crop group (optional)?.
+        /// </summary>
+        public static string lblWhatWouldYouLikeToCallThisCropGroup {
+            get {
+                return ResourceManager.GetString("lblWhatWouldYouLikeToCallThisCropGroup", resourceCulture);
             }
         }
         
