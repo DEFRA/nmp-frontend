@@ -8849,7 +8849,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider allowing more time between applications..
+        ///   Looks up a localized string similar to It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the application rate of slurry..
         /// </summary>
         public static string MsgEndPeriodEndFebWarningPara2nd30SlurryEngland {
             get {

@@ -5431,41 +5431,57 @@ namespace NMP.Portal.Controllers
                             return (model, error);
                         }
                     }
-                    if (!string.IsNullOrWhiteSpace(warningMsg) || isOrganicManureExist)
+                    if (isOrganicManureExist)
                     {
-                        //if (!model.IsWarningMsgNeedToShow)
-                        //{
-                        if (isOrganicManureExist)
+                        bool isSlurry = false;
+                        bool isPoultryManure = false;
+
+                        if (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.PigSlurry || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.CattleSlurry || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.SeparatedCattleSlurryStrainerBox || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.SeparatedCattleSlurryWeepingWall || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.SeparatedCattleSlurryMechanicalSeparator || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.SeparatedPigSlurryLiquidPortion)
                         {
-                            string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
-                            Regex regex = new Regex(pattern);
-                            Match match = regex.Match(closedPeriod);
-                            if (match.Success)
+                            isSlurry = true;
+                        }
+                        if (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.PoultryManure)
+                        {
+                            isPoultryManure = true;
+                        }
+                        if (isSlurry || isPoultryManure)
+                        {
+                            if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
                             {
-                                int startDay = int.Parse(match.Groups[1].Value);
-                                string startMonthStr = match.Groups[2].Value;
-                                int endDay = int.Parse(match.Groups[3].Value);
-                                string endMonthStr = match.Groups[4].Value;
-
-                                DateTimeFormatInfo dtfi = DateTimeFormatInfo.CurrentInfo;
-                                int startMonth = Array.IndexOf(dtfi.AbbreviatedMonthNames, startMonthStr) + 1;
-                                int endMonth = Array.IndexOf(dtfi.AbbreviatedMonthNames, endMonthStr) + 1;
-                                string endMonthFullName = dtfi.MonthNames[endMonth - 1];
-
-                                SlurryOrPoultryManureExistWithinLast20Days = string.Format(Resource.lblEndClosederiodAndEndFebYouMustAllow3WeeksGap, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
                                 model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = true;
+                                if (!isGetCheckAnswer)
+                                {
+                                    model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeadingWithin20DaysEngland;
+                                    model.EndClosedPeriodEndFebWarningPara1 = Resource.MsgEndPeriodEndFebWarningPara1Within20DaysEngland;
+                                    model.EndClosedPeriodEndFebWarningPara2 = Resource.MsgEndPeriodEndFebWarningPara2Within20DaysEngland;
+                                }
+                                else
+                                {
+                                    model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeadingWithin20DaysEngland;
+                                }
                             }
 
-                            //}
-                            //model.IsWarningMsgNeedToShow = true;
-                        }
+                            if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                            {
+                                model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = true;
+                                if (!isGetCheckAnswer)
+                                {
+                                    model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeadingWithin20DaysWales;
+                                    model.EndClosedPeriodEndFebWarningPara1 = Resource.MsgEndPeriodEndFebWarningPara1Within20DaysWales;
+                                    model.EndClosedPeriodEndFebWarningPara2 = Resource.MsgEndPeriodEndFebWarningPara2ndWithin20DaysWales;
+                                }
+                                else
+                                {
+                                    model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeadingWithin20DaysWales;
+                                }
+                            }
 
+                        }
                     }
                 }
             }
 
             model.ClosedPeriod = closedPeriod;
-            model.SlurryOrPoultryManureExistWithinLast20Days = SlurryOrPoultryManureExistWithinLast20Days;
             model.IsWithinClosedPeriod = isWithinClosedPeriod;
             return (model, error);
         }

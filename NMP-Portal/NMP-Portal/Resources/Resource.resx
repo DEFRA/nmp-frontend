@@ -3389,7 +3389,7 @@ cubic metres per hectare  not set</value>
     <value>The Water Resources Regulations state that, between the end of the closed spreading period and the end of February, you must allow at least 3 weeks between each individual application of slurry or poultry manure.</value>
   </data>
   <data name="MsgEndPeriodEndFebWarningPara2nd30SlurryEngland" xml:space="preserve">
-    <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider allowing more time between applications.</value>
+    <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the application rate of slurry.</value>
   </data>
   <data name="MsgEndPeriodEndFebWarningPara2nd8PoultryEngland" xml:space="preserve">
     <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the application rate of poultry manure.</value>
