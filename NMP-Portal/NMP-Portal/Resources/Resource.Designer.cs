@@ -7162,7 +7162,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use the standard figure of {0} tonnes per hectare for all these fields.
+        ///   Looks up a localized string similar to Use the typical figure of {0} tonnes per hectare for all these fields.
         /// </summary>
         public static string lblUseTheStandardFigure {
             get {
@@ -7171,7 +7171,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use the standard figure of 8 tonnes per hectare for all these fields.
+        ///   Looks up a localized string similar to Use the typical figure of 8 tonnes per hectare for all these fields.
         /// </summary>
         public static string lblUseTheStandardFigureOf8TonnesPerHectareForAllTheseFields {
             get {
@@ -10328,15 +10328,6 @@ namespace NMP.Portal.Resources {
         public static string MsgYouCanContinueButYouShouldConsider {
             get {
                 return ResourceManager.GetString("MsgYouCanContinueButYouShouldConsider", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to lblWeWillAssistYou.
-        /// </summary>
-        public static string String {
-            get {
-                return ResourceManager.GetString("String", resourceCulture);
             }
         }
         
