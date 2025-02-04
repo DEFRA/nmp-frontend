@@ -3442,6 +3442,9 @@ cubic metres per hectare  not set</value>
   <data name="lblHowitworks" xml:space="preserve">
     <value>How it works</value>
   </data>
+  <data name="lblHowtosaveyourplanasaPDF" xml:space="preserve">
+    <value>How to save your plan as a PDF</value>
+</data>
   <data name="lblNUM1PaymentOfTheSFI" xml:space="preserve">
     <value>NUM1 payment of the SFI</value>
   </data>
@@ -3500,10 +3503,13 @@ cubic metres per hectare  not set</value>
     <value>Sulphur (S) deficiency status</value>
   </data>
   <data name="lblHowValuesAreEntered" xml:space="preserve">
-    <value>How values are entered (e.g., Index values)</value>
+    <value>How values are entered (e.g. Index values)</value>
   </data>
-  <data name="lblHowtosaveyourplanasaPDF" xml:space="preserve">
-    <value>How to save your plan as a PDF</value>
+  <data name="lblWhatWouldYouLikeToCallThisCropGroup" xml:space="preserve">
+    <value>What would you like to call this crop group (optional)?</value>
+  </data>
+  <data name="lblCropGroupName" xml:space="preserve">
+    <value>Crop Group Name</value>
   </data>
   <data name="contentGettingHelp1" xml:space="preserve">
     <value>If you experience a technical problem with any of the functionality in this service, you can email: &lt;a  href="mailto:helpdesk@rsk-bsl.co.uk"&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt;.</value>

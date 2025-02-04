@@ -7,7 +7,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer&& (!Model.IsCropGroupChange) ? "CheckAnswer" :"VarietyName")" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer&& (!Model.IsCropGroupChange) ? "CheckAnswer" :"CropTypes")" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="CropFields" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
@@ -42,6 +42,7 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCropGroupChange" value="@Model.IsCropGroupChange"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAddAnotherCrop" value="@Model.IsAddAnotherCrop"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPlanRecord" value="@Model.IsPlanRecord"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupName"></govuk-input>
     @if (Model.Crops != null && Model.Crops.Count > 0)
     {
         @for (int i = 0; i < Model.Crops.Count; i++)
@@ -57,6 +58,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].CropInfo2" value="@Model.Crops[i].CropInfo2"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].FieldName" value="@Model.Crops[i].FieldName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].EncryptedCounter" value="@Model.Crops[i].EncryptedCounter"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].CropGroupName" value="@Model.Crops[i].CropGroupName"></govuk-input>
         }
 
     }

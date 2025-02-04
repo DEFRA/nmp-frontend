@@ -5163,6 +5163,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     if (model.ApplicationRate.Value > 30)
                                     {
+                                        model.IsEndClosedPeriodFebruaryWarning = true;
                                         if (!isGetCheckAnswer)
                                         {
                                             model.IsEndClosedPeriodFebruaryWarning = true;

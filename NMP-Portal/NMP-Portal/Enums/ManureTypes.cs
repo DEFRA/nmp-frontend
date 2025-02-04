@@ -17,7 +17,7 @@
         SeparatedCattleSlurryMechanicalSeparator=15,
         SeparatedCattleSlurrySolidPortion=16,
         SeparatedPigSlurrySolidPortion=17,
-        SeparatedPigSlurryLiquidPortion=19,
+        SeparatedPigSlurryLiquidPortion=18,
         DirtyWater=19,
         BiosolidsDigestedCake=21,
         BiosolidsThermallyDried=22,
