@@ -9,9 +9,13 @@
 
 @if (ViewBag.Error != null)
 {
-    <govuk-error-summary>
-        <govuk-error-summary-item href="#">@ViewBag.Error</govuk-error-summary-item>
-    </govuk-error-summary>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@ViewBag.Error</govuk-error-summary-item>
+            </govuk-error-summary>
+        </div>
+    </div>
 }
 @if (Model != null)
 {
@@ -69,7 +73,7 @@
                                     {
                                         <a asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.HarvestYear[i].EncryptedYear" asp-route-isPlanRecord="true">
                                             @string.Format(Resource.lblStartAPlan, Model.HarvestYear[i].Year)
-                                        </a>                                        
+                                        </a>
                                     }
                                 </td>
                             </tr>

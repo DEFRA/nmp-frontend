@@ -9,9 +9,13 @@
 }
 @if (TempData["ErrorOnSelectField"] != null)
 {
-    <govuk-error-summary>
-        <govuk-error-summary-item href="#">@TempData["ErrorOnSelectField"]</govuk-error-summary-item>
-    </govuk-error-summary>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["ErrorOnSelectField"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        </div>
+    </div>
 }
 
 @if (Model != null)

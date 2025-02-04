@@ -19,7 +19,7 @@
     var closedPeriod = TempData["ClosedPeriod"] as string;
     if (!string.IsNullOrEmpty(closedPeriod) && Model.HarvestYear != null)
     {
-        int harvestYear = Model.HarvestYear??0;
+        int harvestYear = Model.HarvestYear ?? 0;
         var dates = closedPeriod.Split(new[] { " to " }, StringSplitOptions.RemoveEmptyEntries);
         if (dates.Length == 2)
         {
@@ -37,13 +37,14 @@
     <govuk-back-link asp-action=@((Model.IsCheckAnswer&&(!Model.IsManureTypeChange)&&(!Model.IsFieldGroupChange)) ? "CheckAnswer" : backAction) asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
 }
 <div class="govuk-grid-row">
-    @if (TempData["ManureApplyingDateError"] != null)
-    {
-        <govuk-error-summary>
-            <govuk-error-summary-item href="#">@TempData["ManureApplyingDateError"]</govuk-error-summary-item>
-        </govuk-error-summary>
-    }
     <div class="govuk-grid-column-two-thirds">
+        @if (TempData["ManureApplyingDateError"] != null)
+        {
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["ManureApplyingDateError"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        }
+
         <form class="form" action="ManureApplyingDate" method="post" autocomplete="off">
             @Html.AntiForgeryToken()
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>

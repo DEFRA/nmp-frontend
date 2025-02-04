@@ -12,8 +12,6 @@
 
 }
 
-
-
 <form asp-action="ManureGroup" asp-controller="OrganicManure" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
@@ -142,14 +140,15 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptakes[i].AutumnCropNitrogenUptake" value="@Model.AutumnCropNitrogenUptakes[i].AutumnCropNitrogenUptake"></govuk-input>
         }
     }
-    @if (TempData["ManureGroupError"] != null)
-    {
-        <govuk-error-summary>
-            <govuk-error-summary-item href="#">@TempData["ManureGroupError"]</govuk-error-summary-item>
-        </govuk-error-summary>
-    }
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
+            @if (TempData["ManureGroupError"] != null)
+            {
+                <govuk-error-summary>
+                    <govuk-error-summary-item href="#">@TempData["ManureGroupError"]</govuk-error-summary-item>
+                </govuk-error-summary>
+            }
+
             <govuk-radios asp-for="@Model.ManureGroupIdForFilter">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">

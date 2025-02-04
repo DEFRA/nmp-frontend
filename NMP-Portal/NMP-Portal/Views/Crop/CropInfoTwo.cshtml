@@ -6,7 +6,7 @@
 }
 
 @section BeforeContent {
-    @if(Model.CropInfo1 != null && Model.CropInfo1 !=0)
+    @if (Model.CropInfo1 != null && Model.CropInfo1 != 0)
     {
         <govuk-back-link asp-action="@(Model.IsCheckAnswer&& (!Model.IsCropGroupChange)&&(!Model.IsCropTypeChange) ? "CheckAnswer" :"CropInfoOne")" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
 
@@ -20,9 +20,13 @@
     @Html.AntiForgeryToken()
     @if (TempData["CropInfoOneError"] != null)
     {
-        <govuk-error-summary>
-            <govuk-error-summary-item href="#">@TempData["CropInfoOneError"]</govuk-error-summary-item>
-        </govuk-error-summary>
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <govuk-error-summary>
+                    <govuk-error-summary-item href="#">@TempData["CropInfoOneError"]</govuk-error-summary-item>
+                </govuk-error-summary>
+            </div>
+        </div>
     }
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID"></govuk-input>

@@ -8,9 +8,15 @@
 
 @if (TempData["ErrorOnHarvestYearOverview"] != null)
 {
-    <govuk-error-summary>
-        <govuk-error-summary-item href="#">@TempData["ErrorOnHarvestYearOverview"]</govuk-error-summary-item>
-    </govuk-error-summary>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["ErrorOnHarvestYearOverview"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        </div>
+    </div>
+
+
 }
 @if (Model != null)
 {
@@ -57,7 +63,7 @@
             </p>
             <p class="govuk-body pb-25">
                 <a asp-action="ExportFields" asp-controller="Report" asp-route-i="@Model.EncryptedFarmId" asp-route-j="@Model.EncryptedHarvestYear">@Resource.lblDownloadPrintOrExportThisPlan</a>
-            </p>            
+            </p>
 
             @if (Model.HarvestYearPlans != null)
             {
@@ -119,7 +125,8 @@
                                                     <td class="govuk-table__cell">
                                                         @if (field.Yield != null)
                                                         {
-                                                            @(field.Yield % 1 == 0 ? (int)field.Yield : field.Yield);
+                                                            @(field.Yield % 1 == 0 ? (int)field.Yield : field.Yield)
+                                                            ;
                                                         }
                                                         else
                                                         {
