@@ -878,7 +878,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Enter different figures for each field</value>
   </data>
   <data name="lblUseTheStandardFigureOf8TonnesPerHectareForAllTheseFields" xml:space="preserve">
-    <value>Use the standard figure of 8 tonnes per hectare for all these fields</value>
+    <value>Use the typical figure of 8 tonnes per hectare for all these fields</value>
   </data>
   <data name="lblHowDoYouWantToEnterTheExpectedYieldForInTheseFields" xml:space="preserve">
     <value>How do you want to enter the expected yield for {0} in these fields?</value>
@@ -1793,7 +1793,7 @@ cubic metres per hectare  not set</value>
     <value>Enter a number which is greater than 0</value>
   </data>
   <data name="lblUseTheStandardFigure" xml:space="preserve">
-    <value>Use the standard figure of {0} tonnes per hectare for all these fields</value>
+    <value>Use the typical figure of {0} tonnes per hectare for all these fields</value>
   </data>
   <data name="lblEnterTheValuesForYour" xml:space="preserve">
     <value>Enter the values for your {0}</value>
@@ -3540,8 +3540,5 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="lblYourFeedbackWillHelpUsImproveThisService" xml:space="preserve">
     <value>Your feedback will help us improve this service.</value>
-  </data>
-  <data name="String" xml:space="preserve">
-    <value>lblWeWillAssistYou</value>
   </data>
 </root>
