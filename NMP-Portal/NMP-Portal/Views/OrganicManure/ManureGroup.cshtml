@@ -14,7 +14,7 @@
 
 
 
-<form asp-action="ManureGroup" asp-controller="OrganicManure" method="post">
+<form asp-action="ManureGroup" asp-controller="OrganicManure" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>

@@ -7,7 +7,7 @@
 @section BeforeContent {
     <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "IsBasedOnSoilOrganicMatter")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="SoilOrganicMatter" asp-controller="Field" method="post">
+<form asp-action="SoilOrganicMatter" asp-controller="Field" method="post" autocomplete="off">
     @if (TempData["Error"] != null)
     {
         <govuk-error-summary>

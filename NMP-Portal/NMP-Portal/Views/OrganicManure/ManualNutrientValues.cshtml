@@ -35,7 +35,7 @@
     <govuk-back-link asp-action="@backAction" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
 }
 
-<form asp-action="ManualNutrientValues" asp-controller="OrganicManure" method="post">
+<form asp-action="ManualNutrientValues" asp-controller="OrganicManure" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">

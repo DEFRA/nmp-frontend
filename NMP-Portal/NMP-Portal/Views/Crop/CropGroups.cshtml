@@ -9,7 +9,7 @@
 @section BeforeContent {
     <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" :"HarvestYearForPlan")" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="CropGroups" asp-controller="Crop" method="post">
+<form asp-action="CropGroups" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
     @if (TempData["CropGroupError"] != null)
     {

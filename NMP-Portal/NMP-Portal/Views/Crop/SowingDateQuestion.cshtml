@@ -12,7 +12,7 @@
 @section BeforeContent {
     <govuk-back-link asp-action="@(Model.IsCheckAnswer && (!Model.IsAnyChangeInField) && (!Model.IsCropGroupChange)? "CheckAnswer" :"CropFields")" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="SowingDateQuestion" asp-controller="Crop" method="post">
+<form asp-action="SowingDateQuestion" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
     @if (TempData["SowingDateQuestionError"] != null)
     {

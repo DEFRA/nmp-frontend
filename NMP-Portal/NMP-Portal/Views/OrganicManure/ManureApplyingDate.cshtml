@@ -44,7 +44,7 @@
         </govuk-error-summary>
     }
     <div class="govuk-grid-column-two-thirds">
-        <form class="form" action="ManureApplyingDate" method="post">
+        <form class="form" action="ManureApplyingDate" method="post" autocomplete="off">
             @Html.AntiForgeryToken()
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>

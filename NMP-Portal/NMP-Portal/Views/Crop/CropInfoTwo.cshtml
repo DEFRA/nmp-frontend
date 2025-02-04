@@ -16,7 +16,7 @@
         <govuk-back-link asp-action="@(Model.IsCheckAnswer&& (!Model.IsCropGroupChange) &&(!Model.IsCropTypeChange) ? "CheckAnswer" :(Model.IsCropTypeChange)?"VarietyName":"Yield")" asp-controller="Crop" asp-route-q="@Model.YieldEncryptedCounter">@Resource.lblBack</govuk-back-link>
     }
 }
-<form asp-action="CropInfoTwo" asp-controller="Crop" method="post">
+<form asp-action="CropInfoTwo" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
     @if (TempData["CropInfoOneError"] != null)
     {

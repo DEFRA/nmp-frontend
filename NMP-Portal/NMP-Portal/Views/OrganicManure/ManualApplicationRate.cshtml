@@ -19,7 +19,7 @@
     <govuk-back-link asp-action=@((Model.IsCheckAnswer&&(!Model.IsManureTypeChange)&&(!Model.IsFieldGroupChange)) ? "CheckAnswer" : "ApplicationRateMethod") asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
 }
 
-<form asp-action="ManualApplicationRate" asp-controller="OrganicManure" method="post">
+<form asp-action="ManualApplicationRate" asp-controller="OrganicManure" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
     <div class="govuk-grid-row">
         @if (TempData["ManualApplicationRateError"] != null)

@@ -10,7 +10,7 @@
     <govuk-back-link asp-action="ManualNutrientValues" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
 }
 
-<form asp-action="NutrientValuesStoreForFuture" asp-controller="OrganicManure" method="post">
+<form asp-action="NutrientValuesStoreForFuture" asp-controller="OrganicManure" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
     @if (ViewBag.Error != null)
     {

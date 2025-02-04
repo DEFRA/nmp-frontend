@@ -17,7 +17,7 @@
 
     }
 }
-<form asp-action="Date" asp-controller="SoilAnalysis" method="post">
+<form asp-action="Date" asp-controller="SoilAnalysis" method="post" autocomplete="off">
     @Html.AntiForgeryToken()  
     
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PH"></govuk-input>

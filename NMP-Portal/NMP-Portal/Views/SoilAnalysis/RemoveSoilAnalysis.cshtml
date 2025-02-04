@@ -15,7 +15,7 @@
     @section BeforeContent {
     <govuk-back-link asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId" asp-route-l="@Model.IsSoilDataChanged">@Resource.lblBack</govuk-back-link>
     }
-    <form asp-action="RemoveSoilAnalysis" asp-controller="SoilAnalysis" method="post">
+    <form asp-action="RemoveSoilAnalysis" asp-controller="SoilAnalysis" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
 
         <div class="govuk-grid-row">

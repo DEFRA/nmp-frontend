@@ -21,7 +21,7 @@
     }
 
 }
-<form asp-action="CropInfoOne" asp-controller="Crop" method="post">
+<form asp-action="CropInfoOne" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
     @if (TempData["CropInfoOneError"] != null)
     {

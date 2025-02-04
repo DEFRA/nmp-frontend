@@ -72,7 +72,7 @@
 @section BeforeContent {
     <govuk-back-link asp-action="BackCheckAnswer" asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="CheckAnswer" asp-controller="Field" method="post">
+<form asp-action="CheckAnswer" asp-controller="Field" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
 
     <div class="govuk-grid-row">

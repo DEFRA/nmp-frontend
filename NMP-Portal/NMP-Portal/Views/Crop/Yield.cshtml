@@ -11,7 +11,7 @@
 @section BeforeContent {
     <govuk-back-link asp-action="@(Model.IsCheckAnswer && (!Model.IsAnyChangeInField)&& (!Model.IsCropGroupChange) && (!Model.IsQuestionChange)?"CheckAnswer":backAction)" asp-controller="Crop" asp-route-q=@(backAction=="SowingDate"?Model.SowingDateEncryptedCounter:Model.YieldEncryptedCounter)>@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="Yield" asp-controller="Crop" method="post">
+<form asp-action="Yield" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
     @if (TempData["ErrorOnYield"] != null)
     {

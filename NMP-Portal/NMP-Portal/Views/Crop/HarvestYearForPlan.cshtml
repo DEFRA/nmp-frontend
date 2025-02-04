@@ -12,7 +12,7 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form asp-action="HarvestYearForPlan" asp-controller="Crop" method="post">
+        <form asp-action="HarvestYearForPlan" asp-controller="Crop" method="post" autocomplete="off">
             @Html.AntiForgeryToken()
 
             @if (TempData["ErrorOnHarvestYear"] != null)

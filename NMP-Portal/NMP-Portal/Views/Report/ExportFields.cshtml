@@ -16,7 +16,7 @@
 
 @if (Model != null)
 {
-    <form asp-action="ExportFields" asp-controller="Report" method="post">
+    <form asp-action="ExportFields" asp-controller="Report" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
 
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>

@@ -35,7 +35,7 @@
                 <govuk-error-summary-item href="#">@TempData["ConditionsAffectingNutrientsError"]</govuk-error-summary-item>
             </govuk-error-summary>
         }
-        <form asp-action="ConditionsAffectingNutrients" asp-controller="OrganicManure" method="post">
+        <form asp-action="ConditionsAffectingNutrients" asp-controller="OrganicManure" method="post" autocomplete="off">
             @Html.AntiForgeryToken()
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
