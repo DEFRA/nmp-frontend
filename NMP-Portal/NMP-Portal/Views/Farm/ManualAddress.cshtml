@@ -12,7 +12,7 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form method="post" asp-controller="Farm">
+        <form method="post" asp-controller="Farm" autocomplete="on">
             @Html.AntiForgeryToken()
             <h1 class="govuk-heading-l">
                 @(string.Format(Resource.lblEnterTheAddressFor, Model.Name))

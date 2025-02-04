@@ -19,16 +19,17 @@
     <govuk-back-link asp-action=@((Model.IsCheckAnswer&&(!Model.IsManureTypeChange)&&(!Model.IsFieldGroupChange)) ? "CheckAnswer" : "ApplicationRateMethod") asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
 }
 
-<form asp-action="ManualApplicationRate" asp-controller="OrganicManure" method="post">
+<form asp-action="ManualApplicationRate" asp-controller="OrganicManure" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
     <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
         @if (TempData["ManualApplicationRateError"] != null)
         {
             <govuk-error-summary>
                 <govuk-error-summary-item>@TempData["ManualApplicationRateError"]</govuk-error-summary-item>
             </govuk-error-summary>
         }
-        <div class="govuk-grid-column-two-thirds">
+        
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
@@ -191,10 +192,10 @@
                         @if (Model.IsEndClosedPeriodFebruaryWarning)
                         {
                             <p class="govuk-notification-banner__heading">
-                                @(Model.ManureTypeId == 8 ? Resource.lblThisApplicationMayTakeYouOverMaxARPoultryManure : Resource.lblApplicationRateOverTheMaximumRateForSlurry)
+                                @Model.EndClosedPeriodEndFebWarningHeading
                             </p>
-                            <p class="govuk-body">@TempData["EndClosedPeriodAndFebruaryWarningMessage"]</p>
-                            <p class="govuk-body">@(Model.ManureTypeId == 8 ? Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultryAdditional : Resource.MsgApplicationRateForSlurryAndPoultryDetailAdditional)</p>
+                            <p class="govuk-body">@Model.EndClosedPeriodEndFebWarningPara1</p>
+                            <p class="govuk-body">@Model.EndClosedPeriodEndFebWarningPara2</p>
                         }
                         @if (Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
                         {
@@ -225,7 +226,7 @@
                                 }
                                 @if (Model.IsEndClosedPeriodFebruaryWarning)
                                 {
-                                    <li>@(Model.ManureTypeId == 8 ? Resource.lblThisApplicationMayTakeYouOverMaxARPoultryManure : Resource.lblApplicationRateOverTheMaximumRateForSlurry)</li>
+                                    <li>@Model.EndClosedPeriodEndFebWarningHeading</li>
                                 }
                                 @if (Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
                                 {
@@ -249,8 +250,8 @@
                                     }
                                     @if (Model.IsEndClosedPeriodFebruaryWarning)
                                     {
-                                        <h2 class="govuk-heading-s">@(Model.ManureTypeId == 8 ? Resource.lblThisApplicationMayTakeYouOverMaxARPoultryManure : Resource.lblApplicationRateOverTheMaximumRateForSlurry)</h2>
-                                        <p class="govuk-body">@TempData["EndClosedPeriodAndFebruaryWarningMessage"]</p>
+                                        <h2 class="govuk-heading-s">@Model.EndClosedPeriodEndFebWarningHeading</h2>
+                                        <p class="govuk-body">@Model.EndClosedPeriodEndFebWarningPara1</p>
                                     }
                                     @if (Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
                                     {

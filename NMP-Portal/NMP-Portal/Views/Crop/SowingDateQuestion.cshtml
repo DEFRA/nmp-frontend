@@ -12,13 +12,17 @@
 @section BeforeContent {
     <govuk-back-link asp-action="@(Model.IsCheckAnswer && (!Model.IsAnyChangeInField) && (!Model.IsCropGroupChange)? "CheckAnswer" :"VarietyName")" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="SowingDateQuestion" asp-controller="Crop" method="post">
+<form asp-action="SowingDateQuestion" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
     @if (TempData["SowingDateQuestionError"] != null)
     {
-        <govuk-error-summary>
-            <govuk-error-summary-item href="#">@TempData["SowingDateQuestionError"]</govuk-error-summary-item>
-        </govuk-error-summary>
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <govuk-error-summary>
+                    <govuk-error-summary-item href="#">@TempData["SowingDateQuestionError"]</govuk-error-summary-item>
+                </govuk-error-summary>
+            </div>
+        </div>
     }
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID"></govuk-input>

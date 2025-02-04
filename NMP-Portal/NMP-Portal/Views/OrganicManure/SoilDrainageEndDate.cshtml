@@ -14,7 +14,7 @@
                 <govuk-error-summary-item href="#">@ViewBag.Error</govuk-error-summary-item>
             </govuk-error-summary>
         }
-        <form class="form" action="SoilDrainageEndDate" method="post">
+        <form class="form" action="SoilDrainageEndDate" method="post" autocomplete="off">
             @Html.AntiForgeryToken()
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>

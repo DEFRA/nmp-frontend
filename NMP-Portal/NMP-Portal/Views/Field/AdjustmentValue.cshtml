@@ -18,7 +18,7 @@
                 <govuk-error-summary-item href="#">@TempData["Error"]</govuk-error-summary-item>
             </govuk-error-summary>
         }
-        <form asp-action="AdjustmentValue" method="post" asp-controller="Field">
+        <form asp-action="AdjustmentValue" method="post" asp-controller="Field" autocomplete="off">
             @Html.AntiForgeryToken()
 
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>

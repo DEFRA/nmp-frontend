@@ -32,7 +32,7 @@
             <hr>
         </div>
     </div>
-    <form asp-action="ExportFields" asp-controller="Report" method="post">
+    <form asp-action="ExportFields" asp-controller="Report" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
 
         <div class="govuk-grid-row">
@@ -42,11 +42,15 @@
                 </h1>
                 <ul class="govuk-list margin-bottom-thirty">
                     <li>@Model.CropAndFieldReport.Farm.FullAddress</li>
-                    <li>
+                    @* <li>
                         @string.Format(Resource.lblCPHNumberSingleBusinessIdentifier, Model.CropAndFieldReport.Farm.CPH, Model.CropAndFieldReport.Farm.BusinessName)
-                    </li>
+                    </li> *@
                     <li>@string.Format(Resource.lblCreatedOnDate, Model.CropAndFieldReport.Farm.CreatedOn.Date.ToLocalTime().Date.ToString("dd MMMM yyyy"))</li>
                 </ul>
+                <h2 class="govuk-heading-l">@Resource.lblAboutRecommendationGuidenceAdvice</h2>
+                <p class="govuk-body">@Resource.lblAboutRecommendationGuidenceAdviceContent1</p>
+                <p class="govuk-body">@Resource.lblAboutRecommendationGuidenceAdviceContent2</p>
+
                 <h2 class="govuk-heading-l">@Resource.lblFarmInformation</h2>
                 <table class="govuk-table  govuk-table-small margin-bottom-sixty">
                     <thead class="govuk-table__head">

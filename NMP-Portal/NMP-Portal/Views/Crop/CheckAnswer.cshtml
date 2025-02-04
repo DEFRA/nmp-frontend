@@ -50,7 +50,7 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form asp-action="CheckAnswer" asp-controller="Crop" method="post">
+        <form asp-action="CheckAnswer" asp-controller="Crop" method="post" autocomplete="off">
             @Html.AntiForgeryToken()
 
             @if (TempData["ErrorCreatePlan"] != null)

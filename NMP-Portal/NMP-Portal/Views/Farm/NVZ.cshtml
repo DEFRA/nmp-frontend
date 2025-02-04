@@ -16,7 +16,7 @@
     <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "Rainfall")" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
 }
 
-<form asp-action="Elevation" asp-controller="Farm" method="post">
+<form asp-action="Elevation" asp-controller="Farm" method="post" autocomplete="off">
    @Html.AntiForgeryToken()
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">

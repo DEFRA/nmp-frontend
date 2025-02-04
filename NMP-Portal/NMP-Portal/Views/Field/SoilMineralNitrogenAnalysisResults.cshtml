@@ -19,7 +19,7 @@
                 <govuk-error-summary-item href="#passport-issued-day">@TempData["SoilMineralNitrogenAnalysisResultsError"]</govuk-error-summary-item>
             </govuk-error-summary>
         }
-        <form asp-action="SoilMineralNitrogenAnalysisResults" method="post" asp-controller="Field">
+        <form asp-action="SoilMineralNitrogenAnalysisResults" method="post" asp-controller="Field" autocomplete="off">
             @Html.AntiForgeryToken()
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference"></govuk-input>

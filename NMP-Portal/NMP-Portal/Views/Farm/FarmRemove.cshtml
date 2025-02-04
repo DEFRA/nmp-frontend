@@ -19,7 +19,7 @@
     <govuk-back-link asp-action="FarmDetails" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
     }
 
-    <form asp-action="FarmRemove" asp-controller="Farm" method="post">
+    <form asp-action="FarmRemove" asp-controller="Farm" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
