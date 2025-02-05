@@ -21,7 +21,7 @@
                 <govuk-error-summary-item>@TempData["CopyExistingFieldError"]</govuk-error-summary-item>
             </govuk-error-summary>
         }
-        <form asp-action="CopyExistingField" method="post" asp-controller="Field">
+        <form asp-action="CopyExistingField" method="post" asp-controller="Field" autocomplete="off">
             @Html.AntiForgeryToken()
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalArea"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID"></govuk-input>

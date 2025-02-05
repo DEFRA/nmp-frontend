@@ -9,7 +9,7 @@
 }
 
 
-<form asp-action="ManureType" asp-controller="OrganicManure" method="post">
+<form asp-action="ManureType" asp-controller="OrganicManure" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
@@ -137,15 +137,14 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptakes[i].AutumnCropNitrogenUptake" value="@Model.AutumnCropNitrogenUptakes[i].AutumnCropNitrogenUptake"></govuk-input>
         }
     }
-    @if (TempData["ManureTypeError"] != null)
-    {
-        <govuk-error-summary>
-            <govuk-error-summary-item href="#">@TempData["ManureTypeError"]</govuk-error-summary-item>
-        </govuk-error-summary>
-    }
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-
+            @if (TempData["ManureTypeError"] != null)
+            {
+                <govuk-error-summary>
+                    <govuk-error-summary-item href="#">@TempData["ManureTypeError"]</govuk-error-summary-item>
+                </govuk-error-summary>
+            }
             <govuk-radios asp-for="@Model.ManureTypeId">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">

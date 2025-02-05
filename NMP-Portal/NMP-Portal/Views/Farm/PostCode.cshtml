@@ -16,7 +16,7 @@
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-l">@string.Format(Resource.lblWhatIsPostcode, Model.Name)</h1>
 
-        <form asp-action="PostCode" method="post" asp-controller="Farm">
+        <form asp-action="PostCode" method="post" asp-controller="Farm" autocomplete="on">
             @Html.AntiForgeryToken()
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>

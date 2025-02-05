@@ -17,7 +17,7 @@
                 <govuk-error-summary-item href="#passport-issued-day">@ViewBag.Error</govuk-error-summary-item>
             </govuk-error-summary>
         }
-        <form asp-action="TopsoilMoisture" asp-controller="OrganicManure" method="post">
+        <form asp-action="TopsoilMoisture" asp-controller="OrganicManure" method="post" autocomplete="off">
             @Html.AntiForgeryToken()
 
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>

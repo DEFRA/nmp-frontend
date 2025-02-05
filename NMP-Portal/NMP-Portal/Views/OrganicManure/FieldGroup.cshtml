@@ -7,7 +7,7 @@
 @section BeforeContent {
     <govuk-back-link asp-action=@((Model.IsCheckAnswer&&Model.IsFieldGroupChange)?"CheckAnswer":"HarvestYearOverview") asp-controller=@((Model.IsCheckAnswer&&Model.IsFieldGroupChange)?"OrganicManure":"Crop") asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="FieldGroup" asp-controller="OrganicManure" method="post">
+<form asp-action="FieldGroup" asp-controller="OrganicManure" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
 
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
@@ -143,15 +143,14 @@
             }
         }
     }
-
-    @if (TempData["FieldGroupError"] != null)
-    {
-        <govuk-error-summary>
-            <govuk-error-summary-item href="#">@TempData["FieldGroupError"]</govuk-error-summary-item>
-        </govuk-error-summary>
-    }
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
+            @if (TempData["FieldGroupError"] != null)
+            {
+                <govuk-error-summary>
+                    <govuk-error-summary-item href="#">@TempData["FieldGroupError"]</govuk-error-summary-item>
+                </govuk-error-summary>
+            }
 
             <govuk-radios asp-for="@Model.FieldGroup">
                 <govuk-radios-fieldset>

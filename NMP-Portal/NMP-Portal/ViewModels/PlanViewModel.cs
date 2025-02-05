@@ -54,5 +54,6 @@ namespace NMP.Portal.ViewModels
         public int? Rainfall { get; set; }
         public string? SortInOrganicListOrderByFieldName { get; set; } = string.Empty;
         public string? SortOrganicListOrderByFieldName { get; set; } = string.Empty;
+        public string? CropGroupName { get; set; } = string.Empty;
     }
 }

@@ -28,7 +28,7 @@
             </govuk-back-link>
         }
     }
-    <form asp-action="UpdateSoil" asp-controller="SoilAnalysis" method="post">
+    <form asp-action="UpdateSoil" asp-controller="SoilAnalysis" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
 
         <div class="govuk-grid-row">
