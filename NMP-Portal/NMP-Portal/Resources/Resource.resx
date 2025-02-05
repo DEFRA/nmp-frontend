@@ -1376,7 +1376,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>What is the incorporation method for your {0}?</value>
   </data>
   <data name="MsgDefraIdentityServiceDown" xml:space="preserve">
-    <value>Defra Customer Identity Service configuration URL is not accessible, please contect administrator.</value>
+    <value>Defra Customer Identity Service configuration URL is not accessible, please contact administrator.</value>
   </data>
   <data name="lblRainfallValueHint" xml:space="preserve">
     <value>Value should be without decimal places</value>
