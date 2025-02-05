@@ -3444,7 +3444,7 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="lblHowtosaveyourplanasaPDF" xml:space="preserve">
     <value>How to save your plan as a PDF</value>
-</data>
+  </data>
   <data name="lblNUM1PaymentOfTheSFI" xml:space="preserve">
     <value>NUM1 payment of the SFI</value>
   </data>
@@ -3546,5 +3546,71 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="lblYourFeedbackWillHelpUsImproveThisService" xml:space="preserve">
     <value>Your feedback will help us improve this service.</value>
+  </data>
+  <data name="MsgClosedPeriodNitrogenExceedWarningHeadingEngland" xml:space="preserve">
+    <value>This application will take you over the maximum application rate for inorganic nitrogen fertiliser to this crop during the closed spreading period</value>
+  </data>
+  <data name="MsgClosedPeriodNitrogenExceedWarningHeadingWales" xml:space="preserve">
+    <value>This application will take you over the maximum application rate for inorganic nitrogen fertiliser to this crop during the closed spreading period</value>
+  </data>
+  <data name="MsgClosedPeriodNitrogenExceedWarningPara1England" xml:space="preserve">
+    <value>The Nitrate Vulnerable Zone (NVZ) rules state that the application rate of inorganic nitrogen fertiliser on brassica crops between {0} and {1} must not exceed 100kg of nitrogen per hectare and that no more than 50kg of nitrogen per hectare can be applied every 4 weeks, up to the date on which you harvest the crop.</value>
+  </data>
+  <data name="MsgClosedPeriodNitrogenExceedWarningPara1Wales" xml:space="preserve">
+    <value>The Water Resources Regulations state that the application rate of inorganic nitrogen fertiliser on brassica crops between {0} and {1} must not exceed 100kg of nitrogen per hectare, and that no more than 50kg of nitrogen per hectare can be applied every 4 weeks, up to the date on which you harvest the crop.</value>
+  </data>
+  <data name="MsgClosedPeriodNitrogenExceedWarningPara2England" xml:space="preserve">
+    <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the application rate of inorganic nitrogen fertiliser.</value>
+  </data>
+  <data name="MsgClosedPeriodNitrogenExceedWarningPara2Wales" xml:space="preserve">
+    <value>It is an offence to breach the Water Resources Regulations, and you should consider reducing the application rate of inorganic nitrogen fertiliser.</value>
+  </data>
+  <data name="MsgClosedPeriodNRateExceedWarningHeadingWales" xml:space="preserve">
+    <value>This application will take you over the maximum application rate for manufactured nitrogen fertiliser to this crop during the closed spreading period</value>
+  </data>
+  <data name="MsgClosedPeriodNRateExceedWarningPara1England" xml:space="preserve">
+    <value>The Nitrate Vulnerable Zone (NVZ) rules state that the application rate of inorganic nitrogen fertiliser to this crop between {0} and {1} must not exceed {3}kg of nitrogen per hectare.</value>
+  </data>
+  <data name="MsgClosedPeriodNRateExceedWarningPara2Wales" xml:space="preserve">
+    <value>It is an offence to breach the Water Resources Regulations, and you should consider reducing the application rate of inorganic nitrogen fertiliser.</value>
+  </data>
+  <data name="MsgWinterOilseedRapeNRateExceedWarningHeadingWales" xml:space="preserve">
+    <value>This application will take you over the maximum application rate for inorganic nitrogen fertiliser to this crop during the closed spreading period</value>
+  </data>
+  <data name="MsgWinterOilseedRapeNRateExceedWarningPara1England" xml:space="preserve">
+    <value>The Nitrate Vulnerable Zone (NVZ) rules state that the application rate of inorganic nitrogen fertiliser on winter oilseed rape between {0} and 31 October must not exceed 30kg of nitrogen per hectare.</value>
+  </data>
+  <data name="MsgWinterOilseedRapeNRateExceedWarningPara1Wales" xml:space="preserve">
+    <value>The Water Resources Regulations state that the application rate of inorganic nitrogen fertiliser on winter oilseed rape between {0} and 31 October must not exceed 30kg of nitrogen per hectare.</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="lbl15SeptemberTo15January" xml:space="preserve">
+    <value>15 {0} to 15 {1}</value>
+  </data>
+  <data name="lbl31October" xml:space="preserve">
+    <value>31 October</value>
+  </data>
+  <data name="Msg31OctoberToEndPeriodFertiliserWarningPara2" xml:space="preserve">
+    <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider changing your application date.</value>
+  </data>
+  <data name="Msg31OctoberToEndPeriodFertiliserWarningPara2Wales" xml:space="preserve">
+    <value>It is an offence to breach the Water Resources Regulations, and you should consider changing your application date.</value>
+  </data>
+  <data name="MsgClosedPeriodFertiliserWarningHeading" xml:space="preserve">
+    <value>The application date you entered is inside your closed spreading period for applying inorganic nitrogen fertiliser</value>
+  </data>
+  <data name="MsgClosedPeriodFertiliserWarningPara2" xml:space="preserve">
+    <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider applying outside the closed spreading period.</value>
+  </data>
+  <data name="MsgClosedPeriodFertiliserWarningPara2Wales" xml:space="preserve">
+    <value>It is an offence to breach the Water Resources Regulations, and you should consider applying outside the closed spreading period. Before spreading fertiliser, a field inspection should be carried out to consider the risk of causing pollution or damage to the soil.</value>
+  </data>
+  <data name="MsgWinterGrassNRateExceedWarningPara1England" xml:space="preserve">
+    <value>The Nitrate Vulnerable Zone (NVZ) rules state that the application rate of inorganic nitrogen fertiliser on grass between {0} and 31 October must not exceed 80kg of nitrogen per hectare, and that no more than 40kg of nitrogen per hectare can be applied at any one time.</value>
+  </data>
+  <data name="MsgWinterGrassNRateExceedWarningPara1Wales" xml:space="preserve">
+    <value>The Water Resources Regulations state that the application rate of inorganic nitrogen fertiliser on grass between {0} and 31 October must not exceed 80kg of nitrogen per hectare, and that no more than 40kg of nitrogen per hectare can be applied at any one time.</value>
   </data>
 </root>

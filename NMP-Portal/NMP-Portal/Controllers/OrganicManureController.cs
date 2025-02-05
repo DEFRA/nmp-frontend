@@ -1205,7 +1205,7 @@ namespace NMP.Portal.Controllers
                     var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
                     model.ManureTypeName = manureType.Name;
                     isHighReadilyAvailableNitrogen = manureType.HighReadilyAvailableNitrogen ?? false;
-                    ViewBag.HighReadilyAvailableNitrogen = manureType.HighReadilyAvailableNitrogen;
+                    model.HighReadilyAvailableNitrogen = manureType.HighReadilyAvailableNitrogen;
                 }
                 else
                 {
@@ -1247,7 +1247,7 @@ namespace NMP.Portal.Controllers
                         int? cropInfo1 = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.CropInfo1).FirstOrDefault();
                         closedPeriod = warningMessage.ClosedPeriodOrganicFarm(fieldDetail, model.HarvestYear ?? 0, cropTypeId, cropInfo1, isPerennial);
                     }
-                    TempData["ClosedPeriod"] = closedPeriod;
+                    model.ClosedPeriod = closedPeriod;
                 }
                 model.IsWarningMsgNeedToShow = false;
                 model.IsClosedPeriodWarning = false;
@@ -1312,7 +1312,7 @@ namespace NMP.Portal.Controllers
                         var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
                         model.ManureTypeName = manureType.Name;
                         isHighReadilyAvailableNitrogen = manureType.HighReadilyAvailableNitrogen ?? false;
-                        ViewBag.HighReadilyAvailableNitrogen = manureType.HighReadilyAvailableNitrogen;
+                        model.HighReadilyAvailableNitrogen = manureType.HighReadilyAvailableNitrogen;
                     }
                     else
                     {
@@ -1354,7 +1354,7 @@ namespace NMP.Portal.Controllers
                             int? cropInfo1 = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.CropInfo1).FirstOrDefault();
                             closedPeriod = warningMessage.ClosedPeriodOrganicFarm(fieldDetail, model.HarvestYear ?? 0, cropTypeId, cropInfo1, isPerennial);
                         }
-                        TempData["ClosedPeriod"] = closedPeriod;
+                        model.ClosedPeriod = closedPeriod;
                     }
                     return View(model);
                 }
@@ -1403,7 +1403,7 @@ namespace NMP.Portal.Controllers
                                             if (!(model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials))
                                             {
                                                 //(string closedPeriod, string warningMsg, string SlurryOrPoultryManureExistWithinLast20Days, model.IsClosedPeriodWarning, model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks, error) = await IsClosedPeriodWarningMessage(model, field.IsWithinNVZ.Value, farm.RegisteredOrganicProducer.Value);
-
+                                                
                                                 (model, error) = await IsClosedPeriodWarningMessage(model, field.IsWithinNVZ.Value, farm.RegisteredOrganicProducer.Value, false);
                                                 
                                             }
@@ -5050,27 +5050,27 @@ namespace NMP.Portal.Controllers
                                     }
                                     else
                                     {
-                                        return (model, error);
+                                        return (model, string.IsNullOrWhiteSpace(error.Message)?null: error);
                                     }
                                 }
                                 else
                                 {
-                                    return (model, error);
+                                    return (model, string.IsNullOrWhiteSpace(error.Message) ? null : error);
                                 }
                             }
                             else
                             {
-                                return (model, error);
+                                return (model, string.IsNullOrWhiteSpace(error.Message) ? null : error);
                             }
                         }
                     }
                     else
                     {
-                        return (model, error);
+                        return (model, string.IsNullOrWhiteSpace(error.Message) ? null : error);
                     }
                 }
             }
-            return (model, error);
+            return (model, string.IsNullOrWhiteSpace(error.Message) ? null : error);
         }
         private async Task<(OrganicManureViewModel, Error?)> IsEndClosedPeriodFebruaryWarningMessage(OrganicManureViewModel model, int fieldId, bool isGetCheckAnswer)
         {
@@ -5100,6 +5100,7 @@ namespace NMP.Portal.Controllers
                     {
                         var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
                         isHighReadilyAvailableNitrogen = manureType.HighReadilyAvailableNitrogen ?? false;
+                        model.HighReadilyAvailableNitrogen = manureType.HighReadilyAvailableNitrogen;
                     }
                     (FieldDetailResponse fieldDetail, error) = await _fieldService.FetchFieldDetailByFieldIdAndHarvestYear(fieldId, model.HarvestYear.Value, false);
                     if (error != null)
@@ -5153,7 +5154,7 @@ namespace NMP.Portal.Controllers
                         }
                         string message = warningMessage.EndClosedPeriodAndFebruaryWarningMessage(model.ApplicationDate.Value, closedPeriod, model.ApplicationRate, isSlurry, isPoultryManure);
                         bool? isWithinClosedPeriodAndFebruary = warningMessage.CheckEndClosedPeriodAndFebruary(model.ApplicationDate.Value, closedPeriod);
-                        (bool? isSlurryOrPoultryExistWithing20Days, error) = await _organicManureService.FetchOrganicManureExistanceByDateRange(model.ApplicationDate.Value.AddDays(-20).ToString("yyyy-MM-dd"), model.ApplicationDate.Value.ToString("yyyy-MM-dd"), false);
+                        //(bool? isSlurryOrPoultryExistWithing20Days, error) = await _organicManureService.FetchOrganicManureExistanceByDateRange(model.OrganicManures[0].ManagementPeriodID,model.ApplicationDate.Value.AddDays(-20).ToString("yyyy-MM-dd"), model.ApplicationDate.Value.ToString("yyyy-MM-dd"), false);
 
                         if (isWithinClosedPeriodAndFebruary == true)
                         {
@@ -5166,7 +5167,6 @@ namespace NMP.Portal.Controllers
                                         model.IsEndClosedPeriodFebruaryWarning = true;
                                         if (!isGetCheckAnswer)
                                         {
-                                            model.IsEndClosedPeriodFebruaryWarning = true;
                                             model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeading30SlurryEngland;
                                             model.EndClosedPeriodEndFebWarningPara1 = Resource.MsgEndPeriodEndFebWarningPara1st30SlurryEngland;
                                             model.EndClosedPeriodEndFebWarningPara2 = Resource.MsgEndPeriodEndFebWarningPara2nd30SlurryEngland;
@@ -5196,24 +5196,7 @@ namespace NMP.Portal.Controllers
 
                                     }
                                 }
-                                if (isSlurryOrPoultryExistWithing20Days == true)
-                                {
-                                    if (isSlurry || isPoultryManure)
-                                    {
-                                        model.IsEndClosedPeriodFebruaryWarning = true;
-                                        if (!isGetCheckAnswer)
-                                        {
-                                            model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeadingWithin20DaysEngland;
-                                            model.EndClosedPeriodEndFebWarningPara1 = Resource.MsgEndPeriodEndFebWarningPara1Within20DaysEngland;
-                                            model.EndClosedPeriodEndFebWarningPara2 = Resource.MsgEndPeriodEndFebWarningPara2Within20DaysEngland;
-                                        }
-                                        else
-                                        {
-                                            model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeadingWithin20DaysEngland;
-                                        }
-                                    }
-                                }
-
+                                
                             }
                             if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
                             {
@@ -5253,23 +5236,6 @@ namespace NMP.Portal.Controllers
                                     }
                                 }
 
-                                if (isSlurryOrPoultryExistWithing20Days == true)
-                                {
-                                    if (isSlurry || isPoultryManure)
-                                    {
-                                        model.IsEndClosedPeriodFebruaryWarning = true;
-                                        if (!isGetCheckAnswer)
-                                        {
-                                            model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeadingWithin20DaysWales;
-                                            model.EndClosedPeriodEndFebWarningPara1 = Resource.MsgEndPeriodEndFebWarningPara1Within20DaysWales;
-                                            model.EndClosedPeriodEndFebWarningPara2 = Resource.MsgEndPeriodEndFebWarningPara2ndWithin20DaysWales;
-                                        }
-                                        else
-                                        {
-                                            model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeadingWithin20DaysWales; 
-                                        }
-                                    }
-                                }
                             }
 
                         }
@@ -5302,7 +5268,7 @@ namespace NMP.Portal.Controllers
                 {
                     var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
                     isHighReadilyAvailableNitrogen = manureType.HighReadilyAvailableNitrogen ?? false;
-                    ViewBag.HighReadilyAvailableNitrogen = manureType.HighReadilyAvailableNitrogen;
+                    model.HighReadilyAvailableNitrogen = manureType.HighReadilyAvailableNitrogen;
                 }
                 (FieldDetailResponse fieldDetail, error) = await _fieldService.FetchFieldDetailByFieldIdAndHarvestYear(Convert.ToInt32(model.FieldList[0]), model.HarvestYear ?? 0, false);
                 if (error != null)
@@ -5425,7 +5391,7 @@ namespace NMP.Portal.Controllers
                     if (isWithinClosedPeriodAndFebruary != null && isWithinClosedPeriodAndFebruary == true)
                     {
 
-                        (isOrganicManureExist, error) = await _organicManureService.FetchOrganicManureExistanceByDateRange(model.ApplicationDate.Value.AddDays(-20).ToString("yyyy-MM-dd"), model.ApplicationDate.Value.ToString("yyyy-MM-dd"), false);
+                        (isOrganicManureExist, error) = await _organicManureService.FetchOrganicManureExistanceByDateRange(model.OrganicManures[0].ManagementPeriodID,model.ApplicationDate.Value.AddDays(-20).ToString("yyyy-MM-dd"), model.ApplicationDate.Value.ToString("yyyy-MM-dd"), false);
                         if (error != null)
                         {
                             return (model, error);
@@ -5451,13 +5417,13 @@ namespace NMP.Portal.Controllers
                                 model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = true;
                                 if (!isGetCheckAnswer)
                                 {
-                                    model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeadingWithin20DaysEngland;
-                                    model.EndClosedPeriodEndFebWarningPara1 = Resource.MsgEndPeriodEndFebWarningPara1Within20DaysEngland;
-                                    model.EndClosedPeriodEndFebWarningPara2 = Resource.MsgEndPeriodEndFebWarningPara2Within20DaysEngland;
+                                    model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeading = Resource.MsgEndPeriodEndFebWarningHeadingWithin20DaysEngland;
+                                    model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1 = Resource.MsgEndPeriodEndFebWarningPara1Within20DaysEngland;
+                                    model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2 = Resource.MsgEndPeriodEndFebWarningPara2Within20DaysEngland;
                                 }
                                 else
                                 {
-                                    model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeadingWithin20DaysEngland;
+                                    model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeading = Resource.MsgEndPeriodEndFebWarningHeadingWithin20DaysEngland;
                                 }
                             }
 
@@ -5466,13 +5432,13 @@ namespace NMP.Portal.Controllers
                                 model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = true;
                                 if (!isGetCheckAnswer)
                                 {
-                                    model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeadingWithin20DaysWales;
-                                    model.EndClosedPeriodEndFebWarningPara1 = Resource.MsgEndPeriodEndFebWarningPara1Within20DaysWales;
-                                    model.EndClosedPeriodEndFebWarningPara2 = Resource.MsgEndPeriodEndFebWarningPara2ndWithin20DaysWales;
+                                    model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeading = Resource.MsgEndPeriodEndFebWarningHeadingWithin20DaysWales;
+                                    model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1 = Resource.MsgEndPeriodEndFebWarningPara1Within20DaysWales;
+                                    model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2 = Resource.MsgEndPeriodEndFebWarningPara2ndWithin20DaysWales;
                                 }
                                 else
                                 {
-                                    model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeadingWithin20DaysWales;
+                                    model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeading = Resource.MsgEndPeriodEndFebWarningHeadingWithin20DaysWales;
                                 }
                             }
 
