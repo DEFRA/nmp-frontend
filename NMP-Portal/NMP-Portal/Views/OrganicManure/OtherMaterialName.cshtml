@@ -13,16 +13,17 @@
     <govuk-back-link asp-action=@((Model.IsCheckAnswer&&(!Model.IsManureTypeChange)&&(!Model.IsFieldGroupChange)) ? "CheckAnswer" : "ManureType") asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
 }
 
-<form asp-action="OtherMaterialName" asp-controller="OrganicManure" method="post">
+<form asp-action="OtherMaterialName" asp-controller="OrganicManure" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
     <div class="govuk-grid-row">
-        @if (TempData["AreaAndQuantityError"] != null)
-        {
-            <govuk-error-summary>
-                <govuk-error-summary-item>@TempData["AreaAndQuantityError"]</govuk-error-summary-item>
-            </govuk-error-summary>
-        }
         <div class="govuk-grid-column-two-thirds">
+            @if (TempData["AreaAndQuantityError"] != null)
+            {
+                <govuk-error-summary>
+                    <govuk-error-summary-item>@TempData["AreaAndQuantityError"]</govuk-error-summary-item>
+                </govuk-error-summary>
+            }
+
 
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>

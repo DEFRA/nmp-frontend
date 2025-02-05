@@ -32,7 +32,7 @@
                 <govuk-error-summary-item href="#passport-issued-day">@TempData["ErrorOnBackButton"]</govuk-error-summary-item>
             </govuk-error-summary>
         }
-        <form asp-action="AddField" method="post" asp-controller="Field">
+        <form asp-action="AddField" method="post" asp-controller="Field" autocomplete="off">
             @Html.AntiForgeryToken()
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalArea"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID"></govuk-input>

@@ -10,7 +10,7 @@
 }
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form asp-action="CheckAnswer" asp-controller="FertiliserManure" method="post">
+        <form asp-action="CheckAnswer" asp-controller="FertiliserManure" method="post" autocomplete="off">
 
             @Html.AntiForgeryToken()
 
@@ -189,27 +189,27 @@
                     <govuk-summary-list-row-value>
                         @if ((Model.N.HasValue) && Model.N.Value > 0)
                         {
-                            @string.Format(Resource.lblKgWithNutrient, Model.N.Value, Resource.lblNitrogen)
+                            @string.Format(Resource.lblKgPerTonneWithNutrient, Model.N.Value, Resource.lblNitrogen)
                             <br />
                         }
                         @if ((Model.P2O5.HasValue) && Model.P2O5.Value > 0)
                         {
-                            @string.Format(Resource.lblKgWithNutrient, Model.P2O5.Value, Resource.lblPhosphateP2O5)
+                            @string.Format(Resource.lblKgPerTonneWithNutrient, Model.P2O5.Value, Resource.lblPhosphateP2O5)
                             <br />
                         }
                         @if ((Model.K2O.HasValue) && Model.K2O.Value > 0)
                         {
-                            @string.Format(Resource.lblKgWithNutrient, Model.K2O.Value, Resource.lblPotashK2O)
+                            @string.Format(Resource.lblKgPerTonneWithNutrient, Model.K2O.Value, Resource.lblPotashK2O)
                             <br />
                         }
                         @if ((Model.SO3.HasValue) && Model.SO3.Value > 0)
                         {
-                            @string.Format(Resource.lblKgWithNutrient, Model.SO3.Value, Resource.lblSulphurSO3)
+                            @string.Format(Resource.lblKgPerTonneWithNutrient, Model.SO3.Value, Resource.lblSulphurSO3)
                             <br />
                         }
                         @if ((Model.Lime.HasValue) && Model.Lime.Value > 0)
                         {
-                            @(string.Format(Resource.lblKgWithNutrient, Model.Lime.Value, Resource.lblLime))
+                            @(string.Format(Resource.lblKgPerTonneWithNutrient, Model.Lime.Value, Resource.lblLime))
                             <br />
                         }
                     </govuk-summary-list-row-value>

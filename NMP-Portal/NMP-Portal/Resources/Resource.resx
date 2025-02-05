@@ -878,7 +878,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Enter different figures for each field</value>
   </data>
   <data name="lblUseTheStandardFigureOf8TonnesPerHectareForAllTheseFields" xml:space="preserve">
-    <value>Use the standard figure of 8 tonnes per hectare for all these fields</value>
+    <value>Use the typical figure of 8 tonnes per hectare for all these fields</value>
   </data>
   <data name="lblHowDoYouWantToEnterTheExpectedYieldForInTheseFields" xml:space="preserve">
     <value>How do you want to enter the expected yield for {0} in these fields?</value>
@@ -1793,7 +1793,7 @@ cubic metres per hectare  not set</value>
     <value>Enter a number which is greater than 0</value>
   </data>
   <data name="lblUseTheStandardFigure" xml:space="preserve">
-    <value>Use the standard figure of {0} tonnes per hectare for all these fields</value>
+    <value>Use the typical figure of {0} tonnes per hectare for all these fields</value>
   </data>
   <data name="lblEnterTheValuesForYour" xml:space="preserve">
     <value>Enter the values for your {0}</value>
@@ -2387,13 +2387,10 @@ cubic metres per hectare  not set</value>
     <value>Do you want to add a recent soil analysis for {0}?</value>
   </data>
   <data name="MsgSoilAnalysisHint1" xml:space="preserve">
-    <value>We need a recent soil analysis to give the best results. Without a recent analysis from the last five years, any recommendations we give will be based on the RB209 default values.</value>
+    <value>You should sample the soil from your fields every 3 to 4 years and get it tested for pH, phosphorus, potassium and magnesium. Enter the results of your most recent soil analysis to include these in your nutrient management plan. ​This will help us give you the best recommendations.</value>
   </data>
   <data name="MsgSoilAnalysisHint2" xml:space="preserve">
-    <value>You can enter your soil analysis later.</value>
-  </data>
-  <data name="MsgSoilAnalysisHint3" xml:space="preserve">
-    <value>You should get a soil analysis every five years, according to the Environment Agency.</value>
+    <value>If you do not enter a soil analysis, or if your most recent soil analysis is more than 5 years old, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop.</value>
   </data>
   <data name="lblSoilDeficientInSulpurForCheckAnswerNotset" xml:space="preserve">
     <value>Is the soil deficient in sulphur (S)? not set</value>
@@ -2522,7 +2519,7 @@ cubic metres per hectare  not set</value>
     <value>If you don't know the exact application date enter an estimate. You can change it later.</value>
   </data>
   <data name="lblYourClosedPeriodForSpreading" xml:space="preserve">
-    <value>Your closed period for spreading inorganic niytrogen (N) fertilisers is:</value>
+    <value>Your closed period for spreading inorganic nitrogen (N) fertilisers is:</value>
   </data>
   <data name="lbl1SeptemberTo15January" xml:space="preserve">
     <value>1 {0} to 15 {1}</value>
@@ -3145,9 +3142,6 @@ cubic metres per hectare  not set</value>
   <data name="lblhelpdesk" xml:space="preserve">
     <value>helpdesk@rsk-bsl.co.uk</value>
   </data>
-  <data name="lblIfYouHaveAnyProblemsOrIssuesWithThisService" xml:space="preserve">
-    <value>If you have any problems or issues with this service, email our helpdesk at </value>
-  </data>
   <data name="lblMailtoHelpdesk" xml:space="preserve">
     <value>mailto:helpdesk@rsk-bsl.co.uk</value>
   </data>
@@ -3352,6 +3346,63 @@ cubic metres per hectare  not set</value>
   <data name="MsgNmaxWarningPara2England" xml:space="preserve">
     <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the amount of nitrogen from organic manures.</value>
   </data>
+  <data name="MsgClosedPeriodWarningHeadingWales" xml:space="preserve">
+    <value>The application date you entered is inside your closed period for applying manure with a high readily available nitrogen content</value>
+  </data>
+  <data name="MsgClosedPeriodWarningPara1England" xml:space="preserve">
+    <value>The Nitrate Vulnerable Zone (NVZ) rules state that the closed period for {0} planted on organic farms {1} on {2} soil is {3}.</value>
+  </data>
+  <data name="MsgClosedPeriodWarningPara1Wales" xml:space="preserve">
+    <value>The Water Resources Regulations state that the closed period for {0} planted on organic farms {1} on {2} soil is {3}.</value>
+  </data>
+  <data name="MsgClosedPeriodWarningPara2England" xml:space="preserve">
+    <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider applying outside the closed period.</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningHeading30SlurryEngland" xml:space="preserve">
+    <value>This application will take you over the maximum application rate for slurry between the end of the closed spreading period and the end of February</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningHeading30SlurryWales" xml:space="preserve">
+    <value>This application will take you over the maximum application rate for slurry between the end of the closed spreading period and the end of February</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningHeading8PoultryEngland" xml:space="preserve">
+    <value>This application will take you over the maximum application rate for poultry manure between the end of the closed spreading period and the end of February</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningHeading8PoultryWales" xml:space="preserve">
+    <value>This application will take you over the maximum application rate for poultry manure between the end of the closed spreading period and the end of February</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningHeadingWithin20DaysEngland" xml:space="preserve">
+    <value>You must allow at least 3 weeks between applications from the end of the closed spreading period to the end of February</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningHeadingWithin20DaysWales" xml:space="preserve">
+    <value>You must allow at least 3 weeks between applications from the end of the closed spreading period to the end of February</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningPara1st30SlurryEngland" xml:space="preserve">
+    <value>The Nitrate Vulnerable Zone (NVZ) rules state you must not spread more than 30 cubic meters per hectare of slurry in a single application from the end of the closed spreading period until the end of February.</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningPara1st8PoultryEngland" xml:space="preserve">
+    <value>The Nitrate Vulnerable Zone (NVZ) rules state you must not spread more than 8 tonnes per hectare of poultry manure in a single application from the end of the closed spreading period until the end of February.</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningPara1Within20DaysEngland" xml:space="preserve">
+    <value>The Nitrate Vulnerable Zone (NVZ) rules state that, between the end of the closed spreading period and the end of February, you must allow at least 3 weeks between each individual application of slurry or poultry manure.</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningPara1Within20DaysWales" xml:space="preserve">
+    <value>The Water Resources Regulations state that, between the end of the closed spreading period and the end of February, you must allow at least 3 weeks between each individual application of slurry or poultry manure.</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningPara2nd30SlurryEngland" xml:space="preserve">
+    <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the application rate of slurry.</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningPara2nd8PoultryEngland" xml:space="preserve">
+    <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the application rate of poultry manure.</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningPara2Within20DaysEngland" xml:space="preserve">
+    <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider allowing more time between applications.</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningPara30SlurryWales" xml:space="preserve">
+    <value>The Water Resources Regulations state you must not spread more than 30 cubic meters per hectare of slurry in a single application from the end of the closed spreading period until the end of February.</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningPara8PoultryWales" xml:space="preserve">
+    <value>The Water Resources Regulations state you must not spread more than 8 tonnes per hectare of poultry manure in a single application from the end of the closed spreading period until the end of February.</value>
+  </data>
   <data name="ContentHowToolWorks" xml:space="preserve">
     <value>The first step is to set up your farm. The farm will contain your fields, and the fields will have the crops and nutrients applied to them. If you have more than one holding, it's best to add a separate farm for each one.</value>
   </data>
@@ -3391,6 +3442,9 @@ cubic metres per hectare  not set</value>
   <data name="lblHowitworks" xml:space="preserve">
     <value>How it works</value>
   </data>
+  <data name="lblHowtosaveyourplanasaPDF" xml:space="preserve">
+    <value>How to save your plan as a PDF</value>
+  </data>
   <data name="lblNUM1PaymentOfTheSFI" xml:space="preserve">
     <value>NUM1 payment of the SFI</value>
   </data>
@@ -3427,6 +3481,15 @@ cubic metres per hectare  not set</value>
   <data name="lnkToRb209NutrientManagementGuide" xml:space="preserve">
     <value>https://ahdb.org.uk/nutrient-management-guide-rb209</value>
   </data>
+  <data name="MsgEndPeriodEndFebWarningPara2nd30SlurryWales" xml:space="preserve">
+    <value>It is an offence to breach the Water Resources Regulations, and you should consider reducing the application rate of slurry.</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningPara2nd8PoultryWales" xml:space="preserve">
+    <value>It is an offence to breach the Water Resources Regulations, and you should consider reducing the application rate of poultry manure.</value>
+  </data>
+  <data name="MsgEndPeriodEndFebWarningPara2ndWithin20DaysWales" xml:space="preserve">
+    <value>It is an offence to breach the Water Resources Regulations, and you should consider allowing more time between applications.</value>
+  </data>
   <data name="lblRemoveSoilAnalysisContentFirst" xml:space="preserve">
     <value>Any recommandations for {0} will be based on previous soil analysis, where they exist. Without any soil analysis the recommendations will be based on the RB209 default values instead.</value>
   </data>
@@ -3440,10 +3503,13 @@ cubic metres per hectare  not set</value>
     <value>Sulphur (S) deficiency status</value>
   </data>
   <data name="lblHowValuesAreEntered" xml:space="preserve">
-    <value>How values are entered (e.g., Index values)</value>
+    <value>How values are entered (e.g. Index values)</value>
   </data>
-  <data name="lblHowtosaveyourplanasaPDF" xml:space="preserve">
-    <value>How to save your plan as a PDF</value>
+  <data name="lblWhatWouldYouLikeToCallThisCropGroup" xml:space="preserve">
+    <value>What would you like to call this crop group (optional)?</value>
+  </data>
+  <data name="lblCropGroupName" xml:space="preserve">
+    <value>Crop Group Name</value>
   </data>
   <data name="contentGettingHelp1" xml:space="preserve">
     <value>If you experience a technical problem with any of the functionality in this service, you can email: &lt;a  href="mailto:helpdesk@rsk-bsl.co.uk"&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt;.</value>
@@ -3480,5 +3546,95 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="lblYourFeedbackWillHelpUsImproveThisService" xml:space="preserve">
     <value>Your feedback will help us improve this service.</value>
+  </data>
+  <data name="lblKgPerTonneWithNutrient" xml:space="preserve">
+    <value>{0} kg per tonne {1}</value>
+  </data>
+  <data name="lbl10February" xml:space="preserve">
+    <value>10 February</value>
+  </data>
+  <data name="lblAboutReleaseSchedule" xml:space="preserve">
+    <value>This is the plan for testing this service, adding new features and rolling it out across
+the country.</value>
+  </data>
+  <data name="lblAddedFunctions" xml:space="preserve">
+    <value>Added function:</value>
+  </data>
+  <data name="lblAllModulesLive" xml:space="preserve">
+    <value>all the modules for England and Wales are live on GOV.UK and available for general use</value>
+  </data>
+  <data name="lblArableCoreFunctions" xml:space="preserve">
+    <value>Arable - core functions:</value>
+  </data>
+  <data name="lblCreateAPlanAndRecord" xml:space="preserve">
+    <value>create a plan and record</value>
+  </data>
+  <data name="lblCreateAPlanandRecordForArableAndGrasslansFarms" xml:space="preserve">
+    <value>create a plan and record for arable and grassland farms</value>
+  </data>
+  <data name="lblExistingManureStorageCapacity" xml:space="preserve">
+    <value>existing manure storage capacity NVZ compliance module</value>
+  </data>
+  <data name="lblFebToJuly2025" xml:space="preserve">
+    <value>February to July 2025 - England and Wales private beta test</value>
+  </data>
+  <data name="lblGrasslandCoreFunctions" xml:space="preserve">
+    <value>Grassland - core functions:</value>
+  </data>
+  <data name="lblIntegratedMANNERNPKCalculations" xml:space="preserve">
+    <value>integrated MANNER-NPK calculations</value>
+  </data>
+  <data name="lblJuly2025Schedule" xml:space="preserve">
+    <value>July 2025 - England and Wales full service live</value>
+  </data>
+  <data name="lblLivestockManureLimitComplianceModule" xml:space="preserve">
+    <value>livestock manure nitrogen (N) farm limit NVZ compliance module</value>
+  </data>
+  <data name="lblMannerNPKStandAloneFrontEnd" xml:space="preserve">
+    <value>MANNER-NPK stand-alone front-end</value>
+  </data>
+  <data name="lblMonitorUseOfTool" xml:space="preserve">
+    <value>we will monitor their use of the tool, and localise and refine the NMPT based on their feedback</value>
+  </data>
+  <data name="lblNMaxComplainceModule" xml:space="preserve">
+    <value>N-max NVZ compliance module</value>
+  </data>
+  <data name="lblNMPTBetaTest1" xml:space="preserve">
+    <value>around 40 to 50 users in England and Wales will test the NMPT online in a
+special testing environment</value>
+  </data>
+  <data name="lblNMPTBetaTestFeedback" xml:space="preserve">
+    <value>we will monitor their use of the tool, and refine and update the NMPT based on their feedback</value>
+  </data>
+  <data name="lblNMPTLaunchesToUsersInScotland" xml:space="preserve">
+    <value>NMPT launches to users in Scotland</value>
+  </data>
+  <data name="lblNMPTLiveForGeneralUse" xml:space="preserve">
+    <value>NMPT is live on GOV.UK and available for general use</value>
+  </data>
+  <data name="lblNMPTReleaseSchedule" xml:space="preserve">
+    <value>NMPT release schedule</value>
+  </data>
+  <data name="lblNov2025EnglandWalesAndScotlandFullServiceLive" xml:space="preserve">
+    <value>November 2025 - England, Wales and Scotland full service
+live</value>
+  </data>
+  <data name="lblNVZAndFarmingRulesFor" xml:space="preserve">
+    <value>NVZ and Farming Rules for Water content and warning messages</value>
+  </data>
+  <data name="lblNVZComplianceWarningMessages" xml:space="preserve">
+    <value>NVZ compliance, warning messages and N-max calculations suitable for Scottish regulations</value>
+  </data>
+  <data name="lblOrganicManureInventory" xml:space="preserve">
+    <value>organic manure inventory NVZ compliance module</value>
+  </data>
+  <data name="lblReadSchedule" xml:space="preserve">
+    <value>Read the &lt;a  href ="/ReleaseSchedule"&gt;&lt;strong&gt;release schedule for testing and new features&lt;/strong&gt;&lt;/a&gt;</value>
+  </data>
+  <data name="lblReleaseSchedule" xml:space="preserve">
+    <value>Release schedule</value>
+  </data>
+  <data name="lblSeptToNov2025" xml:space="preserve">
+    <value>September to November 2025 - Scotland launch phase</value>
   </data>
 </root>

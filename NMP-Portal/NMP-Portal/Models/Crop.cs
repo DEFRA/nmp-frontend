@@ -30,6 +30,7 @@ namespace NMP.Portal.Models
         public int? GrazingIntensity { get; set; }
         public int? CropOrder { get; set; }
         public int? PreviousID { get; set; }
+        public string? CropGroupName { get; set; }
         public DateTime? CreatedOn { get; set; }
         public int? CreatedByID { get; set; }
         public DateTime? ModifiedOn { get; set; }

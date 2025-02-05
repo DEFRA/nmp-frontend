@@ -8,7 +8,7 @@
     <govuk-back-link asp-action="ConditionsAffectingNutrients" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
 }
 
-<form asp-action="EffectiveRainfall" asp-controller="OrganicManure" method="post">
+<form asp-action="EffectiveRainfall" asp-controller="OrganicManure" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
     <div class="govuk-grid-row">
 

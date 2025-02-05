@@ -10,7 +10,7 @@
 @section BeforeContent {
     <govuk-back-link asp-action=@backAction asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="SNSAppliedQuestion" asp-controller="Field" method="post">
+<form asp-action="SNSAppliedQuestion" asp-controller="Field" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference"></govuk-input>
