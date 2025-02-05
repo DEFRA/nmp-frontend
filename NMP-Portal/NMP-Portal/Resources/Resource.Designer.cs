@@ -232,6 +232,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 10 February.
+        /// </summary>
+        public static string lbl10February {
+            get {
+                return ResourceManager.GetString("lbl10February", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 15 {0} to 31 {1}.
         /// </summary>
         public static string lbl15Octto31Jan {
@@ -430,6 +439,16 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This is the plan for testing this service, adding new features and rolling it out across
+        ///the country..
+        /// </summary>
+        public static string lblAboutReleaseSchedule {
+            get {
+                return ResourceManager.GetString("lblAboutReleaseSchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to About these values.
         /// </summary>
         public static string lblAboutTheseValues {
@@ -570,6 +589,15 @@ namespace NMP.Portal.Resources {
         public static string lblAdddressFound {
             get {
                 return ResourceManager.GetString("lblAdddressFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Added function:.
+        /// </summary>
+        public static string lblAddedFunctions {
+            get {
+                return ResourceManager.GetString("lblAddedFunctions", resourceCulture);
             }
         }
         
@@ -808,6 +836,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to all the modules for England and Wales are live on GOV.UK and available for general use.
+        /// </summary>
+        public static string lblAllModulesLive {
+            get {
+                return ResourceManager.GetString("lblAllModulesLive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All of the fields.
         /// </summary>
         public static string lblAllOfTheFields {
@@ -1002,6 +1039,15 @@ namespace NMP.Portal.Resources {
         public static string lblApril {
             get {
                 return ResourceManager.GetString("lblApril", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Arable - core functions:.
+        /// </summary>
+        public static string lblArableCoreFunctions {
+            get {
+                return ResourceManager.GetString("lblArableCoreFunctions", resourceCulture);
             }
         }
         
@@ -1659,6 +1705,24 @@ namespace NMP.Portal.Resources {
         public static string lblCreateANutrientManagementPlan {
             get {
                 return ResourceManager.GetString("lblCreateANutrientManagementPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to create a plan and record.
+        /// </summary>
+        public static string lblCreateAPlanAndRecord {
+            get {
+                return ResourceManager.GetString("lblCreateAPlanAndRecord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to create a plan and record for arable and grassland farms.
+        /// </summary>
+        public static string lblCreateAPlanandRecordForArableAndGrasslansFarms {
+            get {
+                return ResourceManager.GetString("lblCreateAPlanandRecordForArableAndGrasslansFarms", resourceCulture);
             }
         }
         
@@ -2563,6 +2627,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to existing manure storage capacity NVZ compliance module.
+        /// </summary>
+        public static string lblExistingManureStorageCapacity {
+            get {
+                return ResourceManager.GetString("lblExistingManureStorageCapacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to false.
         /// </summary>
         public static string lblFalse {
@@ -2766,6 +2839,15 @@ namespace NMP.Portal.Resources {
         public static string lblFebruary {
             get {
                 return ResourceManager.GetString("lblFebruary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to February to July 2025 - England and Wales private beta test.
+        /// </summary>
+        public static string lblFebToJuly2025 {
+            get {
+                return ResourceManager.GetString("lblFebToJuly2025", resourceCulture);
             }
         }
         
@@ -3045,6 +3127,15 @@ namespace NMP.Portal.Resources {
         public static string lblGrassDetailsForField {
             get {
                 return ResourceManager.GetString("lblGrassDetailsForField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Grassland - core functions:.
+        /// </summary>
+        public static string lblGrasslandCoreFunctions {
+            get {
+                return ResourceManager.GetString("lblGrasslandCoreFunctions", resourceCulture);
             }
         }
         
@@ -3608,6 +3699,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to integrated MANNER-NPK calculations.
+        /// </summary>
+        public static string lblIntegratedMANNERNPKCalculations {
+            get {
+                return ResourceManager.GetString("lblIntegratedMANNERNPKCalculations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to In which years was {0} used for grass?.
         /// </summary>
         public static string lblInWhichYearsWasUsedForGrass {
@@ -3712,6 +3812,15 @@ namespace NMP.Portal.Resources {
         public static string lblJuly {
             get {
                 return ResourceManager.GetString("lblJuly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to July 2025 - England and Wales full service live.
+        /// </summary>
+        public static string lblJuly2025Schedule {
+            get {
+                return ResourceManager.GetString("lblJuly2025Schedule", resourceCulture);
             }
         }
         
@@ -4023,6 +4132,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to livestock manure nitrogen (N) farm limit NVZ compliance module.
+        /// </summary>
+        public static string lblLivestockManureLimitComplianceModule {
+            get {
+                return ResourceManager.GetString("lblLivestockManureLimitComplianceModule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Magnesium.
         /// </summary>
         public static string lblMagnesium {
@@ -4118,6 +4236,15 @@ namespace NMP.Portal.Resources {
         public static string lblManagement {
             get {
                 return ResourceManager.GetString("lblManagement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MANNER-NPK stand-alone front-end.
+        /// </summary>
+        public static string lblMannerNPKStandAloneFrontEnd {
+            get {
+                return ResourceManager.GetString("lblMannerNPKStandAloneFrontEnd", resourceCulture);
             }
         }
         
@@ -4329,6 +4456,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to we will monitor their use of the tool, and localise and refine the NMPT based on their feedback.
+        /// </summary>
+        public static string lblMonitorUseOfTool {
+            get {
+                return ResourceManager.GetString("lblMonitorUseOfTool", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to More about these NVZ rules.
         /// </summary>
         public static string lblMoreAboutTheseNVZRules {
@@ -4410,11 +4546,66 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to N-max NVZ compliance module.
+        /// </summary>
+        public static string lblNMaxComplainceModule {
+            get {
+                return ResourceManager.GetString("lblNMaxComplainceModule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This application may take you over the N-max limit for this crop.
         /// </summary>
         public static string lblNMaxLimitTitle {
             get {
                 return ResourceManager.GetString("lblNMaxLimitTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to around 40 to 50 users in England and Wales will test the NMPT online in a
+        ///special testing environment.
+        /// </summary>
+        public static string lblNMPTBetaTest1 {
+            get {
+                return ResourceManager.GetString("lblNMPTBetaTest1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to we will monitor their use of the tool, and refine and update the NMPT based on their feedback.
+        /// </summary>
+        public static string lblNMPTBetaTestFeedback {
+            get {
+                return ResourceManager.GetString("lblNMPTBetaTestFeedback", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NMPT launches to users in Scotland.
+        /// </summary>
+        public static string lblNMPTLaunchesToUsersInScotland {
+            get {
+                return ResourceManager.GetString("lblNMPTLaunchesToUsersInScotland", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NMPT is live on GOV.UK and available for general use.
+        /// </summary>
+        public static string lblNMPTLiveForGeneralUse {
+            get {
+                return ResourceManager.GetString("lblNMPTLiveForGeneralUse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NMPT release schedule.
+        /// </summary>
+        public static string lblNMPTReleaseSchedule {
+            get {
+                return ResourceManager.GetString("lblNMPTReleaseSchedule", resourceCulture);
             }
         }
         
@@ -4523,6 +4714,16 @@ namespace NMP.Portal.Resources {
         public static string lblNotSet {
             get {
                 return ResourceManager.GetString("lblNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to November 2025 - England, Wales and Scotland full service
+        ///live.
+        /// </summary>
+        public static string lblNov2025EnglandWalesAndScotlandFullServiceLive {
+            get {
+                return ResourceManager.GetString("lblNov2025EnglandWalesAndScotlandFullServiceLive", resourceCulture);
             }
         }
         
@@ -4671,6 +4872,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to NVZ and Farming Rules for Water content and warning messages.
+        /// </summary>
+        public static string lblNVZAndFarmingRulesFor {
+            get {
+                return ResourceManager.GetString("lblNVZAndFarmingRulesFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NVZ compliance, warning messages and N-max calculations suitable for Scottish regulations.
+        /// </summary>
+        public static string lblNVZComplianceWarningMessages {
+            get {
+                return ResourceManager.GetString("lblNVZComplianceWarningMessages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nitrate Vulnerable Zone (NVZ) field.
         /// </summary>
         public static string lblNVZField {
@@ -4793,6 +5012,15 @@ namespace NMP.Portal.Resources {
         public static string lblOrganicManureCreatedSuccessfullyForSpecificField {
             get {
                 return ResourceManager.GetString("lblOrganicManureCreatedSuccessfullyForSpecificField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to organic manure inventory NVZ compliance module.
+        /// </summary>
+        public static string lblOrganicManureInventory {
+            get {
+                return ResourceManager.GetString("lblOrganicManureInventory", resourceCulture);
             }
         }
         
@@ -5481,6 +5709,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Read the &lt;a  href =&quot;/ReleaseSchedule&quot;&gt;&lt;strong&gt;release schedule for testing and new features&lt;/strong&gt;&lt;/a&gt;.
+        /// </summary>
+        public static string lblReadSchedule {
+            get {
+                return ResourceManager.GetString("lblReadSchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The recommendations from this service come from.
         /// </summary>
         public static string lblRecommendationFromthisService {
@@ -5531,6 +5768,15 @@ namespace NMP.Portal.Resources {
         public static string lblRegOrganicProducer {
             get {
                 return ResourceManager.GetString("lblRegOrganicProducer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Release schedule.
+        /// </summary>
+        public static string lblReleaseSchedule {
+            get {
+                return ResourceManager.GetString("lblReleaseSchedule", resourceCulture);
             }
         }
         
@@ -5765,6 +6011,15 @@ namespace NMP.Portal.Resources {
         public static string lblSeptember {
             get {
                 return ResourceManager.GetString("lblSeptember", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to September to November 2025 - Scotland launch phase.
+        /// </summary>
+        public static string lblSeptToNov2025 {
+            get {
+                return ResourceManager.GetString("lblSeptToNov2025", resourceCulture);
             }
         }
         
