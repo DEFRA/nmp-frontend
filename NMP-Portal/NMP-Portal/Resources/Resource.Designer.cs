@@ -9023,7 +9023,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Defra Customer Identity Service is down, please try again later..
+        ///   Looks up a localized string similar to Defra Customer Identity Service configuration URL is not accessible, please contect administrator..
         /// </summary>
         public static string MsgDefraIdentityServiceDown {
             get {
