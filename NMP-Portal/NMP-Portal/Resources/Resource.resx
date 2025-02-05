@@ -3637,4 +3637,10 @@ live</value>
   <data name="lblSeptToNov2025" xml:space="preserve">
     <value>September to November 2025 - Scotland launch phase</value>
   </data>
+  <data name="lblCropGroupWithCounter" xml:space="preserve">
+    <value>Crop group {0}</value>
+  </data>
+  <data name="lblThisCropGroupNameAlreadyExists" xml:space="preserve">
+    <value>This crop group already exists.</value>
+  </data>
 </root>

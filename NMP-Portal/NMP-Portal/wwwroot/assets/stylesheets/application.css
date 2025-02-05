@@ -230,7 +230,9 @@ hr.big_seperator {
         text-align: right;
         width: 35%;
     }
-
+.field-name {
+    width: 14%;
+}
 
 
 #balance table {

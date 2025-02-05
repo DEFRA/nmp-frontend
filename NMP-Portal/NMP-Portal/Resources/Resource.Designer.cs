@@ -1853,6 +1853,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Crop group {0}.
+        /// </summary>
+        public static string lblCropGroupWithCounter {
+            get {
+                return ResourceManager.GetString("lblCropGroupWithCounter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Crop height.
         /// </summary>
         public static string lblCropHeight {
@@ -6893,6 +6902,15 @@ namespace NMP.Portal.Resources {
         public static string lblThisApplicationTakeOverMaxAppRate {
             get {
                 return ResourceManager.GetString("lblThisApplicationTakeOverMaxAppRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This crop group already exists..
+        /// </summary>
+        public static string lblThisCropGroupNameAlreadyExists {
+            get {
+                return ResourceManager.GetString("lblThisCropGroupNameAlreadyExists", resourceCulture);
             }
         }
         
