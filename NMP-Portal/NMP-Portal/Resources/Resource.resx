@@ -3444,7 +3444,7 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="lblHowtosaveyourplanasaPDF" xml:space="preserve">
     <value>How to save your plan as a PDF</value>
-</data>
+  </data>
   <data name="lblNUM1PaymentOfTheSFI" xml:space="preserve">
     <value>NUM1 payment of the SFI</value>
   </data>
@@ -3546,5 +3546,8 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="lblYourFeedbackWillHelpUsImproveThisService" xml:space="preserve">
     <value>Your feedback will help us improve this service.</value>
+  </data>
+  <data name="lblKgPerTonneWithNutrient" xml:space="preserve">
+    <value>{0} kg per tonne {1}</value>
   </data>
 </root>
