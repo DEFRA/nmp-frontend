@@ -1376,7 +1376,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>What is the incorporation method for your {0}?</value>
   </data>
   <data name="MsgDefraIdentityServiceDown" xml:space="preserve">
-    <value>Defra Customer Identity Service is down, please try again later.</value>
+    <value>Defra Customer Identity Service configuration URL is not accessible, please contact administrator.</value>
   </data>
   <data name="lblRainfallValueHint" xml:space="preserve">
     <value>Value should be without decimal places</value>
@@ -3546,6 +3546,102 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="lblYourFeedbackWillHelpUsImproveThisService" xml:space="preserve">
     <value>Your feedback will help us improve this service.</value>
+  </data>
+  <data name="lblKgPerTonneWithNutrient" xml:space="preserve">
+    <value>{0} kg per tonne {1}</value>
+  </data>
+  <data name="lbl10February" xml:space="preserve">
+    <value>10 February</value>
+  </data>
+  <data name="lblAboutReleaseSchedule" xml:space="preserve">
+    <value>This is the plan for testing this service, adding new features and rolling it out across
+the country.</value>
+  </data>
+  <data name="lblAddedFunctions" xml:space="preserve">
+    <value>Added function:</value>
+  </data>
+  <data name="lblAllModulesLive" xml:space="preserve">
+    <value>all the modules for England and Wales are live on GOV.UK and available for general use</value>
+  </data>
+  <data name="lblArableCoreFunctions" xml:space="preserve">
+    <value>Arable - core functions:</value>
+  </data>
+  <data name="lblCreateAPlanAndRecord" xml:space="preserve">
+    <value>create a plan and record</value>
+  </data>
+  <data name="lblCreateAPlanandRecordForArableAndGrasslansFarms" xml:space="preserve">
+    <value>create a plan and record for arable and grassland farms</value>
+  </data>
+  <data name="lblExistingManureStorageCapacity" xml:space="preserve">
+    <value>existing manure storage capacity NVZ compliance module</value>
+  </data>
+  <data name="lblFebToJuly2025" xml:space="preserve">
+    <value>February to July 2025 - England and Wales private beta test</value>
+  </data>
+  <data name="lblGrasslandCoreFunctions" xml:space="preserve">
+    <value>Grassland - core functions:</value>
+  </data>
+  <data name="lblIntegratedMANNERNPKCalculations" xml:space="preserve">
+    <value>integrated MANNER-NPK calculations</value>
+  </data>
+  <data name="lblJuly2025Schedule" xml:space="preserve">
+    <value>July 2025 - England and Wales full service live</value>
+  </data>
+  <data name="lblLivestockManureLimitComplianceModule" xml:space="preserve">
+    <value>livestock manure nitrogen (N) farm limit NVZ compliance module</value>
+  </data>
+  <data name="lblMannerNPKStandAloneFrontEnd" xml:space="preserve">
+    <value>MANNER-NPK stand-alone front-end</value>
+  </data>
+  <data name="lblMonitorUseOfTool" xml:space="preserve">
+    <value>we will monitor their use of the tool, and localise and refine the NMPT based on their feedback</value>
+  </data>
+  <data name="lblNMaxComplainceModule" xml:space="preserve">
+    <value>N-max NVZ compliance module</value>
+  </data>
+  <data name="lblNMPTBetaTest1" xml:space="preserve">
+    <value>around 40 to 50 users in England and Wales will test the NMPT online in a
+special testing environment</value>
+  </data>
+  <data name="lblNMPTBetaTestFeedback" xml:space="preserve">
+    <value>we will monitor their use of the tool, and refine and update the NMPT based on their feedback</value>
+  </data>
+  <data name="lblNMPTLaunchesToUsersInScotland" xml:space="preserve">
+    <value>NMPT launches to users in Scotland</value>
+  </data>
+  <data name="lblNMPTLiveForGeneralUse" xml:space="preserve">
+    <value>NMPT is live on GOV.UK and available for general use</value>
+  </data>
+  <data name="lblNMPTReleaseSchedule" xml:space="preserve">
+    <value>NMPT release schedule</value>
+  </data>
+  <data name="lblNov2025EnglandWalesAndScotlandFullServiceLive" xml:space="preserve">
+    <value>November 2025 - England, Wales and Scotland full service
+live</value>
+  </data>
+  <data name="lblNVZAndFarmingRulesFor" xml:space="preserve">
+    <value>NVZ and Farming Rules for Water content and warning messages</value>
+  </data>
+  <data name="lblNVZComplianceWarningMessages" xml:space="preserve">
+    <value>NVZ compliance, warning messages and N-max calculations suitable for Scottish regulations</value>
+  </data>
+  <data name="lblOrganicManureInventory" xml:space="preserve">
+    <value>organic manure inventory NVZ compliance module</value>
+  </data>
+  <data name="lblReadSchedule" xml:space="preserve">
+    <value>Read the &lt;a  href ="/ReleaseSchedule"&gt;&lt;strong&gt;release schedule for testing and new features&lt;/strong&gt;&lt;/a&gt;</value>
+  </data>
+  <data name="lblReleaseSchedule" xml:space="preserve">
+    <value>Release schedule</value>
+  </data>
+  <data name="lblSeptToNov2025" xml:space="preserve">
+    <value>September to November 2025 - Scotland launch phase</value>
+  </data>
+  <data name="lblCropGroupWithCounter" xml:space="preserve">
+    <value>Crop group {0}</value>
+  </data>
+  <data name="lblThisCropGroupNameAlreadyExists" xml:space="preserve">
+    <value>This crop group already exists.</value>
   </data>
   <data name="MsgClosedPeriodNitrogenExceedWarningHeadingEngland" xml:space="preserve">
     <value>This application will take you over the maximum application rate for inorganic nitrogen fertiliser to this crop during the closed spreading period</value>
