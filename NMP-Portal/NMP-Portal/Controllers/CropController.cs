@@ -444,6 +444,8 @@ namespace NMP.Portal.Controllers
                                     }
                                     if (matchFound && model.Crops.Count == planViewModel.Crops.Count && (!model.IsAnyChangeInField))
                                     {
+                                        model.CropType = await _fieldService.FetchCropTypeById(model.CropTypeID.Value);
+                                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                                         return RedirectToAction("CheckAnswer");
                                     }
                                 }
@@ -454,6 +456,7 @@ namespace NMP.Portal.Controllers
                             }
                         }
 
+                        model.CropType = await _fieldService.FetchCropTypeById(model.CropTypeID.Value);
                         _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                         return RedirectToAction("SowingDateQuestion");
                     }
@@ -498,6 +501,8 @@ namespace NMP.Portal.Controllers
                             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                             if (model.IsCropTypeChange)
                             {
+                                model.CropType = await _fieldService.FetchCropTypeById(model.CropTypeID.Value);
+                                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                                 return RedirectToAction("CropGroupName");
 
                             }
