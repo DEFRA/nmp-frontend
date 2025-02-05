@@ -3444,7 +3444,7 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="lblHowtosaveyourplanasaPDF" xml:space="preserve">
     <value>How to save your plan as a PDF</value>
-</data>
+  </data>
   <data name="lblNUM1PaymentOfTheSFI" xml:space="preserve">
     <value>NUM1 payment of the SFI</value>
   </data>
@@ -3546,5 +3546,11 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="lblYourFeedbackWillHelpUsImproveThisService" xml:space="preserve">
     <value>Your feedback will help us improve this service.</value>
+  </data>
+  <data name="lblCropGroupWithCounter" xml:space="preserve">
+    <value>Crop group {0}</value>
+  </data>
+  <data name="lblThisCropGroupNameAlreadyExists" xml:space="preserve">
+    <value>This crop group already exists.</value>
   </data>
 </root>
