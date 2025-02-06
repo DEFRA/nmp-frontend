@@ -108,6 +108,7 @@ namespace NMP.Portal.Helpers
         public const string FetchSoilNutrientIndexValueAsyncAPI = "vendors/rb209/Soil/NutrientIndices/{0}/{1}/{2}";
         public const string AddSoilAnalysisAsyncAPI = "soil-analyses";
         public const string DeleteSoilAnalysisByIdAPI = "soilAnalysis/{0}";
+        public const string DeleteCropByCropTypeIdandGroupNameAPI = "soilAnalysis/{0}";
 
 
         //Manner APi Url

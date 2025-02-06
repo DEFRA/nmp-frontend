@@ -3718,4 +3718,16 @@ live</value>
   <data name="lblRemoveCropGroupWithCropType" xml:space="preserve">
     <value>Remove {0} ({1})</value>
   </data>
+  <data name="lblRemoveCropGroupContent1" xml:space="preserve">
+    <value>This action will remove all the data about this crop group from your plans. You will not be able to get it back.</value>
+  </data>
+  <data name="lblRemoveCropGroupContent2" xml:space="preserve">
+    <value>It will not remove the fields from your farm and you will be able to use them in your plans</value>
+  </data>
+  <data name="lblRemoveCropTypeFromFieldName" xml:space="preserve">
+    <value>Remove {0} from {1}</value>
+  </data>
+  <data name="MsgCropGroupNameRemoves" xml:space="preserve">
+    <value>{0} removed</value>
+  </data>
 </root>

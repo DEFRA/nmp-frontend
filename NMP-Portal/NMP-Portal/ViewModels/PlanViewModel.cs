@@ -55,5 +55,6 @@ namespace NMP.Portal.ViewModels
         public string? SortInOrganicListOrderByFieldName { get; set; } = string.Empty;
         public string? SortOrganicListOrderByFieldName { get; set; } = string.Empty;
         public string? CropGroupName { get; set; } = string.Empty;
+        public bool? RemoveCropGroup { get; set; } 
     }
 }

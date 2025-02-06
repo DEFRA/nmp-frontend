@@ -5835,11 +5835,38 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This action will remove all the data about this crop group from your plans. You will not be able to get it back..
+        /// </summary>
+        public static string lblRemoveCropGroupContent1 {
+            get {
+                return ResourceManager.GetString("lblRemoveCropGroupContent1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It will not remove the fields from your farm and you will be able to use them in your plans.
+        /// </summary>
+        public static string lblRemoveCropGroupContent2 {
+            get {
+                return ResourceManager.GetString("lblRemoveCropGroupContent2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove {0} ({1}).
         /// </summary>
         public static string lblRemoveCropGroupWithCropType {
             get {
                 return ResourceManager.GetString("lblRemoveCropGroupWithCropType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove {0} from {1}.
+        /// </summary>
+        public static string lblRemoveCropTypeFromFieldName {
+            get {
+                return ResourceManager.GetString("lblRemoveCropTypeFromFieldName", resourceCulture);
             }
         }
         
@@ -9019,6 +9046,15 @@ namespace NMP.Portal.Resources {
         public static string MsgClosedPeriodWarningPara2England {
             get {
                 return ResourceManager.GetString("MsgClosedPeriodWarningPara2England", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} removed.
+        /// </summary>
+        public static string MsgCropGroupNameRemoves {
+            get {
+                return ResourceManager.GetString("MsgCropGroupNameRemoves", resourceCulture);
             }
         }
         

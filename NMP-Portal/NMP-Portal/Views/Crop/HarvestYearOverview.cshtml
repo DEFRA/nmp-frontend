@@ -71,7 +71,6 @@
                     <govuk-tabs-item id="CropAndFields" label=@Resource.lblCropsAndFields>
                         <h2 class="govuk-heading-m non-standard">@Resource.lblCropsAndFields</h2>
                         <a class="govuk-button add-button" asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblAddACropGroup  </a>
-
                         <hr class="seperator_five">
 
                         <!-- Crops Table -->
@@ -80,7 +79,7 @@
                             @foreach (var harvestYearPlan in Model.HarvestYearPlans.FieldData)
                             {
 
-                                <div class="tab-left">
+                                <div class="tab-left margin-bottom-thirty">
                                     <h2 class="govuk-heading-m margin-bottom-ten">
                                         @harvestYearPlan.CropTypeName
                                         @if (!string.IsNullOrWhiteSpace(harvestYearPlan.CropGroupName))
