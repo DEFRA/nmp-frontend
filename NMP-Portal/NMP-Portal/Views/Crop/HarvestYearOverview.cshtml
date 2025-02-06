@@ -71,7 +71,7 @@
                     <govuk-tabs-item id="CropAndFields" label=@Resource.lblCropsAndFields>
                         <h2 class="govuk-heading-m non-standard">@Resource.lblCropsAndFields</h2>
                         <a class="govuk-button add-button" asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblAddACropGroup  </a>
-                        @* <govuk-button class="panel-button" asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblAddACropGroup</govuk-button> *@
+
                         <hr class="seperator_five">
 
                         <!-- Crops Table -->
@@ -79,16 +79,18 @@
                         {
                             @foreach (var harvestYearPlan in Model.HarvestYearPlans.FieldData)
                             {
+
                                 <div class="tab-left">
                                     <h2 class="govuk-heading-m margin-bottom-ten">
                                         @harvestYearPlan.CropTypeName
-                                        @if (harvestYearPlan.CropGroupName != null)
+                                        @if (!string.IsNullOrWhiteSpace(harvestYearPlan.CropGroupName))
                                         {
-                                            <span class="nonbold">@string.Format(Resource.lblBracketWithName, harvestYearPlan.CropGroupName)</span>
+                                            <span class="nonbold">@string.Concat(Resource.lblHyphen," ", harvestYearPlan.CropGroupName)</span>
                                         }
                                     </h2>
                                     <p class="govuk-body"></p>
                                 </div>
+                                <a class=" govuk-button govuk-button--secondary" asp-action="RemoveCropGroup" asp-controller="Crop" asp-route-q="@harvestYearPlan.EncryptedCropTypeName" asp-route-r="@harvestYearPlan.EncryptedCropGroupName">@Resource.lblRemoveThisGroup</a>
                                 <div class="tab-right">
 
                                     @* <govuk-button type="submit" class="govuk-button--secondary update-button">
