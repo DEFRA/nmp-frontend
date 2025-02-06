@@ -3679,6 +3679,9 @@ live</value>
   <data name="MsgWinterOilseedRapeNRateExceedWarningPara1Wales" xml:space="preserve">
     <value>The Water Resources Regulations state that the application rate of inorganic nitrogen fertiliser on winter oilseed rape between {0} and 31 October must not exceed 30kg of nitrogen per hectare.</value>
   </data>
+  <data name="lblRemoveThisGroup" xml:space="preserve">
+    <value>Remove this group</value>
+  </data>
   <data name="lbl15SeptemberTo15January" xml:space="preserve">
     <value>15 {0} to 15 {1}</value>
   </data>
@@ -3711,5 +3714,8 @@ live</value>
   </data>
   <data name="lblPlanHeader" xml:space="preserve">
     <value>{0} plan {1}</value>
+  </data>
+  <data name="lblRemoveCropGroupWithCropType" xml:space="preserve">
+    <value>Remove {0} ({1})</value>
   </data>
 </root>
