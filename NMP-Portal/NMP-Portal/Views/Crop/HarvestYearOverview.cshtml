@@ -30,7 +30,7 @@
             @Resource.lblPlanningAndRecording
         </govuk-breadcrumbs-item>
         <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
-            @Resource.lblHarvestYearOverview
+            @string.Format("{0} {1}",Resource.lblHarvestYears, Model.Year)            
         </govuk-breadcrumbs-item>
     </govuk-breadcrumbs>
     }
@@ -102,7 +102,7 @@
                                             <th scope="col" class="govuk-table__header field-name">@Resource.lblPlantingDate</th>
                                             <th scope="col" class="govuk-table__header field-name">@Resource.lblYieldPerHectare</th>
                                             <th scope="col" class="govuk-table__header">@Resource.lblVarietyForRecommendation</th>
-                                            <th scope="col" class="govuk-table__header"></th>
+                                            <th scope="col" class="govuk-table__header">@Resource.lblAction</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -126,8 +126,7 @@
                                                     <td class="govuk-table__cell">
                                                         @if (field.Yield != null)
                                                         {
-                                                            @(field.Yield % 1 == 0 ? (int)field.Yield : field.Yield)
-                                                            ;
+                                                            @(string.Format("{0} {1}",(field.Yield % 1 == 0 ? (int)field.Yield : field.Yield),Resource.lbltonnes))
                                                         }
                                                         else
                                                         {
