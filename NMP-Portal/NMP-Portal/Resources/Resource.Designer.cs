@@ -2150,7 +2150,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Does {0} typically have more than 30% clover?.
+        ///   Looks up a localized string similar to Does {0} typically have high clover content (30% or more)?.
         /// </summary>
         public static string lblDoesFieldTypicallyHaveMoreThan30PercentClover {
             get {
