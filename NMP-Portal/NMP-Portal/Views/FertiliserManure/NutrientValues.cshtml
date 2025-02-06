@@ -28,17 +28,17 @@
                         </govuk-notification-banner-title>
                         @TempData["NitrogenExceedMessageTitle"]<br />
                         <p class="govuk-notification-banner__heading">
-                            @Resource.MsgForMaxNitrogenForFertiliserTitle
+                            @Model.ClosedPeriodNitrogenExceedWarningHeading
                         </p>
-                        <p class="govuk-body">@TempData["NitrogenExceedForFertiliser"]</p>
-                        @if (TempData["NitrogenExceedFirstAdditionalMessage"] != null)
+                        <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara1</p>
+                        @* @if (Model.ClosedPeriodNitrogenExceedWarningPara1 != null)
                         {
-                            <p class="govuk-body">@TempData["NitrogenExceedFirstAdditionalMessage"]</p>
+                            <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara1</p>
 
-                        }
-                        @if (TempData["NitrogenExceedSecondAdditionalMessage"] != null)
+                        } *@
+                        @if (Model.ClosedPeriodNitrogenExceedWarningPara2 != null)
                         {
-                            <p class="govuk-body">@TempData["NitrogenExceedSecondAdditionalMessage"]</p>
+                            <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara2</p>
                         }
                     </govuk-notification-banner>
                 }
@@ -62,6 +62,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNitrogenExceedWarning" value="@Model.IsNitrogenExceedWarning.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropOrder"></govuk-input>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Date"></govuk-date-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmCountryId"></govuk-input>
 
             @if (Model != null)
             {
