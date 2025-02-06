@@ -23,6 +23,9 @@ namespace NMP.Portal.ServiceResponses
         [JsonProperty("Yield")]
         public string Yield { get; set; }
 
+        [JsonProperty("CropGroupName")]
+        public string? CropGroupName { get; set; }
+
         [JsonProperty("lastModifiedOn")]
         public DateTime LastModifiedOn { get; set; }
 

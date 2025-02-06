@@ -259,6 +259,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 15 {0} to 15 {1}.
+        /// </summary>
+        public static string lbl15SeptemberTo15January {
+            get {
+                return ResourceManager.GetString("lbl15SeptemberTo15January", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 16 {0} to {1} {2}.
         /// </summary>
         public static string lbl16Septo28Feb {
@@ -385,6 +394,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 31 October.
+        /// </summary>
+        public static string lbl31October {
+            get {
+                return ResourceManager.GetString("lbl31October", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 31 {0} to 15 {1}.
         /// </summary>
         public static string lbl31OctoberTo15January {
@@ -463,6 +481,15 @@ namespace NMP.Portal.Resources {
         public static string lblAbove300SeaLevel {
             get {
                 return ResourceManager.GetString("lblAbove300SeaLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Action.
+        /// </summary>
+        public static string lblAction {
+            get {
+                return ResourceManager.GetString("lblAction", resourceCulture);
             }
         }
         
@@ -1853,6 +1880,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Crop group {0}.
+        /// </summary>
+        public static string lblCropGroupWithCounter {
+            get {
+                return ResourceManager.GetString("lblCropGroupWithCounter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Crop height.
         /// </summary>
         public static string lblCropHeight {
@@ -2114,7 +2150,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Does {0} typically have more than 30% clover?.
+        ///   Looks up a localized string similar to Does {0} typically have high clover content (30% or more)?.
         /// </summary>
         public static string lblDoesFieldTypicallyHaveMoreThan30PercentClover {
             get {
@@ -4069,7 +4105,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Last updated: {0}.
+        ///   Looks up a localized string similar to Last updated: {0}..
         /// </summary>
         public static string lblLastUpdated {
             get {
@@ -5322,6 +5358,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} plan {1}.
+        /// </summary>
+        public static string lblPlanHeader {
+            get {
+                return ResourceManager.GetString("lblPlanHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Planning and recording.
         /// </summary>
         public static string lblPlaningndRecording {
@@ -5790,6 +5835,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove {0} ({1}).
+        /// </summary>
+        public static string lblRemoveCropGroupWithCropType {
+            get {
+                return ResourceManager.GetString("lblRemoveCropGroupWithCropType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove {0}.
         /// </summary>
         public static string lblRemoveFarm {
@@ -5822,6 +5876,15 @@ namespace NMP.Portal.Resources {
         public static string lblRemoveSoilAnalysisFromFieldName {
             get {
                 return ResourceManager.GetString("lblRemoveSoilAnalysisFromFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove this group.
+        /// </summary>
+        public static string lblRemoveThisGroup {
+            get {
+                return ResourceManager.GetString("lblRemoveThisGroup", resourceCulture);
             }
         }
         
@@ -6780,7 +6843,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There are {0} fields in this plan.
+        ///   Looks up a localized string similar to There are {0} fields in this plan..
         /// </summary>
         public static string lblThereAreFieldsInThisPlan {
             get {
@@ -6893,6 +6956,15 @@ namespace NMP.Portal.Resources {
         public static string lblThisApplicationTakeOverMaxAppRate {
             get {
                 return ResourceManager.GetString("lblThisApplicationTakeOverMaxAppRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This crop group already exists..
+        /// </summary>
+        public static string lblThisCropGroupNameAlreadyExists {
+            get {
+                return ResourceManager.GetString("lblThisCropGroupNameAlreadyExists", resourceCulture);
             }
         }
         
@@ -8346,7 +8418,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Yield (per hectare).
+        ///   Looks up a localized string similar to Target yield (per hectare).
         /// </summary>
         public static string lblYieldPerHectare {
             get {
@@ -8616,6 +8688,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider changing your application date..
+        /// </summary>
+        public static string Msg31OctoberToEndPeriodFertiliserWarningPara2 {
+            get {
+                return ResourceManager.GetString("Msg31OctoberToEndPeriodFertiliserWarningPara2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources Regulations, and you should consider changing your application date..
+        /// </summary>
+        public static string Msg31OctoberToEndPeriodFertiliserWarningPara2Wales {
+            get {
+                return ResourceManager.GetString("Msg31OctoberToEndPeriodFertiliserWarningPara2Wales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Access token not received from Customer Identity.
         /// </summary>
         public static string MsgAccessTokenNotReceived {
@@ -8771,6 +8861,33 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The application date you entered is inside your closed spreading period for applying inorganic nitrogen fertiliser.
+        /// </summary>
+        public static string MsgClosedPeriodFertiliserWarningHeading {
+            get {
+                return ResourceManager.GetString("MsgClosedPeriodFertiliserWarningHeading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider applying outside the closed spreading period..
+        /// </summary>
+        public static string MsgClosedPeriodFertiliserWarningPara2 {
+            get {
+                return ResourceManager.GetString("MsgClosedPeriodFertiliserWarningPara2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources Regulations, and you should consider applying outside the closed spreading period. Before spreading fertiliser, a field inspection should be carried out to consider the risk of causing pollution or damage to the soil..
+        /// </summary>
+        public static string MsgClosedPeriodFertiliserWarningPara2Wales {
+            get {
+                return ResourceManager.GetString("MsgClosedPeriodFertiliserWarningPara2Wales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The application date you entered is inside your closed period for applying manufactured nitrogen (N) fertiliser.
         /// </summary>
         public static string MsgClosedPeriodForFertliserExceptOilseedAndGrassTitle {
@@ -8785,6 +8902,87 @@ namespace NMP.Portal.Resources {
         public static string MsgClosedPeriodForGrassAndOilseedFertliserWarningMsgTitle {
             get {
                 return ResourceManager.GetString("MsgClosedPeriodForGrassAndOilseedFertliserWarningMsgTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application will take you over the maximum application rate for inorganic nitrogen fertiliser to this crop during the closed spreading period.
+        /// </summary>
+        public static string MsgClosedPeriodNitrogenExceedWarningHeadingEngland {
+            get {
+                return ResourceManager.GetString("MsgClosedPeriodNitrogenExceedWarningHeadingEngland", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application will take you over the maximum application rate for inorganic nitrogen fertiliser to this crop during the closed spreading period.
+        /// </summary>
+        public static string MsgClosedPeriodNitrogenExceedWarningHeadingWales {
+            get {
+                return ResourceManager.GetString("MsgClosedPeriodNitrogenExceedWarningHeadingWales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that the application rate of inorganic nitrogen fertiliser on brassica crops between {0} and {1} must not exceed 100kg of nitrogen per hectare and that no more than 50kg of nitrogen per hectare can be applied every 4 weeks, up to the date on which you harvest the crop..
+        /// </summary>
+        public static string MsgClosedPeriodNitrogenExceedWarningPara1England {
+            get {
+                return ResourceManager.GetString("MsgClosedPeriodNitrogenExceedWarningPara1England", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Water Resources Regulations state that the application rate of inorganic nitrogen fertiliser on brassica crops between {0} and {1} must not exceed 100kg of nitrogen per hectare, and that no more than 50kg of nitrogen per hectare can be applied every 4 weeks, up to the date on which you harvest the crop..
+        /// </summary>
+        public static string MsgClosedPeriodNitrogenExceedWarningPara1Wales {
+            get {
+                return ResourceManager.GetString("MsgClosedPeriodNitrogenExceedWarningPara1Wales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the application rate of inorganic nitrogen fertiliser..
+        /// </summary>
+        public static string MsgClosedPeriodNitrogenExceedWarningPara2England {
+            get {
+                return ResourceManager.GetString("MsgClosedPeriodNitrogenExceedWarningPara2England", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources Regulations, and you should consider reducing the application rate of inorganic nitrogen fertiliser..
+        /// </summary>
+        public static string MsgClosedPeriodNitrogenExceedWarningPara2Wales {
+            get {
+                return ResourceManager.GetString("MsgClosedPeriodNitrogenExceedWarningPara2Wales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application will take you over the maximum application rate for manufactured nitrogen fertiliser to this crop during the closed spreading period.
+        /// </summary>
+        public static string MsgClosedPeriodNRateExceedWarningHeadingWales {
+            get {
+                return ResourceManager.GetString("MsgClosedPeriodNRateExceedWarningHeadingWales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that the application rate of inorganic nitrogen fertiliser to this crop between {0} and {1} must not exceed {3}kg of nitrogen per hectare..
+        /// </summary>
+        public static string MsgClosedPeriodNRateExceedWarningPara1England {
+            get {
+                return ResourceManager.GetString("MsgClosedPeriodNRateExceedWarningPara1England", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources Regulations, and you should consider reducing the application rate of inorganic nitrogen fertiliser..
+        /// </summary>
+        public static string MsgClosedPeriodNRateExceedWarningPara2Wales {
+            get {
+                return ResourceManager.GetString("MsgClosedPeriodNRateExceedWarningPara2Wales", resourceCulture);
             }
         }
         
@@ -10576,6 +10774,51 @@ namespace NMP.Portal.Resources {
         public static string MsgWindspeedAtApplicationNotSet {
             get {
                 return ResourceManager.GetString("MsgWindspeedAtApplicationNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that the application rate of inorganic nitrogen fertiliser on grass between {0} and 31 October must not exceed 80kg of nitrogen per hectare, and that no more than 40kg of nitrogen per hectare can be applied at any one time..
+        /// </summary>
+        public static string MsgWinterGrassNRateExceedWarningPara1England {
+            get {
+                return ResourceManager.GetString("MsgWinterGrassNRateExceedWarningPara1England", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Water Resources Regulations state that the application rate of inorganic nitrogen fertiliser on grass between {0} and 31 October must not exceed 80kg of nitrogen per hectare, and that no more than 40kg of nitrogen per hectare can be applied at any one time..
+        /// </summary>
+        public static string MsgWinterGrassNRateExceedWarningPara1Wales {
+            get {
+                return ResourceManager.GetString("MsgWinterGrassNRateExceedWarningPara1Wales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application will take you over the maximum application rate for inorganic nitrogen fertiliser to this crop during the closed spreading period.
+        /// </summary>
+        public static string MsgWinterOilseedRapeNRateExceedWarningHeadingWales {
+            get {
+                return ResourceManager.GetString("MsgWinterOilseedRapeNRateExceedWarningHeadingWales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that the application rate of inorganic nitrogen fertiliser on winter oilseed rape between {0} and 31 October must not exceed 30kg of nitrogen per hectare..
+        /// </summary>
+        public static string MsgWinterOilseedRapeNRateExceedWarningPara1England {
+            get {
+                return ResourceManager.GetString("MsgWinterOilseedRapeNRateExceedWarningPara1England", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Water Resources Regulations state that the application rate of inorganic nitrogen fertiliser on winter oilseed rape between {0} and 31 October must not exceed 30kg of nitrogen per hectare..
+        /// </summary>
+        public static string MsgWinterOilseedRapeNRateExceedWarningPara1Wales {
+            get {
+                return ResourceManager.GetString("MsgWinterOilseedRapeNRateExceedWarningPara1Wales", resourceCulture);
             }
         }
         
