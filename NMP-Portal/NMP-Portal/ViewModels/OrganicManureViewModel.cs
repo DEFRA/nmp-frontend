@@ -113,5 +113,10 @@ namespace NMP.Portal.ViewModels
         public string? EndClosedPeriodEndFebWarningHeading { get; set; } = string.Empty;
         public string? EndClosedPeriodEndFebWarningPara1 { get; set; } = string.Empty;
         public string? EndClosedPeriodEndFebWarningPara2 { get; set; } = string.Empty;
+
+        public string? EndClosedPeriodFebruaryExistWithinThreeWeeksHeading { get; set; } = string.Empty;
+        public string? EndClosedPeriodFebruaryExistWithinThreeWeeksPara1 { get; set; } = string.Empty;
+        public string? EndClosedPeriodFebruaryExistWithinThreeWeeksPara2 { get; set; } = string.Empty;
+        public bool? HighReadilyAvailableNitrogen { get; set; }
     }
 }

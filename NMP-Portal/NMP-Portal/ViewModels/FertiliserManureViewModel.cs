@@ -39,5 +39,14 @@ namespace NMP.Portal.ViewModels
         public bool IsClosedPeriodWarningOnlyForGrassAndOilseed { get; set; } = false;
         public bool IsNitrogenExceedWarning { get; set; } = false;
         public int? CropOrder { get; set; }
+        public int? FarmCountryId { get; set; }
+        public bool IsClosedPeriodWarning { get; set; } = false;
+        public string? ClosedPeriodWarningHeading { get; set; } = string.Empty;
+        //public string? ClosedPeriodWarningPara1 { get; set; } = string.Empty;
+        public string? ClosedPeriodWarningPara2 { get; set; } = string.Empty;
+
+        public string? ClosedPeriodNitrogenExceedWarningHeading { get; set; } = string.Empty;
+        public string? ClosedPeriodNitrogenExceedWarningPara1 { get; set; } = string.Empty;
+        public string? ClosedPeriodNitrogenExceedWarningPara2 { get; set; } = string.Empty;
     }
 }

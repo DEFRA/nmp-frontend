@@ -30,7 +30,7 @@
             @Resource.lblPlanningAndRecording
         </govuk-breadcrumbs-item>
         <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
-            @Resource.lblHarvestYearOverview
+            @string.Format("{0} {1}",Resource.lblHarvestYears, Model.Year)            
         </govuk-breadcrumbs-item>
     </govuk-breadcrumbs>
     }
@@ -49,7 +49,7 @@
     </div>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds govuk-grid-column-full">
-            <h1 class="govuk-heading-l">@string.Format(Resource.lblCropPlanFor, Model.Year)</h1>
+            <h1 class="govuk-heading-l">@string.Format(Resource.lblPlanHeader,Model.FarmName, Model.Year)</h1>
             <p class="govuk-body">
                 @string.Format(Resource.lblLastUpdated, Model.LastModifiedOn)
                 @string.Format(Resource.lblThereAreFieldsInThisPlan, Model.FieldCount)
@@ -71,7 +71,7 @@
                     <govuk-tabs-item id="CropAndFields" label=@Resource.lblCropsAndFields>
                         <h2 class="govuk-heading-m non-standard">@Resource.lblCropsAndFields</h2>
                         <a class="govuk-button add-button" asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblAddACropGroup  </a>
-                        @* <govuk-button class="panel-button" asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblAddACropGroup</govuk-button> *@
+
                         <hr class="seperator_five">
 
                         <!-- Crops Table -->
@@ -79,29 +79,32 @@
                         {
                             @foreach (var harvestYearPlan in Model.HarvestYearPlans.FieldData)
                             {
+
                                 <div class="tab-left">
                                     <h2 class="govuk-heading-m margin-bottom-ten">
                                         @harvestYearPlan.CropTypeName
-                                        @if (harvestYearPlan.CropVariety != null)
+                                        @if (!string.IsNullOrWhiteSpace(harvestYearPlan.CropGroupName))
                                         {
-                                            <span class="nonbold">@string.Format(Resource.lblBracketWithName, harvestYearPlan.CropVariety)</span>
+                                            <span class="nonbold">@string.Concat(Resource.lblHyphen," ", harvestYearPlan.CropGroupName)</span>
                                         }
                                     </h2>
                                     <p class="govuk-body"></p>
                                 </div>
+                                <a class=" govuk-button govuk-button--secondary" asp-action="RemoveCropGroup" asp-controller="Crop" asp-route-q="@harvestYearPlan.EncryptedCropTypeName" asp-route-r="@harvestYearPlan.EncryptedCropGroupName">@Resource.lblRemoveThisGroup</a>
                                 <div class="tab-right">
 
                                     @* <govuk-button type="submit" class="govuk-button--secondary update-button">
-                                        @Resource.lblUpdateThisGroup
-                                    </govuk-button> *@
+                    @Resource.lblUpdateThisGroup
+                    </govuk-button> *@
                                 </div>
                                 <table class="govuk-table big_crop_table_version_five margin-bottom-forty">
                                     <thead class="govuk-table__head">
                                         <tr class="govuk-table__row">
-                                            <th scope="col" class="govuk-table__header">@Resource.lblField</th>
-                                            <th scope="col" class="govuk-table__header">@Resource.lblPlantingDate</th>
-                                            <th scope="col" class="govuk-table__header">@Resource.lblYieldPerHectare</th>
-                                            <th scope="col" class="govuk-table__header"></th>
+                                            <th scope="col" class="govuk-table__header field-name">@Resource.lblField</th>
+                                            <th scope="col" class="govuk-table__header field-name">@Resource.lblPlantingDate</th>
+                                            <th scope="col" class="govuk-table__header field-name">@Resource.lblYieldPerHectare</th>
+                                            <th scope="col" class="govuk-table__header">@Resource.lblVarietyForRecommendation</th>
+                                            <th scope="col" class="govuk-table__header">@Resource.lblAction</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -125,13 +128,16 @@
                                                     <td class="govuk-table__cell">
                                                         @if (field.Yield != null)
                                                         {
-                                                            @(field.Yield % 1 == 0 ? (int)field.Yield : field.Yield)
-                                                            ;
+                                                            @(string.Format("{0} {1}",(field.Yield % 1 == 0 ? (int)field.Yield : field.Yield),Resource.lbltonnes))
                                                         }
                                                         else
                                                         {
                                                             @Resource.lblNotEntered
                                                         }
+                                                    </td>
+                                                    <td class="govuk-table__cell">
+                                                        @(string.IsNullOrWhiteSpace(field.Variety) ? Resource.lblNotEntered : field.Variety)
+
                                                     </td>
                                                     <td class="govuk-table__cell">
                                                         <a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@field.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">
@@ -262,21 +268,21 @@
                                             <th scope="col" class="govuk-table__header">@Resource.lblApplicationDate</th>
                                         }
                                         @* @if (Model.sortInOrganicListOrderByDate != null && Model.sortInOrganicListOrderByDate == Resource.lblDesc)
-                                        {
-                                            <th scope="col" class="govuk-table__header">@string.Format(Resource.lblApplicationDateWithArrow, Resource.lblDescSign)</th>
-                                        }
-                                        else
-                                        {
-                                            <th scope="col" class="govuk-table__header">@string.Format(Resource.lblApplicationDateWithArrow, Resource.lblAscSign)</th>
-                                        } *@
+                            {
+                            <th scope="col" class="govuk-table__header">@string.Format(Resource.lblApplicationDateWithArrow, Resource.lblDescSign)</th>
+                            }
+                            else
+                            {
+                            <th scope="col" class="govuk-table__header">@string.Format(Resource.lblApplicationDateWithArrow, Resource.lblAscSign)</th>
+                            } *@
                                         @* @if (Model.SortInOrganicListOrderByFieldName != null && Model.SortInOrganicListOrderByFieldName == Resource.lblDesc)
-                                        {
-                                            <th scope="col" class="govuk-table__header">@string.Format(Resource.lblFieldWithArrow, Resource.lblDescSign)</th>
-                                        }
-                                        else
-                                        {
-                                            <th scope="col" class="govuk-table__header">@string.Format(Resource.lblFieldWithArrow, Resource.lblAscSign)</th>
-                                        } *@
+                            {
+                            <th scope="col" class="govuk-table__header">@string.Format(Resource.lblFieldWithArrow, Resource.lblDescSign)</th>
+                            }
+                            else
+                            {
+                            <th scope="col" class="govuk-table__header">@string.Format(Resource.lblFieldWithArrow, Resource.lblAscSign)</th>
+                            } *@
                                         @* <th scope="col" class="govuk-table__header">@Resource.lblField</th> *@
                                         <th scope="col" class="govuk-table__header">@Resource.lblCrop</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblNutrients</th>

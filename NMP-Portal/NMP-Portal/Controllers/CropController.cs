@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using NMP.Portal.Enums;
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
 using NMP.Portal.Resources;
@@ -443,6 +444,8 @@ namespace NMP.Portal.Controllers
                                     }
                                     if (matchFound && model.Crops.Count == planViewModel.Crops.Count && (!model.IsAnyChangeInField))
                                     {
+                                        model.CropType = await _fieldService.FetchCropTypeById(model.CropTypeID.Value);
+                                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                                         return RedirectToAction("CheckAnswer");
                                     }
                                 }
@@ -453,6 +456,7 @@ namespace NMP.Portal.Controllers
                             }
                         }
 
+                        model.CropType = await _fieldService.FetchCropTypeById(model.CropTypeID.Value);
                         _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                         return RedirectToAction("SowingDateQuestion");
                     }
@@ -497,10 +501,12 @@ namespace NMP.Portal.Controllers
                             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                             if (model.IsCropTypeChange)
                             {
+                                model.CropType = await _fieldService.FetchCropTypeById(model.CropTypeID.Value);
+                                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                                 return RedirectToAction("CropGroupName");
 
                             }
-                            
+
                         }
                     }
                     else
@@ -589,7 +595,13 @@ namespace NMP.Portal.Controllers
                 {
                     return View(model);
                 }
-                
+                if (!string.IsNullOrWhiteSpace(model.Variety))
+                {
+                    for (int i = 0; i < model.Crops.Count; i++)
+                    {
+                        model.Crops[i].Variety = model.Variety;
+                    }
+                }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
 
                 if (model.IsCheckAnswer)
@@ -807,6 +819,7 @@ namespace NMP.Portal.Controllers
                             }
                             if (matchFound && (!model.IsAnyChangeInField))
                             {
+                                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                                 return RedirectToAction("CheckAnswer");
                             }
                         }
@@ -818,7 +831,7 @@ namespace NMP.Portal.Controllers
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                 return RedirectToAction("CropGroupName");
-                
+
             }
             catch (Exception ex)
             {
@@ -1592,19 +1605,19 @@ namespace NMP.Portal.Controllers
                 var country = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
                 List<CropInfoOneResponse> cropInfoOneList = cropInfoOneResponse.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.RB209Country.All).ToList();
 
-                 action = model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Cereals ?
-                    "CropInfoTwo" : (((model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other)
-                    || cropInfoOneList.Count == 1) ?
-                    ((model.YieldQuestion != (int)NMP.Portal.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields) ?
-                "Yield" : "YieldQuestion") : "CropInfoOne");
+                action = model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Cereals ?
+                   "CropInfoTwo" : (((model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other)
+                   || cropInfoOneList.Count == 1) ?
+                   ((model.YieldQuestion != (int)NMP.Portal.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields) ?
+               "Yield" : "YieldQuestion") : "CropInfoOne");
                 model.IsCheckAnswer = false;
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("CropData", model);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogTrace($"Crop Controller : Exception in BackCheckAnswer() action : {ex.Message}, {ex.StackTrace}");
                 TempData["ErrorCreatePlan"] = ex.Message;
-                return View("CheckAnswer",model);
+                return View("CheckAnswer", model);
             }
             return RedirectToAction(action, new { q = model.YieldEncryptedCounter });
         }
@@ -1680,6 +1693,26 @@ namespace NMP.Portal.Controllers
 
             Error error = null;
             int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
+
+            //var lastGroup = (await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_cropDataProtector.Unprotect(model.EncryptedFarmId))))
+            //                    .OrderByDescending(cg => cg.CropGroupName)
+            //                    .FirstOrDefault();
+            int? lastGroupNumber = null;
+            if (string.IsNullOrWhiteSpace(model.CropGroupName))
+            {
+                (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
+                if (harvestYearPlanResponse != null && error.Message == null)
+                {
+                    var lastGroup = harvestYearPlanResponse.Where(cg => !string.IsNullOrEmpty(cg.CropGroupName) && cg.CropGroupName.StartsWith("Crop group") &&
+                                     int.TryParse(cg.CropGroupName.Split(' ')[2], out _))
+                                    .OrderBy(cg => int.Parse(cg.CropGroupName.Split(' ')[2]))
+                                    .FirstOrDefault();
+                    if (lastGroup != null)
+                    {
+                        lastGroupNumber = int.Parse(lastGroup.CropGroupName.Split(' ')[2]);
+                    }
+                }
+            }
             List<CropData> cropEntries = new List<CropData>();
             foreach (Crop crop in model.Crops)
             {
@@ -1689,6 +1722,21 @@ namespace NMP.Portal.Controllers
                 crop.EncryptedCounter = null;
                 crop.FieldType = model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass ? (int)NMP.Portal.Enums.FieldType.Grass : (int)NMP.Portal.Enums.FieldType.Arable;
                 //crop.CropOrder = 1;
+                if (string.IsNullOrWhiteSpace(model.CropGroupName))
+                {
+                    if (lastGroupNumber != null)
+                    {
+                        crop.CropGroupName = string.Format(Resource.lblCropGroupWithCounter, (lastGroupNumber + 1));
+                    }
+                    else
+                    {
+                        crop.CropGroupName = string.Format(Resource.lblCropGroupWithCounter, 1);
+                    }
+                }
+                else
+                {
+                    crop.CropGroupName = model.CropGroupName;
+                }
                 CropData cropEntry = new CropData
                 {
                     Crop = crop,
@@ -1788,14 +1836,14 @@ namespace NMP.Portal.Controllers
                             {
                                 model.LastModifiedOn = allCropDetails.Max(x => x.LastModifiedOn.Value.ToString("dd MMM yyyy"));
                                 var groupedResult = allCropDetails
-                                 .GroupBy(crop => new { crop.CropTypeName, crop.CropGroupName })
-                                 .Select(g => new
-                                 {
-                                     CropTypeName = g.Key.CropTypeName,
-                                     CropVariety = g.Key.CropGroupName,
-                                     HarvestPlans = g.ToList()
-                                 })
-                                 .OrderBy(g => g.CropTypeName);
+                                .GroupBy(crop => new { crop.CropTypeName, crop.CropGroupName })
+                                .Select(g => new
+                                {
+                                    CropTypeName = g.Key.CropTypeName,
+                                    CropGroupName = g.Key.CropGroupName,
+                                    HarvestPlans = g.ToList()
+                                })
+                                .OrderBy(g => g.CropTypeName);
                                 model.FieldCount = allCropDetails.Select(h => h.FieldID).Distinct().Count();
                                 List<Field> fieldList = await _fieldService.FetchFieldsByFarmId(farmId);
                                 bool isSecondCropAllowed = await IsSecondCropAllowed(allCropDetails);
@@ -1825,7 +1873,9 @@ namespace NMP.Portal.Controllers
                                     var newField = new HarvestYearPlanFields
                                     {
                                         CropTypeName = group.CropTypeName,
-                                        CropVariety = group.CropVariety,
+                                        CropGroupName = group.CropGroupName,
+                                        EncryptedCropTypeName = _cropDataProtector.Protect((group.CropTypeName)),
+                                        EncryptedCropGroupName = string.IsNullOrWhiteSpace(group.CropGroupName) ? null : _cropDataProtector.Protect((group.CropGroupName)),
                                         FieldData = new List<FieldDetails>()
                                     };
                                     foreach (var plan in group.HarvestPlans)
@@ -2548,13 +2598,13 @@ namespace NMP.Portal.Controllers
                 else
                 {
                     return RedirectToAction("FarmList", "Farm");
-                }               
-                
+                }
+
             }
             catch (Exception ex)
             {
                 _logger.LogTrace($"Crop Controller : Exception in CropGroupName() action : {ex.Message}, {ex.StackTrace}");
-                TempData["ErrorOnYield"] = ex.Message;
+                TempData["ErrorOnSelectField"] = ex.Message;
                 return RedirectToAction("CropFields");
             }
 
@@ -2563,11 +2613,28 @@ namespace NMP.Portal.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CropGroupName(PlanViewModel model)
+        public async Task<IActionResult> CropGroupName(PlanViewModel model)
         {
             _logger.LogTrace("Crop Controller : CropGroupName() post action called");
             try
             {
+                if (!string.IsNullOrWhiteSpace(model.CropGroupName))
+                {
+                    (List<HarvestYearPlanResponse> harvestYearPlanResponses, Error error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
+                    if (string.IsNullOrWhiteSpace(error.Message) && harvestYearPlanResponses.Count > 0)
+                    {
+                        bool cropGroupNameExists = harvestYearPlanResponses
+                                    .Any(harvest =>
+                                            !string.IsNullOrEmpty(harvest.CropGroupName) && harvest.CropGroupName.Equals(model.CropGroupName));
+
+                        if (cropGroupNameExists)
+                        {
+
+                            ModelState.AddModelError("CropGroupName", Resource.lblThisCropGroupNameAlreadyExists);
+                            return View(model);
+                        }
+                    }
+                }
                 for (int i = 0; i < model.Crops.Count; i++)
                 {
                     model.Crops[i].CropGroupName = model.CropGroupName;
@@ -2588,6 +2655,38 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("CheckAnswer");
             }
             return RedirectToAction("VarietyName");
+        }
+        [HttpGet]
+        public IActionResult RemoveCropGroup(string q, string r)
+        {
+            _logger.LogTrace("Crop Controller : RemoveCropGroup() action called");
+            PlanViewModel model = new PlanViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("HarvestYearPlan"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("HarvestYearPlan");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Crop Controller : Exception in RemoveCropGroup() action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnHarvestYearOverview"] = ex.Message;
+                return RedirectToAction("HarvestYearOverview", new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear });
+            }
+
+            if (!string.IsNullOrWhiteSpace(q) && !string.IsNullOrWhiteSpace(r))
+            {
+                ViewBag.CropType = _cropDataProtector.Unprotect(q);
+                ViewBag.CropGroupName = _cropDataProtector.Unprotect(r);
+            }
+
+            return View(model);
         }
     }
 }

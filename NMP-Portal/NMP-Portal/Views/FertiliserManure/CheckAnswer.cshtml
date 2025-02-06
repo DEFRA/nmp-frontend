@@ -32,6 +32,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.QuestionForSpreadInorganicFertiliser" value="@Model.QuestionForSpreadInorganicFertiliser.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCounter" value="@Model.EncryptedCounter"></govuk-input>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Date"></govuk-date-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmCountryId"></govuk-input>
             @if (Model != null)
             {
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules" value="@Model.isEnglishRules.ToString().ToLower()"></govuk-input>
@@ -209,7 +210,7 @@
                         }
                         @if ((Model.Lime.HasValue) && Model.Lime.Value > 0)
                         {
-                            @(string.Format(Resource.lblKgPerTonneWithNutrient, Model.Lime.Value, Resource.lblLime))
+                            @(string.Format("{0} {1} {2}", Model.Lime.Value, Resource.lbltonnes, Resource.lblLime))
                             <br />
                         }
                     </govuk-summary-list-row-value>
