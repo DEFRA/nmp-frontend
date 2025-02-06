@@ -485,6 +485,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Action.
+        /// </summary>
+        public static string lblAction {
+            get {
+                return ResourceManager.GetString("lblAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to add.
         /// </summary>
         public static string lblAdd {
@@ -4096,7 +4105,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Last updated: {0}.
+        ///   Looks up a localized string similar to Last updated: {0}..
         /// </summary>
         public static string lblLastUpdated {
             get {
@@ -5345,6 +5354,15 @@ namespace NMP.Portal.Resources {
         public static string lblPlanCreated {
             get {
                 return ResourceManager.GetString("lblPlanCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} plan {1}.
+        /// </summary>
+        public static string lblPlanHeader {
+            get {
+                return ResourceManager.GetString("lblPlanHeader", resourceCulture);
             }
         }
         
@@ -6825,7 +6843,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There are {0} fields in this plan.
+        ///   Looks up a localized string similar to There are {0} fields in this plan..
         /// </summary>
         public static string lblThereAreFieldsInThisPlan {
             get {
@@ -8400,7 +8418,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Yield (per hectare).
+        ///   Looks up a localized string similar to Target yield (per hectare).
         /// </summary>
         public static string lblYieldPerHectare {
             get {
