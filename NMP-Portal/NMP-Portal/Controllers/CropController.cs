@@ -765,7 +765,7 @@ namespace NMP.Portal.Controllers
                                         {
                                             crop.SowingDate = planViewModel.Crops[i].SowingDate;
                                             crop.Yield = planViewModel.Crops[i].Yield; break;
-                                        }                                       
+                                        }
                                     }
                                 }
                             }
@@ -1693,7 +1693,7 @@ namespace NMP.Portal.Controllers
 
             Error error = null;
             int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
-            
+
             //var lastGroup = (await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_cropDataProtector.Unprotect(model.EncryptedFarmId))))
             //                    .OrderByDescending(cg => cg.CropGroupName)
             //                    .FirstOrDefault();
@@ -1703,7 +1703,7 @@ namespace NMP.Portal.Controllers
                 (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
                 if (harvestYearPlanResponse != null && error.Message == null)
                 {
-                    var lastGroup = harvestYearPlanResponse.Where(cg => cg.CropGroupName.StartsWith("Crop group") &&
+                    var lastGroup = harvestYearPlanResponse.Where(cg => !string.IsNullOrEmpty(cg.CropGroupName) && cg.CropGroupName.StartsWith("Crop group") &&
                                      int.TryParse(cg.CropGroupName.Split(' ')[2], out _))
                                     .OrderBy(cg => int.Parse(cg.CropGroupName.Split(' ')[2]))
                                     .FirstOrDefault();
@@ -1874,6 +1874,8 @@ namespace NMP.Portal.Controllers
                                     {
                                         CropTypeName = group.CropTypeName,
                                         CropGroupName = group.CropGroupName,
+                                        EncryptedCropTypeName = _cropDataProtector.Protect((group.CropTypeName)),
+                                        EncryptedCropGroupName = string.IsNullOrWhiteSpace(group.CropGroupName) ? null : _cropDataProtector.Protect((group.CropGroupName)),
                                         FieldData = new List<FieldDetails>()
                                     };
                                     foreach (var plan in group.HarvestPlans)
@@ -2602,7 +2604,7 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogTrace($"Crop Controller : Exception in CropGroupName() action : {ex.Message}, {ex.StackTrace}");
-                TempData["ErrorOnYield"] = ex.Message;
+                TempData["ErrorOnSelectField"] = ex.Message;
                 return RedirectToAction("CropFields");
             }
 
@@ -2653,6 +2655,38 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("CheckAnswer");
             }
             return RedirectToAction("VarietyName");
+        }
+        [HttpGet]
+        public IActionResult RemoveCropGroup(string q, string r)
+        {
+            _logger.LogTrace("Crop Controller : RemoveCropGroup() action called");
+            PlanViewModel model = new PlanViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("HarvestYearPlan"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("HarvestYearPlan");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Crop Controller : Exception in RemoveCropGroup() action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnHarvestYearOverview"] = ex.Message;
+                return RedirectToAction("HarvestYearOverview", new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear });
+            }
+
+            if (!string.IsNullOrWhiteSpace(q) && !string.IsNullOrWhiteSpace(r))
+            {
+                ViewBag.CropType = _cropDataProtector.Unprotect(q);
+                ViewBag.CropGroupName = _cropDataProtector.Unprotect(r);
+            }
+
+            return View(model);
         }
     }
 }
