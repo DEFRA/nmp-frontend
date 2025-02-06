@@ -5050,27 +5050,28 @@ namespace NMP.Portal.Controllers
                                     }
                                     else
                                     {
-                                        return (model, string.IsNullOrWhiteSpace(error.Message)?null: error);
+                                        return (model, string.IsNullOrWhiteSpace(error?.Message)?null: error);
                                     }
                                 }
                                 else
                                 {
-                                    return (model, string.IsNullOrWhiteSpace(error.Message) ? null : error);
+                                    return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
                                 }
                             }
                             else
                             {
-                                return (model, string.IsNullOrWhiteSpace(error.Message) ? null : error);
+                                return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
                             }
                         }
                     }
                     else
                     {
-                        return (model, string.IsNullOrWhiteSpace(error.Message) ? null : error);
+                        return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
                     }
                 }
             }
-            return (model, string.IsNullOrWhiteSpace(error.Message) ? null : error);
+            
+            return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
         }
         private async Task<(OrganicManureViewModel, Error?)> IsEndClosedPeriodFebruaryWarningMessage(OrganicManureViewModel model, int fieldId, bool isGetCheckAnswer)
         {
