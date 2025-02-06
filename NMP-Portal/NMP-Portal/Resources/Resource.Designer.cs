@@ -5358,6 +5358,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} plan {1}.
+        /// </summary>
+        public static string lblPlanHeader {
+            get {
+                return ResourceManager.GetString("lblPlanHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Planning and recording.
         /// </summary>
         public static string lblPlaningndRecording {

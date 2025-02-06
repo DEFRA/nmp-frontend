@@ -3709,4 +3709,7 @@ live</value>
   <data name="lblAction" xml:space="preserve">
     <value>Action</value>
   </data>
+  <data name="lblPlanHeader" xml:space="preserve">
+    <value>{0} plan {1}</value>
+  </data>
 </root>
