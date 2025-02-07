@@ -4,7 +4,7 @@
 
 @model PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblRemoveThisGroup;
+    ViewData["Title"] = Resource.lblRemove;
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
 
@@ -31,18 +31,20 @@
                         <govuk-error-summary-item href="#">@TempData["DeletePlanOrganicAndFertiliserError"]</govuk-error-summary-item>
                     </govuk-error-summary>
                 }
-                @* MsgDeletePlanOrganicAndFertiliserContent1 *@
+                
                 <h1 class="govuk-heading-l">@string.Format(Resource.lblRemoveAnApplicationOfManureForHarvestYear, Resource.lblInorganicFertiliser, Model.Year)</h1>
 
-                <govuk-govuk-inset-text>
+                  <govuk-inset-text>
                     @Resource.MsgDeletePlanOrganicAndFertiliserContent1
-                </govuk-govuk-inset-text>
-                <p class="govuk-body">
-                    <h4>@Resource.MsgDeletePlanOrganicAndFertiliserContent2</h4>
-                    @Model.FieldName
-                </p>
-                <hr />
-
+                </govuk-inset-text>
+                <table class="govuk-table">
+                    <thead class="govuk-table__head">
+                        <tr class="govuk-table__row">
+                            <th id="field_name" scope="col" class="govuk-table__header">@Resource.MsgDeletePlanOrganicAndFertiliserContent2</th>
+                            <td class="govuk-table__cell">@Model.FieldName</td>
+                        </tr>
+                    </thead>
+                </table>
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblRemove
                 </govuk-button>

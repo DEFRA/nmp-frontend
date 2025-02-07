@@ -7482,7 +7482,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Update rainfall for 2024.
+        ///   Looks up a localized string similar to Update rainfall for {0}.
         /// </summary>
         public static string lblUpdateRainfallFor {
             get {

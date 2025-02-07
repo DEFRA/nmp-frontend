@@ -2573,7 +2573,7 @@ cubic metres per hectare  not set</value>
     <value>Average annual rainfall is {0}mm. You have not entered any excess winter rainfall.</value>
   </data>
   <data name="lblUpdateRainfallFor" xml:space="preserve">
-    <value>Update rainfall for 2024</value>
+    <value>Update rainfall for {0}</value>
   </data>
   <data name="lblAllAmountsArePerHectare" xml:space="preserve">
     <value>All amounts are per hectare.</value>
