@@ -25,6 +25,7 @@ using Microsoft.Identity.Web.UI;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Identity.Client;
 using Azure.Monitor.OpenTelemetry.AspNetCore;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<IISServerOptions>(options =>
@@ -122,17 +123,28 @@ builder.Services.AddSingleton<IFertiliserManureService, FertiliserManureService>
 builder.Services.AddSingleton<ISoilAnalysisService, SoilAnalysisService>();
 builder.Services.AddSingleton<IPKBalanceService, PKBalanceService>();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{    
+    options.Cookie.Name = "NMP-Portal";
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+    options.Cookie.Path = "/";
+    options.SlidingExpiration = true;    
+    options.Cookie.HttpOnly = true;   
+    options.Cookie.SameSite = SameSiteMode.Strict;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;    
+});
+
 builder.Services.AddAntiforgery(options =>
 {
     // Set Cookie properties using CookieBuilder properties�.
     options.Cookie = new CookieBuilder()
-    {
+    {                
         Name = "NMP-Portal",
         HttpOnly = true,
         Path = "/",
         SecurePolicy = CookieSecurePolicy.Always,
         SameSite = SameSiteMode.Strict
-    };
+    };   
     options.FormFieldName = "NMP-Portal-Antiforgery-Field";
     options.HeaderName = "X-CSRF-TOKEN-NMP";
     options.SuppressXFrameOptionsHeader = false;
