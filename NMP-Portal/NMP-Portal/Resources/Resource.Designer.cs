@@ -2888,6 +2888,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fertiliser.
+        /// </summary>
+        public static string lblFertiliser {
+            get {
+                return ResourceManager.GetString("lblFertiliser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fertiliser or Lime applied.
         /// </summary>
         public static string lblFertiliserOrLimeApplied {
@@ -3686,6 +3695,15 @@ namespace NMP.Portal.Resources {
         public static string lblInorganicApplications {
             get {
                 return ResourceManager.GetString("lblInorganicApplications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to inorganic fertiliser.
+        /// </summary>
+        public static string lblInorganicFertiliser {
+            get {
+                return ResourceManager.GetString("lblInorganicFertiliser", resourceCulture);
             }
         }
         
@@ -5835,11 +5853,47 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove an application of {0} for harvest year {1}.
+        /// </summary>
+        public static string lblRemoveAnApplicationOfManureForHarvestYear {
+            get {
+                return ResourceManager.GetString("lblRemoveAnApplicationOfManureForHarvestYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This action will remove all the data about this crop group from your plans. You will not be able to get it back..
+        /// </summary>
+        public static string lblRemoveCropGroupContent1 {
+            get {
+                return ResourceManager.GetString("lblRemoveCropGroupContent1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It will not remove the fields from your farm and you will be able to use them in your plans.
+        /// </summary>
+        public static string lblRemoveCropGroupContent2 {
+            get {
+                return ResourceManager.GetString("lblRemoveCropGroupContent2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove {0} ({1}).
         /// </summary>
         public static string lblRemoveCropGroupWithCropType {
             get {
                 return ResourceManager.GetString("lblRemoveCropGroupWithCropType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove {0} from {1}.
+        /// </summary>
+        public static string lblRemoveCropTypeFromFieldName {
+            get {
+                return ResourceManager.GetString("lblRemoveCropTypeFromFieldName", resourceCulture);
             }
         }
         
@@ -7428,7 +7482,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Update rainfall for 2024.
+        ///   Looks up a localized string similar to Update rainfall for {0}.
         /// </summary>
         public static string lblUpdateRainfallFor {
             get {
@@ -9023,6 +9077,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} removed.
+        /// </summary>
+        public static string MsgCropGroupNameRemoves {
+            get {
+                return ResourceManager.GetString("MsgCropGroupNameRemoves", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which option applies to your {0} not set?.
         /// </summary>
         public static string MsgCropInfo1NotSet {
@@ -9226,6 +9289,24 @@ namespace NMP.Portal.Resources {
         public static string MsgDefraIdentityServiceDown {
             get {
                 return ResourceManager.GetString("MsgDefraIdentityServiceDown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This will remove this organic material application from these fields and change their nutrient recommendations..
+        /// </summary>
+        public static string MsgDeletePlanOrganicAndFertiliserContent1 {
+            get {
+                return ResourceManager.GetString("MsgDeletePlanOrganicAndFertiliserContent1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which fields would you like to remove this application from?.
+        /// </summary>
+        public static string MsgDeletePlanOrganicAndFertiliserContent2 {
+            get {
+                return ResourceManager.GetString("MsgDeletePlanOrganicAndFertiliserContent2", resourceCulture);
             }
         }
         
@@ -10040,6 +10121,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Inorganic fertiliser application removed.
+        /// </summary>
+        public static string MsgInorganicFertiliserApplicationRemoved {
+            get {
+                return ResourceManager.GetString("MsgInorganicFertiliserApplicationRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid authentication.
         /// </summary>
         public static string MsgInvalidAuthentication {
@@ -10279,6 +10369,15 @@ namespace NMP.Portal.Resources {
         public static string MsgNmptServiceNotAvailable {
             get {
                 return ResourceManager.GetString("MsgNmptServiceNotAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nutrient recommendations may be updated.
+        /// </summary>
+        public static string MsgNutrientRecommendationsMayBeUpdated {
+            get {
+                return ResourceManager.GetString("MsgNutrientRecommendationsMayBeUpdated", resourceCulture);
             }
         }
         

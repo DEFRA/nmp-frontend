@@ -29,11 +29,20 @@
             @if (ViewBag.Success != null && ViewBag.Success == "true")
             {
                 <govuk-notification-banner type="Success">
-                    <div class="">
-                        <h3 class="govuk-notification-banner__heading"> @string.Format(!string.IsNullOrEmpty(Model.EncryptedIsUpdate) ? Resource.lblYouHaveUpdated : Resource.lblYouHaveAdded, Model.Name)</h3>
-                        <p class="govuk-body"></p>
-                        <a class="govuk-notification-banner__link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@string.Format(Resource.lblAddFieldFor, Model.Name)</a>
-                    </div>
+                    @if (@TempData["successMsg"] == null)
+                    {
+                        <div class="">
+                            <h3 class="govuk-notification-banner__heading"> @string.Format(!string.IsNullOrEmpty(Model.EncryptedIsUpdate) ? Resource.lblYouHaveUpdated : Resource.lblYouHaveAdded, Model.Name)</h3>
+                            <p class="govuk-body"></p>
+                            <a class="govuk-notification-banner__link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@string.Format(Resource.lblAddFieldFor, Model.Name)</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="govuk-notification-banner__heading">
+                            @TempData["successMsg"]
+                        </p>
+                    }
                 </govuk-notification-banner>
             }
             <div id="farm-title">
