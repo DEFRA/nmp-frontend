@@ -2888,6 +2888,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fertiliser.
+        /// </summary>
+        public static string lblFertiliser {
+            get {
+                return ResourceManager.GetString("lblFertiliser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fertiliser or Lime applied.
         /// </summary>
         public static string lblFertiliserOrLimeApplied {
@@ -3686,6 +3695,15 @@ namespace NMP.Portal.Resources {
         public static string lblInorganicApplications {
             get {
                 return ResourceManager.GetString("lblInorganicApplications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to inorganic fertiliser.
+        /// </summary>
+        public static string lblInorganicFertiliser {
+            get {
+                return ResourceManager.GetString("lblInorganicFertiliser", resourceCulture);
             }
         }
         
@@ -5835,11 +5853,47 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove an application of {0} for harvest year {1}.
+        /// </summary>
+        public static string lblRemoveAnApplicationOfManureForHarvestYear {
+            get {
+                return ResourceManager.GetString("lblRemoveAnApplicationOfManureForHarvestYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This action will remove all the data about this crop group from your plans. You will not be able to get it back..
+        /// </summary>
+        public static string lblRemoveCropGroupContent1 {
+            get {
+                return ResourceManager.GetString("lblRemoveCropGroupContent1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It will not remove the fields from your farm and you will be able to use them in your plans.
+        /// </summary>
+        public static string lblRemoveCropGroupContent2 {
+            get {
+                return ResourceManager.GetString("lblRemoveCropGroupContent2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove {0} ({1}).
         /// </summary>
         public static string lblRemoveCropGroupWithCropType {
             get {
                 return ResourceManager.GetString("lblRemoveCropGroupWithCropType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove {0} from {1}.
+        /// </summary>
+        public static string lblRemoveCropTypeFromFieldName {
+            get {
+                return ResourceManager.GetString("lblRemoveCropTypeFromFieldName", resourceCulture);
             }
         }
         
@@ -6933,29 +6987,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This application may take you over the organic manure nitrogen field limit.
-        /// </summary>
-        public static string lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit {
-            get {
-                return ResourceManager.GetString("lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to This application may take you over the individual hectare limit for spreading of organic manure.
-        /// </summary>
-        public static string lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimitWales {
-            get {
-                return ResourceManager.GetString("lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimitWales", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to This application will take you over the maximum application rate for high nitrogen (N) organic manure..
         /// </summary>
         public static string lblThisApplicationTakeOverMaxAppRate {
             get {
                 return ResourceManager.GetString("lblThisApplicationTakeOverMaxAppRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application will take you over the organic manure nitrogen field limit.
+        /// </summary>
+        public static string lblThisApplicationWillTakeYouOverTheOrganicManureNFieldLimit {
+            get {
+                return ResourceManager.GetString("lblThisApplicationWillTakeYouOverTheOrganicManureNFieldLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application will take you over the individual hectare limit for spreading of organic manure.
+        /// </summary>
+        public static string lblThisApplicationWillTakeYouOverTheOrganicManureNFieldLimitWales {
+            get {
+                return ResourceManager.GetString("lblThisApplicationWillTakeYouOverTheOrganicManureNFieldLimitWales", resourceCulture);
             }
         }
         
@@ -7428,7 +7482,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Update rainfall for 2024.
+        ///   Looks up a localized string similar to Update rainfall for {0}.
         /// </summary>
         public static string lblUpdateRainfallFor {
             get {
@@ -8724,7 +8778,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The application date you entered is inside your closed period for applying high readily available nitrogen organic manure.
+        ///   Looks up a localized string similar to The application date you entered is inside your closed spreading period for applying high readily available nitrogen organic manure.
         /// </summary>
         public static string MsgApplicationDateEnteredIsInsideClosedPeriod {
             get {
@@ -8756,6 +8810,15 @@ namespace NMP.Portal.Resources {
         public static string MsgApplicationDateEnteredIsInsideClosedPeriodDetailWales {
             get {
                 return ResourceManager.GetString("MsgApplicationDateEnteredIsInsideClosedPeriodDetailWales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The application date you entered is inside your closed spreading period for applying manure with a high readily available nitrogen content.
+        /// </summary>
+        public static string MsgApplicationDateEnteredIsInsideClosedPeriodWales {
+            get {
+                return ResourceManager.GetString("MsgApplicationDateEnteredIsInsideClosedPeriodWales", resourceCulture);
             }
         }
         
@@ -9014,11 +9077,30 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider applying outside the closed period..
+        ///   Looks up a localized string similar to It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider applying outside the closed spreading period..
         /// </summary>
         public static string MsgClosedPeriodWarningPara2England {
             get {
                 return ResourceManager.GetString("MsgClosedPeriodWarningPara2England", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources Regulations, and you should consider applying outside the closed spreading period. Before spreading organic manure, a field inspection should be carried out to consider the risk of causing pollution or damage to the soil..
+        /// </summary>
+        public static string MsgClosedPeriodWarningPara2Wales
+        {
+            get
+            {
+                return ResourceManager.GetString("MsgClosedPeriodWarningPara2Wales", resourceCulture);
+            }
+        }
+
+        ///   Looks up a localized string similar to {0} removed.
+        /// </summary>
+        public static string MsgCropGroupNameRemoves {
+            get {
+                return ResourceManager.GetString("MsgCropGroupNameRemoves", resourceCulture);
             }
         }
         
@@ -9059,7 +9141,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that the average amount of crop available nitrogen from manufactured fertilisers and organic manures that you apply on your {0} across your whole farm must not exceed {1} kg per hectare..
+        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that the amount of crop available nitrogen from inorganic fertilisers and organic manures that you apply to this crop averaged across your whole farm must not exceed {0}kg per hectare..
         /// </summary>
         public static string MsgCropNmaxLimitWarningPara1England {
             get {
@@ -9068,7 +9150,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Water Resources Regulations state that the maximum amount of nitrogen from fertilisers and crop available nitrogen from organic manures that you apply on your {0} across your whole farm must not exceed {1} kg/ha..
+        ///   Looks up a localized string similar to The Water Resourcess Regulations state that the amount of crop available nitrogen from inorganic fertilisers and organic manures that you apply to this crop averaged across your whole farm must not exceed {0}kg per hectare..
         /// </summary>
         public static string MsgCropNmaxLimitWarningPara1Wales {
             get {
@@ -9077,11 +9159,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the amount of crop available nitrogen from manufactured fertilisers and organic manures you apply..
+        ///   Looks up a localized string similar to It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the amount of crop available nitrogen from inorganic fertilisers and organic manures you apply..
         /// </summary>
         public static string MsgCropNmaxLimitWarningPara2England {
             get {
                 return ResourceManager.GetString("MsgCropNmaxLimitWarningPara2England", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources Regulations, and you should consider reducing the amount of crop available nitrogen from inorganic fertilisers and organic manures you apply..
+        /// </summary>
+        public static string MsgCropNmaxLimitWarningPara2Wales {
+            get {
+                return ResourceManager.GetString("MsgCropNmaxLimitWarningPara2Wales", resourceCulture);
             }
         }
         
@@ -9226,6 +9317,24 @@ namespace NMP.Portal.Resources {
         public static string MsgDefraIdentityServiceDown {
             get {
                 return ResourceManager.GetString("MsgDefraIdentityServiceDown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This will remove this organic material application from these fields and change their nutrient recommendations..
+        /// </summary>
+        public static string MsgDeletePlanOrganicAndFertiliserContent1 {
+            get {
+                return ResourceManager.GetString("MsgDeletePlanOrganicAndFertiliserContent1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which fields would you like to remove this application from?.
+        /// </summary>
+        public static string MsgDeletePlanOrganicAndFertiliserContent2 {
+            get {
+                return ResourceManager.GetString("MsgDeletePlanOrganicAndFertiliserContent2", resourceCulture);
             }
         }
         
@@ -10004,6 +10113,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources Regulations, and you should consider reducing the amount of nitrogen from organic manures..
+        /// </summary>
+        public static string MsgIfOrganicManureNMaxLimitExceedAdditionalWales {
+            get {
+                return ResourceManager.GetString("MsgIfOrganicManureNMaxLimitExceedAdditionalWales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The Water Resource Regulations apply a limit of 250kg of total Nitrogen per individual hectare to the spreading of organic manure for any 12 month rolling period..
         /// </summary>
         public static string MsgIfOrganicManureNMaxLimitExceedWales {
@@ -10036,6 +10154,15 @@ namespace NMP.Portal.Resources {
         public static string MsgIncorporationMethodNotSet {
             get {
                 return ResourceManager.GetString("MsgIncorporationMethodNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inorganic fertiliser application removed.
+        /// </summary>
+        public static string MsgInorganicFertiliserApplicationRemoved {
+            get {
+                return ResourceManager.GetString("MsgInorganicFertiliserApplicationRemoved", resourceCulture);
             }
         }
         
@@ -10184,7 +10311,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This application may take you over the organic manure nitrogen field limit for compost.
+        ///   Looks up a localized string similar to This application Will take you over the organic manure nitrogen field limit for compost.
         /// </summary>
         public static string MsgNmaxWarningHeadingEngland {
             get {
@@ -10193,7 +10320,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This application may take you over the organic manure nitrogen field limit for compost applied to orchard land.
+        ///   Looks up a localized string similar to This application will take you over the organic manure nitrogen field limit for compost applied to orchard land.
         /// </summary>
         public static string MsgNmaxWarningHeadingGreaterThan1000England {
             get {
@@ -10202,7 +10329,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This application may take you over the individual hectare limit for spreading certified green and green/food compost as a mulch to orchard land.
+        ///   Looks up a localized string similar to This application will take you over the individual hectare limit for spreading certified green and green/food compost as a mulch to orchard land.
         /// </summary>
         public static string MsgNmaxWarningHeadingGreaterThan1000Wales {
             get {
@@ -10211,7 +10338,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This application may take you over the individual hectare limit for spreading certified green and green/food compost.
+        ///   Looks up a localized string similar to This application will take you over the individual hectare limit for spreading certified green and green/food compost.
         /// </summary>
         public static string MsgNmaxWarningHeadingWales {
             get {
@@ -10247,7 +10374,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Water Resource Regulations apply a limit of 500kg of total Nitrogen per individual hectare to the spreading of certified green and green/food compost in any rolling two year period..
+        ///   Looks up a localized string similar to The Water Resources Regulations apply a limit of 500kg of total Nitrogen per individual hectare to the spreading of certified green and green/food compost in any rolling two year period..
         /// </summary>
         public static string MsgNmaxWarningPara1Wales {
             get {
@@ -10279,6 +10406,15 @@ namespace NMP.Portal.Resources {
         public static string MsgNmptServiceNotAvailable {
             get {
                 return ResourceManager.GetString("MsgNmptServiceNotAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nutrient recommendations may be updated.
+        /// </summary>
+        public static string MsgNutrientRecommendationsMayBeUpdated {
+            get {
+                return ResourceManager.GetString("MsgNutrientRecommendationsMayBeUpdated", resourceCulture);
             }
         }
         
@@ -10666,6 +10802,87 @@ namespace NMP.Portal.Resources {
         public static string MsgSowingDateNotSet {
             get {
                 return ResourceManager.GetString("MsgSowingDateNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application will take you over the maximum application rate for high readily available nitrogen organic manure during your closed spreading period.
+        /// </summary>
+        public static string MsgStartClosedPeriodEndFebWarningHeading {
+            get {
+                return ResourceManager.GetString("MsgStartClosedPeriodEndFebWarningHeading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application will take you over the maximum application rate for high readily available nitrogen organic manure during your closed spreading period.
+        /// </summary>
+        public static string MsgStartClosedPeriodEndFebWarningHeadingWales {
+            get {
+                return ResourceManager.GetString("MsgStartClosedPeriodEndFebWarningHeadingWales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that on organic farms the application rate of high readily available nitrogen manures on this crop type between the start of the closed spreading period and the end of February must not exceed 150kg of total nitrogen per hectare..
+        /// </summary>
+        public static string MsgStartClosedPeriodEndFebWarningPara1 {
+            get {
+                return ResourceManager.GetString("MsgStartClosedPeriodEndFebWarningPara1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that on organic farms the application rate of high readily available nitrogen manures on this crop type between the start of the closed spreading period and the end of February must not exceed 150kg of total nitrogen per hectare, and that no more than 50kg of total nitrogen can be applied every 4 weeks..
+        /// </summary>
+        public static string MsgStartClosedPeriodEndFebWarningPara1Brassica {
+            get {
+                return ResourceManager.GetString("MsgStartClosedPeriodEndFebWarningPara1Brassica", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that on organic farms the application rate of high readily available nitrogen manures on grass between the start of the closed spreading period and 31 October must not exceed 150kg of total nitrogen per hectare, and that no more than 40kg of total nitrogen can be applied at any one time..
+        /// </summary>
+        public static string MsgStartClosedPeriodEndFebWarningPara1Grass {
+            get {
+                return ResourceManager.GetString("MsgStartClosedPeriodEndFebWarningPara1Grass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Water Resources Regulations state that the application rate of high readily available nitrogen manures on this crop type between the start of the closed spreading period and the end of February must not exceed 150kg per hectare..
+        /// </summary>
+        public static string MsgStartClosedPeriodEndFebWarningPara1Wales {
+            get {
+                return ResourceManager.GetString("MsgStartClosedPeriodEndFebWarningPara1Wales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that on organic farms the application rate of high readily available nitrogen manures on winter oilseed rape between the start of the closed spreading period and 31 October must not exceed 150kg of total nitrogen per hectare..
+        /// </summary>
+        public static string MsgStartClosedPeriodEndFebWarningPara1WinterOilseed {
+            get {
+                return ResourceManager.GetString("MsgStartClosedPeriodEndFebWarningPara1WinterOilseed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the application rate of high readily available nitrogen manures..
+        /// </summary>
+        public static string MsgStartClosedPeriodEndFebWarningPara2 {
+            get {
+                return ResourceManager.GetString("MsgStartClosedPeriodEndFebWarningPara2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources Regulations, and you should consider reducing the application rate of high readily available nitrogen organic manure..
+        /// </summary>
+        public static string MsgStartClosedPeriodEndFebWarningPara2Wales {
+            get {
+                return ResourceManager.GetString("MsgStartClosedPeriodEndFebWarningPara2Wales", resourceCulture);
             }
         }
         

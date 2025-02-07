@@ -200,11 +200,11 @@
                         @if (Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
                         {
                             <p class="govuk-notification-banner__heading">
-                                @Resource.lblThisApplicationTakeOverMaxAppRate
+                                @Model.StartClosedPeriodEndFebWarningHeading
                             </p>
-                            <p class="govuk-body">@TempData["AppRateExceeds150WithinClosedPeriodOrganic"]</p>
+                            <p class="govuk-body">@Model.StartClosedPeriodEndFebWarningPara1</p>
                             <p class="govuk-body">
-                                @Resource.lblTheNVZActionProgrammeAppRateExceeds150WithinClosedPeriodOrganicAdditional
+                                @Model.StartClosedPeriodEndFebWarningPara2
                             </p>
                         }
                     }
@@ -218,11 +218,11 @@
                             <ul class="govuk-list govuk-list--bullet">
                                 @if (Model.IsOrgManureNfieldLimitWarning)
                                 {
-                                    <li>@Resource.lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit</li>
+                                    <li>@Resource.lblThisApplicationWillTakeYouOverTheOrganicManureNFieldLimit</li>
                                 }
                                 @if (Model.IsNMaxLimitWarning)
                                 {
-                                    <li>@Resource.lblNMaxLimitTitle</li>
+                                    <li>@Model.CropNmaxLimitWarningHeading</li>
                                 }
                                 @if (Model.IsEndClosedPeriodFebruaryWarning)
                                 {
@@ -230,7 +230,7 @@
                                 }
                                 @if (Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
                                 {
-                                    <li>@Resource.lblThisApplicationTakeOverMaxAppRate</li>
+                                    <li>@Model.StartClosedPeriodEndFebWarningHeading</li>
                                 }
                             </ul>
                             <govuk-details>
@@ -240,13 +240,13 @@
                                 <govuk-details-text>
                                     @if (Model.IsOrgManureNfieldLimitWarning)
                                     {
-                                        <h2 class="govuk-heading-s">@Resource.lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit</h2>
-                                        <p class="govuk-body">@Resource.MsgIfOrganicManureNMaxLimitExceed</p>
+                                        <h2 class="govuk-heading-s">@Model.NmaxWarningHeading</h2>
+                                        <p class="govuk-body">@Model.NmaxWarningPara1</p>
                                     }
                                     @if (Model.IsNMaxLimitWarning)
                                     {
-                                        <h2 class="govuk-heading-s">@Resource.lblNMaxLimitTitle</h2>
-                                        <p class="govuk-body">@Resource.MsgNMaxLimit</p>
+                                        <h2 class="govuk-heading-s">@Model.CropNmaxLimitWarningHeading</h2>
+                                        <p class="govuk-body">@Model.CropNmaxLimitWarningPara1</p>
                                     }
                                     @if (Model.IsEndClosedPeriodFebruaryWarning)
                                     {
@@ -255,8 +255,8 @@
                                     }
                                     @if (Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
                                     {
-                                        <h2 class="govuk-heading-s">@Resource.lblThisApplicationTakeOverMaxAppRate</h2>
-                                        <p class="govuk-body">@TempData["AppRateExceeds150WithinClosedPeriodOrganic"]</p>
+                                        <h2 class="govuk-heading-s">@Model.StartClosedPeriodEndFebWarningHeading</h2>
+                                        <p class="govuk-body">@Model.StartClosedPeriodEndFebWarningPara1</p>
 
                                     }
                                 </govuk-details-text>
