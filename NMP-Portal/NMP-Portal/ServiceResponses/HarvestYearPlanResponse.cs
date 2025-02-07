@@ -4,6 +4,8 @@ namespace NMP.Portal.ServiceResponses
 {
     public class HarvestYearPlanResponse
     {
+        [JsonProperty("CropID")]
+        public int CropID { get; set; }
         [JsonProperty("cropTypeId")]
         public int CropTypeID { get; set; }
 

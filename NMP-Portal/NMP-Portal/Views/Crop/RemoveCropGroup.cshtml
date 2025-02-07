@@ -17,7 +17,11 @@
     }
     <form asp-action="RemoveCropGroup" asp-controller="Crop" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
-
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupName" value="@Model.CropGroupName"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropType" value="@Model.CropType"></govuk-input>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds-from-desktop">
                 @if (TempData["RemoveGroupError"] != null)
@@ -26,32 +30,28 @@
                         <govuk-error-summary-item href="#">@TempData["RemoveGroupError"]</govuk-error-summary-item>
                     </govuk-error-summary>
                 }
-             
-                <h1 class="govuk-heading-l">@string.Format(Resource.lblRemoveCropGroupWithCropType, ViewBag.CropGroupName, ViewBag.CropType)</h1>
 
-                <govuk-notification-banner>
-                    <govuk-notification-banner-title>
-                        @Resource.lblImportant
-                    </govuk-notification-banner-title>
-                    <p class="govuk-body">Under construction</p>
-                </govuk-notification-banner>
-                @*
-            <p class="govuk-body">
-            @string.Format(Resource.lblRemoveCropGroupWithCropType, Model.FieldName)
-            </p> *@
+                <h1 class="govuk-heading-l">@string.Format(Resource.lblRemoveCropGroupWithCropType, Model.CropGroupName, Model.CropType)</h1>
 
-                @*  <govuk-radios class="govuk-radios--inline" asp-for="@Model.SoilAnalysisRemove">
-            <govuk-radios-fieldset>
-            <govuk-radios-fieldset-legend>
-            @Resource.lblAreYouSureYouWantToContinue
-            </govuk-radios-fieldset-legend>
-            <govuk-radios-item value="@yes">@Resource.lblYes</govuk-radios-item>
-            <govuk-radios-item value="@no">@Resource.lblNo</govuk-radios-item>
-            </govuk-radios-fieldset>
-            </govuk-radios>
-            <govuk-button type="submit" class="margin-bottom-forty">
-            @Resource.lblContinue
-            </govuk-button> *@
+                <p class="govuk-body">
+                    @Resource.lblRemoveCropGroupContent1
+                </p>
+                <p class="govuk-body">
+                    @Resource.lblRemoveCropGroupContent2
+                </p>
+
+                <govuk-radios class="govuk-radios--inline" asp-for="@Model.RemoveCropGroup">
+                    <govuk-radios-fieldset>
+                        <govuk-radios-fieldset-legend>
+                            @Resource.lblAreYouSureYouWantToContinue
+                        </govuk-radios-fieldset-legend>
+                        <govuk-radios-item value="@yes">@Resource.lblYes</govuk-radios-item>
+                        <govuk-radios-item value="@no">@Resource.lblNo</govuk-radios-item>
+                    </govuk-radios-fieldset>
+                </govuk-radios>
+                <govuk-button type="submit" class="margin-bottom-forty">
+                    @Resource.lblContinue
+                </govuk-button>
 
                 <p class="govuk-body cancel-link"><a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
             </div>

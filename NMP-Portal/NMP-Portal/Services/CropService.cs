@@ -4,6 +4,7 @@ using NMP.Portal.Helpers;
 using NMP.Portal.Models;
 using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
+using System.Net.Http.Json;
 using System.Text;
 
 namespace NMP.Portal.Services
@@ -711,5 +712,53 @@ namespace NMP.Portal.Services
             }
             return (crop, error);
         }
+        public async Task<(string, Error)> RemoveCropPlan(List<int> cropIds)
+        {
+            var cropIdsRequest = new { cropIds };
+            Error error = new Error();
+            string message = string.Empty;
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var jsonContent = JsonConvert.SerializeObject(cropIdsRequest);
+
+                var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+                var url = string.Format(APIURLHelper.DeleteCropPlanByIdsAPI, ""); 
+
+                
+                var requestMessage = new HttpRequestMessage(HttpMethod.Delete, url)
+                {
+                    Content = content
+                };
+                
+                var response = await httpClient.SendAsync(requestMessage);
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+                {
+                    message = responseWrapper.Data["message"].Value;
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+            return (message, error);
+        }
     }
+
 }
