@@ -9088,9 +9088,13 @@ namespace NMP.Portal.Resources {
         /// <summary>
         ///   Looks up a localized string similar to It is an offence to breach the Water Resources Regulations, and you should consider applying outside the closed spreading period. Before spreading organic manure, a field inspection should be carried out to consider the risk of causing pollution or damage to the soil..
         /// </summary>
-        public static string MsgClosedPeriodWarningPara2Wales {
-            get {
+        public static string MsgClosedPeriodWarningPara2Wales
+        {
+            get
+            {
                 return ResourceManager.GetString("MsgClosedPeriodWarningPara2Wales", resourceCulture);
+            }
+        }
 
         ///   Looks up a localized string similar to {0} removed.
         /// </summary>
