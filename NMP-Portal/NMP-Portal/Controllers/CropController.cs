@@ -1905,7 +1905,8 @@ namespace NMP.Portal.Controllers
                                             EncryptedFieldId = _cropDataProtector.Protect(plan.FieldID.ToString()), // Encrypt field ID
                                             FieldName = plan.FieldName,
                                             PlantingDate = plan.PlantingDate,
-                                            Yield = plan.Yield
+                                            Yield = plan.Yield,
+                                            Variety=plan.CropVariety
                                         };
 
                                         newField.FieldData.Add(fieldDetail);
@@ -2338,10 +2339,12 @@ namespace NMP.Portal.Controllers
                                             FertilizerLime = recData.Recommendation.FertilizerLime,
                                             SNSIndex = recData.Recommendation.SNSIndex,
                                             SIndex = recData.Recommendation.SIndex,
-                                            KIndex = recData.Recommendation.KIndex,
+                                            LimeIndex=recData.Recommendation.PH,
+                                            KIndex = recData.Recommendation.KIndex!=null?(recData.Recommendation.KIndex ==Resource.lblMinusTwo?Resource.lblTwoMinus:(recData.Recommendation.KIndex==Resource.lblPlusTwo?Resource.lblTwoPlus: recData.Recommendation.KIndex)):null,
                                             MgIndex = recData.Recommendation.MgIndex,
                                             PIndex = recData.Recommendation.PIndex,
                                             NaIndex = recData.Recommendation.NaIndex,
+                                            NIndex = recData.Recommendation.NIndex,
                                             CreatedOn = recData.Recommendation.CreatedOn,
                                             ModifiedOn = recData.Recommendation.ModifiedOn,
                                             FertiliserAppliedN = recData.Recommendation.FertiliserAppliedN,

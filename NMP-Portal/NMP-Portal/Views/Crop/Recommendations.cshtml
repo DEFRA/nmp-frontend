@@ -85,7 +85,7 @@
                                                         <tr class="govuk-table__row">
                                                             <td class="govuk-table__cell">@Resource.lblNitrogen</td>
                                                             <td class="govuk-table__cell">
-                                                                @(recommendation.SNSIndex == null ? Resource.lblHyphen : recommendation.SNSIndex)
+                                                                @(recommendation.NIndex == null ? Resource.lblHyphen : recommendation.NIndex)
                                                             </td>
                                                             <td class="govuk-table__cell">@(recommendation.CropN == null ? Resource.lblHyphen : recommendation.CropN == 0 ? recommendation.CropN : string.Concat(recommendation.CropN, Resource.lblkg))</td>
                                                             <td class="govuk-table__cell">@(recommendation.ManureN == null ? Resource.lblHyphen : recommendation.ManureN == 0 ? recommendation.ManureN : string.Concat(recommendation.ManureN, Resource.lblkg))</td>
@@ -136,7 +136,7 @@
                                                         <tr class="govuk-table__row">
                                                             <td class="govuk-table__cell"> @Resource.lblMagnesiumMgO</td>
                                                             <td class="govuk-table__cell">
-                                                                @(recommendation.SIndex == null ? Resource.lblHyphen : recommendation.MgIndex)
+                                                                @(recommendation.MgIndex == null ? Resource.lblHyphen : recommendation.MgIndex)
                                                             </td>
                                                             <td class="govuk-table__cell">@(recommendation.CropMgO == null ? Resource.lblHyphen : recommendation.CropMgO == 0 ? recommendation.CropMgO : string.Concat(recommendation.CropMgO, Resource.lblkg))</td>
                                                             <td class="govuk-table__cell">@(recommendation.ManureMgO == null ? Resource.lblHyphen : recommendation.ManureMgO == 0 ? recommendation.ManureMgO : string.Concat(recommendation.ManureMgO, Resource.lblkg))</td>
@@ -147,7 +147,7 @@
                                                         <tr class="govuk-table__row">
                                                             <td class="govuk-table__cell">@Resource.lblLime</td>
                                                             <td class="govuk-table__cell">
-                                                                @Resource.lblHyphen
+                                                                @(recommendation.LimeIndex == null ? Resource.lblHyphen : recommendation.LimeIndex)
                                                             </td>
                                                             <td class="govuk-table__cell">@(recommendation.CropLime == null ? Resource.lblHyphen : recommendation.CropLime == 0 ? recommendation.CropLime : string.Concat(recommendation.CropLime, Resource.lblkg))</td>
                                                             <td class="govuk-table__cell">@(recommendation.ManureLime == null ? Resource.lblHyphen : recommendation.ManureLime == 0 ? recommendation.ManureLime : string.Concat(recommendation.ManureLime, Resource.lblkg))</td>
@@ -255,7 +255,7 @@
                                                         <tr class="govuk-table__row">
                                                             <td class="govuk-table__cell">@Resource.lblNitrogen</td>
                                                             <td class="govuk-table__cell">
-                                                                @(recommendation.SNSIndex == null ? Resource.lblHyphen : recommendation.SNSIndex)
+                                                                @(recommendation.NIndex == null ? Resource.lblHyphen : recommendation.NIndex)
                                                             </td>
                                                             <td class="govuk-table__cell">@(recommendation.CropN == null ? Resource.lblHyphen : recommendation.CropN == 0 ? recommendation.CropN : string.Concat(recommendation.CropN, Resource.lblkg))</td>
                                                             <td class="govuk-table__cell">@(recommendation.ManureN == null ? 0 : recommendation.ManureN == 0 ? recommendation.ManureN : string.Concat(recommendation.ManureN, Resource.lblkg))</td>
@@ -305,7 +305,7 @@
                                                         <tr class="govuk-table__row">
                                                             <td class="govuk-table__cell"> @Resource.lblMagnesiumMgO</td>
                                                             <td class="govuk-table__cell">
-                                                                @(recommendation.SIndex == null ? Resource.lblHyphen : recommendation.MgIndex)
+                                                                @(recommendation.MgIndex == null ? Resource.lblHyphen : recommendation.MgIndex)
                                                             </td>
                                                             <td class="govuk-table__cell">@(recommendation.CropMgO == null ? Resource.lblHyphen : recommendation.CropMgO == 0 ? recommendation.CropMgO : string.Concat(recommendation.CropMgO, Resource.lblkg))</td>
                                                             <td class="govuk-table__cell">@(recommendation.ManureMgO == null ? 0 : recommendation.ManureMgO == 0 ? recommendation.ManureMgO : string.Concat(recommendation.ManureMgO, Resource.lblkg))</td>
@@ -315,8 +315,8 @@
 
                                                         <tr class="govuk-table__row">
                                                             <td class="govuk-table__cell">@Resource.lblLime</td>
-                                                            <td class="govuk-table__cell">
-                                                                @Resource.lblHyphen
+                                                             <td class="govuk-table__cell">
+                                                                @(recommendation.LimeIndex == null ? Resource.lblHyphen : recommendation.LimeIndex)
                                                             </td>
                                                             <td class="govuk-table__cell">@(recommendation.CropLime == null ? Resource.lblHyphen : recommendation.CropLime == 0 ? recommendation.CropLime : string.Concat(recommendation.CropLime, Resource.lblkg))</td>
                                                             <td class="govuk-table__cell">@(recommendation.ManureLime == null ? 0 : recommendation.ManureLime == 0 ? recommendation.ManureLime : string.Concat(recommendation.ManureLime, Resource.lblkg))</td>
