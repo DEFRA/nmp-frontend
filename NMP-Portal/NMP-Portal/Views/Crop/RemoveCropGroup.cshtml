@@ -19,7 +19,9 @@
         @Html.AntiForgeryToken()
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
-        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupName"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupName" value="@Model.CropGroupName"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropType" value="@Model.CropType"></govuk-input>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds-from-desktop">
                 @if (TempData["RemoveGroupError"] != null)
@@ -29,14 +31,7 @@
                     </govuk-error-summary>
                 }
 
-                <h1 class="govuk-heading-l">@string.Format(Resource.lblRemoveCropGroupWithCropType, ViewBag.CropGroupName, ViewBag.CropType)</h1>
-
-                <govuk-notification-banner>
-                    <govuk-notification-banner-title>
-                        @Resource.lblImportant
-                    </govuk-notification-banner-title>
-                    <p class="govuk-body">Under construction</p>
-                </govuk-notification-banner>
+                <h1 class="govuk-heading-l">@string.Format(Resource.lblRemoveCropGroupWithCropType, Model.CropGroupName, Model.CropType)</h1>
 
                 <p class="govuk-body">
                     @Resource.lblRemoveCropGroupContent1

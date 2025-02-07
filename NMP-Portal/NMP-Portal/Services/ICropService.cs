@@ -25,6 +25,6 @@ namespace NMP.Portal.Services
         Task<string?> FetchCropInfoOneQuestionByCropTypeId(int cropTypeId);
         Task<(ManagementPeriod, Error)> FetchManagementperiodById(int id);
         Task<(Crop, Error)> FetchCropById(int id);
-        Task<(string, Error)> RemoveCropGroup(int cropTypeId,string? cropGroupName);
+        Task<(string, Error)> RemoveCropPlan(string cropIds);
     }
 }

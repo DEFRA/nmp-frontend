@@ -4,6 +4,7 @@ using NMP.Portal.Helpers;
 using NMP.Portal.Models;
 using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
+using System.Net.Http.Json;
 using System.Text;
 
 namespace NMP.Portal.Services
@@ -711,14 +712,22 @@ namespace NMP.Portal.Services
             }
             return (crop, error);
         }
-        public async Task<(string, Error)> RemoveCropGroup(int cropTypeId, string? cropGroupName)
+        public async Task<(string, Error)> RemoveCropPlan(string cropIds)
         {
             Error error = new Error();
             string message = string.Empty;
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.DeleteAsync(string.Format(APIURLHelper.DeleteCropByCropTypeIdandGroupNameAPI, cropTypeId,cropGroupName));
+                var url = APIURLHelper.DeleteCropPlanByIdsAPI;  // Just the base URL, no need to pass cropIds in URL here
+
+                // Create HTTP content with the JSON data
+                var content = new StringContent(cropIds, Encoding.UTF8, "application/json");
+
+                // Send the DELETE request with content
+                var response = await httpClient.DeleteAsync(string.Format(url, cropIds));
+               // var response = await httpClient.PostAsync(APIURLHelper.AddFarmAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+                //var response = await httpClient.DeleteAsync(APIURLHelper.DeleteCropPlanByIdsAPI, new StringContent(cropIds, Encoding.UTF8, "application/json"));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
