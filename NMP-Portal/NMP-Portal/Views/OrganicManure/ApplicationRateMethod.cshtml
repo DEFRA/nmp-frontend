@@ -183,16 +183,24 @@
                         @if (Model.IsOrgManureNfieldLimitWarning)
                         {
                             <p class="govuk-notification-banner__heading">
-                                @Resource.lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit
+                                @Model.NmaxWarningHeading
                             </p>
-                            <p class="govuk-body">@Resource.MsgIfOrganicManureNMaxLimitExceed</p>
+                            <p class="govuk-body">@Model.NmaxWarningPara1</p>
+                            @if (Model.NmaxWarningPara2 != null)
+                            {
+                                <p class="govuk-body">@Model.NmaxWarningPara2</p>
+                            }
                         }
                         @if (Model.IsNMaxLimitWarning)
                         {
                             <p class="govuk-notification-banner__heading">
-                                @Resource.lblNMaxLimitTitle
+                                @Model.CropNmaxLimitWarningHeading
                             </p>
-                            <p class="govuk-body">@Resource.MsgNMaxLimit</p>
+                            <p class="govuk-body">@Model.CropNmaxLimitWarningPara1</p>
+                            @if (Model.CropNmaxLimitWarningPara2 != null)
+                            {
+                                <p class="govuk-body">@Model.CropNmaxLimitWarningPara2</p>
+                            }
                         }
                     </govuk-notification-banner>
                 }

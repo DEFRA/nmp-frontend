@@ -1685,7 +1685,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (brassicaCrops.Contains(cropTypeId) && isWithinClosedPeriod)
                 {
-                    DateTime fourWeekDate = model.Date.Value.AddDays(28);
+                    DateTime fourWeekDate = model.Date.Value.AddDays(-28);
                     (decimal nitrogenInFourWeek, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, model.Date.Value, fourWeekDate, false);
                     if (error == null)
                     {

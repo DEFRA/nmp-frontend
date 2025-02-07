@@ -222,7 +222,7 @@ hr.big_seperator {
 }
 
 .big_crop_table_version_five {
-    font-size: 17px;
+    font-size: 17px !important;
 }
 
     .big_crop_table_version_five td:last-child {

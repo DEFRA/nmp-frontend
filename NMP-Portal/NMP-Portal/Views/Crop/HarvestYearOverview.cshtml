@@ -30,7 +30,7 @@
             @Resource.lblPlanningAndRecording
         </govuk-breadcrumbs-item>
         <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
-            @string.Format("{0} {1}",Resource.lblHarvestYears, Model.Year)            
+            @string.Format("{0} {1}", Resource.lblHarvestYears, Model.Year)
         </govuk-breadcrumbs-item>
     </govuk-breadcrumbs>
     }
@@ -43,13 +43,19 @@
                     <p class="govuk-notification-banner__heading">
                         @TempData["successMsg"]
                     </p>
+                    @if (TempData["successMsgSecond"] != null)
+                    {
+                        <p class="govuk-body">
+                            @TempData["successMsgSecond"]
+                        </p>
+                    }
                 </govuk-notification-banner>
             }
         </div>
     </div>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds govuk-grid-column-full">
-            <h1 class="govuk-heading-l">@string.Format(Resource.lblPlanHeader,Model.FarmName, Model.Year)</h1>
+            <h1 class="govuk-heading-l">@string.Format(Resource.lblPlanHeader, Model.FarmName, Model.Year)</h1>
             <p class="govuk-body">
                 @string.Format(Resource.lblLastUpdated, Model.LastModifiedOn)
                 @string.Format(Resource.lblThereAreFieldsInThisPlan, Model.FieldCount)
@@ -58,7 +64,7 @@
                 @if (Model.Rainfall != null)
                 {
                     @string.Format(Resource.lblAverageAnnualRainfallIsYouHaveNotEnteredAnyExcessWinterRainfall, Model.Rainfall)
-                    <a href="#">@Resource.lblUpdateRainfallFor</a>
+                    <a href="#">@string.Format(Resource.lblUpdateRainfallFor, Model.Year)</a>
                 }
             </p>
             <p class="govuk-body pb-25">
@@ -71,7 +77,6 @@
                     <govuk-tabs-item id="CropAndFields" label=@Resource.lblCropsAndFields>
                         <h2 class="govuk-heading-m non-standard">@Resource.lblCropsAndFields</h2>
                         <a class="govuk-button add-button" asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblAddACropGroup  </a>
-
                         <hr class="seperator_five">
 
                         <!-- Crops Table -->
@@ -80,12 +85,12 @@
                             @foreach (var harvestYearPlan in Model.HarvestYearPlans.FieldData)
                             {
 
-                                <div class="tab-left">
+                                <div class="tab-left margin-bottom-thirty">
                                     <h2 class="govuk-heading-m margin-bottom-ten">
                                         @harvestYearPlan.CropTypeName
                                         @if (!string.IsNullOrWhiteSpace(harvestYearPlan.CropGroupName))
                                         {
-                                            <span class="nonbold">@string.Concat(Resource.lblHyphen," ", harvestYearPlan.CropGroupName)</span>
+                                            <span class="nonbold">@string.Concat(Resource.lblHyphen, " ", harvestYearPlan.CropGroupName)</span>
                                         }
                                     </h2>
                                     <p class="govuk-body"></p>
@@ -128,7 +133,7 @@
                                                     <td class="govuk-table__cell">
                                                         @if (field.Yield != null)
                                                         {
-                                                            @(string.Format("{0} {1}",(field.Yield % 1 == 0 ? (int)field.Yield : field.Yield),Resource.lbltonnes))
+                                                            @(string.Format("{0} {1}", (field.Yield % 1 == 0 ? (int)field.Yield : field.Yield), Resource.lbltonnes))
                                                         }
                                                         else
                                                         {
@@ -319,7 +324,7 @@
                                                 }
 
                                             </td>
-                                            <td class="govuk-table__cell"><a href="#">@Resource.lblRemove</a></td>
+                                            <td class="govuk-table__cell"><a asp-action="DeletePlanOrganicAndFertiliser" asp-controller="Crop" asp-route-q="@inorganicFertiliser.EncryptedFertId" asp-route-r="@ViewBag.Fertliser" asp-route-s="@inorganicFertiliser.EncryptedFieldName">@Resource.lblRemove</a></td>
                                         </tr>
                                     }
                                 </tbody>

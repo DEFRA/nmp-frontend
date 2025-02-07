@@ -129,13 +129,9 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
     options.Cookie.Path = "/";
     options.SlidingExpiration = true;    
-    options.Cookie.HttpOnly = true;
+    options.Cookie.HttpOnly = true;   
     options.Cookie.SameSite = SameSiteMode.Strict;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    if (!string.IsNullOrWhiteSpace(builder.Configuration["CustomerIdentityReturnURI"]))
-    {
-        options.Cookie.Domain = new Uri(builder.Configuration["CustomerIdentityReturnURI"]).Authority;
-    }
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;    
 });
 
 builder.Services.AddAntiforgery(options =>
@@ -148,12 +144,7 @@ builder.Services.AddAntiforgery(options =>
         Path = "/",
         SecurePolicy = CookieSecurePolicy.Always,
         SameSite = SameSiteMode.Strict
-    };
-
-    if (!string.IsNullOrWhiteSpace(builder.Configuration["CustomerIdentityReturnURI"]))
-    {
-        options.Cookie.Domain = new Uri(builder.Configuration["CustomerIdentityReturnURI"]).Authority;
-    }    
+    };   
     options.FormFieldName = "NMP-Portal-Antiforgery-Field";
     options.HeaderName = "X-CSRF-TOKEN-NMP";
     options.SuppressXFrameOptionsHeader = false;

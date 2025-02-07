@@ -4,7 +4,7 @@ namespace NMP.Portal.ServiceResponses
 {
     public class InorganicFertiliserResponse
     {
-        [JsonProperty("ID")]
+        [JsonProperty("InorganicFertiliserId")]
         public int ID { get; set; }
         [JsonProperty("ApplicationDate")]
         public DateTime? ApplicationDate { get; set; }
@@ -28,5 +28,7 @@ namespace NMP.Portal.ServiceResponses
         public decimal? UricAcid { get; set; }
         [JsonProperty("Lime")]
         public decimal? Lime { get; set; }
+        public string? EncryptedFertId { get; set; }
+        public string? EncryptedFieldName { get; set; }
     }
 }
