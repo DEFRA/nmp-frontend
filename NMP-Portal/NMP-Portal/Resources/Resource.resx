@@ -3756,7 +3756,7 @@ live</value>
   </data>
   <data name="MsgIfOrganicManureNMaxLimitExceedAdditionalWales" xml:space="preserve">
     <value>It is an offence to breach the Water Resources Regulations, and you should consider reducing the amount of nitrogen from organic manures.</value>
-
+  </data>
   <data name="lblRemoveCropGroupContent1" xml:space="preserve">
     <value>This action will remove all the data about this crop group from your plans. You will not be able to get it back.</value>
   </data>
