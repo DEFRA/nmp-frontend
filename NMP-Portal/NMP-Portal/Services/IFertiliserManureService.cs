@@ -13,5 +13,6 @@ namespace NMP.Portal.Services
 
         Task<(List<FertiliserManure>, Error)> AddFertiliserManureAsync(string fertiliserManure);
         Task<(decimal, Error)> FetchTotalNBasedOnManIdAndAppDate(int managementId, DateTime startDate, DateTime endDate, bool confirm);
+        Task<(string, Error)> DeleteFertiliserByIdAsync(int fertiliserId);
     }
 }

@@ -1,0 +1,55 @@
+﻿﻿@using NMP.Portal.Resources
+@using System.Globalization
+@using NMP.Portal.ViewModels
+
+@model PlanViewModel
+@{
+    ViewData["Title"] = Resource.lblRemoveThisGroup;
+    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+
+}
+
+@if (Model != null)
+{
+    @section BeforeContent {
+    <govuk-back-link asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
+    }
+    <form asp-action="DeletePlanOrganicAndFertiliser" asp-controller="Crop" method="post" autocomplete="off">
+        @Html.AntiForgeryToken()
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DeletedAction" value="@Model.DeletedAction"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedId" value="@Model.EncryptedId"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldName" value="@Model.EncryptedFieldName"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName" value="@Model.FieldName"></govuk-input>
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds-from-desktop">
+                @if (TempData["DeletePlanOrganicAndFertiliserError"] != null)
+                {
+                    <govuk-error-summary>
+                        <govuk-error-summary-item href="#">@TempData["DeletePlanOrganicAndFertiliserError"]</govuk-error-summary-item>
+                    </govuk-error-summary>
+                }
+                @* MsgDeletePlanOrganicAndFertiliserContent1 *@
+                <h1 class="govuk-heading-l">@string.Format(Resource.lblRemoveAnApplicationOfManureForHarvestYear, Resource.lblInorganicFertiliser, Model.Year)</h1>
+
+                <govuk-govuk-inset-text>
+                    @Resource.MsgDeletePlanOrganicAndFertiliserContent1
+                </govuk-govuk-inset-text>
+                <p class="govuk-body">
+                    <h4>@Resource.MsgDeletePlanOrganicAndFertiliserContent2</h4>
+                    @Model.FieldName
+                </p>
+                <hr />
+
+                <govuk-button type="submit" class="margin-bottom-forty">
+                    @Resource.lblRemove
+                </govuk-button>
+
+                <p class="govuk-body cancel-link"><a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
+            </div>
+        </div>
+    </form>
+
+}

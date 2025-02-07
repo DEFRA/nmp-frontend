@@ -109,7 +109,7 @@ namespace NMP.Portal.Helpers
         public const string AddSoilAnalysisAsyncAPI = "soil-analyses";
         public const string DeleteSoilAnalysisByIdAPI = "soilAnalysis/{0}";
         public const string DeleteCropByCropTypeIdandGroupNameAPI = "soilAnalysis/{0}";
-
+        public const string DeleteFertiliserByIdAPI = "fertiliser-manures/{0}";
 
         //Manner APi Url
         public const string FetchMannerApplicationMethodByIdAsyncAPI = "vendors/manner/application-methods/{0}";

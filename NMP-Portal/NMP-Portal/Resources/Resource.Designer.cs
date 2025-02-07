@@ -2888,6 +2888,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fertiliser.
+        /// </summary>
+        public static string lblFertiliser {
+            get {
+                return ResourceManager.GetString("lblFertiliser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fertiliser or Lime applied.
         /// </summary>
         public static string lblFertiliserOrLimeApplied {
@@ -3686,6 +3695,15 @@ namespace NMP.Portal.Resources {
         public static string lblInorganicApplications {
             get {
                 return ResourceManager.GetString("lblInorganicApplications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to inorganic fertiliser.
+        /// </summary>
+        public static string lblInorganicFertiliser {
+            get {
+                return ResourceManager.GetString("lblInorganicFertiliser", resourceCulture);
             }
         }
         
@@ -5831,6 +5849,15 @@ namespace NMP.Portal.Resources {
         public static string lblRemove {
             get {
                 return ResourceManager.GetString("lblRemove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove an application of {0} for harvest year {1}.
+        /// </summary>
+        public static string lblRemoveAnApplicationOfManureForHarvestYear {
+            get {
+                return ResourceManager.GetString("lblRemoveAnApplicationOfManureForHarvestYear", resourceCulture);
             }
         }
         
@@ -9266,6 +9293,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This will remove this organic material application from these fields and change their nutrient recommendations..
+        /// </summary>
+        public static string MsgDeletePlanOrganicAndFertiliserContent1 {
+            get {
+                return ResourceManager.GetString("MsgDeletePlanOrganicAndFertiliserContent1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which fields would you like to remove this application from?.
+        /// </summary>
+        public static string MsgDeletePlanOrganicAndFertiliserContent2 {
+            get {
+                return ResourceManager.GetString("MsgDeletePlanOrganicAndFertiliserContent2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to End of soil drainage not set.
         /// </summary>
         public static string MsgEndOfSoilDrainageNotSet {
@@ -10076,6 +10121,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Inorganic fertiliser application removed.
+        /// </summary>
+        public static string MsgInorganicFertiliserApplicationRemoved {
+            get {
+                return ResourceManager.GetString("MsgInorganicFertiliserApplicationRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid authentication.
         /// </summary>
         public static string MsgInvalidAuthentication {
@@ -10315,6 +10369,15 @@ namespace NMP.Portal.Resources {
         public static string MsgNmptServiceNotAvailable {
             get {
                 return ResourceManager.GetString("MsgNmptServiceNotAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nutrient recommendations may be updated.
+        /// </summary>
+        public static string MsgNutrientRecommendationsMayBeUpdated {
+            get {
+                return ResourceManager.GetString("MsgNutrientRecommendationsMayBeUpdated", resourceCulture);
             }
         }
         
