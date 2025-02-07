@@ -712,22 +712,26 @@ namespace NMP.Portal.Services
             }
             return (crop, error);
         }
-        public async Task<(string, Error)> RemoveCropPlan(string cropIds)
+        public async Task<(string, Error)> RemoveCropPlan(List<int> cropIds)
         {
+            var cropIdsRequest = new { cropIds };
             Error error = new Error();
             string message = string.Empty;
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var url = APIURLHelper.DeleteCropPlanByIdsAPI;  // Just the base URL, no need to pass cropIds in URL here
+                var jsonContent = JsonConvert.SerializeObject(cropIdsRequest);
 
-                // Create HTTP content with the JSON data
-                var content = new StringContent(cropIds, Encoding.UTF8, "application/json");
+                var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+                var url = string.Format(APIURLHelper.DeleteCropPlanByIdsAPI, ""); 
 
-                // Send the DELETE request with content
-                var response = await httpClient.DeleteAsync(string.Format(url, cropIds));
-               // var response = await httpClient.PostAsync(APIURLHelper.AddFarmAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
-                //var response = await httpClient.DeleteAsync(APIURLHelper.DeleteCropPlanByIdsAPI, new StringContent(cropIds, Encoding.UTF8, "application/json"));
+                
+                var requestMessage = new HttpRequestMessage(HttpMethod.Delete, url)
+                {
+                    Content = content
+                };
+                
+                var response = await httpClient.SendAsync(requestMessage);
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)

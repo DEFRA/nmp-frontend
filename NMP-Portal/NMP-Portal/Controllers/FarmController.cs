@@ -966,13 +966,17 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> FarmSummary(string id, string? q, string? u)
+        public async Task<IActionResult> FarmSummary(string id, string? q, string? u, string? r)
         {
             _logger.LogTrace($"Farm Controller : FarmSummary() action called");
             string farmId = string.Empty;
             if (!string.IsNullOrWhiteSpace(q))
             {
                 ViewBag.Success = _dataProtector.Unprotect(q);
+                if (!string.IsNullOrWhiteSpace(r))
+                {
+                    TempData["successMsg"]= _dataProtector.Unprotect(r);
+                }
             }
             else
             {
