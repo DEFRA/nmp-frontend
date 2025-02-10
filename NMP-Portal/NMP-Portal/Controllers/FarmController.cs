@@ -675,7 +675,7 @@ namespace NMP.Portal.Controllers
                     decimal decimalValue;
                     if (decimal.TryParse(ModelState["Rainfall"].RawValue.ToString(), out decimalValue))
                     {
-                        ModelState["Rainfall"].Errors.Add(Resource.MsgIfUserEnterDecimalValueInRainfall);
+                        ModelState["Rainfall"].Errors.Add(RainfallError);
                     }
                     else
                     {

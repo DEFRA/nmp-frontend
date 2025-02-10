@@ -2924,7 +2924,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fertilisers have been successfully added to your plan.
+        ///   Looks up a localized string similar to Inorganic fertiliser added to fields in this plan.
         /// </summary>
         public static string lblFertilisersHavebeenSuccessfullyAdded {
             get {
@@ -5043,7 +5043,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Organic material application added for all fields in this plan.
+        ///   Looks up a localized string similar to Organic fertiliser added to fields in this plan.
         /// </summary>
         public static string lblOrganicManureCreatedSuccessfullyForAllField {
             get {
@@ -6056,6 +6056,15 @@ namespace NMP.Portal.Resources {
         public static string lblSecondCrop {
             get {
                 return ResourceManager.GetString("lblSecondCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a field to see its updated nutrient recommendations.
+        /// </summary>
+        public static string lblSelectAFieldToSeeItsUpdatedNutrientRecommendation {
+            get {
+                return ResourceManager.GetString("lblSelectAFieldToSeeItsUpdatedNutrientRecommendation", resourceCulture);
             }
         }
         
@@ -9088,14 +9097,13 @@ namespace NMP.Portal.Resources {
         /// <summary>
         ///   Looks up a localized string similar to It is an offence to breach the Water Resources Regulations, and you should consider applying outside the closed spreading period. Before spreading organic manure, a field inspection should be carried out to consider the risk of causing pollution or damage to the soil..
         /// </summary>
-        public static string MsgClosedPeriodWarningPara2Wales
-        {
-            get
-            {
+        public static string MsgClosedPeriodWarningPara2Wales {
+            get {
                 return ResourceManager.GetString("MsgClosedPeriodWarningPara2Wales", resourceCulture);
             }
         }
-
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} removed.
         /// </summary>
         public static string MsgCropGroupNameRemoves {

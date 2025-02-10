@@ -1462,6 +1462,7 @@ namespace NMP.Portal.Controllers
                 if (error == null)
                 {
                     string successMsg = Resource.lblFertilisersHavebeenSuccessfullyAdded;
+                    string successMsgSecond = Resource.lblSelectAFieldToSeeItsUpdatedNutrientRecommendation;
                     bool success = true;
                     _httpContextAccessor.HttpContext?.Session.Remove("FertiliserManure");
                     return RedirectToAction("HarvestYearOverview", "Crop", new
@@ -1469,7 +1470,8 @@ namespace NMP.Portal.Controllers
                         id = model.EncryptedFarmId,
                         year = model.EncryptedHarvestYear,
                         q = _farmDataProtector.Protect(success.ToString()),
-                        r = _cropDataProtector.Protect(successMsg)
+                        r = _cropDataProtector.Protect(successMsg),
+                        v=_cropDataProtector.Protect(successMsgSecond)
                     });
                 }
             }

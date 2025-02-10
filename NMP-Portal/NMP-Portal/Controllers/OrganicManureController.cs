@@ -4290,13 +4290,16 @@ namespace NMP.Portal.Controllers
                 }
                 if (success)
                 {
+                    successMsg = Resource.lblOrganicManureCreatedSuccessfullyForAllField;
+                    string successMsgSecond = Resource.lblSelectAFieldToSeeItsUpdatedNutrientRecommendation;
                     _httpContextAccessor.HttpContext?.Session.Remove("OrganicManure");
                     return RedirectToAction("HarvestYearOverview", "Crop", new
                     {
                         id = model.EncryptedFarmId,
                         year = model.EncryptedHarvestYear,
                         q = _farmDataProtector.Protect(success.ToString()),
-                        r = _cropDataProtector.Protect(successMsg)
+                        r = _cropDataProtector.Protect(successMsg),
+                        v = _cropDataProtector.Protect(successMsgSecond)
                     });
                 }
 
