@@ -1532,7 +1532,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>We could not add your application, try again later</value>
   </data>
   <data name="lblOrganicManureCreatedSuccessfullyForAllField" xml:space="preserve">
-    <value>Organic material application added for all fields in this plan</value>
+    <value>Organic fertiliser added to fields in this plan</value>
   </data>
   <data name="lblOrganicMaterialApplications" xml:space="preserve">
     <value>Organic material applications</value>
@@ -1928,7 +1928,7 @@ cubic metres per hectare  not set</value>
     <value>Do you plan to spread more inorganic fertiliser?</value>
   </data>
   <data name="lblFertilisersHavebeenSuccessfullyAdded" xml:space="preserve">
-    <value>Fertilisers have been successfully added to your plan</value>
+    <value>Inorganic fertiliser added to fields in this plan</value>
   </data>
   <data name="lblWhenDoYouFirstPlanToSpreadInOrganicFertiliser" xml:space="preserve">
     <value>When do you first plan to spread inorganic fertiliser?</value>
@@ -3789,5 +3789,8 @@ live</value>
   </data>
   <data name="MsgDeletePlanOrganicAndFertiliserContent2" xml:space="preserve">
     <value>Which fields would you like to remove this application from?</value>
+  </data>
+  <data name="lblSelectAFieldToSeeItsUpdatedNutrientRecommendation" xml:space="preserve">
+    <value>Select a field to see its updated nutrient recommendations</value>
   </data>
 </root>
