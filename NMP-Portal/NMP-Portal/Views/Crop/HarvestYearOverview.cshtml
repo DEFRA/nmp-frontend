@@ -247,7 +247,7 @@
                             <table class="govuk-table big_crop_table_version_three margin-bottom-forty">
                                 <thead class="govuk-table__head">
                                     <tr class="govuk-table__row">
-                                        @if (Model.sortInOrganicListOrderByDate != null)
+                                        @if (Model.sortInOrganicListOrderByDate != null && Model.SortInOrganicListOrderByFieldName == null)
                                         {
                                             if (Model.sortInOrganicListOrderByDate == Resource.lblDesc)
                                             {
@@ -260,7 +260,7 @@
                                             }
                                             <th scope="col" class="govuk-table__header">@Resource.lblField</th>
                                         }
-                                        @if (Model.SortInOrganicListOrderByFieldName != null)
+                                        @if (Model.SortInOrganicListOrderByFieldName != null && Model.sortInOrganicListOrderByDate == null)
                                         {
                                             if (Model.SortInOrganicListOrderByFieldName == Resource.lblDesc)
                                             {
@@ -273,6 +273,28 @@
                                             }
                                             <th scope="col" class="govuk-table__header">@Resource.lblApplicationDate</th>
                                         }
+                                        @if (Model.SortInOrganicListOrderByFieldName != null && Model.sortInOrganicListOrderByDate != null)
+                                        {
+                                            if (Model.sortInOrganicListOrderByDate == Resource.lblDesc)
+                                            {
+                                                <th scope="col" class="govuk-table__header">@string.Format(Resource.lblApplicationDateWithArrow, Resource.lblDescSign)</th>
+                                            }
+                                            else
+                                            {
+                                                <th scope="col" class="govuk-table__header">@string.Format(Resource.lblApplicationDateWithArrow, Resource.lblAscSign)</th>
+
+                                            }
+                                            if (Model.SortInOrganicListOrderByFieldName == Resource.lblDesc)
+                                            {
+                                                <th scope="col" class="govuk-table__header">@string.Format(Resource.lblFieldWithArrow, Resource.lblDescSign)</th>
+
+                                            }
+                                            else
+                                            {
+                                                <th scope="col" class="govuk-table__header">@string.Format(Resource.lblFieldWithArrow, Resource.lblAscSign)</th>
+                                            }
+                                        }
+
                                         @* @if (Model.sortInOrganicListOrderByDate != null && Model.sortInOrganicListOrderByDate == Resource.lblDesc)
                             {
                             <th scope="col" class="govuk-table__header">@string.Format(Resource.lblApplicationDateWithArrow, Resource.lblDescSign)</th>
