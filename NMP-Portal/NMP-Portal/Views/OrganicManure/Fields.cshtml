@@ -85,6 +85,9 @@
     <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefaultFarmManureValueDate" value="@Model.DefaultFarmManureValueDate"></govuk-date-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsThisDefaultValueOfRB209" value="@Model.IsThisDefaultValueOfRB209"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmCountryId"></govuk-input>
+    <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodStartDate" value="@Model.ClosedPeriodStartDate"></govuk-date-input>
+    <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodEndDate" value="@Model.ClosedPeriodEndDate"></govuk-date-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodForUI"></govuk-input>
     @if (Model.OrganicManures != null && Model.OrganicManures.Count > 0)
     {
         @for (int i = 0; i < Model.OrganicManures.Count; i++)

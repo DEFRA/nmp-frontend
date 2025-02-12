@@ -217,7 +217,7 @@ namespace NMP.Portal.Helpers
                     int applicationMonth = applicationDate.Month;
                     int applicationDay = applicationDate.Day;
 
-                    if (startMonth < endMonth)
+                    if (startMonth <= endMonth)
                     {
                         if (applicationMonth >= startMonth && applicationMonth <= endMonth)
                         {
@@ -249,6 +249,7 @@ namespace NMP.Portal.Helpers
 
 
                     }
+                    
                     return isWithinClosedPeriod;
                 }
             }
@@ -713,6 +714,19 @@ namespace NMP.Portal.Helpers
             }
 
             return isWithinWarningPeriod;
+        }
+
+        public bool IsApplicationDateWithinDateRange(DateTime? applicationDate, DateTime? startDate, DateTime? endDate)
+        {
+            bool isWithinDateRange = false;
+            if (applicationDate.HasValue && startDate.HasValue && endDate.HasValue)
+            {
+                if (applicationDate.Value >= startDate.Value && applicationDate.Value <= endDate.Value)
+                {
+                    isWithinDateRange=true;
+                }
+            }
+            return isWithinDateRange;
         }
 
     }

@@ -3843,6 +3843,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the amount of nitrogen from organic manures..
+        /// </summary>
+        public static string lblItIsAnOffenceToBreachTheNitrateVulnerableZone {
+            get {
+                return ResourceManager.GetString("lblItIsAnOffenceToBreachTheNitrateVulnerableZone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources Regulations, and you should consider reducing the amount of nitrogen from organic manures..
+        /// </summary>
+        public static string lblItIsAnOffenceToBreachTheWaterResources {
+            get {
+                return ResourceManager.GetString("lblItIsAnOffenceToBreachTheWaterResources", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No, enter a recent manure analysis.
         /// </summary>
         public static string lblIwantToEnterARecentOrganicMaterialAnalysis {
