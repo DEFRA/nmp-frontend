@@ -3665,7 +3665,7 @@ live</value>
     <value>This application will take you over the maximum application rate for manufactured nitrogen fertiliser to this crop during the closed spreading period</value>
   </data>
   <data name="MsgClosedPeriodNRateExceedWarningPara1England" xml:space="preserve">
-    <value>The Nitrate Vulnerable Zone (NVZ) rules state that the application rate of inorganic nitrogen fertiliser to this crop between {0} and {1} must not exceed {3}kg of nitrogen per hectare.</value>
+    <value>The Nitrate Vulnerable Zone (NVZ) rules state that the application rate of inorganic nitrogen fertiliser to this crop between {0} and {1} must not exceed {2}kg of nitrogen per hectare.</value>
   </data>
   <data name="MsgClosedPeriodNRateExceedWarningPara2Wales" xml:space="preserve">
     <value>It is an offence to breach the Water Resources Regulations, and you should consider reducing the application rate of inorganic nitrogen fertiliser.</value>
