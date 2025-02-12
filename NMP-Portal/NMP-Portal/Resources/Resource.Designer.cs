@@ -9041,7 +9041,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that the application rate of inorganic nitrogen fertiliser to this crop between {0} and {1} must not exceed {3}kg of nitrogen per hectare..
+        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that the application rate of inorganic nitrogen fertiliser to this crop between {0} and {1} must not exceed {2}kg of nitrogen per hectare..
         /// </summary>
         public static string MsgClosedPeriodNRateExceedWarningPara1England {
             get {

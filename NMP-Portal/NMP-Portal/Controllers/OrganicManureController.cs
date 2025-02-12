@@ -4825,7 +4825,7 @@ namespace NMP.Portal.Controllers
                     }
                 }
 
-                if (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.GreenCompost && model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.GreenFoodCompost)
+                if (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.GreenCompost || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.GreenFoodCompost)
                 {
                     var cropTypeIdsForTrigger = new HashSet<int> { 
                         (int)NMP.Portal.Enums.CropTypes.CiderApples, 
@@ -4886,6 +4886,7 @@ namespace NMP.Portal.Controllers
                             }
                             else
                             {
+                                // For this we need to get available N from Manner output, which we can get on check answer page because it requires multiple data from ahead screen of rate. That's why we only show message on checkanswer page .
                                 if (isGetCheckAnswer)
                                 {
                                     (decimal? availableNFromMannerOutput, error) = await GetAvailableNFromMannerOutput(model);
