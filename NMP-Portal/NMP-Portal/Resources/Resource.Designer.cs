@@ -2024,6 +2024,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} removed from {1}.
+        /// </summary>
+        public static string lblCropTypeNameRemoveFromFieldName {
+            get {
+                return ResourceManager.GetString("lblCropTypeNameRemoveFromFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} recommendations for {1} (per hectare).
         /// </summary>
         public static string lblCropTypeRecommendationForField {
@@ -5903,6 +5912,24 @@ namespace NMP.Portal.Resources {
         public static string lblRemoveCropGroupWithCropType {
             get {
                 return ResourceManager.GetString("lblRemoveCropGroupWithCropType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This action will remove crop planning information from {0}.
+        /// </summary>
+        public static string lblRemoveCropPlanContent1 {
+            get {
+                return ResourceManager.GetString("lblRemoveCropPlanContent1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} will not be removed from your farm and you can use it again in your plans.
+        /// </summary>
+        public static string lblRemoveCropPlanContent2 {
+            get {
+                return ResourceManager.GetString("lblRemoveCropPlanContent2", resourceCulture);
             }
         }
         

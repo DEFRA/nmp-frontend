@@ -3798,5 +3798,14 @@ live</value>
   </data>
   <data name="lblItIsAnOffenceToBreachTheWaterResources" xml:space="preserve">
     <value>It is an offence to breach the Water Resources Regulations, and you should consider reducing the amount of nitrogen from organic manures.</value>
+</data>
+  <data name="lblCropTypeNameRemoveFromFieldName" xml:space="preserve">
+    <value>{0} removed from {1}</value>
+  </data>
+  <data name="lblRemoveCropPlanContent1" xml:space="preserve">
+    <value>This action will remove crop planning information from {0}</value>
+  </data>
+  <data name="lblRemoveCropPlanContent2" xml:space="preserve">
+    <value>{0} will not be removed from your farm and you can use it again in your plans</value>
   </data>
 </root>
