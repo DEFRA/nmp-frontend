@@ -3793,6 +3793,12 @@ live</value>
   <data name="lblSelectAFieldToSeeItsUpdatedNutrientRecommendation" xml:space="preserve">
     <value>Select a field to see its updated nutrient recommendations</value>
   </data>
+  <data name="lblItIsAnOffenceToBreachTheNitrateVulnerableZone" xml:space="preserve">
+    <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the amount of nitrogen from organic manures.</value>
+  </data>
+  <data name="lblItIsAnOffenceToBreachTheWaterResources" xml:space="preserve">
+    <value>It is an offence to breach the Water Resources Regulations, and you should consider reducing the amount of nitrogen from organic manures.</value>
+</data>
   <data name="lblCropTypeNameRemoveFromFieldName" xml:space="preserve">
     <value>{0} removed from {1}</value>
   </data>

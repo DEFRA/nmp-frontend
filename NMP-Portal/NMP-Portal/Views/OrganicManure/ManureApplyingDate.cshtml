@@ -15,22 +15,7 @@
     {
         backAction = "ManureType";
     }
-
-    var closedPeriod = Model.ClosedPeriod as string;
-    if (!string.IsNullOrEmpty(closedPeriod) && Model.HarvestYear != null)
-    {
-        int harvestYear = Model.HarvestYear ?? 0;
-        var dates = closedPeriod.Split(new[] { " to " }, StringSplitOptions.RemoveEmptyEntries);
-        if (dates.Length == 2)
-        {
-            int startYear = harvestYear;
-            int endYear = harvestYear + 1;
-            string startDateWithYear = dates[0].Trim() + " " + startYear;
-            string endDateWithYear = dates[1].Trim() + " " + endYear;
-            closedPeriod = string.Format(Resource.lblTo, startDateWithYear, endDateWithYear);
-
-        }
-    }
+ 
 
 }
 @section BeforeContent {
@@ -124,6 +109,9 @@
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefaultFarmManureValueDate" value="@Model.DefaultFarmManureValueDate"></govuk-date-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsThisDefaultValueOfRB209" value="@Model.IsThisDefaultValueOfRB209"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmCountryId"></govuk-input>
+            <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodStartDate" value="@Model.ClosedPeriodStartDate"></govuk-date-input>
+            <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodEndDate" value="@Model.ClosedPeriodEndDate"></govuk-date-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodForUI"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -224,14 +212,14 @@
                         <govuk-date-input-fieldset-legend is-page-heading="true" class="govuk-fieldset">
                             @if (Model.HighReadilyAvailableNitrogen != null && Model.HighReadilyAvailableNitrogen == true)
                             {
-                                @if (Model.ClosedPeriod != null)
+                                @if (Model.ClosedPeriodForUI != null)
                                 {
                                     <p>
                                         @Resource.lblYourClosedPeriodForSpreadingOrganicMaterials
                                     </p>
 
                                     <p>
-                                        <b>@closedPeriod </b> <br />
+                                        <b>@Model.ClosedPeriodForUI </b> <br />
                                         @Resource.lblBasedOnYourCropSoilTypeFarmDetails
                                     </p>
 
