@@ -123,16 +123,16 @@ builder.Services.AddSingleton<IFertiliserManureService, FertiliserManureService>
 builder.Services.AddSingleton<ISoilAnalysisService, SoilAnalysisService>();
 builder.Services.AddSingleton<IPKBalanceService, PKBalanceService>();
 
-builder.Services.ConfigureApplicationCookie(options =>
-{    
-    options.Cookie.Name = "NMP-Portal";
-    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-    options.Cookie.Path = "/";
-    options.SlidingExpiration = true;    
-    options.Cookie.HttpOnly = true;   
-    options.Cookie.SameSite = SameSiteMode.Strict;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;    
-});
+//builder.Services.ConfigureApplicationCookie(options =>
+//{    
+//    options.Cookie.Name = "NMP-Portal";
+//    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+//    options.Cookie.Path = "/";
+//    options.SlidingExpiration = true;    
+//    options.Cookie.HttpOnly = true;   
+//    options.Cookie.SameSite = SameSiteMode.Strict;
+//    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;    
+//});
 
 builder.Services.AddAntiforgery(options =>
 {
