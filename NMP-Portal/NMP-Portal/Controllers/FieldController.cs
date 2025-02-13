@@ -40,7 +40,7 @@ namespace NMP.Portal.Controllers
         private readonly IOrganicManureService _organicManureService;
         private readonly ISoilAnalysisService _soilAnalysisService;
         private readonly IPKBalanceService _pKBalanceService;
-        private readonly ICropService _iCropService;
+        private readonly ICropService _cropService;
 
         public FieldController(ILogger<FieldController> logger, IDataProtectionProvider dataProtectionProvider,
              IFarmService farmService, IHttpContextAccessor httpContextAccessor, ISoilService soilService,
@@ -57,7 +57,7 @@ namespace NMP.Portal.Controllers
             _organicManureService = organicManureService;
             _soilAnalysisService = soilAnalysisService;
             _pKBalanceService = pKBalanceService;
-            _iCropService = cropService;
+            _cropService = cropService;
         }
         public IActionResult Index()
         {
@@ -1563,8 +1563,40 @@ namespace NMP.Portal.Controllers
             {
                 model.PKBalance = null;
             }
-            (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+            int? lastGroupNumber = null;
+            Error error = new Error();
+            (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
 
+            if (farm != null&&(string.IsNullOrWhiteSpace(error.Message)))
+            {
+                (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropService.FetchHarvestYearPlansByFarmId(farm.LastHarvestYear.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
+               
+                    if (harvestYearPlanResponse != null&& harvestYearPlanResponse.Count>0)
+                    {
+                        var lastGroup = harvestYearPlanResponse.Where(cg => !string.IsNullOrEmpty(cg.CropGroupName) && cg.CropGroupName.StartsWith("Crop group") &&
+                                         int.TryParse(cg.CropGroupName.Split(' ')[2], out _))
+                                        .OrderByDescending(cg => int.Parse(cg.CropGroupName.Split(' ')[2]))
+                                        .FirstOrDefault();
+                        if (lastGroup != null)
+                        {
+                            lastGroupNumber = int.Parse(lastGroup.CropGroupName.Split(' ')[2]);
+                        }
+                    }
+
+                    if (lastGroupNumber != null)
+                    {
+                        model.CropGroupName = string.Format(Resource.lblCropGroupWithCounter, (lastGroupNumber + 1));
+                    }
+                    else
+                    {
+                        model.CropGroupName = string.Format(Resource.lblCropGroupWithCounter, 1);
+                    }
+            }
+            else
+            {
+                TempData["AddFieldError"] = Resource.MsgWeCouldNotAddYourFieldPleaseTryAgainLater;
+                return RedirectToAction("CheckAnswer");
+            }
             List<PreviousGrass> grass = new List<PreviousGrass>();
             if (model.PreviousGrassYears != null)
             {
@@ -1696,6 +1728,7 @@ namespace NMP.Portal.Controllers
                             CropTypeID=model.CropTypeID,
                             FieldType = model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass ? (int)NMP.Portal.Enums.FieldType.Grass : (int)NMP.Portal.Enums.FieldType.Arable,
                             CropOrder=1,
+                            CropGroupName=model.CropGroupName,
                             CreatedOn =DateTime.Now,
                             CreatedByID=userId
                         },
@@ -1859,7 +1892,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     ViewBag.SuccessMsgContent = string.Format(Resource.lblYouHaveRemovedASoilAnalysisForFieldName, model.Name);
                                 }
-                                List<Crop> crop = (await _iCropService.FetchCropsByFieldId(model.ID.Value)).ToList();
+                                List<Crop> crop = (await _cropService.FetchCropsByFieldId(model.ID.Value)).ToList();
                                 if (crop != null && crop.Count > 0)
                                 {
                                     if (soilAnalysisResponse.Count > 0)

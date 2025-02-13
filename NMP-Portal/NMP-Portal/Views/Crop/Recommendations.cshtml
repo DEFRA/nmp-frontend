@@ -519,7 +519,7 @@
                                                                 }
                                                             </td>
                                                             <td class="govuk-table__cell">
-                                                                <p class="govuk-body cancel-link"><a href="#">@Resource.lblChange</a></p>
+                                                                <p class="govuk-body cancel-link"><a asp-action="DeletePlanOrganicAndFertiliser" asp-controller="Crop" asp-route-q="@fertiliserManure.EncryptedFertId" asp-route-r="@ViewBag.Fertiliser" asp-route-s="@fertiliserManure.EncryptedFieldName">@Resource.lblRemove</a></p>
                                                             </td>
 
                                                         </tr>
