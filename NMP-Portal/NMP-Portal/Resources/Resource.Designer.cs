@@ -6987,6 +6987,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to These fields all have an application of {0} on {1}.
+        /// </summary>
+        public static string lblTheseFieldsAllHaveAnApplicationOf {
+            get {
+                return ResourceManager.GetString("lblTheseFieldsAllHaveAnApplicationOf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This service will:.
         /// </summary>
         public static string lblTheServiceWill {
@@ -7487,6 +7496,15 @@ namespace NMP.Portal.Resources {
         public static string lblUpdate {
             get {
                 return ResourceManager.GetString("lblUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update all these fields.
+        /// </summary>
+        public static string lblUpdateAllTheseFields {
+            get {
+                return ResourceManager.GetString("lblUpdateAllTheseFields", resourceCulture);
             }
         }
         
@@ -8342,6 +8360,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhichFieldsWouldYouLikeToPlanAnOrganic {
             get {
                 return ResourceManager.GetString("lblWhichFieldsWouldYouLikeToPlanAnOrganic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which fields would you like to remove this application for?.
+        /// </summary>
+        public static string lblWhichFieldsWouldYouLikeToRemoveThisApplicationFor {
+            get {
+                return ResourceManager.GetString("lblWhichFieldsWouldYouLikeToRemoveThisApplicationFor", resourceCulture);
             }
         }
         

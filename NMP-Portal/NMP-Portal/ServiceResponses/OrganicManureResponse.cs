@@ -4,7 +4,7 @@ namespace NMP.Portal.ServiceResponses
 {
     public class OrganicManureResponse
     {
-        [JsonProperty("ID")]
+        [JsonProperty("OrganicMaterialId")]
         public int ID { get; set; }
         [JsonProperty("TypeOfManure")]
         public string? TypeOfManure { get; set; }
@@ -12,9 +12,13 @@ namespace NMP.Portal.ServiceResponses
         public DateTime? ApplicationDate { get; set; }
         [JsonProperty("Field")]
         public string? Field { get; set; }
+        [JsonProperty("FieldId")]
+        public string? FieldId { get; set; }
         [JsonProperty("Crop")]
         public string? Crop { get; set; }
         [JsonProperty("Rate")]
         public decimal? Rate { get; set; }
+        public string? EncryptedId { get; set; }
+        public string? EncryptedFieldName { get; set; }
     }
 }

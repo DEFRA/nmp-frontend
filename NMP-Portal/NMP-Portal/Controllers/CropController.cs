@@ -1918,6 +1918,9 @@ namespace NMP.Portal.Controllers
                                 if (harvestYearPlanResponse.OrganicMaterial.Count > 0)
                                 {
                                     harvestYearPlans.OrganicManureList = harvestYearPlanResponse.OrganicMaterial.OrderByDescending(x => x.ApplicationDate).ToList();
+                                    harvestYearPlans.OrganicManureList.ForEach(m => m.EncryptedId = _cropDataProtector.Protect(m.ID.ToString()));
+                                    ViewBag.Organic = _cropDataProtector.Protect(Resource.lblOrganic);
+                                    harvestYearPlans.OrganicManureList.ForEach(m => m.EncryptedFieldName = _cropDataProtector.Protect(m.Field.ToString()));
                                 }
 
 
@@ -2264,7 +2267,7 @@ namespace NMP.Portal.Controllers
                                     Year = recommendation.Crops.Year,
                                     CropTypeID = recommendation.Crops.CropTypeID,
                                     FieldID = recommendation.Crops.FieldID,
-                                    EncryptedFieldId =_cropDataProtector.Protect(recommendation.Crops.FieldID.ToString()),
+                                    EncryptedFieldId = _cropDataProtector.Protect(recommendation.Crops.FieldID.ToString()),
                                     Variety = recommendation.Crops.Variety,
                                     CropInfo1 = recommendation.Crops.CropInfo1,
                                     CropInfo2 = recommendation.Crops.CropInfo2,
@@ -2707,7 +2710,7 @@ namespace NMP.Portal.Controllers
             return RedirectToAction("VarietyName");
         }
         [HttpGet]
-        public IActionResult RemoveCrop(string q, string? r = null, string? s=null, string? t = null, string? u = null)
+        public IActionResult RemoveCrop(string q, string? r = null, string? s = null, string? t = null, string? u = null)
         {
             _logger.LogTrace("Crop Controller : RemoveCrop() action called");
             PlanViewModel model = new PlanViewModel();
@@ -2746,11 +2749,11 @@ namespace NMP.Portal.Controllers
             if (!string.IsNullOrWhiteSpace(t))
             {
                 model.EncryptedFieldId = t;
-                model.FieldID= Convert.ToInt32(_cropDataProtector.Unprotect(t));
+                model.FieldID = Convert.ToInt32(_cropDataProtector.Unprotect(t));
             }
             if (!string.IsNullOrWhiteSpace(u))
             {
-                model.CropOrder =Convert.ToInt32(_cropDataProtector.Unprotect(u));
+                model.CropOrder = Convert.ToInt32(_cropDataProtector.Unprotect(u));
             }
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
             return View(model);
@@ -2786,7 +2789,7 @@ namespace NMP.Portal.Controllers
                     Error error = new Error();
                     (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
                     if (string.IsNullOrWhiteSpace(error.Message) && harvestYearPlanResponse.Count > 0)
-                    { 
+                    {
                         if (!string.IsNullOrWhiteSpace(model.CropGroupName))
                         {
                             harvestYearPlanResponse = harvestYearPlanResponse.Where(x => x.CropTypeName == model.CropType &&
@@ -2795,7 +2798,7 @@ namespace NMP.Portal.Controllers
                         else
                         {
                             harvestYearPlanResponse = harvestYearPlanResponse.Where(x => x.FieldID == model.FieldID &&
-                            x.Year == model.Year&&x.CropOrder==model.CropOrder.Value).ToList();
+                            x.Year == model.Year && x.CropOrder == model.CropOrder.Value).ToList();
                         }
                         if (harvestYearPlanResponse.Count > 0)
                         {
@@ -2817,7 +2820,7 @@ namespace NMP.Portal.Controllers
                                     }
                                     else
                                     {
-                                        return RedirectToAction("HarvestYearOverview", new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = _cropDataProtector.Protect(string.Format(Resource.lblCropTypeNameRemoveFromFieldName, model.CropType,model.FieldName)) });
+                                        return RedirectToAction("HarvestYearOverview", new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = _cropDataProtector.Protect(string.Format(Resource.lblCropTypeNameRemoveFromFieldName, model.CropType, model.FieldName)) });
                                     }
                                 }
                                 else
@@ -2880,14 +2883,19 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmList", "Farm");
                 }
 
-                if (!string.IsNullOrWhiteSpace(q) && !string.IsNullOrWhiteSpace(r) && !string.IsNullOrWhiteSpace(s))
+                if (!string.IsNullOrWhiteSpace(q) && !string.IsNullOrWhiteSpace(r))
                 {
                     model.EncryptedId = q;
                     model.DeletedAction = r;
-                    model.FieldName = _cropDataProtector.Unprotect(s);
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
+
 
                 }
+                if (!string.IsNullOrWhiteSpace(s))
+                {
+                    model.FieldName = _cropDataProtector.Unprotect(s);
+                }
+
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
             }
             catch (Exception ex)
             {
@@ -2925,14 +2933,178 @@ namespace NMP.Portal.Controllers
                         return RedirectToAction("HarvestYearOverview", new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = _cropDataProtector.Protect(Resource.MsgInorganicFertiliserApplicationRemoved), v = _cropDataProtector.Protect(Resource.MsgNutrientRecommendationsMayBeUpdated) });
                     }
                 }
+                else if (!string.IsNullOrWhiteSpace(decryptedAction) && decryptedAction == Resource.lblOrganic)
+                {
+                    (success, error) = await _fertiliserManureService.DeleteFertiliserByIdAsync(decryptedFertId);
+                    if (!string.IsNullOrWhiteSpace(error.Message))
+                    {
+                        TempData["DeletePlanOrganicAndFertiliserError"] = error.Message;
+                        return View(model);
+
+                    }
+                    else
+                    {
+                        return RedirectToAction("HarvestYearOverview", new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = _cropDataProtector.Protect(Resource.MsgInorganicFertiliserApplicationRemoved), v = _cropDataProtector.Protect(Resource.MsgNutrientRecommendationsMayBeUpdated) });
+                    }
+                }
             }
             catch (Exception ex)
             {
                 _logger.LogTrace($"Crop Controller : Exception in DeletePlanOrganicAndFertiliser() post action : {ex.Message}, {ex.StackTrace}");
                 TempData["DeletePlanOrganicAndFertiliserError"] = ex.Message;
-
             }
             return View(model);
+        }
+        [HttpGet]
+        public IActionResult OrganicManureFieldRemove(string q)
+        {
+            _logger.LogTrace("Crop Controller : OrganicManureField() action called");
+            PlanViewModel model = new PlanViewModel();
+
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("HarvestYearPlan"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("HarvestYearPlan");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+                if (!string.IsNullOrWhiteSpace(q))
+                {
+                    model.EncryptedId = q;
+                    int id = Convert.ToInt32(_cropDataProtector.Unprotect(q));
+                    if (id != null && id > 0)
+                    {
+                        OrganicManureResponse organicManureResponse = model.HarvestYearPlans.OrganicManureList.Where(x => x.ID == id).FirstOrDefault();
+                        if (organicManureResponse != null)
+                        {
+                            List<OrganicManureResponse> organicManureResponses = model.HarvestYearPlans.OrganicManureList.Where(x => x.TypeOfManure == organicManureResponse.TypeOfManure && x.ApplicationDate == organicManureResponse.ApplicationDate).ToList();
+                            if (organicManureResponses != null && organicManureResponses.Count > 0)
+                            {
+                                ViewBag.ManureType = organicManureResponse.TypeOfManure;
+                                ViewBag.ApplicationDate = organicManureResponse.ApplicationDate.Value.ToString("dd MMMM yyyy");
+                                if (organicManureResponses.Count == 1)
+                                {
+                                    model.FieldName = organicManureResponse.Field;
+                                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
+                                    return RedirectToAction("DeletePlanOrganicAndFertiliser", new
+                                    {
+                                        q = model.EncryptedId,
+                                        r = _cropDataProtector.Protect(Resource.lblOrganic),
+                                        s = _cropDataProtector.Protect(model.FieldName)
+                                    });
+
+                                }
+                                else
+                                {
+                                    var SelectListItem = organicManureResponses.Select(f => new SelectListItem
+                                    {
+                                        Value = f.FieldId.ToString(),
+                                        Text = f.Field
+                                    }).ToList();
+                                    ViewBag.fieldList = SelectListItem;
+                                }
+                            }
+                        }
+                    }
+                }
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Crop Controller : Exception in OrganicManureField() action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnHarvestYearOverview"] = ex.Message;
+                return RedirectToAction("HarvestYearOverview", new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear });
+            }
+
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> OrganicManureFieldRemove(PlanViewModel model)
+        {
+            _logger.LogTrace("Crop Controller : OrganicManureFieldRemove() post action called");
+            try
+            {
+                if (model.FieldList == null || model.FieldList.Count == 0)
+                {
+                    ModelState.AddModelError("FieldList", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblField.ToLower()));
+                }
+                int id = Convert.ToInt32(_cropDataProtector.Unprotect(model.EncryptedId));
+                List<OrganicManureResponse> organicManureResponses = new List<OrganicManureResponse>();
+                if (id != null && id > 0)
+                {
+                    OrganicManureResponse organicManureResponse = model.HarvestYearPlans.OrganicManureList.Where(x => x.ID == id).FirstOrDefault();
+                    if (organicManureResponse != null)
+                    {
+                        organicManureResponses = model.HarvestYearPlans.OrganicManureList.Where(x => x.TypeOfManure == organicManureResponse.TypeOfManure && x.ApplicationDate == organicManureResponse.ApplicationDate).ToList();
+                        if (organicManureResponses != null && organicManureResponses.Count > 0)
+                        {
+                            ViewBag.ManureType = organicManureResponse.TypeOfManure;
+                            ViewBag.ApplicationDate = organicManureResponse.ApplicationDate.Value.ToString("dd MMMM yyyy");
+
+
+                        }
+                    }
+                }
+                if (!ModelState.IsValid)
+                {
+                    if (organicManureResponses != null && organicManureResponses.Count > 0)
+                    {
+                        var selectListItem = organicManureResponses.Select(f => new SelectListItem
+                        {
+                            Value = f.FieldId.ToString(),
+                            Text = f.Field
+                        }).ToList();
+                        ViewBag.fieldList = selectListItem;
+                    }
+                    return View(model);
+                }
+                Error error = new Error();
+                string success = string.Empty;
+                string decryptedAction = _cropDataProtector.Unprotect(model.DeletedAction);
+                int decryptedFertId = Convert.ToInt32(_cropDataProtector.Unprotect(model.EncryptedId));
+
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
+                if (model.FieldList.Count == 1 && model.FieldList[0] == Resource.lblUpdateAllTheseFields)
+                {
+                    if (organicManureResponses != null && organicManureResponses.Count > 0)
+                    {
+                        var selectListItem = organicManureResponses.Select(f => new SelectListItem
+                        {
+                            Value = f.FieldId.ToString(),
+                            Text = f.Field
+                        }).ToList();
+                        model.FieldList = selectListItem.Select(item => item.Value).ToList();
+                    }
+
+                }
+                if (!string.IsNullOrWhiteSpace(decryptedAction) && decryptedAction == Resource.lblFertiliser)
+                {
+                    (success, error) = await _fertiliserManureService.DeleteFertiliserByIdAsync(decryptedFertId);
+                    if (!string.IsNullOrWhiteSpace(error.Message))
+                    {
+                        TempData["OrganicManureFieldRemoveError"] = error.Message;
+                        return View(model);
+
+                    }
+                    else
+                    {
+                        return RedirectToAction("HarvestYearOverview", new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = _cropDataProtector.Protect(Resource.MsgInorganicFertiliserApplicationRemoved), v = _cropDataProtector.Protect(Resource.MsgNutrientRecommendationsMayBeUpdated) });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Crop Controller : Exception in OrganicManureFieldRemove() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["OrganicManureFieldRemoveError"] = ex.Message;
+
+            }
+            return RedirectToAction("DeletePlanOrganicAndFertiliser", new { q = model.EncryptedId, r = _cropDataProtector.Protect(Resource.lblOrganic) });
         }
     }
 }
