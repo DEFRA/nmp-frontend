@@ -13,7 +13,13 @@
 @if (Model != null)
 {
     @section BeforeContent {
-    <govuk-back-link asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
+        @if(Model.FieldList!=null&&Model.FieldList.Count>0)
+        {
+            <govuk-back-link asp-action="OrganicManureFieldRemove" asp-controller="Crop" asp-route-q="@Model.EncryptedId">@Resource.lblBack</govuk-back-link>
+        }
+        else{
+        <govuk-back-link asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
+        }
     }
     <form asp-action="DeletePlanOrganicAndFertiliser" asp-controller="Crop" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
@@ -23,6 +29,27 @@
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedId" value="@Model.EncryptedId"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldName" value="@Model.EncryptedFieldName"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName" value="@Model.FieldName"></govuk-input>
+        @if (Model.organicManureIds != null && Model.organicManureIds.Count > 0)
+        {
+            @for (int i = 0; i < Model.organicManureIds.Count; i++)
+            {
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.organicManureIds[i]" value="@Model.organicManureIds[i]"></govuk-input>
+            }
+        }
+        @if (Model.SelectedField != null && Model.SelectedField.Count > 0)
+        {
+            @for (int i = 0; i < Model.SelectedField.Count; i++)
+            {
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SelectedField[i]" value="@Model.SelectedField[i]"></govuk-input>
+            }
+        }
+        @if (Model.FieldList != null && Model.FieldList.Count > 0)
+        {
+            @for (int i = 0; i < Model.FieldList.Count; i++)
+            {
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldList[i]" value="@Model.FieldList[i]"></govuk-input>
+            }
+        }
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds-from-desktop">
                 @if (TempData["DeletePlanOrganicAndFertiliserError"] != null)
@@ -34,14 +61,28 @@
 
                 <h1 class="govuk-heading-l">@(string.Format(Resource.lblRemoveAnApplicationOfManureForHarvestYear, ViewBag.RemoveContent, Model.Year))</h1>
 
-                  <govuk-inset-text>
+                <govuk-inset-text>
                     @ViewBag.RemoveContent2
                 </govuk-inset-text>
                 <table class="govuk-table">
                     <thead class="govuk-table__head">
                         <tr class="govuk-table__row">
                             <th id="field_name" scope="col" class="govuk-table__header">@Resource.MsgDeletePlanOrganicAndFertiliserContent2</th>
-                            <td class="govuk-table__cell">@Model.FieldName</td>
+                            @if (Model.SelectedField != null)
+                            {
+                                <td class="govuk-table__cell">
+                                @foreach (var item in Model.SelectedField)
+                                {
+                                    @item <br />
+                                }
+                                </td>
+                            }
+                            @if (Model.FieldList != null && Model.FieldList.Count > 0)
+                            {
+                                <td class="govuk-table__cell">
+                                    <a asp-action="OrganicManureFieldRemove" asp-controller="Crop" asp-route-q="@Model.EncryptedId">@Resource.lblChange</a>
+                                </td>
+                            }
                         </tr>
                     </thead>
                 </table>

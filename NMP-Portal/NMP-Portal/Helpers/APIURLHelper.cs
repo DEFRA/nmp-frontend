@@ -110,7 +110,7 @@ namespace NMP.Portal.Helpers
         public const string DeleteSoilAnalysisByIdAPI = "soilAnalysis/{0}";
         public const string DeleteCropPlanByIdsAPI = "crops/{0}";
         public const string DeleteFertiliserByIdAPI = "fertiliser-manures/{0}";
-        public const string DeleteOrganicManureByAPI = "organic-manures/{0}";
+        public const string DeleteOrganicManureByAPI = "organic-manures/";
         public const string FetchOrganicManureByIdAPI = "organic-manures/{0}";
         public const string FetchOrganicManureByFarmIdAndYearAPI = "organic-manures/{0}/year={1}";
 

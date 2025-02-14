@@ -1710,26 +1710,26 @@ namespace NMP.Portal.Services
             }
             return (organicManures, error);
         }
-        public async Task<(string, Error)> DeleteOrganicManureByIdAsync(int orgManureId)//List<int> orgManureIds
+        public async Task<(string, Error)> DeleteOrganicManureByIdAsync(List<int> organicManureIds)
         {
-            //var orgManureIdsRequest = new { orgManureIds };
+            var orgManureIdsRequest = new { organicManureIds };
             Error error = new Error();
             string message = string.Empty;
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                //var jsonContent = JsonConvert.SerializeObject(orgManureIdsRequest);
+                var jsonContent = JsonConvert.SerializeObject(orgManureIdsRequest);
 
-                //var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-                //var url = string.Format(APIURLHelper.DeleteOrganicManureByAPI, "");
+                var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+                var url =APIURLHelper.DeleteOrganicManureByAPI;
 
 
-                //var requestMessage = new HttpRequestMessage(HttpMethod.Delete, url)
-                //{
-                //    Content = content
-                //};
-                //var response = await httpClient.SendAsync(requestMessage);
-                var response = await httpClient.DeleteAsync(string.Format(APIURLHelper.DeleteOrganicManureByAPI, orgManureId));
+                var requestMessage = new HttpRequestMessage(HttpMethod.Delete, url)
+                {
+                    Content = content
+                };
+                var response = await httpClient.SendAsync(requestMessage);
+               // var response = await httpClient.DeleteAsync(string.Format(APIURLHelper.DeleteOrganicManureByAPI, orgManureId));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)

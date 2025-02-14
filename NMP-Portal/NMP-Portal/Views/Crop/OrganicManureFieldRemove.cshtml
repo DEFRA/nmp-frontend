@@ -26,6 +26,7 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedId" value="@Model.EncryptedId"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldName" value="@Model.EncryptedFieldName"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName" value="@Model.FieldName"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType" value="@Model.ManureType"></govuk-input>
     @if (Model.HarvestYearPlans.OrganicManureList != null && Model.HarvestYearPlans.OrganicManureList.Count > 0)
     {
         @for (int i = 0; i < Model.HarvestYearPlans.OrganicManureList.Count; i++)
@@ -41,9 +42,23 @@
         }
 
     }
+    @if (Model.organicManureIds != null && Model.organicManureIds.Count > 0)
+    {
+        @for (int i = 0; i < Model.organicManureIds.Count; i++)
+        {
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.organicManureIds[i]" value="@Model.organicManureIds[i]"></govuk-input>
+        }
+    }
+     @if (Model.SelectedField != null && Model.SelectedField.Count > 0)
+    {
+    @for (int i = 0; i < Model.SelectedField.Count; i++)
+        {
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SelectedField[i]" value="@Model.SelectedField[i]"></govuk-input>
+        }
+    }
     <h1 class="govuk-heading-l">
         @Resource.lblWhichFieldsWouldYouLikeToRemoveThisApplicationFor</h1>
-    <p class="govuk-body"> @(string.Format(Resource.lblTheseFieldsAllHaveAnApplicationOf, ViewBag.ManureType, ViewBag.ApplicationDate))</p>
+    <p class="govuk-body"> @(string.Format(Resource.lblTheseFieldsAllHaveAnApplicationOf, Model.ManureType, ViewBag.ApplicationDate))</p>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <govuk-checkboxes name="FieldList" asp-for="FieldList">

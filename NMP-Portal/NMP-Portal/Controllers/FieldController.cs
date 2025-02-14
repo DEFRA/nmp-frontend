@@ -1608,6 +1608,7 @@ namespace NMP.Portal.Controllers
                     model.SoilAnalyses.PotassiumIndex = Convert.ToInt32(model.PotassiumIndexValue.Trim());
                 }
             }
+            model.SoilAnalyses.Year = model.SoilAnalyses.Date.Value.Month >= 8 ? model.SoilAnalyses.Date.Value.Year + 1 : model.SoilAnalyses.Date.Value.Year;
             //model.SoilAnalyses.PotassiumIndex = Convert.ToInt32(model.PotassiumIndexValue);
             FieldData fieldData = new FieldData
             {
@@ -1634,7 +1635,7 @@ namespace NMP.Portal.Controllers
                 },
                 SoilAnalysis = (!model.RecentSoilAnalysisQuestion.Value) ? null : new SoilAnalysis
                 {
-                    Year = model.SoilAnalyses.Date.Value.Year,
+                    Year = model.SoilAnalyses.Year,
                     SulphurDeficient = model.SoilAnalyses.SulphurDeficient,
                     Date = model.SoilAnalyses.Date,
                     PH = model.SoilAnalyses.PH,

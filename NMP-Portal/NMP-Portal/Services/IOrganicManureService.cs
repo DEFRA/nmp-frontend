@@ -51,6 +51,6 @@ namespace NMP.Portal.Services
         Task<(decimal, Error)> FetchTotalNBasedByManIdAppDateAndIsGreenCompost(int managementId, DateTime startDate, DateTime endDate, bool confirm,bool isGreenFoodCompost);
         Task<(OrganicManure, Error)> FetchOrganicManureById(int id);
         Task<(List<OrganicManure>, Error)> FetchOrganicManureByFarmIdAndYear(int farmId, int year);
-        Task<(string, Error)> DeleteOrganicManureByIdAsync(int orgManureIds);
+        Task<(string, Error)> DeleteOrganicManureByIdAsync(List<int> orgManureIds);
     }
 }
