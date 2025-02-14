@@ -28,6 +28,25 @@
                 </govuk-error-summary>
             </div>
         }
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+
+                @if (ViewBag.Success != null && ViewBag.Success == true && TempData["successMsg"] != null)
+                {
+                    <govuk-notification-banner type="Success">
+                        <p class="govuk-notification-banner__heading">
+                            @TempData["successMsg"]
+                        </p>
+                        @if (TempData["successMsgSecond"] != null)
+                        {
+                            <p class="govuk-body">
+                                @TempData["successMsgSecond"]
+                            </p>
+                        }
+                    </govuk-notification-banner>
+                }
+            </div>
+        </div>
         @if (Model.Crops != null && Model.Crops.Count > 0)
         {
             <div class="govuk-grid-column-full">
@@ -432,9 +451,8 @@
                                                                 @orgManure.ManureTypeName
                                                             </td>
                                                             <td class="govuk-table__cell">
-                                                                <p class="govuk-body cancel-link"><a href="#">@Resource.lblChange</a></p>
+                                                                <p class="govuk-body cancel-link"><a asp-action="DeletePlanOrganicAndFertiliser" asp-controller="Crop" asp-route-q="@orgManure.EncryptedId" asp-route-r="@ViewBag.OrganicManure" asp-route-s="@orgManure.EncryptedFieldName" asp-route-u="@ViewBag.isComingFromRecommendation" asp-route-t="@orgManure.EncryptedManureTypeName" asp-route-v="@Model.EncryptedFieldId">@Resource.lblRemove</a></p>
                                                             </td>
-
                                                         </tr>
                                                     }
                                                 </tbody>
@@ -519,7 +537,7 @@
                                                                 }
                                                             </td>
                                                             <td class="govuk-table__cell">
-                                                                <p class="govuk-body cancel-link"><a asp-action="DeletePlanOrganicAndFertiliser" asp-controller="Crop" asp-route-q="@fertiliserManure.EncryptedFertId" asp-route-r="@ViewBag.Fertiliser" asp-route-s="@fertiliserManure.EncryptedFieldName">@Resource.lblRemove</a></p>
+                                                                <p class="govuk-body cancel-link"><a asp-action="DeletePlanOrganicAndFertiliser" asp-controller="Crop" asp-route-q="@fertiliserManure.EncryptedFertId" asp-route-r="@ViewBag.Fertiliser" asp-route-s="@fertiliserManure.EncryptedFieldName" asp-route-u="@ViewBag.isComingFromRecommendation" asp-route-v="@Model.EncryptedFieldId">@Resource.lblRemove</a></p>
                                                             </td>
 
                                                         </tr>

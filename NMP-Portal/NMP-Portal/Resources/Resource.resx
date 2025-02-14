@@ -3784,7 +3784,7 @@ live</value>
   <data name="lblInorganicFertiliser" xml:space="preserve">
     <value>inorganic fertiliser</value>
   </data>
-  <data name="MsgDeletePlanOrganicAndFertiliserContent1" xml:space="preserve">
+  <data name="MsgDeletePlanFertiliserContent1" xml:space="preserve">
     <value>This will remove this organic material application from these fields and change their nutrient recommendations.</value>
   </data>
   <data name="MsgDeletePlanOrganicAndFertiliserContent2" xml:space="preserve">
@@ -3798,7 +3798,7 @@ live</value>
   </data>
   <data name="lblItIsAnOffenceToBreachTheWaterResources" xml:space="preserve">
     <value>It is an offence to breach the Water Resources Regulations, and you should consider reducing the amount of nitrogen from organic manures.</value>
-</data>
+  </data>
   <data name="lblCropTypeNameRemoveFromFieldName" xml:space="preserve">
     <value>{0} removed from {1}</value>
   </data>
@@ -3807,5 +3807,23 @@ live</value>
   </data>
   <data name="lblRemoveCropPlanContent2" xml:space="preserve">
     <value>{0} will not be removed from your farm and you can use it again in your plans</value>
+  </data>
+  <data name="lblTheseFieldsAllHaveAnApplicationOf" xml:space="preserve">
+    <value>These fields all have an application of {0} on {1}</value>
+  </data>
+  <data name="lblUpdateAllTheseFields" xml:space="preserve">
+    <value>Update all these fields</value>
+  </data>
+  <data name="lblWhichFieldsWouldYouLikeToRemoveThisApplicationFor" xml:space="preserve">
+    <value>Which fields would you like to remove this application for?</value>
+  </data>
+  <data name="lblOrganicMaterialApplicationRemoved" xml:space="preserve">
+    <value>Organic material application removed.</value>
+  </data>
+  <data name="lblSelectFieldToSeeItsUpdatedNutrientRecommendations" xml:space="preserve">
+    <value>Select a field to see its updated nutrient recommendations.</value>
+  </data>
+  <data name="MsgDeletePlanOrganicContent1" xml:space="preserve">
+    <value>This will remove the information about this organic material application from these fields and change their nutrient recommendations.</value>
   </data>
 </root>

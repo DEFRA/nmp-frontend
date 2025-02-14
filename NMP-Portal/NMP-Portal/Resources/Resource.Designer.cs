@@ -5115,6 +5115,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Organic material application removed..
+        /// </summary>
+        public static string lblOrganicMaterialApplicationRemoved {
+            get {
+                return ResourceManager.GetString("lblOrganicMaterialApplicationRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Organic material applications.
         /// </summary>
         public static string lblOrganicMaterialApplications {
@@ -6141,6 +6150,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select a field to see its updated nutrient recommendations..
+        /// </summary>
+        public static string lblSelectFieldToSeeItsUpdatedNutrientRecommendations {
+            get {
+                return ResourceManager.GetString("lblSelectFieldToSeeItsUpdatedNutrientRecommendations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select one option.
         /// </summary>
         public static string lblSelectOneOption {
@@ -6987,6 +7005,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to These fields all have an application of {0} on {1}.
+        /// </summary>
+        public static string lblTheseFieldsAllHaveAnApplicationOf {
+            get {
+                return ResourceManager.GetString("lblTheseFieldsAllHaveAnApplicationOf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This service will:.
         /// </summary>
         public static string lblTheServiceWill {
@@ -7487,6 +7514,15 @@ namespace NMP.Portal.Resources {
         public static string lblUpdate {
             get {
                 return ResourceManager.GetString("lblUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update all these fields.
+        /// </summary>
+        public static string lblUpdateAllTheseFields {
+            get {
+                return ResourceManager.GetString("lblUpdateAllTheseFields", resourceCulture);
             }
         }
         
@@ -8342,6 +8378,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhichFieldsWouldYouLikeToPlanAnOrganic {
             get {
                 return ResourceManager.GetString("lblWhichFieldsWouldYouLikeToPlanAnOrganic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which fields would you like to remove this application for?.
+        /// </summary>
+        public static string lblWhichFieldsWouldYouLikeToRemoveThisApplicationFor {
+            get {
+                return ResourceManager.GetString("lblWhichFieldsWouldYouLikeToRemoveThisApplicationFor", resourceCulture);
             }
         }
         
@@ -9376,9 +9421,9 @@ namespace NMP.Portal.Resources {
         /// <summary>
         ///   Looks up a localized string similar to This will remove this organic material application from these fields and change their nutrient recommendations..
         /// </summary>
-        public static string MsgDeletePlanOrganicAndFertiliserContent1 {
+        public static string MsgDeletePlanFertiliserContent1 {
             get {
-                return ResourceManager.GetString("MsgDeletePlanOrganicAndFertiliserContent1", resourceCulture);
+                return ResourceManager.GetString("MsgDeletePlanFertiliserContent1", resourceCulture);
             }
         }
         
@@ -9388,6 +9433,15 @@ namespace NMP.Portal.Resources {
         public static string MsgDeletePlanOrganicAndFertiliserContent2 {
             get {
                 return ResourceManager.GetString("MsgDeletePlanOrganicAndFertiliserContent2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This will remove the information about this organic material application from these fields and change their nutrient recommendations..
+        /// </summary>
+        public static string MsgDeletePlanOrganicContent1 {
+            get {
+                return ResourceManager.GetString("MsgDeletePlanOrganicContent1", resourceCulture);
             }
         }
         

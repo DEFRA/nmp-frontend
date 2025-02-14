@@ -6,5 +6,8 @@
         public string ApplicationMethodName { get; set; } = string.Empty;
         public string? IncorporationMethodName { get; set; } = string.Empty;
         public string? IncorporationDelayName { get; set; } = string.Empty;
+        public string? EncryptedId { get; set; }
+        public string? EncryptedFieldName { get; set; }
+        public string? EncryptedManureTypeName { get; set; }
     }
 }
