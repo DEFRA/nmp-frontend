@@ -13,7 +13,7 @@
 @if (Model != null)
 {
     @section BeforeContent {
-    @if (!string.IsNullOrWhiteSpace(Model.CropGroupName))
+    @if (string.IsNullOrWhiteSpace(Model.FieldName))
         {
             <govuk-back-link asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
         }
@@ -44,7 +44,7 @@
                     </govuk-error-summary>
                 }
                 <h1 class="govuk-heading-l">
-                    @if (!string.IsNullOrWhiteSpace(Model.CropGroupName))
+                    @if (string.IsNullOrWhiteSpace(Model.FieldName))
                     {
                         @string.Format(Resource.lblRemoveCropGroupWithCropType, Model.CropGroupName, Model.CropType)
                     }
@@ -54,7 +54,7 @@
                     }
                 </h1>
 
-                @if (!string.IsNullOrWhiteSpace(Model.CropGroupName))
+                @if (string.IsNullOrWhiteSpace(Model.FieldName))
                 {
                     <p class="govuk-body">
                         @Resource.lblRemoveCropGroupContent1
@@ -86,7 +86,7 @@
                     @Resource.lblContinue
                 </govuk-button>
 
-                @if (!string.IsNullOrWhiteSpace(Model.CropGroupName))
+                @if (string.IsNullOrWhiteSpace(Model.FieldName))
                 {
                     <p class="govuk-body cancel-link"><a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
                 }
