@@ -64,5 +64,6 @@ namespace NMP.Portal.ViewModels
         public int? CropOrder { get; set; }
         public List<int>? organicManureIds { get; set; }
         public List<string>? SelectedField { get; set; }
+        public bool? isComingFromRecommendation { get; set; }
     }
 }
