@@ -5311,7 +5311,7 @@ namespace NMP.Portal.Controllers
 
                             closedPeriod = warningMessage.ClosedPeriodNonOrganicFarm(fieldDetail, model.HarvestYear ?? 0, isPerennial);
 
-                            isWithinClosedPeriod = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate.Value, model.ClosedPeriodStartDate.Value, model.ClosedPeriodEndDate.Value);
+                            isWithinClosedPeriod = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate, model.ClosedPeriodStartDate, model.ClosedPeriodEndDate);
                             if (isWithinClosedPeriod)
                             {
                                 (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
@@ -5394,7 +5394,7 @@ namespace NMP.Portal.Controllers
                             int? cropInfo1 = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.CropInfo1).FirstOrDefault();
                             closedPeriod = warningMessage.ClosedPeriodOrganicFarm(fieldDetail, model.HarvestYear ?? 0, cropTypeId, cropInfo1, isPerennial);
 
-                            isWithinClosedPeriod = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate.Value, model.ClosedPeriodStartDate, model.ClosedPeriodEndDate);
+                            isWithinClosedPeriod = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate, model.ClosedPeriodStartDate, model.ClosedPeriodEndDate);
                             if (isWithinClosedPeriod)
                             {
 
@@ -5622,7 +5622,7 @@ namespace NMP.Portal.Controllers
                                     if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
                                     {
 
-                                        bool isWithinDateRange = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate.Value, model.ClosedPeriodStartDate.Value, endOfOctober);
+                                        bool isWithinDateRange = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate, model.ClosedPeriodStartDate, endOfOctober);
                                         if (isWithinDateRange)
                                         {
                                             (totalN, error) = await _organicManureService.FetchTotalNBasedOnManIdAndAppDate(managementIds[0], model.ClosedPeriodStartDate.Value, endOfOctober, false);
@@ -5644,7 +5644,7 @@ namespace NMP.Portal.Controllers
                                     }
                                     if ((cropTypeId == (int)NMP.Portal.Enums.CropTypes.Asparagus) || (cropTypeId == (int)NMP.Portal.Enums.CropTypes.BulbOnions) || (cropTypeId == (int)NMP.Portal.Enums.CropTypes.SaladOnions))
                                     {
-                                        bool isWithinDateRange = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate.Value, model.ClosedPeriodStartDate.Value, endDateFebruary);
+                                        bool isWithinDateRange = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate, model.ClosedPeriodStartDate, endDateFebruary);
                                         if (isWithinDateRange)
                                         {
                                             decimal? currentNitrogen = totalNitrogen * model.ApplicationRate;
@@ -5661,7 +5661,7 @@ namespace NMP.Portal.Controllers
                                     }
                                     else if (cropTypeIdsForTrigger.Contains(cropTypeId))
                                     {
-                                        bool isWithinDateRange = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate.Value, model.ClosedPeriodStartDate.Value, endDateFebruary);
+                                        bool isWithinDateRange = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate, model.ClosedPeriodStartDate, endDateFebruary);
                                         if (isWithinDateRange)
                                         {
                                             if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
@@ -5681,7 +5681,7 @@ namespace NMP.Portal.Controllers
                                     }
                                     if (brassicaCrops.Contains(cropTypeId))
                                     {
-                                        bool isWithinDateRange = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate.Value, model.ClosedPeriodStartDate.Value, endDateFebruary);
+                                        bool isWithinDateRange = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate, model.ClosedPeriodStartDate, endDateFebruary);
                                         if (isWithinDateRange)
                                         {
                                             totalN = 0;
@@ -5712,7 +5712,7 @@ namespace NMP.Portal.Controllers
                                     }
                                     if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape)
                                     {
-                                        bool isWithinDateRange = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate.Value, model.ClosedPeriodStartDate.Value, endOfOctober);
+                                        bool isWithinDateRange = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate, model.ClosedPeriodStartDate, endOfOctober);
                                         if (isWithinDateRange)
                                         {
                                             decimal? currentNitrogen = totalNitrogen * model.ApplicationRate;
@@ -5730,7 +5730,7 @@ namespace NMP.Portal.Controllers
                                     }
                                     if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
                                     {
-                                        bool isWithinDateRange = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate.Value, endOfOctober, model.ClosedPeriodEndDate.Value);
+                                        bool isWithinDateRange = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate, endOfOctober, model.ClosedPeriodEndDate);
                                         if (isWithinDateRange)
                                         {
                                             model.StartClosedPeriodEndFebWarningHeading = Resource.MsgApplicationDateEnteredIsInsideClosedPeriod;

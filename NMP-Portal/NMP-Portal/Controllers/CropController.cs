@@ -2427,10 +2427,14 @@ namespace NMP.Portal.Controllers
                                                     Na2O = item.Na2O,
                                                     Lime = item.Lime,
                                                     NH4N = item.NH4N,
-                                                    NO3N = item.NO3N
+                                                    NO3N = item.NO3N,
+                                                    EncryptedFertId = _cropDataProtector.Protect(item.ID.ToString()),
+                                                    EncryptedFieldName = _cropDataProtector.Protect(model.FieldName)
                                                 };
+                                                ViewBag.Fertliser = _cropDataProtector.Protect(Resource.lblFertiliser);
                                                 model.FertiliserManures.Add(fertiliserManure);
                                             }
+
                                             model.FertiliserManures = model.FertiliserManures.OrderByDescending(x => x.ApplicationDate).ToList();
                                         }
 
@@ -2790,10 +2794,9 @@ namespace NMP.Portal.Controllers
                     (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
                     if (string.IsNullOrWhiteSpace(error.Message) && harvestYearPlanResponse.Count > 0)
                     {
-                        if (!string.IsNullOrWhiteSpace(model.CropGroupName))
+                        if (string.IsNullOrWhiteSpace(model.FieldName))
                         {
-                            harvestYearPlanResponse = harvestYearPlanResponse.Where(x => x.CropTypeName == model.CropType &&
-                        (string.IsNullOrEmpty(model.CropGroupName) || x.CropGroupName == model.CropGroupName)).ToList();
+                            harvestYearPlanResponse = harvestYearPlanResponse.Where(x => x.CropTypeName == model.CropType && x.CropGroupName == model.CropGroupName).ToList();
                         }
                         else
                         {
@@ -2814,7 +2817,7 @@ namespace NMP.Portal.Controllers
                                 (harvestYearPlanResponse, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
                                 if (string.IsNullOrWhiteSpace(error.Message) && harvestYearPlanResponse.Count > 0)
                                 {
-                                    if (!string.IsNullOrWhiteSpace(model.CropGroupName))
+                                    if (string.IsNullOrWhiteSpace(model.FieldName))
                                     {
                                         return RedirectToAction("HarvestYearOverview", new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = _cropDataProtector.Protect(string.Format(Resource.MsgCropGroupNameRemoves, model.CropGroupName)) });
                                     }
@@ -2828,7 +2831,7 @@ namespace NMP.Portal.Controllers
                                     List<PlanSummaryResponse> planSummaryResponse = await _cropService.FetchPlanSummaryByFarmId(Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)), 0);
                                     if (planSummaryResponse != null && planSummaryResponse.Count > 0)
                                     {
-                                        if (!string.IsNullOrWhiteSpace(model.CropGroupName))
+                                        if (string.IsNullOrWhiteSpace(model.FieldName))
                                         {
                                             return RedirectToAction("PlansAndRecordsOverview", "Crop", new { id = model.EncryptedFarmId, year = _farmDataProtector.Protect(model.Year.ToString()), q = _cropDataProtector.Protect(string.Format(Resource.MsgCropGroupNameRemoves, model.CropGroupName)) });
                                         }
@@ -2839,7 +2842,7 @@ namespace NMP.Portal.Controllers
                                     }
                                     else
                                     {
-                                        if (!string.IsNullOrWhiteSpace(model.CropGroupName))
+                                        if (string.IsNullOrWhiteSpace(model.FieldName))
                                         {
                                             return RedirectToAction("FarmSummary", "Farm", new { id = model.EncryptedFarmId, q = _farmDataProtector.Protect(Resource.lblTrue), r = _farmDataProtector.Protect(string.Format(Resource.MsgCropGroupNameRemoves, model.CropGroupName)) });
                                         }
@@ -2954,7 +2957,6 @@ namespace NMP.Portal.Controllers
                     {
                         TempData["DeletePlanOrganicAndFertiliserError"] = error.Message;
                         return View(model);
-
                     }
                     else
                     {

@@ -87,5 +87,6 @@ namespace NMP.Portal.ViewModels
         public int? PreviousCropID { get; set; }
         public string? Management { get; set; }
         public string? PotassiumIndexValue { get; set; }
+        public string? CropGroupName { get; set; }
     }
 }
