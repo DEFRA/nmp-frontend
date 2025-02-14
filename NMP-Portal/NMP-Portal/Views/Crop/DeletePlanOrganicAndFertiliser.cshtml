@@ -31,11 +31,11 @@
                         <govuk-error-summary-item href="#">@TempData["DeletePlanOrganicAndFertiliserError"]</govuk-error-summary-item>
                     </govuk-error-summary>
                 }
-                
-                <h1 class="govuk-heading-l">@string.Format(Resource.lblRemoveAnApplicationOfManureForHarvestYear, Resource.lblInorganicFertiliser, Model.Year)</h1>
+
+                <h1 class="govuk-heading-l">@(string.Format(Resource.lblRemoveAnApplicationOfManureForHarvestYear, ViewBag.RemoveContent, Model.Year))</h1>
 
                   <govuk-inset-text>
-                    @Resource.MsgDeletePlanOrganicAndFertiliserContent1
+                    @ViewBag.RemoveContent2
                 </govuk-inset-text>
                 <table class="govuk-table">
                     <thead class="govuk-table__head">

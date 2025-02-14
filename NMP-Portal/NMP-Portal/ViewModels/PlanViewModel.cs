@@ -61,7 +61,7 @@ namespace NMP.Portal.ViewModels
         public string? DeletedAction { get; set; } = string.Empty;
         public string? EncryptedFieldName { get; set; } = string.Empty;
         public string? EncryptedFieldId { get; set; } = string.Empty;
-        //public string? EncryptedCropOrder { get; set; } = string.Empty;
+        public string? ManureType { get; set; } = string.Empty;
         public int? CropOrder { get; set; }
     }
 }

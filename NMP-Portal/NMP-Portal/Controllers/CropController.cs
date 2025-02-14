@@ -2888,8 +2888,20 @@ namespace NMP.Portal.Controllers
                     model.EncryptedId = q;
                     model.DeletedAction = r;
 
-
+                    string decryptedAction = _cropDataProtector.Unprotect(r);
+                    if(!string.IsNullOrWhiteSpace(decryptedAction)&&decryptedAction==Resource.lblOrganic)
+                    {
+                        ViewBag.RemoveContent = model.ManureType;
+                        ViewBag.RemoveContent2 = Resource.MsgDeletePlanOrganicContent1;
+                    }
+                    else if (!string.IsNullOrWhiteSpace(decryptedAction) && decryptedAction == Resource.lblFertiliser)
+                    {
+                        ViewBag.RemoveContent = Resource.lblInorganicFertiliser;
+                        ViewBag.RemoveContent2 = Resource.MsgDeletePlanFertiliserContent1;
+                    }
                 }
+
+               
                 if (!string.IsNullOrWhiteSpace(s))
                 {
                     model.FieldName = _cropDataProtector.Unprotect(s);
@@ -2916,12 +2928,12 @@ namespace NMP.Portal.Controllers
                 Error error = new Error();
                 string success = string.Empty;
                 string decryptedAction = _cropDataProtector.Unprotect(model.DeletedAction);
-                int decryptedFertId = Convert.ToInt32(_cropDataProtector.Unprotect(model.EncryptedId));
+                int decryptedId = Convert.ToInt32(_cropDataProtector.Unprotect(model.EncryptedId));
 
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
                 if (!string.IsNullOrWhiteSpace(decryptedAction) && decryptedAction == Resource.lblFertiliser)
                 {
-                    (success, error) = await _fertiliserManureService.DeleteFertiliserByIdAsync(decryptedFertId);
+                    (success, error) = await _fertiliserManureService.DeleteFertiliserByIdAsync(decryptedId);
                     if (!string.IsNullOrWhiteSpace(error.Message))
                     {
                         TempData["DeletePlanOrganicAndFertiliserError"] = error.Message;
@@ -2935,7 +2947,7 @@ namespace NMP.Portal.Controllers
                 }
                 else if (!string.IsNullOrWhiteSpace(decryptedAction) && decryptedAction == Resource.lblOrganic)
                 {
-                    (success, error) = await _fertiliserManureService.DeleteFertiliserByIdAsync(decryptedFertId);
+                    (success, error) = await _organicManureService.DeleteOrganicManureByIdAsync(decryptedId);
                     if (!string.IsNullOrWhiteSpace(error.Message))
                     {
                         TempData["DeletePlanOrganicAndFertiliserError"] = error.Message;
@@ -2944,7 +2956,7 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("HarvestYearOverview", new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = _cropDataProtector.Protect(Resource.MsgInorganicFertiliserApplicationRemoved), v = _cropDataProtector.Protect(Resource.MsgNutrientRecommendationsMayBeUpdated) });
+                        return RedirectToAction("HarvestYearOverview", new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = _cropDataProtector.Protect(Resource.lblOrganicMaterialApplicationRemoved), v = _cropDataProtector.Protect(Resource.lblSelectFieldToSeeItsUpdatedNutrientRecommendations) });
                     }
                 }
             }
@@ -2989,6 +3001,7 @@ namespace NMP.Portal.Controllers
                                 if (organicManureResponses.Count == 1)
                                 {
                                     model.FieldName = organicManureResponse.Field;
+                                    model.ManureType = organicManureResponse.TypeOfManure;
                                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
                                     return RedirectToAction("DeletePlanOrganicAndFertiliser", new
                                     {
@@ -2998,15 +3011,15 @@ namespace NMP.Portal.Controllers
                                     });
 
                                 }
-                                else
-                                {
-                                    var SelectListItem = organicManureResponses.Select(f => new SelectListItem
-                                    {
-                                        Value = f.FieldId.ToString(),
-                                        Text = f.Field
-                                    }).ToList();
-                                    ViewBag.fieldList = SelectListItem;
-                                }
+                                //else
+                                //{
+                                //    var SelectListItem = organicManureResponses.Select(f => new SelectListItem
+                                //    {
+                                //        Value = f.FieldId.ToString(),
+                                //        Text = f.Field
+                                //    }).ToList();
+                                //    ViewBag.fieldList = SelectListItem;
+                                //}
                             }
                         }
                     }
