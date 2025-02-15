@@ -11021,6 +11021,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This Manure type name already exist..
+        /// </summary>
+        public static string MsgThisManureTypeNameAreadyExist {
+            get {
+                return ResourceManager.GetString("MsgThisManureTypeNameAreadyExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  Topsoil moisture not set.
         /// </summary>
         public static string MsgTopsoilMoistureNotSet {

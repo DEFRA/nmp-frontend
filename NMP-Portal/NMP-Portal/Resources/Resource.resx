@@ -3826,4 +3826,7 @@ live</value>
   <data name="MsgDeletePlanOrganicContent1" xml:space="preserve">
     <value>This will remove the information about this organic material application from these fields and change their nutrient recommendations.</value>
   </data>
+  <data name="MsgThisManureTypeNameAreadyExist" xml:space="preserve">
+    <value>This Manure type name already exist.</value>
+  </data>
 </root>

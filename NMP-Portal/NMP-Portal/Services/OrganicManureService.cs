@@ -1760,5 +1760,34 @@ namespace NMP.Portal.Services
 
             return (message, error);
         }
+        public async Task<(bool, Error)> FetchFarmManureTypeCheckByFarmIdAndManureTypeId(int farmId, int ManureTypeId, string ManureTypeName)
+        {
+            bool isFarmManureTypeExist = false;
+            Error error = new Error();
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var farmExist = await httpClient.GetAsync(string.Format(APIURLHelper.FetchFarmManureTypeCheckByFarmIdAndManureTypeIdAPI, farmId, ManureTypeId, ManureTypeName.Trim()));
+                string resultFarmExist = await farmExist.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapperFarmExist = JsonConvert.DeserializeObject<ResponseWrapper>(resultFarmExist);
+                if (responseWrapperFarmExist.Data["exists"] == true)
+                {
+                    isFarmManureTypeExist = true;
+                }
+
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+
+            return (isFarmManureTypeExist, error);
+        }
     }
 }
