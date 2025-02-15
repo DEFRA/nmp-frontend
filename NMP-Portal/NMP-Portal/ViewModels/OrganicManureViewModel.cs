@@ -122,5 +122,8 @@ namespace NMP.Portal.ViewModels
         public string? StartClosedPeriodEndFebWarningHeading { get; set; } = string.Empty;
         public string? StartClosedPeriodEndFebWarningPara1 { get; set; } = string.Empty;
         public string? StartClosedPeriodEndFebWarningPara2 { get; set; } = string.Empty;
+        public DateTime? ClosedPeriodStartDate { get; set; }
+        public DateTime? ClosedPeriodEndDate { get; set; }
+        public string? ClosedPeriodForUI { get; set; } = string.Empty;
     }
 }

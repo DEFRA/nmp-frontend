@@ -36,13 +36,12 @@ namespace NMP.Portal.ViewModels
         public bool IsAnyChangeInField { get; set; } = false;
         public bool IsQuestionChange { get; set; } = false;
         public bool IsCropTypeChange { get; set; } = false;
-
         public string? EncryptedHarvestYear { get; set; } = string.Empty;
         public string? LastModifiedOn { get; set; }
         public List<string>? EncryptedHarvestYearList { get; set; }
         public HarvestYearPlans? HarvestYearPlans { get; set; }
         public int FieldCount { get; set; }
-        public List<HarvestYear> HarvestYear { get; set; } = new List<HarvestYear>();
+        public List<HarvestYear>? HarvestYear { get; set; } = new List<HarvestYear>();
         public bool IsAddAnotherCrop { get; set; }
         public bool? IsPlanRecord { get; set; } = false;
         public string? encryptSortOrganicListOrderByDate { get; set; } = string.Empty;
@@ -55,10 +54,16 @@ namespace NMP.Portal.ViewModels
         public string? SortInOrganicListOrderByFieldName { get; set; } = string.Empty;
         public string? SortOrganicListOrderByFieldName { get; set; } = string.Empty;
         public string? CropGroupName { get; set; } = string.Empty;
-        public bool? RemoveCropGroup { get; set; }
+        public bool? RemoveCrop { get; set; }
         public bool? DeletePlanOrganicAndFertiliser { get; set; }
         public string? EncryptedId { get; set; } = string.Empty;
         public string? DeletedAction { get; set; } = string.Empty;
         public string? EncryptedFieldName { get; set; } = string.Empty;
+        public string? EncryptedFieldId { get; set; } = string.Empty;
+        public string? ManureType { get; set; } = string.Empty;
+        public int? CropOrder { get; set; }
+        public List<int>? organicManureIds { get; set; }
+        public List<string>? SelectedField { get; set; }
+        public bool? isComingFromRecommendation { get; set; }
     }
 }
