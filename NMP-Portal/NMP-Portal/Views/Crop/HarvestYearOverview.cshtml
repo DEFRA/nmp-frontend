@@ -95,7 +95,7 @@
                                     </h2>
                                     <p class="govuk-body"></p>
                                 </div>
-                                <a class=" govuk-button govuk-button--secondary" asp-action="RemoveCropGroup" asp-controller="Crop" asp-route-q="@harvestYearPlan.EncryptedCropTypeName" asp-route-r="@harvestYearPlan.EncryptedCropGroupName">@Resource.lblRemoveThisGroup</a>
+                                <a class=" govuk-button govuk-button--secondary" asp-action="RemoveCrop" asp-controller="Crop" asp-route-q="@harvestYearPlan.EncryptedCropTypeName" asp-route-r="@harvestYearPlan.EncryptedCropGroupName">@Resource.lblRemoveThisGroup</a>
                                 <div class="tab-right">
 
                                     @* <govuk-button type="submit" class="govuk-button--secondary update-button">
@@ -204,7 +204,7 @@
                                         <th scope="col" class="govuk-table__header">@Resource.lblCrop</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblType</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblRate</th>
-                                        @* <th scope="col" class="govuk-table__header"></th> *@
+                                         <th scope="col" class="govuk-table__header"></th> 
                                     </tr>
                                 </thead>
                                 <tbody class="govuk-table__body">
@@ -218,7 +218,7 @@
                                             <td class="govuk-table__cell">
                                                 @string.Format(Resource.lblRateWithTonnes, organicManure.Rate)
                                             </td>
-                                            @* <td class="govuk-table__cell"><a href="#">Change</a></td> *@
+                                            <td class="govuk-table__cell"><a asp-action="OrganicManureFieldRemove" asp-controller="Crop" asp-route-q="@organicManure.EncryptedId">@Resource.lblRemove</a></td>
                                         </tr>
                                     }
                                 </tbody>
