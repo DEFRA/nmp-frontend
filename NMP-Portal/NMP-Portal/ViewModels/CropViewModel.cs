@@ -7,5 +7,9 @@ namespace NMP.Portal.ViewModels
         public string? CropInfo1Name { get; set; }
         public string? CropInfo2Name { get; set; }
         public string? CropTypeName { get; set; }
+        public string? EncryptedCropTypeName { get; set; } = string.Empty;
+        public string? EncryptedFieldName { get; set; } = string.Empty;
+        public string? EncryptedFieldId { get; set; } = string.Empty;
+        public string? EncryptedCropOrder { get; set; } = string.Empty;
     }
 }

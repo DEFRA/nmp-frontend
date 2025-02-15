@@ -222,15 +222,17 @@ hr.big_seperator {
 }
 
 .big_crop_table_version_five {
-    font-size: 17px;
+    font-size: 17px !important;
 }
 
     .big_crop_table_version_five td:last-child {
-        padding-right: 0;
-        text-align: right;
+        /*padding-right: 0;
+        text-align: right;*/
         width: 35%;
     }
-
+.field-name {
+    width: 14%;
+}
 
 
 #balance table {
@@ -284,9 +286,21 @@ a:focus, .govuk-link:focus {
     justify-content: space-between !important;
 }
 
+.govuk-phase-banner__content__top {
+    align-items: flex-start !important;
+}
+
 .govuk-phase-banner__content__align {
     display: inline-flex !important;
     align-items: center;
+}
+
+.govuk-phase-banner__text__right {
+    text-align: right !important;
+}
+
+.cancel-link__bottom_padding {
+    padding-bottom: 2% !important;
 }
 
 @media print {
@@ -332,6 +346,11 @@ a:focus, .govuk-link:focus {
 
 .margin-bottom-thirty {
     margin-bottom: 30px !important;
+}
+
+
+.pb-25 {
+    padding-bottom: 25px !important;
 }
 
 @media print {

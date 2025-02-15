@@ -217,7 +217,7 @@ namespace NMP.Portal.Helpers
                     int applicationMonth = applicationDate.Month;
                     int applicationDay = applicationDate.Day;
 
-                    if (startMonth < endMonth)
+                    if (startMonth <= endMonth)
                     {
                         if (applicationMonth >= startMonth && applicationMonth <= endMonth)
                         {
@@ -249,6 +249,7 @@ namespace NMP.Portal.Helpers
 
 
                     }
+                    
                     return isWithinClosedPeriod;
                 }
             }
@@ -619,6 +620,113 @@ namespace NMP.Portal.Helpers
                 }
             }
             return WarningPeriod;
+        }
+
+        public string? ClosedPeriodForFertiliser(int cropTypeId)
+        {
+            string? closedPeriod = null;
+            if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
+            {
+                closedPeriod = string.Format(Resource.lbl15SeptemberTo15January, Resource.lblSeptember, Resource.lblJanuary);
+
+            }
+            else
+            {
+                closedPeriod = string.Format(Resource.lbl1SeptemberTo15January, Resource.lblSeptember, Resource.lblJanuary);
+
+            }
+
+            return closedPeriod;
+
+        }
+        public bool IsFertiliserApplicationWithinWarningPeriod(DateTime applicationDate, string warningPeriod)
+        {
+            bool isWithinWarningPeriod = false;
+
+            string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
+            Regex regex = new Regex(pattern);
+            if (warningPeriod != null)
+            {
+                Match match = regex.Match(warningPeriod);
+                if (match.Success)
+                {
+                    int startDay = int.Parse(match.Groups[1].Value);
+                    string startMonthStr = match.Groups[2].Value;
+                    int endDay = int.Parse(match.Groups[3].Value);
+                    string endMonthStr = match.Groups[4].Value;
+
+                    Dictionary<int, string> dtfi = new Dictionary<int, string>();
+                    dtfi.Add(0, Resource.lblJanuary);
+                    dtfi.Add(1, Resource.lblFebruary);
+                    dtfi.Add(2, Resource.lblMarch);
+                    dtfi.Add(3, Resource.lblApril);
+                    dtfi.Add(4, Resource.lblMay);
+                    dtfi.Add(5, Resource.lblJune);
+                    dtfi.Add(6, Resource.lblJuly);
+                    dtfi.Add(7, Resource.lblAugust);
+                    dtfi.Add(8, Resource.lblSeptember);
+                    dtfi.Add(9, Resource.lblOctober);
+                    dtfi.Add(10, Resource.lblNovember);
+                    dtfi.Add(11, Resource.lblDecember);
+                    int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1; // Array.IndexOf(dtfi.Values, startMonthStr) + 1;
+                    int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;//Array.IndexOf(dtfi.AbbreviatedMonthNames, endMonthStr) + 1;
+
+                    DateTime warningPeriodStart = new DateTime(applicationDate.Year, startMonth, startDay);
+                    DateTime warningPeriodEnd = new DateTime(applicationDate.Year, endMonth, endDay);
+
+                    int applicationMonth = applicationDate.Month;
+                    int applicationDay = applicationDate.Day;
+
+                    if (startMonth < endMonth)
+                    {
+                        if (applicationMonth >= startMonth && applicationMonth <= endMonth)
+                        {
+                            if (applicationDate >= warningPeriodStart && applicationDate <= warningPeriodEnd)
+                            {
+                                isWithinWarningPeriod = true;
+                            }
+                        }
+                    }
+                    if (startMonth > endMonth)
+                    {
+                        if (applicationDate >= warningPeriodEnd)
+                        {
+                            DateTime closedPeriodEndNextYear = new DateTime(applicationDate.Year + 1, endMonth, endDay);
+                            if (applicationDate >= warningPeriodStart && applicationDate <= closedPeriodEndNextYear)
+                            {
+                                isWithinWarningPeriod = true;
+                            }
+                        }
+                        if (applicationDate <= warningPeriodEnd)
+                        {
+                            DateTime closedPeriodStartPreviousYear = new DateTime(applicationDate.Year - 1, startMonth, startDay);
+
+                            if (applicationDate >= closedPeriodStartPreviousYear && applicationDate <= warningPeriodEnd)
+                            {
+                                isWithinWarningPeriod = true;
+                            }
+                        }
+
+
+                    }
+                    return isWithinWarningPeriod;
+                }
+            }
+
+            return isWithinWarningPeriod;
+        }
+
+        public bool IsApplicationDateWithinDateRange(DateTime? applicationDate, DateTime? startDate, DateTime? endDate)
+        {
+            bool isWithinDateRange = false;
+            if (applicationDate.HasValue && startDate.HasValue && endDate.HasValue)
+            {
+                if (applicationDate.Value >= startDate.Value && applicationDate.Value <= endDate.Value)
+                {
+                    isWithinDateRange=true;
+                }
+            }
+            return isWithinDateRange;
         }
 
     }

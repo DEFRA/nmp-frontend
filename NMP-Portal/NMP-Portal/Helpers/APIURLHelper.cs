@@ -87,7 +87,7 @@ namespace NMP.Portal.Helpers
         public const string FetchTotalNBasedOnManIdFromOrgManureAndFertiliserAsyncAPI = "fertiliser-manures/organic-manures/total-nitrogen/{0}?confirm={1}";
         public const string FetchTotalNFromFertiliserBasedOnManIdAndAppDateAsyncAPI = "fertiliser-manures/total-nitrogen/{0}?fromDate={1}&toDate={2}&confirm={3}";
         public const string FetchCropTypeLinkingsByCropTypeIdAsyncAPI = "crop-type-linkings/{0}";
-        public const string FetchOrganicManureExistanceByDateRangeAsyncAPI = "organic-manures/check-existence?dateFrom={0}&dateTo={1}&confirm={2}";
+        public const string FetchOrganicManureExistanceByDateRangeAsyncAPI = "organic-manures/check-existence?managementPeriodID={0}&dateFrom={1}&dateTo={2}&confirm={3}";
         public const string FetchSeasonsAsyncAPI = "vendors/rb209/Measurement/Seasons";
         public const string FetchSNSIndexByMeasurementMethodAsyncAPI = "vendors/rb209/Measurement/MeasurementMethod";
         public const string FetchSecondCropListByFirstCropIdAsyncAPI = "second-crop-linkings/{0}";
@@ -105,6 +105,15 @@ namespace NMP.Portal.Helpers
         public const string FetchCropAndFieldReportByIdAsyncAPI = "fields/fieldRelatedData/{0}?year={1}";
         public const string FetchManagementperiodByIdAsyncAPI = "management-periods/{0}";
         public const string FetchCropByIdAsyncAPI = "crops/{0}";
+        public const string FetchSoilNutrientIndexValueAsyncAPI = "vendors/rb209/Soil/NutrientIndices/{0}/{1}/{2}";
+        public const string AddSoilAnalysisAsyncAPI = "soil-analyses";
+        public const string DeleteSoilAnalysisByIdAPI = "soilAnalysis/{0}";
+        public const string DeleteCropPlanByIdsAPI = "crops/{0}";
+        public const string DeleteFertiliserByIdAPI = "fertiliser-manures/{0}";
+        public const string DeleteOrganicManureByAPI = "organic-manures/";
+        public const string FetchOrganicManureByIdAPI = "organic-manures/{0}";
+        public const string FetchOrganicManureByFarmIdAndYearAPI = "organic-manures/{0}/year={1}";
+        public const string FetchFarmManureTypeCheckByFarmIdAndManureTypeIdAPI = "farm-manure-type/check?farmId={0}&manureTypeId={1}&manureTypeName={2}";
 
         //Manner APi Url
         public const string FetchMannerApplicationMethodByIdAsyncAPI = "vendors/manner/application-methods/{0}";
@@ -132,5 +141,7 @@ namespace NMP.Portal.Helpers
         public const string FetchSoilNitrogenSupplyItemsAsyncAPI = "grassland/soilNitrogenSupply";
         public const string FetchCropInfoOneQuestionByCropTypeIdAsyncAPI = "crop-info-questions/{0}";
         public const string FetchMannerCalculateNutrientAsyncAPI = "vendors/manner/calculate-nutrients";
+        public const string FetchSoilTypeSoilTextureBySoilTypeIdAsyncAPI = "soil-type-soil-texture/{0}";
+        public const string FetchTotalNBasedByManIdAppDateAndIsGreenCompostAsyncAPI = "organic-manures/total-nitrogen-if-green-food-compost/{0}?fromDate={1}&toDate={2}&confirm={3}&isGreenFoodCompost={4}";
     }
 }

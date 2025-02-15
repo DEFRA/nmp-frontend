@@ -11,7 +11,7 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form asp-action="InOrgnaicManureDuration" asp-controller="FertiliserManure" method="post">
+        <form asp-action="InOrgnaicManureDuration" asp-controller="FertiliserManure" method="post" autocomplete="off">
             @Html.AntiForgeryToken()
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
@@ -35,6 +35,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarningExceptGrassAndOilseed" value="@Model.IsClosedPeriodWarningExceptGrassAndOilseed.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarningOnlyForGrassAndOilseed" value="@Model.IsClosedPeriodWarningOnlyForGrassAndOilseed.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWarningMsgNeedToShow" value="@Model.IsWarningMsgNeedToShow.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmCountryId"></govuk-input>
             @if (Model != null)
             {
                 @if (Model.FieldList != null && Model.FieldList.Count > 0)
@@ -73,11 +74,27 @@
                     <govuk-error-summary-item href="#">@TempData["InOrgnaicManureDurationError"]</govuk-error-summary-item>
                 </govuk-error-summary>
             }
-            @if (Model.IsWarningMsgNeedToShow && (Model.IsClosedPeriodWarningExceptGrassAndOilseed || Model.IsClosedPeriodWarningOnlyForGrassAndOilseed))
+            @if (Model.IsWarningMsgNeedToShow && (Model.IsClosedPeriodWarning  || Model.IsClosedPeriodWarningOnlyForGrassAndOilseed))
             {
+
+                <govuk-notification-banner>
+                    <govuk-notification-banner-title>
+                        @Resource.lblImportant
+                    </govuk-notification-banner-title>
+                    @if (Model.IsClosedPeriodWarning = true)
+                    {
+                        <p class="govuk-notification-banner__heading">
+                            @Model.ClosedPeriodWarningHeading
+                        </p>
+                        <p class="govuk-body">@Model.ClosedPeriodWarningPara2</p>
+                    }
+                    
+
+                </govuk-notification-banner>
+
                 @if (TempData["ClosedPeriodWarningMessage"] != null)
                 {
-                    <govuk-notification-banner>
+                    @* <govuk-notification-banner>
                         <govuk-notification-banner-title>
                             @Resource.lblImportant
                         </govuk-notification-banner-title>
@@ -102,7 +119,7 @@
                                 @Resource.MsgYouCanContinueButYouShouldConsider
                             </p>
                         }
-                    </govuk-notification-banner>
+                    </govuk-notification-banner> *@
                 }
             }
 

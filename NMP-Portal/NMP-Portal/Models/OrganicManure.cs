@@ -39,5 +39,6 @@
         public int MoistureID { get; set; }
         public decimal AutumnCropNitrogenUptake { get; set; }
         public DateTime SoilDrainageEndDate { get; set; }
+        public decimal? AvailableNForNMax { get; set; }
     }
 }

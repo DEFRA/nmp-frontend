@@ -17,7 +17,7 @@
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-l">@Resource.lblFindWeatherDataBasedOnPostcode</h1>
 
-        <form asp-action="ClimatePostCode" method="post" asp-controller="Farm">
+        <form asp-action="ClimatePostCode" method="post" asp-controller="Farm" autocomplete="on">
             @Html.AntiForgeryToken()
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
@@ -44,7 +44,7 @@
             <p class="govuk-body">@string.Format(Resource.lblClimateParagraphFirst, Model.Postcode, Model.Name)</p>
             <p class="govuk-body">@Resource.lblClimateParagraphSecond</p>
             <p class="govuk-body">
-                <a href="#">@Resource.lblClimateParagraphThird</a>
+                <a target="_blank" href="https://www.royalmail.com/find-a-postcode">@Resource.lblClimateParagraphThird</a>
                 @Resource.lblClimateParagraphFourth
             </p>
             <div class="govuk-form-group">

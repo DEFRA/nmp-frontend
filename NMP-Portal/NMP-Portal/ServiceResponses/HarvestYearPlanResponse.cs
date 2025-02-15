@@ -4,6 +4,8 @@ namespace NMP.Portal.ServiceResponses
 {
     public class HarvestYearPlanResponse
     {
+        [JsonProperty("CropID")]
+        public int CropID { get; set; }
         [JsonProperty("cropTypeId")]
         public int CropTypeID { get; set; }
 
@@ -23,11 +25,18 @@ namespace NMP.Portal.ServiceResponses
         [JsonProperty("Yield")]
         public string Yield { get; set; }
 
+        [JsonProperty("CropGroupName")]
+        public string? CropGroupName { get; set; }
+
         [JsonProperty("lastModifiedOn")]
         public DateTime LastModifiedOn { get; set; }
 
         [JsonProperty("cropTypeName")]
         public string CropTypeName { get; set; }
+        [JsonProperty("year")]
+        public int Year { get; set; }
+        [JsonProperty("cropOrder")]
+        public int? CropOrder { get; set; }
         [JsonProperty("TotalOrganicManures")]
         public int OrganicManuresCount { get; set; }
 

@@ -15,36 +15,22 @@
     {
         backAction = "ManureType";
     }
-
-    var closedPeriod = TempData["ClosedPeriod"] as string;
-    if (!string.IsNullOrEmpty(closedPeriod) && Model.HarvestYear != null)
-    {
-        int harvestYear = Model.HarvestYear??0;
-        var dates = closedPeriod.Split(new[] { " to " }, StringSplitOptions.RemoveEmptyEntries);
-        if (dates.Length == 2)
-        {
-            int startYear = harvestYear;
-            int endYear = harvestYear + 1;
-            string startDateWithYear = dates[0].Trim() + " " + startYear;
-            string endDateWithYear = dates[1].Trim() + " " + endYear;
-            closedPeriod = string.Format(Resource.lblTo, startDateWithYear, endDateWithYear);
-
-        }
-    }
+ 
 
 }
 @section BeforeContent {
     <govuk-back-link asp-action=@((Model.IsCheckAnswer&&(!Model.IsManureTypeChange)&&(!Model.IsFieldGroupChange)) ? "CheckAnswer" : backAction) asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
 }
 <div class="govuk-grid-row">
-    @if (TempData["ManureApplyingDateError"] != null)
-    {
-        <govuk-error-summary>
-            <govuk-error-summary-item href="#">@TempData["ManureApplyingDateError"]</govuk-error-summary-item>
-        </govuk-error-summary>
-    }
     <div class="govuk-grid-column-two-thirds">
-        <form class="form" action="ManureApplyingDate" method="post">
+        @if (TempData["ManureApplyingDateError"] != null)
+        {
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["ManureApplyingDateError"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        }
+
+        <form class="form" action="ManureApplyingDate" method="post" autocomplete="off">
             @Html.AntiForgeryToken()
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
@@ -122,6 +108,10 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherMaterialName"></govuk-input>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefaultFarmManureValueDate" value="@Model.DefaultFarmManureValueDate"></govuk-date-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsThisDefaultValueOfRB209" value="@Model.IsThisDefaultValueOfRB209"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmCountryId"></govuk-input>
+            <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodStartDate" value="@Model.ClosedPeriodStartDate"></govuk-date-input>
+            <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodEndDate" value="@Model.ClosedPeriodEndDate"></govuk-date-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodForUI"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -174,7 +164,7 @@
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptakes[i].AutumnCropNitrogenUptake" value="@Model.AutumnCropNitrogenUptakes[i].AutumnCropNitrogenUptake"></govuk-input>
                 }
             }
-            @if ((TempData["ClosedPeriodWarningDetail"] != null || TempData["SlurryOrPoultryManureExistWithinLast20Days"] != null) && Model.IsWarningMsgNeedToShow)
+            @if ((Model.IsClosedPeriodWarning != null || Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks != null) && Model.IsWarningMsgNeedToShow)
             {
                 <govuk-notification-banner>
                     <govuk-notification-banner-title>
@@ -183,27 +173,31 @@
                     @if (Model.IsClosedPeriodWarning)
                     {
                         <p class="govuk-notification-banner__heading">
-                            @Resource.MsgApplicationDateEnteredIsInsideClosedPeriod
+                            @Model.ClosedPeriodWarningHeading
                         </p>
-                        <p class="govuk-body">@TempData["ClosedPeriodWarningDetail"]</p>
+                        <p class="govuk-body">@Model.ClosedPeriodWarningPara1</p>
+                        if (@Model.ClosedPeriodWarningPara2 != null)
+                        {
+                            <p class="govuk-body">@Model.ClosedPeriodWarningPara2</p>
+                        }
                     }
                     @if (Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks)
                     {
                         <p class="govuk-notification-banner__heading">
-                            @Resource.lblYouMustAllowAtLeast3WeeksBetweenApplications
+                            @Model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeading
                         </p>
-                        <p class="govuk-body">@TempData["SlurryOrPoultryManureExistWithinLast20Days"]</p>
-                        @if (TempData["SlurryOrPoultryManureExistWithinLast20Days"] != null)
+                        <p class="govuk-body">@Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1</p>
+                        @if (Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2 != null)
                         {
-                            <p class="govuk-body">@Resource.lblEndClosederiodAndEndFebYouMustAllow3WeeksGapAdditional</p>
+                            <p class="govuk-body">@Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2 </p>
                         }
                     }
-                    @if (Model.IsClosedPeriodWarning)
+                    @* @if (Model.IsClosedPeriodWarning)
                     {
                         <p class="govuk-body">
                             @Resource.MsgYouCanContinueButYouShouldConsider
                         </p>
-                    }
+                    } *@
 
 
                 </govuk-notification-banner>
@@ -216,16 +210,16 @@
                 <govuk-date-input asp-for="@Model.ApplicationDate" pattern="[0-9]*">
                     <govuk-date-input-fieldset>
                         <govuk-date-input-fieldset-legend is-page-heading="true" class="govuk-fieldset">
-                            @if (ViewBag.HighReadilyAvailableNitrogen != null && ViewBag.HighReadilyAvailableNitrogen == true)
+                            @if (Model.HighReadilyAvailableNitrogen != null && Model.HighReadilyAvailableNitrogen == true)
                             {
-                                @if (TempData["ClosedPeriod"] != null)
+                                @if (Model.ClosedPeriodForUI != null)
                                 {
                                     <p>
                                         @Resource.lblYourClosedPeriodForSpreadingOrganicMaterials
                                     </p>
 
                                     <p>
-                                        <b>@closedPeriod </b> <br />
+                                        <b>@Model.ClosedPeriodForUI </b> <br />
                                         @Resource.lblBasedOnYourCropSoilTypeFarmDetails
                                     </p>
 

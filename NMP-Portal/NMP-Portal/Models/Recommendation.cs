@@ -34,6 +34,8 @@ namespace NMP.Portal.Models
         public string? MgIndex { get; set; }
         public string? SIndex { get; set; }
         public string? NaIndex { get; set; }
+        public string? NIndex { get; set; }
+        public string? LimeIndex { get; set; }
         public string? Comments { get; set; }
         public DateTime? CreatedOn { get; set; }
         public int? CreatedByID { get; set; }

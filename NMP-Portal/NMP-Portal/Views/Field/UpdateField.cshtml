@@ -32,7 +32,7 @@
 @section BeforeContent {
     <govuk-back-link asp-action="FieldSoilAnalysisDetail" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="UpdateField" asp-controller="Field" method="post">
+<form asp-action="UpdateField" asp-controller="Field" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
 
     <div class="govuk-grid-row">
@@ -73,7 +73,7 @@
                         <govuk-summary-list-row-action asp-action="AddField" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
-                <govuk-summary-list-row>
+              @*   <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
                         @Resource.lblNationalGridReferenceForCheckAnswere
                     </govuk-summary-list-row-key>
@@ -94,7 +94,7 @@
                     <govuk-summary-list-row-actions>
                         <govuk-summary-list-row-action asp-action="AddField" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
-                </govuk-summary-list-row>
+                </govuk-summary-list-row> *@
                 @if (!Model.isEnglishRules)
                 {
                     <govuk-summary-list-row>

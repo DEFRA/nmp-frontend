@@ -16,8 +16,11 @@ namespace NMP.Portal.ServiceResponses
         [JsonProperty("isPerennial")]
         public bool? IsPerennial { get; set; }
 
-        [JsonProperty("nMaxLimit")]
-        public int? NMaxLimit { get; set; }
+        [JsonProperty("nMaxLimitEngland")]
+        public int? NMaxLimitEngland { get; set; }
+
+        [JsonProperty("nMaxLimitWales")]
+        public int? NMaxLimitWales { get; set; }
 
         [JsonProperty("sNSCategoryID")]
         public int? SNSCategoryID { get; set; }

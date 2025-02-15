@@ -5,12 +5,29 @@
     var AllFieldsAbove300m = (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m;
     var SomeFieldsAbove300m = (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.SomeFieldsAbove300m;
     var NoneAbove300m = (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.NoneAbove300m;
+
+    var backAction = "";
+    if (Model.IsCheckAnswer)
+    {
+        backAction = "CheckAnswer";
+    }
+    else
+    {
+        if (Model.CountryID == (int)NMP.Portal.Enums.FarmCountry.Wales)
+        {
+            backAction = "Rainfall";
+        }
+        else
+        {
+            backAction = "NVZ";
+        }
+    }
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "NVZ")" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
 }
-<form asp-controller="Farm" method="post">
+<form asp-controller="Farm" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">

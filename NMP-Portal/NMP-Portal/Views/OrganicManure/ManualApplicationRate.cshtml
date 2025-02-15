@@ -5,7 +5,7 @@
     var suffixUnit = "";
     if (Model.IsManureTypeLiquid != null)
     {
-        suffixUnit = Model.IsManureTypeLiquid.Value ? Resource.lblMeterCubePerHectare : Resource.lblTonnesPerHectare;
+        suffixUnit = Model.IsManureTypeLiquid.Value ? Resource.lblMeterCubePerHa : Resource.lblTonnesPerHectare;
     }
 
     int trueWarningCount = 0;
@@ -19,16 +19,17 @@
     <govuk-back-link asp-action=@((Model.IsCheckAnswer&&(!Model.IsManureTypeChange)&&(!Model.IsFieldGroupChange)) ? "CheckAnswer" : "ApplicationRateMethod") asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
 }
 
-<form asp-action="ManualApplicationRate" asp-controller="OrganicManure" method="post">
+<form asp-action="ManualApplicationRate" asp-controller="OrganicManure" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
     <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
         @if (TempData["ManualApplicationRateError"] != null)
         {
             <govuk-error-summary>
                 <govuk-error-summary-item>@TempData["ManualApplicationRateError"]</govuk-error-summary-item>
             </govuk-error-summary>
         }
-        <div class="govuk-grid-column-two-thirds">
+        
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
@@ -105,6 +106,10 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherMaterialName"></govuk-input>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefaultFarmManureValueDate" value="@Model.DefaultFarmManureValueDate"></govuk-date-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsThisDefaultValueOfRB209" value="@Model.IsThisDefaultValueOfRB209"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmCountryId"></govuk-input>
+            <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodStartDate" value="@Model.ClosedPeriodStartDate"></govuk-date-input>
+            <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodEndDate" value="@Model.ClosedPeriodEndDate"></govuk-date-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodForUI"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -168,34 +173,41 @@
                         @if (Model.IsOrgManureNfieldLimitWarning)
                         {
                             <p class="govuk-notification-banner__heading">
-                                @Resource.lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit
+                                @Model.NmaxWarningHeading
                             </p>
-                            <p class="govuk-body">@Resource.MsgIfOrganicManureNMaxLimitExceed</p>
-                            <p class="govuk-body">@Resource.MsgIfOrganicManureNMaxLimitExceedAdditional</p>
+                            <p class="govuk-body">@Model.NmaxWarningPara1</p>
+                            @if (Model.NmaxWarningPara2 != null)
+                            {
+                                <p class="govuk-body">@Model.NmaxWarningPara2</p>
+                            }
                         }
                         @if (Model.IsNMaxLimitWarning)
                         {
                             <p class="govuk-notification-banner__heading">
-                                @Resource.lblNMaxLimitTitle
+                                @Model.CropNmaxLimitWarningHeading
                             </p>
-                            <p class="govuk-body">@Resource.MsgNMaxLimit</p>
+                            <p class="govuk-body">@Model.CropNmaxLimitWarningPara1</p>
+                            @if (Model.CropNmaxLimitWarningPara2 != null)
+                            {
+                                <p class="govuk-body">@Model.CropNmaxLimitWarningPara2</p>
+                            }
                         }
                         @if (Model.IsEndClosedPeriodFebruaryWarning)
                         {
                             <p class="govuk-notification-banner__heading">
-                                @(Model.ManureTypeId == 8 ? Resource.lblThisApplicationMayTakeYouOverMaxARPoultryManure : Resource.lblApplicationRateOverTheMaximumRateForSlurry)
+                                @Model.EndClosedPeriodEndFebWarningHeading
                             </p>
-                            <p class="govuk-body">@TempData["EndClosedPeriodAndFebruaryWarningMessage"]</p>
-                            <p class="govuk-body">@(Model.ManureTypeId == 8 ? Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultryAdditional : Resource.MsgApplicationRateForSlurryAndPoultryDetailAdditional)</p>
+                            <p class="govuk-body">@Model.EndClosedPeriodEndFebWarningPara1</p>
+                            <p class="govuk-body">@Model.EndClosedPeriodEndFebWarningPara2</p>
                         }
                         @if (Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
                         {
                             <p class="govuk-notification-banner__heading">
-                                @Resource.lblThisApplicationTakeOverMaxAppRate
+                                @Model.StartClosedPeriodEndFebWarningHeading
                             </p>
-                            <p class="govuk-body">@TempData["AppRateExceeds150WithinClosedPeriodOrganic"]</p>
+                            <p class="govuk-body">@Model.StartClosedPeriodEndFebWarningPara1</p>
                             <p class="govuk-body">
-                                @Resource.lblTheNVZActionProgrammeAppRateExceeds150WithinClosedPeriodOrganicAdditional
+                                @Model.StartClosedPeriodEndFebWarningPara2
                             </p>
                         }
                     }
@@ -209,19 +221,19 @@
                             <ul class="govuk-list govuk-list--bullet">
                                 @if (Model.IsOrgManureNfieldLimitWarning)
                                 {
-                                    <li>@Resource.lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit</li>
+                                    <li>@Resource.lblThisApplicationWillTakeYouOverTheOrganicManureNFieldLimit</li>
                                 }
                                 @if (Model.IsNMaxLimitWarning)
                                 {
-                                    <li>@Resource.lblNMaxLimitTitle</li>
+                                    <li>@Model.CropNmaxLimitWarningHeading</li>
                                 }
                                 @if (Model.IsEndClosedPeriodFebruaryWarning)
                                 {
-                                    <li>@(Model.ManureTypeId == 8 ? Resource.lblThisApplicationMayTakeYouOverMaxARPoultryManure : Resource.lblApplicationRateOverTheMaximumRateForSlurry)</li>
+                                    <li>@Model.EndClosedPeriodEndFebWarningHeading</li>
                                 }
                                 @if (Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
                                 {
-                                    <li>@Resource.lblThisApplicationTakeOverMaxAppRate</li>
+                                    <li>@Model.StartClosedPeriodEndFebWarningHeading</li>
                                 }
                             </ul>
                             <govuk-details>
@@ -231,28 +243,36 @@
                                 <govuk-details-text>
                                     @if (Model.IsOrgManureNfieldLimitWarning)
                                     {
-                                        <h2 class="govuk-heading-s">@Resource.lblThisApplicationMayTakeYouOverTheOrganicManureNFieldLimit</h2>
-                                        <p class="govuk-body">@Resource.MsgIfOrganicManureNMaxLimitExceed</p>
+                                        <h2 class="govuk-heading-s">@Model.NmaxWarningHeading</h2>
+                                        <p class="govuk-body">@Model.NmaxWarningPara1</p>
                                     }
                                     @if (Model.IsNMaxLimitWarning)
                                     {
-                                        <h2 class="govuk-heading-s">@Resource.lblNMaxLimitTitle</h2>
-                                        <p class="govuk-body">@Resource.MsgNMaxLimit</p>
+                                        <h2 class="govuk-heading-s">@Model.CropNmaxLimitWarningHeading</h2>
+                                        <p class="govuk-body">@Model.CropNmaxLimitWarningPara1</p>
                                     }
                                     @if (Model.IsEndClosedPeriodFebruaryWarning)
                                     {
-                                        <h2 class="govuk-heading-s">@(Model.ManureTypeId == 8 ? Resource.lblThisApplicationMayTakeYouOverMaxARPoultryManure : Resource.lblApplicationRateOverTheMaximumRateForSlurry)</h2>
-                                        <p class="govuk-body">@TempData["EndClosedPeriodAndFebruaryWarningMessage"]</p>
+                                        <h2 class="govuk-heading-s">@Model.EndClosedPeriodEndFebWarningHeading</h2>
+                                        <p class="govuk-body">@Model.EndClosedPeriodEndFebWarningPara1</p>
                                     }
                                     @if (Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
                                     {
-                                        <h2 class="govuk-heading-s">@Resource.lblThisApplicationTakeOverMaxAppRate</h2>
-                                        <p class="govuk-body">@TempData["AppRateExceeds150WithinClosedPeriodOrganic"]</p>
+                                        <h2 class="govuk-heading-s">@Model.StartClosedPeriodEndFebWarningHeading</h2>
+                                        <p class="govuk-body">@Model.StartClosedPeriodEndFebWarningPara1</p>
 
                                     }
                                 </govuk-details-text>
                             </govuk-details>
-                            <p class="govuk-body">@Resource.lblYouCanContinueButYouShouldConsiderAdjustingYour</p>
+                            @if(Model.FarmCountryId==(int)NMP.Portal.Enums.FarmCountry.England)
+                            {
+                                <p class="govuk-body">@Resource.lblItIsAnOffenceToBreachTheNitrateVulnerableZone</p>
+                            }
+                            @if (Model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                            {
+                                <p class="govuk-body">@Resource.lblItIsAnOffenceToBreachTheWaterResources</p>
+                            }
+                            
 
                         </div>
                     }
