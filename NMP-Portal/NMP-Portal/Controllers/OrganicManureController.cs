@@ -5432,6 +5432,22 @@ namespace NMP.Portal.Controllers
                                 }
 
                             }
+
+                            DateTime endOfOctober = new DateTime((model.HarvestYear ?? 0) - 1, 10, 31);
+                            if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
+                            {
+                                bool isWithinDateRange = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate, endOfOctober, model.ClosedPeriodEndDate);
+                                if (isWithinDateRange)
+                                {
+
+                                    if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
+                                    {
+                                        model.IsClosedPeriodWarning = true;
+                                        model.ClosedPeriodWarningHeading = Resource.MsgApplicationDateEnteredIsInsideClosedPeriod;
+                                        model.ClosedPeriodWarningPara2 = Resource.MsgClosedPeriodWarningPara2England;
+                                    }
+                                }
+                            }
                         }
                     }
                     //if application date is between end of closed period and end of february.
@@ -5496,6 +5512,7 @@ namespace NMP.Portal.Controllers
                             }
                         }
                     }
+
                 }
             }
 
@@ -5728,17 +5745,17 @@ namespace NMP.Portal.Controllers
 
 
                                     }
-                                    if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
-                                    {
-                                        bool isWithinDateRange = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate, endOfOctober, model.ClosedPeriodEndDate);
-                                        if (isWithinDateRange)
-                                        {
-                                            model.StartClosedPeriodEndFebWarningHeading = Resource.MsgApplicationDateEnteredIsInsideClosedPeriod;
-                                            model.StartClosedPeriodEndFebWarningPara2 = Resource.MsgClosedPeriodWarningPara2England;
-                                            model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = true;
-                                        }
+                                    //if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                    //{
+                                    //    bool isWithinDateRange = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate, endOfOctober, model.ClosedPeriodEndDate);
+                                    //    if (isWithinDateRange)
+                                    //    {
+                                    //        model.StartClosedPeriodEndFebWarningHeading = Resource.MsgApplicationDateEnteredIsInsideClosedPeriod;
+                                    //        model.StartClosedPeriodEndFebWarningPara2 = Resource.MsgClosedPeriodWarningPara2England;
+                                    //        model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = true;
+                                    //    }
 
-                                    }
+                                    //}
 
                                 }
                             }
@@ -6014,12 +6031,12 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("OtherMaterialName", Resource.MsgEnterNameOfTheMaterial);
                 }
-               
+
 
                 (bool farmManureExist, Error error) = await _organicManureService.FetchFarmManureTypeCheckByFarmIdAndManureTypeId(model.FarmId.Value, model.ManureTypeId.Value, model.OtherMaterialName);
-                if(string.IsNullOrWhiteSpace(error.Message))
+                if (string.IsNullOrWhiteSpace(error.Message))
                 {
-                    if(farmManureExist)
+                    if (farmManureExist)
                     {
                         ModelState.AddModelError("OtherMaterialName", Resource.MsgThisManureTypeNameAreadyExist);
                     }
