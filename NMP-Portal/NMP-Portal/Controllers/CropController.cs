@@ -2266,7 +2266,7 @@ namespace NMP.Portal.Controllers
                             }
                             if (model.FertiliserManures == null)
                             {
-                                model.FertiliserManures = new List<FertiliserManure>();
+                                model.FertiliserManures = new List<FertiliserManureDataViewModel>();
                             }
                             foreach (var recommendation in recommendations)
                             {
@@ -2425,7 +2425,7 @@ namespace NMP.Portal.Controllers
                                         {
                                             foreach (var item in recData.FertiliserManures)
                                             {
-                                                var fertiliserManure = new FertiliserManure
+                                                var fertiliserManure = new FertiliserManureDataViewModel
                                                 {
                                                     ID = item.ID,
                                                     ManagementPeriodID = item.ManagementPeriodID,
