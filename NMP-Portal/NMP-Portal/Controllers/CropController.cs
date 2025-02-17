@@ -2441,7 +2441,7 @@ namespace NMP.Portal.Controllers
                                                     Lime = item.Lime,
                                                     NH4N = item.NH4N,
                                                     NO3N = item.NO3N,
-                                                    EncryptedFertId = _cropDataProtector.Protect(item.ID.ToString()),
+                                                    EncryptedId = _cropDataProtector.Protect(item.ID.ToString()),
                                                     EncryptedFieldName = _cropDataProtector.Protect(model.FieldName)
                                                 };
                                                 ViewBag.Fertiliser = _cropDataProtector.Protect(Resource.lblFertiliser);
