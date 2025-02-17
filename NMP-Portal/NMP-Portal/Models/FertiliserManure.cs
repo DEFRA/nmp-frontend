@@ -22,7 +22,7 @@
         public decimal? Lime { get; set; }
         public decimal? NH4N { get; set; }
         public decimal? NO3N { get; set; }
-        public string? EncryptedFertId { get; set; }
+        public string? EncryptedId { get; set; }
         public string? EncryptedFieldName { get; set; }
     }
 }
