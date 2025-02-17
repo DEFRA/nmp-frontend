@@ -221,7 +221,7 @@
                             <ul class="govuk-list govuk-list--bullet">
                                 @if (Model.IsOrgManureNfieldLimitWarning)
                                 {
-                                    <li>@Resource.lblThisApplicationWillTakeYouOverTheOrganicManureNFieldLimit</li>
+                                    <li>@Model.NmaxWarningHeading</li>
                                 }
                                 @if (Model.IsNMaxLimitWarning)
                                 {
