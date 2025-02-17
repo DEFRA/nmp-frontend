@@ -135,10 +135,18 @@ namespace NMP.Portal.Helpers
                         break;
 
                     //Brassica is a crop group. under this below crop type comes..
-                    case (int)NMP.Portal.Enums.CropTypes.BrusselSprouts:         //Brussel Sprouts
-                    case (int)NMP.Portal.Enums.CropTypes.Cabbage:                //Cabbage
-                    case (int)NMP.Portal.Enums.CropTypes.Cauliflower:            //Cauliflower
-                    case (int)NMP.Portal.Enums.CropTypes.Calabrese:              //Calabrese
+                    case (int)NMP.Portal.Enums.CropTypes.ForageRape:
+                    case (int)NMP.Portal.Enums.CropTypes.ForageSwedes:
+                    case (int)NMP.Portal.Enums.CropTypes.KaleGrazed:
+                    case (int)NMP.Portal.Enums.CropTypes.StubbleTurnips:
+                    case (int)NMP.Portal.Enums.CropTypes.Swedes:
+                    case (int)NMP.Portal.Enums.CropTypes.Turnips:
+                    case (int)NMP.Portal.Enums.CropTypes.BrusselSprouts:
+                    case (int)NMP.Portal.Enums.CropTypes.Cabbage:
+                    case (int)NMP.Portal.Enums.CropTypes.Calabrese:
+                    case (int)NMP.Portal.Enums.CropTypes.Cauliflower:
+                    case (int)NMP.Portal.Enums.CropTypes.Radish:
+                    case (int)NMP.Portal.Enums.CropTypes.WildRocket:
                         if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
                         {
                             closedPeriod = null;
