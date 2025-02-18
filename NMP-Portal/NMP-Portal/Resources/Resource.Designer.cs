@@ -629,6 +629,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add excess winter rainfall for harvest year {0}..
+        /// </summary>
+        public static string lblAddExcessWinterRainfallForHarvestYear {
+            get {
+                return ResourceManager.GetString("lblAddExcessWinterRainfallForHarvestYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add a field.
         /// </summary>
         public static string lblAddField {
@@ -1246,15 +1255,6 @@ namespace NMP.Portal.Resources {
         public static string lblAverageAnnualRainfallFor {
             get {
                 return ResourceManager.GetString("lblAverageAnnualRainfallFor", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Average annual rainfall is {0}mm. You have not entered any excess winter rainfall..
-        /// </summary>
-        public static string lblAverageAnnualRainfallIsYouHaveNotEnteredAnyExcessWinterRainfall {
-            get {
-                return ResourceManager.GetString("lblAverageAnnualRainfallIsYouHaveNotEnteredAnyExcessWinterRainfall", resourceCulture);
             }
         }
         
@@ -2668,6 +2668,51 @@ namespace NMP.Portal.Resources {
         public static string lblEstimateOfNitrogenMineralisationQuestion {
             get {
                 return ResourceManager.GetString("lblEstimateOfNitrogenMineralisationQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Excess winter rainfall.
+        /// </summary>
+        public static string lblExcessWinterRainfall {
+            get {
+                return ResourceManager.GetString("lblExcessWinterRainfall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the excess winter rainfall for {0}?.
+        /// </summary>
+        public static string lblExcessWinterRainfallContentOne {
+            get {
+                return ResourceManager.GetString("lblExcessWinterRainfallContentOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AHDB publish excess winter rainfall data each season..
+        /// </summary>
+        public static string lblExcessWinterRainfallContentSecond {
+            get {
+                return ResourceManager.GetString("lblExcessWinterRainfallContentSecond", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View the AHDB excess winter rainfall data..
+        /// </summary>
+        public static string lblExcessWinterRainfallContentThird {
+            get {
+                return ResourceManager.GetString("lblExcessWinterRainfallContentThird", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Excess winter rainfall is {0}.
+        /// </summary>
+        public static string lblExcessWinterRainfallWithValue {
+            get {
+                return ResourceManager.GetString("lblExcessWinterRainfallWithValue", resourceCulture);
             }
         }
         
@@ -5718,6 +5763,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rainfall category for {0}.
+        /// </summary>
+        public static string lblRainfallCategoryForFarmName {
+            get {
+                return ResourceManager.GetString("lblRainfallCategoryForFarmName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rainfall manual.
         /// </summary>
         public static string lblRainfallManual {
@@ -7527,6 +7581,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update excess winter rainfall.
+        /// </summary>
+        public static string lblUpdateExcessWinterRainfall {
+            get {
+                return ResourceManager.GetString("lblUpdateExcessWinterRainfall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Update {0}.
         /// </summary>
         public static string lblUpdateFarm {
@@ -7568,6 +7631,15 @@ namespace NMP.Portal.Resources {
         public static string lblUpdateFieldsOrSoilAnalysis {
             get {
                 return ResourceManager.GetString("lblUpdateFieldsOrSoilAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rainfall categories are estimated from the average annual rainfall, or excess winter rainfall when entered..
+        /// </summary>
+        public static string lblUpdateRainfallContentOne {
+            get {
+                return ResourceManager.GetString("lblUpdateRainfallContentOne", resourceCulture);
             }
         }
         
@@ -8675,6 +8747,15 @@ namespace NMP.Portal.Resources {
         public static string lblYouHaveNotAddedAnyFarms {
             get {
                 return ResourceManager.GetString("lblYouHaveNotAddedAnyFarms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have not entered any excess winter rainfall..
+        /// </summary>
+        public static string lblYouHaveNotEnteredAnyExcessWinterRainfall {
+            get {
+                return ResourceManager.GetString("lblYouHaveNotEnteredAnyExcessWinterRainfall", resourceCulture);
             }
         }
         

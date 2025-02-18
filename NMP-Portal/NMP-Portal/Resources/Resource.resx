@@ -2569,8 +2569,8 @@ cubic metres per hectare  not set</value>
   <data name="lblWhatIsTheAutumnCropNitrogenUptakeFor" xml:space="preserve">
     <value>What is the Autumn crop Nitrogen uptake for {0}?</value>
   </data>
-  <data name="lblAverageAnnualRainfallIsYouHaveNotEnteredAnyExcessWinterRainfall" xml:space="preserve">
-    <value>Average annual rainfall is {0}mm. You have not entered any excess winter rainfall.</value>
+  <data name="lblYouHaveNotEnteredAnyExcessWinterRainfall" xml:space="preserve">
+    <value>You have not entered any excess winter rainfall.</value>
   </data>
   <data name="lblUpdateRainfallFor" xml:space="preserve">
     <value>Update rainfall for {0}</value>
@@ -3828,5 +3828,32 @@ live</value>
   </data>
   <data name="MsgThisManureTypeNameAreadyExist" xml:space="preserve">
     <value>This Manure type name already exist.</value>
+  </data>
+  <data name="lblAddExcessWinterRainfallForHarvestYear" xml:space="preserve">
+    <value>Add excess winter rainfall for harvest year {0}.</value>
+  </data>
+  <data name="lblExcessWinterRainfallWithValue" xml:space="preserve">
+    <value>Excess winter rainfall is {0}</value>
+  </data>
+  <data name="lblExcessWinterRainfall" xml:space="preserve">
+    <value>Excess winter rainfall</value>
+  </data>
+  <data name="lblRainfallCategoryForFarmName" xml:space="preserve">
+    <value>Rainfall category for {0}</value>
+  </data>
+  <data name="lblUpdateRainfallContentOne" xml:space="preserve">
+    <value>Rainfall categories are estimated from the average annual rainfall, or excess winter rainfall when entered.</value>
+  </data>
+  <data name="lblUpdateExcessWinterRainfall" xml:space="preserve">
+    <value>Update excess winter rainfall</value>
+  </data>
+  <data name="lblExcessWinterRainfallContentOne" xml:space="preserve">
+    <value>What is the excess winter rainfall for {0}?</value>
+  </data>
+  <data name="lblExcessWinterRainfallContentSecond" xml:space="preserve">
+    <value>AHDB publish excess winter rainfall data each season.</value>
+  </data>
+  <data name="lblExcessWinterRainfallContentThird" xml:space="preserve">
+    <value>View the AHDB excess winter rainfall data.</value>
   </data>
 </root>
