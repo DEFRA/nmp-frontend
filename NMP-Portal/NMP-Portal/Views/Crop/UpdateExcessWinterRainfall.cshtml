@@ -23,23 +23,22 @@
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">@Resource.lblAverageAnnualRainfall</th>
                     <td class="govuk-table__cell">
-                        @(Model.AnnualRainfall != null ? Model.AnnualRainfall : Resource.lblNotEntered)
+                        @(Model.AnnualRainfall != null ? string.Format(Resource.lblRainfallMM, Model.AnnualRainfall) : Resource.lblNotEntered)
                 </tr>
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">@Resource.lblExcessWinterRainfall</th>
                     <td class="govuk-table__cell">
-                        @(Model.ExcessWinterRainfall != null ? Model.ExcessWinterRainfall : Resource.lblNotEntered)
+                        @(Model.ExcessWinterRainfall != null ? string.Format(Resource.lblRainfallMM, Model.ExcessWinterRainfall) : Resource.lblNotEntered)
                     </td>
                 </tr>
             </tbody>
         </table>
 
+        <div class="margin-bottom-forty">
+            <a class="govuk-button add-button" asp-action="ExcessWinterRainfall" asp-controller="Crop" class="margin-bottom-forty">@Resource.lblUpdateExcessWinterRainfall</a>
+        </div>
 
-        <govuk-button type="submit" class="margin-bottom-forty">@Resource.lblUpdateExcessWinterRainfall</govuk-button>
-
-
-
-        <p class="govuk-body cancel-link"><a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
+            <p class="govuk-body cancel-link"><a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
 
 
     </div>

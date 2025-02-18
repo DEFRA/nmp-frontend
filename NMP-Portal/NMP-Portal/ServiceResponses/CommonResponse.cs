@@ -8,5 +8,7 @@ namespace NMP.Portal.ServiceResponses
         public int Id { get; set; }
         [JsonProperty("Name")]
         public string Name { get; set; }
+        [JsonProperty("value")]
+        public int? Value { get; set; }
     }
 }
