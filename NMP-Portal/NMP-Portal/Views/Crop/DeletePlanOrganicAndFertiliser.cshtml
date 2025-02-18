@@ -32,8 +32,9 @@
                 <govuk-back-link asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
             }
         }
-        <form asp-action="DeletePlanOrganicAndFertiliser" asp-controller="Crop" method="post" autocomplete="off">
-            @Html.AntiForgeryToken()
+        }
+    <form asp-action="DeletePlanOrganicAndFertiliser" asp-controller="Crop" method="post" autocomplete="off">
+        @Html.AntiForgeryToken()
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DeletedAction" value="@Model.DeletedAction"></govuk-input>
@@ -108,5 +109,5 @@
             </div>
         </form>
 
-    }
+    
 }
