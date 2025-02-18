@@ -50,7 +50,9 @@ namespace NMP.Portal.ViewModels
         public string? encryptSortInOrganicListOrderByDate { get; set; } = string.Empty;
         public string? sortInOrganicListOrderByDate { get; set; } = string.Empty;
         public string? encryptSortInOrganicListOrderByFieldName { get; set; } = string.Empty;
-        public int? Rainfall { get; set; }
+        public int? AnnualRainfall { get; set; }
+        public int? ExcessWinterRainfall { get; set; }
+        public string? ExcessWinterRainfallName { get; set; }
         public string? SortInOrganicListOrderByFieldName { get; set; } = string.Empty;
         public string? SortOrganicListOrderByFieldName { get; set; } = string.Empty;
         public string? CropGroupName { get; set; } = string.Empty;

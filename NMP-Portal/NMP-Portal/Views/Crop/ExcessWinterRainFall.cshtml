@@ -1,0 +1,63 @@
+﻿@using NMP.Portal.Resources
+@model NMP.Portal.ViewModels.PlanViewModel
+@{
+    ViewData["Title"] = Resource.lblRainfall;
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="UpdateExcessWinterRainfall" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
+}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+       
+        <h1 class="govuk-heading-l">
+            @string.Format(Resource.lblExcessWinterRainfallContentOne,Model.FarmName)
+        </h1>
+
+        <p class="govuk-body">
+            @Resource.lblExcessWinterRainfallContentSecond
+            <a target="_blank" href="https://ahdb.org.uk/knowledge-library/how-to-use-excess-winter-rainfall-data-to-plan-nitrogen-applications">@Resource.lblExcessWinterRainfallContentThird</a> @Resource.lblFarmingRuleOfWaterSeventh
+        </p>
+        <form asp-action="ExcessWinterRainfall" asp-controller="Crop" method="post" autocomplete="off">
+            @Html.AntiForgeryToken()
+            @if (TempData["ExcessWinterRainfallError"] != null)
+            {
+                <govuk-error-summary>
+                    <govuk-error-summary-item href="#">@TempData["ExcessWinterRainfallError"]</govuk-error-summary-item>
+                </govuk-error-summary>
+            }
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AnnualRainfall"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfall"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
+            <div class="govuk-form-group">
+                <govuk-radios asp-for="@Model.ExcessWinterRainfallName">
+                    <govuk-radios-fieldset>
+                        <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--l">
+                            
+                        </govuk-radios-fieldset-legend>
+                        @if (ViewBag.ExcessRainFallOptions != null)
+                        {
+                            @foreach (var item in ViewBag.ExcessRainFallOptions)
+                            {
+                                    <govuk-radios-item value="@item.Value">@item.Text</govuk-radios-item>                                
+                            }
+                        }
+
+                    </govuk-radios-fieldset>
+                </govuk-radios>
+            </div>
+
+            <div class="govuk-form-group">
+                <fieldset class="govuk-fieldset">
+                    <button class="govuk-button" data-module="govuk-button">Continue</button>
+                </fieldset>
+            </div>
+
+            <p class="govuk-body cancel-link"><a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">Cancel</a></p>
+
+        </form>
+    </div>
+</div>

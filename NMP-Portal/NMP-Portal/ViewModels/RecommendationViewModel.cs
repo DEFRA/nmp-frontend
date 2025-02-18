@@ -17,7 +17,7 @@ namespace NMP.Portal.ViewModels
         public string? EncryptedHarvestYear { get; set; }
         public string? EncryptedFieldId { get; set; } = string.Empty;
         public List<OrganicManureData> OrganicManures { get; set; }
-        public List<FertiliserManure> FertiliserManures { get; set; }
+        public List<FertiliserManureDataViewModel> FertiliserManures { get; set; }
         public List<NutrientResponseWrapper> Nutrients { get; set; }
         public PKBalance? PKBalance { get; set; }
     }
