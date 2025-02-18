@@ -2569,8 +2569,8 @@ cubic metres per hectare  not set</value>
   <data name="lblWhatIsTheAutumnCropNitrogenUptakeFor" xml:space="preserve">
     <value>What is the Autumn crop Nitrogen uptake for {0}?</value>
   </data>
-  <data name="lblAverageAnnualRainfallIsYouHaveNotEnteredAnyExcessWinterRainfall" xml:space="preserve">
-    <value>Average annual rainfall is {0}mm. You have not entered any excess winter rainfall.</value>
+  <data name="lblYouHaveNotEnteredAnyExcessWinterRainfall" xml:space="preserve">
+    <value>You have not entered any excess winter rainfall.</value>
   </data>
   <data name="lblUpdateRainfallFor" xml:space="preserve">
     <value>Update rainfall for {0}</value>
@@ -3770,7 +3770,7 @@ live</value>
   <data name="lblInorganicFertiliser" xml:space="preserve">
     <value>inorganic fertiliser</value>
   </data>
-  <data name="MsgDeletePlanOrganicAndFertiliserContent1" xml:space="preserve">
+  <data name="MsgDeletePlanFertiliserContent1" xml:space="preserve">
     <value>This will remove this organic material application from these fields and change their nutrient recommendations.</value>
   </data>
   <data name="MsgDeletePlanOrganicAndFertiliserContent2" xml:space="preserve">
@@ -3793,6 +3793,54 @@ live</value>
   </data>
   <data name="lblRemoveCropPlanContent2" xml:space="preserve">
     <value>{0} will not be removed from your farm and you can use it again in your plans</value>
+  </data>
+  <data name="lblTheseFieldsAllHaveAnApplicationOf" xml:space="preserve">
+    <value>These fields all have an application of {0} on {1}</value>
+  </data>
+  <data name="lblUpdateAllTheseFields" xml:space="preserve">
+    <value>Update all these fields</value>
+  </data>
+  <data name="lblWhichFieldsWouldYouLikeToRemoveThisApplicationFor" xml:space="preserve">
+    <value>Which fields would you like to remove this application for?</value>
+  </data>
+  <data name="lblOrganicMaterialApplicationRemoved" xml:space="preserve">
+    <value>Organic material application removed.</value>
+  </data>
+  <data name="lblSelectFieldToSeeItsUpdatedNutrientRecommendations" xml:space="preserve">
+    <value>Select a field to see its updated nutrient recommendations.</value>
+  </data>
+  <data name="MsgDeletePlanOrganicContent1" xml:space="preserve">
+    <value>This will remove the information about this organic material application from these fields and change their nutrient recommendations.</value>
+  </data>
+  <data name="MsgThisManureTypeNameAreadyExist" xml:space="preserve">
+    <value>This Manure type name already exist.</value>
+  </data>
+  <data name="lblAddExcessWinterRainfallForHarvestYear" xml:space="preserve">
+    <value>Add excess winter rainfall for harvest year {0}.</value>
+  </data>
+  <data name="lblExcessWinterRainfallWithValue" xml:space="preserve">
+    <value>Excess winter rainfall is {0}</value>
+  </data>
+  <data name="lblExcessWinterRainfall" xml:space="preserve">
+    <value>Excess winter rainfall</value>
+  </data>
+  <data name="lblRainfallCategoryForFarmName" xml:space="preserve">
+    <value>Rainfall category for {0}</value>
+  </data>
+  <data name="lblUpdateRainfallContentOne" xml:space="preserve">
+    <value>Rainfall categories are estimated from the average annual rainfall, or excess winter rainfall when entered.</value>
+  </data>
+  <data name="lblUpdateExcessWinterRainfall" xml:space="preserve">
+    <value>Update excess winter rainfall</value>
+  </data>
+  <data name="lblExcessWinterRainfallContentOne" xml:space="preserve">
+    <value>What is the excess winter rainfall for {0}?</value>
+  </data>
+  <data name="lblExcessWinterRainfallContentSecond" xml:space="preserve">
+    <value>AHDB publish excess winter rainfall data each season.</value>
+  </data>
+  <data name="lblExcessWinterRainfallContentThird" xml:space="preserve">
+    <value>View the AHDB excess winter rainfall data.</value>
   </data>
   <data name="lblAboutGetHelpAndFeedback_line2" xml:space="preserve">
     <value>Check the &lt;a href="/ReleaseSchedule" &gt;release schedule&lt;/a&gt; to see what features have been added to the test version of the service.</value>
