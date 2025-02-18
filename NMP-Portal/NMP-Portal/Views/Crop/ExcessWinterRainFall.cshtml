@@ -1,0 +1,49 @@
+﻿@using NMP.Portal.Resources
+@model NMP.Portal.ViewModels.PlanViewModel
+@{
+    ViewData["Title"] = Resource.lblRainfall;
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="UpdateExcessWinterRainfall" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
+}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        <h1 class="govuk-heading-l">
+            @string.Format(Resource.lblExcessWinterRainfallContentOne,Model.FarmName)
+        </h1>
+
+        <p class="govuk-body">
+            @Resource.lblExcessWinterRainfallContentSecond
+            <a target="_blank" href="https://ahdb.org.uk/knowledge-library/how-to-use-excess-winter-rainfall-data-to-plan-nitrogen-applications">@Resource.lblExcessWinterRainfallContentThird</a> @Resource.lblFarmingRuleOfWaterSeventh
+        </p>
+        <form action="check_rain" method="post" novalidate="">
+            <div class="govuk-form-group">
+                <govuk-radios asp-for="@Model.ExcessWinterRainfall">
+                    <govuk-radios-fieldset>
+
+                        @if (ViewBag.ExcessRainFallOptions != null)
+                        {
+                            @foreach (var item in ViewBag.ExcessRainFallOptions)
+                            {
+                                    <govuk-radios-item value="@item.Value">@item.Name</govuk-radios-item>
+                                
+                            }
+                        }
+
+                    </govuk-radios-fieldset>
+                </govuk-radios>
+            </div>
+
+            <div class="govuk-form-group">
+                <fieldset class="govuk-fieldset">
+                    <button class="govuk-button" data-module="govuk-button">Continue</button>
+                </fieldset>
+            </div>
+
+            <p class="govuk-body cancel-link"><a href="/mvp/farms">Cancel</a></p>
+
+        </form>
+    </div>
+</div>

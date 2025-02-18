@@ -114,6 +114,7 @@ namespace NMP.Portal.Helpers
         public const string FetchOrganicManureByIdAPI = "organic-manures/{0}";
         public const string FetchOrganicManureByFarmIdAndYearAPI = "organic-manures/{0}/year={1}";
         public const string FetchFarmManureTypeCheckByFarmIdAndManureTypeIdAPI = "farm-manure-type/check?farmId={0}&manureTypeId={1}&manureTypeName={2}";
+        public const string FetchExcessRainfallByFarmIdAndYearAPI = "Excess-Rainfall/{0}/year={1}";
 
         //Manner APi Url
         public const string FetchMannerApplicationMethodByIdAsyncAPI = "vendors/manner/application-methods/{0}";

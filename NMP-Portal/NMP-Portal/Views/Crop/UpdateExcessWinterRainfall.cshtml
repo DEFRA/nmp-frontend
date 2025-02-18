@@ -1,0 +1,46 @@
+﻿@using NMP.Portal.Resources
+@model NMP.Portal.ViewModels.PlanViewModel
+@{
+    ViewData["Title"] = Resource.lblRainfall;
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
+}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        <h1 class="govuk-heading-l">
+            @string.Format(Resource.lblRainfallCategoryForFarmName, Model.FarmName)
+        </h1>
+
+        <p class="govuk-body">@Resource.lblUpdateRainfallContentOne</p>
+
+        <table class="govuk-table">
+            <thead class="govuk-table__head">
+            </thead>
+            <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">@Resource.lblAverageAnnualRainfall</th>
+                    <td class="govuk-table__cell">
+                        @(Model.AnnualRainfall != null ? Model.AnnualRainfall : Resource.lblNotEntered)
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">@Resource.lblExcessWinterRainfall</th>
+                    <td class="govuk-table__cell">
+                        @(Model.ExcessWinterRainfall != null ? Model.ExcessWinterRainfall : Resource.lblNotEntered)
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <govuk-button type="submit" class="margin-bottom-forty">@Resource.lblUpdateExcessWinterRainfall</govuk-button>
+
+
+
+        <p class="govuk-body cancel-link"><a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
+
+
+    </div>
+</div>

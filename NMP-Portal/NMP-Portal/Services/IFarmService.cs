@@ -14,5 +14,6 @@ namespace NMP.Portal.Services
         Task<(Farm, Error)> UpdateFarmAsync(FarmData farmData);
         Task<(string, Error)> DeleteFarmByIdAsync(int farmId);
         Task<(List<Country>, Error)> FetchCountryAsync();
+        Task<(ExcessRainfalls, Error)> FetchExcessRainfallsAsync(int farmId, int year);
     }
 }
