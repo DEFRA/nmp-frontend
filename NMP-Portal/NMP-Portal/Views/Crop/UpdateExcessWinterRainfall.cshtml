@@ -9,7 +9,12 @@
 }
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-
+        @if (TempData["UpdateExcessWinterRainfallError"] != null)
+        {
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["UpdateExcessWinterRainfallError"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        }
         <h1 class="govuk-heading-l">
             @string.Format(Resource.lblRainfallCategoryForFarmName, Model.FarmName)
         </h1>

@@ -3223,21 +3223,11 @@ namespace NMP.Portal.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateExcessWinterRainfall(PlanViewModel model)
+        public IActionResult UpdateExcessWinterRainfall(PlanViewModel model)
         {
             _logger.LogTrace("Crop Controller : UpdateExcessWinterRainfall() post action called");
-            try
-            {
-                return RedirectToAction("", model);
-
-            }
-            catch (Exception ex)
-            {
-                _logger.LogTrace($"Crop Controller : Exception in RemoveCrop() post action : {ex.Message}, {ex.StackTrace}");
-                TempData["RemoveGroupError"] = ex.Message;
-
-            }
             return View(model);
+
         }
         [HttpGet]
         public async Task<IActionResult> ExcessWinterRainfall()
@@ -3274,9 +3264,9 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Crop Controller : Exception in UpdateExcessWinterRainfall() action : {ex.Message}, {ex.StackTrace}");
-                TempData["ErrorOnHarvestYearOverview"] = ex.Message;
-                return RedirectToAction("HarvestYearOverview", new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear });
+                _logger.LogTrace($"Crop Controller : Exception in ExcessWinterRainfall() action : {ex.Message}, {ex.StackTrace}");
+                TempData["UpdateExcessWinterRainfallError"] = ex.Message;
+                return RedirectToAction("UpdateExcessWinterRainfall");
             }
 
             return View(model);
@@ -3310,6 +3300,7 @@ namespace NMP.Portal.Controllers
                     }
                     return View(model);
                 }
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
                 return RedirectToAction("ExcessWinterRainfallCheckAnswer", model);
 
             }
