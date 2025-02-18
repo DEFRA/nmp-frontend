@@ -323,7 +323,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>true</value>
   </data>
   <data name="lblUseThisServiceToPlan" xml:space="preserve">
-    <value>This is a free service, provided by Defra, to help farmers plan and record nutrient use on their farms. It gives you guidance only - there is no legal requirement to use it.</value>
+    <value>This is a free service, provided by Defra, to help farmers, land managers and advisers plan and record nutrient use on their land. It gives you guidance only - there is no legal requirement to use it.</value>
   </data>
   <data name="lblWhatIsTheFarmName" xml:space="preserve">
     <value>What is the farm name?</value>
@@ -3415,20 +3415,11 @@ cubic metres per hectare  not set</value>
   <data name="ContentSustainableFarmingIncentiveEnd" xml:space="preserve">
     <value>, you will need a nutrient plan. This service will create a plan that you can use for this purpose.</value>
   </data>
-  <data name="ContentSustainableFarmingIncentiveStart" xml:space="preserve">
-    <value>In order to apply for the</value>
-  </data>
-  <data name="contentYourDataLine1" xml:space="preserve">
-    <value>We only gather the data required to provide you with the appropriate recommendations.</value>
-  </data>
-  <data name="contentYourDataLine2" xml:space="preserve">
-    <value>This service will never share your data with any other organisations.</value>
-  </data>
-  <data name="contentYourDataLine3" xml:space="preserve">
-    <value>In particular, please note that this service does not share data with the</value>
-  </data>
-  <data name="contentYourDataLine4" xml:space="preserve">
-    <value>This service was developed in conjunction with ADAS and AHDB.</value>
+  <data name="contentYourData" xml:space="preserve">
+    <value>&lt;p class="gov-body"&gt;We only gather the data required to provide you with the appropriate recommendations.&lt;/p&gt;
+&lt;p class="gov-body"&gt;This service will never share your data with any other organisations.&lt;/p&gt;
+&lt;p class="gov-body"&gt;In particular, please note that this service does not share data with the Rural Payments Agency or the Environment Agency.&lt;/p&gt;
+&lt;p class="gov-body"&gt;This service was developed in conjunction with ADAS, AHDB and RSK&lt;/p&gt;</value>
   </data>
   <data name="lbldownloadablePdftext" xml:space="preserve">
     <value>It creates downloadable plans in PDF.</value>
@@ -3437,16 +3428,13 @@ cubic metres per hectare  not set</value>
     <value>Farming rules for water</value>
   </data>
   <data name="lblFollowFarmingRules" xml:space="preserve">
-    <value>You must follow the</value>
+    <value>You must follow the appropriate regulations, depending on where your farm is:</value>
   </data>
   <data name="lblHowitworks" xml:space="preserve">
     <value>How it works</value>
   </data>
   <data name="lblHowtosaveyourplanasaPDF" xml:space="preserve">
     <value>How to save your plan as a PDF</value>
-  </data>
-  <data name="lblNUM1PaymentOfTheSFI" xml:space="preserve">
-    <value>NUM1 payment of the SFI</value>
   </data>
   <data name="lblRb209NutrientManagementGuide" xml:space="preserve">
     <value>RB209 (Nutrient Management Guide)</value>
@@ -3460,20 +3448,11 @@ cubic metres per hectare  not set</value>
   <data name="lblRpaInitial" xml:space="preserve">
     <value>(RPA)</value>
   </data>
-  <data name="lblSustainableFarmingIncentive" xml:space="preserve">
-    <value>Sustainable Farming Incentive (SFI)</value>
-  </data>
   <data name="lblTheServiceWill" xml:space="preserve">
     <value>This service will:</value>
   </data>
   <data name="lblYourData" xml:space="preserve">
     <value>Your data</value>
-  </data>
-  <data name="lnkFarmingRuleOfWater" xml:space="preserve">
-    <value>https://www.gov.uk/government/publications/applying-the-farming-rules-for-water/applying-the-farming-rules-for-water</value>
-  </data>
-  <data name="lnkNUM1PaymentOfTheSFI" xml:space="preserve">
-    <value>https://www.gov.uk/government/publications/sfi-handbook-for-the-sfi-2023-offer</value>
   </data>
   <data name="lnkRpa" xml:space="preserve">
     <value>https://www.gov.uk/government/organisations/rural-payments-agency</value>
@@ -3517,8 +3496,15 @@ cubic metres per hectare  not set</value>
   <data name="contentGettingHelp2" xml:space="preserve">
     <value>Please tell us what you were trying to do, what happened, and what you expected. This will help us to identify the problem.</value>
   </data>
-  <data name="contentGettingHelp3" xml:space="preserve">
-    <value>We will reply to your email as quickly as we can, where possible.</value>
+  <data name="contentGettingHelp_line2" xml:space="preserve">
+    <value>&lt;p class="govuk-body"&gt;
+    The helpdesk will help with issues such as:
+&lt;/p&gt;
+&lt;ul class="govuk-list govuk-list--bullet"&gt;
+    &lt;li&gt;technical issues&lt;/li&gt;
+    &lt;li&gt;login issues&lt;/li&gt;
+    &lt;li&gt;service outages&lt;/li&gt;
+&lt;/ul&gt;</value>
   </data>
   <data name="contentGivingFeedbackAboutThisService1" xml:space="preserve">
     <value>If you would like to give us feedback about this service, then please email: &lt;a  href="mailto:nmpt@defra.gov.uk"&gt;nmpt@defra.gov.uk&lt;/a&gt;.</value>
@@ -3530,10 +3516,10 @@ cubic metres per hectare  not set</value>
     <value>About recommendations, guidance, and advice in private beta</value>
   </data>
   <data name="lblAboutRecommendationGuidenceAdviceContent1" xml:space="preserve">
-    <value>The Department for Environment, Food &amp; Rural Affairs (DEFRA), the Agriculture and Horticulture Development Board (AHDB), ADAS and the RSK group take no responsibility for any recommendations, guidance, or advice given during the private beta phase of this service.</value>
+    <value>This service was developed by the Department for Environment, Food &amp; Rural Affairs (Defra), the Agriculture and Horticulture Development Board (AHDB), ADAS and the RSK group. Nutrient recommendations are derived from RB209 Application Programming Interface (API); RB209 is the intellectual property of AHDB.</value>
   </data>
   <data name="lblAboutRecommendationGuidenceAdviceContent2" xml:space="preserve">
-    <value>Any recommendations and advice given in the current version of this service (private beta) can not be used to demonstrate compliance with any regulation or legislation, or as evidence for any government scheme. This includes the Sustainable Farming Incentive (SFI).</value>
+    <value>While Defra and partners seek to ensure that the information provided by this service is accurate at the time of use, Defra and partners accept no liability for loss, damage or injury howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to information contained in or omitted from this service.</value>
   </data>
   <data name="lblGetHelpAndFeedback" xml:space="preserve">
     <value>Get help or give feedback</value>
@@ -3628,8 +3614,8 @@ live</value>
   <data name="lblOrganicManureInventory" xml:space="preserve">
     <value>organic manure inventory NVZ compliance module</value>
   </data>
-  <data name="lblReadSchedule" xml:space="preserve">
-    <value>Read the &lt;a  href ="/ReleaseSchedule"&gt;&lt;strong&gt;release schedule for testing and new features&lt;/strong&gt;&lt;/a&gt;</value>
+  <data name="lblReadScheduleLink" xml:space="preserve">
+    <value>&lt;a  href ="/ReleaseSchedule"&gt;Read the release schedule for testing and new features&lt;/a&gt;</value>
   </data>
   <data name="lblReleaseSchedule" xml:space="preserve">
     <value>Release schedule</value>
@@ -3855,5 +3841,104 @@ live</value>
   </data>
   <data name="lblExcessWinterRainfallContentThird" xml:space="preserve">
     <value>View the AHDB excess winter rainfall data.</value>
+  </data>
+  <data name="lblAboutGetHelpAndFeedback_line2" xml:space="preserve">
+    <value>Check the &lt;a href="/ReleaseSchedule" &gt;release schedule&lt;/a&gt; to see what features have been added to the test version of the service.</value>
+  </data>
+  <data name="lblAboutGetHelpAndFeedback_line3" xml:space="preserve">
+    <value>View the &lt;a href="/AcceptTerms" &gt;terms of use&lt;/a&gt; for this service.</value>
+  </data>
+  <data name="lblAboutRecommendationGuidenceAdviceContent3" xml:space="preserve">
+    <value>Users are responsible for the accuracy of their own data and the application of guidance provided. This service should not be relied upon as the sole source of nutrient management guidance. Always consider local conditions and, if necessary, consult a FACTS Qualified Adviser before making nutrient management decisions.</value>
+  </data>
+  <data name="lblAbout_this_service" xml:space="preserve">
+    <value>About this service</value>
+  </data>
+  <data name="lblAbout_this_service_line1" xml:space="preserve">
+    <value>The first step is to set up your farm. The farm will contain your fields, and the fields will have the crops and nutrients applied to them. If you have more than one holding, it's best to add a separate farm for each one.</value>
+  </data>
+  <data name="lblAbout_this_service_line2" xml:space="preserve">
+    <value>The service will warn you of possible breaches of the Nitrate Vulnerable Zone (NVZ) rules as you make your plans.</value>
+  </data>
+  <data name="lblAbout_this_service_line3" xml:space="preserve">
+    <value>The service also accounts for Soil Nitrogen Supply (SNS). You can add SNS data for a field at the end of the planning process.</value>
+  </data>
+  <data name="lblDo_not_show_this_information_again" xml:space="preserve">
+    <value>Do not show this information again</value>
+  </data>
+  <data name="lblEnglandFormingRuleOfWater" xml:space="preserve">
+    <value>England: &lt;a target="_blank" href="https://www.gov.uk/government/collections/nitrate-vulnerable-zones"&gt;Farming rules for water and Nitrogen vulnerable zones (NVZs)&lt;/a&gt;</value>
+  </data>
+  <data name="lblFooter_links" xml:space="preserve">
+    <value>Footer links</value>
+  </data>
+  <data name="lblHelp_with_the_service_recommendations" xml:space="preserve">
+    <value>Help with the service's recommendations</value>
+  </data>
+  <data name="lblHelp_with_the_service_recommendations_line1" xml:space="preserve">
+    <value>You can email the helpdesk if you have any issues with the data and recommendations the service provides. Email: &lt;a  href="mailto:helpdesk@rsk-bsl.co.uk"&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt;.</value>
+  </data>
+  <data name="lblHelp_with_the_service_recommendations_line2" xml:space="preserve">
+    <value>This service might give slightly different recommendations from the previous service PLANET. This is because this new service uses an updated version of the RB209 API, so it provides the very latest data.</value>
+  </data>
+  <data name="lblHelp_with_the_service_recommendations_line3" xml:space="preserve">
+    <value>We will reply to your email as quickly as we can.</value>
+  </data>
+  <data name="lblIagree_to_the_terms_of_use" xml:space="preserve">
+    <value>I agree to the terms of use</value>
+  </data>
+  <data name="lblMore_information" xml:space="preserve">
+    <value>More information</value>
+  </data>
+  <data name="lblMore_information_line1" xml:space="preserve">
+    <value>The Nutrient Management Plan is intended to be used alongside RB209</value>
+  </data>
+  <data name="lblMore_information_line2" xml:space="preserve">
+    <value>For advice about nutrient planning in general, start with &lt;a href="https://www.triedandtested.org.uk" target="_blank"&gt;Tried and Tested&lt;/a&gt; (opens in a new window).</value>
+  </data>
+  <data name="lblMore_information_line3" xml:space="preserve">
+    <value>For more information on RB209, visit &lt;a href="https://ahdb.org.uk/knowledge-library/rb209-section-1-principles-of-nutrient-management-and-fertiliser-use" target="_blank"&gt;Nutrient management guide (RB209) section 1&lt;/a&gt; (opens in a new window).</value>
+  </data>
+  <data name="lblPrivate_beta_disclaimer" xml:space="preserve">
+    <value>Private beta disclaimer</value>
+  </data>
+  <data name="lblPrivate_beta_disclaimer_sub_heading" xml:space="preserve">
+    <value>Any recommendations and advice given in the private beta version of this service cannot be used:</value>
+  </data>
+  <data name="lblPrivate_beta_disclaimer_sub_heading_line1" xml:space="preserve">
+    <value>to demonstrate compliance with any regulation or legislation, such as NVZ rules</value>
+  </data>
+  <data name="lblPrivate_beta_disclaimer_sub_heading_line2" xml:space="preserve">
+    <value>as evidence for any government scheme, such as the Sustainable Farming Incentive (SFI)</value>
+  </data>
+  <data name="lblSaving_your_data" xml:space="preserve">
+    <value>Saving your data</value>
+  </data>
+  <data name="lblSaving_your_data_line1" xml:space="preserve">
+    <value>The service will save the data you input regularly. There will be a Check Your Answers page at the end of each section, and when you select Submit here, your data will be saved up to this point. You will then be able to leave and resume here.</value>
+  </data>
+  <data name="lblScotlandFormingRuleOfWater" xml:space="preserve">
+    <value>Scotland: &lt;a target="_blank" href="https://www.gov.scot/policies/agriculture-and-the-environment/nvz/"&gt;The Action Programme for Nitrate Vulnerable Zones (Scotland) Regulations 2008&lt;/a&gt;</value>
+  </data>
+  <data name="lblSoil_Analysis_line1" xml:space="preserve">
+    <value>You will get better recommendations if you have a recent soil analysis. You will be asked to enter the data from the analysis as you progress through the service, in order to create your nutrient management plan.</value>
+  </data>
+  <data name="lblSoil_Analysis_line2" xml:space="preserve">
+    <value>You should sample the soil from your fields every 3 to 4 years and get it tested for pH, phosphorus, potassium and magnesium.</value>
+  </data>
+  <data name="lblSoil_Analysis_line3" xml:space="preserve">
+    <value>If you do not enter a soil analysis, or if your most recent soil analysis is more than 5 years old, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop.</value>
+  </data>
+  <data name="lblTermsOfUse" xml:space="preserve">
+    <value>Terms of use</value>
+  </data>
+  <data name="lblTerms_Of_Use" xml:space="preserve">
+    <value>Terms Of Use</value>
+  </data>
+  <data name="lblWalesFormingRuleOfWater" xml:space="preserve">
+    <value>Wales: &lt;a target="_blank" href="https://www.gov.wales/water-resources-control-agricultural-pollution-wales-regulations-2021-guidance-farmers-and-land"&gt;The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021&lt;/a&gt;</value>
+  </data>
+  <data name="msgAcceptTermsOfUse" xml:space="preserve">
+    <value>Please accept terms of use</value>
   </data>
 </root>

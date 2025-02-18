@@ -1,0 +1,10 @@
+﻿@using NMP.Portal.Resources;
+@{
+    ViewData["Title"] = Resource.lblTermsOfUse;
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="Index" asp-controller="Home">@Resource.lblBack</govuk-back-link>
+}
+
+<partial name="_TermsOfUsePartial.cshtml" />
