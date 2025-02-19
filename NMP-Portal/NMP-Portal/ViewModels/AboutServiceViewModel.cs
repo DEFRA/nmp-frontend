@@ -1,6 +1,7 @@
-﻿namespace NMP.Portal.ViewModels;
+﻿using NMP.Portal.Models;
 
-public class AboutServiceViewModel
-{
-    public bool DoNotShowThisInformationAgain { get; set; }
+namespace NMP.Portal.ViewModels;
+
+public class AboutServiceViewModel : AboutService
+{    
 }

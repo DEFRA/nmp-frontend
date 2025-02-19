@@ -9,7 +9,12 @@
 }
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-       
+        @if (TempData["ExcessWinterRainfallError"] != null)
+        {
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["ExcessWinterRainfallError"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        }
         <h1 class="govuk-heading-l">
             @string.Format(Resource.lblExcessWinterRainfallContentOne,Model.FarmName)
         </h1>
@@ -20,20 +25,16 @@
         </p>
         <form asp-action="ExcessWinterRainfall" asp-controller="Crop" method="post" autocomplete="off">
             @Html.AntiForgeryToken()
-            @if (TempData["ExcessWinterRainfallError"] != null)
-            {
-                <govuk-error-summary>
-                    <govuk-error-summary-item href="#">@TempData["ExcessWinterRainfallError"]</govuk-error-summary-item>
-                </govuk-error-summary>
-            }
+            
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AnnualRainfall"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfall"></govuk-input>
+            @* <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfall"></govuk-input> *@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsExcessWinterRainfallUpdated"></govuk-input>
             <div class="govuk-form-group">
-                <govuk-radios asp-for="@Model.ExcessWinterRainfallName">
+                <govuk-radios asp-for="@Model.ExcessWinterRainfallId">
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--l">
                             

@@ -116,6 +116,8 @@ namespace NMP.Portal.Helpers
         public const string FetchFarmManureTypeCheckByFarmIdAndManureTypeIdAPI = "farm-manure-type/check?farmId={0}&manureTypeId={1}&manureTypeName={2}";
         public const string FetchExcessRainfallByFarmIdAndYearAPI = "excessRainfalls/{0}?year={1}";
         public const string FetchExcessWinterRainfallOptionAPI = "/excess-winter-rainfall-options";
+        public const string AddOrUpdateExcessWinterRainfallAPI = "/excessRainfalls/{0}?year={1}";
+        public const string FetchExcessWinterRainfallOptionByIdAPI = "/excess-winter-rainfall-options/value/{0}";
 
         //Manner APi Url
         public const string FetchMannerApplicationMethodByIdAsyncAPI = "vendors/manner/application-methods/{0}";
@@ -145,5 +147,9 @@ namespace NMP.Portal.Helpers
         public const string FetchMannerCalculateNutrientAsyncAPI = "vendors/manner/calculate-nutrients";
         public const string FetchSoilTypeSoilTextureBySoilTypeIdAsyncAPI = "soil-type-soil-texture/{0}";
         public const string FetchTotalNBasedByManIdAppDateAndIsGreenCompostAsyncAPI = "organic-manures/total-nitrogen-if-green-food-compost/{0}?fromDate={1}&toDate={2}&confirm={3}&isGreenFoodCompost={4}";
+        //UserExtension API Urls
+        public const string FetchUserExtensionAPI = "user-extension";
+        public const string UpdateUserExtensionTermsOfUseAPI = "user-extension/accept-terms-of-use";
+        public const string UpdateUserExtensionDoNotShowAboutServiceAPI = "user-extension/show-about-service";
     }
 }

@@ -7,22 +7,33 @@
 @section BeforeContent {
     <govuk-back-link asp-action="ExcessWinterRainFall" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
 }
-<govuk-notification-banner>
-    <govuk-notification-banner-title>
-        @Resource.lblImportant
-    </govuk-notification-banner-title>
-    <p class="govuk-body"> Work is in costruction.</p>
-</govuk-notification-banner>
-@* <div class="govuk-grid-row">
+<div class="govuk-grid-row">
+    @if (TempData["ExcessWinterRainfallCheckAnswerError"] != null)
+    {
+        <govuk-error-summary>
+            <govuk-error-summary-item href="#">@TempData["ExcessWinterRainfallCheckAnswerError"]</govuk-error-summary-item>
+        </govuk-error-summary>
+    }
     <form asp-action="ExcessWinterRainfallCheckAnswer" asp-controller="Crop" method="post" novalidate="">
+        @Html.AntiForgeryToken()
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AnnualRainfall"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfallId"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsExcessWinterRainfallCheckAnswer"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfallName" value="@Model.ExcessWinterRainfallName"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfallValue" value="@Model.ExcessWinterRainfallValue"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsExcessWinterRainfallUpdated"></govuk-input>
         <div class="govuk-grid-column-two-thirds-from-desktop">
-
+            
             <h1 class="govuk-heading-l">
                 @Resource.lblCheckYourAnswers
             </h1>
 
             <h2 class="govuk-heading-m">
-                @string.Concat(Resource.lblHarvestYear, "", Model.Year)
+                @string.Concat(Resource.lblHarvestYear, " ", Model.Year)
             </h2>
 
             <div class="check-answers">
@@ -42,9 +53,7 @@
                 @Resource.lblUpdate
             </govuk-button>
 
-            <p class="govuk-body">
-                <a>@Resource.lblCancel</a>
-            </p>
+            <p class="govuk-body cancel-link"><a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
         </div>
     </form>
-</div> *@
+</div> 
