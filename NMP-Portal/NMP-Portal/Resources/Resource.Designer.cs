@@ -7644,15 +7644,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Update rainfall for {0}.
-        /// </summary>
-        public static string lblUpdateRainfallFor {
-            get {
-                return ResourceManager.GetString("lblUpdateRainfallFor", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Update this farm.
         /// </summary>
         public static string lblUpdateThisFarm {
@@ -7685,6 +7676,15 @@ namespace NMP.Portal.Resources {
         public static string lblUpdateThisGroup {
             get {
                 return ResourceManager.GetString("lblUpdateThisGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update excess winter rainfall.
+        /// </summary>
+        public static string lblUpdateUpdate_excess_winter_rainfall {
+            get {
+                return ResourceManager.GetString("lblUpdateUpdate excess winter rainfall", resourceCulture);
             }
         }
         
@@ -8945,6 +8945,24 @@ namespace NMP.Portal.Resources {
         public static string MsgAccessTokenNotReceived {
             get {
                 return ResourceManager.GetString("MsgAccessTokenNotReceived", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Excess Winter Rainfall for {0} updated.
+        /// </summary>
+        public static string MsgAddExcessWinterRainfallContentOne {
+            get {
+                return ResourceManager.GetString("MsgAddExcessWinterRainfallContentOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This may change your nutrient recommendations for {0}.Select a field to see its recommendations..
+        /// </summary>
+        public static string MsgAddExcessWinterRainfallContentSecond {
+            get {
+                return ResourceManager.GetString("MsgAddExcessWinterRainfallContentSecond", resourceCulture);
             }
         }
         

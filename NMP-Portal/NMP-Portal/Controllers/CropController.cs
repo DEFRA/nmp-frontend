@@ -1840,16 +1840,25 @@ namespace NMP.Portal.Controllers
                         {
                             if (excessRainfalls != null && excessRainfalls.WinterRainfall != null)
                             {
-                                model.ExcessWinterRainfall = excessRainfalls.WinterRainfall.Value;
+                                model.ExcessWinterRainfallValue = excessRainfalls.WinterRainfall.Value;
                                 model.AnnualRainfall = excessRainfalls.WinterRainfall.Value;
-                                // fetch name based on value.
-                                //model.ExcessWinterRainfallName=
+                                model.IsExcessWinterRainfallUpdated = true;
+                                (List<CommonResponse> excessWinterRainfallOption, error) = await _farmService.FetchExcessWinterRainfallOptionAsync();
+                                if (string.IsNullOrWhiteSpace(error.Message) && excessWinterRainfallOption != null && excessWinterRainfallOption.Count > 0)
+                                {
+                                    string excessRainfallName = (excessWinterRainfallOption.FirstOrDefault(x => x.Value == model.ExcessWinterRainfallValue)).Name;
+                                    string[] parts = excessRainfallName.Split(new string[] { " - " }, StringSplitOptions.None);
+                                    model.ExcessWinterRainfallName = $"{parts[0]} ({parts[1]})";
+                                    model.ExcessWinterRainfallId = (excessWinterRainfallOption.FirstOrDefault(x => x.Value == model.ExcessWinterRainfallValue)).Id;
+                                }
+
                                 ViewBag.ExcessRainfallContentFirst = string.Format(Resource.lblExcessWinterRainfallWithValue, model.ExcessWinterRainfallName);
-                                ViewBag.ExcessRainfallContentSecond = string.Format(Resource.lblUpdateRainfallFor, harvestYear);
+                                ViewBag.ExcessRainfallContentSecond = Resource.lblUpdateExcessWinterRainfall;
                             }
                             else
                             {
                                 model.AnnualRainfall = farm.Rainfall.Value;
+                                model.IsExcessWinterRainfallUpdated = false;
                                 ViewBag.ExcessRainfallContentFirst = Resource.lblYouHaveNotEnteredAnyExcessWinterRainfall;
                                 ViewBag.ExcessRainfallContentSecond = string.Format(Resource.lblAddExcessWinterRainfallForHarvestYear, harvestYear);
                             }
@@ -3252,7 +3261,7 @@ namespace NMP.Portal.Controllers
                     {
                         var SelectListItem = excessWinterRainfallOption.Select(f => new SelectListItem
                         {
-                            Value = f.Value.ToString(),
+                            Value = f.Id.ToString(),
                             Text = f.Name
                         }).ToList();
 
@@ -3278,9 +3287,9 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace("Crop Controller : ExcessWinterRainfall() post action called");
             try
             {
-                if (model.ExcessWinterRainfallName == null)
+                if (model.ExcessWinterRainfallId == null)
                 {
-                    ModelState.AddModelError("ExcessWinterRainfallName", Resource.MsgSelectAnOptionBeforeContinuing);
+                    ModelState.AddModelError("ExcessWinterRainfallId", Resource.MsgSelectAnOptionBeforeContinuing);
                 }
                 if (!ModelState.IsValid)
                 {
@@ -3291,7 +3300,7 @@ namespace NMP.Portal.Controllers
                         {
                             var SelectListItem = excessWinterRainfallOption.Select(f => new SelectListItem
                             {
-                                Value = f.Value.ToString(),
+                                Value = f.Id.ToString(),
                                 Text = f.Name
                             }).ToList();
 
@@ -3313,10 +3322,10 @@ namespace NMP.Portal.Controllers
                 TempData["ExcessWinterRainfallError"] = ex.Message;
                 return View(model);
             }
-          
+
         }
         [HttpGet]
-        public IActionResult ExcessWinterRainfallCheckAnswer()
+        public async Task<IActionResult> ExcessWinterRainfallCheckAnswer()
         {
             _logger.LogTrace("Crop Controller : ExcessWinterRainfallCheckAnswer() action called");
             PlanViewModel model = new PlanViewModel();
@@ -3331,22 +3340,48 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
+                (CommonResponse commonResponse, Error error) = await _farmService.FetchExcessWinterRainfallOptionByIdAsync(model.ExcessWinterRainfallId.Value);
+                if (string.IsNullOrWhiteSpace(error.Message) && commonResponse != null)
+                {
+                    model.ExcessWinterRainfallName = commonResponse.Name;
+                    model.ExcessWinterRainfallValue = commonResponse.Value;
+                }
+                model.IsExcessWinterRainfallCheckAnswer = true;
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
             }
 
             catch (Exception ex)
             {
                 _logger.LogTrace($"Crop Controller : Exception in ExcessWinterRainfallCheckAnswer() action : {ex.Message}, {ex.StackTrace}");
-                TempData["ErrorOnHarvestYearOverview"] = ex.Message;
-                return RedirectToAction("HarvestYearOverview", new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear });
+                TempData["ExcessWinterRainfallError"] = ex.Message;
+                return RedirectToAction("ExcessWinterRainfall", model);
             }
 
             return View(model);
         }
+        [HttpGet]
+        public async Task<IActionResult> BackActionForExcessWinterRainfallCheckAnswer()
+        {
+            _logger.LogTrace("Crop Controller : BackActionForExcessWinterRainfallCheckAnswer() action called");
+            PlanViewModel model = new PlanViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("HarvestYearPlan"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("HarvestYearPlan");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+            model.IsExcessWinterRainfallCheckAnswer = false;
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
+            return View(model);
+
+        }
         [HttpPost]
-        public IActionResult ExcessWinterRainfallCheckAnswer(PlanViewModel model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ExcessWinterRainfallCheckAnswer(PlanViewModel model)
         {
             _logger.LogTrace("Crop Controller : ExcessWinterRainfallCheckAnswer() action called");
-            //PlanViewModel model = new PlanViewModel();
 
             try
             {
@@ -3358,12 +3393,34 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
+
+                int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
+                var excessRainfalls = new ExcessRainfalls
+                {
+                    FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)),
+                    Year = model.Year,
+                    ExcessRainfall = model.AnnualRainfall,
+                    WinterRainfall = model.ExcessWinterRainfallValue,
+                    CreatedOn = DateTime.Now,
+                    CreatedByID = userId
+                };
+                string jsonData = JsonConvert.SerializeObject(excessRainfalls);
+                (ExcessRainfalls excessRainfall, Error error) = await _farmService.AddExcessWinterRainfallAsync(Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)), model.Year.Value, jsonData, model.IsExcessWinterRainfallUpdated.Value);
+                if (string.IsNullOrWhiteSpace(error.Message) && excessRainfall != null)
+                {
+                    return RedirectToAction("HarvestYearOverview", new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = _cropDataProtector.Protect(string.Format(Resource.MsgAddExcessWinterRainfallContentOne, model.Year.Value)), v = _cropDataProtector.Protect(string.Format(Resource.MsgAddExcessWinterRainfallContentSecond, model.Year.Value)) });
+                }
+                else
+                {
+                    TempData["ExcessWinterRainfallCheckAnswerError"] = error.Message;
+                    return View(model);
+                }
             }
             catch (Exception ex)
             {
                 _logger.LogTrace($"Crop Controller : Exception in ExcessWinterRainfallCheckAnswer() action : {ex.Message}, {ex.StackTrace}");
-                TempData["ErrorOnHarvestYearOverview"] = ex.Message;
-                return RedirectToAction("HarvestYearOverview", new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear });
+                TempData["ExcessWinterRainfallCheckAnswerError"] = ex.Message;
+                return View(model);
             }
 
             return View(model);

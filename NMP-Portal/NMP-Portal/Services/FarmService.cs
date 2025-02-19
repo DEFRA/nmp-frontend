@@ -74,7 +74,7 @@ namespace NMP.Portal.Services
                 HttpClient httpClient = await GetNMPAPIClient();
 
                 // check if farm already exists or not
-                bool IsFarmExist = await IsFarmExistAsync(farmData.Farm.Name, farmData.Farm.Postcode,farmData.Farm.ID);
+                bool IsFarmExist = await IsFarmExistAsync(farmData.Farm.Name, farmData.Farm.Postcode, farmData.Farm.ID);
                 if (!IsFarmExist)
                 {
                     // if new farm then save farm data
@@ -170,7 +170,7 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var farmExist = await httpClient.GetAsync(string.Format(APIURLHelper.IsFarmExist, farmName, postcode.Trim(),Id));
+                var farmExist = await httpClient.GetAsync(string.Format(APIURLHelper.IsFarmExist, farmName, postcode.Trim(), Id));
                 string resultFarmExist = await farmExist.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapperFarmExist = JsonConvert.DeserializeObject<ResponseWrapper>(resultFarmExist);
                 if (responseWrapperFarmExist.Data["exists"] == true)
@@ -205,7 +205,7 @@ namespace NMP.Portal.Services
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
                 {
-                    rainfallAverage = responseWrapper.Data.avarageAnnualRainfall!=null? responseWrapper.Data.avarageAnnualRainfall.value:0;
+                    rainfallAverage = responseWrapper.Data.avarageAnnualRainfall != null ? responseWrapper.Data.avarageAnnualRainfall.value : 0;
                 }
                 else
                 {
@@ -371,13 +371,13 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchExcessRainfallByFarmIdAndYearAPI, farmId,year));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchExcessRainfallByFarmIdAndYearAPI, farmId, year));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
                 {
                     excessRainfalls = responseWrapper.Data.ExcessRainfall.ToObject<ExcessRainfalls>();
-                   
+
                 }
                 else
                 {
@@ -442,5 +442,98 @@ namespace NMP.Portal.Services
 
             return (excessWinterRainfallOption, error);
         }
+        public async Task<(ExcessRainfalls, Error)> AddExcessWinterRainfallAsync(int farmId,int year,string excessWinterRainfallData,bool isUpdated)
+        {
+            ExcessRainfalls excessRainfalls = null;
+            Error error = new Error();
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                string url = string.Empty;
+                HttpResponseMessage response = null;
+                if (isUpdated!=null&&isUpdated)
+                {
+                     response = await httpClient.PutAsync(string.Format(APIURLHelper.AddOrUpdateExcessWinterRainfallAPI, farmId, year), new StringContent(excessWinterRainfallData, Encoding.UTF8, "application/json"));
+                }
+                else
+                {
+                     response = await httpClient.PostAsync(string.Format(APIURLHelper.AddOrUpdateExcessWinterRainfallAPI, farmId, year), new StringContent(excessWinterRainfallData, Encoding.UTF8, "application/json"));
+                }
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+                {
+
+                    JObject excessRainfallObj = responseWrapper.Data["ExcessRainfall"] as JObject;
+                    if (excessRainfallObj != null)
+                    {
+                        excessRainfalls = excessRainfallObj.ToObject<ExcessRainfalls>();
+                    }
+
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (excessRainfalls, error);
+        }
+        public async Task<(CommonResponse, Error)> FetchExcessWinterRainfallOptionByIdAsync(int id)
+        {
+            CommonResponse excessWinterRainfallOption = new CommonResponse();
+            Error error = new Error();
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchExcessWinterRainfallOptionByIdAPI,id));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+                {
+                    excessWinterRainfallOption = responseWrapper.Data.records.ToObject<CommonResponse>();
+
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+
+            return (excessWinterRainfallOption, error);
+        }
     }
 }
+

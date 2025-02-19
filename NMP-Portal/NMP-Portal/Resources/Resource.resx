@@ -2572,8 +2572,8 @@ cubic metres per hectare  not set</value>
   <data name="lblYouHaveNotEnteredAnyExcessWinterRainfall" xml:space="preserve">
     <value>You have not entered any excess winter rainfall.</value>
   </data>
-  <data name="lblUpdateRainfallFor" xml:space="preserve">
-    <value>Update rainfall for {0}</value>
+  <data name="lblUpdateUpdate excess winter rainfall" xml:space="preserve">
+    <value>Update excess winter rainfall</value>
   </data>
   <data name="lblAllAmountsArePerHectare" xml:space="preserve">
     <value>All amounts are per hectare.</value>
@@ -3855,5 +3855,11 @@ live</value>
   </data>
   <data name="lblExcessWinterRainfallContentThird" xml:space="preserve">
     <value>View the AHDB excess winter rainfall data.</value>
+  </data>
+  <data name="MsgAddExcessWinterRainfallContentOne" xml:space="preserve">
+    <value>Excess Winter Rainfall for {0} updated</value>
+  </data>
+  <data name="MsgAddExcessWinterRainfallContentSecond" xml:space="preserve">
+    <value>This may change your nutrient recommendations for {0}.Select a field to see its recommendations.</value>
   </data>
 </root>
