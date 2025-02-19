@@ -3399,7 +3399,7 @@ namespace NMP.Portal.Controllers
                 {
                     FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)),
                     Year = model.Year,
-                    ExcessRainfall = model.AnnualRainfall,
+                    ExcessRainfall = 0,
                     WinterRainfall = model.ExcessWinterRainfallValue,
                     CreatedOn = DateTime.Now,
                     CreatedByID = userId
