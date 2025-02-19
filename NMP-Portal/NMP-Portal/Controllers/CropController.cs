@@ -518,7 +518,7 @@ namespace NMP.Portal.Controllers
                             {
                                 model.CropType = await _fieldService.FetchCropTypeById(model.CropTypeID.Value);
                                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
-                                return RedirectToAction("CropGroupName");
+                                return RedirectToAction("CropFields");
 
                             }
 
@@ -589,8 +589,8 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogTrace($"Crop Controller : Exception in VarietyName() post action : {ex.Message}, {ex.StackTrace}");
-                TempData["CropTypeError"] = ex.Message;
-                return RedirectToAction("CropTypes");
+                TempData["CropGroupNameError"] = ex.Message;
+                return RedirectToAction("CropGroupName");
             }
             return View(model);
         }
@@ -630,6 +630,10 @@ namespace NMP.Portal.Controllers
                     {
                         return RedirectToAction("CropInfoOne");
 
+                    }
+                    if (model.IsAnyChangeInField)
+                    {
+                        return RedirectToAction("SowingDateQuestion");
                     }
                     return RedirectToAction("CheckAnswer");
                 }
@@ -689,8 +693,8 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogTrace($"Crop Controller : Exception in CropFields() action : {ex.Message}, {ex.StackTrace}");
-                TempData["ErrorOnVariety"] = ex.Message;
-                return RedirectToAction("VarietyName");
+                TempData["CropTypeError"] = ex.Message;
+                return RedirectToAction("CropTypes");
             }
             return View(model);
         }
@@ -901,6 +905,7 @@ namespace NMP.Portal.Controllers
             {
                 return View(model);
             }
+
             if (model.IsCheckAnswer)
             {
                 PlanViewModel planViewModel = new PlanViewModel();
@@ -1063,6 +1068,17 @@ namespace NMP.Portal.Controllers
             //    }
             //}
 
+
+            if (model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.WinterWheat ||
+                model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.WinterTriticale ||
+                model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.ForageWinterTriticale ||
+                model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.WholecropWinterWheat)
+            {
+                if (model.Crops[model.SowingDateCurrentCounter].SowingDate.Value.Month >= 2 && model.Crops[model.SowingDateCurrentCounter].SowingDate.Value.Month <= 6)
+                {
+                    ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate",string.Format(Resource.MsgForSowingDate,model.CropType));
+                }
+            }
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -2740,7 +2756,7 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("CropGroupName");
             }
 
-            if (model.IsCheckAnswer && (!model.IsCropGroupChange) && (!model.IsCropTypeChange))
+            if (model.IsCheckAnswer && (!model.IsCropGroupChange) && (!model.IsCropTypeChange) && (!model.IsAnyChangeInField))
             {
                 return RedirectToAction("CheckAnswer");
             }

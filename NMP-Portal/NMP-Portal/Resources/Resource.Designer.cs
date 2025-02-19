@@ -10527,6 +10527,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The planting date for {0} should be before 1st February. If your planting date is after 1st February, you should change your crop type to a spring sown crop..
+        /// </summary>
+        public static string MsgForSowingDate {
+            get {
+                return ResourceManager.GetString("MsgForSowingDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The combined cropped area and manure non-spreading area cannot be larger than the total field area.
         /// </summary>
         public static string MsgIfCroppedAreaAndNonSpreadingArea {
