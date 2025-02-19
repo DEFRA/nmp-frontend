@@ -3947,4 +3947,7 @@ live</value>
   <data name="MsgAddExcessWinterRainfallContentSecond" xml:space="preserve">
     <value>This may change your nutrient recommendations for {0}.Select a field to see its recommendations.</value>
   </data>
+  <data name="MsgForSowingDate" xml:space="preserve">
+    <value>The planting date for {0} should be before 1st February. If your planting date is after 1st February, you should change your crop type to a spring sown crop.</value>
+  </data>
 </root>
