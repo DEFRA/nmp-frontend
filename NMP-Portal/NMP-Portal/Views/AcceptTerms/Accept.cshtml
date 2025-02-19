@@ -1,0 +1,17 @@
+﻿@using NMP.Portal.Resources;
+@model NMP.Portal.ViewModels.TermsOfUseViewModel;
+@{
+    ViewData["Title"] = Resource.lblTermsOfUse;   
+}
+
+<partial name="_TermsOfUsePartial.cshtml" />
+<form class="form margin-top-forty" asp-action="Accept" asp-controller="AcceptTerms" method="post">
+    <div class="govuk-form-group margin-bottom-forty">      
+        <govuk-checkboxes name="IsTermsOfUseAccepted" asp-for="@Model.IsTermsOfUseAccepted">
+            <govuk-checkboxes-item checked="@Model.IsTermsOfUseAccepted" value="true">@Resource.lblIagree_to_the_terms_of_use</govuk-checkboxes-item>
+        </govuk-checkboxes>
+    </div>
+    <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty">
+        @Resource.lblContinue
+    </govuk-button>
+</form>
