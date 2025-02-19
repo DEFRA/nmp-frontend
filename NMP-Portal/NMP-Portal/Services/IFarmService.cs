@@ -16,5 +16,7 @@ namespace NMP.Portal.Services
         Task<(List<Country>, Error)> FetchCountryAsync();
         Task<(ExcessRainfalls, Error)> FetchExcessRainfallsAsync(int farmId, int year);
         Task<(List<CommonResponse>, Error)> FetchExcessWinterRainfallOptionAsync();
+        Task<(ExcessRainfalls, Error)> AddExcessWinterRainfallAsync(int farmId, int year, string excessWinterRainfallData, bool isUpdated);
+        Task<(CommonResponse, Error)> FetchExcessWinterRainfallOptionByIdAsync(int id);
     }
 }
