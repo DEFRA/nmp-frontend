@@ -3293,7 +3293,7 @@ cubic metres per hectare  not set</value>
     <value>You have added a new soil analysis for {0}</value>
   </data>
   <data name="lblUpdate" xml:space="preserve">
-    <value>update</value>
+    <value>Update</value>
   </data>
   <data name="lblThisApplicationWillTakeYouOverTheOrganicManureNFieldLimitWales" xml:space="preserve">
     <value>This application will take you over the individual hectare limit for spreading of organic manure</value>

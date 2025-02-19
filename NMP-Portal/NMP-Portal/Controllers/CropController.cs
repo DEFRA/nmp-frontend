@@ -3359,24 +3359,6 @@ namespace NMP.Portal.Controllers
 
             return View(model);
         }
-        [HttpGet]
-        public async Task<IActionResult> BackActionForExcessWinterRainfallCheckAnswer()
-        {
-            _logger.LogTrace("Crop Controller : BackActionForExcessWinterRainfallCheckAnswer() action called");
-            PlanViewModel model = new PlanViewModel();
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("HarvestYearPlan"))
-            {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("HarvestYearPlan");
-            }
-            else
-            {
-                return RedirectToAction("FarmList", "Farm");
-            }
-            model.IsExcessWinterRainfallCheckAnswer = false;
-            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
-            return View(model);
-
-        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ExcessWinterRainfallCheckAnswer(PlanViewModel model)

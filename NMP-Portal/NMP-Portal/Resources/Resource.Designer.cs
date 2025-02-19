@@ -7798,7 +7798,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to update.
+        ///   Looks up a localized string similar to Update.
         /// </summary>
         public static string lblUpdate {
             get {
