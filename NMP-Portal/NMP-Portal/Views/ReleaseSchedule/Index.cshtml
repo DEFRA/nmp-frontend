@@ -1,6 +1,6 @@
 ﻿@using NMP.Portal.Resources;
 @{
-    ViewData["Title"] = Resource.lblNMPTReleaseSchedule;
+    ViewData["Title"] = Resource.lblServiceReleaseSchedule;
 }
 
 @section BeforeContent {
@@ -9,19 +9,16 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <div class="govuk-body">
-            <h1 class="govuk-heading-xl">@Resource.lblNMPTReleaseSchedule</h1>
+            <h1 class="govuk-heading-xl">@Resource.lblServiceReleaseSchedule</h1>
             <p class="govuk-body">@Resource.lblAboutReleaseSchedule</p>
 
-            <h2 class="govuk-heading-m">@Resource.lblFebToJuly2025</h2>
+            <h2 class="govuk-heading-m">@Resource.lblMarchToJuly2025</h2>
             <ul class="govuk-list govuk-list--bullet">
                 <li>
                     @Resource.lblNMPTBetaTest1
-                </li>
-                <li>
-                    @Resource.lblNMPTBetaTestFeedback
-                </li>                
+                </li>                              
             </ul> 
-            <h2 class="govuk-heading-m">@Resource.lbl10February</h2>
+            <h2 class="govuk-heading-m">@Resource.lblMarch</h2>
             <p class="govuk-body">@Resource.lblArableCoreFunctions</p>
             <ul class="govuk-list govuk-list--bullet">
                 <li>
@@ -34,7 +31,7 @@
                     @Resource.lblNVZAndFarmingRulesFor
                 </li>
             </ul>
-            <h2 class="govuk-heading-m">@Resource.lblMarch</h2>
+            <h2 class="govuk-heading-m">@Resource.lblApril</h2>
             <p class="govuk-body">@Resource.lblGrasslandCoreFunctions</p>
             <ul class="govuk-list govuk-list--bullet">
                 <li>
@@ -47,36 +44,25 @@
                     @Resource.lblNVZAndFarmingRulesFor
                 </li>
             </ul>
-            <h2 class="govuk-heading-m">@Resource.lblApril</h2>
-            <p class="govuk-body">@Resource.lblAddedFunctions</p>
+            <h2 class="govuk-heading-m">@Resource.lblMay</h2>            
             <ul class="govuk-list govuk-list--bullet">
                 <li>
                     @Resource.lblNMaxComplainceModule
                 </li>                
             </ul>
-            <h2 class="govuk-heading-m">@Resource.lblMay</h2>
-            <p class="govuk-body">@Resource.lblAddedFunctions</p>
+            <h2 class="govuk-heading-m">@Resource.lblJune</h2>            
             <ul class="govuk-list govuk-list--bullet">
                 <li>
                     @Resource.lblLivestockManureLimitComplianceModule
                 </li>
-            </ul>
-            <h2 class="govuk-heading-m">@Resource.lblJune</h2>
-            <p class="govuk-body">@Resource.lblAddedFunctions</p>
-            <ul class="govuk-list govuk-list--bullet">
                 <li>
                     @Resource.lblExistingManureStorageCapacity
                 </li>
-            </ul>
-            <h2 class="govuk-heading-m">@Resource.lblJuly</h2>
-            <p class="govuk-body">@Resource.lblAddedFunctions</p>
-            <ul class="govuk-list govuk-list--bullet">
                 <li>
                     @Resource.lblOrganicManureInventory
                 </li>
-            </ul>
-            <h2 class="govuk-heading-m">@Resource.lblJuly</h2>
-            <p class="govuk-body">@Resource.lblAddedFunctions</p>
+            </ul> 
+            <h2 class="govuk-heading-m">@Resource.lblJuly</h2>           
             <ul class="govuk-list govuk-list--bullet">
                 <li>
                     @Resource.lblMannerNPKStandAloneFrontEnd
@@ -85,32 +71,16 @@
             <h2 class="govuk-heading-m">@Resource.lblJuly2025Schedule</h2>            
             <ul class="govuk-list govuk-list--bullet">
                 <li>
-                    @Resource.lblAllModulesLive
+                    @Html.Raw(Resource.lblAllModulesLive)
                 </li>
             </ul>
-            <h2 class="govuk-heading-m">@Resource.lblSeptToNov2025</h2>
+            <h2 class="govuk-heading-m">@Resource.lblSept2025</h2>
             <ul class="govuk-list govuk-list--bullet">
                 <li>
                     @Resource.lblNMPTLaunchesToUsersInScotland
-                </li>
-                <li>
-                    @Resource.lblMonitorUseOfTool
-                </li>
+                </li>                
             </ul>
-            <h2 class="govuk-heading-m">@Resource.lblSeptember</h2>
-            <p class="govuk-body">@Resource.lblAddedFunctions</p>
-            <ul class="govuk-list govuk-list--bullet">
-                <li>
-                    @Resource.lblCreateAPlanandRecordForArableAndGrasslansFarms
-                </li>
-                <li>
-                    @Resource.lblIntegratedMANNERNPKCalculations
-                </li>
-                <li>
-                    @Resource.lblNVZComplianceWarningMessages
-                </li>
-            </ul>
-            <h2 class="govuk-heading-m">@Resource.lblNov2025EnglandWalesAndScotlandFullServiceLive</h2>           
+            <h2 class="govuk-heading-m">@Resource.lblOctober</h2>
             <ul class="govuk-list govuk-list--bullet">
                 <li>
                     @Resource.lblNMPTLiveForGeneralUse

@@ -657,15 +657,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Added function:.
-        /// </summary>
-        public static string lblAddedFunctions {
-            get {
-                return ResourceManager.GetString("lblAddedFunctions", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Add excess winter rainfall for harvest year {0}..
         /// </summary>
         public static string lblAddExcessWinterRainfallForHarvestYear {
@@ -909,7 +900,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to all the modules for England and Wales are live on GOV.UK and available for general use.
+        ///   Looks up a localized string similar to all the modules for England and Wales are live on &lt;a href=&quot;https://www.gov.uk/&quot; target=&quot;_blank&quot;&gt;GOV.UK&lt;/a&gt; and available for general use.
         /// </summary>
         public static string lblAllModulesLive {
             get {
@@ -1116,7 +1107,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Arable - core functions:.
+        ///   Looks up a localized string similar to Core functions, arable:.
         /// </summary>
         public static string lblArableCoreFunctions {
             get {
@@ -2772,7 +2763,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to existing manure storage capacity NVZ compliance module.
+        ///   Looks up a localized string similar to added function: existing manure storage capacity NVZ compliance module.
         /// </summary>
         public static string lblExistingManureStorageCapacity {
             get {
@@ -2984,15 +2975,6 @@ namespace NMP.Portal.Resources {
         public static string lblFebruary {
             get {
                 return ResourceManager.GetString("lblFebruary", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to February to July 2025 - England and Wales private beta test.
-        /// </summary>
-        public static string lblFebToJuly2025 {
-            get {
-                return ResourceManager.GetString("lblFebToJuly2025", resourceCulture);
             }
         }
         
@@ -3294,7 +3276,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Grassland - core functions:.
+        ///   Looks up a localized string similar to Core functions, grassland:.
         /// </summary>
         public static string lblGrasslandCoreFunctions {
             get {
@@ -4367,7 +4349,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to livestock manure nitrogen (N) farm limit NVZ compliance module.
+        ///   Looks up a localized string similar to added function: livestock manure nitrogen (N) farm limit NVZ compliance module.
         /// </summary>
         public static string lblLivestockManureLimitComplianceModule {
             get {
@@ -4475,7 +4457,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MANNER-NPK stand-alone front-end.
+        ///   Looks up a localized string similar to added function: MANNER-NPK stand-alone front-end.
         /// </summary>
         public static string lblMannerNPKStandAloneFrontEnd {
             get {
@@ -4570,6 +4552,15 @@ namespace NMP.Portal.Resources {
         public static string lblMarch {
             get {
                 return ResourceManager.GetString("lblMarch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to March to July 2025 - England and Wales private beta test.
+        /// </summary>
+        public static string lblMarchToJuly2025 {
+            get {
+                return ResourceManager.GetString("lblMarchToJuly2025", resourceCulture);
             }
         }
         
@@ -4691,15 +4682,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to we will monitor their use of the tool, and localise and refine the NMPT based on their feedback.
-        /// </summary>
-        public static string lblMonitorUseOfTool {
-            get {
-                return ResourceManager.GetString("lblMonitorUseOfTool", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to More information.
         /// </summary>
         public static string lblMore_information {
@@ -4817,7 +4799,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to N-max NVZ compliance module.
+        ///   Looks up a localized string similar to added function: N-max NVZ compliance module.
         /// </summary>
         public static string lblNMaxComplainceModule {
             get {
@@ -4835,21 +4817,11 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to around 40 to 50 users in England and Wales will test the NMPT online in a
-        ///special testing environment.
+        ///   Looks up a localized string similar to a limited number of selected farmers and advisers across England and Wales are invited to test the tool and provide feedback prior to the public release.
         /// </summary>
         public static string lblNMPTBetaTest1 {
             get {
                 return ResourceManager.GetString("lblNMPTBetaTest1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to we will monitor their use of the tool, and refine and update the NMPT based on their feedback.
-        /// </summary>
-        public static string lblNMPTBetaTestFeedback {
-            get {
-                return ResourceManager.GetString("lblNMPTBetaTestFeedback", resourceCulture);
             }
         }
         
@@ -4863,20 +4835,11 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NMPT is live on GOV.UK and available for general use.
+        ///   Looks up a localized string similar to service launches for cross-border farms.
         /// </summary>
         public static string lblNMPTLiveForGeneralUse {
             get {
                 return ResourceManager.GetString("lblNMPTLiveForGeneralUse", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to NMPT release schedule.
-        /// </summary>
-        public static string lblNMPTReleaseSchedule {
-            get {
-                return ResourceManager.GetString("lblNMPTReleaseSchedule", resourceCulture);
             }
         }
         
@@ -5278,7 +5241,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to organic manure inventory NVZ compliance module.
+        ///   Looks up a localized string similar to added function: organic manure inventory NVZ compliance module.
         /// </summary>
         public static string lblOrganicManureInventory {
             get {
@@ -6448,6 +6411,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to September 2025 - Scotland launch phase.
+        /// </summary>
+        public static string lblSept2025 {
+            get {
+                return ResourceManager.GetString("lblSept2025", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to September.
         /// </summary>
         public static string lblSeptember {
@@ -6457,11 +6429,11 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to September to November 2025 - Scotland launch phase.
+        ///   Looks up a localized string similar to Service release schedule.
         /// </summary>
-        public static string lblSeptToNov2025 {
+        public static string lblServiceReleaseSchedule {
             get {
-                return ResourceManager.GetString("lblSeptToNov2025", resourceCulture);
+                return ResourceManager.GetString("lblServiceReleaseSchedule", resourceCulture);
             }
         }
         

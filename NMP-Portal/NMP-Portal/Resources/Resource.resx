@@ -3543,14 +3543,11 @@ cubic metres per hectare  not set</value>
     <value>This is the plan for testing this service, adding new features and rolling it out across
 the country.</value>
   </data>
-  <data name="lblAddedFunctions" xml:space="preserve">
-    <value>Added function:</value>
-  </data>
   <data name="lblAllModulesLive" xml:space="preserve">
-    <value>all the modules for England and Wales are live on GOV.UK and available for general use</value>
+    <value>all the modules for England and Wales are live on &lt;a href="https://www.gov.uk/" target="_blank"&gt;GOV.UK&lt;/a&gt; and available for general use</value>
   </data>
   <data name="lblArableCoreFunctions" xml:space="preserve">
-    <value>Arable - core functions:</value>
+    <value>Core functions, arable:</value>
   </data>
   <data name="lblCreateAPlanAndRecord" xml:space="preserve">
     <value>create a plan and record</value>
@@ -3559,13 +3556,13 @@ the country.</value>
     <value>create a plan and record for arable and grassland farms</value>
   </data>
   <data name="lblExistingManureStorageCapacity" xml:space="preserve">
-    <value>existing manure storage capacity NVZ compliance module</value>
+    <value>added function: existing manure storage capacity NVZ compliance module</value>
   </data>
-  <data name="lblFebToJuly2025" xml:space="preserve">
-    <value>February to July 2025 - England and Wales private beta test</value>
+  <data name="lblMarchToJuly2025" xml:space="preserve">
+    <value>March to July 2025 - England and Wales private beta test</value>
   </data>
   <data name="lblGrasslandCoreFunctions" xml:space="preserve">
-    <value>Grassland - core functions:</value>
+    <value>Core functions, grassland:</value>
   </data>
   <data name="lblIntegratedMANNERNPKCalculations" xml:space="preserve">
     <value>integrated MANNER-NPK calculations</value>
@@ -3574,32 +3571,25 @@ the country.</value>
     <value>July 2025 - England and Wales full service live</value>
   </data>
   <data name="lblLivestockManureLimitComplianceModule" xml:space="preserve">
-    <value>livestock manure nitrogen (N) farm limit NVZ compliance module</value>
+    <value>added function: livestock manure nitrogen (N) farm limit NVZ compliance module</value>
   </data>
   <data name="lblMannerNPKStandAloneFrontEnd" xml:space="preserve">
-    <value>MANNER-NPK stand-alone front-end</value>
-  </data>
-  <data name="lblMonitorUseOfTool" xml:space="preserve">
-    <value>we will monitor their use of the tool, and localise and refine the NMPT based on their feedback</value>
+    <value>added function: MANNER-NPK stand-alone front-end</value>
   </data>
   <data name="lblNMaxComplainceModule" xml:space="preserve">
-    <value>N-max NVZ compliance module</value>
+    <value>added function: N-max NVZ compliance module</value>
   </data>
   <data name="lblNMPTBetaTest1" xml:space="preserve">
-    <value>around 40 to 50 users in England and Wales will test the NMPT online in a
-special testing environment</value>
-  </data>
-  <data name="lblNMPTBetaTestFeedback" xml:space="preserve">
-    <value>we will monitor their use of the tool, and refine and update the NMPT based on their feedback</value>
+    <value>a limited number of selected farmers and advisers across England and Wales are invited to test the tool and provide feedback prior to the public release</value>
   </data>
   <data name="lblNMPTLaunchesToUsersInScotland" xml:space="preserve">
     <value>NMPT launches to users in Scotland</value>
   </data>
   <data name="lblNMPTLiveForGeneralUse" xml:space="preserve">
-    <value>NMPT is live on GOV.UK and available for general use</value>
+    <value>service launches for cross-border farms</value>
   </data>
-  <data name="lblNMPTReleaseSchedule" xml:space="preserve">
-    <value>NMPT release schedule</value>
+  <data name="lblServiceReleaseSchedule" xml:space="preserve">
+    <value>Service release schedule</value>
   </data>
   <data name="lblNov2025EnglandWalesAndScotlandFullServiceLive" xml:space="preserve">
     <value>November 2025 - England, Wales and Scotland full service
@@ -3612,7 +3602,7 @@ live</value>
     <value>NVZ compliance, warning messages and N-max calculations suitable for Scottish regulations</value>
   </data>
   <data name="lblOrganicManureInventory" xml:space="preserve">
-    <value>organic manure inventory NVZ compliance module</value>
+    <value>added function: organic manure inventory NVZ compliance module</value>
   </data>
   <data name="lblReadScheduleLink" xml:space="preserve">
     <value>&lt;a  href ="/ReleaseSchedule"&gt;Read the release schedule for testing and new features&lt;/a&gt;</value>
@@ -3620,8 +3610,8 @@ live</value>
   <data name="lblReleaseSchedule" xml:space="preserve">
     <value>Release schedule</value>
   </data>
-  <data name="lblSeptToNov2025" xml:space="preserve">
-    <value>September to November 2025 - Scotland launch phase</value>
+  <data name="lblSept2025" xml:space="preserve">
+    <value>September 2025 - Scotland launch phase</value>
   </data>
   <data name="lblCropGroupWithCounter" xml:space="preserve">
     <value>Crop group {0}</value>
