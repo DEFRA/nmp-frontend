@@ -6925,16 +6925,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Source Manner (Nutrient Calculation Engine)..
-        /// </summary>
-        public static string lblSourceManner {
-            get {
-                return ResourceManager.GetString("lblSourceManner", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Source AHDB Nutrient Management Guide (RB209)..
+        ///   Looks up a localized string similar to Crop need is calculated using AHDB Nutrient Management Guide (RB209). Supply from manures calculated using Manner (Nutrient Calculation Engine)..
         /// </summary>
         public static string lblSourceRb209 {
             get {

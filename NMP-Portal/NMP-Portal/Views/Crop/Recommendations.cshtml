@@ -101,7 +101,7 @@
                                                             <th class="govuk-table__header" scope="col">@Resource.lblNutrient</th>
                                                             <th class="govuk-table__header" scope="col">@Resource.lblIndexPH</th>
                                                             <th class="govuk-table__header" scope="col">@Resource.lblTotalCropNeed</th>
-                                                            <th class="govuk-table__header" scope="col">@Resource.lblSupplyFromManures<sup>*</sup></th>
+                                                            <th class="govuk-table__header" scope="col">@Resource.lblSupplyFromManures</th>
                                                             <th class="govuk-table__header" scope="col">@Resource.lblFertiliserOrLimeRecommendation</th>
                                                             <th class="govuk-table__header" scope="col">@Resource.lblFertiliserOrLimeApplied</th>
                                                         </tr>
@@ -180,9 +180,8 @@
                                                             <td class="govuk-table__cell">@(recommendation.FertiliserAppliedLime == null ? 0 : recommendation.FertiliserAppliedLime == 0 ? recommendation.FertiliserAppliedLime : string.Concat(recommendation.FertiliserAppliedLime, Resource.lblkg))</td>
                                                         </tr>
                                                     </tbody>
-                                                </table>
-                                                <p class="govuk-body-s">@Resource.lblSourceRb209</p>
-                                                <p class="govuk-body-s margin-bottom-forty"><sup>* </sup>@Resource.lblSourceManner</p>
+                                                </table>                                               
+                                                <p class="govuk-body-s margin-bottom-forty">@Resource.lblSourceRb209</p>
                                                 @if (Model.PKBalance != null && !isPkBalanceTableDisplay)
                                                 {
                                                     <h3 class="govuk-heading-s">
@@ -292,7 +291,7 @@
                                                             <th class="govuk-table__header" scope="col">@Resource.lblNutrient</th>
                                                             <th class="govuk-table__header" scope="col">@Resource.lblIndexPH</th>
                                                             <th class="govuk-table__header" scope="col">@Resource.lblTotalCropNeed</th>
-                                                            <th class="govuk-table__header" scope="col">@Resource.lblSupplyFromManures<sup>*</sup></th>
+                                                            <th class="govuk-table__header" scope="col">@Resource.lblSupplyFromManures</th>
                                                             <th class="govuk-table__header" scope="col">@Resource.lblFertiliserOrLimeRecommendation</th>
                                                             <th class="govuk-table__header" scope="col">@Resource.lblFertiliserOrLimeApplied</th>
                                                         </tr>
@@ -371,8 +370,7 @@
                                                         </tr>
                                                     </tbody>
                                                 </table>
-                                                <p class="govuk-body-s">@Resource.lblSourceRb209</p>
-                                                <p class="govuk-body-s margin-bottom-forty"><sup>* </sup>@Resource.lblSourceManner</p>
+                                                <p class="govuk-body-s margin-bottom-forty">@Resource.lblSourceRb209</p>
                                                 @if (Model.PKBalance != null && !isPkBalanceTableDisplay)
                                                 {
                                                     <h3 class="govuk-heading-s">

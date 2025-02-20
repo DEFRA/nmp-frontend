@@ -3950,10 +3950,7 @@ live</value>
   <data name="MsgForSowingDate" xml:space="preserve">
     <value>The planting date for {0} should be before 1st February. If your planting date is after 1st February, you should change your crop type to a spring sown crop.</value>
   </data>
-  <data name="lblSourceManner" xml:space="preserve">
-    <value>Source Manner (Nutrient Calculation Engine).</value>
-  </data>
   <data name="lblSourceRb209" xml:space="preserve">
-    <value>Source AHDB Nutrient Management Guide (RB209).</value>
+    <value>Crop need is calculated using AHDB Nutrient Management Guide (RB209). Supply from manures calculated using Manner (Nutrient Calculation Engine).</value>
   </data>
 </root>
