@@ -128,11 +128,11 @@
                     <h1 class="govuk-fieldset__heading">
                         @if (int.TryParse(Model.FieldGroup, out int value))
                         {
-                            @string.Format(Resource.lblWhenDoYouApplyingInOrganicfertiliser, Model.CropTypeName)
+                            @string.Format(Resource.lblWhenAreYouApplyingInOrganicfertiliser, Model.CropTypeName)
                         }
                         else
                         {
-                            @Resource.lblWhenDoYouApplyingInorganicFertiliserForTheseFields
+                            @Resource.lblWhenAreYouApplyingInorganicFertiliserForTheseFields
                         }
                     </h1>
                 </legand>

@@ -174,10 +174,10 @@
                                                             <td class="govuk-table__cell">
                                                                 @(recommendation.LimeIndex == null ? Resource.lblHyphen : recommendation.LimeIndex)
                                                             </td>
-                                                            <td class="govuk-table__cell">@(recommendation.CropLime == null ? Resource.lblHyphen : recommendation.CropLime == 0 ? recommendation.CropLime : string.Concat(recommendation.CropLime, Resource.lblkg))</td>
+                                                            <td class="govuk-table__cell">@(recommendation.CropLime == null ? Resource.lblHyphen : recommendation.CropLime == 0 ? recommendation.CropLime : string.Concat(recommendation.CropLime, Resource.lbltonnes))</td>
                                                             <td class="govuk-table__cell">@(recommendation.ManureLime == null ? Resource.lblHyphen : recommendation.ManureLime == 0 ? recommendation.ManureLime : string.Concat(recommendation.ManureLime, Resource.lblkg))</td>
-                                                            <td class="govuk-table__cell">@(recommendation.FertilizerLime == null ? Resource.lblHyphen : recommendation.FertilizerLime < 0 ? 0 : recommendation.FertilizerLime == 0 ? recommendation.FertilizerLime : string.Concat(recommendation.FertilizerLime, Resource.lblkg))</td>
-                                                            <td class="govuk-table__cell">@(recommendation.FertiliserAppliedLime == null ? 0 : recommendation.FertiliserAppliedLime == 0 ? recommendation.FertiliserAppliedLime : string.Concat(recommendation.FertiliserAppliedLime, Resource.lblkg))</td>
+                                                            <td class="govuk-table__cell">@(recommendation.FertilizerLime == null ? Resource.lblHyphen : recommendation.FertilizerLime < 0 ? 0 : recommendation.FertilizerLime == 0 ? recommendation.FertilizerLime : string.Concat(recommendation.FertilizerLime, Resource.lbltonnes))</td>
+                                                            <td class="govuk-table__cell">@(recommendation.FertiliserAppliedLime == null ? 0 : recommendation.FertiliserAppliedLime == 0 ? recommendation.FertiliserAppliedLime : string.Concat(recommendation.FertiliserAppliedLime, Resource.lbltonnes))</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>                                               
@@ -363,10 +363,10 @@
                                                              <td class="govuk-table__cell">
                                                                 @(recommendation.LimeIndex == null ? Resource.lblHyphen : recommendation.LimeIndex)
                                                             </td>
-                                                            <td class="govuk-table__cell">@(recommendation.CropLime == null ? Resource.lblHyphen : recommendation.CropLime == 0 ? recommendation.CropLime : string.Concat(recommendation.CropLime, Resource.lblkg))</td>
+                                                            <td class="govuk-table__cell">@(recommendation.CropLime == null ? Resource.lblHyphen : recommendation.CropLime == 0 ? recommendation.CropLime : string.Concat(recommendation.CropLime, Resource.lbltonnes))</td>
                                                             <td class="govuk-table__cell">@(recommendation.ManureLime == null ? 0 : recommendation.ManureLime == 0 ? recommendation.ManureLime : string.Concat(recommendation.ManureLime, Resource.lblkg))</td>
-                                                            <td class="govuk-table__cell">@(recommendation.FertilizerLime == null ? Resource.lblHyphen : recommendation.FertilizerLime < 0 ? 0 : recommendation.FertilizerLime == 0 ? recommendation.FertilizerLime : string.Concat(recommendation.FertilizerLime, Resource.lblkg))</td>
-                                                            <td class="govuk-table__cell">@(recommendation.FertiliserAppliedLime == null ? 0 : recommendation.FertiliserAppliedLime == 0 ? recommendation.FertiliserAppliedLime : string.Concat(recommendation.FertiliserAppliedLime, Resource.lblkg))</td>
+                                                            <td class="govuk-table__cell">@(recommendation.FertilizerLime == null ? Resource.lblHyphen : recommendation.FertilizerLime < 0 ? 0 : recommendation.FertilizerLime == 0 ? recommendation.FertilizerLime : string.Concat(recommendation.FertilizerLime, Resource.lbltonnes))</td>
+                                                            <td class="govuk-table__cell">@(recommendation.FertiliserAppliedLime == null ? 0 : recommendation.FertiliserAppliedLime == 0 ? recommendation.FertiliserAppliedLime : string.Concat(recommendation.FertiliserAppliedLime, Resource.lbltonnes))</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
