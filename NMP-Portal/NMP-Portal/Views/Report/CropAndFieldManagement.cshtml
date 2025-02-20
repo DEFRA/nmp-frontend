@@ -160,13 +160,13 @@
             { *@
                                         @* <p class="govuk-body">@string.Format(Resource.lblRecommendationsOneWithGrass, field.Management)</p> *@
                                         @* } *@
-                                        <table class="recs-table govuk-table govuk-table-small margin-bottom-sixty">
+                                        <table class="recs-table govuk-table govuk-table-small">
                                             <thead class="govuk-table__head">
                                                 <tr class="govuk-table__row">
                                                     <th scope="col" class="govuk-table__header">@Resource.lblNutrient</th>
                                                     <th scope="col" class="govuk-table__header">@Resource.lblSoilIndex</th>
                                                     <th scope="col" class="govuk-table__header">@Resource.lblCropNeed</th>
-                                                    <th scope="col" class="govuk-table__header">@Resource.lblFromManures</th>
+                                                    <th scope="col" class="govuk-table__header">@Resource.lblFromManures<sup>*</sup></th>
                                                     <th scope="col" class="govuk-table__header">@Resource.lblFromFertilisersOrLime</th>
                                                 </tr>
                                             </thead>
@@ -242,6 +242,8 @@
                                                 </tbody>
                                             }
                                         </table>
+                                        <p class="govuk-body-s">@Resource.lblSourceRb209</p>
+                                        <p class="govuk-body-s margin-bottom-forty"><sup>* </sup>@Resource.lblSourceManner</p>
 
                                         @* } *@
                                     </div>
@@ -605,7 +607,6 @@
                                     {
                                         <div class="govuk-grid-row pagebreak"></div>
                                     }
-
                                 }
                             }
                         }
