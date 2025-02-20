@@ -1351,7 +1351,7 @@ namespace NMP.Portal.Controllers
                 {
                     string formattedStartDate = model.ClosedPeriodStartDate?.ToString("d MMMM yyyy");
                     string formattedEndDate = model.ClosedPeriodEndDate?.ToString("d MMMM yyyy");
-                    ViewBag.ClosedPeriodForUI = $"{formattedStartDate} to {formattedEndDate}";
+                    model.ClosedPeriodForUI = $"{formattedStartDate} to {formattedEndDate}";
                     return View(model);
                 }
 
