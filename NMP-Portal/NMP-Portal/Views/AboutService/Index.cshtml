@@ -1,0 +1,61 @@
+﻿@using NMP.Portal.Resources;
+@model NMP.Portal.ViewModels.AboutServiceViewModel;
+@{
+    ViewData["Title"] = Resource.lblAbout_this_service;
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="Index" asp-controller="Home">@Resource.lblBack</govuk-back-link>
+} 
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        <h1 class="govuk-heading-l">
+            @Resource.lblAbout_this_service
+        </h1>
+
+        <p class="govuk-body">
+            @Resource.lblAbout_this_service_line1
+        </p>
+
+        <p class="govuk-body">
+            @Resource.lblAbout_this_service_line2
+        </p>
+
+        <p class="govuk-body">
+            @Resource.lblAbout_this_service_line3
+        </p>
+
+        <h2 class="govuk-heading-s">
+            @Resource.lblSaving_your_data
+        </h2>
+        <p class="govuk-body">
+            @Resource.lblSaving_your_data_line1
+        </p>
+
+        <h2 class="govuk-heading-s">
+            @Resource.lblSoilAnalysis
+        </h2>
+        <p class="govuk-body">
+            @Resource.lblSoil_Analysis_line1
+        </p>
+        <p class="govuk-body">
+            @Resource.lblSoil_Analysis_line2
+        </p>
+        <p class="govuk-body margin-bottom-forty">
+            @Resource.lblSoil_Analysis_line3
+        </p>
+                
+        <form class="form margin-top-forty" asp-action="Index" asp-controller="AboutService" method="post">
+            <div class="govuk-form-group margin-bottom-forty">
+                <govuk-checkboxes name="DoNotShowAboutThisService" asp-for="@Model.DoNotShowAboutThisService">
+                    <govuk-checkboxes-item checked="@Model.DoNotShowAboutThisService" value="true">@Resource.lblDo_not_show_this_information_again</govuk-checkboxes-item>
+                </govuk-checkboxes>
+            </div>
+            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+        </form>
+    </div>
+</div>
+

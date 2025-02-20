@@ -61,10 +61,10 @@
                 @string.Format(Resource.lblThereAreFieldsInThisPlan, Model.FieldCount)
             </p>
             <p class="govuk-body">
-                @if (Model.Rainfall != null)
+                @if (Model.AnnualRainfall != null)
                 {
-                    @string.Format(Resource.lblAverageAnnualRainfallIsYouHaveNotEnteredAnyExcessWinterRainfall, Model.Rainfall)
-                    <a href="#">@string.Format(Resource.lblUpdateRainfallFor, Model.Year)</a>
+                    @ViewBag.ExcessRainfallContentFirst
+                    <a asp-action="UpdateExcessWinterRainfall" asp-controller="Crop">@ViewBag.ExcessRainfallContentSecond</a>
                 }
             </p>
             <p class="govuk-body pb-25">

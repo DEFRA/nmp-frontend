@@ -50,7 +50,10 @@ namespace NMP.Portal.ViewModels
         public string? encryptSortInOrganicListOrderByDate { get; set; } = string.Empty;
         public string? sortInOrganicListOrderByDate { get; set; } = string.Empty;
         public string? encryptSortInOrganicListOrderByFieldName { get; set; } = string.Empty;
-        public int? Rainfall { get; set; }
+        public int? AnnualRainfall { get; set; }
+        public int? ExcessWinterRainfallValue { get; set; }
+        public int? ExcessWinterRainfallId { get; set; }
+        public string? ExcessWinterRainfallName { get; set; }
         public string? SortInOrganicListOrderByFieldName { get; set; } = string.Empty;
         public string? SortOrganicListOrderByFieldName { get; set; } = string.Empty;
         public string? CropGroupName { get; set; } = string.Empty;
@@ -65,5 +68,7 @@ namespace NMP.Portal.ViewModels
         public List<int>? organicManureIds { get; set; }
         public List<string>? SelectedField { get; set; }
         public bool? isComingFromRecommendation { get; set; }
+        public bool? IsExcessWinterRainfallCheckAnswer { get; set; }
+        public bool? IsExcessWinterRainfallUpdated { get; set; }
     }
 }
