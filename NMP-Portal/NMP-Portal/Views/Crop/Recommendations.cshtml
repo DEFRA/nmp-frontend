@@ -101,7 +101,7 @@
                                                             <th class="govuk-table__header" scope="col">@Resource.lblNutrient</th>
                                                             <th class="govuk-table__header" scope="col">@Resource.lblIndexPH</th>
                                                             <th class="govuk-table__header" scope="col">@Resource.lblTotalCropNeed</th>
-                                                            <th class="govuk-table__header" scope="col">@Resource.lblSupplyFromManures</th>
+                                                            <th class="govuk-table__header" scope="col">@Resource.lblSupplyFromManures<sup>*</sup></th>
                                                             <th class="govuk-table__header" scope="col">@Resource.lblFertiliserOrLimeRecommendation</th>
                                                             <th class="govuk-table__header" scope="col">@Resource.lblFertiliserOrLimeApplied</th>
                                                         </tr>
@@ -181,6 +181,8 @@
                                                         </tr>
                                                     </tbody>
                                                 </table>
+                                                <p class="govuk-body-s">@Resource.lblSourceRb209</p>
+                                                <p class="govuk-body-s margin-bottom-forty"><sup>* </sup>@Resource.lblSourceManner</p>
                                                 @if (Model.PKBalance != null && !isPkBalanceTableDisplay)
                                                 {
                                                     <h3 class="govuk-heading-s">
@@ -290,7 +292,7 @@
                                                             <th class="govuk-table__header" scope="col">@Resource.lblNutrient</th>
                                                             <th class="govuk-table__header" scope="col">@Resource.lblIndexPH</th>
                                                             <th class="govuk-table__header" scope="col">@Resource.lblTotalCropNeed</th>
-                                                            <th class="govuk-table__header" scope="col">@Resource.lblSupplyFromManures</th>
+                                                            <th class="govuk-table__header" scope="col">@Resource.lblSupplyFromManures<sup>*</sup></th>
                                                             <th class="govuk-table__header" scope="col">@Resource.lblFertiliserOrLimeRecommendation</th>
                                                             <th class="govuk-table__header" scope="col">@Resource.lblFertiliserOrLimeApplied</th>
                                                         </tr>
@@ -369,6 +371,8 @@
                                                         </tr>
                                                     </tbody>
                                                 </table>
+                                                <p class="govuk-body-s">@Resource.lblSourceRb209</p>
+                                                <p class="govuk-body-s margin-bottom-forty"><sup>* </sup>@Resource.lblSourceManner</p>
                                                 @if (Model.PKBalance != null && !isPkBalanceTableDisplay)
                                                 {
                                                     <h3 class="govuk-heading-s">

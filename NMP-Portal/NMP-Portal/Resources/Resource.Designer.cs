@@ -6925,6 +6925,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Source Manner (Nutrient Calculation Engine)..
+        /// </summary>
+        public static string lblSourceManner {
+            get {
+                return ResourceManager.GetString("lblSourceManner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source AHDB Nutrient Management Guide (RB209)..
+        /// </summary>
+        public static string lblSourceRb209 {
+            get {
+                return ResourceManager.GetString("lblSourceRb209", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sowing date.
         /// </summary>
         public static string lblSowingDate {
