@@ -1825,8 +1825,8 @@ cubic metres per hectare  not set</value>
   <data name="lblWhichFieldsWouldYouLikeToAddInorganicFertiliserApplications" xml:space="preserve">
     <value>Which fields would you like to add inorganic fertiliser applications to?</value>
   </data>
-  <data name="lblWhenDoYouApplyingInOrganicfertiliser" xml:space="preserve">
-    <value>When do you applying inorganic fertiliser on the {0} fields?</value>
+  <data name="lblWhenAreYouApplyingInOrganicfertiliser" xml:space="preserve">
+    <value>When are you applying inorganic fertiliser on the {0} fields?</value>
   </data>
   <data name="lblInOrganicManureDuration" xml:space="preserve">
     <value>Inorganic manure duration</value>
@@ -1891,7 +1891,7 @@ cubic metres per hectare  not set</value>
   <data name="lblOutpurKgPerHectare" xml:space="preserve">
     <value>kg per hectare</value>
   </data>
-  <data name="lblWhenDoYouApplyingInorganicFertiliserForTheseFields" xml:space="preserve">
+  <data name="lblWhenAreYouApplyingInorganicFertiliserForTheseFields" xml:space="preserve">
     <value>When are you applying inorganic fertiliser on these fields?</value>
   </data>
   <data name="lblAllOfTheFields" xml:space="preserve">

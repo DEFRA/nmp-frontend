@@ -8563,6 +8563,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When are you applying inorganic fertiliser on the {0} fields?.
+        /// </summary>
+        public static string lblWhenAreYouApplyingInOrganicfertiliser {
+            get {
+                return ResourceManager.GetString("lblWhenAreYouApplyingInOrganicfertiliser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When are you applying inorganic fertiliser on these fields?.
+        /// </summary>
+        public static string lblWhenAreYouApplyingInorganicFertiliserForTheseFields {
+            get {
+                return ResourceManager.GetString("lblWhenAreYouApplyingInorganicFertiliserForTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When are you applying {0} on these fields?.
         /// </summary>
         public static string lblWhenAreYouApplyingManureOnField {
@@ -8577,24 +8595,6 @@ namespace NMP.Portal.Resources {
         public static string lblWhenAreYouApplyingYourManureType {
             get {
                 return ResourceManager.GetString("lblWhenAreYouApplyingYourManureType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to When do you applying inorganic fertiliser on the {0} fields?.
-        /// </summary>
-        public static string lblWhenDoYouApplyingInOrganicfertiliser {
-            get {
-                return ResourceManager.GetString("lblWhenDoYouApplyingInOrganicfertiliser", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to When are you applying inorganic fertiliser on these fields?.
-        /// </summary>
-        public static string lblWhenDoYouApplyingInorganicFertiliserForTheseFields {
-            get {
-                return ResourceManager.GetString("lblWhenDoYouApplyingInorganicFertiliserForTheseFields", resourceCulture);
             }
         }
         
