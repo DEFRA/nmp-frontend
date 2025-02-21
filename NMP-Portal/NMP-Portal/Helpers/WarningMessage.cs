@@ -585,11 +585,21 @@ namespace NMP.Portal.Helpers
                         }
                         break;
 
-                    //Brassica is a crop group. under this below crop type comes..
-                    case (int)NMP.Portal.Enums.CropTypes.BrusselSprouts:         //Brussel Sprouts
-                    case (int)NMP.Portal.Enums.CropTypes.Cabbage:                //Cabbage
-                    case (int)NMP.Portal.Enums.CropTypes.Cauliflower:            //Cauliflower
-                    case (int)NMP.Portal.Enums.CropTypes.Calabrese:              //Calabrese
+                        //Brassica is a crop group. under this below crop type comes..
+                        case (int)NMP.Portal.Enums.CropTypes.ForageRape:
+                        case (int)NMP.Portal.Enums.CropTypes.ForageSwedesRootsLifted:
+                        case (int)NMP.Portal.Enums.CropTypes.KaleGrazed:
+                        case (int)NMP.Portal.Enums.CropTypes.StubbleTurnipsGrazed:
+                        case (int)NMP.Portal.Enums.CropTypes.SwedesGrazed:
+                        case (int)NMP.Portal.Enums.CropTypes.TurnipsRootLifted:
+                        case (int)NMP.Portal.Enums.CropTypes.BrusselSprouts:
+                        case (int)NMP.Portal.Enums.CropTypes.Cabbage:
+                        case (int)NMP.Portal.Enums.CropTypes.Calabrese:
+                        case (int)NMP.Portal.Enums.CropTypes.Cauliflower:
+                        case (int)NMP.Portal.Enums.CropTypes.Radish:
+                        case (int)NMP.Portal.Enums.CropTypes.WildRocket:
+                        case (int)NMP.Portal.Enums.CropTypes.Swedes:
+                        case (int)NMP.Portal.Enums.CropTypes.Turnips:
                         if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
                         {
                             WarningPeriod = string.Format(Resource.lbl1Augto28Feb,Resource.lblAugust ,lastDayOfFeb, Resource.lblFebruary);
