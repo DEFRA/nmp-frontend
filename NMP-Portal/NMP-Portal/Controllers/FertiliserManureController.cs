@@ -1525,17 +1525,19 @@ namespace NMP.Portal.Controllers
                                     (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape,
                                     (int)NMP.Portal.Enums.CropTypes.Asparagus,
                                     (int)NMP.Portal.Enums.CropTypes.ForageRape,
-                                    (int)NMP.Portal.Enums.CropTypes.ForageSwedes,
+                                    (int)NMP.Portal.Enums.CropTypes.ForageSwedesRootsLifted,
                                     (int)NMP.Portal.Enums.CropTypes.KaleGrazed,
-                                    (int)NMP.Portal.Enums.CropTypes.StubbleTurnips,
-                                    (int)NMP.Portal.Enums.CropTypes.Swedes,
-                                    (int)NMP.Portal.Enums.CropTypes.Turnips,
+                                    (int)NMP.Portal.Enums.CropTypes.StubbleTurnipsGrazed,
+                                    (int)NMP.Portal.Enums.CropTypes.SwedesGrazed,
+                                    (int)NMP.Portal.Enums.CropTypes.TurnipsRootLifted,
                                     (int)NMP.Portal.Enums.CropTypes.BrusselSprouts,
                                     (int)NMP.Portal.Enums.CropTypes.Cabbage,
                                     (int)NMP.Portal.Enums.CropTypes.Calabrese,
                                     (int)NMP.Portal.Enums.CropTypes.Cauliflower,
                                     (int)NMP.Portal.Enums.CropTypes.Radish,
                                     (int)NMP.Portal.Enums.CropTypes.WildRocket,
+                                    (int)NMP.Portal.Enums.CropTypes.Swedes,
+                                    (int)NMP.Portal.Enums.CropTypes.Turnips,
                                     (int)NMP.Portal.Enums.CropTypes.BulbOnions,
                                     (int)NMP.Portal.Enums.CropTypes.SaladOnions,
                                     (int)NMP.Portal.Enums.CropTypes.Grass
@@ -1666,17 +1668,19 @@ namespace NMP.Portal.Controllers
                 HashSet<int> brassicaCrops = new HashSet<int>
                 {
                     (int)NMP.Portal.Enums.CropTypes.ForageRape,
-                    (int)NMP.Portal.Enums.CropTypes.ForageSwedes,
+                    (int)NMP.Portal.Enums.CropTypes.ForageSwedesRootsLifted,
                     (int)NMP.Portal.Enums.CropTypes.KaleGrazed,
-                    (int)NMP.Portal.Enums.CropTypes.StubbleTurnips,
-                    (int)NMP.Portal.Enums.CropTypes.Swedes,
-                    (int)NMP.Portal.Enums.CropTypes.Turnips,
+                    (int)NMP.Portal.Enums.CropTypes.StubbleTurnipsGrazed,
+                    (int)NMP.Portal.Enums.CropTypes.SwedesGrazed,
+                    (int)NMP.Portal.Enums.CropTypes.TurnipsRootLifted,
                     (int)NMP.Portal.Enums.CropTypes.BrusselSprouts,
                     (int)NMP.Portal.Enums.CropTypes.Cabbage,
                     (int)NMP.Portal.Enums.CropTypes.Calabrese,
                     (int)NMP.Portal.Enums.CropTypes.Cauliflower,
                     (int)NMP.Portal.Enums.CropTypes.Radish,
                     (int)NMP.Portal.Enums.CropTypes.WildRocket,
+                    (int)NMP.Portal.Enums.CropTypes.Swedes,
+                    (int)NMP.Portal.Enums.CropTypes.Turnips
 
                 };
                 string closedPeriod = warningMessage.ClosedPeriodForFertiliser(cropTypeId) ?? string.Empty;
