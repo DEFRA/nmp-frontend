@@ -243,6 +243,21 @@ namespace NMP.Portal.Controllers
                         field.RecentSoilAnalysisQuestion = false;
                     }
 
+                    List<CropTypeResponse> cropTypeResponses = await _fieldService.FetchAllCropTypes();
+                    if (fieldResponse.Crop != null)
+                    {                        
+                        field.CropTypeID = fieldResponse.Crop.CropTypeID;
+                        field.CropType = await _fieldService.FetchCropTypeById(field.CropTypeID ?? 0);
+                        if (cropTypeResponses.Count > 0)
+                        {
+                            var cropType = cropTypeResponses.FirstOrDefault(x => x.CropTypeId == field.CropTypeID);
+                            if (cropType != null)
+                            {
+                                field.CropGroupId = cropType.CropGroupId;
+                                field.CropGroup = await _fieldService.FetchCropGroupById(field.CropGroupId.Value);
+                            }
+                        }
+                    }
                     if (fieldResponse.PreviousGrasses != null && fieldResponse.PreviousGrasses.Count > 0)
                     {
                         List<int> PreviousGrassYears = new List<int>();
@@ -261,22 +276,7 @@ namespace NMP.Portal.Controllers
                     else
                     {
                         field.PreviousGrasses.HasGrassInLastThreeYear = false;
-                        List<CropTypeResponse> cropTypeResponses = await _fieldService.FetchAllCropTypes();
-                        if (fieldResponse.Crop != null)
-                        {
-                            field.CropTypeID = fieldResponse.Crop.CropTypeID;
 
-                            field.CropType = await _fieldService.FetchCropTypeById(field.CropTypeID ?? 0);
-                            if (cropTypeResponses.Count > 0)
-                            {
-                                var cropType = cropTypeResponses.FirstOrDefault(x => x.CropTypeId == field.CropTypeID);
-                                if (cropType != null)
-                                {
-                                    field.CropGroupId = cropType.CropGroupId;
-                                    field.CropGroup = await _fieldService.FetchCropGroupById(field.CropGroupId.Value);
-                                }
-                            }
-                        }
                         if (fieldResponse.SnsAnalyses != null)
                         {
                             field.CurrentCropTypeId = fieldResponse.SnsAnalyses.CurrentCropTypeID;
@@ -1567,30 +1567,30 @@ namespace NMP.Portal.Controllers
             Error error = new Error();
             (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
 
-            if (farm != null&&(string.IsNullOrWhiteSpace(error.Message)))
+            if (farm != null && (string.IsNullOrWhiteSpace(error.Message)))
             {
                 (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropService.FetchHarvestYearPlansByFarmId(farm.LastHarvestYear.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
-               
-                    if (harvestYearPlanResponse != null&& harvestYearPlanResponse.Count>0)
-                    {
-                        var lastGroup = harvestYearPlanResponse.Where(cg => !string.IsNullOrEmpty(cg.CropGroupName) && cg.CropGroupName.StartsWith("Crop group") &&
-                                         int.TryParse(cg.CropGroupName.Split(' ')[2], out _))
-                                        .OrderByDescending(cg => int.Parse(cg.CropGroupName.Split(' ')[2]))
-                                        .FirstOrDefault();
-                        if (lastGroup != null)
-                        {
-                            lastGroupNumber = int.Parse(lastGroup.CropGroupName.Split(' ')[2]);
-                        }
-                    }
 
-                    if (lastGroupNumber != null)
+                if (harvestYearPlanResponse != null && harvestYearPlanResponse.Count > 0)
+                {
+                    var lastGroup = harvestYearPlanResponse.Where(cg => !string.IsNullOrEmpty(cg.CropGroupName) && cg.CropGroupName.StartsWith("Crop group") &&
+                                     int.TryParse(cg.CropGroupName.Split(' ')[2], out _))
+                                    .OrderByDescending(cg => int.Parse(cg.CropGroupName.Split(' ')[2]))
+                                    .FirstOrDefault();
+                    if (lastGroup != null)
                     {
-                        model.CropGroupName = string.Format(Resource.lblCropGroupWithCounter, (lastGroupNumber + 1));
+                        lastGroupNumber = int.Parse(lastGroup.CropGroupName.Split(' ')[2]);
                     }
-                    else
-                    {
-                        model.CropGroupName = string.Format(Resource.lblCropGroupWithCounter, 1);
-                    }
+                }
+
+                if (lastGroupNumber != null)
+                {
+                    model.CropGroupName = string.Format(Resource.lblCropGroupWithCounter, (lastGroupNumber + 1));
+                }
+                else
+                {
+                    model.CropGroupName = string.Format(Resource.lblCropGroupWithCounter, 1);
+                }
             }
             else
             {
