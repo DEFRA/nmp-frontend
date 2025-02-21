@@ -1063,10 +1063,11 @@ namespace NMP.Portal.Controllers
                 model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.ForageWinterTriticale ||
                 model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.WholecropWinterWheat)
             {
-                if (model.Crops[model.SowingDateCurrentCounter].SowingDate.Value.Month >= 2 && model.Crops[model.SowingDateCurrentCounter].SowingDate.Value.Month <= 6)
-                {
-                    ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate",string.Format(Resource.MsgForSowingDate,model.CropType));
-                }
+                    if (model.Crops[model.SowingDateCurrentCounter].SowingDate != null&&
+                        model.Crops[model.SowingDateCurrentCounter].SowingDate.Value.Month >= 2 && model.Crops[model.SowingDateCurrentCounter].SowingDate.Value.Month <= 6)
+                    {
+                        ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", string.Format(Resource.MsgForSowingDate, model.CropType));
+                    }
             }
             if (!ModelState.IsValid)
             {
@@ -3062,7 +3063,7 @@ namespace NMP.Portal.Controllers
                         if (organicManureResponse != null)
                         {
                             model.SelectedField = new List<string>();
-                            List<OrganicManureResponse> organicManureResponses = model.HarvestYearPlans.OrganicManureList.Where(x => x.TypeOfManure == organicManureResponse.TypeOfManure && x.ApplicationDate == organicManureResponse.ApplicationDate).DistinctBy(x=>x.FieldId).ToList();
+                            List<OrganicManureResponse> organicManureResponses = model.HarvestYearPlans.OrganicManureList.Where(x => x.TypeOfManure == organicManureResponse.TypeOfManure && x.ApplicationDate == organicManureResponse.ApplicationDate).DistinctBy(x => x.FieldId).ToList();
                             if (organicManureResponses != null && organicManureResponses.Count > 0)
                             {
                                 //ViewBag.ManureType = organicManureResponse.TypeOfManure;
