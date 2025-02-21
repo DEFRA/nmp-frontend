@@ -473,7 +473,7 @@ namespace NMP.Portal.Controllers
 
                         model.CropType = await _fieldService.FetchCropTypeById(model.CropTypeID.Value);
                         _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
-                        return RedirectToAction("SowingDateQuestion");
+                        return RedirectToAction("CropGroupName");
                     }
                     else
                     {
@@ -535,17 +535,6 @@ namespace NMP.Portal.Controllers
                 {
                     model.CropType = await _fieldService.FetchCropTypeById(model.CropTypeID.Value);
 
-                    //int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
-                    //List<Field> fieldList = await _fieldService.FetchFieldsByFarmId(farmID);
-                    //var SelectListItem = fieldList.Select(f => new SelectListItem
-                    //{
-                    //    Value = f.ID.ToString(),
-                    //    Text = f.Name
-                    //}).ToList();
-                    //(List<HarvestYearPlanResponse> harvestYearPlanResponse, Error error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
-
-                    //Fetch fields allowed for second crop based on first crop
-                    //List<int> fieldsAllowedForSecondCrop = await FetchAllowedFieldsForSecondCrop(harvestYearPlanResponse, model.Year ?? 0, model.CropTypeID ?? 0);
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                     if (harvestYearPlanResponse.Count() > 0)
                     {
@@ -680,7 +669,7 @@ namespace NMP.Portal.Controllers
                     SelectListItem = SelectListItem.Where(x => !harvestFieldIds.Contains(x.Value) || fieldsAllowedForSecondCrop.Contains(int.Parse(x.Value))).ToList();
                     if (SelectListItem.Count == 1)
                     {
-                        return RedirectToAction("VarietyName");
+                        return RedirectToAction("CropTypes");
                     }
                 }
                 ViewBag.fieldList = SelectListItem;
@@ -1074,10 +1063,11 @@ namespace NMP.Portal.Controllers
                 model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.ForageWinterTriticale ||
                 model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.WholecropWinterWheat)
             {
-                if (model.Crops[model.SowingDateCurrentCounter].SowingDate.Value.Month >= 2 && model.Crops[model.SowingDateCurrentCounter].SowingDate.Value.Month <= 6)
-                {
-                    ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate",string.Format(Resource.MsgForSowingDate,model.CropType));
-                }
+                    if (model.Crops[model.SowingDateCurrentCounter].SowingDate != null&&
+                        model.Crops[model.SowingDateCurrentCounter].SowingDate.Value.Month >= 2 && model.Crops[model.SowingDateCurrentCounter].SowingDate.Value.Month <= 6)
+                    {
+                        ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", string.Format(Resource.MsgForSowingDate, model.CropType));
+                    }
             }
             if (!ModelState.IsValid)
             {
@@ -2944,8 +2934,6 @@ namespace NMP.Portal.Controllers
                     if (!string.IsNullOrWhiteSpace(decryptedAction) && decryptedAction == Resource.lblOrganic)
                     {
 
-                        model.organicManureIds = new List<int>();
-                        model.organicManureIds.Add(Convert.ToInt32(_cropDataProtector.Unprotect(q)));
                         ViewBag.RemoveContent = !string.IsNullOrWhiteSpace(model.ManureType) ? model.ManureType : (!string.IsNullOrWhiteSpace(t) ? _cropDataProtector.Unprotect(t) : string.Empty);
                         ViewBag.RemoveContent2 = Resource.MsgDeletePlanOrganicContent1;
                     }
@@ -2958,6 +2946,9 @@ namespace NMP.Portal.Controllers
                 if (!string.IsNullOrWhiteSpace(u))
                 {
                     model.isComingFromRecommendation = Convert.ToBoolean(_cropDataProtector.Unprotect(u));
+                    model.organicManureIds = new List<int>();
+                    model.organicManureIds.Add(Convert.ToInt32(_cropDataProtector.Unprotect(q)));
+
                 }
                 if (!string.IsNullOrWhiteSpace(v))
                 {
@@ -3072,7 +3063,7 @@ namespace NMP.Portal.Controllers
                         if (organicManureResponse != null)
                         {
                             model.SelectedField = new List<string>();
-                            List<OrganicManureResponse> organicManureResponses = model.HarvestYearPlans.OrganicManureList.Where(x => x.TypeOfManure == organicManureResponse.TypeOfManure && x.ApplicationDate == organicManureResponse.ApplicationDate).ToList();
+                            List<OrganicManureResponse> organicManureResponses = model.HarvestYearPlans.OrganicManureList.Where(x => x.TypeOfManure == organicManureResponse.TypeOfManure && x.ApplicationDate == organicManureResponse.ApplicationDate).DistinctBy(x => x.FieldId).ToList();
                             if (organicManureResponses != null && organicManureResponses.Count > 0)
                             {
                                 //ViewBag.ManureType = organicManureResponse.TypeOfManure;

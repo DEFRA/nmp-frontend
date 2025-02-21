@@ -99,84 +99,84 @@ namespace NMP.Portal.Helpers
             {
                 switch (cropTypeId)
                 {
-                    case (int)NMP.Portal.Enums.CropTypes.Asparagus:             //Asparagus
-                    case (int)NMP.Portal.Enums.CropTypes.BulbOnions:            //Bulb Onions
-                        if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
-                        {
-                            closedPeriod = null;
-                        }
-                        if (isSandyShallowSoil && (sowingDate < september16))
-                        {
-                            closedPeriod = null;
-                        }
-                        if (!isSandyShallowSoil)
-                        {
-                            closedPeriod = null;
-                        }
-                        break;
+                    //case (int)NMP.Portal.Enums.CropTypes.Asparagus:             //Asparagus
+                    //case (int)NMP.Portal.Enums.CropTypes.BulbOnions:            //Bulb Onions
+                    //    if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
+                    //    {
+                    //        closedPeriod = null;
+                    //    }
+                    //    if (isSandyShallowSoil && (sowingDate < september16))
+                    //    {
+                    //        closedPeriod = null;
+                    //    }
+                    //    if (!isSandyShallowSoil)
+                    //    {
+                    //        closedPeriod = null;
+                    //    }
+                    //    break;
 
-                    case (int)NMP.Portal.Enums.CropTypes.SaladOnions:            //Salad Onions
+                    //case (int)NMP.Portal.Enums.CropTypes.SaladOnions:            //Salad Onions
 
-                        if (cropInfo1 == 12)                                       // cropInfo1Id==12 for Overwintered
-                        {
-                            if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
-                            {
-                                closedPeriod = null;
-                            }
-                            if (isSandyShallowSoil && (sowingDate < september16))
-                            {
-                                closedPeriod = null;
-                            }
-                            if (!isSandyShallowSoil)
-                            {
-                                closedPeriod = null;
-                            }
-                        }
-                        break;
+                    //    if (cropInfo1 == 12)                                       // cropInfo1Id==12 for Overwintered
+                    //    {
+                    //        if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
+                    //        {
+                    //            closedPeriod = null;
+                    //        }
+                    //        if (isSandyShallowSoil && (sowingDate < september16))
+                    //        {
+                    //            closedPeriod = null;
+                    //        }
+                    //        if (!isSandyShallowSoil)
+                    //        {
+                    //            closedPeriod = null;
+                    //        }
+                    //    }
+                    //    break;
 
-                    //Brassica is a crop group. under this below crop type comes..
-                    case (int)NMP.Portal.Enums.CropTypes.ForageRape:
-                    case (int)NMP.Portal.Enums.CropTypes.ForageSwedes:
-                    case (int)NMP.Portal.Enums.CropTypes.KaleGrazed:
-                    case (int)NMP.Portal.Enums.CropTypes.StubbleTurnips:
-                    case (int)NMP.Portal.Enums.CropTypes.Swedes:
-                    case (int)NMP.Portal.Enums.CropTypes.Turnips:
-                    case (int)NMP.Portal.Enums.CropTypes.BrusselSprouts:
-                    case (int)NMP.Portal.Enums.CropTypes.Cabbage:
-                    case (int)NMP.Portal.Enums.CropTypes.Calabrese:
-                    case (int)NMP.Portal.Enums.CropTypes.Cauliflower:
-                    case (int)NMP.Portal.Enums.CropTypes.Radish:
-                    case (int)NMP.Portal.Enums.CropTypes.WildRocket:
-                        if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
-                        {
-                            closedPeriod = null;
-                        }
-                        if (isSandyShallowSoil && (sowingDate < september16))
-                        {
-                            closedPeriod = null;
-                        }
-                        if (!isSandyShallowSoil)
-                        {
-                            closedPeriod = null;
-                        }
+                    ////Brassica is a crop group. under this below crop type comes..
+                    //case (int)NMP.Portal.Enums.CropTypes.ForageRape:
+                    //case (int)NMP.Portal.Enums.CropTypes.ForageSwedes:
+                    //case (int)NMP.Portal.Enums.CropTypes.KaleGrazed:
+                    //case (int)NMP.Portal.Enums.CropTypes.StubbleTurnips:
+                    //case (int)NMP.Portal.Enums.CropTypes.Swedes:
+                    //case (int)NMP.Portal.Enums.CropTypes.Turnips:
+                    //case (int)NMP.Portal.Enums.CropTypes.BrusselSprouts:
+                    //case (int)NMP.Portal.Enums.CropTypes.Cabbage:
+                    //case (int)NMP.Portal.Enums.CropTypes.Calabrese:
+                    //case (int)NMP.Portal.Enums.CropTypes.Cauliflower:
+                    //case (int)NMP.Portal.Enums.CropTypes.Radish:
+                    //case (int)NMP.Portal.Enums.CropTypes.WildRocket:
+                    //    if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
+                    //    {
+                    //        closedPeriod = null;
+                    //    }
+                    //    if (isSandyShallowSoil && (sowingDate < september16))
+                    //    {
+                    //        closedPeriod = null;
+                    //    }
+                    //    if (!isSandyShallowSoil)
+                    //    {
+                    //        closedPeriod = null;
+                    //    }
 
-                        break;
+                    //    break;
 
-                    case (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape:      // Winter oilseed rape
+                    //case (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape:      // Winter oilseed rape
 
-                        if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
-                        {
-                            closedPeriod = string.Format(Resource.lbl1Novto31Dec,Resource.lblNovember,Resource.lblDecember);
-                        }
-                        if (isSandyShallowSoil && (sowingDate < september16))
-                        {
-                            closedPeriod = string.Format(Resource.lbl1Novto31Dec,Resource.lblNovember,Resource.lblDecember);
-                        }
-                        if (!isSandyShallowSoil)
-                        {
-                            closedPeriod = string.Format(Resource.lbl1Novto31Dec, Resource.lblNovember, Resource.lblDecember);
-                        }
-                        break;
+                    //    if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
+                    //    {
+                    //        closedPeriod = string.Format(Resource.lbl1Novto31Dec,Resource.lblNovember,Resource.lblDecember);
+                    //    }
+                    //    if (isSandyShallowSoil && (sowingDate < september16))
+                    //    {
+                    //        closedPeriod = string.Format(Resource.lbl1Novto31Dec,Resource.lblNovember,Resource.lblDecember);
+                    //    }
+                    //    if (!isSandyShallowSoil)
+                    //    {
+                    //        closedPeriod = string.Format(Resource.lbl1Novto31Dec, Resource.lblNovember, Resource.lblDecember);
+                    //    }
+                    //    break;
 
                     default:
                         closedPeriod = ClosedPeriodNonOrganicFarm(fieldDetail, harvestYear, isPerennial);
@@ -585,11 +585,21 @@ namespace NMP.Portal.Helpers
                         }
                         break;
 
-                    //Brassica is a crop group. under this below crop type comes..
-                    case (int)NMP.Portal.Enums.CropTypes.BrusselSprouts:         //Brussel Sprouts
-                    case (int)NMP.Portal.Enums.CropTypes.Cabbage:                //Cabbage
-                    case (int)NMP.Portal.Enums.CropTypes.Cauliflower:            //Cauliflower
-                    case (int)NMP.Portal.Enums.CropTypes.Calabrese:              //Calabrese
+                        //Brassica is a crop group. under this below crop type comes..
+                        case (int)NMP.Portal.Enums.CropTypes.ForageRape:
+                        case (int)NMP.Portal.Enums.CropTypes.ForageSwedesRootsLifted:
+                        case (int)NMP.Portal.Enums.CropTypes.KaleGrazed:
+                        case (int)NMP.Portal.Enums.CropTypes.StubbleTurnipsGrazed:
+                        case (int)NMP.Portal.Enums.CropTypes.SwedesGrazed:
+                        case (int)NMP.Portal.Enums.CropTypes.TurnipsRootLifted:
+                        case (int)NMP.Portal.Enums.CropTypes.BrusselSprouts:
+                        case (int)NMP.Portal.Enums.CropTypes.Cabbage:
+                        case (int)NMP.Portal.Enums.CropTypes.Calabrese:
+                        case (int)NMP.Portal.Enums.CropTypes.Cauliflower:
+                        case (int)NMP.Portal.Enums.CropTypes.Radish:
+                        case (int)NMP.Portal.Enums.CropTypes.WildRocket:
+                        case (int)NMP.Portal.Enums.CropTypes.Swedes:
+                        case (int)NMP.Portal.Enums.CropTypes.Turnips:
                         if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
                         {
                             WarningPeriod = string.Format(Resource.lbl1Augto28Feb,Resource.lblAugust ,lastDayOfFeb, Resource.lblFebruary);

@@ -5,7 +5,7 @@ namespace NMP.Portal.Helpers
     public class OrganicManureNMaxLimitLogic
     {
         public int NMaxLimit(int nMaxLimit, decimal? yield, string soilType, int? cropInfo1, int cropTypeId, List<int> currentYearManureTypeIds,
-            List<int> previousYearManureTypeIds, int manureTypeId)
+            List<int> previousYearManureTypeIds, int? manureTypeId)
         {
             bool manureTypeCondition = false;
             if (currentYearManureTypeIds.Count > 0)
