@@ -2313,7 +2313,7 @@ namespace NMP.Portal.Controllers
                         orgManure.MgO = model.ManureType.MgO;
                     }
                 }
-                model.IsAnyNeedToStoreNutrientValueForFuture = true;
+                //model.IsAnyNeedToStoreNutrientValueForFuture = true;
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
                 if (model.IsCheckAnswer && model.IsDefaultNutrientOptionChange && (!model.IsApplicationMethodChange) && (!model.IsFieldGroupChange)
                 && (!model.IsManureTypeChange) && (!model.IsIncorporationMethodChange))
@@ -2579,6 +2579,19 @@ namespace NMP.Portal.Controllers
                 {
                     return View(model);
                 }
+
+                if (model.ManureType.DryMatter != model.DryMatterPercent || model.ManureType.TotalN != model.N
+               || model.ManureType.NH4N != model.NH4N || model.ManureType.Uric != model.UricAcid
+                || model.ManureType.NO3N != model.NO3N || model.ManureType.P2O5 != model.P2O5 ||
+                model.ManureType.K2O != model.K2O || model.ManureType.MgO != model.MgO
+                || model.ManureType.SO3 != model.SO3)
+                {
+                    model.IsAnyNeedToStoreNutrientValueForFuture = true;
+                }
+                else
+                {
+                    model.IsAnyNeedToStoreNutrientValueForFuture = false;
+                }
                 if (model.OrganicManures.Count > 0)
                 {
                     foreach (var orgManure in model.OrganicManures)
@@ -2594,7 +2607,7 @@ namespace NMP.Portal.Controllers
                         orgManure.MgO = model.MgO;
                     }
                 }
-                model.IsAnyNeedToStoreNutrientValueForFuture = true;
+
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
                 if (model.IsCheckAnswer && model.IsDefaultNutrientOptionChange && (!model.IsApplicationMethodChange) && (!model.IsFieldGroupChange)
                 && (!model.IsManureTypeChange) && (!model.IsIncorporationMethodChange))
