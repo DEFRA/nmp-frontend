@@ -1842,29 +1842,33 @@ namespace NMP.Portal.Controllers
             model.SoilReleasingClay = field.SoilReleasingClay ?? false;
             model.IsWithinNVZ = field.IsWithinNVZ ?? false;
             model.IsAbove300SeaLevel = field.IsAbove300SeaLevel ?? false;
-            List<SoilTypesResponse> soilTypes = await _fieldService.FetchSoilTypes();
-            SoilTypesResponse? soilType = soilTypes.FirstOrDefault(x => x.SoilTypeId == field.SoilTypeID);
-            model.SoilType = !string.IsNullOrWhiteSpace(soilType.SoilType) ? soilType.SoilType : string.Empty;
-            model.SoilTypeID = field.SoilTypeID;
+            
             model.EncryptedFieldId = id;
             model.ID = fieldId;
             model.isEnglishRules = farm.EnglishRules;
             model.SoilOverChalk = field.SoilOverChalk;
-            if (soilType != null && soilType.KReleasingClay)
+            List<SoilTypesResponse> soilTypes = await _fieldService.FetchSoilTypes();
+            if (soilTypes != null && soilTypes.Count > 0)
             {
-                ViewBag.IsSoilReleasingClay = true;
-            }
-            else
-            {
-                ViewBag.IsSoilReleasingClay = false;
-            }
-            if (model.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.Shallow)
-            {
-                ViewBag.IsSoilOverChalk = true;
-            }
-            else
-            {
-               ViewBag.IsSoilOverChalk = false;
+                SoilTypesResponse? soilType = soilTypes.FirstOrDefault(x => x.SoilTypeId == field.SoilTypeID);
+                model.SoilType = !string.IsNullOrWhiteSpace(soilType.SoilType) ? soilType.SoilType : string.Empty;
+                model.SoilTypeID = field.SoilTypeID;
+                if (soilType != null && soilType.KReleasingClay)
+                {
+                    ViewBag.IsSoilReleasingClay = true;
+                }
+                else
+                {
+                    ViewBag.IsSoilReleasingClay = false;
+                }
+                if (model.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.Shallow)
+                {
+                    ViewBag.IsSoilOverChalk = true;
+                }
+                else
+                {
+                    ViewBag.IsSoilOverChalk = false;
+                }
             }
             model.EncryptedFarmId = farmId;
             model.FarmName = farm.Name;
