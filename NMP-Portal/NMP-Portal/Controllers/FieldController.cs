@@ -1864,7 +1864,7 @@ namespace NMP.Portal.Controllers
             }
             else
             {
-          s      ViewBag.IsSoilOverChalk = false;
+               ViewBag.IsSoilOverChalk = false;
             }
             model.EncryptedFarmId = farmId;
             model.FarmName = farm.Name;
