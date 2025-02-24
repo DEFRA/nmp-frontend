@@ -1842,14 +1842,34 @@ namespace NMP.Portal.Controllers
             model.SoilReleasingClay = field.SoilReleasingClay ?? false;
             model.IsWithinNVZ = field.IsWithinNVZ ?? false;
             model.IsAbove300SeaLevel = field.IsAbove300SeaLevel ?? false;
-            var soilType = await _fieldService.FetchSoilTypeById(field.SoilTypeID.Value);
-            model.SoilType = !string.IsNullOrWhiteSpace(soilType) ? soilType : string.Empty;
-            model.SoilTypeID = field.SoilTypeID;
+            
             model.EncryptedFieldId = id;
             model.ID = fieldId;
             model.isEnglishRules = farm.EnglishRules;
             model.SoilOverChalk = field.SoilOverChalk;
-
+            List<SoilTypesResponse> soilTypes = await _fieldService.FetchSoilTypes();
+            if (soilTypes != null && soilTypes.Count > 0)
+            {
+                SoilTypesResponse? soilType = soilTypes.FirstOrDefault(x => x.SoilTypeId == field.SoilTypeID);
+                model.SoilType = !string.IsNullOrWhiteSpace(soilType.SoilType) ? soilType.SoilType : string.Empty;
+                model.SoilTypeID = field.SoilTypeID;
+                if (soilType != null && soilType.KReleasingClay)
+                {
+                    ViewBag.IsSoilReleasingClay = true;
+                }
+                else
+                {
+                    ViewBag.IsSoilReleasingClay = false;
+                }
+                if (model.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.Shallow)
+                {
+                    ViewBag.IsSoilOverChalk = true;
+                }
+                else
+                {
+                    ViewBag.IsSoilOverChalk = false;
+                }
+            }
             model.EncryptedFarmId = farmId;
             model.FarmName = farm.Name;
             List<SoilAnalysisResponse> soilAnalysisResponse = (await _fieldService.FetchSoilAnalysisByFieldId(fieldId, Resource.lblFalse)).OrderByDescending(x => x.CreatedOn).ToList();
@@ -3892,6 +3912,19 @@ namespace NMP.Portal.Controllers
                     else
                     {
                         return RedirectToAction("FarmList", "Farm");
+                    }
+                    if(model!=null)
+                    {
+                        if (model.SoilOverChalk != null && model.SoilTypeID != (int)NMP.Portal.Enums.SoilTypeEngland.Shallow)
+                        {
+                            model.SoilOverChalk = null;
+                        }
+                        if (model.SoilReleasingClay != null && model.SoilTypeID != (int)NMP.Portal.Enums.SoilTypeEngland.DeepClayey)
+                        {
+                            model.SoilReleasingClay = null;
+                            model.IsSoilReleasingClay = false;
+                        }
+                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
                     }
                 }
 

@@ -91,14 +91,20 @@
                         <td class="govuk-table__cell">@Resource.lblSoilType</td>
                         <td class="govuk-table__cell">@Model.SoilType</td>
                     </tr>
-                    <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">@Resource.lblSoilContainsPostashReleasingClay</td>
-                        <td class="govuk-table__cell">@(Model.SoilReleasingClay == true ? Resource.lblYes : Resource.lblNo)</td>
-                    </tr>
+                    @if (ViewBag.IsSoilReleasingClay != null && ViewBag.IsSoilReleasingClay)
+                    {
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">@Resource.lblSoilContainsPostashReleasingClay</td>
+                            <td class="govuk-table__cell">@(Model.SoilReleasingClay == true ? Resource.lblYes : Resource.lblNo)</td>
+                        </tr>
+                    }
+                    @if (ViewBag.IsSoilOverChalk != null && ViewBag.IsSoilOverChalk)
+                    {
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblIsTheSoilOverChalk</td>
                         <td class="govuk-table__cell">@(Model.SoilOverChalk == true ? Resource.lblYes : Resource.lblNo)</td>
                     </tr>
+                    }
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblIsFieldWithinNVZ</td>
                         <td class="govuk-table__cell">@(Model.IsWithinNVZ == true ? Resource.lblYes : Resource.lblNo)</td>
@@ -115,7 +121,7 @@
 
             <hr class="big_seperator">
             <h2 class="govuk-heading-m">@Resource.lblSoilAnalysis</h2>
-            
+
             @if (ViewBag.SoilAnalysisList != null && ViewBag.SoilAnalysisList.Count > 0)
             {
                 <p class="govuk-body margin margin-bottom-forty"><a asp-controller="SoilAnalysis" asp-action="IsSoilAnalysisAdded" asp-route-i="@Model.EncryptedFieldId" asp-route-j="@Model.EncryptedFarmId">@Resource.lblAddNewSoilAnalysis</a></p>
@@ -139,8 +145,9 @@
                     </tbody>
                 </table>
             }
-            else{
-                <p class="govuk-body">@string.Format(Resource.lblContentIfSoilAnalysisNotApplied,Model.Name)</p>
+            else
+            {
+                <p class="govuk-body">@string.Format(Resource.lblContentIfSoilAnalysisNotApplied, Model.Name)</p>
                 <p class="govuk-body margin margin-bottom-forty"><a asp-controller="SoilAnalysis" asp-action="IsSoilAnalysisAdded" asp-route-i="@Model.EncryptedFieldId" asp-route-j="@Model.EncryptedFarmId">@Resource.lblAddNewSoilAnalysis</a></p>
             }
         </div>
