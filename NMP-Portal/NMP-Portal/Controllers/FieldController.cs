@@ -1847,6 +1847,16 @@ namespace NMP.Portal.Controllers
             model.ID = fieldId;
             model.isEnglishRules = farm.EnglishRules;
             model.SoilOverChalk = field.SoilOverChalk;
+            if (farm != null)
+            {
+                model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Portal.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
+                model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
+            }
+            else
+            {
+                model.IsWithinNVZForFarm = false;
+                model.IsAbove300SeaLevelForFarm = false;
+            }
             List<SoilTypesResponse> soilTypes = await _fieldService.FetchSoilTypes();
             if (soilTypes != null && soilTypes.Count > 0)
             {
