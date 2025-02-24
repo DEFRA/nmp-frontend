@@ -3899,7 +3899,16 @@ namespace NMP.Portal.Controllers
                     model.EncryptedFarmId = farmId;
                     model.FarmName = farm.Name;
                     //model.FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(farmId));
-
+                    if (farm != null)
+                    {
+                        model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Portal.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
+                        model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
+                    }
+                    else
+                    {
+                        model.IsWithinNVZForFarm = false;
+                        model.IsAbove300SeaLevelForFarm = false;
+                    }
                     bool isUpdateField = true;
                     model.EncryptedIsUpdate = _fieldDataProtector.Protect(isUpdateField.ToString());
                     if (model.SoilOverChalk != null && model.SoilTypeID != (int)NMP.Portal.Enums.SoilTypeEngland.Shallow)
