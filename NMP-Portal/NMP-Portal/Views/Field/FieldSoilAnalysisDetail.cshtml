@@ -105,14 +105,14 @@
                             <td class="govuk-table__cell">@(Model.SoilOverChalk == true ? Resource.lblYes : Resource.lblNo)</td>
                         </tr>
                     }
-                    @if (Model.IsWithinNVZForFarm == true)
+                    @if (Model.IsWithinNVZForFarm!=null&&Model.IsWithinNVZForFarm == true)
                     {
                         <tr class="govuk-table__row">
                             <td class="govuk-table__cell">@Resource.lblIsFieldWithinNVZ</td>
                             <td class="govuk-table__cell">@(Model.IsWithinNVZ == true ? Resource.lblYes : Resource.lblNo)</td>
                         </tr>
                     }
-                    @if (Model.IsAbove300SeaLevelForFarm == true)
+                    @if (Model.IsAbove300SeaLevelForFarm != null & Model.IsAbove300SeaLevelForFarm == true)
                     {
                         <tr class="govuk-table__row">
                             <td class="govuk-table__cell">@Resource.lblIsFieldAbove300Meters</td>
