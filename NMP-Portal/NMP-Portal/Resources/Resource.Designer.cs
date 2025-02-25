@@ -6483,7 +6483,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}({1}kg per hectare).
+        ///   Looks up a localized string similar to {0} ({1}kg per hectare).
         /// </summary>
         public static string lblSnsDetail {
             get {
@@ -10373,6 +10373,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The value must be a maximum of 1 decimal place and between 0 to 250..
+        /// </summary>
+        public static string MsgForApplicationRate {
+            get {
+                return ResourceManager.GetString("MsgForApplicationRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rainfall amount must be a whole number, like 600..
         /// </summary>
         public static string MsgForEffectiveRainfallManual {
@@ -11345,6 +11354,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The value must be an integer value between 0 and 9..
+        /// </summary>
+        public static string MsgTheValueMustBeAnIntegerValueBetweenZeroAndNine {
+            get {
+                return ResourceManager.GetString("MsgTheValueMustBeAnIntegerValueBetweenZeroAndNine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This Manure type name already exist..
         /// </summary>
         public static string MsgThisManureTypeNameAreadyExist {
@@ -11377,6 +11395,15 @@ namespace NMP.Portal.Resources {
         public static string MsgUricAcid {
             get {
                 return ResourceManager.GetString("MsgUricAcid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} is not a valid value for Potassium, please specify either 2- or 2+.
+        /// </summary>
+        public static string MsgValueIsNotAValidValueForPotassium {
+            get {
+                return ResourceManager.GetString("MsgValueIsNotAValidValueForPotassium", resourceCulture);
             }
         }
         

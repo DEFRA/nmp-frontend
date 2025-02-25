@@ -2941,6 +2941,19 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("ApplicationRate", Resource.MsgEnterANumberWhichIsGreaterThanZero);
             }
+            if (model.ApplicationRate != null && model.ApplicationRate > 250)
+            {
+                ModelState.AddModelError("ApplicationRate", Resource.MsgForApplicationRate);
+            }
+            //if (model.ApplicationRate != null)
+            //{
+            //    string input = model.ApplicationRate.ToString();
+            //    if (input.Split('.').Length > 2)
+            //    {
+            //        //error msg
+            //    }
+            //}
+
             if (!ModelState.IsValid)
             {
                 return View("ManualApplicationRate", model);
@@ -3158,11 +3171,20 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("Quantity", Resource.MsgEnterANumberWhichIsGreaterThanZero);
             }
+            if (model.Quantity != null&& model.Area != null && model.Area > 0 && model.Quantity > 0)
+            {
+                model.ApplicationRate = Math.Round(model.Quantity.Value / model.Area.Value, 1);
+
+                if (model.ApplicationRate != null && model.ApplicationRate > 250)
+                {
+                    ModelState.AddModelError("Quantity", Resource.MsgForApplicationRate);
+                }
+            }
             if (!ModelState.IsValid)
             {
                 return View("AreaQuantity", model);
             }
-            model.ApplicationRate = (int)Math.Round(model.Quantity.Value / model.Area.Value);
+
             Error error = new Error();
             if (model.OrganicManures.Count > 0)
             {

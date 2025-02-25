@@ -34,7 +34,10 @@ namespace NMP.Portal.ViewModels
         public int? ApplicationRateMethod { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblApplicationRate))]
-        public int? ApplicationRate { get; set; }
+        [RegularExpression(@"^(?:0(\.\d{1})?|[1-9]{1}\d{0,2}(\.\d{1})?|250(\.0{1})?)$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgForApplicationRate))]
+
+
+        public decimal? ApplicationRate { get; set; }
         public int? ApplicationMethod { get; set; }
         //public int? ManualApplicationRate { get; set; }
         public decimal? Area { get; set; }
