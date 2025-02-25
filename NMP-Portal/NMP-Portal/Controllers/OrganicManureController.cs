@@ -2921,17 +2921,17 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Organic Manure Controller : ManualApplicationRate() post action called");
             Error? error = null;
-            if ((!ModelState.IsValid) && ModelState.ContainsKey("ApplicationRate"))
-            {
-                var applicationRateError = ModelState["ApplicationRate"].Errors.Count > 0 ?
-                                ModelState["ApplicationRate"].Errors[0].ErrorMessage.ToString() : null;
+            //if ((!ModelState.IsValid) && ModelState.ContainsKey("ApplicationRate"))
+            //{
+            //    var applicationRateError = ModelState["ApplicationRate"].Errors.Count > 0 ?
+            //                    ModelState["ApplicationRate"].Errors[0].ErrorMessage.ToString() : null;
 
-                if (applicationRateError != null && applicationRateError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["ApplicationRate"].RawValue, Resource.lblApplicationRate)))
-                {
-                    ModelState["ApplicationRate"].Errors.Clear();
-                    ModelState["ApplicationRate"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.MsgApplicationRate));
-                }
-            }
+            //    if (applicationRateError != null && applicationRateError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["ApplicationRate"].RawValue, Resource.lblApplicationRate)))
+            //    {
+            //        ModelState["ApplicationRate"].Errors.Clear();
+            //        ModelState["ApplicationRate"].Errors.Add(Resource.MsgForApplicationRate);
+            //    }
+            //}
 
             if (model.ApplicationRate == null)
             {
@@ -2941,6 +2941,15 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("ApplicationRate", Resource.MsgEnterANumberWhichIsGreaterThanZero);
             }
+            //if (model.ApplicationRate != null)
+            //{
+            //    string input = model.ApplicationRate.ToString();
+            //    if (input.Split('.').Length > 2)
+            //    {
+            //        //error msg
+            //    }
+            //}
+
             if (!ModelState.IsValid)
             {
                 return View("ManualApplicationRate", model);

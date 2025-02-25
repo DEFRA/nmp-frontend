@@ -245,7 +245,7 @@ namespace NMP.Portal.Controllers
 
                     List<CropTypeResponse> cropTypeResponses = await _fieldService.FetchAllCropTypes();
                     if (fieldResponse.Crop != null)
-                    {                        
+                    {
                         field.CropTypeID = fieldResponse.Crop.CropTypeID;
                         field.CropType = await _fieldService.FetchCropTypeById(field.CropTypeID ?? 0);
                         if (cropTypeResponses.Count > 0)
@@ -987,24 +987,52 @@ namespace NMP.Portal.Controllers
                             {
                                 ModelState.AddModelError("PotassiumIndexValue", Resource.MsgEnterValidValueForNutrientIndex);
                             }
+                            if (value == 2)
+                            {
+                                ModelState.AddModelError("PotassiumIndexValue", string.Format(Resource.MsgValueIsNotAValidValueForPotassium, value));
+                            }
                         }
                         else
                         {
                             if ((model.PotassiumIndexValue.ToString() != Resource.lblTwoMinus) &&
                                                    (model.PotassiumIndexValue.ToString() != Resource.lblTwoPlus))
                             {
-                                ModelState.AddModelError("PotassiumIndexValue", Resource.MsgEnterValidValueForNutrientIndex);
+                                ModelState.AddModelError("PotassiumIndexValue", Resource.MsgTheValueMustBeAnIntegerValueBetweenZeroAndNine);
                             }
                         }
 
-
+                        
                     }
                     if (model.SoilAnalyses.PH == null && (string.IsNullOrWhiteSpace(model.PotassiumIndexValue)) &&
                     model.SoilAnalyses.PhosphorusIndex == null && model.SoilAnalyses.MagnesiumIndex == null)
                     {
                         ModelState.AddModelError("CropType", Resource.MsgEnterAtLeastOneValue);
                     }
+                    if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilAnalyses.PhosphorusIndex"))
+                    {
+                        var InvalidFormatError = ModelState["SoilAnalyses.PhosphorusIndex"].Errors.Count > 0 ?
+                                        ModelState["SoilAnalyses.PhosphorusIndex"].Errors[0].ErrorMessage.ToString() : null;
 
+                        if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SoilAnalyses.PhosphorusIndex"].AttemptedValue, Resource.lblPhosphorusIndex)))
+                        {
+                            ModelState["SoilAnalyses.PhosphorusIndex"].Errors.Clear();
+                            ModelState["SoilAnalyses.PhosphorusIndex"].Errors.Add(Resource.MsgTheValueMustBeAnIntegerValueBetweenZeroAndNine);
+                        }
+                    }
+
+
+
+                    if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilAnalyses.MagnesiumIndex"))
+                    {
+                        var InvalidFormatError = ModelState["SoilAnalyses.MagnesiumIndex"].Errors.Count > 0 ?
+                                        ModelState["SoilAnalyses.MagnesiumIndex"].Errors[0].ErrorMessage.ToString() : null;
+
+                        if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SoilAnalyses.MagnesiumIndex"].AttemptedValue, Resource.lblMagnesiumIndex)))
+                        {
+                            ModelState["SoilAnalyses.MagnesiumIndex"].Errors.Clear();
+                            ModelState["SoilAnalyses.MagnesiumIndex"].Errors.Add(Resource.MsgTheValueMustBeAnIntegerValueBetweenZeroAndNine);
+                        }
+                    }
                 }
                 else
                 {
@@ -1842,7 +1870,7 @@ namespace NMP.Portal.Controllers
             model.SoilReleasingClay = field.SoilReleasingClay ?? false;
             model.IsWithinNVZ = field.IsWithinNVZ ?? false;
             model.IsAbove300SeaLevel = field.IsAbove300SeaLevel ?? false;
-            
+
             model.EncryptedFieldId = id;
             model.ID = fieldId;
             model.isEnglishRules = farm.EnglishRules;
@@ -3932,7 +3960,7 @@ namespace NMP.Portal.Controllers
                     {
                         return RedirectToAction("FarmList", "Farm");
                     }
-                    if(model!=null)
+                    if (model != null)
                     {
                         if (model.SoilOverChalk != null && model.SoilTypeID != (int)NMP.Portal.Enums.SoilTypeEngland.Shallow)
                         {
