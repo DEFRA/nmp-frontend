@@ -2360,7 +2360,7 @@ cubic metres per hectare  not set</value>
     <value>Soil nitrogen (N) supply index</value>
   </data>
   <data name="lblSnsDetail" xml:space="preserve">
-    <value>{0}({1}kg per hectare)</value>
+    <value>{0} ({1}kg per hectare)</value>
   </data>
   <data name="lblCalculateNitrogenInCurrentCrop" xml:space="preserve">
     <value>Calculate nitrogen (N) in crop question</value>

@@ -2921,17 +2921,17 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Organic Manure Controller : ManualApplicationRate() post action called");
             Error? error = null;
-            //if ((!ModelState.IsValid) && ModelState.ContainsKey("ApplicationRate"))
-            //{
-            //    var applicationRateError = ModelState["ApplicationRate"].Errors.Count > 0 ?
-            //                    ModelState["ApplicationRate"].Errors[0].ErrorMessage.ToString() : null;
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("ApplicationRate"))
+            {
+                var applicationRateError = ModelState["ApplicationRate"].Errors.Count > 0 ?
+                                ModelState["ApplicationRate"].Errors[0].ErrorMessage.ToString() : null;
 
-            //    if (applicationRateError != null && applicationRateError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["ApplicationRate"].RawValue, Resource.lblApplicationRate)))
-            //    {
-            //        ModelState["ApplicationRate"].Errors.Clear();
-            //        ModelState["ApplicationRate"].Errors.Add(Resource.MsgForApplicationRate);
-            //    }
-            //}
+                if (applicationRateError != null && applicationRateError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["ApplicationRate"].RawValue, Resource.lblApplicationRate)))
+                {
+                    ModelState["ApplicationRate"].Errors.Clear();
+                    ModelState["ApplicationRate"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.MsgApplicationRate));
+                }
+            }
 
             if (model.ApplicationRate == null)
             {
@@ -2940,6 +2940,10 @@ namespace NMP.Portal.Controllers
             if (model.ApplicationRate != null && model.ApplicationRate < 0)
             {
                 ModelState.AddModelError("ApplicationRate", Resource.MsgEnterANumberWhichIsGreaterThanZero);
+            }
+            if (model.ApplicationRate != null && model.ApplicationRate > 250)
+            {
+                ModelState.AddModelError("ApplicationRate", Resource.MsgForApplicationRate);
             }
             //if (model.ApplicationRate != null)
             //{
@@ -3167,11 +3171,20 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("Quantity", Resource.MsgEnterANumberWhichIsGreaterThanZero);
             }
+            if (model.Quantity != null&& model.Area != null && model.Area > 0 && model.Quantity > 0)
+            {
+                model.ApplicationRate = Math.Round(model.Quantity.Value / model.Area.Value, 1);
+
+                if (model.ApplicationRate != null && model.ApplicationRate > 250)
+                {
+                    ModelState.AddModelError("Quantity", Resource.MsgForApplicationRate);
+                }
+            }
             if (!ModelState.IsValid)
             {
                 return View("AreaQuantity", model);
             }
-            model.ApplicationRate = (int)Math.Round(model.Quantity.Value / model.Area.Value);
+
             Error error = new Error();
             if (model.OrganicManures.Count > 0)
             {

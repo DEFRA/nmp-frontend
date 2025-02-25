@@ -6483,7 +6483,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}({1}kg per hectare).
+        ///   Looks up a localized string similar to {0} ({1}kg per hectare).
         /// </summary>
         public static string lblSnsDetail {
             get {
