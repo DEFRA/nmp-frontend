@@ -3943,6 +3943,9 @@ live</value>
   <data name="lblSourceRb209" xml:space="preserve">
     <value>Crop need is calculated using AHDB Nutrient Management Guide (RB209). Supply from manures calculated using MANNER-NPK (Nutrient Calculation Engine).</value>
   </data>
+  <data name="MsgEnterAnApplicationRateTo1DecimalPlace" xml:space="preserve">
+    <value>Enter an application rate to 1 decimal place maximum.</value>
+  </data>
   <data name="MsgTheValueMustBeAnIntegerValueBetweenZeroAndNine" xml:space="preserve">
     <value>The value must be an integer value between 0 and 9.</value>
   </data>
