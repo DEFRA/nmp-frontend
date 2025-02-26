@@ -10418,6 +10418,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The value must be a maximum of 2 decimal place and between 0 to 3..
+        /// </summary>
+        public static string MsgForGreenAreaIndex {
+            get {
+                return ResourceManager.GetString("MsgForGreenAreaIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The NVZ Action Programme states that the application rate of manufactured nitrogen (N) fertiliser on {0} between {1} and {2} must not exceed {3}kg per hectare.
         /// </summary>
         public static string MsgForMaxNitrogenForFertiliserExceptBrassicas {
@@ -10531,6 +10540,15 @@ namespace NMP.Portal.Resources {
         public static string MsgIfCroppedAreaAndNonSpreadingArea {
             get {
                 return ResourceManager.GetString("MsgIfCroppedAreaAndNonSpreadingArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a value between 0 and 3.0.
+        /// </summary>
+        public static string MsgIfGreenAreaIndexIsNull {
+            get {
+                return ResourceManager.GetString("MsgIfGreenAreaIndexIsNull", resourceCulture);
             }
         }
         
@@ -11413,6 +11431,15 @@ namespace NMP.Portal.Resources {
         public static string MsgVarietyNameNotSet {
             get {
                 return ResourceManager.GetString("MsgVarietyNameNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View your farm details.
+        /// </summary>
+        public static string MsgViewYourFarmDetails {
+            get {
+                return ResourceManager.GetString("MsgViewYourFarmDetails", resourceCulture);
             }
         }
         

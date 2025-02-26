@@ -3952,4 +3952,13 @@ live</value>
   <data name="MsgForApplicationRate" xml:space="preserve">
     <value>The value must be a maximum of 1 decimal place and between 0 to 250.</value>
   </data>
+  <data name="MsgForGreenAreaIndex" xml:space="preserve">
+    <value>The value must be a maximum of 2 decimal place and between 0 to 3.</value>
+  </data>
+  <data name="MsgIfGreenAreaIndexIsNull" xml:space="preserve">
+    <value>Enter a value between 0 and 3.0</value>
+  </data>
+  <data name="MsgViewYourFarmDetails" xml:space="preserve">
+    <value>View your farm details</value>
+  </data>
 </root>
