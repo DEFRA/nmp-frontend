@@ -530,7 +530,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Sulphur deficient</value>
   </data>
   <data name="lblHowWouldYouLikeToEnterYourSoilNutrientValues" xml:space="preserve">
-    <value>How would you like to enter your soil nutrient (N) values?</value>
+    <value>How would you like to enter your soil nutrient values?</value>
   </data>
   <data name="lblAsAnIndex" xml:space="preserve">
     <value>As an index</value>
