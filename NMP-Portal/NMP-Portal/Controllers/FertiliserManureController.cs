@@ -568,6 +568,11 @@ namespace NMP.Portal.Controllers
                         }
                     }
                 }
+                Field field = await _fieldService.FetchFieldByFieldId(Convert.ToInt32(model.FieldList[0]));
+                if (field != null)
+                {
+                    model.IsWithinNVZ = field.IsWithinNVZ;
+                }
             }
             catch (Exception ex)
             {

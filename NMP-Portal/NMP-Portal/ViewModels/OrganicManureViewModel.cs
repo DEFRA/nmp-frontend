@@ -128,5 +128,6 @@ namespace NMP.Portal.ViewModels
         public DateTime? ClosedPeriodStartDate { get; set; }
         public DateTime? ClosedPeriodEndDate { get; set; }
         public string? ClosedPeriodForUI { get; set; } = string.Empty;
+        public bool? IsWithinNVZ { get; set; }
     }
 }

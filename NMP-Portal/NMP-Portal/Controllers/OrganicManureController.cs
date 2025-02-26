@@ -1414,6 +1414,11 @@ namespace NMP.Portal.Controllers
 
 
                     }
+                    Field field = await _fieldService.FetchFieldByFieldId(Convert.ToInt32(model.FieldList[0]));
+                    if (field != null)
+                    {
+                        model.IsWithinNVZ = field.IsWithinNVZ;
+                    }
                 }
                 model.IsWarningMsgNeedToShow = false;
                 model.IsClosedPeriodWarning = false;
@@ -3184,7 +3189,7 @@ namespace NMP.Portal.Controllers
             {
                 return View("AreaQuantity", model);
             }
-
+            model.ApplicationRate = (model.Quantity.Value / model.Area.Value);
             Error error = new Error();
             if (model.OrganicManures.Count > 0)
             {
