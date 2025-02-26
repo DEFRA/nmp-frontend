@@ -1928,6 +1928,7 @@ namespace NMP.Portal.Controllers
                         {
                             ViewBag.Success = Resource.lblTrue;
                             ViewBag.SuccessMsgContent = string.Format(Resource.lblYouHaveUpdated, model.Name);
+                            ViewBag.SuccessMsgContentLink = Resource.MsgViewYourFarmDetails; 
                         }
                         else if (statusFor == Resource.lblSoilAnalysis)
                         {
@@ -3107,8 +3108,8 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                seasons = await _fieldService.FetchSeasons();
-                ViewBag.SeasonList = seasons;
+                //seasons = await _fieldService.FetchSeasons();
+                //ViewBag.SeasonList = seasons;
             }
             catch (Exception ex)
             {
@@ -3124,23 +3125,34 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> GreenAreaIndex(FieldViewModel model)
         {
             _logger.LogTrace($"Field Controller : GreenAreaIndex() post action called");
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("GreenAreaIndex"))
+            {
+                var greenAreaIndexError = ModelState["GreenAreaIndex"].Errors.Count > 0 ?
+                                ModelState["GreenAreaIndex"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (greenAreaIndexError != null && greenAreaIndexError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["GreenAreaIndex"].RawValue, Resource.lblWhatIsTheGreenAreaIndexGAI)))
+                {
+                    ModelState["GreenAreaIndex"].Errors.Clear();
+                    ModelState["GreenAreaIndex"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblGreenAreaIndex));
+                }
+            }
             if (model.GreenAreaIndex == null)
             {
-                ModelState.AddModelError("GreenAreaIndex", Resource.lblEnterGAIValueBeforeContinue);
+                ModelState.AddModelError("GreenAreaIndex", Resource.MsgIfGreenAreaIndexIsNull);
             }
-            if (model.SeasonId == 0)
-            {
-                ModelState.AddModelError("SeasonId", Resource.MsgSelectAnOptionBeforeContinuing);
-            }
+            //if (model.SeasonId == 0)
+            //{
+            //    ModelState.AddModelError("SeasonId", Resource.MsgSelectAnOptionBeforeContinuing);
+            //}
             if (model.GreenAreaIndex != null && (model.GreenAreaIndex < 0 || model.GreenAreaIndex > 3))
             {
                 ModelState.AddModelError("GreenAreaIndex", Resource.MsgEnterAValidNumericGAIvalue);
             }
             if (!ModelState.IsValid)
             {
-                List<SeasonResponse> seasons = new List<SeasonResponse>();
-                seasons = await _fieldService.FetchSeasons();
-                ViewBag.SeasonList = seasons;
+                //List<SeasonResponse> seasons = new List<SeasonResponse>();
+                //seasons = await _fieldService.FetchSeasons();
+                //ViewBag.SeasonList = seasons;
                 return View(model);
             }
             model.IsGreenAreaIndex = true;
@@ -3678,9 +3690,9 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("SoilOrganicMatter", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblPercentageValue));
             }
-            if (model.SoilOrganicMatter != null && (model.SoilOrganicMatter < 4 || model.SoilOrganicMatter > 10))
+            if (model.SoilOrganicMatter != null && (model.SoilOrganicMatter < 0 || model.SoilOrganicMatter > 100))
             {
-                ModelState.AddModelError("SoilOrganicMatter", string.Format(Resource.MsgEnterValueInBetween, Resource.lblPercentageLable.ToLower(), 4, 10));
+                ModelState.AddModelError("SoilOrganicMatter", string.Format(Resource.MsgEnterValueInBetween, Resource.lblPercentageLable.ToLower(), 0, 100));
             }
             if (!ModelState.IsValid)
             {

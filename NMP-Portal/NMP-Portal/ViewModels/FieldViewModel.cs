@@ -64,7 +64,8 @@ namespace NMP.Portal.ViewModels
         public decimal? CropHeight { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheGreenAreaIndexGAI))]
-        public int? GreenAreaIndex { get; set; }
+        [RegularExpression(@"^(?:0(\.\d{1,2})?|[1-2]?\d(\.\d{1,2})?|3(\.0{1,2})?)$",ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgForGreenAreaIndex))]
+        public decimal? GreenAreaIndex { get; set; }
 
         public bool IsCropHeight { get; set; } = false;
         public bool IsGreenAreaIndex { get; set; } = false;
