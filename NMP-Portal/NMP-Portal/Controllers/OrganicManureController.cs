@@ -3178,7 +3178,7 @@ namespace NMP.Portal.Controllers
             }
             if (model.Quantity != null&& model.Area != null && model.Area > 0 && model.Quantity > 0)
             {
-                model.ApplicationRate = Math.Round(model.Quantity.Value / model.Area.Value, 1);
+                model.ApplicationRate = model.Quantity.Value / model.Area.Value;
 
                 if (model.ApplicationRate != null && model.ApplicationRate > 250)
                 {
@@ -5068,6 +5068,7 @@ namespace NMP.Portal.Controllers
             if (model.ApplicationRate.HasValue && model.ApplicationDate.HasValue)
             {
                 decimal totalN = 0;
+                decimal previousApplicationsN = 0;
                 //DateTime startDate = model.ApplicationDate.Value.AddDays(-364);
                 //DateTime endDate = model.ApplicationDate.Value;
                 List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(fieldId));
@@ -5085,7 +5086,7 @@ namespace NMP.Portal.Controllers
                             (FieldDetailResponse fieldDetail, error) = await _fieldService.FetchFieldDetailByFieldIdAndHarvestYear(fieldId, model.HarvestYear.Value, false);
                             if (error == null)
                             {
-                                (totalN, error) = await _organicManureService.FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(managementId, false);
+                                (previousApplicationsN, error) = await _organicManureService.FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(managementId, false);
                                 if (error == null)
                                 {
                                     decimal nMaxLimit = 0;
@@ -5101,7 +5102,7 @@ namespace NMP.Portal.Controllers
                                     {
                                         decimal decimalOfTotalNForUseInNmaxCalculation = Convert.ToDecimal(percentOfTotalNForUseInNmaxCalculation / 100.0);
                                         currentApplicationNitrogen = (defaultNitrogen * model.ApplicationRate.Value * decimalOfTotalNForUseInNmaxCalculation);
-                                        totalN = totalN + currentApplicationNitrogen;
+                                        totalN = previousApplicationsN + currentApplicationNitrogen;
 
                                         (List<int> currentYearManureTypeIds, error) = await _organicManureService.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
                                         (List<int> previousYearManureTypeIds, error) = await _organicManureService.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value - 1, false);
@@ -5165,7 +5166,7 @@ namespace NMP.Portal.Controllers
                                                     //string cropInfo1 = await _cropService.FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(crop[0].CropTypeID.Value, crop[0].CropInfo1.Value);
                                                     OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
                                                     nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(nmaxLimitEnglandOrWales ?? 0, crop[0].Yield == null ? null : crop[0].Yield.Value, fieldDetail.SoilTypeName, crop[0].CropInfo1 == null ? null : crop[0].CropInfo1.Value, crop[0].CropTypeID.Value, currentYearManureTypeIds, previousYearManureTypeIds, model.ManureTypeId.Value);
-                                                    if ((totalN + availableNFromMannerOutput) > nMaxLimit)
+                                                    if ((previousApplicationsN + availableNFromMannerOutput) > nMaxLimit)
                                                     {
                                                         model.IsNMaxLimitWarning = true;
                                                         (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
