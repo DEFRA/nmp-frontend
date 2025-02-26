@@ -10004,6 +10004,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter an application rate to 1 decimal place maximum..
+        /// </summary>
+        public static string MsgEnterAnApplicationRateTo1DecimalPlace {
+            get {
+                return ResourceManager.GetString("MsgEnterAnApplicationRateTo1DecimalPlace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a number which is greater than 0.
         /// </summary>
         public static string MsgEnterANumberWhichIsGreaterThanZero {
