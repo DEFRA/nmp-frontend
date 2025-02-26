@@ -263,7 +263,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Plan and record nutrient applications</value>
   </data>
   <data name="lblPlanAndRecordNutrientApplications" xml:space="preserve">
-    <value>Plan and record nutrient applications</value>
+    <value>Plan and manage nutrient applications</value>
   </data>
   <data name="lblPlanningAndRecordingCan" xml:space="preserve">
     <value>This service will:</value>

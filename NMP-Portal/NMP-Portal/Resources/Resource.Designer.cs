@@ -5556,7 +5556,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Plan and record nutrient applications.
+        ///   Looks up a localized string similar to Plan and manage nutrient applications.
         /// </summary>
         public static string lblPlanAndRecordNutrientApplications {
             get {
