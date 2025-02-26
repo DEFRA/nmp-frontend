@@ -963,6 +963,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ammonium-N​.
+        /// </summary>
+        public static string lblAmmoniumHypenN {
+            get {
+                return ResourceManager.GetString("lblAmmoniumHypenN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to amount.
         /// </summary>
         public static string lblAmount {
@@ -4781,6 +4790,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nitrate-N​.
+        /// </summary>
+        public static string lblNitrateHypenN {
+            get {
+                return ResourceManager.GetString("lblNitrateHypenN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nitrogen (N).
         /// </summary>
         public static string lblNitrogen {
@@ -7928,6 +7946,15 @@ namespace NMP.Portal.Resources {
         public static string lblUricAcidForError {
             get {
                 return ResourceManager.GetString("lblUricAcidForError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uric acid N​.
+        /// </summary>
+        public static string lblUricAcidN {
+            get {
+                return ResourceManager.GetString("lblUricAcidN", resourceCulture);
             }
         }
         

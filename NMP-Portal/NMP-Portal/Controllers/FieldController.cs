@@ -311,7 +311,7 @@ namespace NMP.Portal.Controllers
                             {
                                 field.IsBasedOnSoilOrganicMatter = false;
                             }
-                            field.CurrentCropType = Enum.GetName(typeof(NMP.Portal.Enums.CropTypes), field.CurrentCropTypeId);
+                            field.CurrentCropType = await _fieldService.FetchCropTypeById(field.CurrentCropTypeId ?? 0);
 
                             if (cropTypeResponses.Count > 0)
                             {

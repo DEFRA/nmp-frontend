@@ -3964,4 +3964,13 @@ live</value>
   <data name="MsgViewYourFarmDetails" xml:space="preserve">
     <value>View your farm details</value>
   </data>
+  <data name="lblAmmoniumHypenN" xml:space="preserve">
+    <value>Ammonium-N​</value>
+  </data>
+  <data name="lblNitrateHypenN" xml:space="preserve">
+    <value>Nitrate-N​</value>
+  </data>
+  <data name="lblUricAcidN" xml:space="preserve">
+    <value>Uric acid N​</value>
+  </data>
 </root>

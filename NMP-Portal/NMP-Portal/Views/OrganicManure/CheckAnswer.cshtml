@@ -439,7 +439,7 @@
                                     }
                                     @if ((Model.ManureType.NH4N.HasValue) && Model.ManureType.NH4N.Value > 0)
                                     {
-                                        @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.NH4N.Value, Resource.lblAmmonium)
+                                        @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.NH4N.Value, Resource.lblAmmoniumHypenN)
                                         <br />
                                     }
                                     @if ((Model.ManureType.Uric.HasValue) && Model.ManureType.Uric.Value > 0)
@@ -497,7 +497,7 @@
                                     }
                                     @if ((Model.NH4N.HasValue) && Model.NH4N.Value > 0)
                                     {
-                                        @string.Format(Resource.lblKgPerTonneWithNutrient, Model.NH4N.Value, Resource.lblAmmonium)
+                                        @string.Format(Resource.lblKgPerTonneWithNutrient, Model.NH4N.Value, Resource.lblAmmoniumHypenN)
                                         <br />
                                     }
                                     @if ((Model.UricAcid.HasValue) && Model.UricAcid.Value > 0)
@@ -558,7 +558,7 @@
                                 }
                                 @if ((Model.NH4N.HasValue) && Model.NH4N.Value > 0)
                                 {
-                                    @string.Format(Resource.lblKgPerTonneWithNutrient, Model.NH4N.Value, Resource.lblAmmonium)
+                                    @string.Format(Resource.lblKgPerTonneWithNutrient, Model.NH4N.Value, Resource.lblAmmoniumHypenN)
                                     <br />
                                 }
                                 @if ((Model.UricAcid.HasValue) && Model.UricAcid.Value > 0)
@@ -621,7 +621,7 @@
                                 }
                                 @if ((Model.NH4N.HasValue) && Model.NH4N.Value > 0)
                                 {
-                                    @string.Format(Resource.lblKgPerTonneWithNutrient, Model.NH4N.Value, Resource.lblAmmonium)
+                                    @string.Format(Resource.lblKgPerTonneWithNutrient, Model.NH4N.Value, Resource.lblAmmoniumHypenN)
                                     <br />
                                 }
                                 @if ((Model.UricAcid.HasValue) && Model.UricAcid.Value > 0)
@@ -659,7 +659,8 @@
                             {
                                 @if ((Model.ManureType.DryMatter.HasValue) && Model.ManureType.DryMatter.Value > 0)
                                 {
-                                    @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.DryMatter.Value, Resource.lblDryMatterPercent)
+                                    @string.Format("{0}% {1}", Model.ManureType.DryMatter.Value, Resource.lblDryMatterPercent)
+                                    @* @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.DryMatter.Value, Resource.lblDryMatterPercent) *@
                                     <br />
                                 }
                                 @if ((Model.ManureType.TotalN.HasValue) && Model.ManureType.TotalN.Value > 0)
@@ -669,7 +670,7 @@
                                 }
                                 @if ((Model.ManureType.NH4N.HasValue) && Model.ManureType.NH4N.Value > 0)
                                 {
-                                    @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.NH4N.Value, Resource.lblAmmonium)
+                                    @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.NH4N.Value, Resource.lblAmmoniumHypenN)
                                     <br />
                                 }
                                 @if ((Model.ManureType.Uric.HasValue) && Model.ManureType.Uric.Value > 0)
