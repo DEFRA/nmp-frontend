@@ -43,6 +43,10 @@
                     <govuk-notification-banner type="Success">
                         <div class="">
                             <h3 class="govuk-notification-banner__heading">@ViewBag.SuccessMsgContent</h3>
+                            @if (ViewBag.SuccessMsgContentLink!=null)
+                            {
+                                <p class="govuk-body"><a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">@ViewBag.SuccessMsgContentLink</a></p>
+                            }
                         </div>
                         @if (ViewBag.SuccessMsgAdditionalContent != null)
                         {

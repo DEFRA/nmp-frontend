@@ -836,7 +836,7 @@
                                                 <govuk-summary-list-row-action asp-action="GreenAreaIndex" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
                                             </govuk-summary-list-row-actions>
                                         </govuk-summary-list-row>
-                                        <govuk-summary-list-row class=@((Model.SeasonId==0)?"govuk-error-message":"")>
+                                       @*  <govuk-summary-list-row class=@((Model.SeasonId==0)?"govuk-error-message":"")>
                                             <govuk-summary-list-row-key>
                                                 @Resource.lblWhenWasThisMeasured
                                             </govuk-summary-list-row-key>
@@ -846,7 +846,7 @@
                                             <govuk-summary-list-row-actions>
                                                 <govuk-summary-list-row-action asp-action="GreenAreaIndex" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
                                             </govuk-summary-list-row-actions>
-                                        </govuk-summary-list-row>
+                                        </govuk-summary-list-row> *@
                                     }
                                 }
                             }
