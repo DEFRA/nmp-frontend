@@ -1664,7 +1664,7 @@ namespace NMP.Portal.Controllers
             (List<ApplicationMethodResponse> applicationMethodList, error) = await _organicManureService.FetchApplicationMethodList(fieldType ?? 0, isLiquid);
             if (error == null && applicationMethodList.Count > 0)
             {
-                ViewBag.ApplicationMethodList = applicationMethodList.OrderBy(x => x.Name).ToList();
+                ViewBag.ApplicationMethodList = applicationMethodList;
             }
 
             model.ApplicationMethodCount = applicationMethodList.Count;
@@ -1763,7 +1763,7 @@ namespace NMP.Portal.Controllers
 
 
                 (List<ApplicationMethodResponse> applicationMethodList, error) = await _organicManureService.FetchApplicationMethodList(fieldType ?? 0, isLiquid);
-                ViewBag.ApplicationMethodList = applicationMethodList.OrderBy(x => x.Name).ToList(); ;
+                ViewBag.ApplicationMethodList = applicationMethodList;
                 model.ApplicationMethodCount = applicationMethodList.Count;
                 return View(model);
             }
