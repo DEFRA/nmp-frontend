@@ -4294,11 +4294,7 @@ namespace NMP.Portal.Controllers
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
                 if (model.IsCheckAnswer)
                 {
-                    if(model.CropGroupId==null)
-                    {
-                        return RedirectToAction("CropGroups");
-                    }
-                    return RedirectToAction("CropGroups");
+                    return RedirectToAction("CheckAnswer");
                 }
                 return RedirectToAction("CropGroups");
             }
