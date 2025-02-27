@@ -3125,7 +3125,7 @@ cubic metres per hectare  not set</value>
     <value>Based on your crop, soil type and farm details.</value>
   </data>
   <data name="lblYourClosedPeriodForSpreadingOrganicMaterials" xml:space="preserve">
-    <value>Your closed period for spreading organic materials with high readily available nitrogen (N) is:</value>
+    <value>Your closed period for applying high readily available nitrogen organic materials is:</value>
   </data>
   <data name="lblTo" xml:space="preserve">
     <value>{0} to {1}</value>

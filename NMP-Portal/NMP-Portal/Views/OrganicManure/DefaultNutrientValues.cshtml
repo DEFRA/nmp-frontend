@@ -226,7 +226,7 @@
                         <td class="govuk-table__cell alignRight">@(Model.ManureType.P2O5 != null ? string.Format(unit, Model.ManureType.P2O5) : string.Empty)</td>
                     </tr>
                     <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">@Resource.lblPotash</td>
+                        <td class="govuk-table__cell">@Resource.lblPotash.ToLower()</td>
                         <td class="govuk-table__cell alignRight">@(Model.ManureType.K2O != null ? string.Format(unit, Model.ManureType.K2O) : string.Empty)</td>
                     </tr>
                     <tr class="govuk-table__row">
