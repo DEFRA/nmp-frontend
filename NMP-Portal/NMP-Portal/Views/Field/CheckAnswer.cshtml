@@ -592,12 +592,12 @@
 
                 @if (Model.PreviousGrasses.HasGrassInLastThreeYear != null && (Model.PreviousGrasses.HasGrassInLastThreeYear.Value == false || Model.IsPreviousYearGrass == false))
                 {
-                    <govuk-summary-list-row>
+                    <govuk-summary-list-row class=@((!Model.CropGroupId.HasValue)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
                             @string.Format(Resource.lblWhatWasThePreviousCropGroupForCheckAnswere, Model.LastHarvestYear)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @Model.CropGroup
+                            @((!Model.CropGroupId.HasValue) ? Resource.lblNotSet :Model.CropGroup)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="CropGroups" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
@@ -626,7 +626,7 @@
                             @string.Format(Resource.lblHowWouldYouLikeToCalculateSoilNitrogenSupply, Model.Name)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @(Model.WantToApplySns == true ? Resource.lblCalculateBasedOnRecentSoilMineralNitrogenAnalysisResult : Resource.lblEstimateBasedOnPreviousCrop)
+                            @((!Model.WantToApplySns.HasValue) ? Resource.lblNotSet : (Model.WantToApplySns == true ? Resource.lblCalculateBasedOnRecentSoilMineralNitrogenAnalysisResult : Resource.lblEstimateBasedOnPreviousCrop))
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="SNSAppliedQuestion" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
