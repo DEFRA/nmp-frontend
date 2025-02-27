@@ -4,8 +4,9 @@
     ViewData["Title"] = Resource.lblTermsOfUse;   
 }
 
-<partial name="_TermsOfUsePartial.cshtml" />
+
 <form class="form margin-top-forty" asp-action="Accept" asp-controller="AcceptTerms" method="post">
+    <partial name="_TermsOfUsePartial.cshtml" />
     <div class="govuk-form-group margin-bottom-forty">      
         <govuk-checkboxes name="IsTermsOfUseAccepted" asp-for="@Model.IsTermsOfUseAccepted">
             <govuk-checkboxes-item checked="@Model.IsTermsOfUseAccepted" value="true">@Resource.lblIagree_to_the_terms_of_use</govuk-checkboxes-item>
