@@ -103,7 +103,7 @@
                 @Resource.lblCheckYourAnswers
             </h1>
             <govuk-summary-list>
-                @if (!Model.IsComingFromRecommendation)
+                @if (!Model.IsComingFromRecommendation && ViewBag.SelectedFields == null)
                 {
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
@@ -156,7 +156,7 @@
                         <govuk-summary-list-row-actions>
                             @if (ViewBag.Fields != null)
                             {
-                                <govuk-summary-list-row-action class="@( (ViewBag.Fields.Count==1 || Model.FieldGroup.Equals(Resource.lblAll) )? "disabled": "")" asp-action="Fields" asp-controller="FertiliserManure">@Resource.lblChange</govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action class="@( (ViewBag.Fields.Count==1 || Model.FieldGroup.Equals(Resource.lblAll) )? "disabled": "")" asp-action="FieldGroup" asp-controller="FertiliserManure">@Resource.lblChange</govuk-summary-list-row-action>
                             }
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
