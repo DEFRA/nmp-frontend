@@ -66,11 +66,13 @@
                         <td class="govuk-table__cell">@Resource.lblPostCode</td>
                         <td class="govuk-table__cell">@Model.Postcode</td>
                     </tr>
-                    <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">@Resource.lblClimatePostcode</td>
-                        <td class="govuk-table__cell">@Model.ClimateDataPostCode</td>
-                    </tr>
-
+                    @if (Model.Postcode != Model.ClimateDataPostCode)
+                    {
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">@Resource.lblClimatePostcode</td>
+                            <td class="govuk-table__cell">@Model.ClimateDataPostCode</td>
+                        </tr>
+                    } 
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblAverageAnnualRainfall</td>
                         <td class="govuk-table__cell">@Model.Rainfall</td>

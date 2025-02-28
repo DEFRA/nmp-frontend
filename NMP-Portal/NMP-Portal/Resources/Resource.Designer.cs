@@ -131,7 +131,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It replaces earlier services such as PLANET and MANNER. The service will allow you to import your data from PLANET..
+        ///   Looks up a localized string similar to It replaces earlier tools such as PLANET and MANNER. The tool will allow you to import your data from PLANET..
         /// </summary>
         public static string ContentReplacePlanetandManner {
             get {
@@ -149,14 +149,38 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;p class=&quot;gov-body&quot;&gt;We only gather the data required to provide you with the appropriate recommendations.&lt;/p&gt;
-        ///&lt;p class=&quot;gov-body&quot;&gt;This service will never share your data with any other organisations.&lt;/p&gt;
-        ///&lt;p class=&quot;gov-body&quot;&gt;In particular, please note that this service does not share data with the Rural Payments Agency or the Environment Agency.&lt;/p&gt;
-        ///&lt;p class=&quot;gov-body&quot;&gt;This service was developed in conjunction with ADAS, AHDB and RSK&lt;/p&gt;.
+        ///   Looks up a localized string similar to We only gather the data required to provide you with the appropriate recommendations..
         /// </summary>
-        public static string contentYourData {
+        public static string contentYourData1 {
             get {
-                return ResourceManager.GetString("contentYourData", resourceCulture);
+                return ResourceManager.GetString("contentYourData1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This tool will never share your data with any other organisations..
+        /// </summary>
+        public static string contentYourData2 {
+            get {
+                return ResourceManager.GetString("contentYourData2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In particular, please note that this tool does not share data with the &lt;a href=&quot;https://www.gov.uk/government/organisations/rural-payments-agency&quot; target=&quot;_balnk&quot;&gt; Rural Payments Agency&lt;/a&gt; (RPA)..
+        /// </summary>
+        public static string contentYourData3 {
+            get {
+                return ResourceManager.GetString("contentYourData3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This tool was developed in conjunction with ADAS, AHDB and RSK..
+        /// </summary>
+        public static string contentYourData4 {
+            get {
+                return ResourceManager.GetString("contentYourData4", resourceCulture);
             }
         }
         
@@ -2187,6 +2211,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can develop a nutrient application plan during the season. This tool will keep detailed records of cropping, soil analyses, and each fertiliser and manure application..
+        /// </summary>
+        public static string lblDevelopNutrientApplicationPlan {
+            get {
+                return ResourceManager.GetString("lblDevelopNutrientApplicationPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Discs.
         /// </summary>
         public static string lblDiscs {
@@ -2417,15 +2450,6 @@ namespace NMP.Portal.Resources {
         public static string lblEndOfSoilDrainage {
             get {
                 return ResourceManager.GetString("lblEndOfSoilDrainage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to England: &lt;a target=&quot;_blank&quot; href=&quot;https://www.gov.uk/government/collections/nitrate-vulnerable-zones&quot;&gt;Farming rules for water and Nitrogen vulnerable zones (NVZs)&lt;/a&gt;.
-        /// </summary>
-        public static string lblEnglandFormingRuleOfWater {
-            get {
-                return ResourceManager.GetString("lblEnglandFormingRuleOfWater", resourceCulture);
             }
         }
         
@@ -3182,15 +3206,6 @@ namespace NMP.Portal.Resources {
         public static string lblFiveDigit {
             get {
                 return ResourceManager.GetString("lblFiveDigit", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to You must follow the appropriate regulations, depending on where your farm is:.
-        /// </summary>
-        public static string lblFollowFarmingRules {
-            get {
-                return ResourceManager.GetString("lblFollowFarmingRules", resourceCulture);
             }
         }
         
@@ -4736,6 +4751,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to More about these Water Resource Regulations.
+        /// </summary>
+        public static string lblMoreAboutTheseWaterResourceRegulation {
+            get {
+                return ResourceManager.GetString("lblMoreAboutTheseWaterResourceRegulation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to N.
         /// </summary>
         public static string lblN {
@@ -6024,7 +6048,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The recommendations from this service come from.
+        ///   Looks up a localized string similar to The recommendations from this tool come from &lt;a target=&quot;_blank&quot; href=&quot;https://ahdb.org.uk/nutrient-management-guide-rb209&quot;&gt;RB209 (Nutrient Management Guide)&lt;/a&gt;. It gives fertiliser recommendations for all major nutrients and lime, and for most agricultural and horticultural crops..
         /// </summary>
         public static string lblRecommendationFromthisService {
             get {
@@ -6326,15 +6350,6 @@ namespace NMP.Portal.Resources {
         public static string lblSBI {
             get {
                 return ResourceManager.GetString("lblSBI", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Scotland: &lt;a target=&quot;_blank&quot; href=&quot;https://www.gov.scot/policies/agriculture-and-the-environment/nvz/&quot;&gt;The Action Programme for Nitrate Vulnerable Zones (Scotland) Regulations 2008&lt;/a&gt;.
-        /// </summary>
-        public static string lblScotlandFormingRuleOfWater {
-            get {
-                return ResourceManager.GetString("lblScotlandFormingRuleOfWater", resourceCulture);
             }
         }
         
@@ -7167,7 +7182,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to the crops you grow.
+        ///   Looks up a localized string similar to the crops you grow and their nutrient requirements.
         /// </summary>
         public static string lblTheCropsYouGrow {
             get {
@@ -7221,7 +7236,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to the nutrients in your soil.
+        ///   Looks up a localized string similar to the nutrients available, soil nitrogen supply and other soil analysis results.
         /// </summary>
         public static string lblTheNutrientsInYourSoil {
             get {
@@ -7302,7 +7317,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This service will:.
+        ///   Looks up a localized string similar to This tool will:.
         /// </summary>
         public static string lblTheServiceWill {
             get {
@@ -7343,6 +7358,15 @@ namespace NMP.Portal.Resources {
         public static string lblThisApplicationMayBreachMoreThanOneNVZRule {
             get {
                 return ResourceManager.GetString("lblThisApplicationMayBreachMoreThanOneNVZRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application may breach more than one Water Resource Regulation..
+        /// </summary>
+        public static string lblThisApplicationMayBreachMoreThanOneWaterResourceRegulation {
+            get {
+                return ResourceManager.GetString("lblThisApplicationMayBreachMoreThanOneWaterResourceRegulation", resourceCulture);
             }
         }
         
@@ -7977,7 +8001,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This is a free service, provided by Defra, to help farmers, land managers and advisers plan and record nutrient use on their land. It gives you guidance only - there is no legal requirement to use it..
+        ///   Looks up a localized string similar to This is a free tool, provided by Defra, to help farmers, land managers and advisers plan and record nutrient use on their land. It gives you guidance only - there is no legal requirement to use it..
         /// </summary>
         public static string lblUseThisServiceToPlan {
             get {
@@ -8162,15 +8186,6 @@ namespace NMP.Portal.Resources {
         public static string lblViewRecommendations {
             get {
                 return ResourceManager.GetString("lblViewRecommendations", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Wales: &lt;a target=&quot;_blank&quot; href=&quot;https://www.gov.wales/water-resources-control-agricultural-pollution-wales-regulations-2021-guidance-farmers-and-land&quot;&gt;The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021&lt;/a&gt;.
-        /// </summary>
-        public static string lblWalesFormingRuleOfWater {
-            get {
-                return ResourceManager.GetString("lblWalesFormingRuleOfWater", resourceCulture);
             }
         }
         
@@ -9084,7 +9099,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your closed period for spreading organic materials with high readily available nitrogen (N) is:.
+        ///   Looks up a localized string similar to Your closed period for applying high readily available nitrogen organic materials is:.
         /// </summary>
         public static string lblYourClosedPeriodForSpreadingOrganicMaterials {
             get {
