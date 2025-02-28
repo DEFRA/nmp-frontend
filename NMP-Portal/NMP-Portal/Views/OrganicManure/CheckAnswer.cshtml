@@ -363,7 +363,7 @@
                 {
                     <govuk-summary-list-row class=@((!Model.ApplicationMethod.HasValue)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
-                            @string.Format(Resource.lblWhatIsTheApplicationMethodForYour, Model.ManureTypeName)
+                            @string.Format(Resource.lblHowAreYouGoingToApplyTheManure, Model.ManureTypeName)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
                             @((Model.ApplicationMethod.HasValue) ? Model.ApplicationMethodName : Resource.lblNotSet)
@@ -377,7 +377,7 @@
                 {
                     <govuk-summary-list-row class=@((!Model.ApplicationMethod.HasValue)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
-                            @string.Format(Resource.lblWhatIsTheApplicationMethodForYour, Model.ManureTypeName)
+                            @string.Format(Resource.lblHowAreYouGoingToApplyTheManure, Model.ManureTypeName)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
                             @((Model.ApplicationMethod.HasValue) ? Model.ApplicationMethodName : Resource.lblNotSet)
