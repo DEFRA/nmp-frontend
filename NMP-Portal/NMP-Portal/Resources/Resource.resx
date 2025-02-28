@@ -305,13 +305,13 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Sign out</value>
   </data>
   <data name="lblTheCropsYouGrow" xml:space="preserve">
-    <value>the crops you grow</value>
+    <value>the crops you grow and their nutrient requirements</value>
   </data>
   <data name="lblTheManuresAndFertilisersYouUseAndHowYouApplyThem" xml:space="preserve">
     <value>the organic materials and inorganic fertilisers you use and how you apply them</value>
   </data>
   <data name="lblTheNutrientsInYourSoil" xml:space="preserve">
-    <value>the nutrients in your soil</value>
+    <value>the nutrients available, soil nitrogen supply and other soil analysis results</value>
   </data>
   <data name="lblTotalFarmArea" xml:space="preserve">
     <value>Total farm area</value>
@@ -323,7 +323,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>true</value>
   </data>
   <data name="lblUseThisServiceToPlan" xml:space="preserve">
-    <value>This is a free service, provided by Defra, to help farmers, land managers and advisers plan and record nutrient use on their land. It gives you guidance only - there is no legal requirement to use it.</value>
+    <value>This is a free tool, provided by Defra, to help farmers, land managers and advisers plan and record nutrient use on their land. It gives you guidance only - there is no legal requirement to use it.</value>
   </data>
   <data name="lblWhatIsTheFarmName" xml:space="preserve">
     <value>What is the farm name?</value>
@@ -3410,25 +3410,19 @@ cubic metres per hectare  not set</value>
     <value>You will get better recommendations if you have a recent soil analysis. You will be asked to enter the data from the analysis as you progress through the service.</value>
   </data>
   <data name="ContentReplacePlanetandManner" xml:space="preserve">
-    <value>It replaces earlier services such as PLANET and MANNER. The service will allow you to import your data from PLANET.</value>
+    <value>It replaces earlier tools such as PLANET and MANNER. The tool will allow you to import your data from PLANET.</value>
   </data>
   <data name="ContentSustainableFarmingIncentiveEnd" xml:space="preserve">
     <value>, you will need a nutrient plan. This service will create a plan that you can use for this purpose.</value>
   </data>
-  <data name="contentYourData" xml:space="preserve">
-    <value>&lt;p class="gov-body"&gt;We only gather the data required to provide you with the appropriate recommendations.&lt;/p&gt;
-&lt;p class="gov-body"&gt;This service will never share your data with any other organisations.&lt;/p&gt;
-&lt;p class="gov-body"&gt;In particular, please note that this service does not share data with the Rural Payments Agency or the Environment Agency.&lt;/p&gt;
-&lt;p class="gov-body"&gt;This service was developed in conjunction with ADAS, AHDB and RSK&lt;/p&gt;</value>
+  <data name="contentYourData1" xml:space="preserve">
+    <value>We only gather the data required to provide you with the appropriate recommendations.</value>
   </data>
   <data name="lbldownloadablePdftext" xml:space="preserve">
     <value>It creates downloadable plans in PDF.</value>
   </data>
   <data name="lblFarmingRuleOfWater" xml:space="preserve">
     <value>Farming rules for water</value>
-  </data>
-  <data name="lblFollowFarmingRules" xml:space="preserve">
-    <value>You must follow the appropriate regulations, depending on where your farm is:</value>
   </data>
   <data name="lblHowitworks" xml:space="preserve">
     <value>How it works</value>
@@ -3440,7 +3434,7 @@ cubic metres per hectare  not set</value>
     <value>RB209 (Nutrient Management Guide)</value>
   </data>
   <data name="lblRecommendationFromthisService" xml:space="preserve">
-    <value>The recommendations from this service come from</value>
+    <value>The recommendations from this tool come from &lt;a target="_blank" href="https://ahdb.org.uk/nutrient-management-guide-rb209"&gt;RB209 (Nutrient Management Guide)&lt;/a&gt;. It gives fertiliser recommendations for all major nutrients and lime, and for most agricultural and horticultural crops.</value>
   </data>
   <data name="lblRpa" xml:space="preserve">
     <value>Rural Payments Agency</value>
@@ -3449,7 +3443,7 @@ cubic metres per hectare  not set</value>
     <value>(RPA)</value>
   </data>
   <data name="lblTheServiceWill" xml:space="preserve">
-    <value>This service will:</value>
+    <value>This tool will:</value>
   </data>
   <data name="lblYourData" xml:space="preserve">
     <value>Your data</value>
@@ -3491,47 +3485,40 @@ cubic metres per hectare  not set</value>
     <value>Crop Group Name</value>
   </data>
   <data name="contentGettingHelp1" xml:space="preserve">
-    <value>If you experience a technical problem with any of the functionality in this service, you can email: &lt;a  href="mailto:helpdesk@rsk-bsl.co.uk"&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt;.</value>
+    <value>If you experience a technical problem with any of the functionality in this tool, you can email &lt;a  href="mailto:helpdesk@rsk-bsl.co.uk"&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt;.</value>
   </data>
   <data name="contentGettingHelp2" xml:space="preserve">
     <value>Please tell us what you were trying to do, what happened, and what you expected. This will help us to identify the problem.</value>
   </data>
   <data name="contentGettingHelp_line2" xml:space="preserve">
-    <value>&lt;p class="govuk-body"&gt;
-    The helpdesk will help with issues such as:
-&lt;/p&gt;
-&lt;ul class="govuk-list govuk-list--bullet"&gt;
-    &lt;li&gt;technical issues&lt;/li&gt;
-    &lt;li&gt;login issues&lt;/li&gt;
-    &lt;li&gt;service outages&lt;/li&gt;
-&lt;/ul&gt;</value>
+    <value>The helpdesk will help with issues such as:</value>
   </data>
   <data name="contentGivingFeedbackAboutThisService1" xml:space="preserve">
-    <value>If you would like to give us feedback about this service, then please email: &lt;a  href="mailto:nmpt@defra.gov.uk"&gt;nmpt@defra.gov.uk&lt;/a&gt;.</value>
+    <value>If you would like to give us feedback about this tool, then please email &lt;a  href="mailto:nmpt@defra.gov.uk"&gt;nmpt@defra.gov.uk&lt;/a&gt;.</value>
   </data>
   <data name="lblAboutGetHelpAndFeedback" xml:space="preserve">
-    <value>The Create a plan for efficient nutrient management service ('this service') is currently in a private beta phase. This means that we are testing this service by invitation only. Some functionality may not work as expected and some features have not yet been developed.</value>
+    <value>This tool is currently in a private beta phase. This means that we are testing the tool with a group of invited users. As such, some functionality may not work as expected and some features have not yet been developed.</value>
   </data>
   <data name="lblAboutRecommendationGuidenceAdvice" xml:space="preserve">
-    <value>About recommendations, guidance, and advice in private beta</value>
+    <value>About the recommendations, guidance and advice</value>
   </data>
   <data name="lblAboutRecommendationGuidenceAdviceContent1" xml:space="preserve">
-    <value>This service was developed by the Department for Environment, Food &amp; Rural Affairs (Defra), the Agriculture and Horticulture Development Board (AHDB), ADAS and the RSK group. Nutrient recommendations are derived from RB209 Application Programming Interface (API); RB209 is the intellectual property of AHDB.</value>
+    <value>This tool was developed by the Department for Environment, Food &amp; Rural Affairs (Defra), the Agriculture and Horticulture Development Board (AHDB), ADAS and the RSK group. Nutrient recommendations are derived from RB209 Application Programming Interface (API); RB209 is the intellectual property of AHDB.</value>
   </data>
   <data name="lblAboutRecommendationGuidenceAdviceContent2" xml:space="preserve">
-    <value>While Defra and partners seek to ensure that the information provided by this service is accurate at the time of use, Defra and partners accept no liability for loss, damage or injury howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to information contained in or omitted from this service.</value>
+    <value>While Defra and partners seek to ensure that the information provided by this tool is accurate at the time of use, Defra and partners accept no liability for loss, damage or injury howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to information contained in or omitted from this tool.</value>
   </data>
   <data name="lblGetHelpAndFeedback" xml:space="preserve">
     <value>Get help or give feedback</value>
   </data>
   <data name="lblGettingHelp" xml:space="preserve">
-    <value>Getting help</value>
+    <value>Getting help with the tool</value>
   </data>
   <data name="lblGivingFeedbackAboutThisService" xml:space="preserve">
-    <value>Giving feedback about this service</value>
+    <value>Giving feedback about this tool</value>
   </data>
   <data name="lblYourFeedbackWillHelpUsImproveThisService" xml:space="preserve">
-    <value>Your feedback will help us improve this service.</value>
+    <value>Your feedback will help us improve this tool.</value>
   </data>
   <data name="lblKgPerTonneWithNutrient" xml:space="preserve">
     <value>{0} kg per tonne {1}</value>
@@ -3540,8 +3527,7 @@ cubic metres per hectare  not set</value>
     <value>10 February</value>
   </data>
   <data name="lblAboutReleaseSchedule" xml:space="preserve">
-    <value>This is the plan for testing this service, adding new features and rolling it out across
-the country.</value>
+    <value>This is the plan for testing this tool, adding new features and rolling it out across the country.</value>
   </data>
   <data name="lblAllModulesLive" xml:space="preserve">
     <value>all the modules for England and Wales are live on &lt;a href="https://www.gov.uk/" target="_blank"&gt;GOV.UK&lt;/a&gt; and available for general use</value>
@@ -3568,7 +3554,7 @@ the country.</value>
     <value>integrated MANNER-NPK calculations</value>
   </data>
   <data name="lblJuly2025Schedule" xml:space="preserve">
-    <value>July 2025 - England and Wales full service live</value>
+    <value>July 2025 - England and Wales full tool live</value>
   </data>
   <data name="lblLivestockManureLimitComplianceModule" xml:space="preserve">
     <value>added function: livestock manure nitrogen (N) farm limit NVZ compliance module</value>
@@ -3583,13 +3569,13 @@ the country.</value>
     <value>a limited number of selected farmers and advisers across England and Wales are invited to test the tool and provide feedback prior to the public release</value>
   </data>
   <data name="lblNMPTLaunchesToUsersInScotland" xml:space="preserve">
-    <value>NMPT launches to users in Scotland</value>
+    <value>the tool launches to users in Scotland</value>
   </data>
   <data name="lblNMPTLiveForGeneralUse" xml:space="preserve">
-    <value>service launches for cross-border farms</value>
+    <value>tool launches for cross-border farms</value>
   </data>
   <data name="lblServiceReleaseSchedule" xml:space="preserve">
-    <value>Service release schedule</value>
+    <value>Release schedule for this tool</value>
   </data>
   <data name="lblNov2025EnglandWalesAndScotlandFullServiceLive" xml:space="preserve">
     <value>November 2025 - England, Wales and Scotland full service
@@ -3833,67 +3819,58 @@ live</value>
     <value>View the AHDB excess winter rainfall data.</value>
   </data>
   <data name="lblAboutGetHelpAndFeedback_line2" xml:space="preserve">
-    <value>Check the &lt;a href="/ReleaseSchedule" &gt;release schedule&lt;/a&gt; to see what features have been added to the test version of the service.</value>
-  </data>
-  <data name="lblAboutGetHelpAndFeedback_line3" xml:space="preserve">
-    <value>View the &lt;a href="/AcceptTerms" &gt;terms of use&lt;/a&gt; for this service.</value>
+    <value>Check the &lt;a href="/ReleaseSchedule" &gt;release schedule&lt;/a&gt; to see what features have been added to the test version of the tool.</value>
   </data>
   <data name="lblAboutRecommendationGuidenceAdviceContent3" xml:space="preserve">
-    <value>Users are responsible for the accuracy of their own data and the application of guidance provided. This service should not be relied upon as the sole source of nutrient management guidance. Always consider local conditions and, if necessary, consult a FACTS Qualified Adviser before making nutrient management decisions.</value>
+    <value>Users are responsible for the accuracy of their own data and the application of guidance provided. This tool should not be relied upon as the sole source of nutrient management guidance. Always consider local conditions and, if necessary, consult a FACTS Qualified Adviser before making nutrient management decisions.</value>
   </data>
   <data name="lblAbout_this_service" xml:space="preserve">
-    <value>About this service</value>
+    <value>About this tool</value>
   </data>
   <data name="lblAbout_this_service_line1" xml:space="preserve">
     <value>The first step is to set up your farm. The farm will contain your fields, and the fields will have the crops and nutrients applied to them. If you have more than one holding, it's best to add a separate farm for each one.</value>
   </data>
-  <data name="lblAbout_this_service_line2" xml:space="preserve">
-    <value>The service will warn you of possible breaches of the Nitrate Vulnerable Zone (NVZ) rules as you make your plans.</value>
+  <data name="lblRegulations_line1" xml:space="preserve">
+    <value>The service will warn you if you enter field or nutrient management information that will breach Nitrate Vulnerable Zone (NVZ) rules. The service can help you demonstrate compliance with the NVZ rules for regulatory purposes.</value>
   </data>
-  <data name="lblAbout_this_service_line3" xml:space="preserve">
+  <data name="lblRegulations_line2" xml:space="preserve">
     <value>The service also accounts for Soil Nitrogen Supply (SNS). You can add SNS data for a field at the end of the planning process.</value>
   </data>
   <data name="lblDo_not_show_this_information_again" xml:space="preserve">
     <value>Do not show this information again</value>
   </data>
-  <data name="lblEnglandFormingRuleOfWater" xml:space="preserve">
-    <value>England: &lt;a target="_blank" href="https://www.gov.uk/government/collections/nitrate-vulnerable-zones"&gt;Farming rules for water and Nitrogen vulnerable zones (NVZs)&lt;/a&gt;</value>
-  </data>
   <data name="lblFooter_links" xml:space="preserve">
     <value>Footer links</value>
   </data>
   <data name="lblHelp_with_the_service_recommendations" xml:space="preserve">
-    <value>Help with the service's recommendations</value>
+    <value>Help with the tool's recommendations</value>
   </data>
   <data name="lblHelp_with_the_service_recommendations_line1" xml:space="preserve">
-    <value>You can email the helpdesk if you have any issues with the data and recommendations the service provides. Email: &lt;a  href="mailto:helpdesk@rsk-bsl.co.uk"&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt;.</value>
+    <value>You can email the helpdesk if you have any issues with the data and recommendations the tool provides. Email &lt;a  href="mailto:helpdesk@rsk-bsl.co.uk"&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt;.</value>
   </data>
   <data name="lblHelp_with_the_service_recommendations_line2" xml:space="preserve">
-    <value>This service might give slightly different recommendations from the previous service PLANET. This is because this new service uses an updated version of the RB209 API, so it provides the very latest data.</value>
+    <value>This tool might give slightly different recommendations from the previous version of the tool, PLANET. This is because this new tool uses an updated version of the RB209 API, so it provides the very latest data.</value>
   </data>
   <data name="lblHelp_with_the_service_recommendations_line3" xml:space="preserve">
     <value>We will reply to your email as quickly as we can.</value>
   </data>
   <data name="lblIagree_to_the_terms_of_use" xml:space="preserve">
-    <value>I agree to the terms of use</value>
+    <value>Do not show this page again</value>
   </data>
   <data name="lblMore_information" xml:space="preserve">
     <value>More information</value>
   </data>
   <data name="lblMore_information_line1" xml:space="preserve">
-    <value>The Nutrient Management Plan is intended to be used alongside RB209</value>
+    <value>This tool is intended to be used alongside the &lt;a href="https://ahdb.org.uk/knowledge-library/rb209-section-1-principles-of-nutrient-management-and-fertiliser-use" target="_blank"&gt; Nutrient management guide (RB209)&lt;/a&gt; (external link).</value>
   </data>
   <data name="lblMore_information_line2" xml:space="preserve">
-    <value>For advice about nutrient planning in general, start with &lt;a href="https://www.triedandtested.org.uk" target="_blank"&gt;Tried and Tested&lt;/a&gt; (opens in a new window).</value>
-  </data>
-  <data name="lblMore_information_line3" xml:space="preserve">
-    <value>For more information on RB209, visit &lt;a href="https://ahdb.org.uk/knowledge-library/rb209-section-1-principles-of-nutrient-management-and-fertiliser-use" target="_blank"&gt;Nutrient management guide (RB209) section 1&lt;/a&gt; (opens in a new window).</value>
+    <value>For advice about nutrient planning in general, visit &lt;a href="https://www.triedandtested.org.uk" target="_blank"&gt;Tried and Tested&lt;/a&gt; (external link).</value>
   </data>
   <data name="lblPrivate_beta_disclaimer" xml:space="preserve">
     <value>Private beta disclaimer</value>
   </data>
   <data name="lblPrivate_beta_disclaimer_sub_heading" xml:space="preserve">
-    <value>Any recommendations and advice given in the private beta version of this service cannot be used:</value>
+    <value>Any recommendations and advice given in the private beta version of this tool cannot be used:</value>
   </data>
   <data name="lblPrivate_beta_disclaimer_sub_heading_line1" xml:space="preserve">
     <value>to demonstrate compliance with any regulation or legislation, such as NVZ rules</value>
@@ -3907,9 +3884,6 @@ live</value>
   <data name="lblSaving_your_data_line1" xml:space="preserve">
     <value>The service will save the data you input regularly. There will be a Check Your Answers page at the end of each section, and when you select Submit here, your data will be saved up to this point. You will then be able to leave and resume here.</value>
   </data>
-  <data name="lblScotlandFormingRuleOfWater" xml:space="preserve">
-    <value>Scotland: &lt;a target="_blank" href="https://www.gov.scot/policies/agriculture-and-the-environment/nvz/"&gt;The Action Programme for Nitrate Vulnerable Zones (Scotland) Regulations 2008&lt;/a&gt;</value>
-  </data>
   <data name="lblSoil_Analysis_line1" xml:space="preserve">
     <value>You will get better recommendations if you have a recent soil analysis. You will be asked to enter the data from the analysis as you progress through the service, in order to create your nutrient management plan.</value>
   </data>
@@ -3921,12 +3895,6 @@ live</value>
   </data>
   <data name="lblTermsOfUse" xml:space="preserve">
     <value>Terms of use</value>
-  </data>
-  <data name="lblTerms_Of_Use" xml:space="preserve">
-    <value>Terms Of Use</value>
-  </data>
-  <data name="lblWalesFormingRuleOfWater" xml:space="preserve">
-    <value>Wales: &lt;a target="_blank" href="https://www.gov.wales/water-resources-control-agricultural-pollution-wales-regulations-2021-guidance-farmers-and-land"&gt;The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021&lt;/a&gt;</value>
   </data>
   <data name="msgAcceptTermsOfUse" xml:space="preserve">
     <value>Please accept terms of use</value>
@@ -3978,6 +3946,57 @@ live</value>
   </data>
   <data name="lblThisApplicationMayBreachMoreThanOneWaterResourceRegulation" xml:space="preserve">
     <value>This application may breach more than one Water Resource Regulation.</value>
+  </data>
+  <data name="contentYourData2" xml:space="preserve">
+    <value>This tool will never share your data with any other organisations.</value>
+  </data>
+  <data name="contentYourData3" xml:space="preserve">
+    <value>In particular, please note that this tool does not share data with the &lt;a href="https://www.gov.uk/government/organisations/rural-payments-agency" target="_balnk"&gt; Rural Payments Agency&lt;/a&gt; (RPA).</value>
+  </data>
+  <data name="contentYourData4" xml:space="preserve">
+    <value>This tool was developed in conjunction with ADAS, AHDB and RSK.</value>
+  </data>
+  <data name="lblDevelopNutrientApplicationPlan" xml:space="preserve">
+    <value>You can develop a nutrient application plan during the season. This tool will keep detailed records of cropping, soil analyses, and each fertiliser and manure application.</value>
+  </data>
+  <data name="lblAboutTermsOfUseLine1" xml:space="preserve">
+    <value>This tool is currently in a private beta phase. This means that we are testing the tool with a group of invited users. As such, some functionality may not work as expected and some features have not yet been developed.</value>
+  </data>
+  <data name="lblAboutTermsOfUseLine2" xml:space="preserve">
+    <value>Check the &lt;a href="/ReleaseSchedule"&gt;release schedule&lt;/a&gt; to see what features have been added to the test version of the tool.</value>
+  </data>
+  <data name="lblEnglandNVZActionProgramme" xml:space="preserve">
+    <value>Scotland: &lt;a href="https://www.gov.scot/policies/agriculture-and-the-environment/nvz/" target="_blank"&gt;The Action Programme for Nitrate Vulnerable Zones (Scotland) Regulations 2008&lt;/a&gt;</value>
+  </data>
+  <data name="lblEnglandNVZWaterFarmingRules" xml:space="preserve">
+    <value>England: &lt;a href="https://www.gov.uk/government/collections/nitrate-vulnerable-zones" target="_blank"&gt;Nitrate vulnerable zones (NVZs)&lt;/a&gt; and &lt;a href="https://www.gov.uk/government/publications/applying-the-farming-rules-for-water/applying-the-farming-rules-for-water" target="_blank" &gt;Farming rules for water&lt;/a&gt;</value>
+  </data>
+  <data name="lblRegulations" xml:space="preserve">
+    <value>Regulations</value>
+  </data>
+  <data name="lblRegulations_line3" xml:space="preserve">
+    <value>You must follow the appropriate regulations, depending on where your farm is:</value>
+  </data>
+  <data name="lblWalesWaterResourceRegulations" xml:space="preserve">
+    <value>Wales: &lt;a href="https://www.gov.wales/water-resources-control-agricultural-pollution-wales-regulations-2021-guidance-farmers-and-land" target="_blank"&gt;The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021&lt;/a&gt;</value>
+  </data>
+  <data name="lblHelpIssuesLine1" xml:space="preserve">
+    <value>technical issues</value>
+  </data>
+  <data name="lblHelpIssuesLine2" xml:space="preserve">
+    <value>login issues</value>
+  </data>
+  <data name="lblHelpIssuesLine3" xml:space="preserve">
+    <value>service outages</value>
+  </data>
+  <data name="lblMovingDataToLive" xml:space="preserve">
+    <value>Moving your data to the live version of the tool</value>
+  </data>
+  <data name="lblMovingDataToLive_line1" xml:space="preserve">
+    <value>If you wish to take your farm data and plans from the testing version to the live version, please email our team at &lt;a href="mailto:helpdesk@rsk-bsl.co.uk"&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt;.</value>
+  </data>
+  <data name="lblMovingDataToLive_line2" xml:space="preserve">
+    <value>We will migrate your data for you when the tool launches, and then your plans will be suitable for regulatory use.</value>
   </data>
   <data name="lblEnterANumberFrom0To250" xml:space="preserve">
     <value>Enter a number from 0 to 250, to 1 decimal place.</value>

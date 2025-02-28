@@ -88,7 +88,7 @@ namespace NMP.Portal.Controllers
                             Value = f.FieldID.ToString(),
                             Text = f.FieldName
                         }).ToList();
-                        ViewBag.fieldList = SelectListItem.DistinctBy(x=>x.Text).OrderBy(x=>x.Text).ToList();
+                        ViewBag.fieldList = SelectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
                     }
                 }
             }
@@ -178,7 +178,7 @@ namespace NMP.Portal.Controllers
                 model.Nutrients = nutrients;
             }
             if (model.CropAndFieldReport != null && model.CropAndFieldReport.Farm != null)
-            {      
+            {
                 if (string.IsNullOrWhiteSpace(model.CropAndFieldReport.Farm.CPH))
                 {
                     model.CropAndFieldReport.Farm.CPH = Resource.lblNotEntered;
@@ -188,6 +188,7 @@ namespace NMP.Portal.Controllers
                     model.CropAndFieldReport.Farm.BusinessName = Resource.lblNotEntered;
                 }
                 model.CropAndFieldReport.Farm.FullAddress = string.Format("{0}, {1} {2}, {3}, {4}", model.CropAndFieldReport.Farm.Address1, model.CropAndFieldReport.Farm.Address2 != null ? model.CropAndFieldReport.Farm.Address2 + "," : string.Empty, model.CropAndFieldReport.Farm.Address3, model.CropAndFieldReport.Farm.Address4, model.CropAndFieldReport.Farm.Postcode);
+                int totalCount = 0;
                 if ((!string.IsNullOrWhiteSpace(model.CropAndFieldReport.Farm.FullAddress)) && model.CropAndFieldReport.Farm.CountryID != null)
                 {
                     model.CropAndFieldReport.Farm.FullAddress += ", " + Enum.GetName(typeof(NMP.Portal.Enums.FarmCountry), model.CropAndFieldReport.Farm.CountryID);
@@ -201,12 +202,15 @@ namespace NMP.Portal.Controllers
                     int totalArableArea = 0;
                     foreach (var fieldData in model.CropAndFieldReport.Farm.Fields)
                     {
+
                         totalFarmArea += fieldData.TotalArea.Value;
                         if (fieldData.Crops != null && fieldData.Crops.Count > 0)
                         {
+
                             // * fieldData.Crops.Count;
                             foreach (var cropData in fieldData.Crops)
                             {
+                                totalCount++;
                                 if (cropData.CropOrder == 1)
                                 {
                                     if (cropData.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
@@ -218,14 +222,31 @@ namespace NMP.Portal.Controllers
                                         totalArableArea += (int)Math.Round(fieldData.TotalArea.Value);
                                     }
                                 }
-
+                                foreach (var manData in cropData.ManagementPeriods)
+                                {
+                                    if (manData.Recommendation != null)
+                                    {
+                                        manData.Recommendation.LimeIndex = manData.Recommendation.PH;
+                                        manData.Recommendation.CropLime = (manData.Recommendation.PreviousAppliedLime != null && manData.Recommendation.PreviousAppliedLime > 0) ? manData.Recommendation.PreviousAppliedLime : manData.Recommendation.CropLime;
+                                        manData.Recommendation.KIndex = manData.Recommendation.KIndex != null ? (manData.Recommendation.KIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (manData.Recommendation.KIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : manData.Recommendation.KIndex)) : null;
+                                    }
+                                }
                             }
                         }
+                        //manData.Recommendation.KIndex != null ? (manData.Recommendation.KIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (manData.Recommendation.KIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : manData.Recommendation.KIndex)) : null;
+                        if (fieldData.SoilAnalysis != null)
+                        {
+                            if (fieldData.SoilAnalysis.SoilAnalysisAndSNSanalysis != null)
+                            {
+                                fieldData.SoilAnalysis.SoilAnalysisAndSNSanalysis.PotassiumIndex = fieldData.SoilAnalysis.SoilAnalysisAndSNSanalysis.PotassiumIndex != null ? (fieldData.SoilAnalysis.SoilAnalysisAndSNSanalysis.PotassiumIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (fieldData.SoilAnalysis.SoilAnalysisAndSNSanalysis.PotassiumIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : fieldData.SoilAnalysis.SoilAnalysisAndSNSanalysis.PotassiumIndex)) : null;
+                            }
 
+                        }
                     }
                     model.CropAndFieldReport.Farm.GrassArea = totalGrassArea;
                     model.CropAndFieldReport.Farm.ArableArea = totalArableArea;
                     model.CropAndFieldReport.Farm.TotalFarmArea = totalFarmArea;
+                    ViewBag.TotalCount = totalCount;
                 }
             }
             _logger.LogTrace("Report Controller : CropAndFieldManagement() post action called");
