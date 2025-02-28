@@ -4736,6 +4736,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to More about these Water Resource Regulations.
+        /// </summary>
+        public static string lblMoreAboutTheseWaterResourceRegulation {
+            get {
+                return ResourceManager.GetString("lblMoreAboutTheseWaterResourceRegulation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to N.
         /// </summary>
         public static string lblN {
@@ -7343,6 +7352,15 @@ namespace NMP.Portal.Resources {
         public static string lblThisApplicationMayBreachMoreThanOneNVZRule {
             get {
                 return ResourceManager.GetString("lblThisApplicationMayBreachMoreThanOneNVZRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application may breach more than one Water Resource Regulation..
+        /// </summary>
+        public static string lblThisApplicationMayBreachMoreThanOneWaterResourceRegulation {
+            get {
+                return ResourceManager.GetString("lblThisApplicationMayBreachMoreThanOneWaterResourceRegulation", resourceCulture);
             }
         }
         
