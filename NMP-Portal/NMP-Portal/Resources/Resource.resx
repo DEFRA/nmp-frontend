@@ -3527,8 +3527,7 @@ cubic metres per hectare  not set</value>
     <value>10 February</value>
   </data>
   <data name="lblAboutReleaseSchedule" xml:space="preserve">
-    <value>This is the plan for testing this service, adding new features and rolling it out across
-the country.</value>
+    <value>This is the plan for testing this tool, adding new features and rolling it out across the country.</value>
   </data>
   <data name="lblAllModulesLive" xml:space="preserve">
     <value>all the modules for England and Wales are live on &lt;a href="https://www.gov.uk/" target="_blank"&gt;GOV.UK&lt;/a&gt; and available for general use</value>
@@ -3555,7 +3554,7 @@ the country.</value>
     <value>integrated MANNER-NPK calculations</value>
   </data>
   <data name="lblJuly2025Schedule" xml:space="preserve">
-    <value>July 2025 - England and Wales full service live</value>
+    <value>July 2025 - England and Wales full tool live</value>
   </data>
   <data name="lblLivestockManureLimitComplianceModule" xml:space="preserve">
     <value>added function: livestock manure nitrogen (N) farm limit NVZ compliance module</value>
@@ -3570,13 +3569,13 @@ the country.</value>
     <value>a limited number of selected farmers and advisers across England and Wales are invited to test the tool and provide feedback prior to the public release</value>
   </data>
   <data name="lblNMPTLaunchesToUsersInScotland" xml:space="preserve">
-    <value>NMPT launches to users in Scotland</value>
+    <value>the tool launches to users in Scotland</value>
   </data>
   <data name="lblNMPTLiveForGeneralUse" xml:space="preserve">
-    <value>service launches for cross-border farms</value>
+    <value>tool launches for cross-border farms</value>
   </data>
   <data name="lblServiceReleaseSchedule" xml:space="preserve">
-    <value>Service release schedule</value>
+    <value>Release schedule for this tool</value>
   </data>
   <data name="lblNov2025EnglandWalesAndScotlandFullServiceLive" xml:space="preserve">
     <value>November 2025 - England, Wales and Scotland full service

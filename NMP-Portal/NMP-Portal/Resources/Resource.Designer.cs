@@ -484,8 +484,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This is the plan for testing this service, adding new features and rolling it out across
-        ///the country..
+        ///   Looks up a localized string similar to This is the plan for testing this tool, adding new features and rolling it out across the country..
         /// </summary>
         public static string lblAboutReleaseSchedule {
             get {
@@ -4086,7 +4085,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to July 2025 - England and Wales full service live.
+        ///   Looks up a localized string similar to July 2025 - England and Wales full tool live.
         /// </summary>
         public static string lblJuly2025Schedule {
             get {
@@ -4915,7 +4914,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NMPT launches to users in Scotland.
+        ///   Looks up a localized string similar to the tool launches to users in Scotland.
         /// </summary>
         public static string lblNMPTLaunchesToUsersInScotland {
             get {
@@ -4924,7 +4923,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to service launches for cross-border farms.
+        ///   Looks up a localized string similar to tool launches for cross-border farms.
         /// </summary>
         public static string lblNMPTLiveForGeneralUse {
             get {
@@ -6545,7 +6544,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Service release schedule.
+        ///   Looks up a localized string similar to Release schedule for this tool.
         /// </summary>
         public static string lblServiceReleaseSchedule {
             get {
