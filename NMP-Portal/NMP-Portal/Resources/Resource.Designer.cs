@@ -3354,6 +3354,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to GreenAreaIndex.
+        /// </summary>
+        public static string lblGreenAreaIndexForError {
+            get {
+                return ResourceManager.GetString("lblGreenAreaIndexForError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Green area index or crop height.
         /// </summary>
         public static string lblGreenAreaIndexOrCropHeight {
@@ -7632,6 +7641,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total area.
+        /// </summary>
+        public static string lblTotalArea {
+            get {
+                return ResourceManager.GetString("lblTotalArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total crop need.
         /// </summary>
         public static string lblTotalCropNeed {
@@ -10379,6 +10397,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For potassium (K), the index should be 2+ or 2- (not 2 on its own), with no decimals..
+        /// </summary>
+        public static string MsgEnterTheValueOYourSoilAnalysisHint3 {
+            get {
+                return ResourceManager.GetString("MsgEnterTheValueOYourSoilAnalysisHint3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the total field area.
         /// </summary>
         public static string MsgEnterTotalFieldArea {
@@ -10523,7 +10550,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The value must be a maximum of 2 decimal place and between 0 to 3..
+        ///   Looks up a localized string similar to Enter only a number between 0 and 3.0, to 2 decimal places..
         /// </summary>
         public static string MsgForGreenAreaIndex {
             get {
@@ -11522,7 +11549,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} is not a valid value for Potassium, please specify either 2- or 2+.
+        ///   Looks up a localized string similar to For potassium (K), the index should be 2+ or 2-, with no decimals..
         /// </summary>
         public static string MsgValueIsNotAValidValueForPotassium {
             get {

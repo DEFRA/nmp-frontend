@@ -3932,13 +3932,13 @@ live</value>
     <value>The value must be an integer value between 0 and 9.</value>
   </data>
   <data name="MsgValueIsNotAValidValueForPotassium" xml:space="preserve">
-    <value>{0} is not a valid value for Potassium, please specify either 2- or 2+</value>
+    <value>For potassium (K), the index should be 2+ or 2-, with no decimals.</value>
   </data>
   <data name="MsgForApplicationRate" xml:space="preserve">
     <value>The value must be a maximum of 1 decimal place and between 0 to 250.</value>
   </data>
   <data name="MsgForGreenAreaIndex" xml:space="preserve">
-    <value>The value must be a maximum of 2 decimal place and between 0 to 3.</value>
+    <value>Enter only a number between 0 and 3.0, to 2 decimal places.</value>
   </data>
   <data name="MsgIfGreenAreaIndexIsNull" xml:space="preserve">
     <value>Enter a value between 0 and 3.0</value>
@@ -3993,5 +3993,14 @@ live</value>
   </data>
   <data name="lblWalesWaterResourceRegulations" xml:space="preserve">
     <value>Wales: &lt;a href="https://www.gov.wales/water-resources-control-agricultural-pollution-wales-regulations-2021-guidance-farmers-and-land" target="_blank"&gt;The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021&lt;/a&gt;</value>
+  </data>
+  <data name="lblGreenAreaIndexForError" xml:space="preserve">
+    <value>GreenAreaIndex</value>
+  </data>
+  <data name="lblTotalArea" xml:space="preserve">
+    <value>Total area</value>
+  </data>
+  <data name="MsgEnterTheValueOYourSoilAnalysisHint3" xml:space="preserve">
+    <value>For potassium (K), the index should be 2+ or 2- (not 2 on its own), with no decimals.</value>
   </data>
 </root>

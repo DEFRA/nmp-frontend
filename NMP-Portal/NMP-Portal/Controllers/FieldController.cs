@@ -3150,10 +3150,10 @@ namespace NMP.Portal.Controllers
                 var greenAreaIndexError = ModelState["GreenAreaIndex"].Errors.Count > 0 ?
                                 ModelState["GreenAreaIndex"].Errors[0].ErrorMessage.ToString() : null;
 
-                if (greenAreaIndexError != null && greenAreaIndexError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["GreenAreaIndex"].RawValue, Resource.lblWhatIsTheGreenAreaIndexGAI)))
+                if (greenAreaIndexError != null && greenAreaIndexError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["GreenAreaIndex"].RawValue, Resource.lblGreenAreaIndexForError)))
                 {
                     ModelState["GreenAreaIndex"].Errors.Clear();
-                    ModelState["GreenAreaIndex"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblGreenAreaIndex));
+                    ModelState["GreenAreaIndex"].Errors.Add(Resource.MsgForGreenAreaIndex);
                 }
             }
             if (model.GreenAreaIndex == null)
