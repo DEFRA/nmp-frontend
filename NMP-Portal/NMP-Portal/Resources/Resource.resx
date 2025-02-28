@@ -3507,13 +3507,13 @@ cubic metres per hectare  not set</value>
     <value>The Create a plan for efficient nutrient management service ('this service') is currently in a private beta phase. This means that we are testing this service by invitation only. Some functionality may not work as expected and some features have not yet been developed.</value>
   </data>
   <data name="lblAboutRecommendationGuidenceAdvice" xml:space="preserve">
-    <value>About recommendations, guidance, and advice in private beta</value>
+    <value>About the recommendations, guidance and advice</value>
   </data>
   <data name="lblAboutRecommendationGuidenceAdviceContent1" xml:space="preserve">
-    <value>This service was developed by the Department for Environment, Food &amp; Rural Affairs (Defra), the Agriculture and Horticulture Development Board (AHDB), ADAS and the RSK group. Nutrient recommendations are derived from RB209 Application Programming Interface (API); RB209 is the intellectual property of AHDB.</value>
+    <value>This tool was developed by the Department for Environment, Food &amp; Rural Affairs (Defra), the Agriculture and Horticulture Development Board (AHDB), ADAS and the RSK group. Nutrient recommendations are derived from RB209 Application Programming Interface (API); RB209 is the intellectual property of AHDB.</value>
   </data>
   <data name="lblAboutRecommendationGuidenceAdviceContent2" xml:space="preserve">
-    <value>While Defra and partners seek to ensure that the information provided by this service is accurate at the time of use, Defra and partners accept no liability for loss, damage or injury howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to information contained in or omitted from this service.</value>
+    <value>While Defra and partners seek to ensure that the information provided by this tool is accurate at the time of use, Defra and partners accept no liability for loss, damage or injury howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to information contained in or omitted from this tool.</value>
   </data>
   <data name="lblGetHelpAndFeedback" xml:space="preserve">
     <value>Get help or give feedback</value>
@@ -3833,7 +3833,7 @@ live</value>
     <value>View the &lt;a href="/AcceptTerms" &gt;terms of use&lt;/a&gt; for this service.</value>
   </data>
   <data name="lblAboutRecommendationGuidenceAdviceContent3" xml:space="preserve">
-    <value>Users are responsible for the accuracy of their own data and the application of guidance provided. This service should not be relied upon as the sole source of nutrient management guidance. Always consider local conditions and, if necessary, consult a FACTS Qualified Adviser before making nutrient management decisions.</value>
+    <value>Users are responsible for the accuracy of their own data and the application of guidance provided. This tool should not be relied upon as the sole source of nutrient management guidance. Always consider local conditions and, if necessary, consult a FACTS Qualified Adviser before making nutrient management decisions.</value>
   </data>
   <data name="lblAbout_this_service" xml:space="preserve">
     <value>About this service</value>
@@ -3866,7 +3866,7 @@ live</value>
     <value>We will reply to your email as quickly as we can.</value>
   </data>
   <data name="lblIagree_to_the_terms_of_use" xml:space="preserve">
-    <value>I agree to the terms of use</value>
+    <value>Do not show this page again</value>
   </data>
   <data name="lblMore_information" xml:space="preserve">
     <value>More information</value>
@@ -3884,7 +3884,7 @@ live</value>
     <value>Private beta disclaimer</value>
   </data>
   <data name="lblPrivate_beta_disclaimer_sub_heading" xml:space="preserve">
-    <value>Any recommendations and advice given in the private beta version of this service cannot be used:</value>
+    <value>Any recommendations and advice given in the private beta version of this tool cannot be used:</value>
   </data>
   <data name="lblPrivate_beta_disclaimer_sub_heading_line1" xml:space="preserve">
     <value>to demonstrate compliance with any regulation or legislation, such as NVZ rules</value>
@@ -3909,9 +3909,6 @@ live</value>
   </data>
   <data name="lblTermsOfUse" xml:space="preserve">
     <value>Terms of use</value>
-  </data>
-  <data name="lblTerms_Of_Use" xml:space="preserve">
-    <value>Terms Of Use</value>
   </data>
   <data name="msgAcceptTermsOfUse" xml:space="preserve">
     <value>Please accept terms of use</value>
@@ -3975,5 +3972,11 @@ live</value>
   </data>
   <data name="lblDevelopNutrientApplicationPlan" xml:space="preserve">
     <value>You can develop a nutrient application plan during the season. This tool will keep detailed records of cropping, soil analyses, and each fertiliser and manure application.</value>
+  </data>
+  <data name="lblAboutTermsOfUseLine1" xml:space="preserve">
+    <value>This tool is currently in a private beta phase. This means that we are testing the tool with a group of invited users. As such, some functionality may not work as expected and some features have not yet been developed.</value>
+  </data>
+  <data name="lblAboutTermsOfUseLine2" xml:space="preserve">
+    <value>Check the &lt;a href="/ReleaseSchedule"&gt;release schedule&lt;/a&gt; to see what features have been added to the test version of the tool.</value>
   </data>
 </root>

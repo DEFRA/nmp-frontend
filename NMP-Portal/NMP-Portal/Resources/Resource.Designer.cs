@@ -482,7 +482,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to About recommendations, guidance, and advice in private beta.
+        ///   Looks up a localized string similar to About the recommendations, guidance and advice.
         /// </summary>
         public static string lblAboutRecommendationGuidenceAdvice {
             get {
@@ -491,7 +491,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This service was developed by the Department for Environment, Food &amp; Rural Affairs (Defra), the Agriculture and Horticulture Development Board (AHDB), ADAS and the RSK group. Nutrient recommendations are derived from RB209 Application Programming Interface (API); RB209 is the intellectual property of AHDB..
+        ///   Looks up a localized string similar to This tool was developed by the Department for Environment, Food &amp; Rural Affairs (Defra), the Agriculture and Horticulture Development Board (AHDB), ADAS and the RSK group. Nutrient recommendations are derived from RB209 Application Programming Interface (API); RB209 is the intellectual property of AHDB..
         /// </summary>
         public static string lblAboutRecommendationGuidenceAdviceContent1 {
             get {
@@ -500,7 +500,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to While Defra and partners seek to ensure that the information provided by this service is accurate at the time of use, Defra and partners accept no liability for loss, damage or injury howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to information contained in or omitted from this service..
+        ///   Looks up a localized string similar to While Defra and partners seek to ensure that the information provided by this tool is accurate at the time of use, Defra and partners accept no liability for loss, damage or injury howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to information contained in or omitted from this tool..
         /// </summary>
         public static string lblAboutRecommendationGuidenceAdviceContent2 {
             get {
@@ -509,7 +509,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Users are responsible for the accuracy of their own data and the application of guidance provided. This service should not be relied upon as the sole source of nutrient management guidance. Always consider local conditions and, if necessary, consult a FACTS Qualified Adviser before making nutrient management decisions..
+        ///   Looks up a localized string similar to Users are responsible for the accuracy of their own data and the application of guidance provided. This tool should not be relied upon as the sole source of nutrient management guidance. Always consider local conditions and, if necessary, consult a FACTS Qualified Adviser before making nutrient management decisions..
         /// </summary>
         public static string lblAboutRecommendationGuidenceAdviceContent3 {
             get {
@@ -524,6 +524,24 @@ namespace NMP.Portal.Resources {
         public static string lblAboutReleaseSchedule {
             get {
                 return ResourceManager.GetString("lblAboutReleaseSchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This tool is currently in a private beta phase. This means that we are testing the tool with a group of invited users. As such, some functionality may not work as expected and some features have not yet been developed..
+        /// </summary>
+        public static string lblAboutTermsOfUseLine1 {
+            get {
+                return ResourceManager.GetString("lblAboutTermsOfUseLine1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check the &lt;a href=&quot;/ReleaseSchedule&quot;&gt;release schedule&lt;/a&gt; to see what features have been added to the test version of the tool..
+        /// </summary>
+        public static string lblAboutTermsOfUseLine2 {
+            get {
+                return ResourceManager.GetString("lblAboutTermsOfUseLine2", resourceCulture);
             }
         }
         
@@ -3769,7 +3787,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to I agree to the terms of use.
+        ///   Looks up a localized string similar to Do not show this page again.
         /// </summary>
         public static string lblIagree_to_the_terms_of_use {
             get {
@@ -5886,7 +5904,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Any recommendations and advice given in the private beta version of this service cannot be used:.
+        ///   Looks up a localized string similar to Any recommendations and advice given in the private beta version of this tool cannot be used:.
         /// </summary>
         public static string lblPrivate_beta_disclaimer_sub_heading {
             get {
@@ -7151,15 +7169,6 @@ namespace NMP.Portal.Resources {
         public static string lblTargetYield {
             get {
                 return ResourceManager.GetString("lblTargetYield", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Terms Of Use.
-        /// </summary>
-        public static string lblTerms_Of_Use {
-            get {
-                return ResourceManager.GetString("lblTerms_Of_Use", resourceCulture);
             }
         }
         
