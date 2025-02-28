@@ -419,7 +419,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to About this service.
+        ///   Looks up a localized string similar to About this tool.
         /// </summary>
         public static string lblAbout_this_service {
             get {
@@ -433,24 +433,6 @@ namespace NMP.Portal.Resources {
         public static string lblAbout_this_service_line1 {
             get {
                 return ResourceManager.GetString("lblAbout_this_service_line1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The service will warn you of possible breaches of the Nitrate Vulnerable Zone (NVZ) rules as you make your plans..
-        /// </summary>
-        public static string lblAbout_this_service_line2 {
-            get {
-                return ResourceManager.GetString("lblAbout_this_service_line2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The service also accounts for Soil Nitrogen Supply (SNS). You can add SNS data for a field at the end of the planning process..
-        /// </summary>
-        public static string lblAbout_this_service_line3 {
-            get {
-                return ResourceManager.GetString("lblAbout_this_service_line3", resourceCulture);
             }
         }
         
@@ -2468,6 +2450,24 @@ namespace NMP.Portal.Resources {
         public static string lblEndOfSoilDrainage {
             get {
                 return ResourceManager.GetString("lblEndOfSoilDrainage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scotland: &lt;a href=&quot;https://www.gov.scot/policies/agriculture-and-the-environment/nvz/&quot; target=&quot;_blank&quot;&gt;The Action Programme for Nitrate Vulnerable Zones (Scotland) Regulations 2008&lt;/a&gt;.
+        /// </summary>
+        public static string lblEnglandNVZActionProgramme {
+            get {
+                return ResourceManager.GetString("lblEnglandNVZActionProgramme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to England: &lt;a href=&quot;https://www.gov.uk/government/collections/nitrate-vulnerable-zones&quot; target=&quot;_blank&quot;&gt;Nitrate vulnerable zones (NVZs)&lt;/a&gt; and &lt;a href=&quot;https://www.gov.uk/government/publications/applying-the-farming-rules-for-water/applying-the-farming-rules-for-water&quot; target=&quot;_blank&quot; &gt;Farming rules for water&lt;/a&gt;.
+        /// </summary>
+        public static string lblEnglandNVZWaterFarmingRules {
+            get {
+                return ResourceManager.GetString("lblEnglandNVZWaterFarmingRules", resourceCulture);
             }
         }
         
@@ -6120,6 +6120,42 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Regulations.
+        /// </summary>
+        public static string lblRegulations {
+            get {
+                return ResourceManager.GetString("lblRegulations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The service will warn you if you enter field or nutrient management information that will breach Nitrate Vulnerable Zone (NVZ) rules. The service can help you demonstrate compliance with the NVZ rules for regulatory purposes..
+        /// </summary>
+        public static string lblRegulations_line1 {
+            get {
+                return ResourceManager.GetString("lblRegulations_line1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The service also accounts for Soil Nitrogen Supply (SNS). You can add SNS data for a field at the end of the planning process..
+        /// </summary>
+        public static string lblRegulations_line2 {
+            get {
+                return ResourceManager.GetString("lblRegulations_line2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must follow the appropriate regulations, depending on where your farm is:.
+        /// </summary>
+        public static string lblRegulations_line3 {
+            get {
+                return ResourceManager.GetString("lblRegulations_line3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Release schedule.
         /// </summary>
         public static string lblReleaseSchedule {
@@ -8195,6 +8231,15 @@ namespace NMP.Portal.Resources {
         public static string lblViewRecommendations {
             get {
                 return ResourceManager.GetString("lblViewRecommendations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wales: &lt;a href=&quot;https://www.gov.wales/water-resources-control-agricultural-pollution-wales-regulations-2021-guidance-farmers-and-land&quot; target=&quot;_blank&quot;&gt;The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021&lt;/a&gt;.
+        /// </summary>
+        public static string lblWalesWaterResourceRegulations {
+            get {
+                return ResourceManager.GetString("lblWalesWaterResourceRegulations", resourceCulture);
             }
         }
         

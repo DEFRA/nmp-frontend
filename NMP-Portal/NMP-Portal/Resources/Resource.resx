@@ -3836,15 +3836,15 @@ live</value>
     <value>Users are responsible for the accuracy of their own data and the application of guidance provided. This tool should not be relied upon as the sole source of nutrient management guidance. Always consider local conditions and, if necessary, consult a FACTS Qualified Adviser before making nutrient management decisions.</value>
   </data>
   <data name="lblAbout_this_service" xml:space="preserve">
-    <value>About this service</value>
+    <value>About this tool</value>
   </data>
   <data name="lblAbout_this_service_line1" xml:space="preserve">
     <value>The first step is to set up your farm. The farm will contain your fields, and the fields will have the crops and nutrients applied to them. If you have more than one holding, it's best to add a separate farm for each one.</value>
   </data>
-  <data name="lblAbout_this_service_line2" xml:space="preserve">
-    <value>The service will warn you of possible breaches of the Nitrate Vulnerable Zone (NVZ) rules as you make your plans.</value>
+  <data name="lblRegulations_line1" xml:space="preserve">
+    <value>The service will warn you if you enter field or nutrient management information that will breach Nitrate Vulnerable Zone (NVZ) rules. The service can help you demonstrate compliance with the NVZ rules for regulatory purposes.</value>
   </data>
-  <data name="lblAbout_this_service_line3" xml:space="preserve">
+  <data name="lblRegulations_line2" xml:space="preserve">
     <value>The service also accounts for Soil Nitrogen Supply (SNS). You can add SNS data for a field at the end of the planning process.</value>
   </data>
   <data name="lblDo_not_show_this_information_again" xml:space="preserve">
@@ -3978,5 +3978,20 @@ live</value>
   </data>
   <data name="lblAboutTermsOfUseLine2" xml:space="preserve">
     <value>Check the &lt;a href="/ReleaseSchedule"&gt;release schedule&lt;/a&gt; to see what features have been added to the test version of the tool.</value>
+  </data>
+  <data name="lblEnglandNVZActionProgramme" xml:space="preserve">
+    <value>Scotland: &lt;a href="https://www.gov.scot/policies/agriculture-and-the-environment/nvz/" target="_blank"&gt;The Action Programme for Nitrate Vulnerable Zones (Scotland) Regulations 2008&lt;/a&gt;</value>
+  </data>
+  <data name="lblEnglandNVZWaterFarmingRules" xml:space="preserve">
+    <value>England: &lt;a href="https://www.gov.uk/government/collections/nitrate-vulnerable-zones" target="_blank"&gt;Nitrate vulnerable zones (NVZs)&lt;/a&gt; and &lt;a href="https://www.gov.uk/government/publications/applying-the-farming-rules-for-water/applying-the-farming-rules-for-water" target="_blank" &gt;Farming rules for water&lt;/a&gt;</value>
+  </data>
+  <data name="lblRegulations" xml:space="preserve">
+    <value>Regulations</value>
+  </data>
+  <data name="lblRegulations_line3" xml:space="preserve">
+    <value>You must follow the appropriate regulations, depending on where your farm is:</value>
+  </data>
+  <data name="lblWalesWaterResourceRegulations" xml:space="preserve">
+    <value>Wales: &lt;a href="https://www.gov.wales/water-resources-control-agricultural-pollution-wales-regulations-2021-guidance-farmers-and-land" target="_blank"&gt;The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021&lt;/a&gt;</value>
   </data>
 </root>
