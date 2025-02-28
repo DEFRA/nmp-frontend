@@ -1394,7 +1394,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Conditions affecting the loss of nutrients from your organic materials</value>
   </data>
   <data name="lblHowLongIsTheGapBetweenApplicationAndIncoporation" xml:space="preserve">
-    <value>How long is the gap between application and incorporation for your {0}?</value>
+    <value>How long is there between application and incorporation for your {0}?</value>
   </data>
   <data name="lblIncorprationDelay" xml:space="preserve">
     <value>Incorpration Delay</value>
@@ -2387,7 +2387,7 @@ cubic metres per hectare  not set</value>
     <value>Do you want to add a recent soil analysis for {0}?</value>
   </data>
   <data name="MsgSoilAnalysisHint1" xml:space="preserve">
-    <value>You should sample the soil from your fields every 3 to 4 years and get it tested for pH, phosphorus, potassium and magnesium. Enter the results of your most recent soil analysis to include these in your nutrient management plan. ​This will help us give you the best recommendations.</value>
+    <value>You will get better recommendations if you have a recent soil analysis. You should sample the soil from your fields every 3 to 4 years and get it tested for pH, phosphorus, potassium and magnesium.</value>
   </data>
   <data name="MsgSoilAnalysisHint2" xml:space="preserve">
     <value>If you do not enter a soil analysis, or if your most recent soil analysis is more than 5 years old, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop.</value>
@@ -3980,7 +3980,6 @@ live</value>
   <data name="lblWalesWaterResourceRegulations" xml:space="preserve">
     <value>Wales: &lt;a href="https://www.gov.wales/water-resources-control-agricultural-pollution-wales-regulations-2021-guidance-farmers-and-land" target="_blank"&gt;The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021&lt;/a&gt;</value>
   </data>
-
   <data name="lblGreenAreaIndexForError" xml:space="preserve">
     <value>GreenAreaIndex</value>
   </data>
@@ -3989,7 +3988,7 @@ live</value>
   </data>
   <data name="MsgEnterTheValueOYourSoilAnalysisHint3" xml:space="preserve">
     <value>For potassium (K), the index should be 2+ or 2- (not 2 on its own), with no decimals.</value>
-</data>
+  </data>
   <data name="lblHelpIssuesLine1" xml:space="preserve">
     <value>technical issues</value>
   </data>

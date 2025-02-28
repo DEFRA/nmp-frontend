@@ -3634,7 +3634,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How long is the gap between application and incorporation for your {0}?.
+        ///   Looks up a localized string similar to How long is there between application and incorporation for your {0}?.
         /// </summary>
         public static string lblHowLongIsTheGapBetweenApplicationAndIncoporation {
             get {
@@ -11379,7 +11379,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You should sample the soil from your fields every 3 to 4 years and get it tested for pH, phosphorus, potassium and magnesium. Enter the results of your most recent soil analysis to include these in your nutrient management plan. ​This will help us give you the best recommendations..
+        ///   Looks up a localized string similar to You will get better recommendations if you have a recent soil analysis. You should sample the soil from your fields every 3 to 4 years and get it tested for pH, phosphorus, potassium and magnesium..
         /// </summary>
         public static string MsgSoilAnalysisHint1 {
             get {
