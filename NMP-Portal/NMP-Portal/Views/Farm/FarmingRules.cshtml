@@ -14,7 +14,6 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-l">@Resource.lblFarmingRulesForWater</h1>
 
         <form asp-action="FarmingRules" method="post" asp-controller="Farm" autocomplete="off">
             @Html.AntiForgeryToken()
@@ -41,26 +40,54 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsUpdate"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
             }
-            <p class="govuk-body">
-                @Resource.lblFarmingRuleOfWaterFirst
-            </p>
-            <p class="govuk-body">
-                @Resource.lblFarmingRuleOfWaterSecond
-            </p>
-             <p class="govuk-body">
-                @Resource.lblFarmingRuleOfWaterThird
-            </p>
-             <p class="govuk-body">
-                @Resource.lblFarmingRuleOfWaterFourth
-            </p>
-            <p class="govuk-body margin-bottom-forty">
-                @Resource.lblFarmingRuleOfWaterFifth
+
+            @if (Model != null && Model.CountryID == (int)NMP.Portal.Enums.FarmCountry.England)
+            {
+                <h1 class="govuk-heading-l">@Resource.lblNitrateVulnerableZones</h1>
+                <p class="govuk-body">
+                    @Resource.lblFirstRuleOfNVZForEngland
+                </p>
+                <p class="govuk-body">
+                    @Resource.lblSecondRuleOfNVZForEngland
+                </p>
+                <p class="govuk-body">
+                    @Resource.lblThirdRuleOfNVZForEngland
+                    <a target="_blank" href="https://www.gov.uk/government/collections/nitrate-vulnerable-zones">@Resource.lblFourthRuleOfNVZForEngland</a>
+                    @Resource.lblOpenInANewWindow
+                </p>
                 <br />
-                <a target="_blank" href="https://www.gov.uk/guidance/rules-for-farmers-and-land-managers-to-prevent-water-pollution#assess-pollution-risks">@Resource.lblFarmingRuleOfWaterSixth</a>
-                @Resource.lblFarmingRuleOfWaterSeventh
-            </p>
-          
-           
+                <h1 class="govuk-heading-l">@Resource.lblFarmingRulesForWater</h1>
+                <p class="govuk-body">
+                    @Resource.lblFarmingRuleOfWaterFirstForEngland
+                </p>
+                <p class="govuk-body">
+                    @Resource.lblFarmingRuleOfWaterSecondForEngland
+                </p>
+                <p class="govuk-body">
+                    @Resource.lblFarmingRuleOfWaterThirdForEngland
+                </p>
+                <p class="govuk-body margin-bottom-forty">
+                    @Resource.lblFarmingRuleOfWaterFourthForEngland
+                    <a target="_blank" href="https://www.gov.uk/guidance/rules-for-farmers-and-land-managers-to-prevent-water-pollution#assess-pollution-risks">@Resource.lblFarmingRuleOfWaterFifthForEngland</a>
+                    @Resource.lblOpenInANewWindow
+                </p>
+            }
+            else @if (Model != null && Model.CountryID == (int)NMP.Portal.Enums.FarmCountry.Wales)
+            {
+                <h1 class="govuk-heading-l">@Resource.lblTheWaterResourcesRegulations2021</h1>
+                <p class="govuk-body">
+                    @Resource.lblFarmingRuleOfWaterFirstForWale
+                </p>
+                <p class="govuk-body">
+                    @Resource.lblFarmingRuleOfWaterSecondForWale
+                </p>
+                <p class="govuk-body">
+                    @Resource.lblRead
+                    <a target="_blank" href="https://www.gov.wales/water-resources-control-agricultural-pollution-wales-regulations-2021-guidance-farmers-and-land">@Resource.lblFarmingRuleOfWaterThirdForWale</a>
+                    @Resource.lblOpenInANewWindow
+                </p>
+            }
+
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>

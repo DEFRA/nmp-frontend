@@ -2896,65 +2896,74 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Further information is available from:.
+        ///   Looks up a localized string similar to rules for farmers and land managers.
         /// </summary>
-        public static string lblFarmingRuleOfWaterFifth {
+        public static string lblFarmingRuleOfWaterFifthForEngland {
             get {
-                return ResourceManager.GetString("lblFarmingRuleOfWaterFifth", resourceCulture);
+                return ResourceManager.GetString("lblFarmingRuleOfWaterFifthForEngland", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All agricultural land in England is subject to the Farming Rules for Water..
+        ///   Looks up a localized string similar to All agricultural land in England is subject to the Farming Rules for Water. These rules aim to reduce and prevent water pollution from agricultural sources..
         /// </summary>
-        public static string lblFarmingRuleOfWaterFirst {
+        public static string lblFarmingRuleOfWaterFirstForEngland {
             get {
-                return ResourceManager.GetString("lblFarmingRuleOfWaterFirst", resourceCulture);
+                return ResourceManager.GetString("lblFarmingRuleOfWaterFirstForEngland", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All agricultural land in Wales is subject to the Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021. These regulations have been introduced to reduce losses of pollutants from agriculture to the environment by setting rules for certain farming practices..
+        /// </summary>
+        public static string lblFarmingRuleOfWaterFirstForWale {
+            get {
+                return ResourceManager.GetString("lblFarmingRuleOfWaterFirstForWale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Read the.
+        /// </summary>
+        public static string lblFarmingRuleOfWaterFourthForEngland {
+            get {
+                return ResourceManager.GetString("lblFarmingRuleOfWaterFourthForEngland", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To comply with the rules, you must ensure that all applications of organic material or inorganic fertiliser are planned. This is so they do not exceed the needs of the soil and crop on that land, or create a significant risk of pollution..
+        /// </summary>
+        public static string lblFarmingRuleOfWaterSecondForEngland {
+            get {
+                return ResourceManager.GetString("lblFarmingRuleOfWaterSecondForEngland", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must follow rules when you use inorganic fertilisers and organic materials. This tool will help you demonstrate compliance with the rules. It will also tell you if you are at risk of breaking the rules as you plan nutrient applications..
+        /// </summary>
+        public static string lblFarmingRuleOfWaterSecondForWale {
+            get {
+                return ResourceManager.GetString("lblFarmingRuleOfWaterSecondForWale", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Creating and following a nutrient management plan will help you comply with these rules..
         /// </summary>
-        public static string lblFarmingRuleOfWaterFourth {
+        public static string lblFarmingRuleOfWaterThirdForEngland {
             get {
-                return ResourceManager.GetString("lblFarmingRuleOfWaterFourth", resourceCulture);
+                return ResourceManager.GetString("lblFarmingRuleOfWaterThirdForEngland", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The rules aim to reduce and prevent diffuse water pollution from agricultural sources..
+        ///   Looks up a localized string similar to The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021.
         /// </summary>
-        public static string lblFarmingRuleOfWaterSecond {
+        public static string lblFarmingRuleOfWaterThirdForWale {
             get {
-                return ResourceManager.GetString("lblFarmingRuleOfWaterSecond", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to (opens in a new window).
-        /// </summary>
-        public static string lblFarmingRuleOfWaterSeventh {
-            get {
-                return ResourceManager.GetString("lblFarmingRuleOfWaterSeventh", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Rules for farmers and land managers.
-        /// </summary>
-        public static string lblFarmingRuleOfWaterSixth {
-            get {
-                return ResourceManager.GetString("lblFarmingRuleOfWaterSixth", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To comply with the rules a land manager must ensure that all applications of organic manure or manufactured fertiliser are planned so that they don’t exceed the needs of the soil and crop on that land or give rise to a significant risk of agricultural diffuse pollution..
-        /// </summary>
-        public static string lblFarmingRuleOfWaterThird {
-            get {
-                return ResourceManager.GetString("lblFarmingRuleOfWaterThird", resourceCulture);
+                return ResourceManager.GetString("lblFarmingRuleOfWaterThirdForWale", resourceCulture);
             }
         }
         
@@ -3211,6 +3220,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to NVZs are areas designated as being at risk from agricultural nitrate pollution. They include about 55% of land in England..
+        /// </summary>
+        public static string lblFirstRuleOfNVZForEngland {
+            get {
+                return ResourceManager.GetString("lblFirstRuleOfNVZForEngland", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 99999.
         /// </summary>
         public static string lblFiveDigit {
@@ -3243,6 +3261,15 @@ namespace NMP.Portal.Resources {
         public static string lblForFertiliserSecond {
             get {
                 return ResourceManager.GetString("lblForFertiliserSecond", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nitrate vulnerable zones (NVZs).
+        /// </summary>
+        public static string lblFourthRuleOfNVZForEngland {
+            get {
+                return ResourceManager.GetString("lblFourthRuleOfNVZForEngland", resourceCulture);
             }
         }
         
@@ -4896,6 +4923,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nitrate Vulnerable Zones (NVZs).
+        /// </summary>
+        public static string lblNitrateVulnerableZones {
+            get {
+                return ResourceManager.GetString("lblNitrateVulnerableZones", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nitrogen (N).
         /// </summary>
         public static string lblNitrogen {
@@ -5280,6 +5316,15 @@ namespace NMP.Portal.Resources {
         public static string lblOpenGovernmentLicence {
             get {
                 return ResourceManager.GetString("lblOpenGovernmentLicence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (opens in a new window).
+        /// </summary>
+        public static string lblOpenInANewWindow {
+            get {
+                return ResourceManager.GetString("lblOpenInANewWindow", resourceCulture);
             }
         }
         
@@ -6112,6 +6157,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Read.
+        /// </summary>
+        public static string lblRead {
+            get {
+                return ResourceManager.GetString("lblRead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;a  href =&quot;/ReleaseSchedule&quot;&gt;Read the release schedule for testing and new features&lt;/a&gt;.
         /// </summary>
         public static string lblReadScheduleLink {
@@ -6468,6 +6522,15 @@ namespace NMP.Portal.Resources {
         public static string lblSecondCrop {
             get {
                 return ResourceManager.GetString("lblSecondCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If your land is in an NVZ, you must follow rules when you use nitrogen fertiliser. This tool will help you demonstrate compliance with the NVZ rules. It will also tell you if you are at risk of breaking the rules as you plan nutrient applications..
+        /// </summary>
+        public static string lblSecondRuleOfNVZForEngland {
+            get {
+                return ResourceManager.GetString("lblSecondRuleOfNVZForEngland", resourceCulture);
             }
         }
         
@@ -7431,6 +7494,24 @@ namespace NMP.Portal.Resources {
         public static string lblTheseValuesAreUsedToCalculateHowEffective {
             get {
                 return ResourceManager.GetString("lblTheseValuesAreUsedToCalculateHowEffective", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021.
+        /// </summary>
+        public static string lblTheWaterResourcesRegulations2021 {
+            get {
+                return ResourceManager.GetString("lblTheWaterResourcesRegulations2021", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Read more about.
+        /// </summary>
+        public static string lblThirdRuleOfNVZForEngland {
+            get {
+                return ResourceManager.GetString("lblThirdRuleOfNVZForEngland", resourceCulture);
             }
         }
         

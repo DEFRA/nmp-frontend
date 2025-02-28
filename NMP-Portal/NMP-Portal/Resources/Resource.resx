@@ -2815,26 +2815,23 @@ cubic metres per hectare  not set</value>
   <data name="lblInWhichYearsWasUsedForGrass" xml:space="preserve">
     <value>In which years was {0} used for grass?</value>
   </data>
-  <data name="lblFarmingRuleOfWaterFifth" xml:space="preserve">
-    <value>Further information is available from:</value>
+  <data name="lblFarmingRuleOfWaterFourthForEngland" xml:space="preserve">
+    <value>Read the</value>
   </data>
-  <data name="lblFarmingRuleOfWaterFirst" xml:space="preserve">
-    <value>All agricultural land in England is subject to the Farming Rules for Water.</value>
+  <data name="lblFarmingRuleOfWaterFirstForEngland" xml:space="preserve">
+    <value>All agricultural land in England is subject to the Farming Rules for Water. These rules aim to reduce and prevent water pollution from agricultural sources.</value>
   </data>
-  <data name="lblFarmingRuleOfWaterFourth" xml:space="preserve">
+  <data name="lblFarmingRuleOfWaterThirdForEngland" xml:space="preserve">
     <value>Creating and following a nutrient management plan will help you comply with these rules.</value>
   </data>
-  <data name="lblFarmingRuleOfWaterSecond" xml:space="preserve">
-    <value>The rules aim to reduce and prevent diffuse water pollution from agricultural sources.</value>
-  </data>
-  <data name="lblFarmingRuleOfWaterSeventh" xml:space="preserve">
+  <data name="lblOpenInANewWindow" xml:space="preserve">
     <value>(opens in a new window)</value>
   </data>
-  <data name="lblFarmingRuleOfWaterSixth" xml:space="preserve">
-    <value>Rules for farmers and land managers</value>
+  <data name="lblFarmingRuleOfWaterFifthForEngland" xml:space="preserve">
+    <value>rules for farmers and land managers</value>
   </data>
-  <data name="lblFarmingRuleOfWaterThird" xml:space="preserve">
-    <value>To comply with the rules a land manager must ensure that all applications of organic manure or manufactured fertiliser are planned so that they don’t exceed the needs of the soil and crop on that land or give rise to a significant risk of agricultural diffuse pollution.</value>
+  <data name="lblFarmingRuleOfWaterSecondForEngland" xml:space="preserve">
+    <value>To comply with the rules, you must ensure that all applications of organic material or inorganic fertiliser are planned. This is so they do not exceed the needs of the soil and crop on that land, or create a significant risk of pollution.</value>
   </data>
   <data name="lblWhatIsPostcode" xml:space="preserve">
     <value>What is {0}'s postcode?</value>
@@ -4009,5 +4006,35 @@ live</value>
   </data>
   <data name="lblEnterANumberFrom0To250" xml:space="preserve">
     <value>Enter a number from 0 to 250, to 1 decimal place.</value>
+  </data>
+  <data name="lblFarmingRuleOfWaterFirstForWale" xml:space="preserve">
+    <value>All agricultural land in Wales is subject to the Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021. These regulations have been introduced to reduce losses of pollutants from agriculture to the environment by setting rules for certain farming practices.</value>
+  </data>
+  <data name="lblFarmingRuleOfWaterSecondForWale" xml:space="preserve">
+    <value>You must follow rules when you use inorganic fertilisers and organic materials. This tool will help you demonstrate compliance with the rules. It will also tell you if you are at risk of breaking the rules as you plan nutrient applications.</value>
+  </data>
+  <data name="lblFarmingRuleOfWaterThirdForWale" xml:space="preserve">
+    <value>The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021</value>
+  </data>
+  <data name="lblFirstRuleOfNVZForEngland" xml:space="preserve">
+    <value>NVZs are areas designated as being at risk from agricultural nitrate pollution. They include about 55% of land in England.</value>
+  </data>
+  <data name="lblFourthRuleOfNVZForEngland" xml:space="preserve">
+    <value>Nitrate vulnerable zones (NVZs)</value>
+  </data>
+  <data name="lblNitrateVulnerableZones" xml:space="preserve">
+    <value>Nitrate Vulnerable Zones (NVZs)</value>
+  </data>
+  <data name="lblRead" xml:space="preserve">
+    <value>Read</value>
+  </data>
+  <data name="lblSecondRuleOfNVZForEngland" xml:space="preserve">
+    <value>If your land is in an NVZ, you must follow rules when you use nitrogen fertiliser. This tool will help you demonstrate compliance with the NVZ rules. It will also tell you if you are at risk of breaking the rules as you plan nutrient applications.</value>
+  </data>
+  <data name="lblTheWaterResourcesRegulations2021" xml:space="preserve">
+    <value>The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021</value>
+  </data>
+  <data name="lblThirdRuleOfNVZForEngland" xml:space="preserve">
+    <value>Read more about</value>
   </data>
 </root>
