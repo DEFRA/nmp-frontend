@@ -20,16 +20,9 @@ namespace NMP.Portal.Controllers
         {
             AboutServiceViewModel model = new AboutServiceViewModel();
             (UserExtension userExtension, Error error) = await _userExtensionService.FetchUserExtensionAsync();
-            if (userExtension != null && userExtension.IsTermsOfUseAccepted)
+            if (userExtension != null && userExtension.DoNotShowAboutThisService)
             {
-                if (userExtension.DoNotShowAboutThisService)
-                {
-                    return RedirectToAction("FarmList", "Farm");
-                }
-                //else
-                //{
-                //    return RedirectToAction("Index", "AboutService");
-                //}
+                return RedirectToAction("Accept", "AcceptTerms");
             }
 
             return View(model);
@@ -51,7 +44,7 @@ namespace NMP.Portal.Controllers
                 }
             }
 
-            return RedirectToAction("FarmList", "Farm");
+            return RedirectToAction("Accept", "AcceptTerms");
         }
     }
 }

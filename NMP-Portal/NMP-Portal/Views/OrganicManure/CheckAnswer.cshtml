@@ -79,7 +79,6 @@
                     @if (Model.IsNMaxLimitWarning)
                     {
                         <p class="govuk-notification-banner__heading">
-                            @Resource.lblNMaxLimitTitle
                             @if (Model.CropNmaxLimitWarningHeading != null)
                             {
                                 @Model.CropNmaxLimitWarningHeading
@@ -258,7 +257,7 @@
                 }
             }
             <govuk-summary-list>
-                @if (!Model.IsComingFromRecommendation)
+                @if (!Model.IsComingFromRecommendation && ViewBag.SelectedFields == null)
                 {
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
@@ -311,7 +310,7 @@
                         <govuk-summary-list-row-actions>
                             @if (ViewBag.Fields != null)
                             {
-                                <govuk-summary-list-row-action class="@( (ViewBag.Fields.Count==1 || Model.FieldGroup.Equals(Resource.lblAll) )? "disabled": "")" asp-action="Fields" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action class="@( (ViewBag.Fields.Count==1 || Model.FieldGroup.Equals(Resource.lblAll) )? "disabled": "")" asp-action="FieldGroup" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
                             }
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
@@ -364,7 +363,7 @@
                 {
                     <govuk-summary-list-row class=@((!Model.ApplicationMethod.HasValue)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
-                            @string.Format(Resource.lblWhatIsTheApplicationMethodForYour, Model.ManureTypeName)
+                            @string.Format(Resource.lblHowAreYouGoingToApplyTheManure, Model.ManureTypeName)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
                             @((Model.ApplicationMethod.HasValue) ? Model.ApplicationMethodName : Resource.lblNotSet)
@@ -378,7 +377,7 @@
                 {
                     <govuk-summary-list-row class=@((!Model.ApplicationMethod.HasValue)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
-                            @string.Format(Resource.lblWhatIsTheApplicationMethodForYour, Model.ManureTypeName)
+                            @string.Format(Resource.lblHowAreYouGoingToApplyTheManure, Model.ManureTypeName)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
                             @((Model.ApplicationMethod.HasValue) ? Model.ApplicationMethodName : Resource.lblNotSet)
@@ -439,7 +438,7 @@
                                     }
                                     @if ((Model.ManureType.NH4N.HasValue) && Model.ManureType.NH4N.Value > 0)
                                     {
-                                        @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.NH4N.Value, Resource.lblAmmonium)
+                                        @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.NH4N.Value, Resource.lblAmmoniumHypenN)
                                         <br />
                                     }
                                     @if ((Model.ManureType.Uric.HasValue) && Model.ManureType.Uric.Value > 0)
@@ -497,7 +496,7 @@
                                     }
                                     @if ((Model.NH4N.HasValue) && Model.NH4N.Value > 0)
                                     {
-                                        @string.Format(Resource.lblKgPerTonneWithNutrient, Model.NH4N.Value, Resource.lblAmmonium)
+                                        @string.Format(Resource.lblKgPerTonneWithNutrient, Model.NH4N.Value, Resource.lblAmmoniumHypenN)
                                         <br />
                                     }
                                     @if ((Model.UricAcid.HasValue) && Model.UricAcid.Value > 0)
@@ -558,7 +557,7 @@
                                 }
                                 @if ((Model.NH4N.HasValue) && Model.NH4N.Value > 0)
                                 {
-                                    @string.Format(Resource.lblKgPerTonneWithNutrient, Model.NH4N.Value, Resource.lblAmmonium)
+                                    @string.Format(Resource.lblKgPerTonneWithNutrient, Model.NH4N.Value, Resource.lblAmmoniumHypenN)
                                     <br />
                                 }
                                 @if ((Model.UricAcid.HasValue) && Model.UricAcid.Value > 0)
@@ -621,7 +620,7 @@
                                 }
                                 @if ((Model.NH4N.HasValue) && Model.NH4N.Value > 0)
                                 {
-                                    @string.Format(Resource.lblKgPerTonneWithNutrient, Model.NH4N.Value, Resource.lblAmmonium)
+                                    @string.Format(Resource.lblKgPerTonneWithNutrient, Model.NH4N.Value, Resource.lblAmmoniumHypenN)
                                     <br />
                                 }
                                 @if ((Model.UricAcid.HasValue) && Model.UricAcid.Value > 0)
@@ -659,7 +658,8 @@
                             {
                                 @if ((Model.ManureType.DryMatter.HasValue) && Model.ManureType.DryMatter.Value > 0)
                                 {
-                                    @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.DryMatter.Value, Resource.lblDryMatterPercent)
+                                    @string.Format("{0}% {1}", Model.ManureType.DryMatter.Value, Resource.lblDryMatterPercent)
+                                    @* @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.DryMatter.Value, Resource.lblDryMatterPercent) *@
                                     <br />
                                 }
                                 @if ((Model.ManureType.TotalN.HasValue) && Model.ManureType.TotalN.Value > 0)
@@ -669,7 +669,7 @@
                                 }
                                 @if ((Model.ManureType.NH4N.HasValue) && Model.ManureType.NH4N.Value > 0)
                                 {
-                                    @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.NH4N.Value, Resource.lblAmmonium)
+                                    @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.NH4N.Value, Resource.lblAmmoniumHypenN)
                                     <br />
                                 }
                                 @if ((Model.ManureType.Uric.HasValue) && Model.ManureType.Uric.Value > 0)

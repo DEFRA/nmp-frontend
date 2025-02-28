@@ -112,10 +112,12 @@
                     <govuk-error-summary-item href="#">@TempData["Error"]</govuk-error-summary-item>
                 </govuk-error-summary>
             }
-            <h1 class="govuk-heading-l">@Resource.lblGreenAreaIndex</h1>
+            <h1 class="govuk-heading-l">@Resource.lblWhatIsTheGreenAreaIndexGAI</h1>
 
-            <govuk-input asp-for="@Model.GreenAreaIndex" input-class="govuk-input--width-5" inputmode="numeric" spellcheck="false"></govuk-input>
-            <govuk-radios asp-for="@Model.SeasonId">
+            <govuk-input asp-for="@Model.GreenAreaIndex" input-class="govuk-input--width-5" inputmode="numeric" spellcheck="false">
+                <govuk-input-label is-page-heading="false"></govuk-input-label>
+            </govuk-input>
+           @*  <govuk-radios asp-for="@Model.SeasonId">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend>
                         @Resource.lblWhenWasThisMeasured
@@ -129,7 +131,7 @@
                     }
 
                 </govuk-radios-fieldset>
-            </govuk-radios>
+            </govuk-radios> *@
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>

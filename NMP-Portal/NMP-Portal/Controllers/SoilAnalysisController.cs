@@ -419,13 +419,17 @@ namespace NMP.Portal.Controllers
                             {
                                 ModelState.AddModelError("PotassiumIndexValue", Resource.MsgEnterValidValueForNutrientIndex);
                             }
+                            if (value == 2)
+                            {
+                                ModelState.AddModelError("PotassiumIndexValue", string.Format(Resource.MsgValueIsNotAValidValueForPotassium, value));
+                            }
                         }
                         else
                         {
                             if ((model.PotassiumIndexValue.ToString() != Resource.lblTwoMinus) &&
                                                    (model.PotassiumIndexValue.ToString() != Resource.lblTwoPlus))
                             {
-                                ModelState.AddModelError("PotassiumIndexValue", Resource.MsgEnterValidValueForNutrientIndex);
+                                ModelState.AddModelError("PotassiumIndexValue", Resource.MsgTheValueMustBeAnIntegerValueBetweenZeroAndNine);
                             }
                         }
 
@@ -436,7 +440,31 @@ namespace NMP.Portal.Controllers
                     {
                         ModelState.AddModelError("Date", Resource.MsgEnterAtLeastOneValue);
                     }
+                    if ((!ModelState.IsValid) && ModelState.ContainsKey("PhosphorusIndex"))
+                    {
+                        var InvalidFormatError = ModelState["PhosphorusIndex"].Errors.Count > 0 ?
+                                        ModelState["PhosphorusIndex"].Errors[0].ErrorMessage.ToString() : null;
 
+                        if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["PhosphorusIndex"].AttemptedValue, Resource.lblPhosphorusIndex)))
+                        {
+                            ModelState["PhosphorusIndex"].Errors.Clear();
+                            ModelState["PhosphorusIndex"].Errors.Add(Resource.MsgTheValueMustBeAnIntegerValueBetweenZeroAndNine);
+                        }
+                    }
+
+
+
+                    if ((!ModelState.IsValid) && ModelState.ContainsKey("MagnesiumIndex"))
+                    {
+                        var InvalidFormatError = ModelState["MagnesiumIndex"].Errors.Count > 0 ?
+                                        ModelState["MagnesiumIndex"].Errors[0].ErrorMessage.ToString() : null;
+
+                        if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["MagnesiumIndex"].AttemptedValue, Resource.lblMagnesiumIndex)))
+                        {
+                            ModelState["MagnesiumIndex"].Errors.Clear();
+                            ModelState["MagnesiumIndex"].Errors.Add(Resource.MsgTheValueMustBeAnIntegerValueBetweenZeroAndNine);
+                        }
+                    }
                 }
                 else
                 {

@@ -514,7 +514,7 @@
                                                 <thead class="govuk-table__header">
                                                     <tr class="govuk-table__row">
                                                         <th class="govuk-table__header" scope="col">@Resource.lblApplicationDate</th>
-                                                        <th class="govuk-table__header" scope="col">@Resource.lblRate</th>
+                                                        @* <th class="govuk-table__header" scope="col">@Resource.lblRate</th> *@
                                                         <th class="govuk-table__header" scope="col">@Resource.lblNutrient</th>
                                                         <th class="govuk-table__header" scope="col">@Resource.lblAction</th>
                                                     </tr>
@@ -526,9 +526,9 @@
                                                             <td class="govuk-table__cell">
                                                                 @(fertiliserManure.ApplicationDate.Value.Date != null ? fertiliserManure.ApplicationDate.Value.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB")) : null)
                                                             </td>
-                                                            <td class="govuk-table__cell">
+                                                         @*    <td class="govuk-table__cell">
                                                                 @string.Format(Resource.lblRateInKg, fertiliserManure.ApplicationRate)
-                                                            </td>
+                                                            </td> *@
                                                             <td class="govuk-table__cell">
                                                                 @if (fertiliserManure.N > 0)
                                                                 {
