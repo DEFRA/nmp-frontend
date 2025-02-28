@@ -1342,8 +1342,8 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lbltonnes" xml:space="preserve">
     <value>tonnes</value>
   </data>
-  <data name="lblWhatIsTheApplicationMethod" xml:space="preserve">
-    <value>What is the application method for your {0}?</value>
+  <data name="lblHowAreYouGoingToApplyTheManure" xml:space="preserve">
+    <value>How are you going to apply the {0}?</value>
   </data>
   <data name="MsgEnterADateWithin2YearsOfTheHarvestYear" xml:space="preserve">
     <value>Enter a date within 2 years of the harvest year you are planning for</value>
@@ -3921,7 +3921,7 @@ live</value>
     <value>For potassium (K), the index should be 2+ or 2-, with no decimals.</value>
   </data>
   <data name="MsgForApplicationRate" xml:space="preserve">
-    <value>The value must be a maximum of 1 decimal place and between 0 to 250.</value>
+    <value>Enter only a number from 0 to 250, to 1 decimal place, such as 8.5</value>
   </data>
   <data name="MsgForGreenAreaIndex" xml:space="preserve">
     <value>Enter only a number between 0 and 3.0, to 2 decimal places.</value>
@@ -4007,5 +4007,8 @@ live</value>
   </data>
   <data name="lblMovingDataToLive_line2" xml:space="preserve">
     <value>We will migrate your data for you when the tool launches, and then your plans will be suitable for regulatory use.</value>
+  </data>
+  <data name="lblEnterANumberFrom0To250" xml:space="preserve">
+    <value>Enter a number from 0 to 250, to 1 decimal place.</value>
   </data>
 </root>

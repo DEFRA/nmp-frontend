@@ -1414,11 +1414,15 @@ namespace NMP.Portal.Controllers
 
 
                     }
-                    Field field = await _fieldService.FetchFieldByFieldId(Convert.ToInt32(model.FieldList[0]));
-                    if (field != null)
+                    foreach (var fieldId in model.FieldList)
                     {
-                        model.IsWithinNVZ = field.IsWithinNVZ;
+                        Field field = await _fieldService.FetchFieldByFieldId(Convert.ToInt32(fieldId));
+                        if (field != null && field.IsWithinNVZ==true)
+                        {
+                            model.IsWithinNVZ = true;
+                        }
                     }
+                        
                 }
                 model.IsWarningMsgNeedToShow = false;
                 model.IsClosedPeriodWarning = false;
