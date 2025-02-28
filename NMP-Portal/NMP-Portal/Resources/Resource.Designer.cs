@@ -2475,6 +2475,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a number from 0 to 250, to 1 decimal place..
+        /// </summary>
+        public static string lblEnterANumberFrom0To250 {
+            get {
+                return ResourceManager.GetString("lblEnterANumberFrom0To250", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a positive value of {0}.
         /// </summary>
         public static string lblEnterAPositiveValueOfPropertyName {
@@ -3524,6 +3533,15 @@ namespace NMP.Portal.Resources {
         public static string lblHomePage {
             get {
                 return ResourceManager.GetString("lblHomePage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How are you going to apply the {0}?.
+        /// </summary>
+        public static string lblHowAreYouGoingToApplyTheManure {
+            get {
+                return ResourceManager.GetString("lblHowAreYouGoingToApplyTheManure", resourceCulture);
             }
         }
         
@@ -8274,15 +8292,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the application method for your {0}?.
-        /// </summary>
-        public static string lblWhatIsTheApplicationMethod {
-            get {
-                return ResourceManager.GetString("lblWhatIsTheApplicationMethod", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to What is the application method for your {0} ?.
         /// </summary>
         public static string lblWhatIsTheApplicationMethodForYour {
@@ -10427,7 +10436,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The value must be a maximum of 1 decimal place and between 0 to 250..
+        ///   Looks up a localized string similar to Enter only a number from 0 to 250, to 1 decimal place, such as 8.5.
         /// </summary>
         public static string MsgForApplicationRate {
             get {

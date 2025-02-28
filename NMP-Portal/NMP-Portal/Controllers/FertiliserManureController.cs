@@ -555,8 +555,8 @@ namespace NMP.Portal.Controllers
                     }).ToList();
                     ViewBag.InOrganicManureDurationsList = SelectListItem;
                 }
-                if (int.TryParse(model.FieldGroup, out int value) || (model.FieldGroup == Resource.lblSelectSpecificFields && model.FieldList.Count == 1))
-                {
+                //if (int.TryParse(model.FieldGroup, out int value) || (model.FieldGroup == Resource.lblSelectSpecificFields && model.FieldList.Count == 1))
+                //{
                     foreach (var fieldId in model.FieldList)
                     {
                         (CropTypeResponse cropTypeResponse, error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
@@ -566,13 +566,15 @@ namespace NMP.Portal.Controllers
                             ViewBag.closingPeriod = warning.ClosedPeriodForFertiliser(cropTypeResponse.CropTypeId);
 
                         }
+
+                    Field field = await _fieldService.FetchFieldByFieldId(Convert.ToInt32(fieldId));
+                    if (field != null && field.IsWithinNVZ==true)
+                    {
+                        model.IsWithinNVZ = true;
                     }
                 }
-                Field field = await _fieldService.FetchFieldByFieldId(Convert.ToInt32(model.FieldList[0]));
-                if (field != null)
-                {
-                    model.IsWithinNVZ = field.IsWithinNVZ;
-                }
+                //}
+                
             }
             catch (Exception ex)
             {
