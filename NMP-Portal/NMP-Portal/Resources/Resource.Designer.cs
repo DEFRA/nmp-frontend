@@ -70,14 +70,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;p class=&quot;govuk-body&quot;&gt;
-        ///    The helpdesk will help with issues such as:
-        ///&lt;/p&gt;
-        ///&lt;ul class=&quot;govuk-list govuk-list--bullet&quot;&gt;
-        ///    &lt;li&gt;technical issues&lt;/li&gt;
-        ///    &lt;li&gt;login issues&lt;/li&gt;
-        ///    &lt;li&gt;service outages&lt;/li&gt;
-        ///&lt;/ul&gt;.
+        ///   Looks up a localized string similar to The helpdesk will help with issues such as:.
         /// </summary>
         public static string contentGettingHelp_line2 {
             get {
@@ -86,7 +79,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you experience a technical problem with any of the functionality in this service, you can email: &lt;a  href=&quot;mailto:helpdesk@rsk-bsl.co.uk&quot;&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt;..
+        ///   Looks up a localized string similar to If you experience a technical problem with any of the functionality in this tool, you can email &lt;a  href=&quot;mailto:helpdesk@rsk-bsl.co.uk&quot;&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt;..
         /// </summary>
         public static string contentGettingHelp1 {
             get {
@@ -104,7 +97,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you would like to give us feedback about this service, then please email: &lt;a  href=&quot;mailto:nmpt@defra.gov.uk&quot;&gt;nmpt@defra.gov.uk&lt;/a&gt;..
+        ///   Looks up a localized string similar to If you would like to give us feedback about this tool, then please email &lt;a  href=&quot;mailto:nmpt@defra.gov.uk&quot;&gt;nmpt@defra.gov.uk&lt;/a&gt;..
         /// </summary>
         public static string contentGivingFeedbackAboutThisService1 {
             get {
@@ -437,7 +430,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Create a plan for efficient nutrient management service (&apos;this service&apos;) is currently in a private beta phase. This means that we are testing this service by invitation only. Some functionality may not work as expected and some features have not yet been developed..
+        ///   Looks up a localized string similar to This tool is currently in a private beta phase. This means that we are testing the tool with a group of invited users. As such, some functionality may not work as expected and some features have not yet been developed..
         /// </summary>
         public static string lblAboutGetHelpAndFeedback {
             get {
@@ -446,20 +439,11 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Check the &lt;a href=&quot;/ReleaseSchedule&quot; &gt;release schedule&lt;/a&gt; to see what features have been added to the test version of the service..
+        ///   Looks up a localized string similar to Check the &lt;a href=&quot;/ReleaseSchedule&quot; &gt;release schedule&lt;/a&gt; to see what features have been added to the test version of the tool..
         /// </summary>
         public static string lblAboutGetHelpAndFeedback_line2 {
             get {
                 return ResourceManager.GetString("lblAboutGetHelpAndFeedback_line2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to View the &lt;a href=&quot;/AcceptTerms&quot; &gt;terms of use&lt;/a&gt; for this service..
-        /// </summary>
-        public static string lblAboutGetHelpAndFeedback_line3 {
-            get {
-                return ResourceManager.GetString("lblAboutGetHelpAndFeedback_line3", resourceCulture);
             }
         }
         
@@ -3291,7 +3275,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Getting help.
+        ///   Looks up a localized string similar to Getting help with the tool.
         /// </summary>
         public static string lblGettingHelp {
             get {
@@ -3300,7 +3284,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Giving feedback about this service.
+        ///   Looks up a localized string similar to Giving feedback about this tool.
         /// </summary>
         public static string lblGivingFeedbackAboutThisService {
             get {
@@ -3480,7 +3464,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Help with the service&apos;s recommendations.
+        ///   Looks up a localized string similar to Help with the tool&apos;s recommendations.
         /// </summary>
         public static string lblHelp_with_the_service_recommendations {
             get {
@@ -3489,7 +3473,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can email the helpdesk if you have any issues with the data and recommendations the service provides. Email: &lt;a  href=&quot;mailto:helpdesk@rsk-bsl.co.uk&quot;&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt;..
+        ///   Looks up a localized string similar to You can email the helpdesk if you have any issues with the data and recommendations the tool provides. Email &lt;a  href=&quot;mailto:helpdesk@rsk-bsl.co.uk&quot;&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt;..
         /// </summary>
         public static string lblHelp_with_the_service_recommendations_line1 {
             get {
@@ -3498,7 +3482,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This service might give slightly different recommendations from the previous service PLANET. This is because this new service uses an updated version of the RB209 API, so it provides the very latest data..
+        ///   Looks up a localized string similar to This tool might give slightly different recommendations from the previous version of the tool, PLANET. This is because this new tool uses an updated version of the RB209 API, so it provides the very latest data..
         /// </summary>
         public static string lblHelp_with_the_service_recommendations_line2 {
             get {
@@ -3521,6 +3505,33 @@ namespace NMP.Portal.Resources {
         public static string lblhelpdesk {
             get {
                 return ResourceManager.GetString("lblhelpdesk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to technical issues.
+        /// </summary>
+        public static string lblHelpIssuesLine1 {
+            get {
+                return ResourceManager.GetString("lblHelpIssuesLine1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to login issues.
+        /// </summary>
+        public static string lblHelpIssuesLine2 {
+            get {
+                return ResourceManager.GetString("lblHelpIssuesLine2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to service outages.
+        /// </summary>
+        public static string lblHelpIssuesLine3 {
+            get {
+                return ResourceManager.GetString("lblHelpIssuesLine3", resourceCulture);
             }
         }
         
@@ -4733,7 +4744,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Nutrient Management Plan is intended to be used alongside RB209.
+        ///   Looks up a localized string similar to This tool is intended to be used alongside the &lt;a href=&quot;https://ahdb.org.uk/knowledge-library/rb209-section-1-principles-of-nutrient-management-and-fertiliser-use&quot; target=&quot;_blank&quot;&gt; Nutrient management guide (RB209)&lt;/a&gt; (external link)..
         /// </summary>
         public static string lblMore_information_line1 {
             get {
@@ -4742,20 +4753,11 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For advice about nutrient planning in general, start with &lt;a href=&quot;https://www.triedandtested.org.uk&quot; target=&quot;_blank&quot;&gt;Tried and Tested&lt;/a&gt; (opens in a new window)..
+        ///   Looks up a localized string similar to For advice about nutrient planning in general, visit &lt;a href=&quot;https://www.triedandtested.org.uk&quot; target=&quot;_blank&quot;&gt;Tried and Tested&lt;/a&gt; (external link)..
         /// </summary>
         public static string lblMore_information_line2 {
             get {
                 return ResourceManager.GetString("lblMore_information_line2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to For more information on RB209, visit &lt;a href=&quot;https://ahdb.org.uk/knowledge-library/rb209-section-1-principles-of-nutrient-management-and-fertiliser-use&quot; target=&quot;_blank&quot;&gt;Nutrient management guide (RB209) section 1&lt;/a&gt; (opens in a new window)..
-        /// </summary>
-        public static string lblMore_information_line3 {
-            get {
-                return ResourceManager.GetString("lblMore_information_line3", resourceCulture);
             }
         }
         
@@ -4774,6 +4776,33 @@ namespace NMP.Portal.Resources {
         public static string lblMoreAboutTheseWaterResourceRegulation {
             get {
                 return ResourceManager.GetString("lblMoreAboutTheseWaterResourceRegulation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Moving your data to the live version of the tool.
+        /// </summary>
+        public static string lblMovingDataToLive {
+            get {
+                return ResourceManager.GetString("lblMovingDataToLive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you wish to take your farm data and plans from the testing version to the live version, please email our team at &lt;a href=&quot;mailto:helpdesk@rsk-bsl.co.uk&quot;&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt;..
+        /// </summary>
+        public static string lblMovingDataToLive_line1 {
+            get {
+                return ResourceManager.GetString("lblMovingDataToLive_line1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We will migrate your data for you when the tool launches, and then your plans will be suitable for regulatory use..
+        /// </summary>
+        public static string lblMovingDataToLive_line2 {
+            get {
+                return ResourceManager.GetString("lblMovingDataToLive_line2", resourceCulture);
             }
         }
         
@@ -9180,7 +9209,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your feedback will help us improve this service..
+        ///   Looks up a localized string similar to Your feedback will help us improve this tool..
         /// </summary>
         public static string lblYourFeedbackWillHelpUsImproveThisService {
             get {
