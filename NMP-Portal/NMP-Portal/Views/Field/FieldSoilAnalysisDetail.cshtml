@@ -43,6 +43,10 @@
                     <govuk-notification-banner type="Success">
                         <div class="">
                             <h3 class="govuk-notification-banner__heading">@ViewBag.SuccessMsgContent</h3>
+                            @if (ViewBag.SuccessMsgContentLink!=null)
+                            {
+                                <p class="govuk-body"><a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">@ViewBag.SuccessMsgContentLink</a></p>
+                            }
                         </div>
                         @if (ViewBag.SuccessMsgAdditionalContent != null)
                         {
@@ -91,22 +95,34 @@
                         <td class="govuk-table__cell">@Resource.lblSoilType</td>
                         <td class="govuk-table__cell">@Model.SoilType</td>
                     </tr>
-                    <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">@Resource.lblSoilContainsPostashReleasingClay</td>
-                        <td class="govuk-table__cell">@(Model.SoilReleasingClay == true ? Resource.lblYes : Resource.lblNo)</td>
-                    </tr>
-                    <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">@Resource.lblIsTheSoilOverChalk</td>
-                        <td class="govuk-table__cell">@(Model.SoilOverChalk == true ? Resource.lblYes : Resource.lblNo)</td>
-                    </tr>
-                    <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">@Resource.lblIsFieldWithinNVZ</td>
-                        <td class="govuk-table__cell">@(Model.IsWithinNVZ == true ? Resource.lblYes : Resource.lblNo)</td>
-                    </tr>
-                    <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">@Resource.lblIsFieldAbove300Meters</td>
-                        <td class="govuk-table__cell">@(Model.IsAbove300SeaLevel == true ? Resource.lblYes : Resource.lblNo)</td>
-                    </tr>
+                    @if (ViewBag.IsSoilReleasingClay != null && ViewBag.IsSoilReleasingClay)
+                    {
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">@Resource.lblSoilContainsPostashReleasingClay</td>
+                            <td class="govuk-table__cell">@(Model.SoilReleasingClay == true ? Resource.lblYes : Resource.lblNo)</td>
+                        </tr>
+                    }
+                    @if (ViewBag.IsSoilOverChalk != null && ViewBag.IsSoilOverChalk)
+                    {
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">@Resource.lblIsTheSoilOverChalk</td>
+                            <td class="govuk-table__cell">@(Model.SoilOverChalk == true ? Resource.lblYes : Resource.lblNo)</td>
+                        </tr>
+                    }
+                    @if (Model.IsWithinNVZForFarm!=null&&Model.IsWithinNVZForFarm == true)
+                    {
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">@Resource.lblIsFieldWithinNVZ</td>
+                            <td class="govuk-table__cell">@(Model.IsWithinNVZ == true ? Resource.lblYes : Resource.lblNo)</td>
+                        </tr>
+                    }
+                    @if (Model.IsAbove300SeaLevelForFarm != null & Model.IsAbove300SeaLevelForFarm == true)
+                    {
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">@Resource.lblIsFieldAbove300Meters</td>
+                            <td class="govuk-table__cell">@(Model.IsAbove300SeaLevel == true ? Resource.lblYes : Resource.lblNo)</td>
+                        </tr>
+                    }
                 </tbody>
             </table>
             <p class="govuk-body margin-bottom-forty"><a asp-action="UpdateField" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">@Resource.lblChangeFieldDetails</a></p>
@@ -115,7 +131,7 @@
 
             <hr class="big_seperator">
             <h2 class="govuk-heading-m">@Resource.lblSoilAnalysis</h2>
-            
+
             @if (ViewBag.SoilAnalysisList != null && ViewBag.SoilAnalysisList.Count > 0)
             {
                 <p class="govuk-body margin margin-bottom-forty"><a asp-controller="SoilAnalysis" asp-action="IsSoilAnalysisAdded" asp-route-i="@Model.EncryptedFieldId" asp-route-j="@Model.EncryptedFarmId">@Resource.lblAddNewSoilAnalysis</a></p>
@@ -139,8 +155,9 @@
                     </tbody>
                 </table>
             }
-            else{
-                <p class="govuk-body">@string.Format(Resource.lblContentIfSoilAnalysisNotApplied,Model.Name)</p>
+            else
+            {
+                <p class="govuk-body">@string.Format(Resource.lblContentIfSoilAnalysisNotApplied, Model.Name)</p>
                 <p class="govuk-body margin margin-bottom-forty"><a asp-controller="SoilAnalysis" asp-action="IsSoilAnalysisAdded" asp-route-i="@Model.EncryptedFieldId" asp-route-j="@Model.EncryptedFarmId">@Resource.lblAddNewSoilAnalysis</a></p>
             }
         </div>

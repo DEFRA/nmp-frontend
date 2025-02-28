@@ -48,5 +48,6 @@ namespace NMP.Portal.ViewModels
         public string? ClosedPeriodNitrogenExceedWarningHeading { get; set; } = string.Empty;
         public string? ClosedPeriodNitrogenExceedWarningPara1 { get; set; } = string.Empty;
         public string? ClosedPeriodNitrogenExceedWarningPara2 { get; set; } = string.Empty;
+        public bool? IsWithinNVZ { get; set; }
     }
 }

@@ -245,7 +245,7 @@ namespace NMP.Portal.Controllers
 
                     List<CropTypeResponse> cropTypeResponses = await _fieldService.FetchAllCropTypes();
                     if (fieldResponse.Crop != null)
-                    {                        
+                    {
                         field.CropTypeID = fieldResponse.Crop.CropTypeID;
                         field.CropType = await _fieldService.FetchCropTypeById(field.CropTypeID ?? 0);
                         if (cropTypeResponses.Count > 0)
@@ -311,7 +311,7 @@ namespace NMP.Portal.Controllers
                             {
                                 field.IsBasedOnSoilOrganicMatter = false;
                             }
-                            field.CurrentCropType = Enum.GetName(typeof(NMP.Portal.Enums.CropTypes), field.CurrentCropTypeId);
+                            field.CurrentCropType = await _fieldService.FetchCropTypeById(field.CurrentCropTypeId ?? 0);
 
                             if (cropTypeResponses.Count > 0)
                             {
@@ -987,24 +987,52 @@ namespace NMP.Portal.Controllers
                             {
                                 ModelState.AddModelError("PotassiumIndexValue", Resource.MsgEnterValidValueForNutrientIndex);
                             }
+                            if (value == 2)
+                            {
+                                ModelState.AddModelError("PotassiumIndexValue", string.Format(Resource.MsgValueIsNotAValidValueForPotassium, value));
+                            }
                         }
                         else
                         {
                             if ((model.PotassiumIndexValue.ToString() != Resource.lblTwoMinus) &&
                                                    (model.PotassiumIndexValue.ToString() != Resource.lblTwoPlus))
                             {
-                                ModelState.AddModelError("PotassiumIndexValue", Resource.MsgEnterValidValueForNutrientIndex);
+                                ModelState.AddModelError("PotassiumIndexValue", Resource.MsgTheValueMustBeAnIntegerValueBetweenZeroAndNine);
                             }
                         }
 
-
+                        
                     }
                     if (model.SoilAnalyses.PH == null && (string.IsNullOrWhiteSpace(model.PotassiumIndexValue)) &&
                     model.SoilAnalyses.PhosphorusIndex == null && model.SoilAnalyses.MagnesiumIndex == null)
                     {
                         ModelState.AddModelError("CropType", Resource.MsgEnterAtLeastOneValue);
                     }
+                    if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilAnalyses.PhosphorusIndex"))
+                    {
+                        var InvalidFormatError = ModelState["SoilAnalyses.PhosphorusIndex"].Errors.Count > 0 ?
+                                        ModelState["SoilAnalyses.PhosphorusIndex"].Errors[0].ErrorMessage.ToString() : null;
 
+                        if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SoilAnalyses.PhosphorusIndex"].AttemptedValue, Resource.lblPhosphorusIndex)))
+                        {
+                            ModelState["SoilAnalyses.PhosphorusIndex"].Errors.Clear();
+                            ModelState["SoilAnalyses.PhosphorusIndex"].Errors.Add(Resource.MsgTheValueMustBeAnIntegerValueBetweenZeroAndNine);
+                        }
+                    }
+
+
+
+                    if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilAnalyses.MagnesiumIndex"))
+                    {
+                        var InvalidFormatError = ModelState["SoilAnalyses.MagnesiumIndex"].Errors.Count > 0 ?
+                                        ModelState["SoilAnalyses.MagnesiumIndex"].Errors[0].ErrorMessage.ToString() : null;
+
+                        if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SoilAnalyses.MagnesiumIndex"].AttemptedValue, Resource.lblMagnesiumIndex)))
+                        {
+                            ModelState["SoilAnalyses.MagnesiumIndex"].Errors.Clear();
+                            ModelState["SoilAnalyses.MagnesiumIndex"].Errors.Add(Resource.MsgTheValueMustBeAnIntegerValueBetweenZeroAndNine);
+                        }
+                    }
                 }
                 else
                 {
@@ -1171,7 +1199,7 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmList", "Farm");
                 }
                 cropGroups = await _fieldService.FetchCropGroups();
-                List<CropGroupResponse> cropGroupArables = cropGroups.Where(x => x.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass).ToList();
+                List<CropGroupResponse> cropGroupArables = cropGroups.Where(x => x.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass).OrderBy(x=>x.CropGroupName).ToList();
                 //_httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropGroupList", cropGroups);
                 ViewBag.CropGroupList = cropGroupArables;
             }
@@ -1210,8 +1238,12 @@ namespace NMP.Portal.Controllers
             }
             if (!ModelState.IsValid)
             {
-                List<CropGroupResponse> cropTypes = new List<CropGroupResponse>();
-                ViewBag.CropGroupList = await _fieldService.FetchCropGroups();
+                List<CropGroupResponse> cropGroups = new List<CropGroupResponse>();
+                cropGroups = await _fieldService.FetchCropGroups();
+                if(cropGroups.Count>0)
+                {
+                    ViewBag.CropGroupList = cropGroups.OrderBy(x => x.CropGroupName);
+                }
                 return View(field);
             }
 
@@ -1254,7 +1286,7 @@ namespace NMP.Portal.Controllers
 
                 cropTypes = await _fieldService.FetchCropTypes(model.CropGroupId ?? 0);
                 var country = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
-                var cropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.RB209Country.All).ToList();
+                var cropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.RB209Country.All).OrderBy(c => c.CropType).ToList();
 
                 ViewBag.CropTypeList = cropTypeList;
                 if (cropTypeList.Count == 1)
@@ -1296,7 +1328,7 @@ namespace NMP.Portal.Controllers
                 List<CropTypeResponse> cropTypes = new List<CropTypeResponse>();
                 cropTypes = await _fieldService.FetchCropTypes(field.CropGroupId ?? 0);
                 var country = field.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
-                ViewBag.CropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.RB209Country.All).ToList();
+                ViewBag.CropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.RB209Country.All).OrderBy(c => c.CropType).ToList();
                 return View(field);
             }
             field.CropType = await _fieldService.FetchCropTypeById(field.CropTypeID.Value);
@@ -1460,6 +1492,14 @@ namespace NMP.Portal.Controllers
                 if (!model.CropTypeID.HasValue)
                 {
                     ModelState.AddModelError("CropTypeID", Resource.MsgPreviousCropTypeNotSet);
+                }
+            }
+
+            if (model.PreviousGrasses.HasGrassInLastThreeYear == false)
+            {
+                if (model.WantToApplySns == null)
+                {
+                    ModelState.AddModelError("WantToApplySns", string.Format("{0} {1}", string.Format(Resource.lblHowWouldYouLikeToCalculateSoilNitrogenSupply, model.Name), Resource.lblNotSet));
                 }
             }
 
@@ -1842,14 +1882,44 @@ namespace NMP.Portal.Controllers
             model.SoilReleasingClay = field.SoilReleasingClay ?? false;
             model.IsWithinNVZ = field.IsWithinNVZ ?? false;
             model.IsAbove300SeaLevel = field.IsAbove300SeaLevel ?? false;
-            var soilType = await _fieldService.FetchSoilTypeById(field.SoilTypeID.Value);
-            model.SoilType = !string.IsNullOrWhiteSpace(soilType) ? soilType : string.Empty;
-            model.SoilTypeID = field.SoilTypeID;
+
             model.EncryptedFieldId = id;
             model.ID = fieldId;
             model.isEnglishRules = farm.EnglishRules;
             model.SoilOverChalk = field.SoilOverChalk;
-
+            if (farm != null)
+            {
+                model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Portal.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
+                model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
+            }
+            else
+            {
+                model.IsWithinNVZForFarm = false;
+                model.IsAbove300SeaLevelForFarm = false;
+            }
+            List<SoilTypesResponse> soilTypes = await _fieldService.FetchSoilTypes();
+            if (soilTypes != null && soilTypes.Count > 0)
+            {
+                SoilTypesResponse? soilType = soilTypes.FirstOrDefault(x => x.SoilTypeId == field.SoilTypeID);
+                model.SoilType = !string.IsNullOrWhiteSpace(soilType.SoilType) ? soilType.SoilType : string.Empty;
+                model.SoilTypeID = field.SoilTypeID;
+                if (soilType != null && soilType.KReleasingClay)
+                {
+                    ViewBag.IsSoilReleasingClay = true;
+                }
+                else
+                {
+                    ViewBag.IsSoilReleasingClay = false;
+                }
+                if (model.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.Shallow)
+                {
+                    ViewBag.IsSoilOverChalk = true;
+                }
+                else
+                {
+                    ViewBag.IsSoilOverChalk = false;
+                }
+            }
             model.EncryptedFarmId = farmId;
             model.FarmName = farm.Name;
             List<SoilAnalysisResponse> soilAnalysisResponse = (await _fieldService.FetchSoilAnalysisByFieldId(fieldId, Resource.lblFalse)).OrderByDescending(x => x.CreatedOn).ToList();
@@ -1870,6 +1940,7 @@ namespace NMP.Portal.Controllers
                         {
                             ViewBag.Success = Resource.lblTrue;
                             ViewBag.SuccessMsgContent = string.Format(Resource.lblYouHaveUpdated, model.Name);
+                            ViewBag.SuccessMsgContentLink = Resource.MsgViewYourFarmDetails; 
                         }
                         else if (statusFor == Resource.lblSoilAnalysis)
                         {
@@ -2055,7 +2126,10 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmList", "Farm");
                 }
                 cropGroups = await _fieldService.FetchCropGroups();
-                ViewBag.CropGroupList = cropGroups;
+                if (cropGroups.Count > 0)
+                {
+                    ViewBag.CropGroupList = cropGroups.OrderBy(c => c.CropGroupName);
+                }
             }
             catch (Exception ex)
             {
@@ -2077,7 +2151,12 @@ namespace NMP.Portal.Controllers
             }
             if (!ModelState.IsValid)
             {
-                ViewBag.CropGroupList = await _fieldService.FetchCropGroups();
+                List<CropGroupResponse> cropGroups = new List<CropGroupResponse>();
+                cropGroups = await _fieldService.FetchCropGroups();
+                if (cropGroups.Count > 0)
+                {
+                    ViewBag.CropGroupList = cropGroups.OrderBy(c => c.CropGroupName); 
+                }
                 return View(model);
             }
 
@@ -2163,7 +2242,7 @@ namespace NMP.Portal.Controllers
 
                 cropTypes = await _fieldService.FetchCropTypes(model.CurrentCropGroupId ?? 0);
                 var country = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
-                var cropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.RB209Country.All).ToList();
+                var cropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.RB209Country.All).OrderBy(c => c.CropType).ToList();
 
                 ViewBag.CropTypeList = cropTypeList;
                 if (cropTypeList.Count == 1)
@@ -2281,7 +2360,7 @@ namespace NMP.Portal.Controllers
                 List<CropTypeResponse> cropTypes = new List<CropTypeResponse>();
                 cropTypes = await _fieldService.FetchCropTypes(model.CurrentCropGroupId ?? 0);
                 var country = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
-                ViewBag.CropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.RB209Country.All).ToList();
+                ViewBag.CropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.RB209Country.All).OrderBy(c => c.CropType).ToList();
                 return View(model);
             }
             model.CurrentCropType = await _fieldService.FetchCropTypeById(model.CurrentCropTypeId.Value);
@@ -3049,8 +3128,8 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                seasons = await _fieldService.FetchSeasons();
-                ViewBag.SeasonList = seasons;
+                //seasons = await _fieldService.FetchSeasons();
+                //ViewBag.SeasonList = seasons;
             }
             catch (Exception ex)
             {
@@ -3066,23 +3145,34 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> GreenAreaIndex(FieldViewModel model)
         {
             _logger.LogTrace($"Field Controller : GreenAreaIndex() post action called");
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("GreenAreaIndex"))
+            {
+                var greenAreaIndexError = ModelState["GreenAreaIndex"].Errors.Count > 0 ?
+                                ModelState["GreenAreaIndex"].Errors[0].ErrorMessage.ToString() : null;
+
+                if (greenAreaIndexError != null && greenAreaIndexError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["GreenAreaIndex"].RawValue, Resource.lblGreenAreaIndexForError)))
+                {
+                    ModelState["GreenAreaIndex"].Errors.Clear();
+                    ModelState["GreenAreaIndex"].Errors.Add(Resource.MsgForGreenAreaIndex);
+                }
+            }
             if (model.GreenAreaIndex == null)
             {
-                ModelState.AddModelError("GreenAreaIndex", Resource.lblEnterGAIValueBeforeContinue);
+                ModelState.AddModelError("GreenAreaIndex", Resource.MsgIfGreenAreaIndexIsNull);
             }
-            if (model.SeasonId == 0)
-            {
-                ModelState.AddModelError("SeasonId", Resource.MsgSelectAnOptionBeforeContinuing);
-            }
+            //if (model.SeasonId == 0)
+            //{
+            //    ModelState.AddModelError("SeasonId", Resource.MsgSelectAnOptionBeforeContinuing);
+            //}
             if (model.GreenAreaIndex != null && (model.GreenAreaIndex < 0 || model.GreenAreaIndex > 3))
             {
                 ModelState.AddModelError("GreenAreaIndex", Resource.MsgEnterAValidNumericGAIvalue);
             }
             if (!ModelState.IsValid)
             {
-                List<SeasonResponse> seasons = new List<SeasonResponse>();
-                seasons = await _fieldService.FetchSeasons();
-                ViewBag.SeasonList = seasons;
+                //List<SeasonResponse> seasons = new List<SeasonResponse>();
+                //seasons = await _fieldService.FetchSeasons();
+                //ViewBag.SeasonList = seasons;
                 return View(model);
             }
             model.IsGreenAreaIndex = true;
@@ -3620,9 +3710,9 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("SoilOrganicMatter", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblPercentageValue));
             }
-            if (model.SoilOrganicMatter != null && (model.SoilOrganicMatter < 4 || model.SoilOrganicMatter > 10))
+            if (model.SoilOrganicMatter != null && (model.SoilOrganicMatter < 0 || model.SoilOrganicMatter > 100))
             {
-                ModelState.AddModelError("SoilOrganicMatter", string.Format(Resource.MsgEnterValueInBetween, Resource.lblPercentageLable.ToLower(), 4, 10));
+                ModelState.AddModelError("SoilOrganicMatter", string.Format(Resource.MsgEnterValueInBetween, Resource.lblPercentageLable.ToLower(), 0, 100));
             }
             if (!ModelState.IsValid)
             {
@@ -3869,7 +3959,16 @@ namespace NMP.Portal.Controllers
                     model.EncryptedFarmId = farmId;
                     model.FarmName = farm.Name;
                     //model.FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(farmId));
-
+                    if (farm != null)
+                    {
+                        model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Portal.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
+                        model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
+                    }
+                    else
+                    {
+                        model.IsWithinNVZForFarm = false;
+                        model.IsAbove300SeaLevelForFarm = false;
+                    }
                     bool isUpdateField = true;
                     model.EncryptedIsUpdate = _fieldDataProtector.Protect(isUpdateField.ToString());
                     if (model.SoilOverChalk != null && model.SoilTypeID != (int)NMP.Portal.Enums.SoilTypeEngland.Shallow)
@@ -3892,6 +3991,19 @@ namespace NMP.Portal.Controllers
                     else
                     {
                         return RedirectToAction("FarmList", "Farm");
+                    }
+                    if (model != null)
+                    {
+                        if (model.SoilOverChalk != null && model.SoilTypeID != (int)NMP.Portal.Enums.SoilTypeEngland.Shallow)
+                        {
+                            model.SoilOverChalk = null;
+                        }
+                        if (model.SoilReleasingClay != null && model.SoilTypeID != (int)NMP.Portal.Enums.SoilTypeEngland.DeepClayey)
+                        {
+                            model.SoilReleasingClay = null;
+                            model.IsSoilReleasingClay = false;
+                        }
+                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
                     }
                 }
 
@@ -4150,6 +4262,15 @@ namespace NMP.Portal.Controllers
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             if (model.IsCheckAnswer)
             {
+                if ((model.PreviousGrasses.HasGrassInLastThreeYear!=null&& (!model.PreviousGrasses.HasGrassInLastThreeYear.Value)))
+                {
+                    model.CropGroupId = null;
+                    model.CropGroup = string.Empty;
+                    model.CropTypeID = null;
+                    model.CropType = string.Empty;
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
+                    return RedirectToAction("CropGroups");
+                }
                 return RedirectToAction("CheckAnswer");
             }
             if (model.PreviousGrasses.HasGrassInLastThreeYear.Value)
@@ -4159,6 +4280,10 @@ namespace NMP.Portal.Controllers
             }
             else
             {
+                model.CropGroupId = null;
+                model.CropGroup = string.Empty;
+                model.CropTypeID = null;
+                model.CropType = string.Empty;
                 model.PreviousGrasses.HarvestYear = null;
                 model.PreviousGrasses.GrassManagementOptionID = null;
                 model.PreviousGrasses.GrassTypicalCutID = null;

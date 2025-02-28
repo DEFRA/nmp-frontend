@@ -30,15 +30,9 @@ public class AcceptTermsController : Controller
         int userId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
         (UserExtension userExtension, Error error) = await _userExtensionService.FetchUserExtensionAsync();
         if (userExtension != null && userExtension.IsTermsOfUseAccepted)
-        {
-            if (userExtension.DoNotShowAboutThisService)
-            {
-                return RedirectToAction("FarmList", "Farm");
-            }
-            else
-            {
-                return RedirectToAction("Index", "AboutService");
-            }
+        {            
+            return RedirectToAction("FarmList", "Farm");
+                   
         }
         return View("Accept", model);
     }
@@ -56,12 +50,12 @@ public class AcceptTermsController : Controller
         {
             TermsOfUse termsOfUse = model;
             (UserExtension userExtension, Error error) = await _userExtensionService.UpdateTermsOfUseAsync(termsOfUse);
-            if(userExtension!= null && userExtension.DoNotShowAboutThisService)
+            if(userExtension!= null && userExtension.IsTermsOfUseAccepted)
             {
                 return RedirectToAction("FarmList", "Farm");
             }
             
-            return RedirectToAction("Index", "AboutService");
+            return View("Accept", model);
         }
         else
         {

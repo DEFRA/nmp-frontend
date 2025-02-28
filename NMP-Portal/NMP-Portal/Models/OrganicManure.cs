@@ -1,4 +1,7 @@
-﻿namespace NMP.Portal.Models
+﻿using NMP.Portal.Resources;
+using System.ComponentModel.DataAnnotations;
+
+namespace NMP.Portal.Models
 {
     public class OrganicManure
     {
@@ -14,7 +17,8 @@
         public decimal? MgO { get; set; }
         public decimal? SO3 { get; set; }
         public decimal AvailableN { get; set; }
-        public int? ApplicationRate { get; set; }
+        
+        public decimal? ApplicationRate { get; set; }
         public decimal? DryMatterPercent { get; set; }
         public decimal? UricAcid { get; set; }
         public DateTime EndOfDrain { get; set; }

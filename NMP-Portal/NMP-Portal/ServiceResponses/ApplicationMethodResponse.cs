@@ -16,5 +16,9 @@ namespace NMP.Portal.ServiceResponses
         [JsonProperty("applicableForArableAndHorticulture")]
         public string? ApplicableForArableAndHorticulture { get; set; }
 
+        [JsonProperty("sortOrder")]
+        public int SortOrder { get; set; }
+        
+
     }
 }
