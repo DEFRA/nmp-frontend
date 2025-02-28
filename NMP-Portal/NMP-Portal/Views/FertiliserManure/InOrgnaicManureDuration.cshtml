@@ -36,6 +36,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarningOnlyForGrassAndOilseed" value="@Model.IsClosedPeriodWarningOnlyForGrassAndOilseed.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWarningMsgNeedToShow" value="@Model.IsWarningMsgNeedToShow.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmCountryId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZ"></govuk-input>
             @if (Model != null)
             {
                 @if (Model.FieldList != null && Model.FieldList.Count > 0)
@@ -74,9 +75,8 @@
                     <govuk-error-summary-item href="#">@TempData["InOrgnaicManureDurationError"]</govuk-error-summary-item>
                 </govuk-error-summary>
             }
-            @if (Model.IsWarningMsgNeedToShow && (Model.IsClosedPeriodWarning  || Model.IsClosedPeriodWarningOnlyForGrassAndOilseed))
+            @if (Model.IsWarningMsgNeedToShow && (Model.IsClosedPeriodWarning || Model.IsClosedPeriodWarningOnlyForGrassAndOilseed))
             {
-
                 <govuk-notification-banner>
                     <govuk-notification-banner-title>
                         @Resource.lblImportant
@@ -88,38 +88,36 @@
                         </p>
                         <p class="govuk-body">@Model.ClosedPeriodWarningPara2</p>
                     }
-                    
-
                 </govuk-notification-banner>
 
                 @if (TempData["ClosedPeriodWarningMessage"] != null)
                 {
                     @* <govuk-notification-banner>
-                        <govuk-notification-banner-title>
-                            @Resource.lblImportant
-                        </govuk-notification-banner-title>
-                        @(Model.IsClosedPeriodWarningOnlyForGrassAndOilseed ?
-                            Resource.MsgApplicationAfter31October : Resource.MsgClosedPeriod)<br /><br />
+            <govuk-notification-banner-title>
+            @Resource.lblImportant
+            </govuk-notification-banner-title>
+            @(Model.IsClosedPeriodWarningOnlyForGrassAndOilseed ?
+            Resource.MsgApplicationAfter31October : Resource.MsgClosedPeriod)<br /><br />
 
-                        <p class="govuk-notification-banner__heading">
-                            @(Model.IsClosedPeriodWarningOnlyForGrassAndOilseed ?
-                                Resource.MsgClosedPeriodForGrassAndOilseedFertliserWarningMsgTitle : Resource.MsgClosedPeriodForFertliserExceptOilseedAndGrassTitle)
-                        </p>
-                        <p class="govuk-body">@TempData["ClosedPeriodWarningMessage"]</p>
+            <p class="govuk-notification-banner__heading">
+            @(Model.IsClosedPeriodWarningOnlyForGrassAndOilseed ?
+            Resource.MsgClosedPeriodForGrassAndOilseedFertliserWarningMsgTitle : Resource.MsgClosedPeriodForFertliserExceptOilseedAndGrassTitle)
+            </p>
+            <p class="govuk-body">@TempData["ClosedPeriodWarningMessage"]</p>
 
-                        @if (Model.IsClosedPeriodWarningOnlyForGrassAndOilseed)
-                        {
-                            <p class="govuk-body">
-                                @Resource.MsgForGrassAndOilseedRapeClosedPeriodForFertiliserAdditional
-                            </p>
-                        }
-                        else @if (Model.IsClosedPeriodWarningExceptGrassAndOilseed)
-                        {
-                            <p class="govuk-body">
-                                @Resource.MsgYouCanContinueButYouShouldConsider
-                            </p>
-                        }
-                    </govuk-notification-banner> *@
+            @if (Model.IsClosedPeriodWarningOnlyForGrassAndOilseed)
+            {
+            <p class="govuk-body">
+            @Resource.MsgForGrassAndOilseedRapeClosedPeriodForFertiliserAdditional
+            </p>
+            }
+            else @if (Model.IsClosedPeriodWarningExceptGrassAndOilseed)
+            {
+            <p class="govuk-body">
+            @Resource.MsgYouCanContinueButYouShouldConsider
+            </p>
+            }
+            </govuk-notification-banner> *@
                 }
             }
 
@@ -137,7 +135,7 @@
                     </h1>
                 </legand>
 
-                @if (ViewBag.closingPeriod != null)
+                @if (ViewBag.closingPeriod != null && Model.IsWithinNVZ == true)
                 {
                     <div id="closed-date" class="govuk-body">
                         <p>
@@ -149,12 +147,12 @@
                         <p>
                             @Resource.lblBasedOnYourCropSoilTypeAndFarmDetails
                         </p>
-                        
+
 
                     </div>
                 }
                 <div class="govuk-body">
-                @Resource.lblForFertiliserSecond
+                    @Resource.lblForFertiliserSecond
                 </div>
                 <govuk-date-input asp-for="@Model.Date" pattern="[0-9]*">
                     <govuk-date-input-fieldset>

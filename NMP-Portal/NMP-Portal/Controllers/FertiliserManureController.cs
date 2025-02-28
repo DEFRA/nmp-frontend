@@ -555,8 +555,8 @@ namespace NMP.Portal.Controllers
                     }).ToList();
                     ViewBag.InOrganicManureDurationsList = SelectListItem;
                 }
-                if (int.TryParse(model.FieldGroup, out int value) || (model.FieldGroup == Resource.lblSelectSpecificFields && model.FieldList.Count == 1))
-                {
+                //if (int.TryParse(model.FieldGroup, out int value) || (model.FieldGroup == Resource.lblSelectSpecificFields && model.FieldList.Count == 1))
+                //{
                     foreach (var fieldId in model.FieldList)
                     {
                         (CropTypeResponse cropTypeResponse, error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
@@ -566,8 +566,15 @@ namespace NMP.Portal.Controllers
                             ViewBag.closingPeriod = warning.ClosedPeriodForFertiliser(cropTypeResponse.CropTypeId);
 
                         }
+
+                    Field field = await _fieldService.FetchFieldByFieldId(Convert.ToInt32(fieldId));
+                    if (field != null && field.IsWithinNVZ==true)
+                    {
+                        model.IsWithinNVZ = true;
                     }
                 }
+                //}
+                
             }
             catch (Exception ex)
             {
@@ -1842,12 +1849,15 @@ namespace NMP.Portal.Controllers
                 }
                 bool isWithinWarningPeriod = warningMessage.IsFertiliserApplicationWithinWarningPeriod(model.Date.Value, warningPeriod);
 
+                DateTime endOfOctober = new DateTime(model.Date.Value.Year, 10, 31);
+               (decimal PreviousApplicationsNitrogen, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, startDate, endOfOctober, false);
+
                 if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape && isWithinWarningPeriod)
                 {
                     bool isNitrogenRateExceeded = false;
                     int maxNitrogenRate = 0;
 
-                    if (model.N.Value > 30)
+                    if ((PreviousApplicationsNitrogen + model.N.Value) > 30)
                     {
                         isNitrogenRateExceeded = true;
                         maxNitrogenRate = 30;
@@ -1933,7 +1943,10 @@ namespace NMP.Portal.Controllers
                     }
                 }
 
-
+                //NMax limit for crop logic
+                decimal previousApplicationsN = 0;
+                decimal currentApplicationNitrogen = Convert.ToDecimal(model.N);
+                (previousApplicationsN, error) = await _organicManureService.FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(managementId, false);
                 List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(fieldId));
                 var crop = cropsResponse.Where(x => x.Year == model.HarvestYear && x.Confirm == false).ToList();
                 if (crop != null)
@@ -1962,7 +1975,7 @@ namespace NMP.Portal.Controllers
                                         //string cropInfo1 = await _cropService.FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(crop[0].CropTypeID.Value, crop[0].CropInfo1.Value);
                                         OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
                                         nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(nmaxLimitEnglandOrWales ?? 0, crop[0].Yield == null ? null : crop[0].Yield.Value, fieldDetail.SoilTypeName, crop[0].CropInfo1 == null ? null : crop[0].CropInfo1.Value, crop[0].CropTypeID.Value, currentYearManureTypeIds, previousYearManureTypeIds, null);
-                                        if (totalNitrogen > nMaxLimit)
+                                        if ((previousApplicationsN + currentApplicationNitrogen) > nMaxLimit)
                                         {
                                             model.IsNitrogenExceedWarning = true;
                                             (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);

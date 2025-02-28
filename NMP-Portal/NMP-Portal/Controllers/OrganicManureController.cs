@@ -1414,6 +1414,15 @@ namespace NMP.Portal.Controllers
 
 
                     }
+                    foreach (var fieldId in model.FieldList)
+                    {
+                        Field field = await _fieldService.FetchFieldByFieldId(Convert.ToInt32(fieldId));
+                        if (field != null && field.IsWithinNVZ==true)
+                        {
+                            model.IsWithinNVZ = true;
+                        }
+                    }
+                        
                 }
                 model.IsWarningMsgNeedToShow = false;
                 model.IsClosedPeriodWarning = false;
@@ -1659,7 +1668,7 @@ namespace NMP.Portal.Controllers
             (List<ApplicationMethodResponse> applicationMethodList, error) = await _organicManureService.FetchApplicationMethodList(fieldType ?? 0, isLiquid);
             if (error == null && applicationMethodList.Count > 0)
             {
-                ViewBag.ApplicationMethodList = applicationMethodList.OrderBy(x => x.Name).ToList();
+                ViewBag.ApplicationMethodList = applicationMethodList.OrderBy(a=>a.SortOrder).ToList();
             }
 
             model.ApplicationMethodCount = applicationMethodList.Count;
@@ -1758,7 +1767,7 @@ namespace NMP.Portal.Controllers
 
 
                 (List<ApplicationMethodResponse> applicationMethodList, error) = await _organicManureService.FetchApplicationMethodList(fieldType ?? 0, isLiquid);
-                ViewBag.ApplicationMethodList = applicationMethodList.OrderBy(x => x.Name).ToList(); ;
+                ViewBag.ApplicationMethodList = applicationMethodList.OrderBy(a => a.SortOrder).ToList(); 
                 model.ApplicationMethodCount = applicationMethodList.Count;
                 return View(model);
             }
@@ -2941,6 +2950,19 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("ApplicationRate", Resource.MsgEnterANumberWhichIsGreaterThanZero);
             }
+            if (model.ApplicationRate != null && model.ApplicationRate > 250)
+            {
+                ModelState.AddModelError("ApplicationRate", Resource.MsgForApplicationRate);
+            }
+            //if (model.ApplicationRate != null)
+            //{
+            //    string input = model.ApplicationRate.ToString();
+            //    if (input.Split('.').Length > 2)
+            //    {
+            //        //error msg
+            //    }
+            //}
+
             if (!ModelState.IsValid)
             {
                 return View("ManualApplicationRate", model);
@@ -3158,11 +3180,20 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("Quantity", Resource.MsgEnterANumberWhichIsGreaterThanZero);
             }
+            if (model.Quantity != null&& model.Area != null && model.Area > 0 && model.Quantity > 0)
+            {
+                model.ApplicationRate = model.Quantity.Value / model.Area.Value;
+
+                if (model.ApplicationRate != null && model.ApplicationRate > 250)
+                {
+                    ModelState.AddModelError("Quantity", Resource.MsgForApplicationRate);
+                }
+            }
             if (!ModelState.IsValid)
             {
                 return View("AreaQuantity", model);
             }
-            model.ApplicationRate = (int)Math.Round(model.Quantity.Value / model.Area.Value);
+            model.ApplicationRate = (model.Quantity.Value / model.Area.Value);
             Error error = new Error();
             if (model.OrganicManures.Count > 0)
             {
@@ -5041,6 +5072,7 @@ namespace NMP.Portal.Controllers
             if (model.ApplicationRate.HasValue && model.ApplicationDate.HasValue)
             {
                 decimal totalN = 0;
+                decimal previousApplicationsN = 0;
                 //DateTime startDate = model.ApplicationDate.Value.AddDays(-364);
                 //DateTime endDate = model.ApplicationDate.Value;
                 List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(fieldId));
@@ -5058,7 +5090,7 @@ namespace NMP.Portal.Controllers
                             (FieldDetailResponse fieldDetail, error) = await _fieldService.FetchFieldDetailByFieldIdAndHarvestYear(fieldId, model.HarvestYear.Value, false);
                             if (error == null)
                             {
-                                (totalN, error) = await _organicManureService.FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(managementId, false);
+                                (previousApplicationsN, error) = await _organicManureService.FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(managementId, false);
                                 if (error == null)
                                 {
                                     decimal nMaxLimit = 0;
@@ -5074,7 +5106,7 @@ namespace NMP.Portal.Controllers
                                     {
                                         decimal decimalOfTotalNForUseInNmaxCalculation = Convert.ToDecimal(percentOfTotalNForUseInNmaxCalculation / 100.0);
                                         currentApplicationNitrogen = (defaultNitrogen * model.ApplicationRate.Value * decimalOfTotalNForUseInNmaxCalculation);
-                                        totalN = totalN + currentApplicationNitrogen;
+                                        totalN = previousApplicationsN + currentApplicationNitrogen;
 
                                         (List<int> currentYearManureTypeIds, error) = await _organicManureService.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
                                         (List<int> previousYearManureTypeIds, error) = await _organicManureService.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value - 1, false);
@@ -5138,7 +5170,7 @@ namespace NMP.Portal.Controllers
                                                     //string cropInfo1 = await _cropService.FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(crop[0].CropTypeID.Value, crop[0].CropInfo1.Value);
                                                     OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
                                                     nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(nmaxLimitEnglandOrWales ?? 0, crop[0].Yield == null ? null : crop[0].Yield.Value, fieldDetail.SoilTypeName, crop[0].CropInfo1 == null ? null : crop[0].CropInfo1.Value, crop[0].CropTypeID.Value, currentYearManureTypeIds, previousYearManureTypeIds, model.ManureTypeId.Value);
-                                                    if ((totalN + availableNFromMannerOutput) > nMaxLimit)
+                                                    if ((previousApplicationsN + availableNFromMannerOutput) > nMaxLimit)
                                                     {
                                                         model.IsNMaxLimitWarning = true;
                                                         (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);

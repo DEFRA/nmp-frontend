@@ -29,16 +29,9 @@
                 <li>
                     @Resource.lblHelpProtectTheEnvironment
                 </li>
-            </ul>            
-            <p class="govuk-body">@Resource.lblFollowFarmingRules</p>
-            <ul class="govuk-list govuk-list--spaced">
-                <li>@Html.Raw(Resource.lblEnglandFormingRuleOfWater)</li>
-                <li>@Html.Raw(Resource.lblWalesFormingRuleOfWater)</li>
-                <li>@Html.Raw(Resource.lblScotlandFormingRuleOfWater)</li>
-            </ul>
-            
+            </ul> 
             <h2 class="govuk-heading-m">@Resource.lblHowitworks</h2>
-            <p class="govuk-body">@Resource.lblRecommendationFromthisService <a target="_blank" href="@Resource.lnkToRb209NutrientManagementGuide">@Resource.lblRb209NutrientManagementGuide</a>.</p>
+            <p class="govuk-body">@Html.Raw(Resource.lblRecommendationFromthisService)</p>
             <p class="govuk-body">@Resource.lblYourPlanWillBasedOn</p>
             <ul class="govuk-list govuk-list--bullet">
                 <li>
@@ -51,18 +44,25 @@
                     @Resource.lblTheManuresAndFertilisersYouUseAndHowYouApplyThem
                 </li>
             </ul>
+            <p class="govuk-body">@Resource.lblDevelopNutrientApplicationPlan</p>
             <p class="govuk-body">@Resource.lbldownloadablePdftext</p>
             <p class="govuk-body">@Resource.ContentReplacePlanetandManner</p>
-
-            <h2 class="govuk-heading-m">@Resource.lblYourData</h2>
-            @Html.Raw(Resource.contentYourData)
             <h2 class="govuk-heading-m">@Resource.lblReleaseSchedule</h2>
             <p class="govuk-body margin-bottom-forty">@Html.Raw(Resource.lblReadScheduleLink)</p>
+
+
+            <h2 class="govuk-heading-m">@Resource.lblYourData</h2>
+            <p class="gov-body">@Resource.contentYourData1</p>
+            <p class="gov-body">@Resource.contentYourData2</p>
+            <p class="gov-body">@Html.Raw(Resource.contentYourData3)</p>
+            <p class="gov-body">@Resource.contentYourData4</p>
+            
+           
         </div>
         <div class="govuk-body">            
             @if (ViewBag.IsDefraCustomerIdentifyConfigurationWorking)
             {
-                            <govuk-button-link asp-action="Accept" asp-controller="AcceptTerms">@Resource.btnStartNow</govuk-button-link>
+                <govuk-button-link asp-action="Index" asp-controller="AboutService">@Resource.btnStartNow</govuk-button-link>
             }
         </div>
     </div>
