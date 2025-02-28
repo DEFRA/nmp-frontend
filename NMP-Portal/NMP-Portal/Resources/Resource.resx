@@ -3958,6 +3958,12 @@ live</value>
   <data name="lblUricAcidN" xml:space="preserve">
     <value>Uric acid N​</value>
   </data>
+  <data name="lblMoreAboutTheseWaterResourceRegulation" xml:space="preserve">
+    <value>More about these Water Resource Regulations</value>
+  </data>
+  <data name="lblThisApplicationMayBreachMoreThanOneWaterResourceRegulation" xml:space="preserve">
+    <value>This application may breach more than one Water Resource Regulation.</value>
+  </data>
   <data name="contentYourData2" xml:space="preserve">
     <value>This tool will never share your data with any other organisations.</value>
   </data>
