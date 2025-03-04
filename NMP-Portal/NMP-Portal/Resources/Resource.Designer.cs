@@ -2446,7 +2446,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to England: &lt;a href=&quot;https://www.gov.uk/government/collections/nitrate-vulnerable-zones&quot; target=&quot;_blank&quot;&gt;Nitrate vulnerable zones (NVZs)&lt;/a&gt; and &lt;a href=&quot;https://www.gov.uk/government/publications/applying-the-farming-rules-for-water/applying-the-farming-rules-for-water&quot; target=&quot;_blank&quot; &gt;Farming rules for water&lt;/a&gt;.
+        ///   Looks up a localized string similar to England: &lt;a href=&quot;https://www.gov.uk/government/publications/applying-the-farming-rules-for-water/applying-the-farming-rules-for-water&quot; target=&quot;_blank&quot; &gt;Farming rules for water&lt;/a&gt; and  &lt;a href=&quot;https://www.gov.uk/government/collections/nitrate-vulnerable-zones&quot; target=&quot;_blank&quot;&gt;Nitrate vulnerable zones (NVZs)&lt;/a&gt;.
         /// </summary>
         public static string lblEnglandNVZWaterFarmingRules {
             get {
@@ -6238,7 +6238,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The service will warn you if you enter field or nutrient management information that will breach Nitrate Vulnerable Zone (NVZ) rules. The service can help you demonstrate compliance with the NVZ rules for regulatory purposes..
+        ///   Looks up a localized string similar to You can use the recommendations and outputs from this tool to demonstrate compliance with environmental regulations. This tool will warn you if you enter field or nutrient management information that will breach rules relating to inorganic fertilisers, organic manures or other materials containing nitrogen..
         /// </summary>
         public static string lblRegulations_line1 {
             get {
@@ -6247,20 +6247,11 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The service also accounts for Soil Nitrogen Supply (SNS). You can add SNS data for a field at the end of the planning process..
+        ///   Looks up a localized string similar to You must follow the appropriate regulations, depending on where your farm is:.
         /// </summary>
         public static string lblRegulations_line2 {
             get {
                 return ResourceManager.GetString("lblRegulations_line2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to You must follow the appropriate regulations, depending on where your farm is:.
-        /// </summary>
-        public static string lblRegulations_line3 {
-            get {
-                return ResourceManager.GetString("lblRegulations_line3", resourceCulture);
             }
         }
         
@@ -6499,7 +6490,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The service will save the data you input regularly. There will be a Check Your Answers page at the end of each section, and when you select Submit here, your data will be saved up to this point. You will then be able to leave and resume here..
+        ///   Looks up a localized string similar to The tool will save the data you input regularly. There will be a Check Your Answers page at the end of each section, and when you select Submit here, your data will be saved up to this point. You will then be able to leave and resume here..
         /// </summary>
         public static string lblSaving_your_data_line1 {
             get {
@@ -6769,7 +6760,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You will get better recommendations if you have a recent soil analysis. You will be asked to enter the data from the analysis as you progress through the service, in order to create your nutrient management plan..
+        ///   Looks up a localized string similar to You should sample the soil from your fields every 3 to 4 years and get it tested for pH, phosphorus, potassium and magnesium..
         /// </summary>
         public static string lblSoil_Analysis_line1 {
             get {
@@ -6778,7 +6769,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You should sample the soil from your fields every 3 to 4 years and get it tested for pH, phosphorus, potassium and magnesium..
+        ///   Looks up a localized string similar to You will be asked to enter the data from the analysis as you progress through the tool, in order to create your nutrient management plan..
         /// </summary>
         public static string lblSoil_Analysis_line2 {
             get {
@@ -6787,11 +6778,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you do not enter a soil analysis, or if your most recent soil analysis is more than 5 years old, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop..
+        ///   Looks up a localized string similar to ​If you do not enter a soil analysis, or if your most recent soil analysis is more than 5 years old, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop..
         /// </summary>
         public static string lblSoil_Analysis_line3 {
             get {
                 return ResourceManager.GetString("lblSoil_Analysis_line3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The tool also accounts for Soil Nitrogen Supply (SNS). You can add SNS data for a field at the end of the planning process..
+        /// </summary>
+        public static string lblSoil_Analysis_line4 {
+            get {
+                return ResourceManager.GetString("lblSoil_Analysis_line4", resourceCulture);
             }
         }
         
