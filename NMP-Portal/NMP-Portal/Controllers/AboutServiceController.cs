@@ -29,6 +29,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(AboutServiceViewModel model)
         {
             if (ModelState.IsValid)
