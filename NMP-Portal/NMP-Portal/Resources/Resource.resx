@@ -1283,7 +1283,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Total potassium (K2O)</value>
   </data>
   <data name="lblTotalSulphur" xml:space="preserve">
-    <value>Total sulphur (SO3)</value>
+    <value>Total Sulphur (SO3)</value>
   </data>
   <data name="lblUricAcid" xml:space="preserve">
     <value>Uric acid (N)</value>
@@ -4036,5 +4036,8 @@ live</value>
   </data>
   <data name="lblSoil_Analysis_line4" xml:space="preserve">
     <value>The tool also accounts for Soil Nitrogen Supply (SNS). You can add SNS data for a field at the end of the planning process.</value>
+  </data>
+  <data name="lblTotalMagnesium" xml:space="preserve">
+    <value>Total Magnesium</value>
   </data>
 </root>
