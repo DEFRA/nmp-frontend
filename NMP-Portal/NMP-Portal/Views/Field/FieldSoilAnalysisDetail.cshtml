@@ -17,21 +17,30 @@
 @if (Model != null)
 {
     @section BeforeContent {
-    <govuk-breadcrumbs class="govuk-breadcrumbs-link">
-        <govuk-breadcrumbs-item asp-action="FarmList" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
-            @Resource.lblAllFarm
-        </govuk-breadcrumbs-item>
-        <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
-            @Model.FarmName
-        </govuk-breadcrumbs-item>
-        <govuk-breadcrumbs-item asp-action="ManageFarmFields" asp-controller="Field" asp-route-Id="@Model.EncryptedFarmId">
-            @Resource.lblFields
-        </govuk-breadcrumbs-item>
-        <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
-            @Model.Name
-        </govuk-breadcrumbs-item>
-
-    </govuk-breadcrumbs>
+    @if (Model.HarvestYear == null && Model.EncryptedHarvestYear == null)
+        {
+            <govuk-breadcrumbs class="govuk-breadcrumbs-link">
+            <govuk-breadcrumbs-item asp-action="FarmList" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+                @Resource.lblAllFarm
+            </govuk-breadcrumbs-item>
+            <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+                @Model.FarmName
+            </govuk-breadcrumbs-item>
+            <govuk-breadcrumbs-item asp-action="ManageFarmFields" asp-controller="Field" asp-route-Id="@Model.EncryptedFarmId">
+                @Resource.lblFields
+            </govuk-breadcrumbs-item>
+            <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
+                @Model.Name
+            </govuk-breadcrumbs-item>
+             </govuk-breadcrumbs>
+        }
+        else
+        {
+                <govuk-back-link  asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">
+                    @string.Format(Resource.lblBackToTheYearFieldNamePlan, Model.HarvestYear, Model.Name)
+                </govuk-back-link>
+        }
+       
     }
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
@@ -43,7 +52,7 @@
                     <govuk-notification-banner type="Success">
                         <div class="">
                             <h3 class="govuk-notification-banner__heading">@ViewBag.SuccessMsgContent</h3>
-                            @if (ViewBag.SuccessMsgContentLink!=null)
+                            @if (ViewBag.SuccessMsgContentLink != null)
                             {
                                 <p class="govuk-body"><a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">@ViewBag.SuccessMsgContentLink</a></p>
                             }
@@ -109,7 +118,7 @@
                             <td class="govuk-table__cell">@(Model.SoilOverChalk == true ? Resource.lblYes : Resource.lblNo)</td>
                         </tr>
                     }
-                    @if (Model.IsWithinNVZForFarm!=null&&Model.IsWithinNVZForFarm == true)
+                    @if (Model.IsWithinNVZForFarm != null && Model.IsWithinNVZForFarm == true)
                     {
                         <tr class="govuk-table__row">
                             <td class="govuk-table__cell">@Resource.lblIsFieldWithinNVZ</td>

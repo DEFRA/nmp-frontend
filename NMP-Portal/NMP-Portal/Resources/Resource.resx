@@ -4037,4 +4037,10 @@ live</value>
   <data name="lblThirdRuleOfNVZForEngland" xml:space="preserve">
     <value>Read more about</value>
   </data>
+  <data name="lblViewFieldAndSoilAnalysisInformationForField" xml:space="preserve">
+    <value>View field and soil analysis information for {0}</value>
+  </data>
+  <data name="lblBackToTheYearFieldNamePlan" xml:space="preserve">
+    <value>Back to the {0} {1} Plan</value>
+  </data>
 </root>

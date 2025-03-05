@@ -36,6 +36,7 @@ namespace NMP.Portal.Controllers
         private readonly ICropService _cropService;
         private readonly IFieldService _fieldService;
         private readonly IOrganicManureService _organicManureService;
+        private readonly IDataProtector _fieldDataProtector;
 
 
         public FertiliserManureController(ILogger<FertiliserManureController> logger, IDataProtectionProvider dataProtectionProvider,
@@ -46,6 +47,7 @@ namespace NMP.Portal.Controllers
             _httpContextAccessor = httpContextAccessor;
             _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
             _cropDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.CropController");
+            _fieldDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FieldController");
             _farmService = farmService;
             _fertiliserManureService = fertiliserManureService;
             _cropService = cropService;
@@ -92,7 +94,7 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("Recommendations", "Crop", new
                     {
                         q = model.EncryptedFarmId,
-                        r = _cropDataProtector.Protect(fieldId),
+                        r = _fieldDataProtector.Protect(fieldId),
                         s = model.EncryptedHarvestYear
 
                     });
@@ -160,7 +162,7 @@ namespace NMP.Portal.Controllers
                         model.FieldGroup = Resource.lblSelectSpecificFields;
                         model.FieldGroupName = Resource.lblSelectSpecificFields;
                         model.IsComingFromRecommendation = true;
-                        string fieldId = _cropDataProtector.Unprotect(s);
+                        string fieldId = _fieldDataProtector.Unprotect(s);
                         model.FieldList.Add(fieldId);
                         (List<int> managementIds, error) = await _fertiliserManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldId, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup, null);// 1 id cropOrder
                         if (error == null)

@@ -144,7 +144,7 @@ namespace NMP.Portal.Controllers
                     (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(k)));
                     if (string.IsNullOrWhiteSpace(error.Message))
                     {
-                        int fieldId = Convert.ToInt32(_farmDataProtector.Unprotect(j));
+                        int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(j));
                         _logger.LogTrace($"SoilAnalysisController: fields/{fieldId} called.");
                         var field = await _fieldService.FetchFieldByFieldId(fieldId);
                         model.FieldName = field.Name;
@@ -835,7 +835,7 @@ namespace NMP.Portal.Controllers
             if (!string.IsNullOrWhiteSpace(i) && !string.IsNullOrWhiteSpace(j))
             {
                 model.EncryptedFarmId = j;
-                int fieldId = Convert.ToInt32(_farmDataProtector.Unprotect(i));
+                int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(i));
                 var field = await _fieldService.FetchFieldByFieldId(fieldId);
                 if (field != null)
                 {

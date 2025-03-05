@@ -107,7 +107,7 @@ namespace NMP.Portal.Controllers
                         model.FieldGroup = Resource.lblSelectSpecificFields;
                         model.FieldGroupName = Resource.lblSelectSpecificFields;
                         model.IsComingFromRecommendation = true;
-                        string fieldId = _cropDataProtector.Unprotect(s);
+                        string fieldId = _fieldDataProtector.Unprotect(s);
                         model.FieldList.Add(fieldId);
                         (List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldId, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup, null);
                         if (error == null)
@@ -3919,7 +3919,7 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("Recommendations", "Crop", new
                     {
                         q = model.EncryptedFarmId,
-                        r = _cropDataProtector.Protect(fieldId),
+                        r = _fieldDataProtector.Protect(fieldId),
                         s = model.EncryptedHarvestYear
 
                     });
