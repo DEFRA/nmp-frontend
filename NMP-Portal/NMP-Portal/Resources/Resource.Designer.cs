@@ -1348,6 +1348,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Back to the {0} {1} Plan.
+        /// </summary>
+        public static string lblBackToTheYearFieldNamePlan {
+            get {
+                return ResourceManager.GetString("lblBackToTheYearFieldNamePlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back to {0} farm plan.
         /// </summary>
         public static string lblBackToYearFarmPlan {
@@ -8358,6 +8367,15 @@ namespace NMP.Portal.Resources {
         public static string lblViewEditThePlan {
             get {
                 return ResourceManager.GetString("lblViewEditThePlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View field and soil analysis information for {0}.
+        /// </summary>
+        public static string lblViewFieldAndSoilAnalysisInformationForField {
+            get {
+                return ResourceManager.GetString("lblViewFieldAndSoilAnalysisInformationForField", resourceCulture);
             }
         }
         
