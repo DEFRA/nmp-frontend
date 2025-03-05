@@ -1928,7 +1928,7 @@ namespace NMP.Portal.Controllers
 
                                         var fieldDetail = new FieldDetails
                                         {
-                                            EncryptedFieldId = _cropDataProtector.Protect(plan.FieldID.ToString()), // Encrypt field ID
+                                            EncryptedFieldId = _fieldDataProtector.Protect(plan.FieldID.ToString()), // Encrypt field ID
                                             FieldName = plan.FieldName,
                                             PlantingDate = plan.PlantingDate,
                                             Yield = plan.Yield,
@@ -2248,7 +2248,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (!string.IsNullOrWhiteSpace(r))
                 {
-                    decryptedFieldId = Convert.ToInt32(_cropDataProtector.Unprotect(r));
+                    decryptedFieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(r));
                     model.EncryptedFieldId = r;
                 }
                 if (!string.IsNullOrWhiteSpace(s))
@@ -2302,7 +2302,7 @@ namespace NMP.Portal.Controllers
                                     Year = recommendation.Crops.Year,
                                     CropTypeID = recommendation.Crops.CropTypeID,
                                     FieldID = recommendation.Crops.FieldID,
-                                    EncryptedFieldId = _cropDataProtector.Protect(recommendation.Crops.FieldID.ToString()),
+                                    EncryptedFieldId = _fieldDataProtector.Protect(recommendation.Crops.FieldID.ToString()),
                                     Variety = recommendation.Crops.Variety,
                                     CropInfo1 = recommendation.Crops.CropInfo1,
                                     CropInfo2 = recommendation.Crops.CropInfo2,
@@ -2792,7 +2792,7 @@ namespace NMP.Portal.Controllers
             if (!string.IsNullOrWhiteSpace(t))
             {
                 model.EncryptedFieldId = t;
-                model.FieldID = Convert.ToInt32(_cropDataProtector.Unprotect(t));
+                model.FieldID = Convert.ToInt32(_fieldDataProtector.Unprotect(t));
             }
             if (!string.IsNullOrWhiteSpace(u))
             {

@@ -1835,7 +1835,7 @@ namespace NMP.Portal.Controllers
 
                 if (model.Fields != null && model.Fields.Count > 0)
                 {
-                    model.Fields.ForEach(x => x.EncryptedFieldId = _farmDataProtector.Protect(x.ID.ToString()));
+                    model.Fields.ForEach(x => x.EncryptedFieldId = _fieldDataProtector.Protect(x.ID.ToString()));
                 }
                 (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(farmId);
                 model.FarmName = farm.Name;
@@ -1866,13 +1866,13 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> FieldSoilAnalysisDetail(string id, string farmId, string? q, string? r, string? s)//id encryptedFieldId,farmID=EncryptedFarmID,q=success,r=FiedlOrSoilAnalysis,s=soilUpdateOrSave
+        public async Task<IActionResult> FieldSoilAnalysisDetail(string id, string farmId, string? q, string? r, string? s,string? t)//id encryptedFieldId,farmID=EncryptedFarmID,q=success,r=FiedlOrSoilAnalysis,s=soilUpdateOrSave
         {
             _logger.LogTrace($"Field Controller : FieldSoilAnalysisDetail() action called");
             FieldViewModel model = new FieldViewModel();
 
             (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(farmId)));
-            int fieldId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
+            int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(id));
             var field = await _fieldService.FetchFieldByFieldId(fieldId);
             model.Name = field.Name;
             model.TotalArea = field.TotalArea ?? 0;
@@ -1882,7 +1882,16 @@ namespace NMP.Portal.Controllers
             model.SoilReleasingClay = field.SoilReleasingClay ?? false;
             model.IsWithinNVZ = field.IsWithinNVZ ?? false;
             model.IsAbove300SeaLevel = field.IsAbove300SeaLevel ?? false;
-
+            if (!string.IsNullOrWhiteSpace(t))
+            {
+                model.HarvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(t));
+                model.EncryptedHarvestYear = t;
+            }
+            else
+            {
+                model.HarvestYear = null;
+                model.EncryptedHarvestYear = null;
+            }
             model.EncryptedFieldId = id;
             model.ID = fieldId;
             model.isEnglishRules = farm.EnglishRules;
@@ -3939,7 +3948,7 @@ namespace NMP.Portal.Controllers
                 if (!string.IsNullOrWhiteSpace(id))
                 {
                     (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(farmId)));
-                    int fieldId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
+                    int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(id));
                     var field = await _fieldService.FetchFieldByFieldId(fieldId);
                     model.Name = field.Name;
                     model.TotalArea = field.TotalArea ?? 0;
@@ -4051,7 +4060,7 @@ namespace NMP.Portal.Controllers
                         ModifiedByID = userId
                     }
                 };
-                int fieldId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFieldId));
+                int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
                 (Field fieldResponse, Error error1) = await _fieldService.UpdateFieldAsync(fieldData, fieldId);
                 if (error1.Message == null && fieldResponse != null)
                 {
@@ -4111,7 +4120,7 @@ namespace NMP.Portal.Controllers
             }
             else
             {
-                int fieldId = Convert.ToInt32(_farmDataProtector.Unprotect(field.EncryptedFieldId));
+                int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(field.EncryptedFieldId));
                 (string message, Error error) = await _fieldService.DeleteFieldByIdAsync(fieldId);
                 if (!string.IsNullOrWhiteSpace(error.Message))
                 {

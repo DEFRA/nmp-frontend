@@ -4040,4 +4040,10 @@ live</value>
   <data name="lblTotalMagnesium" xml:space="preserve">
     <value>Total Magnesium</value>
   </data>
+  <data name="lblBackToTheYearFieldNamePlan" xml:space="preserve">
+    <value>Back to the {0} {1} Plan</value>
+  </data>
+  <data name="lblViewFieldAndSoilAnalysisInformationForField" xml:space="preserve">
+    <value>View field and soil analysis information for {0}</value>
+  </data>
 </root>
