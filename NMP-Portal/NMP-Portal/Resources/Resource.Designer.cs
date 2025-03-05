@@ -7822,6 +7822,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total Magnesium.
+        /// </summary>
+        public static string lblTotalMagnesium {
+            get {
+                return ResourceManager.GetString("lblTotalMagnesium", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total magnesium oxide (MgO).
         /// </summary>
         public static string lblTotalMagnesiumOxide {
@@ -7939,7 +7948,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total sulphur (SO3).
+        ///   Looks up a localized string similar to Total Sulphur (SO3).
         /// </summary>
         public static string lblTotalSulphur {
             get {
