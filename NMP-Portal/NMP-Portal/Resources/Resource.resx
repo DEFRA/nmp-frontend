@@ -4046,4 +4046,10 @@ live</value>
   <data name="lblViewFieldAndSoilAnalysisInformationForField" xml:space="preserve">
     <value>View field and soil analysis information for {0}</value>
   </data>
+  <data name="lblDateAnalysisTaken" xml:space="preserve">
+    <value>Date analysis taken</value>
+  </data>
+  <data name="lblSoilMineralNitrogenDetailsForFieldName" xml:space="preserve">
+    <value>Soil mineral nitrogen (SNS) details for {0}</value>
+  </data>
 </root>
