@@ -2131,6 +2131,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Date analysis taken.
+        /// </summary>
+        public static string lblDateAnalysisTaken {
+            get {
+                return ResourceManager.GetString("lblDateAnalysisTaken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Date sample taken.
         /// </summary>
         public static string lblDateSample {
@@ -6945,6 +6954,15 @@ namespace NMP.Portal.Resources {
         public static string lblSoilMineralNitrogenAt6090CMForError {
             get {
                 return ResourceManager.GetString("lblSoilMineralNitrogenAt6090CMForError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Soil mineral nitrogen (SNS) details for {0}.
+        /// </summary>
+        public static string lblSoilMineralNitrogenDetailsForFieldName {
+            get {
+                return ResourceManager.GetString("lblSoilMineralNitrogenDetailsForFieldName", resourceCulture);
             }
         }
         
