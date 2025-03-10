@@ -759,6 +759,75 @@ namespace NMP.Portal.Services
             }
             return (message, error);
         }
+        public async Task<(bool,Error)> IsCropsGroupNameExistForUpdate(string cropIds, string cropGroupName, int year)
+        {
+            bool isCropsGroupNameExist = false;
+            Error error = new Error();
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropGroupNameByCropIdGroupNameAndYearAPI, cropIds, cropGroupName, year));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (responseWrapper.Data == true)
+                {
+                    isCropsGroupNameExist = true;
+                }
+
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+
+            return (isCropsGroupNameExist,error);
+        }
+        public async Task<(List<Crop>, Error)> UpdateCropGroupName(string cropIds, string CropGroupName, int year)
+        {
+            List<Crop> crops = new List<Crop>();
+            Error error = new Error();
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.PutAsync(string.Format(APIURLHelper.UpdateCropGroupNameAPI, cropIds, CropGroupName, year),null);
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+                {
+                    var cropResponsss = responseWrapper.Data.Crops.ToObject<List<Crop>>();
+                    if (cropResponsss != null)
+                    {
+                        crops = cropResponsss;
+                    }
+
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+            return (crops, error);
+        }
     }
 
 }

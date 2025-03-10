@@ -3254,7 +3254,7 @@ cubic metres per hectare  not set</value>
     <value>remove this soil analysis.</value>
   </data>
   <data name="lblYouCanAlso" xml:space="preserve">
-    <value>You can also</value>
+    <value>You can also </value>
   </data>
   <data name="lblThisMayChangeYourNutrientRecommendations" xml:space="preserve">
     <value>This may change your nutrient recommendations. Select the field in your</value>
@@ -4045,5 +4045,29 @@ live</value>
   </data>
   <data name="lblViewFieldAndSoilAnalysisInformationForField" xml:space="preserve">
     <value>View field and soil analysis information for {0}</value>
+  </data>
+  <data name="lblUpdateCropGroupNameContent1" xml:space="preserve">
+    <value>Changes here will be applied to all of these fields. To change a single field select it from your crop plan.</value>
+  </data>
+  <data name="lblRemoveThisCropGroup" xml:space="preserve">
+    <value>remove this crop group.</value>
+  </data>
+  <data name="lblUpdateThisCropGroup" xml:space="preserve">
+    <value>Update this crop group</value>
+  </data>
+  <data name="lblViewTheYearCropPlan" xml:space="preserve">
+    <value>View the {0} crop plan.</value>
+  </data>
+  <data name="lblWhatIsTheCropType" xml:space="preserve">
+    <value>What is the crop type?</value>
+  </data>
+  <data name="lblUpdateCropGroupNameForHarvestYear" xml:space="preserve">
+    <value>Update {0} for harvest year {1}</value>
+  </data>
+  <data name="lblCropPlanUpdated" xml:space="preserve">
+    <value>Crop Plan updated</value>
+  </data>
+  <data name="lblSelectAFieldToSeeItsUpdatedRecommendations" xml:space="preserve">
+    <value>Select a field to see its updated recommendations</value>
   </data>
 </root>

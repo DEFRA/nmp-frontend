@@ -1,0 +1,170 @@
+﻿﻿@using NMP.Portal.Resources
+@using System.Globalization
+@model NMP.Portal.ViewModels.PlanViewModel
+@section BeforeContent {
+    <govuk-back-link asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
+}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+
+        <h1 class="govuk-heading-l">
+            @string.Format(Resource.lblUpdateCropGroupNameForHarvestYear, Model.CropGroupName, Model.Year)
+        </h1>
+
+        <govuk-inset-text>
+            <p class="govuk-body">
+                @Resource.lblUpdateCropGroupNameContent1 <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@string.Format(Resource.lblViewTheYearCropPlan, Model.Year)</a>.
+            </p>
+        </govuk-inset-text>
+
+        <div class="govuk-grid-row">
+            <form asp-action="UpdateCropGroupNameCheckAnswer" asp-controller="Crop" method="post" autocomplete="off">
+                @Html.AntiForgeryToken()
+                @if (TempData["ErrorUpdateCropGroupNameCheckAnswer"] != null)
+                {
+                    <govuk-error-summary>
+                        <govuk-error-summary-item href="#">@TempData["ErrorUpdateCropGroupNameCheckAnswer"]</govuk-error-summary-item>
+                    </govuk-error-summary>
+                }
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Yield" value="@Model.Yield"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year" value="@Model.Year"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear" value="@Model.EncryptedHarvestYear"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId" value="@Model.EncryptedFarmId"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupName" value="@Model.CropGroupName"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropType" value="@Model.CropType"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID" value="@Model.CropTypeID"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Variety" value="@Model.Variety"></govuk-input>
+                <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SowingDate" value="@Model.SowingDate"></govuk-date-input>
+                @if (Model.Crops != null && Model.Crops.Count > 0)
+                {
+                    @for (int i = 0; i < Model.Crops.Count; i++)
+                    {
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].ID" value="@Model.Crops[i].ID"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].CropTypeID" value="@Model.Crops[i].CropTypeID"></govuk-input>
+                        <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].SowingDate" value="@Model.Crops[i].SowingDate"></govuk-date-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].Yield" value="@Model.Crops[i].Yield"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].FieldName" value="@Model.Crops[i].FieldName"></govuk-input>
+                    }
+
+                }
+                <govuk-summary-list>
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>@Resource.lblWhatIsTheCropType</govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>@Model.CropType</govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action href="">@Resource.lblChange</govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>@Resource.lblVarietyNameWithOptional</govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>@Model.Variety</govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action href="">@Resource.lblChange</govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>@string.Format(Resource.lblWhichFieldsDoYouPlanToGrow, Model.CropType)</govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @if(Model.Crops!=null&&Model.Crops.Count>0)
+                            {
+                            @foreach (var crop in Model.Crops)
+                            {
+                                @crop.FieldName <br />
+                            }
+                            }
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action href="">@Resource.lblChange</govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>@Resource.lblWhatWouldYouLikeToCallThisCropGroup</govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>@Model.CropGroupName</govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action asp-action="UpdateCropGroupName" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+
+                    @if (ViewBag.SowingQuestion != null)
+                    {
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>@Resource.lblDoYouHaveADateForWhenYouPlantedYour</govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>@ViewBag.SowingQuestion</govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action href="">@Resource.lblChange</govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+
+                    }
+                    else  @if (ViewBag.allSowingAreSame != null && ViewBag.allSowingAreSame)
+                    {
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>@Resource.lblDoYouHaveADateForWhenYouPlantedYour</govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>@Model.SowingDate.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB"))</govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action href="">@Resource.lblChange</govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+                    }
+                    else
+                    {
+                        @foreach (var crop in Model.Crops)
+                        {
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>@Resource.lblDoYouHaveADateForWhenYouPlantedYour</govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>@crop.SowingDate.Value.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB"))</govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action href="">@Resource.lblChange</govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                        }
+                    }
+                    @if (ViewBag.YieldQuestion != null)
+                    {
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>@Resource.lblHowDoYouWantToEnterExpectedYield</govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>@ViewBag.YieldQuestion</govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action href="">@Resource.lblChange</govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+
+                    }
+                    else  @if (ViewBag.allYieldsAreSame != null && ViewBag.allYieldsAreSame)
+                    {
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>@Resource.lblHowDoYouWantToEnterExpectedYield</govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>@Model.Yield</govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action href="">@Resource.lblChange</govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+
+                        </govuk-summary-list-row>
+                    }
+                    else
+                    {
+                        @foreach (var crop in Model.Crops)
+                        {
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>@Resource.lblHowDoYouWantToEnterExpectedYield</govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>@crop.Yield</govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action href="">@Resource.lblChange</govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                        }
+                    }
+
+                </govuk-summary-list>
+
+                <p class="govuk-body margin-bottom-forty">@Resource.lblYouCanAlso<a asp-action="RemoveCrop" asp-controller="Crop" asp-route-q="@ViewBag.EncryptedCropTypeId" asp-route-r="@(ViewBag.EncryptedCropGroupName==null?null:ViewBag.EncryptedCropGroupName)">@Resource.lblRemoveThisCropGroup</a>.</p>
+                <button class="govuk-button" data-module="govuk-button">
+                    @Resource.lblUpdateThisCropGroup
+                </button>
+                <p class="govuk-body">
+                    <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
