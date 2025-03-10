@@ -1283,7 +1283,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Total potassium (K2O)</value>
   </data>
   <data name="lblTotalSulphur" xml:space="preserve">
-    <value>Total sulphur (SO3)</value>
+    <value>Total Sulphur (SO3)</value>
   </data>
   <data name="lblUricAcid" xml:space="preserve">
     <value>Uric acid (N)</value>
@@ -3828,10 +3828,10 @@ live</value>
     <value>The first step is to set up your farm. The farm will contain your fields, and the fields will have the crops and nutrients applied to them. If you have more than one holding, it's best to add a separate farm for each one.</value>
   </data>
   <data name="lblRegulations_line1" xml:space="preserve">
-    <value>The service will warn you if you enter field or nutrient management information that will breach Nitrate Vulnerable Zone (NVZ) rules. The service can help you demonstrate compliance with the NVZ rules for regulatory purposes.</value>
+    <value>You can use the recommendations and outputs from this tool to demonstrate compliance with environmental regulations. This tool will warn you if you enter field or nutrient management information that will breach rules relating to inorganic fertilisers, organic manures or other materials containing nitrogen.</value>
   </data>
   <data name="lblRegulations_line2" xml:space="preserve">
-    <value>The service also accounts for Soil Nitrogen Supply (SNS). You can add SNS data for a field at the end of the planning process.</value>
+    <value>You must follow the appropriate regulations, depending on where your farm is:</value>
   </data>
   <data name="lblDo_not_show_this_information_again" xml:space="preserve">
     <value>Do not show this information again</value>
@@ -3879,16 +3879,16 @@ live</value>
     <value>Saving your data</value>
   </data>
   <data name="lblSaving_your_data_line1" xml:space="preserve">
-    <value>The service will save the data you input regularly. There will be a Check Your Answers page at the end of each section, and when you select Submit here, your data will be saved up to this point. You will then be able to leave and resume here.</value>
+    <value>The tool will save the data you input regularly. There will be a Check Your Answers page at the end of each section, and when you select Submit here, your data will be saved up to this point. You will then be able to leave and resume here.</value>
   </data>
   <data name="lblSoil_Analysis_line1" xml:space="preserve">
-    <value>You will get better recommendations if you have a recent soil analysis. You will be asked to enter the data from the analysis as you progress through the service, in order to create your nutrient management plan.</value>
-  </data>
-  <data name="lblSoil_Analysis_line2" xml:space="preserve">
     <value>You should sample the soil from your fields every 3 to 4 years and get it tested for pH, phosphorus, potassium and magnesium.</value>
   </data>
+  <data name="lblSoil_Analysis_line2" xml:space="preserve">
+    <value>You will be asked to enter the data from the analysis as you progress through the tool, in order to create your nutrient management plan.</value>
+  </data>
   <data name="lblSoil_Analysis_line3" xml:space="preserve">
-    <value>If you do not enter a soil analysis, or if your most recent soil analysis is more than 5 years old, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop.</value>
+    <value>​If you do not enter a soil analysis, or if your most recent soil analysis is more than 5 years old, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop.</value>
   </data>
   <data name="lblTermsOfUse" xml:space="preserve">
     <value>Terms of use</value>
@@ -3966,13 +3966,10 @@ live</value>
     <value>Scotland: &lt;a href="https://www.gov.scot/policies/agriculture-and-the-environment/nvz/" target="_blank"&gt;The Action Programme for Nitrate Vulnerable Zones (Scotland) Regulations 2008&lt;/a&gt;</value>
   </data>
   <data name="lblEnglandNVZWaterFarmingRules" xml:space="preserve">
-    <value>England: &lt;a href="https://www.gov.uk/government/collections/nitrate-vulnerable-zones" target="_blank"&gt;Nitrate vulnerable zones (NVZs)&lt;/a&gt; and &lt;a href="https://www.gov.uk/government/publications/applying-the-farming-rules-for-water/applying-the-farming-rules-for-water" target="_blank" &gt;Farming rules for water&lt;/a&gt;</value>
+    <value>England: &lt;a href="https://www.gov.uk/government/publications/applying-the-farming-rules-for-water/applying-the-farming-rules-for-water" target="_blank" &gt;Farming rules for water&lt;/a&gt; and  &lt;a href="https://www.gov.uk/government/collections/nitrate-vulnerable-zones" target="_blank"&gt;Nitrate vulnerable zones (NVZs)&lt;/a&gt;</value>
   </data>
   <data name="lblRegulations" xml:space="preserve">
     <value>Regulations</value>
-  </data>
-  <data name="lblRegulations_line3" xml:space="preserve">
-    <value>You must follow the appropriate regulations, depending on where your farm is:</value>
   </data>
   <data name="lblWalesWaterResourceRegulations" xml:space="preserve">
     <value>Wales: &lt;a href="https://www.gov.wales/water-resources-control-agricultural-pollution-wales-regulations-2021-guidance-farmers-and-land" target="_blank"&gt;The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021&lt;/a&gt;</value>
@@ -4036,5 +4033,17 @@ live</value>
   </data>
   <data name="lblThirdRuleOfNVZForEngland" xml:space="preserve">
     <value>Read more about</value>
+  </data>
+  <data name="lblSoil_Analysis_line4" xml:space="preserve">
+    <value>The tool also accounts for Soil Nitrogen Supply (SNS). You can add SNS data for a field at the end of the planning process.</value>
+  </data>
+  <data name="lblTotalMagnesium" xml:space="preserve">
+    <value>Total Magnesium</value>
+  </data>
+  <data name="lblBackToTheYearFieldNamePlan" xml:space="preserve">
+    <value>Back to the {0} {1} Plan</value>
+  </data>
+  <data name="lblViewFieldAndSoilAnalysisInformationForField" xml:space="preserve">
+    <value>View field and soil analysis information for {0}</value>
   </data>
 </root>

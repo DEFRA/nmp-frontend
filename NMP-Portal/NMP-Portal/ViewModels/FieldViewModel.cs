@@ -55,5 +55,7 @@ namespace NMP.Portal.ViewModels
         public string? Management { get; set; }
         public string? PotassiumIndexValue { get; set; }
         public string? CropGroupName { get; set; }
+        public int? HarvestYear { get; set; }
+        public string? EncryptedHarvestYear { get; set; }
     }
 }
