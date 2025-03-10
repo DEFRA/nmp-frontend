@@ -36,7 +36,7 @@ namespace NMP.Portal.ServiceResponses
         [JsonProperty("year")]
         public int Year { get; set; }
         [JsonProperty("sowingdate")]
-        public DateTime? Sowingdate { get; set; }
+        public DateTime? SowingDate { get; set; }
         [JsonProperty("cropOrder")]
         public int? CropOrder { get; set; }
         [JsonProperty("TotalOrganicManures")]
