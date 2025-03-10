@@ -28,6 +28,7 @@ using Azure.Monitor.OpenTelemetry.AspNetCore;
 using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.ConfigureKestrel(c => c.AddServerHeader = false);
 builder.Services.Configure<IISServerOptions>(options =>
 {
     options.MaxRequestBodySize = null;
@@ -49,7 +50,7 @@ builder.Services.Configure<FormOptions>(options =>
     options.BufferBodyLengthLimit = int.MaxValue;
     options.BufferBody = true;
 });
-
+builder.Services.AddHttpsRedirection(options => { });
 builder.Services.AddDefraCustomerIdentity(builder);
 
 builder.Services.AddAuthorization(options =>
@@ -168,6 +169,12 @@ builder.Services.AddGovUkFrontend(options =>
     };
 });
 builder.Services.AddCsp(nonceByteAmount: 32);
+builder.Services.AddHsts(options =>
+{
+    options.Preload = true;
+    options.IncludeSubDomains = true;
+    options.MaxAge = TimeSpan.FromDays(60);
+});
 
 var app = builder.Build();
 app.UseMiddleware<SecurityHeadersMiddleware>();

@@ -38,7 +38,7 @@
             howWouldYouEnterApplicationRate = Resource.lblCalculateBasedOnTheAreaAndQuantity;
             break;
         case 2:
-            howWouldYouEnterApplicationRate = string.Format(Resource.lblUseTypicalApplicationRate, Model.ApplicationRateArable);
+            howWouldYouEnterApplicationRate = string.Format(Resource.lblUseTypicalApplicationRate, Model.ApplicationRateArable, (Model.IsManureTypeLiquid.HasValue && Model.IsManureTypeLiquid == true) ? Resource.lblMeterCubePerHa : Resource.lblTonnesPerHectare); //  string.Format(Resource.lblUseTypicalApplicationRate, Model.ApplicationRateArable);
             break;
     }
 

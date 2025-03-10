@@ -218,7 +218,7 @@
                     <govuk-radios-item value="@calculateBasedOnAreaAndQuantity">@Resource.lblCalculateBasedOnTheAreaAndQuantity</govuk-radios-item>
                     @if (!isOtherManure)
                     {
-                        <govuk-radios-item value="@useDefaultApplicationRate">@string.Format(Resource.lblUseTypicalApplicationRate, Model.ApplicationRateArable)</govuk-radios-item>
+                        <govuk-radios-item value="@useDefaultApplicationRate">@string.Format(Resource.lblUseTypicalApplicationRate, Model.ApplicationRateArable, (Model.IsManureTypeLiquid.HasValue && Model.IsManureTypeLiquid == true) ? Resource.lblMeterCubePerHa : Resource.lblTonnesPerHectare)</govuk-radios-item>
                     }
                 </govuk-radios-fieldset>
             </govuk-radios>

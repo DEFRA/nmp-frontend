@@ -7624,7 +7624,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This is the total rainfall between x and y. If you think this is wrong, you can change it now or later..
+        ///   Looks up a localized string similar to This is the rainfall between the application date and the end of drainage and is calculated using average rainfall data for your postcode. If you have more accurate rainfall data, you can update this figure now or later..
         /// </summary>
         public static string lblThisIsTotalRainfall {
             get {
@@ -8218,7 +8218,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use the typical application rate of {0} cubic metres per hectare.
+        ///   Looks up a localized string similar to Use the typical application rate of {0} {1}.
         /// </summary>
         public static string lblUseTypicalApplicationRate {
             get {
@@ -11667,7 +11667,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  Topsoil moisture not set.
+        ///   Looks up a localized string similar to Topsoil moisture not set.
         /// </summary>
         public static string MsgTopsoilMoistureNotSet {
             get {

@@ -1307,7 +1307,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>How would you like to enter the application rate for your {0}?</value>
   </data>
   <data name="lblUseTypicalApplicationRate" xml:space="preserve">
-    <value>Use the typical application rate of {0} cubic metres per hectare</value>
+    <value>Use the typical application rate of {0} {1}</value>
   </data>
   <data name="MsgSelectAMethodForEnteringApplicationRate" xml:space="preserve">
     <value>Select a method for entering the application rate before continuing.</value>
@@ -1683,7 +1683,7 @@ kg per cubic metre</value>
     <value>Effective rainfall manual</value>
   </data>
   <data name="lblThisIsTotalRainfall" xml:space="preserve">
-    <value>This is the total rainfall between x and y. If you think this is wrong, you can change it now or later.</value>
+    <value>This is the rainfall between the application date and the end of drainage and is calculated using average rainfall data for your postcode. If you have more accurate rainfall data, you can update this figure now or later.</value>
   </data>
   <data name="lblTotalRainfall" xml:space="preserve">
     <value>Total rainfall</value>
@@ -1760,7 +1760,7 @@ cubic metres per hectare  not set</value>
     <value>Rainfall within 6 hours of application not set</value>
   </data>
   <data name="MsgTopsoilMoistureNotSet" xml:space="preserve">
-    <value> Topsoil moisture not set</value>
+    <value>Topsoil moisture not set</value>
   </data>
   <data name="MsgTotalRainfallSinceApplicationNotSet" xml:space="preserve">
     <value>Total rainfall since application not set</value>
