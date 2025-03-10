@@ -7,9 +7,24 @@ a.navbar-brand {
     word-break: break-all;
 }
 
-a {
-    color: #0077cc;
+a, .govuk:link {
+    color: #1d70b8;
 }
+a:link, .govuk-link:link {
+    /*color: #1d70b8 !important;*/    
+    text-decoration-thickness: max(1px, .0625rem);
+    text-underline-offset: 0.1578em;
+}
+
+    a:hover, .govuk-link:hover {
+        text-decoration: underline;        
+        text-decoration-thickness: max(3px, .0625rem);
+        text-underline-offset: 0.1578em;
+        color:#003078;
+    }
+    a:visited, .govuk-link:visited {
+        color: #4c2c92;
+    }
 
 .btn-primary {
     color: #fff;
@@ -72,6 +87,12 @@ button.accept-policy {
 
 .input-width-15 {
     max-width: 14.5em;
+}
+
+.govuk-back-link {
+    font-size: 19px !important;
+    line-height: 1.25 !important;
+    margin-top: 20px !important;
 }
 
 .back-link {

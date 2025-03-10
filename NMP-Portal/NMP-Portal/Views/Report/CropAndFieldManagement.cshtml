@@ -602,7 +602,7 @@
                                                                     @foreach (var comment in commentsForNutrient)
                                                                     {
                                                                         <p class="govuk-body">
-                                                                            @comment.Comment
+                                                                            @Html.Raw(comment.Comment)
                                                                         </p>
                                                                     }
                                                                 }

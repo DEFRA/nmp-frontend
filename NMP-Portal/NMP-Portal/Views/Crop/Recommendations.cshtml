@@ -599,6 +599,7 @@
                     @* Crop details tab *@
                     <govuk-tabs-item id="cropDetails" label="@Resource.lblCropDetails">
                         <h2 class="govuk-heading-m non-standard">@string.Format(Resource.lblCropDetailsForFieldInYear, Model.FieldName, Model.Crops[0].Year)</h2>
+                        <p class="govuk-body"><a asp-action="FieldSoilAnalysisDetail" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId" asp-route-t="@Model.EncryptedHarvestYear">@string.Format(Resource.lblViewFieldAndSoilAnalysisInformationForField, Model.FieldName)</a></p>
                         @foreach (var crop in Model.Crops)
                         {
                             <hr class="seperator_five">
