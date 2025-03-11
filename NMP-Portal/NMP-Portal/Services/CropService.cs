@@ -800,10 +800,10 @@ namespace NMP.Portal.Services
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
                 {
-                    var cropResponsss = responseWrapper.Data.Crops.ToObject<List<Crop>>();
-                    if (cropResponsss != null)
+                    var cropResponse = responseWrapper.Data.Crops.ToObject<List<Crop>>();
+                    if (cropResponse != null)
                     {
-                        crops = cropResponsss;
+                        crops = cropResponse;
                     }
 
                 }
