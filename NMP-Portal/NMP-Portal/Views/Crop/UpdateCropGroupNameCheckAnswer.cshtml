@@ -161,7 +161,8 @@
                 {
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>@Resource.lblHowDoYouWantToEnterExpectedYield</govuk-summary-list-row-key>
-                        <govuk-summary-list-row-value>@Model.Yield</govuk-summary-list-row-value>
+
+                        <govuk-summary-list-row-value>@(Model.Yield.Value == 0.0m ? 0 : Model.Yield.Value.ToString("#.#") +" " + Resource.lblTonnesPerHectare)</govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action href="#">@Resource.lblChange</govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
@@ -174,7 +175,7 @@
                     {
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key>@string.Format(Resource.lblWhatIsTheDifferentExpectedYield, Model.CropType, crop.FieldName)</govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>@crop.Yield</govuk-summary-list-row-value>
+                            <govuk-summary-list-row-value>@(crop.Yield.Value == 0.0m ? 0 : crop.Yield.Value.ToString("#.#") + " " + Resource.lblTonnesPerHectare)</govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action href="#">@Resource.lblChange</govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
