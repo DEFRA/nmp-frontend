@@ -11,7 +11,7 @@ a, .govuk:link {
     color: #1d70b8;
 }
 a:link, .govuk-link:link {
-    color: #1d70b8 !important;    
+    /*color: #1d70b8 !important;*/    
     text-decoration-thickness: max(1px, .0625rem);
     text-underline-offset: 0.1578em;
 }
