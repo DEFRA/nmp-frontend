@@ -3643,6 +3643,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How do you plan to use the crop?.
+        /// </summary>
+        public static string lblHowDoYouPlanToUseTheCrop {
+            get {
+                return ResourceManager.GetString("lblHowDoYouPlanToUseTheCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How do you plan to use the straw from your {0}?.
         /// </summary>
         public static string lblHowDoYouPlanToUseTheStrawFromYourCropType {

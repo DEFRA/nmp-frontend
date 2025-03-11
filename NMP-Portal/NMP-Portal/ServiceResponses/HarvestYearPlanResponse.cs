@@ -21,7 +21,9 @@ namespace NMP.Portal.ServiceResponses
         [JsonProperty("otherCropName")]
         public string OtherCropName { get; set; }
         [JsonProperty("CropInfo1")]
-        public string CropInfo1 { get; set; }
+        public int? CropInfo1 { get; set; }
+        [JsonProperty("CropInfo2")]
+        public int? CropInfo2 { get; set; }
         [JsonProperty("Yield")]
         public string Yield { get; set; }
 

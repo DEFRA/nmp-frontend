@@ -4070,4 +4070,7 @@ live</value>
   <data name="lblSelectAFieldToSeeItsUpdatedRecommendations" xml:space="preserve">
     <value>Select a field to see its updated recommendations</value>
   </data>
+  <data name="lblHowDoYouPlanToUseTheCrop" xml:space="preserve">
+    <value>How do you plan to use the crop?</value>
+  </data>
 </root>
