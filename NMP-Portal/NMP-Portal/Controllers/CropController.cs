@@ -2722,7 +2722,7 @@ namespace NMP.Portal.Controllers
                 else
                 {
                     TempData["ErrorUpdateCropGroupNameCheckAnswer"] = ex.Message;
-                    return RedirectToAction("UpdateCropGroupNameCheckAnswer");
+                    return RedirectToAction("UpdateCropGroupNameCheckAnswer", new { q = _cropDataProtector.Protect(model.CropType), r = _cropDataProtector.Protect(model.CropGroupName) });
                 }
 
             }
