@@ -11,5 +11,6 @@ namespace NMP.Portal.ViewModels
         public string? EncryptedFieldName { get; set; } = string.Empty;
         public string? EncryptedFieldId { get; set; } = string.Empty;
         public string? EncryptedCropOrder { get; set; } = string.Empty;
+        public string? EncryptedCropId { get; set; }
     }
 }

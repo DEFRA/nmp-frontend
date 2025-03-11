@@ -2641,8 +2641,8 @@ cubic metres per hectare  not set</value>
   <data name="lblBalanceFromPreviousYear" xml:space="preserve">
     <value>Balance from {0}</value>
   </data>
-  <data name="lblCropDetailsForFieldInYear" xml:space="preserve">
-    <value>Crop details for {0} in {1}</value>
+  <data name="lblCropFieldAndSoilDetailsForFieldInYear" xml:space="preserve">
+    <value>Crop, field and soil details for {0} in {1}</value>
   </data>
   <data name="lblFertiliserOrLimeApplied" xml:space="preserve">
     <value>Fertiliser or Lime applied</value>
@@ -4034,8 +4034,17 @@ live</value>
   <data name="lblThirdRuleOfNVZForEngland" xml:space="preserve">
     <value>Read more about</value>
   </data>
+  <data name="lblCropFieldAndSoilDetails" xml:space="preserve">
+    <value>Crop, field and soil details</value>
+  </data>
   <data name="lblSoil_Analysis_line4" xml:space="preserve">
     <value>The tool also accounts for Soil Nitrogen Supply (SNS). You can add SNS data for a field at the end of the planning process.</value>
+  </data>
+  <data name="lblAddTheseAnalysisResults" xml:space="preserve">
+    <value>Add these analysis results</value>
+  </data>
+  <data name="MsgSnsSuccess" xml:space="preserve">
+    <value>Soil mineral nitrogen analysis results added to {0}.</value>
   </data>
   <data name="lblTotalMagnesium" xml:space="preserve">
     <value>Total Magnesium</value>

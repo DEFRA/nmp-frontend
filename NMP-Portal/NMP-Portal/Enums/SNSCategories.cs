@@ -2,9 +2,9 @@
 {
     public enum SNSCategories
     {
-        OtherArableAndPotatoes = 1,
+        WinterCereals = 1,
         WinterOilseedRape = 2,
-        WinterCereals = 3,
+        OtherArableAndPotatoes = 3,
         Vegetables = 4,
         Fruit = 5
     }
