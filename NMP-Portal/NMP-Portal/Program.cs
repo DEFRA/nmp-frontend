@@ -124,6 +124,7 @@ builder.Services.AddSingleton<IFertiliserManureService, FertiliserManureService>
 builder.Services.AddSingleton<ISoilAnalysisService, SoilAnalysisService>();
 builder.Services.AddSingleton<IPKBalanceService, PKBalanceService>();
 builder.Services.AddSingleton<IUserExtensionService, UserExtensionService>();
+builder.Services.AddSingleton<ISnsAnalysisService, SnsAnalysisService>();
 //builder.Services.ConfigureApplicationCookie(options =>
 //{    
 //    options.Cookie.Name = "NMP-Portal";

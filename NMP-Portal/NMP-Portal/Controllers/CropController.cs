@@ -2219,7 +2219,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Recommendations(string q, string r, string? s, string? t, string? u)//q=farmId,r=fieldId,s=harvestYear
+        public async Task<IActionResult> Recommendations(string q, string r, string? s, string? t, string? u,string? sns)//q=farmId,r=fieldId,s=harvestYear
         {
             _logger.LogTrace($"Crop Controller : Recommendations({q}, {r}, {s}) action called");
             RecommendationViewModel model = new RecommendationViewModel();
@@ -2257,6 +2257,12 @@ namespace NMP.Portal.Controllers
                     decryptedHarvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(s));
                     model.EncryptedHarvestYear = s;
                 }
+
+                if (!string.IsNullOrWhiteSpace(sns))
+                {
+                    TempData["successSnsAnalysis"] = _cropDataProtector.Unprotect(sns);
+                }
+
                 (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropService.FetchHarvestYearPlansByFarmId(decryptedHarvestYear, decryptedFarmId);
                 if (harvestYearPlanResponse != null && error.Message == null)
                 {
@@ -2300,6 +2306,7 @@ namespace NMP.Portal.Controllers
                                 var crop = new CropViewModel
                                 {
                                     ID = recommendation.Crops.ID,
+                                    EncryptedCropId=_cropDataProtector.Protect(recommendation.Crops.ID.ToString()),
                                     Year = recommendation.Crops.Year,
                                     CropTypeID = recommendation.Crops.CropTypeID,
                                     FieldID = recommendation.Crops.FieldID,

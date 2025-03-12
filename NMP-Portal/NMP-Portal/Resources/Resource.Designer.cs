@@ -790,6 +790,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add these analysis results.
+        /// </summary>
+        public static string lblAddTheseAnalysisResults {
+            get {
+                return ResourceManager.GetString("lblAddTheseAnalysisResults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add the soil analysis for {0}.
         /// </summary>
         public static string lblAddTheSoilAnalysisFor {
@@ -1888,20 +1897,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Crop details for {0} in {1}.
-        /// </summary>
-        public static string lblCropDetailsForFieldInYear {
-            get {
-                return ResourceManager.GetString("lblCropDetailsForFieldInYear", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Cropped area.
         /// </summary>
         public static string lblCropedArea {
             get {
                 return ResourceManager.GetString("lblCropedArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Crop, field and soil details.
+        /// </summary>
+        public static string lblCropFieldAndSoilDetails {
+            get {
+                return ResourceManager.GetString("lblCropFieldAndSoilDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Crop, field and soil details for {0} in {1}.
+        /// </summary>
+        public static string lblCropFieldAndSoilDetailsForFieldInYear {
+            get {
+                return ResourceManager.GetString("lblCropFieldAndSoilDetailsForFieldInYear", resourceCulture);
             }
         }
         
@@ -11564,6 +11582,15 @@ namespace NMP.Portal.Resources {
         public static string MsgServiceNotAvailable {
             get {
                 return ResourceManager.GetString("MsgServiceNotAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Soil mineral nitrogen analysis results added to {0}..
+        /// </summary>
+        public static string MsgSnsSuccess {
+            get {
+                return ResourceManager.GetString("MsgSnsSuccess", resourceCulture);
             }
         }
         
