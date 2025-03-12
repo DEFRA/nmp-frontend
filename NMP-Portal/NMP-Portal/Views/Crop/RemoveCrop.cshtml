@@ -15,7 +15,7 @@
     @section BeforeContent {
     @if (string.IsNullOrWhiteSpace(Model.FieldName))
         {
-            <govuk-back-link asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
+            <govuk-back-link asp-action="UpdateCropGroupNameCheckAnswer" asp-controller="Crop" asp-route-q="@ViewBag.EncryptedCropType" asp-route-r="@(ViewBag.EncryptedCropGroupName!=null?ViewBag.EncryptedCropGroupName:null)" asp-route-s="@Model.EncryptedIsCropUpdate">@Resource.lblBack</govuk-back-link>
         }
         else
         {
@@ -26,6 +26,9 @@
     }
     <form asp-action="RemoveCrop" asp-controller="Crop" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
+        
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsCropUpdate"></govuk-input>        
+        <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SowingDate" value="@Model.SowingDate"></govuk-date-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
@@ -35,6 +38,28 @@
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId" value="@Model.EncryptedFieldId"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropOrder" value="@Model.CropOrder"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldID" value="@Model.FieldID"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Yield"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Variety"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropInfo1" value="@Model.CropInfo1"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropInfo2" value="@Model.CropInfo2"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropInfo1Name" value="@Model.CropInfo1Name"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropInfo2Name" value="@Model.CropInfo2Name"></govuk-input>
+        @if (Model.Crops != null && Model.Crops.Count > 0)
+        {
+            @for (int i = 0; i < Model.Crops.Count; i++)
+            {
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].ID" value="@Model.Crops[i].ID"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].CropTypeID" value="@Model.Crops[i].CropTypeID"></govuk-input>
+                <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].SowingDate"></govuk-date-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].Yield" value="@Model.Crops[i].Yield"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].FieldName" value="@Model.Crops[i].FieldName"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].CropInfo1" value="@Model.Crops[i].CropInfo1"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].CropInfo2" value="@Model.Crops[i].CropInfo2"></govuk-input>
+
+            }
+
+        }
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds-from-desktop">
                 @if (TempData["RemoveGroupError"] != null)

@@ -2077,6 +2077,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Crop Plan updated.
+        /// </summary>
+        public static string lblCropPlanUpdated {
+            get {
+                return ResourceManager.GetString("lblCropPlanUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Crops and fields.
         /// </summary>
         public static string lblCropsAndFields {
@@ -3666,6 +3675,15 @@ namespace NMP.Portal.Resources {
         public static string lblHowAreYouGoingToApplyTheManure {
             get {
                 return ResourceManager.GetString("lblHowAreYouGoingToApplyTheManure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How do you plan to use the crop?.
+        /// </summary>
+        public static string lblHowDoYouPlanToUseTheCrop {
+            get {
+                return ResourceManager.GetString("lblHowDoYouPlanToUseTheCrop", resourceCulture);
             }
         }
         
@@ -6418,6 +6436,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to remove this crop group..
+        /// </summary>
+        public static string lblRemoveThisCropGroup {
+            get {
+                return ResourceManager.GetString("lblRemoveThisCropGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove this group.
         /// </summary>
         public static string lblRemoveThisGroup {
@@ -6576,6 +6603,15 @@ namespace NMP.Portal.Resources {
         public static string lblSelectAFieldToSeeItsUpdatedNutrientRecommendation {
             get {
                 return ResourceManager.GetString("lblSelectAFieldToSeeItsUpdatedNutrientRecommendation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a field to see its updated recommendations.
+        /// </summary>
+        public static string lblSelectAFieldToSeeItsUpdatedRecommendations {
+            get {
+                return ResourceManager.GetString("lblSelectAFieldToSeeItsUpdatedRecommendations", resourceCulture);
             }
         }
         
@@ -8092,6 +8128,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Changes here will be applied to all of these fields. To change a single field select it from your crop plan..
+        /// </summary>
+        public static string lblUpdateCropGroupNameContent1 {
+            get {
+                return ResourceManager.GetString("lblUpdateCropGroupNameContent1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update {0} for harvest year {1}.
+        /// </summary>
+        public static string lblUpdateCropGroupNameForHarvestYear {
+            get {
+                return ResourceManager.GetString("lblUpdateCropGroupNameForHarvestYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Update excess winter rainfall.
         /// </summary>
         public static string lblUpdateExcessWinterRainfall {
@@ -8151,6 +8205,15 @@ namespace NMP.Portal.Resources {
         public static string lblUpdateRainfallContentOne {
             get {
                 return ResourceManager.GetString("lblUpdateRainfallContentOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update this crop group.
+        /// </summary>
+        public static string lblUpdateThisCropGroup {
+            get {
+                return ResourceManager.GetString("lblUpdateThisCropGroup", resourceCulture);
             }
         }
         
@@ -8452,6 +8515,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View the {0} crop plan..
+        /// </summary>
+        public static string lblViewTheYearCropPlan {
+            get {
+                return ResourceManager.GetString("lblViewTheYearCropPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Wales: &lt;a href=&quot;https://www.gov.wales/water-resources-control-agricultural-pollution-wales-regulations-2021-guidance-farmers-and-land&quot; target=&quot;_blank&quot;&gt;The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021&lt;/a&gt;.
         /// </summary>
         public static string lblWalesWaterResourceRegulations {
@@ -8574,6 +8646,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhatIsTheCropHeight {
             get {
                 return ResourceManager.GetString("lblWhatIsTheCropHeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the crop type?.
+        /// </summary>
+        public static string lblWhatIsTheCropType {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheCropType", resourceCulture);
             }
         }
         
@@ -9208,7 +9289,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can also.
+        ///   Looks up a localized string similar to You can also .
         /// </summary>
         public static string lblYouCanAlso {
             get {
