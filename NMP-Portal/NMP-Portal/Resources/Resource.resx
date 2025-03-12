@@ -4061,4 +4061,7 @@ live</value>
   <data name="lblSoilMineralNitrogenDetailsForFieldName" xml:space="preserve">
     <value>Soil mineral nitrogen (SNS) details for {0}</value>
   </data>
+  <data name="lblAddASoilMineralNitrogenAnalysisResultForCrop" xml:space="preserve">
+    <value>Add a soil mineral nitrogen analysis result for {0}</value>
+  </data>
 </root>

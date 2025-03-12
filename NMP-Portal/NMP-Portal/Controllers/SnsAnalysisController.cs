@@ -99,8 +99,8 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace($"SnsAnalysis Controller : SoilSampleDate() post action called");
             if ((!ModelState.IsValid) && ModelState.ContainsKey("SampleDate"))
             {
-                var dateError = ModelState["SampleForSoilMineralNitrogen"].Errors.Count > 0 ?
-                                ModelState["SampleForSoilMineralNitrogen"].Errors[0].ErrorMessage.ToString() : null;
+                var dateError = ModelState["SampleDate"].Errors.Count > 0 ?
+                                ModelState["SampleDate"].Errors[0].ErrorMessage.ToString() : null;
 
                 if (dateError != null && (dateError.Equals(Resource.MsgDateMustBeARealDate) ||
                     dateError.Equals(Resource.MsgDateMustIncludeAMonth) ||
@@ -117,22 +117,22 @@ namespace NMP.Portal.Controllers
 
             if (model.SampleDate == null)
             {
-                ModelState.AddModelError("SampleForSoilMineralNitrogen", Resource.MsgdateMustBeFilledBeforeProceeding);
+                ModelState.AddModelError("SampleDate", Resource.MsgdateMustBeFilledBeforeProceeding);
             }
             if (DateTime.TryParseExact(model.SampleDate.ToString(), "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out _))
             {
-                ModelState.AddModelError("SampleForSoilMineralNitrogen", Resource.MsgDateEnteredIsNotValid);
+                ModelState.AddModelError("SampleDate", Resource.MsgDateEnteredIsNotValid);
             }
 
             if (model.SampleDate != null)
             {
                 if (model.SampleDate.Value.Date > DateTime.Now)
                 {
-                    ModelState.AddModelError("SampleForSoilMineralNitrogen", Resource.MsgDateShouldNotBeInTheFuture);
+                    ModelState.AddModelError("SampleDate", Resource.MsgDateShouldNotBeInTheFuture);
                 }
                 if (model.SampleDate.Value.Date.Year < 1601)
                 {
-                    ModelState.AddModelError("SampleForSoilMineralNitrogen", Resource.MsgDateEnteredIsNotValid);
+                    ModelState.AddModelError("SampleDate", Resource.MsgDateEnteredIsNotValid);
                 }
             }
 
@@ -1659,12 +1659,8 @@ namespace NMP.Portal.Controllers
             if (error.Message == null && snsResponse != null)
             {
                 string success = _cropDataProtector.Protect("true");
-                //string fieldName = _farmDataProtector.Protect(snsResponse.Name);
                 _httpContextAccessor.HttpContext?.Session.Remove("SnsData");
-                //< govuk - back - link asp - action = "@action" asp - controller = @controller asp - route - q = "@Model.EncryptedFarmId" asp - route - r = "@Model.EncryptedFieldId" asp - route - s = "@Model.EncryptedHarvestYear" > @Resource.lblBack </ govuk - back - link >
-
                 return RedirectToAction("Recommendations", "Crop",new { q = model.EncryptedFarmId, r = model.EncryptedFieldId, s = model.EncryptedHarvestYear, sns=success });
-                //return RedirectToAction("ManageFarmFields", new { id = model.EncryptedFarmId, q = success, name = fieldName });
             }
             else
             {

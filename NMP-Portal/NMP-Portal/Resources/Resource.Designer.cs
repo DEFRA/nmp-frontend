@@ -646,6 +646,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add a soil mineral nitrogen analysis result for {0}.
+        /// </summary>
+        public static string lblAddASoilMineralNitrogenAnalysisResultForCrop {
+            get {
+                return ResourceManager.GetString("lblAddASoilMineralNitrogenAnalysisResultForCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add business information.
         /// </summary>
         public static string lblAddBusinessInformation {

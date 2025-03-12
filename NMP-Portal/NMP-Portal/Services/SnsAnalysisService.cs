@@ -31,7 +31,11 @@ namespace NMP.Portal.Services
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        snsAnalysis = responseWrapper.Data.Field.ToObject<SnsAnalysis>();
+                        if(responseWrapper.Data.snsAnalyses.records.Count>0)
+                        {
+                            snsAnalysis = responseWrapper.Data.snsAnalyses.records[0].ToObject<SnsAnalysis>();
+
+                        }
                     }
                 }
                 else
@@ -75,7 +79,7 @@ namespace NMP.Portal.Services
                     if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
                     {
 
-                        JObject farmDataJObject = responseWrapper.Data["Field"] as JObject;
+                        JObject farmDataJObject = responseWrapper.Data["snsAnalysis"] as JObject;
                         if (snsData != null)
                         {
                            snsAnalysis = farmDataJObject.ToObject<SnsAnalysis>();

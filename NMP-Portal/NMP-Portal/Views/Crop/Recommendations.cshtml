@@ -664,8 +664,14 @@
 
                             @*  <p class="govuk-body"><a href="#">@string.Format(Resource.lblRemoveCropTypeFromFieldName, crop.CropTypeName, Model.FieldName)</a></p> *@
 
-                            <p class="govuk-body"><a asp-action="SoilSampleDate" asp-controller="SnsAnalysis" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-c="@crop.EncryptedCropId" asp-route-f="@crop.EncryptedFieldName">Add a soil mineral nitrogen analysis result for Field</a></p>
-
+                            @if(crop.IsSnsExist != true)
+                            {
+                                <p class="govuk-body"><a asp-action="SoilSampleDate" asp-controller="SnsAnalysis" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-c="@crop.EncryptedCropId" asp-route-f="@crop.EncryptedFieldName">@string.Format(Resource.lblAddASoilMineralNitrogenAnalysisResultForCrop, (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Other ? crop.OtherCropName : crop.CropTypeName))</a></p>
+                            }
+                            else
+                            {
+                                <p class="govuk-body"><a href="#">Remove the Soil Nitrogen Supply (SNS) analysis</a></p>
+                            }
                         }
 
                     </govuk-tabs-item>
