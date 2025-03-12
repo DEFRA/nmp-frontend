@@ -4088,4 +4088,7 @@ live</value>
   <data name="lblHowDoYouPlanToUseTheCrop" xml:space="preserve">
     <value>How do you plan to use the crop?</value>
   </data>
+  <data name="lblAddASoilMineralNitrogenAnalysisResultForCrop" xml:space="preserve">
+    <value>Add a soil mineral nitrogen analysis result for {0}</value>
+  </data>
 </root>

@@ -12,5 +12,6 @@ namespace NMP.Portal.ViewModels
         public string? EncryptedFieldId { get; set; } = string.Empty;
         public string? EncryptedCropOrder { get; set; } = string.Empty;
         public string? EncryptedCropId { get; set; }
+        public bool? IsSnsExist { get; set; } = false;
     }
 }

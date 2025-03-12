@@ -41,10 +41,11 @@ namespace NMP.Portal.Controllers
         private readonly ICropService _cropService;
         private readonly IOrganicManureService _organicManureService;
         private readonly IFertiliserManureService _fertiliserManureService;
+        private readonly ISnsAnalysisService _snsAnalysisService;
 
         public CropController(ILogger<CropController> logger, IDataProtectionProvider dataProtectionProvider,
              IFarmService farmService, IHttpContextAccessor httpContextAccessor, IFieldService fieldService, ICropService cropService, IOrganicManureService organicManureService,
-             IFertiliserManureService fertiliserManureService)
+             IFertiliserManureService fertiliserManureService,ISnsAnalysisService snsAnalysisService)
         {
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
@@ -56,6 +57,7 @@ namespace NMP.Portal.Controllers
             _cropService = cropService;
             _organicManureService = organicManureService;
             _fertiliserManureService = fertiliserManureService;
+            _snsAnalysisService = snsAnalysisService;
         }
         public IActionResult Index()
         {
@@ -2303,6 +2305,10 @@ namespace NMP.Portal.Controllers
                             }
                             foreach (var recommendation in recommendations)
                             {
+                                //check sns already exist or not in SnsAnalyses table by cropID
+                                SnsAnalysis snsData = await _snsAnalysisService.FetchSnsAnalysisByCropIdAsync(recommendation.Crops.ID??0);
+                                
+
                                 var crop = new CropViewModel
                                 {
                                     ID = recommendation.Crops.ID,
@@ -2317,7 +2323,9 @@ namespace NMP.Portal.Controllers
                                     Yield = recommendation.Crops.Yield,
                                     SowingDate = recommendation.Crops.SowingDate,
                                     OtherCropName = recommendation.Crops.OtherCropName,
-                                    CropTypeName = await _fieldService.FetchCropTypeById(recommendation.Crops.CropTypeID.Value)
+                                    CropTypeName = await _fieldService.FetchCropTypeById(recommendation.Crops.CropTypeID.Value),
+                                    IsSnsExist= (snsData.CropID != null && snsData.CropID > 0)?true:false
+
 
                                 };
                                 if (!string.IsNullOrWhiteSpace(crop.CropTypeName))
@@ -2519,7 +2527,7 @@ namespace NMP.Portal.Controllers
                     id = q,
                     year = s
                 });
-            }
+            }           
             return View(model);
         }
 
