@@ -1634,7 +1634,7 @@ namespace NMP.Portal.Controllers
             SnsAnalysis sns = new SnsAnalysis
             {
                 CropID=model.CropID,
-                CurrentCropTypeID = model.CropTypeId ?? 0,
+                CropTypeID = model.CropTypeId ?? 0,
                 SampleDate = model.SampleDate,
                 SnsAt0to30cm = model.SoilMineralNitrogenAt030CM,
                 SnsAt30to60cm = model.SoilMineralNitrogenAt3060CM,
@@ -1642,6 +1642,7 @@ namespace NMP.Portal.Controllers
                 SampleDepth = model.SampleDepth,
                 SoilMineralNitrogen = model.SoilMineralNitrogen,
                 NumberOfShoots = model.NumberOfShoots,
+                GreenAreaIndex=model.GreenAreaIndex,
                 CropHeight = model.CropHeight,
                 SeasonId = model.SeasonId,
                 PercentageOfOrganicMatter = model.SoilOrganicMatter,

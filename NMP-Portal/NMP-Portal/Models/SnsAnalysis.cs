@@ -3,7 +3,7 @@
     public class SnsAnalysis
     {
         public int CropID { get; set; }
-        public int CurrentCropTypeID { get; set; }
+        public int CropTypeID { get; set; }
         public DateTime? SampleDate { get; set; }
         public int? SnsAt0to30cm { get; set; }
         public int? SnsAt30to60cm { get; set; }
@@ -11,6 +11,7 @@
         public int? SampleDepth { get; set; }
         public int? SoilMineralNitrogen { get; set; }
         public int? NumberOfShoots { get; set; }
+        public decimal? GreenAreaIndex { get; set; }
         public decimal? CropHeight { get; set; }
         public int? SeasonId { get; set; }
         public decimal? PercentageOfOrganicMatter { get; set; }
