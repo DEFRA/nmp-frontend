@@ -1672,5 +1672,84 @@ namespace NMP.Portal.Controllers
             return null;
 
         }
+
+        [HttpGet]
+        public IActionResult RemoveSnsAnalysis(string? q, string? r, string? s,string? c)
+        {
+            _logger.LogTrace($"SnsAnalysis Controller : RemoveSnsAnalysis() action called");
+            SnsAnalysisViewModel model = new SnsAnalysisViewModel() ;
+            try
+            {                
+                
+                if(!string.IsNullOrWhiteSpace(q))
+                {
+                    model.EncryptedFarmId = q;
+                }
+                if (!string.IsNullOrWhiteSpace(r))
+                {
+                    model.EncryptedFieldId = r;
+                }
+                if (!string.IsNullOrWhiteSpace(s))
+                {
+                    model.EncryptedHarvestYear = s;
+                }
+                if (!string.IsNullOrWhiteSpace(c))
+                {
+                    model.EncryptedCropId = c;
+                    model.CropId =Convert.ToInt32(_cropDataProtector.Unprotect(c));
+                }
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("SnsData", model);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"SnsAnalysis Controller : Exception in RemoveSnsAnalysis() action : {ex.Message}, {ex.StackTrace}");
+                TempData["NutrientRecommendationsError"] = ex.Message;
+                return RedirectToAction("Recommendations", "Crop", new { q = model.EncryptedFarmId, r = model.EncryptedFieldId, s = model.EncryptedHarvestYear });
+            }
+            return View(model);
+
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveSnsAnalysis(SnsAnalysisViewModel model)
+        {
+            _logger.LogTrace($"SnsAnalysis Controller : RemoveSns() post action called");
+            if(model.IsSnsRemove==null)
+            {
+                ModelState.AddModelError("IsSNSRemove", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            if (model.IsSnsRemove == false)
+            {
+                return RedirectToAction("Recommendations", "Crop", new { q = model.EncryptedFarmId, r = model.EncryptedFieldId, s = model.EncryptedHarvestYear });
+            }
+            else
+            {
+                SnsAnalysis snsAnalysis = await _snsAnalysisService.FetchSnsAnalysisByCropIdAsync(model.CropId);
+                if (snsAnalysis != null)
+                {
+                    (string message, Error error) = await _snsAnalysisService.RemoveSnsAnalysisAsync(snsAnalysis.ID.Value);
+                    if (string.IsNullOrWhiteSpace(error.Message)&&(!string.IsNullOrWhiteSpace(message)))
+                    {
+                        return RedirectToAction("Recommendations", "Crop", new { q = model.EncryptedFarmId, r = model.EncryptedFieldId, s = model.EncryptedHarvestYear, t = _cropDataProtector.Protect(string.Format(Resource.MsgYourDataSuccessfullyRemoved, Resource.lblSoilNitrogenSupplyAnalysis)) });
+                    }
+                    else
+                    {
+                        TempData["RemoveSNSError"] = error.Message;
+                        return View(model);
+                    }
+                }
+                
+            }
+            return View(model);
+
+        }
     }
 }
