@@ -11946,6 +11946,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to We could not add a soil mineral nitrogen analysis, please try again later.
+        /// </summary>
+        public static string MsgWeCouldNotAddYourSnsPleaseTryAgainLater {
+            get {
+                return ResourceManager.GetString("MsgWeCouldNotAddYourSnsPleaseTryAgainLater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to We could not create your plan, please try again later.
         /// </summary>
         public static string MsgWeCouldNotCreateYourPlanPleaseTryAgainLater {

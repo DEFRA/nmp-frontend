@@ -7,7 +7,7 @@
 @section BeforeContent {
     <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" :"GreenAreaIndexOrCropHeightQuestion")" asp-controller="SnsAnalysis">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="CropHeight" asp-controller="Field" method="post" autocomplete="off">
+<form asp-action="CropHeight" asp-controller="SnsAnalysis" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
 
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCalculateNitrogen" value="@Model.IsCalculateNitrogen"></govuk-input>
