@@ -589,6 +589,15 @@ namespace NMP.Portal.Controllers
                     {
                         return RedirectToAction("FarmList", "Farm");
                     }
+                    if (!string.IsNullOrWhiteSpace(model.CropGroupName))
+                    {
+                        ViewBag.EncryptedCropGroupName = _cropDataProtector.Protect(model.CropGroupName);
+                    }
+                    if (!string.IsNullOrWhiteSpace(model.CropType))
+                    {
+                        ViewBag.EncryptedCropTypeId = _cropDataProtector.Protect(model.CropType);
+                    }
+
                 }
 
             }
@@ -671,6 +680,15 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
+                    if (!string.IsNullOrWhiteSpace(model.CropGroupName))
+                    {
+                        ViewBag.EncryptedCropGroupName = _cropDataProtector.Protect(model.CropGroupName);
+                    }
+                    if (!string.IsNullOrWhiteSpace(model.CropType))
+                    {
+                        ViewBag.EncryptedCropTypeId = _cropDataProtector.Protect(model.CropType);
+                    }
+
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
                     return RedirectToAction("UpdateCropGroupNameCheckAnswer", new { q = _cropDataProtector.Protect(model.CropType), r = (!string.IsNullOrWhiteSpace(model.CropGroupName) ? _cropDataProtector.Protect(model.CropGroupName) : string.Empty), s = _cropDataProtector.Protect(Resource.lblTrue) });
                     //return RedirectToAction("UpdateCropGroupNameCheckAnswer", new { q = _cropDataProtector.Protect(model.CropType), r = _cropDataProtector.Protect(model.CropGroupName), s = _cropDataProtector.Protect(Resource.lblTrue) });
@@ -2771,6 +2789,17 @@ namespace NMP.Portal.Controllers
                     {
                         return RedirectToAction("FarmList", "Farm");
                     }
+                    if (!string.IsNullOrWhiteSpace(model.CropGroupName))
+                    {
+                        ViewBag.EncryptedCropGroupName = _cropDataProtector.Protect(model.CropGroupName);
+                    }
+                    if (!string.IsNullOrWhiteSpace(model.CropType))
+                    {
+                        ViewBag.EncryptedCropTypeId = _cropDataProtector.Protect(model.CropType);
+                    }
+
+                    
+
                 }
 
             }
@@ -2824,6 +2853,16 @@ namespace NMP.Portal.Controllers
                     {
                         if (model.Crops != null && model.Crops.Count > 0)
                         {
+                            if (!string.IsNullOrWhiteSpace(model.CropGroupName))
+                            {
+                                ViewBag.EncryptedCropGroupName = _cropDataProtector.Protect(model.CropGroupName);
+                            }
+                            if (!string.IsNullOrWhiteSpace(model.CropType))
+                            {
+                                ViewBag.EncryptedCropTypeId = _cropDataProtector.Protect(model.CropType);
+                            }
+
+                            
                             string cropIds = string.Join(",", model.Crops.Select(x => x.ID));
                             (bool groupNameExist, Error error) = await _cropService.IsCropsGroupNameExistForUpdate(cropIds, model.CropGroupName, model.Year.Value);
                             if (string.IsNullOrWhiteSpace(error.Message) && groupNameExist)
@@ -3679,7 +3718,7 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    if(string.IsNullOrWhiteSpace(model.CropGroupName))
+                    if (string.IsNullOrWhiteSpace(model.CropGroupName))
                     {
                         model.CropGroupName = model.PreviousCropGroupName;
                     }
