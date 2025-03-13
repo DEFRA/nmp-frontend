@@ -50,6 +50,12 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace($"Sns Controller : Index() action called");
             return View();
         }
+        public IActionResult SnsAnalysisCancel(string q, string r, string? s)
+        {
+            _logger.LogTrace($"SnsAnalysis Controller : SnsAnalysisCancel action called");
+            _httpContextAccessor.HttpContext?.Session.Remove("SnsData");
+            return RedirectToAction("Recommendations", "Crop", new { q = q,r=r,s=s });
+        }
 
         [HttpGet]
         public async Task<IActionResult> SoilSampleDate(string? q, string? r, string? s, string? c, string? f)   //q=farmId,r=fieldId,s=harvestYear, c=cropId (ID from crop table),f=fieldName

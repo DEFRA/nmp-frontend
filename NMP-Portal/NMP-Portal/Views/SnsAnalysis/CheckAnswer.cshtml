@@ -185,7 +185,7 @@
                                         @Resource.lblWhatIsTheNumberOfShootsPerSquareMetre
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value>
-                                        @(Model.NumberOfShoots.HasValue ? Model.NumberOfShoots : Resource.lblNotSet)
+                                        @(Model.NumberOfShoots.HasValue ? string.Format(Resource.lblShootsPerSquareMetre, Model.NumberOfShoots) : Resource.lblNotSet)
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
                                         <govuk-summary-list-row-action asp-action="NumberOfShoots" asp-controller="SnsAnalysis">@Resource.lblChange</govuk-summary-list-row-action>
@@ -325,7 +325,7 @@
                             @string.Format(Resource.lblSoilNitrogenSupplyIndex, Model.FieldName)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @string.Format(Resource.lblSnsDetailKgPerHectare, Model.SnsIndex, Model.SnsValue)
+                            @string.Format(Resource.lblSnsDetail, Model.SnsIndex, Model.SnsValue)
                         </govuk-summary-list-row-value>
 
                     </govuk-summary-list-row>
@@ -338,7 +338,7 @@
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblAddTheseAnalysisResults
             </govuk-button>
-            <p class="govuk-body cancel-link"><a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
+            <p class="govuk-body cancel-link"><a asp-action="SnsAnalysisCancel" asp-controller="SnsAnalysis" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
         </div>
     </div>
 </form>
