@@ -65,7 +65,7 @@
                     <govuk-summary-list-row-key>@Resource.lblVarietyNameWithOptional</govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>@Model.Variety</govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action href="#">@Resource.lblChange</govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action asp-action="VarietyName" asp-controller="Crop" asp-route-q="@Model.EncryptedIsCropUpdate">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>

@@ -562,27 +562,55 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> VarietyName()
+        public async Task<IActionResult> VarietyName(string? q)
         {
             _logger.LogTrace("Crop Controller : VarietyName() action called");
             PlanViewModel model = new PlanViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
+                if (string.IsNullOrWhiteSpace(q))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
+                    {
+                        model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+                    }
+                    else
+                    {
+                        return RedirectToAction("FarmList", "Farm");
+                    }
                 }
                 else
                 {
-                    return RedirectToAction("FarmList", "Farm");
+                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("HarvestYearPlan"))
+                    {
+                        model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("HarvestYearPlan");
+                    }
+                    else
+                    {
+                        return RedirectToAction("FarmList", "Farm");
+                    }
+                    if (model != null&&(!string.IsNullOrWhiteSpace(model.Variety)&&model.Variety==Resource.lblNotEntered))
+                    {
+                        model.Variety = string.Empty;
+                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
+                    }
                 }
 
             }
             catch (Exception ex)
             {
                 _logger.LogTrace($"Crop Controller : Exception in VarietyName() post action : {ex.Message}, {ex.StackTrace}");
-                TempData["CropGroupNameError"] = ex.Message;
-                return RedirectToAction("CropGroupName");
+
+                if (string.IsNullOrWhiteSpace(q))
+                {
+                    TempData["CropGroupNameError"] = ex.Message;
+                    return RedirectToAction("CropGroupName");
+                }
+                else
+                {
+                    TempData["ErrorUpdateCropGroupNameCheckAnswer"] = ex.Message;
+                    return RedirectToAction("UpdateCropGroupNameCheckAnswer", new { q = _cropDataProtector.Protect(model.CropType), r = _cropDataProtector.Protect(model.CropGroupName) });
+                }
             }
             return View(model);
         }
@@ -594,6 +622,14 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace("Crop Controller : VarietyName() post action called");
             try
             {
+                if ((!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate)) && string.IsNullOrWhiteSpace(model.Variety))
+                {
+                    ModelState.AddModelError("Variety", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblVarietyName));
+                }
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
                 if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes && model.Variety == null)
                 {
                     ModelState.AddModelError("Variety", Resource.MsgEnterAPotatoVarietyNameBeforeContinuing);
@@ -602,34 +638,45 @@ namespace NMP.Portal.Controllers
                 {
                     return View(model);
                 }
-                if (!string.IsNullOrWhiteSpace(model.Variety))
+                if (string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
                 {
-                    for (int i = 0; i < model.Crops.Count; i++)
+                    if (!string.IsNullOrWhiteSpace(model.Variety))
                     {
-                        model.Crops[i].Variety = model.Variety;
+                        for (int i = 0; i < model.Crops.Count; i++)
+                        {
+                            model.Crops[i].Variety = model.Variety;
+                        }
                     }
-                }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
 
-                if (model.IsCheckAnswer)
+                    if (model.IsCheckAnswer)
+                    {
+                        for (int i = 0; i < model.Crops.Count; i++)
+                        {
+                            model.Crops[i].Variety = model.Variety;
+                            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                        }
+                        if (model.IsCropTypeChange)
+                        {
+                            return RedirectToAction("CropInfoOne");
+
+                        }
+                        if (model.IsAnyChangeInField)
+                        {
+                            return RedirectToAction("SowingDateQuestion");
+                        }
+                        return RedirectToAction("CheckAnswer");
+                    }
+                    return RedirectToAction("SowingDateQuestion");
+                }
+                else
                 {
-                    for (int i = 0; i < model.Crops.Count; i++)
-                    {
-                        model.Crops[i].Variety = model.Variety;
-                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
-                    }
-                    if (model.IsCropTypeChange)
-                    {
-                        return RedirectToAction("CropInfoOne");
-
-                    }
-                    if (model.IsAnyChangeInField)
-                    {
-                        return RedirectToAction("SowingDateQuestion");
-                    }
-                    return RedirectToAction("CheckAnswer");
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
+                    return RedirectToAction("UpdateCropGroupNameCheckAnswer", new { q = _cropDataProtector.Protect(model.CropType), r = _cropDataProtector.Protect(model.CropGroupName), s = _cropDataProtector.Protect(Resource.lblTrue) });
                 }
-                return RedirectToAction("SowingDateQuestion");
+
+
+
             }
             catch (Exception ex)
             {
@@ -2221,7 +2268,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Recommendations(string q, string r, string? s, string? t, string? u,string? sns)//q=farmId,r=fieldId,s=harvestYear
+        public async Task<IActionResult> Recommendations(string q, string r, string? s, string? t, string? u, string? sns)//q=farmId,r=fieldId,s=harvestYear
         {
             _logger.LogTrace($"Crop Controller : Recommendations({q}, {r}, {s}) action called");
             RecommendationViewModel model = new RecommendationViewModel();
@@ -2306,13 +2353,13 @@ namespace NMP.Portal.Controllers
                             foreach (var recommendation in recommendations)
                             {
                                 //check sns already exist or not in SnsAnalyses table by cropID
-                                SnsAnalysis snsData = await _snsAnalysisService.FetchSnsAnalysisByCropIdAsync(recommendation.Crops.ID??0);
+                                SnsAnalysis snsData = await _snsAnalysisService.FetchSnsAnalysisByCropIdAsync(recommendation.Crops.ID ?? 0);
 
 
                                 var crop = new CropViewModel
                                 {
                                     ID = recommendation.Crops.ID,
-                                    EncryptedCropId=_cropDataProtector.Protect(recommendation.Crops.ID.ToString()),
+                                    EncryptedCropId = _cropDataProtector.Protect(recommendation.Crops.ID.ToString()),
                                     Year = recommendation.Crops.Year,
                                     CropTypeID = recommendation.Crops.CropTypeID,
                                     FieldID = recommendation.Crops.FieldID,
@@ -2324,8 +2371,8 @@ namespace NMP.Portal.Controllers
                                     SowingDate = recommendation.Crops.SowingDate,
                                     OtherCropName = recommendation.Crops.OtherCropName,
                                     CropTypeName = await _fieldService.FetchCropTypeById(recommendation.Crops.CropTypeID.Value),
-                                    IsSnsExist= (snsData.CropID != null && snsData.CropID > 0)?true:false,
-                                    SnsAnalysisData=snsData
+                                    IsSnsExist = (snsData.CropID != null && snsData.CropID > 0) ? true : false,
+                                    SnsAnalysisData = snsData
 
                                 };
                                 if (!string.IsNullOrWhiteSpace(crop.CropTypeName))
@@ -2752,9 +2799,9 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace("Crop Controller : CropGroupName() post action called");
             try
             {
-                if (string.IsNullOrWhiteSpace(model.CropGroupName))
+                if ((!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate)) && string.IsNullOrWhiteSpace(model.CropGroupName))
                 {
-                    ModelState.AddModelError("CropGroupName",string.Format(Resource.MsgEnterTheValueBeforeContinuing,Resource.lblCropGroupName));
+                    ModelState.AddModelError("CropGroupName", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblCropGroupName));
                 }
                 if (!ModelState.IsValid)
                 {
