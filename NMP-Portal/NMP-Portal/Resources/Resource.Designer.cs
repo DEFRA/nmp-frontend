@@ -9388,6 +9388,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can view your recommendations.
+        /// </summary>
+        public static string lblYouCanViewYourRecommendations {
+            get {
+                return ResourceManager.GetString("lblYouCanViewYourRecommendations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  You have added {0}.
         /// </summary>
         public static string lblYouHaveAdded {

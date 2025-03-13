@@ -83,6 +83,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClimateDataPostCode"></govuk-input>
 
+            <div class="check-answers">
             <govuk-summary-list>
                 <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
@@ -205,6 +206,7 @@
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
             </govuk-summary-list>
+            </div>
 
             <govuk-button type="submit" class="margin-bottom-forty">
                 @(!string.IsNullOrEmpty(Model.EncryptedIsUpdate) ? Resource.lblUpdateThisFarm : Resource.lblAddThisFarm)
