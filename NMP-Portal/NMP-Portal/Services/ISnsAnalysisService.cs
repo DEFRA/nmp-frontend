@@ -7,5 +7,6 @@ namespace NMP.Portal.Services
     {
         Task<SnsAnalysis> FetchSnsAnalysisByCropIdAsync(int cropId);
         Task<(SnsAnalysis, Error)> AddSnsAnalysisAsync(SnsAnalysis snsData);
+        Task<(string, Error)> RemoveSnsAnalysisAsync(int snsAnalysisId);
     }
 }

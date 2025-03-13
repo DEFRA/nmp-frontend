@@ -2,6 +2,7 @@
 {
     public class SnsAnalysis
     {
+        public int? ID { get; set; }
         public int CropID { get; set; }
         public int CropTypeID { get; set; }
         public DateTime? SampleDate { get; set; }
