@@ -4091,6 +4091,18 @@ live</value>
   <data name="lblAddASoilMineralNitrogenAnalysisResultForCrop" xml:space="preserve">
     <value>Add a soil mineral nitrogen analysis result for {0}</value>
   </data>
+  <data name="lblRemoveSNSAnalysisContentOne" xml:space="preserve">
+    <value>This will remove all data about this SNS from the current crop. You will not be able to get it back.</value>
+  </data>
+  <data name="lblRemoveTheSoilNitrogenSupplyAnalysis" xml:space="preserve">
+    <value>Remove the Soil Nitrogen Supply (SNS) analysis</value>
+  </data>
+  <data name="MsgYourDataSuccessfullyRemoved" xml:space="preserve">
+    <value>Your {0} has been successfully removed.</value>
+  </data>
+  <data name="lblSoilNitrogenSupplyAnalysis" xml:space="preserve">
+    <value>Soil Nitrogen Supply (SNS) analysis</value>
+  </data>
   <data name="lblNumberOfShootsPerSquareMetre" xml:space="preserve">
     <value>Number of shoots per square metre</value>
   </data>

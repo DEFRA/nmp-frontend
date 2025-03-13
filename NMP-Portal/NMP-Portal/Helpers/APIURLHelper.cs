@@ -120,6 +120,7 @@ namespace NMP.Portal.Helpers
         public const string FetchExcessWinterRainfallOptionByIdAPI = "/excess-winter-rainfall-options/value/{0}";
         public const string FetchCropGroupNameByCropIdGroupNameAndYearAPI = "/crops/GroupNameExist/{0}?newGroupName={1}&year={2}";
         public const string UpdateCropGroupNameAPI = "/crops/CropGroupName/{0}?cropGroupName={1}&year={2}";
+        public const string DeleteSNSAnalysisAPI = "/snsAnalysis/{0}";
 
         //Manner APi Url
         public const string FetchMannerApplicationMethodByIdAsyncAPI = "vendors/manner/application-methods/{0}";

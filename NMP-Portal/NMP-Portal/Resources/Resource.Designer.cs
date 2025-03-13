@@ -6436,6 +6436,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This will remove all data about this SNS from the current crop. You will not be able to get it back..
+        /// </summary>
+        public static string lblRemoveSNSAnalysisContentOne {
+            get {
+                return ResourceManager.GetString("lblRemoveSNSAnalysisContentOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Any recommandations for {0} will be based on previous soil analysis, where they exist. Without any soil analysis the recommendations will be based on the RB209 default values instead..
         /// </summary>
         public static string lblRemoveSoilAnalysisContentFirst {
@@ -6450,6 +6459,15 @@ namespace NMP.Portal.Resources {
         public static string lblRemoveSoilAnalysisFromFieldName {
             get {
                 return ResourceManager.GetString("lblRemoveSoilAnalysisFromFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove the Soil Nitrogen Supply (SNS) analysis.
+        /// </summary>
+        public static string lblRemoveTheSoilNitrogenSupplyAnalysis {
+            get {
+                return ResourceManager.GetString("lblRemoveTheSoilNitrogenSupplyAnalysis", resourceCulture);
             }
         }
         
@@ -7071,6 +7089,15 @@ namespace NMP.Portal.Resources {
         public static string lblSoilMineralNitrogenForError {
             get {
                 return ResourceManager.GetString("lblSoilMineralNitrogenForError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Soil Nitrogen Supply (SNS) analysis.
+        /// </summary>
+        public static string lblSoilNitrogenSupplyAnalysis {
+            get {
+                return ResourceManager.GetString("lblSoilNitrogenSupplyAnalysis", resourceCulture);
             }
         }
         
@@ -12005,6 +12032,15 @@ namespace NMP.Portal.Resources {
         public static string MsgYouCanContinueButYouShouldConsider {
             get {
                 return ResourceManager.GetString("MsgYouCanContinueButYouShouldConsider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your {0} has been successfully removed..
+        /// </summary>
+        public static string MsgYourDataSuccessfullyRemoved {
+            get {
+                return ResourceManager.GetString("MsgYourDataSuccessfullyRemoved", resourceCulture);
             }
         }
         

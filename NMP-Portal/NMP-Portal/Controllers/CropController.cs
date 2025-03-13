@@ -45,7 +45,7 @@ namespace NMP.Portal.Controllers
 
         public CropController(ILogger<CropController> logger, IDataProtectionProvider dataProtectionProvider,
              IFarmService farmService, IHttpContextAccessor httpContextAccessor, IFieldService fieldService, ICropService cropService, IOrganicManureService organicManureService,
-             IFertiliserManureService fertiliserManureService,ISnsAnalysisService snsAnalysisService)
+             IFertiliserManureService fertiliserManureService, ISnsAnalysisService snsAnalysisService)
         {
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
@@ -2307,7 +2307,7 @@ namespace NMP.Portal.Controllers
                             {
                                 //check sns already exist or not in SnsAnalyses table by cropID
                                 SnsAnalysis snsData = await _snsAnalysisService.FetchSnsAnalysisByCropIdAsync(recommendation.Crops.ID??0);
-                                
+
 
                                 var crop = new CropViewModel
                                 {
@@ -2527,7 +2527,7 @@ namespace NMP.Portal.Controllers
                     id = q,
                     year = s
                 });
-            }           
+            }
             return View(model);
         }
 
@@ -2752,6 +2752,14 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace("Crop Controller : CropGroupName() post action called");
             try
             {
+                if (string.IsNullOrWhiteSpace(model.CropGroupName))
+                {
+                    ModelState.AddModelError("CropGroupName",string.Format(Resource.MsgEnterTheValueBeforeContinuing,Resource.lblCropGroupName));
+                }
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
                 if (!string.IsNullOrWhiteSpace(model.CropGroupName))
                 {
                     if (string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
@@ -3540,7 +3548,7 @@ namespace NMP.Portal.Controllers
                             {
                                 var crop = new Crop();
                                 crop.FieldName = harvestYearPlanResponse[i].FieldName;
-                                crop.CropTypeID = harvestYearPlanResponse.FirstOrDefault().CropTypeID;                                
+                                crop.CropTypeID = harvestYearPlanResponse.FirstOrDefault().CropTypeID;
                                 if (decimal.TryParse(harvestYearPlanResponse[i].Yield, out decimal yield))
                                 {
                                     crop.Yield = yield;
@@ -3608,7 +3616,7 @@ namespace NMP.Portal.Controllers
                             model.CropType = harvestYearPlanResponse.FirstOrDefault().CropTypeName;
                             model.Variety = string.IsNullOrWhiteSpace(harvestYearPlanResponse.FirstOrDefault().CropVariety) ? Resource.lblNotEntered : harvestYearPlanResponse.FirstOrDefault().CropVariety;
                             model.CropGroupName = harvestYearPlanResponse.FirstOrDefault().CropGroupName;
-                            if (model.CropTypeID!=null&&model.CropInfo1!=null)
+                            if (model.CropTypeID != null && model.CropInfo1 != null)
                             {
                                 model.CropInfo1Name = await _cropService.FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(model.CropTypeID.Value, model.CropInfo1.Value);
                             }
@@ -3618,8 +3626,8 @@ namespace NMP.Portal.Controllers
                                 model.CropInfo2Name = await _cropService.FetchCropInfo2NameByCropInfo2Id(model.CropInfo2.Value);
                             }
                             ViewBag.EncryptedCropTypeId = _cropDataProtector.Protect(model.CropType.ToString());
-                         
-                            
+
+
                             if (!string.IsNullOrWhiteSpace(model.CropGroupName))
                             {
                                 ViewBag.EncryptedCropGroupName = _cropDataProtector.Protect(model.CropGroupName);
@@ -3732,6 +3740,6 @@ namespace NMP.Portal.Controllers
             return View(model);
         }
 
-      
+
     }
 }

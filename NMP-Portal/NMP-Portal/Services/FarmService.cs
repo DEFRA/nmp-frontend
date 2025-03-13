@@ -9,8 +9,6 @@ using NMP.Portal.ViewModels;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json.Nodes;
-//using static System.Runtime.InteropServices.JavaScript.JSType;
-//using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace NMP.Portal.Services
 {
