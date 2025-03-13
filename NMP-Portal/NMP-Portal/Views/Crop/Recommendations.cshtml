@@ -12,22 +12,24 @@
     }
     bool isPkBalanceTableDisplay = false;
 }
+<div class="govuk-grid-row">
+    @if (TempData["NutrientRecommendationsError"] != null)
+    {
+        <div class="govuk-grid-column-two-thirds">
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["NutrientRecommendationsError"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        </div>
+    }
+    @if (Model != null)
+    {
 
-@if (Model != null)
-{
-    @Html.AntiForgeryToken()
-    <div class="govuk-grid-row">
+
         @section BeforeContent {
         <govuk-back-link asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@string.Format(Resource.lblBackToYearFarmPlan, Model.Crops[0].Year)</govuk-back-link>
         }
-        @if (TempData["NutrientRecommendationsError"] != null)
-        {
-            <div class="govuk-grid-column-two-thirds">
-                <govuk-error-summary>
-                    <govuk-error-summary-item href="#">@TempData["NutrientRecommendationsError"]</govuk-error-summary-item>
-                </govuk-error-summary>
-            </div>
-        }
+
+        @Html.AntiForgeryToken()
         <div class="govuk-grid-column-two-thirds">
 
             @if (ViewBag.Success != null && ViewBag.Success == true && TempData["successMsg"] != null)
@@ -48,7 +50,7 @@
             {
                 <govuk-notification-banner type="Success">
                     <p class="govuk-notification-banner__heading">
-                        @string.Format(Resource.MsgSnsSuccess,Model.FieldName)
+                        @string.Format(Resource.MsgSnsSuccess, Model.FieldName)
                     </p>
 
                 </govuk-notification-banner>
@@ -663,7 +665,7 @@
 
                             @*  <p class="govuk-body"><a href="#">@string.Format(Resource.lblRemoveCropTypeFromFieldName, crop.CropTypeName, Model.FieldName)</a></p> *@
 
-                            @if(crop.IsSnsExist != true)
+                            @if (crop.IsSnsExist != true)
                             {
                                 <p class="govuk-body"><a asp-action="SoilSampleDate" asp-controller="SnsAnalysis" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-c="@crop.EncryptedCropId" asp-route-f="@crop.EncryptedFieldName">@string.Format(Resource.lblAddASoilMineralNitrogenAnalysisResultForCrop, (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Other ? crop.OtherCropName : crop.CropTypeName))</a></p>
                             }
@@ -677,5 +679,6 @@
                 </govuk-tabs>
             </div>
         }
-    </div>
-}
+
+    }
+</div>
