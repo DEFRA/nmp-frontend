@@ -4121,4 +4121,10 @@ live</value>
   <data name="lblShootsPerSquareMetre" xml:space="preserve">
     <value>{0} shoots per square metre</value>
   </data>
+  <data name="MsgWeCouldNotAddYourSnsPleaseTryAgainLater" xml:space="preserve">
+    <value>We could not add a soil mineral nitrogen analysis, please try again later</value>
+  </data>
+  <data name="lblYouCanViewYourRecommendations" xml:space="preserve">
+    <value>You can view your recommendations</value>
+  </data>
 </root>

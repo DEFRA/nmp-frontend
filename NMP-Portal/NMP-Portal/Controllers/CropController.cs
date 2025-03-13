@@ -2799,14 +2799,6 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace("Crop Controller : CropGroupName() post action called");
             try
             {
-                if ((!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate)) && string.IsNullOrWhiteSpace(model.CropGroupName))
-                {
-                    ModelState.AddModelError("CropGroupName", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblCropGroupName));
-                }
-                if (!ModelState.IsValid)
-                {
-                    return View(model);
-                }
                 if (!string.IsNullOrWhiteSpace(model.CropGroupName))
                 {
                     if (string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
@@ -2872,7 +2864,7 @@ namespace NMP.Portal.Controllers
             }
             else
             {
-                return RedirectToAction("UpdateCropGroupNameCheckAnswer", new { q = _cropDataProtector.Protect(model.CropType), r = _cropDataProtector.Protect(model.CropGroupName), s = _cropDataProtector.Protect(Resource.lblTrue) });
+                return RedirectToAction("UpdateCropGroupNameCheckAnswer", new { q = _cropDataProtector.Protect(model.CropType), r =(!string.IsNullOrWhiteSpace(model.CropGroupName)?_cropDataProtector.Protect(model.CropGroupName):string.Empty), s = _cropDataProtector.Protect(Resource.lblTrue) });
             }
         }
         [HttpGet]
@@ -3663,6 +3655,7 @@ namespace NMP.Portal.Controllers
                             model.CropType = harvestYearPlanResponse.FirstOrDefault().CropTypeName;
                             model.Variety = string.IsNullOrWhiteSpace(harvestYearPlanResponse.FirstOrDefault().CropVariety) ? Resource.lblNotEntered : harvestYearPlanResponse.FirstOrDefault().CropVariety;
                             model.CropGroupName = harvestYearPlanResponse.FirstOrDefault().CropGroupName;
+                            model.PreviousCropGroupName = model.CropGroupName;
                             if (model.CropTypeID != null && model.CropInfo1 != null)
                             {
                                 model.CropInfo1Name = await _cropService.FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(model.CropTypeID.Value, model.CropInfo1.Value);
@@ -3685,7 +3678,10 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-
+                    if(string.IsNullOrWhiteSpace(model.CropGroupName))
+                    {
+                        model.CropGroupName = model.PreviousCropGroupName;
+                    }
 
                     for (int i = 0; i < model.Crops.Count; i++)
                     {

@@ -141,6 +141,7 @@
             }
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingField" value="@Model.CopyExistingField.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPreviousYearGrass" value="@Model.IsPreviousYearGrass.ToString().ToLower()"></govuk-input>
+            <div class="check-answers">
             <govuk-summary-list>
                 <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
@@ -998,7 +999,7 @@
                 }
 
             </govuk-summary-list>
-
+            </div>
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblAddThisField
             </govuk-button>

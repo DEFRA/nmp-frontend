@@ -1671,7 +1671,7 @@ namespace NMP.Portal.Controllers
             }
             else
             {
-                TempData["AddFieldError"] = Resource.MsgWeCouldNotAddYourFieldPleaseTryAgainLater;
+                TempData["AddFieldError"] = Resource.MsgWeCouldNotAddYourSnsPleaseTryAgainLater;
                 return RedirectToAction("CheckAnswer");
             }
 
