@@ -6,7 +6,12 @@
 }
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-
+        @if (TempData["ErrorUpdateCropGroupNameCheckAnswer"] != null)
+        {
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["ErrorUpdateCropGroupNameCheckAnswer"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        }
         <h1 class="govuk-heading-l">
             @string.Format(Resource.lblUpdateCropGroupNameForHarvestYear, Model.CropGroupName, Model.Year)
         </h1>
@@ -19,12 +24,7 @@
 
         <form asp-action="UpdateCropGroupNameCheckAnswer" asp-controller="Crop" method="post" autocomplete="off">
             @Html.AntiForgeryToken()
-            @if (TempData["ErrorUpdateCropGroupNameCheckAnswer"] != null)
-            {
-                <govuk-error-summary>
-                    <govuk-error-summary-item href="#">@TempData["ErrorUpdateCropGroupNameCheckAnswer"]</govuk-error-summary-item>
-                </govuk-error-summary>
-            }
+           
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Yield" value="@Model.Yield"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year" value="@Model.Year"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear" value="@Model.EncryptedHarvestYear"></govuk-input>
@@ -62,10 +62,15 @@
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
-                    <govuk-summary-list-row-key>@Resource.lblVarietyNameWithOptional</govuk-summary-list-row-key>
-                    <govuk-summary-list-row-value>@Model.Variety</govuk-summary-list-row-value>
+                    <govuk-summary-list-row-key>
+                        @((Model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup1 ||
+                            Model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup2 ||
+                            Model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup3 ||
+                            Model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup4) ? Resource.lblWhatIsThePotatoVarietyName : Resource.lblVarietyNameWithOptional)
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>@(string.IsNullOrWhiteSpace(Model.Variety)?Resource.lblNotEntered:Model.Variety)</govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action href="#">@Resource.lblChange</govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action asp-action="VarietyName" asp-controller="Crop" asp-route-q="@Model.EncryptedIsCropUpdate">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>

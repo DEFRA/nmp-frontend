@@ -27,6 +27,6 @@ namespace NMP.Portal.Services
         Task<(Crop, Error)> FetchCropById(int id);
         Task<(string, Error)> RemoveCropPlan(List<int> cropIds);
         Task<(bool, Error)> IsCropsGroupNameExistForUpdate(string cropIds,string cropGroupName,int year);
-        Task<(List<Crop>, Error)> UpdateCropGroupName(string cropIds,string CropGroupName,int year);
+        Task<(List<Crop>, Error)> UpdateCropGroupName(string cropIds,string CropGroupName,string? varietyName,int year);
     }
 }

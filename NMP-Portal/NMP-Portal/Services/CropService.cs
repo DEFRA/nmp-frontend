@@ -4,6 +4,7 @@ using NMP.Portal.Helpers;
 using NMP.Portal.Models;
 using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
+using System;
 using System.Net.Http.Json;
 using System.Text;
 
@@ -788,14 +789,14 @@ namespace NMP.Portal.Services
 
             return (isCropsGroupNameExist,error);
         }
-        public async Task<(List<Crop>, Error)> UpdateCropGroupName(string cropIds, string CropGroupName, int year)
+        public async Task<(List<Crop>, Error)> UpdateCropGroupName(string cropIds, string CropGroupName,string? varietyName, int year)
         {
             List<Crop> crops = new List<Crop>();
             Error error = new Error();
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.PutAsync(string.Format(APIURLHelper.UpdateCropGroupNameAPI, cropIds, CropGroupName, year),null);
+                var response = await httpClient.PutAsync(string.Format(APIURLHelper.UpdateCropGroupNameWithVarietyAPI, cropIds, CropGroupName, varietyName, year), null);
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
@@ -810,7 +811,7 @@ namespace NMP.Portal.Services
                 else
                 {
                     if (responseWrapper != null && responseWrapper.Error != null)
-                    {
+                    {             
                         error = responseWrapper.Error.ToObject<Error>();
                         _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
                     }
