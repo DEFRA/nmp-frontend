@@ -5203,6 +5203,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Number of shoots per square metre.
+        /// </summary>
+        public static string lblNumberOfShootsPerSquareMetre {
+            get {
+                return ResourceManager.GetString("lblNumberOfShootsPerSquareMetre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nutrient.
         /// </summary>
         public static string lblNutrient {
@@ -5577,6 +5586,15 @@ namespace NMP.Portal.Resources {
         public static string lblPercentageLable {
             get {
                 return ResourceManager.GetString("lblPercentageLable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Percentage of organic matter.
+        /// </summary>
+        public static string lblPercentageOfOrganicMatter {
+            get {
+                return ResourceManager.GetString("lblPercentageOfOrganicMatter", resourceCulture);
             }
         }
         
@@ -6598,6 +6616,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Season.
+        /// </summary>
+        public static string lblSeason {
+            get {
+                return ResourceManager.GetString("lblSeason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Second crop.
         /// </summary>
         public static string lblSecondCrop {
@@ -6738,6 +6765,15 @@ namespace NMP.Portal.Resources {
         public static string lblShallow {
             get {
                 return ResourceManager.GetString("lblShallow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} shoots per square metre.
+        /// </summary>
+        public static string lblShootsPerSquareMetre {
+            get {
+                return ResourceManager.GetString("lblShootsPerSquareMetre", resourceCulture);
             }
         }
         
@@ -7062,6 +7098,15 @@ namespace NMP.Portal.Resources {
         public static string lblSoilNitrogenSupplyAnalysis {
             get {
                 return ResourceManager.GetString("lblSoilNitrogenSupplyAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Soil Nitrogen Supply (SNS) analysis for {0}.
+        /// </summary>
+        public static string lblSoilNitrogenSupplyAnalysisForField {
+            get {
+                return ResourceManager.GetString("lblSoilNitrogenSupplyAnalysisForField", resourceCulture);
             }
         }
         
@@ -11996,6 +12041,15 @@ namespace NMP.Portal.Resources {
         public static string MsgYourDataSuccessfullyRemoved {
             get {
                 return ResourceManager.GetString("MsgYourDataSuccessfullyRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Soil Nitrogen Supply Index.
+        /// </summary>
+        public static string String1 {
+            get {
+                return ResourceManager.GetString("String1", resourceCulture);
             }
         }
         

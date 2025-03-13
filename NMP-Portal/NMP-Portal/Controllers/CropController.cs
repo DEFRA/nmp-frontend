@@ -2324,8 +2324,8 @@ namespace NMP.Portal.Controllers
                                     SowingDate = recommendation.Crops.SowingDate,
                                     OtherCropName = recommendation.Crops.OtherCropName,
                                     CropTypeName = await _fieldService.FetchCropTypeById(recommendation.Crops.CropTypeID.Value),
-                                    IsSnsExist= (snsData.CropID != null && snsData.CropID > 0)?true:false
-
+                                    IsSnsExist= (snsData.CropID != null && snsData.CropID > 0)?true:false,
+                                    SnsAnalysisData=snsData
 
                                 };
                                 if (!string.IsNullOrWhiteSpace(crop.CropTypeName))

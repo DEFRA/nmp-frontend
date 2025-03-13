@@ -4103,4 +4103,22 @@ live</value>
   <data name="lblSoilNitrogenSupplyAnalysis" xml:space="preserve">
     <value>Soil Nitrogen Supply (SNS) analysis</value>
   </data>
+  <data name="lblNumberOfShootsPerSquareMetre" xml:space="preserve">
+    <value>Number of shoots per square metre</value>
+  </data>
+  <data name="lblPercentageOfOrganicMatter" xml:space="preserve">
+    <value>Percentage of organic matter</value>
+  </data>
+  <data name="lblSoilNitrogenSupplyAnalysisForField" xml:space="preserve">
+    <value>Soil Nitrogen Supply (SNS) analysis for {0}</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value>Soil Nitrogen Supply Index</value>
+  </data>
+  <data name="lblSeason" xml:space="preserve">
+    <value>Season</value>
+  </data>
+  <data name="lblShootsPerSquareMetre" xml:space="preserve">
+    <value>{0} shoots per square metre</value>
+  </data>
 </root>
