@@ -52,6 +52,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Yield"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsCropUpdate" value="@Model.EncryptedIsCropUpdate"></govuk-input>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SowingDate"></govuk-date-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCropGroupName"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -83,7 +84,12 @@
 
             <div class="govuk-form-group">
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherCropName"></govuk-input>
-                @if (Model.CropGroupId == potatoGroupId)
+                @if (Model.CropGroupId == potatoGroupId || 
+                ((!string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate)) && 
+                (Model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup1 ||
+                Model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup2 ||
+                Model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup3 ||
+                Model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup4)))
                 {
                     <govuk-input asp-for="@Model.Variety">
                         <govuk-input-label is-page-heading="true" class="govuk-label--l">@Resource.lblWhatIsThePotatoVarietyName</govuk-input-label>
@@ -100,7 +106,17 @@
                 @Resource.lblContinue
             </govuk-button>
         </form>
-        <p class="govuk-body cancel-link"><a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
+        @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
+        {
+            <p class="govuk-body cancel-link"><a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
+        }
+        else
+        {
+            <p class="govuk-body cancel-link">
+                <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
+            </p>
+        }
+        
     </div>
 
 </div>
