@@ -230,15 +230,16 @@ namespace NMP.Portal.Controllers
                                         manData.Recommendation.CropLime = (manData.Recommendation.PreviousAppliedLime != null && manData.Recommendation.PreviousAppliedLime > 0) ? manData.Recommendation.PreviousAppliedLime : manData.Recommendation.CropLime;
                                         manData.Recommendation.KIndex = manData.Recommendation.KIndex != null ? (manData.Recommendation.KIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (manData.Recommendation.KIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : manData.Recommendation.KIndex)) : null;
                                     }
-                                }
+                                }                           
+
                             }
                         }
                         //manData.Recommendation.KIndex != null ? (manData.Recommendation.KIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (manData.Recommendation.KIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : manData.Recommendation.KIndex)) : null;
                         if (fieldData.SoilAnalysis != null)
                         {
-                            if (fieldData.SoilAnalysis.SoilAnalysisAndSNSanalysis != null)
+                            if (fieldData.SoilAnalysis != null)
                             {
-                                fieldData.SoilAnalysis.SoilAnalysisAndSNSanalysis.PotassiumIndex = fieldData.SoilAnalysis.SoilAnalysisAndSNSanalysis.PotassiumIndex != null ? (fieldData.SoilAnalysis.SoilAnalysisAndSNSanalysis.PotassiumIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (fieldData.SoilAnalysis.SoilAnalysisAndSNSanalysis.PotassiumIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : fieldData.SoilAnalysis.SoilAnalysisAndSNSanalysis.PotassiumIndex)) : null;
+                                fieldData.SoilAnalysis.PotassiumIndex = fieldData.SoilAnalysis.PotassiumIndex != null ? (fieldData.SoilAnalysis.PotassiumIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (fieldData.SoilAnalysis.PotassiumIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : fieldData.SoilAnalysis.PotassiumIndex)) : null;
                             }
 
                         }

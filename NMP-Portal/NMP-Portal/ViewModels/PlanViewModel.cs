@@ -70,5 +70,7 @@ namespace NMP.Portal.ViewModels
         public bool? isComingFromRecommendation { get; set; }
         public bool? IsExcessWinterRainfallCheckAnswer { get; set; }
         public bool? IsExcessWinterRainfallUpdated { get; set; }
+        public string? EncryptedIsCropUpdate { get; set; }
+        public string? PreviousCropGroupName { get; set; }
     }
 }

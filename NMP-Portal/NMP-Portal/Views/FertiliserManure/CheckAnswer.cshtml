@@ -102,6 +102,7 @@
             <h1 class="govuk-heading-l">
                 @Resource.lblCheckYourAnswers
             </h1>
+            <div class="check-answers">
             <govuk-summary-list>
                 @if (!Model.IsComingFromRecommendation && ViewBag.SelectedFields == null)
                 {
@@ -221,7 +222,7 @@
 
 
             </govuk-summary-list>
-
+            </div>
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblAddToPlan
             </govuk-button>

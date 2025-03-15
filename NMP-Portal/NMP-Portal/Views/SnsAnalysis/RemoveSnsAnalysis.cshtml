@@ -1,0 +1,64 @@
+﻿﻿@using NMP.Portal.Resources
+@using System.Globalization
+@using NMP.Portal.ViewModels
+
+@model SnsAnalysisViewModel
+@{
+    ViewData["Title"] = Resource.lblRemoveTheSoilNitrogenSupplyAnalysis;
+    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+
+}
+
+@if (Model != null)
+{
+    @section BeforeContent {
+    <govuk-back-link asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">
+        @Resource.lblBack
+    </govuk-back-link>
+    }
+    <form asp-action="RemoveSnsAnalysis" asp-controller="SnsAnalysis" method="post" autocomplete="off">
+        @Html.AntiForgeryToken()
+
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId" value="@Model.EncryptedFarmId"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear" value="@Model.EncryptedHarvestYear"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId" value="@Model.EncryptedFieldId"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropId" value="@Model.CropId"></govuk-input>
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds-from-desktop">
+                @if (TempData["RemoveSNSError"] != null)
+                {
+                    <govuk-error-summary>
+                        <govuk-error-summary-item href="#">@TempData["RemoveSNSError"]</govuk-error-summary-item>
+                    </govuk-error-summary>
+                }
+                <h1 class="govuk-heading-l">
+                    @Resource.lblRemoveTheSoilNitrogenSupplyAnalysis
+                </h1>
+
+
+                <p class="govuk-body">
+                    @Resource.lblRemoveSNSAnalysisContentOne
+                </p>
+
+
+                <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsSnsRemove">
+                    <govuk-radios-fieldset>
+                        <govuk-radios-fieldset-legend>
+                            @Resource.lblAreYouSureYouWantToContinue
+                        </govuk-radios-fieldset-legend>
+                        <govuk-radios-item value="@yes">@Resource.lblYes</govuk-radios-item>
+                        <govuk-radios-item value="@no">@Resource.lblNo</govuk-radios-item>
+                    </govuk-radios-fieldset>
+                </govuk-radios>
+                <govuk-button type="submit" class="margin-bottom-forty">
+                    @Resource.lblContinue
+                </govuk-button>
+
+                <p class="govuk-body cancel-link"><a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
+
+            </div>
+        </div>
+    </form>
+
+}

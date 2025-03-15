@@ -2641,8 +2641,8 @@ cubic metres per hectare  not set</value>
   <data name="lblBalanceFromPreviousYear" xml:space="preserve">
     <value>Balance from {0}</value>
   </data>
-  <data name="lblCropDetailsForFieldInYear" xml:space="preserve">
-    <value>Crop details for {0} in {1}</value>
+  <data name="lblCropFieldAndSoilDetailsForFieldInYear" xml:space="preserve">
+    <value>Crop, field and soil details for {0} in {1}</value>
   </data>
   <data name="lblFertiliserOrLimeApplied" xml:space="preserve">
     <value>Fertiliser or Lime applied</value>
@@ -3254,7 +3254,7 @@ cubic metres per hectare  not set</value>
     <value>remove this soil analysis.</value>
   </data>
   <data name="lblYouCanAlso" xml:space="preserve">
-    <value>You can also</value>
+    <value>You can also </value>
   </data>
   <data name="lblThisMayChangeYourNutrientRecommendations" xml:space="preserve">
     <value>This may change your nutrient recommendations. Select the field in your</value>
@@ -4034,8 +4034,17 @@ live</value>
   <data name="lblThirdRuleOfNVZForEngland" xml:space="preserve">
     <value>Read more about</value>
   </data>
+  <data name="lblCropFieldAndSoilDetails" xml:space="preserve">
+    <value>Crop, field and soil details</value>
+  </data>
   <data name="lblSoil_Analysis_line4" xml:space="preserve">
     <value>The tool also accounts for Soil Nitrogen Supply (SNS). You can add SNS data for a field at the end of the planning process.</value>
+  </data>
+  <data name="lblAddTheseAnalysisResults" xml:space="preserve">
+    <value>Add these analysis results</value>
+  </data>
+  <data name="MsgSnsSuccess" xml:space="preserve">
+    <value>Soil mineral nitrogen analysis results added to {0}.</value>
   </data>
   <data name="lblTotalMagnesium" xml:space="preserve">
     <value>Total Magnesium</value>
@@ -4045,5 +4054,77 @@ live</value>
   </data>
   <data name="lblViewFieldAndSoilAnalysisInformationForField" xml:space="preserve">
     <value>View field and soil analysis information for {0}</value>
+  </data>
+  <data name="lblDateAnalysisTaken" xml:space="preserve">
+    <value>Date analysis taken</value>
+  </data>
+  <data name="lblSoilMineralNitrogenDetailsForFieldName" xml:space="preserve">
+    <value>Soil mineral nitrogen (SNS) details for {0}</value>
+  </data>
+  <data name="lblUpdateCropGroupNameContent1" xml:space="preserve">
+    <value>Changes here will be applied to all of these fields. To change a single field select it from your crop plan.</value>
+  </data>
+  <data name="lblRemoveThisCropGroup" xml:space="preserve">
+    <value>remove this crop group.</value>
+  </data>
+  <data name="lblUpdateThisCropGroup" xml:space="preserve">
+    <value>Update this crop group</value>
+  </data>
+  <data name="lblViewTheYearCropPlan" xml:space="preserve">
+    <value>View the {0} crop plan.</value>
+  </data>
+  <data name="lblWhatIsTheCropType" xml:space="preserve">
+    <value>What is the crop type?</value>
+  </data>
+  <data name="lblUpdateCropGroupNameForHarvestYear" xml:space="preserve">
+    <value>Update {0} for harvest year {1}</value>
+  </data>
+  <data name="lblCropPlanUpdated" xml:space="preserve">
+    <value>Crop Plan updated</value>
+  </data>
+  <data name="lblSelectAFieldToSeeItsUpdatedRecommendations" xml:space="preserve">
+    <value>Select a field to see its updated recommendations</value>
+  </data>
+  <data name="lblHowDoYouPlanToUseTheCrop" xml:space="preserve">
+    <value>How do you plan to use the crop?</value>
+  </data>
+  <data name="lblAddASoilMineralNitrogenAnalysisResultForCrop" xml:space="preserve">
+    <value>Add a soil mineral nitrogen analysis result for {0}</value>
+  </data>
+  <data name="lblRemoveSNSAnalysisContentOne" xml:space="preserve">
+    <value>This will remove all data about this SNS from the current crop. You will not be able to get it back.</value>
+  </data>
+  <data name="lblRemoveTheSoilNitrogenSupplyAnalysis" xml:space="preserve">
+    <value>Remove the Soil Nitrogen Supply (SNS) analysis</value>
+  </data>
+  <data name="MsgYourDataSuccessfullyRemoved" xml:space="preserve">
+    <value>Your {0} has been successfully removed.</value>
+  </data>
+  <data name="lblSoilNitrogenSupplyAnalysis" xml:space="preserve">
+    <value>Soil Nitrogen Supply (SNS) analysis</value>
+  </data>
+  <data name="lblNumberOfShootsPerSquareMetre" xml:space="preserve">
+    <value>Number of shoots per square metre</value>
+  </data>
+  <data name="lblPercentageOfOrganicMatter" xml:space="preserve">
+    <value>Percentage of organic matter</value>
+  </data>
+  <data name="lblSoilNitrogenSupplyAnalysisForField" xml:space="preserve">
+    <value>Soil Nitrogen Supply (SNS) analysis for {0}</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value>Soil Nitrogen Supply Index</value>
+  </data>
+  <data name="lblSeason" xml:space="preserve">
+    <value>Season</value>
+  </data>
+  <data name="lblShootsPerSquareMetre" xml:space="preserve">
+    <value>{0} shoots per square metre</value>
+  </data>
+  <data name="MsgWeCouldNotAddYourSnsPleaseTryAgainLater" xml:space="preserve">
+    <value>We could not add a soil mineral nitrogen analysis, please try again later</value>
+  </data>
+  <data name="lblYouCanViewYourRecommendations" xml:space="preserve">
+    <value>You can view your recommendations</value>
   </data>
 </root>
