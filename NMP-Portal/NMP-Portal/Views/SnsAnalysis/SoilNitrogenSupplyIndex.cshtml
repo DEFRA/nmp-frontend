@@ -19,6 +19,10 @@
     {
         actionMethod = "AdjustmentValue";
     }
+    else if (Model.SnsCategoryId != null && Model.SnsCategoryId==(int)NMP.Portal.Enums.SNSCategories.Vegetables)
+    {
+        actionMethod = "SampleDepth";
+    }
 
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
