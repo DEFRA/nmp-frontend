@@ -4,7 +4,7 @@
 
 @{
     ViewData["Title"] = Resource.lblSampleDepth;
-    var backAction = Model.IsCheckAnswer ? "CheckAnswer" : (Model.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Other) ? "CurrentCropGroups" : "CurrentCropTypes";
+    var backAction = Model.IsCheckAnswer ? "CheckAnswer" : "SoilSampleDate";
 }
 
 @section BeforeContent {
