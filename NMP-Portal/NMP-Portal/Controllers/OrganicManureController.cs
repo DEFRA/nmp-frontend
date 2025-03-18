@@ -1053,13 +1053,13 @@ namespace NMP.Portal.Controllers
                 {
                     if (manureTypeList.Count > 0)
                     {
-
-                        var SelectListItem = manureTypeList.Select(f => new SelectListItem
+                        var manures = manureTypeList.OrderBy(m => m.SortOrder).ToList();
+                        var SelectListItem = manures.Select(f => new SelectListItem
                         {
                             Value = f.Id.ToString(),
-                            Text = f.Name.ToString()
+                            Text = f.Name
                         }).ToList();
-                        ViewBag.ManureTypeList = SelectListItem.OrderBy(x => x.Text).ToList();
+                        ViewBag.ManureTypeList = SelectListItem.ToList();
                     }
                     return View(model);
                 }
@@ -1098,10 +1098,11 @@ namespace NMP.Portal.Controllers
                     {
                         if (manureTypeList.Count > 0)
                         {
-                            var SelectListItem = manureTypeList.Select(f => new SelectListItem
+                            var manures = manureTypeList.OrderBy(m => m.SortOrder).ToList();
+                            var SelectListItem = manures.Select(f => new SelectListItem
                             {
                                 Value = f.Id.ToString(),
-                                Text = f.Name.ToString()
+                                Text = f.Name
                             }).ToList();
                             ViewBag.ManureTypeList = SelectListItem.OrderBy(x => x.Text).ToList(); ;
 
@@ -3338,7 +3339,7 @@ namespace NMP.Portal.Controllers
             (List<IncorporationMethodResponse> incorporationMethods, error) = await _organicManureService.FetchIncorporationMethodsByApplicationId(model.ApplicationMethod.Value, applicableForArableOrGrass);
             if (error == null && incorporationMethods.Count > 0)
             {
-                ViewBag.IncorporationMethod = incorporationMethods;
+                ViewBag.IncorporationMethod = incorporationMethods.OrderBy(i=>i.SortOrder).ToList();
             }
             return View(model);
 
