@@ -2453,7 +2453,7 @@ namespace NMP.Portal.Controllers
                     if (totalMagnesiumOxideError != null && totalMagnesiumOxideError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["MgO"].RawValue, Resource.lblMgO)))
                     {
                         ModelState["MgO"].Errors.Clear();
-                        ModelState["MgO"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblTotalMagnesiumOxide));
+                        ModelState["MgO"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblMagnesiumMgO));
                     }
                 }
                 if (model.DryMatterPercent == null)
@@ -2490,7 +2490,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.MgO == null)
                 {
-                    ModelState.AddModelError("MgO", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblMagnesium.ToLower()));
+                    ModelState.AddModelError("MgO", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblMagnesiumMgO.ToLower()));
                 }
 
                 if (model.N != null && model.NH4N != null && model.UricAcid != null && model.NO3N != null)
@@ -2572,7 +2572,7 @@ namespace NMP.Portal.Controllers
                 {
                     if (model.MgO < 0 || model.MgO > 99)
                     {
-                        ModelState.AddModelError("MgO", string.Format(Resource.MsgMinMaxValidation, Resource.lblTotalMagnesiumOxide, 99));
+                        ModelState.AddModelError("MgO", string.Format(Resource.MsgMinMaxValidation, Resource.lblMagnesiumMgO, 99));
                     }
                 }
 
