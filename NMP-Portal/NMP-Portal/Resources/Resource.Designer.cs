@@ -2500,7 +2500,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to England: &lt;a href=&quot;https://www.gov.uk/government/publications/applying-the-farming-rules-for-water/applying-the-farming-rules-for-water&quot; target=&quot;_blank&quot; &gt;Farming rules for water&lt;/a&gt; and  &lt;a href=&quot;https://www.gov.uk/government/collections/nitrate-vulnerable-zones&quot; target=&quot;_blank&quot;&gt;Nitrate vulnerable zones (NVZs)&lt;/a&gt;.
+        ///   Looks up a localized string similar to England: &lt;a href=&quot;https://www.gov.uk/guidance/rules-for-farmers-and-land-managers-to-prevent-water-pollution#assess-pollution-risks&quot; target=&quot;_blank&quot; &gt;Farming rules for water&lt;/a&gt; and  &lt;a href=&quot;https://www.gov.uk/government/collections/nitrate-vulnerable-zones&quot; target=&quot;_blank&quot;&gt;Nitrate vulnerable zones (NVZs)&lt;/a&gt;.
         /// </summary>
         public static string lblEnglandNVZWaterFarmingRules {
             get {
@@ -3914,7 +3914,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not show this page again.
+        ///   Looks up a localized string similar to I agree to the terms of use.
         /// </summary>
         public static string lblIagree_to_the_terms_of_use {
             get {
