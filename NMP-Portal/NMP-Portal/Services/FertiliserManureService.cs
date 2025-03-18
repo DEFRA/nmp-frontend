@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NMP.Portal.Enums;
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
 using NMP.Portal.Resources;
@@ -25,15 +26,15 @@ namespace NMP.Portal.Services
                 string url = string.Empty;
                 //if (cropTypeId != null)
                 //{
-                    url = string.Format(APIURLHelper.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeIdAsyncAPI, harvestYear, cropTypeId, fieldIds, cropOrder);
-                    if (cropOrder == null)
-                    {
-                        url = url.Replace("&cropOrder=", "");
-                    }
-                    if (cropTypeId == null)
-                    {
-                        url = url.Replace("cropTypeId=&", "");
-                    }
+                url = string.Format(APIURLHelper.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeIdAsyncAPI, harvestYear, cropTypeId, fieldIds, cropOrder);
+                if (cropOrder == null)
+                {
+                    url = url.Replace("&cropOrder=", "");
+                }
+                if (cropTypeId == null)
+                {
+                    url = url.Replace("cropTypeId=&", "");
+                }
                 //}
                 //else
                 //{
@@ -402,6 +403,48 @@ namespace NMP.Portal.Services
             }
 
             return (message, error);
+        }
+        public async Task<(FertiliserManure, Error)> FetchFertiliserByIdAsync(int fertiliserId)
+        {
+            Error error = new Error();
+            FertiliserManure fertiliserManure = new FertiliserManure();
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchFertiliserByIdAPI, fertiliserId));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+                {
+                    var fertiliser = responseWrapper.Data.Fertiliser.ToObject<FertiliserManure>();
+                    if (fertiliser != null)
+                    {
+                        fertiliserManure = fertiliser;
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+
+            return (fertiliserManure, error);
         }
     }
 }

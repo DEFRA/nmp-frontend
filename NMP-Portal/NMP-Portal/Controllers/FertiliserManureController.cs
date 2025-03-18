@@ -558,24 +558,24 @@ namespace NMP.Portal.Controllers
                 }
                 //if (int.TryParse(model.FieldGroup, out int value) || (model.FieldGroup == Resource.lblSelectSpecificFields && model.FieldList.Count == 1))
                 //{
-                    foreach (var fieldId in model.FieldList)
+                foreach (var fieldId in model.FieldList)
+                {
+                    (CropTypeResponse cropTypeResponse, error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
+                    if (error == null)
                     {
-                        (CropTypeResponse cropTypeResponse, error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
-                        if (error == null)
-                        {
-                            WarningMessage warning = new WarningMessage();
-                            ViewBag.closingPeriod = warning.ClosedPeriodForFertiliser(cropTypeResponse.CropTypeId);
+                        WarningMessage warning = new WarningMessage();
+                        ViewBag.closingPeriod = warning.ClosedPeriodForFertiliser(cropTypeResponse.CropTypeId);
 
-                        }
+                    }
 
                     Field field = await _fieldService.FetchFieldByFieldId(Convert.ToInt32(fieldId));
-                    if (field != null && field.IsWithinNVZ==true)
+                    if (field != null && field.IsWithinNVZ == true)
                     {
                         model.IsWithinNVZ = true;
                     }
                 }
                 //}
-                
+
             }
             catch (Exception ex)
             {
@@ -1312,13 +1312,17 @@ namespace NMP.Portal.Controllers
             }
             Error? error = null;
 
-            if(!string.IsNullOrWhiteSpace(q))
+            if (!string.IsNullOrWhiteSpace(q))
             {
                 model.EncryptedIsUpdate = q;
-                int encryptedId =Convert.ToInt32(_fertiliserManureProtector.Unprotect(q));
-                if (encryptedId > 0)
+                int decryptedId = Convert.ToInt32(_fertiliserManureProtector.Unprotect(q));
+                if (decryptedId > 0)
                 {
-                    //(FertiliserManure fertiliserManure,error)=await _fertiliserManureService.fetchf
+                    (FertiliserManure fertiliserManure, error) = await _fertiliserManureService.FetchFertiliserByIdAsync(decryptedId);
+                    if (string.IsNullOrWhiteSpace(error.Message) && fertiliserManure != null)
+                    {
+
+                    }
                 }
             }
 
@@ -1861,7 +1865,7 @@ namespace NMP.Portal.Controllers
                 bool isWithinWarningPeriod = warningMessage.IsFertiliserApplicationWithinWarningPeriod(model.Date.Value, warningPeriod);
 
                 DateTime endOfOctober = new DateTime(model.Date.Value.Year, 10, 31);
-               (decimal PreviousApplicationsNitrogen, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, startDate, endOfOctober, false);
+                (decimal PreviousApplicationsNitrogen, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, startDate, endOfOctober, false);
 
                 if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape && isWithinWarningPeriod)
                 {

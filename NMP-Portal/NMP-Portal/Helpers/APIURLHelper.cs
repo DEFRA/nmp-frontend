@@ -121,6 +121,7 @@ namespace NMP.Portal.Helpers
         public const string FetchCropGroupNameByCropIdGroupNameAndYearAPI = "/crops/GroupNameExist/{0}?newGroupName={1}&year={2}";
         public const string UpdateCropGroupNameWithVarietyAPI = "crops/CropGroupName/{0}?cropGroupName={1}&variety={2}&year={3}";
         public const string DeleteSNSAnalysisAPI = "/snsAnalysis/{0}";
+        public const string FetchFertiliserByIdAPI = "/fertiliser-manures/{0}";
 
         //Manner APi Url
         public const string FetchMannerApplicationMethodByIdAsyncAPI = "vendors/manner/application-methods/{0}";
