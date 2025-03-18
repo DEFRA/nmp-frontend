@@ -4047,7 +4047,7 @@ live</value>
     <value>Soil mineral nitrogen analysis results added to {0}.</value>
   </data>
   <data name="lblTotalMagnesium" xml:space="preserve">
-    <value>Total Magnesium</value>
+    <value>Total Magnesium (MgO)</value>
   </data>
   <data name="lblBackToTheYearFieldNamePlan" xml:space="preserve">
     <value>Back to the {0} {1} Plan</value>
