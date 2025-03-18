@@ -1298,7 +1298,7 @@ namespace NMP.Portal.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> CheckAnswer()
+        public async Task<IActionResult> CheckAnswer(string? q)
         {
             _logger.LogTrace($"Fertiliser Manure Controller : CheckAnswer() action called");
             FertiliserManureViewModel model = new FertiliserManureViewModel();
@@ -1311,6 +1311,16 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("FarmList", "Farm");
             }
             Error? error = null;
+
+            if(!string.IsNullOrWhiteSpace(q))
+            {
+                model.EncryptedIsUpdate = q;
+                int encryptedId =Convert.ToInt32(_fertiliserManureProtector.Unprotect(q));
+                if (encryptedId > 0)
+                {
+                    //(FertiliserManure fertiliserManure,error)=await _fertiliserManureService.fetchf
+                }
+            }
 
             if (model != null && model.FieldList != null)
             {
