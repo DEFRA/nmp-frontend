@@ -102,6 +102,7 @@
             <h1 class="govuk-heading-l">
                 @Resource.lblCheckYourAnswers
             </h1>
+            <div class="check-answers">
             <govuk-summary-list>
                 @if (!Model.IsComingFromRecommendation && ViewBag.SelectedFields == null)
                 {
@@ -190,22 +191,22 @@
                     <govuk-summary-list-row-value>
                         @if ((Model.N.HasValue) && Model.N.Value > 0)
                         {
-                            @string.Format(Resource.lblKgPerTonneWithNutrient, Model.N.Value, Resource.lblNitrogen)
+                                @string.Format("{0} {1} {2}", Model.N.Value, Resource.lblKgPerHectare,  Resource.lblNitrogen)
                             <br />
                         }
                         @if ((Model.P2O5.HasValue) && Model.P2O5.Value > 0)
                         {
-                            @string.Format(Resource.lblKgPerTonneWithNutrient, Model.P2O5.Value, Resource.lblPhosphateP2O5)
+                                @string.Format("{0} {1} {2}", Model.P2O5.Value, Resource.lblKgPerHectare, Resource.lblPhosphateP2O5)
                             <br />
                         }
                         @if ((Model.K2O.HasValue) && Model.K2O.Value > 0)
                         {
-                            @string.Format(Resource.lblKgPerTonneWithNutrient, Model.K2O.Value, Resource.lblPotashK2O)
+                                @string.Format("{0} {1} {2}", Model.K2O.Value, Resource.lblKgPerHectare, Resource.lblPotashK2O)
                             <br />
                         }
                         @if ((Model.SO3.HasValue) && Model.SO3.Value > 0)
                         {
-                            @string.Format(Resource.lblKgPerTonneWithNutrient, Model.SO3.Value, Resource.lblSulphurSO3)
+                                @string.Format("{0} {1} {2}", Model.SO3.Value, Resource.lblKgPerHectare, Resource.lblSulphurSO3)
                             <br />
                         }
                         @if ((Model.Lime.HasValue) && Model.Lime.Value > 0)
@@ -221,7 +222,7 @@
 
 
             </govuk-summary-list>
-
+            </div>
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblAddToPlan
             </govuk-button>

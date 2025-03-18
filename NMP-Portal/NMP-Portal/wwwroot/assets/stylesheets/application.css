@@ -471,3 +471,11 @@ a:focus, .govuk-link:focus {
     }
 }
 
+.check-answers dt.govuk-summary-list__key {
+    width: 45%;
+}
+
+.check-answers dd.govuk-summary-list__value {
+    width: 35%;
+    padding: 0;
+}

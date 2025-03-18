@@ -118,6 +118,9 @@ namespace NMP.Portal.Helpers
         public const string FetchExcessWinterRainfallOptionAPI = "/excess-winter-rainfall-options";
         public const string AddOrUpdateExcessWinterRainfallAPI = "/excessRainfalls/{0}?year={1}";
         public const string FetchExcessWinterRainfallOptionByIdAPI = "/excess-winter-rainfall-options/value/{0}";
+        public const string FetchCropGroupNameByCropIdGroupNameAndYearAPI = "/crops/GroupNameExist/{0}?newGroupName={1}&year={2}";
+        public const string UpdateCropGroupNameWithVarietyAPI = "crops/CropGroupName/{0}?cropGroupName={1}&variety={2}&year={3}";
+        public const string DeleteSNSAnalysisAPI = "/snsAnalysis/{0}";
 
         //Manner APi Url
         public const string FetchMannerApplicationMethodByIdAsyncAPI = "vendors/manner/application-methods/{0}";
@@ -151,5 +154,8 @@ namespace NMP.Portal.Helpers
         public const string FetchUserExtensionAPI = "user-extension";
         public const string UpdateUserExtensionTermsOfUseAPI = "user-extension/accept-terms-of-use";
         public const string UpdateUserExtensionDoNotShowAboutServiceAPI = "user-extension/show-about-service";
+
+        public const string FetchSnsAnalysisByCropIdAsyncAPI = "sns-analyses/crop/{0}";
+        public const string AddSnsAnalysisAsyncAPI = "sns-analyses";
     }
 }
