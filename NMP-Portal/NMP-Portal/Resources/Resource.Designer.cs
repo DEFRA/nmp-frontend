@@ -3914,7 +3914,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not show this page again.
+        ///   Looks up a localized string similar to I agree to the terms of use.
         /// </summary>
         public static string lblIagree_to_the_terms_of_use {
             get {
