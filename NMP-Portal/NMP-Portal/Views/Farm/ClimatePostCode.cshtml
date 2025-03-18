@@ -19,6 +19,8 @@
 
         <form asp-action="ClimatePostCode" method="post" asp-controller="Farm" autocomplete="on">
             @Html.AntiForgeryToken()
+
+            <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
@@ -41,6 +43,7 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsUpdate"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
             }
+            </div>
             <p class="govuk-body">@string.Format(Resource.lblClimateParagraphFirst, Model.Postcode, Model.Name)</p>
             <p class="govuk-body">@Resource.lblClimateParagraphSecond</p>
             <p class="govuk-body">
