@@ -14,6 +14,7 @@
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="Address" method="post" asp-controller="Farm" autocomplete="on">
             @Html.AntiForgeryToken()
+            <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
@@ -33,6 +34,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClimateDataPostCode"></govuk-input>
+            </div>
             <h1 class="govuk-heading-l">
                 @string.Format(Resource.lblSelectTheAddressFor, Model.Name)
             </h1>

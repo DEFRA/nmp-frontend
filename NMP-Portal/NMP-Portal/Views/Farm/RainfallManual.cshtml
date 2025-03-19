@@ -16,6 +16,7 @@
                 @string.Format(Resource.lblEnterAverageAnualRainfall, Model.Postcode)
             </h1> *@
 
+            <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
@@ -36,7 +37,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClimateDataPostCode"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country"></govuk-input>
-
+            </div>
             <div class="govuk-form-group">
                 <govuk-input asp-for=@Model.Rainfall input-class="govuk-input--width-5" inputmode="numeric" spellcheck="false">                    
                     <govuk-input-label is-page-heading="true" class="govuk-label--l"> @string.Format(Resource.lblEnterAverageAnualRainfall, Model.Postcode)</govuk-input-label>

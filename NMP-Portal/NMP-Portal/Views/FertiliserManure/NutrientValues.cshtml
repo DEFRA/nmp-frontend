@@ -9,9 +9,10 @@
     <govuk-back-link asp-action=@(Model.IsCheckAnswer?"CheckAnswer":"InOrgnaicManureDuration") asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedCounter">@Resource.lblBack</govuk-back-link>
 }
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+    
         <form asp-action="NutrientValues" asp-controller="FertiliserManure" method="post" autocomplete="off">
             @Html.AntiForgeryToken()
+
             @if (TempData["NutrientValuesError"] != null)
             {
                 <govuk-error-summary>
@@ -95,14 +96,12 @@
                     }
                 }
             }
-
-
-
+        <div class="govuk-grid-column-two-thirds">
             <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
                 <h1 class="govuk-fieldset__heading">@Resource.lblHowMuchOfEachNutrientDoYouPlan</h1>
             </legand>
-
-            <div class="govuk-grid-row">
+            </div>
+            <div class="govuk-grid-column-full">
                 @if (Model.FieldList.Count == 1)
                 {
                     if (Model.RecommendationViewModel != null)
@@ -213,6 +212,8 @@
                         </govuk-details>
                     }
                 }
+
+            </div>
                 <div class="govuk-grid-column-two-thirds">
                     <govuk-input asp-for=@Model.N inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                         <govuk-input-label is-page-heading="true">@Resource.lblNitrogen</govuk-input-label>
@@ -244,9 +245,9 @@
 
                 </div>
 
-            </div>
+           
 
 
         </form>
-    </div>
+    
 </div>

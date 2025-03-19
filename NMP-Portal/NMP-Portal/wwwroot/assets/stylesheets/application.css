@@ -479,3 +479,8 @@ a:focus, .govuk-link:focus {
     width: 35%;
     padding: 0;
 }
+
+.guidance {
+    display: block;
+    width: 66%;
+}
