@@ -4127,4 +4127,7 @@ live</value>
   <data name="lblYouCanViewYourRecommendations" xml:space="preserve">
     <value>You can view your recommendations</value>
   </data>
+  <data name="lblYouHaveNoInorganicFertiliserApplicationForFieldInYear" xml:space="preserve">
+    <value>You have no inorganic fertiliser applications planned for {0} in {1}.</value>
+  </data>
 </root>

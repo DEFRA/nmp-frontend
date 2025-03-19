@@ -9415,6 +9415,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have no inorganic fertiliser applications planned for {0} in {1}..
+        /// </summary>
+        public static string lblYouHaveNoInorganicFertiliserApplicationForFieldInYear {
+            get {
+                return ResourceManager.GetString("lblYouHaveNoInorganicFertiliserApplicationForFieldInYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have no organic material applications planned for {0} in {1}..
         /// </summary>
         public static string lblYouHaveNoOrganicMaterialApplicationForFieldInYear {
