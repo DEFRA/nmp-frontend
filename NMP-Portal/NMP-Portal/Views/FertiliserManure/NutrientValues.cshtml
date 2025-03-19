@@ -63,6 +63,8 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropOrder"></govuk-input>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Date"></govuk-date-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmCountryId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFertId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"></govuk-input>
 
             @if (Model != null)
             {
@@ -232,9 +234,12 @@
                         <govuk-input-label is-page-heading="true">@Resource.lblLime</govuk-input-label>
                         <govuk-input-suffix>@Resource.lbltonnes</govuk-input-suffix>
                     </govuk-input>
-                    <govuk-button type="submit" class="margin-bottom-forty">
-                        @Resource.lblContinue
-                    </govuk-button>
+                    @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
+                    {
+                        <govuk-button type="submit" class="margin-bottom-forty">
+                            @Resource.lblContinue
+                        </govuk-button>
+                    }
                     <p class="govuk-body cancel-link"><a asp-action="CreateFertiliserManureCancel" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
 
                 </div>

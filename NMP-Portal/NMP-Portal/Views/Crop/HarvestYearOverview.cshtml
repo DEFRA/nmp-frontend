@@ -350,7 +350,7 @@
                                             <td class="govuk-table__cell">
                                                 @* <a asp-action="DeletePlanOrganicAndFertiliser" asp-controller="Crop" asp-route-q="@inorganicFertiliser.EncryptedFertId" asp-route-r="@ViewBag.Fertliser" asp-route-s="@inorganicFertiliser.EncryptedFieldName">@Resource.lblRemove</a>
                                                 <br /> *@
-                                                <a asp-action="DeletePlanOrganicAndFertiliser" asp-controller="Crop" asp-route-q="@inorganicFertiliser.EncryptedFertId" asp-route-r="@ViewBag.Fertliser" asp-route-s="@inorganicFertiliser.EncryptedFieldName">@Resource.lblChange</a>
+                                                <a asp-action="CheckAnswer" asp-controller="FertiliserManure" asp-route-q="@inorganicFertiliser.EncryptedFertId" asp-route-r="@Model.EncryptedFarmId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-t="@inorganicFertiliser.EncryptedFieldName">@Resource.lblChange</a>
                                             </td>
                                         </tr>
                                     }
