@@ -2545,7 +2545,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter an application rate in tonnes per hectare or cubic meters per hectare.
+        ///   Looks up a localized string similar to Enter an application rate in {0}.
         /// </summary>
         public static string lblEnterAnApplicationRate {
             get {
