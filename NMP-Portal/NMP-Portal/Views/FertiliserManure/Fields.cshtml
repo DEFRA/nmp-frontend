@@ -82,13 +82,20 @@
                     <govuk-checkboxes-item value=@Resource.lblSelectAll behavior="Exclusive">@Resource.lblSelectAll</govuk-checkboxes-item>
                 </govuk-checkboxes-fieldset>
             </govuk-checkboxes>
-            @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
-            {
+            
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>
-            }
-            <p class="govuk-body cancel-link"><a asp-action="CreateFertiliserManureCancel" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
+            
+            <p class="govuk-body cancel-link">
+                @if(string.IsNullOrWhiteSpace(Model.EncryptedFertId)){
+                    <a asp-action="CreateFertiliserManureCancel" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
+                }
+                else
+                {
+                    <a asp-action="CheckAnswer" asp-controller="FertiliserManure">@Resource.lblCancel</a>
+                }
+            </p>
 
         </form>
     </div>
