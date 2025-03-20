@@ -203,7 +203,7 @@
                             @* @Resource.lblWhenDoYouFirstPlanToSpreadInOrganicFertiliser *@
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @((Model.Date.HasValue) ? Model.Date.Value.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotSet)
+                            @((Model.Date.HasValue) ? Model.Date.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotSet)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="InOrgnaicManureDuration" asp-controller="FertiliserManure">@Resource.lblChange</govuk-summary-list-row-action>
