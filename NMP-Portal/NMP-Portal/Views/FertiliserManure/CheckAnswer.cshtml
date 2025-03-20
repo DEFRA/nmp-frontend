@@ -13,7 +13,6 @@
         <form asp-action="CheckAnswer" asp-controller="FertiliserManure" method="post" autocomplete="off">
 
             @Html.AntiForgeryToken()
-
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
@@ -33,6 +32,8 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCounter" value="@Model.EncryptedCounter"></govuk-input>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Date"></govuk-date-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmCountryId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFertId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"></govuk-input>
             @if (Model != null)
             {
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules" value="@Model.isEnglishRules.ToString().ToLower()"></govuk-input>
@@ -100,134 +101,202 @@
             }
 
             <h1 class="govuk-heading-l">
-                @Resource.lblCheckYourAnswers
-            </h1>
-            <div class="check-answers">
-            <govuk-summary-list>
-                @if (!Model.IsComingFromRecommendation && ViewBag.SelectedFields == null)
+                @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
                 {
-                    <govuk-summary-list-row>
-                        <govuk-summary-list-row-key>
-                            @Resource.lblWhichFieldsWouldYouLikeToAddAnOrganic
-                        </govuk-summary-list-row-key>
-                        <govuk-summary-list-row-value>
-                            @Model.FieldGroupName
-                        </govuk-summary-list-row-value>
-                        <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="FieldGroup" asp-controller="FertiliserManure">@Resource.lblChange</govuk-summary-list-row-action>
-                        </govuk-summary-list-row-actions>
-                    </govuk-summary-list-row>
+                    @Resource.lblCheckYourAnswers
+                }
+                else
+                {
+                    @string.Format(Resource.lblUpdateAnInorganicMaterialApplication, Model.HarvestYear.Value)
                 }
 
-                @if (!Model.IsComingFromRecommendation && ViewBag.SelectedFields != null)
-                {
-                    <govuk-summary-list-row>
-                        <govuk-summary-list-row-key>
-                            @Resource.lblWhichFieldsWouldYouLikeToAddAnOrganic
-                        </govuk-summary-list-row-key>
-                        <govuk-summary-list-row-value>
-                            @if (ViewBag.SelectedFields != null)
-                            {
-                                if (ViewBag.SelectedFields.Count <= Convert.ToInt32(Resource.FieldGreaterThanX))
+            </h1>
+            <div class="check-answers">
+                <govuk-summary-list>
+                    @if (!Model.IsComingFromRecommendation && ViewBag.SelectedFields == null)
+                    {
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>
+                                @Resource.lblWhichFieldsWouldYouLikeToAddAnOrganic
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @Model.FieldGroupName
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="FieldGroup" asp-controller="FertiliserManure">@Resource.lblChange</govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+                    }
+
+                    @if (!Model.IsComingFromRecommendation && ViewBag.SelectedFields != null)
+                    {
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>
+                                @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
                                 {
-                                    @foreach (var item in ViewBag.SelectedFields)
-                                    {
-                                        @item <br />
-                                    }
+                                    @Resource.lblWhichFieldsWouldYouLikeToAddAnOrganic
                                 }
                                 else
                                 {
-                                    @string.Format(Resource.lblFarmFields, ViewBag.SelectedFields.Count)
-                                    <govuk-details>
-                                        <govuk-details-summary>
-                                            @Resource.lblViewFields
-                                        </govuk-details-summary>
-                                        <govuk-details-text>
-
-                                            @foreach (var item in ViewBag.SelectedFields)
-                                            {
-                                                @item <br />
-                                            }
-                                        </govuk-details-text>
-                                    </govuk-details>
+                                    @Resource.lblWhichFieldsWouldYouLikeToEditAnOrganic
                                 }
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @if (ViewBag.SelectedFields != null)
+                                {
+                                    if (ViewBag.SelectedFields.Count <= Convert.ToInt32(Resource.FieldGreaterThanX))
+                                    {
+                                        @foreach (var item in ViewBag.SelectedFields)
+                                        {
+                                            @item <br />
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @string.Format(Resource.lblFarmFields, ViewBag.SelectedFields.Count)
+                                        <govuk-details>
+                                            <govuk-details-summary>
+                                                @Resource.lblViewFields
+                                            </govuk-details-summary>
+                                            <govuk-details-text>
 
+                                                @foreach (var item in ViewBag.SelectedFields)
+                                                {
+                                                    @item <br />
+                                                }
+                                            </govuk-details-text>
+                                        </govuk-details>
+                                    }
+
+                                }
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                               
+                                @if (ViewBag.Fields != null && ViewBag.Fields.Count > 1)
+                                {
+                                    <govuk-summary-list-row-action asp-action="@(string.IsNullOrWhiteSpace(Model.EncryptedFertId)?"FieldGroup":"Fields")" asp-controller="FertiliserManure">@Resource.lblChange</govuk-summary-list-row-action>
+                                }
+                                
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+                    }
+
+
+
+                    <govuk-summary-list-row class=@((!Model.Date.HasValue)?"govuk-error-message":"")>
+                        <govuk-summary-list-row-key>
+                            @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
+                            {
+                                @if (int.TryParse(Model.FieldGroup, out int value))
+                                {
+                                    @string.Format(Resource.lblWhenAreYouApplyingInOrganicfertiliser, Model.CropTypeName)
+                                }
+                                else
+                                {
+                                    @Resource.lblWhenAreYouApplyingInorganicFertiliserForTheseFields
+                                }
+                            }
+                            else
+                            {
+                                @Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields
+                            }
+                            @* @Resource.lblWhenDoYouFirstPlanToSpreadInOrganicFertiliser *@
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @((Model.Date.HasValue) ? Model.Date.Value.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotSet)
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action asp-action="InOrgnaicManureDuration" asp-controller="FertiliserManure">@Resource.lblChange</govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
+                            {
+                                @Resource.lblHowMuchOfEachNutrientDoYouPlan
+                            }
+                            else
+                            {
+                                @Resource.lblHowMuchOfEachNutrientDoYouPlanforUpdate
+                            }
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @if ((Model.N.HasValue) && Model.N.Value > 0)
+                            {
+                                @string.Format("{0} {1} {2}", Model.N.Value, Resource.lblKgPerHectare, Resource.lblNitrogen)
+                                <br />
+                            }
+                            @if ((Model.P2O5.HasValue) && Model.P2O5.Value > 0)
+                            {
+                                @string.Format("{0} {1} {2}", Model.P2O5.Value, Resource.lblKgPerHectare, Resource.lblPhosphateP2O5)
+                                <br />
+                            }
+                            @if ((Model.K2O.HasValue) && Model.K2O.Value > 0)
+                            {
+                                @string.Format("{0} {1} {2}", Model.K2O.Value, Resource.lblKgPerHectare, Resource.lblPotashK2O)
+                                <br />
+                            }
+                            @if ((Model.SO3.HasValue) && Model.SO3.Value > 0)
+                            {
+                                @string.Format("{0} {1} {2}", Model.SO3.Value, Resource.lblKgPerHectare, Resource.lblSulphurSO3)
+                                <br />
+                            }
+                            @if ((Model.Lime.HasValue) && Model.Lime.Value > 0)
+                            {
+                                @(string.Format("{0} {1} {2}", Model.Lime.Value, Resource.lbltonnes, Resource.lblLime))
+                                <br />
                             }
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            @if (ViewBag.Fields != null && ViewBag.Fields.Count > 1)
-                            {                                
-                                <govuk-summary-list-row-action asp-action="FieldGroup" asp-controller="FertiliserManure">@Resource.lblChange</govuk-summary-list-row-action>
-                            }
+                            <govuk-summary-list-row-action asp-action="NutrientValues" asp-controller="FertiliserManure">@Resource.lblChange</govuk-summary-list-row-action>
+
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
+
+
+                </govuk-summary-list>
+                @if (!string.IsNullOrWhiteSpace(Model.EncryptedFertId))
+                {
+                    <p class="govuk-body margin-bottom-forty">
+                        @Resource.lblYouCanAlso
+                        @*     <a asp-action="DeletePlanOrganicAndFertiliser" asp-controller="Crop" asp-route-q="@Model.EncryptedFertId" asp-route-r="@ViewBag.Fertliser">@Resource.lblRemoveThisApplication</a> *@
+                        <a href="#">@string.Format(Resource.lblRemoveThisApplicationFromField, Model.FieldName)</a>
+                    </p>
                 }
-
-
-
-                <govuk-summary-list-row class=@((!Model.Date.HasValue)?"govuk-error-message":"")>
-                    <govuk-summary-list-row-key>
-                        @if (int.TryParse(Model.FieldGroup, out int value))
-                        {
-                            @string.Format(Resource.lblWhenAreYouApplyingInOrganicfertiliser, Model.CropTypeName)
-                        }
-                        else
-                        {
-                            @Resource.lblWhenAreYouApplyingInorganicFertiliserForTheseFields
-                        }
-                        @* @Resource.lblWhenDoYouFirstPlanToSpreadInOrganicFertiliser *@
-                    </govuk-summary-list-row-key>
-                    <govuk-summary-list-row-value>
-                        @((Model.Date.HasValue) ? Model.Date.Value.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotSet)
-                    </govuk-summary-list-row-value>
-                    <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="InOrgnaicManureDuration" asp-controller="FertiliserManure">@Resource.lblChange</govuk-summary-list-row-action>
-                    </govuk-summary-list-row-actions>
-                </govuk-summary-list-row>
-                <govuk-summary-list-row>
-                    <govuk-summary-list-row-key>
-                        @Resource.lblHowMuchOfEachNutrientDoYouPlan
-                    </govuk-summary-list-row-key>
-                    <govuk-summary-list-row-value>
-                        @if ((Model.N.HasValue) && Model.N.Value > 0)
-                        {
-                                @string.Format("{0} {1} {2}", Model.N.Value, Resource.lblKgPerHectare,  Resource.lblNitrogen)
-                            <br />
-                        }
-                        @if ((Model.P2O5.HasValue) && Model.P2O5.Value > 0)
-                        {
-                                @string.Format("{0} {1} {2}", Model.P2O5.Value, Resource.lblKgPerHectare, Resource.lblPhosphateP2O5)
-                            <br />
-                        }
-                        @if ((Model.K2O.HasValue) && Model.K2O.Value > 0)
-                        {
-                                @string.Format("{0} {1} {2}", Model.K2O.Value, Resource.lblKgPerHectare, Resource.lblPotashK2O)
-                            <br />
-                        }
-                        @if ((Model.SO3.HasValue) && Model.SO3.Value > 0)
-                        {
-                                @string.Format("{0} {1} {2}", Model.SO3.Value, Resource.lblKgPerHectare, Resource.lblSulphurSO3)
-                            <br />
-                        }
-                        @if ((Model.Lime.HasValue) && Model.Lime.Value > 0)
-                        {
-                            @(string.Format("{0} {1} {2}", Model.Lime.Value, Resource.lbltonnes, Resource.lblLime))
-                            <br />
-                        }
-                    </govuk-summary-list-row-value>
-                    <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="NutrientValues" asp-controller="FertiliserManure">@Resource.lblChange</govuk-summary-list-row-action>
-                    </govuk-summary-list-row-actions>
-                </govuk-summary-list-row>
-
-
-            </govuk-summary-list>
             </div>
-            <govuk-button type="submit" class="margin-bottom-forty">
-                @Resource.lblAddToPlan
-            </govuk-button>
 
-            <p class="govuk-body cancel-link"><a asp-action="CreateFertiliserManureCancel" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
+
+            @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
+            {
+                <govuk-button type="submit" class="margin-bottom-forty">
+                    @* @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
+                { *@
+                    @Resource.lblAddToPlan
+                    @*  }
+                else
+                {
+                @Resource.lblUpdate
+                } *@
+
+                </govuk-button>
+            }
+            else
+            {
+                <govuk-button type="button" class="margin-bottom-forty">
+                    @* @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
+                { *@
+                    @Resource.lblUpdate
+                    @*  }
+                else
+                {
+                @Resource.lblUpdate
+                } *@
+
+                </govuk-button>
+            }
+            <p class="govuk-body cancel-link">
+                <a asp-action="CreateFertiliserManureCancel" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
+            </p>
 
         </form>
     </div>

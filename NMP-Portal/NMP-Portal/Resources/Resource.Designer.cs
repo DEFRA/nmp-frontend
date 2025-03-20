@@ -3806,6 +3806,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How much of each nutrient do you plan to include in this application, per hectare?.
+        /// </summary>
+        public static string lblHowMuchOfEachNutrientDoYouPlanforUpdate {
+            get {
+                return ResourceManager.GetString("lblHowMuchOfEachNutrientDoYouPlanforUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How to save your plan as a PDF.
         /// </summary>
         public static string lblHowtosaveyourplanasaPDF {
@@ -6472,6 +6481,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove this application from {0}.
+        /// </summary>
+        public static string lblRemoveThisApplicationFromField {
+            get {
+                return ResourceManager.GetString("lblRemoveThisApplicationFromField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to remove this crop group..
         /// </summary>
         public static string lblRemoveThisCropGroup {
@@ -8200,6 +8218,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update an inorganic fertiliser application for harvest year {0}.
+        /// </summary>
+        public static string lblUpdateAnInorganicMaterialApplication {
+            get {
+                return ResourceManager.GetString("lblUpdateAnInorganicMaterialApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Changes here will be applied to all of these fields. To change a single field select it from your crop plan..
         /// </summary>
         public static string lblUpdateCropGroupNameContent1 {
@@ -9046,6 +9073,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When do you plan to spread inorganic fertiliser on these fields?.
+        /// </summary>
+        public static string lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields {
+            get {
+                return ResourceManager.GetString("lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When was the sample for soil mineral nitrogen (N) taken in {0}?.
         /// </summary>
         public static string lblWhenWasTheSampleForSoilMineralNitrogenTaken {
@@ -9114,6 +9150,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhichFieldsWouldYouLikeToCreateA2025CropAndFieldManagementReportFor {
             get {
                 return ResourceManager.GetString("lblWhichFieldsWouldYouLikeToCreateA2025CropAndFieldManagementReportFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which fields do you want to edit this inorganic fertiliser application for?.
+        /// </summary>
+        public static string lblWhichFieldsWouldYouLikeToEditAnOrganic {
+            get {
+                return ResourceManager.GetString("lblWhichFieldsWouldYouLikeToEditAnOrganic", resourceCulture);
             }
         }
         

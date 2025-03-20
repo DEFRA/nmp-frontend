@@ -4130,4 +4130,19 @@ live</value>
   <data name="lblYouHaveNoInorganicFertiliserApplicationForFieldInYear" xml:space="preserve">
     <value>You have no inorganic fertiliser applications planned for {0} in {1}.</value>
   </data>
+  <data name="lblUpdateAnInorganicMaterialApplication" xml:space="preserve">
+    <value>Update an inorganic fertiliser application for harvest year {0}</value>
+  </data>
+  <data name="lblRemoveThisApplicationFromField" xml:space="preserve">
+    <value>Remove this application from {0}</value>
+  </data>
+  <data name="lblHowMuchOfEachNutrientDoYouPlanforUpdate" xml:space="preserve">
+    <value>How much of each nutrient do you plan to include in this application, per hectare?</value>
+  </data>
+  <data name="lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields" xml:space="preserve">
+    <value>When do you plan to spread inorganic fertiliser on these fields?</value>
+  </data>
+  <data name="lblWhichFieldsWouldYouLikeToEditAnOrganic" xml:space="preserve">
+    <value>Which fields do you want to edit this inorganic fertiliser application for?</value>
+  </data>
 </root>
