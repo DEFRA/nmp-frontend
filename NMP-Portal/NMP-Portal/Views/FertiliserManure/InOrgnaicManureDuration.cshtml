@@ -37,6 +37,8 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWarningMsgNeedToShow" value="@Model.IsWarningMsgNeedToShow.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmCountryId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZ"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFertId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"></govuk-input>
             @if (Model != null)
             {
                 @if (Model.FieldList != null && Model.FieldList.Count > 0)
@@ -167,10 +169,12 @@
                 </govuk-date-input>
             </div>
 
-
-            <govuk-button type="submit" class="margin-bottom-forty">
-                @Resource.lblContinue
+            @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
+            {
+                <govuk-button type="submit" class="margin-bottom-forty">
+                    @Resource.lblContinue
             </govuk-button>
+            }
             <p class="govuk-body cancel-link"><a asp-action="CreateFertiliserManureCancel" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
 
 

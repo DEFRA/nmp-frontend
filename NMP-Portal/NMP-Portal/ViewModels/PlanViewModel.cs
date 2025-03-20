@@ -72,5 +72,9 @@ namespace NMP.Portal.ViewModels
         public bool? IsExcessWinterRainfallUpdated { get; set; }
         public string? EncryptedIsCropUpdate { get; set; }
         public string? PreviousCropGroupName { get; set; }
+
+        // grass properties
+        public int? CurrentSward { get; set; }
+        public int? GrassSeason { get; set; }
     }
 }

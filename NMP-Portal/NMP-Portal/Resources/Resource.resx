@@ -4130,4 +4130,34 @@ live</value>
   <data name="lblYouHaveNoInorganicFertiliserApplicationForFieldInYear" xml:space="preserve">
     <value>You have no inorganic fertiliser applications planned for {0} in {1}.</value>
   </data>
+  <data name="lblUpdateAnInorganicMaterialApplication" xml:space="preserve">
+    <value>Update an inorganic fertiliser application for harvest year {0}</value>
+  </data>
+  <data name="lblRemoveThisApplicationFromField" xml:space="preserve">
+    <value>Remove this application from {0}</value>
+  </data>
+  <data name="lblHowMuchOfEachNutrientDoYouPlanforUpdate" xml:space="preserve">
+    <value>How much of each nutrient do you plan to include in this application, per hectare?</value>
+  </data>
+  <data name="lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields" xml:space="preserve">
+    <value>When do you plan to spread inorganic fertiliser on these fields?</value>
+  </data>
+  <data name="lblWhichFieldsWouldYouLikeToEditAnOrganic" xml:space="preserve">
+    <value>Which fields do you want to edit this inorganic fertiliser application for?</value>
+  </data>
+  <data name="lblWhichFieldsWouldYouLikeToAddToThisGrass" xml:space="preserve">
+    <value>Which fields would you like to add to this Grass group?</value>
+  </data>
+  <data name="lblAreTheseNewSwardOrExistingSwardInTheseFields" xml:space="preserve">
+    <value>Are these new swards or existing swards in these fields?</value>
+  </data>
+  <data name="lblExistingSwards" xml:space="preserve">
+    <value>Existing swards</value>
+  </data>
+  <data name="lblNewSwards" xml:space="preserve">
+    <value>New swards</value>
+  </data>
+  <data name="lblWhatIsTheSwardInTheseFields" xml:space="preserve">
+    <value>What is the sward in these fields in {0}?</value>
+  </data>
 </root>

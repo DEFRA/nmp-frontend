@@ -1177,6 +1177,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are these new swards or existing swards in these fields?.
+        /// </summary>
+        public static string lblAreTheseNewSwardOrExistingSwardInTheseFields {
+            get {
+                return ResourceManager.GetString("lblAreTheseNewSwardOrExistingSwardInTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to continue?.
         /// </summary>
         public static string lblAreYouSureYouWantToContinue {
@@ -2869,6 +2878,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Existing swards.
+        /// </summary>
+        public static string lblExistingSwards {
+            get {
+                return ResourceManager.GetString("lblExistingSwards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to false.
         /// </summary>
         public static string lblFalse {
@@ -3802,6 +3820,15 @@ namespace NMP.Portal.Resources {
         public static string lblHowMuchOfEachNutrientDoYouPlan {
             get {
                 return ResourceManager.GetString("lblHowMuchOfEachNutrientDoYouPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How much of each nutrient do you plan to include in this application, per hectare?.
+        /// </summary>
+        public static string lblHowMuchOfEachNutrientDoYouPlanforUpdate {
+            get {
+                return ResourceManager.GetString("lblHowMuchOfEachNutrientDoYouPlanforUpdate", resourceCulture);
             }
         }
         
@@ -4946,6 +4973,15 @@ namespace NMP.Portal.Resources {
         public static string lblNationalGridReferenceForCheckAnswere {
             get {
                 return ResourceManager.GetString("lblNationalGridReferenceForCheckAnswere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New swards.
+        /// </summary>
+        public static string lblNewSwards {
+            get {
+                return ResourceManager.GetString("lblNewSwards", resourceCulture);
             }
         }
         
@@ -6468,6 +6504,15 @@ namespace NMP.Portal.Resources {
         public static string lblRemoveTheSoilNitrogenSupplyAnalysis {
             get {
                 return ResourceManager.GetString("lblRemoveTheSoilNitrogenSupplyAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove this application from {0}.
+        /// </summary>
+        public static string lblRemoveThisApplicationFromField {
+            get {
+                return ResourceManager.GetString("lblRemoveThisApplicationFromField", resourceCulture);
             }
         }
         
@@ -8200,6 +8245,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update an inorganic fertiliser application for harvest year {0}.
+        /// </summary>
+        public static string lblUpdateAnInorganicMaterialApplication {
+            get {
+                return ResourceManager.GetString("lblUpdateAnInorganicMaterialApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Changes here will be applied to all of these fields. To change a single field select it from your crop plan..
         /// </summary>
         public static string lblUpdateCropGroupNameContent1 {
@@ -8902,6 +8956,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the sward in these fields in {0}?.
+        /// </summary>
+        public static string lblWhatIsTheSwardInTheseFields {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheSwardInTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is your last harvest year?.
         /// </summary>
         public static string lblWhatIsYourLastHarvestYear {
@@ -9046,6 +9109,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When do you plan to spread inorganic fertiliser on these fields?.
+        /// </summary>
+        public static string lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields {
+            get {
+                return ResourceManager.GetString("lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When was the sample for soil mineral nitrogen (N) taken in {0}?.
         /// </summary>
         public static string lblWhenWasTheSampleForSoilMineralNitrogenTaken {
@@ -9109,11 +9181,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Which fields would you like to add to this Grass group?.
+        /// </summary>
+        public static string lblWhichFieldsWouldYouLikeToAddToThisGrass {
+            get {
+                return ResourceManager.GetString("lblWhichFieldsWouldYouLikeToAddToThisGrass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which fields would you like to create a {0} crop and field management report for?.
         /// </summary>
         public static string lblWhichFieldsWouldYouLikeToCreateA2025CropAndFieldManagementReportFor {
             get {
                 return ResourceManager.GetString("lblWhichFieldsWouldYouLikeToCreateA2025CropAndFieldManagementReportFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which fields do you want to edit this inorganic fertiliser application for?.
+        /// </summary>
+        public static string lblWhichFieldsWouldYouLikeToEditAnOrganic {
+            get {
+                return ResourceManager.GetString("lblWhichFieldsWouldYouLikeToEditAnOrganic", resourceCulture);
             }
         }
         
