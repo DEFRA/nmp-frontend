@@ -1177,6 +1177,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are these new swards or existing swards in these fields?.
+        /// </summary>
+        public static string lblAreTheseNewSwardOrExistingSwardInTheseFields {
+            get {
+                return ResourceManager.GetString("lblAreTheseNewSwardOrExistingSwardInTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to continue?.
         /// </summary>
         public static string lblAreYouSureYouWantToContinue {
@@ -2865,6 +2874,15 @@ namespace NMP.Portal.Resources {
         public static string lblExistingManureStorageCapacity {
             get {
                 return ResourceManager.GetString("lblExistingManureStorageCapacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Existing swards.
+        /// </summary>
+        public static string lblExistingSwards {
+            get {
+                return ResourceManager.GetString("lblExistingSwards", resourceCulture);
             }
         }
         
@@ -4955,6 +4973,15 @@ namespace NMP.Portal.Resources {
         public static string lblNationalGridReferenceForCheckAnswere {
             get {
                 return ResourceManager.GetString("lblNationalGridReferenceForCheckAnswere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New swards.
+        /// </summary>
+        public static string lblNewSwards {
+            get {
+                return ResourceManager.GetString("lblNewSwards", resourceCulture);
             }
         }
         
@@ -8929,6 +8956,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the sward in these fields in {0}?.
+        /// </summary>
+        public static string lblWhatIsTheSwardInTheseFields {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheSwardInTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is your last harvest year?.
         /// </summary>
         public static string lblWhatIsYourLastHarvestYear {
@@ -9141,6 +9177,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhichFieldsWouldYouLikeToAddInorganicFertiliserApplications {
             get {
                 return ResourceManager.GetString("lblWhichFieldsWouldYouLikeToAddInorganicFertiliserApplications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which fields would you like to add to this Grass group?.
+        /// </summary>
+        public static string lblWhichFieldsWouldYouLikeToAddToThisGrass {
+            get {
+                return ResourceManager.GetString("lblWhichFieldsWouldYouLikeToAddToThisGrass", resourceCulture);
             }
         }
         
