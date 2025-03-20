@@ -283,6 +283,12 @@ namespace NMP.Portal.Controllers
                 TempData["CropGroupError"] = ex.Message;
                 return View(model);
             }
+            if(model.CropGroupId==(int)NMP.Portal.Enums.CropGroup.Grass)
+            {
+                model.CropTypeID = (int)NMP.Portal.Enums.CropTypes.Grass;
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                return RedirectToAction("CropFields");
+            }
 
             return RedirectToAction("CropTypes");
         }
@@ -706,7 +712,7 @@ namespace NMP.Portal.Controllers
         }
         [HttpGet]
         public async Task<IActionResult> CropFields()
-        {
+       {
             _logger.LogTrace("Crop Controller : CropFields() action called");
             PlanViewModel model = new PlanViewModel();
             try
@@ -2900,6 +2906,10 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("CheckAnswer");
                 }
 
+                if(model.CropGroupId==(int)NMP.Portal.Enums.CropGroup.Grass)
+                {
+                    return RedirectToAction("CurrentSward");
+                }
                 return RedirectToAction("VarietyName");
             }
             else
@@ -3827,6 +3837,100 @@ namespace NMP.Portal.Controllers
             return View(model);
         }
 
+
+        [HttpGet]
+        public async Task<IActionResult> CurrentSward()
+        {
+            _logger.LogTrace("Crop Controller : CurrentSward() action called");
+            PlanViewModel model = new PlanViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Crop Controller : Exception in CurrentSward() action : {ex.Message}, {ex.StackTrace}");
+                TempData["CropInfoOneError"] = ex.Message;
+                return RedirectToAction("CropGroupName");
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CurrentSward(PlanViewModel model)
+        {
+            _logger.LogTrace("Crop Controller : CropInfoTwo() post action called");
+            try
+            {
+                
+                if (model.CurrentSward == null)
+                {
+                    ModelState.AddModelError("CurrentSward", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Crop Controller : Exception in CropInfoTwo() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["CropInfoTwoError"] = ex.Message;
+                return RedirectToAction("CurrentSward");
+            }
+            if (model.CurrentSward == (int)NMP.Portal.Enums.CurrentSward.NewSward)
+            {
+                return RedirectToAction("GrassSeason");
+            }
+            else
+            {
+                return RedirectToAction("SowingDateQuestion");
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GrassSeason()
+        {
+            _logger.LogTrace("Crop Controller : GrassSeason() action called");
+            PlanViewModel model = new PlanViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+                
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Crop Controller : Exception in GrassSeason() action : {ex.Message}, {ex.StackTrace}");
+                TempData["CropInfoOneError"] = ex.Message;
+                return RedirectToAction("GrassSeason");
+            }
+
+            return View(model);
+        }
+
+        
 
     }
 }

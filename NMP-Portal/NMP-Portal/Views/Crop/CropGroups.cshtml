@@ -42,6 +42,9 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAddAnotherCrop" value="@Model.IsAddAnotherCrop"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPlanRecord" value="@Model.IsPlanRecord"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupName"></govuk-input>
+
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CurrentSward"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassSeason"></govuk-input>
     @if (Model.FieldList != null && Model.FieldList.Count > 0)
     {
         @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -85,14 +88,14 @@
                     {
                         @foreach (var item in ViewBag.CropGroupList)
                         {
-                            @if (item.CropGroupId == grassGroupId)
+                            @* @if (item.CropGroupId == grassGroupId)
                             {
                                 <govuk-radios-item value="@item.CropGroupId" disabled="true">@item.CropGroupName</govuk-radios-item>
                             }
                             else
-                            {
+                            { *@
                                 <govuk-radios-item value="@item.CropGroupId">@item.CropGroupName</govuk-radios-item>
-                            }
+                            @* } *@
                         }
                     }
 
