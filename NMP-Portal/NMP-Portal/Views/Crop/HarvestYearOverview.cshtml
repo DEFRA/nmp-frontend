@@ -84,7 +84,6 @@
                         {
                             @foreach (var harvestYearPlan in Model.HarvestYearPlans.FieldData)
                             {
-
                                 <div class="tab-left margin-bottom-thirty">
                                     <h2 class="govuk-heading-m margin-bottom-ten">
                                         @harvestYearPlan.CropTypeName
@@ -205,7 +204,7 @@
                                         <th scope="col" class="govuk-table__header">@Resource.lblCrop</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblType</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblRate</th>
-                                         <th scope="col" class="govuk-table__header"></th> 
+                                        <th scope="col" class="govuk-table__header"></th>
                                     </tr>
                                 </thead>
                                 <tbody class="govuk-table__body">
@@ -348,7 +347,11 @@
                                                 }
 
                                             </td>
-                                            <td class="govuk-table__cell"><a asp-action="DeletePlanOrganicAndFertiliser" asp-controller="Crop" asp-route-q="@inorganicFertiliser.EncryptedFertId" asp-route-r="@ViewBag.Fertliser" asp-route-s="@inorganicFertiliser.EncryptedFieldName">@Resource.lblRemove</a></td>
+                                            <td class="govuk-table__cell">
+                                                @* <a asp-action="DeletePlanOrganicAndFertiliser" asp-controller="Crop" asp-route-q="@inorganicFertiliser.EncryptedFertId" asp-route-r="@ViewBag.Fertliser" asp-route-s="@inorganicFertiliser.EncryptedFieldName">@Resource.lblRemove</a>
+                                                <br /> *@
+                                                <a asp-action="CheckAnswer" asp-controller="FertiliserManure" asp-route-q="@inorganicFertiliser.EncryptedFertId" asp-route-r="@Model.EncryptedFarmId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-t="@inorganicFertiliser.EncryptedFieldName">@Resource.lblChange</a>
+                                            </td>
                                         </tr>
                                     }
                                 </tbody>

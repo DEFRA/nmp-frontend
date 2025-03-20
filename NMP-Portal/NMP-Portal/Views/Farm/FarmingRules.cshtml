@@ -17,6 +17,8 @@
 
         <form asp-action="FarmingRules" method="post" asp-controller="Farm" autocomplete="off">
             @Html.AntiForgeryToken()
+
+            <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
@@ -40,7 +42,7 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsUpdate"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
             }
-
+            </div>
             @if (Model != null && Model.CountryID == (int)NMP.Portal.Enums.FarmCountry.England)
             {
                 <h1 class="govuk-heading-l">@Resource.lblNitrateVulnerableZones</h1>

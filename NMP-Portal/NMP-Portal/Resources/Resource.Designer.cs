@@ -2509,7 +2509,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to England: &lt;a href=&quot;https://www.gov.uk/government/publications/applying-the-farming-rules-for-water/applying-the-farming-rules-for-water&quot; target=&quot;_blank&quot; &gt;Farming rules for water&lt;/a&gt; and  &lt;a href=&quot;https://www.gov.uk/government/collections/nitrate-vulnerable-zones&quot; target=&quot;_blank&quot;&gt;Nitrate vulnerable zones (NVZs)&lt;/a&gt;.
+        ///   Looks up a localized string similar to England: &lt;a href=&quot;https://www.gov.uk/guidance/rules-for-farmers-and-land-managers-to-prevent-water-pollution#assess-pollution-risks&quot; target=&quot;_blank&quot; &gt;Farming rules for water&lt;/a&gt; and  &lt;a href=&quot;https://www.gov.uk/government/collections/nitrate-vulnerable-zones&quot; target=&quot;_blank&quot;&gt;Nitrate vulnerable zones (NVZs)&lt;/a&gt;.
         /// </summary>
         public static string lblEnglandNVZWaterFarmingRules {
             get {
@@ -2554,7 +2554,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter an application rate in tonnes per hectare or cubic meters per hectare.
+        ///   Looks up a localized string similar to Enter an application rate in {0}.
         /// </summary>
         public static string lblEnterAnApplicationRate {
             get {
@@ -3824,6 +3824,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How much of each nutrient do you plan to include in this application, per hectare?.
+        /// </summary>
+        public static string lblHowMuchOfEachNutrientDoYouPlanforUpdate {
+            get {
+                return ResourceManager.GetString("lblHowMuchOfEachNutrientDoYouPlanforUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How to save your plan as a PDF.
         /// </summary>
         public static string lblHowtosaveyourplanasaPDF {
@@ -3932,7 +3941,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not show this page again.
+        ///   Looks up a localized string similar to I agree to the terms of use.
         /// </summary>
         public static string lblIagree_to_the_terms_of_use {
             get {
@@ -6499,6 +6508,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove this application from {0}.
+        /// </summary>
+        public static string lblRemoveThisApplicationFromField {
+            get {
+                return ResourceManager.GetString("lblRemoveThisApplicationFromField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to remove this crop group..
         /// </summary>
         public static string lblRemoveThisCropGroup {
@@ -8011,7 +8029,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total Magnesium.
+        ///   Looks up a localized string similar to Total Magnesium (MgO).
         /// </summary>
         public static string lblTotalMagnesium {
             get {
@@ -8223,6 +8241,15 @@ namespace NMP.Portal.Resources {
         public static string lblUpdateAllTheseFields {
             get {
                 return ResourceManager.GetString("lblUpdateAllTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update an inorganic fertiliser application for harvest year {0}.
+        /// </summary>
+        public static string lblUpdateAnInorganicMaterialApplication {
+            get {
+                return ResourceManager.GetString("lblUpdateAnInorganicMaterialApplication", resourceCulture);
             }
         }
         
@@ -9082,6 +9109,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When do you plan to spread inorganic fertiliser on these fields?.
+        /// </summary>
+        public static string lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields {
+            get {
+                return ResourceManager.GetString("lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When was the sample for soil mineral nitrogen (N) taken in {0}?.
         /// </summary>
         public static string lblWhenWasTheSampleForSoilMineralNitrogenTaken {
@@ -9159,6 +9195,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhichFieldsWouldYouLikeToCreateA2025CropAndFieldManagementReportFor {
             get {
                 return ResourceManager.GetString("lblWhichFieldsWouldYouLikeToCreateA2025CropAndFieldManagementReportFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which fields do you want to edit this inorganic fertiliser application for?.
+        /// </summary>
+        public static string lblWhichFieldsWouldYouLikeToEditAnOrganic {
+            get {
+                return ResourceManager.GetString("lblWhichFieldsWouldYouLikeToEditAnOrganic", resourceCulture);
             }
         }
         
@@ -9456,6 +9501,15 @@ namespace NMP.Portal.Resources {
         public static string lblYouHaveAddedANewSoilAnalysisForFieldName {
             get {
                 return ResourceManager.GetString("lblYouHaveAddedANewSoilAnalysisForFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have no inorganic fertiliser applications planned for {0} in {1}..
+        /// </summary>
+        public static string lblYouHaveNoInorganicFertiliserApplicationForFieldInYear {
+            get {
+                return ResourceManager.GetString("lblYouHaveNoInorganicFertiliserApplicationForFieldInYear", resourceCulture);
             }
         }
         

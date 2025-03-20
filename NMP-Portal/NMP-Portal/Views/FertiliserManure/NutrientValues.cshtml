@@ -9,9 +9,10 @@
     <govuk-back-link asp-action=@(Model.IsCheckAnswer?"CheckAnswer":"InOrgnaicManureDuration") asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedCounter">@Resource.lblBack</govuk-back-link>
 }
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+    
         <form asp-action="NutrientValues" asp-controller="FertiliserManure" method="post" autocomplete="off">
             @Html.AntiForgeryToken()
+
             @if (TempData["NutrientValuesError"] != null)
             {
                 <govuk-error-summary>
@@ -63,6 +64,8 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropOrder"></govuk-input>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Date"></govuk-date-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmCountryId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFertId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"></govuk-input>
 
             @if (Model != null)
             {
@@ -93,14 +96,12 @@
                     }
                 }
             }
-
-
-
+        <div class="govuk-grid-column-two-thirds">
             <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
                 <h1 class="govuk-fieldset__heading">@Resource.lblHowMuchOfEachNutrientDoYouPlan</h1>
             </legand>
-
-            <div class="govuk-grid-row">
+            </div>
+            <div class="govuk-grid-column-full">
                 @if (Model.FieldList.Count == 1)
                 {
                     if (Model.RecommendationViewModel != null)
@@ -211,6 +212,8 @@
                         </govuk-details>
                     }
                 }
+
+            </div>
                 <div class="govuk-grid-column-two-thirds">
                     <govuk-input asp-for=@Model.N inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                         <govuk-input-label is-page-heading="true">@Resource.lblNitrogen</govuk-input-label>
@@ -232,16 +235,19 @@
                         <govuk-input-label is-page-heading="true">@Resource.lblLime</govuk-input-label>
                         <govuk-input-suffix>@Resource.lbltonnes</govuk-input-suffix>
                     </govuk-input>
-                    <govuk-button type="submit" class="margin-bottom-forty">
-                        @Resource.lblContinue
-                    </govuk-button>
+                    @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
+                    {
+                        <govuk-button type="submit" class="margin-bottom-forty">
+                            @Resource.lblContinue
+                        </govuk-button>
+                    }
                     <p class="govuk-body cancel-link"><a asp-action="CreateFertiliserManureCancel" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
 
                 </div>
 
-            </div>
+           
 
 
         </form>
-    </div>
+    
 </div>

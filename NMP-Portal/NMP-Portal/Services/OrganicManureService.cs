@@ -229,6 +229,7 @@ namespace NMP.Portal.Services
                     {
                         var manureTypes = responseWrapper.Data.ToObject<List<ManureType>>();
                         manureTypeList.AddRange(manureTypes);
+                        manureTypeList.OrderBy(m=>m.SortOrder).ToList();
                     }
                 }
                 else
