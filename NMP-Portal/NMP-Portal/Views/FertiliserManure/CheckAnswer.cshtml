@@ -73,13 +73,19 @@
                     <govuk-error-summary-item href="#">@TempData["CheckYourAnswerError"]</govuk-error-summary-item>
                 </govuk-error-summary>
             }
-            @if (Model.IsWarningMsgNeedToShow && (Model.IsClosedPeriodWarningExceptGrassAndOilseed || Model.IsClosedPeriodWarningOnlyForGrassAndOilseed || Model.IsNitrogenExceedWarning))
+            @if (Model.IsWarningMsgNeedToShow && (Model.IsClosedPeriodWarningExceptGrassAndOilseed || Model.IsClosedPeriodWarningOnlyForGrassAndOilseed || Model.IsNitrogenExceedWarning || Model.IsClosedPeriodWarning))
             {
                 <govuk-notification-banner>
                     <govuk-notification-banner-title>
                         @Resource.lblImportant
                     </govuk-notification-banner-title>
 
+                    @if (!string.IsNullOrWhiteSpace(Model.ClosedPeriodWarningHeading))
+                    {
+                        <p class="govuk-notification-banner__heading">
+                            @Model.ClosedPeriodWarningHeading
+                        </p>
+                    }
                     @if (Model.IsClosedPeriodWarningExceptGrassAndOilseed)
                     {
                         <p class="govuk-notification-banner__heading">
@@ -98,6 +104,7 @@
                             @Resource.MsgForMaxNitrogenForFertiliserTitle
                         </p>
                     }
+
                 </govuk-notification-banner>
             }
 
@@ -172,12 +179,12 @@
                                 }
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                               
+
                                 @if (ViewBag.Fields != null && ViewBag.Fields.Count > 1)
                                 {
                                     <govuk-summary-list-row-action asp-action="@(string.IsNullOrWhiteSpace(Model.EncryptedFertId)?"FieldGroup":"Fields")" asp-controller="FertiliserManure">@Resource.lblChange</govuk-summary-list-row-action>
                                 }
-                                
+
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     }
