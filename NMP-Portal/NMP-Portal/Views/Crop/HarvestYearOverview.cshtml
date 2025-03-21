@@ -341,6 +341,10 @@
                                                 {
                                                     <span class="nutrient-list">@string.Format(Resource.lblKgWithNutrient, inorganicFertiliser.SO3, Resource.lblSulphurSO3)</span>
                                                 }
+                                                @if (inorganicFertiliser.MgO != null && inorganicFertiliser.MgO > 0)
+                                                {
+                                                    <span class="nutrient-list">@string.Format(Resource.lblKgWithNutrient, inorganicFertiliser.MgO, Resource.lblMagnesiumMgO)</span>
+                                                }
                                                 @if (inorganicFertiliser.Lime != null && inorganicFertiliser.Lime > 0)
                                                 {
                                                     <span class="nutrient-list">@string.Format(Resource.lblTonneWithNutrient, inorganicFertiliser.Lime, Resource.lblLime)</span>

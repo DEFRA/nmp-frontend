@@ -1561,6 +1561,7 @@ namespace NMP.Portal.Controllers
                     fertiliserManure.K2O = model.K2O;
                     fertiliserManure.SO3 = model.SO3;
                     fertiliserManure.Lime = model.Lime;
+                    fertiliserManure.MgO = model.MgO;
                     fertiliserManure.ApplicationRate = 1;
                 }
             }
