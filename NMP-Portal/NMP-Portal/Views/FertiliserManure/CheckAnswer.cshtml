@@ -26,6 +26,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.P2O5"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.K2O"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SO3"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MgO"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Lime"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropOrder"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.QuestionForSpreadInorganicFertiliser" value="@Model.QuestionForSpreadInorganicFertiliser.ToString().ToLower()"></govuk-input>
@@ -72,13 +73,19 @@
                     <govuk-error-summary-item href="#">@TempData["CheckYourAnswerError"]</govuk-error-summary-item>
                 </govuk-error-summary>
             }
-            @if (Model.IsWarningMsgNeedToShow && (Model.IsClosedPeriodWarningExceptGrassAndOilseed || Model.IsClosedPeriodWarningOnlyForGrassAndOilseed || Model.IsNitrogenExceedWarning))
+            @if (Model.IsWarningMsgNeedToShow && (Model.IsClosedPeriodWarningExceptGrassAndOilseed || Model.IsClosedPeriodWarningOnlyForGrassAndOilseed || Model.IsNitrogenExceedWarning || Model.IsClosedPeriodWarning))
             {
                 <govuk-notification-banner>
                     <govuk-notification-banner-title>
                         @Resource.lblImportant
                     </govuk-notification-banner-title>
 
+                    @if (!string.IsNullOrWhiteSpace(Model.ClosedPeriodWarningHeading))
+                    {
+                        <p class="govuk-notification-banner__heading">
+                            @Model.ClosedPeriodWarningHeading
+                        </p>
+                    }
                     @if (Model.IsClosedPeriodWarningExceptGrassAndOilseed)
                     {
                         <p class="govuk-notification-banner__heading">
@@ -97,6 +104,7 @@
                             @Resource.MsgForMaxNitrogenForFertiliserTitle
                         </p>
                     }
+
                 </govuk-notification-banner>
             }
 
@@ -171,12 +179,12 @@
                                 }
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                               
+
                                 @if (ViewBag.Fields != null && ViewBag.Fields.Count > 1)
                                 {
                                     <govuk-summary-list-row-action asp-action="@(string.IsNullOrWhiteSpace(Model.EncryptedFertId)?"FieldGroup":"Fields")" asp-controller="FertiliserManure">@Resource.lblChange</govuk-summary-list-row-action>
                                 }
-                                
+
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     }
@@ -239,6 +247,11 @@
                             @if ((Model.SO3.HasValue) && Model.SO3.Value > 0)
                             {
                                 @string.Format("{0} {1} {2}", Model.SO3.Value, Resource.lblKgPerHectare, Resource.lblSulphurSO3)
+                                <br />
+                            }
+                            @if ((Model.MgO.HasValue) && Model.MgO.Value > 0)
+                            {
+                                @string.Format("{0} {1} {2}", Model.MgO.Value, Resource.lblKgPerHectare, Resource.lblMagnesiumMgO)
                                 <br />
                             }
                             @if ((Model.Lime.HasValue) && Model.Lime.Value > 0)
