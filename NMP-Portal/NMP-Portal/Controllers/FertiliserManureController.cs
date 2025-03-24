@@ -503,6 +503,26 @@ namespace NMP.Portal.Controllers
                         Text = f.Name.ToString()
                     }).ToList();
                     ViewBag.FieldList = selectListItem.OrderBy(x => x.Text).ToList();
+                    if (!string.IsNullOrWhiteSpace(model.EncryptedFertId))
+                    {
+                        (List<CommonResponse> commonResponse, error) = await _fertiliserManureService.FetchFieldWithSameDateAndNutrient(Convert.ToInt32(_cropDataProtector.Unprotect(model.EncryptedFertId)), model.FarmId.Value, model.HarvestYear.Value);
+                        if (string.IsNullOrWhiteSpace(error.Message) && commonResponse != null && commonResponse.Count > 0)
+                        {
+                            selectListItem = new List<SelectListItem>();
+                            selectListItem = commonResponse.Select(f => new SelectListItem
+                            {
+                                Value = f.Id.ToString(),
+                                Text = f.Name.ToString()
+                            }).ToList();
+                            ViewBag.FieldList = selectListItem.OrderBy(x => x.Text).ToList();
+                        }
+                        else
+                        {
+                            TempData["FieldError"] = error.Message;
+                            return View(model);
+                        }
+                    }
+
 
                     if (model.FieldList == null || model.FieldList.Count == 0)
                     {
@@ -510,9 +530,7 @@ namespace NMP.Portal.Controllers
                     }
                     if (!ModelState.IsValid)
                     {
-
                         return View(model);
-
                     }
                     if (model.FieldList.Count == 1 && model.FieldList[0] == Resource.lblSelectAll)
                     {
@@ -1350,7 +1368,13 @@ namespace NMP.Portal.Controllers
                 model.EncryptedFertId = q;
                 int decryptedId = Convert.ToInt32(_cropDataProtector.Unprotect(q));
                 int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(r));
+                model.FarmId = decryptedFarmId;
                 int decryptedHarvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(s));
+                (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
+                if (error.Message == null)
+                {
+                    model.FarmCountryId = farm.CountryID;
+                }
                 if (decryptedId > 0)
                 {
                     (FertiliserManure fertiliserManure, error) = await _fertiliserManureService.FetchFertiliserByIdAsync(decryptedId);
@@ -1390,7 +1414,7 @@ namespace NMP.Portal.Controllers
                         model.Lime = fertiliserManure.Lime;
                         model.SO3 = fertiliserManure.SO3;
                         model.K2O = fertiliserManure.K2O;
-                        model.Date = fertiliserManure.ApplicationDate.Value.Date;
+                        model.Date = fertiliserManure.ApplicationDate.Value.ToLocalTime();
                         model.FieldGroup = Resource.lblSelectSpecificFields;
                         _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
                     }
@@ -1535,8 +1559,24 @@ namespace NMP.Portal.Controllers
                                              .Select(field => field.Name)
                                              .ToList();
                             ViewBag.SelectedFields = fieldNames.OrderBy(name => name).ToList();
-                            ViewBag.Fields = fieldList;
+                            if (string.IsNullOrWhiteSpace(model.EncryptedFertId))
+                            {
+                                ViewBag.Fields = fieldList;
+                            }
                         }
+                    }
+                }
+                if (!string.IsNullOrWhiteSpace(model.EncryptedFertId))
+                {
+                    (List<CommonResponse> commonResponse, error) = await _fertiliserManureService.FetchFieldWithSameDateAndNutrient(Convert.ToInt32(_cropDataProtector.Unprotect(model.EncryptedFertId)), model.FarmId.Value, model.HarvestYear.Value);
+                    if (string.IsNullOrWhiteSpace(error.Message) && commonResponse != null && commonResponse.Count > 0)
+                    {
+                        var SelectListItem = commonResponse.Select(f => new SelectListItem
+                        {
+                            Value = f.Id.ToString(),
+                            Text = f.Name.ToString()
+                        }).ToList();
+                        ViewBag.Fields = SelectListItem.OrderBy(x => x.Text).ToList();
                     }
                 }
             }
@@ -1561,6 +1601,7 @@ namespace NMP.Portal.Controllers
                     fertiliserManure.K2O = model.K2O;
                     fertiliserManure.SO3 = model.SO3;
                     fertiliserManure.Lime = model.Lime;
+                    fertiliserManure.MgO = model.MgO;
                     fertiliserManure.ApplicationRate = 1;
                 }
             }
