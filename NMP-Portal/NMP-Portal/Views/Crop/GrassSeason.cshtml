@@ -8,7 +8,7 @@
 @section BeforeContent {
     <govuk-back-link asp-action="@(Model.IsCheckAnswer&& (!Model.IsCropGroupChange) ? "CheckAnswer" :"CurrentSward")" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="CurrentSward" asp-controller="Crop" method="post" autocomplete="off">
+<form asp-action="GrassSeason" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
     @if (TempData["CropInfoOneError"] != null)
     {
@@ -84,14 +84,19 @@
                         @string.Format(Resource.lblWhatIsTheSwardInTheseFields,Model.Year)
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
-                        
+                    @if (ViewBag.GrassSeason != null)
+                    {
+                        foreach (var season in ViewBag.GrassSeason)
+                        {
+                            <govuk-radios-item value="@season.SeasonId">@season.SeasonName</govuk-radios-item>
+                        }
+                    }
 
                 </govuk-radios-fieldset>
             </govuk-radios>
-            <h3>work in progress</h3>
-           @*  <govuk-button type="submit" class="margin-bottom-forty">
+            <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
-            </govuk-button> *@
+            </govuk-button>
             <p class="govuk-body cancel-link"><a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
 
         </div>

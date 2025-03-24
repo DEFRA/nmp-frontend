@@ -159,5 +159,7 @@ namespace NMP.Portal.Helpers
 
         public const string FetchSnsAnalysisByCropIdAsyncAPI = "sns-analyses/crop/{0}";
         public const string AddSnsAnalysisAsyncAPI = "sns-analyses";
+
+        public const string FetchGrassSeasonsAsyncAPI = "vendors/rb209/Grassland/GrasslandSeasons/{0}";
     }
 }
