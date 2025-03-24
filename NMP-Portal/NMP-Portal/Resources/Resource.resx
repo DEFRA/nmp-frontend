@@ -4160,4 +4160,10 @@ live</value>
   <data name="lblWhatIsTheSwardInTheseFields" xml:space="preserve">
     <value>What is the sward in these fields in {0}?</value>
   </data>
+  <data name="MsgInorganicFertiliserApplicationUpdated" xml:space="preserve">
+    <value>Inorganic fertiliser application updated</value>
+  </data>
+  <data name="MsgViewFieldUpdatedNutrientRecommendations" xml:space="preserve">
+    <value>View {0} updated nutrient recommendations.</value>
+  </data>
 </root>

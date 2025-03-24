@@ -50,6 +50,15 @@
                     }
 
                 }
+                @if (Model.UpdatedFertiliserIds != null && Model.UpdatedFertiliserIds.Count > 0)
+                {
+                    @for (int i = 0; i < Model.UpdatedFertiliserIds.Count; i++)
+                    {
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.UpdatedFertiliserIds[i].FertiliserId" value="@Model.UpdatedFertiliserIds[i].FertiliserId"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.UpdatedFertiliserIds[i].ManagementPeriodId" value="@Model.UpdatedFertiliserIds[i].ManagementPeriodId"></govuk-input>
+                    }
+
+                }
                 @if (Model.FertiliserManures != null && Model.FertiliserManures.Count > 0)
                 {
                     @for (int i = 0; i < Model.FertiliserManures.Count; i++)
@@ -170,12 +179,11 @@
                 </govuk-date-input>
             </div>
 
-            @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
-            {
+           
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
             </govuk-button>
-            }
+            
             <p class="govuk-body cancel-link"><a asp-action="CreateFertiliserManureCancel" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
 
 

@@ -11208,6 +11208,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Inorganic fertiliser application updated.
+        /// </summary>
+        public static string MsgInorganicFertiliserApplicationUpdated {
+            get {
+                return ResourceManager.GetString("MsgInorganicFertiliserApplicationUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid authentication.
         /// </summary>
         public static string MsgInvalidAuthentication {
@@ -12023,6 +12032,15 @@ namespace NMP.Portal.Resources {
         public static string MsgVarietyNameNotSet {
             get {
                 return ResourceManager.GetString("MsgVarietyNameNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View {0} updated nutrient recommendations..
+        /// </summary>
+        public static string MsgViewFieldUpdatedNutrientRecommendations {
+            get {
+                return ResourceManager.GetString("MsgViewFieldUpdatedNutrientRecommendations", resourceCulture);
             }
         }
         

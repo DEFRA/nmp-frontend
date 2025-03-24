@@ -49,6 +49,14 @@
                             @TempData["successMsgSecond"]
                         </p>
                     }
+                    @if (TempData["successMsgLink"] != null)
+                    {
+                        <p class="govuk-body">
+                            <a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@TempData["successMsgLink"]" asp-route-s="@Model.EncryptedHarvestYear">
+                                @string.Format(Resource.MsgViewFieldUpdatedNutrientRecommendations,TempData["fieldName"])
+                            </a>
+                        </p>
+                    }
                 </govuk-notification-banner>
             }
         </div>
