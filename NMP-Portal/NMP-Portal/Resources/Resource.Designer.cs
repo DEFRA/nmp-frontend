@@ -7399,6 +7399,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Spring sown (April to June).
+        /// </summary>
+        public static string lblSpringSown {
+            get {
+                return ResourceManager.GetString("lblSpringSown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you want to use these standard nutrient values for {0}?.
         /// </summary>
         public static string lblStandardNutrientValues {
@@ -7494,6 +7503,15 @@ namespace NMP.Portal.Resources {
         public static string lblSulphurSO3Lowercase {
             get {
                 return ResourceManager.GetString("lblSulphurSO3Lowercase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Summer or autumn sown (July to mid-October).
+        /// </summary>
+        public static string lblSummerOrAutumnSown {
+            get {
+                return ResourceManager.GetString("lblSummerOrAutumnSown", resourceCulture);
             }
         }
         

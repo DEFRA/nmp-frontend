@@ -4160,6 +4160,12 @@ live</value>
   <data name="lblWhatIsTheSwardInTheseFields" xml:space="preserve">
     <value>What is the sward in these fields in {0}?</value>
   </data>
+  <data name="lblSpringSown" xml:space="preserve">
+    <value>Spring sown (April to June)</value>
+  </data>
+  <data name="lblSummerOrAutumnSown" xml:space="preserve">
+    <value>Summer or autumn sown (July to mid-October)</value>
+  </data>
   <data name="MsgInorganicFertiliserApplicationUpdated" xml:space="preserve">
     <value>Inorganic fertiliser application updated</value>
   </data>

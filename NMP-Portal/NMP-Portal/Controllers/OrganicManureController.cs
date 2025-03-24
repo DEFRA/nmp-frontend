@@ -3194,7 +3194,7 @@ namespace NMP.Portal.Controllers
             {
                 return View("AreaQuantity", model);
             }
-            model.ApplicationRate = (model.Quantity.Value / model.Area.Value);
+            model.ApplicationRate =Math.Round((model.Quantity.Value / model.Area.Value),1);
             Error error = new Error();
             if (model.OrganicManures.Count > 0)
             {
