@@ -13,6 +13,10 @@
     {
         action = "CheckAnswer";
     }
+    else if (Model.CurrentSward == (int)NMP.Portal.Enums.CurrentSward.NewSward)
+    {
+        action = "GrassSeason";
+    }
     else if(Model.CropGroupId==(int)NMP.Portal.Enums.CropGroup.Grass)
     {
         action = "CurrentSward";

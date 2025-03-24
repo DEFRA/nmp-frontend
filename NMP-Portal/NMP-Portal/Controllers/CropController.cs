@@ -3917,8 +3917,9 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-
-                
+                List<GrassSeasonResponse> grassSeasons = await _cropService.FetchGrassSeasons();
+                grassSeasons.RemoveAll(g => g.SeasonId == 0);
+                ViewBag.GrassSeason = grassSeasons.OrderByDescending(x=>x.SeasonId);
             }
             catch (Exception ex)
             {
@@ -3926,11 +3927,35 @@ namespace NMP.Portal.Controllers
                 TempData["CropInfoOneError"] = ex.Message;
                 return RedirectToAction("GrassSeason");
             }
-
             return View(model);
         }
 
-        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> GrassSeason(PlanViewModel model)
+        {
+            _logger.LogTrace("Crop Controller : GrassSeason() post action called");
+            try
+            {
+                if (model.GrassSeason == null)
+                {
+                    ModelState.AddModelError("GrassSeason", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Crop Controller : Exception in GrassSeason() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["GrassSeason"] = ex.Message;
+                return RedirectToAction("GrassSeason");
+            }
+            
+            return RedirectToAction("SowingDateQuestion");
+        }
 
     }
 }
