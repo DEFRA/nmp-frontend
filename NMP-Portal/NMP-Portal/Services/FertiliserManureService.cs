@@ -366,14 +366,23 @@ namespace NMP.Portal.Services
             }
             return (totalN, error);
         }
-        public async Task<(string, Error)> DeleteFertiliserByIdAsync(int fertiliserId)
+        public async Task<(string, Error)> DeleteFertiliserByIdAsync(string fertiliserIds)
         {
             Error error = new Error();
             string message = string.Empty;
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.DeleteAsync(string.Format(APIURLHelper.DeleteFertiliserByIdAPI, fertiliserId));
+                var content = new StringContent(fertiliserIds, Encoding.UTF8, "application/json");
+                var url = APIURLHelper.DeleteFertiliserByIdsAPI;
+
+
+                var requestMessage = new HttpRequestMessage(HttpMethod.Delete, url)
+                {
+                    Content = content
+                };
+                var response = await httpClient.SendAsync(requestMessage);
+                //var response = await httpClient.DeleteAsync(string.Format(APIURLHelper.DeleteFertiliserByIdsAPI, fertiliserIds));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)

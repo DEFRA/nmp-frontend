@@ -3744,7 +3744,7 @@ live</value>
     <value>inorganic fertiliser</value>
   </data>
   <data name="MsgDeletePlanFertiliserContent1" xml:space="preserve">
-    <value>This will remove this organic material application from these fields and change their nutrient recommendations.</value>
+    <value>This will remove the information about this inorganic fertiliser application from {0} and change the {1} nutrient recommendations.</value>
   </data>
   <data name="MsgDeletePlanOrganicAndFertiliserContent2" xml:space="preserve">
     <value>Which fields would you like to remove this application from?</value>
@@ -4171,5 +4171,14 @@ live</value>
   </data>
   <data name="MsgViewFieldUpdatedNutrientRecommendations" xml:space="preserve">
     <value>View {0} updated nutrient recommendations.</value>
+  </data>
+  <data name="lblRemoveAnInorganicFertiliserApplicationFromField" xml:space="preserve">
+    <value>Remove an inorganic fertiliser application from {0}</value>
+  </data>
+  <data name="lblRemoveAnInorganicFertiliserApplication" xml:space="preserve">
+    <value>Remove an inorganic fertiliser application</value>
+  </data>
+  <data name="MsgDeletePlanFertiliserContent2" xml:space="preserve">
+    <value>This will remove the information about this inorganic fertiliser application are change the {0} nutrient recommendations for these fields.</value>
   </data>
 </root>

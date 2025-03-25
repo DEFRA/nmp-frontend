@@ -3171,24 +3171,24 @@ namespace NMP.Portal.Controllers
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
                 if (!string.IsNullOrWhiteSpace(decryptedAction) && decryptedAction == Resource.lblFertiliser)
                 {
-                    (success, error) = await _fertiliserManureService.DeleteFertiliserByIdAsync(decryptedId);
-                    if (!string.IsNullOrWhiteSpace(error.Message))
-                    {
-                        TempData["DeletePlanOrganicAndFertiliserError"] = error.Message;
-                        return View(model);
+                    //(success, error) = await _fertiliserManureService.DeleteFertiliserByIdAsync(decryptedId);
+                    //if (!string.IsNullOrWhiteSpace(error.Message))
+                    //{
+                    //    TempData["DeletePlanOrganicAndFertiliserError"] = error.Message;
+                    //    return View(model);
 
-                    }
-                    else
-                    {
-                        if (model.isComingFromRecommendation != null && model.isComingFromRecommendation == false)
-                        {
-                            return RedirectToAction("Recommendations", new { q = model.EncryptedFarmId, r = model.EncryptedFieldId, s = model.EncryptedHarvestYear, t = _cropDataProtector.Protect(Resource.MsgInorganicFertiliserApplicationRemoved), u = _cropDataProtector.Protect(Resource.MsgNutrientRecommendationsMayBeUpdated) });
-                        }
-                        else
-                        {
-                            return Redirect(Url.Action("HarvestYearOverview", new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = _cropDataProtector.Protect(Resource.MsgInorganicFertiliserApplicationRemoved), v = _cropDataProtector.Protect(Resource.MsgNutrientRecommendationsMayBeUpdated) }) + Resource.lblInorganicFertiliserApplicationsForSorting); ;
-                        }
-                    }
+                    //}
+                    //else
+                    //{
+                    //    if (model.isComingFromRecommendation != null && model.isComingFromRecommendation == false)
+                    //    {
+                    //        return RedirectToAction("Recommendations", new { q = model.EncryptedFarmId, r = model.EncryptedFieldId, s = model.EncryptedHarvestYear, t = _cropDataProtector.Protect(Resource.MsgInorganicFertiliserApplicationRemoved), u = _cropDataProtector.Protect(Resource.MsgNutrientRecommendationsMayBeUpdated) });
+                    //    }
+                    //    else
+                    //    {
+                    //        return Redirect(Url.Action("HarvestYearOverview", new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = _cropDataProtector.Protect(Resource.MsgInorganicFertiliserApplicationRemoved), v = _cropDataProtector.Protect(Resource.MsgNutrientRecommendationsMayBeUpdated) }) + Resource.lblInorganicFertiliserApplicationsForSorting); ;
+                    //    }
+                    //}
                 }
                 else if (!string.IsNullOrWhiteSpace(decryptedAction) && decryptedAction == Resource.lblOrganic)
                 {

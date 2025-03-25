@@ -6400,6 +6400,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove an inorganic fertiliser application.
+        /// </summary>
+        public static string lblRemoveAnInorganicFertiliserApplication {
+            get {
+                return ResourceManager.GetString("lblRemoveAnInorganicFertiliserApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove an inorganic fertiliser application from {0}.
+        /// </summary>
+        public static string lblRemoveAnInorganicFertiliserApplicationFromField {
+            get {
+                return ResourceManager.GetString("lblRemoveAnInorganicFertiliserApplicationFromField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This action will remove all the data about this crop group from your plans. You will not be able to get it back..
         /// </summary>
         public static string lblRemoveCropGroupContent1 {
@@ -10317,11 +10335,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This will remove this organic material application from these fields and change their nutrient recommendations..
+        ///   Looks up a localized string similar to This will remove the information about this inorganic fertiliser application from {0} and change the {1} nutrient recommendations..
         /// </summary>
         public static string MsgDeletePlanFertiliserContent1 {
             get {
                 return ResourceManager.GetString("MsgDeletePlanFertiliserContent1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This will remove the information about this inorganic fertiliser application are change the {0} nutrient recommendations for these fields..
+        /// </summary>
+        public static string MsgDeletePlanFertiliserContent2 {
+            get {
+                return ResourceManager.GetString("MsgDeletePlanFertiliserContent2", resourceCulture);
             }
         }
         

@@ -588,7 +588,7 @@
                                                                 }
                                                             </td>
                                                             <td class="govuk-table__cell">
-                                                                <p class="govuk-body cancel-link"><a asp-action="DeletePlanOrganicAndFertiliser" asp-controller="Crop" asp-route-q="@fertiliserManure.EncryptedId" asp-route-r="@ViewBag.Fertiliser" asp-route-s="@fertiliserManure.EncryptedFieldName" asp-route-u="@ViewBag.isComingFromRecommendation" asp-route-v="@Model.EncryptedFieldId">@Resource.lblRemove</a></p>
+                                                                <p class="govuk-body cancel-link"><a asp-action="RemoveFertiliser" asp-controller="FertiliserManure" asp-route-q="@fertiliserManure.EncryptedId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@fertiliserManure.EncryptedFieldName" asp-route-t="@Model.EncryptedFarmId" asp-route-u="@Model.EncryptedHarvestYear">@Resource.lblRemove</a></p>
                                                             </td>
 
                                                         </tr>

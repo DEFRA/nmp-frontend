@@ -283,7 +283,7 @@
                     <p class="govuk-body margin-bottom-forty">
                         @Resource.lblYouCanAlso
                         @*     <a asp-action="DeletePlanOrganicAndFertiliser" asp-controller="Crop" asp-route-q="@Model.EncryptedFertId" asp-route-r="@ViewBag.Fertliser">@Resource.lblRemoveThisApplication</a> *@
-                        <a href="#">@string.Format(Resource.lblRemoveThisApplicationFromField, Model.FieldName)</a>
+                        <a asp-action="RemoveFertiliser" asp-controller="FertiliserManure">@string.Format(Resource.lblRemoveThisApplicationFromField, Model.FieldName)</a>
                     </p>
                 }
             </div>
