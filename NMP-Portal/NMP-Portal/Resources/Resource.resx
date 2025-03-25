@@ -4178,6 +4178,9 @@ live</value>
   <data name="lblRemoveAnInorganicFertiliserApplication" xml:space="preserve">
     <value>Remove an inorganic fertiliser application</value>
   </data>
+  <data name="lblRemoveThisApplicationFromTheseField" xml:space="preserve">
+    <value>Remove this application from these field</value>
+  </data>
   <data name="MsgDeletePlanFertiliserContent2" xml:space="preserve">
     <value>This will remove the information about this inorganic fertiliser application are change the {0} nutrient recommendations for these fields.</value>
   </data>

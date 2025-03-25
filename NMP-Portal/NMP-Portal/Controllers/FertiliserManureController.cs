@@ -1598,6 +1598,10 @@ namespace NMP.Portal.Controllers
                             {
                                 ViewBag.Fields = fieldList;
                             }
+                            if (model.FieldList != null && model.FieldList.Count == 1 && fieldNames != null)
+                            {
+                                model.FieldName = fieldNames.FirstOrDefault();
+                            }
                         }
                     }
                 }
@@ -2346,15 +2350,17 @@ namespace NMP.Portal.Controllers
                                                      .Where(field => model.FieldList.Contains(field.Id.ToString())).OrderBy(field => field.Name)
                                                      .Select(field => field.Name)
                                                      .ToList();
-                                    
+
                                     if (fieldNames != null && fieldNames.Count == 1)
                                     {
                                         model.FieldName = fieldNames.FirstOrDefault();
                                     }
-                                    else if (fieldNames!=null)
+                                    else if (fieldNames != null)
                                     {
+                                        model.FieldName = string.Empty;
                                         ViewBag.SelectedFields = fieldNames.OrderBy(name => name).ToList();
                                     }
+                                    ViewBag.EncryptedFieldId = _fieldDataProtector.Protect(model.FieldList.FirstOrDefault());
                                 }
                             }
                         }
@@ -2371,7 +2377,7 @@ namespace NMP.Portal.Controllers
                     {
                         ViewBag.EncryptedFieldId = r;
                         model.FieldList = new List<string>();
-                        model.FieldList.Add(_cropDataProtector.Unprotect(r));
+                        model.FieldList.Add(_fieldDataProtector.Unprotect(r));
                     }
                     if (!string.IsNullOrWhiteSpace(s))
                     {
@@ -2396,6 +2402,11 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogTrace($"Farm Controller : Exception in RemoveFertiliser() action : {ex.Message}, {ex.StackTrace}");
+                if (model.IsComingFromRecommendation)
+                {
+                    TempData["NutrientRecommendationsError"] = ex.Message;
+                    return RedirectToAction("Recommendations", "Crop", new { q = model.EncryptedFarmId, r = r, s = model.EncryptedHarvestYear });
+                }
                 TempData["CheckYourAnswerError"] = ex.Message;
                 return RedirectToAction("CheckAnswer");
             }
@@ -2425,11 +2436,17 @@ namespace NMP.Portal.Controllers
                                              .Where(field => model.FieldList.Contains(field.Id.ToString())).OrderBy(field => field.Name)
                                              .Select(field => field.Name)
                                              .ToList();
-                            ViewBag.SelectedFields = fieldNames.OrderBy(name => name).ToList();
+
                             if (fieldNames != null && fieldNames.Count == 1)
                             {
                                 model.FieldName = fieldNames.FirstOrDefault();
                             }
+                            else if (fieldNames != null)
+                            {
+                                model.FieldName = string.Empty;
+                                ViewBag.SelectedFields = fieldNames.OrderBy(name => name).ToList();
+                            }
+                            ViewBag.EncryptedFieldId = _fieldDataProtector.Protect(model.FieldList.FirstOrDefault());
                         }
                     }
                 }
@@ -2439,17 +2456,42 @@ namespace NMP.Portal.Controllers
             {
                 if (!model.IsDeleteFertliser.Value)
                 {
-                    return RedirectToAction("CheckAnswer");
+                    if (model.IsComingFromRecommendation)
+                    {
+                        string encryptedFieldId = _fieldDataProtector.Protect(model.FieldList.FirstOrDefault());
+                        ViewBag.EncryptedFieldId = encryptedFieldId;
+                        if (!string.IsNullOrWhiteSpace(encryptedFieldId))
+                        {
+                            return RedirectToAction("Recommendations", "Crop", new { q = model.EncryptedFarmId, r = encryptedFieldId, s = model.EncryptedHarvestYear });
+                        }
+                        
+                    }
+                    else
+                    {
+                        return RedirectToAction("CheckAnswer");
+                    }
                 }
                 else
                 {
-                    if (model != null && model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
+
+                    List<int> fertiliserIds = new List<int>();
+                    if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0 && model.FertiliserManures != null && model.FertiliserManures.Count > 0)
                     {
-                        List<int> fertiliserIds=new List<int>();
-                        foreach(var fertliser in model.UpdatedFertiliserIds)
+                        foreach (var fertiliserManure in model.FertiliserManures)
                         {
-                            fertiliserIds.Add(fertliser.FertiliserId.Value);
+                            fertiliserIds.Add(model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId.Value == fertiliserManure.ManagementPeriodID).Select(x => x.FertiliserId.Value).FirstOrDefault());
                         }
+
+                    }
+
+                    if (model.IsComingFromRecommendation && (!string.IsNullOrWhiteSpace(model.EncryptedFertId)))
+                    {
+                        ViewBag.EncryptedFieldId = _fieldDataProtector.Protect(model.FieldList.FirstOrDefault());
+                        fertiliserIds.Add(Convert.ToInt32(_cropDataProtector.Unprotect(model.EncryptedFertId)));
+                    }
+
+                    if (fertiliserIds.Count > 0)
+                    {
                         var result = new
                         {
                             fertliserManureIds = fertiliserIds
@@ -2458,13 +2500,29 @@ namespace NMP.Portal.Controllers
                         (string success, error) = await _fertiliserManureService.DeleteFertiliserByIdAsync(jsonString);
                         if (string.IsNullOrWhiteSpace(error.Message))
                         {
-                            return Redirect(Url.Action("HarvestYearOverview","Crop", new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = _cropDataProtector.Protect(Resource.MsgInorganicFertiliserApplicationRemoved), v = _cropDataProtector.Protect(Resource.lblSelectAFieldToSeeItsUpdatedNutrientRecommendation) }) + Resource.lblInorganicFertiliserApplicationsForSorting); ;
+                            if (model.IsComingFromRecommendation)
+                            {
+                                if (model.FieldList != null && model.FieldList.Count > 0)
+                                {
+                                    string encryptedFieldId = _fieldDataProtector.Protect(model.FieldList.FirstOrDefault());
+                                    if (!string.IsNullOrWhiteSpace(encryptedFieldId))
+                                    {
+                                        return RedirectToAction("Recommendations", "Crop", new { q = model.EncryptedFarmId, r = encryptedFieldId, s = model.EncryptedHarvestYear, t = _cropDataProtector.Protect(Resource.MsgInorganicFertiliserApplicationRemoved), u = _cropDataProtector.Protect(Resource.MsgNutrientRecommendationsMayBeUpdated) });
+                                        //return RedirectToAction("Recommendations", "Crop", new { q = model.EncryptedFarmId, r = encryptedFieldId, s = model.EncryptedHarvestYear });
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                return Redirect(Url.Action("HarvestYearOverview", "Crop", new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = _cropDataProtector.Protect(Resource.MsgInorganicFertiliserApplicationRemoved), v = _cropDataProtector.Protect(Resource.lblSelectAFieldToSeeItsUpdatedNutrientRecommendation) }) + Resource.lblInorganicFertiliserApplicationsForSorting); ;
+                                
+                            }
                         }
                         else
                         {
                             if (model.FieldList != null && model.FieldList.Count > 0)
                             {
-                                (List<CommonResponse> fieldList,Error fieldListError) = await _fertiliserManureService.FetchFieldByFarmIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, model.FarmId.Value, null);
+                                (List<CommonResponse> fieldList, Error fieldListError) = await _fertiliserManureService.FetchFieldByFarmIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, model.FarmId.Value, null);
                                 if (fieldListError == null)
                                 {
                                     if (fieldList.Count > 0)
@@ -2473,10 +2531,15 @@ namespace NMP.Portal.Controllers
                                                          .Where(field => model.FieldList.Contains(field.Id.ToString())).OrderBy(field => field.Name)
                                                          .Select(field => field.Name)
                                                          .ToList();
-                                        ViewBag.SelectedFields = fieldNames.OrderBy(name => name).ToList();
+
                                         if (fieldNames != null && fieldNames.Count == 1)
                                         {
                                             model.FieldName = fieldNames.FirstOrDefault();
+                                        }
+                                        else if (fieldNames != null)
+                                        {
+                                            model.FieldName = string.Empty;
+                                            ViewBag.SelectedFields = fieldNames.OrderBy(name => name).ToList();
                                         }
                                     }
                                 }
@@ -2489,6 +2552,13 @@ namespace NMP.Portal.Controllers
                             return View(model);
                         }
                     }
+
+                    //foreach (var fertliser in model.UpdatedFertiliserIds)
+                    //    {
+                    //        fertiliserIds.Add(fertliser.FertiliserId.Value);
+                    //    }
+
+
                 }
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
             }

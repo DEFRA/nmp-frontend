@@ -38,6 +38,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmCountryId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFertId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation" value="@Model.IsComingFromRecommendation.ToString().ToLower()"></govuk-input>
             @if (Model.FertiliserManures != null && Model.FertiliserManures.Count > 0)
             {
                 @for (int i = 0; i < Model.FertiliserManures.Count; i++)
@@ -75,7 +76,15 @@
             <govuk-checkboxes name="FieldList" asp-for="FieldList">
                 <govuk-checkboxes-fieldset>
                     <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @Resource.lblWhichFieldsWouldYouLikeToAddInorganicFertiliserApplications
+                        @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
+                        {
+                            @Resource.lblWhichFieldsWouldYouLikeToAddInorganicFertiliserApplications
+                        }
+                        else
+                        {
+                            @Resource.lblWhichFieldsWouldYouLikeToEditAnOrganic
+                        }
+                        @* @Resource.lblWhichFieldsWouldYouLikeToAddInorganicFertiliserApplications *@
                     </govuk-checkboxes-fieldset-legend>
                     <govuk-checkboxes-hint>
                         @Resource.lblSelectAllThatApply

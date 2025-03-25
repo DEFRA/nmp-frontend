@@ -55,7 +55,7 @@
         @if (Model != null)
         {
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules" value="@Model.isEnglishRules.ToString().ToLower()"></govuk-input>
-
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation" value="@Model.IsComingFromRecommendation.ToString().ToLower()"></govuk-input>
 
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
@@ -130,7 +130,7 @@
                 {
 
                     <p class="govuk-body">
-                        <ul>
+                        <ul class="govuk-body">
                             @foreach (var item in ViewBag.SelectedFields)
                             {
                                 <li>@item</li>

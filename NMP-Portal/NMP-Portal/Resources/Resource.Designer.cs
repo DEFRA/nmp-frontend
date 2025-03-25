@@ -6535,6 +6535,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove this application from these field.
+        /// </summary>
+        public static string lblRemoveThisApplicationFromTheseField {
+            get {
+                return ResourceManager.GetString("lblRemoveThisApplicationFromTheseField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to remove this crop group..
         /// </summary>
         public static string lblRemoveThisCropGroup {
