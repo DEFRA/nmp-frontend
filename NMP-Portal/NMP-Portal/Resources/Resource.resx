@@ -4166,4 +4166,10 @@ live</value>
   <data name="lblSummerOrAutumnSown" xml:space="preserve">
     <value>Summer or autumn sown (July to mid-October)</value>
   </data>
+  <data name="MsgInorganicFertiliserApplicationUpdated" xml:space="preserve">
+    <value>Inorganic fertiliser application updated</value>
+  </data>
+  <data name="MsgViewFieldUpdatedNutrientRecommendations" xml:space="preserve">
+    <value>View {0} updated nutrient recommendations.</value>
+  </data>
 </root>

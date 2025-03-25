@@ -712,7 +712,7 @@ namespace NMP.Portal.Controllers
         }
         [HttpGet]
         public async Task<IActionResult> CropFields()
-       {
+        {
             _logger.LogTrace("Crop Controller : CropFields() action called");
             PlanViewModel model = new PlanViewModel();
             try
@@ -1874,7 +1874,7 @@ namespace NMP.Portal.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> HarvestYearOverview(string id, string year, string? q, string? r, string? s, string? t, string? u, string? v)
+        public async Task<IActionResult> HarvestYearOverview(string id, string year, string? q, string? r, string? s, string? t, string? u, string? v, string? w)//w is a link
         {
             _logger.LogTrace($"Crop Controller : HarvestYearOverview({id}, {year}, {q}, {r}) action called");
             PlanViewModel? model = null;
@@ -1888,6 +1888,19 @@ namespace NMP.Portal.Controllers
                         if (!string.IsNullOrWhiteSpace(v))
                         {
                             TempData["successMsgSecond"] = _cropDataProtector.Unprotect(v);
+                        }
+                        if (!string.IsNullOrWhiteSpace(w))
+                        {
+                            int decryptedFieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(w));
+                            if (decryptedFieldId > 0)
+                            {
+                                Field field = await _fieldService.FetchFieldByFieldId(decryptedFieldId);
+                                if(field!=null)
+                                {
+                                    TempData["fieldName"] = field.Name;
+                                }
+                            }
+                            TempData["successMsgLink"] = w;
                         }
                     }
                     ViewBag.Success = true;
@@ -2804,7 +2817,7 @@ namespace NMP.Portal.Controllers
                         ViewBag.EncryptedCropTypeId = _cropDataProtector.Protect(model.CropType);
                     }
 
-                    
+
 
                 }
 
@@ -2868,7 +2881,7 @@ namespace NMP.Portal.Controllers
                                 ViewBag.EncryptedCropTypeId = _cropDataProtector.Protect(model.CropType);
                             }
 
-                            
+
                             string cropIds = string.Join(",", model.Crops.Select(x => x.ID));
                             (bool groupNameExist, Error error) = await _cropService.IsCropsGroupNameExistForUpdate(cropIds, model.CropGroupName, model.Year.Value);
                             if (string.IsNullOrWhiteSpace(error.Message) && groupNameExist)
@@ -3872,7 +3885,7 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace("Crop Controller : CropInfoTwo() post action called");
             try
             {
-                
+
                 if (model.CurrentSward == null)
                 {
                     ModelState.AddModelError("CurrentSward", Resource.MsgSelectAnOptionBeforeContinuing);

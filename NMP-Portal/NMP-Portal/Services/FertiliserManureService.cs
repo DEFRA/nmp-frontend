@@ -446,10 +446,10 @@ namespace NMP.Portal.Services
 
             return (fertiliserManure, error);
         }
-        public async Task<(List<CommonResponse>, Error)> FetchFieldWithSameDateAndNutrient(int fertiliserId, int farmId, int harvestYear)
+        public async Task<(List<FertiliserResponse>, Error)> FetchFieldWithSameDateAndNutrient(int fertiliserId, int farmId, int harvestYear)
         {
             Error error = new Error();
-            List<CommonResponse> commonResponse = new List<CommonResponse>();
+            List<FertiliserResponse> fertiliserResponse = new List<FertiliserResponse>();
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
@@ -458,7 +458,7 @@ namespace NMP.Portal.Services
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
                 {
-                    commonResponse = responseWrapper.Data.ToObject<List<CommonResponse>>();                    
+                    fertiliserResponse = responseWrapper.Data.ToObject<List<FertiliserResponse>>();                    
                 }
                 else
                 {
@@ -482,7 +482,49 @@ namespace NMP.Portal.Services
                 throw new Exception(error.Message, ex);
             }
 
-            return (commonResponse, error);
+            return (fertiliserResponse, error);
+        }
+        public async Task<(List<FertiliserManure>, Error)> UpdateFertiliser(string fertliserData)
+        {
+            Error error = new Error();
+            List<FertiliserManure> fertiliser = new List<FertiliserManure>();
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.PutAsync(string.Format(APIURLHelper.UpdateFertiliserAPI), new StringContent(fertliserData, Encoding.UTF8, "application/json"));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+                {
+                    List<FertiliserManure> fertilisers = responseWrapper.Data.FertiliserManure.ToObject<List<FertiliserManure>>();
+                    if (fertilisers != null && fertilisers.Count > 0)
+                    {
+                        fertiliser.AddRange(fertilisers);
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+
+            return (fertiliser, error);
         }
     }
 }
