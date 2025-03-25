@@ -2565,8 +2565,8 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogTrace($"Farm Controller : Exception in RemoveFertiliser() post action : {ex.Message}, {ex.StackTrace}");
-                TempData["FieldGroupError"] = ex.Message;
-                return View("Views/FertiliserManure/FieldGroup.cshtml", model);
+                TempData["RemoveFertiliserError"] = ex.Message;
+                return View(model);
             }
             return View(model);
 
