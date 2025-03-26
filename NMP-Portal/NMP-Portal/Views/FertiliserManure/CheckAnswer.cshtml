@@ -38,6 +38,7 @@
             @if (Model != null)
             {
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules" value="@Model.isEnglishRules.ToString().ToLower()"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation" value="@Model.IsComingFromRecommendation.ToString().ToLower()"></govuk-input>
 
 
                 @if (Model.FieldList != null && Model.FieldList.Count > 0)
@@ -283,7 +284,15 @@
                     <p class="govuk-body margin-bottom-forty">
                         @Resource.lblYouCanAlso
                         @*     <a asp-action="DeletePlanOrganicAndFertiliser" asp-controller="Crop" asp-route-q="@Model.EncryptedFertId" asp-route-r="@ViewBag.Fertliser">@Resource.lblRemoveThisApplication</a> *@
-                        <a href="#">@string.Format(Resource.lblRemoveThisApplicationFromField, Model.FieldName)</a>
+                        <a asp-action="RemoveFertiliser" asp-controller="FertiliserManure">
+                            @if (ViewBag.SelectedFields != null && ViewBag.SelectedFields.Count == 1)
+                            {
+                                @string.Format(Resource.lblRemoveThisApplicationFromField, Model.FieldName)
+                            }
+                            else{
+                                @Resource.lblRemoveThisApplicationFromTheseField
+                            }
+                        </a>
                     </p>
                 }
             </div>

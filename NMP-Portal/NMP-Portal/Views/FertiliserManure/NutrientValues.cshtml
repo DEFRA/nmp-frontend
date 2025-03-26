@@ -69,6 +69,7 @@
 
         @if (Model != null)
         {
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation" value="@Model.IsComingFromRecommendation.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.QuestionForSpreadInorganicFertiliser" value="@Model.QuestionForSpreadInorganicFertiliser.ToString().ToLower()"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
@@ -107,7 +108,17 @@
         }
         <div class="govuk-grid-column-two-thirds">
             <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                <h1 class="govuk-fieldset__heading">@Resource.lblHowMuchOfEachNutrientDoYouPlan</h1>
+                <h1 class="govuk-fieldset__heading">
+                    @* @Resource.lblHowMuchOfEachNutrientDoYouPlan *@
+                    @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
+                    {
+                        @Resource.lblHowMuchOfEachNutrientDoYouPlan
+                    }
+                    else
+                    {
+                        @Resource.lblHowMuchOfEachNutrientDoYouPlanforUpdate
+                    }
+                </h1>
             </legand>
         </div>
         <div class="govuk-grid-column-full">
