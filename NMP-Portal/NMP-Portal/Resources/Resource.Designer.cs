@@ -8686,7 +8686,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to View the {0} crop plan..
+        ///   Looks up a localized string similar to View the {0} crop plan.
         /// </summary>
         public static string lblViewTheYearCropPlan {
             get {

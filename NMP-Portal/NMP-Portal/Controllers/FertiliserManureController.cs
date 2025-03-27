@@ -2500,6 +2500,7 @@ namespace NMP.Portal.Controllers
                         (string success, error) = await _fertiliserManureService.DeleteFertiliserByIdAsync(jsonString);
                         if (string.IsNullOrWhiteSpace(error.Message))
                         {
+                            _httpContextAccessor.HttpContext?.Session.Remove("FertiliserManure");
                             if (model.IsComingFromRecommendation)
                             {
                                 if (model.FieldList != null && model.FieldList.Count > 0)
