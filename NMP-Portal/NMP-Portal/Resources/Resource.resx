@@ -4071,7 +4071,7 @@ live</value>
     <value>Update this crop group</value>
   </data>
   <data name="lblViewTheYearCropPlan" xml:space="preserve">
-    <value>View the {0} crop plan.</value>
+    <value>View the {0} crop plan</value>
   </data>
   <data name="lblWhatIsTheCropType" xml:space="preserve">
     <value>What is the crop type?</value>

@@ -152,7 +152,7 @@
                     </govuk-radios-fieldset>
                 </govuk-radios>
                 <govuk-button type="submit" class="margin-bottom-forty">
-                    @Resource.lblRemove
+                    @Resource.lblContinue
                 </govuk-button>
                 @if (Model.IsComingFromRecommendation)
                 {
@@ -161,7 +161,7 @@
                 }
                 else
                 {
-                    <p class="govuk-body cancel-link"><a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
+                    <p class="govuk-body cancel-link"><a asp-action="CheckAnswer" asp-controller="FertiliserManure">@Resource.lblCancel</a></p>
 
                 }
 

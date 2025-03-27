@@ -52,9 +52,9 @@
                     <p class="govuk-notification-banner__heading">
                         @string.Format(Resource.MsgSnsSuccess, Model.FieldName)
                     </p>
-                    <p class="govuk-body">
+                   @*  <p class="govuk-body">
                         @Resource.lblYouCanViewYourRecommendations
-                    </p>
+                    </p> *@
                 </govuk-notification-banner>
             }
         </div>
@@ -671,7 +671,7 @@
                             else
                             {
                                 <hr class="seperator_five">
-                                <h2 class="govuk-heading-m non-standard">@string.Format(Resource.lblSoilNitrogenSupplyAnalysisForField, crop.FieldName)</h2>
+                                <h2 class="govuk-heading-m non-standard">@string.Format(Resource.lblSoilNitrogenSupplyAnalysisForField, Model.FieldName)</h2>
                                 <div class="tabs-thirds margin-bottom-forty">
                                     <table class="govuk-table">
                                         <tbody class="govuk-table__body">
