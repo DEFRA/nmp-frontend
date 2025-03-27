@@ -315,7 +315,7 @@ namespace NMP.Portal.Services
             }
             return (fertilisers, error);
         }
-        public async Task<(decimal, Error)> FetchTotalNBasedOnManIdAndAppDate(int managementId, DateTime startDate, DateTime endDate, bool confirm)
+        public async Task<(decimal, Error)> FetchTotalNBasedOnManIdAndAppDate(int managementId, DateTime startDate, DateTime endDate,int? fertiliserId, bool confirm)
         {
             Error error = null;
             decimal totalN = 0;
@@ -324,7 +324,7 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchTotalNFromFertiliserBasedOnManIdAndAppDateAsyncAPI, managementId, fromdate, toDate, confirm));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchTotalNFromFertiliserBasedOnManIdAndAppDateAsyncAPI, managementId, fromdate, toDate, fertiliserId, confirm));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
