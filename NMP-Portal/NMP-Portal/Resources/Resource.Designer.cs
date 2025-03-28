@@ -3400,6 +3400,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Grass.
+        /// </summary>
+        public static string lblGrass {
+            get {
+                return ResourceManager.GetString("lblGrass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Grass details for {0}.
         /// </summary>
         public static string lblGrassDetailsForField {
