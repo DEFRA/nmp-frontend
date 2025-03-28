@@ -636,7 +636,7 @@
 
                                         <tr class="govuk-table__row">
                                             <th class="govuk-table__cell" scope="row">@Resource.lblVarietyForRecommendation</th>
-                                            <td class="govuk-table__cell">@(crop.Variety != null ? crop.Variety : Resource.lblNotEntered)</td>
+                                            <td class="govuk-table__cell">@((!string.IsNullOrWhiteSpace(crop.Variety)) ? crop.Variety : Resource.lblNotEntered)</td>
                                         </tr>
                                         <tr class="govuk-table__row">
                                             <th class="govuk-table__cell" scope="row">
