@@ -285,7 +285,8 @@ namespace NMP.Portal.Controllers
             }
             if(model.CropGroupId==(int)NMP.Portal.Enums.CropGroup.Grass)
             {
-                model.CropTypeID = (int)NMP.Portal.Enums.CropTypes.Grass;
+                model.CropType = Resource.lblGrass;
+                model.CropTypeID = await _cropService.FetchCropTypeByGroupId(model.CropGroupId ?? 0);
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                 return RedirectToAction("CropFields");
             }
@@ -1011,6 +1012,10 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("CheckAnswer");
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass)
+                {
+                    return RedirectToAction("SwardType");
+                }
                 return RedirectToAction("YieldQuestion");
             }
             else
@@ -1187,6 +1192,10 @@ namespace NMP.Portal.Controllers
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                     return RedirectToAction("CheckAnswer");
                 }
+                if(model.CropGroupId==(int)NMP.Portal.Enums.CropGroup.Grass)
+                {
+                    return RedirectToAction("SwardType");
+                }
                 return RedirectToAction("YieldQuestion");
             }
 
@@ -1195,6 +1204,10 @@ namespace NMP.Portal.Controllers
                 if (model.IsCheckAnswer && (!model.IsAnyChangeInField))
                 {
                     return RedirectToAction("CheckAnswer");
+                }
+                if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass)
+                {
+                    return RedirectToAction("SwardType");
                 }
                 return RedirectToAction("YieldQuestion");
             }
@@ -3876,7 +3889,7 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogTrace($"Crop Controller : Exception in CurrentSward() action : {ex.Message}, {ex.StackTrace}");
-                TempData["CropInfoOneError"] = ex.Message;
+                TempData["CurrentSwardError"] = ex.Message;
                 return RedirectToAction("CropGroupName");
             }
 
@@ -3906,8 +3919,8 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Crop Controller : Exception in CropInfoTwo() post action : {ex.Message}, {ex.StackTrace}");
-                TempData["CropInfoTwoError"] = ex.Message;
+                _logger.LogTrace($"Crop Controller : Exception in CurrentSward() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["CurrentSwardError"] = ex.Message;
                 return RedirectToAction("CurrentSward");
             }
             if (model.CurrentSward == (int)NMP.Portal.Enums.CurrentSward.NewSward)
@@ -3942,8 +3955,8 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogTrace($"Crop Controller : Exception in GrassSeason() action : {ex.Message}, {ex.StackTrace}");
-                TempData["CropInfoOneError"] = ex.Message;
-                return RedirectToAction("GrassSeason");
+                TempData["GrassSeasonError"] = ex.Message;
+                return RedirectToAction("CurrentSward");
             }
             return View(model);
         }
@@ -3968,12 +3981,37 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogTrace($"Crop Controller : Exception in GrassSeason() post action : {ex.Message}, {ex.StackTrace}");
-                TempData["GrassSeason"] = ex.Message;
+                TempData["GrassSeasonError"] = ex.Message;
                 return RedirectToAction("GrassSeason");
             }
             
             return RedirectToAction("SowingDateQuestion");
         }
 
+        public async Task<IActionResult> SwardType()
+        {
+            _logger.LogTrace("Crop Controller : SwardType() action called");
+            PlanViewModel model = new PlanViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Crop Controller : Exception in SwardType() action : {ex.Message}, {ex.StackTrace}");
+                TempData["SwardTypeError"] = ex.Message;
+                return RedirectToAction("SowingDate");
+            }
+
+            return View(model);
+        }
     }
 }
