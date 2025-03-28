@@ -10137,6 +10137,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Crop group name should not contain special characters..
+        /// </summary>
+        public static string MsgCropGroupNameShouldNotContainSpecialChar {
+            get {
+                return ResourceManager.GetString("MsgCropGroupNameShouldNotContainSpecialChar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which option applies to your {0} not set?.
         /// </summary>
         public static string MsgCropInfo1NotSet {

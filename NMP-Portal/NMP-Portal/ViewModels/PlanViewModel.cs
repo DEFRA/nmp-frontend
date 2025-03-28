@@ -1,4 +1,6 @@
 ﻿using NMP.Portal.Models;
+using NMP.Portal.Resources;
+using System.ComponentModel.DataAnnotations;
 
 namespace NMP.Portal.ViewModels
 {
@@ -56,6 +58,8 @@ namespace NMP.Portal.ViewModels
         public string? ExcessWinterRainfallName { get; set; }
         public string? SortInOrganicListOrderByFieldName { get; set; } = string.Empty;
         public string? SortOrganicListOrderByFieldName { get; set; } = string.Empty;
+
+        [RegularExpression(@"^[a-zA-Z0-9\s]+$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgCropGroupNameShouldNotContainSpecialChar))]
         public string? CropGroupName { get; set; } = string.Empty;
         public bool? RemoveCrop { get; set; }
         public bool? DeletePlanOrganicAndFertiliser { get; set; }
