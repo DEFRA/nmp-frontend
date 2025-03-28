@@ -61,7 +61,7 @@
                     <govuk-summary-list-row-key>@Resource.lblWhatIsTheCropType</govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>@Model.CropType</govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action href="#">@Resource.lblChange</govuk-summary-list-row-action>
+                        @* <govuk-summary-list-row-action href="#">@Resource.lblChange</govuk-summary-list-row-action> *@
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
@@ -88,7 +88,7 @@
                         }
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action href="#">@Resource.lblChange</govuk-summary-list-row-action>
+                        @* <govuk-summary-list-row-action href="#">@Resource.lblChange</govuk-summary-list-row-action> *@
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
@@ -105,7 +105,7 @@
                         <govuk-summary-list-row-key>@(string.Format(Resource.lblDoYouHaveADateForWhenYouPlantedYour, Model.CropType))</govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>@Resource.lblNotEntered</govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action href="#">@Resource.lblChange</govuk-summary-list-row-action>
+                            @* <govuk-summary-list-row-action href="#">@Resource.lblChange</govuk-summary-list-row-action> *@
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
@@ -115,7 +115,7 @@
                         <govuk-summary-list-row-key>@(string.Format(Resource.lblDoYouHaveADateForWhenYouPlantedYour, Model.CropType))</govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>@ViewBag.SowingQuestion</govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action href="#">@Resource.lblChange</govuk-summary-list-row-action>
+                            @* <govuk-summary-list-row-action href="#">@Resource.lblChange</govuk-summary-list-row-action> *@
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
 
@@ -126,7 +126,7 @@
                         <govuk-summary-list-row-key>@(string.Format(Resource.lblDoYouHaveADateForWhenYouPlantedYour, Model.CropType))</govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>@Model.SowingDate.ToLocalTime().Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))</govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action href="#">@Resource.lblChange</govuk-summary-list-row-action>
+                            @* <govuk-summary-list-row-action href="#">@Resource.lblChange</govuk-summary-list-row-action> *@
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
@@ -139,7 +139,7 @@
                             <govuk-summary-list-row-key>@(string.Format(Resource.lblWhatIsThePlantingDate, Model.CropType, crop.FieldName))</govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>@crop.SowingDate.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))</govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action href="#">@Resource.lblChange</govuk-summary-list-row-action>
+                                @* <govuk-summary-list-row-action href="#">@Resource.lblChange</govuk-summary-list-row-action> *@
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     }
@@ -150,7 +150,7 @@
                         <govuk-summary-list-row-key>@Resource.lblHowDoYouWantToEnterExpectedYield</govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>@Resource.lblNotEntered</govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action href="#">@Resource.lblChange</govuk-summary-list-row-action>
+                            @* <govuk-summary-list-row-action href="#">@Resource.lblChange</govuk-summary-list-row-action> *@
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
@@ -160,7 +160,7 @@
                         <govuk-summary-list-row-key>@Resource.lblHowDoYouWantToEnterExpectedYield</govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>@ViewBag.YieldQuestion</govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action href="#">@Resource.lblChange</govuk-summary-list-row-action>
+                            @* <govuk-summary-list-row-action href="#">@Resource.lblChange</govuk-summary-list-row-action> *@
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
 
@@ -172,7 +172,7 @@
 
                         <govuk-summary-list-row-value>@(Model.Yield.Value == 0.0m ? 0 : Model.Yield.Value.ToString("#.#") +" " + Resource.lblTonnesPerHectare)</govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action href="#">@Resource.lblChange</govuk-summary-list-row-action>
+                            @* <govuk-summary-list-row-action href="#">@Resource.lblChange</govuk-summary-list-row-action> *@
                         </govuk-summary-list-row-actions>
 
                     </govuk-summary-list-row>
@@ -185,7 +185,7 @@
                             <govuk-summary-list-row-key>@string.Format(Resource.lblWhatIsTheDifferentExpectedYield, Model.CropType, crop.FieldName)</govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>@(crop.Yield.Value == 0.0m ? 0 : crop.Yield.Value.ToString("#.#") + " " + Resource.lblTonnesPerHectare)</govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action href="#">@Resource.lblChange</govuk-summary-list-row-action>
+                                @* <govuk-summary-list-row-action href="#">@Resource.lblChange</govuk-summary-list-row-action> *@
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     }
@@ -207,7 +207,7 @@
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>@Model.CropInfo1Name</govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action href="#">@Resource.lblChange</govuk-summary-list-row-action>
+                            @* <govuk-summary-list-row-action href="#">@Resource.lblChange</govuk-summary-list-row-action> *@
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
@@ -219,7 +219,7 @@
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>@Model.CropInfo2Name</govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action href="#">@Resource.lblChange</govuk-summary-list-row-action>
+                            @* <govuk-summary-list-row-action href="#">@Resource.lblChange</govuk-summary-list-row-action> *@
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
