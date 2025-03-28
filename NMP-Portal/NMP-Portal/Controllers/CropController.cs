@@ -1893,6 +1893,10 @@ namespace NMP.Portal.Controllers
             PlanViewModel? model = null;
             try
             {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
+                {
+                    _httpContextAccessor.HttpContext?.Session.Remove("FertiliserManure");
+                }
                 if (!string.IsNullOrWhiteSpace(q))
                 {
                     if (!string.IsNullOrWhiteSpace(r))
@@ -1922,6 +1926,7 @@ namespace NMP.Portal.Controllers
                 {
                     ViewBag.Success = false;
                     _httpContextAccessor.HttpContext?.Session.Remove("CropData");
+
                 }
 
                 if (string.IsNullOrWhiteSpace(s) && string.IsNullOrWhiteSpace(u))

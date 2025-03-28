@@ -1883,7 +1883,16 @@ namespace NMP.Portal.Controllers
             string nitrogenExceedFirstAdditionalMessage = string.Empty;
             string nitrogenExceedSecondAdditionalMessage = string.Empty;
             decimal totalNitrogen = 0;
-            (totalNitrogen, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, startDate, endDate, false);
+            //if we are coming for update then we will exclude the fertiliserId.
+            if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
+            {
+                (totalNitrogen, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, startDate, endDate, model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.FertiliserId).FirstOrDefault(), false);
+            }
+            else
+            {
+                (totalNitrogen, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, startDate, endDate, null, false);
+
+            }
             if (error == null)
             {
                 WarningMessage warningMessage = new WarningMessage();
@@ -1922,7 +1931,18 @@ namespace NMP.Portal.Controllers
                 if (brassicaCrops.Contains(cropTypeId) && isWithinClosedPeriod)
                 {
                     DateTime fourWeekDate = model.Date.Value.AddDays(-28);
-                    (decimal nitrogenInFourWeek, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, model.Date.Value, fourWeekDate, false);
+                    decimal nitrogenInFourWeek = 0;
+                    //if we are coming for update then we will exclude the fertiliserId.
+                    if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
+                    {
+                        ( nitrogenInFourWeek, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId,  fourWeekDate, model.Date.Value, model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.FertiliserId).FirstOrDefault(), false);
+                    }
+                    else
+                    {
+                        ( nitrogenInFourWeek, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId,  fourWeekDate, model.Date.Value, null, false);
+
+                    }
+
                     if (error == null)
                     {
                         nitrogenInFourWeek = nitrogenInFourWeek + Convert.ToDecimal(model.N);
@@ -2039,7 +2059,18 @@ namespace NMP.Portal.Controllers
                 bool isWithinWarningPeriod = warningMessage.IsFertiliserApplicationWithinWarningPeriod(model.Date.Value, warningPeriod);
 
                 DateTime endOfOctober = new DateTime(model.Date.Value.Year, 10, 31);
-                (decimal PreviousApplicationsNitrogen, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, startDate, endOfOctober, false);
+                decimal PreviousApplicationsNitrogen = 0;
+                //if we are coming for update then we will exclude the fertiliserId.
+                if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
+                {
+                    (PreviousApplicationsNitrogen, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, startDate, endOfOctober, model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.FertiliserId).FirstOrDefault(), false);
+                }
+                else
+                {
+                    (PreviousApplicationsNitrogen, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, startDate, endOfOctober, null, false);
+
+                }
+               // (decimal PreviousApplicationsNitrogen, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, startDate, endOfOctober,null, false);
 
                 if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape && isWithinWarningPeriod)
                 {
@@ -2093,7 +2124,18 @@ namespace NMP.Portal.Controllers
                     DateTime start = DateTime.ParseExact(startString, "d MMMM yyyy", CultureInfo.InvariantCulture);
                     string endString = $"{endPeriod} {model.HarvestYear}";
                     DateTime end = DateTime.ParseExact(endString, "d MMMM yyyy", CultureInfo.InvariantCulture);
-                    (decimal nitrogenWithinWarningPeriod, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, start, end, false);
+                    decimal nitrogenWithinWarningPeriod = 0;
+                    //if we are coming for update then we will exclude the fertiliserId.
+                    if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
+                    {
+                        (nitrogenWithinWarningPeriod, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, start, end, model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.FertiliserId).FirstOrDefault(), false);
+                    }
+                    else
+                    {
+                        (nitrogenWithinWarningPeriod, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, start, end, null, false);
+
+                    }
+                   // (decimal nitrogenWithinWarningPeriod, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, start, end,null, false);
                     if (model.N.Value > 40 || nitrogenWithinWarningPeriod > 80)
                     {
                         isNitrogenRateExceeded = true;
@@ -2135,7 +2177,16 @@ namespace NMP.Portal.Controllers
                 //NMax limit for crop logic
                 decimal previousApplicationsN = 0;
                 decimal currentApplicationNitrogen = Convert.ToDecimal(model.N);
-                (previousApplicationsN, error) = await _organicManureService.FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(managementId, false);
+                //if we are coming for update then we will exclude the fertiliserId.
+                if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
+                {
+                    (previousApplicationsN, error) = await _organicManureService.FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(managementId, model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.FertiliserId).FirstOrDefault(), false);
+                }
+                else
+                {
+                    (previousApplicationsN, error) = await _organicManureService.FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(managementId, null, false);
+                }
+                //(previousApplicationsN, error) = await _organicManureService.FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(managementId, false);
                 List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(fieldId));
                 var crop = cropsResponse.Where(x => x.Year == model.HarvestYear && x.Confirm == false).ToList();
                 if (crop != null)
@@ -2296,7 +2347,7 @@ namespace NMP.Portal.Controllers
                             year = model.EncryptedHarvestYear,
                             q = _farmDataProtector.Protect(success.ToString()),
                             r = _cropDataProtector.Protect(Resource.MsgInorganicFertiliserApplicationUpdated),
-                            w =  _fieldDataProtector.Protect(model.FieldList.FirstOrDefault())
+                            w = _fieldDataProtector.Protect(model.FieldList.FirstOrDefault())
                         }) + Resource.lblInorganicFertiliserApplicationsForSorting);
                     }
                     else
@@ -2320,7 +2371,7 @@ namespace NMP.Portal.Controllers
             return RedirectToAction("CheckAnswer");
         }
         [HttpGet]
-        public async Task<IActionResult> RemoveFertiliser(string q, string r, string s,  string? t, string? u, string? v)
+        public async Task<IActionResult> RemoveFertiliser(string q, string r, string s, string? t, string? u, string? v)
         {
             _logger.LogTrace($"Fertiliser Manure Controller : RemoveFertiliser() action called");
             FertiliserManureViewModel model = new FertiliserManureViewModel();
@@ -2464,7 +2515,7 @@ namespace NMP.Portal.Controllers
                         {
                             return RedirectToAction("Recommendations", "Crop", new { q = model.EncryptedFarmId, r = encryptedFieldId, s = model.EncryptedHarvestYear });
                         }
-                        
+
                     }
                     else
                     {
@@ -2516,7 +2567,7 @@ namespace NMP.Portal.Controllers
                             else
                             {
                                 return Redirect(Url.Action("HarvestYearOverview", "Crop", new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = _cropDataProtector.Protect(Resource.MsgInorganicFertiliserApplicationRemoved), v = _cropDataProtector.Protect(Resource.lblSelectAFieldToSeeItsUpdatedNutrientRecommendation) }) + Resource.lblInorganicFertiliserApplicationsForSorting); ;
-                                
+
                             }
                         }
                         else
