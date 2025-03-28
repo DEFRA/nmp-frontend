@@ -1935,11 +1935,11 @@ namespace NMP.Portal.Controllers
                     //if we are coming for update then we will exclude the fertiliserId.
                     if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
                     {
-                        ( nitrogenInFourWeek, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, model.Date.Value, fourWeekDate, model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.FertiliserId).FirstOrDefault(), false);
+                        ( nitrogenInFourWeek, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId,  fourWeekDate, model.Date.Value, model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.FertiliserId).FirstOrDefault(), false);
                     }
                     else
                     {
-                        ( nitrogenInFourWeek, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, model.Date.Value, fourWeekDate, null, false);
+                        ( nitrogenInFourWeek, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId,  fourWeekDate, model.Date.Value, null, false);
 
                     }
 

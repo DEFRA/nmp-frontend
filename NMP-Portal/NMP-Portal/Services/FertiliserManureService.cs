@@ -324,7 +324,16 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchTotalNFromFertiliserBasedOnManIdAndAppDateAsyncAPI, managementId, fromdate, toDate, fertiliserId, confirm));
+                string url = APIURLHelper.FetchTotalNFromFertiliserBasedOnManIdAndAppDateAsyncAPI;
+
+                if (fertiliserId.HasValue)
+                {
+                    url += $"&fertiliserId={fertiliserId.Value}";
+                }
+
+                url = string.Format(url, managementId, fromdate, toDate, confirm);
+                var response = await httpClient.GetAsync(url);
+                //var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchTotalNFromFertiliserBasedOnManIdAndAppDateAsyncAPI, managementId, fromdate, toDate, fertiliserId, confirm));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
