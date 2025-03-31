@@ -4187,4 +4187,7 @@ live</value>
   <data name="lblGrass" xml:space="preserve">
     <value>Grass</value>
   </data>
+  <data name="MsgCropGroupNameShouldNotContainSpecialChar" xml:space="preserve">
+    <value>Crop group name should not contain special characters.</value>
+  </data>
 </root>

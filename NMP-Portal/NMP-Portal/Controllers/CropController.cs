@@ -1084,13 +1084,13 @@ namespace NMP.Portal.Controllers
                 //    ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Add(Resource.MsgTheDateMustInclude);
                 //}
                 //else 
-                if (dateError != null && (dateError.Equals(Resource.MsgDateMustBeARealDate) ||
-                    dateError.Equals(Resource.MsgDateMustIncludeAMonth) ||
-                     dateError.Equals(Resource.MsgDateMustIncludeAMonthAndYear) ||
-                     dateError.Equals(Resource.MsgDateMustIncludeADayAndYear) ||
-                     dateError.Equals(Resource.MsgDateMustIncludeAYear) ||
-                     dateError.Equals(Resource.MsgDateMustIncludeADay) ||
-                     dateError.Equals(Resource.MsgDateMustIncludeADayAndMonth)))
+                if (dateError != null && (dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate,"SowingDate")) ||
+                    dateError.Equals(  string.Format(Resource.MsgDateMustIncludeAMonth,"SowingDate")) ||
+                     dateError.Equals( string.Format(Resource.MsgDateMustIncludeAMonthAndYear,"SowingDate")) ||
+                     dateError.Equals( string.Format(Resource.MsgDateMustIncludeADayAndYear,"SowingDate")) ||
+                     dateError.Equals( string.Format(Resource.MsgDateMustIncludeAYear,"SowingDate")) ||
+                     dateError.Equals( string.Format(Resource.MsgDateMustIncludeADay,"SowingDate")) ||
+                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndMonth,"SowingDate"))))
                 {
                     ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Clear();
                     ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"].Errors.Add(Resource.MsgTheDateMustInclude);
@@ -2866,6 +2866,10 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace("Crop Controller : CropGroupName() post action called");
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
                 if (!string.IsNullOrWhiteSpace(model.CropGroupName))
                 {
                     if (string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
@@ -3974,6 +3978,9 @@ namespace NMP.Portal.Controllers
                 }
                 if (!ModelState.IsValid)
                 {
+                    List<GrassSeasonResponse> grassSeasons = await _cropService.FetchGrassSeasons();
+                    grassSeasons.RemoveAll(g => g.SeasonId == 0);
+                    ViewBag.GrassSeason = grassSeasons.OrderByDescending(x => x.SeasonId);
                     return View(model);
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
