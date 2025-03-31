@@ -1428,7 +1428,7 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogTrace($"SnsAnalysis Controller : Exception in SampleDepth() action : {ex.Message}, {ex.StackTrace}");
                 TempData["Error"] = ex.Message;
-                return RedirectToAction("CurrentCropTypes");
+                return RedirectToAction("SoilSampleDate");
             }
             return View(model);
         }
@@ -1589,7 +1589,7 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("CurrentCropTypes");
+                    return RedirectToAction("CheckAnswer");
                 }
             
             

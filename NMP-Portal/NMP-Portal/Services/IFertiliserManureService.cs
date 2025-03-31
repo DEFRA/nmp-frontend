@@ -12,7 +12,10 @@ namespace NMP.Portal.Services
         Task<(InOrganicManureDurationResponse, Error)> FetchInOrganicManureDurationsById(int id);
 
         Task<(List<FertiliserManure>, Error)> AddFertiliserManureAsync(string fertiliserManure);
-        Task<(decimal, Error)> FetchTotalNBasedOnManIdAndAppDate(int managementId, DateTime startDate, DateTime endDate, bool confirm);
-        Task<(string, Error)> DeleteFertiliserByIdAsync(int fertiliserId);
+        Task<(decimal, Error)> FetchTotalNBasedOnManIdAndAppDate(int managementId, DateTime startDate, DateTime endDate,int? fertiliserId, bool confirm);
+        Task<(string, Error)> DeleteFertiliserByIdAsync(string fertiliserIds);
+        Task<(FertiliserManure, Error)> FetchFertiliserByIdAsync(int fertiliserId);
+        Task<(List<FertiliserResponse>, Error)> FetchFieldWithSameDateAndNutrient(int fertiliserId,int farmId,int harvestYear);
+        Task<(List<FertiliserManure>, Error)> UpdateFertiliser(string fertliserData);
     }
 }

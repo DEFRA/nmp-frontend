@@ -1,4 +1,6 @@
-﻿namespace NMP.Portal.Models
+﻿using Newtonsoft.Json;
+
+namespace NMP.Portal.Models
 {
     public class ManureType
     {
@@ -22,7 +24,7 @@
         public decimal? NMaxConstant { get; set; }
         public int? ApplicationRateArable { get; set; }
         public int? ApplicationRateGrass { get; set; }
-        public int? PercentOfTotalNForUseInNmaxCalculation { get; set; }
-
+        public int? PercentOfTotalNForUseInNmaxCalculation { get; set; }                
+        public int SortOrder { get; set; }
     }
 }

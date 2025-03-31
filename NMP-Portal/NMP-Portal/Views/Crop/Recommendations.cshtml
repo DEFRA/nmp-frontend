@@ -52,9 +52,9 @@
                     <p class="govuk-notification-banner__heading">
                         @string.Format(Resource.MsgSnsSuccess, Model.FieldName)
                     </p>
-                    <p class="govuk-body">
+                   @*  <p class="govuk-body">
                         @Resource.lblYouCanViewYourRecommendations
-                    </p>
+                    </p> *@
                 </govuk-notification-banner>
             }
         </div>
@@ -198,7 +198,7 @@
                                                     <h3 class="govuk-heading-s">
                                                         @Resource.lblPhosphateP2O5AndPotashK2OBalance
                                                     </h3>
-                                                    <div id="balance" class="margin-bottom-forty">
+                                                    <div id="balance">
                                                         <table class="govuk-table data-table">
                                                             <thead class="govuk-table__head">
                                                                 <tr class="govuk-table__row">
@@ -229,6 +229,7 @@
 
                                                 @if (Model.RecommendationComments != null && Model.RecommendationComments.Count > 0)
                                                 {
+                                                    
                                                     <h2 class="govuk-heading-m">@Resource.lblGuidance</h2>
                                                     <div class="guidance">
                                                         @foreach (var recCom in Model.RecommendationComments.Where(rc => rc.RecommendationID == recommendation.ID))
@@ -242,7 +243,7 @@
                                                                 </p>
                                                             }
                                                         }
-                                                    </div>
+                                                    </div>                                                   
                                                 }
 
                                             }
@@ -387,7 +388,7 @@
                                                     <h3 class="govuk-heading-s">
                                                         @Resource.lblPhosphateP2O5AndPotashK2OBalance
                                                     </h3>
-                                                    <div id="balance" class="margin-bottom-forty">
+                                                    <div id="balance">
                                                         <table class="govuk-table data-table">
                                                             <thead class="govuk-table__head">
                                                                 <tr class="govuk-table__row">
@@ -417,8 +418,9 @@
                                                 }
                                                 @if (Model.RecommendationComments != null && Model.RecommendationComments.Count > 0)
                                                 {
+                                                   
                                                     <h2 class="govuk-heading-m">@Resource.lblGuidance</h2>
-                                                    <div class="guidance">
+                                                        <div class="guidance">
 
                                                         @foreach (var recCom in Model.RecommendationComments.Where(rc => rc.RecommendationID == recommendation.ID))
                                                         {
@@ -432,18 +434,19 @@
                                                             }
                                                         }
                                                     </div>
+                                                    
                                                 }
                                             }
                                         }
                                         <hr class="seperator_five">
                                         <h2 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h2>
-                                        <p class="govuk-body">
+                                        <p class="govuk-body govuk-grid-column-two-thirds">
                                             @Resource.lblAboutRecommendationGuidenceAdviceContent1
                                         </p>
-                                        <p class="govuk-body">
+                                        <p class="govuk-body govuk-grid-column-two-thirds">
                                             @Resource.lblAboutRecommendationGuidenceAdviceContent2
                                         </p>
-                                        <p class="govuk-body">
+                                        <p class="govuk-body govuk-grid-column-two-thirds">
                                             @Resource.lblAboutRecommendationGuidenceAdviceContent3
                                         </p>
                                         <p class="govuk-body mt-5 margin-top-forty"><a class="govuk-link" href="#">@Resource.lblBackToTheTop</a></p>
@@ -585,7 +588,7 @@
                                                                 }
                                                             </td>
                                                             <td class="govuk-table__cell">
-                                                                <p class="govuk-body cancel-link"><a asp-action="DeletePlanOrganicAndFertiliser" asp-controller="Crop" asp-route-q="@fertiliserManure.EncryptedId" asp-route-r="@ViewBag.Fertiliser" asp-route-s="@fertiliserManure.EncryptedFieldName" asp-route-u="@ViewBag.isComingFromRecommendation" asp-route-v="@Model.EncryptedFieldId">@Resource.lblRemove</a></p>
+                                                                <p class="govuk-body cancel-link"><a asp-action="RemoveFertiliser" asp-controller="FertiliserManure" asp-route-q="@fertiliserManure.EncryptedId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@fertiliserManure.EncryptedFieldName" asp-route-t="@Model.EncryptedFarmId" asp-route-u="@Model.EncryptedHarvestYear">@Resource.lblRemove</a></p>
                                                             </td>
 
                                                         </tr>
@@ -595,7 +598,7 @@
                                         }
                                         else
                                         {
-                                            <p class="govuk-body">@string.Format(Resource.lblYouHaveNoOrganicMaterialApplicationForFieldInYear, Model.FieldName, Model.Crops[0].Year)</p>
+                                            <p class="govuk-body">@string.Format(Resource.lblYouHaveNoInorganicFertiliserApplicationForFieldInYear, Model.FieldName, Model.Crops[0].Year)</p>
                                             <p class="govuk-body"><a asp-action="FieldGroup" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear" asp-route-s="@Model.EncryptedFieldId">@string.Format(Resource.lblAddAnInOrganicFertiliserApplicationForField, Model.FieldName)</a></p>
                                             <hr class="seperator_five">
                                         }
@@ -633,7 +636,7 @@
 
                                         <tr class="govuk-table__row">
                                             <th class="govuk-table__cell" scope="row">@Resource.lblVarietyForRecommendation</th>
-                                            <td class="govuk-table__cell">@(crop.Variety != null ? crop.Variety : Resource.lblNotEntered)</td>
+                                            <td class="govuk-table__cell">@((!string.IsNullOrWhiteSpace(crop.Variety)) ? crop.Variety : Resource.lblNotEntered)</td>
                                         </tr>
                                         <tr class="govuk-table__row">
                                             <th class="govuk-table__cell" scope="row">
@@ -668,7 +671,7 @@
                             else
                             {
                                 <hr class="seperator_five">
-                                <h2 class="govuk-heading-m non-standard">@string.Format(Resource.lblSoilNitrogenSupplyAnalysisForField, crop.FieldName)</h2>
+                                <h2 class="govuk-heading-m non-standard">@string.Format(Resource.lblSoilNitrogenSupplyAnalysisForField, Model.FieldName)</h2>
                                 <div class="tabs-thirds margin-bottom-forty">
                                     <table class="govuk-table">
                                         <tbody class="govuk-table__body">

@@ -1,4 +1,5 @@
 ﻿using NMP.Portal.Models;
+using NMP.Portal.ServiceResponses;
 
 namespace NMP.Portal.ViewModels
 {
@@ -49,5 +50,8 @@ namespace NMP.Portal.ViewModels
         public string? ClosedPeriodNitrogenExceedWarningPara1 { get; set; } = string.Empty;
         public string? ClosedPeriodNitrogenExceedWarningPara2 { get; set; } = string.Empty;
         public bool? IsWithinNVZ { get; set; }
+        public string? EncryptedFertId { get; set; } = string.Empty;
+        public List<FertiliserResponse>? UpdatedFertiliserIds { get; set; }
+        public bool? IsDeleteFertliser { get; set; }
     }
 }
