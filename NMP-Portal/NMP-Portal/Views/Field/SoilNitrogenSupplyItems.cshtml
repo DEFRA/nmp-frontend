@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = Resource.lblSoilNitrogenSupplyItems;
     var backAction = "";
-    if (Model.IsCheckAnswer)
+    if (Model.IsCheckAnswer && (!Model.IsHasGrassInLastThreeYearChange))
     {
         backAction = "CheckAnswer";
     }
@@ -70,6 +70,7 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.GrassManagementOptionID"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.GrassTypicalCutID"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.HasGreaterThan30PercentClover"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsHasGrassInLastThreeYearChange" value="@Model.IsHasGrassInLastThreeYearChange.ToString().ToLower()"></govuk-input>
     @* <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.SoilNitrogenSupplyItemID"></govuk-input> *@
     @if (Model.PreviousGrassYears != null && Model.PreviousGrassYears.Count > 0)
     {

@@ -44,7 +44,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" :"HasGrassInLastThreeYear")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@((Model.IsCheckAnswer&&(!Model.IsHasGrassInLastThreeYearChange)) ? "CheckAnswer" :"HasGrassInLastThreeYear")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="CropGroups" asp-controller="Field" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
