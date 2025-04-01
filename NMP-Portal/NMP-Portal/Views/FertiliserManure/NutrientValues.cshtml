@@ -19,31 +19,7 @@
                 <govuk-error-summary-item>@TempData["NutrientValuesError"]</govuk-error-summary-item>
             </govuk-error-summary>
         }
-        @if (Model.IsWarningMsgNeedToShow)
-        {
-            @if (Model.IsNitrogenExceedWarning)
-            {
-                <govuk-notification-banner>
-                    <govuk-notification-banner-title>
-                        @Resource.lblImportant
-                    </govuk-notification-banner-title>
-                    @TempData["NitrogenExceedMessageTitle"]<br />
-                    <p class="govuk-notification-banner__heading">
-                        @Model.ClosedPeriodNitrogenExceedWarningHeading
-                    </p>
-                    <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara1</p>
-                    @* @if (Model.ClosedPeriodNitrogenExceedWarningPara1 != null)
-            {
-            <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara1</p>
-
-            } *@
-                    @if (Model.ClosedPeriodNitrogenExceedWarningPara2 != null)
-                    {
-                        <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara2</p>
-                    }
-                </govuk-notification-banner>
-            }
-        }
+       
 
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
@@ -107,6 +83,31 @@
             }
         }
         <div class="govuk-grid-column-two-thirds">
+            @if (Model.IsWarningMsgNeedToShow)
+            {
+                @if (Model.IsNitrogenExceedWarning)
+                {
+                    <govuk-notification-banner>
+                        <govuk-notification-banner-title>
+                            @Resource.lblImportant
+                        </govuk-notification-banner-title>
+                        @TempData["NitrogenExceedMessageTitle"]<br />
+                        <p class="govuk-notification-banner__heading">
+                            @Model.ClosedPeriodNitrogenExceedWarningHeading
+                        </p>
+                        <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara1</p>
+                        @* @if (Model.ClosedPeriodNitrogenExceedWarningPara1 != null)
+                {
+                <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara1</p>
+
+                } *@
+                        @if (Model.ClosedPeriodNitrogenExceedWarningPara2 != null)
+                        {
+                            <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara2</p>
+                        }
+                    </govuk-notification-banner>
+                }
+            }
             <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
                 <h1 class="govuk-fieldset__heading">
                     @* @Resource.lblHowMuchOfEachNutrientDoYouPlan *@

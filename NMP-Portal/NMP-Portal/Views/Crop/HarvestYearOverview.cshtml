@@ -226,7 +226,7 @@
                                             <td class="govuk-table__cell">
                                                 @string.Format(Resource.lblRateWithTonnes, organicManure.Rate)
                                             </td>
-                                            <td class="govuk-table__cell"><a asp-action="OrganicManureFieldRemove" asp-controller="Crop" asp-route-q="@organicManure.EncryptedId">@Resource.lblRemove</a></td>
+                                            <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="OrganicManure" asp-route-q="@organicManure.EncryptedId" asp-route-r="@Model.EncryptedFarmId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-q="@organicManure.EncryptedFieldName">@Resource.lblViewOrChange.ToLower()</a></td>
                                         </tr>
                                     }
                                 </tbody>

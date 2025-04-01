@@ -464,10 +464,10 @@ namespace NMP.Portal.Services
 
             return (fertiliserManure, error);
         }
-        public async Task<(List<FertiliserResponse>, Error)> FetchFieldWithSameDateAndNutrient(int fertiliserId, int farmId, int harvestYear)
+        public async Task<(List<FertiliserAndManureSameDateAndNutrientValueResponse>, Error)> FetchFieldWithSameDateAndNutrient(int fertiliserId, int farmId, int harvestYear)
         {
             Error error = new Error();
-            List<FertiliserResponse> fertiliserResponse = new List<FertiliserResponse>();
+            List<FertiliserAndManureSameDateAndNutrientValueResponse> fertiliserResponse = new List<FertiliserAndManureSameDateAndNutrientValueResponse>();
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
@@ -476,7 +476,7 @@ namespace NMP.Portal.Services
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
                 {
-                    fertiliserResponse = responseWrapper.Data.ToObject<List<FertiliserResponse>>();                    
+                    fertiliserResponse = responseWrapper.Data.ToObject<List<FertiliserAndManureSameDateAndNutrientValueResponse>>();                    
                 }
                 else
                 {
