@@ -138,6 +138,8 @@ namespace NMP.Portal.Controllers
                     model.isEnglishRules = farm.EnglishRules;
                     model.FarmName = farm.Name;
                     model.LastHarvestYear = farm.LastHarvestYear;
+                    model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Portal.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
+                    model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
                 }
             }
             catch (Exception ex)
@@ -1327,9 +1329,13 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace($"Field Controller : CheckAnswer() post action called");
             if (model.PreviousGrasses != null && model.PreviousGrasses.HasGrassInLastThreeYear == false)
             {
+                if (!model.CropGroupId.HasValue)
+                {
+                    ModelState.AddModelError("CropGroupId", string.Format("{0} {1}", string.Format(Resource.lblWhatWasThePreviousCropGroupForCheckAnswere, model.LastHarvestYear), Resource.lblNotSet));
+                }
                 if (!model.CropTypeID.HasValue)
                 {
-                    ModelState.AddModelError("CropTypeID", Resource.MsgPreviousCropTypeNotSet);
+                    ModelState.AddModelError("CropTypeID", string.Format("{0} {1}", string.Format(Resource.lblWhatWasThePreviousCropTypeForCheckAnswere, model.LastHarvestYear), Resource.lblNotSet));
                 }
             }
             if (model.PreviousGrasses != null && model.PreviousGrasses.HasGrassInLastThreeYear == true)
@@ -2371,6 +2377,13 @@ namespace NMP.Portal.Controllers
                             model.CropGroup = string.Empty;
                             model.CropTypeID = null;
                             model.CropType = string.Empty;
+                            model.PreviousGrasses.HarvestYear = null;
+                            model.PreviousGrasses.GrassManagementOptionID = null;
+                            model.PreviousGrasses.GrassTypicalCutID = null;
+                            model.PreviousGrasses.HasGreaterThan30PercentClover = null;
+                            model.PreviousGrasses.SoilNitrogenSupplyItemID = null;
+                            model.PreviousGrassYears = null;
+                            model.IsPreviousYearGrass = null;
                             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", model);
                             return RedirectToAction("CropGroups");
                         }
