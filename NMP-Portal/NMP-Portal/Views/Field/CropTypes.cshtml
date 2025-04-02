@@ -5,7 +5,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" :"CropGroups")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@((Model.IsCheckAnswer&&(!Model.IsHasGrassInLastThreeYearChange)) ? "CheckAnswer" :"CropGroups")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="CropTypes" asp-controller="Field" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
@@ -54,6 +54,7 @@
 
     @if (Model != null)
     {
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsHasGrassInLastThreeYearChange" value="@Model.IsHasGrassInLastThreeYearChange.ToString().ToLower()"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.HasGrassInLastThreeYear"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.HarvestYear"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.GrassManagementOptionID"></govuk-input>
