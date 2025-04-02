@@ -131,7 +131,7 @@ namespace NMP.Portal.ViewModels
         public string? ClosedPeriodForUI { get; set; } = string.Empty;
         public bool? IsWithinNVZ { get; set; }
         public string? EncryptedOrgManureId { get; set; } = string.Empty;
-        public List<FertiliserAndManureSameDateAndNutrientValueResponse>? UpdatedOrganicIds { get; set; }
+        public List<FertiliserAndOrganicManureUpdateResponse>? UpdatedOrganicIds { get; set; }
         public string? FieldName { get; set; }
     }
 }

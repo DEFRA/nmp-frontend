@@ -2,7 +2,7 @@
 
 namespace NMP.Portal.ServiceResponses
 {
-    public class FertiliserAndManureSameDateAndNutrientValueResponse
+    public class FertiliserAndOrganicManureUpdateResponse
     {
 
         [JsonProperty("ID")]

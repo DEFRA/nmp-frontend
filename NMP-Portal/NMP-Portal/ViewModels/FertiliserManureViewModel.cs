@@ -51,7 +51,7 @@ namespace NMP.Portal.ViewModels
         public string? ClosedPeriodNitrogenExceedWarningPara2 { get; set; } = string.Empty;
         public bool? IsWithinNVZ { get; set; }
         public string? EncryptedFertId { get; set; } = string.Empty;
-        public List<FertiliserAndManureSameDateAndNutrientValueResponse>? UpdatedFertiliserIds { get; set; }
+        public List<FertiliserAndOrganicManureUpdateResponse>? UpdatedFertiliserIds { get; set; }
         public bool? IsDeleteFertliser { get; set; }
     }
 }

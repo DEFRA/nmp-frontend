@@ -41,7 +41,6 @@
             howWouldYouEnterApplicationRate = string.Format(Resource.lblUseTypicalApplicationRate, Model.ApplicationRateArable, (Model.IsManureTypeLiquid.HasValue && Model.IsManureTypeLiquid == true) ? Resource.lblMeterCubePerHa : Resource.lblTonnesPerHectare); //  string.Format(Resource.lblUseTypicalApplicationRate, Model.ApplicationRateArable);
             break;
     }
-
 }
 @section BeforeContent {
     <govuk-back-link asp-action="BackCheckAnswer" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
@@ -325,7 +324,7 @@
                             <govuk-summary-list-row-actions>
                                 @if (ViewBag.Fields != null && ViewBag.Fields.Count > 1)
                                 {
-                                    <govuk-summary-list-row-action asp-action="FieldGroup" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
+                                    <govuk-summary-list-row-action asp-action="@(string.IsNullOrWhiteSpace(Model.EncryptedOrgManureId)?"FieldGroup":"Fields")" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
                                 }
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
@@ -741,7 +740,7 @@
                             <govuk-summary-list-row-action class=@((Model.ManureTypeId.HasValue)?"":"disabled") asp-action="ApplicationRateMethod" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
-                    @if (howWouldYouEnterApplicationRate == Resource.lblEnterAnApplicationRate)
+                    @if (howWouldYouEnterApplicationRate == string.Format(Resource.lblEnterAnApplicationRate, (Model.IsManureTypeLiquid.HasValue && Model.IsManureTypeLiquid == true) ? Resource.lblMeterCubePerHa : Resource.lblTonnesPerHectare))
                     {
                         <govuk-summary-list-row class=@((!Model.ApplicationRate.HasValue)?"govuk-error-message":"")>
                             <govuk-summary-list-row-key>
@@ -915,11 +914,37 @@
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 </govuk-summary-list>
+                @if (!string.IsNullOrWhiteSpace(Model.EncryptedOrgManureId))
+                {
+                    <p class="govuk-body margin-bottom-forty">
+                        @Resource.lblYouCanAlso
+                        @*     <a asp-action="DeletePlanOrganicAndFertiliser" asp-controller="Crop" asp-route-q="@Model.EncryptedFertId" asp-route-r="@ViewBag.Fertliser">@Resource.lblRemoveThisApplication</a> *@
+                        <a href="#">
+                            @if (ViewBag.SelectedFields != null && ViewBag.SelectedFields.Count == 1)
+                            {
+                                @string.Format(Resource.lblRemoveThisApplicationFromField, Model.FieldName)
+                            }
+                            else
+                            {
+                                @Resource.lblRemoveThisApplicationFromTheseField
+                            }
+                        </a>
+                    </p>
+                }
             </div>
 
-            <govuk-button type="submit" class="margin-bottom-forty">
-                @Resource.lblAddToPlan
-            </govuk-button>
+            @if (string.IsNullOrWhiteSpace(Model.EncryptedOrgManureId))
+            {
+                <govuk-button type="submit" class="margin-bottom-forty">
+                    @Resource.lblAddToPlan
+                </govuk-button>
+            }
+            else
+            {
+                <govuk-button type="button" class="margin-bottom-forty">
+                    @Resource.lblUpdate
+                </govuk-button>
+            }
             <p class="govuk-body cancel-link"><a asp-action="CreateManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
         </div>
     </div>
