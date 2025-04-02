@@ -41,7 +41,7 @@ public class AcceptTermsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Accept(TermsOfUseViewModel model)
     {
-        if(!model.IsTermsOfUseAccepted)
+        if (!model.IsTermsOfUseAccepted)
         {
             ModelState.AddModelError("IsTermsOfUseAccepted", Resource.msgAcceptTermsOfUse);
         }
@@ -50,15 +50,19 @@ public class AcceptTermsController : Controller
         {
             TermsOfUse termsOfUse = model;
             (UserExtension userExtension, Error error) = await _userExtensionService.UpdateTermsOfUseAsync(termsOfUse);
-            if(userExtension!= null && userExtension.IsTermsOfUseAccepted)
+            if (userExtension != null && userExtension.IsTermsOfUseAccepted)
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-            
+            if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+            {
+                ViewBag.Error = error.Message;
+            }
+
             return View("Accept", model);
         }
         else
-        {
+        {            
             return View("Accept", model);
         }
     }
