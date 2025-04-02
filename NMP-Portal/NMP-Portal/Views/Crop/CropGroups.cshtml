@@ -88,14 +88,14 @@
                     {
                         @foreach (var item in ViewBag.CropGroupList)
                         {
-                            @* @if (item.CropGroupId == grassGroupId)
+                            @if (item.CropGroupId == grassGroupId)
                             {
                                 <govuk-radios-item value="@item.CropGroupId" disabled="true">@item.CropGroupName</govuk-radios-item>
                             }
                             else
-                            { *@
+                            {
                                 <govuk-radios-item value="@item.CropGroupId">@item.CropGroupName</govuk-radios-item>
-                            @* } *@
+                            }
                         }
                     }
 
