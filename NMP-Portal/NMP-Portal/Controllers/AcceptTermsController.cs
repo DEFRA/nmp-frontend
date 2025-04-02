@@ -54,18 +54,15 @@ public class AcceptTermsController : Controller
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-            if (error != null)
+            if (error != null && !string.IsNullOrWhiteSpace(error.Message))
             {
                 ViewBag.Error = error.Message;
             }
 
-
-
             return View("Accept", model);
         }
         else
-        {
-            ViewBag.Error = "Invalid Model State";
+        {            
             return View("Accept", model);
         }
     }
