@@ -41,7 +41,7 @@ public class AcceptTermsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Accept(TermsOfUseViewModel model)
     {
-        if(!model.IsTermsOfUseAccepted)
+        if (!model.IsTermsOfUseAccepted)
         {
             ModelState.AddModelError("IsTermsOfUseAccepted", Resource.msgAcceptTermsOfUse);
         }
