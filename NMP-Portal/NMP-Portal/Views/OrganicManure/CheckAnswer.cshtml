@@ -32,7 +32,7 @@
     switch (Model.ApplicationRateMethod)
     {
         case 0:
-            howWouldYouEnterApplicationRate = Resource.lblEnterAnApplicationRate;
+            howWouldYouEnterApplicationRate = string.Format(Resource.lblEnterAnApplicationRate, (Model.IsManureTypeLiquid.HasValue && Model.IsManureTypeLiquid == true) ? Resource.lblMeterCubePerHa : Resource.lblTonnesPerHectare);
             break;
         case 1:
             howWouldYouEnterApplicationRate = Resource.lblCalculateBasedOnTheAreaAndQuantity;

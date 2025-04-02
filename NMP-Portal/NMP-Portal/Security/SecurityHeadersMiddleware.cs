@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Primitives;
+using System.Reflection.PortableExecutable;
 
 namespace NMP.Portal.Security;
 
@@ -8,9 +9,15 @@ public sealed class SecurityHeadersMiddleware(RequestDelegate requestDelegate)
 
     public Task Invoke(HttpContext context)
     {
+        // Remove technology disclosure headers
+        context.Response.Headers.Remove("X-Powered-By");
+        context.Response.Headers.Remove("Server");
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
         // TODO Change the value depending of your needs
         context.Response.Headers.Append("Referrer-Policy", new StringValues("strict-origin"));
+
+        // Strict Transport Security (HSTS) - Enforces HTTPS
+        context.Response.Headers.Append("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
 
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options
         context.Response.Headers.Append("X-Content-Type-Options", new StringValues("nosniff"));
@@ -22,7 +29,7 @@ public sealed class SecurityHeadersMiddleware(RequestDelegate requestDelegate)
         context.Response.Headers.Append("X-Permitted-Cross-Domain-Policies", new StringValues("none"));
 
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection
-        context.Response.Headers.Append("X-Xss-Protection", new StringValues("1; mode=block"));
+        //context.Response.Headers.Append("X-Xss-Protection", new StringValues("1; mode=block"));
 
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expect-CT
         // You can use https://report-uri.com/ to get notified when a misissued certificate is detected
@@ -33,7 +40,7 @@ public sealed class SecurityHeadersMiddleware(RequestDelegate requestDelegate)
             "autoplay=(self), " +
             "camera=(self), " +
             "display-capture=(self), " +
-           // "document-domain=(self), " +
+            // "document-domain=(self), " +
             "midi=(self), " +
             "publickey-credentials-get=(self), " +
             "sync-xhr=(self), " +
@@ -44,6 +51,9 @@ public sealed class SecurityHeadersMiddleware(RequestDelegate requestDelegate)
             "microphone=(self), " +
             "payment=(self), " +
             "usb=(self)"));
+
+        // Remove X-XSS-Protection (deprecated)
+        context.Response.Headers.Remove("X-XSS-Protection");
 
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
@@ -72,8 +82,10 @@ public sealed class SecurityHeadersMiddleware(RequestDelegate requestDelegate)
         //    "upgrade-insecure-requests;" +
         //    "worker-src 'self';"
         //    ));
-
+                
 
         return _requestDelegate(context);
     }
+
+
 }

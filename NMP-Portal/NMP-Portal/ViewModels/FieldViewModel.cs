@@ -57,5 +57,6 @@ namespace NMP.Portal.ViewModels
         public string? CropGroupName { get; set; }
         public int? HarvestYear { get; set; }
         public string? EncryptedHarvestYear { get; set; }
+        public bool IsHasGrassInLastThreeYearChange { get; set; } = false;
     }
 }

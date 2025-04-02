@@ -102,11 +102,12 @@
             <p class="govuk-body">
                 @Resource.MsgEnterTheValueOYourSoilAnalysisHint2
             </p>
-            <p class="govuk-body">
-                @Resource.MsgEnterTheValueOYourSoilAnalysisHint3
-            </p>
+            
             @if (Model.IsSoilNutrientValueTypeIndex != null && Model.IsSoilNutrientValueTypeIndex.Value)
             {
+                <p class="govuk-body">
+                    @Resource.MsgEnterTheValueOYourSoilAnalysisHint3
+                </p>
                 <div class="govuk-form-group govuk-input__wrapper">
                     <govuk-input asp-for="@Model.SoilAnalyses.PH" input-class="govuk-input--width-5" spellcheck="false" type="number" step="any">
                         <govuk-input-label is-page-heading="true" class="govuk-label">@Resource.lblPHLevelOption</govuk-input-label>
