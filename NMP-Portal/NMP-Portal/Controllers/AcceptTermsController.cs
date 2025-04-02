@@ -62,7 +62,7 @@ public class AcceptTermsController : Controller
             return View("Accept", model);
         }
         else
-        {
+        {            
             return View("Accept", model);
         }
     }

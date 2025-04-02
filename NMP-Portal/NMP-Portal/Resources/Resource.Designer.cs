@@ -5617,6 +5617,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Page not found – Plan and record nutrient applications – GOV.UK.
+        /// </summary>
+        public static string lblPageNotFoundPage {
+            get {
+                return ResourceManager.GetString("lblPageNotFoundPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to %.
         /// </summary>
         public static string lblPercentage {

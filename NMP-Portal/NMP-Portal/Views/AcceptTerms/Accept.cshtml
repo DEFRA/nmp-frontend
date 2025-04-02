@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = Resource.lblTermsOfUse;   
 }
+
 @if (ViewBag.Error != null)
 {
     <div class="govuk-grid-row">
@@ -11,6 +12,7 @@
                 <govuk-error-summary-item href="#">@ViewBag.Error</govuk-error-summary-item>
             </govuk-error-summary>
         </div>
+
     </div>
 }
 
