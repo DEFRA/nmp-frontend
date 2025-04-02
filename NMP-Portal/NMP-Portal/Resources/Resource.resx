@@ -4127,4 +4127,70 @@ live</value>
   <data name="lblYouCanViewYourRecommendations" xml:space="preserve">
     <value>You can view your recommendations</value>
   </data>
+  <data name="lblYouHaveNoInorganicFertiliserApplicationForFieldInYear" xml:space="preserve">
+    <value>You have no inorganic fertiliser applications planned for {0} in {1}.</value>
+  </data>
+  <data name="lblUpdateAnInorganicMaterialApplication" xml:space="preserve">
+    <value>Update an inorganic fertiliser application for harvest year {0}</value>
+  </data>
+  <data name="lblRemoveThisApplicationFromField" xml:space="preserve">
+    <value>Remove this application from {0}</value>
+  </data>
+  <data name="lblHowMuchOfEachNutrientDoYouPlanforUpdate" xml:space="preserve">
+    <value>How much of each nutrient do you plan to include in this application, per hectare?</value>
+  </data>
+  <data name="lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields" xml:space="preserve">
+    <value>When do you plan to spread inorganic fertiliser on these fields?</value>
+  </data>
+  <data name="lblWhichFieldsWouldYouLikeToEditAnOrganic" xml:space="preserve">
+    <value>Which fields do you want to edit this inorganic fertiliser application for?</value>
+  </data>
+  <data name="lblWhichFieldsWouldYouLikeToAddToThisGrass" xml:space="preserve">
+    <value>Which fields would you like to add to this Grass group?</value>
+  </data>
+  <data name="lblAreTheseNewSwardOrExistingSwardInTheseFields" xml:space="preserve">
+    <value>Are these new swards or existing swards in these fields?</value>
+  </data>
+  <data name="lblExistingSwards" xml:space="preserve">
+    <value>Existing swards</value>
+  </data>
+  <data name="lblNewSwards" xml:space="preserve">
+    <value>New swards</value>
+  </data>
+  <data name="lblWhatIsTheSwardInTheseFields" xml:space="preserve">
+    <value>What is the sward in these fields in {0}?</value>
+  </data>
+  <data name="lblSpringSown" xml:space="preserve">
+    <value>Spring sown (April to June)</value>
+  </data>
+  <data name="lblSummerOrAutumnSown" xml:space="preserve">
+    <value>Summer or autumn sown (July to mid-October)</value>
+  </data>
+  <data name="MsgInorganicFertiliserApplicationUpdated" xml:space="preserve">
+    <value>Inorganic fertiliser application updated</value>
+  </data>
+  <data name="MsgViewFieldUpdatedNutrientRecommendations" xml:space="preserve">
+    <value>View {0} updated nutrient recommendations.</value>
+  </data>
+  <data name="lblRemoveAnInorganicFertiliserApplicationFromField" xml:space="preserve">
+    <value>Remove an inorganic fertiliser application from {0}</value>
+  </data>
+  <data name="lblRemoveAnInorganicFertiliserApplication" xml:space="preserve">
+    <value>Remove an inorganic fertiliser application</value>
+  </data>
+  <data name="lblRemoveThisApplicationFromTheseField" xml:space="preserve">
+    <value>Remove this application from these field</value>
+  </data>
+  <data name="MsgDeletePlanFertiliserContent2" xml:space="preserve">
+    <value>This will remove the information about this inorganic fertiliser application are change the {0} nutrient recommendations for these fields.</value>
+  </data>
+  <data name="lblGrass" xml:space="preserve">
+    <value>Grass</value>
+  </data>
+  <data name="MsgCropGroupNameShouldNotContainSpecialChar" xml:space="preserve">
+    <value>Crop group name should not contain special characters.</value>
+  </data>
+  <data name="lblPageNotFoundPage" xml:space="preserve">
+    <value>Page not found – Plan and record nutrient applications – GOV.UK</value>
+  </data>
 </root>

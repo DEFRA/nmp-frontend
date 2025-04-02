@@ -4,6 +4,16 @@
     ViewData["Title"] = Resource.lblTermsOfUse;   
 }
 
+@if(ViewBag.Error != null)
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@ViewBag.Error</govuk-error-summary-item>
+            </govuk-error-summary>
+        </div>
+    </div>   
+}
 
 <form class="form margin-top-forty" asp-action="Accept" asp-controller="AcceptTerms" method="post">
     <partial name="_TermsOfUsePartial.cshtml" />

@@ -50,15 +50,22 @@ public class AcceptTermsController : Controller
         {
             TermsOfUse termsOfUse = model;
             (UserExtension userExtension, Error error) = await _userExtensionService.UpdateTermsOfUseAsync(termsOfUse);
-            if(userExtension!= null && userExtension.IsTermsOfUseAccepted)
+            if (userExtension != null && userExtension.IsTermsOfUseAccepted)
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-            
+            if (error != null)
+            {
+                ViewBag.Error = error.Message;
+            }
+
+
+
             return View("Accept", model);
         }
         else
         {
+            ViewBag.Error = "Invalid Model State";
             return View("Accept", model);
         }
     }
