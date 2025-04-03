@@ -926,9 +926,13 @@
                             }
                             else
                             {
-                                @Resource.lblRemoveThisApplicationFromTheseField
+                                @Resource.lblRemoveThisApplication
                             }
                         </a>
+                        @if (ViewBag.SelectedFields != null && ViewBag.SelectedFields.Count> 1)
+                            {
+                        @Resource.lbForTheseFields
+                            }
                     </p>
                 }
             </div>

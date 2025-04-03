@@ -223,6 +223,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to for these fields.
+        /// </summary>
+        public static string lbForTheseFields {
+            get {
+                return ResourceManager.GetString("lbForTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 10 February.
         /// </summary>
         public static string lbl10February {
@@ -6540,6 +6549,15 @@ namespace NMP.Portal.Resources {
         public static string lblRemoveTheSoilNitrogenSupplyAnalysis {
             get {
                 return ResourceManager.GetString("lblRemoveTheSoilNitrogenSupplyAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to remove this application.
+        /// </summary>
+        public static string lblRemoveThisApplication {
+            get {
+                return ResourceManager.GetString("lblRemoveThisApplication", resourceCulture);
             }
         }
         
