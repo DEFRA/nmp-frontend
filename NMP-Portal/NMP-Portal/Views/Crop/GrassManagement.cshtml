@@ -1,17 +1,17 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblSwardType;
-    
+    ViewData["Title"] = Resource.lblGrassManagement;
+
     var bachAction = (Model.SowingDateQuestion == (int)NMP.Portal.Enums.SowingDateQuestion.NoIWillEnterTheDateLater) ? "SowingDateQuestion" :
-     "SowingDate";
+     "SwardType";
     int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
 }
 
 @section BeforeContent {
     <govuk-back-link asp-action=@(Model.IsCheckAnswer&& (!Model.IsAnyChangeInField)&& (!Model.IsCropGroupChange) ? "CheckAnswer" :bachAction) asp-controller="Crop" asp-route-q="@Model.SowingDateEncryptedCounter">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="SwardType" asp-controller="Crop" method="post" autocomplete="off">
+<form asp-action="GrassManagement" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
     @if (TempData["CropInfoOneError"] != null)
     {
@@ -82,24 +82,13 @@
         <div class="govuk-grid-column-two-thirds">
 
             <h1 class="govuk-heading-l">
-                @string.Format( Resource.lblWhatIsTheSwardTypeForTheseFields,Model.Crops[0].Year)
+                @Resource.lblHowWillTheseFieldsBeManaged
             </h1>
             <h2>Page under construction</h2>
-            @* <govuk-radios asp-for="@Model.CurrentSward">
-                <govuk-radios-fieldset>
-                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @Resource.lblAreTheseNewSwardOrExistingSwardInTheseFields
-                    </govuk-radios-fieldset-legend>
-                    <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
-
-                    <govuk-radios-item value="@valueNewSward">@Resource.lblNewSwards</govuk-radios-item>
-                    <govuk-radios-item value="@valueExistingSward">@Resource.lblExistingSwards</govuk-radios-item>
-
-                </govuk-radios-fieldset>
-            </govuk-radios> *@
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
+
             <p class="govuk-body cancel-link"><a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
 
         </div>

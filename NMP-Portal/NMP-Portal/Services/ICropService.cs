@@ -29,6 +29,7 @@ namespace NMP.Portal.Services
         Task<(bool, Error)> IsCropsGroupNameExistForUpdate(string cropIds,string cropGroupName,int year);
         Task<(List<Crop>, Error)> UpdateCropGroupName(string cropIds,string CropGroupName,string? varietyName,int year);
         Task<List<GrassSeasonResponse>> FetchGrassSeasons();
+        Task<(List<GrassGrowthClassResponse>, Error)> FetchGrassGrowthClass(List<int> fieldIds);
 
     }
 }

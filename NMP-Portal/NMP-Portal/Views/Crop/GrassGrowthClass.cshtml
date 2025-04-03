@@ -1,17 +1,19 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblSwardType;
+    ViewData["Title"] = Resource.lblGrassGrowthClass;
+
     
-    var bachAction = (Model.SowingDateQuestion == (int)NMP.Portal.Enums.SowingDateQuestion.NoIWillEnterTheDateLater) ? "SowingDateQuestion" :
-     "SowingDate";
     int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
+
+    var EnterDifferentFiguresForEachField = (int)NMP.Portal.Enums.YieldQuestion.EnterDifferentFiguresForEachField;
+    var EnterASingleFigureForAllTheseFields = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@(Model.IsCheckAnswer&& (!Model.IsAnyChangeInField)&& (!Model.IsCropGroupChange) ? "CheckAnswer" :bachAction) asp-controller="Crop" asp-route-q="@Model.SowingDateEncryptedCounter">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(Model.IsCheckAnswer&& (!Model.IsAnyChangeInField)&& (!Model.IsCropGroupChange) ? "CheckAnswer" :"DefoliationSequence") asp-controller="Crop" asp-route-q="@Model.SowingDateEncryptedCounter">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="SwardType" asp-controller="Crop" method="post" autocomplete="off">
+<form asp-action="GrassGrowthClass" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
     @if (TempData["CropInfoOneError"] != null)
     {
@@ -51,6 +53,9 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupName"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropInfo2"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CurrentSward"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassDistinctCount"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassCounter"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassEncryptedCounter"></govuk-input>
     @if (Model.FieldList != null && Model.FieldList.Count > 0)
     {
         @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -79,28 +84,68 @@
     }
 
     <div class="govuk-grid-row">
+
         <div class="govuk-grid-column-two-thirds">
+            @if (Model.Crops.Count > 1 && Model.GrassGrowthClassDistinctCount == 1)
+            {
+               <h1 class="govuk-heading-l">
+                    @Resource.lblAnnualDryMatterYield
+               </h1>
+            }
+            @if (Model.Crops.Count == 1 || Model.GrassGrowthClassDistinctCount > 1)
+            {
+                <h1 class="govuk-heading-l">
+                    @string.Format(Resource.lblTargetDryMatterYieldForField, ViewBag.FieldName)
+                </h1>
+            }
+            <p class="govuk-body">@Resource.lblWeUseTheTargetAnnaulDryMatterYieldToGiveNitrogenRecommendationsForGrass</p>
 
-            <h1 class="govuk-heading-l">
-                @string.Format( Resource.lblWhatIsTheSwardTypeForTheseFields,Model.Crops[0].Year)
-            </h1>
-            <h2>Page under construction</h2>
-            @* <govuk-radios asp-for="@Model.CurrentSward">
-                <govuk-radios-fieldset>
-                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @Resource.lblAreTheseNewSwardOrExistingSwardInTheseFields
-                    </govuk-radios-fieldset-legend>
-                    <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
+            <h2 class="govuk-heading-m">@Resource.lblGrassGrowthClass</h2>
+            <div class="text_group">
 
-                    <govuk-radios-item value="@valueNewSward">@Resource.lblNewSwards</govuk-radios-item>
-                    <govuk-radios-item value="@valueExistingSward">@Resource.lblExistingSwards</govuk-radios-item>
+                @if (Model.Crops.Count > 1 && Model.GrassGrowthClassDistinctCount == 1)
+                {
+                    <p class="govuk-body">@Resource.lblBasedOnYourDataTheGrassGrowthClassForTheseField</p>
+                }
+                @if (Model.Crops.Count == 1 || Model.GrassGrowthClassDistinctCount > 1)
+                {
+                    <p class="govuk-body">@string.Format(Resource.lblBasedOnYourDataTheGrassGrowthClassForXField, ViewBag.FieldName)</p>
+                }
+                @if(ViewBag.GrassGrowthClass != null)
+                {
+                    <p class="govuk-body strong"><b>@ViewBag.GrassGrowthClass</b></p>
+                }
+                
+            </div>
+            @if(Model.Crops.Count==1 || Model.GrassGrowthClassDistinctCount>1)
+            {
+                <p class="govuk-body">@Resource.lblThisGivesTheFollowingRangeForAnnualDryMatterYield</p>
+                <p class="govuk-body strong">@string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField,ViewBag.FieldName,Model.Crops[0].Year)</p>
+                
+            }
+            @if (Model.Crops.Count > 1 && Model.GrassGrowthClassDistinctCount == 1)
+            {
+                <p class="govuk-body">@Resource.lblThisGrowthClassGivesARangeForAnnualDryMatterYieldOf</p>
+                <p class="govuk-body"><b>@Resource.lbl9To12TonnesPerHectare</b></p>
+                @* <p class="govuk-body strong"><b>@Resource.lblDoYouWantToEnterTheSameTargetYieldForTheseFields</b></p> *@
 
-                </govuk-radios-fieldset>
-            </govuk-radios> *@
-            <govuk-button type="submit" class="margin-bottom-forty">
-                @Resource.lblContinue
-            </govuk-button>
-            <p class="govuk-body cancel-link"><a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
+                <govuk-radios asp-for="@Model.GrassGrowthClassQuestion">
+                    <govuk-radios-fieldset>
+                        <govuk-radios-fieldset-legend is-page-heading="false">
+                            <b>@Resource.lblDoYouWantToEnterTheSameTargetYieldForTheseFields</b>
+                        </govuk-radios-fieldset-legend>
+
+                        <govuk-radios-item value="@EnterASingleFigureForAllTheseFields">@Resource.lblYesEnterTheSameTargetYieldForTheseFields</govuk-radios-item>
+                        <govuk-radios-item value="@EnterDifferentFiguresForEachField">@Resource.lblNoEnterADifferentTargetYieldForEachFields</govuk-radios-item>
+                    </govuk-radios-fieldset>
+                </govuk-radios>
+
+            }
+                <govuk-button type="submit" class="margin-bottom-forty">
+                    @Resource.lblContinue
+                </govuk-button>
+
+                <p class="govuk-body cancel-link"><a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
 
         </div>
 
