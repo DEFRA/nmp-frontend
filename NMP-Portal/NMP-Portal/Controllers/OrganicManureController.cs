@@ -1542,9 +1542,9 @@ namespace NMP.Portal.Controllers
                 }
 
                 //check for closed period warning.
+                OrganicManureViewModel organicManureViewModel = new OrganicManureViewModel();
                 if (model != null)
-                {
-                    OrganicManureViewModel organicManureViewModel = new OrganicManureViewModel();
+                {                    
                     if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
                     {
                         organicManureViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
@@ -1625,6 +1625,19 @@ namespace NMP.Portal.Controllers
 
                 if (model.IsCheckAnswer && (!model.IsManureTypeChange) && (!model.IsFieldGroupChange))
                 {
+                        if (organicManureViewModel != null && organicManureViewModel.ApplicationDate != null && model.ApplicationDate != null)
+                        {
+                            if (model.ApplicationDate != organicManureViewModel.ApplicationDate)
+                            {
+                                model.MoistureType = null;
+                                model.SoilDrainageEndDate = null;
+                                model.TotalRainfall = null;
+                            }
+                        return RedirectToAction("ConditionsAffectingNutrients");
+                    }
+                        
+                    
+
                     return RedirectToAction("CheckAnswer");
                 }
                 return RedirectToAction("ApplicationMethod");
@@ -4144,6 +4157,12 @@ namespace NMP.Portal.Controllers
                                         model.DefaultNutrientValue = Resource.lblYesUseTheseValues;
                                     }
 
+                                    if (model.ManureTypeId != null && (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)&&
+                                        farmManureType.ManureTypeName.Equals(organicManure.ManureTypeName))
+                                    {
+                                        model.ManureGroupId = organicManure.ManureTypeID;
+                                        model.ManureGroupIdForFilter = organicManure.ManureTypeID;
+                                    }
                                     model.DefaultFarmManureValueDate = farmManureType.ModifiedOn == null ? farmManureType.CreatedOn : farmManureType.ModifiedOn;
                                 }
                                 else
@@ -4170,10 +4189,6 @@ namespace NMP.Portal.Controllers
                                 }
                             }
 
-                            if (model.ManureTypeId != null && (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials))
-                            {
-                                model.OtherMaterialName = organicManure.ManureTypeName;
-                            }
                             model.ApplicationRate = organicManure.ApplicationRate;
                             model.SoilDrainageEndDate = organicManure.SoilDrainageEndDate;
                             int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
@@ -5409,7 +5424,15 @@ namespace NMP.Portal.Controllers
                 //The planned application would result in more than 250 kg/ha of total N from all applications of any Manure type apart from ‘Green compost’ or ‘Green/food compost’, applied or planned to the field in the last 365 days up to and including the application date of the manure
                 if (model.ManureTypeId != (int)NMP.Portal.Enums.ManureTypes.GreenCompost && model.ManureTypeId != (int)NMP.Portal.Enums.ManureTypes.GreenFoodCompost)
                 {
-                    (previousAppliedTotalN, error) = await _organicManureService.FetchTotalNBasedByManIdAppDateAndIsGreenCompost(managementId, model.ApplicationDate.Value.AddDays(-364), model.ApplicationDate.Value, false, false);
+                    //passing orgId
+                    if (model.UpdatedOrganicIds != null && model.UpdatedOrganicIds.Count > 0)
+                    {
+                        (previousAppliedTotalN, error) = await _organicManureService.FetchTotalNBasedByManIdAppDateAndIsGreenCompost(managementId, model.ApplicationDate.Value.AddDays(-364), model.ApplicationDate.Value, false, false, model.UpdatedOrganicIds.Where(x=>x.ManagementPeriodId== managementId).Select(x=>x.OrganicManureId).FirstOrDefault());
+                    }
+                    else
+                    {
+                        (previousAppliedTotalN, error) = await _organicManureService.FetchTotalNBasedByManIdAppDateAndIsGreenCompost(managementId, model.ApplicationDate.Value.AddDays(-364), model.ApplicationDate.Value, false, false, null);
+                    }
                     if (error == null)
                     {
                         decimal currentApplicationNitrogen = 0;
@@ -5467,7 +5490,16 @@ namespace NMP.Portal.Controllers
                     (CropTypeResponse cropTypeResponse, error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(model.FieldList[0]), model.HarvestYear ?? 0, false);
                     if (!cropTypeIdsForTrigger.Contains(cropTypeResponse.CropTypeId))
                     {
-                        (previousAppliedTotalN, error) = await _organicManureService.FetchTotalNBasedByManIdAppDateAndIsGreenCompost(managementId, model.ApplicationDate.Value.AddDays(-729), model.ApplicationDate.Value, false, true);
+                        //passing orgId
+                        if (model.UpdatedOrganicIds != null && model.UpdatedOrganicIds.Count > 0)
+                        {
+                            (previousAppliedTotalN, error) = await _organicManureService.FetchTotalNBasedByManIdAppDateAndIsGreenCompost(managementId, model.ApplicationDate.Value.AddDays(-729), model.ApplicationDate.Value, false, true, model.UpdatedOrganicIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.OrganicManureId).FirstOrDefault());
+                        }
+                        else
+                        {
+                            (previousAppliedTotalN, error) = await _organicManureService.FetchTotalNBasedByManIdAppDateAndIsGreenCompost(managementId, model.ApplicationDate.Value.AddDays(-729), model.ApplicationDate.Value, false, true,null);
+                        }
+                        
                         if (error == null)
                         {
 
@@ -5513,7 +5545,16 @@ namespace NMP.Portal.Controllers
 
                     if (cropTypeIdsForTrigger.Contains(cropTypeResponse.CropTypeId))
                     {
-                        (previousAppliedTotalN, error) = await _organicManureService.FetchTotalNBasedByManIdAppDateAndIsGreenCompost(managementId, model.ApplicationDate.Value.AddDays(-1459), model.ApplicationDate.Value, false, true);
+                        //passing orgId
+                        if (model.UpdatedOrganicIds != null && model.UpdatedOrganicIds.Count > 0)
+                        {
+                            (previousAppliedTotalN, error) = await _organicManureService.FetchTotalNBasedByManIdAppDateAndIsGreenCompost(managementId, model.ApplicationDate.Value.AddDays(-1459), model.ApplicationDate.Value, false, true, model.UpdatedOrganicIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.OrganicManureId).FirstOrDefault());
+                        }
+                        else
+                        {
+                            (previousAppliedTotalN, error) = await _organicManureService.FetchTotalNBasedByManIdAppDateAndIsGreenCompost(managementId, model.ApplicationDate.Value.AddDays(-1459), model.ApplicationDate.Value, false, true,null);
+                        }
+
                         if (error == null)
                         {
                             decimal currentApplicationNitrogen = 0;
@@ -5597,7 +5638,16 @@ namespace NMP.Portal.Controllers
                             (FieldDetailResponse fieldDetail, error) = await _fieldService.FetchFieldDetailByFieldIdAndHarvestYear(fieldId, model.HarvestYear.Value, false);
                             if (error == null)
                             {
-                                (previousApplicationsN, error) = await _organicManureService.FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(managementId, null, false);
+                                //passing orgId
+                                if (model.UpdatedOrganicIds != null && model.UpdatedOrganicIds.Count > 0)
+                                {
+                                    (previousApplicationsN, error) = await _organicManureService.FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(managementId, false, null, model.UpdatedOrganicIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.OrganicManureId).FirstOrDefault());
+                                }
+                                else
+                                {
+                                    (previousApplicationsN, error) = await _organicManureService.FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(managementId, false, null, null);
+                                }
+                               // (previousApplicationsN, error) = await _organicManureService.FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(managementId,false, null, null);
                                 if (error == null)
                                 {
                                     decimal nMaxLimit = 0;
@@ -5669,6 +5719,7 @@ namespace NMP.Portal.Controllers
                                             //decimal? currentApplicationN = totalNitrogen * model.ApplicationRate.Value;
                                             if (error == null)
                                             {
+                                                //passing orgId
                                                 (List<int> currentYearManureTypeIds, error) = await _organicManureService.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
                                                 (List<int> previousYearManureTypeIds, error) = await _organicManureService.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value - 1, false);
                                                 if (error == null)
@@ -6291,6 +6342,7 @@ namespace NMP.Portal.Controllers
                                             bool isWithinDateRange = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate, model.ClosedPeriodStartDate, endOfOctober);
                                             if (isWithinDateRange)
                                             {
+                                                //passing orgId
                                                 (totalN, error) = await _organicManureService.FetchTotalNBasedOnManIdAndAppDate(managementIds[0], model.ClosedPeriodStartDate.Value, endOfOctober, false);
 
                                                 decimal? currentNitrogen = totalNitrogen * model.ApplicationRate;
@@ -6316,6 +6368,7 @@ namespace NMP.Portal.Controllers
                                             if (isWithinDateRange)
                                             {
                                                 decimal? currentNitrogen = totalNitrogen * model.ApplicationRate;
+                                                //passing orgId
                                                 (totalN, error) = await _organicManureService.FetchTotalNBasedOnManIdAndAppDate(managementIds[0], model.ClosedPeriodStartDate.Value, endDateFebruary, false);
                                                 if (currentNitrogen + totalN > 150)
                                                 {
@@ -6336,6 +6389,7 @@ namespace NMP.Portal.Controllers
                                             {
 
                                                 decimal? currentNitrogen = totalNitrogen * model.ApplicationRate;
+                                                //passing orgId
                                                 (totalN, error) = await _organicManureService.FetchTotalNBasedOnManIdAndAppDate(managementIds[0], model.ClosedPeriodStartDate.Value, endDateFebruary, false);
                                                 if (currentNitrogen + totalN > 150)
                                                 {
@@ -6358,6 +6412,7 @@ namespace NMP.Portal.Controllers
                                                 totalN = 0;
                                                 if (managementIds.Count > 0)
                                                 {
+                                                    //passing orgId
                                                     (totalN, error) = await _organicManureService.FetchTotalNBasedOnManIdAndAppDate(managementIds[0], model.ClosedPeriodStartDate.Value, endDateFebruary, false);
 
                                                     (bool isOrganicManureExistWithin4Weeks, error) = await _organicManureService.FetchOrganicManureExistanceByDateRange(model.OrganicManures[0].ManagementPeriodID, model.ApplicationDate.Value.AddDays(-28).ToString("yyyy-MM-dd"), model.ApplicationDate.Value.ToString("yyyy-MM-dd"), false);
@@ -6387,6 +6442,7 @@ namespace NMP.Portal.Controllers
                                             if (isWithinDateRange)
                                             {
                                                 decimal? currentNitrogen = totalNitrogen * model.ApplicationRate;
+                                                //passing orgId
                                                 (totalN, error) = await _organicManureService.FetchTotalNBasedOnManIdAndAppDate(managementIds[0], model.ClosedPeriodStartDate.Value, endOfOctober, false);
                                                 if (currentNitrogen + totalN > 150)
                                                 {
