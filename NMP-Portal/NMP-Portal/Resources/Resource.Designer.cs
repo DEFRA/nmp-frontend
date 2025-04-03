@@ -223,6 +223,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to for these fields.
+        /// </summary>
+        public static string lbForTheseFields {
+            get {
+                return ResourceManager.GetString("lbForTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 10 February.
         /// </summary>
         public static string lbl10February {
@@ -6661,6 +6670,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to remove this application.
+        /// </summary>
+        public static string lblRemoveThisApplication {
+            get {
+                return ResourceManager.GetString("lblRemoveThisApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove this application from {0}.
         /// </summary>
         public static string lblRemoveThisApplicationFromField {
@@ -8470,6 +8488,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update an organic material application for harvest year {0}.
+        /// </summary>
+        public static string lblUpdateAnOrganicMaterialApplicationForHarvestYear {
+            get {
+                return ResourceManager.GetString("lblUpdateAnOrganicMaterialApplicationForHarvestYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Changes here will be applied to all of these fields. To change a single field select it from your crop plan..
         /// </summary>
         public static string lblUpdateCropGroupNameContent1 {
@@ -9429,6 +9456,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhichFieldsDoYouPlanToGrow {
             get {
                 return ResourceManager.GetString("lblWhichFieldsDoYouPlanToGrow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which fields do you want to update this organic manure application for?.
+        /// </summary>
+        public static string lblWhichFieldsDoYouWantToUpdateThisOrganicManureApplicationFor {
+            get {
+                return ResourceManager.GetString("lblWhichFieldsDoYouWantToUpdateThisOrganicManureApplicationFor", resourceCulture);
             }
         }
         

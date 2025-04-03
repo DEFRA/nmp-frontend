@@ -1917,6 +1917,10 @@ namespace NMP.Portal.Controllers
                 {
                     _httpContextAccessor.HttpContext?.Session.Remove("FertiliserManure");
                 }
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
+                {
+                    _httpContextAccessor.HttpContext?.Session.Remove("OrganicManure");
+                }
                 if (!string.IsNullOrWhiteSpace(q))
                 {
                     if (!string.IsNullOrWhiteSpace(r))
