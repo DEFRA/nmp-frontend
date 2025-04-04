@@ -1598,7 +1598,16 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchTotalNBasedByManIdAppDateAndIsGreenCompostAsyncAPI, managementId, fromdate, toDate, confirm,isGreenFoodCompost, organicManureId));
+                string url = APIURLHelper.FetchTotalNBasedByManIdAppDateAndIsGreenCompostAsyncAPI;
+
+                if (organicManureId.HasValue)
+                {
+                    url += $"&organicManureID={organicManureId.Value}";
+                }
+
+                url = string.Format(url, managementId, fromdate, toDate, confirm, isGreenFoodCompost);
+                var response = await httpClient.GetAsync(url);
+                //var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchTotalNBasedByManIdAppDateAndIsGreenCompostAsyncAPI, managementId, fromdate, toDate, confirm,isGreenFoodCompost, organicManureId));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)

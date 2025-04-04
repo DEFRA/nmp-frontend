@@ -1544,7 +1544,7 @@ namespace NMP.Portal.Controllers
                 //check for closed period warning.
                 OrganicManureViewModel organicManureViewModel = new OrganicManureViewModel();
                 if (model != null)
-                {                    
+                {
                     if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
                     {
                         organicManureViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
@@ -1553,6 +1553,7 @@ namespace NMP.Portal.Controllers
                     if (model.ApplicationDate != organicManureViewModel.ApplicationDate)
                     {
                         model.IsWarningMsgNeedToShow = false;
+                        model.IsApplicationDateChange = true;
                     }
                 }
                 model.IsClosedPeriodWarning = false;
@@ -1621,25 +1622,22 @@ namespace NMP.Portal.Controllers
                     }
                 }
                 //model.IsWarningMsgNeedToShow = false;
-                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                
 
                 if (model.IsCheckAnswer && (!model.IsManureTypeChange) && (!model.IsFieldGroupChange))
                 {
-                        if (organicManureViewModel != null && organicManureViewModel.ApplicationDate != null && model.ApplicationDate != null)
-                        {
-                            if (model.ApplicationDate != organicManureViewModel.ApplicationDate)
-                            {
-                                model.MoistureType = null;
-                                model.SoilDrainageEndDate = null;
-                                model.TotalRainfall = null;
-                            }
-                        return RedirectToAction("ConditionsAffectingNutrients");
-                    }
-                        
-                    
-
+                        if (model.IsApplicationDateChange.HasValue&&model.IsApplicationDateChange.Value)
+                        {                            
+                            model.MoistureType = null;
+                            model.SoilDrainageEndDate = null;
+                            model.TotalRainfall = null;
+                            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                            return RedirectToAction("ConditionsAffectingNutrients");
+                        }
+                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
                     return RedirectToAction("CheckAnswer");
                 }
+                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
                 return RedirectToAction("ApplicationMethod");
             }
             catch (Exception ex)
@@ -3739,8 +3737,16 @@ namespace NMP.Portal.Controllers
                             (NitrogenUptakeResponse nitrogenUptakeResponse, error) = await _organicManureService.FetchAutumnCropNitrogenUptake(jsonString);
                             if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
                             {
-                                TempData["IncorporationDelayError"] = error.Message;
-                                return RedirectToAction("IncorporationDelay");
+                                if (model.IsApplicationMethodChange)
+                                {
+                                    TempData["ManureApplyingDateError"] = error.Message;
+                                    return RedirectToAction("ManureApplyingDate");
+                                }
+                                else
+                                {
+                                    TempData["IncorporationDelayError"] = error.Message;
+                                    return RedirectToAction("IncorporationDelay");
+                                }
                             }
                             if (nitrogenUptakeResponse != null && error == null)
                             {
@@ -3762,8 +3768,16 @@ namespace NMP.Portal.Controllers
                         }
                         else if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
                         {
-                            TempData["IncorporationDelayError"] = error.Message;
-                            return RedirectToAction("IncorporationDelay");
+                            if (model.IsApplicationMethodChange)
+                            {
+                                TempData["ManureApplyingDateError"] = error.Message;
+                                return RedirectToAction("ManureApplyingDate");
+                            }
+                            else
+                            {
+                                TempData["IncorporationDelayError"] = error.Message;
+                                return RedirectToAction("IncorporationDelay");
+                            }
                         }
                     }
                 }
@@ -3815,8 +3829,16 @@ namespace NMP.Portal.Controllers
                 string halfPostCode = string.Empty;
                 if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
                 {
-                    TempData["IncorporationDelayError"] = error.Message;
-                    return RedirectToAction("IncorporationDelay");
+                    if (model.IsApplicationMethodChange)
+                    {
+                        TempData["ManureApplyingDateError"] = error.Message;
+                        return RedirectToAction("ManureApplyingDate");
+                    }
+                    else
+                    {
+                        TempData["IncorporationDelayError"] = error.Message;
+                        return RedirectToAction("IncorporationDelay");
+                    }
                 }
                 else
                 {
@@ -3845,8 +3867,16 @@ namespace NMP.Portal.Controllers
                     (WindspeedResponse windspeed, error) = await _organicManureService.FetchWindspeedDataDefault();
                     if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
                     {
-                        TempData["IncorporationDelayError"] = error.Message;
-                        return RedirectToAction("IncorporationDelay");
+                        if (model.IsApplicationMethodChange)
+                        {
+                            TempData["ManureApplyingDateError"] = error.Message;
+                            return RedirectToAction("ManureApplyingDate");
+                        }
+                        else
+                        {
+                            TempData["IncorporationDelayError"] = error.Message;
+                            return RedirectToAction("IncorporationDelay");
+                        }
                     }
                     else
                     {
@@ -3859,8 +3889,16 @@ namespace NMP.Portal.Controllers
                     (WindspeedResponse windspeed, error) = await _organicManureService.FetchWindspeedById(model.WindspeedID.Value);
                     if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
                     {
-                        TempData["IncorporationDelayError"] = error.Message;
-                        return RedirectToAction("IncorporationDelay");
+                        if (model.IsApplicationMethodChange)
+                        {
+                            TempData["ManureApplyingDateError"] = error.Message;
+                            return RedirectToAction("ManureApplyingDate");
+                        }
+                        else
+                        {
+                            TempData["IncorporationDelayError"] = error.Message;
+                            return RedirectToAction("IncorporationDelay");
+                        }
                     }
                     else
                     {
@@ -3874,8 +3912,16 @@ namespace NMP.Portal.Controllers
                     (MoistureTypeResponse moisterType, error) = await _organicManureService.FetchMoisterTypeDefaultByApplicationDate(model.ApplicationDate.Value.ToString("yyyy-MM-ddTHH:mm:ss"));
                     if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
                     {
-                        TempData["IncorporationDelayError"] = error.Message;
-                        return RedirectToAction("IncorporationDelay");
+                        if (model.IsApplicationMethodChange)
+                        {
+                            TempData["ManureApplyingDateError"] = error.Message;
+                            return RedirectToAction("ManureApplyingDate");
+                        }
+                        else
+                        {
+                            TempData["IncorporationDelayError"] = error.Message;
+                            return RedirectToAction("IncorporationDelay");
+                        }
                     }
                     else
                     {
@@ -3888,8 +3934,16 @@ namespace NMP.Portal.Controllers
                     (MoistureTypeResponse moisterType, error) = await _organicManureService.FetchMoisterTypeById(model.MoistureTypeId.Value);
                     if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
                     {
-                        TempData["IncorporationDelayError"] = error.Message;
-                        return RedirectToAction("IncorporationDelay");
+                        if (model.IsApplicationMethodChange)
+                        {
+                            TempData["ManureApplyingDateError"] = error.Message;
+                            return RedirectToAction("ManureApplyingDate");
+                        }
+                        else
+                        {
+                            TempData["IncorporationDelayError"] = error.Message;
+                            return RedirectToAction("IncorporationDelay");
+                        }
                     }
                     else
                     {
@@ -3903,8 +3957,16 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogTrace($"Organic Manure Controller : Exception in ConditionsAffectingNutrients() action : {ex.Message}, {ex.StackTrace}");
-                TempData["IncorporationDelayError"] = ex.Message;
-                return RedirectToAction("IncorporationDelay");
+                if (model.IsApplicationMethodChange)
+                {
+                    TempData["ManureApplyingDateError"] = ex.Message;
+                    return RedirectToAction("ManureApplyingDate");
+                }
+                else
+                {
+                    TempData["IncorporationDelayError"] = ex.Message;
+                    return RedirectToAction("IncorporationDelay");
+                }
             }
 
 
@@ -4165,7 +4227,7 @@ namespace NMP.Portal.Controllers
                                     model.DefaultNutrientValue = Resource.lblYes;
                                 }
                             }
-                            else if (farmManureTypeResponse.Count==0)
+                            else if (farmManureTypeResponse.Count == 0)
                             {
                                 model.DefaultNutrientValue = Resource.lblYes;
                             }
@@ -4603,6 +4665,7 @@ namespace NMP.Portal.Controllers
                 model.IsApplicationMethodChange = false;
                 model.IsFieldGroupChange = false;
                 model.IsIncorporationMethodChange = false;
+                model.IsApplicationDateChange = false;
 
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
             }
@@ -4992,7 +5055,7 @@ namespace NMP.Portal.Controllers
             }
             model.IsCheckAnswer = false;
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
-            if(!string.IsNullOrWhiteSpace(model.EncryptedOrgManureId))
+            if (!string.IsNullOrWhiteSpace(model.EncryptedOrgManureId))
             {
                 _httpContextAccessor.HttpContext?.Session.Remove("OrganicManure");
                 return RedirectToAction("HarvestYearOverview", "Crop", new
@@ -5424,7 +5487,7 @@ namespace NMP.Portal.Controllers
                     //passing orgId
                     if (model.UpdatedOrganicIds != null && model.UpdatedOrganicIds.Count > 0)
                     {
-                        (previousAppliedTotalN, error) = await _organicManureService.FetchTotalNBasedByManIdAppDateAndIsGreenCompost(managementId, model.ApplicationDate.Value.AddDays(-364), model.ApplicationDate.Value, false, false, model.UpdatedOrganicIds.Where(x=>x.ManagementPeriodId== managementId).Select(x=>x.OrganicManureId).FirstOrDefault());
+                        (previousAppliedTotalN, error) = await _organicManureService.FetchTotalNBasedByManIdAppDateAndIsGreenCompost(managementId, model.ApplicationDate.Value.AddDays(-364), model.ApplicationDate.Value, false, false, model.UpdatedOrganicIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.OrganicManureId).FirstOrDefault());
                     }
                     else
                     {
@@ -5496,7 +5559,7 @@ namespace NMP.Portal.Controllers
                         {
                             (previousAppliedTotalN, error) = await _organicManureService.FetchTotalNBasedByManIdAppDateAndIsGreenCompost(managementId, model.ApplicationDate.Value.AddDays(-729), model.ApplicationDate.Value, false, true,null);
                         }
-                        
+
                         if (error == null)
                         {
 
@@ -5644,7 +5707,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     (previousApplicationsN, error) = await _organicManureService.FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(managementId, false, null, null);
                                 }
-                               // (previousApplicationsN, error) = await _organicManureService.FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(managementId,false, null, null);
+                                // (previousApplicationsN, error) = await _organicManureService.FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(managementId,false, null, null);
                                 if (error == null)
                                 {
                                     decimal nMaxLimit = 0;

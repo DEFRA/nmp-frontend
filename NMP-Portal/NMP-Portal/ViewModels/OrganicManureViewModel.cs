@@ -133,5 +133,6 @@ namespace NMP.Portal.ViewModels
         public string? EncryptedOrgManureId { get; set; } = string.Empty;
         public List<FertiliserAndOrganicManureUpdateResponse>? UpdatedOrganicIds { get; set; }
         public string? FieldName { get; set; }
+        public bool? IsApplicationDateChange { get; set; } = false;
     }
 }
