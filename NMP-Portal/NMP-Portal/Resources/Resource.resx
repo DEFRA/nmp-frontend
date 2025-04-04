@@ -4190,6 +4190,45 @@ live</value>
   <data name="MsgCropGroupNameShouldNotContainSpecialChar" xml:space="preserve">
     <value>Crop group name should not contain special characters.</value>
   </data>
+  <data name="lbl9To12TonnesPerHectare" xml:space="preserve">
+    <value>9 to 12 tonnes per hectare.</value>
+  </data>
+  <data name="lblAnnualDryMatterYield" xml:space="preserve">
+    <value>Annual dry matter yield</value>
+  </data>
+  <data name="lblBasedOnYourDataTheGrassGrowthClassForTheseField" xml:space="preserve">
+    <value>Based on your data, the grass growth class for these Field is:</value>
+  </data>
+  <data name="lblBasedOnYourDataTheGrassGrowthClassForXField" xml:space="preserve">
+    <value>Based on your data, the grass growth class for {0} Field is:</value>
+  </data>
+  <data name="lblDoYouWantToEnterTheSameTargetYieldForTheseFields" xml:space="preserve">
+    <value>Do you want to enter the same target yield for these fields? </value>
+  </data>
+  <data name="lblGrassGrowthClass" xml:space="preserve">
+    <value>Grass growth class</value>
+  </data>
+  <data name="lblNoEnterADifferentTargetYieldForEachFields" xml:space="preserve">
+    <value>No, Enter a different target yield for each fields</value>
+  </data>
+  <data name="lblTargetDryMatterYieldForField" xml:space="preserve">
+    <value>Target dry matter yield for {0} Field</value>
+  </data>
+  <data name="lblThisGivesTheFollowingRangeForAnnualDryMatterYield" xml:space="preserve">
+    <value>This gives the following range for annual dry matter yield.</value>
+  </data>
+  <data name="lblThisGrowthClassGivesARangeForAnnualDryMatterYieldOf" xml:space="preserve">
+    <value>This growth class gives a range for annual dry matter yield of:</value>
+  </data>
+  <data name="lblWeUseTheTargetAnnaulDryMatterYieldToGiveNitrogenRecommendationsForGrass" xml:space="preserve">
+    <value>We use the target annual dry matter yield to give nitrogen (N) recommendations for grass.</value>
+  </data>
+  <data name="lblWhatIsTheTotalTargetDryMatterYieldForField" xml:space="preserve">
+    <value>What is the total target dry matter yield for {0} Field in {1}?</value>
+  </data>
+  <data name="lblYesEnterTheSameTargetYieldForTheseFields" xml:space="preserve">
+    <value>Yes, Enter the same target yield for these fields</value>
+  </data>
   <data name="lblPageNotFoundPage" xml:space="preserve">
     <value>Page not found – Plan and record nutrient applications – GOV.UK</value>
   </data>
@@ -4204,5 +4243,38 @@ live</value>
   </data>
   <data name="lblRemoveThisApplication" xml:space="preserve">
     <value>remove this application</value>
+  </data>
+  <data name="lblDefoliation" xml:space="preserve">
+    <value>Defoliation</value>
+  </data>
+  <data name="lblDefoliationSequence" xml:space="preserve">
+    <value>Defoliation sequence</value>
+  </data>
+  <data name="lblDryMatterYield" xml:space="preserve">
+    <value>Dry matter yield</value>
+  </data>
+  <data name="lblGrassManagement" xml:space="preserve">
+    <value>Grass management</value>
+  </data>
+  <data name="lblHowManyCutsAndGrazingsWillYouHaveInTheseFields" xml:space="preserve">
+    <value>How many cuts and grazings will you have in these fields?</value>
+  </data>
+  <data name="lblHowWillTheseFieldsBeManaged" xml:space="preserve">
+    <value>How will these fields be managed?</value>
+  </data>
+  <data name="lblSwardType" xml:space="preserve">
+    <value>Sward type</value>
+  </data>
+  <data name="lblWhatIsTheCutAndGrazingOrderInTheseFields" xml:space="preserve">
+    <value>What is the cut and grazing order in these fields?</value>
+  </data>
+  <data name="lblWhatIsTheSwardTypeForTheseFields" xml:space="preserve">
+    <value>What is the sward type for these fields in {0}?</value>
+  </data>
+  <data name="lblWhatIsTheTotalTargetDryMatterYieldFor" xml:space="preserve">
+    <value>What is the total target dry matter yield for {0} field in {1}</value>
+  </data>
+  <data name="lblWhatIsTheTotalTargetDryMatterYieldForFields" xml:space="preserve">
+    <value>What is the total target dry matter yield for fields in {0}</value>
   </data>
 </root>

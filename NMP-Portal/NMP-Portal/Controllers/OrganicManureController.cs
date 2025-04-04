@@ -4118,11 +4118,6 @@ namespace NMP.Portal.Controllers
                                 model.ManureGroupId = manureType.ManureGroupId;
                                 model.ManureGroupIdForFilter = manureType.ManureGroupId;
                             }
-
-                            if (organicManure.AreaSpread != null && organicManure.ManureQuantity != null)
-                            {
-                                model.ApplicationRateMethod = (int)NMP.Portal.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity;
-                            }
                             //model.ManureGroupId = (await _organicManureService.FetchManureTypeByManureTypeId(model.ManureTypeId.Value)).Item1.ManureGroupId;
                             model.N = organicManure.N;
                             model.P2O5 = organicManure.P2O5;
@@ -4211,6 +4206,8 @@ namespace NMP.Portal.Controllers
                             }
                             if (organicManure.AreaSpread != null && organicManure.ManureQuantity != null)
                             {
+                                model.Area = organicManure.AreaSpread;
+                                model.Quantity = organicManure.ManureQuantity;
                                 model.ApplicationRateMethod = (int)NMP.Portal.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity;
                             }
                             else if (model.ApplicationRateArable == model.ApplicationRate)
