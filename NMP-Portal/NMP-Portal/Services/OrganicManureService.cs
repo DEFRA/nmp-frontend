@@ -117,7 +117,7 @@ namespace NMP.Portal.Services
         {
             List<int> managementIds = new List<int>();
             Error error = null;
-            if(cropOrder==null)
+            if (cropOrder == null)
             {
                 cropOrder = 1;
             }
@@ -1116,7 +1116,7 @@ namespace NMP.Portal.Services
             return isPerennial;
         }
 
-        public async Task<(decimal, Error)> FetchTotalNBasedOnManIdAndAppDate(int managementId, DateTime startDate, DateTime endDate, bool confirm)
+        public async Task<(decimal, Error)> FetchTotalNBasedOnManIdAndAppDate(int managementId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId)
         {
             Error error = null;
             decimal totalN = 0;
@@ -1125,7 +1125,16 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchTotalNBasedOnManIdAndAppDateAsyncAPI, managementId, fromdate, toDate, confirm));
+                string url = APIURLHelper.FetchTotalNBasedOnManIdAndAppDateAsyncAPI;
+
+                if (organicManureId.HasValue)
+                {
+                    url += $"&organicManureID={organicManureId.Value}";
+                }
+
+                url = string.Format(url, managementId, fromdate, toDate, confirm);
+                var response = await httpClient.GetAsync(url);
+                //var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchTotalNBasedOnManIdAndAppDateAsyncAPI, managementId, fromdate, toDate, confirm));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
@@ -1296,7 +1305,7 @@ namespace NMP.Portal.Services
             return (manureTypeIds, error);
         }
 
-        public async Task<(decimal, Error)> FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(int managementId,int? fertiliserId, bool confirm)
+        public async Task<(decimal, Error)> FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(int managementId,  bool confirm, int? fertiliserId, int? organicManureId)
         {
             Error error = null;
             decimal totalN = 0;
@@ -1307,7 +1316,11 @@ namespace NMP.Portal.Services
 
                 if (fertiliserId.HasValue)
                 {
-                    url += $"&fertiliserId={fertiliserId.Value}";
+                    url += $"&fertiliserID={fertiliserId.Value}";
+                }
+                if (organicManureId.HasValue)
+                {
+                    url += $"&organicManureID={organicManureId.Value}";
                 }
 
                 url = string.Format(url, managementId, confirm);
@@ -1513,7 +1526,7 @@ namespace NMP.Portal.Services
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
                         mannerCalculateNutrientResponse = responseWrapper.Data.ToObject<MannerCalculateNutrientResponse>();
-                        
+
                     }
                 }
                 else
@@ -1585,7 +1598,7 @@ namespace NMP.Portal.Services
             return (soilTypeSoilTexture, error);
         }
 
-        public async Task<(decimal, Error)> FetchTotalNBasedByManIdAppDateAndIsGreenCompost(int managementId, DateTime startDate, DateTime endDate, bool confirm,bool isGreenFoodCompost)
+        public async Task<(decimal, Error)> FetchTotalNBasedByManIdAppDateAndIsGreenCompost(int managementId, DateTime startDate, DateTime endDate, bool confirm, bool isGreenFoodCompost, int? organicManureId)
         {
             Error error = null;
             decimal totalN = 0;
@@ -1594,7 +1607,16 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchTotalNBasedByManIdAppDateAndIsGreenCompostAsyncAPI, managementId, fromdate, toDate, confirm,isGreenFoodCompost));
+                string url = APIURLHelper.FetchTotalNBasedByManIdAppDateAndIsGreenCompostAsyncAPI;
+
+                if (organicManureId.HasValue)
+                {
+                    url += $"&organicManureID={organicManureId.Value}";
+                }
+
+                url = string.Format(url, managementId, fromdate, toDate, confirm, isGreenFoodCompost);
+                var response = await httpClient.GetAsync(url);
+                //var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchTotalNBasedByManIdAppDateAndIsGreenCompostAsyncAPI, managementId, fromdate, toDate, confirm,isGreenFoodCompost, organicManureId));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
@@ -1739,7 +1761,7 @@ namespace NMP.Portal.Services
                     Content = content
                 };
                 var response = await httpClient.SendAsync(requestMessage);
-               // var response = await httpClient.DeleteAsync(string.Format(APIURLHelper.DeleteOrganicManureByAPI, orgManureId));
+                // var response = await httpClient.DeleteAsync(string.Format(APIURLHelper.DeleteOrganicManureByAPI, orgManureId));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)

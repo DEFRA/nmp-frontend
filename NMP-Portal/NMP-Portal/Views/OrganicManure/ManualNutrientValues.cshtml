@@ -163,6 +163,17 @@
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptakes[i].AutumnCropNitrogenUptake" value="@Model.AutumnCropNitrogenUptakes[i].AutumnCropNitrogenUptake"></govuk-input>
                 }
             }
+
+            @if (Model.UpdatedOrganicIds != null && Model.UpdatedOrganicIds.Count > 0)
+            {
+                @for (int i = 0; i < Model.UpdatedOrganicIds.Count; i++)
+                {
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.UpdatedOrganicIds[i].OrganicManureId" value="@Model.UpdatedOrganicIds[i].OrganicManureId"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.UpdatedOrganicIds[i].ManagementPeriodId" value="@Model.UpdatedOrganicIds[i].ManagementPeriodId"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.UpdatedOrganicIds[i].Name" value="@Model.UpdatedOrganicIds[i].Name"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.UpdatedOrganicIds[i].Id" value="@Model.UpdatedOrganicIds[i].Id"></govuk-input>
+                }
+            }
             <div class="govuk-form-group">
                 <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
                     <h1 class="govuk-fieldset__heading">@((Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials) ? Resource.lblAddAnalysisValuesForMixedManure : string.Format(Resource.lblEnterTheValuesForYour, Model.ManureTypeName))</h1>
