@@ -1727,7 +1727,14 @@ namespace NMP.Portal.Controllers
                 }
                 else if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass)
                 {
-                    action = "GrassGrowthClass";
+                    if (model.GrassGrowthClassDistinctCount == 1)
+                    {
+                        action = "DryMatterYield";
+                    }
+                    else
+                    {
+                        action = "GrassGrowthClass";
+                    }
                 }
                 else if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other || cropInfoOneList.Count == 1)
                 {
@@ -1748,7 +1755,23 @@ namespace NMP.Portal.Controllers
                 TempData["ErrorCreatePlan"] = ex.Message;
                 return View("CheckAnswer", model);
             }
-            return RedirectToAction(action, new { q = model.YieldEncryptedCounter });
+            string encryptedCounter = string.Empty;
+            if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass)
+            {
+                if(model.GrassGrowthClassQuestion != null)
+                {
+                    encryptedCounter = model.DryMatterYieldEncryptedCounter;
+                }
+                else
+                {
+                    encryptedCounter = model.GrassGrowthClassEncryptedCounter;
+                }
+            }
+            else
+            {
+                encryptedCounter = model.YieldEncryptedCounter;
+            }
+            return RedirectToAction(action, new { q = encryptedCounter });
         }
 
 
@@ -4159,12 +4182,13 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> DefoliationSequence(PlanViewModel model)
         {
             _logger.LogTrace("Crop Controller : DefoliationSequence() post action called");
-
+            model.GrassGrowthClassCounter = 0;
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
             return RedirectToAction("GrassGrowthClass");
         }
 
         [HttpGet]
-        public async Task<IActionResult> GrassGrowthClass()
+        public async Task<IActionResult> GrassGrowthClass(string? q)
         {
             _logger.LogTrace("Crop Controller : GrassGrowthClass() action called");
             PlanViewModel model = new PlanViewModel();
@@ -4183,44 +4207,69 @@ namespace NMP.Portal.Controllers
 
                 foreach (var crop in model.Crops)
                 {
-                    fieldIds.Add(crop.FieldID??0);
+                    fieldIds.Add(crop.FieldID ?? 0);
                 }
                 (List<GrassGrowthClassResponse> grassGrowthClasses, Error error) = await _cropService.FetchGrassGrowthClass(fieldIds);
-                if(error.Message==null)
+                if (error.Message == null)
                 {
                     foreach (var grassGrowthClass in grassGrowthClasses)
                     {
                         grassGrowthClassIds.Add(grassGrowthClass.GrassGrowthClassId);
                     }
                 }
-                
-                
-                model.GrassGrowthClassDistinctCount = grassGrowthClassIds.Distinct().Count();
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
-                if (model.Crops.Count == 1)
-                {
-                    ViewBag.FieldName = model.Crops[0].FieldName;
-                    return View(model);
-                }
-                else
-                {
-                    if (model.GrassGrowthClassDistinctCount == 1)
-                    {
+                //List<GrassGrowthClassResponse> grassGrowthClasses = new List<GrassGrowthClassResponse>()
+                //{
+                //    new GrassGrowthClassResponse{GrassGrowthClassId=1,GrassGrowthClassName="Good" },
+                //    new GrassGrowthClassResponse{GrassGrowthClassId=1,GrassGrowthClassName="Good"}
+                //};
+                //foreach (var grassGrowthClass in grassGrowthClasses)
+                //{
+                //    grassGrowthClassIds.Add(grassGrowthClass.GrassGrowthClassId);
+                //}
 
-                        return View(model);
-                    }
-                    if (model.GrassGrowthClassDistinctCount > 1)
+                model.GrassGrowthClassDistinctCount = grassGrowthClassIds.Distinct().Count();
+                if (model.GrassGrowthClassDistinctCount > 1)
+                {
+                    model.GrassGrowthClassDistinctCount = grassGrowthClassIds.Count;
+                }
+
+                if (string.IsNullOrWhiteSpace(q) && model.Crops != null && model.Crops.Count > 0)
+                {
+                    model.GrassGrowthClassEncryptedCounter = _fieldDataProtector.Protect(model.GrassGrowthClassCounter.ToString());
+                    if (model.GrassGrowthClassCounter == 0)
                     {
-                        if (model.GrassGrowthClassCounter < model.GrassGrowthClassDistinctCount)
-                        {
-                            model.GrassGrowthClassCounter = model.GrassGrowthClassCounter + 1;
-                        }
-                        model.FieldID = model.Crops[model.GrassGrowthClassCounter - 1].FieldID;
-                        ViewBag.FieldName = model.Crops[model.GrassGrowthClassCounter - 1].FieldName;
-                        ViewBag.GrassGrowthClass = grassGrowthClasses[model.GrassGrowthClassCounter - 1].GrassGrowthClassName;
+                        model.FieldID = model.Crops[0].FieldID.Value;
+                        model.FieldName = model.Crops[model.GrassGrowthClassCounter].FieldName;
+                        ViewBag.FieldName = model.Crops[model.GrassGrowthClassCounter].FieldName;
+                        ViewBag.GrassGrowthClass = grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassName;
+                    }
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                }
+                else if (!string.IsNullOrWhiteSpace(q) && (model.Crops != null && model.Crops.Count > 0))
+                {
+                    int itemCount = Convert.ToInt32(_fieldDataProtector.Unprotect(q));
+                    int index = itemCount - 1;//index of list
+                    if (itemCount == 0)
+                    {
+                        model.GrassGrowthClassCounter = 0;
+                        model.GrassGrowthClassEncryptedCounter = string.Empty;
                         _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                        return RedirectToAction("DefoliationSequence");
+                    }
+                    model.FieldID = model.Crops[index].FieldID.Value;
+                    model.FieldName = (await _fieldService.FetchFieldByFieldId(model.Crops[index].FieldID.Value)).Name;
+                    model.GrassGrowthClassCounter = index;
+
+                    model.GrassGrowthClassEncryptedCounter = _fieldDataProtector.Protect(model.GrassGrowthClassCounter.ToString());
+                    model.FieldID = model.Crops[model.GrassGrowthClassCounter].FieldID;
+                    ViewBag.FieldName = model.Crops[model.GrassGrowthClassCounter].FieldName;
+                    ViewBag.GrassGrowthClass = grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassName;
+                    if (model.GrassGrowthClassQuestion != null)
+                    {
+                        return RedirectToAction("DefoliationSequence");
                     }
                 }
+
             }
             catch (Exception ex)
             {
@@ -4228,6 +4277,8 @@ namespace NMP.Portal.Controllers
                 TempData["GrassGrowthClassError"] = ex.Message;
                 return RedirectToAction("DefoliationSequence");
             }
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+            
             return View(model);
         }
 
@@ -4236,44 +4287,78 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> GrassGrowthClass(PlanViewModel model)
         {
             _logger.LogTrace("Crop Controller : GrassGrowthClass() post action called");
-            
 
-            if (model.Crops.Count == 1)
+            List<int> fieldIds = new List<int>();
+            List<int> grassGrowthClassIds = new List<int>();
+
+            foreach (var crop in model.Crops)
+            {
+                fieldIds.Add(crop.FieldID ?? 0);
+            }
+            (List<GrassGrowthClassResponse> grassGrowthClasses, Error error) = await _cropService.FetchGrassGrowthClass(fieldIds);
+            if (error.Message == null)
+            {
+                foreach (var grassGrowthClass in grassGrowthClasses)
+                {
+                    grassGrowthClassIds.Add(grassGrowthClass.GrassGrowthClassId);
+                }
+            }
+            //List<GrassGrowthClassResponse> grassGrowthClasses = new List<GrassGrowthClassResponse>()
+            //    {
+            //        new GrassGrowthClassResponse{GrassGrowthClassId=1,GrassGrowthClassName="Good" },
+            //        new GrassGrowthClassResponse{GrassGrowthClassId=1,GrassGrowthClassName="Good"}
+            //    };
+            //foreach (var grassGrowthClass in grassGrowthClasses)
+            //{
+            //    grassGrowthClassIds.Add(grassGrowthClass.GrassGrowthClassId);
+            //}
+
+            model.GrassGrowthClassDistinctCount = grassGrowthClassIds.Distinct().Count();
+            if (model.GrassGrowthClassDistinctCount > 1)
+            {
+                model.GrassGrowthClassDistinctCount = grassGrowthClassIds.Count;
+            }
+
+            //if (model.GrassGrowthClassDistinctCount>1)
+            //{
+            for (int i = 0; i < model.Crops.Count; i++)
+            {
+                if (model.FieldID == model.Crops[i].FieldID.Value)
+                {
+                    model.GrassGrowthClassCounter++;
+                    if (i + 1 < model.Crops.Count)
+                    {
+                        model.FieldID = model.Crops[i + 1].FieldID.Value;
+                        model.FieldName = model.Crops[i + 1].FieldName;
+                        ViewBag.FieldName = model.Crops[i + 1].FieldName;
+                        ViewBag.GrassGrowthClass = grassGrowthClasses[i + 1].GrassGrowthClassName;
+                    }
+
+                    break;
+                }
+            }
+            model.GrassGrowthClassEncryptedCounter = _fieldDataProtector.Protect(model.GrassGrowthClassCounter.ToString());
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+            
+            if (model.GrassGrowthClassDistinctCount == 1 && model.Crops.Count > 1)
+            {
+                return RedirectToAction("DryMatterYield");
+            }
+            if (model.GrassGrowthClassCounter == model.Crops.Count)
             {
                 return RedirectToAction("CheckAnswer");
             }
             else
             {
-                if (model.GrassGrowthClassDistinctCount == 1)
-                {
-                    if (model.GrassGrowthClassQuestion == null)
-                    {
-                        ModelState.AddModelError("GrassGrowthClassQuestion", Resource.MsgSelectAnOptionBeforeContinuing);
-                    }
-                    if (!ModelState.IsValid)
-                    {
-                        return View(model);
-                    }
-                    return RedirectToAction("DryMatterYield");
-                }
-                if (model.GrassGrowthClassDistinctCount > 1)
-                {
-                    if (model.GrassGrowthClassDistinctCount == model.GrassGrowthClassCounter)
-                    {
-                        return RedirectToAction("CheckAnswer");
-                    }
-                }
-
-                return RedirectToAction("GrassGrowthClass");
+                return View(model);
             }
-            
-            //return RedirectToAction("CheckAnswer");
+
         }
 
         [HttpGet]
-        public async Task<IActionResult> DryMatterYield()
+        public async Task<IActionResult> DryMatterYield(string q)
         {
-            _logger.LogTrace("Crop Controller : DryMatterYield() action called");
+            _logger.LogTrace($"Crop Controller : DryMatterYield({q}) action called");
             PlanViewModel model = new PlanViewModel();
             try
             {
@@ -4285,6 +4370,33 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
+                if (string.IsNullOrWhiteSpace(q) && model.Crops != null && model.Crops.Count > 0)
+                {
+                    model.DryMatterYieldEncryptedCounter = _fieldDataProtector.Protect(model.DryMatterYieldCounter.ToString());
+                    if (model.DryMatterYieldCounter == 0)
+                    {
+                        model.FieldID = model.Crops[0].FieldID.Value;
+                    }
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                }
+                else if (!string.IsNullOrWhiteSpace(q) && (model.Crops != null && model.Crops.Count > 0))
+                {
+                    int itemCount = Convert.ToInt32(_fieldDataProtector.Unprotect(q));
+                    int index = itemCount - 1;//index of list
+                    if (itemCount == 0)
+                    {
+                        model.DryMatterYieldCounter = 0;
+                        model.DryMatterYieldEncryptedCounter = string.Empty;
+                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                        return RedirectToAction("GrassGrowthClass");
+                    }
+                    model.FieldID = model.Crops[index].FieldID.Value;
+                    model.FieldName = (await _fieldService.FetchFieldByFieldId(model.Crops[index].FieldID.Value)).Name;
+                    model.DryMatterYieldCounter = index;
+                    model.DryMatterYieldEncryptedCounter = _fieldDataProtector.Protect(model.DryMatterYieldCounter.ToString());
+                }
+
+                return View(model);
 
             }
             catch (Exception ex)
@@ -4294,7 +4406,6 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("GrassGrowthClass");
             }
 
-            return View(model);
         }
 
         [HttpPost]
@@ -4303,7 +4414,67 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace("Crop Controller : DryMatterYield() post action called");
 
-            return RedirectToAction("CheckAnswer");
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            if (model.GrassGrowthClassQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterDifferentFiguresForEachField)
+            {
+                for (int i = 0; i < model.Crops.Count; i++)
+                {
+                    if (model.FieldID == model.Crops[i].FieldID.Value)
+                    {
+                        model.DryMatterYieldCounter++;
+                        if (i + 1 < model.Crops.Count)
+                        {
+                            model.FieldID = model.Crops[i + 1].FieldID.Value;
+                        }
+
+                        break;
+                    }
+                }
+                model.DryMatterYieldEncryptedCounter = _fieldDataProtector.Protect(model.DryMatterYieldCounter.ToString());
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                if (model.IsCheckAnswer && (!model.IsAnyChangeInField) && (!model.IsQuestionChange) && (!model.IsCropGroupChange))
+                {
+                    return RedirectToAction("CheckAnswer");
+                }
+            }
+
+            else if (model.GrassGrowthClassQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
+            {
+                model.DryMatterYieldCounter = 1;
+                for (int i = 0; i < model.Crops.Count; i++)
+                {
+                    model.Crops[i].SowingDate = model.Crops[0].SowingDate;
+                    //model.Crops[i].EncryptedCounter = _fieldDataProtector.Protect(model.SowingDateCurrentCounter.ToString());
+                }
+                model.DryMatterYieldEncryptedCounter = _fieldDataProtector.Protect(model.DryMatterYieldCounter.ToString());
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                if (model.IsCheckAnswer && (!model.IsAnyChangeInField) && (!model.IsCropGroupChange))
+                {
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                    return RedirectToAction("CheckAnswer");
+                }
+                
+                return RedirectToAction("CheckAnswer");
+            }
+
+            if (model.DryMatterYieldCounter == model.Crops.Count)
+            {
+                if (model.IsCheckAnswer && (!model.IsAnyChangeInField))
+                {
+                    return RedirectToAction("CheckAnswer");
+                }
+                
+                return RedirectToAction("CheckAnswer");
+            }
+            else
+            {
+                return View(model);
+            }
+
         }
     }
 }

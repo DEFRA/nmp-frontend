@@ -7,7 +7,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@(Model.IsCheckAnswer&& (!Model.IsAnyChangeInField)&& (!Model.IsCropGroupChange) ? "CheckAnswer" :"GrassGrowthClass") asp-controller="Crop" asp-route-q="@Model.SowingDateEncryptedCounter">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(Model.IsCheckAnswer&& (!Model.IsAnyChangeInField)&& (!Model.IsCropGroupChange) ? "CheckAnswer" :"DryMatterYield") asp-controller="Crop" asp-route-q="@Model.DryMatterYieldEncryptedCounter">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="DryMatterYield" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
@@ -32,7 +32,7 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherCropName"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SowingDateQuestion"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldID"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldID" value="@Model.FieldID"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.YieldQuestion"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.YieldCurrentCounter" value="@Model.YieldCurrentCounter"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.YieldEncryptedCounter" value="@Model.YieldEncryptedCounter"></govuk-input>
@@ -48,10 +48,17 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPlanRecord" value="@Model.IsPlanRecord"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupName"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropInfo2"></govuk-input>
+
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassSeason"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CurrentSward"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassDistinctCount"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassCounter"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassEncryptedCounter"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassQuestion"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DryMatterYieldCounter" value="@Model.DryMatterYieldCounter"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DryMatterYieldEncryptedCounter"></govuk-input>
+
+
     @if (Model.FieldList != null && Model.FieldList.Count > 0)
     {
         @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -75,24 +82,35 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].EncryptedCounter" value="@Model.Crops[i].EncryptedCounter"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].CropOrder" value="@Model.Crops[i].CropOrder"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].CropGroupName" value="@Model.Crops[i].CropGroupName"></govuk-input>
+
+
+            @if (i == Model.DryMatterYieldCounter)
+            {
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-two-thirds">
+                        <h1 class="govuk-heading-l">
+                            @if (Model.GrassGrowthClassQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
+                            {
+                                @string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForFields, Model.Crops[0].Year)
+                            }
+                            else
+                            {
+                                @string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldFor, Model.Crops[i].FieldName, Model.Crops[i].Year)
+                            }
+                        </h1>
+                    </div>
+                </div>
+            }
         }
 
     }
 
-    <div class="govuk-grid-row">
+    
+    <h2>Page under construction</h2>
+    <govuk-button type="submit" class="margin-bottom-forty">
+        @Resource.lblContinue
+    </govuk-button>
 
-        <div class="govuk-grid-column-two-thirds">
-            <h1 class="govuk-heading-l">
-                @string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForFields,Model.Crops[0].Year)
-            </h1>
-            <h2>Page under construction</h2>
-            <govuk-button type="submit" class="margin-bottom-forty">
-                @Resource.lblContinue
-            </govuk-button>
+    <p class="govuk-body cancel-link"><a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
 
-            <p class="govuk-body cancel-link"><a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
-
-        </div>
-
-    </div>
 </form>
