@@ -85,5 +85,8 @@ namespace NMP.Portal.ViewModels
         public int GrassGrowthClassDistinctCount { get; set; } = 0;
         public string? GrassGrowthClassEncryptedCounter { get; set; }
         public int? GrassGrowthClassQuestion { get; set; }
+
+        public int DryMatterYieldCounter { get; set; } = 0;
+        public string? DryMatterYieldEncryptedCounter { get; set; }
     }
 }
