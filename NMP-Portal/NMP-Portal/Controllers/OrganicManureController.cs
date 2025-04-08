@@ -6951,7 +6951,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Farm Controller : Exception in RemoveOrganicManure() action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogTrace($"OrganicManure Controller : Exception in RemoveOrganicManure() action : {ex.Message}, {ex.StackTrace}");
                 if (model.IsComingFromRecommendation)
                 {
                     TempData["NutrientRecommendationsError"] = ex.Message;
@@ -7114,7 +7114,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Farm Controller : Exception in RemoveOrganicManure() post action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogTrace($"OrganicManure Controller : Exception in RemoveOrganicManure() post action : {ex.Message}, {ex.StackTrace}");
                 TempData["RemoveOrganicManureError"] = ex.Message;
                 return View(model);
             }
