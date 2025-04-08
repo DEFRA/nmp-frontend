@@ -502,7 +502,7 @@
                                                                 @orgManure.ManureTypeName
                                                             </td>
                                                             <td class="govuk-table__cell">
-                                                                <p class="govuk-body cancel-link"><a asp-action="DeletePlanOrganicAndFertiliser" asp-controller="Crop" asp-route-q="@orgManure.EncryptedId" asp-route-r="@ViewBag.OrganicManure" asp-route-s="@orgManure.EncryptedFieldName" asp-route-u="@ViewBag.isComingFromRecommendation" asp-route-t="@orgManure.EncryptedManureTypeName" asp-route-v="@Model.EncryptedFieldId">@Resource.lblRemove</a></p>
+                                                                <p class="govuk-body cancel-link"><a asp-controller="OrganicManure" asp-action="RemoveOrganicManure" asp-route-q="@orgManure.EncryptedId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@orgManure.EncryptedFieldName" asp-route-t="@Model.EncryptedFarmId" asp-route-u="@Model.EncryptedHarvestYear">@Resource.lblRemove</a></p>
                                                             </td>
                                                         </tr>
                                                     }
