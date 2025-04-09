@@ -1742,17 +1742,16 @@ namespace NMP.Portal.Services
             }
             return (organicManures, error);
         }
-        public async Task<(string, Error)> DeleteOrganicManureByIdAsync(List<int> organicManureIds)
+        public async Task<(string, Error)> DeleteOrganicManureByIdAsync(string organicManureIds)
         {
-            var orgManureIdsRequest = new { organicManureIds };
+            
             Error error = new Error();
             string message = string.Empty;
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var jsonContent = JsonConvert.SerializeObject(orgManureIdsRequest);
-
-                var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+            
+                var content = new StringContent(organicManureIds, Encoding.UTF8, "application/json");
                 var url =APIURLHelper.DeleteOrganicManureByAPI;
 
 

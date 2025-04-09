@@ -930,7 +930,7 @@
                     <p class="govuk-body margin-bottom-forty">
                         @Resource.lblYouCanAlso
                         @*     <a asp-action="DeletePlanOrganicAndFertiliser" asp-controller="Crop" asp-route-q="@Model.EncryptedFertId" asp-route-r="@ViewBag.Fertliser">@Resource.lblRemoveThisApplication</a> *@
-                        <a href="#">
+                        <a asp-controller="OrganicManure" asp-action="RemoveOrganicManure">
                             @if (ViewBag.SelectedFields != null && ViewBag.SelectedFields.Count == 1)
                             {
                                 @string.Format(Resource.lblRemoveThisApplicationFromField, Model.FieldName)
