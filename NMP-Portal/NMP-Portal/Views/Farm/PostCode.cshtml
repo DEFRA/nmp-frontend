@@ -18,6 +18,8 @@
 
         <form asp-action="PostCode" method="post" asp-controller="Farm" autocomplete="on">
             @Html.AntiForgeryToken()
+
+            <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
@@ -40,6 +42,7 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsUpdate"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
             }
+            </div>
           @*   <govuk-notification-banner>
                 <govuk-notification-banner-title>
                     @Resource.lblImportant

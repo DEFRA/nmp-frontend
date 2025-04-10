@@ -7,10 +7,28 @@
     var YesIHaveDifferentDatesForEachOfTheseFields = (int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveDifferentDatesForEachOfTheseFields;
     // int PotatoGroupId = (int)NMP.Portal.Enums.CropGroup.Potatoes;
     int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
+
+    var action = "";
+    if (Model.IsCheckAnswer && (!Model.IsAnyChangeInField) && (!Model.IsCropGroupChange))
+    {
+        action = "CheckAnswer";
+    }
+    else if (Model.CurrentSward == (int)NMP.Portal.Enums.CurrentSward.NewSward)
+    {
+        action = "GrassSeason";
+    }
+    else if(Model.CropGroupId==(int)NMP.Portal.Enums.CropGroup.Grass)
+    {
+        action = "CurrentSward";
+    }
+    else
+    {
+        action = "VarietyName";
+    }
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer && (!Model.IsAnyChangeInField) && (!Model.IsCropGroupChange)? "CheckAnswer" :"VarietyName")" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@action" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="SowingDateQuestion" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
@@ -48,6 +66,9 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAddAnotherCrop" value="@Model.IsAddAnotherCrop"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPlanRecord" value="@Model.IsPlanRecord"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupName"></govuk-input>
+
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CurrentSward"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassSeason"></govuk-input>
     @if (Model.FieldList != null && Model.FieldList.Count > 0)
     {
         @for (int i = 0; i < Model.FieldList.Count; i++)

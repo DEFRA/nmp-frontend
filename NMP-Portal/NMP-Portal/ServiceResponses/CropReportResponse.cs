@@ -8,5 +8,7 @@ namespace NMP.Portal.ServiceResponses
     {
         [JsonProperty("ManagementPeriods")]
         public List<RecommendationReportResponse>? ManagementPeriods { get; set; }
+        [JsonProperty("SNSAnalysis")]
+        public SnsResponse? SNSAnalysis { get; set; }
     }
 }

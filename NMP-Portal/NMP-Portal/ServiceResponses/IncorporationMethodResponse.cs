@@ -9,5 +9,8 @@ namespace NMP.Portal.ServiceResponses
 
         [JsonProperty("name")]
         public string? Name { get; set; }
+        
+        [JsonProperty("sortOrder")]
+        public int SortOrder {  get; set; }
     }
 }

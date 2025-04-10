@@ -32,13 +32,13 @@
     switch (Model.ApplicationRateMethod)
     {
         case 0:
-            howWouldYouEnterApplicationRate = Resource.lblEnterAnApplicationRate;
+            howWouldYouEnterApplicationRate = string.Format(Resource.lblEnterAnApplicationRate, (Model.IsManureTypeLiquid.HasValue && Model.IsManureTypeLiquid == true) ? Resource.lblMeterCubePerHa : Resource.lblTonnesPerHectare);
             break;
         case 1:
             howWouldYouEnterApplicationRate = Resource.lblCalculateBasedOnTheAreaAndQuantity;
             break;
         case 2:
-            howWouldYouEnterApplicationRate = string.Format(Resource.lblUseTypicalApplicationRate, Model.ApplicationRateArable);
+            howWouldYouEnterApplicationRate = string.Format(Resource.lblUseTypicalApplicationRate, Model.ApplicationRateArable, (Model.IsManureTypeLiquid.HasValue && Model.IsManureTypeLiquid == true) ? Resource.lblMeterCubePerHa : Resource.lblTonnesPerHectare); //  string.Format(Resource.lblUseTypicalApplicationRate, Model.ApplicationRateArable);
             break;
     }
 
@@ -256,6 +256,7 @@
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptakes[i].AutumnCropNitrogenUptake" value="@Model.AutumnCropNitrogenUptakes[i].AutumnCropNitrogenUptake"></govuk-input>
                 }
             }
+            <div class="check-answers">
             <govuk-summary-list>
                 @if (!Model.IsComingFromRecommendation && ViewBag.SelectedFields == null)
                 {
@@ -900,6 +901,7 @@
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
             </govuk-summary-list>
+            </div>
 
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblAddToPlan

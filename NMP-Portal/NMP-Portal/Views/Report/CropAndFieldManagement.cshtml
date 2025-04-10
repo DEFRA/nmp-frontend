@@ -498,43 +498,67 @@
                                 </div>
                             </div>
                         }
-                        @if (field.SoilAnalysis != null && field.SoilAnalysis.SoilAnalysisAndSNSanalysis != null)
+                        @if (field.SoilAnalysis != null)
                         {
                             <div class="govuk-grid-row">
                                 <div class="govuk-grid-column-full">
                                     @* pass field *@
                                     <h2 class="govuk-heading-m">@string.Format(Resource.lblSoilAnalysisForField, field.Name)</h2>
-                                    <p class="govuk-body">@string.Format(Resource.lblLastUpdatedOnDate, field.SoilAnalysis.LastModify != null ? field.SoilAnalysis.LastModify.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotEntered)</p>
 
                                     <table class="govuk-table govuk-table-small margin-bottom-sixty">
                                         <thead class="govuk-table__head">
                                             <tr class="govuk-table__row">
+                                                <th class="govuk-table__header">
+                                                    @Resource.lblDateAnalysisTaken
+                                                </th>
                                                 <th class="govuk-table__header">@Resource.lblPh</th>
                                                 <th class="govuk-table__header">@Resource.lblPhosphorusP</th>
                                                 <th class="govuk-table__header">@Resource.lblPotassium</th>
                                                 <th class="govuk-table__header">@Resource.lblMagnesiumMg</th>
-                                                <th class="govuk-table__header">@Resource.lblSNS</th>
-                                                <th class="govuk-table__header">@Resource.lblSNSIndexForReport</th>
-                                                <th class="govuk-table__header">@Resource.lblSNSMethod</th>
                                             </tr>
                                         </thead>
                                         <tbody class="govuk-table__body">
                                             <tr class="govuk-table__row">
-                                                <td class="govuk-table__cell">@(field.SoilAnalysis.SoilAnalysisAndSNSanalysis.PH != null ? field.SoilAnalysis.SoilAnalysisAndSNSanalysis.PH : Resource.lblNotEntered)</td>
+                                                <td class="govuk-table__cell">@(field.SoilAnalysis.Date != null ? field.SoilAnalysis.Date.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotEntered)</td>
+                                                <td class="govuk-table__cell">@(field.SoilAnalysis.PH != null ? field.SoilAnalysis.PH : Resource.lblNotEntered)</td>
                                                 <td class="govuk-table__cell">
-                                                    @(field.SoilAnalysis.SoilAnalysisAndSNSanalysis.PhosphorusIndex != null ? field.SoilAnalysis.SoilAnalysisAndSNSanalysis.PhosphorusIndex : Resource.lblNotEntered)
+                                                    @(field.SoilAnalysis.PhosphorusIndex != null ? field.SoilAnalysis.PhosphorusIndex : Resource.lblNotEntered)
                                                 </td>
                                                 <td class="govuk-table__cell">
-                                                    @(field.SoilAnalysis.SoilAnalysisAndSNSanalysis.PotassiumIndex != null ? field.SoilAnalysis.SoilAnalysisAndSNSanalysis.PotassiumIndex : Resource.lblNotEntered)
+                                                    @(field.SoilAnalysis.PotassiumIndex != null ? field.SoilAnalysis.PotassiumIndex : Resource.lblNotEntered)
                                                 </td>
                                                 <td class="govuk-table__cell">
-                                                    @(field.SoilAnalysis.SoilAnalysisAndSNSanalysis.MagnesiumIndex != null ? field.SoilAnalysis.SoilAnalysisAndSNSanalysis.MagnesiumIndex : Resource.lblNotEntered)
+                                                    @(field.SoilAnalysis.MagnesiumIndex != null ? field.SoilAnalysis.MagnesiumIndex : Resource.lblNotEntered)
                                                 </td>
+                                            </tr>
+                                        </tbody>
+
+
+                                    </table>
+                                </div>
+                            </div>
+                        }
+                        @if (crop.SNSAnalysis != null)
+                        {
+                            <div class="govuk-grid-row">
+                                <div class="govuk-grid-column-full">
+                                    <h2 class="govuk-heading-m">@string.Format(Resource.lblSoilMineralNitrogenDetailsForFieldName, field.Name)</h2>
+                                </div>
+                                <div class="govuk-grid-column-one-half half-table-left">
+                                    <table class="govuk-table govuk-table-small margin-bottom-sixty">
+                                        <thead class="govuk-table__head">
+                                            <tr class="govuk-table__row">
+                                                <th class="govuk-table__header">@Resource.lblSNSMethod</th>
+                                                <td class="govuk-table__cell">@(crop.SNSAnalysis.SNSMethod != null ? crop.SNSAnalysis.SNSMethod : Resource.lblNotEntered)</td>                                                                                               
+                                            </tr>
+                                        </thead>
+                                        <tbody class="govuk-table__body">
+                                            <tr class="govuk-table__row">
+                                                <th class="govuk-table__header">@Resource.lblSNS</th>
                                                 <td class="govuk-table__cell">
-                                                    @(field.SoilAnalysis.SoilAnalysisAndSNSanalysis.SNS != null ? field.SoilAnalysis.SoilAnalysisAndSNSanalysis.SNS : Resource.lblNotEntered)
-                                                </td>
-                                                <td class="govuk-table__cell">@(field.SoilAnalysis.SoilAnalysisAndSNSanalysis.SNSIndex != null ? field.SoilAnalysis.SoilAnalysisAndSNSanalysis.SNSIndex : Resource.lblNotEntered)</td>
-                                                <td class="govuk-table__cell">@(field.SoilAnalysis.SoilAnalysisAndSNSanalysis.SNSMethod != null ? field.SoilAnalysis.SoilAnalysisAndSNSanalysis.SNSMethod : Resource.lblNotEntered)</td>
+                                                    @(crop.SNSAnalysis.SnsValue != null ? crop.SNSAnalysis.SnsValue : Resource.lblNotEntered)
+                                                </td>                                                
+                                             
                                             </tr>
                                         </tbody>
 
@@ -602,7 +626,7 @@
                                                                     @foreach (var comment in commentsForNutrient)
                                                                     {
                                                                         <p class="govuk-body">
-                                                                            @comment.Comment
+                                                                            @Html.Raw(comment.Comment)
                                                                         </p>
                                                                     }
                                                                 }
