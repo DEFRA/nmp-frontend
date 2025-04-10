@@ -738,6 +738,15 @@ namespace NMP.Portal.Controllers
                                         }
                                     }
                                 }
+                                (List<FarmManureTypeResponse> farmManureTypeList, error) = await _organicManureService.FetchFarmManureTypeByFarmId(model.FarmId ?? 0);
+                                if (error == null && farmManureTypeList.Count > 0)
+                                {
+                                    FarmManureTypeResponse farmManureType = farmManureTypeList.Where(x => x.ManureTypeID == model.ManureTypeId).FirstOrDefault();
+                                    if (farmManureType != null)
+                                    {
+                                        model.DefaultFarmManureValueDate = farmManureType.ModifiedOn == null ? farmManureType.CreatedOn : farmManureType.ModifiedOn;
+                                    }
+                                }
                                 foreach (var organicManure in model.OrganicManures)
                                 {
                                     if (model.ApplicationDate.HasValue)
@@ -4169,10 +4178,18 @@ namespace NMP.Portal.Controllers
                             model.ApplicationDate = organicManure.ApplicationDate.ToLocalTime();
                             model.ApplicationMethod = organicManure.ApplicationMethodID;
                             (model.ApplicationMethodName, error) = await _organicManureService.FetchApplicationMethodById(model.ApplicationMethod.Value);
-                            if (error != null && string.IsNullOrWhiteSpace(error.Message))
+
+                            if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                             {
-                                //error showing
+                                _httpContextAccessor.HttpContext?.Session.Remove("OrganicManure");
+                                TempData["ErrorOnHarvestYearOverview"] = error.Message;
+                                return RedirectToAction("HarvestYearOverview", "Crop", new
+                                {
+                                    id = model.EncryptedFarmId,
+                                    year = model.EncryptedHarvestYear
+                                });
                             }
+                            
                             (ManureType manureType, error) = await _organicManureService.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
                             if (error == null && manureType != null)
                             {
@@ -4200,7 +4217,7 @@ namespace NMP.Portal.Controllers
                             model.ManureType.DryMatter = organicManure.DryMatterPercent;
                             model.ManureType.Uric = organicManure.UricAcid;
 
-                            (List<FarmManureTypeResponse> farmManureTypeResponse, error) = await _organicManureService.FetchFarmManureTypeByFarmId(model.ManureTypeId.Value);
+                            (List<FarmManureTypeResponse> farmManureTypeResponse, error) = await _organicManureService.FetchFarmManureTypeByFarmId(model.FarmId.Value);
                             if (error == null && farmManureTypeResponse != null && farmManureTypeResponse.Count > 0)
                             {
                                 FarmManureTypeResponse farmManureType = farmManureTypeResponse.Where(x => x.ManureTypeID == model.ManureTypeId && x.ManureTypeName == model.ManureTypeName).FirstOrDefault();
@@ -4807,7 +4824,10 @@ namespace NMP.Portal.Controllers
                             }
 
                             decimal decimalOfTotalNForUseInNmaxCalculation = Convert.ToDecimal(percentOfTotalNForUseInNmaxCalculation / 100.0);
-                            currentApplicationNitrogen = (totalNitrogen * model.ApplicationRate.Value * decimalOfTotalNForUseInNmaxCalculation);
+                            if(model.ApplicationRate.HasValue)
+                            {
+                                currentApplicationNitrogen = (totalNitrogen * model.ApplicationRate.Value * decimalOfTotalNForUseInNmaxCalculation);
+                            }
                         }
                     }
 
@@ -5932,7 +5952,7 @@ namespace NMP.Portal.Controllers
                             {
                                 if (isSlurry)
                                 {
-                                    if (model.ApplicationRate.Value > 30)
+                                    if (model.ApplicationRate.HasValue && model.ApplicationRate.Value > 30)
                                     {
                                         model.IsEndClosedPeriodFebruaryWarning = true;
                                         if (!isGetCheckAnswer)
@@ -5950,7 +5970,7 @@ namespace NMP.Portal.Controllers
                                 }
                                 if (isPoultryManure)
                                 {
-                                    if (model.ApplicationRate.Value > 8)
+                                    if (model.ApplicationRate.HasValue && model.ApplicationRate.Value > 8)
                                     {
                                         model.IsEndClosedPeriodFebruaryWarning = true;
                                         if (!isGetCheckAnswer)
@@ -5972,7 +5992,7 @@ namespace NMP.Portal.Controllers
                             {
                                 if (isSlurry)
                                 {
-                                    if (model.ApplicationRate.Value > 30)
+                                    if (model.ApplicationRate.HasValue && model.ApplicationRate.Value > 30)
                                     {
                                         model.IsEndClosedPeriodFebruaryWarning = true;
                                         if (!isGetCheckAnswer)
@@ -5990,7 +6010,7 @@ namespace NMP.Portal.Controllers
                                 }
                                 if (isPoultryManure)
                                 {
-                                    if (model.ApplicationRate.Value > 8)
+                                    if (model.ApplicationRate.HasValue && model.ApplicationRate.Value > 8)
                                     {
                                         model.IsEndClosedPeriodFebruaryWarning = true;
                                         if (!isGetCheckAnswer)
@@ -6624,7 +6644,10 @@ namespace NMP.Portal.Controllers
                         }
 
                         decimal decimalOfTotalNForUseInNmaxCalculation = Convert.ToDecimal(percentOfTotalNForUseInNmaxCalculation / 100.0);
-                        currentApplicationNitrogen = (totalNitrogen * model.ApplicationRate.Value * decimalOfTotalNForUseInNmaxCalculation);
+                        if(model.ApplicationRate.HasValue)
+                        {
+                            currentApplicationNitrogen = (totalNitrogen * model.ApplicationRate.Value * decimalOfTotalNForUseInNmaxCalculation);
+                        }
                     }
                 }
 
