@@ -22,6 +22,7 @@
             <govuk-error-summary-item href="#">@TempData["CropGroupNameError"]</govuk-error-summary-item>
         </govuk-error-summary>
     }
+    <div hidden="true">
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupId"></govuk-input>
@@ -88,7 +89,7 @@
         }
 
     }
-
+    </div>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
@@ -100,7 +101,16 @@
             </govuk-button>
             @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
             {
-                <p class="govuk-body cancel-link"><a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
+                <p class="govuk-body cancel-link">
+                    @if (!Model.IsCheckAnswer)
+                    {
+                        <a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a>
+                    }
+                    else
+                    {
+                        <a asp-action="Cancel" asp-controller="Crop">@Resource.lblCancel</a>
+                    }
+                </p>
             }
             else
             {

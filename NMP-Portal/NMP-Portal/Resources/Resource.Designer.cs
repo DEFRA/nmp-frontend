@@ -1213,6 +1213,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to cancel?.
+        /// </summary>
+        public static string lblAreYouSureYouWantToCancel {
+            get {
+                return ResourceManager.GetString("lblAreYouSureYouWantToCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to continue?.
         /// </summary>
         public static string lblAreYouSureYouWantToContinue {
@@ -7818,6 +7827,15 @@ namespace NMP.Portal.Resources {
         public static string lblTheEffectivenessOfYourOrganicMaterialApp {
             get {
                 return ResourceManager.GetString("lblTheEffectivenessOfYourOrganicMaterialApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The information entered about this {0} will be lost..
+        /// </summary>
+        public static string lblTheInformationEnteredAboutThisWillBeLost {
+            get {
+                return ResourceManager.GetString("lblTheInformationEnteredAboutThisWillBeLost", resourceCulture);
             }
         }
         
