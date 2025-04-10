@@ -618,7 +618,28 @@ namespace NMP.Portal.Controllers
                         Text = f.Name.ToString()
                     }).ToList();
                     ViewBag.FieldList = selectListItem.OrderBy(x => x.Text).ToList();
-
+                    if (!string.IsNullOrWhiteSpace(model.EncryptedOrgManureId))
+                    {
+                        (List<FertiliserAndOrganicManureUpdateResponse> organicManureResponse, error) = await _organicManureService.FetchFieldWithSameDateAndManureType(Convert.ToInt32(_cropDataProtector.Unprotect(model.EncryptedOrgManureId)), model.FarmId.Value, model.HarvestYear.Value);
+                        //(List<FertiliserAndOrganicManureUpdateResponse> organicManureResponse, error) = await _organicManureService.FetchFieldWithSameDateAndManureType(decryptedId, model.FarmId.Value, model.HarvestYear.Value);
+                        if (string.IsNullOrWhiteSpace(error.Message) && organicManureResponse != null && organicManureResponse.Count > 0)
+                        {
+                            selectListItem = new List<SelectListItem>();
+                            selectListItem = organicManureResponse.Select(f => new SelectListItem
+                            {
+                                Value = f.Id.ToString(),
+                                Text = f.Name.ToString()
+                            }).GroupBy(x => x.Value)
+                            .Select(g => g.First())
+                            .ToList();
+                            ViewBag.FieldList = selectListItem.OrderBy(x => x.Text).ToList();
+                        }
+                        else
+                        {
+                            TempData["FieldError"] = error.Message;
+                            return View(model);
+                        }
+                    }
                     if (model.FieldList == null || model.FieldList.Count == 0)
                     {
                         ModelState.AddModelError("FieldList", Resource.MsgSelectAtLeastOneField);
