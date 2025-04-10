@@ -3731,8 +3731,8 @@ live</value>
   <data name="lblFertiliser" xml:space="preserve">
     <value>Fertiliser</value>
   </data>
-  <data name="lblRemoveAnApplicationOfManureForHarvestYear" xml:space="preserve">
-    <value>Remove an application of {0} for harvest year {1}</value>
+  <data name="lblRemoveAnOrganicMaterialApplicationFromField" xml:space="preserve">
+    <value>Remove an organic material application from {0}</value>
   </data>
   <data name="MsgInorganicFertiliserApplicationRemoved" xml:space="preserve">
     <value>Inorganic fertiliser application removed</value>
@@ -3743,8 +3743,8 @@ live</value>
   <data name="lblInorganicFertiliser" xml:space="preserve">
     <value>inorganic fertiliser</value>
   </data>
-  <data name="MsgDeletePlanFertiliserContent1" xml:space="preserve">
-    <value>This will remove the information about this inorganic fertiliser application from {0} and change the {1} nutrient recommendations.</value>
+  <data name="MsgDeleteOrganicAndFertiliserContent1" xml:space="preserve">
+    <value>This will remove the information about this {0} application from {1} and change the {2} nutrient recommendations.</value>
   </data>
   <data name="MsgDeletePlanOrganicAndFertiliserContent2" xml:space="preserve">
     <value>Which fields would you like to remove this application from?</value>
@@ -4181,8 +4181,8 @@ live</value>
   <data name="lblRemoveThisApplicationFromTheseField" xml:space="preserve">
     <value>Remove this application from these field</value>
   </data>
-  <data name="MsgDeletePlanFertiliserContent2" xml:space="preserve">
-    <value>This will remove the information about this inorganic fertiliser application are change the {0} nutrient recommendations for these fields.</value>
+  <data name="MsgDeleteOrganicAndFertiliserContent2" xml:space="preserve">
+    <value>This will remove the information about this {0} application are change the {1} nutrient recommendations for these fields:</value>
   </data>
   <data name="lblGrass" xml:space="preserve">
     <value>Grass</value>
@@ -4276,6 +4276,15 @@ live</value>
   </data>
   <data name="lblWhatIsTheTotalTargetDryMatterYieldForFields" xml:space="preserve">
     <value>What is the total target dry matter yield for fields in {0}</value>
+  </data>
+  <data name="RemoveAnOrganicMaterialApplication" xml:space="preserve">
+    <value>Remove an organic material application</value>
+  </data>
+  <data name="lblOrganicManure" xml:space="preserve">
+    <value>organic manure</value>
+  </data>
+  <data name="MsgDeleteOrganicContent2" xml:space="preserve">
+    <value>This will remove the information about this {0} application and change the {1} nutrient recommendations for these fields:</value>
   </data>
   <data name="lblReportError" xml:space="preserve">
     <value>Please report this error to &lt;a href="mailto:helpdesk@rsk-bsl.co.uk"&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt; include what you were trying to do and the status code : {0}</value>

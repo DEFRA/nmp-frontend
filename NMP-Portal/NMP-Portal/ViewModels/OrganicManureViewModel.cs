@@ -134,5 +134,6 @@ namespace NMP.Portal.ViewModels
         public List<FertiliserAndOrganicManureUpdateResponse>? UpdatedOrganicIds { get; set; }
         public string? FieldName { get; set; }
         public bool? IsApplicationDateChange { get; set; } = false;
+        public bool? IsDeleteOrganic { get; set; }
     }
 }

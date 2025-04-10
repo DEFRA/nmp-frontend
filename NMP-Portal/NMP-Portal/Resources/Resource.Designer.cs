@@ -5608,6 +5608,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to organic manure.
+        /// </summary>
+        public static string lblOrganicManure {
+            get {
+                return ResourceManager.GetString("lblOrganicManure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Organic manure applications.
         /// </summary>
         public static string lblOrganicManureApplications {
@@ -6535,15 +6544,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove an application of {0} for harvest year {1}.
-        /// </summary>
-        public static string lblRemoveAnApplicationOfManureForHarvestYear {
-            get {
-                return ResourceManager.GetString("lblRemoveAnApplicationOfManureForHarvestYear", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Remove an inorganic fertiliser application.
         /// </summary>
         public static string lblRemoveAnInorganicFertiliserApplication {
@@ -6558,6 +6558,15 @@ namespace NMP.Portal.Resources {
         public static string lblRemoveAnInorganicFertiliserApplicationFromField {
             get {
                 return ResourceManager.GetString("lblRemoveAnInorganicFertiliserApplicationFromField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove an organic material application from {0}.
+        /// </summary>
+        public static string lblRemoveAnOrganicMaterialApplicationFromField {
+            get {
+                return ResourceManager.GetString("lblRemoveAnOrganicMaterialApplicationFromField", resourceCulture);
             }
         }
         
@@ -10641,20 +10650,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This will remove the information about this inorganic fertiliser application from {0} and change the {1} nutrient recommendations..
+        ///   Looks up a localized string similar to This will remove the information about this {0} application from {1} and change the {2} nutrient recommendations..
         /// </summary>
-        public static string MsgDeletePlanFertiliserContent1 {
+        public static string MsgDeleteOrganicAndFertiliserContent1 {
             get {
-                return ResourceManager.GetString("MsgDeletePlanFertiliserContent1", resourceCulture);
+                return ResourceManager.GetString("MsgDeleteOrganicAndFertiliserContent1", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This will remove the information about this inorganic fertiliser application are change the {0} nutrient recommendations for these fields..
+        ///   Looks up a localized string similar to This will remove the information about this {0} application are change the {1} nutrient recommendations for these fields:.
         /// </summary>
-        public static string MsgDeletePlanFertiliserContent2 {
+        public static string MsgDeleteOrganicAndFertiliserContent2 {
             get {
-                return ResourceManager.GetString("MsgDeletePlanFertiliserContent2", resourceCulture);
+                return ResourceManager.GetString("MsgDeleteOrganicAndFertiliserContent2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This will remove the information about this {0} application and change the {1} nutrient recommendations for these fields:.
+        /// </summary>
+        public static string MsgDeleteOrganicContent2 {
+            get {
+                return ResourceManager.GetString("MsgDeleteOrganicContent2", resourceCulture);
             }
         }
         
@@ -12527,6 +12545,15 @@ namespace NMP.Portal.Resources {
         public static string MsgYourDataSuccessfullyRemoved {
             get {
                 return ResourceManager.GetString("MsgYourDataSuccessfullyRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove an organic material application.
+        /// </summary>
+        public static string RemoveAnOrganicMaterialApplication {
+            get {
+                return ResourceManager.GetString("RemoveAnOrganicMaterialApplication", resourceCulture);
             }
         }
         
