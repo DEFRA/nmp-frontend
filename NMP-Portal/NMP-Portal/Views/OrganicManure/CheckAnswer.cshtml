@@ -838,7 +838,7 @@
                     </govuk-summary-list-row>
                     @* } *@
                     @* } *@
-                    @if (Model.FieldList.Count > 1)
+                    @if (Model.FieldList!= null && Model.FieldList.Count > 1)
                     {
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key>

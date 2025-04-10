@@ -4588,7 +4588,7 @@ namespace NMP.Portal.Controllers
 
                 model.IsClosedPeriodWarning = false;
                 model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false;
-                if (int.TryParse(model.FieldGroup, out int value) || (model.FieldGroup == Resource.lblSelectSpecificFields && model.FieldList.Count == 1))
+                if (int.TryParse(model.FieldGroup, out int value) || (model.FieldGroup == Resource.lblSelectSpecificFields && model.FieldList != null && model.FieldList.Count == 1))
                 {
                     int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
                     (Farm farm, error) = await _farmService.FetchFarmByIdAsync(farmId);
