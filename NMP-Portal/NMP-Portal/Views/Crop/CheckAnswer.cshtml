@@ -59,6 +59,7 @@
                     <govuk-error-summary-item href="#">@TempData["ErrorCreatePlan"]</govuk-error-summary-item>
                 </govuk-error-summary>
             }
+            <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupId"></govuk-input>
@@ -113,7 +114,7 @@
                 }
 
             }
-
+            </div>
             <h1 class="govuk-heading-l">
                 @Resource.lblCheckYourAnswers
             </h1>
@@ -416,7 +417,16 @@
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblCreatePlan
             </govuk-button>
-            <p class="govuk-body cancel-link"><a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
+            <p class="govuk-body cancel-link">
+                @if (!Model.IsCheckAnswer)
+                {
+                    <a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a>
+                }
+                else
+                {
+                    <a asp-action="Cancel" asp-controller="Crop">@Resource.lblCancel</a>
+                }
+            </p>
         </form>
     </div>
 </div>

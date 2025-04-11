@@ -4286,4 +4286,10 @@ live</value>
   <data name="MsgDeleteOrganicContent2" xml:space="preserve">
     <value>This will remove the information about this {0} application and change the {1} nutrient recommendations for these fields:</value>
   </data>
+  <data name="lblAreYouSureYouWantToCancel" xml:space="preserve">
+    <value>Are you sure you want to cancel?</value>
+  </data>
+  <data name="lblTheInformationEnteredAboutThisWillBeLost" xml:space="preserve">
+    <value>The information entered about this {0} will be lost.</value>
+  </data>
 </root>
