@@ -12,6 +12,7 @@
 
         <form asp-action="Fields" asp-controller="FertiliserManure" method="post" autocomplete="off">
             @Html.AntiForgeryToken()
+            <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroup"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
@@ -66,6 +67,7 @@
                 }
 
             }
+            </div>
             @if (TempData["FieldError"] != null)
             {
                 <govuk-error-summary>
@@ -107,7 +109,7 @@
                 </govuk-button>
             
             <p class="govuk-body cancel-link">
-                @if(string.IsNullOrWhiteSpace(Model.EncryptedFertId)){
+                @if(string.IsNullOrWhiteSpace(Model.EncryptedFertId)&&(!Model.IsCheckAnswer)){
                     <a asp-action="CreateFertiliserManureCancel" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
                 }
                 else

@@ -53,5 +53,6 @@ namespace NMP.Portal.ViewModels
         public string? EncryptedFertId { get; set; } = string.Empty;
         public List<FertiliserAndOrganicManureUpdateResponse>? UpdatedFertiliserIds { get; set; }
         public bool? IsDeleteFertliser { get; set; }
+        public bool? IsCancel { get; set; }
     }
 }

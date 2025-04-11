@@ -13,6 +13,7 @@
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="InOrgnaicManureDuration" asp-controller="FertiliserManure" method="post" autocomplete="off">
             @Html.AntiForgeryToken()
+            <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
@@ -81,7 +82,7 @@
 
                 }
             }
-
+            </div>
             @if (TempData["InOrgnaicManureDurationError"] != null)
             {
                 <govuk-error-summary>
@@ -193,7 +194,16 @@
                 @Resource.lblContinue
             </govuk-button>
 
-            <p class="govuk-body cancel-link"><a asp-action="CreateFertiliserManureCancel" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
+            <p class="govuk-body cancel-link">
+                @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId) && (!Model.IsCheckAnswer))
+                {
+                    <a asp-action="CreateFertiliserManureCancel" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
+                }
+                else
+                {
+                    <a asp-action="CheckAnswer" asp-controller="FertiliserManure">@Resource.lblCancel</a>
+                }
+            </p>
 
 
         </form>
