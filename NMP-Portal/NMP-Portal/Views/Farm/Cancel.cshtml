@@ -1,0 +1,55 @@
+﻿@using NMP.Portal.ViewModels;
+@using NMP.Portal.Resources;
+@model NMP.Portal.ViewModels.FarmViewModel
+
+@{
+
+    var cancelViewModel = new CancelViewModel
+            {
+                IsCancel = Model.IsCancel,
+                LableContent = string.Format(Resource.lblTheInformationEnteredAboutThisWillBeLost, Resource.lblFarm.ToLower())
+            };
+}
+@section BeforeContent {
+    <govuk-back-link asp-action="CheckAnswer" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+
+}
+@if (TempData["CancelPageError"] != null)
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item href="#">@TempData["CancelPageError"]</govuk-error-summary-item>
+    </govuk-error-summary>
+}
+<form asp-controller="Farm" asp-action="Cancel" method="post" autocomplete="off">
+    @Html.AntiForgeryToken()
+    <div hidden="true">
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPostCodeChanged" value="@Model.IsPostCodeChanged"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address3"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Postcode"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Rainfall"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegisteredOrganicProducer"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZFields"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FullAddress"></govuk-input>
+        @* <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer"></govuk-input> *@
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsUpdate"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LastHarvestYear"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryID"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClimateDataPostCode"></govuk-input>
+    </div>
+    @await Html.PartialAsync("~/views/shared/_cancelconfirmation.cshtml", cancelViewModel)
+    <govuk-button type="submit" class="margin-bottom-forty">
+        @Resource.lblContinue
+    </govuk-button>
+</form>
+<p class="govuk-body cancel-link">
+    <a asp-action="CheckAnswer" asp-controller="Farm">@Resource.lblCancel</a>
+</p>

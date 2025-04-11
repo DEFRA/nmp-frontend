@@ -2986,6 +2986,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Farm.
+        /// </summary>
+        public static string lblFarm {
+            get {
+                return ResourceManager.GetString("lblFarm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Farm Address.
         /// </summary>
         public static string lblFarmAddress {

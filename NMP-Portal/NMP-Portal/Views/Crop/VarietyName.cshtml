@@ -116,8 +116,8 @@
                 @Resource.lblContinue
             </govuk-button>
         </form>
-        @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
-        {
+       @*  @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
+        { *@
             <p class="govuk-body cancel-link">
                 @if (!Model.IsCheckAnswer)
                 {
@@ -128,13 +128,13 @@
              <a asp-action="CheckAnswer" asp-controller="Crop">@Resource.lblCancel</a>
                 }
             </p>
-        }
+       @*  }
         else
         {
             <p class="govuk-body cancel-link">
                 <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
             </p>
-        }
+        } *@
         
     </div>
 

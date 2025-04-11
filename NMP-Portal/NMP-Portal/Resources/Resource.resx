@@ -4292,4 +4292,7 @@ live</value>
   <data name="lblTheInformationEnteredAboutThisWillBeLost" xml:space="preserve">
     <value>The information entered about this {0} will be lost.</value>
   </data>
+  <data name="lblFarm" xml:space="preserve">
+    <value>Farm</value>
+  </data>
 </root>

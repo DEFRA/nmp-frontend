@@ -15,6 +15,12 @@
     <govuk-back-link asp-action="CheckAnswer" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
 
 }
+@if (TempData["CancelPageError"] != null)
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item href="#">@TempData["CancelPageError"]</govuk-error-summary-item>
+    </govuk-error-summary>
+}
 <form asp-controller="Crop" asp-action="Cancel" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
     <div hidden="true">
