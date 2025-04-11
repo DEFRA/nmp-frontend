@@ -2605,5 +2605,62 @@ namespace NMP.Portal.Controllers
 
 
         }
+
+        [HttpGet]
+        public IActionResult Cancel()
+        {
+            _logger.LogTrace("Fertiliser Manure Controller : Cancel() action called");
+            FertiliserManureViewModel model = new FertiliserManureViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FertiliserManureViewModel>("FertiliserManure");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Fertiliser Manure Controller : Exception in Cancel() action : {ex.Message}, {ex.StackTrace}");
+                TempData["CheckYourAnswerError"] = ex.Message;
+                return RedirectToAction("CheckAnswer");
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Cancel(FertiliserManureViewModel model)
+        {
+            _logger.LogTrace("Fertiliser Manure Controller : Cancel() post action called");
+            if (model.IsCancel == null)
+            {
+                ModelState.AddModelError("IsCancel", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View("Cancel", model);
+            }
+            if (!model.IsCancel.Value)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
+            else
+            {
+                return RedirectToAction("HarvestYearOverview", "Crop", new
+                {
+                    id = model.EncryptedFarmId,
+                    year = model.EncryptedHarvestYear
+                });
+
+
+            }
+
+        }
     }
 }

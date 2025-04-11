@@ -20,7 +20,7 @@
             </govuk-error-summary>
         }
       
-
+        <div hidden="true">
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
@@ -82,6 +82,7 @@
                 }
             }
         }
+        </div>
         <div class="govuk-grid-column-two-thirds">
             @if (Model.IsWarningMsgNeedToShow)
             {
@@ -266,7 +267,7 @@
             </govuk-button>
 
             <p class="govuk-body cancel-link">
-                @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
+                @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId)&&(!Model.IsCheckAnswer))
                 {
                     <a asp-action="CreateFertiliserManureCancel" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
                 }

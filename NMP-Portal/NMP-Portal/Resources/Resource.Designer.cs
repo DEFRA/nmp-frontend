@@ -3211,6 +3211,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fertiliser application.
+        /// </summary>
+        public static string lblFertiliserApplication {
+            get {
+                return ResourceManager.GetString("lblFertiliserApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fertiliser or Lime applied.
         /// </summary>
         public static string lblFertiliserOrLimeApplied {
