@@ -12,13 +12,22 @@
             };
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="CheckAnswer" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
+    @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
+{
+        <govuk-back-link asp-action="CheckAnswer" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
+    }
+    else
+    {
+        <govuk-back-link asp-action="UpdateCropGroupNameCheckAnswer" asp-controller="Crop" asp-route-s="@Model.EncryptedIsCropUpdate">@Resource.lblBack</govuk-back-link>
+    }
 
 }
+
 <form asp-controller="Crop" asp-action="Cancel" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
     <div hidden="true">
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear" value="@Model.EncryptedHarvestYear"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupId"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroup"></govuk-input>
@@ -36,7 +45,9 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropInfo1Name"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropInfo2Name"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupName"></govuk-input>
-
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsCropUpdate" value="@Model.EncryptedIsCropUpdate"></govuk-input>
+        <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SowingDate" value="@Model.SowingDate"></govuk-date-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Yield" value="@Model.Yield"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CurrentSward"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassSeason"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassDistinctCount" value="@Model.GrassGrowthClassDistinctCount"></govuk-input>
@@ -79,5 +90,12 @@
     </govuk-button>
 </form>
 <p class="govuk-body cancel-link">
-    <a asp-action="CheckAnswer" asp-controller="Crop">@Resource.lblCancel</a>
+    @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
+    {
+        <a asp-action="CheckAnswer" asp-controller="Crop">@Resource.lblCancel</a>
+    }
+    else
+    {
+        <a asp-action="UpdateCropGroupNameCheckAnswer" asp-controller="Crop" asp-route-s="@Model.EncryptedIsCropUpdate">@Resource.lblCancel</a>
+    }
 </p>

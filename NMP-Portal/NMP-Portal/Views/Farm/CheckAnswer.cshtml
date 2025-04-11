@@ -213,7 +213,11 @@
             <govuk-button type="submit" class="margin-bottom-forty">
                 @(!string.IsNullOrEmpty(Model.EncryptedIsUpdate) ? Resource.lblUpdateThisFarm : Resource.lblAddThisFarm)
             </govuk-button>
-            <p class="govuk-body cancel-link"><a asp-action="CreateFarmCancel" asp-controller="Farm">@Resource.lblCancel</a></p>
+            <p class="govuk-body cancel-link">
+               
+                    <a class="govuk-link" asp-action="Cancel" asp-controller="Farm">@Resource.lblCancel</a>
+               
+            </p>
         </div>
     </div>
 </form>

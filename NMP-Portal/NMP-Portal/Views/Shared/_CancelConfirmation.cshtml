@@ -6,14 +6,14 @@
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
 }
 
+
+
 @if (TempData["CancelPageError"] != null)
 {
     <govuk-error-summary>
         <govuk-error-summary-item href="#">@TempData["CancelPageError"]</govuk-error-summary-item>
     </govuk-error-summary>
 }
-
-
 <h1 class="govuk-heading-l">
     @Resource.lblAreYouSureYouWantToCancel
 </h1>

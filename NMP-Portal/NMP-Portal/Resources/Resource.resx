@@ -4298,4 +4298,7 @@ live</value>
   <data name="lblTechnicalDifficulties" xml:space="preserve">
     <value>Sorry, we're experiencing technical difficulties</value>
   </data>
+  <data name="lblFarm" xml:space="preserve">
+    <value>Farm</value>
+  </data>
 </root>

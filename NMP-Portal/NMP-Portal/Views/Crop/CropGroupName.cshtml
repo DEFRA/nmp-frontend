@@ -108,14 +108,14 @@
                     }
                     else
                     {
-                 <a asp-action="CheckAnswer" asp-controller="Crop">@Resource.lblCancel</a>
+                        <a asp-action="CheckAnswer" asp-controller="Crop">@Resource.lblCancel</a>
                     }
                 </p>
             }
             else
             {
                 <p class="govuk-body cancel-link">
-                <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
+                    <a asp-action="UpdateCropGroupNameCheckAnswer" asp-controller="Crop" asp-route-q="@ViewBag.EncryptedCropTypeId" asp-route-r="@(ViewBag.EncryptedCropGroupName==null?null:ViewBag.EncryptedCropGroupName)" asp-route-s="@Model.EncryptedIsCropUpdate">@Resource.lblCancel</a>
                 </p>
             }
 
