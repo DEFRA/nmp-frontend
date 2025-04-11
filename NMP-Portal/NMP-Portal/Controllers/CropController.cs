@@ -4176,27 +4176,52 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public IActionResult Cancel()
+        public IActionResult Cancel(string? q)
         {
             _logger.LogTrace("Crop Controller : Cancel() action called");
             PlanViewModel model = new PlanViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
+                if (string.IsNullOrEmpty(q))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
+                    {
+                        model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+                    }
+                    else
+                    {
+                        return RedirectToAction("FarmList", "Farm");
+                    }
                 }
                 else
                 {
-                    return RedirectToAction("FarmList", "Farm");
+                    model.EncryptedIsCropUpdate = q;
+                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("HarvestYearPlan"))
+                    {
+                        model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("HarvestYearPlan");
+                    }
+                    else
+                    {
+                        return RedirectToAction("FarmList", "Farm");
+                    }
+
                 }
 
             }
             catch (Exception ex)
             {
                 _logger.LogTrace($"Crop Controller : Exception in Cancel() action : {ex.Message}, {ex.StackTrace}");
-                TempData["ErrorCreatePlan"] = ex.Message;
-                return RedirectToAction("CheckAnswer");
+                if (string.IsNullOrEmpty(q))
+                {
+                    TempData["ErrorCreatePlan"] = ex.Message;
+                    return RedirectToAction("CheckAnswer");
+                }
+                else
+                {
+                    TempData["ErrorUpdateCropGroupNameCheckAnswer"] = ex.Message;
+                    return RedirectToAction("UpdateCropGroupNameCheckAnswer", new {s=q});
+                }
+                 
             }
 
             return View(model);
@@ -4217,11 +4242,25 @@ namespace NMP.Portal.Controllers
             }
             if (!model.IsCancel.Value)
             {
-                return RedirectToAction("CheckAnswer");
+                if (string.IsNullOrEmpty(model.EncryptedIsCropUpdate))
+                {
+                    return RedirectToAction("CheckAnswer");
+                }
+                else
+                {
+                    return RedirectToAction("UpdateCropGroupNameCheckAnswer", new { s = model.EncryptedIsCropUpdate });
+                }
             }
             else
             {
-                _httpContextAccessor.HttpContext?.Session.Remove("CropData");
+                if (string.IsNullOrEmpty(model.EncryptedIsCropUpdate))
+                {
+                    _httpContextAccessor.HttpContext?.Session.Remove("CropData");
+                }
+                else
+                {
+                    _httpContextAccessor.HttpContext?.Session.Remove("HarvestYearPlan");
+                }
                 model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
                 (List<HarvestYearPlanResponse> harvestYearPlanResponse, Error error)=  await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
                 if(string.IsNullOrWhiteSpace(error.Message))
