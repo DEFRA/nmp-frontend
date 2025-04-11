@@ -88,5 +88,6 @@ namespace NMP.Portal.ViewModels
 
         public int DryMatterYieldCounter { get; set; } = 0;
         public string? DryMatterYieldEncryptedCounter { get; set; }
+        public bool? IsCancel { get; set; }
     }
 }

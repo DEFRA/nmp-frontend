@@ -27,6 +27,7 @@
         }
         <form asp-action="VarietyName" asp-controller="Crop" method="post" autocomplete="off">
             @Html.AntiForgeryToken()
+            <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupId"></govuk-input>
@@ -90,7 +91,7 @@
                 }
 
             }
-
+            </div>
             <div class="govuk-form-group">
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherCropName"></govuk-input>
                 @if (Model.CropGroupId == potatoGroupId || 
@@ -117,7 +118,16 @@
         </form>
         @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
         {
-            <p class="govuk-body cancel-link"><a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
+            <p class="govuk-body cancel-link">
+                @if (!Model.IsCheckAnswer)
+                {
+                    <a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a>
+                }
+                else
+                {
+             <a asp-action="CheckAnswer" asp-controller="Crop">@Resource.lblCancel</a>
+                }
+            </p>
         }
         else
         {
