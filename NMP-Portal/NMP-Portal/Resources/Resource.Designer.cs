@@ -6751,6 +6751,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please report this error to &lt;a href=&quot;mailto:helpdesk@rsk-bsl.co.uk&quot;&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt; include what you were trying to do and the status code : {0}.
+        /// </summary>
+        public static string lblReportError {
+            get {
+                return ResourceManager.GetString("lblReportError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rotary cultivator.
         /// </summary>
         public static string lblRotaryCultivator {
@@ -7773,6 +7782,15 @@ namespace NMP.Portal.Resources {
         public static string lblTargetYield {
             get {
                 return ResourceManager.GetString("lblTargetYield", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sorry, we&apos;re experiencing technical difficulties.
+        /// </summary>
+        public static string lblTechnicalDifficulties {
+            get {
+                return ResourceManager.GetString("lblTechnicalDifficulties", resourceCulture);
             }
         }
         
