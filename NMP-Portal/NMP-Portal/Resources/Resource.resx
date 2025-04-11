@@ -4286,4 +4286,10 @@ live</value>
   <data name="MsgDeleteOrganicContent2" xml:space="preserve">
     <value>This will remove the information about this {0} application and change the {1} nutrient recommendations for these fields:</value>
   </data>
+  <data name="lblOrganicManureApplicationsForSorting" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MsgOrganicMaterialApplicationUpdated" xml:space="preserve">
+    <value>Organic material application updated.</value>
+  </data>
 </root>

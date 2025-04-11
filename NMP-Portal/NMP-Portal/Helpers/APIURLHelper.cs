@@ -165,5 +165,7 @@ namespace NMP.Portal.Helpers
 
         public const string FetchGrassSeasonsAsyncAPI = "vendors/rb209/Grassland/GrasslandSeasons/{0}";
         public const string FetchGrassGrowthClassesAsyncAPI = "grass-growth/byFieldIds";
+
+        public const string UpdateOrganicManureAsyncAPI = "organic-manures";
     }
 }

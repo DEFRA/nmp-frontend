@@ -45,7 +45,7 @@
 @section BeforeContent {
     <govuk-back-link asp-action="BackCheckAnswer" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="CheckAnswer" asp-controller="OrganicManure" method="post" autocomplete="off">
+<form asp-action=@(!string.IsNullOrEmpty(Model.EncryptedOrgManureId) ? "OrganicManureUpdate" : "CheckAnswer") asp-controller="OrganicManure" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
 
     <div class="govuk-grid-row">
@@ -959,7 +959,7 @@
             }
             else
             {
-                <govuk-button type="button" class="margin-bottom-forty">
+                <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblUpdate
                 </govuk-button>
             }
