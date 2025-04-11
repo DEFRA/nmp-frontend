@@ -4292,4 +4292,10 @@ live</value>
   <data name="lblTheInformationEnteredAboutThisWillBeLost" xml:space="preserve">
     <value>The information entered about this {0} will be lost.</value>
   </data>
+  <data name="lblReportError" xml:space="preserve">
+    <value>Please report this error to &lt;a href="mailto:helpdesk@rsk-bsl.co.uk"&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt; include what you were trying to do and the status code : {0}</value>
+  </data>
+  <data name="lblTechnicalDifficulties" xml:space="preserve">
+    <value>Sorry, we're experiencing technical difficulties</value>
+  </data>
 </root>
