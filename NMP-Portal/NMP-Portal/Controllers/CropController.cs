@@ -3976,7 +3976,7 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("DefoliationSequence");
             }
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
-            
+
             return View(model);
         }
 
@@ -4037,7 +4037,7 @@ namespace NMP.Portal.Controllers
             }
             model.GrassGrowthClassEncryptedCounter = _fieldDataProtector.Protect(model.GrassGrowthClassCounter.ToString());
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
-            
+
             if (model.GrassGrowthClassDistinctCount == 1 && model.Crops.Count > 1)
             {
                 return RedirectToAction("DryMatterYield");
@@ -4155,7 +4155,7 @@ namespace NMP.Portal.Controllers
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                     return RedirectToAction("CheckAnswer");
                 }
-                
+
                 return RedirectToAction("CheckAnswer");
             }
 
@@ -4165,12 +4165,125 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("CheckAnswer");
                 }
-                
+
                 return RedirectToAction("CheckAnswer");
             }
             else
             {
                 return View(model);
+            }
+
+        }
+
+        [HttpGet]
+        public IActionResult Cancel(string? q)
+        {
+            _logger.LogTrace("Crop Controller : Cancel() action called");
+            PlanViewModel model = new PlanViewModel();
+            try
+            {
+                if (string.IsNullOrEmpty(q))
+                {
+                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
+                    {
+                        model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+                    }
+                    else
+                    {
+                        return RedirectToAction("FarmList", "Farm");
+                    }
+                }
+                else
+                {
+                    model.EncryptedIsCropUpdate = q;
+                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("HarvestYearPlan"))
+                    {
+                        model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("HarvestYearPlan");
+                    }
+                    else
+                    {
+                        return RedirectToAction("FarmList", "Farm");
+                    }
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Crop Controller : Exception in Cancel() action : {ex.Message}, {ex.StackTrace}");
+                if (string.IsNullOrEmpty(q))
+                {
+                    TempData["ErrorCreatePlan"] = ex.Message;
+                    return RedirectToAction("CheckAnswer");
+                }
+                else
+                {
+                    TempData["ErrorUpdateCropGroupNameCheckAnswer"] = ex.Message;
+                    return RedirectToAction("UpdateCropGroupNameCheckAnswer", new {s=q});
+                }
+                 
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Cancel(PlanViewModel model)
+        {
+            _logger.LogTrace("Crop Controller : Cancel() post action called");
+            if (model.IsCancel == null)
+            {
+                ModelState.AddModelError("IsCancel", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View("Cancel", model);
+            }
+            if (!model.IsCancel.Value)
+            {
+                if (string.IsNullOrEmpty(model.EncryptedIsCropUpdate))
+                {
+                    return RedirectToAction("CheckAnswer");
+                }
+                else
+                {
+                    return RedirectToAction("UpdateCropGroupNameCheckAnswer", new { s = model.EncryptedIsCropUpdate });
+                }
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(model.EncryptedIsCropUpdate))
+                {
+                    _httpContextAccessor.HttpContext?.Session.Remove("CropData");
+                }
+                else
+                {
+                    _httpContextAccessor.HttpContext?.Session.Remove("HarvestYearPlan");
+                }
+                model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
+                (List<HarvestYearPlanResponse> harvestYearPlanResponse, Error error)=  await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
+                if(string.IsNullOrWhiteSpace(error.Message))
+                {
+                    if (harvestYearPlanResponse.Count > 0)
+                    {
+                        return RedirectToAction("HarvestYearOverview", new
+                        {
+                            id = model.EncryptedFarmId,
+                            year = model.EncryptedHarvestYear
+                        });
+                    }
+                    else
+                    {
+                        return RedirectToAction("FarmList", "Farm");
+                    }
+                }
+                else
+                {
+                    TempData["CancelPageError"] = error.Message;
+                    return View("Cancel",model);
+                }
+               
             }
 
         }

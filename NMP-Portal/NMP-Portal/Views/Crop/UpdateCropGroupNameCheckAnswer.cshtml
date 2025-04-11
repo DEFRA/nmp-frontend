@@ -236,7 +236,7 @@
                 @Resource.lblUpdateThisCropGroup
             </button>
             <p class="govuk-body">
-                <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
+                <a asp-action="Cancel" asp-controller="Crop" asp-route-q="@Model.EncryptedIsCropUpdate">@Resource.lblCancel</a>
             </p>
         </form>
 

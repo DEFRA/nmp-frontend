@@ -1213,6 +1213,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to cancel?.
+        /// </summary>
+        public static string lblAreYouSureYouWantToCancel {
+            get {
+                return ResourceManager.GetString("lblAreYouSureYouWantToCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to continue?.
         /// </summary>
         public static string lblAreYouSureYouWantToContinue {
@@ -2977,6 +2986,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Farm.
+        /// </summary>
+        public static string lblFarm {
+            get {
+                return ResourceManager.GetString("lblFarm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Farm Address.
         /// </summary>
         public static string lblFarmAddress {
@@ -3189,6 +3207,15 @@ namespace NMP.Portal.Resources {
         public static string lblFertiliser {
             get {
                 return ResourceManager.GetString("lblFertiliser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fertiliser application.
+        /// </summary>
+        public static string lblFertiliserApplication {
+            get {
+                return ResourceManager.GetString("lblFertiliserApplication", resourceCulture);
             }
         }
         
@@ -6742,6 +6769,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please report this error to &lt;a href=&quot;mailto:helpdesk@rsk-bsl.co.uk&quot;&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt; include what you were trying to do and the status code : {0}.
+        /// </summary>
+        public static string lblReportError {
+            get {
+                return ResourceManager.GetString("lblReportError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rotary cultivator.
         /// </summary>
         public static string lblRotaryCultivator {
@@ -7768,6 +7804,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sorry, we&apos;re experiencing technical difficulties.
+        /// </summary>
+        public static string lblTechnicalDifficulties {
+            get {
+                return ResourceManager.GetString("lblTechnicalDifficulties", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Terms of use.
         /// </summary>
         public static string lblTermsOfUse {
@@ -7827,6 +7872,15 @@ namespace NMP.Portal.Resources {
         public static string lblTheEffectivenessOfYourOrganicMaterialApp {
             get {
                 return ResourceManager.GetString("lblTheEffectivenessOfYourOrganicMaterialApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The information entered about this {0} will be lost..
+        /// </summary>
+        public static string lblTheInformationEnteredAboutThisWillBeLost {
+            get {
+                return ResourceManager.GetString("lblTheInformationEnteredAboutThisWillBeLost", resourceCulture);
             }
         }
         

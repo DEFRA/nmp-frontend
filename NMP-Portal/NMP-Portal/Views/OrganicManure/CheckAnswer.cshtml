@@ -841,7 +841,7 @@
                     </govuk-summary-list-row>
                     @* } *@
                     @* } *@
-                    @if (Model.FieldList.Count > 1)
+                    @if (Model.FieldList!= null && Model.FieldList.Count > 1)
                     {
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key>
@@ -963,7 +963,7 @@
                     @Resource.lblUpdate
                 </govuk-button>
             }
-            <p class="govuk-body cancel-link"><a asp-action="CreateManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
+            <p class="govuk-body cancel-link"><a asp-action="Cancel" asp-controller="OrganicManure" >@Resource.lblCancel</a></p>
         </div>
     </div>
 </form>

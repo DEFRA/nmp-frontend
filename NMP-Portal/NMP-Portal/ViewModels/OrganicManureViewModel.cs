@@ -135,5 +135,6 @@ namespace NMP.Portal.ViewModels
         public string? FieldName { get; set; }
         public bool? IsApplicationDateChange { get; set; } = false;
         public bool? IsDeleteOrganic { get; set; }
+        public bool? IsCancel { get; set; }
     }
 }

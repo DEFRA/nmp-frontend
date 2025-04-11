@@ -618,7 +618,28 @@ namespace NMP.Portal.Controllers
                         Text = f.Name.ToString()
                     }).ToList();
                     ViewBag.FieldList = selectListItem.OrderBy(x => x.Text).ToList();
-
+                    if (!string.IsNullOrWhiteSpace(model.EncryptedOrgManureId))
+                    {
+                        (List<FertiliserAndOrganicManureUpdateResponse> organicManureResponse, error) = await _organicManureService.FetchFieldWithSameDateAndManureType(Convert.ToInt32(_cropDataProtector.Unprotect(model.EncryptedOrgManureId)), model.FarmId.Value, model.HarvestYear.Value);
+                        //(List<FertiliserAndOrganicManureUpdateResponse> organicManureResponse, error) = await _organicManureService.FetchFieldWithSameDateAndManureType(decryptedId, model.FarmId.Value, model.HarvestYear.Value);
+                        if (string.IsNullOrWhiteSpace(error.Message) && organicManureResponse != null && organicManureResponse.Count > 0)
+                        {
+                            selectListItem = new List<SelectListItem>();
+                            selectListItem = organicManureResponse.Select(f => new SelectListItem
+                            {
+                                Value = f.Id.ToString(),
+                                Text = f.Name.ToString()
+                            }).GroupBy(x => x.Value)
+                            .Select(g => g.First())
+                            .ToList();
+                            ViewBag.FieldList = selectListItem.OrderBy(x => x.Text).ToList();
+                        }
+                        else
+                        {
+                            TempData["FieldError"] = error.Message;
+                            return View(model);
+                        }
+                    }
                     if (model.FieldList == null || model.FieldList.Count == 0)
                     {
                         ModelState.AddModelError("FieldList", Resource.MsgSelectAtLeastOneField);
@@ -1635,7 +1656,7 @@ namespace NMP.Portal.Controllers
 
                 if (model.IsCheckAnswer && (!model.IsManureTypeChange) && (!model.IsFieldGroupChange))
                 {
-                    if (model.IsApplicationDateChange.HasValue && model.IsApplicationDateChange.Value)
+                    if (model.IsApplicationDateChange.HasValue&&model.IsApplicationDateChange.Value)
                     {
                         model.MoistureType = null;
                         model.SoilDrainageEndDate = null;
@@ -4608,7 +4629,7 @@ namespace NMP.Portal.Controllers
 
                 model.IsClosedPeriodWarning = false;
                 model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false;
-                if (int.TryParse(model.FieldGroup, out int value) || (model.FieldGroup == Resource.lblSelectSpecificFields && model.FieldList.Count == 1))
+                if (int.TryParse(model.FieldGroup, out int value) || (model.FieldGroup == Resource.lblSelectSpecificFields && model.FieldList != null && model.FieldList.Count == 1))
                 {
                     int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
                     (Farm farm, error) = await _farmService.FetchFarmByIdAsync(farmId);
@@ -7086,7 +7107,7 @@ namespace NMP.Portal.Controllers
                                     string encryptedFieldId = _fieldDataProtector.Protect(model.FieldList.FirstOrDefault());
                                     if (!string.IsNullOrWhiteSpace(encryptedFieldId))
                                     {
-                                        return RedirectToAction("Recommendations", "Crop", new { q = model.EncryptedFarmId, r = encryptedFieldId, s = model.EncryptedHarvestYear, t = _cropDataProtector.Protect(Resource.lblOrganicMaterialApplicationRemoved), u = _cropDataProtector.Protect(Resource.lblSelectFieldToSeeItsUpdatedNutrientRecommendations) });
+                                        return RedirectToAction("Recommendations","Crop", new { q = model.EncryptedFarmId, r = encryptedFieldId, s = model.EncryptedHarvestYear, t = _cropDataProtector.Protect(Resource.lblOrganicMaterialApplicationRemoved), u = _cropDataProtector.Protect(Resource.lblSelectFieldToSeeItsUpdatedNutrientRecommendations) });
                                     }
                                 }
                             }
@@ -7150,7 +7171,61 @@ namespace NMP.Portal.Controllers
 
 
         }
+        [HttpGet]
+        public IActionResult Cancel()
+        {
+            _logger.LogTrace("Organic Manure Controller : Cancel() action called");
+            OrganicManureViewModel model = new OrganicManureViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
 
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Organic Manure Controller : Exception in Cancel() action : {ex.Message}, {ex.StackTrace}");
+                TempData["AddOrganicManureError"] = ex.Message;
+                return RedirectToAction("CheckAnswer");
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Cancel(OrganicManureViewModel model)
+        {
+            _logger.LogTrace("Organic Manure Controller : Cancel() post action called");
+            if (model.IsCancel == null)
+            {
+                ModelState.AddModelError("IsCancel", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View("Cancel", model);
+            }
+            if (!model.IsCancel.Value)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
+            else
+            {
+                return RedirectToAction("HarvestYearOverview","Crop", new
+                {
+                    id = model.EncryptedFarmId,
+                    year = model.EncryptedHarvestYear
+                });
+
+
+            }
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> OrganicManureUpdate(OrganicManureViewModel model)
