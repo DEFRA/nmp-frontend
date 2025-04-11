@@ -11,7 +11,7 @@ using System.Diagnostics;
 
 namespace NMP.Portal.Controllers
 {
-    [AllowAnonymous]   
+    [AllowAnonymous]
     
     public class ErrorController : Controller
     {
@@ -56,43 +56,13 @@ namespace NMP.Portal.Controllers
 
             return View(viewName, new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-        //[Route("Error/500")]
-        //public IActionResult AppError()
-        //{
-        //    var exceptionHandlerPathFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
-        //    _telemetryClient.TrackException(exception: exceptionHandlerPathFeature?.Error);
-        //    _telemetryClient.TrackEvent("Error.ServerError", new Dictionary<string, string>
-        //    {
-        //        ["originalPath"] = exceptionHandlerPathFeature.Path,
-        //        ["error"] = exceptionHandlerPathFeature.Error.Message
-        //    });
-
-        //    return View("Error");
-        //}
-
-        //[Route("Error/404")]
-        //public IActionResult PageNotFound()
-        //{
-        //    string originalPath = "unknown";
-        //    if (HttpContext.Items.ContainsKey("originalPath"))
-        //    {
-        //        originalPath = HttpContext.Items["originalPath"] as string;
-        //    }
-        //    _telemetryClient.TrackEvent("Error.PageNotFound", new Dictionary<string, string>
-        //    {
-        //        ["originalPath"] = originalPath
-        //    });
-        //    return View("PageNotFound");
-        //}
-
+          
         public IActionResult Index()
         {
             var error = new ErrorViewModel();
             if (HttpContext.Session.Keys.Contains("Error"))
             {
-                error = HttpContext.Session.GetObjectFromJson<ErrorViewModel>("Error");
-                //_logger.LogError(error?.Message);
+                error = HttpContext.Session.GetObjectFromJson<ErrorViewModel>("Error");                
             }
 
             return View("Error", error);
