@@ -54,5 +54,6 @@ namespace NMP.Portal.Services
         Task<(string, Error)> DeleteOrganicManureByIdAsync(string orgManureIds);
         Task<(bool, Error)> FetchFarmManureTypeCheckByFarmIdAndManureTypeId(int farmId, int ManureTypeId, string ManureTypeName);
         Task<(List<FertiliserAndOrganicManureUpdateResponse>, Error)> FetchFieldWithSameDateAndManureType(int fertiliserId, int farmId, int harvestYear);
+        Task<(List<OrganicManure>, Error)> UpdateOrganicManure(string organicManureData);
     }
 }

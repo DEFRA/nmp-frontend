@@ -5653,6 +5653,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string lblOrganicManureApplicationsForSorting {
+            get {
+                return ResourceManager.GetString("lblOrganicManureApplicationsForSorting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Organic fertiliser added to fields in this plan.
         /// </summary>
         public static string lblOrganicManureCreatedSuccessfullyForAllField {
@@ -11879,6 +11888,15 @@ namespace NMP.Portal.Resources {
         public static string MsgNutrientValueTypeForCheckAnswereNotSet {
             get {
                 return ResourceManager.GetString("MsgNutrientValueTypeForCheckAnswereNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Organic material application updated..
+        /// </summary>
+        public static string MsgOrganicMaterialApplicationUpdated {
+            get {
+                return ResourceManager.GetString("MsgOrganicMaterialApplicationUpdated", resourceCulture);
             }
         }
         

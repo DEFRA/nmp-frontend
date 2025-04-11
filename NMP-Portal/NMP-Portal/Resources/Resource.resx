@@ -4304,4 +4304,10 @@ live</value>
   <data name="lblFertiliserApplication" xml:space="preserve">
     <value>Fertiliser application</value>
   </data>
+  <data name="lblOrganicManureApplicationsForSorting" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MsgOrganicMaterialApplicationUpdated" xml:space="preserve">
+    <value>Organic material application updated.</value>
+  </data>
 </root>
