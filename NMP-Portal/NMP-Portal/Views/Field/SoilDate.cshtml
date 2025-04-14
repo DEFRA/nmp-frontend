@@ -101,7 +101,7 @@
                 @Resource.lblContinue
             </govuk-button>
             <p class="govuk-body cancel-link">
-                @if (string.IsNullOrWhiteSpace(Model.EncryptedFieldId)&&(!Model.IsCheckAnswer))
+                @if (!Model.IsCheckAnswer)
                 {
                     <a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a>
                 }
