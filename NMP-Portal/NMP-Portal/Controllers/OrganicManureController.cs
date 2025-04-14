@@ -7247,37 +7247,40 @@ namespace NMP.Portal.Controllers
                                 ManagementPeriodID = organic.ManagementPeriodID,
                                 ManureTypeID = organic.ManureTypeID,
                                 ManureTypeName = model.ManureTypeName,
-                                DryMatterPercent = organic.DryMatterPercent,
+                                ApplicationDate = organic.ApplicationDate,
+                                Confirm=organic.Confirm,
                                 N = organic.N,
-                                NH4N = organic.NH4N,
-                                UricAcid = organic.UricAcid,
-                                NO3N = organic.NO3N,
                                 P2O5 = organic.P2O5,
                                 K2O = organic.K2O,
-                                SO3 = organic.SO3,
                                 MgO = organic.MgO,
-                                ApplicationDate = organic.ApplicationDate,
+                                SO3 = organic.SO3,
+                                AvailableN=organic.AvailableN,
                                 ApplicationRate = organic.ApplicationRate,
+                                DryMatterPercent = organic.DryMatterPercent,
+                                UricAcid = organic.UricAcid,
+                                EndOfDrain = organic.SoilDrainageEndDate,
+                                Rainfall = organic.Rainfall,
+                                AreaSpread=organic.AreaSpread,
+                                ManureQuantity=organic.ManureQuantity,
                                 ApplicationMethodID = organic.ApplicationMethodID,
                                 IncorporationMethodID = organic.IncorporationMethodID,
                                 IncorporationDelayID = organic.IncorporationDelayID,
-                                AutumnCropNitrogenUptake = organic.AutumnCropNitrogenUptake,
-                                EndOfDrain = organic.SoilDrainageEndDate,
-                                Rainfall = organic.Rainfall,
+                                NH4N = organic.NH4N,
+                                NO3N = organic.NO3N,
+                                AvailableP2O5=organic.AvailableP2O5,
+                                AvailableK2O=organic.AvailableK2O,
+                                AvailableSO3=organic.AvailableSO3,
                                 WindspeedID = organic.WindspeedID,
-                                RainfallWithinSixHoursID = organic.RainfallWithinSixHoursID
+                                RainfallWithinSixHoursID = organic.RainfallWithinSixHoursID,
+                                MoistureID=organic.MoistureID,
+                                AutumnCropNitrogenUptake = organic.AutumnCropNitrogenUptake,
+                                AvailableNForNMax=organic.AvailableNForNMax
+
                             };
 
 
                             organicManureList.Add(organicManure);
                         }
-                        //var result = new
-                        //{
-                        //    OrganicManures = organicManureList,
-                        //    FarmID=model.FarmId,
-                        //    FieldTypeID = (int)NMP.Portal.Enums.FieldType.Arable,
-                        //    SaveDefaultForFarm = model.IsAnyNeedToStoreNutrientValueForFuture
-                        //};
 
                         var result = new
                         {
