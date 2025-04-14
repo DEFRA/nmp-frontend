@@ -25,7 +25,7 @@
             <div class="govuk-grid-column-two-thirds">
                 <h1 class="govuk-heading-l">@string.Format(Resource.lblRemoveField, Model.Name)</h1>
                 <p class="govuk-body">@Resource.MsgRemoveThisField</p>
-
+                <div hidden="true">
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherReference"></govuk-input>
@@ -58,6 +58,7 @@
                     }
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPreviousYearGrass" value="@Model.IsPreviousYearGrass.ToString().ToLower()"></govuk-input>
                 }
+                </div>
 
                 <govuk-radios class="govuk-radios--inline" asp-for="@Model.FieldRemove">
                     <govuk-radios-fieldset>
