@@ -58,5 +58,6 @@ namespace NMP.Portal.ViewModels
         public int? HarvestYear { get; set; }
         public string? EncryptedHarvestYear { get; set; }
         public bool IsHasGrassInLastThreeYearChange { get; set; } = false;
+        public bool? IsCancel { get; set; }
     }
 }
