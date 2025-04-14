@@ -7,7 +7,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer&& (!Model.IsCropGroupChange) && (!Model.IsAnyChangeInField) && (!Model.IsQuestionChange)?"CheckAnswer":"SowingDate")" asp-controller="Crop" asp-route-q="@Model.SowingDateEncryptedCounter">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer&& (!Model.IsCropGroupChange) && (!Model.IsAnyChangeInField) && (!Model.IsQuestionChange)&& (!Model.IsCropTypeChange)?"CheckAnswer":"SowingDate")" asp-controller="Crop" asp-route-q="@Model.SowingDateEncryptedCounter">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="SowingDate" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
@@ -47,6 +47,7 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassQuestion"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DryMatterYieldCounter"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DryMatterYieldEncryptedCounter"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCropTypeChange" value="@Model.IsCropTypeChange"></govuk-input>
     @if (Model.FieldList != null && Model.FieldList.Count > 0)
     {
         @for (int i = 0; i < Model.FieldList.Count; i++)

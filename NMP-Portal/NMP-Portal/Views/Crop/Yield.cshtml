@@ -9,7 +9,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer && (!Model.IsAnyChangeInField)&& (!Model.IsCropGroupChange) && (!Model.IsQuestionChange)?"CheckAnswer":backAction)" asp-controller="Crop" asp-route-q=@(backAction=="SowingDate"?Model.SowingDateEncryptedCounter:Model.YieldEncryptedCounter)>@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer && (!Model.IsAnyChangeInField)&& (!Model.IsCropGroupChange) && (!Model.IsQuestionChange)&& (!Model.IsCropTypeChange)?"CheckAnswer":backAction)" asp-controller="Crop" asp-route-q=@(backAction=="SowingDate"?Model.SowingDateEncryptedCounter:Model.YieldEncryptedCounter)>@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="Yield" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
@@ -49,6 +49,7 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyChangeInField" value="@Model.IsAnyChangeInField"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsQuestionChange" value="@Model.IsQuestionChange"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCropGroupChange" value="@Model.IsCropGroupChange"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCropTypeChange" value="@Model.IsCropTypeChange"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAddAnotherCrop" value="@Model.IsAddAnotherCrop"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPlanRecord" value="@Model.IsPlanRecord"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupName"></govuk-input>

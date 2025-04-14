@@ -22,7 +22,7 @@
 
         <form asp-action="SampleDepth" method="post" asp-controller="SnsAnalysis" autocomplete="off">
             @Html.AntiForgeryToken()
-
+            <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCalculateNitrogen" value="@Model.IsCalculateNitrogen"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumberOfShoots"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SeasonId" value="@Model.SeasonId"></govuk-input>
@@ -57,7 +57,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"></govuk-input>
-
+            </div>
             <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
                 <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblAddSoilMineralNitrogen, Model.FieldName)</h1>
             </legand>

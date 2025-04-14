@@ -5,7 +5,7 @@
     int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
     int potatoGroupId = (int)NMP.Portal.Enums.CropGroup.Potatoes;
     var action = "";
-    if (Model.IsCheckAnswer && (!Model.IsCropGroupChange))
+    if (Model.IsCheckAnswer && (!Model.IsCropGroupChange) && (!Model.IsCropTypeChange))
     {
         action = "CheckAnswer";
     }
@@ -54,6 +54,7 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropInfo2Name"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyChangeInField" value="@Model.IsAnyChangeInField"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCropGroupChange" value="@Model.IsCropGroupChange"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCropTypeChange" value="@Model.IsCropTypeChange"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAddAnotherCrop" value="@Model.IsAddAnotherCrop"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPlanRecord" value="@Model.IsPlanRecord"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupName"></govuk-input>
