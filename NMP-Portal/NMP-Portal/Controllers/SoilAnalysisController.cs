@@ -202,6 +202,11 @@ namespace NMP.Portal.Controllers
                     }
                     _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("SoilAnalysisData", model);
                 }
+                if (model != null)
+                {
+                    model.IsCheckAnswer = true;
+                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("SoilAnalysisData", model);
+                }
             }
             catch (Exception ex)
             {
@@ -297,6 +302,10 @@ namespace NMP.Portal.Controllers
 
             model.IsSoilDataChanged = _soilAnalysisDataProtector.Protect(Resource.lblTrue);
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("SoilAnalysisData", model);
+            if (model.IsCheckAnswer)
+            {
+                return RedirectToAction("ChangeSoilAnalysis", new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
+            }
             if (model.isSoilAnalysisAdded != null && model.isSoilAnalysisAdded.Value)
             {
                 return RedirectToAction("SoilNutrientValueType");
@@ -363,7 +372,10 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("SoilNutrientValue");
                 }
             }
-
+            if (model.IsCheckAnswer)
+            {
+                return RedirectToAction("ChangeSoilAnalysis", new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
+            }
 
             if (model.isSoilAnalysisAdded != null && model.isSoilAnalysisAdded.Value)
             {
@@ -652,6 +664,10 @@ namespace NMP.Portal.Controllers
             }
             model.IsSoilDataChanged = _soilAnalysisDataProtector.Protect(Resource.lblTrue);
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("SoilAnalysisData", model);
+            if (model.IsCheckAnswer)
+            {
+                return RedirectToAction("ChangeSoilAnalysis", new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
+            }
             if (model.isSoilAnalysisAdded != null && model.isSoilAnalysisAdded.Value)
             {
                 return RedirectToAction("Date");
@@ -899,6 +915,93 @@ namespace NMP.Portal.Controllers
             }
             //return RedirectToAction("SoilAnalysisDetail", new { i = model.EncryptedFieldId, j = model.EncryptedFarmId, k = success ,l=model.EncryptedSoilAnalysisId});
         }
+        [HttpGet]
+        public IActionResult Cancel()
+        {
+            _logger.LogTrace("SoilAnalysis Controller : Cancel() action called");
+            SoilAnalysisViewModel model = new SoilAnalysisViewModel();
+            try
+            {
+                if (HttpContext.Session.Keys.Contains("SoilAnalysisData"))
+                {
+                    model = HttpContext.Session.GetObjectFromJson<SoilAnalysisViewModel>("SoilAnalysisData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+                model.IsSoilDataChanged = _soilAnalysisDataProtector.Protect(Resource.lblTrue);
+                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("SoilAnalysisData", model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"SoilAnalysis Controller : Exception in Cancel() action : {ex.Message}, {ex.StackTrace}");
+                TempData["ChangeSoilAnalysisError"] = ex.Message;
+                return RedirectToAction("ChangeSoilAnalysis", new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
+            }
 
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Cancel(SoilAnalysisViewModel model)
+        {
+            _logger.LogTrace("SoilAnalysis Controller : Cancel() post action called");
+            if (model.IsCancel == null)
+            {
+                ModelState.AddModelError("IsCancel", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View("Cancel", model);
+            }
+            if (!model.IsCancel.Value)
+            {
+                return RedirectToAction("ChangeSoilAnalysis", new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
+
+            }
+            else
+            {
+                HttpContext?.Session.Remove("SoilAnalysisData");
+                return RedirectToAction("FieldSoilAnalysisDetail", "Field", new { id = model.EncryptedFieldId, farmId = model.EncryptedFarmId });
+            }
+
+        }
+        [HttpGet]
+        public IActionResult BackActionForCheckAnswer()
+        {
+            _logger.LogTrace("SoilAnalysis Controller : BackActionForCheckAnswer() action called");
+            SoilAnalysisViewModel model = new SoilAnalysisViewModel();
+            try
+            {
+                if (HttpContext.Session.Keys.Contains("SoilAnalysisData"))
+                {
+                    model = HttpContext.Session.GetObjectFromJson<SoilAnalysisViewModel>("SoilAnalysisData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+                model.IsCheckAnswer = false;
+                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("SoilAnalysisData", model);
+                if (model.isSoilAnalysisAdded != null && model.isSoilAnalysisAdded.Value)
+                {
+                    return RedirectToAction("SoilNutrientValue");
+                }
+                else
+                {
+                    return RedirectToAction("FieldSoilAnalysisDetail", "Field", new { id = model.EncryptedFieldId, farmId = model.EncryptedFarmId });
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"SoilAnalysis Controller : Exception in Cancel() action : {ex.Message}, {ex.StackTrace}");
+                TempData["ChangeSoilAnalysisError"] = ex.Message;
+                return RedirectToAction("ChangeSoilAnalysis", new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
+            }
+
+            return View(model);
+        }
     }
 }

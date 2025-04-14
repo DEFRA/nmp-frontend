@@ -190,6 +190,7 @@ namespace NMP.Portal.Controllers
                 if (fieldResponse != null && string.IsNullOrWhiteSpace(error.Message))
                 {
                     //field.Name = fieldData.Name;
+                    field.IsCheckAnswer = true;
                     field.NationalGridReference = fieldResponse.Field.NationalGridReference;
                     field.OtherReference = fieldResponse.Field.OtherReference;
                     field.TotalArea = fieldResponse.Field.TotalArea;
@@ -2704,6 +2705,64 @@ namespace NMP.Portal.Controllers
             }
 
             return RedirectToAction("CheckAnswer");
+        }
+        [HttpGet]
+        public IActionResult Cancel()
+        {
+            _logger.LogTrace("Field Controller : Cancel() action called");
+            FieldViewModel model = new FieldViewModel();
+            try
+            {
+                if (HttpContext.Session.Keys.Contains("FieldData"))
+                {
+                    model = HttpContext.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Field Controller : Exception in Cancel() action : {ex.Message}, {ex.StackTrace}");
+                TempData["AddFieldError"] = ex.Message;
+                return RedirectToAction("CheckAnswer");
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Cancel(FieldViewModel model)
+        {
+            _logger.LogTrace("Field Controller : Cancel() post action called");
+            if (model.IsCancel == null)
+            {
+                ModelState.AddModelError("IsCancel", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View("Cancel", model);
+            }
+            if (!model.IsCancel.Value)
+            {
+                if (string.IsNullOrWhiteSpace(model.EncryptedFieldId))
+                {
+                    return RedirectToAction("CheckAnswer");
+                }
+                else
+                {
+                    return RedirectToAction("UpdateField");
+                }
+            }
+            else
+            {
+                //HttpContext?.Session.Remove("FieldData");
+                return RedirectToAction("CreateFieldCancel", new { id = model.EncryptedFarmId});
+            }
+
         }
     }
 }

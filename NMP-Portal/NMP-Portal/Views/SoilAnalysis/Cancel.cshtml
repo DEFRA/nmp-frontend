@@ -1,0 +1,48 @@
+﻿@using NMP.Portal.ViewModels;
+@using NMP.Portal.Resources;
+@model NMP.Portal.ViewModels.SoilAnalysisViewModel
+
+@{
+
+    var cancelViewModel = new CancelViewModel
+            {
+                IsCancel = Model.IsCancel,
+                LableContent = string.Format(Resource.lblTheInformationEnteredAboutThisWillBeLost, Resource.lblSoilAnalysis.ToLower())
+            };
+}
+@section BeforeContent {
+    <govuk-back-link asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId" asp-route-l="@Model.IsSoilDataChanged">@Resource.lblBack</govuk-back-link>
+
+}
+
+<form asp-controller="SoilAnalysis" asp-action="Cancel" method="post" autocomplete="off">
+    @Html.AntiForgeryToken()
+    <div hidden="true">
+        <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Date"></govuk-date-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PH"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MagnesiumIndex"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphorusIndex"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PotassiumIndexValue"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphorusMethodologyID"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Magnesium"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Phosphorus"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Potassium"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldID"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedSoilAnalysisId"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SulphurDeficient" value="@Model.SulphurDeficient.ToString().ToLower()"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilNutrientValueTypeIndex" value="@Model.IsSoilNutrientValueTypeIndex.ToString().ToLower()"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isSoilAnalysisAdded" value="@Model.isSoilAnalysisAdded.ToString().ToLower()"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilDataChanged" value="@Model.IsSoilDataChanged"></govuk-input>
+    </div>
+    @await Html.PartialAsync("~/views/shared/_cancelconfirmation.cshtml", cancelViewModel)
+    <govuk-button type="submit" class="margin-bottom-forty">
+        @Resource.lblContinue
+    </govuk-button>
+</form>
+<p class="govuk-body cancel-link">
+<p class="govuk-body cancel-link"><a asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId" asp-route-l="@Model.IsSoilDataChanged">@Resource.lblCancel</a></p>
+</p>
