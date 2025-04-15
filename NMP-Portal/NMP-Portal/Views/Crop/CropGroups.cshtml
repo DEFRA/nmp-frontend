@@ -21,6 +21,7 @@
             </div>
         </div>
     }
+    <div hidden="true">
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroup"></govuk-input>
@@ -45,6 +46,12 @@
 
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CurrentSward"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassSeason"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassDistinctCount" value="@Model.GrassGrowthClassDistinctCount"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassCounter" value="@Model.GrassGrowthClassCounter"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassEncryptedCounter" value="@Model.GrassGrowthClassEncryptedCounter"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassQuestion"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DryMatterYieldCounter"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DryMatterYieldEncryptedCounter"></govuk-input>
     @if (Model.FieldList != null && Model.FieldList.Count > 0)
     {
         @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -73,7 +80,7 @@
         }
 
     }
-
+    </div>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
@@ -88,14 +95,14 @@
                     {
                         @foreach (var item in ViewBag.CropGroupList)
                         {
-                            @if (item.CropGroupId == grassGroupId)
+                            @* @if (item.CropGroupId == grassGroupId)
                             {
                                 <govuk-radios-item value="@item.CropGroupId" disabled="true">@item.CropGroupName</govuk-radios-item>
                             }
                             else
-                            {
+                            { *@
                                 <govuk-radios-item value="@item.CropGroupId">@item.CropGroupName</govuk-radios-item>
-                            }
+                            @* } *@
                         }
                     }
 
@@ -104,7 +111,16 @@
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
-            <p class="govuk-body cancel-link"><a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
+            <p class="govuk-body cancel-link">
+                @if (!Model.IsCheckAnswer)
+                {
+                    <a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a>
+                }
+                else
+                {
+             <a asp-action="CheckAnswer" asp-controller="Crop">@Resource.lblCancel</a>
+                }
+            </p>
 
         </div>
 

@@ -441,7 +441,7 @@ namespace NMP.Portal.Controllers
                     int decryptedId = Convert.ToInt32(_cropDataProtector.Unprotect(model.EncryptedFertId));
                     if (decryptedId > 0 && model.FarmId != null && model.HarvestYear != null)
                     {
-                        (List<FertiliserResponse> fertiliserResponse, error) = await _fertiliserManureService.FetchFieldWithSameDateAndNutrient(decryptedId, model.FarmId.Value, model.HarvestYear.Value);
+                        (List<FertiliserAndOrganicManureUpdateResponse> fertiliserResponse, error) = await _fertiliserManureService.FetchFieldWithSameDateAndNutrient(decryptedId, model.FarmId.Value, model.HarvestYear.Value);
                         if (string.IsNullOrWhiteSpace(error.Message) && fertiliserResponse != null && fertiliserResponse.Count > 0)
                         {
                             var SelectListItem = fertiliserResponse.Select(f => new SelectListItem
@@ -502,7 +502,7 @@ namespace NMP.Portal.Controllers
                     ViewBag.FieldList = selectListItem.OrderBy(x => x.Text).ToList();
                     if (!string.IsNullOrWhiteSpace(model.EncryptedFertId))
                     {
-                        (List<FertiliserResponse> fertiliserResponse, error) = await _fertiliserManureService.FetchFieldWithSameDateAndNutrient(Convert.ToInt32(_cropDataProtector.Unprotect(model.EncryptedFertId)), model.FarmId.Value, model.HarvestYear.Value);
+                        (List<FertiliserAndOrganicManureUpdateResponse> fertiliserResponse, error) = await _fertiliserManureService.FetchFieldWithSameDateAndNutrient(Convert.ToInt32(_cropDataProtector.Unprotect(model.EncryptedFertId)), model.FarmId.Value, model.HarvestYear.Value);
                         if (string.IsNullOrWhiteSpace(error.Message) && fertiliserResponse != null && fertiliserResponse.Count > 0)
                         {
                             selectListItem = new List<SelectListItem>();
@@ -1397,7 +1397,7 @@ namespace NMP.Portal.Controllers
                     (FertiliserManure fertiliserManure, error) = await _fertiliserManureService.FetchFertiliserByIdAsync(decryptedId);
                     if (string.IsNullOrWhiteSpace(error.Message) && fertiliserManure != null)
                     {
-                        (List<FertiliserResponse> fertiliserResponse, error) = await _fertiliserManureService.FetchFieldWithSameDateAndNutrient(decryptedId, decryptedFarmId, decryptedHarvestYear);
+                        (List<FertiliserAndOrganicManureUpdateResponse> fertiliserResponse, error) = await _fertiliserManureService.FetchFieldWithSameDateAndNutrient(decryptedId, decryptedFarmId, decryptedHarvestYear);
                         if (string.IsNullOrWhiteSpace(error.Message) && fertiliserResponse != null && fertiliserResponse.Count > 0)
                         {
                             model.UpdatedFertiliserIds = fertiliserResponse;
@@ -1607,7 +1607,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (!string.IsNullOrWhiteSpace(model.EncryptedFertId))
                 {
-                    (List<FertiliserResponse> fertiliserResponse, error) = await _fertiliserManureService.FetchFieldWithSameDateAndNutrient(Convert.ToInt32(_cropDataProtector.Unprotect(model.EncryptedFertId)), model.FarmId.Value, model.HarvestYear.Value);
+                    (List<FertiliserAndOrganicManureUpdateResponse> fertiliserResponse, error) = await _fertiliserManureService.FetchFieldWithSameDateAndNutrient(Convert.ToInt32(_cropDataProtector.Unprotect(model.EncryptedFertId)), model.FarmId.Value, model.HarvestYear.Value);
                     if (string.IsNullOrWhiteSpace(error.Message) && fertiliserResponse != null && fertiliserResponse.Count > 0)
                     {
                         var SelectListItem = fertiliserResponse.Select(f => new SelectListItem
@@ -2070,7 +2070,7 @@ namespace NMP.Portal.Controllers
                     (PreviousApplicationsNitrogen, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, startDate, endOfOctober, null, false);
 
                 }
-               // (decimal PreviousApplicationsNitrogen, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, startDate, endOfOctober,null, false);
+                // (decimal PreviousApplicationsNitrogen, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, startDate, endOfOctober,null, false);
 
                 if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape && isWithinWarningPeriod)
                 {
@@ -2135,7 +2135,7 @@ namespace NMP.Portal.Controllers
                         (nitrogenWithinWarningPeriod, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, start, end, null, false);
 
                     }
-                   // (decimal nitrogenWithinWarningPeriod, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, start, end,null, false);
+                    // (decimal nitrogenWithinWarningPeriod, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, start, end,null, false);
                     if (model.N.Value > 40 || nitrogenWithinWarningPeriod > 80)
                     {
                         isNitrogenRateExceeded = true;
@@ -2180,11 +2180,11 @@ namespace NMP.Portal.Controllers
                 //if we are coming for update then we will exclude the fertiliserId.
                 if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
                 {
-                    (previousApplicationsN, error) = await _organicManureService.FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(managementId, model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.FertiliserId).FirstOrDefault(), false);
+                    (previousApplicationsN, error) = await _organicManureService.FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(managementId, false, model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.FertiliserId).FirstOrDefault(), null);
                 }
                 else
                 {
-                    (previousApplicationsN, error) = await _organicManureService.FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(managementId, null, false);
+                    (previousApplicationsN, error) = await _organicManureService.FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(managementId,  false, null,null);
                 }
                 //(previousApplicationsN, error) = await _organicManureService.FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(managementId, false);
                 List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(fieldId));
@@ -2280,92 +2280,73 @@ namespace NMP.Portal.Controllers
                 {
                     if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
                     {
-                        foreach (var fertiliserManure in model.FertiliserManures)
+                        List<FertiliserManure> fertiliserList = new List<FertiliserManure>();
+                        foreach (FertiliserManure fertiliserManure in model.FertiliserManures)
                         {
-                            fertiliserManure.ID = model.UpdatedFertiliserIds != null ? (model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId.Value == fertiliserManure.ManagementPeriodID).Select(x => x.FertiliserId.Value).FirstOrDefault()) : 0;
-                            fertiliserManure.ManagementPeriodID = fertiliserManure.ManagementPeriodID;
-                            fertiliserManure.ApplicationDate = model.Date.Value;
-                            fertiliserManure.N = model.N;
-                            fertiliserManure.P2O5 = model.P2O5;
-                            fertiliserManure.K2O = model.K2O;
-                            fertiliserManure.SO3 = model.SO3;
-                            fertiliserManure.Lime = model.Lime;
-                            fertiliserManure.MgO = model.MgO;
-                            fertiliserManure.ApplicationRate = 1;
+                            FertiliserManure FertiliserManure = new FertiliserManure
+                            {
+                                ID = model.UpdatedFertiliserIds != null ? (model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId.Value == fertiliserManure.ManagementPeriodID).Select(x => x.FertiliserId.Value).FirstOrDefault()) : 0,
+                                ManagementPeriodID = fertiliserManure.ManagementPeriodID,
+                                ApplicationDate = model.Date,
+                                ApplicationRate = 1,
+                                Confirm = fertiliserManure.Confirm,
+                                N = model.N,
+                                P2O5 = model.P2O5,
+                                K2O = model.K2O,
+                                SO3 = model.SO3,
+                                Lime = model.Lime,
+                                MgO = model.MgO,
+                                Na2O = fertiliserManure.Na2O ?? 0,
+                                NFertAnalysisPercent = fertiliserManure.NFertAnalysisPercent ?? 0,
+                                P2O5FertAnalysisPercent = fertiliserManure.P2O5FertAnalysisPercent ?? 0,
+                                K2OFertAnalysisPercent = fertiliserManure.K2OFertAnalysisPercent ?? 0,
+                                MgOFertAnalysisPercent = fertiliserManure.MgOFertAnalysisPercent ?? 0,
+                                SO3FertAnalysisPercent = fertiliserManure.SO3FertAnalysisPercent ?? 0,
+                                Na2OFertAnalysisPercent = fertiliserManure.Na2OFertAnalysisPercent ?? 0,                                
+                                NH4N = fertiliserManure.NH4N ?? 0,
+                                NO3N = fertiliserManure.NO3N ?? 0,
+                            };
+                            fertiliserList.Add(FertiliserManure);
+                        }
+                        var result = new
+                        {
+                            FertiliserManure = fertiliserList
+                        };
+                        string jsonString = JsonConvert.SerializeObject(result);
+                        (List<FertiliserManure> fertiliser, Error error) = await _fertiliserManureService.UpdateFertiliser(jsonString);
+                        if (string.IsNullOrWhiteSpace(error.Message) && fertiliser.Count > 0)
+                        {
+                            bool success = true;
+                            _httpContextAccessor.HttpContext?.Session.Remove("FertiliserManure");
+                            if (model.FieldList != null && model.FieldList.Count == 1)
+                            {
+                                return Redirect(Url.Action("HarvestYearOverview", "Crop", new
+                                {
+                                    id = model.EncryptedFarmId,
+                                    year = model.EncryptedHarvestYear,
+                                    q = _farmDataProtector.Protect(success.ToString()),
+                                    r = _cropDataProtector.Protect(Resource.MsgInorganicFertiliserApplicationUpdated),
+                                    w = _fieldDataProtector.Protect(model.FieldList.FirstOrDefault())
+                                }) + Resource.lblInorganicFertiliserApplicationsForSorting);
+                            }
+                            else
+                            {
+                                return Redirect(Url.Action("HarvestYearOverview", "Crop", new
+                                {
+                                    id = model.EncryptedFarmId,
+                                    year = model.EncryptedHarvestYear,
+                                    q = _farmDataProtector.Protect(success.ToString()),
+                                    r = _cropDataProtector.Protect(Resource.MsgInorganicFertiliserApplicationUpdated),
+                                    v = _cropDataProtector.Protect(Resource.lblSelectAFieldToSeeItsUpdatedRecommendations)
+                                }) + Resource.lblInorganicFertiliserApplicationsForSorting);
+                            }
+                        }
+                        else
+                        {
+                            TempData["CheckYourAnswerError"] = error.Message;
+                            return RedirectToAction("CheckAnswer");
                         }
                     }
-                }
-            }
-
-
-
-            if (model.FertiliserManures.Count > 0)
-            {
-                List<FertiliserManure> fertiliserList = new List<FertiliserManure>();
-                foreach (FertiliserManure fertiliserManure in model.FertiliserManures)
-                {
-                    FertiliserManure FertiliserManure = new FertiliserManure
-                    {
-                        ID = fertiliserManure.ID,
-                        ManagementPeriodID = fertiliserManure.ManagementPeriodID,
-                        ApplicationDate = fertiliserManure.ApplicationDate,
-                        ApplicationRate = fertiliserManure.ApplicationRate ?? 0,
-                        Confirm = fertiliserManure.Confirm,
-                        N = fertiliserManure.N ?? 0,
-                        P2O5 = fertiliserManure.P2O5 ?? 0,
-                        K2O = fertiliserManure.K2O ?? 0,
-                        MgO = fertiliserManure.MgO ?? 0,
-                        SO3 = fertiliserManure.SO3 ?? 0,
-                        Na2O = fertiliserManure.Na2O ?? 0,
-                        NFertAnalysisPercent = fertiliserManure.NFertAnalysisPercent ?? 0,
-                        P2O5FertAnalysisPercent = fertiliserManure.P2O5FertAnalysisPercent ?? 0,
-                        K2OFertAnalysisPercent = fertiliserManure.K2OFertAnalysisPercent ?? 0,
-                        MgOFertAnalysisPercent = fertiliserManure.MgOFertAnalysisPercent ?? 0,
-                        SO3FertAnalysisPercent = fertiliserManure.SO3FertAnalysisPercent ?? 0,
-                        Na2OFertAnalysisPercent = fertiliserManure.Na2OFertAnalysisPercent ?? 0,
-                        Lime = fertiliserManure.Lime ?? 0,
-                        NH4N = fertiliserManure.NH4N ?? 0,
-                        NO3N = fertiliserManure.NO3N ?? 0,
-                    };
-                    fertiliserList.Add(FertiliserManure);
-                }
-                var result = new
-                {
-                    FertiliserManure = fertiliserList
-                };
-                string jsonString = JsonConvert.SerializeObject(result);
-                (List<FertiliserManure> fertiliser, Error error) = await _fertiliserManureService.UpdateFertiliser(jsonString);
-                if (string.IsNullOrWhiteSpace(error.Message) && fertiliser.Count > 0)
-                {
-                    bool success = true;
-                    _httpContextAccessor.HttpContext?.Session.Remove("FertiliserManure");
-                    if (model.FieldList != null && model.FieldList.Count == 1)
-                    {
-                        return Redirect(Url.Action("HarvestYearOverview", "Crop", new
-                        {
-                            id = model.EncryptedFarmId,
-                            year = model.EncryptedHarvestYear,
-                            q = _farmDataProtector.Protect(success.ToString()),
-                            r = _cropDataProtector.Protect(Resource.MsgInorganicFertiliserApplicationUpdated),
-                            w = _fieldDataProtector.Protect(model.FieldList.FirstOrDefault())
-                        }) + Resource.lblInorganicFertiliserApplicationsForSorting);
-                    }
-                    else
-                    {
-                        return Redirect(Url.Action("HarvestYearOverview", "Crop", new
-                        {
-                            id = model.EncryptedFarmId,
-                            year = model.EncryptedHarvestYear,
-                            q = _farmDataProtector.Protect(success.ToString()),
-                            r = _cropDataProtector.Protect(Resource.MsgInorganicFertiliserApplicationUpdated),
-                            v = _cropDataProtector.Protect(Resource.lblSelectAFieldToSeeItsUpdatedRecommendations)
-                        }) + Resource.lblInorganicFertiliserApplicationsForSorting);
-                    }
-                }
-                else
-                {
-                    TempData["CheckYourAnswerError"] = error.Message;
-                    return RedirectToAction("CheckAnswer");
                 }
             }
             return RedirectToAction("CheckAnswer");
@@ -2452,7 +2433,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Farm Controller : Exception in RemoveFertiliser() action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogTrace($"OrganicManure Controller : Exception in RemoveFertiliser() action : {ex.Message}, {ex.StackTrace}");
                 if (model.IsComingFromRecommendation)
                 {
                     TempData["NutrientRecommendationsError"] = ex.Message;
@@ -2616,12 +2597,69 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Farm Controller : Exception in RemoveFertiliser() post action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogTrace($"OrganicManure Controller : Exception in RemoveFertiliser() post action : {ex.Message}, {ex.StackTrace}");
                 TempData["RemoveFertiliserError"] = ex.Message;
                 return View(model);
             }
             return View(model);
 
+
+        }
+
+        [HttpGet]
+        public IActionResult Cancel()
+        {
+            _logger.LogTrace("Fertiliser Manure Controller : Cancel() action called");
+            FertiliserManureViewModel model = new FertiliserManureViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FertiliserManureViewModel>("FertiliserManure");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Fertiliser Manure Controller : Exception in Cancel() action : {ex.Message}, {ex.StackTrace}");
+                TempData["CheckYourAnswerError"] = ex.Message;
+                return RedirectToAction("CheckAnswer");
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Cancel(FertiliserManureViewModel model)
+        {
+            _logger.LogTrace("Fertiliser Manure Controller : Cancel() post action called");
+            if (model.IsCancel == null)
+            {
+                ModelState.AddModelError("IsCancel", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View("Cancel", model);
+            }
+            if (!model.IsCancel.Value)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
+            else
+            {
+                return RedirectToAction("HarvestYearOverview", "Crop", new
+                {
+                    id = model.EncryptedFarmId,
+                    year = model.EncryptedHarvestYear
+                });
+
+
+            }
 
         }
     }

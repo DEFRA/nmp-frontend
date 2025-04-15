@@ -24,6 +24,7 @@
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="FieldMeasurements" method="post" asp-controller="Field" autocomplete="off">
             @Html.AntiForgeryToken()
+            <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LPIDNumber"></govuk-input>
@@ -83,7 +84,7 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPreviousYearGrass" value="@Model.IsPreviousYearGrass.ToString().ToLower()"></govuk-input>
             }
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingField" value="@Model.CopyExistingField.ToString().ToLower()"></govuk-input>
-
+            </div>
             <div class="govuk-form-group">
                 <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
                     <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblFieldMeasurements, Model.Name)</h1>
@@ -102,6 +103,20 @@
                 @Resource.lblContinue
             </govuk-button>
         </form>
-        <p class="govuk-body cancel-link"><a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
+        <p class="govuk-body cancel-link">
+
+            @if (!string.IsNullOrWhiteSpace(Model.EncryptedFieldId))
+            {
+                <a asp-action="UpdateField" asp-controller="Field">@Resource.lblCancel</a>
+            }
+            else if (!Model.IsCheckAnswer)
+            {
+            <a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a>
+            }
+            else if (Model.IsCheckAnswer)
+            {
+            <a asp-action="CheckAnswer" asp-controller="Field">@Resource.lblCancel</a>
+            }
+        </p>
     </div>
 </div>

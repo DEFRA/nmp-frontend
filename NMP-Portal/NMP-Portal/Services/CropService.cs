@@ -871,6 +871,59 @@ namespace NMP.Portal.Services
             }
             return grassSeasons;
         }
+
+        public async Task<(List<GrassGrowthClassResponse>, Error)> FetchGrassGrowthClass(List<int> fieldIds)
+        {
+            var fieldIdsRequest = new { fieldIds };
+            Error error = new Error();
+            string message = string.Empty;
+            List<GrassGrowthClassResponse> grassGrowthClasses = new List<GrassGrowthClassResponse>();
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var jsonContent = JsonConvert.SerializeObject(fieldIdsRequest);
+
+                var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+                var url = APIURLHelper.FetchGrassGrowthClassesAsyncAPI;
+
+
+                var requestMessage = new HttpRequestMessage(HttpMethod.Post, url)
+                {
+                    Content = content
+                };
+
+                var response = await httpClient.SendAsync(requestMessage);
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode)
+                {
+                    if (responseWrapper != null && responseWrapper.Data != null)
+                    {
+                        var grassGrowthClassList = responseWrapper.Data.ToObject<List<GrassGrowthClassResponse>>();
+                        grassGrowthClasses.AddRange(grassGrowthClassList);
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+            return (grassGrowthClasses, error);
+        }
     }
 
 }

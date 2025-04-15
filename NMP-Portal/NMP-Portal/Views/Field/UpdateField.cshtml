@@ -46,6 +46,7 @@
             <h1 class="govuk-heading-l">
                 @string.Format( Resource.lblUpdateXField,Model.Name)
             </h1>
+            <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherReference"></govuk-input>
@@ -61,6 +62,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilOverChalk" value="@Model.SoilOverChalk.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId"></govuk-input>
+            </div>
             <govuk-summary-list>
                 <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
@@ -217,7 +219,9 @@
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblUpdateThisField
             </govuk-button>
-            <p class="govuk-body cancel-link"><a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
+            <p class="govuk-body cancel-link">
+                <a asp-action="Cancel" asp-controller="Field">@Resource.lblCancel</a>
+            </p>
         </div>
     </div>
 </form>

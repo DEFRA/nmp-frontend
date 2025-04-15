@@ -1,5 +1,6 @@
 ﻿using NMP.Portal.Models;
 using NMP.Portal.Resources;
+using NMP.Portal.ServiceResponses;
 using System.ComponentModel.DataAnnotations;
 
 namespace NMP.Portal.ViewModels
@@ -129,5 +130,11 @@ namespace NMP.Portal.ViewModels
         public DateTime? ClosedPeriodEndDate { get; set; }
         public string? ClosedPeriodForUI { get; set; } = string.Empty;
         public bool? IsWithinNVZ { get; set; }
+        public string? EncryptedOrgManureId { get; set; } = string.Empty;
+        public List<FertiliserAndOrganicManureUpdateResponse>? UpdatedOrganicIds { get; set; }
+        public string? FieldName { get; set; }
+        public bool? IsApplicationDateChange { get; set; } = false;
+        public bool? IsDeleteOrganic { get; set; }
+        public bool? IsCancel { get; set; }
     }
 }

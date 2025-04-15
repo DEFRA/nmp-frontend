@@ -2,7 +2,7 @@
 
 namespace NMP.Portal.ServiceResponses
 {
-    public class FertiliserResponse
+    public class FertiliserAndOrganicManureUpdateResponse
     {
 
         [JsonProperty("ID")]
@@ -11,6 +11,8 @@ namespace NMP.Portal.ServiceResponses
         public string? Name { get; set; }
         [JsonProperty("FertiliserId")]
         public int? FertiliserId { get; set; }
+        [JsonProperty("OrganicManureId")]
+        public int? OrganicManureId { get; set; }
         [JsonProperty("ManagementPeriodID")]
         public int? ManagementPeriodId { get; set; }
     }

@@ -80,5 +80,14 @@ namespace NMP.Portal.ViewModels
         // grass properties
         public int? CurrentSward { get; set; }
         public int? GrassSeason { get; set; }
+
+        public int GrassGrowthClassCounter { get; set; } = 0;
+        public int GrassGrowthClassDistinctCount { get; set; } = 0;
+        public string? GrassGrowthClassEncryptedCounter { get; set; }
+        public int? GrassGrowthClassQuestion { get; set; }
+
+        public int DryMatterYieldCounter { get; set; } = 0;
+        public string? DryMatterYieldEncryptedCounter { get; set; }
+        public bool? IsCancel { get; set; }
     }
 }

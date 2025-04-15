@@ -44,7 +44,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="BackCheckAnswer" asp-controller="Crop" asp-route-q="@Model.YieldEncryptedCounter">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="BackCheckAnswer" asp-controller="Crop" asp-route-q="@(Model.CropGroupId==(int)NMP.Portal.Enums.CropGroup.Grass ? Model.GrassGrowthClassEncryptedCounter: Model.YieldEncryptedCounter)">@Resource.lblBack</govuk-back-link>
 }
 
 
@@ -59,6 +59,7 @@
                     <govuk-error-summary-item href="#">@TempData["ErrorCreatePlan"]</govuk-error-summary-item>
                 </govuk-error-summary>
             }
+            <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupId"></govuk-input>
@@ -80,6 +81,12 @@
 
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CurrentSward"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassSeason"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassDistinctCount" value="@Model.GrassGrowthClassDistinctCount"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassCounter" value="@Model.GrassGrowthClassCounter"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassEncryptedCounter" value="@Model.GrassGrowthClassEncryptedCounter"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassQuestion"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DryMatterYieldCounter"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DryMatterYieldEncryptedCounter"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -107,7 +114,7 @@
                 }
 
             }
-
+            </div>
             <h1 class="govuk-heading-l">
                 @Resource.lblCheckYourAnswers
             </h1>
@@ -410,7 +417,16 @@
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblCreatePlan
             </govuk-button>
-            <p class="govuk-body cancel-link"><a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
+            <p class="govuk-body cancel-link">
+                @if (!Model.IsCheckAnswer)
+                {
+                    <a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a>
+                }
+                else
+                {
+                    <a asp-action="Cancel" asp-controller="Crop">@Resource.lblCancel</a>
+                }
+            </p>
         </form>
     </div>
 </div>

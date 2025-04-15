@@ -22,6 +22,7 @@
             <govuk-error-summary-item href="#">@TempData["CropGroupNameError"]</govuk-error-summary-item>
         </govuk-error-summary>
     }
+    <div hidden="true">
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupId"></govuk-input>
@@ -51,6 +52,12 @@
 
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CurrentSward"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassSeason"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassDistinctCount" value="@Model.GrassGrowthClassDistinctCount"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassCounter" value="@Model.GrassGrowthClassCounter"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassEncryptedCounter" value="@Model.GrassGrowthClassEncryptedCounter"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassQuestion"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DryMatterYieldCounter"></govuk-input>
+    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DryMatterYieldEncryptedCounter"></govuk-input>
     @if (Model.FieldList != null && Model.FieldList.Count > 0)
     {
         @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -82,7 +89,7 @@
         }
 
     }
-
+    </div>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
@@ -94,12 +101,21 @@
             </govuk-button>
             @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
             {
-                <p class="govuk-body cancel-link"><a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
+                <p class="govuk-body cancel-link">
+                    @if (!Model.IsCheckAnswer)
+                    {
+                        <a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a>
+                    }
+                    else
+                    {
+                        <a asp-action="CheckAnswer" asp-controller="Crop">@Resource.lblCancel</a>
+                    }
+                </p>
             }
             else
             {
                 <p class="govuk-body cancel-link">
-                <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
+                    <a asp-action="UpdateCropGroupNameCheckAnswer" asp-controller="Crop" asp-route-q="@ViewBag.EncryptedCropTypeId" asp-route-r="@(ViewBag.EncryptedCropGroupName==null?null:ViewBag.EncryptedCropGroupName)" asp-route-s="@Model.EncryptedIsCropUpdate">@Resource.lblCancel</a>
                 </p>
             }
 

@@ -16,7 +16,7 @@
     {
         // if (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
         // {
-            backaction = "ManualNutrientValues";
+        backaction = "ManualNutrientValues";
         //}
         // else
         // {
@@ -45,136 +45,149 @@
                     <govuk-error-summary-item>@ViewBag.Error</govuk-error-summary-item>
                 </govuk-error-summary>
             }
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroup"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeId"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules"></govuk-input>
-            <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationDate" value="@Model.ApplicationDate"></govuk-date-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefaultNutrientValue"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationMethod"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Area"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Quantity"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationRate" value="@Model.ApplicationRate"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupId"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationMethod"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationMethodCount"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationDelay"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.DryMatter"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.TotalN"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.NH4N"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.NO3N"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.Uric"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.P2O5"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.K2O"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.MgO"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.SO3"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DryMatterPercent"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.N"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NH4N"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NO3N"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.UricAcid"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.P2O5"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.K2O"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MgO"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SO3"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsFieldGroupChange" value="@Model.IsFieldGroupChange.ToString().ToLower()"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManureTypeChange" value="@Model.IsManureTypeChange.ToString().ToLower()"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManureTypeLiquid" value="@Model.IsManureTypeLiquid.ToString().ToLower()"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationMethodName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationDelayName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationMethodName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroupName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.K2OAvailable"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.P2O5Available"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyNeedToStoreNutrientValueForFuture"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
+            <div hidden="true">
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroup"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeId"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupName"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules"></govuk-input>
+                <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationDate" value="@Model.ApplicationDate"></govuk-date-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefaultNutrientValue"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationMethod"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Area"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Quantity"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationRate" value="@Model.ApplicationRate"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeName"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupId"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationMethod"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationMethodCount"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationDelay"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.DryMatter"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.TotalN"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.NH4N"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.NO3N"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.Uric"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.P2O5"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.K2O"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.MgO"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.SO3"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DryMatterPercent"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.N"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NH4N"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NO3N"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.UricAcid"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.P2O5"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.K2O"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MgO"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SO3"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsFieldGroupChange" value="@Model.IsFieldGroupChange.ToString().ToLower()"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManureTypeChange" value="@Model.IsManureTypeChange.ToString().ToLower()"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManureTypeLiquid" value="@Model.IsManureTypeLiquid.ToString().ToLower()"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationMethodName"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationDelayName"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationMethodName"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroupName"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeName"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.K2OAvailable"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.P2O5Available"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyNeedToStoreNutrientValueForFuture"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
 
 
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptake"></govuk-input>
-            <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilDrainageEndDate" value="@Model.SoilDrainageEndDate"></govuk-date-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RainfallWithinSixHoursID"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalRainfall"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.WindspeedID"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MoistureTypeId"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RainfallWithinSixHours"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Windspeed"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MoistureType"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupIdForFilter"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWarningMsgNeedToShow" value="@Model.IsWarningMsgNeedToShow.ToString().ToLower()"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarning" value="@Model.IsClosedPeriodWarning"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNMaxLimitWarning" value="@Model.IsNMaxLimitWarning.ToString().ToLower()"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsOrgManureNfieldLimitWarning" value="@Model.IsOrgManureNfieldLimitWarning.ToString().ToLower()"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEndClosedPeriodFebruaryWarning" value="@Model.IsEndClosedPeriodFebruaryWarning"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks" value="@Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150" value="@Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropOrder"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherMaterialName"></govuk-input>
-            <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefaultFarmManureValueDate" value="@Model.DefaultFarmManureValueDate"></govuk-date-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsThisDefaultValueOfRB209" value="@Model.IsThisDefaultValueOfRB209"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmCountryId"></govuk-input>
-            <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodStartDate" value="@Model.ClosedPeriodStartDate"></govuk-date-input>
-            <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodEndDate" value="@Model.ClosedPeriodEndDate"></govuk-date-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodForUI"></govuk-input>
-            @if (Model.FieldList != null && Model.FieldList.Count > 0)
-            {
-                @for (int i = 0; i < Model.FieldList.Count; i++)
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptake"></govuk-input>
+                <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilDrainageEndDate" value="@Model.SoilDrainageEndDate"></govuk-date-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RainfallWithinSixHoursID"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalRainfall"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.WindspeedID"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MoistureTypeId"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RainfallWithinSixHours"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Windspeed"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MoistureType"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupIdForFilter"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWarningMsgNeedToShow" value="@Model.IsWarningMsgNeedToShow.ToString().ToLower()"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarning" value="@Model.IsClosedPeriodWarning"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNMaxLimitWarning" value="@Model.IsNMaxLimitWarning.ToString().ToLower()"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsOrgManureNfieldLimitWarning" value="@Model.IsOrgManureNfieldLimitWarning.ToString().ToLower()"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEndClosedPeriodFebruaryWarning" value="@Model.IsEndClosedPeriodFebruaryWarning"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks" value="@Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150" value="@Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropOrder"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherMaterialName"></govuk-input>
+                <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefaultFarmManureValueDate" value="@Model.DefaultFarmManureValueDate"></govuk-date-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsThisDefaultValueOfRB209" value="@Model.IsThisDefaultValueOfRB209"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmCountryId"></govuk-input>
+                <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodStartDate" value="@Model.ClosedPeriodStartDate"></govuk-date-input>
+                <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodEndDate" value="@Model.ClosedPeriodEndDate"></govuk-date-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodForUI"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedOrgManureId"></govuk-input>
+                @if (Model.FieldList != null && Model.FieldList.Count > 0)
                 {
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldList[i]" value="@Model.FieldList[i]"></govuk-input>
+                    @for (int i = 0; i < Model.FieldList.Count; i++)
+                    {
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldList[i]" value="@Model.FieldList[i]"></govuk-input>
+                    }
                 }
-            }
-            @if (Model.OrganicManures != null && Model.OrganicManures.Count > 0)
-            {
-                @for (int i = 0; i < Model.OrganicManures.Count; i++)
+                @if (Model.OrganicManures != null && Model.OrganicManures.Count > 0)
                 {
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].ManagementPeriodID" value="@Model.OrganicManures[i].ManagementPeriodID"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].ManureTypeID" value="@Model.OrganicManures[i].ManureTypeID"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].ApplicationMethodID" value="@Model.OrganicManures[i].ApplicationMethodID"></govuk-input>
-                    <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].ApplicationDate" value="@Model.OrganicManures[i].ApplicationDate"></govuk-date-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].K2O" value="@Model.OrganicManures[i].K2O"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].MgO" value="@Model.OrganicManures[i].MgO"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].P2O5" value="@Model.OrganicManures[i].P2O5"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].SO3" value="@Model.OrganicManures[i].SO3"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].NH4N" value="@Model.OrganicManures[i].NH4N"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].NO3N" value="@Model.OrganicManures[i].NO3N"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].UricAcid" value="@Model.OrganicManures[i].UricAcid"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].DryMatterPercent" value="@Model.OrganicManures[i].DryMatterPercent"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].N" value="@Model.OrganicManures[i].N"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].ApplicationRate" value="@Model.OrganicManures[i].ApplicationRate"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].IncorporationDelayID" value="@Model.OrganicManures[i].IncorporationDelayID"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].IncorporationMethodID" value="@Model.OrganicManures[i].IncorporationMethodID"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationRateArable" value="@Model.ApplicationRateArable"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].AvailableK2O" value="@Model.OrganicManures[i].AvailableK2O"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].AvailableP2O5" value="@Model.OrganicManures[i].AvailableP2O5"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].AreaSpread" value="@Model.OrganicManures[i].AreaSpread"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].ManureQuantity" value="@Model.OrganicManures[i].ManureQuantity"></govuk-input>
+                    @for (int i = 0; i < Model.OrganicManures.Count; i++)
+                    {
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].ManagementPeriodID" value="@Model.OrganicManures[i].ManagementPeriodID"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].ManureTypeID" value="@Model.OrganicManures[i].ManureTypeID"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].ApplicationMethodID" value="@Model.OrganicManures[i].ApplicationMethodID"></govuk-input>
+                        <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].ApplicationDate" value="@Model.OrganicManures[i].ApplicationDate"></govuk-date-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].K2O" value="@Model.OrganicManures[i].K2O"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].MgO" value="@Model.OrganicManures[i].MgO"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].P2O5" value="@Model.OrganicManures[i].P2O5"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].SO3" value="@Model.OrganicManures[i].SO3"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].NH4N" value="@Model.OrganicManures[i].NH4N"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].NO3N" value="@Model.OrganicManures[i].NO3N"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].UricAcid" value="@Model.OrganicManures[i].UricAcid"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].DryMatterPercent" value="@Model.OrganicManures[i].DryMatterPercent"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].N" value="@Model.OrganicManures[i].N"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].ApplicationRate" value="@Model.OrganicManures[i].ApplicationRate"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].IncorporationDelayID" value="@Model.OrganicManures[i].IncorporationDelayID"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].IncorporationMethodID" value="@Model.OrganicManures[i].IncorporationMethodID"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationRateArable" value="@Model.ApplicationRateArable"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].AvailableK2O" value="@Model.OrganicManures[i].AvailableK2O"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].AvailableP2O5" value="@Model.OrganicManures[i].AvailableP2O5"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].AreaSpread" value="@Model.OrganicManures[i].AreaSpread"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].ManureQuantity" value="@Model.OrganicManures[i].ManureQuantity"></govuk-input>
 
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].AutumnCropNitrogenUptake" value="@Model.OrganicManures[i].AutumnCropNitrogenUptake"></govuk-input>
-                    <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].SoilDrainageEndDate" value="@Model.SoilDrainageEndDate"></govuk-date-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].RainfallWithinSixHoursID"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].Rainfall" value="@Model.OrganicManures[i].Rainfall"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].WindspeedID" value="@Model.OrganicManures[i].WindspeedID"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].MoistureID" value="@Model.OrganicManures[i].MoistureID"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].AutumnCropNitrogenUptake" value="@Model.OrganicManures[i].AutumnCropNitrogenUptake"></govuk-input>
+                        <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].SoilDrainageEndDate" value="@Model.SoilDrainageEndDate"></govuk-date-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].RainfallWithinSixHoursID"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].Rainfall" value="@Model.OrganicManures[i].Rainfall"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].WindspeedID" value="@Model.OrganicManures[i].WindspeedID"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].MoistureID" value="@Model.OrganicManures[i].MoistureID"></govuk-input>
+                    }
                 }
-            }
-            @if (Model.AutumnCropNitrogenUptakes != null && Model.AutumnCropNitrogenUptakes.Count > 0)
-            {
-                @for (int i = 0; i < Model.AutumnCropNitrogenUptakes.Count; i++)
+                @if (Model.AutumnCropNitrogenUptakes != null && Model.AutumnCropNitrogenUptakes.Count > 0)
                 {
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptakes[i].EncryptedFieldId" value="@Model.AutumnCropNitrogenUptakes[i].EncryptedFieldId"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptakes[i].FieldName" value="@Model.AutumnCropNitrogenUptakes[i].FieldName"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptakes[i].CropTypeId" value="@Model.AutumnCropNitrogenUptakes[i].CropTypeId"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptakes[i].CropTypeName" value="@Model.AutumnCropNitrogenUptakes[i].CropTypeName"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptakes[i].AutumnCropNitrogenUptake" value="@Model.AutumnCropNitrogenUptakes[i].AutumnCropNitrogenUptake"></govuk-input>
+                    @for (int i = 0; i < Model.AutumnCropNitrogenUptakes.Count; i++)
+                    {
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptakes[i].EncryptedFieldId" value="@Model.AutumnCropNitrogenUptakes[i].EncryptedFieldId"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptakes[i].FieldName" value="@Model.AutumnCropNitrogenUptakes[i].FieldName"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptakes[i].CropTypeId" value="@Model.AutumnCropNitrogenUptakes[i].CropTypeId"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptakes[i].CropTypeName" value="@Model.AutumnCropNitrogenUptakes[i].CropTypeName"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptakes[i].AutumnCropNitrogenUptake" value="@Model.AutumnCropNitrogenUptakes[i].AutumnCropNitrogenUptake"></govuk-input>
+                    }
                 }
-            }
+                @if (Model.UpdatedOrganicIds != null && Model.UpdatedOrganicIds.Count > 0)
+                {
+                    @for (int i = 0; i < Model.UpdatedOrganicIds.Count; i++)
+                    {
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.UpdatedOrganicIds[i].OrganicManureId" value="@Model.UpdatedOrganicIds[i].OrganicManureId"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.UpdatedOrganicIds[i].ManagementPeriodId" value="@Model.UpdatedOrganicIds[i].ManagementPeriodId"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.UpdatedOrganicIds[i].Name" value="@Model.UpdatedOrganicIds[i].Name"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.UpdatedOrganicIds[i].Id" value="@Model.UpdatedOrganicIds[i].Id"></govuk-input>
+                    }
+                }
+            </div>
             @if (Model.IsWarningMsgNeedToShow != null && Model.IsWarningMsgNeedToShow)
             {
                 @if (Model.IsOrgManureNfieldLimitWarning || Model.IsNMaxLimitWarning)
@@ -212,7 +225,7 @@
             <govuk-radios asp-for="@Model.ApplicationRateMethod">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblHowWouldYouLikeToEnterTheApplicationRate, isOtherManure? Model.OtherMaterialName: Model.ManureTypeName)
+                        @string.Format(Resource.lblHowWouldYouLikeToEnterTheApplicationRate, isOtherManure ? Model.OtherMaterialName : Model.ManureTypeName)
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-item value="@enterAnApplicationRate">@string.Format(Resource.lblEnterAnApplicationRate, (Model.IsManureTypeLiquid.HasValue && Model.IsManureTypeLiquid == true) ? Resource.lblMeterCubePerHa : Resource.lblTonnesPerHectare)</govuk-radios-item>
                     <govuk-radios-item value="@calculateBasedOnAreaAndQuantity">@Resource.lblCalculateBasedOnTheAreaAndQuantity</govuk-radios-item>
@@ -225,7 +238,17 @@
             <govuk-button type="submit" class="margin-bottom-forty" asp-action="ApplicationRateMethod">
                 @Resource.lblContinue
             </govuk-button>
-            <p class="govuk-body cancel-link"><a asp-action="CreateManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
+            
+            <p class="govuk-body cancel-link">
+                @if (!Model.IsCheckAnswer)
+                {
+                    <a asp-action="CreateManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
+                }
+                else
+                {
+                    <a asp-action="CheckAnswer" asp-controller="OrganicManure">@Resource.lblCancel</a>
+                }
+            </p>
         </form>
     </div>
 

@@ -30,6 +30,7 @@
     }
     <form asp-action="RemoveFertiliser" asp-controller="FertiliserManure" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
+        <div hidden="true">
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
@@ -94,7 +95,7 @@
 
             }
         }
-
+        </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds-from-desktop">
                 @if (TempData["RemoveFertiliserError"] != null)
@@ -119,11 +120,11 @@
                 <div class="govuk-body">
                     @if (!string.IsNullOrWhiteSpace(Model.FieldName))
                     {
-                        @string.Format(Resource.MsgDeletePlanFertiliserContent1, Model.FieldName, Model.HarvestYear)
+                        @string.Format(Resource.MsgDeleteOrganicAndFertiliserContent1, Resource.lblInorganicFertiliser, Model.FieldName, Model.HarvestYear)
                     }
                     else
                     {
-                        @string.Format(Resource.MsgDeletePlanFertiliserContent2, Model.HarvestYear)
+                        @string.Format(Resource.MsgDeleteOrganicAndFertiliserContent2,Resource.lblInorganicFertiliser, Model.HarvestYear)
                     }
                 </div>
                 @if (ViewBag.SelectedFields != null)

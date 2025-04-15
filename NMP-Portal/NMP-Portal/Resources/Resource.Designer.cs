@@ -223,6 +223,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to for these fields.
+        /// </summary>
+        public static string lbForTheseFields {
+            get {
+                return ResourceManager.GetString("lbForTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 10 February.
         /// </summary>
         public static string lbl10February {
@@ -399,6 +408,15 @@ namespace NMP.Portal.Resources {
         public static string lbl31OctoberTo15January {
             get {
                 return ResourceManager.GetString("lbl31OctoberTo15January", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 9 to 12 tonnes per hectare..
+        /// </summary>
+        public static string lbl9To12TonnesPerHectare {
+            get {
+                return ResourceManager.GetString("lbl9To12TonnesPerHectare", resourceCulture);
             }
         }
         
@@ -1033,6 +1051,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Annual dry matter yield.
+        /// </summary>
+        public static string lblAnnualDryMatterYield {
+            get {
+                return ResourceManager.GetString("lblAnnualDryMatterYield", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Annual rainfall.
         /// </summary>
         public static string lblAnnualRainfall {
@@ -1182,6 +1209,15 @@ namespace NMP.Portal.Resources {
         public static string lblAreTheseNewSwardOrExistingSwardInTheseFields {
             get {
                 return ResourceManager.GetString("lblAreTheseNewSwardOrExistingSwardInTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to cancel?.
+        /// </summary>
+        public static string lblAreYouSureYouWantToCancel {
+            get {
+                return ResourceManager.GetString("lblAreYouSureYouWantToCancel", resourceCulture);
             }
         }
         
@@ -1461,6 +1497,24 @@ namespace NMP.Portal.Resources {
         public static string lblBasedOnYourCropSoilTypeFarmDetails {
             get {
                 return ResourceManager.GetString("lblBasedOnYourCropSoilTypeFarmDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Based on your data, the grass growth class for these Field is:.
+        /// </summary>
+        public static string lblBasedOnYourDataTheGrassGrowthClassForTheseField {
+            get {
+                return ResourceManager.GetString("lblBasedOnYourDataTheGrassGrowthClassForTheseField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Based on your data, the grass growth class for {0} Field is:.
+        /// </summary>
+        public static string lblBasedOnYourDataTheGrassGrowthClassForXField {
+            get {
+                return ResourceManager.GetString("lblBasedOnYourDataTheGrassGrowthClassForXField", resourceCulture);
             }
         }
         
@@ -2230,6 +2284,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Defoliation.
+        /// </summary>
+        public static string lblDefoliation {
+            get {
+                return ResourceManager.GetString("lblDefoliation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Defoliation sequence.
+        /// </summary>
+        public static string lblDefoliationSequence {
+            get {
+                return ResourceManager.GetString("lblDefoliationSequence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delay to incorporation.
         /// </summary>
         public static string lblDelayToIncorporation {
@@ -2392,6 +2464,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you want to enter the same target yield for these fields? .
+        /// </summary>
+        public static string lblDoYouWantToEnterTheSameTargetYieldForTheseFields {
+            get {
+                return ResourceManager.GetString("lblDoYouWantToEnterTheSameTargetYieldForTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you want to use existing nutrient values for {0}.
         /// </summary>
         public static string lblDoYouWantToUseExistingNutrientValuesFor {
@@ -2424,6 +2505,15 @@ namespace NMP.Portal.Resources {
         public static string lblDryMatterPercent {
             get {
                 return ResourceManager.GetString("lblDryMatterPercent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dry matter yield.
+        /// </summary>
+        public static string lblDryMatterYield {
+            get {
+                return ResourceManager.GetString("lblDryMatterYield", resourceCulture);
             }
         }
         
@@ -2896,6 +2986,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Farm.
+        /// </summary>
+        public static string lblFarm {
+            get {
+                return ResourceManager.GetString("lblFarm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Farm Address.
         /// </summary>
         public static string lblFarmAddress {
@@ -3108,6 +3207,15 @@ namespace NMP.Portal.Resources {
         public static string lblFertiliser {
             get {
                 return ResourceManager.GetString("lblFertiliser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fertiliser application.
+        /// </summary>
+        public static string lblFertiliserApplication {
+            get {
+                return ResourceManager.GetString("lblFertiliserApplication", resourceCulture);
             }
         }
         
@@ -3418,11 +3526,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Grass growth class.
+        /// </summary>
+        public static string lblGrassGrowthClass {
+            get {
+                return ResourceManager.GetString("lblGrassGrowthClass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Core functions, grassland:.
         /// </summary>
         public static string lblGrasslandCoreFunctions {
             get {
                 return ResourceManager.GetString("lblGrasslandCoreFunctions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Grass management.
+        /// </summary>
+        public static string lblGrassManagement {
+            get {
+                return ResourceManager.GetString("lblGrassManagement", resourceCulture);
             }
         }
         
@@ -3769,6 +3895,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How many cuts and grazings will you have in these fields?.
+        /// </summary>
+        public static string lblHowManyCutsAndGrazingsWillYouHaveInTheseFields {
+            get {
+                return ResourceManager.GetString("lblHowManyCutsAndGrazingsWillYouHaveInTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How many cuts typically each year?.
         /// </summary>
         public static string lblHowManyCutsTypicallyEachYear {
@@ -3874,6 +4009,15 @@ namespace NMP.Portal.Resources {
         public static string lblHowWetWasTheTopsoil {
             get {
                 return ResourceManager.GetString("lblHowWetWasTheTopsoil", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How will these fields be managed?.
+        /// </summary>
+        public static string lblHowWillTheseFieldsBeManaged {
+            get {
+                return ResourceManager.GetString("lblHowWillTheseFieldsBeManaged", resourceCulture);
             }
         }
         
@@ -5121,6 +5265,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No, Enter a different target yield for each fields.
+        /// </summary>
+        public static string lblNoEnterADifferentTargetYieldForEachFields {
+            get {
+                return ResourceManager.GetString("lblNoEnterADifferentTargetYieldForEachFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No fields are available for second crop planning.
         /// </summary>
         public static string lblNoFieldsAreAvailable {
@@ -5482,11 +5635,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to organic manure.
+        /// </summary>
+        public static string lblOrganicManure {
+            get {
+                return ResourceManager.GetString("lblOrganicManure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Organic manure applications.
         /// </summary>
         public static string lblOrganicManureApplications {
             get {
                 return ResourceManager.GetString("lblOrganicManureApplications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string lblOrganicManureApplicationsForSorting {
+            get {
+                return ResourceManager.GetString("lblOrganicManureApplicationsForSorting", resourceCulture);
             }
         }
         
@@ -6409,15 +6580,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove an application of {0} for harvest year {1}.
-        /// </summary>
-        public static string lblRemoveAnApplicationOfManureForHarvestYear {
-            get {
-                return ResourceManager.GetString("lblRemoveAnApplicationOfManureForHarvestYear", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Remove an inorganic fertiliser application.
         /// </summary>
         public static string lblRemoveAnInorganicFertiliserApplication {
@@ -6432,6 +6594,15 @@ namespace NMP.Portal.Resources {
         public static string lblRemoveAnInorganicFertiliserApplicationFromField {
             get {
                 return ResourceManager.GetString("lblRemoveAnInorganicFertiliserApplicationFromField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove an organic material application from {0}.
+        /// </summary>
+        public static string lblRemoveAnOrganicMaterialApplicationFromField {
+            get {
+                return ResourceManager.GetString("lblRemoveAnOrganicMaterialApplicationFromField", resourceCulture);
             }
         }
         
@@ -6544,6 +6715,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to remove this application.
+        /// </summary>
+        public static string lblRemoveThisApplication {
+            get {
+                return ResourceManager.GetString("lblRemoveThisApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove this application from {0}.
         /// </summary>
         public static string lblRemoveThisApplicationFromField {
@@ -6585,6 +6765,15 @@ namespace NMP.Portal.Resources {
         public static string lblRemoveThisSoilAnalysis {
             get {
                 return ResourceManager.GetString("lblRemoveThisSoilAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please report this error to &lt;a href=&quot;mailto:helpdesk@rsk-bsl.co.uk&quot;&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt; include what you were trying to do and the status code : {0}.
+        /// </summary>
+        public static string lblReportError {
+            get {
+                return ResourceManager.GetString("lblReportError", resourceCulture);
             }
         }
         
@@ -7579,6 +7768,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sward type.
+        /// </summary>
+        public static string lblSwardType {
+            get {
+                return ResourceManager.GetString("lblSwardType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to take you over the {0}.
         /// </summary>
         public static string lblTakeYouOverThe {
@@ -7588,11 +7786,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Target dry matter yield for {0} Field.
+        /// </summary>
+        public static string lblTargetDryMatterYieldForField {
+            get {
+                return ResourceManager.GetString("lblTargetDryMatterYieldForField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Target yield.
         /// </summary>
         public static string lblTargetYield {
             get {
                 return ResourceManager.GetString("lblTargetYield", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sorry, we&apos;re experiencing technical difficulties.
+        /// </summary>
+        public static string lblTechnicalDifficulties {
+            get {
+                return ResourceManager.GetString("lblTechnicalDifficulties", resourceCulture);
             }
         }
         
@@ -7656,6 +7872,15 @@ namespace NMP.Portal.Resources {
         public static string lblTheEffectivenessOfYourOrganicMaterialApp {
             get {
                 return ResourceManager.GetString("lblTheEffectivenessOfYourOrganicMaterialApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The information entered about this {0} will be lost..
+        /// </summary>
+        public static string lblTheInformationEnteredAboutThisWillBeLost {
+            get {
+                return ResourceManager.GetString("lblTheInformationEnteredAboutThisWillBeLost", resourceCulture);
             }
         }
         
@@ -7863,6 +8088,24 @@ namespace NMP.Portal.Resources {
         public static string lblThisCropGroupNameAlreadyExists {
             get {
                 return ResourceManager.GetString("lblThisCropGroupNameAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This gives the following range for annual dry matter yield..
+        /// </summary>
+        public static string lblThisGivesTheFollowingRangeForAnnualDryMatterYield {
+            get {
+                return ResourceManager.GetString("lblThisGivesTheFollowingRangeForAnnualDryMatterYield", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This growth class gives a range for annual dry matter yield of:.
+        /// </summary>
+        public static string lblThisGrowthClassGivesARangeForAnnualDryMatterYieldOf {
+            get {
+                return ResourceManager.GetString("lblThisGrowthClassGivesARangeForAnnualDryMatterYieldOf", resourceCulture);
             }
         }
         
@@ -8317,6 +8560,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update an organic material application for harvest year {0}.
+        /// </summary>
+        public static string lblUpdateAnOrganicMaterialApplicationForHarvestYear {
+            get {
+                return ResourceManager.GetString("lblUpdateAnOrganicMaterialApplicationForHarvestYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Changes here will be applied to all of these fields. To change a single field select it from your crop plan..
         /// </summary>
         public static string lblUpdateCropGroupNameContent1 {
@@ -8740,6 +8992,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to We use the target annual dry matter yield to give nitrogen (N) recommendations for grass..
+        /// </summary>
+        public static string lblWeUseTheTargetAnnaulDryMatterYieldToGiveNitrogenRecommendationsForGrass {
+            get {
+                return ResourceManager.GetString("lblWeUseTheTargetAnnaulDryMatterYieldToGiveNitrogenRecommendationsForGrass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  and we will assist you..
         /// </summary>
         public static string lblWeWillAssistYou {
@@ -8862,6 +9123,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhatIsTheCurrentCropType {
             get {
                 return ResourceManager.GetString("lblWhatIsTheCurrentCropType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the cut and grazing order in these fields?.
+        /// </summary>
+        public static string lblWhatIsTheCutAndGrazingOrderInTheseFields {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheCutAndGrazingOrderInTheseFields", resourceCulture);
             }
         }
         
@@ -9024,6 +9294,42 @@ namespace NMP.Portal.Resources {
         public static string lblWhatIsTheSwardInTheseFields {
             get {
                 return ResourceManager.GetString("lblWhatIsTheSwardInTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the sward type for these fields in {0}?.
+        /// </summary>
+        public static string lblWhatIsTheSwardTypeForTheseFields {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheSwardTypeForTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the total target dry matter yield for {0} field in {1}.
+        /// </summary>
+        public static string lblWhatIsTheTotalTargetDryMatterYieldFor {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheTotalTargetDryMatterYieldFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the total target dry matter yield for {0} Field in {1}?.
+        /// </summary>
+        public static string lblWhatIsTheTotalTargetDryMatterYieldForField {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheTotalTargetDryMatterYieldForField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the total target dry matter yield for fields in {0}.
+        /// </summary>
+        public static string lblWhatIsTheTotalTargetDryMatterYieldForFields {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheTotalTargetDryMatterYieldForFields", resourceCulture);
             }
         }
         
@@ -9226,6 +9532,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Which fields do you want to update this organic manure application for?.
+        /// </summary>
+        public static string lblWhichFieldsDoYouWantToUpdateThisOrganicManureApplicationFor {
+            get {
+                return ResourceManager.GetString("lblWhichFieldsDoYouWantToUpdateThisOrganicManureApplicationFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which fields would you like to add organic material applications to?.
         /// </summary>
         public static string lblWhichFieldsWouldYouLikeToAddAnOrganic {
@@ -9420,6 +9735,15 @@ namespace NMP.Portal.Resources {
         public static string lblYes {
             get {
                 return ResourceManager.GetString("lblYes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes, Enter the same target yield for these fields.
+        /// </summary>
+        public static string lblYesEnterTheSameTargetYieldForTheseFields {
+            get {
+                return ResourceManager.GetString("lblYesEnterTheSameTargetYieldForTheseFields", resourceCulture);
             }
         }
         
@@ -10371,20 +10695,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This will remove the information about this inorganic fertiliser application from {0} and change the {1} nutrient recommendations..
+        ///   Looks up a localized string similar to This will remove the information about this {0} application from {1} and change the {2} nutrient recommendations..
         /// </summary>
-        public static string MsgDeletePlanFertiliserContent1 {
+        public static string MsgDeleteOrganicAndFertiliserContent1 {
             get {
-                return ResourceManager.GetString("MsgDeletePlanFertiliserContent1", resourceCulture);
+                return ResourceManager.GetString("MsgDeleteOrganicAndFertiliserContent1", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This will remove the information about this inorganic fertiliser application are change the {0} nutrient recommendations for these fields..
+        ///   Looks up a localized string similar to This will remove the information about this {0} application are change the {1} nutrient recommendations for these fields:.
         /// </summary>
-        public static string MsgDeletePlanFertiliserContent2 {
+        public static string MsgDeleteOrganicAndFertiliserContent2 {
             get {
-                return ResourceManager.GetString("MsgDeletePlanFertiliserContent2", resourceCulture);
+                return ResourceManager.GetString("MsgDeleteOrganicAndFertiliserContent2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This will remove the information about this {0} application and change the {1} nutrient recommendations for these fields:.
+        /// </summary>
+        public static string MsgDeleteOrganicContent2 {
+            get {
+                return ResourceManager.GetString("MsgDeleteOrganicContent2", resourceCulture);
             }
         }
         
@@ -11559,6 +11892,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Organic material application updated..
+        /// </summary>
+        public static string MsgOrganicMaterialApplicationUpdated {
+            get {
+                return ResourceManager.GetString("MsgOrganicMaterialApplicationUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Soil pH value not set.
         /// </summary>
         public static string MsgPhNotSet {
@@ -12257,6 +12599,15 @@ namespace NMP.Portal.Resources {
         public static string MsgYourDataSuccessfullyRemoved {
             get {
                 return ResourceManager.GetString("MsgYourDataSuccessfullyRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove an organic material application.
+        /// </summary>
+        public static string RemoveAnOrganicMaterialApplication {
+            get {
+                return ResourceManager.GetString("RemoveAnOrganicMaterialApplication", resourceCulture);
             }
         }
         

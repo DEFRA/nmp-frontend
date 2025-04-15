@@ -18,5 +18,7 @@ namespace NMP.Portal.ViewModels
         public string? PotassiumIndexValue { get; set; } = string.Empty;
         public string? PhosphorusMethodology { get; set; } = string.Empty;
         public bool? SoilAnalysisRemove { get; set; }
+        public bool? IsCancel { get; set; }
+        public bool IsCheckAnswer { get; set; } = false;
     }
 }
