@@ -1642,7 +1642,7 @@ namespace NMP.Portal.Controllers
                         {
                             new ManagementPeriod
                             {
-                                DefoliationID=1,
+                                Defoliation=1,
                                 Utilisation1ID=2,
                                 CreatedOn=DateTime.Now,
                                 CreatedByID=userId

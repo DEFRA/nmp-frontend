@@ -2,6 +2,7 @@
 {
     public class HarvestYearPlanFields
     {
+        public int? CropTypeID { get; set; }
         public string? CropTypeName { get; set; }
         public string? CropGroupName { get; set; }
         public string? EncryptedCropTypeName { get; set; }
@@ -16,5 +17,6 @@
         public DateTime? PlantingDate { get; set; }
         public decimal? Yield { get; set; }
         public string? Variety { get; set; } = string.Empty;
+        public string? Management { get; set; } = string.Empty;
     }
 }

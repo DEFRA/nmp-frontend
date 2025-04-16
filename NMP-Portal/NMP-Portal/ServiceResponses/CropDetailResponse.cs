@@ -34,6 +34,9 @@ namespace NMP.Portal.ServiceResponses
         public DateTime? LastModifiedOn { get; set; }
         [JsonProperty("PlantingDate")]
         public DateTime? PlantingDate { get; set; }
+        [JsonProperty("Management")]
+        public string? Management { get; set; }
+        
 
 
     }

@@ -883,7 +883,7 @@ namespace NMP.Portal.Controllers
                                             {
                                                 ID = recData.ManagementPeriod.ID,
                                                 CropID = recData.ManagementPeriod.CropID,
-                                                DefoliationID = recData.ManagementPeriod.DefoliationID,
+                                                Defoliation = recData.ManagementPeriod.Defoliation,
                                                 Utilisation1ID = recData.ManagementPeriod.Utilisation1ID,
                                                 Utilisation2ID = recData.ManagementPeriod.Utilisation2ID,
                                                 PloughedDown = recData.ManagementPeriod.PloughedDown
@@ -1154,7 +1154,7 @@ namespace NMP.Portal.Controllers
                                                 {
                                                     ID = recData.ManagementPeriod.ID,
                                                     CropID = recData.ManagementPeriod.CropID,
-                                                    DefoliationID = recData.ManagementPeriod.DefoliationID,
+                                                    Defoliation = recData.ManagementPeriod.Defoliation,
                                                     Utilisation1ID = recData.ManagementPeriod.Utilisation1ID,
                                                     Utilisation2ID = recData.ManagementPeriod.Utilisation2ID,
                                                     PloughedDown = recData.ManagementPeriod.PloughedDown
