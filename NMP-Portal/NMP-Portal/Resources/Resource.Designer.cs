@@ -12513,6 +12513,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to We could not update your application, try again later.
+        /// </summary>
+        public static string MsgWeCouldNotUpdateOrganicManure {
+            get {
+                return ResourceManager.GetString("MsgWeCouldNotUpdateOrganicManure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to We could not add your application, try again later.
         /// </summary>
         public static string MsgWeCounldNotAddOrganicManure {

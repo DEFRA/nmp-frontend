@@ -4310,4 +4310,7 @@ live</value>
   <data name="MsgOrganicMaterialApplicationUpdated" xml:space="preserve">
     <value>Organic material application updated.</value>
   </data>
+  <data name="MsgWeCouldNotUpdateOrganicManure" xml:space="preserve">
+    <value>We could not update your application, try again later</value>
+  </data>
 </root>
