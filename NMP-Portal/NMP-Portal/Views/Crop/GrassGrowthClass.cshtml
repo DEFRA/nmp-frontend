@@ -62,6 +62,10 @@
     @* <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassQuestion"></govuk-input> *@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DryMatterYieldCounter"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DryMatterYieldEncryptedCounter"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SwardTypeId"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SwardManagementId"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PotentialCut"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationSequenceId"></govuk-input>
     
     @if (Model.FieldList != null && Model.FieldList.Count > 0)
     {
@@ -128,9 +132,26 @@
                         @if (Model.Crops.Count == 1 || Model.GrassGrowthClassDistinctCount > 1)
                         {
                             <p class="govuk-body">@Resource.lblThisGivesTheFollowingRangeForAnnualDryMatterYield</p>
-                            <p class="govuk-body strong"><b>@string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField, Model.FieldName, Model.Crops[0].Year)</b></p>
+                            @* <p class="govuk-body strong"><b>@string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField, Model.FieldName, Model.Crops[0].Year)</b></p>
+ *@
+                            
+                            <govuk-radios asp-for="@Model.Yield">
+                                <govuk-radios-fieldset>
+                                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--m">
+                                        @string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField, Model.FieldName, Model.Crops[0].Year)
+                                    </govuk-radios-fieldset-legend>
+                                    <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
+                                    @if(ViewBag.YieldRanges != null)
+                                    {
+                                        @foreach (var yieldRanges in ViewBag.YieldRanges)
+                                        {
+                                            <govuk-radios-item value="@yieldRanges.Yield">@(string.Concat(yieldRanges.Yield.ToString()," "+ Resource.lblTonnesPerHectare))</govuk-radios-item>
+                                        }
+                                    }
+                                    
 
-                            <h2>Page under construction</h2>
+                                </govuk-radios-fieldset>
+                            </govuk-radios>
 
                         }
                         @if (Model.Crops.Count > 1 && Model.GrassGrowthClassDistinctCount == 1)

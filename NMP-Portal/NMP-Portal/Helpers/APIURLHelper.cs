@@ -167,5 +167,11 @@ namespace NMP.Portal.Helpers
         public const string FetchGrassGrowthClassesAsyncAPI = "grass-growth/byFieldIds";
 
         public const string UpdateOrganicManureAsyncAPI = "organic-manures";
+
+        public const string FetchDefoliationSequencesBySwardTypeIdAndNumberOfCutAsyncAPI = "vendors/rb209/Grass/DefoliationSequence?swardTypeId={0}&numberOfCuts={1}";
+        public const string FetchPotentialCutsBySwardTypeIdAndSwardManagementIdAsyncAPI = "vendors/rb209/Grass/PotentialCuts?swardTypeId={0}&swardManagementId={1}";
+        public const string FetchSwardManagementsAsyncAPI = "vendors/rb209/Grass/SwardManagements";
+        public const string FetchSwardTypesAsyncAPI = "vendors/rb209/Grass/SwardTypes";
+        public const string FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassIdAsyncAPI = "vendors/rb209/Grass/YieldRangesEnglandAndWales?sequenceId={0}&grassGrowthClassId={1}";
     }
 }

@@ -31,5 +31,13 @@ namespace NMP.Portal.Services
         Task<List<GrassSeasonResponse>> FetchGrassSeasons();
         Task<(List<GrassGrowthClassResponse>, Error)> FetchGrassGrowthClass(List<int> fieldIds);
 
+        Task<(List<DefoliationSequenceResponse>, Error)> FetchDefoliationSequencesBySwardTypeIdAndNumberOfCut(int swardTypeId, int numberOfCut);
+        Task<(List<PotentialCutResponse>,Error)> FetchPotentialCutsBySwardTypeIdAndSwardManagementId(int swardTypeId, int swardManagementId);
+        Task<(List<SwardManagementResponse>,Error)> FetchSwardManagements();
+        Task<(List<SwardTypeResponse>, Error)> FetchSwardTypes();
+        Task<(List<YieldRangesEnglandAndWalesResponse>, Error)> FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(int sequenceId, int grassGrowthClassId);
+
+
+
     }
 }
