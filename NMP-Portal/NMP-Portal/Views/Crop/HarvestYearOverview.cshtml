@@ -117,7 +117,15 @@
                                             <th scope="col" class="govuk-table__header field-name">@Resource.lblField</th>
                                             <th scope="col" class="govuk-table__header field-name">@Resource.lblPlantingDate</th>
                                             <th scope="col" class="govuk-table__header field-name">@Resource.lblYieldPerHectare</th>
-                                            <th scope="col" class="govuk-table__header">@Resource.lblVarietyForRecommendation</th>
+                                            <th scope="col" class="govuk-table__header">
+                                            @if(harvestYearPlan.CropTypeID==(int)NMP.Portal.Enums.CropTypes.Grass)
+                                            {
+                                                @Resource.lblManagement
+                                            }
+                                            else{
+                                            @Resource.lblVarietyForRecommendation
+                                            }
+                                            </th>
                                             <th scope="col" class="govuk-table__header">@Resource.lblAction</th>
                                         </tr>
                                     </thead>
@@ -150,7 +158,15 @@
                                                         }
                                                     </td>
                                                     <td class="govuk-table__cell">
-                                                        @(string.IsNullOrWhiteSpace(field.Variety) ? Resource.lblNotEntered : field.Variety)
+                                                        @if (harvestYearPlan.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                                        {
+                                                            @(string.IsNullOrWhiteSpace(field.Management) ? Resource.lblNotEntered : field.Management)
+                                                        }
+                                                        else
+                                                        {
+                                                            @(string.IsNullOrWhiteSpace(field.Variety) ? Resource.lblNotEntered : field.Variety)
+                                                        }
+                                                        
 
                                                     </td>
                                                     <td class="govuk-table__cell">
