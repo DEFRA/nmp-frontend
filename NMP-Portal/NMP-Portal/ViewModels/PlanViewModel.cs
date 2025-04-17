@@ -1,5 +1,6 @@
 ﻿using NMP.Portal.Models;
 using NMP.Portal.Resources;
+using NMP.Portal.ServiceResponses;
 using System.ComponentModel.DataAnnotations;
 
 namespace NMP.Portal.ViewModels
@@ -89,5 +90,9 @@ namespace NMP.Portal.ViewModels
         public int DryMatterYieldCounter { get; set; } = 0;
         public string? DryMatterYieldEncryptedCounter { get; set; }
         public bool? IsCancel { get; set; }
+        public int? SwardTypeId { get; set; }
+        public int? SwardManagementId { get; set; }
+        public int? PotentialCut { get; set; }
+        public int? DefoliationSequenceId { get; set; }
     }
 }

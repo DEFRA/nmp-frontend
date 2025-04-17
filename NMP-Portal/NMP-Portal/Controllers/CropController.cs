@@ -3806,6 +3806,16 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmList", "Farm");
                 }
 
+                (List<SwardTypeResponse> swardTypeResponses, Error error) = await _cropService.FetchSwardTypes();
+                if (!string.IsNullOrWhiteSpace(error.Message))
+                {
+                    TempData["SwardTypeError"] = error.Message;
+                    return RedirectToAction("SowingDate");
+                }
+                else
+                {
+                    ViewBag.SwardType = swardTypeResponses;
+                }
             }
             catch (Exception ex)
             {
@@ -3822,7 +3832,17 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> SwardType(PlanViewModel model)
         {
             _logger.LogTrace("Crop Controller : SwardType() post action called");
-
+            if (model.SwardTypeId == null)
+            {
+                ModelState.AddModelError("SwardTypeId", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                (List<SwardTypeResponse> swardTypeResponses, Error error) = await _cropService.FetchSwardTypes();
+                ViewBag.SwardType = swardTypeResponses;
+                return View(model);
+            }
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
             return RedirectToAction("GrassManagement");
 
         }
@@ -3842,12 +3862,21 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-
+                (List<SwardManagementResponse> swardManagementResponses, Error error) = await _cropService.FetchSwardManagements();
+                if (!string.IsNullOrWhiteSpace(error.Message))
+                {
+                    TempData["SwardManagementError"] = error.Message;
+                    return RedirectToAction("SwardType");
+                }
+                else
+                {
+                    ViewBag.SwardManagement = swardManagementResponses;
+                }
             }
             catch (Exception ex)
             {
                 _logger.LogTrace($"Crop Controller : Exception in GrassManagement() action : {ex.Message}, {ex.StackTrace}");
-                TempData["GrassManagementError"] = ex.Message;
+                TempData["SwardManagementError"] = ex.Message;
                 return RedirectToAction("SwardType");
             }
 
@@ -3859,7 +3888,17 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> GrassManagement(PlanViewModel model)
         {
             _logger.LogTrace("Crop Controller : GrassManagement() post action called");
-
+            if (model.SwardManagementId == null)
+            {
+                ModelState.AddModelError("SwardManagementId", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                (List<SwardManagementResponse> swardManagementResponses, Error error) = await _cropService.FetchSwardManagements();
+                ViewBag.SwardManagement = swardManagementResponses;
+                return View(model);
+            }
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
             return RedirectToAction("Defoliation");
         }
 
@@ -3878,7 +3917,17 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
+                (List<PotentialCutResponse> potentialCuts, Error error) = await _cropService.FetchPotentialCutsBySwardTypeIdAndSwardManagementId(model.SwardTypeId ?? 0, model.SwardManagementId ?? 0);
+                if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+                {
+                    TempData["SwardManagementError"] = error.Message;
+                    return RedirectToAction("SwardType");
+                }
+                else
+                {
+                    ViewBag.PotentialCuts = potentialCuts;
 
+                }
             }
             catch (Exception ex)
             {
@@ -3895,7 +3944,17 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> Defoliation(PlanViewModel model)
         {
             _logger.LogTrace("Crop Controller : Defoliation() post action called");
-
+            if (model.PotentialCut == null)
+            {
+                ModelState.AddModelError("PotentialCut", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                (List<PotentialCutResponse> potentialCuts, Error error) = await _cropService.FetchPotentialCutsBySwardTypeIdAndSwardManagementId(model.SwardTypeId ?? 0, model.SwardManagementId ?? 0);
+                ViewBag.PotentialCuts = potentialCuts;
+                return View(model);
+            }
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
             return RedirectToAction("DefoliationSequence");
         }
 
@@ -3915,6 +3974,16 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmList", "Farm");
                 }
 
+                (List<DefoliationSequenceResponse> defoliationSequenceResponses, Error error) = await _cropService.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCut(model.SwardTypeId ?? 0, model.PotentialCut ?? 0);
+                if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+                {
+                    TempData["DefoliationSequenceError"] = error.Message;
+                    return RedirectToAction("Defoliation");
+                }
+                else
+                {
+                    ViewBag.DefoliationSequenceResponses = defoliationSequenceResponses;
+                }
             }
             catch (Exception ex)
             {
@@ -3932,6 +4001,16 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace("Crop Controller : DefoliationSequence() post action called");
             model.GrassGrowthClassCounter = 0;
+            if (model.DefoliationSequenceId == null)
+            {
+                ModelState.AddModelError("DefoliationSequenceId", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                (List<DefoliationSequenceResponse> defoliationSequenceResponses, Error error) = await _cropService.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCut(model.SwardTypeId ?? 0, model.PotentialCut ?? 0);
+                ViewBag.DefoliationSequenceResponses = defoliationSequenceResponses;
+                return View(model);
+            }
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
             return RedirectToAction("GrassGrowthClass");
         }
@@ -3940,6 +4019,7 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> GrassGrowthClass(string? q)
         {
             _logger.LogTrace("Crop Controller : GrassGrowthClass() action called");
+            Error error = new Error();
             PlanViewModel model = new PlanViewModel();
             try
             {
@@ -3958,7 +4038,9 @@ namespace NMP.Portal.Controllers
                 {
                     fieldIds.Add(crop.FieldID ?? 0);
                 }
-                (List<GrassGrowthClassResponse> grassGrowthClasses, Error error) = await _cropService.FetchGrassGrowthClass(fieldIds);
+                (List<GrassGrowthClassResponse> grassGrowthClasses, error) = await _cropService.FetchGrassGrowthClass(fieldIds);
+
+
                 if (error.Message == null)
                 {
                     foreach (var grassGrowthClass in grassGrowthClasses)
@@ -3966,6 +4048,17 @@ namespace NMP.Portal.Controllers
                         grassGrowthClassIds.Add(grassGrowthClass.GrassGrowthClassId);
                     }
                 }
+                (List<YieldRangesEnglandAndWalesResponse> yieldRangesEnglandAndWalesResponses, error) = await _cropService.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(2, 4);
+                if (error != null && string.IsNullOrWhiteSpace(error.Message))
+                {
+                    TempData["GrassGrowthClassError"] = error.Message;
+                    return RedirectToAction("DefoliationSequence");
+                }
+                else
+                {
+                    ViewBag.YieldRanges = yieldRangesEnglandAndWalesResponses;
+                }
+
                 //List<GrassGrowthClassResponse> grassGrowthClasses = new List<GrassGrowthClassResponse>()
                 //{
                 //    new GrassGrowthClassResponse{GrassGrowthClassId=1,GrassGrowthClassName="Good" },

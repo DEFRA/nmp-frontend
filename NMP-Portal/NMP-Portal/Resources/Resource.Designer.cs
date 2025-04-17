@@ -2545,6 +2545,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Eight.
+        /// </summary>
+        public static string lblEight {
+            get {
+                return ResourceManager.GetString("lblEight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The NVZ Action Programme states that, between {0} and the end of February, you must allow at least 3 weeks between each individual application of slurry or poultry manure..
         /// </summary>
         public static string lblEndClosederiodAndEndFebYouMustAllow3WeeksGap {
@@ -3409,6 +3418,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Five.
+        /// </summary>
+        public static string lblFive {
+            get {
+                return ResourceManager.GetString("lblFive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 99999.
         /// </summary>
         public static string lblFiveDigit {
@@ -3441,6 +3459,15 @@ namespace NMP.Portal.Resources {
         public static string lblForFertiliserSecond {
             get {
                 return ResourceManager.GetString("lblForFertiliserSecond", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Four.
+        /// </summary>
+        public static string lblFour {
+            get {
+                return ResourceManager.GetString("lblFour", resourceCulture);
             }
         }
         
@@ -5148,6 +5175,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nine.
+        /// </summary>
+        public static string lblNine {
+            get {
+                return ResourceManager.GetString("lblNine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nitrate (N).
         /// </summary>
         public static string lblNitrate {
@@ -5559,6 +5595,15 @@ namespace NMP.Portal.Resources {
         public static string lblOctober {
             get {
                 return ResourceManager.GetString("lblOctober", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to One.
+        /// </summary>
+        public static string lblOne {
+            get {
+                return ResourceManager.GetString("lblOne", resourceCulture);
             }
         }
         
@@ -7039,6 +7084,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Seven.
+        /// </summary>
+        public static string lblSeven {
+            get {
+                return ResourceManager.GetString("lblSeven", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shallow.
         /// </summary>
         public static string lblShallow {
@@ -7071,6 +7125,15 @@ namespace NMP.Portal.Resources {
         public static string lblSignout {
             get {
                 return ResourceManager.GetString("lblSignout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Six.
+        /// </summary>
+        public static string lblSix {
+            get {
+                return ResourceManager.GetString("lblSix", resourceCulture);
             }
         }
         
@@ -8164,6 +8227,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Three.
+        /// </summary>
+        public static string lblThree {
+            get {
+                return ResourceManager.GetString("lblThree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tine cultivator.
         /// </summary>
         public static string lblTineCultivator {
@@ -8484,6 +8556,15 @@ namespace NMP.Portal.Resources {
         public static string lblTrue {
             get {
                 return ResourceManager.GetString("lblTrue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Two.
+        /// </summary>
+        public static string lblTwo {
+            get {
+                return ResourceManager.GetString("lblTwo", resourceCulture);
             }
         }
         

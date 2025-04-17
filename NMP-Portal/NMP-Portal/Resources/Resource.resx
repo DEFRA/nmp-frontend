@@ -4313,4 +4313,31 @@ live</value>
   <data name="MsgWeCouldNotUpdateOrganicManure" xml:space="preserve">
     <value>We could not update your application, try again later</value>
   </data>
+  <data name="lblEight" xml:space="preserve">
+    <value>Eight</value>
+  </data>
+  <data name="lblFive" xml:space="preserve">
+    <value>Five</value>
+  </data>
+  <data name="lblFour" xml:space="preserve">
+    <value>Four</value>
+  </data>
+  <data name="lblNine" xml:space="preserve">
+    <value>Nine</value>
+  </data>
+  <data name="lblOne" xml:space="preserve">
+    <value>One</value>
+  </data>
+  <data name="lblSeven" xml:space="preserve">
+    <value>Seven</value>
+  </data>
+  <data name="lblSix" xml:space="preserve">
+    <value>Six</value>
+  </data>
+  <data name="lblThree" xml:space="preserve">
+    <value>Three</value>
+  </data>
+  <data name="lblTwo" xml:space="preserve">
+    <value>Two</value>
+  </data>
 </root>
