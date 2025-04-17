@@ -1900,7 +1900,7 @@ namespace NMP.Portal.Controllers
                     {
                         new ManagementPeriod
                         {
-                            DefoliationID=1,
+                            Defoliation=1,
                             Utilisation1ID=2,
                             CreatedOn=DateTime.Now,
                             CreatedByID=userId
@@ -2038,11 +2038,12 @@ namespace NMP.Portal.Controllers
                             {
                                 model.LastModifiedOn = allCropDetails.Max(x => x.LastModifiedOn.Value.ToString("dd MMM yyyy"));
                                 var groupedResult = allCropDetails
-                                .GroupBy(crop => new { crop.CropTypeName, crop.CropGroupName })
+                                .GroupBy(crop => new { crop.CropTypeName, crop.CropGroupName, crop.CropTypeID })
                                 .Select(g => new
                                 {
                                     CropTypeName = g.Key.CropTypeName,
                                     CropGroupName = g.Key.CropGroupName,
+                                    CropTypeID = g.Key.CropTypeID,
                                     HarvestPlans = g.ToList()
                                 })
                                 .OrderBy(g => g.CropTypeName);
@@ -2074,6 +2075,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     var newField = new HarvestYearPlanFields
                                     {
+                                        CropTypeID = group.CropTypeID,
                                         CropTypeName = group.CropTypeName,
                                         CropGroupName = group.CropGroupName,
                                         EncryptedCropTypeName = _cropDataProtector.Protect((group.CropTypeName)),
@@ -2089,7 +2091,8 @@ namespace NMP.Portal.Controllers
                                             FieldName = plan.FieldName,
                                             PlantingDate = plan.PlantingDate,
                                             Yield = plan.Yield,
-                                            Variety = plan.CropVariety
+                                            Variety = plan.CropVariety,
+                                            Management = plan.Management,
                                         };
 
                                         newField.FieldData.Add(fieldDetail);
@@ -2531,7 +2534,7 @@ namespace NMP.Portal.Controllers
                                         {
                                             ID = recData.ManagementPeriod.ID,
                                             CropID = recData.ManagementPeriod.CropID,
-                                            DefoliationID = recData.ManagementPeriod.DefoliationID,
+                                            Defoliation = recData.ManagementPeriod.Defoliation,
                                             Utilisation1ID = recData.ManagementPeriod.Utilisation1ID,
                                             Utilisation2ID = recData.ManagementPeriod.Utilisation2ID,
                                             PloughedDown = recData.ManagementPeriod.PloughedDown

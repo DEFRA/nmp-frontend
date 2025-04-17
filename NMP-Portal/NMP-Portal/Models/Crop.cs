@@ -26,8 +26,11 @@ namespace NMP.Portal.Models
         public decimal? MilkYield { get; set; }
         public decimal? ConcentrateUse { get; set; }
         public decimal? StockingRate { get; set; }
-        public int? DefoliationSequence { get; set; }
+        public int? DefoliationSequenceID { get; set; }
         public int? GrazingIntensity { get; set; }
+        public int? SwardTypeID { get; set; }
+        public int? SwardManagementID { get; set; }
+        public int? PotentialCut { get; set; }
         public int? CropOrder { get; set; }
         public int? PreviousID { get; set; }
         public string? CropGroupName { get; set; }
