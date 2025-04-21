@@ -76,7 +76,7 @@
                 }
             </p>
             <p class="govuk-body pb-25">
-                <a asp-action="ExportFields" asp-controller="Report" asp-route-i="@Model.EncryptedFarmId" asp-route-j="@Model.EncryptedHarvestYear">@Resource.lblDownloadPrintOrExportThisPlan</a>
+                <a asp-action="ReportType" asp-controller="Report" asp-route-i="@Model.EncryptedFarmId" asp-route-j="@Model.EncryptedHarvestYear">@Resource.lblDownloadPrintOrExportThisPlan</a>
             </p>
 
             @if (Model.HarvestYearPlans != null)
