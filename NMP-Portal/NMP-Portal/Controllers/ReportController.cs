@@ -45,40 +45,21 @@ namespace NMP.Portal.Controllers
             return View();
         }
         [HttpGet]
-        public async Task<IActionResult> ExportFields(string i, string j)
+        public async Task<IActionResult> ExportFields()
         {
-            _logger.LogTrace("Crop Controller : ExportFields() action called");
-            ReportViewModel model = null;
+            _logger.LogTrace("Report Controller : ExportFields() action called");
+            ReportViewModel model = new ReportViewModel();
             try
             {
                 if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = new ReportViewModel();
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
-                else if (string.IsNullOrWhiteSpace(i) && string.IsNullOrWhiteSpace(j))
+                else
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                if (model == null)
-                {
-                    model = new ReportViewModel();
-                    if (!(string.IsNullOrWhiteSpace(i) && string.IsNullOrWhiteSpace(j)))
-                    {
-
-                        model.EncryptedFarmId = i;
-                        model.EncryptedHarvestYear = j;
-                        model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId.ToString()));
-                        model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedHarvestYear.ToString()));
-                        //int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
-                        (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
-                        if (farm != null)
-                        {
-                            model.FarmName = farm.Name;
-                        }
-                    }
-                }
-                if (model != null && model.FarmId != null)
+                if (model.ReportType != null && model.ReportType == (int)NMP.Portal.Enums.ReportType.CropAndFieldManagementReport)
                 {
                     (List<HarvestYearPlanResponse> fieldList, Error error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
                     if (string.IsNullOrWhiteSpace(error.Message))
@@ -230,7 +211,7 @@ namespace NMP.Portal.Controllers
                                         manData.Recommendation.CropLime = (manData.Recommendation.PreviousAppliedLime != null && manData.Recommendation.PreviousAppliedLime > 0) ? manData.Recommendation.PreviousAppliedLime : manData.Recommendation.CropLime;
                                         manData.Recommendation.KIndex = manData.Recommendation.KIndex != null ? (manData.Recommendation.KIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (manData.Recommendation.KIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : manData.Recommendation.KIndex)) : null;
                                     }
-                                }                           
+                                }
 
                             }
                         }
@@ -252,6 +233,78 @@ namespace NMP.Portal.Controllers
             }
             _logger.LogTrace("Report Controller : CropAndFieldManagement() post action called");
             return View(model);
+        }
+        [HttpGet]
+        public async Task<IActionResult> ReportType(string i, string j)
+        {
+            _logger.LogTrace("Report Controller : ReportType() action called");
+            ReportViewModel model = null;
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = new ReportViewModel();
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else if (string.IsNullOrWhiteSpace(i) && string.IsNullOrWhiteSpace(j))
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+                if (model == null)
+                {
+                    model = new ReportViewModel();
+                    if (!(string.IsNullOrWhiteSpace(i) && string.IsNullOrWhiteSpace(j)))
+                    {
+
+                        model.EncryptedFarmId = i;
+                        model.EncryptedHarvestYear = j;
+                        model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId.ToString()));
+                        model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedHarvestYear.ToString()));
+                        (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
+                        if (farm != null)
+                        {
+                            model.FarmName = farm.Name;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in ReportType() action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnHarvestYearOverview"] = ex.Message;
+                return RedirectToAction("HarvestYearOverview", new
+                {
+                    id = model.EncryptedFarmId,
+                    year = model.EncryptedHarvestYear
+                });
+            }
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ReportType(ReportViewModel model)
+        {
+            _logger.LogTrace("Report Controller : ReportType() post action called");
+            try
+            {
+                if (model.ReportType == null)
+                {
+                    ModelState.AddModelError("ReportType",Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+                if (!ModelState.IsValid)
+                {
+                    return View("ReportType", model);
+                }
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+
+                return RedirectToAction("ExportFields");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in ReportType() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnReportSelection"] = ex.Message;
+                return View(model);
+            }
         }
     }
 }

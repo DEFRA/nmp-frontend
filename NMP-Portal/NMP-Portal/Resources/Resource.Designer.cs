@@ -1942,6 +1942,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Crop and field management report.
+        /// </summary>
+        public static string lblCropAndFieldManagementForReport {
+            get {
+                return ResourceManager.GetString("lblCropAndFieldManagementForReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} crop and field management report for {1}.
         /// </summary>
         public static string lblCropAndFieldManagementReport {
@@ -1974,6 +1983,15 @@ namespace NMP.Portal.Resources {
         public static string lblCropedArea {
             get {
                 return ResourceManager.GetString("lblCropedArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Crop, field and nutrient applications, for one or more fields..
+        /// </summary>
+        public static string lblCropFieldAndNutrientApplicationsForOneOrMoreFields {
+            get {
+                return ResourceManager.GetString("lblCropFieldAndNutrientApplicationsForOneOrMoreFields", resourceCulture);
             }
         }
         
@@ -2307,6 +2325,15 @@ namespace NMP.Portal.Resources {
         public static string lblDelayToIncorporation {
             get {
                 return ResourceManager.GetString("lblDelayToIncorporation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Demonstrate compliance with the N-max limit for each crop..
+        /// </summary>
+        public static string lblDemonstrateComplianceWithTheNMaxLimitForEachCrop {
+            get {
+                return ResourceManager.GetString("lblDemonstrateComplianceWithTheNMaxLimitForEachCrop", resourceCulture);
             }
         }
         
@@ -5274,6 +5301,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to N-max report.
+        /// </summary>
+        public static string lblNMaxReport {
+            get {
+                return ResourceManager.GetString("lblNMaxReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to a limited number of selected farmers and advisers across England and Wales are invited to test the tool and provide feedback prior to the public release.
         /// </summary>
         public static string lblNMPTBetaTest1 {
@@ -7044,6 +7080,15 @@ namespace NMP.Portal.Resources {
         public static string lblSelectOneOption {
             get {
                 return ResourceManager.GetString("lblSelectOneOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select one option. Available reports are based on data entered for the year..
+        /// </summary>
+        public static string lblSelectOneOptionAvailableReportsAreBasedOnDataEntereForTheYear {
+            get {
+                return ResourceManager.GetString("lblSelectOneOptionAvailableReportsAreBasedOnDataEntereForTheYear", resourceCulture);
             }
         }
         
@@ -9465,6 +9510,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhatIsYourLastHarvestYear {
             get {
                 return ResourceManager.GetString("lblWhatIsYourLastHarvestYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What kind of report do you want to save or print from your {0} data?.
+        /// </summary>
+        public static string lblWhatKindOfReportDoYouWantToSaveOrPrintFromYourData {
+            get {
+                return ResourceManager.GetString("lblWhatKindOfReportDoYouWantToSaveOrPrintFromYourData", resourceCulture);
             }
         }
         
