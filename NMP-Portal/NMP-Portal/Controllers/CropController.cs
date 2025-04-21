@@ -3870,6 +3870,16 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
+                    //temporary code until we get api for fetch SwardManagement by swardTypeId
+
+                    if(model.SwardTypeId==3 || model.SwardTypeId == 4)
+                    {
+                        var idsToRemove = new List<int> { 1,3,5 };
+
+                        swardManagementResponses = swardManagementResponses
+                            .Where(s => !idsToRemove.Contains(s.SwardManagementId))
+                            .ToList();
+                    }
                     ViewBag.SwardManagement = swardManagementResponses;
                 }
             }
