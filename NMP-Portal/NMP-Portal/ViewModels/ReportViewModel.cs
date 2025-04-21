@@ -13,6 +13,7 @@ namespace NMP.Portal.ViewModels
         public int? FarmId { get; set; }
         public string? FarmName { get; set; } = string.Empty;
 
+        public int? ReportType { get; set; }
         public CropAndFieldReportResponse? CropAndFieldReport { get; set; }
         public List<NutrientResponseWrapper>? Nutrients { get; set; }
     }

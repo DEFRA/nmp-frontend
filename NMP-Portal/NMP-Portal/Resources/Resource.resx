@@ -4340,4 +4340,22 @@ live</value>
   <data name="lblTwo" xml:space="preserve">
     <value>Two</value>
   </data>
+  <data name="lblCropAndFieldManagementForReport" xml:space="preserve">
+    <value>Crop and field management report</value>
+  </data>
+  <data name="lblCropFieldAndNutrientApplicationsForOneOrMoreFields" xml:space="preserve">
+    <value>Crop, field and nutrient applications, for one or more fields.</value>
+  </data>
+  <data name="lblDemonstrateComplianceWithTheNMaxLimitForEachCrop" xml:space="preserve">
+    <value>Demonstrate compliance with the N-max limit for each crop.</value>
+  </data>
+  <data name="lblNMaxReport" xml:space="preserve">
+    <value>N-max report</value>
+  </data>
+  <data name="lblSelectOneOptionAvailableReportsAreBasedOnDataEntereForTheYear" xml:space="preserve">
+    <value>Select one option. Available reports are based on data entered for the year.</value>
+  </data>
+  <data name="lblWhatKindOfReportDoYouWantToSaveOrPrintFromYourData" xml:space="preserve">
+    <value>What kind of report do you want to save or print from your {0} data?</value>
+  </data>
 </root>
