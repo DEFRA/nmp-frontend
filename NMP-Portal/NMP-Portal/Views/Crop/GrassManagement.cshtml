@@ -99,7 +99,7 @@
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @Resource.lblHowWillTheseFieldsBeManaged
                     </govuk-radios-fieldset-legend>
-                    <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
+                    <govuk-radios-hint>@string.Format(Resource.lblTheseOptionsComeFromRB209, Resource.lblSelectOneOption)</govuk-radios-hint>
                     @if (ViewBag.SwardManagement != null)
                     {
                         @foreach (var swardManagement in ViewBag.SwardManagement)

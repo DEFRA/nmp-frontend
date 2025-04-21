@@ -3996,16 +3996,21 @@ namespace NMP.Portal.Controllers
                 }
                 (List<GrassGrowthClassResponse> grassGrowthClasses, error) = await _cropService.FetchGrassGrowthClass(fieldIds);
 
-
-                if (error.Message == null)
+                if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+                {
+                    TempData["GrassGrowthClassError"] = error.Message;
+                    return RedirectToAction("DefoliationSequence");
+                }
+                else
                 {
                     foreach (var grassGrowthClass in grassGrowthClasses)
                     {
                         grassGrowthClassIds.Add(grassGrowthClass.GrassGrowthClassId);
                     }
                 }
+                
                 (List<YieldRangesEnglandAndWalesResponse> yieldRangesEnglandAndWalesResponses, error) = await _cropService.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(2, 4);
-                if (error != null && string.IsNullOrWhiteSpace(error.Message))
+                if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {
                     TempData["GrassGrowthClassError"] = error.Message;
                     return RedirectToAction("DefoliationSequence");

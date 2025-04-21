@@ -4340,4 +4340,19 @@ live</value>
   <data name="lblTwo" xml:space="preserve">
     <value>Two</value>
   </data>
+  <data name="lblHowManyCutsWillYouHaveInTheseFields" xml:space="preserve">
+    <value>How many cuts will you have in these fields?</value>
+  </data>
+  <data name="lblHowManyGrazingsWillYouHaveInTheseFields" xml:space="preserve">
+    <value>How many grazings will you have in these fields?</value>
+  </data>
+  <data name="lblTheseOptionsComeFromRB209" xml:space="preserve">
+    <value>{0}. These options come from RB209 (Nutrient Management Guide).</value>
+  </data>
+  <data name="lblWhatIsTheCutOrderInTheseFields" xml:space="preserve">
+    <value>What is the cut order in these fields?</value>
+  </data>
+  <data name="lblWhatIsTheGrazingOrderInTheseFields" xml:space="preserve">
+    <value>What is the grazing order in these fields?</value>
+  </data>
 </root>

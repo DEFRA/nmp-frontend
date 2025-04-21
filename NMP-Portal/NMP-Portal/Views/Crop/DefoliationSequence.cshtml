@@ -13,12 +13,12 @@
 }
 <form asp-action="DefoliationSequence" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
-    @if (TempData["CropInfoOneError"] != null)
+    @if (TempData["GrassGrowthClassError"] != null)
     {
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
                 <govuk-error-summary>
-                    <govuk-error-summary-item href="#">@TempData["CropInfoOneError"]</govuk-error-summary-item>
+                    <govuk-error-summary-item href="#">@TempData["GrassGrowthClassError"]</govuk-error-summary-item>
                 </govuk-error-summary>
             </div>
         </div>
@@ -97,9 +97,31 @@
             <govuk-radios asp-for="@Model.DefoliationSequenceId">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+
+                        @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazedOnly)
+                        {
+                            @Resource.lblWhatIsTheGrazingOrderInTheseFields
+                        }
+                        @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.CutForSilageOnly)
+                        {
+                            @Resource.lblWhatIsTheCutOrderInTheseFields
+                        }
+                        @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.CutForHayOnly)
+                        {
+                            @Resource.lblWhatIsTheCutOrderInTheseFields
+                        }
+                        @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazingAndSilage)
+                        {
+                            @Resource.lblHowManyCutsAndGrazingsWillYouHaveInTheseFields
+                        }
+                        @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazingAndHay)
+                        {
+                            @Resource.lblHowManyCutsAndGrazingsWillYouHaveInTheseFields
+                        }
+
                         @Resource.lblWhatIsTheCutAndGrazingOrderInTheseFields
                     </govuk-radios-fieldset-legend>
-                    <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
+                    <govuk-radios-hint>@string.Format(Resource.lblTheseOptionsComeFromRB209, Resource.lblSelectOneOption)</govuk-radios-hint>
                     @if (ViewBag.DefoliationSequenceResponses != null)
                     {
                         @foreach (var defoliationSequence in ViewBag.DefoliationSequenceResponses)
