@@ -2524,9 +2524,14 @@ namespace NMP.Portal.Controllers
                                     Yield = recommendation.Crops.Yield,
                                     SowingDate = recommendation.Crops.SowingDate,
                                     OtherCropName = recommendation.Crops.OtherCropName,
-                                    CropTypeName = await _fieldService.FetchCropTypeById(recommendation.Crops.CropTypeID.Value),
+                                    CropTypeName =recommendation.Crops.CropTypeID==140 ? NMP.Portal.Enums.CropTypes.GetName(typeof(CropTypes), recommendation.Crops.CropTypeID) :await _fieldService.FetchCropTypeById(recommendation.Crops.CropTypeID.Value),
                                     IsSnsExist = (snsData.CropID != null && snsData.CropID > 0) ? true : false,
-                                    SnsAnalysisData = snsData
+                                    SnsAnalysisData = snsData,
+                                    SwardManagementName=recommendation.Crops.SwardManagementName,
+                                    EstablishmentName = recommendation.Crops.EstablishmentName,
+                                    SwardTypeName = recommendation.Crops.SwardTypeName,
+                                    DefoliationSequenceName = recommendation.Crops.DefoliationSequenceName,
+                                    CropGroupName=recommendation.Crops.CropGroupName,
 
                                 };
                                 if (!string.IsNullOrWhiteSpace(crop.CropTypeName))
