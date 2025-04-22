@@ -98,9 +98,30 @@
             <govuk-radios asp-for="@Model.PotentialCut">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @Resource.lblHowManyCutsAndGrazingsWillYouHaveInTheseFields
+                        @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazedOnly)
+                        {
+                            @Resource.lblHowManyGrazingsWillYouHaveInTheseFields
+                        }
+                        @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.CutForSilageOnly)
+                        {
+                            @Resource.lblHowManyCutsWillYouHaveInTheseFields
+                        }
+                        @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.CutForHayOnly)
+                        {
+                            @Resource.lblHowManyCutsWillYouHaveInTheseFields
+                        }
+                        @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazingAndSilage)
+                        {
+                            @Resource.lblHowManyCutsAndGrazingsWillYouHaveInTheseFields
+                        }
+                        @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazingAndHay)
+                        {
+                            @Resource.lblHowManyCutsAndGrazingsWillYouHaveInTheseFields
+                        }
+
+
                     </govuk-radios-fieldset-legend>
-                    <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
+                    <govuk-radios-hint>@string.Format(Resource.lblTheseOptionsComeFromRB209, Resource.lblSelectOneOption)</govuk-radios-hint>
                     @if (ViewBag.PotentialCuts != null)
                     {
                         @foreach (var potentialCut in ViewBag.PotentialCuts)

@@ -3976,6 +3976,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How many cuts will you have in these fields?.
+        /// </summary>
+        public static string lblHowManyCutsWillYouHaveInTheseFields {
+            get {
+                return ResourceManager.GetString("lblHowManyCutsWillYouHaveInTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How many fields at {0} are above 300 metres?.
         /// </summary>
         public static string lblHowManyFieldsAtFarmAreAbove300Meters {
@@ -4000,6 +4009,15 @@ namespace NMP.Portal.Resources {
         public static string lblHowManyFieldsInNVZ {
             get {
                 return ResourceManager.GetString("lblHowManyFieldsInNVZ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How many grazings will you have in these fields?.
+        /// </summary>
+        public static string lblHowManyGrazingsWillYouHaveInTheseFields {
+            get {
+                return ResourceManager.GetString("lblHowManyGrazingsWillYouHaveInTheseFields", resourceCulture);
             }
         }
         
@@ -8092,6 +8110,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0}. These options come from RB209 (Nutrient Management Guide)..
+        /// </summary>
+        public static string lblTheseOptionsComeFromRB209 {
+            get {
+                return ResourceManager.GetString("lblTheseOptionsComeFromRB209", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This tool will:.
         /// </summary>
         public static string lblTheServiceWill {
@@ -9280,6 +9307,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the cut order in these fields?.
+        /// </summary>
+        public static string lblWhatIsTheCutOrderInTheseFields {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheCutOrderInTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the expected yield for {0} in {1}?.
         /// </summary>
         public static string lblWhatIsTheDifferentExpectedYield {
@@ -9339,6 +9375,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhatIsTheFarmPostcode {
             get {
                 return ResourceManager.GetString("lblWhatIsTheFarmPostcode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the grazing order in these fields?.
+        /// </summary>
+        public static string lblWhatIsTheGrazingOrderInTheseFields {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheGrazingOrderInTheseFields", resourceCulture);
             }
         }
         

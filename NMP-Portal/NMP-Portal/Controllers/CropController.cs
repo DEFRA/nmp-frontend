@@ -3875,6 +3875,16 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
+                    //temporary code until we get api for fetch SwardManagement by swardTypeId
+
+                    if(model.SwardTypeId==3 || model.SwardTypeId == 4)
+                    {
+                        var idsToRemove = new List<int> { 1,3,5 };
+
+                        swardManagementResponses = swardManagementResponses
+                            .Where(s => !idsToRemove.Contains(s.SwardManagementId))
+                            .ToList();
+                    }
                     ViewBag.SwardManagement = swardManagementResponses;
                 }
             }
@@ -4045,16 +4055,21 @@ namespace NMP.Portal.Controllers
                 }
                 (List<GrassGrowthClassResponse> grassGrowthClasses, error) = await _cropService.FetchGrassGrowthClass(fieldIds);
 
-
-                if (error.Message == null)
+                if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+                {
+                    TempData["GrassGrowthClassError"] = error.Message;
+                    return RedirectToAction("DefoliationSequence");
+                }
+                else
                 {
                     foreach (var grassGrowthClass in grassGrowthClasses)
                     {
                         grassGrowthClassIds.Add(grassGrowthClass.GrassGrowthClassId);
                     }
                 }
+                
                 (List<YieldRangesEnglandAndWalesResponse> yieldRangesEnglandAndWalesResponses, error) = await _cropService.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(2, 4);
-                if (error != null && string.IsNullOrWhiteSpace(error.Message))
+                if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {
                     TempData["GrassGrowthClassError"] = error.Message;
                     return RedirectToAction("DefoliationSequence");
