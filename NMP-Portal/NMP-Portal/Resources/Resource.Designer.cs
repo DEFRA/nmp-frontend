@@ -2230,6 +2230,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cuts and grazings.
+        /// </summary>
+        public static string lblCutsAndGrazings {
+            get {
+                return ResourceManager.GetString("lblCutsAndGrazings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Date.
         /// </summary>
         public static string lblDate {
@@ -8421,6 +8430,15 @@ namespace NMP.Portal.Resources {
         public static string lblToStartCreatingPlanAndRecords {
             get {
                 return ResourceManager.GetString("lblToStartCreatingPlanAndRecords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total annual target dry matter yield.
+        /// </summary>
+        public static string lblTotalAnnualTargetDryMatterYield {
+            get {
+                return ResourceManager.GetString("lblTotalAnnualTargetDryMatterYield", resourceCulture);
             }
         }
         

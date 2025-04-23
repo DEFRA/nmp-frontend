@@ -4373,6 +4373,12 @@ live</value>
   <data name="lblWhatIsTheGrazingOrderInTheseFields" xml:space="preserve">
     <value>What is the grazing order in these fields?</value>
   </data>
+  <data name="lblCutsAndGrazings" xml:space="preserve">
+    <value>Cuts and grazings</value>
+  </data>
+  <data name="lblTotalAnnualTargetDryMatterYield" xml:space="preserve">
+    <value>Total annual target dry matter yield</value>
+  </data>
   <data name="lblThisShouldBeWithinTheFollowingRange" xml:space="preserve">
     <value>This should be within the following range, based on the grass growth class.</value>
   </data>
