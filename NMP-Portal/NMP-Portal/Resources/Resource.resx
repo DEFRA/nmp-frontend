@@ -4190,8 +4190,8 @@ live</value>
   <data name="MsgCropGroupNameShouldNotContainSpecialChar" xml:space="preserve">
     <value>Crop group name should not contain special characters.</value>
   </data>
-  <data name="lbl9To12TonnesPerHectare" xml:space="preserve">
-    <value>9 to 12 tonnes per hectare.</value>
+  <data name="lblDryMatterYieldRangeTonnesPerHectare" xml:space="preserve">
+    <value>{0} to {1} tonnes per hectare.</value>
   </data>
   <data name="lblAnnualDryMatterYield" xml:space="preserve">
     <value>Annual dry matter yield</value>
@@ -4378,5 +4378,8 @@ live</value>
   </data>
   <data name="lblTotalAnnualTargetDryMatterYield" xml:space="preserve">
     <value>Total annual target dry matter yield</value>
+  </data>
+  <data name="lblThisShouldBeWithinTheFollowingRange" xml:space="preserve">
+    <value>This should be within the following range, based on the grass growth class.</value>
   </data>
 </root>

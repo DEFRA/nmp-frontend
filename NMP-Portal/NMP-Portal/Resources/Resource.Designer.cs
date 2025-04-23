@@ -412,15 +412,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 9 to 12 tonnes per hectare..
-        /// </summary>
-        public static string lbl9To12TonnesPerHectare {
-            get {
-                return ResourceManager.GetString("lbl9To12TonnesPerHectare", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to A.
         /// </summary>
         public static string lblA {
@@ -2550,6 +2541,15 @@ namespace NMP.Portal.Resources {
         public static string lblDryMatterYield {
             get {
                 return ResourceManager.GetString("lblDryMatterYield", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} to {1} tonnes per hectare..
+        /// </summary>
+        public static string lblDryMatterYieldRangeTonnesPerHectare {
+            get {
+                return ResourceManager.GetString("lblDryMatterYieldRangeTonnesPerHectare", resourceCulture);
             }
         }
         
@@ -8286,6 +8286,15 @@ namespace NMP.Portal.Resources {
         public static string lblThisMayChangeYourNutrientRecommendations {
             get {
                 return ResourceManager.GetString("lblThisMayChangeYourNutrientRecommendations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This should be within the following range, based on the grass growth class..
+        /// </summary>
+        public static string lblThisShouldBeWithinTheFollowingRange {
+            get {
+                return ResourceManager.GetString("lblThisShouldBeWithinTheFollowingRange", resourceCulture);
             }
         }
         
