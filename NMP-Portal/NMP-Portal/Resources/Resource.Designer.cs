@@ -2419,6 +2419,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you expect sulphur (S) deficiency in crops grown in {0}?.
+        /// </summary>
+        public static string lblDoYouExpectSulphurDeficiency {
+            get {
+                return ResourceManager.GetString("lblDoYouExpectSulphurDeficiency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you have a date for when you planted your {0}, or when you will plant it?.
         /// </summary>
         public static string lblDoYouHaveADateForWhenYouPlantedYour {
@@ -4198,6 +4207,15 @@ namespace NMP.Portal.Resources {
         public static string lblIfYouhaveMoreThanOneHolding {
             get {
                 return ResourceManager.GetString("lblIfYouhaveMoreThanOneHolding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you select Yes, we will give you sulphur (S) recommendations in your nutrient management plan.
+        /// </summary>
+        public static string lblIfYouSelectYesWeWillGiveYouSulphurRecom {
+            get {
+                return ResourceManager.GetString("lblIfYouSelectYesWeWillGiveYouSulphurRecom", resourceCulture);
             }
         }
         

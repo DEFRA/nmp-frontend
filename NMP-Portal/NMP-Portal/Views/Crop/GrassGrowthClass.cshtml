@@ -147,10 +147,21 @@
                                     <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
                                     @if(ViewBag.YieldRanges != null)
                                     {
+
                                         @foreach (var yieldRanges in ViewBag.YieldRanges)
                                         {
-                                            <govuk-radios-item value="@yieldRanges.Yield">@(string.Concat(yieldRanges.Yield.ToString()," "+ Resource.lblTonnesPerHectare))</govuk-radios-item>
+                                            var modelYieldInt = (int)Math.Floor(Convert.ToDecimal(Model.Crops[i].Yield));
+                                            bool isSelected = modelYieldInt == yieldRanges.Yield;
+
+                                            <govuk-radios-item value="@yieldRanges.Yield" checked="@(isSelected)">
+                                                @(string.Concat(yieldRanges.Yield.ToString(), " ", Resource.lblTonnesPerHectare))
+                                            </govuk-radios-item>
                                         }
+
+                                        @* @foreach (var yieldRanges in ViewBag.YieldRanges)
+                                        {
+                                            <govuk-radios-item value="@yieldRanges.Yield">@(string.Concat(yieldRanges.Yield.ToString()," "+ Resource.lblTonnesPerHectare))</govuk-radios-item>
+                                        } *@
                                     }
                                     
 
@@ -181,6 +192,12 @@
 
                     </div>
 
+                </div>
+            }
+            else
+            {
+                <div hidden="true">
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[@i].Yield" value="@Model.Crops[i].Yield"></govuk-input>
                 </div>
             }
 

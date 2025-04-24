@@ -4382,4 +4382,10 @@ live</value>
   <data name="lblThisShouldBeWithinTheFollowingRange" xml:space="preserve">
     <value>This should be within the following range, based on the grass growth class.</value>
   </data>
+  <data name="lblDoYouExpectSulphurDeficiency" xml:space="preserve">
+    <value>Do you expect sulphur (S) deficiency in crops grown in {0}?</value>
+  </data>
+  <data name="lblIfYouSelectYesWeWillGiveYouSulphurRecom" xml:space="preserve">
+    <value>If you select Yes, we will give you sulphur (S) recommendations in your nutrient management plan</value>
+  </data>
 </root>
