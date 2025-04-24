@@ -95,13 +95,13 @@
                 <div class="govuk-grid-row">
                     <div class="govuk-grid-column-two-thirds">
                         <h1 class="govuk-heading-l">
-                            @if (Model.GrassGrowthClassQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
-                            {
+                            @* @if (Model.GrassGrowthClassQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
+                            { *@
 
                                 <govuk-radios asp-for="@Model.Crops[i].Yield">
                                     <govuk-radios-fieldset>
                                         <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--m">
-                                            @string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForFields, Model.Crops[0].Year)
+                                            @(Model.GrassGrowthClassQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForFields, Model.Crops[0].Year) : string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldFor, Model.Crops[i].FieldName, Model.Crops[i].Year))
                                         </govuk-radios-fieldset-legend>
                                         <govuk-radios-hint>@Resource.lblThisShouldBeWithinTheFollowingRange</govuk-radios-hint>
                                         @if (ViewBag.YieldRanges != null)
@@ -120,8 +120,8 @@
                                     </govuk-radios-fieldset>
                                 </govuk-radios>
 
-                            }
-                            else
+                            @* } *@
+                            @* else
                             {
                                 <govuk-radios asp-for="@Model.Crops[i].Yield">
                                     <govuk-radios-fieldset>
@@ -139,7 +139,7 @@
                                     </govuk-radios-fieldset>
                                 </govuk-radios>
                                 
-                            }
+                            } *@
                         </h1>
                     </div>
                 </div>
