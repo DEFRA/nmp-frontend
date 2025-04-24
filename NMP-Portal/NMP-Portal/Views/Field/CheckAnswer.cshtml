@@ -309,7 +309,7 @@
                     {
                         <govuk-summary-list-row class=@((!Model.SoilAnalyses.SulphurDeficient.HasValue)?"govuk-error-message":"")>
                             <govuk-summary-list-row-key>
-                                @Resource.lblSoilDeficientInSulpurForCheckAnswer
+                                @string.Format(Resource.lblDoYouExpectSulphurDeficiency, Model.Name)
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
                                 @((!Model.SoilAnalyses.SulphurDeficient.HasValue) ? Resource.lblNotSet : (Model.SoilAnalyses.SulphurDeficient.Value ? Resource.lblYes : Resource.lblNo))
