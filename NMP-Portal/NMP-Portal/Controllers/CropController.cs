@@ -1862,7 +1862,7 @@ namespace NMP.Portal.Controllers
             }
             model.IsCheckAnswer = true;
             ViewBag.DefaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
-            if (model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Other&&model.CropTypeID!=null)
+            if (model.CropTypeID != null&& model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Other)
             {
                 string? cropInfoOneQuestion = await _cropService.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0);
                 ViewBag.CropInfoOneQuestion = cropInfoOneQuestion;

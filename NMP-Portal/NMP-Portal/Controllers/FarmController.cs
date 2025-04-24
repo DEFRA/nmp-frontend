@@ -991,7 +991,7 @@ namespace NMP.Portal.Controllers
                 ViewBag.Success = _dataProtector.Unprotect(q);
                 if (!string.IsNullOrWhiteSpace(r))
                 {
-                    TempData["successMsg"]= _dataProtector.Unprotect(r);
+                    TempData["successMsg"] = _dataProtector.Unprotect(r);
                 }
             }
             else
