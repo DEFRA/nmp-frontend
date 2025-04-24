@@ -162,6 +162,10 @@ namespace NMP.Portal.Controllers
             {
                 model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
             return View(model);
         }
         [HttpPost]
@@ -214,6 +218,10 @@ namespace NMP.Portal.Controllers
             {
                 model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
             return View(model);
         }
 
@@ -237,6 +245,10 @@ namespace NMP.Portal.Controllers
             if (HttpContext.Session.Keys.Contains("FarmData"))
             {
                 model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
             }
             return View(model);
         }
@@ -495,6 +507,10 @@ namespace NMP.Portal.Controllers
             if (HttpContext.Session.Keys.Contains("FarmData"))
             {
                 model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
             }
             if (model.Rainfall == 0 || model.Rainfall == null)
             {

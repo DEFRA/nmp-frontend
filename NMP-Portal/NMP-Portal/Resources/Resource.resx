@@ -4379,4 +4379,7 @@ live</value>
   <data name="lblTotalAnnualTargetDryMatterYield" xml:space="preserve">
     <value>Total annual target dry matter yield</value>
   </data>
+  <data name="lblRecommendationsForGrass" xml:space="preserve">
+    <value>Recommendations {0} - {1}</value>
+  </data>
 </root>

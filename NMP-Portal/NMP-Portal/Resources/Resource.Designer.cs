@@ -6616,6 +6616,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Recommendations {0} - {1}.
+        /// </summary>
+        public static string lblRecommendationsForGrass {
+            get {
+                return ResourceManager.GetString("lblRecommendationsForGrass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Recommendations 1 - {0}.
         /// </summary>
         public static string lblRecommendationsOneWithGrass {
