@@ -28,6 +28,7 @@ using Azure.Monitor.OpenTelemetry.AspNetCore;
 using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.ConfigureKestrel(c => c.AddServerHeader = false);
 builder.Services.Configure<IISServerOptions>(options =>
 {
     options.MaxRequestBodySize = null;
@@ -49,7 +50,7 @@ builder.Services.Configure<FormOptions>(options =>
     options.BufferBodyLengthLimit = int.MaxValue;
     options.BufferBody = true;
 });
-
+builder.Services.AddHttpsRedirection(options => { });
 builder.Services.AddDefraCustomerIdentity(builder);
 
 builder.Services.AddAuthorization(options =>
@@ -57,8 +58,6 @@ builder.Services.AddAuthorization(options =>
     options.FallbackPolicy = options.DefaultPolicy;
 });
 
-//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-//    .AddCookie(o => o.LoginPath = new PathString("/Account/Login"));
 
 builder.Services.AddControllersWithViews(options =>
 {
@@ -78,7 +77,15 @@ builder.Services.AddRazorPages().AddMvcOptions(options =>
 
 builder.Services.AddDataProtection();
 builder.Services.AddControllersWithViews().AddSessionStateTempDataProvider();
-builder.Services.AddSession(options => { options.Cookie.HttpOnly = true; options.Cookie.IsEssential = true; options.IdleTimeout = TimeSpan.FromMinutes(20); });
+builder.Services.AddSession(options =>
+{
+    options.Cookie.Name = "NMP-Portal.Session";
+    options.Cookie.HttpOnly = true;  // Prevent JavaScript access
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;  // Only send over HTTPS
+    options.Cookie.SameSite = SameSiteMode.Strict;  // Prevent CSRF
+    options.IdleTimeout = TimeSpan.FromMinutes(30);  // Session timeout
+    
+});
 
 var applicationInsightsConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]?.ToString();
 
@@ -123,28 +130,18 @@ builder.Services.AddSingleton<IFertiliserManureService, FertiliserManureService>
 builder.Services.AddSingleton<ISoilAnalysisService, SoilAnalysisService>();
 builder.Services.AddSingleton<IPKBalanceService, PKBalanceService>();
 builder.Services.AddSingleton<IUserExtensionService, UserExtensionService>();
-//builder.Services.ConfigureApplicationCookie(options =>
-//{    
-//    options.Cookie.Name = "NMP-Portal";
-//    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-//    options.Cookie.Path = "/";
-//    options.SlidingExpiration = true;    
-//    options.Cookie.HttpOnly = true;   
-//    options.Cookie.SameSite = SameSiteMode.Strict;
-//    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;    
-//});
-
+builder.Services.AddSingleton<ISnsAnalysisService, SnsAnalysisService>();
 builder.Services.AddAntiforgery(options =>
 {
     // Set Cookie properties using CookieBuilder properties�.
     options.Cookie = new CookieBuilder()
-    {                
+    {
         Name = "NMP-Portal",
-        HttpOnly = true,
+        HttpOnly = true,        
         Path = "/",
         SecurePolicy = CookieSecurePolicy.Always,
         SameSite = SameSiteMode.Strict
-    };   
+    };
     options.FormFieldName = "NMP-Portal-Antiforgery-Field";
     options.HeaderName = "X-CSRF-TOKEN-NMP";
     options.SuppressXFrameOptionsHeader = false;
@@ -205,8 +202,7 @@ app.Use(async (context, next) =>
     {
         context.Response.StatusCode = 405;
         return;
-    }
-
+    } 
     await next.Invoke();
     // Do logging or other work that doesn't write to the Response.
 });

@@ -222,19 +222,19 @@
                         <td class="govuk-table__cell alignRight">@(Model.ManureType.NO3N != null ? string.Format(unit, Model.ManureType.NO3N) : string.Empty)</td>
                     </tr>
                     <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">@Resource.lblPhosphate</td>
+                        <td class="govuk-table__cell">@Resource.lblTotalPhosphateOnly</td>
                         <td class="govuk-table__cell alignRight">@(Model.ManureType.P2O5 != null ? string.Format(unit, Model.ManureType.P2O5) : string.Empty)</td>
                     </tr>
                     <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">@Resource.lblPotash.ToLower()</td>
+                        <td class="govuk-table__cell">@Resource.lblTotalPotashWithNutrient</td>
                         <td class="govuk-table__cell alignRight">@(Model.ManureType.K2O != null ? string.Format(unit, Model.ManureType.K2O) : string.Empty)</td>
                     </tr>
                     <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">@Resource.lblSulphur</td>
+                        <td class="govuk-table__cell">@Resource.lblTotalSulphur</td>
                         <td class="govuk-table__cell alignRight">@(Model.ManureType.SO3 != null ? string.Format(unit, Model.ManureType.SO3) : string.Empty)</td>
                     </tr>
                     <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">@Resource.lblMagnesium</td>
+                        <td class="govuk-table__cell">@Resource.lblTotalMagnesium</td>
                         <td class="govuk-table__cell alignRight">@(Model.ManureType.MgO != null ? string.Format(unit, Model.ManureType.MgO) : string.Empty)</td>
                     </tr>
                 </tbody>

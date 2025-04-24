@@ -27,7 +27,6 @@ namespace NMP.Portal.ViewModels
         public string? FarmName { get; set; } = string.Empty;
         public string EncryptedFarmId { get; set; } = string.Empty;
         public bool? IsSoilNutrientValueTypeIndex { get; set; }
-        public bool? WantToApplySns { get; set; }
         public int? CropGroupId { get; set; }
         public bool IsCheckAnswer { get; set; } = false;
         public string? SoilType { get; set; } = string.Empty;
@@ -42,39 +41,7 @@ namespace NMP.Portal.ViewModels
         public int? LastHarvestYear { get; set; }
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblSampleForSoilMineralNitrogen))]
         public DateTime? SampleForSoilMineralNitrogen { get; set; }
-        public int? CurrentCropGroupId { get; set; }
-        public string? CurrentCropGroup { get; set; }
-        public int? CurrentCropTypeId { get; set; }
-        public string? CurrentCropType { get; set; }
-        public int? SoilMineralNitrogenAt030CM { get; set; }
-        public int? SoilMineralNitrogenAt3060CM { get; set; }
-        public int? SoilMineralNitrogenAt6090CM { get; set; }
-        public int? SampleDepth { get; set; }
-        public int? SoilMineralNitrogen { get; set; }
-        public bool? IsCalculateNitrogen { get; set; }
 
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheNumberOfShootsPerSquareMetre))]
-        public int? NumberOfShoots { get; set; }
-        public int SeasonId { get; set; }
-        public bool? IsEstimateOfNitrogenMineralisation { get; set; }
-        public bool? IsBasedOnSoilOrganicMatter { get; set; }
-        public int GreenAreaIndexOrCropHeight { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheCropHeight))]
-        public decimal? CropHeight { get; set; }
-
-        [RegularExpression(@"^(?:0(\.\d{1,2})?|[1-2]?\d(\.\d{1,2})?|3(\.0{1,2})?)$",ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgForGreenAreaIndex))]
-        public decimal? GreenAreaIndex { get; set; }
-
-        public bool IsCropHeight { get; set; } = false;
-        public bool IsGreenAreaIndex { get; set; } = false;
-        public bool IsNumberOfShoots { get; set; } = false;
-        public bool IsCalculateNitrogenNo { get; set; } = false;
-        public decimal? SoilOrganicMatter { get; set; }
-        public decimal? AdjustmentValue { get; set; }
-        public int SnsIndex { get; set; }
-        public int SnsValue { get; set; }
-        public int? SnsCategoryId { get; set; }
         public bool? RecentSoilAnalysisQuestion { get; set; }
         public bool IsRecentSoilAnalysisQuestionChange { get; set; } = false;
         //public bool SoilOverChalk { get; set; } = false;
@@ -88,5 +55,8 @@ namespace NMP.Portal.ViewModels
         public string? Management { get; set; }
         public string? PotassiumIndexValue { get; set; }
         public string? CropGroupName { get; set; }
+        public int? HarvestYear { get; set; }
+        public string? EncryptedHarvestYear { get; set; }
+        public bool IsHasGrassInLastThreeYearChange { get; set; } = false;
     }
 }

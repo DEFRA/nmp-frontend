@@ -214,11 +214,11 @@
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @string.Format(Resource.lblHowWouldYouLikeToEnterTheApplicationRate, isOtherManure? Model.OtherMaterialName: Model.ManureTypeName)
                     </govuk-radios-fieldset-legend>
-                    <govuk-radios-item value="@enterAnApplicationRate">@Resource.lblEnterAnApplicationRate</govuk-radios-item>
+                    <govuk-radios-item value="@enterAnApplicationRate">@string.Format(Resource.lblEnterAnApplicationRate, (Model.IsManureTypeLiquid.HasValue && Model.IsManureTypeLiquid == true) ? Resource.lblMeterCubePerHa : Resource.lblTonnesPerHectare)</govuk-radios-item>
                     <govuk-radios-item value="@calculateBasedOnAreaAndQuantity">@Resource.lblCalculateBasedOnTheAreaAndQuantity</govuk-radios-item>
                     @if (!isOtherManure)
                     {
-                        <govuk-radios-item value="@useDefaultApplicationRate">@string.Format(Resource.lblUseTypicalApplicationRate, Model.ApplicationRateArable)</govuk-radios-item>
+                        <govuk-radios-item value="@useDefaultApplicationRate">@string.Format(Resource.lblUseTypicalApplicationRate, Model.ApplicationRateArable, (Model.IsManureTypeLiquid.HasValue && Model.IsManureTypeLiquid == true) ? Resource.lblMeterCubePerHa : Resource.lblTonnesPerHectare)</govuk-radios-item>
                     }
                 </govuk-radios-fieldset>
             </govuk-radios>

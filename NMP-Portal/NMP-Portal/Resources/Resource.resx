@@ -1283,7 +1283,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Total potassium (K2O)</value>
   </data>
   <data name="lblTotalSulphur" xml:space="preserve">
-    <value>Total sulphur (SO3)</value>
+    <value>Total Sulphur (SO3)</value>
   </data>
   <data name="lblUricAcid" xml:space="preserve">
     <value>Uric acid (N)</value>
@@ -1301,13 +1301,13 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Calculate based on the area and quantity you are applying</value>
   </data>
   <data name="lblEnterAnApplicationRate" xml:space="preserve">
-    <value>Enter an application rate in tonnes per hectare or cubic meters per hectare</value>
+    <value>Enter an application rate in {0}</value>
   </data>
   <data name="lblHowWouldYouLikeToEnterTheApplicationRate" xml:space="preserve">
     <value>How would you like to enter the application rate for your {0}?</value>
   </data>
   <data name="lblUseTypicalApplicationRate" xml:space="preserve">
-    <value>Use the typical application rate of {0} cubic metres per hectare</value>
+    <value>Use the typical application rate of {0} {1}</value>
   </data>
   <data name="MsgSelectAMethodForEnteringApplicationRate" xml:space="preserve">
     <value>Select a method for entering the application rate before continuing.</value>
@@ -1683,7 +1683,7 @@ kg per cubic metre</value>
     <value>Effective rainfall manual</value>
   </data>
   <data name="lblThisIsTotalRainfall" xml:space="preserve">
-    <value>This is the total rainfall between x and y. If you think this is wrong, you can change it now or later.</value>
+    <value>This is the rainfall between the application date and the end of drainage and is calculated using average rainfall data for your postcode. If you have more accurate rainfall data, you can update this figure now or later.</value>
   </data>
   <data name="lblTotalRainfall" xml:space="preserve">
     <value>Total rainfall</value>
@@ -1760,7 +1760,7 @@ cubic metres per hectare  not set</value>
     <value>Rainfall within 6 hours of application not set</value>
   </data>
   <data name="MsgTopsoilMoistureNotSet" xml:space="preserve">
-    <value> Topsoil moisture not set</value>
+    <value>Topsoil moisture not set</value>
   </data>
   <data name="MsgTotalRainfallSinceApplicationNotSet" xml:space="preserve">
     <value>Total rainfall since application not set</value>
@@ -2641,8 +2641,8 @@ cubic metres per hectare  not set</value>
   <data name="lblBalanceFromPreviousYear" xml:space="preserve">
     <value>Balance from {0}</value>
   </data>
-  <data name="lblCropDetailsForFieldInYear" xml:space="preserve">
-    <value>Crop details for {0} in {1}</value>
+  <data name="lblCropFieldAndSoilDetailsForFieldInYear" xml:space="preserve">
+    <value>Crop, field and soil details for {0} in {1}</value>
   </data>
   <data name="lblFertiliserOrLimeApplied" xml:space="preserve">
     <value>Fertiliser or Lime applied</value>
@@ -3254,7 +3254,7 @@ cubic metres per hectare  not set</value>
     <value>remove this soil analysis.</value>
   </data>
   <data name="lblYouCanAlso" xml:space="preserve">
-    <value>You can also</value>
+    <value>You can also </value>
   </data>
   <data name="lblThisMayChangeYourNutrientRecommendations" xml:space="preserve">
     <value>This may change your nutrient recommendations. Select the field in your</value>
@@ -3744,7 +3744,7 @@ live</value>
     <value>inorganic fertiliser</value>
   </data>
   <data name="MsgDeletePlanFertiliserContent1" xml:space="preserve">
-    <value>This will remove this organic material application from these fields and change their nutrient recommendations.</value>
+    <value>This will remove the information about this inorganic fertiliser application from {0} and change the {1} nutrient recommendations.</value>
   </data>
   <data name="MsgDeletePlanOrganicAndFertiliserContent2" xml:space="preserve">
     <value>Which fields would you like to remove this application from?</value>
@@ -3828,10 +3828,10 @@ live</value>
     <value>The first step is to set up your farm. The farm will contain your fields, and the fields will have the crops and nutrients applied to them. If you have more than one holding, it's best to add a separate farm for each one.</value>
   </data>
   <data name="lblRegulations_line1" xml:space="preserve">
-    <value>The service will warn you if you enter field or nutrient management information that will breach Nitrate Vulnerable Zone (NVZ) rules. The service can help you demonstrate compliance with the NVZ rules for regulatory purposes.</value>
+    <value>You can use the recommendations and outputs from this tool to demonstrate compliance with environmental regulations. This tool will warn you if you enter field or nutrient management information that will breach rules relating to inorganic fertilisers, organic manures or other materials containing nitrogen.</value>
   </data>
   <data name="lblRegulations_line2" xml:space="preserve">
-    <value>The service also accounts for Soil Nitrogen Supply (SNS). You can add SNS data for a field at the end of the planning process.</value>
+    <value>You must follow the appropriate regulations, depending on where your farm is:</value>
   </data>
   <data name="lblDo_not_show_this_information_again" xml:space="preserve">
     <value>Do not show this information again</value>
@@ -3852,7 +3852,7 @@ live</value>
     <value>We will reply to your email as quickly as we can.</value>
   </data>
   <data name="lblIagree_to_the_terms_of_use" xml:space="preserve">
-    <value>Do not show this page again</value>
+    <value>I agree to the terms of use</value>
   </data>
   <data name="lblMore_information" xml:space="preserve">
     <value>More information</value>
@@ -3879,16 +3879,16 @@ live</value>
     <value>Saving your data</value>
   </data>
   <data name="lblSaving_your_data_line1" xml:space="preserve">
-    <value>The service will save the data you input regularly. There will be a Check Your Answers page at the end of each section, and when you select Submit here, your data will be saved up to this point. You will then be able to leave and resume here.</value>
+    <value>The tool will save the data you input regularly. There will be a Check Your Answers page at the end of each section, and when you select Submit here, your data will be saved up to this point. You will then be able to leave and resume here.</value>
   </data>
   <data name="lblSoil_Analysis_line1" xml:space="preserve">
-    <value>You will get better recommendations if you have a recent soil analysis. You will be asked to enter the data from the analysis as you progress through the service, in order to create your nutrient management plan.</value>
-  </data>
-  <data name="lblSoil_Analysis_line2" xml:space="preserve">
     <value>You should sample the soil from your fields every 3 to 4 years and get it tested for pH, phosphorus, potassium and magnesium.</value>
   </data>
+  <data name="lblSoil_Analysis_line2" xml:space="preserve">
+    <value>You will be asked to enter the data from the analysis as you progress through the tool, in order to create your nutrient management plan.</value>
+  </data>
   <data name="lblSoil_Analysis_line3" xml:space="preserve">
-    <value>If you do not enter a soil analysis, or if your most recent soil analysis is more than 5 years old, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop.</value>
+    <value>​If you do not enter a soil analysis, or if your most recent soil analysis is more than 5 years old, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop.</value>
   </data>
   <data name="lblTermsOfUse" xml:space="preserve">
     <value>Terms of use</value>
@@ -3966,13 +3966,10 @@ live</value>
     <value>Scotland: &lt;a href="https://www.gov.scot/policies/agriculture-and-the-environment/nvz/" target="_blank"&gt;The Action Programme for Nitrate Vulnerable Zones (Scotland) Regulations 2008&lt;/a&gt;</value>
   </data>
   <data name="lblEnglandNVZWaterFarmingRules" xml:space="preserve">
-    <value>England: &lt;a href="https://www.gov.uk/government/collections/nitrate-vulnerable-zones" target="_blank"&gt;Nitrate vulnerable zones (NVZs)&lt;/a&gt; and &lt;a href="https://www.gov.uk/government/publications/applying-the-farming-rules-for-water/applying-the-farming-rules-for-water" target="_blank" &gt;Farming rules for water&lt;/a&gt;</value>
+    <value>England: &lt;a href="https://www.gov.uk/guidance/rules-for-farmers-and-land-managers-to-prevent-water-pollution#assess-pollution-risks" target="_blank" &gt;Farming rules for water&lt;/a&gt; and  &lt;a href="https://www.gov.uk/government/collections/nitrate-vulnerable-zones" target="_blank"&gt;Nitrate vulnerable zones (NVZs)&lt;/a&gt;</value>
   </data>
   <data name="lblRegulations" xml:space="preserve">
     <value>Regulations</value>
-  </data>
-  <data name="lblRegulations_line3" xml:space="preserve">
-    <value>You must follow the appropriate regulations, depending on where your farm is:</value>
   </data>
   <data name="lblWalesWaterResourceRegulations" xml:space="preserve">
     <value>Wales: &lt;a href="https://www.gov.wales/water-resources-control-agricultural-pollution-wales-regulations-2021-guidance-farmers-and-land" target="_blank"&gt;The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021&lt;/a&gt;</value>
@@ -4036,5 +4033,164 @@ live</value>
   </data>
   <data name="lblThirdRuleOfNVZForEngland" xml:space="preserve">
     <value>Read more about</value>
+  </data>
+  <data name="lblCropFieldAndSoilDetails" xml:space="preserve">
+    <value>Crop, field and soil details</value>
+  </data>
+  <data name="lblSoil_Analysis_line4" xml:space="preserve">
+    <value>The tool also accounts for Soil Nitrogen Supply (SNS). You can add SNS data for a field at the end of the planning process.</value>
+  </data>
+  <data name="lblAddTheseAnalysisResults" xml:space="preserve">
+    <value>Add these analysis results</value>
+  </data>
+  <data name="MsgSnsSuccess" xml:space="preserve">
+    <value>Soil mineral nitrogen analysis results added to {0}.</value>
+  </data>
+  <data name="lblTotalMagnesium" xml:space="preserve">
+    <value>Total Magnesium (MgO)</value>
+  </data>
+  <data name="lblBackToTheYearFieldNamePlan" xml:space="preserve">
+    <value>Back to the {0} {1} Plan</value>
+  </data>
+  <data name="lblViewFieldAndSoilAnalysisInformationForField" xml:space="preserve">
+    <value>View field and soil analysis information for {0}</value>
+  </data>
+  <data name="lblDateAnalysisTaken" xml:space="preserve">
+    <value>Date analysis taken</value>
+  </data>
+  <data name="lblSoilMineralNitrogenDetailsForFieldName" xml:space="preserve">
+    <value>Soil mineral nitrogen (SNS) details for {0}</value>
+  </data>
+  <data name="lblUpdateCropGroupNameContent1" xml:space="preserve">
+    <value>Changes here will be applied to all of these fields. To change a single field select it from your crop plan.</value>
+  </data>
+  <data name="lblRemoveThisCropGroup" xml:space="preserve">
+    <value>remove this crop group.</value>
+  </data>
+  <data name="lblUpdateThisCropGroup" xml:space="preserve">
+    <value>Update this crop group</value>
+  </data>
+  <data name="lblViewTheYearCropPlan" xml:space="preserve">
+    <value>View the {0} crop plan</value>
+  </data>
+  <data name="lblWhatIsTheCropType" xml:space="preserve">
+    <value>What is the crop type?</value>
+  </data>
+  <data name="lblUpdateCropGroupNameForHarvestYear" xml:space="preserve">
+    <value>Update {0} for harvest year {1}</value>
+  </data>
+  <data name="lblCropPlanUpdated" xml:space="preserve">
+    <value>Crop Plan updated</value>
+  </data>
+  <data name="lblSelectAFieldToSeeItsUpdatedRecommendations" xml:space="preserve">
+    <value>Select a field to see its updated recommendations</value>
+  </data>
+  <data name="lblHowDoYouPlanToUseTheCrop" xml:space="preserve">
+    <value>How do you plan to use the crop?</value>
+  </data>
+  <data name="lblAddASoilMineralNitrogenAnalysisResultForCrop" xml:space="preserve">
+    <value>Add a soil mineral nitrogen analysis result for {0}</value>
+  </data>
+  <data name="lblRemoveSNSAnalysisContentOne" xml:space="preserve">
+    <value>This will remove all data about this SNS from the current crop. You will not be able to get it back.</value>
+  </data>
+  <data name="lblRemoveTheSoilNitrogenSupplyAnalysis" xml:space="preserve">
+    <value>Remove the Soil Nitrogen Supply (SNS) analysis</value>
+  </data>
+  <data name="MsgYourDataSuccessfullyRemoved" xml:space="preserve">
+    <value>Your {0} has been successfully removed.</value>
+  </data>
+  <data name="lblSoilNitrogenSupplyAnalysis" xml:space="preserve">
+    <value>Soil Nitrogen Supply (SNS) analysis</value>
+  </data>
+  <data name="lblNumberOfShootsPerSquareMetre" xml:space="preserve">
+    <value>Number of shoots per square metre</value>
+  </data>
+  <data name="lblPercentageOfOrganicMatter" xml:space="preserve">
+    <value>Percentage of organic matter</value>
+  </data>
+  <data name="lblSoilNitrogenSupplyAnalysisForField" xml:space="preserve">
+    <value>Soil Nitrogen Supply (SNS) analysis for {0}</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value>Soil Nitrogen Supply Index</value>
+  </data>
+  <data name="lblSeason" xml:space="preserve">
+    <value>Season</value>
+  </data>
+  <data name="lblShootsPerSquareMetre" xml:space="preserve">
+    <value>{0} shoots per square metre</value>
+  </data>
+  <data name="MsgWeCouldNotAddYourSnsPleaseTryAgainLater" xml:space="preserve">
+    <value>We could not add a soil mineral nitrogen analysis, please try again later</value>
+  </data>
+  <data name="lblYouCanViewYourRecommendations" xml:space="preserve">
+    <value>You can view your recommendations</value>
+  </data>
+  <data name="lblYouHaveNoInorganicFertiliserApplicationForFieldInYear" xml:space="preserve">
+    <value>You have no inorganic fertiliser applications planned for {0} in {1}.</value>
+  </data>
+  <data name="lblUpdateAnInorganicMaterialApplication" xml:space="preserve">
+    <value>Update an inorganic fertiliser application for harvest year {0}</value>
+  </data>
+  <data name="lblRemoveThisApplicationFromField" xml:space="preserve">
+    <value>Remove this application from {0}</value>
+  </data>
+  <data name="lblHowMuchOfEachNutrientDoYouPlanforUpdate" xml:space="preserve">
+    <value>How much of each nutrient do you plan to include in this application, per hectare?</value>
+  </data>
+  <data name="lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields" xml:space="preserve">
+    <value>When do you plan to spread inorganic fertiliser on these fields?</value>
+  </data>
+  <data name="lblWhichFieldsWouldYouLikeToEditAnOrganic" xml:space="preserve">
+    <value>Which fields do you want to edit this inorganic fertiliser application for?</value>
+  </data>
+  <data name="lblWhichFieldsWouldYouLikeToAddToThisGrass" xml:space="preserve">
+    <value>Which fields would you like to add to this Grass group?</value>
+  </data>
+  <data name="lblAreTheseNewSwardOrExistingSwardInTheseFields" xml:space="preserve">
+    <value>Are these new swards or existing swards in these fields?</value>
+  </data>
+  <data name="lblExistingSwards" xml:space="preserve">
+    <value>Existing swards</value>
+  </data>
+  <data name="lblNewSwards" xml:space="preserve">
+    <value>New swards</value>
+  </data>
+  <data name="lblWhatIsTheSwardInTheseFields" xml:space="preserve">
+    <value>What is the sward in these fields in {0}?</value>
+  </data>
+  <data name="lblSpringSown" xml:space="preserve">
+    <value>Spring sown (April to June)</value>
+  </data>
+  <data name="lblSummerOrAutumnSown" xml:space="preserve">
+    <value>Summer or autumn sown (July to mid-October)</value>
+  </data>
+  <data name="MsgInorganicFertiliserApplicationUpdated" xml:space="preserve">
+    <value>Inorganic fertiliser application updated</value>
+  </data>
+  <data name="MsgViewFieldUpdatedNutrientRecommendations" xml:space="preserve">
+    <value>View {0} updated nutrient recommendations.</value>
+  </data>
+  <data name="lblRemoveAnInorganicFertiliserApplicationFromField" xml:space="preserve">
+    <value>Remove an inorganic fertiliser application from {0}</value>
+  </data>
+  <data name="lblRemoveAnInorganicFertiliserApplication" xml:space="preserve">
+    <value>Remove an inorganic fertiliser application</value>
+  </data>
+  <data name="lblRemoveThisApplicationFromTheseField" xml:space="preserve">
+    <value>Remove this application from these field</value>
+  </data>
+  <data name="MsgDeletePlanFertiliserContent2" xml:space="preserve">
+    <value>This will remove the information about this inorganic fertiliser application are change the {0} nutrient recommendations for these fields.</value>
+  </data>
+  <data name="lblGrass" xml:space="preserve">
+    <value>Grass</value>
+  </data>
+  <data name="MsgCropGroupNameShouldNotContainSpecialChar" xml:space="preserve">
+    <value>Crop group name should not contain special characters.</value>
+  </data>
+  <data name="lblPageNotFoundPage" xml:space="preserve">
+    <value>Page not found – Plan and record nutrient applications – GOV.UK</value>
   </data>
 </root>

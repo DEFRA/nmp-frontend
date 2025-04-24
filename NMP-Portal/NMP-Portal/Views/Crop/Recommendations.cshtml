@@ -12,40 +12,51 @@
     }
     bool isPkBalanceTableDisplay = false;
 }
-
-@if (Model != null)
-{
-    @section BeforeContent {
-    <govuk-back-link asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@string.Format(Resource.lblBackToYearFarmPlan, Model.Crops[0].Year)</govuk-back-link>
+<div class="govuk-grid-row">
+    @if (TempData["NutrientRecommendationsError"] != null)
+    {
+        <div class="govuk-grid-column-two-thirds">
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["NutrientRecommendationsError"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        </div>
     }
-    @Html.AntiForgeryToken()
-    <div class="govuk-grid-row">
-        @if (TempData["NutrientRecommendationsError"] != null)
-        {
-            <div class="govuk-grid-column-two-thirds">
-                <govuk-error-summary>
-                    <govuk-error-summary-item href="#">@TempData["NutrientRecommendationsError"]</govuk-error-summary-item>
-                </govuk-error-summary>
-            </div>
-        }
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
+    @if (Model != null)
+    {
 
-                @if (ViewBag.Success != null && ViewBag.Success == true && TempData["successMsg"] != null)
-                {
-                    <govuk-notification-banner type="Success">
-                        <p class="govuk-notification-banner__heading">
-                            @TempData["successMsg"]
+
+        @section BeforeContent {
+        <govuk-back-link asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@string.Format(Resource.lblBackToYearFarmPlan, Model.Crops[0].Year)</govuk-back-link>
+        }
+
+        @Html.AntiForgeryToken()
+        <div class="govuk-grid-column-two-thirds">
+
+            @if (ViewBag.Success != null && ViewBag.Success == true && TempData["successMsg"] != null)
+            {
+                <govuk-notification-banner type="Success">
+                    <p class="govuk-notification-banner__heading">
+                        @TempData["successMsg"]
+                    </p>
+                    @if (TempData["successMsgSecond"] != null)
+                    {
+                        <p class="govuk-body">
+                            @TempData["successMsgSecond"]
                         </p>
-                        @if (TempData["successMsgSecond"] != null)
-                        {
-                            <p class="govuk-body">
-                                @TempData["successMsgSecond"]
-                            </p>
-                        }
-                    </govuk-notification-banner>
-                }
-            </div>
+                    }
+                </govuk-notification-banner>
+            }
+            @if (TempData["successSnsAnalysis"] != null)
+            {
+                <govuk-notification-banner type="Success">
+                    <p class="govuk-notification-banner__heading">
+                        @string.Format(Resource.MsgSnsSuccess, Model.FieldName)
+                    </p>
+                   @*  <p class="govuk-body">
+                        @Resource.lblYouCanViewYourRecommendations
+                    </p> *@
+                </govuk-notification-banner>
+            }
         </div>
         @if (Model.Crops != null && Model.Crops.Count > 0)
         {
@@ -149,15 +160,15 @@
                                                         </tr>
 
                                                         @*    <tr class="govuk-table__row">
-                                                            <td class="govuk-table__cell"> @Resource.lblSodiumNa2O</td>
-                                                            <td class="govuk-table__cell">
-                                                                @(recommendation.SIndex == null ? Resource.lblHyphen : recommendation.NaIndex)
-                                                            </td>
-                                                            <td class="govuk-table__cell">@(recommendation.CropNa2O == null ? Resource.lblHyphen : recommendation.CropNa2O == 0 ? recommendation.CropNa2O : string.Concat(recommendation.CropNa2O, Resource.lblkg))</td>
-                                                            <td class="govuk-table__cell">@(recommendation.ManureNa2O == null ? 0 : recommendation.ManureNa2O == 0 ? recommendation.ManureNa2O : string.Concat(recommendation.ManureNa2O, Resource.lblkg))</td>
-                                                            <td class="govuk-table__cell">@(recommendation.FertilizerNa2O == null ? Resource.lblHyphen : recommendation.FertilizerNa2O < 0 ? 0 : recommendation.FertilizerNa2O == 0 ? recommendation.FertilizerNa2O : string.Concat(recommendation.FertilizerNa2O, Resource.lblkg))</td>
-                                                            <td class="govuk-table__cell">@(recommendation.FertiliserAppliedNa2O == null ? 0 : recommendation.FertiliserAppliedNa2O == 0 ? recommendation.FertiliserAppliedNa2O : string.Concat(recommendation.FertiliserAppliedNa2O, Resource.lblkg))</td>
-                                                        </tr> *@
+                        <td class="govuk-table__cell"> @Resource.lblSodiumNa2O</td>
+                        <td class="govuk-table__cell">
+                        @(recommendation.SIndex == null ? Resource.lblHyphen : recommendation.NaIndex)
+                        </td>
+                        <td class="govuk-table__cell">@(recommendation.CropNa2O == null ? Resource.lblHyphen : recommendation.CropNa2O == 0 ? recommendation.CropNa2O : string.Concat(recommendation.CropNa2O, Resource.lblkg))</td>
+                        <td class="govuk-table__cell">@(recommendation.ManureNa2O == null ? 0 : recommendation.ManureNa2O == 0 ? recommendation.ManureNa2O : string.Concat(recommendation.ManureNa2O, Resource.lblkg))</td>
+                        <td class="govuk-table__cell">@(recommendation.FertilizerNa2O == null ? Resource.lblHyphen : recommendation.FertilizerNa2O < 0 ? 0 : recommendation.FertilizerNa2O == 0 ? recommendation.FertilizerNa2O : string.Concat(recommendation.FertilizerNa2O, Resource.lblkg))</td>
+                        <td class="govuk-table__cell">@(recommendation.FertiliserAppliedNa2O == null ? 0 : recommendation.FertiliserAppliedNa2O == 0 ? recommendation.FertiliserAppliedNa2O : string.Concat(recommendation.FertiliserAppliedNa2O, Resource.lblkg))</td>
+                        </tr> *@
                                                         <tr class="govuk-table__row">
                                                             <td class="govuk-table__cell"> @Resource.lblMagnesiumMgO</td>
                                                             <td class="govuk-table__cell">
@@ -174,20 +185,20 @@
                                                             <td class="govuk-table__cell">
                                                                 @(recommendation.LimeIndex == null ? Resource.lblHyphen : recommendation.LimeIndex)
                                                             </td>
-                                                            <td class="govuk-table__cell">@(recommendation.CropLime == null ? Resource.lblHyphen : recommendation.CropLime == 0 ? recommendation.CropLime : string.Concat(recommendation.CropLime," ", Resource.lbltonnes))</td>
-                                                            <td class="govuk-table__cell">@(recommendation.ManureLime == null ? Resource.lblHyphen : recommendation.ManureLime == 0 ? recommendation.ManureLime : string.Concat(recommendation.ManureLime," ", Resource.lbltonnes))</td>
-                                                            <td class="govuk-table__cell">@(recommendation.FertilizerLime == null ? Resource.lblHyphen : recommendation.FertilizerLime < 0 ? 0 : recommendation.FertilizerLime == 0 ? recommendation.FertilizerLime : string.Concat(recommendation.FertilizerLime," ", Resource.lbltonnes))</td>
-                                                            <td class="govuk-table__cell">@(recommendation.FertiliserAppliedLime == null ? 0 : recommendation.FertiliserAppliedLime == 0 ? recommendation.FertiliserAppliedLime : string.Concat(recommendation.FertiliserAppliedLime," ", Resource.lbltonnes))</td>
+                                                            <td class="govuk-table__cell">@(recommendation.CropLime == null ? Resource.lblHyphen : recommendation.CropLime == 0 ? recommendation.CropLime : string.Concat(recommendation.CropLime, " ", Resource.lbltonnes))</td>
+                                                            <td class="govuk-table__cell">@(recommendation.ManureLime == null ? Resource.lblHyphen : recommendation.ManureLime == 0 ? recommendation.ManureLime : string.Concat(recommendation.ManureLime, " ", Resource.lbltonnes))</td>
+                                                            <td class="govuk-table__cell">@(recommendation.FertilizerLime == null ? Resource.lblHyphen : recommendation.FertilizerLime < 0 ? 0 : recommendation.FertilizerLime == 0 ? recommendation.FertilizerLime : string.Concat(recommendation.FertilizerLime, " ", Resource.lbltonnes))</td>
+                                                            <td class="govuk-table__cell">@(recommendation.FertiliserAppliedLime == null ? 0 : recommendation.FertiliserAppliedLime == 0 ? recommendation.FertiliserAppliedLime : string.Concat(recommendation.FertiliserAppliedLime, " ", Resource.lbltonnes))</td>
                                                         </tr>
                                                     </tbody>
-                                                </table>                                               
+                                                </table>
                                                 <p class="govuk-body-s margin-bottom-forty">@Resource.lblSourceRb209</p>
                                                 @if (Model.PKBalance != null && !isPkBalanceTableDisplay)
                                                 {
                                                     <h3 class="govuk-heading-s">
                                                         @Resource.lblPhosphateP2O5AndPotashK2OBalance
                                                     </h3>
-                                                    <div id="balance" class="margin-bottom-forty">
+                                                    <div id="balance">
                                                         <table class="govuk-table data-table">
                                                             <thead class="govuk-table__head">
                                                                 <tr class="govuk-table__row">
@@ -218,6 +229,7 @@
 
                                                 @if (Model.RecommendationComments != null && Model.RecommendationComments.Count > 0)
                                                 {
+                                                    
                                                     <h2 class="govuk-heading-m">@Resource.lblGuidance</h2>
                                                     <div class="guidance">
                                                         @foreach (var recCom in Model.RecommendationComments.Where(rc => rc.RecommendationID == recommendation.ID))
@@ -231,7 +243,7 @@
                                                                 </p>
                                                             }
                                                         }
-                                                    </div>
+                                                    </div>                                                   
                                                 }
 
                                             }
@@ -338,15 +350,15 @@
                                                             <td class="govuk-table__cell">@(recommendation.FertiliserAppliedSO3 == null ? 0 : recommendation.FertiliserAppliedSO3 == 0 ? recommendation.FertiliserAppliedSO3 : string.Concat(recommendation.FertiliserAppliedSO3, Resource.lblkg))</td>
                                                         </tr>
                                                         @* <tr class="govuk-table__row">
-                                                            <td class="govuk-table__cell"> @Resource.lblSodiumNa2O</td>
-                                                            <td class="govuk-table__cell">
-                                                                @(recommendation.SIndex == null ? Resource.lblHyphen : recommendation.NaIndex)
-                                                            </td>
-                                                            <td class="govuk-table__cell">@(recommendation.CropNa2O == null ? Resource.lblHyphen : recommendation.CropNa2O == 0 ? recommendation.CropNa2O : string.Concat(recommendation.CropNa2O, Resource.lblkg))</td>
-                                                            <td class="govuk-table__cell">@(recommendation.ManureNa2O == null ? 0 : recommendation.ManureNa2O == 0 ? recommendation.ManureNa2O : string.Concat(recommendation.ManureNa2O, Resource.lblkg))</td>
-                                                            <td class="govuk-table__cell">@(recommendation.FertilizerNa2O == null ? Resource.lblHyphen : recommendation.FertilizerNa2O < 0 ? 0 : recommendation.FertilizerNa2O == 0 ? recommendation.FertilizerNa2O : string.Concat(recommendation.FertilizerNa2O, Resource.lblkg))</td>
-                                                            <td class="govuk-table__cell">@(recommendation.FertiliserAppliedNa2O == null ? 0 : recommendation.FertiliserAppliedNa2O == 0 ? recommendation.FertiliserAppliedNa2O : string.Concat(recommendation.FertiliserAppliedNa2O, Resource.lblkg))</td>
-                                                        </tr> *@
+                        <td class="govuk-table__cell"> @Resource.lblSodiumNa2O</td>
+                        <td class="govuk-table__cell">
+                        @(recommendation.SIndex == null ? Resource.lblHyphen : recommendation.NaIndex)
+                        </td>
+                        <td class="govuk-table__cell">@(recommendation.CropNa2O == null ? Resource.lblHyphen : recommendation.CropNa2O == 0 ? recommendation.CropNa2O : string.Concat(recommendation.CropNa2O, Resource.lblkg))</td>
+                        <td class="govuk-table__cell">@(recommendation.ManureNa2O == null ? 0 : recommendation.ManureNa2O == 0 ? recommendation.ManureNa2O : string.Concat(recommendation.ManureNa2O, Resource.lblkg))</td>
+                        <td class="govuk-table__cell">@(recommendation.FertilizerNa2O == null ? Resource.lblHyphen : recommendation.FertilizerNa2O < 0 ? 0 : recommendation.FertilizerNa2O == 0 ? recommendation.FertilizerNa2O : string.Concat(recommendation.FertilizerNa2O, Resource.lblkg))</td>
+                        <td class="govuk-table__cell">@(recommendation.FertiliserAppliedNa2O == null ? 0 : recommendation.FertiliserAppliedNa2O == 0 ? recommendation.FertiliserAppliedNa2O : string.Concat(recommendation.FertiliserAppliedNa2O, Resource.lblkg))</td>
+                        </tr> *@
                                                         <tr class="govuk-table__row">
                                                             <td class="govuk-table__cell"> @Resource.lblMagnesiumMgO</td>
                                                             <td class="govuk-table__cell">
@@ -360,13 +372,13 @@
 
                                                         <tr class="govuk-table__row">
                                                             <td class="govuk-table__cell">@Resource.lblLime</td>
-                                                             <td class="govuk-table__cell">
+                                                            <td class="govuk-table__cell">
                                                                 @(recommendation.LimeIndex == null ? Resource.lblHyphen : recommendation.LimeIndex)
                                                             </td>
-                                                            <td class="govuk-table__cell">@(recommendation.CropLime == null ? Resource.lblHyphen : recommendation.CropLime == 0 ? recommendation.CropLime : string.Concat(recommendation.CropLime," ", Resource.lbltonnes))</td>
-                                                            <td class="govuk-table__cell">@(recommendation.ManureLime == null ? 0 : recommendation.ManureLime == 0 ? recommendation.ManureLime : string.Concat(recommendation.ManureLime," ", Resource.lbltonnes))</td>
-                                                            <td class="govuk-table__cell">@(recommendation.FertilizerLime == null ? Resource.lblHyphen : recommendation.FertilizerLime < 0 ? 0 : recommendation.FertilizerLime == 0 ? recommendation.FertilizerLime : string.Concat(recommendation.FertilizerLime," ", Resource.lbltonnes))</td>
-                                                            <td class="govuk-table__cell">@(recommendation.FertiliserAppliedLime == null ? 0 : recommendation.FertiliserAppliedLime == 0 ? recommendation.FertiliserAppliedLime : string.Concat(recommendation.FertiliserAppliedLime," ", Resource.lbltonnes))</td>
+                                                            <td class="govuk-table__cell">@(recommendation.CropLime == null ? Resource.lblHyphen : recommendation.CropLime == 0 ? recommendation.CropLime : string.Concat(recommendation.CropLime, " ", Resource.lbltonnes))</td>
+                                                            <td class="govuk-table__cell">@(recommendation.ManureLime == null ? 0 : recommendation.ManureLime == 0 ? recommendation.ManureLime : string.Concat(recommendation.ManureLime, " ", Resource.lbltonnes))</td>
+                                                            <td class="govuk-table__cell">@(recommendation.FertilizerLime == null ? Resource.lblHyphen : recommendation.FertilizerLime < 0 ? 0 : recommendation.FertilizerLime == 0 ? recommendation.FertilizerLime : string.Concat(recommendation.FertilizerLime, " ", Resource.lbltonnes))</td>
+                                                            <td class="govuk-table__cell">@(recommendation.FertiliserAppliedLime == null ? 0 : recommendation.FertiliserAppliedLime == 0 ? recommendation.FertiliserAppliedLime : string.Concat(recommendation.FertiliserAppliedLime, " ", Resource.lbltonnes))</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -376,7 +388,7 @@
                                                     <h3 class="govuk-heading-s">
                                                         @Resource.lblPhosphateP2O5AndPotashK2OBalance
                                                     </h3>
-                                                    <div id="balance" class="margin-bottom-forty">
+                                                    <div id="balance">
                                                         <table class="govuk-table data-table">
                                                             <thead class="govuk-table__head">
                                                                 <tr class="govuk-table__row">
@@ -406,8 +418,9 @@
                                                 }
                                                 @if (Model.RecommendationComments != null && Model.RecommendationComments.Count > 0)
                                                 {
+                                                   
                                                     <h2 class="govuk-heading-m">@Resource.lblGuidance</h2>
-                                                    <div class="guidance">
+                                                        <div class="guidance">
 
                                                         @foreach (var recCom in Model.RecommendationComments.Where(rc => rc.RecommendationID == recommendation.ID))
                                                         {
@@ -421,18 +434,19 @@
                                                             }
                                                         }
                                                     </div>
+                                                    
                                                 }
                                             }
                                         }
                                         <hr class="seperator_five">
                                         <h2 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h2>
-                                        <p class="govuk-body">
+                                        <p class="govuk-body govuk-grid-column-two-thirds">
                                             @Resource.lblAboutRecommendationGuidenceAdviceContent1
                                         </p>
-                                        <p class="govuk-body">
+                                        <p class="govuk-body govuk-grid-column-two-thirds">
                                             @Resource.lblAboutRecommendationGuidenceAdviceContent2
                                         </p>
-                                        <p class="govuk-body">
+                                        <p class="govuk-body govuk-grid-column-two-thirds">
                                             @Resource.lblAboutRecommendationGuidenceAdviceContent3
                                         </p>
                                         <p class="govuk-body mt-5 margin-top-forty"><a class="govuk-link" href="#">@Resource.lblBackToTheTop</a></p>
@@ -526,9 +540,9 @@
                                                             <td class="govuk-table__cell">
                                                                 @(fertiliserManure.ApplicationDate.Value.Date != null ? fertiliserManure.ApplicationDate.Value.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB")) : null)
                                                             </td>
-                                                         @*    <td class="govuk-table__cell">
-                                                                @string.Format(Resource.lblRateInKg, fertiliserManure.ApplicationRate)
-                                                            </td> *@
+                                                            @*    <td class="govuk-table__cell">
+                            @string.Format(Resource.lblRateInKg, fertiliserManure.ApplicationRate)
+                            </td> *@
                                                             <td class="govuk-table__cell">
                                                                 @if (fertiliserManure.N > 0)
                                                                 {
@@ -574,7 +588,7 @@
                                                                 }
                                                             </td>
                                                             <td class="govuk-table__cell">
-                                                                <p class="govuk-body cancel-link"><a asp-action="DeletePlanOrganicAndFertiliser" asp-controller="Crop" asp-route-q="@fertiliserManure.EncryptedId" asp-route-r="@ViewBag.Fertiliser" asp-route-s="@fertiliserManure.EncryptedFieldName" asp-route-u="@ViewBag.isComingFromRecommendation" asp-route-v="@Model.EncryptedFieldId">@Resource.lblRemove</a></p>
+                                                                <p class="govuk-body cancel-link"><a asp-action="RemoveFertiliser" asp-controller="FertiliserManure" asp-route-q="@fertiliserManure.EncryptedId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@fertiliserManure.EncryptedFieldName" asp-route-t="@Model.EncryptedFarmId" asp-route-u="@Model.EncryptedHarvestYear">@Resource.lblRemove</a></p>
                                                             </td>
 
                                                         </tr>
@@ -584,7 +598,7 @@
                                         }
                                         else
                                         {
-                                            <p class="govuk-body">@string.Format(Resource.lblYouHaveNoOrganicMaterialApplicationForFieldInYear, Model.FieldName, Model.Crops[0].Year)</p>
+                                            <p class="govuk-body">@string.Format(Resource.lblYouHaveNoInorganicFertiliserApplicationForFieldInYear, Model.FieldName, Model.Crops[0].Year)</p>
                                             <p class="govuk-body"><a asp-action="FieldGroup" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear" asp-route-s="@Model.EncryptedFieldId">@string.Format(Resource.lblAddAnInOrganicFertiliserApplicationForField, Model.FieldName)</a></p>
                                             <hr class="seperator_five">
                                         }
@@ -597,36 +611,32 @@
                     </govuk-tabs-item>
 
                     @* Crop details tab *@
-                    <govuk-tabs-item id="cropDetails" label="@Resource.lblCropDetails">
-                        <h2 class="govuk-heading-m non-standard">@string.Format(Resource.lblCropDetailsForFieldInYear, Model.FieldName, Model.Crops[0].Year)</h2>
+
+
+                    <govuk-tabs-item id="cropDetails" label="@(Model.Crops.Count == 2 ? Resource.lblCropDetails : Resource.lblCropFieldAndSoilDetails)">
+
+                        <h2 class="govuk-heading-m non-standard">@string.Format(Resource.lblCropFieldAndSoilDetailsForFieldInYear, Model.FieldName, Model.Crops[0].Year)</h2>
+                        <p class="govuk-body"><a asp-action="FieldSoilAnalysisDetail" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId" asp-route-t="@Model.EncryptedHarvestYear">@string.Format(Resource.lblViewFieldAndSoilAnalysisInformationForField, Model.FieldName)</a></p>
                         @foreach (var crop in Model.Crops)
                         {
                             <hr class="seperator_five">
                             <div class="tabs-thirds margin-bottom-forty">
                                 <h2 class="govuk-heading-m">
-                                    @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Other)
-                                    {
-                                        @crop.OtherCropName
-                                    }
-                                    else
-                                    {
-                                        @crop.CropTypeName
-                                    }
+                                    @string.Format(Resource.lblCropDetailsForField, Model.FieldName)
                                 </h2>
 
                                 <table class="govuk-table">
                                     <tbody class="govuk-table__body">
-                                        @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Other)
-                                        {
-                                            <tr class="govuk-table__row">
-                                                <th class="govuk-table__cell" scope="row">@Resource.lblCropType</th>
-                                                <td class="govuk-table__cell">@crop.CropTypeName</td>
-                                            </tr>
-                                        }
+
+                                        <tr class="govuk-table__row">
+                                            <th class="govuk-table__cell" scope="row">@Resource.lblCrop</th>
+                                            <td class="govuk-table__cell">@crop.CropTypeName</td>
+                                        </tr>
+
 
                                         <tr class="govuk-table__row">
                                             <th class="govuk-table__cell" scope="row">@Resource.lblVarietyForRecommendation</th>
-                                            <td class="govuk-table__cell">@(crop.Variety != null ? crop.Variety : Resource.lblNotEntered)</td>
+                                            <td class="govuk-table__cell">@((!string.IsNullOrWhiteSpace(crop.Variety)) ? crop.Variety : Resource.lblNotEntered)</td>
                                         </tr>
                                         <tr class="govuk-table__row">
                                             <th class="govuk-table__cell" scope="row">
@@ -650,16 +660,156 @@
 
                                     </tbody>
                                 </table>
-                                <p class="govuk-body"><a asp-action="RemoveCrop" asp-controller="Crop" asp-route-q="@crop.EncryptedCropTypeName" asp-route-s="@crop.EncryptedFieldName" asp-route-t="@crop.EncryptedFieldId" asp-route-u="@crop.EncryptedCropOrder">@string.Format(Resource.lblRemoveCropTypeFromFieldName, crop.CropTypeName, Model.FieldName)</a></p>
                             </div>
 
-                            @*  <p class="govuk-body"><a href="#">@string.Format(Resource.lblRemoveCropTypeFromFieldName, crop.CropTypeName, Model.FieldName)</a></p> *@
 
+                            <p class="govuk-body"><a asp-action="RemoveCrop" asp-controller="Crop" asp-route-q="@crop.EncryptedCropTypeName" asp-route-s="@crop.EncryptedFieldName" asp-route-t="@crop.EncryptedFieldId" asp-route-u="@crop.EncryptedCropOrder">@string.Format(Resource.lblRemoveCropTypeFromFieldName, crop.CropTypeName, Model.FieldName)</a></p>
+                            @if (crop.IsSnsExist != true)
+                            {
+                                <p class="govuk-body"><a asp-action="SoilSampleDate" asp-controller="SnsAnalysis" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-c="@crop.EncryptedCropId" asp-route-f="@crop.EncryptedFieldName">@string.Format(Resource.lblAddASoilMineralNitrogenAnalysisResultForCrop, (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Other ? crop.OtherCropName : crop.CropTypeName))</a></p>
+                            }
+                            else
+                            {
+                                <hr class="seperator_five">
+                                <h2 class="govuk-heading-m non-standard">@string.Format(Resource.lblSoilNitrogenSupplyAnalysisForField, Model.FieldName)</h2>
+                                <div class="tabs-thirds margin-bottom-forty">
+                                    <table class="govuk-table">
+                                        <tbody class="govuk-table__body">
+                                            <tr class="govuk-table__row">
+                                                <td class="govuk-table__cell">
+                                                    @Resource.lblDateSample
+                                                </td>
+                                                <td class="govuk-table__cell">@crop.SnsAnalysisData.SampleDate.Value.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))</td>
+                                            </tr>
+                                            @if (crop.SnsAnalysisData.SnsAt0to30cm != null && crop.SnsAnalysisData.SnsAt0to30cm > 0)
+                                            {
+                                                <tr class="govuk-table__row">
+                                                    <td class="govuk-table__cell">
+                                                        @Resource.lblKilogramsOfSoilMineralNitrogenAt030CM
+                                                    </td>
+                                                    <td class="govuk-table__cell"> @string.Concat(crop.SnsAnalysisData.SnsAt0to30cm, Resource.lblkg)</td>
+                                                </tr>
+                                            }
+                                            @if (crop.SnsAnalysisData.SnsAt30to60cm != null && crop.SnsAnalysisData.SnsAt30to60cm > 0)
+                                            {
+                                                <tr class="govuk-table__row">
+                                                    <td class="govuk-table__cell">
+                                                        @Resource.lblKilogramsOfSoilMineralNitrogenAt3060CM
+                                                    </td>
+                                                    <td class="govuk-table__cell">@string.Concat(crop.SnsAnalysisData.SnsAt30to60cm, Resource.lblkg)</td>
+                                                </tr>
+                                            }
+                                            @if (crop.SnsAnalysisData.SnsAt60to90cm != null && crop.SnsAnalysisData.SnsAt60to90cm > 0)
+                                            {
+                                                <tr class="govuk-table__row">
+                                                    <td class="govuk-table__cell">
+                                                        @Resource.lblKilogramsOfSoilMineralNitrogenAt6090CMOptional
+                                                    </td>
+                                                    <td class="govuk-table__cell">@string.Concat(crop.SnsAnalysisData.SnsAt60to90cm, Resource.lblkg)</td>
+                                                </tr>
+                                            }
+                                            @if (crop.SnsAnalysisData.SampleDepth.HasValue)
+                                            {
+                                                <tr class="govuk-table__row">
+                                                    <td class="govuk-table__cell">
+                                                        @Resource.lblSampleDepth
+                                                    </td>
+                                                    <td class="govuk-table__cell">@crop.SnsAnalysisData.SampleDepth</td>
+                                                </tr>
+                                            }
+                                            @if (crop.SnsAnalysisData.SoilMineralNitrogen.HasValue)
+                                            {
+                                                <tr class="govuk-table__row">
+                                                    <td class="govuk-table__cell">
+                                                        @Resource.lblSoilMineralNitrogen
+                                                    </td>
+                                                    <td class="govuk-table__cell">@string.Concat(crop.SnsAnalysisData.SoilMineralNitrogen, Resource.lblKgPerHectare)</td>
+                                                </tr>
+                                            }
+                                            @if (crop.SnsAnalysisData.NumberOfShoots != null && crop.SnsAnalysisData.NumberOfShoots > 0)
+                                            {
+                                                <tr class="govuk-table__row">
+                                                    <td class="govuk-table__cell">
+                                                        @Resource.lblNumberOfShootsPerSquareMetre
+                                                    </td>
+                                                    <td class="govuk-table__cell">@string.Format(Resource.lblShootsPerSquareMetre, crop.SnsAnalysisData.NumberOfShoots)</td>
+                                                </tr>
+                                            }
+                                            @if (crop.SnsAnalysisData.SeasonId != 0)
+                                            {
+                                                <tr class="govuk-table__row">
+                                                    <td class="govuk-table__cell">
+                                                        @Resource.lblSeason
+                                                    </td>
+                                                    <td class="govuk-table__cell">@(crop.SnsAnalysisData.SeasonId == (int)NMP.Portal.Enums.Season.Autumn ? Resource.lblAutumn : Resource.lblSpring)</td>
+                                                </tr>
+                                            }
+                                            @if (crop.SnsAnalysisData.CropHeight.HasValue)
+                                            {
+                                                <tr class="govuk-table__row">
+                                                    <td class="govuk-table__cell">
+                                                        @Resource.lblCropHeight
+                                                    </td>
+                                                    <td class="govuk-table__cell">@crop.SnsAnalysisData.CropHeight</td>
+                                                </tr>
+                                            }
+                                            @if (crop.SnsAnalysisData.GreenAreaIndex.HasValue)
+                                            {
+                                                <tr class="govuk-table__row">
+                                                    <td class="govuk-table__cell">
+                                                        @Resource.lblGreenAreaIndex
+                                                    </td>
+                                                    <td class="govuk-table__cell">@crop.SnsAnalysisData.GreenAreaIndex</td>
+                                                </tr>
+                                            }
+                                            @if (crop.SnsAnalysisData.PercentageOfOrganicMatter != null && crop.SnsAnalysisData.PercentageOfOrganicMatter > 0)
+                                            {
+                                                <tr class="govuk-table__row">
+                                                    <td class="govuk-table__cell">
+                                                        @Resource.lblPercentageOfOrganicMatter
+                                                    </td>
+                                                    <td class="govuk-table__cell">
+                                                        @string.Concat(crop.SnsAnalysisData.PercentageOfOrganicMatter % 1 == 0
+                                                                 ? ((int)crop.SnsAnalysisData.PercentageOfOrganicMatter).ToString()
+                                                                 : crop.SnsAnalysisData.PercentageOfOrganicMatter.ToString(), Resource.lblPercentage)
+                                                    </td>
+                                                </tr>
+                                            }
+
+                                            @if (crop.SnsAnalysisData.AdjustmentValue != null && crop.SnsAnalysisData.AdjustmentValue > 0)
+                                            {
+                                                <tr class="govuk-table__row">
+                                                    <td class="govuk-table__cell">
+                                                        @Resource.lblPercentageOfOrganicMatter
+                                                    </td>
+                                                    <td class="govuk-table__cell">
+                                                        @string.Concat(crop.SnsAnalysisData.AdjustmentValue % 1 == 0
+                                                                 ? ((int)crop.SnsAnalysisData.AdjustmentValue).ToString()
+                                                                 : crop.SnsAnalysisData.AdjustmentValue.ToString(), Resource.lblKgPerHectare)
+                                                    </td>
+                                                </tr>
+                                            }
+
+                                            <tr class="govuk-table__row">
+                                                <td class="govuk-table__cell">
+                                                    @Resource.lblSnsIndex
+                                                </td>
+                                                <td class="govuk-table__cell">@string.Concat(crop.SnsAnalysisData.SoilNitrogenSupplyValue, Resource.lblKgPerHectare)</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                
+                              <p class="govuk-body"><a asp-action="RemoveSnsAnalysis" asp-controller="SnsAnalysis" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-c="@crop.EncryptedCropId">@Resource.lblRemoveTheSoilNitrogenSupplyAnalysis</a></p>
+
+                            }
                         }
 
                     </govuk-tabs-item>
                 </govuk-tabs>
             </div>
         }
-    </div>
-}
+
+    }
+</div>

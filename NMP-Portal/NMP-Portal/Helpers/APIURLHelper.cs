@@ -110,6 +110,7 @@ namespace NMP.Portal.Helpers
         public const string DeleteSoilAnalysisByIdAPI = "soilAnalysis/{0}";
         public const string DeleteCropPlanByIdsAPI = "crops/{0}";
         public const string DeleteFertiliserByIdAPI = "fertiliser-manures/{0}";
+        public const string DeleteFertiliserByIdsAPI = "fertiliser-manures/";
         public const string DeleteOrganicManureByAPI = "organic-manures/";
         public const string FetchOrganicManureByIdAPI = "organic-manures/{0}";
         public const string FetchOrganicManureByFarmIdAndYearAPI = "organic-manures/{0}/year={1}";
@@ -118,6 +119,12 @@ namespace NMP.Portal.Helpers
         public const string FetchExcessWinterRainfallOptionAPI = "/excess-winter-rainfall-options";
         public const string AddOrUpdateExcessWinterRainfallAPI = "/excessRainfalls/{0}?year={1}";
         public const string FetchExcessWinterRainfallOptionByIdAPI = "/excess-winter-rainfall-options/value/{0}";
+        public const string FetchCropGroupNameByCropIdGroupNameAndYearAPI = "/crops/GroupNameExist/{0}?newGroupName={1}&year={2}";
+        public const string UpdateCropGroupNameWithVarietyAPI = "crops/CropGroupName/{0}?cropGroupName={1}&variety={2}&year={3}";
+        public const string DeleteSNSAnalysisAPI = "/snsAnalysis/{0}";
+        public const string FetchFertiliserByIdAPI = "/fertiliser-manures/{0}";
+        public const string FetchFieldWithSameDateAndNutrientAPI = "/fertiliser-manures/FertliserData/{0}?farmId={1}&harvestYear={2}";
+        public const string UpdateFertiliserAPI = "/fertiliser-manures";
 
         //Manner APi Url
         public const string FetchMannerApplicationMethodByIdAsyncAPI = "vendors/manner/application-methods/{0}";
@@ -151,5 +158,10 @@ namespace NMP.Portal.Helpers
         public const string FetchUserExtensionAPI = "user-extension";
         public const string UpdateUserExtensionTermsOfUseAPI = "user-extension/accept-terms-of-use";
         public const string UpdateUserExtensionDoNotShowAboutServiceAPI = "user-extension/show-about-service";
+
+        public const string FetchSnsAnalysisByCropIdAsyncAPI = "sns-analyses/crop/{0}";
+        public const string AddSnsAnalysisAsyncAPI = "sns-analyses";
+
+        public const string FetchGrassSeasonsAsyncAPI = "vendors/rb209/Grassland/GrasslandSeasons/{0}";
     }
 }

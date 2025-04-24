@@ -49,6 +49,14 @@
                             @TempData["successMsgSecond"]
                         </p>
                     }
+                    @if (TempData["successMsgLink"] != null)
+                    {
+                        <p class="govuk-body">
+                            <a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@TempData["successMsgLink"]" asp-route-s="@Model.EncryptedHarvestYear">
+                                @string.Format(Resource.MsgViewFieldUpdatedNutrientRecommendations,TempData["fieldName"])
+                            </a>
+                        </p>
+                    }
                 </govuk-notification-banner>
             }
         </div>
@@ -84,7 +92,6 @@
                         {
                             @foreach (var harvestYearPlan in Model.HarvestYearPlans.FieldData)
                             {
-
                                 <div class="tab-left margin-bottom-thirty">
                                     <h2 class="govuk-heading-m margin-bottom-ten">
                                         @harvestYearPlan.CropTypeName
@@ -95,7 +102,8 @@
                                     </h2>
                                     <p class="govuk-body"></p>
                                 </div>
-                                <a class=" govuk-button govuk-button--secondary" asp-action="RemoveCrop" asp-controller="Crop" asp-route-q="@harvestYearPlan.EncryptedCropTypeName" asp-route-r="@harvestYearPlan.EncryptedCropGroupName">@Resource.lblRemoveThisGroup</a>
+                                <a class=" govuk-button govuk-button--secondary" asp-action="UpdateCropGroupNameCheckAnswer" asp-controller="Crop" asp-route-q="@harvestYearPlan.EncryptedCropTypeName" asp-route-r="@harvestYearPlan.EncryptedCropGroupName">@Resource.lblUpdateThisGroup</a>
+                                @* <a class=" govuk-button govuk-button--secondary" asp-action="RemoveCrop" asp-controller="Crop" asp-route-q="@harvestYearPlan.EncryptedCropTypeName" asp-route-r="@harvestYearPlan.EncryptedCropGroupName">@Resource.lblRemoveThisGroup</a> *@
                                 <div class="tab-right">
 
                                     @* <govuk-button type="submit" class="govuk-button--secondary update-button">
@@ -204,7 +212,7 @@
                                         <th scope="col" class="govuk-table__header">@Resource.lblCrop</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblType</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblRate</th>
-                                         <th scope="col" class="govuk-table__header"></th> 
+                                        <th scope="col" class="govuk-table__header"></th>
                                     </tr>
                                 </thead>
                                 <tbody class="govuk-table__body">
@@ -341,13 +349,21 @@
                                                 {
                                                     <span class="nutrient-list">@string.Format(Resource.lblKgWithNutrient, inorganicFertiliser.SO3, Resource.lblSulphurSO3)</span>
                                                 }
+                                                @if (inorganicFertiliser.MgO != null && inorganicFertiliser.MgO > 0)
+                                                {
+                                                    <span class="nutrient-list">@string.Format(Resource.lblKgWithNutrient, inorganicFertiliser.MgO, Resource.lblMagnesiumMgO)</span>
+                                                }
                                                 @if (inorganicFertiliser.Lime != null && inorganicFertiliser.Lime > 0)
                                                 {
                                                     <span class="nutrient-list">@string.Format(Resource.lblTonneWithNutrient, inorganicFertiliser.Lime, Resource.lblLime)</span>
                                                 }
 
                                             </td>
-                                            <td class="govuk-table__cell"><a asp-action="DeletePlanOrganicAndFertiliser" asp-controller="Crop" asp-route-q="@inorganicFertiliser.EncryptedFertId" asp-route-r="@ViewBag.Fertliser" asp-route-s="@inorganicFertiliser.EncryptedFieldName">@Resource.lblRemove</a></td>
+                                            <td class="govuk-table__cell">
+                                                @* <a asp-action="DeletePlanOrganicAndFertiliser" asp-controller="Crop" asp-route-q="@inorganicFertiliser.EncryptedFertId" asp-route-r="@ViewBag.Fertliser" asp-route-s="@inorganicFertiliser.EncryptedFieldName">@Resource.lblRemove</a>
+                                                <br /> *@
+                                                <a asp-action="CheckAnswer" asp-controller="FertiliserManure" asp-route-q="@inorganicFertiliser.EncryptedFertId" asp-route-r="@Model.EncryptedFarmId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-t="@inorganicFertiliser.EncryptedFieldName">@Resource.lblChange</a>
+                                            </td>
                                         </tr>
                                     }
                                 </tbody>

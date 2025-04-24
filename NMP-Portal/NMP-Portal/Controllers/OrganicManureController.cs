@@ -107,7 +107,7 @@ namespace NMP.Portal.Controllers
                         model.FieldGroup = Resource.lblSelectSpecificFields;
                         model.FieldGroupName = Resource.lblSelectSpecificFields;
                         model.IsComingFromRecommendation = true;
-                        string fieldId = _cropDataProtector.Unprotect(s);
+                        string fieldId = _fieldDataProtector.Unprotect(s);
                         model.FieldList.Add(fieldId);
                         (List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldId, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup, null);
                         if (error == null)
@@ -1053,13 +1053,13 @@ namespace NMP.Portal.Controllers
                 {
                     if (manureTypeList.Count > 0)
                     {
-
-                        var SelectListItem = manureTypeList.Select(f => new SelectListItem
+                        var manures = manureTypeList.OrderBy(m => m.SortOrder).ToList();
+                        var SelectListItem = manures.Select(f => new SelectListItem
                         {
                             Value = f.Id.ToString(),
-                            Text = f.Name.ToString()
+                            Text = f.Name
                         }).ToList();
-                        ViewBag.ManureTypeList = SelectListItem.OrderBy(x => x.Text).ToList();
+                        ViewBag.ManureTypeList = SelectListItem.ToList();
                     }
                     return View(model);
                 }
@@ -1098,10 +1098,11 @@ namespace NMP.Portal.Controllers
                     {
                         if (manureTypeList.Count > 0)
                         {
-                            var SelectListItem = manureTypeList.Select(f => new SelectListItem
+                            var manures = manureTypeList.OrderBy(m => m.SortOrder).ToList();
+                            var SelectListItem = manures.Select(f => new SelectListItem
                             {
                                 Value = f.Id.ToString(),
-                                Text = f.Name.ToString()
+                                Text = f.Name
                             }).ToList();
                             ViewBag.ManureTypeList = SelectListItem.OrderBy(x => x.Text).ToList(); ;
 
@@ -2453,7 +2454,7 @@ namespace NMP.Portal.Controllers
                     if (totalMagnesiumOxideError != null && totalMagnesiumOxideError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["MgO"].RawValue, Resource.lblMgO)))
                     {
                         ModelState["MgO"].Errors.Clear();
-                        ModelState["MgO"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblTotalMagnesiumOxide));
+                        ModelState["MgO"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblMagnesiumMgO));
                     }
                 }
                 if (model.DryMatterPercent == null)
@@ -2490,7 +2491,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.MgO == null)
                 {
-                    ModelState.AddModelError("MgO", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblMagnesium.ToLower()));
+                    ModelState.AddModelError("MgO", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblMagnesiumMgO.ToLower()));
                 }
 
                 if (model.N != null && model.NH4N != null && model.UricAcid != null && model.NO3N != null)
@@ -2572,7 +2573,7 @@ namespace NMP.Portal.Controllers
                 {
                     if (model.MgO < 0 || model.MgO > 99)
                     {
-                        ModelState.AddModelError("MgO", string.Format(Resource.MsgMinMaxValidation, Resource.lblTotalMagnesiumOxide, 99));
+                        ModelState.AddModelError("MgO", string.Format(Resource.MsgMinMaxValidation, Resource.lblMagnesiumMgO, 99));
                     }
                 }
 
@@ -3193,7 +3194,7 @@ namespace NMP.Portal.Controllers
             {
                 return View("AreaQuantity", model);
             }
-            model.ApplicationRate = (model.Quantity.Value / model.Area.Value);
+            model.ApplicationRate =Math.Round((model.Quantity.Value / model.Area.Value),1);
             Error error = new Error();
             if (model.OrganicManures.Count > 0)
             {
@@ -3338,7 +3339,7 @@ namespace NMP.Portal.Controllers
             (List<IncorporationMethodResponse> incorporationMethods, error) = await _organicManureService.FetchIncorporationMethodsByApplicationId(model.ApplicationMethod.Value, applicableForArableOrGrass);
             if (error == null && incorporationMethods.Count > 0)
             {
-                ViewBag.IncorporationMethod = incorporationMethods;
+                ViewBag.IncorporationMethod = incorporationMethods.OrderBy(i=>i.SortOrder).ToList();
             }
             return View(model);
 
@@ -3919,7 +3920,7 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("Recommendations", "Crop", new
                     {
                         q = model.EncryptedFarmId,
-                        r = _cropDataProtector.Protect(fieldId),
+                        r = _fieldDataProtector.Protect(fieldId),
                         s = model.EncryptedHarvestYear
 
                     });
@@ -5090,7 +5091,7 @@ namespace NMP.Portal.Controllers
                             (FieldDetailResponse fieldDetail, error) = await _fieldService.FetchFieldDetailByFieldIdAndHarvestYear(fieldId, model.HarvestYear.Value, false);
                             if (error == null)
                             {
-                                (previousApplicationsN, error) = await _organicManureService.FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(managementId, false);
+                                (previousApplicationsN, error) = await _organicManureService.FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(managementId,null, false);
                                 if (error == null)
                                 {
                                     decimal nMaxLimit = 0;

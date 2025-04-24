@@ -9,6 +9,8 @@ namespace NMP.Portal.ServiceResponses
 
         [JsonProperty("snsIndex")]
         public int SnsIndex { get; set; }
+        [JsonProperty("SNSMethod")]
+        public string? SNSMethod { get; set; }
 
     }
 }
