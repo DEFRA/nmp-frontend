@@ -1852,7 +1852,7 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    ViewBag.SwardType = swardTypeResponses.FirstOrDefault(x=>x.SwardTypeId==model.SwardTypeId)?.SwardType;
+                    ViewBag.SwardType = swardTypeResponses.FirstOrDefault(x =>x.SwardTypeId==model.SwardTypeId)?.SwardType;
                 }
 
             }
@@ -2752,12 +2752,15 @@ namespace NMP.Portal.Controllers
                                 }
 
                                 string defolicationName = string.Empty;
-                                if ((string.IsNullOrWhiteSpace(defolicationName)) && recommendation.Crops.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                if (recommendation.Crops.SwardTypeID != null && recommendation.Crops.PotentialCut != null && recommendation.Crops.DefoliationSequenceID != null)
                                 {
-                                    (List<DefoliationSequenceResponse> defResponse, Error grassError) = await _cropService.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCut(recommendation.Crops.SwardTypeID.Value, recommendation.Crops.PotentialCut.Value);
-                                    if (grassError == null && defResponse.Count > 0)
+                                    if ((string.IsNullOrWhiteSpace(defolicationName)) && recommendation.Crops.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
                                     {
-                                        defolicationName = defResponse.Where(x => x.DefoliationSequenceId == recommendation.Crops.DefoliationSequenceID).Select(x => x.DefoliationSequence).FirstOrDefault();
+                                        (List<DefoliationSequenceResponse> defResponse, Error grassError) = await _cropService.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCut(recommendation.Crops.SwardTypeID.Value, recommendation.Crops.PotentialCut.Value);
+                                        if (grassError == null && defResponse.Count > 0)
+                                        {
+                                            defolicationName = defResponse.Where(x => x.DefoliationSequenceId == recommendation.Crops.DefoliationSequenceID).Select(x => x.DefoliationSequenceDescription).FirstOrDefault();
+                                        }
                                     }
                                 }
                                 var defolicationParts = (!string.IsNullOrWhiteSpace(defolicationName)) ? defolicationName.Split(',') : null;
@@ -2772,7 +2775,7 @@ namespace NMP.Portal.Controllers
                                             ID = recData.ManagementPeriod.ID,
                                             CropID = recData.ManagementPeriod.CropID,
                                             Defoliation = recData.ManagementPeriod.Defoliation,
-                                            DefoliationSequenceName = defIndex < defolicationParts.Length ? defolicationParts[defIndex] : string.Empty,
+                                            DefoliationSequenceName = (defolicationParts != null && defIndex < defolicationParts.Length) ? defolicationParts[defIndex] : string.Empty,
                                             Utilisation1ID = recData.ManagementPeriod.Utilisation1ID,
                                             Utilisation2ID = recData.ManagementPeriod.Utilisation2ID,
                                             PloughedDown = recData.ManagementPeriod.PloughedDown
@@ -4354,7 +4357,7 @@ namespace NMP.Portal.Controllers
             {
                 fieldIds.Add(crop.FieldID ?? 0);
             }
-           
+
 
             (List<GrassGrowthClassResponse> grassGrowthClasses, error) = await _cropService.FetchGrassGrowthClass(fieldIds);
 
@@ -4434,7 +4437,7 @@ namespace NMP.Portal.Controllers
             List<int> fieldIds = new List<int>();
             List<int> grassGrowthClassIds = new List<int>();
             Error error = new Error();
-            
+
             try
             {
                 if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
@@ -4463,7 +4466,7 @@ namespace NMP.Portal.Controllers
                         grassGrowthClassIds.Add(grassGrowthClass.GrassGrowthClassId);
                     }
                 }
-                
+
                 if (string.IsNullOrWhiteSpace(q) && model.Crops != null && model.Crops.Count > 0)
                 {
                     model.DryMatterYieldEncryptedCounter = _fieldDataProtector.Protect(model.DryMatterYieldCounter.ToString());
