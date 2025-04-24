@@ -4082,16 +4082,6 @@ namespace NMP.Portal.Controllers
                     }
                 }
 
-                //List<GrassGrowthClassResponse> grassGrowthClasses = new List<GrassGrowthClassResponse>()
-                //{
-                //    new GrassGrowthClassResponse{GrassGrowthClassId=1,GrassGrowthClassName="Good" },
-                //    new GrassGrowthClassResponse{GrassGrowthClassId=1,GrassGrowthClassName="Good"}
-                //};
-                //foreach (var grassGrowthClass in grassGrowthClasses)
-                //{
-                //    grassGrowthClassIds.Add(grassGrowthClass.GrassGrowthClassId);
-                //}
-
                 model.GrassGrowthClassDistinctCount = grassGrowthClassIds.Distinct().Count();
                 if (model.GrassGrowthClassDistinctCount > 1)
                 {
@@ -4204,16 +4194,6 @@ namespace NMP.Portal.Controllers
                 }
             }
 
-            //List<GrassGrowthClassResponse> grassGrowthClasses = new List<GrassGrowthClassResponse>()
-            //    {
-            //        new GrassGrowthClassResponse{GrassGrowthClassId=1,GrassGrowthClassName="Good" },
-            //        new GrassGrowthClassResponse{GrassGrowthClassId=1,GrassGrowthClassName="Good"}
-            //    };
-            //foreach (var grassGrowthClass in grassGrowthClasses)
-            //{
-            //    grassGrowthClassIds.Add(grassGrowthClass.GrassGrowthClassId);
-            //}
-
             model.GrassGrowthClassDistinctCount = grassGrowthClassIds.Distinct().Count();
             if (model.GrassGrowthClassDistinctCount > 1)
             {
@@ -4306,13 +4286,7 @@ namespace NMP.Portal.Controllers
                         grassGrowthClassIds.Add(grassGrowthClass.GrassGrowthClassId);
                     }
                 }
-                //List<GrassGrowthClassResponse> grassGrowthClasses = new List<GrassGrowthClassResponse>()
-                //{
-                //    new GrassGrowthClassResponse{GrassGrowthClassId=1,GrassGrowthClassName="Good" },
-                //    new GrassGrowthClassResponse{GrassGrowthClassId=1,GrassGrowthClassName="Good"}
-                //};
-
-
+                
                 if (string.IsNullOrWhiteSpace(q) && model.Crops != null && model.Crops.Count > 0)
                 {
                     model.DryMatterYieldEncryptedCounter = _fieldDataProtector.Protect(model.DryMatterYieldCounter.ToString());
@@ -4388,17 +4362,15 @@ namespace NMP.Portal.Controllers
             {
                 return View(model);
             }
-            //List<GrassGrowthClassResponse> grassGrowthClasses = new List<GrassGrowthClassResponse>()
-            //    {
-            //        new GrassGrowthClassResponse{GrassGrowthClassId=1,GrassGrowthClassName="Good" },
-            //        new GrassGrowthClassResponse{GrassGrowthClassId=1,GrassGrowthClassName="Good"}
-            //    };
-
+            foreach (var crop in model.Crops)
+            {
+                fieldIds.Add(crop.FieldID ?? 0);
+            }
             (List<GrassGrowthClassResponse> grassGrowthClasses, error) = await _cropService.FetchGrassGrowthClass(fieldIds);
             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
             {
-                TempData["GrassGrowthClassError"] = error.Message;
-                return RedirectToAction("DefoliationSequence");
+                TempData["DryMatterYieldError"] = error.Message;
+                return RedirectToAction("GrassGrowthClass");
             }
             else
             {
@@ -4422,7 +4394,7 @@ namespace NMP.Portal.Controllers
                             (List<YieldRangesEnglandAndWalesResponse> yieldRangesEnglandAndWalesResponses, error) = await _cropService.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(model.DefoliationSequenceId ?? 0, grassGrowthClasses[i + 1].GrassGrowthClassId);
                             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                             {
-                                TempData["GrassGrowthClassError"] = error.Message;
+                                TempData["DryMatterYieldError"] = error.Message;
                                 return RedirectToAction("GrassGrowthClass");
                             }
                             else
