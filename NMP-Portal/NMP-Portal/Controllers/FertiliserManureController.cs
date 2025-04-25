@@ -852,7 +852,7 @@ namespace NMP.Portal.Controllers
                             }
                             if (recommendationViewModel.ManagementPeriods == null)
                             {
-                                recommendationViewModel.ManagementPeriods = new List<ManagementPeriod>();
+                                recommendationViewModel.ManagementPeriods = new List<ManagementPeriodViewModel>();
                             }
                             if (recommendationViewModel.Recommendations == null)
                             {
@@ -879,7 +879,7 @@ namespace NMP.Portal.Controllers
                                     {
                                         foreach (var recData in recommendation.RecommendationData)
                                         {
-                                            var ManagementPeriods = new ManagementPeriod
+                                            var ManagementPeriods = new ManagementPeriodViewModel
                                             {
                                                 ID = recData.ManagementPeriod.ID,
                                                 CropID = recData.ManagementPeriod.CropID,
@@ -1123,7 +1123,7 @@ namespace NMP.Portal.Controllers
                                 }
                                 if (recommendationViewModel.ManagementPeriods == null)
                                 {
-                                    recommendationViewModel.ManagementPeriods = new List<ManagementPeriod>();
+                                    recommendationViewModel.ManagementPeriods = new List<ManagementPeriodViewModel>();
                                 }
                                 if (recommendationViewModel.Recommendations == null)
                                 {
@@ -1150,7 +1150,7 @@ namespace NMP.Portal.Controllers
                                         {
                                             foreach (var recData in recommendation.RecommendationData)
                                             {
-                                                var ManagementPeriods = new ManagementPeriod
+                                                var ManagementPeriods = new ManagementPeriodViewModel
                                                 {
                                                     ID = recData.ManagementPeriod.ID,
                                                     CropID = recData.ManagementPeriod.CropID,
