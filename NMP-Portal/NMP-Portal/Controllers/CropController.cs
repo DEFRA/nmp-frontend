@@ -2656,7 +2656,7 @@ namespace NMP.Portal.Controllers
                             }
                             if (model.ManagementPeriods == null)
                             {
-                                model.ManagementPeriods = new List<ManagementPeriod>();
+                                model.ManagementPeriods = new List<ManagementPeriodViewModel>();
                             }
                             if (model.Recommendations == null)
                             {
@@ -2702,6 +2702,11 @@ namespace NMP.Portal.Controllers
                                     SwardTypeName = recommendation.Crops.SwardTypeName,
                                     DefoliationSequenceName = recommendation.Crops.DefoliationSequenceName,
                                     CropGroupName = recommendation.Crops.CropGroupName,
+                                    SwardManagementID = recommendation.Crops.SwardManagementID,
+                                    Establishment = recommendation.Crops.Establishment,
+                                    SwardTypeID = recommendation.Crops.SwardTypeID,
+                                    DefoliationSequenceID = recommendation.Crops.DefoliationSequenceID,
+                                    PotentialCut = recommendation.Crops.PotentialCut,
 
                                 };
                                 if (!string.IsNullOrWhiteSpace(crop.CropTypeName))
@@ -2745,20 +2750,39 @@ namespace NMP.Portal.Controllers
                                     model.PKBalance.KBalance = recommendation.PKBalance.KBalance;
 
                                 }
+
+                                string defolicationName = string.Empty;
+                                if (recommendation.Crops.SwardTypeID != null && recommendation.Crops.PotentialCut != null && recommendation.Crops.DefoliationSequenceID != null)
+                                {
+                                    if ((string.IsNullOrWhiteSpace(defolicationName)) && recommendation.Crops.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                    {
+                                        (List<DefoliationSequenceResponse> defResponse, Error grassError) = await _cropService.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCut(recommendation.Crops.SwardTypeID.Value, recommendation.Crops.PotentialCut.Value);
+                                        if (grassError == null && defResponse.Count > 0)
+                                        {
+                                            defolicationName = defResponse.Where(x => x.DefoliationSequenceId == recommendation.Crops.DefoliationSequenceID).Select(x => x.DefoliationSequenceDescription).FirstOrDefault();
+                                        }
+                                    }
+                                }
+                                var defolicationParts = (!string.IsNullOrWhiteSpace(defolicationName)) ? defolicationName.Split(',') : null;
+
+                                int defIndex = 0;
                                 if (recommendation.RecommendationData.Count > 0)
                                 {
                                     foreach (var recData in recommendation.RecommendationData)
                                     {
-                                        var ManagementPeriods = new ManagementPeriod
+                                        var ManagementPeriods = new ManagementPeriodViewModel
                                         {
                                             ID = recData.ManagementPeriod.ID,
                                             CropID = recData.ManagementPeriod.CropID,
                                             Defoliation = recData.ManagementPeriod.Defoliation,
+                                            DefoliationSequenceName = (defolicationParts != null && defIndex < defolicationParts.Length) ? defolicationParts[defIndex] : string.Empty,
                                             Utilisation1ID = recData.ManagementPeriod.Utilisation1ID,
                                             Utilisation2ID = recData.ManagementPeriod.Utilisation2ID,
                                             PloughedDown = recData.ManagementPeriod.PloughedDown
                                         };
                                         model.ManagementPeriods.Add(ManagementPeriods);
+
+                                        defIndex++;
                                         var rec = new Recommendation
                                         {
                                             ID = recData.Recommendation.ID,

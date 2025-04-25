@@ -4388,4 +4388,7 @@ live</value>
   <data name="lblIfYouSelectYesWeWillGiveYouSulphurRecom" xml:space="preserve">
     <value>If you select Yes, we will give you sulphur (S) recommendations in your nutrient management plan</value>
   </data>
+  <data name="lblRecommendationsForGrass" xml:space="preserve">
+    <value>Recommendations {0} - {1}</value>
+  </data>
 </root>
