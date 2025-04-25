@@ -194,6 +194,10 @@ namespace NMP.Portal.Controllers
                                 totalCount++;
                                 if (cropData.CropOrder == 1)
                                 {
+                                    cropData.SwardManagementName = cropData.SwardManagementName;
+                                    cropData.EstablishmentName = cropData.EstablishmentName;
+                                    cropData.SwardTypeName = cropData.SwardTypeName;
+                                    cropData.DefoliationSequenceName = cropData.DefoliationSequenceName;
                                     if (cropData.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
                                     {
                                         totalGrassArea += (int)Math.Round(fieldData.TotalArea.Value);
@@ -203,14 +207,33 @@ namespace NMP.Portal.Controllers
                                         totalArableArea += (int)Math.Round(fieldData.TotalArea.Value);
                                     }
                                 }
+                                string defolicationName = string.Empty;
+                                if (cropData.SwardTypeID != null && cropData.PotentialCut != null && cropData.DefoliationSequenceID != null)
+                                {
+                                    if ((string.IsNullOrWhiteSpace(defolicationName)) && cropData.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                    {
+                                        (List<DefoliationSequenceResponse> defResponse, Error grassError) = await _cropService.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCut(cropData.SwardTypeID.Value, cropData.PotentialCut.Value);
+                                        if (grassError == null && defResponse.Count > 0)
+                                        {
+                                            defolicationName = defResponse.Where(x => x.DefoliationSequenceId == cropData.DefoliationSequenceID).Select(x => x.DefoliationSequenceDescription).FirstOrDefault();
+                                        }
+                                    }
+                                }
+                                int defIndex = 0;
                                 foreach (var manData in cropData.ManagementPeriods)
                                 {
+                                    var defolicationParts = (!string.IsNullOrWhiteSpace(defolicationName)) ? defolicationName.Split(',') : null;
+                                    if (manData != null)
+                                    {
+                                        manData.DefoliationSequenceName = (defolicationParts != null && defIndex < defolicationParts.Length) ? defolicationParts[defIndex] : string.Empty;
+                                    }
                                     if (manData.Recommendation != null)
                                     {
                                         manData.Recommendation.LimeIndex = manData.Recommendation.PH;
                                         manData.Recommendation.CropLime = (manData.Recommendation.PreviousAppliedLime != null && manData.Recommendation.PreviousAppliedLime > 0) ? manData.Recommendation.PreviousAppliedLime : manData.Recommendation.CropLime;
                                         manData.Recommendation.KIndex = manData.Recommendation.KIndex != null ? (manData.Recommendation.KIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (manData.Recommendation.KIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : manData.Recommendation.KIndex)) : null;
                                     }
+                                    defIndex++;
                                 }
 
                             }

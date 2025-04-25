@@ -3490,6 +3490,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For cut or grazing.
+        /// </summary>
+        public static string lblForCutOrGrazing {
+            get {
+                return ResourceManager.GetString("lblForCutOrGrazing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to For example, 27 3 2023.
         /// </summary>
         public static string lblForExample {
@@ -8502,6 +8511,15 @@ namespace NMP.Portal.Resources {
         public static string lblTotalCroppedArea {
             get {
                 return ResourceManager.GetString("lblTotalCroppedArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total dry matter yield.
+        /// </summary>
+        public static string lblTotalDryMatterYield {
+            get {
+                return ResourceManager.GetString("lblTotalDryMatterYield", resourceCulture);
             }
         }
         
