@@ -1852,7 +1852,7 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    ViewBag.SwardType = swardTypeResponses.FirstOrDefault(x =>x.SwardTypeId==model.SwardTypeId)?.SwardType;
+                    ViewBag.SwardType = swardTypeResponses.FirstOrDefault(x => x.SwardTypeId == model.SwardTypeId)?.SwardType;
                 }
 
             }
@@ -1923,7 +1923,7 @@ namespace NMP.Portal.Controllers
                 }
                 else if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass)
                 {
-                    if (model.GrassGrowthClassDistinctCount == 1)
+                    if (model.Crops.Count > 1 && model.GrassGrowthClassDistinctCount == 1)
                     {
                         action = "DryMatterYield";
                     }
@@ -4352,6 +4352,51 @@ namespace NMP.Portal.Controllers
             List<int> fieldIds = new List<int>();
             List<int> grassGrowthClassIds = new List<int>();
             Error error = new Error();
+            List<GrassGrowthClassResponse> grassGrowthClasses = new List<GrassGrowthClassResponse>();
+
+            if (model.Crops.Count == 1 || model.GrassGrowthClassDistinctCount > 1)
+            {
+                if (model.Crops[model.GrassGrowthClassCounter].Yield == null)
+                {
+                    ModelState.AddModelError("Crops[" + model.GrassGrowthClassCounter + "].Yield", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+
+            }
+            if (model.Crops.Count > 1 && model.GrassGrowthClassDistinctCount == 1)
+            {
+                if (model.GrassGrowthClassQuestion == null)
+                {
+                    ModelState.AddModelError("GrassGrowthClassQuestion", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+
+            }
+            if (!ModelState.IsValid)
+            {
+                foreach (var crop in model.Crops)
+                {
+                    fieldIds.Add(crop.FieldID ?? 0);
+                }
+                (grassGrowthClasses, error) = await _cropService.FetchGrassGrowthClass(fieldIds);
+
+                model.FieldID = model.Crops[0].FieldID.Value;
+                model.FieldName = model.Crops[model.GrassGrowthClassCounter].FieldName;
+                ViewBag.FieldName = model.Crops[model.GrassGrowthClassCounter].FieldName;
+                ViewBag.GrassGrowthClass = grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassName;
+
+                (List<YieldRangesEnglandAndWalesResponse> yieldRangesEnglandAndWalesResponses, error) = await _cropService.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(model.DefoliationSequenceId ?? 0, grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassId);
+                if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+                {
+                    TempData["GrassGrowthClassError"] = error.Message;
+                    return RedirectToAction("DefoliationSequence");
+                }
+                else
+                {
+                    ViewBag.YieldMin = yieldRangesEnglandAndWalesResponses.First();
+                    ViewBag.YieldMax = yieldRangesEnglandAndWalesResponses.Last();
+                    ViewBag.YieldRanges = yieldRangesEnglandAndWalesResponses;
+                }
+                return View(model);
+            }
 
             foreach (var crop in model.Crops)
             {
@@ -4359,7 +4404,7 @@ namespace NMP.Portal.Controllers
             }
 
 
-            (List<GrassGrowthClassResponse> grassGrowthClasses, error) = await _cropService.FetchGrassGrowthClass(fieldIds);
+            (grassGrowthClasses, error) = await _cropService.FetchGrassGrowthClass(fieldIds);
 
             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
             {
@@ -4538,6 +4583,37 @@ namespace NMP.Portal.Controllers
             List<int> fieldIds = new List<int>();
             List<int> grassGrowthClassIds = new List<int>();
             Error error = new Error();
+            List<GrassGrowthClassResponse> grassGrowthClasses = new List<GrassGrowthClassResponse>();
+
+            if (model.Crops.Count > 1 && model.GrassGrowthClassDistinctCount == 1)
+            {
+                if (model.Crops[model.DryMatterYieldCounter].Yield == null)
+                {
+                    ModelState.AddModelError("Crops[" + model.DryMatterYieldCounter + "].Yield", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+                if (!ModelState.IsValid)
+                {
+
+                    foreach (var crop in model.Crops)
+                    {
+                        fieldIds.Add(crop.FieldID ?? 0);
+                    }
+                    (grassGrowthClasses, error) = await _cropService.FetchGrassGrowthClass(fieldIds);
+
+                    (List<YieldRangesEnglandAndWalesResponse> yieldRangesEnglandAndWalesResponses, error) = await _cropService.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(model.DefoliationSequenceId ?? 0, grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassId);
+                    if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+                    {
+                        TempData["GrassGrowthClassError"] = error.Message;
+                        return RedirectToAction("DefoliationSequence");
+                    }
+                    else
+                    {
+                        ViewBag.YieldRanges = yieldRangesEnglandAndWalesResponses;
+                    }
+                    return View(model);
+                }
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -4546,7 +4622,7 @@ namespace NMP.Portal.Controllers
             {
                 fieldIds.Add(crop.FieldID ?? 0);
             }
-            (List<GrassGrowthClassResponse> grassGrowthClasses, error) = await _cropService.FetchGrassGrowthClass(fieldIds);
+            (grassGrowthClasses, error) = await _cropService.FetchGrassGrowthClass(fieldIds);
             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
             {
                 TempData["DryMatterYieldError"] = error.Message;
@@ -4559,9 +4635,10 @@ namespace NMP.Portal.Controllers
                     grassGrowthClassIds.Add(grassGrowthClass.GrassGrowthClassId);
                 }
             }
-
+            model.GrassGrowthClassCounter = 0;
             if (model.GrassGrowthClassQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterDifferentFiguresForEachField)
             {
+
                 for (int i = 0; i < model.Crops.Count; i++)
                 {
                     if (model.FieldID == model.Crops[i].FieldID.Value)
