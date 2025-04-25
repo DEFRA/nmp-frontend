@@ -4391,4 +4391,10 @@ live</value>
   <data name="lblRecommendationsForGrass" xml:space="preserve">
     <value>Recommendations {0} - {1}</value>
   </data>
+  <data name="lblTotalDryMatterYield" xml:space="preserve">
+    <value>Total dry matter yield</value>
+  </data>
+  <data name="lblForCutOrGrazing" xml:space="preserve">
+    <value>For cut or grazing</value>
+  </data>
 </root>
