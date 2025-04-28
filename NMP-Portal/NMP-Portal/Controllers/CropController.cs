@@ -371,12 +371,20 @@ namespace NMP.Portal.Controllers
                     Value = f.ID.ToString(),
                     Text = f.Name
                 }).ToList();
-
+                PlanViewModel cropData = null;
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
+                {
+                    cropData = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+                }
                 (List<HarvestYearPlanResponse> harvestYearPlanResponse, Error error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
 
                 //Fetch fields allowed for second crop based on first crop
                 List<int> fieldsAllowedForSecondCrop = await FetchAllowedFieldsForSecondCrop(harvestYearPlanResponse, model.Year ?? 0, model.CropTypeID ?? 0);
 
+                if (cropData != null && cropData.CropTypeID != model.CropTypeID)
+                {
+                    model.IsCropTypeChange = true;
+                }
                 if (harvestYearPlanResponse.Count() > 0 || SelectListItem.Count == 1)
                 {
                     var harvestFieldIds = harvestYearPlanResponse.Select(x => x.FieldID.ToString()).ToList();
@@ -414,25 +422,16 @@ namespace NMP.Portal.Controllers
                                     counter++;
                                     crop.FieldName = (await _fieldService.FetchFieldByFieldId(fieldId)).Name;
 
-                                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
+                                    if (cropData != null && cropData.Crops != null && cropData.Crops.Count > 0)
                                     {
-                                        PlanViewModel planViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
-
-                                        if (planViewModel.Crops != null && planViewModel.Crops.Count > 0)
+                                        for (int i = 0; i < cropData.Crops.Count; i++)
                                         {
-                                            for (int i = 0; i < planViewModel.Crops.Count; i++)
+                                            if (cropData.Crops[i].FieldID == fieldId)
                                             {
-                                                if (planViewModel.Crops[i].FieldID == fieldId)
-                                                {
-                                                    crop.SowingDate = planViewModel.Crops[i].SowingDate;
-                                                    crop.Yield = planViewModel.Crops[i].Yield; break;
-                                                }
+                                                crop.SowingDate = cropData.Crops[i].SowingDate;
+                                                crop.Yield = cropData.Crops[i].Yield; break;
                                             }
                                         }
-                                    }
-                                    else
-                                    {
-                                        return RedirectToAction("FarmList", "Farm");
                                     }
 
                                     model.Crops.Add(crop);
@@ -441,104 +440,64 @@ namespace NMP.Portal.Controllers
                         }
                         if (model.IsCheckAnswer && (!model.IsCropGroupChange))
                         {
-                            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
+                            // bool matchFound = false;
+                            if (cropData != null && cropData.Crops != null && cropData.Crops.Count > 0)
                             {
-                                bool matchFound = false;
-                                PlanViewModel planViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
-                                if (planViewModel.Crops != null && planViewModel.Crops.Count > 0)
+                                //foreach (var cropList1 in model.Crops)
+                                //{
+                                //    matchFound = cropData.Crops.Any(cropList2 => cropList2.FieldID == cropList1.FieldID);
+                                //    if (!matchFound || model.Crops.Count != cropData.Crops.Count)
+                                //    {
+                                //        model.IsAnyChangeInField = true;
+                                //        break;
+                                //    }
+                                //}
+                                if (model.SowingDateQuestion == (int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveDifferentDatesForEachOfTheseFields ||
+                                   model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterDifferentFiguresForEachField)
                                 {
-                                    foreach (var cropList1 in model.Crops)
+                                    if (model.Crops.Count == 1)
                                     {
-                                        matchFound = planViewModel.Crops.Any(cropList2 => cropList2.FieldID == cropList1.FieldID);
-                                        if (!matchFound || model.Crops.Count != planViewModel.Crops.Count)
-                                        {
-                                            //model.IsCheckAnswer = false;
-                                            model.IsAnyChangeInField = true;
-                                            break;
-                                        }
-                                    }
-                                    if (model.SowingDateQuestion == (int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveDifferentDatesForEachOfTheseFields ||
-                                       model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterDifferentFiguresForEachField)
-                                    {
-                                        if (model.Crops.Count == 1)
-                                        {
-                                            model.SowingDateQuestion = model.SowingDateQuestion == (int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveDifferentDatesForEachOfTheseFields ? null : model.SowingDateQuestion;
-                                            model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
-                                            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
-                                        }
-                                    }
-                                    if (matchFound && model.Crops.Count == planViewModel.Crops.Count && (!model.IsAnyChangeInField))
-                                    {
-                                        model.CropType = await _fieldService.FetchCropTypeById(model.CropTypeID.Value);
+                                        model.SowingDateQuestion = model.SowingDateQuestion == (int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveDifferentDatesForEachOfTheseFields ? null : model.SowingDateQuestion;
+                                        model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
                                         _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
-                                        return RedirectToAction("CheckAnswer");
                                     }
                                 }
-                            }
-                            else
-                            {
-                                return RedirectToAction("FarmList", "Farm");
+
+                                //if (matchFound && model.Crops.Count == cropData.Crops.Count && (!model.IsAnyChangeInField))
+                                //{
+
+                                if (!model.IsCropTypeChange)
+                                {
+                                    model.CropType = await _fieldService.FetchCropTypeById(model.CropTypeID.Value);
+                                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                                    return RedirectToAction("CheckAnswer"); //return RedirectToAction("CropGroupName");
+                                }
+
+                                //}
                             }
                         }
-
                         model.CropType = await _fieldService.FetchCropTypeById(model.CropTypeID.Value);
                         _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                        ViewBag.FieldOptions = fieldList;
                         return RedirectToAction("CropGroupName");
                     }
                     else
                     {
-                        if (model.Crops != null && model.Crops.Count > 0)
+                        if (!model.IsCheckAnswer)
                         {
-                            foreach (var crop in model.Crops)
+                            if (model.Crops != null && model.Crops.Count > 0)
                             {
-                                if (crop.FieldID != null)
+                                foreach (var crop in model.Crops)
                                 {
-                                    crop.CropOrder = fieldsAllowedForSecondCrop.Contains(crop.FieldID.Value) ? 2 : 1;
+                                    if (crop.FieldID != null)
+                                    {
+                                        crop.CropOrder = fieldsAllowedForSecondCrop.Contains(crop.FieldID.Value) ? 2 : 1;
+                                    }
                                 }
                             }
                         }
 
                     }
-                }
-                if (model.IsCheckAnswer)
-                {
-                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
-                    {
-                        PlanViewModel CropData = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
-                        if (CropData.CropTypeID == model.CropTypeID)
-                        {
-                            return RedirectToAction("CheckAnswer");
-                        }
-                        else
-                        {
-                            model.CropInfo1 = null;
-                            model.CropInfo2 = null;
-                            model.CropInfo1Name = null;
-                            model.CropInfo2Name = null;
-                            model.CropType = await _fieldService.FetchCropTypeById(model.CropTypeID.Value);
-                            model.IsCropTypeChange = true;
-                            for (int i = 0; i < model.Crops.Count; i++)
-                            {
-                                model.Crops[i].CropTypeID = model.CropTypeID.Value;
-                                model.Crops[i].CropInfo1 = null;
-                                model.Crops[i].CropInfo2 = null;
-                            }
-                            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
-                            if (model.IsCropTypeChange)
-                            {
-                                model.CropType = await _fieldService.FetchCropTypeById(model.CropTypeID.Value);
-                                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
-                                return RedirectToAction("CropFields");
-
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        return RedirectToAction("FarmList", "Farm");
-                    }
-
                 }
 
                 if (model.CropTypeID != null)
@@ -553,8 +512,53 @@ namespace NMP.Portal.Controllers
                         if (SelectListItem.Count == 0)
                         {
                             TempData["CropTypeError"] = Resource.lblNoFieldsAreAvailable;
+                            ViewBag.FieldOptions = fieldList;
                             return RedirectToAction("CropTypes");
                         }
+                    }
+                }
+
+                if (model.IsCheckAnswer)
+                {
+                    if (cropData != null && cropData.CropTypeID == model.CropTypeID)
+                    {
+                        ViewBag.FieldOptions = fieldList;
+                        return RedirectToAction("CheckAnswer");
+                    }
+                    else
+                    {
+                        foreach (var crop in model.Crops)
+                        {
+                            if ((fieldsAllowedForSecondCrop.Count > 0 && (!fieldsAllowedForSecondCrop.Contains(crop.FieldID.Value)) && crop.CropOrder == 2) ||
+                                (fieldsAllowedForSecondCrop.Count == 0 && crop.CropOrder == 2))
+                            {
+                                model.FieldList.Remove(crop.FieldID.ToString());
+                                crop.FieldID = null;
+                                crop.FieldName = null;
+                                //model.Crops.RemoveAll(crop => crop.FieldID == crop.FieldID.Value);
+                            }
+                        }
+                        model.CropInfo1 = null;
+                        model.CropInfo2 = null;
+                        model.CropInfo1Name = null;
+                        model.CropInfo2Name = null;
+                        model.CropType = await _fieldService.FetchCropTypeById(model.CropTypeID.Value);
+
+                        for (int i = 0; i < model.Crops.Count; i++)
+                        {
+                            model.Crops[i].CropTypeID = model.CropTypeID.Value;
+                            model.Crops[i].CropInfo1 = null;
+                            model.Crops[i].CropInfo2 = null;
+                        }
+                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                        ViewBag.FieldOptions = fieldList;
+                        //if (model.IsCropTypeChange)
+                        //{
+                        //    model.CropType = await _fieldService.FetchCropTypeById(model.CropTypeID.Value);
+                        //    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+
+                        //    return RedirectToAction("CropFields");
+                        //}
                     }
                 }
 
@@ -739,7 +743,7 @@ namespace NMP.Portal.Controllers
                 //Fetch fields allowed for second crop based on first crop
                 List<int> fieldsAllowedForSecondCrop = await FetchAllowedFieldsForSecondCrop(harvestYearPlanResponse, model.Year ?? 0, model.CropTypeID ?? 0);
 
-                if (harvestYearPlanResponse.Count() > 0)
+                if (harvestYearPlanResponse.Count() > 0 || SelectListItem.Count == 1)
                 {
                     var harvestFieldIds = harvestYearPlanResponse.Select(x => x.FieldID.ToString()).ToList();
                     SelectListItem = SelectListItem.Where(x => !harvestFieldIds.Contains(x.Value) || fieldsAllowedForSecondCrop.Contains(int.Parse(x.Value))).ToList();
