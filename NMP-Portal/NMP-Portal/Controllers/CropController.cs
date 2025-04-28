@@ -527,17 +527,36 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        foreach (var crop in model.Crops)
+                        //foreach (var crop in model.Crops)
+                        //{
+                        //    if ((fieldsAllowedForSecondCrop.Count > 0 && (!fieldsAllowedForSecondCrop.Contains(crop.FieldID.Value)) && crop.CropOrder == 2) ||
+                        //        (fieldsAllowedForSecondCrop.Count == 0 && crop.CropOrder == 2))
+                        //    {
+                        //        model.FieldList.Remove(crop.FieldID.ToString());
+                        //        crop.FieldID = null;
+                        //        crop.FieldName = null;
+                        //        //model.Crops.RemoveAll(crop => crop.FieldID == crop.FieldID.Value);
+                        //    }
+                        //}
+                        if (model.Crops != null && model.Crops.Count > 0)
                         {
-                            if ((fieldsAllowedForSecondCrop.Count > 0 && (!fieldsAllowedForSecondCrop.Contains(crop.FieldID.Value)) && crop.CropOrder == 2) ||
-                                (fieldsAllowedForSecondCrop.Count == 0 && crop.CropOrder == 2))
+                            var cropsToRemove = model.Crops
+                            .Where(crop =>
+                            (fieldsAllowedForSecondCrop.Count > 0 &&
+                                !fieldsAllowedForSecondCrop.Contains(crop.FieldID.Value) &&
+                                crop.CropOrder == 2) ||
+                            (fieldsAllowedForSecondCrop.Count == 0 &&
+                                crop.CropOrder == 2))
+                            .ToList();
+
+                            foreach (var crop in cropsToRemove)
                             {
                                 model.FieldList.Remove(crop.FieldID.ToString());
-                                crop.FieldID = null;
-                                crop.FieldName = null;
-                                //model.Crops.RemoveAll(crop => crop.FieldID == crop.FieldID.Value);
                             }
+
+                            model.Crops.RemoveAll(crop => cropsToRemove.Contains(crop));
                         }
+
                         model.CropInfo1 = null;
                         model.CropInfo2 = null;
                         model.CropInfo1Name = null;
@@ -1196,7 +1215,7 @@ namespace NMP.Portal.Controllers
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                     return RedirectToAction("CheckAnswer");
                 }
-                if(model.CropGroupId==(int)NMP.Portal.Enums.CropGroup.Grass)
+                if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass)
                 {
                     return RedirectToAction("SwardType");
                 }
@@ -1747,6 +1766,8 @@ namespace NMP.Portal.Controllers
                 int otherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
                 int cerealsGroupId = (int)NMP.Portal.Enums.CropGroup.Cereals;
                 int potatoesGroupId = (int)NMP.Portal.Enums.CropGroup.Potatoes;
+                string? cropInfoOneQuestion = await _cropService.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0);
+                ViewBag.CropInfoOneQuestion = cropInfoOneQuestion;
                 foreach (var crop in model.Crops)
                 {
                     if (crop.SowingDate == null)
@@ -1790,7 +1811,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.CropInfo1 == null && model.CropGroupId != otherGroupId)
                 {
-                    ModelState.AddModelError("CropInfo1", string.Format(Resource.MsgCropInfo1NotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType));
+                    ModelState.AddModelError("CropInfo1", string.Format("{0} {1}", cropInfoOneQuestion,Resource.lblNotSet.ToLower()));
                 }
                 if (model.CropInfo2 == null && model.CropGroupId == cerealsGroupId)
                 {
@@ -1800,6 +1821,22 @@ namespace NMP.Portal.Controllers
             }
             if (!ModelState.IsValid)
             {
+                int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
+                List<Field> fieldList = await _fieldService.FetchFieldsByFarmId(farmID);
+
+                (List<HarvestYearPlanResponse> harvestYearPlanResponse, Error harvestYearError) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
+
+                //Fetch fields allowed for second crop based on first crop
+                List<int> fieldsAllowedForSecondCrop = await FetchAllowedFieldsForSecondCrop(harvestYearPlanResponse, model.Year ?? 0, model.CropTypeID ?? 0);
+
+                if (harvestYearPlanResponse.Count() > 0 || fieldsAllowedForSecondCrop.Count() > 0)
+                {
+                    var harvestFieldIds = harvestYearPlanResponse.Select(x => x.FieldID.ToString()).ToList();
+                    fieldList = fieldList.Where(x => !harvestFieldIds.Contains(x.ID.ToString()) || fieldsAllowedForSecondCrop.Contains(x.ID ?? 0)).ToList();
+                }
+                ViewBag.FieldOptions = fieldList;
+                ViewBag.DefaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+                
                 return View("CheckAnswer", model);
             }
 
@@ -3958,7 +3995,7 @@ namespace NMP.Portal.Controllers
                 }
                 List<GrassSeasonResponse> grassSeasons = await _cropService.FetchGrassSeasons();
                 grassSeasons.RemoveAll(g => g.SeasonId == 0);
-                ViewBag.GrassSeason = grassSeasons.OrderByDescending(x=>x.SeasonId);
+                ViewBag.GrassSeason = grassSeasons.OrderByDescending(x => x.SeasonId);
             }
             catch (Exception ex)
             {
@@ -3995,7 +4032,7 @@ namespace NMP.Portal.Controllers
                 TempData["GrassSeasonError"] = ex.Message;
                 return RedirectToAction("GrassSeason");
             }
-            
+
             return RedirectToAction("SowingDateQuestion");
         }
 
