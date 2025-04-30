@@ -1925,7 +1925,9 @@ namespace NMP.Portal.Controllers
                     {
                         if (defoliationSequenceResponses.FirstOrDefault(x => x.DefoliationSequenceId == model.DefoliationSequenceId) != null)
                         {
-                            ViewBag.DefoliationSequenceName = defoliationSequenceResponses.FirstOrDefault(x => x.DefoliationSequenceId == model.DefoliationSequenceId)?.DefoliationSequenceDescription;
+                            var defoliations = defoliationSequenceResponses.FirstOrDefault(x => x.DefoliationSequenceId == model.DefoliationSequenceId)?.DefoliationSequenceDescription;
+                            string[] arrDefoliations = defoliations.Split(',');
+                            ViewBag.DefoliationSequenceName = arrDefoliations;
 
                         }
                         else
