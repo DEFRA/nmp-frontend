@@ -27,7 +27,7 @@ namespace NMP.Portal.Services
         Task<(Crop, Error)> FetchCropById(int id);
         Task<(string, Error)> RemoveCropPlan(List<int> cropIds);
         Task<(bool, Error)> IsCropsGroupNameExistForUpdate(string cropIds,string cropGroupName,int year);
-        Task<(List<Crop>, Error)> UpdateCropGroupName(string cropIds,string CropGroupName,string? varietyName,int year);
+        Task<(List<Crop>, Error)> UpdateCrop(string cropData);
         Task<List<GrassSeasonResponse>> FetchGrassSeasons();
         Task<(List<GrassGrowthClassResponse>, Error)> FetchGrassGrowthClass(List<int> fieldIds);
 
@@ -37,7 +37,7 @@ namespace NMP.Portal.Services
         Task<(List<SwardTypeResponse>, Error)> FetchSwardTypes();
         Task<(List<YieldRangesEnglandAndWalesResponse>, Error)> FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(int sequenceId, int grassGrowthClassId);
 
-
+        Task<(List<ManagementPeriod>, Error)> FetchManagementperiodByCropId(int cropId,bool isShortSummary);
 
     }
 }

@@ -789,19 +789,19 @@ namespace NMP.Portal.Services
 
             return (isCropsGroupNameExist,error);
         }
-        public async Task<(List<Crop>, Error)> UpdateCropGroupName(string cropIds, string CropGroupName,string? varietyName, int year)
+        public async Task<(List<Crop>, Error)> UpdateCrop(string cropData)
         {
             List<Crop> crops = new List<Crop>();
             Error error = new Error();
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.PutAsync(string.Format(APIURLHelper.UpdateCropGroupNameWithVarietyAPI, cropIds, CropGroupName, varietyName, year), null);
+                var response = await httpClient.PutAsync(string.Format(APIURLHelper.UpdateCropAPI) , new StringContent(cropData, Encoding.UTF8, "application/json"));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
                 {
-                    var cropResponse = responseWrapper.Data.Crops.ToObject<List<Crop>>();
+                    var cropResponse = responseWrapper.Data.updatedCrops.ToObject<List<Crop>>();
                     if (cropResponse != null)
                     {
                         crops = cropResponse;
@@ -1125,6 +1125,46 @@ namespace NMP.Portal.Services
                 throw new Exception(error.Message, ex);
             }
             return (yieldRanges,error);
+        }
+        public async Task<(List<ManagementPeriod>, Error)> FetchManagementperiodByCropId(int cropId, bool isShortSummary)
+        {
+            List<ManagementPeriod> managementPeriodList = new List<ManagementPeriod>();
+            Error error = new Error();
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchManagementPeriodByCropIdAsyncAPI, cropId, isShortSummary));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode)
+                {
+                    if (responseWrapper != null && responseWrapper.Data != null)
+                    {
+                        managementPeriodList = responseWrapper.Data.ManagementPeriods.ToObject<List<ManagementPeriod>>();
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (managementPeriodList, error);
         }
     }
 
