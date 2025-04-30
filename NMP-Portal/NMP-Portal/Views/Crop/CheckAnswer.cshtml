@@ -204,7 +204,10 @@
                             @Model.CropGroup
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
+                            @if(string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
+                            {
                             <govuk-summary-list-row-action asp-action="CropGroups" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
+                            }
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                     }
@@ -219,7 +222,10 @@
                                     Model.CropType) : Resource.lblNotSet)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
+                                 @if(string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
+                            {
                                 <govuk-summary-list-row-action asp-action="CropTypes" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
+                            }
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     }
@@ -327,7 +333,10 @@
                                 @(Model.CurrentSward == null ? Resource.lblNotEntered : currentSward)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
+                                 @if(string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
+                            {
                                 <govuk-summary-list-row-action asp-action="CurrentSward" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
+                            }
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
 
@@ -516,7 +525,7 @@
                         }
                     }
 
-                    @if (Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass)
+                    @if (Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass && (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate)))
                     {
                         <govuk-summary-list-row class=@((!Model.SwardTypeId.HasValue)?"govuk-error-message":"")>
                             <govuk-summary-list-row-key>
