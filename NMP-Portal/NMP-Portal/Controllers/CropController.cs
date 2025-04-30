@@ -699,17 +699,28 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        foreach (var crop in model.Crops)
+                        if (model.Crops != null && model.Crops.Count > 0)
                         {
-                            if ((fieldsAllowedForSecondCrop.Count > 0 && (!fieldsAllowedForSecondCrop.Contains(crop.FieldID.Value)) && crop.CropOrder == 2) ||
-                                (fieldsAllowedForSecondCrop.Count == 0 && crop.CropOrder == 2))
+                            var cropsToRemove = model.Crops
+                            .Where(crop =>
+                            (fieldsAllowedForSecondCrop.Count > 0 &&
+                                !fieldsAllowedForSecondCrop.Contains(crop.FieldID.Value) &&
+                                crop.CropOrder == 2) ||
+                            (fieldsAllowedForSecondCrop.Count == 0 &&
+                                crop.CropOrder == 2))
+                            .ToList();
+
+                            if (model.FieldList != null && model.FieldList.Count > 0)
                             {
-                                model.FieldList.Remove(crop.FieldID.ToString());
-                                crop.FieldID = null;
-                                crop.FieldName = null;
-                                //model.Crops.RemoveAll(crop => crop.FieldID == crop.FieldID.Value);
+                                foreach (var crop in cropsToRemove)
+                                {
+                                    model.FieldList.Remove(crop.FieldID.ToString());
+                                }
                             }
+
+                            model.Crops.RemoveAll(crop => cropsToRemove.Contains(crop));
                         }
+
                         model.CropInfo1 = null;
                         model.CropInfo2 = null;
                         model.CropInfo1Name = null;
