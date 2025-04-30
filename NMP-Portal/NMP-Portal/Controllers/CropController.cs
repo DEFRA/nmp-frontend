@@ -1924,12 +1924,13 @@ namespace NMP.Portal.Controllers
                             crop.CropGroupName = harvestYearPlanResponse[i].CropGroupName;
                             crop.FieldName = harvestYearPlanResponse[i].FieldName;
                             crop.CropTypeID = harvestYearPlanResponse.FirstOrDefault().CropTypeID;
+                            crop.EncryptedCounter = _fieldDataProtector.Protect(counter.ToString());
                             if (decimal.TryParse(harvestYearPlanResponse[i].Yield, out decimal yield))
                             {
                                 crop.Yield = yield;
                                 model.Yield = yield;
                                 yieldQuestion = yield == defaultYield ? string.Format(Resource.lblUseTheStandardFigure, defaultYield) : null;
-                                crop.EncryptedCounter = _fieldDataProtector.Protect(counter.ToString());
+                                
                                 if (string.IsNullOrWhiteSpace(yieldQuestion))
                                 {
                                     if (firstYield == null)
@@ -1993,9 +1994,10 @@ namespace NMP.Portal.Controllers
 
                                 }
                             }
+                            counter++;
                             model.Crops.Add(crop);
                         }
-                        counter++;
+          
 
                         if (model.Crops != null && model.Crops.All(x => x.Yield != null) && allYieldsAreSame && harvestYearPlanResponse.Count >= 1)
                         {
