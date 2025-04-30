@@ -447,7 +447,7 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("CropFields");
             }
 
-            if(model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass)
+            if (model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass)
             {
                 model.CurrentSward = null;
                 model.GrassSeason = null;
@@ -1860,7 +1860,7 @@ namespace NMP.Portal.Controllers
                 }
                 ViewBag.FieldOptions = fieldList;
 
-                if(model.CropGroupId==(int)NMP.Portal.Enums.CropGroup.Grass)
+                if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass)
                 {
                     model.IsCropTypeChange = false;
                     model.IsCropGroupChange = false;
@@ -1938,7 +1938,7 @@ namespace NMP.Portal.Controllers
                     }
                 }
 
-                
+
             }
             else
             {
@@ -1946,7 +1946,7 @@ namespace NMP.Portal.Controllers
             }
             model.IsCheckAnswer = true;
             ViewBag.DefaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
-            if (model.CropTypeID != null&& model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Other)
+            if (model.CropTypeID != null && model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Other)
             {
                 string? cropInfoOneQuestion = await _cropService.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0);
                 ViewBag.CropInfoOneQuestion = cropInfoOneQuestion;
@@ -1971,7 +1971,7 @@ namespace NMP.Portal.Controllers
             }
             if (model.CropGroupId != null)
             {
-                if(model.CropGroupId==(int)NMP.Portal.Enums.CropGroup.Grass)
+                if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass)
                 {
                     model.CropGroup = Resource.lblGrass;
                 }
@@ -4562,8 +4562,9 @@ namespace NMP.Portal.Controllers
             {
                 model.DryMatterYieldCounter = 0;
                 model.DryMatterYieldEncryptedCounter = _cropDataProtector.Protect(model.DryMatterYieldCounter.ToString());
+                model.Crops.ForEach(x => x.Yield = null);
             }
-            
+
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
 
             if (model.GrassGrowthClassDistinctCount == 1 && model.Crops.Count > 1)
@@ -4576,6 +4577,10 @@ namespace NMP.Portal.Controllers
             }
             else
             {
+                if (model.IsCheckAnswer && model.GrassGrowthClassQuestion == null)
+                {
+                    return RedirectToAction("CheckAnswer");
+                }
                 return View(model);
             }
 
@@ -4772,10 +4777,10 @@ namespace NMP.Portal.Controllers
                 }
                 model.DryMatterYieldEncryptedCounter = _fieldDataProtector.Protect(model.DryMatterYieldCounter.ToString());
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
-                if (model.IsCheckAnswer && (!model.IsAnyChangeInField) && (!model.IsQuestionChange) && (!model.IsCropGroupChange) && (!model.IsCropTypeChange))
-                {
-                    return RedirectToAction("CheckAnswer");
-                }
+                //if (model.IsCheckAnswer && (!model.IsAnyChangeInField) && (!model.IsQuestionChange) && (!model.IsCropGroupChange) && (!model.IsCropTypeChange))
+                //{
+                //    return RedirectToAction("CheckAnswer");
+                //}
             }
 
             else if (model.GrassGrowthClassQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
@@ -4799,15 +4804,17 @@ namespace NMP.Portal.Controllers
 
             if (model.DryMatterYieldCounter == model.Crops.Count)
             {
-                if (model.IsCheckAnswer && (!model.IsAnyChangeInField))
-                {
-                    return RedirectToAction("CheckAnswer");
-                }
 
                 return RedirectToAction("CheckAnswer");
             }
             else
             {
+                if (model.IsCheckAnswer && model.Crops
+    .Where((crop, index) => index != model.DryMatterYieldCounter-1)
+    .All(crop => crop != null && crop.Yield != null))
+                {
+                    return RedirectToAction("CheckAnswer");
+                }
                 return View(model);
             }
 
