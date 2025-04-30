@@ -8,7 +8,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@(Model.IsCheckAnswer&& (!Model.IsAnyChangeInField)&& (!Model.IsCropGroupChange) ? "CheckAnswer" :bachAction) asp-controller="Crop" asp-route-q="@Model.SowingDateEncryptedCounter">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(Model.IsCheckAnswer&& (!Model.IsCropGroupChange) ? "CheckAnswer" :bachAction) asp-controller="Crop" asp-route-q="@Model.SowingDateEncryptedCounter">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="GrassManagement" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
