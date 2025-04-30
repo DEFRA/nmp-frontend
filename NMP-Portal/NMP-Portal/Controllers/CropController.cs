@@ -2144,14 +2144,22 @@ namespace NMP.Portal.Controllers
                         model.DefoliationSequenceId = null;
                     }
 
-                    for (int i = 0; i < model.Crops.Count; i++)
+                }
+            }
+            if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
+            {
+                for (int i = 0; i < model.Crops.Count; i++)
+                {
+                    if (model.Crops[i].CropInfo1 == null && model.Crops[i].Yield == null)
                     {
-                        if (model.Crops[i].CropInfo1 == null && model.Crops[i].Yield == null)
-                        {
-                            isBasePlan = true;
-                        }
+                        isBasePlan = true;
+                    }
+                    if (string.IsNullOrWhiteSpace(model.CropGroupName))
+                    {
+                        model.CropGroupName = model.PreviousCropGroupName;
                         model.Crops[i].CropGroupName = model.PreviousCropGroupName;
                     }
+                    
                 }
             }
             model.IsCheckAnswer = true;
