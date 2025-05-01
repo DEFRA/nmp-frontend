@@ -1950,6 +1950,9 @@ namespace NMP.Portal.Controllers
                             crop.CropGroupName = harvestYearPlanResponse[i].CropGroupName;
                             crop.FieldName = harvestYearPlanResponse[i].FieldName;
                             crop.CropTypeID = harvestYearPlanResponse.FirstOrDefault().CropTypeID;
+                            model.SwardManagementId = harvestYearPlanResponse.FirstOrDefault().SwardManagementID; ;
+                            model.DefoliationSequenceId = harvestYearPlanResponse.FirstOrDefault().DefoliationSequenceID;
+                            model.SwardTypeId = harvestYearPlanResponse.FirstOrDefault().SwardTypeID;
                             crop.EncryptedCounter = _fieldDataProtector.Protect(counter.ToString());
                             if (decimal.TryParse(harvestYearPlanResponse[i].Yield, out decimal yield))
                             {
@@ -2045,7 +2048,7 @@ namespace NMP.Portal.Controllers
                         model.Variety = harvestYearPlanResponse.FirstOrDefault().CropVariety;
                         model.CropGroupName = harvestYearPlanResponse.FirstOrDefault().CropGroupName;
                         model.PreviousCropGroupName = model.CropGroupName;
-
+                        
                         if (model.CropTypeID != null && model.CropInfo1 != null)
                         {
                             model.CropInfo1Name = await _cropService.FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(model.CropTypeID.Value, model.CropInfo1.Value);
