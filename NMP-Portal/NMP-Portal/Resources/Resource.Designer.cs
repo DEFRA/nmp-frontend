@@ -11838,6 +11838,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your current plan allows only one crop. To add a second crop, please update your plan..
+        /// </summary>
+        public static string MsgIfUserCreateSecondCropInBasicPlan {
+            get {
+                return ResourceManager.GetString("MsgIfUserCreateSecondCropInBasicPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a whole number without a decimal point.
         /// </summary>
         public static string MsgIfUserEnterDecimalValueInRainfall {

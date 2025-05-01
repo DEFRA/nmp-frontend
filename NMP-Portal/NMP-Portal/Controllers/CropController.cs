@@ -549,9 +549,11 @@ namespace NMP.Portal.Controllers
                     cropData = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
                 }
                 (List<HarvestYearPlanResponse> harvestYearPlanResponse, Error error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
-
+                List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = harvestYearPlanResponse.Where(x => x.CropInfo1 != null && x.Yield != null).ToList();
                 //Fetch fields allowed for second crop based on first crop
-                List<int> fieldsAllowedForSecondCrop = await FetchAllowedFieldsForSecondCrop(harvestYearPlanResponse, model.Year ?? 0, model.CropTypeID ?? 0);
+                List<int> fieldsAllowedForSecondCrop = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0);
+                //Fetch fields allowed for second crop based on first crop
+                //List<int> fieldsAllowedForSecondCrop = await FetchAllowedFieldsForSecondCrop(harvestYearPlanResponse, model.Year ?? 0, model.CropTypeID ?? 0);
 
                 if (cropData != null && cropData.CropTypeID != model.CropTypeID)
                 {
@@ -561,6 +563,7 @@ namespace NMP.Portal.Controllers
                 {
                     var harvestFieldIds = harvestYearPlanResponse.Select(x => x.FieldID.ToString()).ToList();
                     SelectListItem = SelectListItem.Where(x => !harvestFieldIds.Contains(x.Value) || fieldsAllowedForSecondCrop.Contains(int.Parse(x.Value))).ToList();
+
                     if (SelectListItem.Count == 1)
                     {
                         model.FieldList = new List<string>();
@@ -671,7 +674,25 @@ namespace NMP.Portal.Controllers
 
                     }
                 }
-
+                int harvestYearPlanCount = 0;
+                int cropPlanCounter = 0;
+                if (harvestYearPlanResponse.Count() > 0)
+                {
+                    harvestYearPlanCount = harvestYearPlanResponse.Count();
+                    foreach (var harvestYearPlan in harvestYearPlanResponse)
+                    {
+                        if (harvestYearPlan.CropInfo1 == null && harvestYearPlan.Yield == null)
+                        {
+                            cropPlanCounter++;
+                        }
+                    }
+                }
+                if (harvestYearPlanCount > 0 && cropPlanCounter > 0 && harvestYearPlanCount == cropPlanCounter)
+                {
+                    TempData["CropTypeError"] = Resource.MsgIfUserCreateSecondCropInBasicPlan;
+                    ViewBag.FieldOptions = fieldList;
+                    return RedirectToAction("CropTypes");
+                }
                 if (model.CropTypeID != null)
                 {
                     model.CropType = await _fieldService.FetchCropTypeById(model.CropTypeID.Value);
@@ -919,12 +940,12 @@ namespace NMP.Portal.Controllers
                     Text = f.Name
                 }).ToList();
                 (List<HarvestYearPlanResponse> harvestYearPlanResponse, Error error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
-
+                List<HarvestYearPlanResponse>  cropPlanForFirstCropFilter = harvestYearPlanResponse.Where(x => x.CropInfo1 != null && x.Yield != null).ToList();
                 //Fetch fields allowed for second crop based on first crop
-                List<int> fieldsAllowedForSecondCrop = await FetchAllowedFieldsForSecondCrop(harvestYearPlanResponse, model.Year ?? 0, model.CropTypeID ?? 0);
+                List<int> fieldsAllowedForSecondCrop = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0);
 
                 if (harvestYearPlanResponse.Count() > 0 || SelectListItem.Count == 1)
-                {
+                {                   
                     var harvestFieldIds = harvestYearPlanResponse.Select(x => x.FieldID.ToString()).ToList();
                     SelectListItem = SelectListItem.Where(x => !harvestFieldIds.Contains(x.Value) || fieldsAllowedForSecondCrop.Contains(int.Parse(x.Value))).ToList();
                     if (SelectListItem.Count == 1)
@@ -962,10 +983,15 @@ namespace NMP.Portal.Controllers
                     Value = f.ID.ToString(),
                     Text = f.Name
                 }).ToList();
-                (List<HarvestYearPlanResponse> harvestYearPlanResponse, Error error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
+                //(List<HarvestYearPlanResponse> harvestYearPlanResponse, Error error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
 
+                ////Fetch fields allowed for second crop based on first crop
+                //List<int> fieldsAllowedForSecondCrop = await FetchAllowedFieldsForSecondCrop(harvestYearPlanResponse, model.Year ?? 0, model.CropTypeID ?? 0);
+                (List<HarvestYearPlanResponse> harvestYearPlanResponse, Error error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
+                List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = harvestYearPlanResponse.Where(x => x.CropInfo1 != null && x.Yield != null).ToList();
                 //Fetch fields allowed for second crop based on first crop
-                List<int> fieldsAllowedForSecondCrop = await FetchAllowedFieldsForSecondCrop(harvestYearPlanResponse, model.Year ?? 0, model.CropTypeID ?? 0);
+                List<int> fieldsAllowedForSecondCrop = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0);
+
 
                 if (harvestYearPlanResponse.Count() > 0)
                 {
@@ -1930,7 +1956,7 @@ namespace NMP.Portal.Controllers
                                 crop.Yield = yield;
                                 model.Yield = yield;
                                 yieldQuestion = yield == defaultYield ? string.Format(Resource.lblUseTheStandardFigure, defaultYield) : null;
-                                
+
                                 if (string.IsNullOrWhiteSpace(yieldQuestion))
                                 {
                                     if (firstYield == null)
@@ -1997,7 +2023,7 @@ namespace NMP.Portal.Controllers
                             counter++;
                             model.Crops.Add(crop);
                         }
-          
+
 
                         if (model.Crops != null && model.Crops.All(x => x.Yield != null) && allYieldsAreSame && harvestYearPlanResponse.Count >= 1)
                         {
@@ -2062,12 +2088,12 @@ namespace NMP.Portal.Controllers
             //Fetch fields allowed for second crop based on first crop
             List<int> fieldsAllowedForSecondCrop = await FetchAllowedFieldsForSecondCrop(harvestYearPlanResponse, model.Year ?? 0, model.CropTypeID ?? 0);
 
-                if (harvestYearPlanResponse.Count() > 0 || fieldsAllowedForSecondCrop.Count() > 0)
-                {
-                    var harvestFieldIds = harvestYearPlanResponse.Select(x => x.FieldID.ToString()).ToList();
-                    fieldList = fieldList.Where(x => !harvestFieldIds.Contains(x.ID.ToString()) || fieldsAllowedForSecondCrop.Contains(x.ID ?? 0)).ToList();
-                }
-                ViewBag.FieldOptions = fieldList;
+            if (harvestYearPlanResponse.Count() > 0 || fieldsAllowedForSecondCrop.Count() > 0)
+            {
+                var harvestFieldIds = harvestYearPlanResponse.Select(x => x.FieldID.ToString()).ToList();
+                fieldList = fieldList.Where(x => !harvestFieldIds.Contains(x.ID.ToString()) || fieldsAllowedForSecondCrop.Contains(x.ID ?? 0)).ToList();
+            }
+            ViewBag.FieldOptions = fieldList;
 
             if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass)
             {
@@ -2159,7 +2185,7 @@ namespace NMP.Portal.Controllers
                         model.CropGroupName = model.PreviousCropGroupName;
                         model.Crops[i].CropGroupName = model.PreviousCropGroupName;
                     }
-                    
+
                 }
             }
             model.IsCheckAnswer = true;
@@ -3430,10 +3456,10 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogTrace($"Crop Controller : Exception in CropGroupName() action : {ex.Message}, {ex.StackTrace}");
-              
+
                 TempData["ErrorOnSelectField"] = ex.Message;
                 return RedirectToAction("CropFields");
-             
+
 
             }
 
