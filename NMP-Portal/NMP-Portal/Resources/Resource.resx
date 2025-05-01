@@ -4397,4 +4397,7 @@ live</value>
   <data name="lblForCutOrGrazing" xml:space="preserve">
     <value>For cut or grazing</value>
   </data>
+  <data name="MsgIfUserCreateSecondCropInBasicPlan" xml:space="preserve">
+    <value>Your current plan allows only one crop. To add a second crop, please update your plan.</value>
+  </data>
 </root>
