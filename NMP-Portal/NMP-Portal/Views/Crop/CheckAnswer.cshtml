@@ -83,7 +83,14 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="BackCheckAnswer" asp-controller="Crop" asp-route-q="@(Model.CropGroupId==(int)NMP.Portal.Enums.CropGroup.Grass ? Model.GrassGrowthClassEncryptedCounter: Model.YieldEncryptedCounter)">@Resource.lblBack</govuk-back-link>
+    @if(string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
+    {
+        <govuk-back-link asp-action="BackCheckAnswer" asp-controller="Crop" asp-route-q="@(Model.CropGroupId==(int)NMP.Portal.Enums.CropGroup.Grass ? Model.GrassGrowthClassEncryptedCounter: Model.YieldEncryptedCounter)">@Resource.lblBack</govuk-back-link>
+    }
+    else
+    {
+        <govuk-back-link asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
+    }
 }
 
 
