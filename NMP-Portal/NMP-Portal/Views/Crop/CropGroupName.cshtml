@@ -5,14 +5,14 @@
 }
 
 @section BeforeContent {
-    @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
-    {
+    @* @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
+    { *@
         <govuk-back-link asp-action="@(Model.IsCheckAnswer&& (!Model.IsCropGroupChange)&& (!Model.IsCropTypeChange) ? "CheckAnswer" :"CropFields")" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
-    }
+   @*  }
     else
     {
         <govuk-back-link asp-action="UpdateCropGroupNameCheckAnswer" asp-controller="Crop" asp-route-q="@ViewBag.EncryptedCropTypeId" asp-route-r="@(ViewBag.EncryptedCropGroupName==null?null:ViewBag.EncryptedCropGroupName)" asp-route-s="@Model.EncryptedIsCropUpdate">@Resource.lblBack</govuk-back-link>
-    }
+    } *@
 }
 <form asp-action="CropGroupName" asp-controller="Crop" method="post">
     @Html.AntiForgeryToken()
@@ -62,6 +62,8 @@
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SwardManagementId"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PotentialCut"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationSequenceId"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SowingDateCurrentCounter" value="@Model.SowingDateCurrentCounter"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SowingDateEncryptedCounter" value="@Model.SowingDateEncryptedCounter"></govuk-input>
         @if (Model.FieldList != null && Model.FieldList.Count > 0)
         {
             @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -103,8 +105,8 @@
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
-            @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
-            {
+           @*  @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
+            { *@
                 <p class="govuk-body cancel-link">
                     @if (!Model.IsCheckAnswer)
                     {
@@ -115,13 +117,13 @@
                         <a asp-action="CheckAnswer" asp-controller="Crop">@Resource.lblCancel</a>
                     }
                 </p>
-            }
+          @*   }
             else
             {
                 <p class="govuk-body cancel-link">
                     <a asp-action="UpdateCropGroupNameCheckAnswer" asp-controller="Crop" asp-route-q="@ViewBag.EncryptedCropTypeId" asp-route-r="@(ViewBag.EncryptedCropGroupName==null?null:ViewBag.EncryptedCropGroupName)" asp-route-s="@Model.EncryptedIsCropUpdate">@Resource.lblCancel</a>
                 </p>
-            }
+            } *@
 
         </div>
 

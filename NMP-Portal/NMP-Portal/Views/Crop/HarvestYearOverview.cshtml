@@ -102,7 +102,7 @@
                                     </h2>
                                     <p class="govuk-body"></p>
                                 </div>
-                                <a class=" govuk-button govuk-button--secondary" asp-action="UpdateCropGroupNameCheckAnswer" asp-controller="Crop" asp-route-q="@harvestYearPlan.EncryptedCropTypeName" asp-route-r="@harvestYearPlan.EncryptedCropGroupName">@Resource.lblUpdateThisGroup</a>
+                                <a class=" govuk-button govuk-button--secondary" asp-action="CheckAnswer" asp-controller="Crop" asp-route-q="@harvestYearPlan.EncryptedCropTypeName" asp-route-r="@harvestYearPlan.EncryptedCropGroupName" asp-route-t="@Model.EncryptedHarvestYear" asp-route-u="@Model.EncryptedFarmId">@Resource.lblUpdateThisGroup</a>
                                 @* <a class=" govuk-button govuk-button--secondary" asp-action="RemoveCrop" asp-controller="Crop" asp-route-q="@harvestYearPlan.EncryptedCropTypeName" asp-route-r="@harvestYearPlan.EncryptedCropGroupName">@Resource.lblRemoveThisGroup</a> *@
                                 <div class="tab-right">
 

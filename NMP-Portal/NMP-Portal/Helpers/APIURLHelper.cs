@@ -121,12 +121,13 @@ namespace NMP.Portal.Helpers
         public const string FetchExcessWinterRainfallOptionByIdAPI = "/excess-winter-rainfall-options/value/{0}";
         public const string FetchCropGroupNameByCropIdGroupNameAndYearAPI = "/crops/GroupNameExist/{0}?newGroupName={1}&year={2}";
         public const string UpdateCropGroupNameWithVarietyAPI = "crops/CropGroupName/{0}?cropGroupName={1}&variety={2}&year={3}";
+        public const string UpdateCropAPI = "crops";
         public const string DeleteSNSAnalysisAPI = "/snsAnalysis/{0}";
         public const string FetchFertiliserByIdAPI = "/fertiliser-manures/{0}";
         public const string FetchFieldWithSameDateAndNutrientAPI = "/fertiliser-manures/FertliserData/{0}?farmId={1}&harvestYear={2}";
         public const string UpdateFertiliserAPI = "/fertiliser-manures";
         public const string FetchFieldWithSameDateAndManureTypeAPI = "/organic-manures/OrganicManuresData/{0}?farmId={1}&harvestYear={2}";
-
+        public const string FetchManagementPeriodByCropIdAsyncAPI = "management-periods/crops/{0}?shortSummary={1}";
         //Manner APi Url
         public const string FetchMannerApplicationMethodByIdAsyncAPI = "vendors/manner/application-methods/{0}";
         public const string FetchMannerIncorporationDelaysByMethodIdAndApplicableForAsyncAPI = "vendors/manner/incorporation-delays/by-incorp-method-and-applicable-for/{0}?applicableFor={1}";//    vendors/manner/incorporation-delays/by-incorp-method/{0}";
