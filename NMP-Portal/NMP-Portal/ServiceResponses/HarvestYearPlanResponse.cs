@@ -48,6 +48,7 @@ namespace NMP.Portal.ServiceResponses
         [JsonProperty("SwardManagementID")]
         public int? SwardManagementID { get; set; }
         public int? PotentialCut { get; set; }
+        public int? Establishment { get; set; }
         [JsonProperty("TotalOrganicManures")]
         public int OrganicManuresCount { get; set; }
 

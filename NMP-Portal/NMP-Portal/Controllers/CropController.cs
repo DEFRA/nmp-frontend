@@ -1953,6 +1953,8 @@ namespace NMP.Portal.Controllers
                             model.SwardManagementId = harvestYearPlanResponse.FirstOrDefault().SwardManagementID; ;
                             model.DefoliationSequenceId = harvestYearPlanResponse.FirstOrDefault().DefoliationSequenceID;
                             model.SwardTypeId = harvestYearPlanResponse.FirstOrDefault().SwardTypeID;
+                            model.PotentialCut = harvestYearPlanResponse.FirstOrDefault().PotentialCut;
+                            model.CurrentSward = harvestYearPlanResponse.FirstOrDefault().Establishment;
                             crop.EncryptedCounter = _fieldDataProtector.Protect(counter.ToString());
                             if (decimal.TryParse(harvestYearPlanResponse[i].Yield, out decimal yield))
                             {
@@ -4174,7 +4176,11 @@ namespace NMP.Portal.Controllers
                     List<CropData> cropEntries = new List<CropData>();
                     foreach (Crop crop in model.Crops)
                     {
-                        crop.CropGroupName = model.CropGroupName;
+                        crop.DefoliationSequenceID = model.DefoliationSequenceId;
+                        crop.SwardTypeID = model.SwardTypeId;
+                        crop.SwardManagementID = model.SwardManagementId;
+                        crop.PotentialCut = model.PotentialCut;
+                        crop.Establishment = model.CurrentSward;
                         (List<ManagementPeriod> managementPeriodList, error) = await _cropService.FetchManagementperiodByCropId(crop.ID.Value, true);
                         if (string.IsNullOrWhiteSpace(error.Message))
                         {
@@ -4204,8 +4210,9 @@ namespace NMP.Portal.Controllers
                         {
                             id = model.EncryptedFarmId,
                             year = model.EncryptedHarvestYear,
-                            q = _farmDataProtector.Protect(Resource.lblTrue.ToString()),
-                            r = _cropDataProtector.Protect(Resource.lblPlanCreated)
+                            q = Resource.lblTrue,
+                            r = _cropDataProtector.Protect(Resource.lblCropPlanUpdated),
+                            v = _cropDataProtector.Protect(Resource.lblSelectAFieldToSeeItsUpdatedRecommendations)
                         });
                     }
                     else
