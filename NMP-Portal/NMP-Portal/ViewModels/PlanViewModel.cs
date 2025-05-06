@@ -22,7 +22,7 @@ namespace NMP.Portal.ViewModels
         public string? FieldName { get; set; }
         public int? FieldID { get; set; }
         public new int? Year { get; set; }
-        public DateTime SowingDate { get; set; }
+        public DateTime? SowingDate { get; set; }
         public List<string>? FieldList { get; set; }
         public List<Crop>? Crops { get; set; }
         public int? SowingDateQuestion { get; set; }
