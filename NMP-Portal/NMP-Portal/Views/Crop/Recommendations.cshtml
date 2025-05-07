@@ -733,7 +733,7 @@
                             </div>
 
 
-                            <p class="govuk-body"><a asp-action="RemoveCrop" asp-controller="Crop" asp-route-q="@crop.EncryptedCropTypeName" asp-route-s="@crop.EncryptedFieldName" asp-route-t="@crop.EncryptedFieldId" asp-route-u="@crop.EncryptedCropOrder">@string.Format(Resource.lblRemoveCropTypeFromFieldName, crop.CropTypeName, Model.FieldName)</a></p>
+                            <p class="govuk-body"><a asp-action="RemoveCrop" asp-controller="Crop" asp-route-q="@crop.EncryptedCropTypeName" asp-route-s="@crop.EncryptedFieldName" asp-route-t="@crop.EncryptedFieldId" asp-route-u="@crop.EncryptedCropOrder" asp-route-v="@Model.EncryptedFarmId"  asp-route-w="@Model.EncryptedHarvestYear">@string.Format(Resource.lblRemoveCropTypeFromFieldName, crop.CropTypeName, Model.FieldName)</a></p>
                             @if (crop.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)
                             {
                                 @if (crop.IsSnsExist != true)

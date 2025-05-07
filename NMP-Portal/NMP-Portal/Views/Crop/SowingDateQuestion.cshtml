@@ -89,6 +89,7 @@
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationSequenceId"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsCropUpdate"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SowingDateEncryptedCounter" value="@Model.SowingDateEncryptedCounter"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCropGroupName"></govuk-input>
         @if (Model.FieldList != null && Model.FieldList.Count > 0)
         {
             @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -130,7 +131,7 @@
                         @Resource.lblYouCanChangeYourPlantingDateLater
                     </govuk-radios-hint>
 
-                    <govuk-radios-item value="@YesIHaveASingleDateForAllTheseFields">@(Model.Crops.Count > 1 ? Resource.lblYesIHaveASingleDateForAllTheseFields : Resource.lblYes)</govuk-radios-item>
+                    <govuk-radios-item value="@YesIHaveASingleDateForAllTheseFields">@((Model.Crops.Count > 1 || (!string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))) ? Resource.lblYesIHaveASingleDateForAllTheseFields : Resource.lblYes)</govuk-radios-item>
                     @if (Model.Crops.Count > 1)
                     {
                         <govuk-radios-item value="@YesIHaveDifferentDatesForEachOfTheseFields">@Resource.lblYesIHaveDifferentDatesForEachOfTheseFields</govuk-radios-item>
