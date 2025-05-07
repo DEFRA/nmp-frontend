@@ -440,7 +440,7 @@
                                             @(crop.Yield.HasValue ? crop.Yield.Value == 0.0m ? 0 : crop.Yield.Value.ToString("#.#") + " " + @Resource.lblTonnesPerHectare : Resource.lblNotSet)
                                         </govuk-summary-list-row-value>
                                         <govuk-summary-list-row-actions>
-                                            @if (Model.Yield == null && (!string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate)))
+                                            @if (crop.Yield == null && (!string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate)))
                                             {
                                                 <govuk-summary-list-row-action asp-action="YieldQuestion" asp-controller="Crop" asp-route-q=@Model.YieldEncryptedCounter>@Resource.lblChange</govuk-summary-list-row-action>
                                             }
