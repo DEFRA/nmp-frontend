@@ -2158,6 +2158,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Crops.
+        /// </summary>
+        public static string lblCrops {
+            get {
+                return ResourceManager.GetString("lblCrops", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Crops and fields.
         /// </summary>
         public static string lblCropsAndFields {
@@ -7066,6 +7075,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select a field to see its nutrient recommendations..
+        /// </summary>
+        public static string lblSelectAFieldToSeeItsNutrientRecommendations {
+            get {
+                return ResourceManager.GetString("lblSelectAFieldToSeeItsNutrientRecommendations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select a field to see its updated nutrient recommendations.
         /// </summary>
         public static string lblSelectAFieldToSeeItsUpdatedNutrientRecommendation {
@@ -10808,6 +10826,15 @@ namespace NMP.Portal.Resources {
         public static string MsgCroppedAreaIsGreaterThanTotalArea {
             get {
                 return ResourceManager.GetString("MsgCroppedAreaIsGreaterThanTotalArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} added for {1}.
+        /// </summary>
+        public static string MsgCropsAddedForYear {
+            get {
+                return ResourceManager.GetString("MsgCropsAddedForYear", resourceCulture);
             }
         }
         

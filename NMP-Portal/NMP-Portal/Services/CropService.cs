@@ -760,19 +760,27 @@ namespace NMP.Portal.Services
             }
             return (message, error);
         }
-        public async Task<(bool,Error)> IsCropsGroupNameExistForUpdate(string cropIds, string cropGroupName, int year)
+        public async Task<(bool,Error)> IsCropsGroupNameExistForUpdate(string cropIds, string cropGroupName, int year, int farmId)
         {
             bool isCropsGroupNameExist = false;
             Error error = new Error();
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropGroupNameByCropIdGroupNameAndYearAPI, cropIds, cropGroupName, year));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropGroupNameByCropIdGroupNameAndYearAPI, cropIds, cropGroupName, year, farmId));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-                if (responseWrapper.Data == true)
+                if (response.IsSuccessStatusCode && responseWrapper != null&&responseWrapper.Data == true)
                 {
                     isCropsGroupNameExist = true;
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
                 }
 
             }
