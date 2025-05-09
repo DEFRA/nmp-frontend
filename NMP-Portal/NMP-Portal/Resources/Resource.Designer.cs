@@ -6886,7 +6886,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to remove this crop group..
+        ///   Looks up a localized string similar to remove this crop group.
         /// </summary>
         public static string lblRemoveThisCropGroup {
             get {
@@ -7759,7 +7759,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When is the planting date for {0} in {1}?.
+        ///   Looks up a localized string similar to What is the planting date for {0} in {1}?.
         /// </summary>
         public static string lblSowingDiffrentDateForCheckAnswer {
             get {
@@ -7768,7 +7768,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When is the planting date for {0} in {1} not set?.
+        ///   Looks up a localized string similar to What is the planting date for {0} in {1} not set?.
         /// </summary>
         public static string lblSowingDiffrentDateNotSet {
             get {
@@ -7777,7 +7777,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When is the planting date for your {0}?.
+        ///   Looks up a localized string similar to What is the planting date for your {0}?.
         /// </summary>
         public static string lblSowingSingleDateForCheckAnswer {
             get {
@@ -7786,7 +7786,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When is the planting date for your {0} not set?.
+        ///   Looks up a localized string similar to What is the planting date for your {0} not set?.
         /// </summary>
         public static string lblSowingSingleDateNotSet {
             get {
