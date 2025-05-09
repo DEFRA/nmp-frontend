@@ -231,10 +231,9 @@
                                     Model.CropType) : Resource.lblNotSet)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                @if(string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
-                                {
+                                
                                     <govuk-summary-list-row-action asp-action="CropTypes" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
-                                }
+                                
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     }

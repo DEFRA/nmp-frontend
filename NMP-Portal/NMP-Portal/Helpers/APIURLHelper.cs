@@ -119,7 +119,7 @@ namespace NMP.Portal.Helpers
         public const string FetchExcessWinterRainfallOptionAPI = "/excess-winter-rainfall-options";
         public const string AddOrUpdateExcessWinterRainfallAPI = "/excessRainfalls/{0}?year={1}";
         public const string FetchExcessWinterRainfallOptionByIdAPI = "/excess-winter-rainfall-options/value/{0}";
-        public const string FetchCropGroupNameByCropIdGroupNameAndYearAPI = "/crops/GroupNameExist/{0}?newGroupName={1}&year={2}";
+        public const string FetchCropGroupNameByCropIdGroupNameAndYearAPI = "/crops/GroupNameExist/{0}?newGroupName={1}&year={2}&farmId={3}";
         public const string UpdateCropGroupNameWithVarietyAPI = "crops/CropGroupName/{0}?cropGroupName={1}&variety={2}&year={3}";
         public const string UpdateCropAPI = "crops";
         public const string DeleteSNSAnalysisAPI = "/snsAnalysis/{0}";
