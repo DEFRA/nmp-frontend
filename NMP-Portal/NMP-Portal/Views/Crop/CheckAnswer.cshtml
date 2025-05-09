@@ -292,7 +292,7 @@
 
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
+                            @if (!(!string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate) && (ViewBag.IsFieldChange!=null&&ViewBag.IsFieldChange)))
                             {
                                 <govuk-summary-list-row-action class="@(ViewBag.FieldOptions.Count==1? "disabled": "")" asp-action="CropFields" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
                             }

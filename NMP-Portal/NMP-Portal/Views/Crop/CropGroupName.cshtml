@@ -7,7 +7,7 @@
 @section BeforeContent {
     @* @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
     { *@
-        <govuk-back-link asp-action="@(Model.IsCheckAnswer&& (!Model.IsCropGroupChange)&& (!Model.IsCropTypeChange) ? "CheckAnswer" :"CropFields")" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer&& (!Model.IsCropGroupChange)&& (!Model.IsCropTypeChange)&& (!Model.IsAnyChangeInField) ? "CheckAnswer" :"CropFields")" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
    @*  }
     else
     {
