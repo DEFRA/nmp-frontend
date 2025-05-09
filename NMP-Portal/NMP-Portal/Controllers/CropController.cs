@@ -3091,6 +3091,18 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Crop Controller : PlansAndRecordsOverview({id}, {year}) action called");
             PlanViewModel model = new PlanViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
+            {
+                _httpContextAccessor.HttpContext?.Session.Remove("FertiliserManure");
+            }
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
+            {
+                _httpContextAccessor.HttpContext?.Session.Remove("OrganicManure");
+            }
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
+            {
+                _httpContextAccessor.HttpContext?.Session.Remove("CropData");
+            }
             if (!string.IsNullOrWhiteSpace(q))
             {
                 TempData["successMsg"] = _cropDataProtector.Unprotect(q);
