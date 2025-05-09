@@ -1468,7 +1468,7 @@ namespace NMP.Portal.Controllers
                 model.IsQuestionChange = false;
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
             }
-            if (model.Crops.Count == 1)
+            if (model.Crops.Count == 1 && (ViewBag.DefaultYield == null || ViewBag.DefaultYield == 0))
             {
                 model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
@@ -1580,6 +1580,7 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("CropInfoOne");
                 }
             }
+            ViewBag.DefaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
             return View(model);
         }
 

@@ -93,7 +93,10 @@
                         @(string.Format(Model.Crops.Count > 1 ? Resource.lblHowDoYouWantToEnterTheExpectedYieldForInTheseFields : Resource.lblYieldQuestionForSingleField, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType))
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-item value="@EnterASingleFigureForAllTheseFields">@(Model.Crops.Count > 1 ? Resource.lblEnterASingleFigureForAllTheseFields : Resource.lblEnterAFigure)</govuk-radios-item>
-                    <govuk-radios-item value="@EnterDifferentFiguresForEachField">@Resource.lblEnterDifferentFiguresForEachField</govuk-radios-item>
+                    @if (Model.Crops.Count > 1)
+                    {
+                        <govuk-radios-item value="@EnterDifferentFiguresForEachField">@Resource.lblEnterDifferentFiguresForEachField</govuk-radios-item>
+                    }
                     @if (ViewBag.DefaultYield != null && ViewBag.DefaultYield > 0)
                     {
                         <govuk-radios-item value="@UseTheStandardFigureForAllTheseFields">@string.Format(Resource.lblUseTheStandardFigure, ViewBag.DefaultYield)</govuk-radios-item>

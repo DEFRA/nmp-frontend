@@ -30,7 +30,15 @@
             yieldQuestion = string.Format(Resource.lblUseTheStandardFigure, ViewBag.DefaultYield);
             break;
         case (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields:
-            yieldQuestion = Resource.lblEnterASingleFigureForAllTheseFields;
+            if (Model.Crops.Count == 1 && (ViewBag.DefaultYield != null || ViewBag.DefaultYield > 0))
+            {
+                yieldQuestion = Resource.lblEnterAFigure;
+            }
+            else
+            {
+                yieldQuestion = Resource.lblEnterASingleFigureForAllTheseFields;
+            }
+            
             break;
         case (int)NMP.Portal.Enums.YieldQuestion.EnterDifferentFiguresForEachField:
             yieldQuestion = Resource.lblEnterDifferentFiguresForEachField;
@@ -231,10 +239,10 @@
                                     Model.CropType) : Resource.lblNotSet)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                @if(string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
-                                {
+                                @* @if(string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
+                                { *@
                                     <govuk-summary-list-row-action asp-action="CropTypes" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
-                                }
+                                @* } *@
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     }
@@ -405,7 +413,7 @@
 
                     @if (Model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass)
                     {
-                        @if (Model.FieldList.Count > 1)
+                        @if (Model.FieldList.Count > 1 || (Model.Crops.Count == 1 && (ViewBag.DefaultYield != null || ViewBag.DefaultYield > 0)))
                         {
                             <govuk-summary-list-row class=@((string.IsNullOrWhiteSpace(yieldQuestion))?"govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
