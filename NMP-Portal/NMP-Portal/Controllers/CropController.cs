@@ -960,7 +960,7 @@ namespace NMP.Portal.Controllers
                     (List<HarvestYearPlanResponse> harvestYearPlanResponseForFilter, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
                     if (string.IsNullOrWhiteSpace(error.Message) && harvestYearPlanResponseForFilter.Count > 0)
                     {
-                        harvestYearPlanResponseForFilter = harvestYearPlanResponseForFilter.Where(x => x.CropTypeName == model.CropType && x.CropGroupName == model.PreviousCropGroupName).ToList();
+                        harvestYearPlanResponseForFilter = harvestYearPlanResponseForFilter.Where(x => x.CropGroupName == model.PreviousCropGroupName).ToList();
                         if (harvestYearPlanResponseForFilter != null)
                         {
                             var fieldIds = harvestYearPlanResponseForFilter.Select(x => x.FieldID).ToList();
@@ -1097,7 +1097,7 @@ namespace NMP.Portal.Controllers
                                 (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
                                 if (string.IsNullOrWhiteSpace(error.Message) && harvestYearPlanResponse.Count > 0)
                                 {
-                                    harvestYearPlanResponse = harvestYearPlanResponse.Where(x => x.CropTypeName == model.CropType && x.CropGroupName == model.PreviousCropGroupName).ToList();
+                                    harvestYearPlanResponse = harvestYearPlanResponse.Where(x => x.CropGroupName == model.PreviousCropGroupName).ToList();
                                     if (harvestYearPlanResponse != null)
                                     {
                                         crop.ID = harvestYearPlanResponse.Where(x => x.FieldID == fieldId).Select(x => x.CropID).FirstOrDefault();
@@ -2159,7 +2159,7 @@ namespace NMP.Portal.Controllers
             (harvestYearPlanResponse, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
             if (string.IsNullOrWhiteSpace(error.Message) && harvestYearPlanResponse.Count > 0)
             {
-                harvestYearPlanResponse = harvestYearPlanResponse.Where(x => x.CropTypeName == model.CropType && x.CropGroupName == model.PreviousCropGroupName).ToList();
+                harvestYearPlanResponse = harvestYearPlanResponse.Where(x => x.CropGroupName == model.PreviousCropGroupName).ToList();
                 if (harvestYearPlanResponse != null&& harvestYearPlanResponse.Count==1)
                 {
                     ViewBag.IsFieldChange=true;
@@ -3903,7 +3903,7 @@ namespace NMP.Portal.Controllers
                     {
                         if (model.isComingFromRecommendation.HasValue && (!model.isComingFromRecommendation.Value))
                         {
-                            harvestYearPlanResponse = harvestYearPlanResponse.Where(x => x.CropTypeName == model.CropType && x.CropGroupName == model.PreviousCropGroupName).ToList();
+                            harvestYearPlanResponse = harvestYearPlanResponse.Where(x => x.CropGroupName == model.PreviousCropGroupName).ToList();
                         }
                         else
                         {
