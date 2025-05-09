@@ -4,8 +4,23 @@
     ViewData["Title"] = Resource.lblYield;
     int EnterASingleFigureForAllTheseFields = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
     int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
-    var backAction = Model.Crops.Count > 1 ? "Yield" : Model.SowingDateQuestion != (int)NMP.Portal.Enums.SowingDateQuestion.NoIWillEnterTheDateLater ? "SowingDate" :
-    "SowingDateQuestion";
+    var backAction = "";
+    if (Model.Crops.Count > 1)
+    {
+        backAction = "Yield";
+    }
+    else if (Model.Crops.Count == 1 && ViewBag.DefaultYield != null || ViewBag.DefaultYield > 0)
+    {
+        backAction = "Yield";
+    }
+    else if (Model.SowingDateQuestion != (int)NMP.Portal.Enums.SowingDateQuestion.NoIWillEnterTheDateLater)
+    {
+        backAction = "SowingDate";
+    }
+    else
+    {
+        backAction = "SowingDateQuestion";
+    }
 }
 
 @section BeforeContent {
