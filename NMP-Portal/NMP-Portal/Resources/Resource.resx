@@ -4400,4 +4400,13 @@ live</value>
   <data name="MsgIfUserCreateSecondCropInBasicPlan" xml:space="preserve">
     <value>Your current plan allows only one crop. To add a second crop, please update your plan.</value>
   </data>
+  <data name="lblCrops" xml:space="preserve">
+    <value>Crops</value>
+  </data>
+  <data name="lblSelectAFieldToSeeItsNutrientRecommendations" xml:space="preserve">
+    <value>Select a field to see its nutrient recommendations.</value>
+  </data>
+  <data name="MsgCropsAddedForYear" xml:space="preserve">
+    <value>{0} added for {1}</value>
+  </data>
 </root>

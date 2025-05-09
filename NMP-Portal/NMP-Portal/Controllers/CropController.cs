@@ -558,7 +558,7 @@ namespace NMP.Portal.Controllers
                 {
                     cropData = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
                 }
-                
+
                 List<int> fieldsAllowedForSecondCrop = new List<int>();
                 List<int> fieldRemoveList = new List<int>();
                 (List<HarvestYearPlanResponse> harvestYearPlanResponse, Error error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
@@ -993,10 +993,10 @@ namespace NMP.Portal.Controllers
                     Value = f.ID.ToString(),
                     Text = f.Name
                 }).ToList();
-                
+
                 List<int> fieldsAllowedForSecondCrop = new List<int>();
                 List<int> fieldRemoveList = new List<int>();
-                (List<HarvestYearPlanResponse> harvestYearPlanResponse,  error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
+                (List<HarvestYearPlanResponse> harvestYearPlanResponse,error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
                 List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = harvestYearPlanResponse.Where(x => x.CropInfo1 != null &&
                x.Yield != null).ToList();
                 if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
@@ -1069,7 +1069,7 @@ namespace NMP.Portal.Controllers
                 }).ToList();
                 List<int> fieldsAllowedForSecondCrop = new List<int>();
                 List<int> fieldRemoveList = new List<int>();
-                (List<HarvestYearPlanResponse> harvestYearPlanResponse,  error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
+                (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
                 List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = harvestYearPlanResponse.Where(x => x.CropInfo1 != null &&
                x.Yield != null).ToList();
                 if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
@@ -2198,7 +2198,7 @@ namespace NMP.Portal.Controllers
             if (string.IsNullOrWhiteSpace(error.Message) && harvestYearPlanResponse.Count > 0)
             {
                 harvestYearPlanResponse = harvestYearPlanResponse.Where(x => x.CropGroupName == model.PreviousCropGroupName).ToList();
-                if (harvestYearPlanResponse != null&& harvestYearPlanResponse.Count==1)
+                if (harvestYearPlanResponse != null && harvestYearPlanResponse.Count==1)
                 {
                     ViewBag.IsFieldChange = true;
                 }
@@ -2369,7 +2369,7 @@ namespace NMP.Portal.Controllers
                     model.CropGroup = Resource.lblGrass;
                 }
             }
-            if(isBasePlan)
+            if (isBasePlan)
             {
                 ViewBag.IsBasePlan = isBasePlan;
             }
@@ -2713,7 +2713,9 @@ namespace NMP.Portal.Controllers
                     id = model.EncryptedFarmId,
                     year = model.EncryptedHarvestYear,
                     q = _farmDataProtector.Protect(success.ToString()),
-                    r = _cropDataProtector.Protect(Resource.lblPlanCreated)
+                    r = model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass ? _cropDataProtector.Protect(string.Format(Resource.MsgCropsAddedForYear, Resource.lblGrass, model.Year)) : _cropDataProtector.Protect(string.Format(Resource.MsgCropsAddedForYear, Resource.lblCrops, model.Year)),
+                    v = _cropDataProtector.Protect(Resource.lblSelectAFieldToSeeItsNutrientRecommendations)
+
                 });
             }
             else
@@ -4611,7 +4613,7 @@ namespace NMP.Portal.Controllers
                     };
                     string jsonData = JsonConvert.SerializeObject(cropDataWrapper);
                     (List<Crop> crops, error) = await _cropService.UpdateCrop(jsonData);
-                  if (string.IsNullOrWhiteSpace(error.Message) && crops.Count > 0)
+                    if (string.IsNullOrWhiteSpace(error.Message) && crops.Count > 0)
                     {
                         model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
                         _httpContextAccessor.HttpContext?.Session.Remove("CropData");
