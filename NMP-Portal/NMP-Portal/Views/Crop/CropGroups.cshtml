@@ -60,6 +60,10 @@
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SowingDateCurrentCounter" value="@Model.SowingDateCurrentCounter"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SowingDateEncryptedCounter" value="@Model.SowingDateEncryptedCounter"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCropGroupName"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation" value="@Model.IsComingFromRecommendation.ToString().ToLower()"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCropType"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCropOrder"></govuk-input>
         @if (Model.FieldList != null && Model.FieldList.Count > 0)
         {
             @for (int i = 0; i < Model.FieldList.Count; i++)

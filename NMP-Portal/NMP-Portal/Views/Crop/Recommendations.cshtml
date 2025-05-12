@@ -732,8 +732,8 @@
                                 </table>
                             </div>
 
-
-                            <p class="govuk-body"><a asp-action="RemoveCrop" asp-controller="Crop" asp-route-q="@crop.EncryptedCropTypeName" asp-route-s="@crop.EncryptedFieldName" asp-route-t="@crop.EncryptedFieldId" asp-route-u="@crop.EncryptedCropOrder" asp-route-v="@Model.EncryptedFarmId"  asp-route-w="@Model.EncryptedHarvestYear">@string.Format(Resource.lblRemoveCropTypeFromFieldName, crop.CropTypeName, Model.FieldName)</a></p>
+                            <p class="govuk-body"><a asp-action="CheckAnswer" asp-controller="Crop" asp-route-q="@crop.EncryptedCropTypeName" asp-route-r="@crop.EncryptedCropGroupName" asp-route-t="@Model.EncryptedHarvestYear" asp-route-u="@Model.EncryptedFarmId" asp-route-v="@crop.EncryptedFieldId" asp-route-w="@crop.EncryptedCropOrder">@string.Format(Resource.lblChangeLinkForRecommendation, crop.CropTypeName, Model.FieldName)</a></p>
+                            @* <p class="govuk-body"><a asp-action="RemoveCrop" asp-controller="Crop" asp-route-q="@crop.EncryptedCropTypeName" asp-route-s="@crop.EncryptedFieldName" asp-route-t="@crop.EncryptedFieldId" asp-route-u="@crop.EncryptedCropOrder" asp-route-v="@Model.EncryptedFarmId"  asp-route-w="@Model.EncryptedHarvestYear">@string.Format(Resource.lblRemoveCropTypeFromFieldName, crop.CropTypeName, Model.FieldName)</a></p> *@
                             @if (crop.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)
                             {
                                 @if (crop.IsSnsExist != true)
