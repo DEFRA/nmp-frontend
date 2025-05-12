@@ -6,7 +6,7 @@
     var bachAction = (Model.SowingDateQuestion == (int)NMP.Portal.Enums.SowingDateQuestion.NoIWillEnterTheDateLater) ? "SowingDateQuestion" :
      "SwardType";
     int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
-    var potentialCutName = "";
+    int potentialCutId = 0;
 }
 
 @section BeforeContent {
@@ -52,6 +52,7 @@
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPlanRecord" value="@Model.IsPlanRecord"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupName"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropInfo2"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyChangeInField" value="@Model.IsAnyChangeInField"></govuk-input>
 
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassSeason"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CurrentSward"></govuk-input>
@@ -129,44 +130,44 @@
                     {
                         @foreach (var potentialCut in ViewBag.PotentialCuts)
                         {
-                            if (potentialCut.PotentialCut == (int)NMP.Portal.Enums.PotentialCut.One)
+                            if (string.Equals(potentialCut.PotentialCut, Resource.lblOne))
                             {
-                                potentialCutName = Resource.lblOne;
+                                potentialCutId = (int)NMP.Portal.Enums.PotentialCut.One;
                             }
-                            else if (potentialCut.PotentialCut == (int)NMP.Portal.Enums.PotentialCut.Two)
+                            else if (string.Equals(potentialCut.PotentialCut, Resource.lblTwo))
                             {
-                                potentialCutName = Resource.lblTwo;
+                                potentialCutId = (int)NMP.Portal.Enums.PotentialCut.Two;
                             }
-                            else if (potentialCut.PotentialCut == (int)NMP.Portal.Enums.PotentialCut.Three)
+                            else if (string.Equals(potentialCut.PotentialCut,Resource.lblThree))
                             {
-                                potentialCutName = Resource.lblThree;
+                                potentialCutId = (int)NMP.Portal.Enums.PotentialCut.Three;
                             }
-                            else if (potentialCut.PotentialCut == (int)NMP.Portal.Enums.PotentialCut.Four)
+                            else if (string.Equals(potentialCut.PotentialCut,Resource.lblFour))
                             {
-                                potentialCutName = Resource.lblFour;
+                                potentialCutId = (int)NMP.Portal.Enums.PotentialCut.Four;
                             }
-                            else if (potentialCut.PotentialCut == (int)NMP.Portal.Enums.PotentialCut.Five)
+                            else if (string.Equals(potentialCut.PotentialCut ,Resource.lblFive))
                             {
-                                potentialCutName = Resource.lblFive;
+                                potentialCutId = (int)NMP.Portal.Enums.PotentialCut.Five;
                             }
-                            else if (potentialCut.PotentialCut == (int)NMP.Portal.Enums.PotentialCut.Six)
+                            else if (string.Equals(potentialCut.PotentialCut ,Resource.lblSix))
                             {
-                                potentialCutName = Resource.lblSix;
+                                potentialCutId = (int)NMP.Portal.Enums.PotentialCut.Six;
                             }
-                            else if (potentialCut.PotentialCut == (int)NMP.Portal.Enums.PotentialCut.Seven)
+                            else if (string.Equals(potentialCut.PotentialCut ,Resource.lblSeven))
                             {
-                                potentialCutName = Resource.lblSeven;
+                                potentialCutId = (int)NMP.Portal.Enums.PotentialCut.Seven;
                             }
-                            else if (potentialCut.PotentialCut == (int)NMP.Portal.Enums.PotentialCut.Eight)
+                            else if (string.Equals(potentialCut.PotentialCut ,Resource.lblEight))
                             {
-                                potentialCutName = Resource.lblEight;
+                                potentialCutId = (int)NMP.Portal.Enums.PotentialCut.Eight;
                             }
-                            else if (potentialCut.PotentialCut == (int)NMP.Portal.Enums.PotentialCut.Nine)
+                            else if (string.Equals(potentialCut.PotentialCut ,Resource.lblNine))
                             {
-                                potentialCutName = Resource.lblNine;
+                                potentialCutId = (int)NMP.Portal.Enums.PotentialCut.Nine;
                             }
 
-                            <govuk-radios-item value="@potentialCut.PotentialCut">@potentialCutName</govuk-radios-item>
+                            <govuk-radios-item value="@potentialCutId">@potentialCut.PotentialCut</govuk-radios-item>
                         }
                     }
 

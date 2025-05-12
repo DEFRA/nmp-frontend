@@ -926,19 +926,19 @@ namespace NMP.Portal.Services
         }
 
         //grass
-        public async Task<(List<DefoliationSequenceResponse>,Error)> FetchDefoliationSequencesBySwardTypeIdAndNumberOfCut(int swardTypeId, int numberOfCut)
+        public async Task<(List<DefoliationSequenceResponse>,Error)> FetchDefoliationSequencesBySwardTypeIdAndNumberOfCut(int swardTypeId, int numberOfCut,bool isNewSward)
         {
             Error error = null;
             List<DefoliationSequenceResponse> defoliationSequenceResponses = new List<DefoliationSequenceResponse>();
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCutAsyncAPI, swardTypeId, numberOfCut));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCutAsyncAPI, swardTypeId, numberOfCut, isNewSward));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if ((response.IsSuccessStatusCode && responseWrapper != null) || responseWrapper.Data != null)
                 {
-                    var defoliationSequenceList = responseWrapper.Data.list.ToObject<List<DefoliationSequenceResponse>>();
+                    var defoliationSequenceList = responseWrapper.Data.ToObject<List<DefoliationSequenceResponse>>();
                     defoliationSequenceResponses.AddRange(defoliationSequenceList);
                 }
                 else
@@ -977,7 +977,7 @@ namespace NMP.Portal.Services
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
                 {
-                    var potentialCutList = responseWrapper.Data.list.ToObject<List<PotentialCutResponse>>();
+                    var potentialCutList = responseWrapper.Data.ToObject<List<PotentialCutResponse>>();
                     potentialCuts.AddRange(potentialCutList);
                 }
                 else
@@ -1100,8 +1100,39 @@ namespace NMP.Portal.Services
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
                 {
-                    var yieldRangesList = responseWrapper.Data.ToObject<List<YieldRangesEnglandAndWalesResponse>>();
-                    yieldRanges.AddRange(yieldRangesList);
+
+                    //Temporary code start (until grass api fixed.)
+                    List<string> inputs = new List<string>
+                    {
+                        "Seven tonnes per hectare",
+                        "Ten tonnes per hectare",
+                        "Three tonnes per hectare",
+                        "Twenty tonnes per hectare"
+                    };
+                    List<YieldRangesEnglandAndWalesResponseTemprary> yieldRangesList = responseWrapper.Data.ToObject<List<YieldRangesEnglandAndWalesResponseTemprary>>();
+                    Dictionary<string, int> wordToNumber = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase)
+                    {
+                        {"One", 1}, {"Two", 2}, {"Three", 3}, {"Four", 4}, {"Five", 5},
+                        {"Six", 6}, {"Seven", 7}, {"Eight", 8}, {"Nine", 9}, {"Ten", 10},
+                        {"Eleven", 11}, {"Twelve", 12}, {"Thirteen", 13}, {"Fourteen", 14},
+                        {"Fifteen", 15}, {"Sixteen", 16}, {"Seventeen", 17}, {"Eighteen", 18},
+                        {"Nineteen", 19}, {"Twenty", 20}
+                    };
+
+                    var yields = yieldRangesList.Select(item =>
+                    {
+                        string firstWord = item.Yield.Split(' ')[0];
+                        return new YieldRangesEnglandAndWalesResponse
+                        {
+                            Yield = wordToNumber.TryGetValue(firstWord, out int value) ? value : 0
+                        };
+                    }).ToList();
+                    //Temporary code end
+
+
+                    //var yieldRangesList = responseWrapper.Data.ToObject<List<YieldRangesEnglandAndWalesResponseTemprary>>();
+                    // yieldRanges.AddRange(yieldRangesList);
+                    yieldRanges.AddRange(yields);
                 }
                 else
                 {
