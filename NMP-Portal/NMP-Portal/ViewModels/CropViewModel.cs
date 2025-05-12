@@ -19,5 +19,9 @@ namespace NMP.Portal.ViewModels
         public string? SwardManagementName { get; set; }
         public string? EstablishmentName { get; set; }
         public string? DefoliationSequenceName { get; set; }
+        public string? EncryptedCropGroupName
+        {
+            get; set;
+        }
     }
 }

@@ -72,7 +72,7 @@ namespace NMP.Portal.ViewModels
         public int? CropOrder { get; set; }
         public List<int>? organicManureIds { get; set; }
         public List<string>? SelectedField { get; set; }
-        public bool? isComingFromRecommendation { get; set; }
+        public bool? IsComingFromRecommendation { get; set; }
         public bool? IsExcessWinterRainfallCheckAnswer { get; set; }
         public bool? IsExcessWinterRainfallUpdated { get; set; }
         public string? EncryptedIsCropUpdate { get; set; }
@@ -94,5 +94,8 @@ namespace NMP.Portal.ViewModels
         public int? SwardManagementId { get; set; }
         public int? PotentialCut { get; set; }
         public int? DefoliationSequenceId { get; set; }
+        public string? EncryptedCropOrder { get; set; } = string.Empty;
+        public string? EncryptedCropType { get; set; } = string.Empty;
+        public string? EncryptedCropGroupName { get; set; } = string.Empty;
     }
 }

@@ -1031,10 +1031,10 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Do you have a planting date for your {0}?</value>
   </data>
   <data name="lblSowingDiffrentDateForCheckAnswer" xml:space="preserve">
-    <value>When is the planting date for {0} in {1}?</value>
+    <value>What is the planting date for {0} in {1}?</value>
   </data>
   <data name="lblSowingSingleDateForCheckAnswer" xml:space="preserve">
-    <value>When is the planting date for your {0}?</value>
+    <value>What is the planting date for your {0}?</value>
   </data>
   <data name="lblVarietyNameForCheckAnswer" xml:space="preserve">
     <value>Variety name</value>
@@ -1058,10 +1058,10 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>yield not set</value>
   </data>
   <data name="lblSowingDiffrentDateNotSet" xml:space="preserve">
-    <value>When is the planting date for {0} in {1} not set?</value>
+    <value>What is the planting date for {0} in {1} not set?</value>
   </data>
   <data name="lblSowingSingleDateNotSet" xml:space="preserve">
-    <value>When is the planting date for your {0} not set?</value>
+    <value>What is the planting date for your {0} not set?</value>
   </data>
   <data name="lblWhatIsTheDifferentExpectedYieldNotSet" xml:space="preserve">
     <value>What is the expected yield for {0} in {1} not set?</value>
@@ -1097,7 +1097,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Nitrogen (N)</value>
   </data>
   <data name="lblChangeLinkForRecommendation" xml:space="preserve">
-    <value>Change {0} details for {1}</value>
+    <value>Change the {0} details for {1}</value>
   </data>
   <data name="lblCropDetails" xml:space="preserve">
     <value>Crop details</value>
@@ -4399,5 +4399,20 @@ live</value>
   </data>
   <data name="MsgIfUserCreateSecondCropInBasicPlan" xml:space="preserve">
     <value>Your current plan allows only one crop. To add a second crop, please update your plan.</value>
+  </data>
+  <data name="lblCrops" xml:space="preserve">
+    <value>Crops</value>
+  </data>
+  <data name="lblSelectAFieldToSeeItsNutrientRecommendations" xml:space="preserve">
+    <value>Select a field to see its nutrient recommendations.</value>
+  </data>
+  <data name="MsgCropsAddedForYear" xml:space="preserve">
+    <value>{0} added for {1}</value>
+  </data>
+  <data name="MsgForSuccessCrop" xml:space="preserve">
+    <value>Select a field to see its nutrient recommendations, or to add a soil mineral nitrogen (N) analysis results</value>
+  </data>
+  <data name="lblUpdateCropGroupNameContentForSingleField" xml:space="preserve">
+    <value>Changes here will be applied to {0} only. To change multiple fields at once you can </value>
   </data>
 </root>

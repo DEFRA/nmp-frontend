@@ -1609,7 +1609,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Change {0} details for {1}.
+        ///   Looks up a localized string similar to Change the {0} details for {1}.
         /// </summary>
         public static string lblChangeLinkForRecommendation {
             get {
@@ -2154,6 +2154,15 @@ namespace NMP.Portal.Resources {
         public static string lblCropPlanUpdated {
             get {
                 return ResourceManager.GetString("lblCropPlanUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Crops.
+        /// </summary>
+        public static string lblCrops {
+            get {
+                return ResourceManager.GetString("lblCrops", resourceCulture);
             }
         }
         
@@ -7066,6 +7075,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select a field to see its nutrient recommendations..
+        /// </summary>
+        public static string lblSelectAFieldToSeeItsNutrientRecommendations {
+            get {
+                return ResourceManager.GetString("lblSelectAFieldToSeeItsNutrientRecommendations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select a field to see its updated nutrient recommendations.
         /// </summary>
         public static string lblSelectAFieldToSeeItsUpdatedNutrientRecommendation {
@@ -7759,7 +7777,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When is the planting date for {0} in {1}?.
+        ///   Looks up a localized string similar to What is the planting date for {0} in {1}?.
         /// </summary>
         public static string lblSowingDiffrentDateForCheckAnswer {
             get {
@@ -7768,7 +7786,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When is the planting date for {0} in {1} not set?.
+        ///   Looks up a localized string similar to What is the planting date for {0} in {1} not set?.
         /// </summary>
         public static string lblSowingDiffrentDateNotSet {
             get {
@@ -7777,7 +7795,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When is the planting date for your {0}?.
+        ///   Looks up a localized string similar to What is the planting date for your {0}?.
         /// </summary>
         public static string lblSowingSingleDateForCheckAnswer {
             get {
@@ -7786,7 +7804,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When is the planting date for your {0} not set?.
+        ///   Looks up a localized string similar to What is the planting date for your {0} not set?.
         /// </summary>
         public static string lblSowingSingleDateNotSet {
             get {
@@ -8799,6 +8817,15 @@ namespace NMP.Portal.Resources {
         public static string lblUpdateCropGroupNameContent1 {
             get {
                 return ResourceManager.GetString("lblUpdateCropGroupNameContent1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changes here will be applied to {0} only. To change multiple fields at once you can .
+        /// </summary>
+        public static string lblUpdateCropGroupNameContentForSingleField {
+            get {
+                return ResourceManager.GetString("lblUpdateCropGroupNameContentForSingleField", resourceCulture);
             }
         }
         
@@ -10812,6 +10839,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} added for {1}.
+        /// </summary>
+        public static string MsgCropsAddedForYear {
+            get {
+                return ResourceManager.GetString("MsgCropsAddedForYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The date entered is not valid..
         /// </summary>
         public static string MsgDateEnteredIsNotValid {
@@ -11780,6 +11816,15 @@ namespace NMP.Portal.Resources {
         public static string MsgForSowingDate {
             get {
                 return ResourceManager.GetString("MsgForSowingDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a field to see its nutrient recommendations, or to add a soil mineral nitrogen (N) analysis results.
+        /// </summary>
+        public static string MsgForSuccessCrop {
+            get {
+                return ResourceManager.GetString("MsgForSuccessCrop", resourceCulture);
             }
         }
         
