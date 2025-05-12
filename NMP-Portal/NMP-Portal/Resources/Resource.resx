@@ -1097,7 +1097,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Nitrogen (N)</value>
   </data>
   <data name="lblChangeLinkForRecommendation" xml:space="preserve">
-    <value>Change {0} details for {1}</value>
+    <value>Change the {0} details for {1}</value>
   </data>
   <data name="lblCropDetails" xml:space="preserve">
     <value>Crop details</value>
@@ -4065,7 +4065,7 @@ live</value>
     <value>Changes here will be applied to all of these fields. To change a single field select it from your crop plan.</value>
   </data>
   <data name="lblRemoveThisCropGroup" xml:space="preserve">
-    <value>remove this crop group</value>
+    <value>remove this crop group.</value>
   </data>
   <data name="lblUpdateThisCropGroup" xml:space="preserve">
     <value>Update this crop group</value>
@@ -4408,5 +4408,11 @@ live</value>
   </data>
   <data name="MsgCropsAddedForYear" xml:space="preserve">
     <value>{0} added for {1}</value>
+  </data>
+  <data name="MsgForSuccessCrop" xml:space="preserve">
+    <value>Select a field to see its nutrient recommendations, or to add a soil mineral nitrogen (N) analysis results</value>
+  </data>
+  <data name="lblUpdateCropGroupNameContentForSingleField" xml:space="preserve">
+    <value>Changes here will be applied to {0} only. To change multiple fields at once you can </value>
   </data>
 </root>
