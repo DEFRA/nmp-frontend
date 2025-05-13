@@ -622,6 +622,19 @@ namespace NMP.Portal.Controllers
                                         EncryptedCounter = _fieldDataProtector.Protect(counter.ToString()),
                                         CropOrder = fieldsAllowedForSecondCrop.Contains(fieldId) ? 2 : 1
                                     };
+                                    if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
+                                    {
+                                        (List<HarvestYearPlanResponse> harvestYearPlanResponseForUpdate, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
+                                        if (string.IsNullOrWhiteSpace(error.Message) && harvestYearPlanResponseForUpdate.Count > 0)
+                                        {
+                                            harvestYearPlanResponseForUpdate = harvestYearPlanResponseForUpdate.Where(x => x.CropGroupName == model.PreviousCropGroupName).ToList();
+                                            if (harvestYearPlanResponseForUpdate != null)
+                                            {
+                                                crop.ID = harvestYearPlanResponseForUpdate.Where(x => x.FieldID == fieldId).Select(x => x.CropID).FirstOrDefault();
+                                                crop.CropOrder = harvestYearPlanResponseForUpdate.Where(x => x.FieldID == fieldId).Select(x => x.CropOrder).FirstOrDefault();
+                                            }
+                                        }
+                                    }
                                     counter++;
                                     crop.FieldName = (await _fieldService.FetchFieldByFieldId(fieldId)).Name;
 
