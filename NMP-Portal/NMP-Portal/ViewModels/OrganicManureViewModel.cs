@@ -136,5 +136,6 @@ namespace NMP.Portal.ViewModels
         public bool? IsApplicationDateChange { get; set; } = false;
         public bool? IsDeleteOrganic { get; set; }
         public bool? IsCancel { get; set; }
+        public bool? Defoliation { get; set; }
     }
 }
