@@ -8,4 +8,11 @@ namespace NMP.Portal.ServiceResponses
         [JsonProperty("yield")]
         public int Yield { get; set; }
     }
+
+    //Temporary class for grass yield
+    public class YieldRangesEnglandAndWalesResponseTemprary
+    {
+        [JsonProperty("yield")]
+        public string Yield { get; set; }
+    }
 }

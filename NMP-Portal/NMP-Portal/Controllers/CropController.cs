@@ -2301,7 +2301,7 @@ namespace NMP.Portal.Controllers
 
                 }
 
-                (List<DefoliationSequenceResponse> defoliationSequenceResponses, error) = await _cropService.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCut(model.SwardTypeId ?? 0, model.PotentialCut ?? 0);
+                (List<DefoliationSequenceResponse> defoliationSequenceResponses, error) = await _cropService.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCut(model.SwardTypeId ?? 0, model.PotentialCut ?? 0, model.CurrentSward == (int)NMP.Portal.Enums.CurrentSward.NewSward ? true : false);
                 if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {
                     TempData["DefoliationSequenceError"] = error.Message;
@@ -2671,11 +2671,11 @@ namespace NMP.Portal.Controllers
                     crop.SwardTypeID = model.SwardTypeId;
                     crop.SwardManagementID = model.SwardManagementId;
                     crop.PotentialCut = model.PotentialCut;
-                    crop.Establishment = model.GrassSeason;
+                    crop.Establishment = model.GrassSeason??0;
 
                     List<ManagementPeriod> managementPeriods = new List<ManagementPeriod>();
                     string defoliationSequence = "";
-                    (List<DefoliationSequenceResponse> defoliationSequenceResponses, error) = await _cropService.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCut(model.SwardTypeId ?? 0, model.PotentialCut ?? 0);
+                    (List<DefoliationSequenceResponse> defoliationSequenceResponses, error) = await _cropService.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCut(model.SwardTypeId ?? 0, model.PotentialCut ?? 0, model.CurrentSward == (int)NMP.Portal.Enums.CurrentSward.NewSward ? true : false);
                     if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                     {
                         TempData["ErrorCreatePlan"] = error.Message;
@@ -2710,7 +2710,7 @@ namespace NMP.Portal.Controllers
                         {
                             Defoliation = i,
                             Utilisation1ID = utilisation1,
-                            Yield = crop.Yield,
+                            Yield =crop.Yield/ model.PotentialCut,
                             CreatedOn = DateTime.Now,
                             CreatedByID = userId
                         });
@@ -3381,7 +3381,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     if ((string.IsNullOrWhiteSpace(defolicationName)) && recommendation.Crops.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
                                     {
-                                        (List<DefoliationSequenceResponse> defResponse, Error grassError) = await _cropService.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCut(recommendation.Crops.SwardTypeID.Value, recommendation.Crops.PotentialCut.Value);
+                                        (List<DefoliationSequenceResponse> defResponse, Error grassError) = await _cropService.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCut(recommendation.Crops.SwardTypeID.Value, recommendation.Crops.PotentialCut.Value, recommendation.Crops.Establishment.Value > 0 ? true : false);
                                         if (grassError == null && defResponse.Count > 0)
                                         {
                                             defolicationName = defResponse.Where(x => x.DefoliationSequenceId == recommendation.Crops.DefoliationSequenceID).Select(x => x.DefoliationSequenceDescription).FirstOrDefault();
@@ -5032,7 +5032,7 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmList", "Farm");
                 }
 
-                (List<DefoliationSequenceResponse> defoliationSequenceResponses, Error error) = await _cropService.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCut(model.SwardTypeId ?? 0, model.PotentialCut ?? 0);
+                (List<DefoliationSequenceResponse> defoliationSequenceResponses, Error error) = await _cropService.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCut(model.SwardTypeId ?? 0, model.PotentialCut ?? 0,model.CurrentSward==(int)NMP.Portal.Enums.CurrentSward.NewSward ? true : false);
                 if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {
                     TempData["DefoliationSequenceError"] = error.Message;
@@ -5065,7 +5065,7 @@ namespace NMP.Portal.Controllers
             }
             if (!ModelState.IsValid)
             {
-                (List<DefoliationSequenceResponse> defoliationSequenceResponses, Error error) = await _cropService.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCut(model.SwardTypeId ?? 0, model.PotentialCut ?? 0);
+                (List<DefoliationSequenceResponse> defoliationSequenceResponses, Error error) = await _cropService.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCut(model.SwardTypeId ?? 0, model.PotentialCut ?? 0, model.CurrentSward == (int)NMP.Portal.Enums.CurrentSward.NewSward ? true : false);
                 ViewBag.DefoliationSequenceResponses = defoliationSequenceResponses;
                 return View(model);
             }

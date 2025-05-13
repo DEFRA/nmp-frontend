@@ -212,7 +212,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     if ((string.IsNullOrWhiteSpace(defolicationName)) && cropData.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
                                     {
-                                        (List<DefoliationSequenceResponse> defResponse, Error grassError) = await _cropService.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCut(cropData.SwardTypeID.Value, cropData.PotentialCut.Value);
+                                        (List<DefoliationSequenceResponse> defResponse, Error grassError) = await _cropService.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCut(cropData.SwardTypeID.Value, cropData.PotentialCut.Value,cropData.Establishment>0?true:false);
                                         if (grassError == null && defResponse.Count > 0)
                                         {
                                             defolicationName = defResponse.Where(x => x.DefoliationSequenceId == cropData.DefoliationSequenceID).Select(x => x.DefoliationSequenceDescription).FirstOrDefault();
