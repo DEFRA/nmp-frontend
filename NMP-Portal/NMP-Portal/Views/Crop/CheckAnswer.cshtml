@@ -30,7 +30,7 @@
             yieldQuestion = string.Format(Resource.lblUseTheStandardFigure, ViewBag.DefaultYield);
             break;
         case (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields:
-            if (Model.Crops.Count == 1 && (ViewBag.DefaultYield != null || ViewBag.DefaultYield > 0))
+            if (Model.Crops.Count == 1 && (ViewBag.DefaultYield != null && ViewBag.DefaultYield > 0))
             {
                 yieldQuestion = Resource.lblEnterAFigure;
             }
@@ -428,7 +428,7 @@
 
                     @if (Model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass)
                     {
-                        @if (Model.FieldList.Count > 1 || (Model.Crops.Count == 1 && (ViewBag.DefaultYield != null || ViewBag.DefaultYield > 0)))
+                        @if (Model.FieldList.Count > 1 || (Model.Crops.Count == 1 && (ViewBag.DefaultYield != null && ViewBag.DefaultYield > 0)))
                         {
                             <govuk-summary-list-row class=@((string.IsNullOrWhiteSpace(yieldQuestion))?"govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
