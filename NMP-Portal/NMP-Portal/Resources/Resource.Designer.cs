@@ -394,6 +394,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 1 to 2 years.
+        /// </summary>
+        public static string lbl1To2Years {
+            get {
+                return ResourceManager.GetString("lbl1To2Years", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 31 October.
         /// </summary>
         public static string lbl31October {
@@ -408,6 +417,15 @@ namespace NMP.Portal.Resources {
         public static string lbl31OctoberTo15January {
             get {
                 return ResourceManager.GetString("lbl31OctoberTo15January", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 3 years or more.
+        /// </summary>
+        public static string lbl3YearsOrMore {
+            get {
+                return ResourceManager.GetString("lbl3YearsOrMore", resourceCulture);
             }
         }
         
@@ -4766,6 +4784,15 @@ namespace NMP.Portal.Resources {
         public static string lblLastUpdatedOnDate {
             get {
                 return ResourceManager.GetString("lblLastUpdatedOnDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lay duration.
+        /// </summary>
+        public static string lblLayDuration {
+            get {
+                return ResourceManager.GetString("lblLayDuration", resourceCulture);
             }
         }
         
@@ -9645,6 +9672,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhatTypeOfOrganicMaterialAreYouUsingInThisApplication {
             get {
                 return ResourceManager.GetString("lblWhatTypeOfOrganicMaterialAreYouUsingInThisApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What was the length of the lay in {0}?.
+        /// </summary>
+        public static string lblWhatWasTheLengthOfTheLayInYear {
+            get {
+                return ResourceManager.GetString("lblWhatWasTheLengthOfTheLayInYear", resourceCulture);
             }
         }
         

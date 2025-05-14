@@ -4415,4 +4415,16 @@ live</value>
   <data name="lblUpdateCropGroupNameContentForSingleField" xml:space="preserve">
     <value>Changes here will be applied to {0} only. To change multiple fields at once you can </value>
   </data>
+  <data name="lbl1To2Years" xml:space="preserve">
+    <value>1 to 2 years</value>
+  </data>
+  <data name="lbl3YearsOrMore" xml:space="preserve">
+    <value>3 years or more</value>
+  </data>
+  <data name="lblWhatWasTheLengthOfTheLayInYear" xml:space="preserve">
+    <value>What was the length of the lay in {0}?</value>
+  </data>
+  <data name="lblLayDuration" xml:space="preserve">
+    <value>Lay duration</value>
+  </data>
 </root>

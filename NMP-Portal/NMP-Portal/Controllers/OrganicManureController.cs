@@ -1252,7 +1252,7 @@ namespace NMP.Portal.Controllers
                     model.K2O = null;
                     model.MgO = null;
                     model.NO3N = null;
-                    model.DefaultNutrientValue = null;
+                    //model.DefaultNutrientValue = null;
                 }
             }
 
@@ -1278,7 +1278,7 @@ namespace NMP.Portal.Controllers
                 {
                     if (model.ApplicationRateMethod == (int)NMP.Portal.Enums.ApplicationRate.UseDefaultApplicationRate)
                     {
-                        model.ApplicationRateMethod = null;
+                        //model.ApplicationRateMethod = null;
                         model.ApplicationRate = null;
                         foreach (var orgManure in model.OrganicManures)
                         {
