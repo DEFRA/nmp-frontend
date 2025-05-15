@@ -1331,14 +1331,22 @@ namespace NMP.Portal.Controllers
 
             if (model.PreviousGrasses.HasGrassInLastThreeYear != null && model.PreviousGrasses.HasGrassInLastThreeYear.Value)
             {
-                if (model.PreviousGrasses.HasGreaterThan30PercentClover == false)
+                if(!model.PreviousGrassYears.Contains(model.LastHarvestYear??0))
                 {
-                    return RedirectToAction("SoilNitrogenSupplyItems");
+                    return RedirectToAction("CropTypes");
                 }
                 else
                 {
-                    return RedirectToAction("HasGreaterThan30PercentClover");
+                    if (model.PreviousGrasses.HasGreaterThan30PercentClover == false)
+                    {
+                        return RedirectToAction("SoilNitrogenSupplyItems");
+                    }
+                    else
+                    {
+                        return RedirectToAction("HasGreaterThan30PercentClover");
+                    }
                 }
+                
             }
             return RedirectToAction("CropTypes");
         }
