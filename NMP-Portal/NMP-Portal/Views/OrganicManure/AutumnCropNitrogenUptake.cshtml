@@ -157,7 +157,7 @@
             <div class="govuk-form-group">
 
                 <govuk-input asp-for="@Model.AutumnCropNitrogenUptake" inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                    <govuk-input-label is-page-heading="true" class="govuk-label--l">@string.Format(Resource.lblWhatIsTheAutumnCropNitrogenUptakeFor, ViewBag.FieldName)</govuk-input-label>
+                    <govuk-input-label is-page-heading="true" class="govuk-label--l">@string.Format(Resource.lblWhatIsTheAutumnCropNitrogenUptakeFor, ViewBag.CropTypeName, ViewBag.FieldName)</govuk-input-label>
                     <govuk-input-suffix>@Resource.lblKgPerHectare</govuk-input-suffix>
                 </govuk-input>
             </div>

@@ -232,6 +232,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to I accept the Terms of Use.
+        /// </summary>
+        public static string lbl_I_accept_to_the_terms_of_use {
+            get {
+                return ResourceManager.GetString("lbl_I_accept_to_the_terms_of_use", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 10 February.
         /// </summary>
         public static string lbl10February {
@@ -2410,7 +2419,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Does {0} typically have high clover content (30% or more)?.
+        ///   Looks up a localized string similar to Did {0} typically have clover content of 30% or more across the last season?.
         /// </summary>
         public static string lblDoesFieldTypicallyHaveMoreThan30PercentClover {
             get {
@@ -4216,15 +4225,6 @@ namespace NMP.Portal.Resources {
         public static string lblHyphen {
             get {
                 return ResourceManager.GetString("lblHyphen", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to I agree to the terms of use.
-        /// </summary>
-        public static string lblIagree_to_the_terms_of_use {
-            get {
-                return ResourceManager.GetString("lblIagree_to_the_terms_of_use", resourceCulture);
             }
         }
         
@@ -9361,7 +9361,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the Autumn crop Nitrogen uptake for {0}?.
+        ///   Looks up a localized string similar to What is the autumn crop nitrogen (N) uptake for {0} in {1}?.
         /// </summary>
         public static string lblWhatIsTheAutumnCropNitrogenUptakeFor {
             get {
@@ -10414,7 +10414,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please accept terms of use.
+        ///   Looks up a localized string similar to Please accept the Terms of Use.
         /// </summary>
         public static string msgAcceptTermsOfUse {
             get {

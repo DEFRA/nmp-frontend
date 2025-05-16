@@ -5136,12 +5136,14 @@ namespace NMP.Portal.Controllers
                 Field field = await _fieldService.FetchFieldByFieldId(fieldId);
                 model.EncryptedFieldId = f;
                 ViewBag.FieldName = field.Name;
+                ViewBag.CropTypeName = model.CropTypeName;
                 model.AutumnCropNitrogenUptake = model.AutumnCropNitrogenUptakes?.FirstOrDefault(x => x.EncryptedFieldId == f)?.AutumnCropNitrogenUptake;
             }
             if (model.FieldList.Count == 1)
             {
                 Field field = await _fieldService.FetchFieldByFieldId(Convert.ToInt32(model.FieldList[0]));
                 ViewBag.FieldName = field.Name;
+                ViewBag.CropTypeName = model.CropTypeName;
                 model.AutumnCropNitrogenUptake = model.AutumnCropNitrogenUptakes[0].AutumnCropNitrogenUptake;
             }
             return View(model);
@@ -5181,6 +5183,7 @@ namespace NMP.Portal.Controllers
             {
                 Field field = await _fieldService.FetchFieldByFieldId(Convert.ToInt32(_organicManureProtector.Unprotect(model.EncryptedFieldId)));
                 ViewBag.FieldName = field.Name;
+                ViewBag.CropTypeName = model.CropTypeName;
                 model.AutumnCropNitrogenUptake = model.AutumnCropNitrogenUptakes?.FirstOrDefault(x => x.EncryptedFieldId == model.EncryptedFieldId)?.AutumnCropNitrogenUptake;
                 return View("AutumnCropNitrogenUptake", model);
             }
