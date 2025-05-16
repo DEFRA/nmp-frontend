@@ -323,7 +323,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>true</value>
   </data>
   <data name="lblUseThisServiceToPlan" xml:space="preserve">
-    <value>This is a free tool, provided by Defra, to help farmers, land managers and advisers plan and record nutrient use on their land. It gives you guidance only - there is no legal requirement to use it.</value>
+    <value>This is a free tool, provided by Defra, to help farmers, land managers and advisers record nutrient use on their land. It gives you guidance only - there is no legal requirement to use it.</value>
   </data>
   <data name="lblWhatIsTheFarmName" xml:space="preserve">
     <value>What is the farm name?</value>
@@ -3407,7 +3407,7 @@ cubic metres per hectare  not set</value>
     <value>You will get better recommendations if you have a recent soil analysis. You will be asked to enter the data from the analysis as you progress through the service.</value>
   </data>
   <data name="ContentReplacePlanetandManner" xml:space="preserve">
-    <value>It replaces earlier tools such as PLANET and MANNER. The tool will allow you to import your data from PLANET.</value>
+    <value>This tool replaces the PLANET and MANNER-NPK planning tools. It will allow you to import your data from PLANET.</value>
   </data>
   <data name="ContentSustainableFarmingIncentiveEnd" xml:space="preserve">
     <value>, you will need a nutrient plan. This service will create a plan that you can use for this purpose.</value>
