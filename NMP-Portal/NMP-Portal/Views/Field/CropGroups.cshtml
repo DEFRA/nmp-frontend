@@ -4,47 +4,45 @@
     ViewData["Title"] = Resource.lblCropGroup;
     int grassGroupId = (int)NMP.Portal.Enums.CropGroup.Grass;
 
-    // var backAction = Model.RecentSoilAnalysisQuestion.Value == true ? "SoilNutrientValue" :
-    //                 "RecentSoilAnalysisQuestion";
-    // var backAction = "";
-    // if (Model.RecentSoilAnalysisQuestion.Value == true && Model.PreviousGrasses.HasGrassInLastThreeYear == false)
-    // {
-    //     backAction = "SoilNutrientValue";
-    // }
-    // else if (Model.PreviousGrasses.HasGrassInLastThreeYear != null)
-    // {
-    //     if (Model.PreviousGrasses.HasGrassInLastThreeYear == true)
-    //     {
-    //         if (Model.IsPreviousYearGrass == false)
-    //         {
-    //             if (Model.PreviousGrasses.HasGreaterThan30PercentClover == false)
-    //             {
-    //                 backAction = "SoilNitrogenSupplyItems";
-    //             }
-    //             else
-    //             {
-    //                 backAction = "HasGreaterThan30PercentClover";
-    //             }
-    //         }
-    //         else
-    //         {
-    //             backAction = "RecentSoilAnalysisQuestion";
-    //         }
-    //     }
-    //     else
-    //     {
-    //         backAction = "HasGrassInLastThreeYear";
-    //     }
+    var backAction = "";
+    if (Model.RecentSoilAnalysisQuestion.Value == true && Model.PreviousGrasses.HasGrassInLastThreeYear == false)
+    {
+        backAction = "SoilNutrientValue";
+    }
+    else if (Model.PreviousGrasses.HasGrassInLastThreeYear != null)
+    {
+        if (Model.PreviousGrasses.HasGrassInLastThreeYear == true)
+        {
+            if (Model.IsPreviousYearGrass == false)
+            {
+                if (Model.PreviousGrasses.HasGreaterThan30PercentClover == false)
+                {
+                    backAction = "SoilNitrogenSupplyItems";
+                }
+                else
+                {
+                    backAction = "HasGreaterThan30PercentClover";
+                }
+            }
+            else
+            {
+                backAction = "RecentSoilAnalysisQuestion";
+            }
+        }
+        else
+        {
+            backAction = "HasGrassInLastThreeYear";
+        }
 
-    // }
-    // else
-    // {
-    //     backAction = "RecentSoilAnalysisQuestion";
-    // }
+    }
+    else
+    {
+        backAction = "RecentSoilAnalysisQuestion";
+    }
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@((Model.IsCheckAnswer&&(!Model.IsHasGrassInLastThreeYearChange)) ? "CheckAnswer" :"HasGrassInLastThreeYear")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@((Model.IsCheckAnswer&&(!Model.IsHasGrassInLastThreeYearChange)) ? "CheckAnswer" :backAction)" asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="CropGroups" asp-controller="Field" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
@@ -114,6 +112,7 @@
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.GrassTypicalCutID"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.HasGreaterThan30PercentClover"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.SoilNitrogenSupplyItemID"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.LayDuration"></govuk-input>
         @if (Model.PreviousGrassYears != null && Model.PreviousGrassYears.Count > 0)
         {
             @for (int i = 0; i < Model.PreviousGrassYears.Count; i++)

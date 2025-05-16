@@ -140,7 +140,27 @@ namespace NMP.Portal.Controllers
                     model.LastHarvestYear = farm.LastHarvestYear;
                     model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Portal.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
                     model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
+
+                    List<PlanSummaryResponse> cropPlans = await _cropService.FetchPlanSummaryByFarmId(model.FarmID, 0);
+                    cropPlans.RemoveAll(x => x.Year == 0);
+                    if (cropPlans.Count() > 0)
+                    {
+                        int currentYear = DateTime.Now.Year;
+
+                        int? latestPreviousHarvestYear = cropPlans
+                            .Where(p => p.Year <= currentYear)
+                            .Select(p => (int?)p.Year)
+                            .DefaultIfEmpty()
+                            .Max();
+
+                        model.LastHarvestYear = latestPreviousHarvestYear;
+                    }
+                    else
+                    {
+                        model.LastHarvestYear = farm.LastHarvestYear;
+                    }
                 }
+                
             }
             catch (Exception ex)
             {
@@ -1311,14 +1331,22 @@ namespace NMP.Portal.Controllers
 
             if (model.PreviousGrasses.HasGrassInLastThreeYear != null && model.PreviousGrasses.HasGrassInLastThreeYear.Value)
             {
-                if (model.PreviousGrasses.HasGreaterThan30PercentClover == false)
+                if(!model.PreviousGrassYears.Contains(model.LastHarvestYear??0))
                 {
-                    return RedirectToAction("SoilNitrogenSupplyItems");
+                    return RedirectToAction("CropTypes");
                 }
                 else
                 {
-                    return RedirectToAction("HasGreaterThan30PercentClover");
+                    if (model.PreviousGrasses.HasGreaterThan30PercentClover == false)
+                    {
+                        return RedirectToAction("SoilNitrogenSupplyItems");
+                    }
+                    else
+                    {
+                        return RedirectToAction("HasGreaterThan30PercentClover");
+                    }
                 }
+                
             }
             return RedirectToAction("CropTypes");
         }
@@ -1535,6 +1563,7 @@ namespace NMP.Portal.Controllers
                     {
                         HasGrassInLastThreeYear = model.PreviousGrasses.HasGrassInLastThreeYear,
                         HarvestYear = year,
+                        LayDuration=model.PreviousGrasses.LayDuration,
                         GrassManagementOptionID = model.PreviousGrasses.GrassManagementOptionID,
                         GrassTypicalCutID = model.PreviousGrasses.GrassTypicalCutID,
                         HasGreaterThan30PercentClover = model.PreviousGrasses.HasGreaterThan30PercentClover,
@@ -2475,7 +2504,7 @@ namespace NMP.Portal.Controllers
         public IActionResult GrassLastThreeHarvestYear(FieldViewModel model)
         {
             _logger.LogTrace($"Field Controller : GrassLastThreeHarvestYear() post action called");
-
+            int lastHarvestYear = 0;
             if (model.PreviousGrassYears == null)
             {
                 ModelState.AddModelError("PreviousGrassYears", Resource.lblSelectAtLeastOneYearBeforeContinuing);
@@ -2483,7 +2512,7 @@ namespace NMP.Portal.Controllers
             if (!ModelState.IsValid)
             {
                 List<int> previousYears = new List<int>();
-                int lastHarvestYear = model.LastHarvestYear ?? 0;
+                lastHarvestYear = model.LastHarvestYear ?? 0;
                 previousYears.Add(lastHarvestYear);
                 previousYears.Add(lastHarvestYear - 1);
                 previousYears.Add(lastHarvestYear - 2);
@@ -2493,19 +2522,32 @@ namespace NMP.Portal.Controllers
             if (model.PreviousGrassYears?.Count == 1 && model.PreviousGrassYears[0] == 0)
             {
                 List<int> previousYears = new List<int>();
-                int lastHarvestYear = model.LastHarvestYear ?? 0;
+                lastHarvestYear = model.LastHarvestYear ?? 0;
                 previousYears.Add(lastHarvestYear);
                 previousYears.Add(lastHarvestYear - 1);
                 previousYears.Add(lastHarvestYear - 2);
                 model.PreviousGrassYears = previousYears;
             }
-            model.IsPreviousYearGrass = (model.PreviousGrassYears != null && model.PreviousGrassYears.Contains(System.DateTime.Now.Year - 1)) ? true : false;
+            model.IsPreviousYearGrass = (model.PreviousGrassYears != null && model.PreviousGrassYears.Contains(lastHarvestYear)) ? true : false;
+            lastHarvestYear = model.LastHarvestYear ?? 0;
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
-            if (model.IsCheckAnswer&&(!model.IsHasGrassInLastThreeYearChange))
+            
+            if(model.PreviousGrassYears?.Count==3)
+            {
+                model.PreviousGrasses.LayDuration = (int)NMP.Portal.Enums.LayDuration.ThreeYearsOrMore;
+            }
+            else if (model.PreviousGrassYears?.Count <= 2 && model.PreviousGrassYears[0]==model.LastHarvestYear)
+            {
+                model.PreviousGrasses.LayDuration = (int)NMP.Portal.Enums.LayDuration.OneToTwoYears;
+            }
+            else
+            {
+                return RedirectToAction("LayDuration");
+            }
+            if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange))
             {
                 return RedirectToAction("CheckAnswer");
             }
-
             return RedirectToAction("GrassManagementOptions");
         }
 
@@ -2706,6 +2748,48 @@ namespace NMP.Portal.Controllers
 
             return RedirectToAction("CheckAnswer");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> LayDuration()
+        {
+            _logger.LogTrace($"Field Controller : LayDuration() action called");
+            FieldViewModel model = new FieldViewModel();
+
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LayDuration(FieldViewModel model)
+        {
+            _logger.LogTrace($"Field Controller : LayDuration() post action called");
+
+            if (model.PreviousGrasses.LayDuration == null)
+            {
+                ModelState.AddModelError("PreviousGrasses.LayDuration", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
+            if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange))
+            {
+                return RedirectToAction("CheckAnswer");
+            }
+
+            return RedirectToAction("GrassManagementOptions");
+        }
+
         [HttpGet]
         public IActionResult Cancel()
         {

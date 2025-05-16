@@ -10,6 +10,7 @@
         public int? GrassTypicalCutID { get; set; }
         public bool? HasGreaterThan30PercentClover { get; set; }
         public int? SoilNitrogenSupplyItemID { get; set; }
+        public int? LayDuration { get; set; }
         public DateTime? CreatedOn { get; set; }
         public int? CreatedByID { get; set; }
         public DateTime? ModifiedOn { get; set; }

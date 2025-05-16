@@ -232,6 +232,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to I accept the Terms of Use.
+        /// </summary>
+        public static string lbl_I_accept_to_the_terms_of_use {
+            get {
+                return ResourceManager.GetString("lbl_I_accept_to_the_terms_of_use", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 10 February.
         /// </summary>
         public static string lbl10February {
@@ -394,6 +403,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 1 to 2 years.
+        /// </summary>
+        public static string lbl1To2Years {
+            get {
+                return ResourceManager.GetString("lbl1To2Years", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 31 October.
         /// </summary>
         public static string lbl31October {
@@ -408,6 +426,15 @@ namespace NMP.Portal.Resources {
         public static string lbl31OctoberTo15January {
             get {
                 return ResourceManager.GetString("lbl31OctoberTo15January", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 3 years or more.
+        /// </summary>
+        public static string lbl3YearsOrMore {
+            get {
+                return ResourceManager.GetString("lbl3YearsOrMore", resourceCulture);
             }
         }
         
@@ -2392,7 +2419,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Does {0} typically have high clover content (30% or more)?.
+        ///   Looks up a localized string similar to Did {0} typically have clover content of 30% or more across the last season?.
         /// </summary>
         public static string lblDoesFieldTypicallyHaveMoreThan30PercentClover {
             get {
@@ -4211,15 +4238,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to I agree to the terms of use.
-        /// </summary>
-        public static string lblIagree_to_the_terms_of_use {
-            get {
-                return ResourceManager.GetString("lblIagree_to_the_terms_of_use", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to If you have harvested most of your {0} crops you can set {1} as your last harvest year..
         /// </summary>
         public static string lblIfYouHaveHarvestedMostOfYourCrops {
@@ -4775,6 +4793,15 @@ namespace NMP.Portal.Resources {
         public static string lblLastUpdatedOnDate {
             get {
                 return ResourceManager.GetString("lblLastUpdatedOnDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lay duration.
+        /// </summary>
+        public static string lblLayDuration {
+            get {
+                return ResourceManager.GetString("lblLayDuration", resourceCulture);
             }
         }
         
@@ -9343,7 +9370,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the Autumn crop Nitrogen uptake for {0}?.
+        ///   Looks up a localized string similar to What is the autumn crop nitrogen (N) uptake for {0} in {1}?.
         /// </summary>
         public static string lblWhatIsTheAutumnCropNitrogenUptakeFor {
             get {
@@ -9654,6 +9681,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhatTypeOfOrganicMaterialAreYouUsingInThisApplication {
             get {
                 return ResourceManager.GetString("lblWhatTypeOfOrganicMaterialAreYouUsingInThisApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What was the length of the lay in {0}?.
+        /// </summary>
+        public static string lblWhatWasTheLengthOfTheLayInYear {
+            get {
+                return ResourceManager.GetString("lblWhatWasTheLengthOfTheLayInYear", resourceCulture);
             }
         }
         
@@ -10405,7 +10441,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please accept terms of use.
+        ///   Looks up a localized string similar to Please accept the Terms of Use.
         /// </summary>
         public static string msgAcceptTermsOfUse {
             get {
