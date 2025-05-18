@@ -3553,6 +3553,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Is this application for the same cut or grazing in all the selected grass fields?.
+        /// </summary>
+        public static string lblForMultipleDefoliation {
+            get {
+                return ResourceManager.GetString("lblForMultipleDefoliation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Four.
         /// </summary>
         public static string lblFour {
@@ -9834,6 +9843,24 @@ namespace NMP.Portal.Resources {
         public static string lblWhichCountryIsIn {
             get {
                 return ResourceManager.GetString("lblWhichCountryIsIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which cut or grazing in this application for ?.
+        /// </summary>
+        public static string lblWhichCutOrGrazingInThisApplicationForAllField {
+            get {
+                return ResourceManager.GetString("lblWhichCutOrGrazingInThisApplicationForAllField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which cut or grazing in this application for in {0}?.
+        /// </summary>
+        public static string lblWhichCutOrGrazingInThisApplicationForInField {
+            get {
+                return ResourceManager.GetString("lblWhichCutOrGrazingInThisApplicationForInField", resourceCulture);
             }
         }
         

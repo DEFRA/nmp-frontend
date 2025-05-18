@@ -4427,4 +4427,13 @@ live</value>
   <data name="lblLayDuration" xml:space="preserve">
     <value>Lay duration</value>
   </data>
+  <data name="lblWhichCutOrGrazingInThisApplicationForInField" xml:space="preserve">
+    <value>Which cut or grazing in this application for in {0}?</value>
+  </data>
+  <data name="lblForMultipleDefoliation" xml:space="preserve">
+    <value>Is this application for the same cut or grazing in all the selected grass fields?</value>
+  </data>
+  <data name="lblWhichCutOrGrazingInThisApplicationForAllField" xml:space="preserve">
+    <value>Which cut or grazing in this application for ?</value>
+  </data>
 </root>

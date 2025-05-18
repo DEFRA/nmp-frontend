@@ -38,6 +38,6 @@ namespace NMP.Portal.Services
         Task<(List<YieldRangesEnglandAndWalesResponse>, Error)> FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(int sequenceId, int grassGrowthClassId);
 
         Task<(List<ManagementPeriod>, Error)> FetchManagementperiodByCropId(int cropId,bool isShortSummary);
-
+        Task<(DefoliationSequenceResponse, Error)> FetchDefoliationSequencesById(int defoliationId);
     }
 }
