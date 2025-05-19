@@ -851,7 +851,7 @@ namespace NMP.Portal.Controllers
                                     EncryptedCounter = _fieldDataProtector.Protect(counter.ToString())
                                 };
                                 counter++;
-                                if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value && model.IsCheckAnswer)
+                                if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
                                 {
                                     if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
                                     {
@@ -942,13 +942,27 @@ namespace NMP.Portal.Controllers
                             {
                                 if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
                                 {
-                                    (List<ManagementPeriod> ManagementPeriod, error) = await _cropService.FetchManagementperiodByCropId(cropList.Select(x => x.ID.Value).FirstOrDefault(), false);
-                                    var managementPeriodIdsToRemove = ManagementPeriod
-                                    .Skip(1)
-                                    .Select(mp => mp.ID.Value)
-                                    .ToList();
+
+                                    (List<ManagementPeriod> managementPeriod, error) = await _cropService.FetchManagementperiodByCropId(cropList.Select(x => x.ID.Value).FirstOrDefault(), false);
+
+                                    var filteredFertiliserManure = model.FertiliserManures
+                                     .Where(fm => managementPeriod.Any(mp => mp.ID == fm.ManagementPeriodID) &&
+                                         fm.Defoliation == null).ToList();
+                                    if (filteredFertiliserManure != null && filteredFertiliserManure.Count== managementPeriod.Count)
+                                    {
+                                        var managementPeriodIdsToRemove = managementPeriod
+                                       .Skip(1)
+                                       .Select(mp => mp.ID.Value)
+                                       .ToList();
+                                        model.FertiliserManures.RemoveAll(fm => managementPeriodIdsToRemove.Contains(fm.ManagementPeriodID));
+                                    }
+                                    else
+                                    {
+                                        model.FertiliserManures.RemoveAll(x => managementPeriod.Any(mp => mp.ID == x.ManagementPeriodID)&&
+                                        x.Defoliation == null);
+                                    }
                                     grassCropCounter++;
-                                    model.FertiliserManures.RemoveAll(fm => managementPeriodIdsToRemove.Contains(fm.ManagementPeriodID));
+
 
                                 }
                                 model.IsAnyCropIsGrass = true;
