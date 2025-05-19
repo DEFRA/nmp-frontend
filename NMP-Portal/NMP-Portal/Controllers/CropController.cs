@@ -395,7 +395,10 @@ namespace NMP.Portal.Controllers
 
                                 if (!model.IsCropTypeChange)
                                 {
-                                    model.CropType = await _fieldService.FetchCropTypeById(model.CropTypeID.Value);
+                                    if (model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass)
+                                    {
+                                        model.CropType = await _fieldService.FetchCropTypeById(model.CropTypeID.Value);
+                                    }
                                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                                     return RedirectToAction("CheckAnswer"); //return RedirectToAction("CropGroupName");
                                 }
@@ -403,7 +406,10 @@ namespace NMP.Portal.Controllers
                                 //}
                             }
                         }
-                        model.CropType = await _fieldService.FetchCropTypeById(model.CropTypeID.Value);
+                        if (model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass)
+                        {
+                            model.CropType = await _fieldService.FetchCropTypeById(model.CropTypeID.Value);
+                        }
                         _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                         ViewBag.FieldOptions = fieldList;
                         return RedirectToAction("CropGroupName");
@@ -429,7 +435,10 @@ namespace NMP.Portal.Controllers
 
                 if (model.CropTypeID != null)
                 {
-                    model.CropType = await _fieldService.FetchCropTypeById(model.CropTypeID.Value);
+                    if (model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass)
+                    {
+                        model.CropType = await _fieldService.FetchCropTypeById(model.CropTypeID.Value);
+                    }
 
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                     if (harvestYearPlanResponse.Count() > 0)
