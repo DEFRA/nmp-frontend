@@ -982,13 +982,16 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        if (model.GrassCropCount != null && model.GrassCropCount.Value > 1)
+                        if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
                         {
-                            return RedirectToAction("IsSameDefoliationForAll");
+                            if (model.GrassCropCount != null && model.GrassCropCount.Value > 1)
+                            {
+                                return RedirectToAction("IsSameDefoliationForAll");
+                            }
+                            model.IsSameDefoliationForAll = true;
+                            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
+                            return RedirectToAction("Defoliation");
                         }
-                        model.IsSameDefoliationForAll = true;
-                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
-                        return RedirectToAction("Defoliation");
                     }
                 }
                 else
@@ -1865,6 +1868,7 @@ namespace NMP.Portal.Controllers
                                 if (string.IsNullOrWhiteSpace(error.Message) && crop != null && crop.DefoliationSequenceID != null)
                                 {
                                     model.FieldID = crop.FieldID;
+                                    model.CropOrder = crop.CropOrder;
                                     model.FieldName = (await _fieldService.FetchFieldByFieldId(model.FieldID.Value)).Name;
                                     (DefoliationSequenceResponse defoliationSequence, error) = await _cropService.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
                                     if (error == null && defoliationSequence != null)
@@ -1898,9 +1902,12 @@ namespace NMP.Portal.Controllers
                             counter++;
                             model.FertiliserManures.Add(fertiliserManure);
 
-                        }
+                        };
+
+                        model.IsSameDefoliationForAll = true;
                         model.HarvestYear = decryptedHarvestYear;
-                        model.DefoliationCurrentCounter = 0;
+                        model.DefoliationCurrentCounter = 1;
+                        model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
                         model.FarmId = decryptedFarmId;
                         model.EncryptedHarvestYear = s;
                         model.EncryptedFarmId = r;
