@@ -1864,37 +1864,40 @@ namespace NMP.Portal.Controllers
                             {
                                 defoliation = managementPeriod.Defoliation;
                                 (Crop crop, error) = await _cropService.FetchCropById(managementPeriod.CropID.Value);
-
-                                if (string.IsNullOrWhiteSpace(error.Message) && crop != null && crop.DefoliationSequenceID != null)
+                                if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
                                 {
-                                    model.FieldID = crop.FieldID;
-                                    model.CropOrder = crop.CropOrder;
-                                    model.FieldName = (await _fieldService.FetchFieldByFieldId(model.FieldID.Value)).Name;
-                                    (DefoliationSequenceResponse defoliationSequence, error) = await _cropService.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
-                                    if (error == null && defoliationSequence != null)
+                                    if (string.IsNullOrWhiteSpace(error.Message) && crop != null && crop.DefoliationSequenceID != null)
                                     {
-                                        string description = defoliationSequence.DefoliationSequenceDescription;
+                                        model.FieldID = crop.FieldID;
+                                        model.CropOrder = crop.CropOrder;
+                                        model.FieldName = (await _fieldService.FetchFieldByFieldId(model.FieldID.Value)).Name;
+                                        (DefoliationSequenceResponse defoliationSequence, error) = await _cropService.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+                                        if (error == null && defoliationSequence != null)
+                                        {
+                                            string description = defoliationSequence.DefoliationSequenceDescription;
 
-                                        string[] defoliationParts = description.Split(',')
-                                                                               .Select(x => x.Trim())
-                                                                               .ToArray();
+                                            string[] defoliationParts = description.Split(',')
+                                                                                   .Select(x => x.Trim())
+                                                                                   .ToArray();
 
-                                        string selectedDefoliation = (defoliation > 0 && defoliation.Value <= defoliationParts.Length)
-                                            ? $"{Enum.GetName(typeof(PotentialCut), defoliation.Value)} ({defoliationParts[defoliation.Value - 1]})"
-                                            : $"{defoliation}";
-                                        model.IsAnyCropIsGrass = true;
-                                        model.IsSameDefoliationForAll = true;
-                                        model.GrassCropCount = 1;
-                                        defoliationName = selectedDefoliation;
+                                            string selectedDefoliation = (defoliation > 0 && defoliation.Value <= defoliationParts.Length)
+                                                ? $"{Enum.GetName(typeof(PotentialCut), defoliation.Value)} ({defoliationParts[defoliation.Value - 1]})"
+                                                : $"{defoliation}";
+                                            model.IsAnyCropIsGrass = true;
+                                            model.IsSameDefoliationForAll = true;
+                                            model.GrassCropCount = 1;
+                                            defoliationName = selectedDefoliation;
+                                        }
                                     }
+
+                                    fertiliserManure.EncryptedCounter = _fieldDataProtector.Protect(counter.ToString());
+                                    fertiliserManure.Defoliation = defoliation;
+                                    fertiliserManure.DefoliationName = defoliationName;
+                                    fertiliserManure.FieldID = model.FieldID;
+                                    fertiliserManure.FieldName = model.FieldName;
+
                                 }
                             }
-                            fertiliserManure.EncryptedCounter = _fieldDataProtector.Protect(counter.ToString());
-                            fertiliserManure.Defoliation = defoliation;
-                            fertiliserManure.DefoliationName = defoliationName;
-                            fertiliserManure.FieldID = model.FieldID;
-                            fertiliserManure.FieldName = model.FieldName;
-                            
                             var fertiliser = new FertiliserManure
                             {
                                 ManagementPeriodID = fertiliserManure.ManagementPeriodID
