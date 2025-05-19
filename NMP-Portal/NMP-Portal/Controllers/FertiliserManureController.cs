@@ -2161,7 +2161,7 @@ namespace NMP.Portal.Controllers
                 {
                     if (grassFieldIds.Any(x => x == fertiliser.FieldID.ToString()) && fertiliser.Defoliation == null)
                     {
-                        if (model.IsSameDefoliationForAll.HasValue && (model.IsSameDefoliationForAll.Value))
+                        if (model.IsSameDefoliationForAll.HasValue && (model.IsSameDefoliationForAll.Value) && model.GrassCropCount > 1))
                         {
                             ModelState.AddModelError(string.Concat("FertiliserManures[", i, "].Defoliation"), string.Format("{0} {1}", string.Format(Resource.lblWhichCutOrGrazingInThisApplicationForInField, fertiliser.FieldName), Resource.lblNotSet));
                         }
