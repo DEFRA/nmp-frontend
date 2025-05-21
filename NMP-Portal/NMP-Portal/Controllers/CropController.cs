@@ -861,7 +861,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-               
+
             }
             catch (Exception ex)
             {
@@ -2138,6 +2138,7 @@ namespace NMP.Portal.Controllers
                                 }
 
                             }
+                            crop.Variety= harvestYearPlanResponse[i].CropVariety;
                             crop.ID = harvestYearPlanResponse[i].CropID;
                             crop.OtherCropName = harvestYearPlanResponse[i].OtherCropName;
                             crop.CropInfo1 = harvestYearPlanResponse[i].CropInfo1;
@@ -2160,16 +2161,16 @@ namespace NMP.Portal.Controllers
                         if (model.Crops != null && model.Crops.All(x => x.Yield != null) && allYieldsAreSame && harvestYearPlanResponse.Count >= 1)
                         {
                             model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
-                            
+
                         }
                         if (model.Crops != null && model.Crops.All(x => x.SowingDate != null) && allSowingAreSame && harvestYearPlanResponse.Count >= 1)
                         {
                             model.SowingDateQuestion = (int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields;
-                            
+
                         }
                         model.CropInfo1 = harvestYearPlanResponse.FirstOrDefault().CropInfo1;
                         model.CropInfo2 = harvestYearPlanResponse.FirstOrDefault().CropInfo2;
-                        
+
                         model.CropTypeID = harvestYearPlanResponse.FirstOrDefault().CropTypeID;
                         model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedHarvestYear));
                         model.CropType = harvestYearPlanResponse.FirstOrDefault().CropTypeName;
@@ -2738,7 +2739,7 @@ namespace NMP.Portal.Controllers
                         {
                             Defoliation = i,
                             Utilisation1ID = utilisation1,
-                            Yield =crop.Yield/ model.PotentialCut,
+                            Yield = crop.Yield / model.PotentialCut,
                             CreatedOn = DateTime.Now,
                             CreatedByID = userId
                         });
@@ -2770,7 +2771,7 @@ namespace NMP.Portal.Controllers
                     year = model.EncryptedHarvestYear,
                     q = _farmDataProtector.Protect(success.ToString()),
                     r = model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass ? _cropDataProtector.Protect(string.Format(Resource.MsgCropsAddedForYear, Resource.lblGrass, model.Year)) : _cropDataProtector.Protect(string.Format(Resource.MsgCropsAddedForYear, Resource.lblCrops, model.Year)),
-                    v = model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass ? _cropDataProtector.Protect(Resource.lblSelectAFieldToSeeItsNutrientRecommendations): _cropDataProtector.Protect(Resource.MsgForSuccessCrop)
+                    v = model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass ? _cropDataProtector.Protect(Resource.lblSelectAFieldToSeeItsNutrientRecommendations) : _cropDataProtector.Protect(Resource.MsgForSuccessCrop)
 
                 });
             }
@@ -3838,7 +3839,7 @@ namespace NMP.Portal.Controllers
                         {
 
                             string cropIds = string.Join(",", model.Crops.Select(x => x.ID));
-                            (bool groupNameExist, Error error) = await _cropService.IsCropsGroupNameExistForUpdate(cropIds, model.CropGroupName, model.Year.Value,Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
+                            (bool groupNameExist, Error error) = await _cropService.IsCropsGroupNameExistForUpdate(cropIds, model.CropGroupName, model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
                             if (string.IsNullOrWhiteSpace(error.Message) && groupNameExist)
                             {
                                 ModelState.AddModelError("CropGroupName", Resource.lblThisCropGroupNameAlreadyExists);
@@ -3889,7 +3890,7 @@ namespace NMP.Portal.Controllers
                 {
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
                 }
-                else if (string.IsNullOrWhiteSpace(q)&& string.IsNullOrWhiteSpace(r))
+                else if (string.IsNullOrWhiteSpace(q) && string.IsNullOrWhiteSpace(r))
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
@@ -5064,7 +5065,7 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmList", "Farm");
                 }
 
-                (List<DefoliationSequenceResponse> defoliationSequenceResponses, Error error) = await _cropService.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCut(model.SwardTypeId ?? 0, model.PotentialCut ?? 0,model.CurrentSward==(int)NMP.Portal.Enums.CurrentSward.NewSward ? true : false);
+                (List<DefoliationSequenceResponse> defoliationSequenceResponses, Error error) = await _cropService.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCut(model.SwardTypeId ?? 0, model.PotentialCut ?? 0, model.CurrentSward == (int)NMP.Portal.Enums.CurrentSward.NewSward ? true : false);
                 if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {
                     TempData["DefoliationSequenceError"] = error.Message;
