@@ -664,11 +664,13 @@ namespace NMP.Portal.Controllers
                                         }
                                     }
                                 }
-
-                                anyNewManId = model.FertiliserManures.Any(newId => !fertiliserManureViewModel.FertiliserManures.Contains(newId));
-                                if (anyNewManId)
+                                if (fertiliserManureViewModel != null && fertiliserManureViewModel.FertiliserManures != null)
                                 {
-                                    model.IsAnyChangeInField = true;
+                                    anyNewManId = model.FertiliserManures.Any(newId => !fertiliserManureViewModel.FertiliserManures.Contains(newId));
+                                    if (anyNewManId)
+                                    {
+                                        model.IsAnyChangeInField = true;
+                                    }
                                 }
                                 model.GrassCropCount = grassCropCounter;
                                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
@@ -686,12 +688,15 @@ namespace NMP.Portal.Controllers
                                 model.GrassCropCount = null;
                                 model.IsSameDefoliationForAll = null;
                                 model.IsAnyChangeInSameDefoliationFlag = false;
-                                anyNewManId = model.FertiliserManures.Any(newId => !fertiliserManureViewModel.FertiliserManures.Contains(newId));
-                                if (anyNewManId)
+                                if (fertiliserManureViewModel != null && fertiliserManureViewModel.FertiliserManures != null)
                                 {
-                                    model.IsAnyChangeInField = true;
+                                    anyNewManId = model.FertiliserManures.Any(newId => !fertiliserManureViewModel.FertiliserManures.Contains(newId));
+                                    if (anyNewManId)
+                                    {
+                                        model.IsAnyChangeInField = true;
+                                    }
+                                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
                                 }
-                                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
                             }
                             if (model.IsCheckAnswer && (!model.IsAnyChangeInField))
                             {
@@ -988,7 +993,7 @@ namespace NMP.Portal.Controllers
                                 }
                             }
                         }
-                        if (fertiliserManureViewModel != null)
+                        if (fertiliserManureViewModel != null && fertiliserManureViewModel.FertiliserManures != null)
                         {
                             bool anyNewManId = model.FertiliserManures.Any(newId => !fertiliserManureViewModel.FertiliserManures.Contains(newId));
                             if (anyNewManId)
@@ -1004,7 +1009,7 @@ namespace NMP.Portal.Controllers
                         model.GrassCropCount = null;
                         model.IsSameDefoliationForAll = null;
                         model.IsAnyChangeInSameDefoliationFlag = false;
-                        if (fertiliserManureViewModel != null)
+                        if (fertiliserManureViewModel != null && fertiliserManureViewModel.FertiliserManures != null)
                         {
                             bool anyNewManId = model.FertiliserManures.Any(newId => !fertiliserManureViewModel.FertiliserManures.Contains(newId));
                             if (anyNewManId)
