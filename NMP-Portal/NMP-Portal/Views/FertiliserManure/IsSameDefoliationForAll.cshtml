@@ -1,54 +1,58 @@
-﻿﻿@using NMP.Portal.Resources
-@using System.Globalization
-@using NMP.Portal.ViewModels
-
-@model FertiliserManureViewModel
+﻿@using NMP.Portal.Resources
+@model NMP.Portal.ViewModels.FertiliserManureViewModel
 @{
-    ViewData["Title"] = Resource.lblRemove;
+    ViewData["Title"] = Resource.lblNutrientValues;
+    var count = 0;
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
-
+    string backAction = string.Empty;
+    if (Model.IsCheckAnswer&&(!Model.IsAnyChangeInField))
+    {
+        backAction = "CheckAnswer";
+    }
+    else if (Model.FieldGroup == Resource.lblSelectSpecificFields)
+    {
+        backAction = "Fields";
+    }
+    else
+    {
+        backAction = "FieldGroup";
+    }
 }
 
-@if (Model != null)
-{
+@section BeforeContent {
+    <govuk-back-link asp-action="@backAction" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedCounter">@Resource.lblBack</govuk-back-link>
+}
+<div class="govuk-grid-row">
 
-    @section BeforeContent {
-    @if (Model.IsComingFromRecommendation)
-        {
-            <govuk-back-link asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@ViewBag.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">
-                @Resource.lblBack
-            </govuk-back-link>
-        }
-        else
-        {
-            <govuk-back-link asp-action="CheckAnswer" asp-controller="FertiliserManure">
-                @Resource.lblBack
-            </govuk-back-link>
-
-        }
-    }
-    <form asp-action="RemoveFertiliser" asp-controller="FertiliserManure" method="post" autocomplete="off">
+    <form asp-action="IsSameDefoliationForAll" asp-controller="FertiliserManure" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
+
+        @if (TempData["IsSameDefoliationForAllError"] != null)
+        {
+            <govuk-error-summary>
+                <govuk-error-summary-item>@TempData["IsSameDefoliationForAllError"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        }
+
         <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroup"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroupName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation" value="@Model.IsComingFromRecommendation"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules" value="@Model.isEnglishRules.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroup"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.N"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.P2O5"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.K2O"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SO3"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MgO"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Lime"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropOrder"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.QuestionForSpreadInorganicFertiliser" value="@Model.QuestionForSpreadInorganicFertiliser.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCounter" value="@Model.EncryptedCounter"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarningExceptGrassAndOilseed" value="@Model.IsClosedPeriodWarningExceptGrassAndOilseed.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarningOnlyForGrassAndOilseed" value="@Model.IsClosedPeriodWarningOnlyForGrassAndOilseed.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWarningMsgNeedToShow" value="@Model.IsWarningMsgNeedToShow.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNitrogenExceedWarning" value="@Model.IsNitrogenExceedWarning.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropOrder"></govuk-input>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Date"></govuk-date-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmCountryId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFertId"></govuk-input>
@@ -56,16 +60,23 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationCurrentCounter"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationEncryptedCounter"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldID"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSameDefoliationForAll"></govuk-input>
+            @* <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSameDefoliationForAll"></govuk-input> *@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCropGroupChange"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyChangeInField"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassCropCount"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.N"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.P2O5"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.K2O"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SO3"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MgO"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Lime"></govuk-input>
+
             @if (Model != null)
             {
-                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules" value="@Model.isEnglishRules.ToString().ToLower()"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyChangeInSameDefoliationFlag" value="@Model.IsAnyChangeInSameDefoliationFlag.ToString().ToLower()"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation" value="@Model.IsComingFromRecommendation.ToString().ToLower()"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.QuestionForSpreadInorganicFertiliser" value="@Model.QuestionForSpreadInorganicFertiliser.ToString().ToLower()"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyCropIsGrass" value="@Model.IsAnyCropIsGrass.ToString().ToLower()"></govuk-input>
-
                 @if (Model.FieldList != null && Model.FieldList.Count > 0)
                 {
                     @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -74,7 +85,6 @@
                     }
 
                 }
-
                 @if (Model.UpdatedFertiliserIds != null && Model.UpdatedFertiliserIds.Count > 0)
                 {
                     @for (int i = 0; i < Model.UpdatedFertiliserIds.Count; i++)
@@ -90,98 +100,57 @@
                     {
                         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].ManagementPeriodID" value="@Model.FertiliserManures[i].ManagementPeriodID"></govuk-input>
                         <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].ApplicationDate" value="@Model.FertiliserManures[i].ApplicationDate"></govuk-date-input>
-                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].K2O" value="@Model.FertiliserManures[i].K2O"></govuk-input>
                         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].MgO" value="@Model.FertiliserManures[i].MgO"></govuk-input>
-                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].P2O5" value="@Model.FertiliserManures[i].P2O5"></govuk-input>
-                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].SO3" value="@Model.FertiliserManures[i].SO3"></govuk-input>
                         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].NH4N" value="@Model.FertiliserManures[i].NH4N"></govuk-input>
                         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].NO3N" value="@Model.FertiliserManures[i].NO3N"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].ApplicationRate" value="@Model.FertiliserManures[i].ApplicationRate"></govuk-input>
                         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].N" value="@Model.FertiliserManures[i].N"></govuk-input>
                         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].Lime" value="@Model.FertiliserManures[i].Lime"></govuk-input>
-                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].ApplicationRate" value="@Model.FertiliserManures[i].ApplicationRate"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].P2O5" value="@Model.FertiliserManures[i].P2O5"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].K2O" value="@Model.FertiliserManures[i].K2O"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].SO3" value="@Model.FertiliserManures[i].SO3"></govuk-input>
                         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].FieldID" value="@Model.FertiliserManures[i].FieldID"></govuk-input>
                         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].Defoliation" value="@Model.FertiliserManures[i].Defoliation"></govuk-input>
                         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].DefoliationName" value="@Model.FertiliserManures[i].DefoliationName"></govuk-input>
                         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].FieldName" value="@Model.FertiliserManures[i].FieldName"></govuk-input>
                         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].EncryptedCounter" value="@Model.FertiliserManures[i].EncryptedCounter"></govuk-input>
                     }
-
                 }
             }
         </div>
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds-from-desktop">
-                @if (TempData["RemoveFertiliserError"] != null)
+        <div class="govuk-grid-column-two-thirds">
+            <govuk-radios asp-for="@Model.IsSameDefoliationForAll">
+                <govuk-radios-fieldset>
+                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @Resource.lblForMultipleDefoliation
+                    </govuk-radios-fieldset-legend>
+
+                    <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>
+                    <govuk-radios-item value=@no>@Resource.lblNo</govuk-radios-item>
+
+                </govuk-radios-fieldset>
+            </govuk-radios>
+
+            <govuk-button type="submit" class="margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+
+            <p class="govuk-body cancel-link">
+                @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId) && (!Model.IsCheckAnswer))
                 {
-                    <govuk-error-summary>
-                        <govuk-error-summary-item href="#">@TempData["RemoveFertiliserError"]</govuk-error-summary-item>
-                    </govuk-error-summary>
-                }
-
-                <h1 class="govuk-heading-l">
-                    @if (!string.IsNullOrWhiteSpace(Model.FieldName))
-                    {
-                        @(string.Format(Resource.lblRemoveAnInorganicFertiliserApplicationFromField, Model.FieldName))
-                    }
-                    else
-                    {
-                        @Resource.lblRemoveAnInorganicFertiliserApplication
-                    }
-
-                </h1>
-
-                <div class="govuk-body">
-                    @if (!string.IsNullOrWhiteSpace(Model.FieldName))
-                    {
-                        @string.Format(Resource.MsgDeleteOrganicAndFertiliserContent1, Resource.lblInorganicFertiliser, Model.FieldName, Model.HarvestYear)
-                    }
-                    else
-                    {
-                        @string.Format(Resource.MsgDeleteOrganicAndFertiliserContent2, Resource.lblInorganicFertiliser, Model.HarvestYear)
-                    }
-                </div>
-                @if (ViewBag.SelectedFields != null)
-                {
-
-                    <p class="govuk-body">
-                        <ul class="govuk-body">
-                            @foreach (var item in ViewBag.SelectedFields)
-                            {
-                                <li>@item</li>
-                            }
-                        </ul>
-                        @*  @foreach (var item in ViewBag.SelectedFields)
-                {
-                @item <br />
-                } *@
-                    </p>
-                }
-                <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsDeleteFertliser">
-                    <govuk-radios-fieldset>
-                        <govuk-radios-fieldset-legend>
-                            @Resource.lblAreYouSureYouWantToContinue
-                        </govuk-radios-fieldset-legend>
-                        <govuk-radios-item value="@yes">@Resource.lblYes</govuk-radios-item>
-                        <govuk-radios-item value="@no">@Resource.lblNo</govuk-radios-item>
-                    </govuk-radios-fieldset>
-                </govuk-radios>
-                <govuk-button type="submit" class="margin-bottom-forty">
-                    @Resource.lblContinue
-                </govuk-button>
-                @if (Model.IsComingFromRecommendation)
-                {
-                    <p class="govuk-body cancel-link"><a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@ViewBag.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
-
+                    <a asp-action="CreateFertiliserManureCancel" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
                 }
                 else
                 {
-                    <p class="govuk-body cancel-link"><a asp-action="CheckAnswer" asp-controller="FertiliserManure">@Resource.lblCancel</a></p>
-
+                    <a asp-action="CheckAnswer" asp-controller="FertiliserManure">@Resource.lblCancel</a>
                 }
+            </p>
 
-            </div>
         </div>
+
+
+
+
     </form>
 
-
-}
+</div>

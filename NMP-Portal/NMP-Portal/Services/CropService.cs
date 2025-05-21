@@ -933,6 +933,46 @@ namespace NMP.Portal.Services
             return (grassGrowthClasses, error);
         }
 
+        public async Task<(List<ManagementPeriod>, Error)> FetchManagementperiodByCropId(int cropId, bool isShortSummary)
+        {
+            List<ManagementPeriod> managementPeriodList = new List<ManagementPeriod>();
+            Error error = new Error();
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchManagementPeriodByCropIdAsyncAPI, cropId, isShortSummary));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode)
+                {
+                    if (responseWrapper != null && responseWrapper.Data != null)
+                    {
+                        managementPeriodList = responseWrapper.Data.ManagementPeriods.ToObject<List<ManagementPeriod>>();
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (managementPeriodList, error);
+        }
         //grass
         public async Task<(List<DefoliationSequenceResponse>,Error)> FetchDefoliationSequencesBySwardTypeIdAndNumberOfCut(int swardTypeId, int numberOfCut,bool isNewSward)
         {
@@ -1165,22 +1205,19 @@ namespace NMP.Portal.Services
             }
             return (yieldRanges,error);
         }
-        public async Task<(List<ManagementPeriod>, Error)> FetchManagementperiodByCropId(int cropId, bool isShortSummary)
+        public async Task<(DefoliationSequenceResponse, Error)> FetchDefoliationSequencesById(int defoliationId)
         {
-            List<ManagementPeriod> managementPeriodList = new List<ManagementPeriod>();
-            Error error = new Error();
+            Error error = null;
+            DefoliationSequenceResponse defoliationSequenceResponse = new DefoliationSequenceResponse();
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchManagementPeriodByCropIdAsyncAPI, cropId, isShortSummary));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchDefoliationSequencesByIdAsyncAPI, defoliationId));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-                if (response.IsSuccessStatusCode)
+                if ((response.IsSuccessStatusCode && responseWrapper != null) || responseWrapper.Data != null)
                 {
-                    if (responseWrapper != null && responseWrapper.Data != null)
-                    {
-                        managementPeriodList = responseWrapper.Data.ManagementPeriods.ToObject<List<ManagementPeriod>>();
-                    }
+                    defoliationSequenceResponse = responseWrapper.Data.ToObject<DefoliationSequenceResponse>();                    
                 }
                 else
                 {
@@ -1203,8 +1240,9 @@ namespace NMP.Portal.Services
                 _logger.LogError(ex.Message);
                 throw new Exception(error.Message, ex);
             }
-            return (managementPeriodList, error);
+            return (defoliationSequenceResponse, error);
         }
+
     }
 
 }
