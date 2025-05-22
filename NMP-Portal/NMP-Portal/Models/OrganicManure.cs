@@ -44,5 +44,6 @@ namespace NMP.Portal.Models
         public decimal AutumnCropNitrogenUptake { get; set; }
         public DateTime SoilDrainageEndDate { get; set; }
         public decimal? AvailableNForNMax { get; set; }
+        public int? FieldID { get; set; }
     }
 }

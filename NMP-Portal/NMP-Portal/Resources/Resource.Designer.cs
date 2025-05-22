@@ -2437,6 +2437,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Double Crop.
+        /// </summary>
+        public static string lblDoubleCrop {
+            get {
+                return ResourceManager.GetString("lblDoubleCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to It creates downloadable plans in PDF..
         /// </summary>
         public static string lbldownloadablePdftext {
@@ -9843,6 +9852,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhichCountryIsIn {
             get {
                 return ResourceManager.GetString("lblWhichCountryIsIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which crop is this manure application for in {0}?.
+        /// </summary>
+        public static string lblWhichCropIsThisManureApplication {
+            get {
+                return ResourceManager.GetString("lblWhichCropIsThisManureApplication", resourceCulture);
             }
         }
         
