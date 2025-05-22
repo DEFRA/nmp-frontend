@@ -5,7 +5,7 @@
     string defoliation = string.Empty;
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="Defoliation" asp-controller="FertiliserManure" asp-route-q="@Model.DefoliationEncryptedCounter">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@((Model.IsCheckAnswer&&(!Model.IsAnyChangeInField))?"CheckAnswer":"Defoliation") asp-controller="FertiliserManure" asp-route-q="@Model.DefoliationEncryptedCounter">@Resource.lblBack</govuk-back-link>
 }
 
 
@@ -104,12 +104,13 @@
                         <govuk-radios asp-for="@Model.FertiliserManures[i].Defoliation">
                             <govuk-radios-fieldset>
                                 <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                                    @if(Model.IsSameDefoliationForAll.HasValue&&Model.IsSameDefoliationForAll.Value)
+                                    @if (Model.IsSameDefoliationForAll.HasValue && Model.IsSameDefoliationForAll.Value&&Model.GrassCropCount>1)
                                     {
                                         @Resource.lblWhichCutOrGrazingInThisApplicationForAllField
                                     }
-                                    else{
-                                    @string.Format(Resource.lblWhichCutOrGrazingInThisApplicationForInField, Model.FieldName)
+                                    else
+                                    {
+                                        @string.Format(Resource.lblWhichCutOrGrazingInThisApplicationForInField, Model.FieldName)
                                     }
                                 </govuk-radios-fieldset-legend>
                                 <govuk-radios-hint>@string.Format(Resource.lblTheseOptionsComeFromRB209, Resource.lblSelectOneOption)</govuk-radios-hint>

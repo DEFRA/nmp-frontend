@@ -124,7 +124,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It replaces earlier tools such as PLANET and MANNER. The tool will allow you to import your data from PLANET..
+        ///   Looks up a localized string similar to This tool replaces the PLANET and MANNER-NPK planning tools. It will allow you to import your data from PLANET..
         /// </summary>
         public static string ContentReplacePlanetandManner {
             get {
@@ -9055,7 +9055,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This is a free tool, provided by Defra, to help farmers, land managers and advisers plan and record nutrient use on their land. It gives you guidance only - there is no legal requirement to use it..
+        ///   Looks up a localized string similar to This is a free tool, provided by Defra, to help farmers, land managers and advisers record nutrient use on their land. It gives you guidance only - there is no legal requirement to use it..
         /// </summary>
         public static string lblUseThisServiceToPlan {
             get {
