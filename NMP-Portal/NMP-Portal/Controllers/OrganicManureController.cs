@@ -4553,6 +4553,7 @@ namespace NMP.Portal.Controllers
                 string message = string.Empty;
                 model.IsOrgManureNfieldLimitWarning = false;
                 model.IsNMaxLimitWarning = false;
+                model.isAnyChangeInField = false;
                 model.IsEndClosedPeriodFebruaryWarning = false;
                 model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = false;
                 if (model.FieldList != null && model.FieldList.Count > 0)
@@ -4877,6 +4878,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.DoubleCrop == null && model.isDoubleCropAvailable)
                 {
+                    int i = 0;
                     List<Crop> cropList = new List<Crop>();
                     string cropTypeName = string.Empty;
                     if (model.DoubleCrop == null)
@@ -4887,7 +4889,8 @@ namespace NMP.Portal.Controllers
                             cropList = cropList.Where(x => x.Year == model.HarvestYear).ToList();
                             if (cropList != null && cropList.Count == 2)
                             {
-                                ModelState.AddModelError("DoubleCrop", string.Format("{0} {1}", string.Format(Resource.lblWhichCropIsThisManureApplication, (await _fieldService.FetchFieldByFieldId(Convert.ToInt32(fieldId))).Name), Resource.lblNotSet));
+                                ModelState.AddModelError("DoubleCrop[" + i + "].CropID", string.Format("{0} {1}", string.Format(Resource.lblWhichCropIsThisManureApplication, (await _fieldService.FetchFieldByFieldId(Convert.ToInt32(fieldId))).Name), Resource.lblNotSet));
+                                i++;
                             }
                         }
                     }
