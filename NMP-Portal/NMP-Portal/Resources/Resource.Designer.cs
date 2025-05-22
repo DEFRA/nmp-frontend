@@ -2752,6 +2752,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a number which is an integer value..
+        /// </summary>
+        public static string lblEnterANumberWhichIsAnIntegerValue {
+            get {
+                return ResourceManager.GetString("lblEnterANumberWhichIsAnIntegerValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a positive value of {0}.
         /// </summary>
         public static string lblEnterAPositiveValueOfPropertyName {

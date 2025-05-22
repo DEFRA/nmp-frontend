@@ -137,5 +137,13 @@ namespace NMP.Portal.ViewModels
         public bool? IsDeleteOrganic { get; set; }
         public bool? IsCancel { get; set; }
         public bool? Defoliation { get; set; }
+        public bool IsAnyChangeInSameDefoliationFlag { get; set; } = false;
+        public bool? IsSameDefoliationForAll { get; set; }
+        public int DefoliationCurrentCounter { get; set; } = 0;
+        public string? DefoliationEncryptedCounter { get; set; }
+        public string? EncryptedCounter { get; set; }
+        public bool? IsAnyCropIsGrass { get; set; }
+        public int? GrassCropCount { get; set; }
+        public int? FieldID { get; set; }
     }
 }
