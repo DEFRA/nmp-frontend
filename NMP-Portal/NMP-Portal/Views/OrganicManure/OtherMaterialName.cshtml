@@ -110,6 +110,14 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName" value="@Model.FieldName"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isDoubleCropAvailable"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isAnyChangeInField"></govuk-input>
+
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationCurrentCounter"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationEncryptedCounter"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassCropCount"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyCropIsGrass" value="@Model.IsAnyCropIsGrass.ToString().ToLower()"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyChangeInSameDefoliationFlag" value="@Model.IsAnyChangeInSameDefoliationFlag.ToString().ToLower()"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSameDefoliationForAll"></govuk-input>
+
                 @if (Model.FieldList != null && Model.FieldList.Count > 0)
                 {
                     @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -148,7 +156,13 @@
                         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].Rainfall" value="@Model.OrganicManures[i].Rainfall"></govuk-input>
                         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].WindspeedID" value="@Model.OrganicManures[i].WindspeedID"></govuk-input>
                         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].MoistureID" value="@Model.OrganicManures[i].MoistureID"></govuk-input>
+
                         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].FieldID" value="@Model.OrganicManures[i].FieldID"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].FieldName" value="@Model.OrganicManures[i].FieldName"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].EncryptedCounter" value="@Model.OrganicManures[i].EncryptedCounter"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].Defoliation" value="@Model.OrganicManures[i].Defoliation"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].DefoliationName" value="@Model.OrganicManures[i].DefoliationName"></govuk-input>
+
                     }
                 }
                 @if (Model.AutumnCropNitrogenUptakes != null && Model.AutumnCropNitrogenUptakes.Count > 0)

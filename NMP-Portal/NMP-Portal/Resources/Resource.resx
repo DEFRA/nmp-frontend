@@ -4442,4 +4442,7 @@ live</value>
   <data name="lblDoubleCrop" xml:space="preserve">
     <value>Double Crop</value>
   </data>
+  <data name="lblEnterANumberWhichIsAnIntegerValue" xml:space="preserve">
+    <value>Enter a number which is an integer value.</value>
+  </data>
 </root>

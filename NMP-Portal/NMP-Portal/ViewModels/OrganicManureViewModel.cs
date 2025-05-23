@@ -144,5 +144,12 @@ namespace NMP.Portal.ViewModels
         public int? FieldID { get; set; }
         public bool isDoubleCropAvailable { get; set; } = false;
         public bool isAnyChangeInField { get; set; } = false;
+        public bool IsAnyChangeInSameDefoliationFlag { get; set; } = false;
+        public bool? IsSameDefoliationForAll { get; set; }
+        public int DefoliationCurrentCounter { get; set; } = 0;
+        public string? DefoliationEncryptedCounter { get; set; }
+        public string? EncryptedCounter { get; set; }
+        public bool? IsAnyCropIsGrass { get; set; }
+        public int? GrassCropCount { get; set; }
     }
 }
