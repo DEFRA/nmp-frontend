@@ -7734,6 +7734,26 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("MoistureTypeId", Resource.MsgTopsoilMoistureNotSet);
             }
+            if (model.DoubleCrop == null && model.IsDoubleCropAvailable)
+            {
+                int index = 0;
+                List<Crop> cropList = new List<Crop>();
+                string cropTypeName = string.Empty;
+                if (model.DoubleCrop == null)
+                {
+                    foreach (string fieldId in model.FieldList)
+                    {
+                        cropList = await _cropService.FetchCropsByFieldId(Convert.ToInt32(fieldId));
+                        cropList = cropList.Where(x => x.Year == model.HarvestYear).ToList();
+                        if (cropList != null && cropList.Count == 2)
+                        {
+                            ModelState.AddModelError("MoistureTypeId", string.Format("{0} {1}", string.Format(Resource.lblWhichCropIsThisManureApplication, (await _fieldService.FetchFieldByFieldId(Convert.ToInt32(fieldId))).Name), Resource.lblNotSet));
+                            index++;
+                        }
+                    }
+                }
+
+            }
             if (!ModelState.IsValid)
             {
                 return View(model);
