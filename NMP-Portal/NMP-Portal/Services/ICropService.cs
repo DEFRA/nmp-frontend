@@ -39,5 +39,9 @@ namespace NMP.Portal.Services
 
         Task<(List<ManagementPeriod>, Error)> FetchManagementperiodByCropId(int cropId,bool isShortSummary);
         Task<(DefoliationSequenceResponse, Error)> FetchDefoliationSequencesById(int defoliationId);
+        Task<(SwardManagementResponse, Error)> FetchSwardManagementBySwardManagementId(int swardManagementId);
+        Task<(List<SwardManagementResponse>, Error)> FetchSwardManagementBySwardTypeId(int swardTypeId);
+
+        Task<(SwardTypeResponse, Error)> FetchSwardTypeBySwardTypeId(int swardTypeId);
     }
 }
