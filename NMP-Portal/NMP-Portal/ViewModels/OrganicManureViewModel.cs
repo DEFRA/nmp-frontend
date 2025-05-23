@@ -142,7 +142,7 @@ namespace NMP.Portal.ViewModels
         public int DoubleCropCurrentCounter { get; set; }
         public string? DoubleCropEncryptedCounter { get; set; }
         public int? FieldID { get; set; }
-        public bool isDoubleCropAvailable { get; set; } = false;
-        public bool isAnyChangeInField { get; set; } = false;
+        public bool IsDoubleCropAvailable { get; set; } = false;
+        public bool IsAnyChangeInField { get; set; } = false;
     }
 }
