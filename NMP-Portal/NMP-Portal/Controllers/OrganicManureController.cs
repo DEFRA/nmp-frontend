@@ -21,6 +21,7 @@ using System.Collections.Immutable;
 using System;
 using Microsoft.Identity.Client;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Components.Routing;
 
 namespace NMP.Portal.Controllers
 {
@@ -305,190 +306,202 @@ namespace NMP.Portal.Controllers
                             {
                                 model.FieldList = fieldList.Select(x => x.Id.ToString()).ToList();
                                 string fieldIds = string.Join(",", model.FieldList);
-                                (List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldIds, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup, model.CropOrder);
-                                if (error == null)
+                                if (model.OrganicManures == null)
                                 {
-                                    if (managementIds.Count > 0)
+                                    model.OrganicManures = new List<OrganicManure>();
+                                }
+                                if (model.OrganicManures.Count > 0)
+                                {
+                                    model.OrganicManures.Clear();
+                                }
+                                foreach (string fieldIdForManID in model.FieldList)
+                                {
+                                    List<Crop> cropList = await _cropService.FetchCropsByFieldId(Convert.ToInt32(fieldIdForManID));
+                                    if (cropList != null && cropList.Count > 0)
                                     {
-                                        if (model.OrganicManures == null)
+                                        cropList = cropList.Where(x => x.Year == model.HarvestYear && x.CropTypeID == Convert.ToInt32(model.FieldGroup)).ToList();
+                                        if (cropList.Count > 0)
                                         {
-                                            model.OrganicManures = new List<OrganicManure>();
+                                            model.CropOrder = Convert.ToInt32(cropList.Select(x => x.CropOrder).FirstOrDefault());
                                         }
-                                        if (model.OrganicManures.Count > 0)
+                                    }
+
+                                    (List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldIdForManID, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup, model.CropOrder);
+                                    if (error == null)
+                                    {
+                                        if (managementIds.Count > 0)
                                         {
-                                            model.OrganicManures.Clear();
-                                        }
-                                        foreach (var manIds in managementIds)
-                                        {
-                                            var organicManure = new OrganicManure
+                                            foreach (var manIds in managementIds)
                                             {
-                                                ManagementPeriodID = manIds
-                                            };
-                                            model.OrganicManures.Add(organicManure);
-                                        }
-                                        if (model.IsCheckAnswer && model.OrganicManures.Count > 0)
-                                        {
-                                            int i = 0;
-                                            model.AutumnCropNitrogenUptakes = new List<AutumnCropNitrogenUptakeDetail>();
-                                            foreach (var field in model.FieldList)
-                                            {
-                                                int fieldId = Convert.ToInt32(field);
-                                                Field fieldData = await _fieldService.FetchFieldByFieldId(fieldId);
-                                                if (fieldData != null)
+                                                var organicManure = new OrganicManure
                                                 {
-                                                    //if (model.AutumnCropNitrogenUptakes.Any(f => f.FieldName == fieldData.Name.ToString()))
-                                                    //{
-                                                    //    break;
-                                                    //}
-                                                    (CropTypeResponse cropsResponse, error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(fieldId, model.HarvestYear.Value, false);
-                                                    if (cropsResponse != null)
-                                                    {
-                                                        (CropTypeLinkingResponse cropTypeLinkingResponse, error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(cropsResponse.CropTypeId);
-
-                                                        if (error == null && cropTypeLinkingResponse != null)
-                                                        {
-                                                            int mannerCropTypeId = cropTypeLinkingResponse.MannerCropTypeID;
-
-                                                            var uptakeData = new
-                                                            {
-                                                                cropTypeId = mannerCropTypeId,
-                                                                applicationMonth = model.ApplicationDate.Value.Month
-                                                            };
-
-                                                            string jsonString = JsonConvert.SerializeObject(uptakeData);
-                                                            (NitrogenUptakeResponse nitrogenUptakeResponse, error) = await _organicManureService.FetchAutumnCropNitrogenUptake(jsonString);
-                                                            if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
-                                                            {
-                                                                TempData["FieldGroupError"] = error.Message;
-                                                                return View("FieldGroup", model);
-                                                            }
-                                                            if (nitrogenUptakeResponse != null && error == null)
-                                                            {
-                                                                if (model.AutumnCropNitrogenUptakes == null)
-                                                                {
-                                                                    model.AutumnCropNitrogenUptakes = new List<AutumnCropNitrogenUptakeDetail>();
-                                                                }
-
-                                                                model.AutumnCropNitrogenUptakes.Add(new AutumnCropNitrogenUptakeDetail
-                                                                {
-                                                                    EncryptedFieldId = _organicManureProtector.Protect(fieldId.ToString()),
-                                                                    FieldName = fieldData.Name ?? string.Empty,
-                                                                    CropTypeId = cropsResponse.CropTypeId,
-                                                                    CropTypeName = cropsResponse.CropType,
-                                                                    AutumnCropNitrogenUptake = nitrogenUptakeResponse.value
-                                                                });
-                                                            }
-                                                        }
-                                                        else if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
-                                                        {
-                                                            TempData["FieldGroupError"] = error.Message;
-                                                            return View("FieldGroup", model);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            foreach (var organicManure in model.OrganicManures)
-                                            {
-                                                if (model.ApplicationDate.HasValue)
-                                                {
-                                                    organicManure.ApplicationDate = model.ApplicationDate.Value;
-                                                }
-                                                if (model.ApplicationMethod.HasValue)
-                                                {
-                                                    organicManure.ApplicationMethodID = model.ApplicationMethod.Value;
-                                                }
-                                                if (model.ApplicationRate.HasValue)
-                                                {
-                                                    organicManure.ApplicationRate = model.ApplicationRate.Value;
-                                                }
-                                                if (model.Area.HasValue)
-                                                {
-                                                    organicManure.AreaSpread = model.Area.Value;
-                                                }
-                                                if (model.Quantity.HasValue)
-                                                {
-                                                    organicManure.ManureQuantity = model.Quantity.Value;
-                                                }
-                                                organicManure.ManureTypeID = model.ManureTypeId.Value;
-                                                organicManure.ManureTypeName = model.OtherMaterialName;
-                                                if (model.TotalRainfall.HasValue)
-                                                {
-                                                    organicManure.Rainfall = model.TotalRainfall.Value;
-                                                }
-                                                //if (string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && (!model.DefaultNutrientValue.Value))
-                                                //{
-                                                if (!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis)
-                                                {
-                                                    organicManure.DryMatterPercent = model.DryMatterPercent.Value;
-                                                    organicManure.K2O = model.K2O.Value;
-                                                    organicManure.MgO = model.MgO.Value;
-                                                    organicManure.N = model.N.Value;
-                                                    organicManure.NH4N = model.NH4N.Value;
-                                                    organicManure.NO3N = model.NO3N.Value;
-                                                    organicManure.P2O5 = model.P2O5.Value;
-                                                    organicManure.SO3 = model.SO3.Value;
-                                                    organicManure.UricAcid = model.UricAcid.Value;
-                                                }
-                                                else
-                                                {
-                                                    if (model.ManureType != null)
-                                                    {
-                                                        organicManure.DryMatterPercent = model.ManureType.DryMatter.Value;
-                                                        organicManure.K2O = model.ManureType.K2O.Value;
-                                                        organicManure.MgO = model.ManureType.MgO.Value;
-                                                        organicManure.N = model.ManureType.TotalN.Value;
-                                                        organicManure.NH4N = model.ManureType.NH4N.Value;
-                                                        organicManure.NO3N = model.ManureType.NO3N.Value;
-                                                        organicManure.P2O5 = model.ManureType.P2O5.Value;
-                                                        organicManure.SO3 = model.ManureType.SO3.Value;
-                                                        organicManure.UricAcid = model.ManureType.Uric.Value;
-                                                    }
-                                                }
-                                                if (model.IncorporationDelay.HasValue)
-                                                {
-                                                    organicManure.IncorporationDelayID = model.IncorporationDelay.Value;
-                                                }
-                                                if (model.IncorporationMethod.HasValue)
-                                                {
-                                                    organicManure.IncorporationMethodID = model.IncorporationMethod.Value;
-                                                }
-                                                if (model.SoilDrainageEndDate.HasValue)
-                                                {
-                                                    organicManure.EndOfDrain = model.SoilDrainageEndDate.Value;
-                                                }
-                                                //if (model.AutumnCropNitrogenUptake.HasValue)
-                                                //{
-                                                //    organicManure.AutumnCropNitrogenUptake = model.AutumnCropNitrogenUptake.Value;
-                                                //}
-                                                if (model.AutumnCropNitrogenUptakes != null && model.AutumnCropNitrogenUptakes.Count > 0 && i < model.AutumnCropNitrogenUptakes.Count)
-                                                {
-                                                    organicManure.AutumnCropNitrogenUptake = model.AutumnCropNitrogenUptakes[i].AutumnCropNitrogenUptake;
-                                                }
-
-                                                if (model.WindspeedID.HasValue)
-                                                {
-                                                    organicManure.WindspeedID = model.WindspeedID.Value;
-                                                }
-                                                if (model.MoistureTypeId.HasValue)
-                                                {
-                                                    organicManure.MoistureID = model.MoistureTypeId.Value;
-                                                }
-                                                if (model.RainfallWithinSixHoursID.HasValue)
-                                                {
-                                                    organicManure.RainfallWithinSixHoursID = model.RainfallWithinSixHoursID.Value;
-                                                }
-                                                i++;
+                                                    ManagementPeriodID = manIds
+                                                };
+                                                model.OrganicManures.Add(organicManure);
                                             }
                                         }
                                     }
+                                    else
+                                    {
+                                        TempData["FieldGroupError"] = error.Message;
+                                        return View("FieldGroup", model);
+                                    }
                                 }
-                                else
+
+                                if (model.IsCheckAnswer && model.OrganicManures.Count > 0)
                                 {
-                                    TempData["FieldGroupError"] = error.Message;
-                                    return View("FieldGroup", model);
+                                    int i = 0;
+                                    model.AutumnCropNitrogenUptakes = new List<AutumnCropNitrogenUptakeDetail>();
+                                    foreach (var field in model.FieldList)
+                                    {
+                                        int fieldId = Convert.ToInt32(field);
+                                        Field fieldData = await _fieldService.FetchFieldByFieldId(fieldId);
+                                        if (fieldData != null)
+                                        {
+                                            //if (model.AutumnCropNitrogenUptakes.Any(f => f.FieldName == fieldData.Name.ToString()))
+                                            //{
+                                            //    break;
+                                            //}
+                                            (CropTypeResponse cropsResponse, error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(fieldId, model.HarvestYear.Value, false);
+                                            if (cropsResponse != null)
+                                            {
+                                                (CropTypeLinkingResponse cropTypeLinkingResponse, error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(cropsResponse.CropTypeId);
+
+                                                if (error == null && cropTypeLinkingResponse != null)
+                                                {
+                                                    int mannerCropTypeId = cropTypeLinkingResponse.MannerCropTypeID;
+
+                                                    var uptakeData = new
+                                                    {
+                                                        cropTypeId = mannerCropTypeId,
+                                                        applicationMonth = model.ApplicationDate.Value.Month
+                                                    };
+
+                                                    string jsonString = JsonConvert.SerializeObject(uptakeData);
+                                                    (NitrogenUptakeResponse nitrogenUptakeResponse, error) = await _organicManureService.FetchAutumnCropNitrogenUptake(jsonString);
+                                                    if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
+                                                    {
+                                                        TempData["FieldGroupError"] = error.Message;
+                                                        return View("FieldGroup", model);
+                                                    }
+                                                    if (nitrogenUptakeResponse != null && error == null)
+                                                    {
+                                                        if (model.AutumnCropNitrogenUptakes == null)
+                                                        {
+                                                            model.AutumnCropNitrogenUptakes = new List<AutumnCropNitrogenUptakeDetail>();
+                                                        }
+
+                                                        model.AutumnCropNitrogenUptakes.Add(new AutumnCropNitrogenUptakeDetail
+                                                        {
+                                                            EncryptedFieldId = _organicManureProtector.Protect(fieldId.ToString()),
+                                                            FieldName = fieldData.Name ?? string.Empty,
+                                                            CropTypeId = cropsResponse.CropTypeId,
+                                                            CropTypeName = cropsResponse.CropType,
+                                                            AutumnCropNitrogenUptake = nitrogenUptakeResponse.value
+                                                        });
+                                                    }
+                                                }
+                                                else if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
+                                                {
+                                                    TempData["FieldGroupError"] = error.Message;
+                                                    return View("FieldGroup", model);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    foreach (var organicManure in model.OrganicManures)
+                                    {
+                                        if (model.ApplicationDate.HasValue)
+                                        {
+                                            organicManure.ApplicationDate = model.ApplicationDate.Value;
+                                        }
+                                        if (model.ApplicationMethod.HasValue)
+                                        {
+                                            organicManure.ApplicationMethodID = model.ApplicationMethod.Value;
+                                        }
+                                        if (model.ApplicationRate.HasValue)
+                                        {
+                                            organicManure.ApplicationRate = model.ApplicationRate.Value;
+                                        }
+                                        if (model.Area.HasValue)
+                                        {
+                                            organicManure.AreaSpread = model.Area.Value;
+                                        }
+                                        if (model.Quantity.HasValue)
+                                        {
+                                            organicManure.ManureQuantity = model.Quantity.Value;
+                                        }
+                                        organicManure.ManureTypeID = model.ManureTypeId.Value;
+                                        organicManure.ManureTypeName = model.OtherMaterialName;
+                                        if (model.TotalRainfall.HasValue)
+                                        {
+                                            organicManure.Rainfall = model.TotalRainfall.Value;
+                                        }
+                                        //if (string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && (!model.DefaultNutrientValue.Value))
+                                        //{
+                                        if (!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis)
+                                        {
+                                            organicManure.DryMatterPercent = model.DryMatterPercent.Value;
+                                            organicManure.K2O = model.K2O.Value;
+                                            organicManure.MgO = model.MgO.Value;
+                                            organicManure.N = model.N.Value;
+                                            organicManure.NH4N = model.NH4N.Value;
+                                            organicManure.NO3N = model.NO3N.Value;
+                                            organicManure.P2O5 = model.P2O5.Value;
+                                            organicManure.SO3 = model.SO3.Value;
+                                            organicManure.UricAcid = model.UricAcid.Value;
+                                        }
+                                        else
+                                        {
+                                            if (model.ManureType != null)
+                                            {
+                                                organicManure.DryMatterPercent = model.ManureType.DryMatter.Value;
+                                                organicManure.K2O = model.ManureType.K2O.Value;
+                                                organicManure.MgO = model.ManureType.MgO.Value;
+                                                organicManure.N = model.ManureType.TotalN.Value;
+                                                organicManure.NH4N = model.ManureType.NH4N.Value;
+                                                organicManure.NO3N = model.ManureType.NO3N.Value;
+                                                organicManure.P2O5 = model.ManureType.P2O5.Value;
+                                                organicManure.SO3 = model.ManureType.SO3.Value;
+                                                organicManure.UricAcid = model.ManureType.Uric.Value;
+                                            }
+                                        }
+                                        if (model.IncorporationDelay.HasValue)
+                                        {
+                                            organicManure.IncorporationDelayID = model.IncorporationDelay.Value;
+                                        }
+                                        if (model.IncorporationMethod.HasValue)
+                                        {
+                                            organicManure.IncorporationMethodID = model.IncorporationMethod.Value;
+                                        }
+                                        if (model.SoilDrainageEndDate.HasValue)
+                                        {
+                                            organicManure.EndOfDrain = model.SoilDrainageEndDate.Value;
+                                        }
+                                        //if (model.AutumnCropNitrogenUptake.HasValue)
+                                        //{
+                                        //    organicManure.AutumnCropNitrogenUptake = model.AutumnCropNitrogenUptake.Value;
+                                        //}
+                                        if (model.AutumnCropNitrogenUptakes != null && model.AutumnCropNitrogenUptakes.Count > 0 && i < model.AutumnCropNitrogenUptakes.Count)
+                                        {
+                                            organicManure.AutumnCropNitrogenUptake = model.AutumnCropNitrogenUptakes[i].AutumnCropNitrogenUptake;
+                                        }
+
+                                        if (model.WindspeedID.HasValue)
+                                        {
+                                            organicManure.WindspeedID = model.WindspeedID.Value;
+                                        }
+                                        if (model.MoistureTypeId.HasValue)
+                                        {
+                                            organicManure.MoistureID = model.MoistureTypeId.Value;
+                                        }
+                                        if (model.RainfallWithinSixHoursID.HasValue)
+                                        {
+                                            organicManure.RainfallWithinSixHoursID = model.RainfallWithinSixHoursID.Value;
+                                        }
+                                        i++;
+                                    }
                                 }
-
-
 
                                 if (model.IsCheckAnswer && model.IsFieldGroupChange)
                                 {
@@ -710,10 +723,6 @@ namespace NMP.Portal.Controllers
                                     Field fieldData = await _fieldService.FetchFieldByFieldId(fieldId);
                                     if (fieldData != null)
                                     {
-                                        //if (model.AutumnCropNitrogenUptakes.Any(f => f.FieldName == fieldData.Name.ToString()))
-                                        //{
-                                        //    break;
-                                        //}
                                         (CropTypeResponse cropsResponse, error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(fieldId, model.HarvestYear.Value, false);
 
                                         (CropTypeLinkingResponse cropTypeLinkingResponse, error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(cropsResponse.CropTypeId);
@@ -868,62 +877,99 @@ namespace NMP.Portal.Controllers
                         TempData["FieldError"] = error.Message;
                         return View(model);
                     }
+                    foreach (var organicManure in model.OrganicManures)
+                    {
+                        (ManagementPeriod managementPeriod, error) = await _cropService.FetchManagementperiodById(organicManure.ManagementPeriodID);
+                        if (string.IsNullOrWhiteSpace(error.Message) && managementPeriod != null)
+                        {
+                            (Crop crop, error) = await _cropService.FetchCropById(managementPeriod.CropID.Value);
+                            if (string.IsNullOrWhiteSpace(error.Message) && crop != null)
+                            {
+                                organicManure.FieldID = crop.FieldID;
+                            }
+                        }
+                    }
+                    OrganicManureViewModel organicManureViewModel = null;
+                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
+                    {
+                        organicManureViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+                        if (organicManureViewModel != null && organicManureViewModel.FieldList != null && organicManureViewModel.FieldList.Count > 0)
+                        {
+                            var fieldListChange = organicManureViewModel.FieldList.Where(item1 => !model.FieldList.Any(item2 => item2 == item1)).ToList();
+
+                            if (fieldListChange != null && fieldListChange.Count > 0)
+                            {
+                                model.isAnyChangeInField = true;
+                                model.DoubleCrop = null;
+                                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return RedirectToAction("FarmList", "Farm");
+                    }
+                    foreach (string field in model.FieldList)
+                    {
+                        List<Crop> cropList = await _cropService.FetchCropsByFieldId(Convert.ToInt32(field));
+                        cropList = cropList.Where(x => x.Year == model.HarvestYear).ToList();
+                        if (cropList != null && cropList.Count == 2)
+                        {
+                            model.isDoubleCropAvailable = true;
+                            int counter = 0;
+                            model.FieldName = (await _fieldService.FetchFieldByFieldId(Convert.ToInt32(field))).Name;
+                            model.DoubleCropEncryptedCounter = _fieldDataProtector.Protect(counter.ToString());
+                            break;
+                        }
+                    }
                     if (model.IsCheckAnswer && model.IsFieldGroupChange)
                     {
-                        if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
+
+                        if (organicManureViewModel != null && organicManureViewModel.FieldList.Count > 0)
                         {
-                            OrganicManureViewModel organicManureViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
-                            if (organicManureViewModel != null && organicManureViewModel.FieldList.Count > 0)
+                            // Perform the required action for these items
+                            if (model.isAnyChangeInField)
                             {
-                                var fieldListChange = organicManureViewModel.FieldList.Where(item1 => !model.FieldList.Any(item2 => item2 == item1)).ToList();
+                                List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
+                                var crop = cropsResponse.Where(x => x.Year == model.HarvestYear);
+                                int cropTypeId = crop.Select(x => x.CropTypeID).FirstOrDefault() ?? 0;
+                                int cropCategoryId = await _mannerService.FetchCategoryIdByCropTypeIdAsync(cropTypeId);
 
-                                // Perform the required action for these items
-                                if (fieldListChange != null && fieldListChange.Count > 0)
+                                //check early and late for winter cereals and winter oilseed rape
+                                //if sowing date after 15 sept then late
+                                DateTime? sowingDate = crop.Select(x => x.SowingDate).FirstOrDefault();
+                                if (cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal || cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlyStablishedWinterOilseedRape)
                                 {
-                                    List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
-                                    var crop = cropsResponse.Where(x => x.Year == model.HarvestYear);
-                                    int cropTypeId = crop.Select(x => x.CropTypeID).FirstOrDefault() ?? 0;
-                                    int cropCategoryId = await _mannerService.FetchCategoryIdByCropTypeIdAsync(cropTypeId);
-
-                                    //check early and late for winter cereals and winter oilseed rape
-                                    //if sowing date after 15 sept then late
-                                    DateTime? sowingDate = crop.Select(x => x.SowingDate).FirstOrDefault();
-                                    if (cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal || cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlyStablishedWinterOilseedRape)
+                                    if (sowingDate != null)
                                     {
-                                        if (sowingDate != null)
+                                        int day = sowingDate.Value.Day;
+                                        int month = sowingDate.Value.Month;
+                                        if (month == (int)NMP.Portal.Enums.Month.September && day > 15)
                                         {
-                                            int day = sowingDate.Value.Day;
-                                            int month = sowingDate.Value.Month;
-                                            if (month == (int)NMP.Portal.Enums.Month.September && day > 15)
+                                            if (cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal)
                                             {
-                                                if (cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal)
-                                                {
-                                                    cropCategoryId = (int)NMP.Portal.Enums.CropCategory.LateSownWinterCereal;
-                                                }
-                                                else
-                                                {
-                                                    cropCategoryId = (int)NMP.Portal.Enums.CropCategory.LateStablishedWinterOilseedRape;
-                                                }
+                                                cropCategoryId = (int)NMP.Portal.Enums.CropCategory.LateSownWinterCereal;
+                                            }
+                                            else
+                                            {
+                                                cropCategoryId = (int)NMP.Portal.Enums.CropCategory.LateStablishedWinterOilseedRape;
                                             }
                                         }
                                     }
+                                }
 
-                                    if (model.ApplicationDate.Value.Month >= (int)NMP.Portal.Enums.Month.August && model.ApplicationDate.Value.Month <= (int)NMP.Portal.Enums.Month.October)
-                                    {
+                                if (model.ApplicationDate.Value.Month >= (int)NMP.Portal.Enums.Month.August && model.ApplicationDate.Value.Month <= (int)NMP.Portal.Enums.Month.October)
+                                {
 
-                                        model.AutumnCropNitrogenUptake = await _mannerService.FetchCropNUptakeDefaultAsync(cropCategoryId);
-                                    }
-                                    else
-                                    {
-                                        model.AutumnCropNitrogenUptake = 0;
-                                    }
+                                    model.AutumnCropNitrogenUptake = await _mannerService.FetchCropNUptakeDefaultAsync(cropCategoryId);
+                                }
+                                else
+                                {
+                                    model.AutumnCropNitrogenUptake = 0;
                                 }
                             }
                         }
-                        else
-                        {
-                            return RedirectToAction("FarmList", "Farm");
-                        }
+
 
                     }
                     _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
@@ -940,6 +986,7 @@ namespace NMP.Portal.Controllers
                 TempData["FieldError"] = ex.Message;
                 return View(model);
             }
+
             return RedirectToAction("ManureGroup");
 
         }
@@ -1369,213 +1416,221 @@ namespace NMP.Portal.Controllers
                         return RedirectToAction("OtherMaterialName");
                     }
 
-                    //logic start for defoliation
 
-                    model.IsAnyCropIsGrass = false;
-                    List<string> fieldsToRemove = new List<string>();
-                    foreach (string field in model.FieldList)
+                    if (model.isDoubleCropAvailable)
                     {
-                        List<Crop> cropList = await _cropService.FetchCropsByFieldId(Convert.ToInt32(field));
-
-                        if (cropList.Count > 0)
-                        {
-                            //temporary croporder==1
-                            model.CropOrder = 1;
-                            cropList = cropList.Where(x => x.Year == model.HarvestYear && x.CropOrder == model.CropOrder).ToList();
-                        }
-
-                        if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass))
-                        {
-                            fieldsToRemove.Add(field);
-                        }
-                        if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
-                        {
-                            model.IsAnyCropIsGrass = true;
-                        }
+                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                        return RedirectToAction("DoubleCrop");
                     }
-                    List<string> fieldListCopy = new List<string>(model.FieldList);
+                    else
+                    {
+                        //logic start for defoliation
 
-                    if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
-                    {
-                        foreach (var field in fieldsToRemove)
+                        model.IsAnyCropIsGrass = false;
+                        List<string> fieldsToRemove = new List<string>();
+                        foreach (string field in model.FieldList)
                         {
-                            fieldListCopy.Remove(field);
+                            List<Crop> cropList = await _cropService.FetchCropsByFieldId(Convert.ToInt32(field));
+
+                            if (cropList.Count > 0)
+                            {
+                                //temporary croporder==1
+                                model.CropOrder = 1;
+                                cropList = cropList.Where(x => x.Year == model.HarvestYear && x.CropOrder == model.CropOrder).ToList();
+                            }
+
+                            if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass))
+                            {
+                                fieldsToRemove.Add(field);
+                            }
+                            if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
+                            {
+                                model.IsAnyCropIsGrass = true;
+                            }
                         }
-                    }
-                    string fieldIds = string.Join(",", fieldListCopy);
-                    (List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldIds, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup, null);//1 is CropOrder
-                    if (error == null)
-                    {
-                        if (managementIds.Count > 0)
+                        List<string> fieldListCopy = new List<string>(model.FieldList);
+
+                        if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
                         {
-                            if (model.OrganicManures == null)
+                            foreach (var field in fieldsToRemove)
                             {
-                                model.OrganicManures = new List<OrganicManure>();
+                                fieldListCopy.Remove(field);
                             }
-                            if (model.OrganicManures.Count > 0)
+                        }
+                        string fieldIds = string.Join(",", fieldListCopy);
+                        (List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldIds, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup, null);//1 is CropOrder
+                        if (error == null)
+                        {
+                            if (managementIds.Count > 0)
                             {
-                                model.OrganicManures.Clear();
-                            }
-                            int counter = 1;
-                            foreach (var manIds in managementIds)
-                            {
-                                var organicManure = new OrganicManure
+                                if (model.OrganicManures == null)
                                 {
-                                    ManagementPeriodID = manIds,
-                                    EncryptedCounter = _fieldDataProtector.Protect(counter.ToString())
-                                };
-                                counter++;
-                                if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
+                                    model.OrganicManures = new List<OrganicManure>();
+                                }
+                                if (model.OrganicManures.Count > 0)
                                 {
-                                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
+                                    model.OrganicManures.Clear();
+                                }
+                                int counter = 1;
+                                foreach (var manIds in managementIds)
+                                {
+                                    var organicManure = new OrganicManure
                                     {
-                                        OrganicManureViewModel orgManureViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
-
-                                        if (orgManureViewModel.OrganicManures != null && orgManureViewModel.OrganicManures.Count > 0)
+                                        ManagementPeriodID = manIds,
+                                        EncryptedCounter = _fieldDataProtector.Protect(counter.ToString())
+                                    };
+                                    counter++;
+                                    if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
+                                    {
+                                        if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
                                         {
-                                            for (int i = 0; i < orgManureViewModel.OrganicManures.Count; i++)
+                                            OrganicManureViewModel orgManureViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+
+                                            if (orgManureViewModel.OrganicManures != null && orgManureViewModel.OrganicManures.Count > 0)
                                             {
-                                                if (orgManureViewModel.OrganicManures[i].ManagementPeriodID == manIds && orgManureViewModel.OrganicManures[i].Defoliation != null)
+                                                for (int i = 0; i < orgManureViewModel.OrganicManures.Count; i++)
                                                 {
-                                                    organicManure.Defoliation = orgManureViewModel.OrganicManures[i].Defoliation;
-                                                    (ManagementPeriod managementPeriod, error) = await _cropService.FetchManagementperiodById(manIds);
-                                                    if (string.IsNullOrWhiteSpace(error.Message) && managementPeriod != null)
+                                                    if (orgManureViewModel.OrganicManures[i].ManagementPeriodID == manIds && orgManureViewModel.OrganicManures[i].Defoliation != null)
                                                     {
-                                                        (Crop crop, error) = await _cropService.FetchCropById(managementPeriod.CropID.Value);
-
-                                                        if (string.IsNullOrWhiteSpace(error.Message) && crop != null && crop.DefoliationSequenceID != null)
+                                                        organicManure.Defoliation = orgManureViewModel.OrganicManures[i].Defoliation;
+                                                        (ManagementPeriod managementPeriod, error) = await _cropService.FetchManagementperiodById(manIds);
+                                                        if (string.IsNullOrWhiteSpace(error.Message) && managementPeriod != null)
                                                         {
-                                                            (DefoliationSequenceResponse defoliationSequence, error) = await _cropService.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
-                                                            if (error == null && defoliationSequence != null)
+                                                            (Crop crop, error) = await _cropService.FetchCropById(managementPeriod.CropID.Value);
+
+                                                            if (string.IsNullOrWhiteSpace(error.Message) && crop != null && crop.DefoliationSequenceID != null)
                                                             {
-                                                                string description = defoliationSequence.DefoliationSequenceDescription;
+                                                                (DefoliationSequenceResponse defoliationSequence, error) = await _cropService.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+                                                                if (error == null && defoliationSequence != null)
+                                                                {
+                                                                    string description = defoliationSequence.DefoliationSequenceDescription;
 
-                                                                string[] defoliationParts = description.Split(',')
-                                                                                                       .Select(x => x.Trim())
-                                                                                                       .ToArray();
+                                                                    string[] defoliationParts = description.Split(',')
+                                                                                                           .Select(x => x.Trim())
+                                                                                                           .ToArray();
 
-                                                                string selectedDefoliation = (organicManure.Defoliation.Value > 0 && organicManure.Defoliation.Value <= defoliationParts.Length)
-                                                                    ? $"{Enum.GetName(typeof(PotentialCut), organicManure.Defoliation.Value)} ({defoliationParts[organicManure.Defoliation.Value - 1]})"
-                                                                    : $"{organicManure.Defoliation.Value}";
+                                                                    string selectedDefoliation = (organicManure.Defoliation.Value > 0 && organicManure.Defoliation.Value <= defoliationParts.Length)
+                                                                        ? $"{Enum.GetName(typeof(PotentialCut), organicManure.Defoliation.Value)} ({defoliationParts[organicManure.Defoliation.Value - 1]})"
+                                                                        : $"{organicManure.Defoliation.Value}";
 
-                                                                organicManure.DefoliationName = selectedDefoliation;
+                                                                    organicManure.DefoliationName = selectedDefoliation;
+                                                                }
                                                             }
                                                         }
                                                     }
                                                 }
                                             }
                                         }
+                                        else
+                                        {
+                                            return RedirectToAction("FarmList", "Farm");
+                                        }
                                     }
-                                    else
-                                    {
-                                        return RedirectToAction("FarmList", "Farm");
-                                    }
+                                    model.OrganicManures.Add(organicManure);
                                 }
-                                model.OrganicManures.Add(organicManure);
+
+                                model.DefoliationCurrentCounter = 0;
                             }
-
-                            model.DefoliationCurrentCounter = 0;
                         }
-                    }
-                    else
-                    {
-                        TempData["FieldError"] = error.Message;
-                        return View(model);
-                    }
-
-                    if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
-                    {
-                        foreach (var organic in model.OrganicManures)
+                        else
                         {
-                            (ManagementPeriod managementPeriod, error) = await _cropService.FetchManagementperiodById(organic.ManagementPeriodID);
-                            if (string.IsNullOrWhiteSpace(error.Message) && managementPeriod != null)
+                            TempData["FieldError"] = error.Message;
+                            return View(model);
+                        }
+
+                        if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
+                        {
+                            foreach (var organic in model.OrganicManures)
                             {
-                                (Crop crop, error) = await _cropService.FetchCropById(managementPeriod.CropID.Value);
-                                if (string.IsNullOrWhiteSpace(error.Message) && crop != null)
+                                (ManagementPeriod managementPeriod, error) = await _cropService.FetchManagementperiodById(organic.ManagementPeriodID);
+                                if (string.IsNullOrWhiteSpace(error.Message) && managementPeriod != null)
                                 {
-                                    organic.FieldID = crop.FieldID;
-                                    organic.FieldName = (await _fieldService.FetchFieldByFieldId(organic.FieldID.Value)).Name;
+                                    (Crop crop, error) = await _cropService.FetchCropById(managementPeriod.CropID.Value);
+                                    if (string.IsNullOrWhiteSpace(error.Message) && crop != null)
+                                    {
+                                        organic.FieldID = crop.FieldID;
+                                        organic.FieldName = (await _fieldService.FetchFieldByFieldId(organic.FieldID.Value)).Name;
+                                    }
                                 }
                             }
                         }
-                    }
 
 
-                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
-                    int grassCropCounter = 0;
-                    foreach (var field in model.FieldList)
-                    {
-                        List<Crop> cropList = await _cropService.FetchCropsByFieldId(Convert.ToInt32(field));
-                        if (cropList.Count > 0)
+                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                        int grassCropCounter = 0;
+                        foreach (var field in model.FieldList)
                         {
-                            cropList = cropList.Where(x => x.Year == model.HarvestYear && x.CropOrder == model.CropOrder).ToList();
-                        }
-                        if (cropList.Count > 0)
-                        {
-                            if (cropList.Any(c => c.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
+                            List<Crop> cropList = await _cropService.FetchCropsByFieldId(Convert.ToInt32(field));
+                            if (cropList.Count > 0)
                             {
-                                if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
+                                cropList = cropList.Where(x => x.Year == model.HarvestYear && x.CropOrder == model.CropOrder).ToList();
+                            }
+                            if (cropList.Count > 0)
+                            {
+                                if (cropList.Any(c => c.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
                                 {
-
-                                    (List<ManagementPeriod> managementPeriod, error) = await _cropService.FetchManagementperiodByCropId(cropList.Select(x => x.ID.Value).FirstOrDefault(), false);
-
-                                    var filteredOrganicManure = model.OrganicManures
-                                     .Where(fm => managementPeriod.Any(mp => mp.ID == fm.ManagementPeriodID) &&
-                                         fm.Defoliation == null).ToList();
-                                    if (filteredOrganicManure != null && filteredOrganicManure.Count == managementPeriod.Count)
+                                    if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
                                     {
-                                        var managementPeriodIdsToRemove = managementPeriod
-                                       .Skip(1)
-                                       .Select(mp => mp.ID.Value)
-                                       .ToList();
-                                        model.OrganicManures.RemoveAll(fm => managementPeriodIdsToRemove.Contains(fm.ManagementPeriodID));
-                                    }
-                                    else
-                                    {
-                                        model.OrganicManures.RemoveAll(x => managementPeriod.Any(mp => mp.ID == x.ManagementPeriodID) &&
-                                        x.Defoliation == null);
-                                    }
-                                    grassCropCounter++;
+
+                                        (List<ManagementPeriod> managementPeriod, error) = await _cropService.FetchManagementperiodByCropId(cropList.Select(x => x.ID.Value).FirstOrDefault(), false);
+
+                                        var filteredOrganicManure = model.OrganicManures
+                                         .Where(fm => managementPeriod.Any(mp => mp.ID == fm.ManagementPeriodID) &&
+                                             fm.Defoliation == null).ToList();
+                                        if (filteredOrganicManure != null && filteredOrganicManure.Count == managementPeriod.Count)
+                                        {
+                                            var managementPeriodIdsToRemove = managementPeriod
+                                           .Skip(1)
+                                           .Select(mp => mp.ID.Value)
+                                           .ToList();
+                                            model.OrganicManures.RemoveAll(fm => managementPeriodIdsToRemove.Contains(fm.ManagementPeriodID));
+                                        }
+                                        else
+                                        {
+                                            model.OrganicManures.RemoveAll(x => managementPeriod.Any(mp => mp.ID == x.ManagementPeriodID) &&
+                                            x.Defoliation == null);
+                                        }
+                                        grassCropCounter++;
 
 
+                                    }
+                                    model.IsAnyCropIsGrass = true;
                                 }
-                                model.IsAnyCropIsGrass = true;
                             }
                         }
-                    }
-                    model.GrassCropCount = grassCropCounter;
+                        model.GrassCropCount = grassCropCounter;
 
-                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
-                    if (model.IsCheckAnswer && model.IsAnyCropIsGrass.HasValue && (!model.IsAnyCropIsGrass.Value))
-                    {
-                        model.GrassCropCount = null;
-                        model.IsSameDefoliationForAll = null;
-                        model.IsAnyChangeInSameDefoliationFlag = false;
                         _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
-                        return RedirectToAction("CheckAnswer");
-
-                    }
-                    else
-                    {
-                        if (!model.IsAnyCropIsGrass.Value)
+                        if (model.IsCheckAnswer && model.IsAnyCropIsGrass.HasValue && (!model.IsAnyCropIsGrass.Value))
                         {
+                            model.GrassCropCount = null;
+                            model.IsSameDefoliationForAll = null;
+                            model.IsAnyChangeInSameDefoliationFlag = false;
                             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
-                            return RedirectToAction("ManureApplyingDate");
+                            return RedirectToAction("CheckAnswer");
+
+                        }
+                        else
+                        {
+                            if (!model.IsAnyCropIsGrass.Value)
+                            {
+                                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                                return RedirectToAction("ManureApplyingDate");
+                            }
+
+                            if (model.GrassCropCount != null && model.GrassCropCount.Value > 1)
+                            {
+                                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                                return RedirectToAction("IsSameDefoliationForAll");
+                            }
+                            model.IsSameDefoliationForAll = true;
+                            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                            return RedirectToAction("Defoliation");
                         }
 
-                        if (model.GrassCropCount != null && model.GrassCropCount.Value > 1)
-                        {
-                            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
-                            return RedirectToAction("IsSameDefoliationForAll");
-                        }
-                        model.IsSameDefoliationForAll = true;
-                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
-                        return RedirectToAction("Defoliation");
+                        //logic end for defoliation
                     }
 
-                    //logic end for defoliation
-
-                    
                 }
                 else
                 {
@@ -4280,13 +4335,20 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
 
-                if (!model.IsFieldGroupChange)
+                if (!model.IsFieldGroupChange && (!model.isAnyChangeInField))
                 {
                     return RedirectToAction("CheckAnswer");
                 }
             }
 
+            //if (model.isDoubleCropAvailable)
+            //{
+            //    return RedirectToAction("DoubleCrop", new
+            //    {
+            //        q = model.DoubleCropEncryptedCounter
 
+            //    });
+            //}
             if (model.FieldGroup == Resource.lblSelectSpecificFields && model.IsComingFromRecommendation)
             {
                 if (model.FieldList.Count > 0 && model.FieldList.Count == 1)
@@ -4702,6 +4764,7 @@ namespace NMP.Portal.Controllers
                 string message = string.Empty;
                 model.IsOrgManureNfieldLimitWarning = false;
                 model.IsNMaxLimitWarning = false;
+                model.isAnyChangeInField = false;
                 model.IsEndClosedPeriodFebruaryWarning = false;
                 model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = false;
                 if (model.FieldList != null && model.FieldList.Count > 0)
@@ -5060,6 +5123,26 @@ namespace NMP.Portal.Controllers
                 if (model.MoistureTypeId == null)
                 {
                     ModelState.AddModelError("MoistureTypeId", Resource.MsgTopsoilMoistureNotSet);
+                }
+                if (model.DoubleCrop == null && model.isDoubleCropAvailable)
+                {
+                    int index = 0;
+                    List<Crop> cropList = new List<Crop>();
+                    string cropTypeName = string.Empty;
+                    if (model.DoubleCrop == null)
+                    {
+                        foreach (string fieldId in model.FieldList)
+                        {
+                            cropList = await _cropService.FetchCropsByFieldId(Convert.ToInt32(fieldId));
+                            cropList = cropList.Where(x => x.Year == model.HarvestYear).ToList();
+                            if (cropList != null && cropList.Count == 2)
+                            {
+                                ModelState.AddModelError("DoubleCrop[" + index + "].CropID", string.Format("{0} {1}", string.Format(Resource.lblWhichCropIsThisManureApplication, (await _fieldService.FetchFieldByFieldId(Convert.ToInt32(fieldId))).Name), Resource.lblNotSet));
+                                index++;
+                            }
+                        }
+                    }
+
                 }
                 if (!ModelState.IsValid)
                 {
@@ -5466,9 +5549,9 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("AutumnCropNitrogenUptake", Resource.lblEnterANumberWhichIsAnIntegerValue);
                 }
-                
+
             }
-            
+
             if (!ModelState.IsValid)
             {
                 Field field = await _fieldService.FetchFieldByFieldId(Convert.ToInt32(_organicManureProtector.Unprotect(model.EncryptedFieldId)));
@@ -7864,6 +7947,470 @@ namespace NMP.Portal.Controllers
             }
             return RedirectToAction("CheckAnswer");
         }
+        [HttpGet]
+        public async Task<IActionResult> DoubleCrop(string q)
+        {
+            _logger.LogTrace($"Organic Manure Controller : DoubleCrop({q}) action called");
+            OrganicManureViewModel model = new OrganicManureViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+
+            if (string.IsNullOrWhiteSpace(q) && model.OrganicManures != null && model.OrganicManures.Count > 0)
+            {
+                model.DoubleCropEncryptedCounter = _fieldDataProtector.Protect(model.DoubleCropCurrentCounter.ToString());
+
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("OrganicManure", model);
+            }
+            else if (!string.IsNullOrWhiteSpace(q) && (model.DoubleCrop != null && model.DoubleCrop.Count > 0))
+            {
+                int itemCount = Convert.ToInt32(_fieldDataProtector.Unprotect(q));
+                int index = itemCount - 1;
+                if (itemCount == 0)
+                {
+                    model.DoubleCropCurrentCounter = 0;
+                    model.DoubleCropEncryptedCounter = string.Empty;
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("OrganicManure", model);
+                    if (model.IsCheckAnswer && (!model.IsManureTypeChange) && (!model.IsFieldGroupChange))
+                    {
+                        return RedirectToAction("CheckAnswer");
+                    }
+                    if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
+                    {
+                        return RedirectToAction("ManureGroup");
+                    }
+                    else if (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
+                    {
+                        return RedirectToAction("OtherMaterialName");
+                    }
+                    else
+                    {
+                        return RedirectToAction("ManureType");
+                    }
+                }
+                model.FieldID = model.DoubleCrop[index].FieldID;
+                model.FieldName = (await _fieldService.FetchFieldByFieldId(model.DoubleCrop[index].FieldID)).Name;
+                model.DoubleCropCurrentCounter = index;
+                model.DoubleCropEncryptedCounter = _fieldDataProtector.Protect(model.DoubleCropCurrentCounter.ToString());
+            }
+            if (model.FieldList != null && model.FieldList.Count > 0)
+            {
+                List<Crop> cropList = new List<Crop>();
+                string cropTypeName = string.Empty;
+                if (model.DoubleCrop == null)
+                {
+                    model.DoubleCrop = new List<DoubleCrop>();
+                    int counter = 1;
+                    foreach (string fieldId in model.FieldList)
+                    {
+                        cropList = await _cropService.FetchCropsByFieldId(Convert.ToInt32(fieldId));
+                        cropList = cropList.Where(x => x.Year == model.HarvestYear).ToList();
+                        cropTypeName = await _fieldService.FetchCropTypeById(cropList.FirstOrDefault().CropTypeID.Value);
+                        if (cropList != null && cropList.Count == 2)
+                        {
+                            var doubleCrop = new DoubleCrop
+                            {
+                                CropName = cropTypeName,
+                                CropOrder = cropList.FirstOrDefault().CropOrder.Value,
+                                FieldID = cropList.FirstOrDefault().FieldID.Value,
+                                FieldName = (await _fieldService.FetchFieldByFieldId(cropList.FirstOrDefault().FieldID.Value)).Name,
+                                EncryptedCounter = _fieldDataProtector.Protect(counter.ToString()), //model.DoubleCropEncryptedCounter,
+                                Counter = model.DoubleCropCurrentCounter,
+                            };
+                            model.DoubleCrop.Add(doubleCrop);
+                            counter++;
+                        }
+                    }
+                }
+                cropList = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.DoubleCrop[model.DoubleCropCurrentCounter].FieldID));
+                cropList = cropList.Where(x => x.Year == model.HarvestYear).ToList();
+
+                if (cropList != null && cropList.Count == 2)
+                {
+                    var cropOptions = new List<SelectListItem>();
+                    int counter = 1;
+                    foreach (var crop in cropList)
+                    {
+                        cropTypeName = await _fieldService.FetchCropTypeById(crop.CropTypeID.Value);
+                        cropOptions.Add(new SelectListItem
+                        {
+                            Text = string.Format("{0} {1} {2} {3}", Resource.lblCrop, counter, ":", cropTypeName),
+                            Value = crop.ID.ToString()
+                        });
+                        counter++;
+                    }
+
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("OrganicManure", model);
+                    ViewBag.DoubleCropOptions = cropOptions;
+                }
+                if (model.DoubleCropCurrentCounter == 0)
+                {
+                    model.FieldID = model.DoubleCrop[0].FieldID;
+                    model.FieldName = (await _fieldService.FetchFieldByFieldId(model.DoubleCrop[0].FieldID)).Name;
+
+                }
+            }
+
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("OrganicManure", model);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DoubleCrop(OrganicManureViewModel model)
+        {
+            _logger.LogTrace("Organic Manure Controller : DoubleCrop() post action called");
+            if (model.DoubleCrop[model.DoubleCropCurrentCounter].CropID == null)
+            {
+                ModelState.AddModelError("DoubleCrop[" + model.DoubleCropCurrentCounter + "].CropID", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            Error error = new Error();
+
+            if (!ModelState.IsValid)
+            {
+                if (model.FieldList != null && model.FieldList.Count > 0)
+                {
+
+                    List<Crop> cropList = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[model.DoubleCropCurrentCounter]));
+                    cropList = cropList.Where(x => x.Year == model.HarvestYear).ToList();
+                    if (model.DoubleCrop == null)
+                    {
+                        model.DoubleCrop = new List<DoubleCrop>();
+                    }
+                    if (cropList != null && cropList.Count == 2)
+                    {
+                        var cropOptions = new List<SelectListItem>();
+                        int counter = 1;
+                        foreach (var crop in cropList)
+                        {
+                            string cropTypeName = await _fieldService.FetchCropTypeById(crop.CropTypeID.Value);
+                            cropOptions.Add(new SelectListItem
+                            {
+                                Text = string.Format("{0} {1} {2} {3}", Resource.lblCrop, counter, ":", cropTypeName),
+                                Value = crop.ID.ToString()
+                            });
+                            counter++;
+                        }
+                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("OrganicManure", model);
+                        ViewBag.DoubleCropOptions = cropOptions;
+                    }
+                }
+                return View(model);
+            }
+
+
+            if (model.DoubleCrop.Any(x => x.FieldID == model.FieldID))
+            {
+                List<Crop> cropList = await _cropService.FetchCropsByFieldId(model.FieldID.Value);
+                cropList = cropList.Where(x => x.Year == model.HarvestYear).ToList();
+                if (cropList != null && cropList.Count == 2)
+                {
+                    cropList = cropList.Where(x => x.ID == model.DoubleCrop[model.DoubleCropCurrentCounter].CropID).ToList();
+                    if (cropList.Count > 0)
+                    {
+                        model.DoubleCrop[model.DoubleCropCurrentCounter].CropOrder = cropList.Select(x => x.CropOrder.Value).FirstOrDefault();
+                        model.DoubleCrop[model.DoubleCropCurrentCounter].CropName = await _fieldService.FetchCropTypeById(Convert.ToInt32(cropList.Select(x => x.CropTypeID.Value).FirstOrDefault()));
+                    }
+                }
+            }
+            for (int i = 0; i < model.DoubleCrop.Count; i++)
+            {
+                if (model.FieldID == model.DoubleCrop[i].FieldID)
+                {
+                    model.DoubleCropCurrentCounter++;
+                    if (i + 1 < model.DoubleCrop.Count)
+                    {
+                        model.FieldID = model.DoubleCrop[i + 1].FieldID;
+                        model.FieldName = (await _fieldService.FetchFieldByFieldId(model.FieldID.Value)).Name;
+                    }
+
+                    break;
+                }
+            }
+            model.DoubleCropEncryptedCounter = _fieldDataProtector.Protect(model.DoubleCropCurrentCounter.ToString());
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("OrganicManure", model);
+            if (model.IsCheckAnswer && (!model.isAnyChangeInField))
+            {
+                return RedirectToAction("CheckAnswer");
+            }
+
+            if (model.DoubleCropCurrentCounter == model.DoubleCrop.Count)
+            {
+                if (model.IsCheckAnswer && (!model.isAnyChangeInField))
+                {
+                    //if (model.IsAnyChangeInField && (!model.IsCropGroupChange) && (!model.IsCropTypeChange))
+                    //{
+                    //    model.IsAnyChangeInField = false;
+                    //}
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("OrganicManure", model);
+                    return RedirectToAction("CheckAnswer");
+                }
+                else
+                {
+                    if (model.DoubleCrop != null && model.DoubleCrop.Any(x => x.CropOrder == 2))
+                    {
+                        foreach (var doubleCrop in model.DoubleCrop)
+                        {
+                            if (doubleCrop.CropOrder == 2)
+                            {
+
+                                (List<ManagementPeriod> managementPeriods, error) = await _cropService.FetchManagementperiodByCropId(doubleCrop.CropID, true);
+                                if (string.IsNullOrWhiteSpace(error.Message) && managementPeriods != null && managementPeriods.Count > 0)
+                                {
+                                    foreach (var organicManure in model.OrganicManures)
+                                    {
+                                        if (organicManure.FieldID == doubleCrop.FieldID)
+                                        {
+                                            organicManure.ManagementPeriodID = managementPeriods.Select(x => x.ID.Value).FirstOrDefault();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    //logic start for defoliation
+                    
+                    model.IsAnyCropIsGrass = false;
+                    List<string> fieldsToRemove = new List<string>();
+                    foreach (string field in model.FieldList)
+                    {
+                        List<Crop> cropList = await _cropService.FetchCropsByFieldId(Convert.ToInt32(field));
+
+                        if (cropList.Count > 0)
+                        {
+                            //temporary croporder==1
+                            model.CropOrder = 1;
+                            cropList = cropList.Where(x => x.Year == model.HarvestYear && x.CropOrder == model.CropOrder).ToList();
+                        }
+
+                        if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass))
+                        {
+                            fieldsToRemove.Add(field);
+                        }
+                        if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
+                        {
+                            model.IsAnyCropIsGrass = true;
+                        }
+                    }
+                    List<string> fieldListCopy = new List<string>(model.FieldList);
+
+                    if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
+                    {
+                        foreach (var field in fieldsToRemove)
+                        {
+                            fieldListCopy.Remove(field);
+                        }
+                    }
+                    string fieldIds = string.Join(",", fieldListCopy);
+                    (List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldIds, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup, null);//1 is CropOrder
+                    if (error == null)
+                    {
+                        if (managementIds.Count > 0)
+                        {
+                            if (model.OrganicManures == null)
+                            {
+                                model.OrganicManures = new List<OrganicManure>();
+                            }
+                            if (model.OrganicManures.Count > 0)
+                            {
+                                model.OrganicManures.Clear();
+                            }
+                            int counter = 1;
+                            foreach (var manIds in managementIds)
+                            {
+                                var organicManure = new OrganicManure
+                                {
+                                    ManagementPeriodID = manIds,
+                                    EncryptedCounter = _fieldDataProtector.Protect(counter.ToString())
+                                };
+                                counter++;
+                                if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
+                                {
+                                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
+                                    {
+                                        OrganicManureViewModel orgManureViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+
+                                        if (orgManureViewModel.OrganicManures != null && orgManureViewModel.OrganicManures.Count > 0)
+                                        {
+                                            for (int i = 0; i < orgManureViewModel.OrganicManures.Count; i++)
+                                            {
+                                                if (orgManureViewModel.OrganicManures[i].ManagementPeriodID == manIds && orgManureViewModel.OrganicManures[i].Defoliation != null)
+                                                {
+                                                    organicManure.Defoliation = orgManureViewModel.OrganicManures[i].Defoliation;
+                                                    (ManagementPeriod managementPeriod, error) = await _cropService.FetchManagementperiodById(manIds);
+                                                    if (string.IsNullOrWhiteSpace(error.Message) && managementPeriod != null)
+                                                    {
+                                                        (Crop crop, error) = await _cropService.FetchCropById(managementPeriod.CropID.Value);
+
+                                                        if (string.IsNullOrWhiteSpace(error.Message) && crop != null && crop.DefoliationSequenceID != null)
+                                                        {
+                                                            (DefoliationSequenceResponse defoliationSequence, error) = await _cropService.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+                                                            if (error == null && defoliationSequence != null)
+                                                            {
+                                                                string description = defoliationSequence.DefoliationSequenceDescription;
+
+                                                                string[] defoliationParts = description.Split(',')
+                                                                                                       .Select(x => x.Trim())
+                                                                                                       .ToArray();
+
+                                                                string selectedDefoliation = (organicManure.Defoliation.Value > 0 && organicManure.Defoliation.Value <= defoliationParts.Length)
+                                                                    ? $"{Enum.GetName(typeof(PotentialCut), organicManure.Defoliation.Value)} ({defoliationParts[organicManure.Defoliation.Value - 1]})"
+                                                                    : $"{organicManure.Defoliation.Value}";
+
+                                                                organicManure.DefoliationName = selectedDefoliation;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return RedirectToAction("FarmList", "Farm");
+                                    }
+                                }
+                                model.OrganicManures.Add(organicManure);
+                            }
+
+                            model.DefoliationCurrentCounter = 0;
+                        }
+                    }
+                    else
+                    {
+                        TempData["FieldError"] = error.Message;
+                        return View(model);
+                    }
+
+                    if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
+                    {
+                        foreach (var organic in model.OrganicManures)
+                        {
+                            (ManagementPeriod managementPeriod, error) = await _cropService.FetchManagementperiodById(organic.ManagementPeriodID);
+                            if (string.IsNullOrWhiteSpace(error.Message) && managementPeriod != null)
+                            {
+                                (Crop crop, error) = await _cropService.FetchCropById(managementPeriod.CropID.Value);
+                                if (string.IsNullOrWhiteSpace(error.Message) && crop != null)
+                                {
+                                    organic.FieldID = crop.FieldID;
+                                    organic.FieldName = (await _fieldService.FetchFieldByFieldId(organic.FieldID.Value)).Name;
+                                }
+                            }
+                        }
+                    }
+
+
+                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                    int grassCropCounter = 0;
+                    foreach (var field in model.FieldList)
+                    {
+                        List<Crop> cropList = await _cropService.FetchCropsByFieldId(Convert.ToInt32(field));
+                        if (cropList.Count > 0)
+                        {
+                            cropList = cropList.Where(x => x.Year == model.HarvestYear && x.CropOrder == model.CropOrder).ToList();
+                        }
+                        if (cropList.Count > 0)
+                        {
+                            if (cropList.Any(c => c.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
+                            {
+                                if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
+                                {
+
+                                    (List<ManagementPeriod> managementPeriod, error) = await _cropService.FetchManagementperiodByCropId(cropList.Select(x => x.ID.Value).FirstOrDefault(), false);
+
+                                    var filteredOrganicManure = model.OrganicManures
+                                     .Where(fm => managementPeriod.Any(mp => mp.ID == fm.ManagementPeriodID) &&
+                                         fm.Defoliation == null).ToList();
+                                    if (filteredOrganicManure != null && filteredOrganicManure.Count == managementPeriod.Count)
+                                    {
+                                        var managementPeriodIdsToRemove = managementPeriod
+                                       .Skip(1)
+                                       .Select(mp => mp.ID.Value)
+                                       .ToList();
+                                        model.OrganicManures.RemoveAll(fm => managementPeriodIdsToRemove.Contains(fm.ManagementPeriodID));
+                                    }
+                                    else
+                                    {
+                                        model.OrganicManures.RemoveAll(x => managementPeriod.Any(mp => mp.ID == x.ManagementPeriodID) &&
+                                        x.Defoliation == null);
+                                    }
+                                    grassCropCounter++;
+
+
+                                }
+                                model.IsAnyCropIsGrass = true;
+                            }
+                        }
+                    }
+                    model.GrassCropCount = grassCropCounter;
+
+                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                    if (model.IsCheckAnswer && model.IsAnyCropIsGrass.HasValue && (!model.IsAnyCropIsGrass.Value))
+                    {
+                        model.GrassCropCount = null;
+                        model.IsSameDefoliationForAll = null;
+                        model.IsAnyChangeInSameDefoliationFlag = false;
+                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                        return RedirectToAction("CheckAnswer");
+
+                    }
+                    else
+                    {
+                        if (!model.IsAnyCropIsGrass.Value)
+                        {
+                            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                            return RedirectToAction("ManureApplyingDate");
+                        }
+
+                        if (model.GrassCropCount != null && model.GrassCropCount.Value > 1)
+                        {
+                            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                            return RedirectToAction("IsSameDefoliationForAll");
+                        }
+                        model.IsSameDefoliationForAll = true;
+                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                        return RedirectToAction("Defoliation");
+                    }
+
+                    //logic end for defoliation
+
+                    //_httpContextAccessor.HttpContext.Session.SetObjectAsJson("OrganicManure", model);
+                    //return RedirectToAction("ManureApplyingDate");
+                }
+            }
+            else
+            {
+                List<Crop> cropList = await _cropService.FetchCropsByFieldId(model.FieldID.Value);
+                cropList = cropList.Where(x => x.Year == model.HarvestYear).ToList();
+
+                if (cropList != null && cropList.Count == 2)
+                {
+                    var cropOptions = new List<SelectListItem>();
+                    int counter = 1;
+                    foreach (var crop in cropList)
+                    {
+                        string cropTypeName = await _fieldService.FetchCropTypeById(crop.CropTypeID.Value);
+                        cropOptions.Add(new SelectListItem
+                        {
+                            Text = string.Format("{0} {1} {2} {3}", Resource.lblCrop, counter, ":", cropTypeName),
+                            Value = crop.ID.ToString()
+                        });
+                        counter++;
+                    }
+
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("OrganicManure", model);
+                    ViewBag.DoubleCropOptions = cropOptions;
+
+                }
+                return View(model);
+            }
+        }
 
         [HttpGet]
         public IActionResult IsSameDefoliationForAll()
@@ -8218,7 +8765,7 @@ namespace NMP.Portal.Controllers
                             {
                                 model.FieldID = model.OrganicManures[i + 1].FieldID.Value;
                                 model.FieldName = (await _fieldService.FetchFieldByFieldId(model.FieldID.Value)).Name;
-                                
+
                             }
                             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("OrganicManure", model);
                             break;
@@ -8392,9 +8939,13 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("OtherMaterialName");
             }
-            if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
+            if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value && model.isDoubleCropAvailable)
             {
                 return RedirectToAction("Defoliation", new { q = model.DefoliationEncryptedCounter });
+            }
+            else if (model.isDoubleCropAvailable)
+            {
+                return RedirectToAction("DoubleCrop", new { q = model.DoubleCropEncryptedCounter });
             }
             else
             {

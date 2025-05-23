@@ -4436,6 +4436,12 @@ live</value>
   <data name="lblWhichCutOrGrazingInThisApplicationForAllField" xml:space="preserve">
     <value>Which cut or grazing in this application for ?</value>
   </data>
+  <data name="lblWhichCropIsThisManureApplication" xml:space="preserve">
+    <value>Which crop is this manure application for in {0}?</value>
+  </data>
+  <data name="lblDoubleCrop" xml:space="preserve">
+    <value>Double Crop</value>
+  </data>
   <data name="lblEnterANumberWhichIsAnIntegerValue" xml:space="preserve">
     <value>Enter a number which is an integer value.</value>
   </data>

@@ -2,6 +2,7 @@
 using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
 using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 
 namespace NMP.Portal.ViewModels
 {
@@ -137,6 +138,12 @@ namespace NMP.Portal.ViewModels
         public bool? IsDeleteOrganic { get; set; }
         public bool? IsCancel { get; set; }
         public bool? Defoliation { get; set; }
+        public List<DoubleCrop>? DoubleCrop { get; set; }
+        public int DoubleCropCurrentCounter { get; set; }
+        public string? DoubleCropEncryptedCounter { get; set; }
+        public int? FieldID { get; set; }
+        public bool isDoubleCropAvailable { get; set; } = false;
+        public bool isAnyChangeInField { get; set; } = false;
         public bool IsAnyChangeInSameDefoliationFlag { get; set; } = false;
         public bool? IsSameDefoliationForAll { get; set; }
         public int DefoliationCurrentCounter { get; set; } = 0;
@@ -144,6 +151,5 @@ namespace NMP.Portal.ViewModels
         public string? EncryptedCounter { get; set; }
         public bool? IsAnyCropIsGrass { get; set; }
         public int? GrassCropCount { get; set; }
-        public int? FieldID { get; set; }
     }
 }
