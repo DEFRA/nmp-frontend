@@ -6,7 +6,7 @@
     ViewData["Title"] = Resource.lblCheckAnswer;
     var DefaultNutrientValue = "";
     var howWouldYouEnterApplicationRate = "";
-
+    int counter = 1;
     bool needToShowIncorporationsBtn = true;
     @if (Model.ApplicationMethod != null)
     {
@@ -215,6 +215,12 @@
                 <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodEndDate" value="@Model.ClosedPeriodEndDate"></govuk-date-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodForUI"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedOrgManureId"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldID" value="@Model.FieldID"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCropEncryptedCounter" value="@Model.DoubleCropEncryptedCounter"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCropCurrentCounter" value="@Model.DoubleCropCurrentCounter"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName" value="@Model.FieldName"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isDoubleCropAvailable"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isAnyChangeInField"></govuk-input>
                 @if (Model.FieldList != null && Model.FieldList.Count > 0)
                 {
                     @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -256,6 +262,7 @@
                         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].Rainfall" value="@Model.OrganicManures[i].Rainfall"></govuk-input>
                         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].WindspeedID" value="@Model.OrganicManures[i].WindspeedID"></govuk-input>
                         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].MoistureID" value="@Model.OrganicManures[i].MoistureID"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].FieldID" value="@Model.OrganicManures[i].FieldID"></govuk-input>
                     }
                 }
                 @if (Model.AutumnCropNitrogenUptakes != null && Model.AutumnCropNitrogenUptakes.Count > 0)
@@ -278,6 +285,18 @@
                         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.UpdatedOrganicIds[i].ManagementPeriodId" value="@Model.UpdatedOrganicIds[i].ManagementPeriodId"></govuk-input>
                         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.UpdatedOrganicIds[i].Name" value="@Model.UpdatedOrganicIds[i].Name"></govuk-input>
                         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.UpdatedOrganicIds[i].Id" value="@Model.UpdatedOrganicIds[i].Id"></govuk-input>
+                    }
+                }
+                @if (Model.DoubleCrop != null && Model.DoubleCrop.Count > 0)
+                {
+                    @for (int i = 0; i < Model.DoubleCrop.Count; i++)
+                    {
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].CropID"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].FieldName"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].FieldID"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].CropName"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].CropOrder"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].EncryptedCounter"></govuk-input>
                     }
                 }
             </div>
@@ -375,6 +394,42 @@
                                     <govuk-summary-list-row-action asp-action="OtherMaterialName" asp-controller="OrganicManure">@Resource.lblChange</govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
+                        }
+
+                    }
+                    @if (Model.isDoubleCropAvailable)
+                    {
+                        @if (Model.DoubleCrop == null)
+                        {
+                            <govuk-summary-list-row class="govuk-error-message" )>
+                                <govuk-summary-list-row-key>
+                                    @string.Format(Resource.lblWhichCropIsThisManureApplication, Model.FieldName)
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @Resource.lblNotSet
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="DoubleCrop" asp-controller="OrganicManure" asp-route-q="@Model.DoubleCropEncryptedCounter">@Resource.lblChange</govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                        }
+                        else
+                        {
+                            @foreach (var doubleCrop in Model.DoubleCrop)
+                            {
+                                <govuk-summary-list-row class=@((doubleCrop.CropID==null)?"govuk-error-message":"")>
+                                    <govuk-summary-list-row-key>
+                                        @string.Format(Resource.lblWhichCropIsThisManureApplication, doubleCrop.FieldName)
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @((doubleCrop.CropID == null) ? Resource.lblNotSet : string.Format("{0} {1} {2} {3} {4}", Resource.lblCrop, counter, "(", doubleCrop.CropName, ")"))
+                                    </govuk-summary-list-row-value>
+                                    <govuk-summary-list-row-actions>
+                                        <govuk-summary-list-row-action asp-action="DoubleCrop" asp-controller="OrganicManure" asp-route-q="@doubleCrop.EncryptedCounter">@Resource.lblChange</govuk-summary-list-row-action>
+                                    </govuk-summary-list-row-actions>
+                                </govuk-summary-list-row>
+                                counter++;
+                            }
                         }
 
                     }
@@ -846,7 +901,7 @@
                     </govuk-summary-list-row>
                     @* } *@
                     @* } *@
-                    @if (Model.FieldList!= null && Model.FieldList.Count > 1)
+                    @if (Model.FieldList != null && Model.FieldList.Count > 1)
                     {
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key>
@@ -968,7 +1023,7 @@
                     @Resource.lblUpdate
                 </govuk-button>
             }
-            <p class="govuk-body cancel-link"><a asp-action="Cancel" asp-controller="OrganicManure" >@Resource.lblCancel</a></p>
+            <p class="govuk-body cancel-link"><a asp-action="Cancel" asp-controller="OrganicManure">@Resource.lblCancel</a></p>
         </div>
     </div>
 </form>
