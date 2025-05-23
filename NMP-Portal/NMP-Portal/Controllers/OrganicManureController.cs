@@ -922,6 +922,10 @@ namespace NMP.Portal.Controllers
                             model.DoubleCropEncryptedCounter = _fieldDataProtector.Protect(counter.ToString());
                             break;
                         }
+                        else
+                        {
+                            model.IsDoubleCropAvailable = false;
+                        }
                     }
                     if (model.IsCheckAnswer && model.IsFieldGroupChange)
                     {
@@ -1602,7 +1606,7 @@ namespace NMP.Portal.Controllers
                         model.GrassCropCount = grassCropCounter;
 
                         _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
-                        if (model.IsCheckAnswer && model.IsAnyCropIsGrass.HasValue && (!model.IsAnyCropIsGrass.Value))
+                        if (model.IsCheckAnswer && model.IsAnyCropIsGrass.HasValue && (!model.IsAnyChangeInField))
                         {
                             model.GrassCropCount = null;
                             model.IsSameDefoliationForAll = null;
