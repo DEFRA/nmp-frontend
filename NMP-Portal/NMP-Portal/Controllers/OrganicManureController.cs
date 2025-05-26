@@ -8018,14 +8018,14 @@ namespace NMP.Portal.Controllers
                                 }
                                 else
                                 {
-                                    TempData["CheckYourAnswerError"] = error.Message;
+                                    TempData["UpdateOrganicManureError"] = Resource.MsgWeCouldNotUpdateOrganicManure;
                                     return RedirectToAction("CheckAnswer");
                                 }
                             }
                         }
                         else
                         {
-                            TempData["CheckYourAnswerError"] = error.Message;
+                            TempData["UpdateOrganicManureError"] = Resource.MsgWeCouldNotUpdateOrganicManure;
                             return RedirectToAction("CheckAnswer");
                         }
                     }
@@ -8033,7 +8033,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                TempData["CheckYourAnswerError"] = ex.Message;
+                TempData["UpdateOrganicManureError"] = ex.Message;
                 return RedirectToAction("CheckAnswer");
             }
             return RedirectToAction("CheckAnswer");
