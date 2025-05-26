@@ -65,5 +65,9 @@ namespace NMP.Portal.ViewModels
         public bool IsAnyChangeInField { get; set; } = false;
         public int? GrassCropCount { get; set; }
         public bool IsAnyChangeInSameDefoliationFlag { get; set; } = false;
+        public List<DoubleCrop>? DoubleCrop { get; set; }
+        public int DoubleCropCurrentCounter { get; set; }
+        public string? DoubleCropEncryptedCounter { get; set; }
+        public bool IsDoubleCropAvailable { get; set; } = false;
     }
 }
