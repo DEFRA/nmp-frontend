@@ -5,6 +5,7 @@ using NMP.Portal.Models;
 using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
 using System;
+using System.Collections.Generic;
 using System.Net.Http.Json;
 using System.Text;
 
@@ -1148,39 +1149,8 @@ namespace NMP.Portal.Services
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
                 {
-
-                    //Temporary code start (until grass api fixed.)
-                    List<string> inputs = new List<string>
-                    {
-                        "Seven tonnes per hectare",
-                        "Ten tonnes per hectare",
-                        "Three tonnes per hectare",
-                        "Twenty tonnes per hectare"
-                    };
-                    List<YieldRangesEnglandAndWalesResponseTemprary> yieldRangesList = responseWrapper.Data.ToObject<List<YieldRangesEnglandAndWalesResponseTemprary>>();
-                    Dictionary<string, int> wordToNumber = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase)
-                    {
-                        {"One", 1}, {"Two", 2}, {"Three", 3}, {"Four", 4}, {"Five", 5},
-                        {"Six", 6}, {"Seven", 7}, {"Eight", 8}, {"Nine", 9}, {"Ten", 10},
-                        {"Eleven", 11}, {"Twelve", 12}, {"Thirteen", 13}, {"Fourteen", 14},
-                        {"Fifteen", 15}, {"Sixteen", 16}, {"Seventeen", 17}, {"Eighteen", 18},
-                        {"Nineteen", 19}, {"Twenty", 20}
-                    };
-
-                    var yields = yieldRangesList.Select(item =>
-                    {
-                        string firstWord = item.Yield.Split(' ')[0];
-                        return new YieldRangesEnglandAndWalesResponse
-                        {
-                            Yield = wordToNumber.TryGetValue(firstWord, out int value) ? value : 0
-                        };
-                    }).ToList();
-                    //Temporary code end
-
-
-                    //var yieldRangesList = responseWrapper.Data.ToObject<List<YieldRangesEnglandAndWalesResponseTemprary>>();
-                    // yieldRanges.AddRange(yieldRangesList);
-                    yieldRanges.AddRange(yields);
+                    var yieldRangesList = responseWrapper.Data.ToObject<List<YieldRangesEnglandAndWalesResponse>>();
+                    yieldRanges.AddRange(yieldRangesList);
                 }
                 else
                 {
@@ -1241,6 +1211,119 @@ namespace NMP.Portal.Services
                 throw new Exception(error.Message, ex);
             }
             return (defoliationSequenceResponse, error);
+        }
+
+        public async Task<(SwardManagementResponse, Error)> FetchSwardManagementBySwardManagementId(int swardManagementId)
+        {
+            Error error = null;
+            SwardManagementResponse swardManagementResponse = new SwardManagementResponse();
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchSwardManagementBySwardManagementIdAsyncAPI, swardManagementId));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if ((response.IsSuccessStatusCode && responseWrapper != null) || responseWrapper.Data != null)
+                {
+                    swardManagementResponse = responseWrapper.Data.ToObject<SwardManagementResponse>();
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (swardManagementResponse, error);
+        }
+        public async Task<(List<SwardManagementResponse>, Error)> FetchSwardManagementBySwardTypeId(int swardTypeId)
+        {
+            Error error = null;
+            List<SwardManagementResponse> swardManagementResponse = new List<SwardManagementResponse>();
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchSwardManagementBySwardTypeIdAsyncAPI, swardTypeId));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if ((response.IsSuccessStatusCode && responseWrapper != null) || responseWrapper.Data != null)
+                {
+                    swardManagementResponse = responseWrapper.Data.ToObject<List<SwardManagementResponse>>();
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (swardManagementResponse, error);
+        }
+
+        public async Task<(SwardTypeResponse, Error)> FetchSwardTypeBySwardTypeId(int swardTypeId)
+        {
+            Error error = null;
+            SwardTypeResponse swardTypeResponse = new SwardTypeResponse();
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchSwardTypeBySwardTypeIdAsyncAPI, swardTypeId));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if ((response.IsSuccessStatusCode && responseWrapper != null) || responseWrapper.Data != null)
+                {
+                    swardTypeResponse = responseWrapper.Data.ToObject<SwardTypeResponse>();
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (swardTypeResponse, error);
         }
 
     }

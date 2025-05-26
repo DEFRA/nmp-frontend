@@ -117,10 +117,10 @@
                                             @foreach (var yieldRanges in ViewBag.YieldRanges)
                                             {
                                                 var modelYieldInt = (int)Math.Floor(Convert.ToDecimal(Model.Crops[i].Yield));
-                                                bool isSelected = modelYieldInt == yieldRanges.Yield;
+                                                bool isSelected = modelYieldInt == yieldRanges.YieldId;
 
-                                                <govuk-radios-item value="@yieldRanges.Yield" checked="@(isSelected)">
-                                                    @(string.Concat(yieldRanges.Yield.ToString(), " ", Resource.lblTonnesPerHectare))
+                                                <govuk-radios-item value="@yieldRanges.YieldId" checked="@(isSelected)">
+                                                    @(string.Concat(yieldRanges.YieldId.ToString(), " ", Resource.lblTonnesPerHectare))
                                                 </govuk-radios-item>
                                             }
                                             

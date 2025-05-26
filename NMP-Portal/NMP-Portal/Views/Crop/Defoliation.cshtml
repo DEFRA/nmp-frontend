@@ -134,44 +134,7 @@
                     {
                         @foreach (var potentialCut in ViewBag.PotentialCuts)
                         {
-                            if (string.Equals(potentialCut.PotentialCut, Resource.lblOne))
-                            {
-                                potentialCutId = (int)NMP.Portal.Enums.PotentialCut.One;
-                            }
-                            else if (string.Equals(potentialCut.PotentialCut, Resource.lblTwo))
-                            {
-                                potentialCutId = (int)NMP.Portal.Enums.PotentialCut.Two;
-                            }
-                            else if (string.Equals(potentialCut.PotentialCut,Resource.lblThree))
-                            {
-                                potentialCutId = (int)NMP.Portal.Enums.PotentialCut.Three;
-                            }
-                            else if (string.Equals(potentialCut.PotentialCut,Resource.lblFour))
-                            {
-                                potentialCutId = (int)NMP.Portal.Enums.PotentialCut.Four;
-                            }
-                            else if (string.Equals(potentialCut.PotentialCut ,Resource.lblFive))
-                            {
-                                potentialCutId = (int)NMP.Portal.Enums.PotentialCut.Five;
-                            }
-                            else if (string.Equals(potentialCut.PotentialCut ,Resource.lblSix))
-                            {
-                                potentialCutId = (int)NMP.Portal.Enums.PotentialCut.Six;
-                            }
-                            else if (string.Equals(potentialCut.PotentialCut ,Resource.lblSeven))
-                            {
-                                potentialCutId = (int)NMP.Portal.Enums.PotentialCut.Seven;
-                            }
-                            else if (string.Equals(potentialCut.PotentialCut ,Resource.lblEight))
-                            {
-                                potentialCutId = (int)NMP.Portal.Enums.PotentialCut.Eight;
-                            }
-                            else if (string.Equals(potentialCut.PotentialCut ,Resource.lblNine))
-                            {
-                                potentialCutId = (int)NMP.Portal.Enums.PotentialCut.Nine;
-                            }
-
-                            <govuk-radios-item value="@potentialCutId">@potentialCut.PotentialCut</govuk-radios-item>
+                            <govuk-radios-item value="@potentialCut.PotentialCutId">@potentialCut.PotentialCutText</govuk-radios-item>
                         }
                     }
 

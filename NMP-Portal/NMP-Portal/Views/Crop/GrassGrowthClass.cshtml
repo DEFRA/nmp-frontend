@@ -143,7 +143,7 @@
                             <p class="govuk-body">@Resource.lblThisGivesTheFollowingRangeForAnnualDryMatterYield</p>
                             @if (ViewBag.YieldMin != null && ViewBag.YieldMax != null)
                             {
-                                <p class="govuk-body"><b>@string.Format(Resource.lblDryMatterYieldRangeTonnesPerHectare, ViewBag.YieldMin.Yield, ViewBag.YieldMax.Yield)</b></p>
+                                <p class="govuk-body"><b>@string.Format(Resource.lblDryMatterYieldRangeTonnesPerHectare, ViewBag.YieldMin.YieldId, ViewBag.YieldMax.YieldId)</b></p>
                             }
 
                             <govuk-radios asp-for="@Model.Crops[i].Yield">
@@ -158,10 +158,10 @@
                                         @foreach (var yieldRanges in ViewBag.YieldRanges)
                                         {
                                             var modelYieldInt = (int)Math.Floor(Convert.ToDecimal(Model.Crops[i].Yield));
-                                            bool isSelected = modelYieldInt == yieldRanges.Yield;
+                                            bool isSelected = modelYieldInt == yieldRanges.YieldId;
 
-                                            <govuk-radios-item value="@yieldRanges.Yield" checked="@(isSelected)">
-                                                @(string.Concat(yieldRanges.Yield.ToString(), " ", Resource.lblTonnesPerHectare))
+                                            <govuk-radios-item value="@yieldRanges.YieldId" checked="@(isSelected)">
+                                                @(string.Concat(yieldRanges.YieldId.ToString(), " ", Resource.lblTonnesPerHectare))
                                             </govuk-radios-item>
                                         }
 

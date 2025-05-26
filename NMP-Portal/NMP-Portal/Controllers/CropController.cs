@@ -2299,38 +2299,26 @@ namespace NMP.Portal.Controllers
 
                 }
 
-                (List<SwardManagementResponse> swardManagementResponses, error) = await _cropService.FetchSwardManagements();
-                if (!string.IsNullOrWhiteSpace(error.Message))
+                (SwardManagementResponse swardManagementResponse, error) = await _cropService.FetchSwardManagementBySwardManagementId(model.SwardManagementId ?? 0);
+                if (error != null)
                 {
                     TempData["SwardManagementError"] = error.Message;
                     return RedirectToAction("SwardType");
                 }
                 else
                 {
-                    //temporary code until we get api for fetch SwardManagement by swardTypeId
-
-                    if (model.SwardTypeId == 3 || model.SwardTypeId == 4)
+                    if (swardManagementResponse != null)
                     {
-                        var idsToRemove = new List<int> { 1, 3, 5 };
-
-                        swardManagementResponses = swardManagementResponses
-                            .Where(s => !idsToRemove.Contains(s.SwardManagementId))
-                            .ToList();
-                    }
-
-                    if (swardManagementResponses.FirstOrDefault(x => x.SwardManagementId == model.SwardManagementId) != null)
-                    {
-                        ViewBag.SwardManagementName = swardManagementResponses.FirstOrDefault(x => x.SwardManagementId == model.SwardManagementId)?.SwardManagement;
+                        ViewBag.SwardManagementName = swardManagementResponse.SwardManagement;
 
                     }
                     else
                     {
                         model.SwardManagementId = null;
                     }
-
                 }
 
-                (List<DefoliationSequenceResponse> defoliationSequenceResponses, error) = await _cropService.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCut(model.SwardTypeId ?? 0, model.PotentialCut ?? 0, model.CurrentSward == (int)NMP.Portal.Enums.CurrentSward.NewSward ? true : false);
+                (DefoliationSequenceResponse defoliationSequenceResponse, error) = await _cropService.FetchDefoliationSequencesById(model.DefoliationSequenceId ?? 0);
                 if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {
                     TempData["DefoliationSequenceError"] = error.Message;
@@ -2338,9 +2326,9 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    if (defoliationSequenceResponses.FirstOrDefault(x => x.DefoliationSequenceId == model.DefoliationSequenceId) != null)
+                    if (defoliationSequenceResponse != null)
                     {
-                        var defoliations = defoliationSequenceResponses.FirstOrDefault(x => x.DefoliationSequenceId == model.DefoliationSequenceId)?.DefoliationSequenceDescription;
+                        var defoliations = defoliationSequenceResponse.DefoliationSequenceDescription;
                         string[] arrDefoliations = defoliations.Split(',');
                         ViewBag.DefoliationSequenceName = arrDefoliations;
 
@@ -3410,10 +3398,12 @@ namespace NMP.Portal.Controllers
                                 {
                                     if ((string.IsNullOrWhiteSpace(defolicationName)) && recommendation.Crops.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
                                     {
-                                        (List<DefoliationSequenceResponse> defResponse, Error grassError) = await _cropService.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCut(recommendation.Crops.SwardTypeID.Value, recommendation.Crops.PotentialCut.Value, recommendation.Crops.Establishment.Value > 0 ? true : false);
-                                        if (grassError == null && defResponse.Count > 0)
+                                        //(List<DefoliationSequenceResponse> defResponse, Error grassError) = await _cropService.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCut(recommendation.Crops.SwardTypeID.Value, recommendation.Crops.PotentialCut.Value, recommendation.Crops.Establishment.Value > 0 ? true : false);
+
+                                        (DefoliationSequenceResponse defoliationSequence, error) = await _cropService.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+                                        if (error == null && defoliationSequence.DefoliationSequenceId != null )
                                         {
-                                            defolicationName = defResponse.Where(x => x.DefoliationSequenceId == recommendation.Crops.DefoliationSequenceID).Select(x => x.DefoliationSequenceDescription).FirstOrDefault();
+                                            defolicationName = defoliationSequence.DefoliationSequenceDescription;
                                         }
                                     }
                                 }
@@ -4943,24 +4933,14 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                (List<SwardManagementResponse> swardManagementResponses, Error error) = await _cropService.FetchSwardManagements();
-                if (!string.IsNullOrWhiteSpace(error.Message))
+                (List<SwardManagementResponse> swardManagementResponses, Error error) = await _cropService.FetchSwardManagementBySwardTypeId(model.SwardTypeId??0);
+                if (error != null)
                 {
                     TempData["SwardManagementError"] = error.Message;
                     return RedirectToAction("SwardType");
                 }
                 else
                 {
-                    //temporary code until we get api for fetch SwardManagement by swardTypeId
-
-                    if (model.SwardTypeId == 3 || model.SwardTypeId == 4)
-                    {
-                        var idsToRemove = new List<int> { 1, 3, 5 };
-
-                        swardManagementResponses = swardManagementResponses
-                            .Where(s => !idsToRemove.Contains(s.SwardManagementId))
-                            .ToList();
-                    }
                     ViewBag.SwardManagement = swardManagementResponses;
                 }
             }
