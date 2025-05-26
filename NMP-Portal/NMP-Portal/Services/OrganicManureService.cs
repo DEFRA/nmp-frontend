@@ -1533,6 +1533,7 @@ namespace NMP.Portal.Services
                 {
                     if (responseWrapper != null && responseWrapper.Error != null)
                     {
+                        error = new Error();
                         error = responseWrapper.Error.ToObject<Error>();
                         _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
                     }
@@ -1744,13 +1745,13 @@ namespace NMP.Portal.Services
         }
         public async Task<(string, Error)> DeleteOrganicManureByIdAsync(string organicManureIds)
         {
-            
+
             Error error = new Error();
             string message = string.Empty;
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-            
+
                 var content = new StringContent(organicManureIds, Encoding.UTF8, "application/json");
                 var url =APIURLHelper.DeleteOrganicManureByAPI;
 
