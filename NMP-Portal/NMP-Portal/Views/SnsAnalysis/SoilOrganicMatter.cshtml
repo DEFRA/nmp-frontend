@@ -65,7 +65,17 @@
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
-            <p class="govuk-body cancel-link"><a asp-action="SnsAnalysisCancel" asp-controller="SnsAnalysis" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
+            @* <p class="govuk-body cancel-link"><a asp-action="SnsAnalysisCancel" asp-controller="SnsAnalysis" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p> *@
+            <p class="govuk-body cancel-link">
+                @if (!Model.IsCheckAnswer)
+                {
+                    <a class="govuk-link" asp-action="SnsAnalysisCancel" asp-controller="SnsAnalysis" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
+                }
+                else
+                {
+                    <a class="govuk-link" asp-action="CheckAnswer" asp-controller="SnsAnalysis">@Resource.lblCancel</a>
+                }
+            </p>
         </div>
 
     </div>

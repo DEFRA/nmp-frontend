@@ -219,8 +219,8 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCropEncryptedCounter" value="@Model.DoubleCropEncryptedCounter"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCropCurrentCounter" value="@Model.DoubleCropCurrentCounter"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName" value="@Model.FieldName"></govuk-input>
-                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isDoubleCropAvailable"></govuk-input>
-                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isAnyChangeInField"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDoubleCropAvailable"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyChangeInField"></govuk-input>
 
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationCurrentCounter"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationEncryptedCounter"></govuk-input>
@@ -411,9 +411,7 @@
                         }
 
                     }
-
-                    
-                    @if (Model.isDoubleCropAvailable)
+                    @if (Model.IsDoubleCropAvailable)
                     {
                         @if (Model.DoubleCrop == null)
                         {
@@ -438,7 +436,7 @@
                                         @string.Format(Resource.lblWhichCropIsThisManureApplication, doubleCrop.FieldName)
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value>
-                                        @((doubleCrop.CropID == null) ? Resource.lblNotSet : string.Format("{0} {1} {2} {3} {4}", Resource.lblCrop, counter, "(", doubleCrop.CropName, ")"))
+                                        @((doubleCrop.CropID == null) ? Resource.lblNotSet : string.Format("{0} {1} {2} {3} {4}", Resource.lblCrop, doubleCrop.CropOrder, "(", doubleCrop.CropName, ")"))
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
                                         <govuk-summary-list-row-action asp-action="DoubleCrop" asp-controller="OrganicManure" asp-route-q="@doubleCrop.EncryptedCounter">@Resource.lblChange</govuk-summary-list-row-action>

@@ -112,7 +112,7 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCropEncryptedCounter" value="@Model.DoubleCropEncryptedCounter"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCropCurrentCounter" value="@Model.DoubleCropCurrentCounter"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName" value="@Model.FieldName"></govuk-input>
-                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isDoubleCropAvailable"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDoubleCropAvailable"></govuk-input>
 
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationCurrentCounter"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationEncryptedCounter"></govuk-input>
@@ -120,6 +120,7 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyCropIsGrass" value="@Model.IsAnyCropIsGrass.ToString().ToLower()"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyChangeInSameDefoliationFlag" value="@Model.IsAnyChangeInSameDefoliationFlag.ToString().ToLower()"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSameDefoliationForAll"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyChangeInField"></govuk-input>
 
                 @if (Model.FieldList != null && Model.FieldList.Count > 0)
                 {

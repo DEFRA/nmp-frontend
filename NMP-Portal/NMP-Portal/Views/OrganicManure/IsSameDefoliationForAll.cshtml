@@ -10,7 +10,7 @@
     {
         backAction = "CheckAnswer";
     }
-    else if (Model.isDoubleCropAvailable)
+    else if (Model.IsDoubleCropAvailable)
     {
         backAction = "DoubleCrop";
     }
@@ -123,8 +123,8 @@
 
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCropEncryptedCounter" value="@Model.DoubleCropEncryptedCounter"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCropCurrentCounter" value="@Model.DoubleCropCurrentCounter"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isDoubleCropAvailable"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isAnyChangeInField"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDoubleCropAvailable"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyChangeInField"></govuk-input>
 
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationCurrentCounter"></govuk-input>
