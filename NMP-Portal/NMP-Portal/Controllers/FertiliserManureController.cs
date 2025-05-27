@@ -4286,32 +4286,7 @@ namespace NMP.Portal.Controllers
 
             if (model.DoubleCropCurrentCounter == model.DoubleCrop.Count)
             {
-                //foreach (var doubleCrop in model.DoubleCrop)
-                //{
-                //    (List<ManagementPeriod> managementPeriods, error) = await _cropService.FetchManagementperiodByCropId(doubleCrop.CropID, true);
-                //    if (string.IsNullOrWhiteSpace(error.Message) && managementPeriods != null && managementPeriods.Count > 0)
-                //    {
-                //        foreach (var organicManure in model.FertiliserManures)
-                //        {
-                //            if (organicManure.FieldID == doubleCrop.FieldID)
-                //            {
-                //                if (model.UpdatedFertiliserIds != null)
-                //                {
-                //                    foreach (var updatedOrganicIds in model.UpdatedFertiliserIds)
-                //                    {
-                //                        if (organicManure.ManagementPeriodID == updatedOrganicIds.ManagementPeriodId)
-                //                        {
-                //                            updatedOrganicIds.ManagementPeriodId = managementPeriods.Select(x => x.ID.Value).FirstOrDefault();
-                //                            break;
-                //                        }
-                //                    }
-                //                }
-
-                //                organicManure.ManagementPeriodID = managementPeriods.Select(x => x.ID.Value).FirstOrDefault();
-                //            }
-                //        }
-                //    }
-                //}
+                
                 if (model.IsCheckAnswer && (!model.IsAnyChangeInField))
                 {
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FertiliserManure", model);
