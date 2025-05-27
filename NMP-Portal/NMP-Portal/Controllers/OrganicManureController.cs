@@ -319,7 +319,15 @@ namespace NMP.Portal.Controllers
                                     List<Crop> cropList = await _cropService.FetchCropsByFieldId(Convert.ToInt32(fieldIdForManID));
                                     if (cropList != null && cropList.Count > 0)
                                     {
-                                        cropList = cropList.Where(x => x.Year == model.HarvestYear && x.CropTypeID == Convert.ToInt32(model.FieldGroup)).ToList();
+                                        if (int.TryParse(model.FieldGroup, out int cropTypeId))
+                                        {
+                                            cropList = cropList.Where(x => x.Year == model.HarvestYear && x.CropTypeID == cropTypeId).ToList();
+                                        }
+                                        else
+                                        {
+                                            cropList = cropList.Where(x => x.Year == model.HarvestYear).ToList();
+                                        }
+                                        //cropList = cropList.Where(x => x.Year == model.HarvestYear && x.CropTypeID == Convert.ToInt32(model.FieldGroup)).ToList();
                                         if (cropList.Count > 0)
                                         {
                                             model.CropOrder = Convert.ToInt32(cropList.Select(x => x.CropOrder).FirstOrDefault());
