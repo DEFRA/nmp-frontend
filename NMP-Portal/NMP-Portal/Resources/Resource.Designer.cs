@@ -1222,7 +1222,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are these new swards or existing swards in these fields?.
+        ///   Looks up a localized string similar to Are these new swards or existing swards in {0}?.
         /// </summary>
         public static string lblAreTheseNewSwardOrExistingSwardInTheseFields {
             get {
@@ -4039,7 +4039,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How many cuts and grazings will you have in these fields?.
+        ///   Looks up a localized string similar to How many cuts and grazings will you have in {0}?.
         /// </summary>
         public static string lblHowManyCutsAndGrazingsWillYouHaveInTheseFields {
             get {
@@ -4057,7 +4057,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How many cuts will you have in these fields?.
+        ///   Looks up a localized string similar to How many cuts will you have in {0}?.
         /// </summary>
         public static string lblHowManyCutsWillYouHaveInTheseFields {
             get {
@@ -4094,7 +4094,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How many grazings will you have in these fields?.
+        ///   Looks up a localized string similar to How many grazings will you have in {0}?.
         /// </summary>
         public static string lblHowManyGrazingsWillYouHaveInTheseFields {
             get {
@@ -4175,7 +4175,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How will these fields be managed?.
+        ///   Looks up a localized string similar to How will {0} be managed?.
         /// </summary>
         public static string lblHowWillTheseFieldsBeManaged {
             get {
@@ -8209,6 +8209,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to these fields.
+        /// </summary>
+        public static string lblTheseFields {
+            get {
+                return ResourceManager.GetString("lblTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to These fields all have an application of {0} on {1}.
         /// </summary>
         public static string lblTheseFieldsAllHaveAnApplicationOf {
@@ -8218,7 +8227,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}. These options come from RB209 (Nutrient Management Guide)..
+        ///   Looks up a localized string similar to {0}. These options come from the AHDB Nutrient Management Guide (RB209)..
         /// </summary>
         public static string lblTheseOptionsComeFromRB209 {
             get {
@@ -9433,7 +9442,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the cut and grazing order in these fields?.
+        ///   Looks up a localized string similar to What is the cut and grazing order in {0}?.
         /// </summary>
         public static string lblWhatIsTheCutAndGrazingOrderInTheseFields {
             get {
@@ -9442,7 +9451,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the cut order in these fields?.
+        ///   Looks up a localized string similar to What is the cut order in {0}?.
         /// </summary>
         public static string lblWhatIsTheCutOrderInTheseFields {
             get {
@@ -9613,7 +9622,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the sward in these fields in {0}?.
+        ///   Looks up a localized string similar to What is the sward in {0} in {1}?.
         /// </summary>
         public static string lblWhatIsTheSwardInTheseFields {
             get {
@@ -9622,7 +9631,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the sward type for these fields in {0}?.
+        ///   Looks up a localized string similar to What is the sward type for {0} in {1}?.
         /// </summary>
         public static string lblWhatIsTheSwardTypeForTheseFields {
             get {
