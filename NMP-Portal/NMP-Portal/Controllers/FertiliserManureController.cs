@@ -3986,6 +3986,7 @@ namespace NMP.Portal.Controllers
                                                 if (item.ManagementPeriodId == filteredManId)
                                                 {
                                                     item.ManagementPeriodId = managementPeriodID;
+                                                    break;
                                                 }
                                             }
                                         }
@@ -4046,6 +4047,7 @@ namespace NMP.Portal.Controllers
                                             if (item.ManagementPeriodId == filteredManId)
                                             {
                                                 item.ManagementPeriodId = managementPeriodID;
+                                                break;
                                             }
                                         }
                                     }
