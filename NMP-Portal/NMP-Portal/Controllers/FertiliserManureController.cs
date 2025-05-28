@@ -2134,9 +2134,10 @@ namespace NMP.Portal.Controllers
                         model.K2O = fertiliserManure.K2O;
                         model.Date = fertiliserManure.ApplicationDate.Value.ToLocalTime();
                         model.FieldGroup = Resource.lblSelectSpecificFields;
-                        if (model.IsAnyCropIsGrass == null)
+
+                        foreach (var updateFertiliser in model.UpdatedFertiliserIds)
                         {
-                            foreach (var updateFertiliser in model.UpdatedFertiliserIds)
+                            if (!model.FertiliserManures.Any(x => x.ManagementPeriodID == updateFertiliser.ManagementPeriodId))
                             {
                                 (ManagementPeriod managementPeriod, Error updateFertilserError) = await _cropService.FetchManagementperiodById(updateFertiliser.ManagementPeriodId.Value);
                                 if (managementPeriod != null)
@@ -2163,6 +2164,7 @@ namespace NMP.Portal.Controllers
                                 }
                             }
                         }
+                        
                         _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
                     }
                 }
@@ -3964,35 +3966,30 @@ namespace NMP.Portal.Controllers
                             if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
                             {
                                 var cropId = cropList.Select(x => x.ID.Value).FirstOrDefault();
-                                (List<ManagementPeriod> ManagementPeriod, error) = await _cropService.FetchManagementperiodByCropId(cropId, false);
+                                (List<ManagementPeriod> managementPeriodList, error) = await _cropService.FetchManagementperiodByCropId(cropId, false);
 
-                                if (ManagementPeriod != null)
+                                if (managementPeriodList != null)
                                 {
-                                    managementPeriodID = ManagementPeriod.Where(x => x.Defoliation == model.FertiliserManures[model.DefoliationCurrentCounter].Defoliation).Select(x => x.ID.Value).FirstOrDefault();
-                                }
-                            }
-                            if (model.IsCheckAnswer && (!string.IsNullOrWhiteSpace(model.EncryptedFertId)))
-                            {
-                                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
-                                {
-                                    FertiliserManureViewModel fertiliserManureViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FertiliserManureViewModel>("FertiliserManure");
-                                    if (fertiliserManureViewModel != null && model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
+                                    managementPeriodID = managementPeriodList.Where(x => x.Defoliation == model.FertiliserManures[model.DefoliationCurrentCounter].Defoliation).Select(x => x.ID.Value).FirstOrDefault();
+
+                                    if (model.IsCheckAnswer && (!string.IsNullOrWhiteSpace(model.EncryptedFertId)))
                                     {
-                                        foreach (var item in model.UpdatedFertiliserIds)
+                                        int filteredManId = managementPeriodList
+                                     .Where(fm => model.UpdatedFertiliserIds.Any(mp => mp.ManagementPeriodId == fm.ID))
+                                     .Select(x => x.ID.Value)
+                                     .FirstOrDefault();
+
+                                        if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
                                         {
-                                            if (item.ManagementPeriodId == model.FertiliserManures[i].ManagementPeriodID)
+                                            foreach (var item in model.UpdatedFertiliserIds)
                                             {
-                                                if (managementPeriodID != null)
+                                                if (item.ManagementPeriodId == filteredManId)
                                                 {
                                                     item.ManagementPeriodId = managementPeriodID;
                                                 }
                                             }
                                         }
                                     }
-                                }
-                                else
-                                {
-                                    return RedirectToAction("FarmList", "Farm");
                                 }
                             }
                             model.FertiliserManures[i].ManagementPeriodID = managementPeriodID.Value;
@@ -4030,35 +4027,29 @@ namespace NMP.Portal.Controllers
                         if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
                         {
                             var cropId = cropList.Select(x => x.ID.Value).FirstOrDefault();
-                            (List<ManagementPeriod> ManagementPeriod, error) = await _cropService.FetchManagementperiodByCropId(cropId, false);
+                            (List<ManagementPeriod> managementPeriodList, error) = await _cropService.FetchManagementperiodByCropId(cropId, false);
 
-                            if (ManagementPeriod != null)
+                            if (managementPeriodList != null)
                             {
-                                managementPeriodID = ManagementPeriod.Where(x => x.Defoliation == model.FertiliserManures[i].Defoliation).Select(x => x.ID.Value).FirstOrDefault();
-                            }
-                        }
-                        if (model.IsCheckAnswer && (!string.IsNullOrWhiteSpace(model.EncryptedFertId)))
-                        {
-                            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
-                            {
-                                FertiliserManureViewModel fertiliserManureViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FertiliserManureViewModel>("FertiliserManure");
-                                if (fertiliserManureViewModel != null && model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
+                                managementPeriodID = managementPeriodList.Where(x => x.Defoliation == model.FertiliserManures[i].Defoliation).Select(x => x.ID.Value).FirstOrDefault();
+                                if (model.IsCheckAnswer && (!string.IsNullOrWhiteSpace(model.EncryptedFertId)))
                                 {
-                                    foreach (var item in model.UpdatedFertiliserIds)
+                                    int filteredManId = managementPeriodList
+                                 .Where(fm => model.UpdatedFertiliserIds.Any(mp => mp.ManagementPeriodId == fm.ID))
+                                 .Select(x => x.ID.Value)
+                                 .FirstOrDefault();
+
+                                    if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
                                     {
-                                        if (item.ManagementPeriodId == model.FertiliserManures[i].ManagementPeriodID)
+                                        foreach (var item in model.UpdatedFertiliserIds)
                                         {
-                                            if (managementPeriodID != null)
+                                            if (item.ManagementPeriodId == filteredManId)
                                             {
                                                 item.ManagementPeriodId = managementPeriodID;
                                             }
                                         }
                                     }
                                 }
-                            }
-                            else
-                            {
-                                return RedirectToAction("FarmList", "Farm");
                             }
                         }
                         model.FertiliserManures[i].ManagementPeriodID = managementPeriodID.Value;
