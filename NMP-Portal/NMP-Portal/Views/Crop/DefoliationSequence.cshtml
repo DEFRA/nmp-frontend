@@ -112,19 +112,19 @@
                         }
                         @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.CutForSilageOnly)
                         {
-                            @Resource.lblWhatIsTheCutOrderInTheseFields
+                            @string.Format(Resource.lblWhatIsTheCutOrderInTheseFields, (Model.FieldList.Count==1? Model.Crops[0].FieldName + " " + Resource.lblField : Resource.lblTheseFields))
                         }
                         @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.CutForHayOnly)
                         {
-                            @Resource.lblWhatIsTheCutOrderInTheseFields
+                            @string.Format(Resource.lblWhatIsTheCutOrderInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName + " " + Resource.lblField : Resource.lblTheseFields))
                         }
                         @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazingAndSilage)
                         {
-                            @Resource.lblWhatIsTheCutAndGrazingOrderInTheseFields
+                            @string.Format(Resource.lblWhatIsTheCutAndGrazingOrderInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName + " " + Resource.lblField : Resource.lblTheseFields))
                         }
                         @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazingAndHay)
                         {
-                            @Resource.lblWhatIsTheCutAndGrazingOrderInTheseFields
+                            @string.Format(Resource.lblWhatIsTheCutAndGrazingOrderInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName + " " + Resource.lblField : Resource.lblTheseFields))
                         }
 
                     </govuk-radios-fieldset-legend>
