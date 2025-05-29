@@ -515,9 +515,16 @@ namespace NMP.Portal.Controllers
                                         }
                                         else
                                         {
-                                            cropList = cropList.Where(x => x.Year == model.HarvestYear && x.CropOrder == model.CropOrder).ToList();
+                                            cropList = cropList.Where(x => x.Year == model.HarvestYear).ToList();
                                         }
 
+                                        if (cropList.Count > 1)
+                                        {
+                                            model.IsDoubleCropAvailable = true;
+                                            int counter = 0;
+                                            model.FieldName = (await _fieldService.FetchFieldByFieldId(Convert.ToInt32(field))).Name;
+                                            model.DoubleCropEncryptedCounter = _fieldDataProtector.Protect(counter.ToString());
+                                        }
 
                                     }
 
@@ -1958,7 +1965,7 @@ namespace NMP.Portal.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> CheckAnswer(string? q, string? r, string? s, string? t)
+        public async Task<IActionResult> CheckAnswer(string? q, string? r, string? s, string? t, string? u)
         {
             _logger.LogTrace($"Fertiliser Manure Controller : CheckAnswer() action called");
             FertiliserManureViewModel model = new FertiliserManureViewModel();
@@ -1967,6 +1974,10 @@ namespace NMP.Portal.Controllers
 
             if (!string.IsNullOrWhiteSpace(q) && !string.IsNullOrWhiteSpace(r) && !string.IsNullOrWhiteSpace(s))
             {
+                if (!string.IsNullOrWhiteSpace(u))
+                {
+                    model.IsComingFromRecommendation = true;
+                }
                 model.EncryptedFertId = q;
                 int decryptedId = Convert.ToInt32(_cropDataProtector.Unprotect(q));
                 int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(r));
@@ -1988,6 +1999,12 @@ namespace NMP.Portal.Controllers
                         if (string.IsNullOrWhiteSpace(error.Message) && fertiliserResponse != null && fertiliserResponse.Count > 0)
                         {
                             model.UpdatedFertiliserIds = fertiliserResponse;
+                            if (model.IsComingFromRecommendation)
+                            {
+                                model.UpdatedFertiliserIds.RemoveAll(x => x.FertiliserId != fertiliserManure.ID);
+                                fertiliserResponse.RemoveAll(x => x.FertiliserId != fertiliserManure.ID);
+                            }
+
                             var SelectListItem = fertiliserResponse.Select(f => new SelectListItem
                             {
                                 Value = f.Id.ToString(),
@@ -2164,7 +2181,7 @@ namespace NMP.Portal.Controllers
                                 }
                             }
                         }
-                        
+
                         _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
                     }
                 }
@@ -2476,7 +2493,7 @@ namespace NMP.Portal.Controllers
 
                     }
                 }
-                if (model.DoubleCrop.Count > 0)
+                if (model.DoubleCrop!=null&&model.DoubleCrop.Count > 0)
                 {
                     foreach (var doubleCrop in model.DoubleCrop)
                     {
@@ -2604,13 +2621,25 @@ namespace NMP.Portal.Controllers
             }
             model.IsCheckAnswer = false;
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
-            if (!string.IsNullOrWhiteSpace(model.EncryptedFertId))
+            if (!string.IsNullOrWhiteSpace(model.EncryptedFertId) && (!model.IsComingFromRecommendation))
             {
                 _httpContextAccessor.HttpContext?.Session.Remove("FertiliserManure");
                 return RedirectToAction("HarvestYearOverview", "Crop", new
                 {
                     id = model.EncryptedFarmId,
                     year = model.EncryptedHarvestYear
+                });
+            }
+            else if (!string.IsNullOrWhiteSpace(model.EncryptedFertId) && (model.IsComingFromRecommendation))
+            {
+                _httpContextAccessor.HttpContext?.Session.Remove("FertiliserManure");
+                string fieldId = model.FieldList[0];
+                return RedirectToAction("Recommendations", "Crop", new
+                {
+                    q = model.EncryptedFarmId,
+                    r = _fieldDataProtector.Protect(fieldId),
+                    s = model.EncryptedHarvestYear
+
                 });
             }
 
@@ -3273,14 +3302,23 @@ namespace NMP.Portal.Controllers
                             {
                                 if (fertiliser.FieldID == doubleCrop.FieldID)
                                 {
-                                    if (model.UpdatedFertiliserIds != null)
+                                    if (model.IsCheckAnswer && (!string.IsNullOrWhiteSpace(model.EncryptedFertId)))
                                     {
-                                        foreach (var updatedFertiliser in model.UpdatedFertiliserIds)
+                                        if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
                                         {
-                                            if (fertiliser.ManagementPeriodID == updatedFertiliser.ManagementPeriodId)
+                                            int filteredManId = managementPeriods
+                                                 .Where(fm => model.UpdatedFertiliserIds.Any(mp => mp.ManagementPeriodId == fm.ID))
+                                                 .Select(x => x.ID.Value)
+                                                 .FirstOrDefault();
+
+
+                                            foreach (var item in model.UpdatedFertiliserIds)
                                             {
-                                                updatedFertiliser.ManagementPeriodId = managementPeriods.Select(x => x.ID.Value).FirstOrDefault();
-                                                break;
+                                                if (item.ManagementPeriodId == filteredManId)
+                                                {
+                                                    item.ManagementPeriodId = managementPeriods.Select(x => x.ID.Value).FirstOrDefault(); ;
+                                                    break;
+                                                }
                                             }
                                         }
                                     }
@@ -3349,14 +3387,29 @@ namespace NMP.Portal.Controllers
                             _httpContextAccessor.HttpContext?.Session.Remove("FertiliserManure");
                             if (model.FieldList != null && model.FieldList.Count == 1)
                             {
-                                return Redirect(Url.Action("HarvestYearOverview", "Crop", new
+                                if (!model.IsComingFromRecommendation)
                                 {
-                                    id = model.EncryptedFarmId,
-                                    year = model.EncryptedHarvestYear,
-                                    q = _farmDataProtector.Protect(success.ToString()),
-                                    r = _cropDataProtector.Protect(Resource.MsgInorganicFertiliserApplicationUpdated),
-                                    w = _fieldDataProtector.Protect(model.FieldList.FirstOrDefault())
-                                }) + Resource.lblInorganicFertiliserApplicationsForSorting);
+                                    return Redirect(Url.Action("HarvestYearOverview", "Crop", new
+                                    {
+                                        id = model.EncryptedFarmId,
+                                        year = model.EncryptedHarvestYear,
+                                        q = _farmDataProtector.Protect(success.ToString()),
+                                        r = _cropDataProtector.Protect(Resource.MsgInorganicFertiliserApplicationUpdated),
+                                        w = _fieldDataProtector.Protect(model.FieldList.FirstOrDefault())
+                                    }) + Resource.lblInorganicFertiliserApplicationsForSorting);
+                                }
+                                else
+                                {
+                                    return RedirectToAction("Recommendations", "Crop", new
+                                    {
+                                        q = model.EncryptedFarmId,
+                                        r = _fieldDataProtector.Protect(model.FieldList.FirstOrDefault()),
+                                        s = model.EncryptedHarvestYear,
+                                        t = _cropDataProtector.Protect(Resource.MsgInorganicFertiliserApplicationUpdated),
+                                        u = _cropDataProtector.Protect(Resource.MsgNutrientRecommendationsMayBeUpdated)
+
+                                    });
+                                }
                             }
                             else
                             {
@@ -3536,19 +3589,18 @@ namespace NMP.Portal.Controllers
                 {
 
                     List<int> fertiliserIds = new List<int>();
-                    if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0 && model.FertiliserManures != null && model.FertiliserManures.Count > 0)
+                    if (model.IsComingFromRecommendation && (!string.IsNullOrWhiteSpace(model.EncryptedFertId)))
+                    {
+                        ViewBag.EncryptedFieldId = _fieldDataProtector.Protect(model.FieldList.FirstOrDefault());
+                        fertiliserIds.Add(Convert.ToInt32(_cropDataProtector.Unprotect(model.EncryptedFertId)));
+                    }
+                    else if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0 && model.FertiliserManures != null && model.FertiliserManures.Count > 0)
                     {
                         foreach (var fertiliserManure in model.FertiliserManures)
                         {
                             fertiliserIds.Add(model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId.Value == fertiliserManure.ManagementPeriodID).Select(x => x.FertiliserId.Value).FirstOrDefault());
                         }
 
-                    }
-
-                    if (model.IsComingFromRecommendation && (!string.IsNullOrWhiteSpace(model.EncryptedFertId)))
-                    {
-                        ViewBag.EncryptedFieldId = _fieldDataProtector.Protect(model.FieldList.FirstOrDefault());
-                        fertiliserIds.Add(Convert.ToInt32(_cropDataProtector.Unprotect(model.EncryptedFertId)));
                     }
 
                     if (fertiliserIds.Count > 0)
@@ -4507,14 +4559,18 @@ namespace NMP.Portal.Controllers
                     {
                         if (fertiliser.FieldID == model.DoubleCrop[model.DoubleCropCurrentCounter].FieldID)
                         {
-                            if (model.UpdatedFertiliserIds != null)
+                            if (model.IsCheckAnswer && (!string.IsNullOrWhiteSpace(model.EncryptedFertId)))
                             {
-                                foreach (var updatedOrganicIds in model.UpdatedFertiliserIds)
+
+                                if (model.UpdatedFertiliserIds != null)
                                 {
-                                    if (fertiliser.ManagementPeriodID == updatedOrganicIds.ManagementPeriodId)
+                                    foreach (var updatedFertIds in model.UpdatedFertiliserIds)
                                     {
-                                        updatedOrganicIds.ManagementPeriodId = managementPeriods.Select(x => x.ID.Value).FirstOrDefault();
-                                        break;
+                                        if (fertiliser.FieldName.Equals(updatedFertIds.Name))
+                                        {
+                                            updatedFertIds.ManagementPeriodId = managementPeriods.Select(x => x.ID.Value).FirstOrDefault();
+                                            break;
+                                        }
                                     }
                                 }
                             }

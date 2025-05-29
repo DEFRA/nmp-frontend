@@ -621,7 +621,11 @@
                                                 }
                                             </td>
                                             <td class="govuk-table__cell">
-                                                <p class="govuk-body cancel-link"><a asp-action="RemoveFertiliser" asp-controller="FertiliserManure" asp-route-q="@fertiliserManure.EncryptedId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@fertiliserManure.EncryptedFieldName" asp-route-t="@Model.EncryptedFarmId" asp-route-u="@Model.EncryptedHarvestYear">@Resource.lblRemove</a></p>
+                                                @* <p class="govuk-body cancel-link"><a asp-action="RemoveFertiliser" asp-controller="FertiliserManure" asp-route-q="@fertiliserManure.EncryptedId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@fertiliserManure.EncryptedFieldName" asp-route-t="@Model.EncryptedFarmId" asp-route-u="@Model.EncryptedHarvestYear">@Resource.lblRemove</a></p> *@
+                                                <p class="govuk-body cancel-link">
+                                                    <a asp-action="CheckAnswer" asp-controller="FertiliserManure" asp-route-q="@fertiliserManure.EncryptedId" asp-route-r="@Model.EncryptedFarmId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-t="@fertiliserManure.EncryptedFieldName" asp-route-u="@ViewBag.Fertiliser">
+                                                        @Resource.lblChange
+                                                </a></p>
                                             </td>
 
                                         </tr>
