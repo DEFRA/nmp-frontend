@@ -8635,7 +8635,7 @@ namespace NMP.Portal.Controllers
                         }
                         else if (model.FieldGroup == Resource.lblSelectSpecificFields && (!model.IsComingFromRecommendation))
                         {
-                            return RedirectToAction("Fields");
+                            return RedirectToAction("ManureType");
                         }
                         return RedirectToAction("FieldGroup", new
                         {
