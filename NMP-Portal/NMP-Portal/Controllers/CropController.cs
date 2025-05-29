@@ -2708,6 +2708,9 @@ namespace NMP.Portal.Controllers
 
                 else
                 {
+                    //if yield null then save as 0
+                    crop.Yield = crop.Yield ?? 0;
+
                     crop.DefoliationSequenceID = model.DefoliationSequenceId;
                     crop.SwardTypeID = model.SwardTypeId;
                     crop.SwardManagementID = model.SwardManagementId;
@@ -2753,7 +2756,7 @@ namespace NMP.Portal.Controllers
                             {
                                 Defoliation = i,
                                 Utilisation1ID = utilisation1,
-                                Yield = crop.Yield / model.PotentialCut,
+                                Yield = crop.Yield??0 / model.PotentialCut,
                                 CreatedOn = DateTime.Now,
                                 CreatedByID = userId
                             });
@@ -2807,7 +2810,7 @@ namespace NMP.Portal.Controllers
                             {
                                 Defoliation = i,
                                 Utilisation1ID = utilisation1,
-                                Yield = crop.Yield / model.PotentialCut,
+                                Yield = crop.Yield??0 / model.PotentialCut,
                                 CreatedOn = DateTime.Now,
                                 CreatedByID = userId
                             });
