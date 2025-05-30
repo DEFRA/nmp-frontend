@@ -535,7 +535,12 @@
                                                 @orgManure.ManureTypeName
                                             </td>
                                             <td class="govuk-table__cell">
-                                                <p class="govuk-body cancel-link"><a asp-controller="OrganicManure" asp-action="RemoveOrganicManure" asp-route-q="@orgManure.EncryptedId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@orgManure.EncryptedFieldName" asp-route-t="@Model.EncryptedFarmId" asp-route-u="@Model.EncryptedHarvestYear">@Resource.lblRemove</a></p>
+                                                @* <p class="govuk-body cancel-link"><a asp-controller="OrganicManure" asp-action="RemoveOrganicManure" asp-route-q="@orgManure.EncryptedId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@orgManure.EncryptedFieldName" asp-route-t="@Model.EncryptedFarmId" asp-route-u="@Model.EncryptedHarvestYear">@Resource.lblRemove</a></p> *@
+                                                <p class="govuk-body cancel-link">
+                                                    <a asp-action="CheckAnswer" asp-controller="OrganicManure" asp-route-q="@orgManure.EncryptedId" asp-route-r="@Model.EncryptedFarmId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-t="@orgManure.EncryptedFieldName" asp-route-u="@ViewBag.OrganicManure">
+                                                        @Resource.lblViewOrChange
+                                                    </a>
+                                                </p>
                                             </td>
                                         </tr>
                                     }
@@ -624,7 +629,7 @@
                                                 @* <p class="govuk-body cancel-link"><a asp-action="RemoveFertiliser" asp-controller="FertiliserManure" asp-route-q="@fertiliserManure.EncryptedId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@fertiliserManure.EncryptedFieldName" asp-route-t="@Model.EncryptedFarmId" asp-route-u="@Model.EncryptedHarvestYear">@Resource.lblRemove</a></p> *@
                                                 <p class="govuk-body cancel-link">
                                                     <a asp-action="CheckAnswer" asp-controller="FertiliserManure" asp-route-q="@fertiliserManure.EncryptedId" asp-route-r="@Model.EncryptedFarmId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-t="@fertiliserManure.EncryptedFieldName" asp-route-u="@ViewBag.Fertiliser">
-                                                        @Resource.lblChange
+                                                        @Resource.lblViewOrChange
                                                 </a></p>
                                             </td>
 
