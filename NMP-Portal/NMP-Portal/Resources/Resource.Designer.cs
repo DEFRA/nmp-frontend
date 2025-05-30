@@ -5058,7 +5058,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manue type.
+        ///   Looks up a localized string similar to Manure Type.
         /// </summary>
         public static string lblManureType {
             get {
@@ -5328,7 +5328,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nitrate (N).
+        ///   Looks up a localized string similar to Nitrate-N.
         /// </summary>
         public static string lblNitrate {
             get {
@@ -6049,7 +6049,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ph.
+        ///   Looks up a localized string similar to pH.
         /// </summary>
         public static string lblPh {
             get {
@@ -6823,7 +6823,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It will not remove the fields from your farm and you will be able to use them in your plans.
+        ///   Looks up a localized string similar to It will not remove the fields from your farm and you will be able to use them in your plans..
         /// </summary>
         public static string lblRemoveCropGroupContent2 {
             get {
@@ -6850,7 +6850,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} will not be removed from your farm and you can use it again in your plans.
+        ///   Looks up a localized string similar to {0} will not be removed from your farm and you can use it again in your plans..
         /// </summary>
         public static string lblRemoveCropPlanContent2 {
             get {
@@ -6949,7 +6949,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to remove this crop group..
+        ///   Looks up a localized string similar to remove this crop group.
         /// </summary>
         public static string lblRemoveThisCropGroup {
             get {
@@ -12180,7 +12180,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This application Will take you over the organic manure nitrogen field limit for compost.
+        ///   Looks up a localized string similar to This application will take you over the organic manure nitrogen field limit for compost.
         /// </summary>
         public static string MsgNmaxWarningHeadingEngland {
             get {

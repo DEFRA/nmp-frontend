@@ -1238,7 +1238,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>What type of organic material are you using in this application?</value>
   </data>
   <data name="lblManureType" xml:space="preserve">
-    <value>Manue type</value>
+    <value>Manure Type</value>
   </data>
   <data name="lblWhatTypeOfManureGroupAreYouUsingInThisApplication" xml:space="preserve">
     <value>What type of {0} are you using in this application?</value>
@@ -1265,7 +1265,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Dry matter</value>
   </data>
   <data name="lblNitrate" xml:space="preserve">
-    <value>Nitrate (N)</value>
+    <value>Nitrate-N</value>
   </data>
   <data name="lblStandardNutrientValues" xml:space="preserve">
     <value>Do you want to use these standard nutrient values for {0}?</value>
@@ -2924,7 +2924,7 @@ cubic metres per hectare  not set</value>
     <value>Organic manure applications</value>
   </data>
   <data name="lblPh" xml:space="preserve">
-    <value>ph</value>
+    <value>pH</value>
   </data>
   <data name="lblPotashReleasingClay" xml:space="preserve">
     <value>Potash (K) releasing clay</value>
@@ -3317,7 +3317,7 @@ cubic metres per hectare  not set</value>
     <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the amount of crop available nitrogen from inorganic fertilisers and organic manures you apply.</value>
   </data>
   <data name="MsgNmaxWarningHeadingEngland" xml:space="preserve">
-    <value>This application Will take you over the organic manure nitrogen field limit for compost</value>
+    <value>This application will take you over the organic manure nitrogen field limit for compost</value>
   </data>
   <data name="MsgNmaxWarningHeadingGreaterThan1000England" xml:space="preserve">
     <value>This application will take you over the organic manure nitrogen field limit for compost applied to orchard land</value>
@@ -3720,7 +3720,7 @@ live</value>
     <value>This action will remove all the data about this crop group from your plans. You will not be able to get it back.</value>
   </data>
   <data name="lblRemoveCropGroupContent2" xml:space="preserve">
-    <value>It will not remove the fields from your farm and you will be able to use them in your plans</value>
+    <value>It will not remove the fields from your farm and you will be able to use them in your plans.</value>
   </data>
   <data name="lblRemoveCropTypeFromFieldName" xml:space="preserve">
     <value>Remove {0} from {1}</value>
@@ -3765,7 +3765,7 @@ live</value>
     <value>This action will remove crop planning information from {0}</value>
   </data>
   <data name="lblRemoveCropPlanContent2" xml:space="preserve">
-    <value>{0} will not be removed from your farm and you can use it again in your plans</value>
+    <value>{0} will not be removed from your farm and you can use it again in your plans.</value>
   </data>
   <data name="lblTheseFieldsAllHaveAnApplicationOf" xml:space="preserve">
     <value>These fields all have an application of {0} on {1}</value>
@@ -4065,7 +4065,7 @@ live</value>
     <value>Changes here will be applied to all of these fields. To change a single field select it from your crop plan.</value>
   </data>
   <data name="lblRemoveThisCropGroup" xml:space="preserve">
-    <value>remove this crop group.</value>
+    <value>remove this crop group</value>
   </data>
   <data name="lblUpdateThisCropGroup" xml:space="preserve">
     <value>Update this crop group</value>
