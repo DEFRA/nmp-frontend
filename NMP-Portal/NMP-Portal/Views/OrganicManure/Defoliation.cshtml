@@ -5,7 +5,7 @@
     string defoliation = string.Empty;
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="Defoliation" asp-controller="OrganicManure" asp-route-q="@Model.DefoliationEncryptedCounter">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@((Model.IsCheckAnswer&&(!Model.IsAnyChangeInField)&&(!Model.IsManureTypeChange))?"CheckAnswer":"Defoliation") asp-controller="OrganicManure" asp-route-q="@Model.DefoliationEncryptedCounter">@Resource.lblBack</govuk-back-link>
 }
 
 

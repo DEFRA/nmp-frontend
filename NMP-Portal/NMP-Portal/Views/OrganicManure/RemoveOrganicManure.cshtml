@@ -13,19 +13,19 @@
 {
 
     @section BeforeContent {
-    @if (Model.IsComingFromRecommendation)
+    @* @if (Model.IsComingFromRecommendation)
         {
             <govuk-back-link asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@ViewBag.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">
                 @Resource.lblBack
             </govuk-back-link>
         }
         else
-        {
+        { *@
             <govuk-back-link asp-action="CheckAnswer" asp-controller="OrganicManure">
                 @Resource.lblBack
             </govuk-back-link>
 
-        }
+        @* } *@
     }
     <form asp-action="RemoveOrganicManure" asp-controller="OrganicManure" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
@@ -266,16 +266,16 @@
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>
-                @if (Model.IsComingFromRecommendation)
+                @* @if (Model.IsComingFromRecommendation)
                 {
                     <p class="govuk-body cancel-link"><a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@ViewBag.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
 
                 }
                 else
-                {
+                { *@
                     <p class="govuk-body cancel-link"><a asp-action="CheckAnswer" asp-controller="OrganicManure">@Resource.lblCancel</a></p>
 
-                }
+                @* } *@
 
             </div>
         </div>

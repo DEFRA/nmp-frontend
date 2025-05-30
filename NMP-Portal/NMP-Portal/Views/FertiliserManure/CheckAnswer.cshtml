@@ -68,6 +68,8 @@
                         {
                             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.UpdatedFertiliserIds[i].FertiliserId" value="@Model.UpdatedFertiliserIds[i].FertiliserId"></govuk-input>
                             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.UpdatedFertiliserIds[i].ManagementPeriodId" value="@Model.UpdatedFertiliserIds[i].ManagementPeriodId"></govuk-input>
+
+                            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.UpdatedFertiliserIds[i].Name" value="@Model.UpdatedFertiliserIds[i].Name"></govuk-input>
                         }
 
                     }
@@ -174,6 +176,19 @@
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="FieldGroup" asp-controller="FertiliserManure">@Resource.lblChange</govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+                    }
+                    @if (Model.IsComingFromRecommendation && Model.FieldGroup==Resource.lblSelectSpecificFields)
+                    {
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>
+                                @Resource.lblWhichFieldsWouldYouLikeToEditAnOrganic
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @Model.FieldName
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     }
