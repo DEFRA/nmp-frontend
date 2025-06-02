@@ -4448,4 +4448,7 @@ live</value>
   <data name="lblTheseFields" xml:space="preserve">
     <value>these fields</value>
   </data>
+  <data name="lblWhichCropsWouldYouLikeToCreateNMaxReportFor" xml:space="preserve">
+    <value>Which crops would you like to create a {0} N-max report for?</value>
+  </data>
 </root>

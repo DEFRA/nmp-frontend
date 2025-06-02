@@ -1,0 +1,31 @@
+﻿@using NMP.Portal.Resources
+@using System.Globalization
+@model NMP.Portal.ViewModels.ReportViewModel
+@{
+    ViewData["Title"] = Resource.lblField;
+}
+
+@section BeforeContent {
+    <div class="noprint">
+        <govuk-back-link asp-action="ExportFieldsOrCropType" asp-controller="Report">@string.Format(Resource.lblBackToYourPlan, Model.Year)</govuk-back-link>
+    </div>
+
+}
+@if (TempData["NMaxReport"] != null)
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item href="#">@TempData["NMaxReport"]</govuk-error-summary-item>
+    </govuk-error-summary>
+}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <govuk-notification-banner>
+            <govuk-notification-banner-title>
+                @Resource.lblImportant
+            </govuk-notification-banner-title>
+            <p class="govuk-body">This page is under construction.</p>
+
+
+        </govuk-notification-banner>
+    </div>
+</div>

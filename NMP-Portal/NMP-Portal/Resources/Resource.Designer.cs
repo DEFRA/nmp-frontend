@@ -9883,6 +9883,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Which crops would you like to create a {0} N-max report for?.
+        /// </summary>
+        public static string lblWhichCropsWouldYouLikeToCreateNMaxReportFor {
+            get {
+                return ResourceManager.GetString("lblWhichCropsWouldYouLikeToCreateNMaxReportFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which cut or grazing in this application for ?.
         /// </summary>
         public static string lblWhichCutOrGrazingInThisApplicationForAllField {

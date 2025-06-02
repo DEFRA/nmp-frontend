@@ -25,13 +25,27 @@
 {
     <form asp-action="ReportType" asp-controller="Report" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
-
+        <div hidden="true">
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
-
+        @if (Model.FieldList != null && Model.FieldList.Count > 0)
+        {
+            @for (int i = 0; i < Model.FieldList.Count; i++)
+            {
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldList[i]" value="@Model.FieldList[i]"></govuk-input>
+            }
+        }
+        @if (Model.CropTypeList != null && Model.CropTypeList.Count > 0)
+        {
+            @for (int i = 0; i < Model.CropTypeList.Count; i++)
+            {
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeList[i]" value="@Model.CropTypeList[i]"></govuk-input>
+            }
+        }
+        </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
 
