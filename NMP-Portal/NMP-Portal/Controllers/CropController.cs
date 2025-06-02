@@ -2262,8 +2262,10 @@ namespace NMP.Portal.Controllers
                 var fieldIdsForFilter = fieldList.Select(f => f.ID);
                 harvestYearPlanResponse = harvestYearPlanResponse
                     .Where(x => fieldIdsForFilter.Contains(x.FieldID))
-                    .ToList();
+                    .ToList();                
             }
+                ViewBag.FieldOptions = fieldList;
+            
             //Fetch fields allowed for second crop based on first crop
             List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = harvestYearPlanResponse.Where(x => x.CropInfo1 != null && x.Yield != null).ToList();
             List<int> fieldsAllowedForSecondCrop = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) ? false : true);
@@ -2272,8 +2274,7 @@ namespace NMP.Portal.Controllers
             {
                 var harvestFieldIds = harvestYearPlanResponse.Select(x => x.FieldID.ToString()).ToList();
                 fieldList = fieldList.Where(x => !harvestFieldIds.Contains(x.ID.ToString()) || fieldsAllowedForSecondCrop.Contains(x.ID ?? 0)).ToList();
-            }
-            ViewBag.FieldOptions = fieldList;
+            }         
 
             if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass)
             {
@@ -3675,18 +3676,27 @@ namespace NMP.Portal.Controllers
                     secondCropList = await _cropService.FetchSecondCropListByFirstCropId(firstCropPlans.CropTypeID);
                     if (secondCropList.Count > 0)
                     {
-                        foreach (int secondCropTypeId in secondCropList)
+                        if (secondCropList.Any(x => x == cropTypeId))
                         {
-                            if (secondCropTypeId != cropTypeId)
-                            {
-                                fieldRemoveList.Add(firstCropPlans.FieldID);
-                                break;
-                            }
-                            else
-                            {
-                                break;
-                            }
+                            break;
                         }
+                        else
+                        {
+                            fieldRemoveList.Add(firstCropPlans.FieldID);
+                            break;
+                        }
+                        //foreach (int secondCropTypeId in secondCropList)
+                        //{
+                        //    if (secondCropTypeId != cropTypeId)
+                        //    {
+                        //        fieldRemoveList.Add(firstCropPlans.FieldID);
+                        //        break;
+                        //    }
+                        //    else
+                        //    {
+                        //        break;
+                        //    }
+                        //}
                     }
                 }
                 if (cropPlanCount == 1)
