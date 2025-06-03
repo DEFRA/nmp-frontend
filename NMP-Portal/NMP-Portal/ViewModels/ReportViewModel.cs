@@ -17,5 +17,6 @@ namespace NMP.Portal.ViewModels
         public CropAndFieldReportResponse? CropAndFieldReport { get; set; }
         public List<NutrientResponseWrapper>? Nutrients { get; set; }
         public List<string>? CropTypeList { get; set; }
+        public Farm? Farm { get; set; }
     }
 }

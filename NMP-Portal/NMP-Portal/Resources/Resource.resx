@@ -4451,4 +4451,19 @@ live</value>
   <data name="lblWhichCropsWouldYouLikeToCreateNMaxReportFor" xml:space="preserve">
     <value>Which crops would you like to create a {0} N-max report for?</value>
   </data>
+  <data name="lblHarvestYearValue" xml:space="preserve">
+    <value>Harvest year {0}</value>
+  </data>
+  <data name="lblNMaxCompliant" xml:space="preserve">
+    <value>N-max compliant</value>
+  </data>
+  <data name="lblNMaxLimitsForFarm" xml:space="preserve">
+    <value>N-max limits for {0}</value>
+  </data>
+  <data name="lblSingleBusinessIdentifier" xml:space="preserve">
+    <value>Single Business Identifier</value>
+  </data>
+  <data name="lblSummary" xml:space="preserve">
+    <value>Summary</value>
+  </data>
 </root>

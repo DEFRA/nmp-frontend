@@ -152,7 +152,7 @@ namespace NMP.Portal.Controllers
 
                         if (model.CropTypeList == null || model.CropTypeList.Count == 0)
                         {
-                            ModelState.AddModelError("CropTypeList", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblField.ToLower()));
+                            ModelState.AddModelError("CropTypeList", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropType.ToLower()));
                         }
                         if (!ModelState.IsValid)
                         {
@@ -399,6 +399,35 @@ namespace NMP.Portal.Controllers
                 else
                 {
                     return RedirectToAction("FarmList", "Farm");
+                }
+                List<NMaxReportResponse> nMaxReportResponses = new List<NMaxReportResponse>();
+                if (model.CropTypeList != null)
+                {
+                    (model.Farm, Error error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
+                    if (model.Farm != null && string.IsNullOrWhiteSpace(error.Message))
+                    {
+                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                        //(error, List<Field> fieldList) = await _fieldService.FetchFieldByFarmId(model.Farm.ID, Resource.lblFalse);
+                        //if (fieldList != null && fieldList.Count > 0 && string.IsNullOrWhiteSpace(error.Message))
+                        //{
+                        //    foreach (var field in fieldList)
+                        //    {
+                        //        List<Crop> cropList = await _cropService.FetchCropsByFieldId(field.ID.Value);
+                        //        if (cropList.Count > 0)
+                        //        {
+                        //            cropList = cropList.Where(x => x.Year == model.Year).ToList();
+                        //            if (cropList.Any(c => model.CropTypeList.Contains(c.CropTypeID.Value.ToString())))
+                        //            {
+                        //                foreach (var crop in cropList)
+                        //                {
+
+                        //                }
+                        //            }
+                        //        }
+                        //        //(Crop crop,Error error)=await _cropService.fetchcropty
+                        //    }
+                        //}
+                    }
                 }
 
             }

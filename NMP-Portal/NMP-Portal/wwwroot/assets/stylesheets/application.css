@@ -484,3 +484,6 @@ a:focus, .govuk-link:focus {
     display: block;
     width: 66%;
 }
+.nmax_header h1 {
+    margin-bottom: 20px;
+}
