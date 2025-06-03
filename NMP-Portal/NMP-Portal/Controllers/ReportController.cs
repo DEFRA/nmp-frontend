@@ -400,7 +400,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                List<NMaxReportResponse> nMaxReportResponses = new List<NMaxReportResponse>();
+                
                 if (model.CropTypeList != null)
                 {
                     (model.Farm, Error error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
