@@ -45,9 +45,9 @@ namespace NMP.Portal.Controllers
             return View();
         }
         [HttpGet]
-        public async Task<IActionResult> ExportFields()
+        public async Task<IActionResult> ExportFieldsOrCropType()
         {
-            _logger.LogTrace("Report Controller : ExportFields() action called");
+            _logger.LogTrace("Report Controller : ExportFieldsOrCropType() action called");
             ReportViewModel model = new ReportViewModel();
             try
             {
@@ -72,10 +72,23 @@ namespace NMP.Portal.Controllers
                         ViewBag.fieldList = SelectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
                     }
                 }
+                else
+                {
+                    (List<HarvestYearPlanResponse> cropTypeList, Error error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
+                    if (string.IsNullOrWhiteSpace(error.Message))
+                    {
+                        var SelectListItem = cropTypeList.Select(f => new SelectListItem
+                        {
+                            Value = f.CropTypeID.ToString(),
+                            Text = f.CropTypeName
+                        }).ToList();
+                        ViewBag.CropTypeList = SelectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
+                    }
+                }
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Report Controller : Exception in ExportFields() action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogTrace($"Report Controller : Exception in ExportFieldsOrCropType() action : {ex.Message}, {ex.StackTrace}");
                 TempData["ErrorOnHarvestYearOverview"] = ex.Message;
                 return RedirectToAction("HarvestYearOverview", new
                 {
@@ -87,43 +100,80 @@ namespace NMP.Portal.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ExportFields(ReportViewModel model)
+        public async Task<IActionResult> ExportFieldsOrCropType(ReportViewModel model)
         {
-            _logger.LogTrace("Report Controller : ExportFields() post action called");
+            _logger.LogTrace("Report Controller : ExportFieldsOrCropType() post action called");
             try
             {
                 int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
-                (List<HarvestYearPlanResponse> fieldList, Error error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
-                if (string.IsNullOrWhiteSpace(error.Message))
+                //fetch field
+                Error error = null;
+                if (model.ReportType != null && model.ReportType == (int)NMP.Portal.Enums.ReportType.CropAndFieldManagementReport)
                 {
-                    var selectListItem = fieldList.Select(f => new SelectListItem
+                    (List<HarvestYearPlanResponse> fieldList, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
+                    if (string.IsNullOrWhiteSpace(error.Message))
                     {
-                        Value = f.FieldID.ToString(),
-                        Text = f.FieldName
-                    }).ToList();
+                        var selectListItem = fieldList.Select(f => new SelectListItem
+                        {
+                            Value = f.FieldID.ToString(),
+                            Text = f.FieldName
+                        }).ToList();
 
-                    if (model.FieldList == null || model.FieldList.Count == 0)
-                    {
-                        ModelState.AddModelError("FieldList", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblField.ToLower()));
+                        if (model.FieldList == null || model.FieldList.Count == 0)
+                        {
+                            ModelState.AddModelError("FieldList", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblField.ToLower()));
+                        }
+                        if (!ModelState.IsValid)
+                        {
+                            ViewBag.fieldList = selectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
+                            return View("ExportFields", model);
+                        }
+                        if (model.FieldList.Count == 1 && model.FieldList[0] == Resource.lblSelectAll)
+                        {
+                            model.FieldList = selectListItem.Select(item => item.Value).ToList();
+                        }
+                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                     }
-                    if (!ModelState.IsValid)
-                    {
-                        ViewBag.fieldList = selectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
-                        return View("ExportFields", model);
-                    }
-                    if (model.FieldList.Count == 1 && model.FieldList[0] == Resource.lblSelectAll)
-                    {
-                        model.FieldList = selectListItem.Select(item => item.Value).ToList();
-                    }
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
-
                     return RedirectToAction("CropAndFieldManagement");
+
                 }
-                return View(model);
+                else
+                {
+                    //fetch crop type
+                    (List<HarvestYearPlanResponse> cropTypeList, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
+                    if (string.IsNullOrWhiteSpace(error.Message))
+                    {
+                        var SelectListItem = cropTypeList.Select(f => new SelectListItem
+                        {
+                            Value = f.CropTypeID.ToString(),
+                            Text = f.CropTypeName
+                        }).ToList();
+
+
+                        if (model.CropTypeList == null || model.CropTypeList.Count == 0)
+                        {
+                            ModelState.AddModelError("CropTypeList", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropType.ToLower()));
+                        }
+                        if (!ModelState.IsValid)
+                        {
+                            ViewBag.CropTypeList = SelectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
+                            return View("ExportFieldsOrCropType", model);
+                        }
+                        if (model.CropTypeList.Count == 1 && model.CropTypeList[0] == Resource.lblSelectAll)
+                        {
+                            model.CropTypeList = SelectListItem.Select(item => item.Value).ToList();
+                        }
+                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+
+                        return RedirectToAction("NMaxReport");
+                    }
+                    return View(model);
+                }
+
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Report Controller : Exception in ExportFields() post action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogTrace($"Report Controller : Exception in ExportFieldsOrCropType() post action : {ex.Message}, {ex.StackTrace}");
                 TempData["ErrorOnSelectField"] = ex.Message;
                 return View(model);
             }
@@ -149,8 +199,8 @@ namespace NMP.Portal.Controllers
             }
             else
             {
-                TempData["ErrorOnCropReport"] = error.Message;
-                return View(model);
+                TempData["ErrorOnSelectField"] = error.Message;
+                return RedirectToAction("ExportFieldsOrCropType");
             }
             (List<NutrientResponseWrapper> nutrients, error) = await _fieldService.FetchNutrientsAsync();
             if (error == null && nutrients.Count > 0)
@@ -319,8 +369,14 @@ namespace NMP.Portal.Controllers
                     return View("ReportType", model);
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
-
-                return RedirectToAction("ExportFields");
+                //if (model.ReportType != null && model.ReportType == (int)NMP.Portal.Enums.ReportType.CropAndFieldManagementReport)
+                //{
+                return RedirectToAction("ExportFieldsOrCropType");
+                //}
+                //else
+                //{
+                //    return RedirectToAction("ExportCrops");
+                //}
             }
             catch (Exception ex)
             {
@@ -328,6 +384,65 @@ namespace NMP.Portal.Controllers
                 TempData["ErrorOnReportSelection"] = ex.Message;
                 return View(model);
             }
+        }
+        [HttpGet]
+        public async Task<IActionResult> NMaxReport()
+        {
+            _logger.LogTrace("Report Controller : NMaxReport() action called");
+            ReportViewModel model = new ReportViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+                
+                if (model.CropTypeList != null)
+                {
+                    (model.Farm, Error error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
+                    if (model.Farm != null && string.IsNullOrWhiteSpace(error.Message))
+                    {
+                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                        //(error, List<Field> fieldList) = await _fieldService.FetchFieldByFarmId(model.Farm.ID, Resource.lblFalse);
+                        //if (fieldList != null && fieldList.Count > 0 && string.IsNullOrWhiteSpace(error.Message))
+                        //{
+                        //    foreach (var field in fieldList)
+                        //    {
+                        //        List<Crop> cropList = await _cropService.FetchCropsByFieldId(field.ID.Value);
+                        //        if (cropList.Count > 0)
+                        //        {
+                        //            cropList = cropList.Where(x => x.Year == model.Year).ToList();
+                        //            if (cropList.Any(c => model.CropTypeList.Contains(c.CropTypeID.Value.ToString())))
+                        //            {
+                        //                foreach (var crop in cropList)
+                        //                {
+
+                        //                }
+                        //            }
+                        //        }
+                        //        //(Crop crop,Error error)=await _cropService.fetchcropty
+                        //    }
+                        //}
+                    }
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in NMaxReport() action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnHarvestYearOverview"] = ex.Message;
+                return RedirectToAction("HarvestYearOverview", new
+                {
+                    id = model.EncryptedFarmId,
+                    year = model.EncryptedHarvestYear
+                });
+            }
+            return View(model);
         }
     }
 }

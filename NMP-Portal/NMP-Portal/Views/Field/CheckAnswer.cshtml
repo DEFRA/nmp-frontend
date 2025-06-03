@@ -198,7 +198,7 @@
                             @Resource.lblTotalFieldArea
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @(Model.TotalArea == null ? Resource.lblNotEntered : (Model.TotalArea == 0) ? ((int)Model.TotalArea) : string.Format("{0} {1}",  Model.TotalArea, Resource.lblhectar))
+                            @(Model.TotalArea == null ? Resource.lblNotEntered : (Model.TotalArea == 0) ? ((int)Model.TotalArea) : string.Format("{0} {1}", Model.TotalArea, Resource.lblhectar))
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="FieldMeasurements" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
@@ -209,7 +209,7 @@
                             @Resource.lblCroppedAreaForCheckAnswere
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @(Model.CroppedArea == null ? Resource.lblNotEntered : (Model.CroppedArea == 0) ? ((int)Model.CroppedArea) : string.Format("{0} {1}",Model.CroppedArea, Resource.lblhectar))
+                            @(Model.CroppedArea == null ? Resource.lblNotEntered : (Model.CroppedArea == 0) ? ((int)Model.CroppedArea) : string.Format("{0} {1}", Model.CroppedArea, Resource.lblhectar))
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="FieldMeasurements" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
@@ -220,7 +220,7 @@
                             @Resource.lblManureNonSpreadingAreaForCheckAnswere
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @(Model.ManureNonSpreadingArea == null ? Resource.lblNotEntered : Model.ManureNonSpreadingArea  == 0 ? ((int)Model.ManureNonSpreadingArea) : string.Format("{0} {1}", Model.ManureNonSpreadingArea, Resource.lblhectar))
+                            @(Model.ManureNonSpreadingArea == null ? Resource.lblNotEntered : Model.ManureNonSpreadingArea == 0 ? ((int)Model.ManureNonSpreadingArea) : string.Format("{0} {1}", Model.ManureNonSpreadingArea, Resource.lblhectar))
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="FieldMeasurements" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
@@ -306,7 +306,7 @@
                             <govuk-summary-list-row-action asp-action="RecentSoilAnalysisQuestion" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
-                    @if (Model.RecentSoilAnalysisQuestion.Value)
+                    @if (Model.RecentSoilAnalysisQuestion.HasValue && Model.RecentSoilAnalysisQuestion.Value)
                     {
                         <govuk-summary-list-row class=@((!Model.SoilAnalyses.SulphurDeficient.HasValue)?"govuk-error-message":"")>
                             <govuk-summary-list-row-key>
@@ -955,7 +955,7 @@
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
                         }
-                        
+
                         <govuk-summary-list-row class=@((!Model.PreviousGrasses.GrassManagementOptionID.HasValue)?"govuk-error-message":"")>
                             <govuk-summary-list-row-key>
                                 @Resource.lblHowWasTheGrassTypicallyManagedEachYear

@@ -3796,6 +3796,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Harvest year {0}.
+        /// </summary>
+        public static string lblHarvestYearValue {
+            get {
+                return ResourceManager.GetString("lblHarvestYearValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Has {0} been used for grass in any of the the last 3 years?.
         /// </summary>
         public static string lblHasBeenUsedForGrassInAnyOfTheLast3Year {
@@ -5387,6 +5396,24 @@ namespace NMP.Portal.Resources {
         public static string lblNMaxComplainceModule {
             get {
                 return ResourceManager.GetString("lblNMaxComplainceModule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to N-max compliant.
+        /// </summary>
+        public static string lblNMaxCompliant {
+            get {
+                return ResourceManager.GetString("lblNMaxCompliant", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to N-max limits for {0}.
+        /// </summary>
+        public static string lblNMaxLimitsForFarm {
+            get {
+                return ResourceManager.GetString("lblNMaxLimitsForFarm", resourceCulture);
             }
         }
         
@@ -7309,6 +7336,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Single Business Identifier.
+        /// </summary>
+        public static string lblSingleBusinessIdentifier {
+            get {
+                return ResourceManager.GetString("lblSingleBusinessIdentifier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Six.
         /// </summary>
         public static string lblSix {
@@ -7980,6 +8016,15 @@ namespace NMP.Portal.Resources {
         public static string lblSulphurSO3Lowercase {
             get {
                 return ResourceManager.GetString("lblSulphurSO3Lowercase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Summary.
+        /// </summary>
+        public static string lblSummary {
+            get {
+                return ResourceManager.GetString("lblSummary", resourceCulture);
             }
         }
         
@@ -9884,6 +9929,16 @@ namespace NMP.Portal.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to Which cut or grazing in this application for?.
+        ///   Looks up a localized string similar to Which crops would you like to create a {0} N-max report for?.
+        /// </summary>
+        public static string lblWhichCropsWouldYouLikeToCreateNMaxReportFor {
+            get {
+                return ResourceManager.GetString("lblWhichCropsWouldYouLikeToCreateNMaxReportFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which cut or grazing in this application for ?.
         /// </summary>
         public static string lblWhichCutOrGrazingInThisApplicationForAllField {
             get {
