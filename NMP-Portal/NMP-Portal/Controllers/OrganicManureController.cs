@@ -350,20 +350,20 @@ namespace NMP.Portal.Controllers
                                         else
                                         {
                                             cropList = cropList.Where(x => x.Year == model.HarvestYear).ToList();
+                                            if (cropList.Count > 1)
+                                            {
+                                                model.IsDoubleCropAvailable = true;
+                                                int counter = 0;
+                                                model.FieldName = (await _fieldService.FetchFieldByFieldId(Convert.ToInt32(fieldIdForManID))).Name;
+                                                model.DoubleCropEncryptedCounter = _fieldDataProtector.Protect(counter.ToString());
+                                            }
                                         }
                                         //cropList = cropList.Where(x => x.Year == model.HarvestYear && x.CropTypeID == Convert.ToInt32(model.FieldGroup)).ToList();
                                         if (cropList.Count > 0)
                                         {
                                             model.CropOrder = Convert.ToInt32(cropList.Select(x => x.CropOrder).FirstOrDefault());
                                         }
-
-                                        if (cropList.Count > 1)
-                                        {
-                                            model.IsDoubleCropAvailable = true;
-                                            int counter = 0;
-                                            model.FieldName = (await _fieldService.FetchFieldByFieldId(Convert.ToInt32(fieldIdForManID))).Name;
-                                            model.DoubleCropEncryptedCounter = _fieldDataProtector.Protect(counter.ToString());
-                                        }
+                                       
                                     }
 
                                     (List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldIdForManID, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup, model.CropOrder);
@@ -1609,15 +1609,14 @@ namespace NMP.Portal.Controllers
                                 }
                                 
                             }
-
                             model.DefoliationCurrentCounter = 0;
                         }
-                    }
-                    else
-                    {
-                        TempData["FieldError"] = error.Message;
-                        return View(model);
-                    }
+                        else
+                        {
+                            TempData["ManureTypeError"] = error.Message;
+                            return View(model);
+                        }
+                    }                    
 
                     foreach (var organic in model.OrganicManures)
                     {
