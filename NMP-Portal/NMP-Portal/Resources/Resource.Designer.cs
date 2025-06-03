@@ -2554,7 +2554,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to use existing nutrient values for {0}.
+        ///   Looks up a localized string similar to Do you want to use existing nutrient values for {0}?.
         /// </summary>
         public static string lblDoYouWantToUseExistingNutrientValuesFor {
             get {
@@ -2563,7 +2563,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to use these nutrient values from RB209 for {0} ?.
+        ///   Looks up a localized string similar to Do you want to use these nutrient values from RB209 for {0}?.
         /// </summary>
         public static string lblDoYouWantToUseTheseNutrientValuesFromRB209 {
             get {
@@ -4030,7 +4030,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How long is the gap between application and incorporation for your {0} ?.
+        ///   Looks up a localized string similar to How long is the gap between application and incorporation for your {0}?.
         /// </summary>
         public static string lblHowLongIsTheGapBetweenApplicationAndIncorporation {
             get {
@@ -4193,7 +4193,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How would you like to calculate the soil nitrogen (N) supply.
+        ///   Looks up a localized string similar to How would you like to calculate the soil nitrogen (N) supply?.
         /// </summary>
         public static string lblHowWouldYouLikeToCalculateSNSForCheckAnswer {
             get {
@@ -4229,7 +4229,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the incorporation method for your {0} ?.
+        ///   Looks up a localized string similar to What is the incorporation method for your {0}?.
         /// </summary>
         public static string lblHowWouldYouLikeToEnterTheApplicationRateA {
             get {
@@ -7516,7 +7516,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Is the soil deficient in sulphur (S)? not set.
+        ///   Looks up a localized string similar to Is the soil deficient in sulphur (S) not set?.
         /// </summary>
         public static string lblSoilDeficientInSulpurForCheckAnswerNotset {
             get {
@@ -9379,7 +9379,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the application method for your {0} ?.
+        ///   Looks up a localized string similar to What is the application method for your {0}?.
         /// </summary>
         public static string lblWhatIsTheApplicationMethodForYour {
             get {
@@ -9883,7 +9883,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Which cut or grazing in this application for ?.
+        ///   Looks up a localized string similar to Which cut or grazing in this application for?.
         /// </summary>
         public static string lblWhichCutOrGrazingInThisApplicationForAllField {
             get {
