@@ -315,7 +315,7 @@ namespace NMP.Portal.Services
             }
             return (fertilisers, error);
         }
-        public async Task<(decimal, Error)> FetchTotalNBasedOnManIdAndAppDate(int managementId, DateTime startDate, DateTime endDate,int? fertiliserId, bool confirm)
+        public async Task<(decimal, Error)> FetchTotalNBasedOnFieldIdAndAppDate(int fieldId, DateTime startDate, DateTime endDate,int? fertiliserId, bool confirm)
         {
             Error error = null;
             decimal totalN = 0;
@@ -331,7 +331,7 @@ namespace NMP.Portal.Services
                     url += $"&fertiliserId={fertiliserId.Value}";
                 }
 
-                url = string.Format(url, managementId, fromdate, toDate, confirm);
+                url = string.Format(url, fieldId, fromdate, toDate, confirm);
                 var response = await httpClient.GetAsync(url);
                 //var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchTotalNFromFertiliserBasedOnManIdAndAppDateAsyncAPI, managementId, fromdate, toDate, fertiliserId, confirm));
                 string result = await response.Content.ReadAsStringAsync();

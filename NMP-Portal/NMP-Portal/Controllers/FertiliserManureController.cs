@@ -2821,11 +2821,11 @@ namespace NMP.Portal.Controllers
             //if we are coming for update then we will exclude the fertiliserId.
             if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
             {
-                (totalNitrogen, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, startDate, endDate, model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.FertiliserId).FirstOrDefault(), false);
+                (totalNitrogen, error) = await _fertiliserManureService.FetchTotalNBasedOnFieldIdAndAppDate(fieldId, startDate, endDate, model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.FertiliserId).FirstOrDefault(), false);
             }
             else
             {
-                (totalNitrogen, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, startDate, endDate, null, false);
+                (totalNitrogen, error) = await _fertiliserManureService.FetchTotalNBasedOnFieldIdAndAppDate(fieldId, startDate, endDate, null, false);
 
             }
             if (error == null)
@@ -2870,11 +2870,11 @@ namespace NMP.Portal.Controllers
                     //if we are coming for update then we will exclude the fertiliserId.
                     if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
                     {
-                        (nitrogenInFourWeek, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, fourWeekDate, model.Date.Value, model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.FertiliserId).FirstOrDefault(), false);
+                        (nitrogenInFourWeek, error) = await _fertiliserManureService.FetchTotalNBasedOnFieldIdAndAppDate(fieldId, fourWeekDate, model.Date.Value, model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.FertiliserId).FirstOrDefault(), false);
                     }
                     else
                     {
-                        (nitrogenInFourWeek, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, fourWeekDate, model.Date.Value, null, false);
+                        (nitrogenInFourWeek, error) = await _fertiliserManureService.FetchTotalNBasedOnFieldIdAndAppDate(fieldId, fourWeekDate, model.Date.Value, null, false);
 
                     }
 
@@ -2998,11 +2998,11 @@ namespace NMP.Portal.Controllers
                 //if we are coming for update then we will exclude the fertiliserId.
                 if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
                 {
-                    (PreviousApplicationsNitrogen, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, startDate, endOfOctober, model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.FertiliserId).FirstOrDefault(), false);
+                    (PreviousApplicationsNitrogen, error) = await _fertiliserManureService.FetchTotalNBasedOnFieldIdAndAppDate(fieldId, startDate, endOfOctober, model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.FertiliserId).FirstOrDefault(), false);
                 }
                 else
                 {
-                    (PreviousApplicationsNitrogen, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, startDate, endOfOctober, null, false);
+                    (PreviousApplicationsNitrogen, error) = await _fertiliserManureService.FetchTotalNBasedOnFieldIdAndAppDate(fieldId, startDate, endOfOctober, null, false);
 
                 }
                 // (decimal PreviousApplicationsNitrogen, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, startDate, endOfOctober,null, false);
@@ -3063,11 +3063,11 @@ namespace NMP.Portal.Controllers
                     //if we are coming for update then we will exclude the fertiliserId.
                     if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
                     {
-                        (nitrogenWithinWarningPeriod, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, start, end, model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.FertiliserId).FirstOrDefault(), false);
+                        (nitrogenWithinWarningPeriod, error) = await _fertiliserManureService.FetchTotalNBasedOnFieldIdAndAppDate(fieldId, start, end, model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.FertiliserId).FirstOrDefault(), false);
                     }
                     else
                     {
-                        (nitrogenWithinWarningPeriod, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, start, end, null, false);
+                        (nitrogenWithinWarningPeriod, error) = await _fertiliserManureService.FetchTotalNBasedOnFieldIdAndAppDate(fieldId, start, end, null, false);
 
                     }
                     // (decimal nitrogenWithinWarningPeriod, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, start, end,null, false);
