@@ -788,7 +788,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>{0} must be a real date</value>
   </data>
   <data name="lblHowWouldYouLikeToCalculateSNSForCheckAnswer" xml:space="preserve">
-    <value>How would you like to calculate the soil nitrogen (N) supply</value>
+    <value>How would you like to calculate the soil nitrogen (N) supply?</value>
   </data>
   <data name="lblSoilDeficientInSulpurForCheckAnswer" xml:space="preserve">
     <value>Is the soil deficient in sulphur (S)?</value>
@@ -1490,16 +1490,16 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Autumn crop nitrogen (N) uptake</value>
   </data>
   <data name="lblDoYouWantToUseTheseNutrientValuesFromRB209" xml:space="preserve">
-    <value>Do you want to use these nutrient values from RB209 for {0} ?</value>
+    <value>Do you want to use these nutrient values from RB209 for {0}?</value>
   </data>
   <data name="lblEndOfSoilDrainage" xml:space="preserve">
     <value>End of soil drainage</value>
   </data>
   <data name="lblHowLongIsTheGapBetweenApplicationAndIncorporation" xml:space="preserve">
-    <value>How long is the gap between application and incorporation for your {0} ?</value>
+    <value>How long is the gap between application and incorporation for your {0}?</value>
   </data>
   <data name="lblHowWouldYouLikeToEnterTheApplicationRateA" xml:space="preserve">
-    <value>What is the incorporation method for your {0} ?</value>
+    <value>What is the incorporation method for your {0}?</value>
   </data>
   <data name="lblRainfallWithinSixHoursOfApplication" xml:space="preserve">
     <value>Rainfall within 6 hours of application</value>
@@ -1511,7 +1511,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Total rainfall since application</value>
   </data>
   <data name="lblWhatIsTheApplicationMethodForYour" xml:space="preserve">
-    <value>What is the application method for your {0} ?</value>
+    <value>What is the application method for your {0}?</value>
   </data>
   <data name="lblWhatTypeOfOrganicMaterialAreYouUsing" xml:space="preserve">
     <value>What type of organic material are you using in this application?</value>
@@ -2393,7 +2393,7 @@ cubic metres per hectare  not set</value>
     <value>If you do not enter a soil analysis, or if your most recent soil analysis is more than 5 years old, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop.</value>
   </data>
   <data name="lblSoilDeficientInSulpurForCheckAnswerNotset" xml:space="preserve">
-    <value>Is the soil deficient in sulphur (S)? not set</value>
+    <value>Is the soil deficient in sulphur (S) not set?</value>
   </data>
   <data name="MsgMagnesiumIndexNotSet" xml:space="preserve">
     <value>Magnesium (Mg) not set</value>
@@ -2792,7 +2792,7 @@ cubic metres per hectare  not set</value>
     <value>Enter name of the material</value>
   </data>
   <data name="lblDoYouWantToUseExistingNutrientValuesFor" xml:space="preserve">
-    <value>Do you want to use existing nutrient values for {0}</value>
+    <value>Do you want to use existing nutrient values for {0}?</value>
   </data>
   <data name="lblOtherOrganicMaterials" xml:space="preserve">
     <value>Other organic materials</value>
@@ -4434,7 +4434,7 @@ live</value>
     <value>Is this application for the same cut or grazing in all the selected grass fields?</value>
   </data>
   <data name="lblWhichCutOrGrazingInThisApplicationForAllField" xml:space="preserve">
-    <value>Which cut or grazing in this application for ?</value>
+    <value>Which cut or grazing in this application for?</value>
   </data>
   <data name="lblWhichCropIsThisManureApplication" xml:space="preserve">
     <value>Which crop is this manure application for in {0}?</value>
@@ -4447,5 +4447,23 @@ live</value>
   </data>
   <data name="lblTheseFields" xml:space="preserve">
     <value>these fields</value>
+  </data>
+  <data name="lblWhichCropsWouldYouLikeToCreateNMaxReportFor" xml:space="preserve">
+    <value>Which crops would you like to create a {0} N-max report for?</value>
+  </data>
+  <data name="lblHarvestYearValue" xml:space="preserve">
+    <value>Harvest year {0}</value>
+  </data>
+  <data name="lblNMaxCompliant" xml:space="preserve">
+    <value>N-max compliant</value>
+  </data>
+  <data name="lblNMaxLimitsForFarm" xml:space="preserve">
+    <value>N-max limits for {0}</value>
+  </data>
+  <data name="lblSingleBusinessIdentifier" xml:space="preserve">
+    <value>Single Business Identifier</value>
+  </data>
+  <data name="lblSummary" xml:space="preserve">
+    <value>Summary</value>
   </data>
 </root>

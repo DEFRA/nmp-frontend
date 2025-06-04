@@ -513,14 +513,14 @@ namespace NMP.Portal.Controllers
                                         else
                                         {
                                             cropList = cropList.Where(x => x.Year == model.HarvestYear).ToList();
-                                        }
 
-                                        if (cropList.Count > 1)
-                                        {
-                                            model.IsDoubleCropAvailable = true;
-                                            int counter = 0;
-                                            model.FieldName = (await _fieldService.FetchFieldByFieldId(Convert.ToInt32(field))).Name;
-                                            model.DoubleCropEncryptedCounter = _fieldDataProtector.Protect(counter.ToString());
+                                            if (cropList.Count > 1)
+                                            {
+                                                model.IsDoubleCropAvailable = true;
+                                                int counter = 0;
+                                                model.FieldName = (await _fieldService.FetchFieldByFieldId(Convert.ToInt32(field))).Name;
+                                                model.DoubleCropEncryptedCounter = _fieldDataProtector.Protect(counter.ToString());
+                                            }
                                         }
 
                                     }

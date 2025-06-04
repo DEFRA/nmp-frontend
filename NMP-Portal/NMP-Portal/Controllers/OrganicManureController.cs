@@ -350,20 +350,20 @@ namespace NMP.Portal.Controllers
                                         else
                                         {
                                             cropList = cropList.Where(x => x.Year == model.HarvestYear).ToList();
+                                            if (cropList.Count > 1)
+                                            {
+                                                model.IsDoubleCropAvailable = true;
+                                                int counter = 0;
+                                                model.FieldName = (await _fieldService.FetchFieldByFieldId(Convert.ToInt32(fieldIdForManID))).Name;
+                                                model.DoubleCropEncryptedCounter = _fieldDataProtector.Protect(counter.ToString());
+                                            }
                                         }
                                         //cropList = cropList.Where(x => x.Year == model.HarvestYear && x.CropTypeID == Convert.ToInt32(model.FieldGroup)).ToList();
                                         if (cropList.Count > 0)
                                         {
                                             model.CropOrder = Convert.ToInt32(cropList.Select(x => x.CropOrder).FirstOrDefault());
                                         }
-
-                                        if (cropList.Count > 1)
-                                        {
-                                            model.IsDoubleCropAvailable = true;
-                                            int counter = 0;
-                                            model.FieldName = (await _fieldService.FetchFieldByFieldId(Convert.ToInt32(fieldIdForManID))).Name;
-                                            model.DoubleCropEncryptedCounter = _fieldDataProtector.Protect(counter.ToString());
-                                        }
+                                       
                                     }
 
                                     (List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldIdForManID, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup, model.CropOrder);
@@ -1340,10 +1340,10 @@ namespace NMP.Portal.Controllers
                         }
                     }
 
-                    OrganicManureViewModel organicManureViewModel = JsonConvert.DeserializeObject<OrganicManureViewModel>(HttpContext.Session.GetString("OrganicManure"));
-                    if (organicManureViewModel != null)
+                    //OrganicManureViewModel organicManureViewModel = JsonConvert.DeserializeObject<OrganicManureViewModel>(HttpContext.Session.GetString("OrganicManure"));
+                    if (orgManureViewModel != null)
                     {
-                        if (organicManureViewModel.ManureTypeId != model.ManureTypeId)
+                        if (orgManureViewModel.ManureTypeId != model.ManureTypeId)
                         {
                             model.DryMatterPercent = null;
                             model.N = null;
@@ -1367,17 +1367,17 @@ namespace NMP.Portal.Controllers
                     //if manure type change 
                     if (model.IsCheckAnswer)
                     {
-                        OrganicManureViewModel organicManure = new OrganicManureViewModel();
-                        if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
-                        {
-                            organicManure = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
-                        }
-                        else
-                        {
-                            return RedirectToAction("FarmList", "Farm");
-                        }
+                        //OrganicManureViewModel organicManure = new OrganicManureViewModel();
+                        //if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
+                        //{
+                        //    organicManure = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+                        //}
+                        //else
+                        //{
+                        //    return RedirectToAction("FarmList", "Farm");
+                        //}
 
-                        if (organicManure.ManureTypeId != model.ManureTypeId)
+                        if (orgManureViewModel.ManureTypeId != model.ManureTypeId)
                         {
                             model.IsManureTypeChange = true;
                             if (model.ApplicationRateMethod == (int)NMP.Portal.Enums.ApplicationRate.UseDefaultApplicationRate)
@@ -1391,7 +1391,7 @@ namespace NMP.Portal.Controllers
                             }
 
                             //if manure type is changed liquid to soild or solid to liquid then ApplicationMethod,IncorporationMethod,IncorporationDelay need to set null
-                            if (organicManure.IsManureTypeLiquid.Value != model.IsManureTypeLiquid.Value)
+                            if (orgManureViewModel.IsManureTypeLiquid.Value != model.IsManureTypeLiquid.Value)
                             {
                                 model.ApplicationMethod = null;
                                 model.IncorporationMethod = null;
@@ -1557,10 +1557,32 @@ namespace NMP.Portal.Controllers
                                         DryMatterPercent = model.DryMatterPercent,
                                         UricAcid = model.UricAcid,
                                         EncryptedCounter = _fieldDataProtector.Protect(counter.ToString())
+
                                     };
                                     if (model.ApplicationDate != null)
                                     {
                                         organicManure.ApplicationDate = model.ApplicationDate.Value;
+                                    }
+                                    if (model.WindspeedID != null)
+                                    {
+                                        organicManure.WindspeedID = model.WindspeedID.Value;
+                                    }
+                                    if (model.RainfallWithinSixHoursID != null)
+                                    {
+                                        organicManure.RainfallWithinSixHoursID = model.RainfallWithinSixHoursID.Value;
+                                    }
+                                    if (model.TotalRainfall != null)
+                                    {
+                                        organicManure.Rainfall = model.TotalRainfall.Value;
+                                    }
+                                    if (model.MoistureTypeId != null)
+                                    {
+                                        organicManure.MoistureID = model.MoistureTypeId.Value;
+                                    }
+                                    if (model.SoilDrainageEndDate != null)
+                                    {
+                                        organicManure.SoilDrainageEndDate = model.SoilDrainageEndDate.Value;
+                                        organicManure.EndOfDrain = model.SoilDrainageEndDate.Value;
                                     }
                                     counter++;
                                     if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
@@ -1609,15 +1631,14 @@ namespace NMP.Portal.Controllers
                                 }
                                 
                             }
-
                             model.DefoliationCurrentCounter = 0;
                         }
                         else
                         {
-                            TempData["FieldError"] = error.Message;
+                            TempData["ManureTypeError"] = error.Message;
                             return View(model);
                         }
-                    }
+                    }                    
 
 
                     foreach (var organic in model.OrganicManures)
@@ -4684,7 +4705,7 @@ namespace NMP.Portal.Controllers
 
                             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                             {
-                                _httpContextAccessor.HttpContext?.Session.Remove("OrganicManure");
+                                _httpContextAccessor.HttpContext?.Session.Remove("OrganicManure");                                
                                 TempData["ErrorOnHarvestYearOverview"] = error.Message;
                                 return RedirectToAction("HarvestYearOverview", "Crop", new
                                 {
@@ -8506,31 +8527,31 @@ namespace NMP.Portal.Controllers
                                                         else
                                                         {
                                                             TempData["UpdateOrganicManureError"] = Resource.MsgWeCouldNotUpdateOrganicManure;
-                                                            return View(model);
+                                                            return RedirectToAction("CheckAnswer");
                                                         }
                                                     }
                                                     else
                                                     {
                                                         TempData["UpdateOrganicManureError"] = Resource.MsgWeCouldNotUpdateOrganicManure;
-                                                        return View(model);
+                                                        return RedirectToAction("CheckAnswer");
                                                     }
                                                 }
                                                 else
                                                 {
                                                     TempData["UpdateOrganicManureError"] = Resource.MsgWeCouldNotUpdateOrganicManure;
-                                                    return View(model);
+                                                    return RedirectToAction("CheckAnswer");
                                                 }
                                             }
                                             else
                                             {
                                                 TempData["UpdateOrganicManureError"] = Resource.MsgWeCouldNotUpdateOrganicManure;
-                                                return View(model);
+                                                return RedirectToAction("CheckAnswer");
                                             }
                                         }
                                         else
                                         {
                                             TempData["UpdateOrganicManureError"] = Resource.MsgWeCouldNotUpdateOrganicManure;
-                                            return View(model);
+                                            return RedirectToAction("CheckAnswer");
                                         }
                                     }
 
@@ -9372,23 +9393,7 @@ namespace NMP.Portal.Controllers
                                     }
                                 }
                             }
-                        }
-                        if (model.IsCheckAnswer && (!string.IsNullOrWhiteSpace(model.EncryptedOrgManureId)))
-                        {
-                            //if (model.UpdatedOrganicIds != null && model.UpdatedOrganicIds.Count > 0)
-                            //{
-                            //    foreach (var item in model.UpdatedOrganicIds)
-                            //    {
-                            //        if (item.ManagementPeriodId == model.OrganicManures[i].ManagementPeriodID)
-                            //        {
-                            //            if (managementPeriodID != null)
-                            //            {
-                            //                item.ManagementPeriodId = managementPeriodID;
-                            //            }
-                            //        }
-                            //    }
-                            //}
-                        }
+                        }                        
                         model.OrganicManures[i].ManagementPeriodID = managementPeriodID.Value;
 
 
@@ -9420,11 +9425,11 @@ namespace NMP.Portal.Controllers
                     }
                     model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("OrganicManure", model);
-                    if (model.IsCheckAnswer && (!model.IsAnyChangeInSameDefoliationFlag) && (!model.IsAnyChangeInField))
-                    {
-                        return RedirectToAction("CheckAnswer");
-                    }
-                    return RedirectToAction("ManureApplyingDate");
+                    //if (model.IsCheckAnswer && (!model.IsAnyChangeInSameDefoliationFlag) && (!model.IsAnyChangeInField) && (!model.IsManureTypeChange))
+                    //{
+                    //    return RedirectToAction("CheckAnswer");
+                    //}
+                    //return RedirectToAction("ManureApplyingDate");
                 }
 
                 if (model.DefoliationCurrentCounter == model.OrganicManures.Count)

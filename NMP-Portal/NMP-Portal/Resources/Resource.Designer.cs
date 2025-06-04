@@ -2554,7 +2554,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to use existing nutrient values for {0}.
+        ///   Looks up a localized string similar to Do you want to use existing nutrient values for {0}?.
         /// </summary>
         public static string lblDoYouWantToUseExistingNutrientValuesFor {
             get {
@@ -2563,7 +2563,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to use these nutrient values from RB209 for {0} ?.
+        ///   Looks up a localized string similar to Do you want to use these nutrient values from RB209 for {0}?.
         /// </summary>
         public static string lblDoYouWantToUseTheseNutrientValuesFromRB209 {
             get {
@@ -3796,6 +3796,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Harvest year {0}.
+        /// </summary>
+        public static string lblHarvestYearValue {
+            get {
+                return ResourceManager.GetString("lblHarvestYearValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Has {0} been used for grass in any of the the last 3 years?.
         /// </summary>
         public static string lblHasBeenUsedForGrassInAnyOfTheLast3Year {
@@ -4030,7 +4039,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How long is the gap between application and incorporation for your {0} ?.
+        ///   Looks up a localized string similar to How long is the gap between application and incorporation for your {0}?.
         /// </summary>
         public static string lblHowLongIsTheGapBetweenApplicationAndIncorporation {
             get {
@@ -4193,7 +4202,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How would you like to calculate the soil nitrogen (N) supply.
+        ///   Looks up a localized string similar to How would you like to calculate the soil nitrogen (N) supply?.
         /// </summary>
         public static string lblHowWouldYouLikeToCalculateSNSForCheckAnswer {
             get {
@@ -4229,7 +4238,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the incorporation method for your {0} ?.
+        ///   Looks up a localized string similar to What is the incorporation method for your {0}?.
         /// </summary>
         public static string lblHowWouldYouLikeToEnterTheApplicationRateA {
             get {
@@ -5387,6 +5396,24 @@ namespace NMP.Portal.Resources {
         public static string lblNMaxComplainceModule {
             get {
                 return ResourceManager.GetString("lblNMaxComplainceModule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to N-max compliant.
+        /// </summary>
+        public static string lblNMaxCompliant {
+            get {
+                return ResourceManager.GetString("lblNMaxCompliant", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to N-max limits for {0}.
+        /// </summary>
+        public static string lblNMaxLimitsForFarm {
+            get {
+                return ResourceManager.GetString("lblNMaxLimitsForFarm", resourceCulture);
             }
         }
         
@@ -7309,6 +7336,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Single Business Identifier.
+        /// </summary>
+        public static string lblSingleBusinessIdentifier {
+            get {
+                return ResourceManager.GetString("lblSingleBusinessIdentifier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Six.
         /// </summary>
         public static string lblSix {
@@ -7516,7 +7552,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Is the soil deficient in sulphur (S)? not set.
+        ///   Looks up a localized string similar to Is the soil deficient in sulphur (S) not set?.
         /// </summary>
         public static string lblSoilDeficientInSulpurForCheckAnswerNotset {
             get {
@@ -7980,6 +8016,15 @@ namespace NMP.Portal.Resources {
         public static string lblSulphurSO3Lowercase {
             get {
                 return ResourceManager.GetString("lblSulphurSO3Lowercase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Summary.
+        /// </summary>
+        public static string lblSummary {
+            get {
+                return ResourceManager.GetString("lblSummary", resourceCulture);
             }
         }
         
@@ -9379,7 +9424,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the application method for your {0} ?.
+        ///   Looks up a localized string similar to What is the application method for your {0}?.
         /// </summary>
         public static string lblWhatIsTheApplicationMethodForYour {
             get {
@@ -9879,6 +9924,16 @@ namespace NMP.Portal.Resources {
         public static string lblWhichCropIsThisManureApplication {
             get {
                 return ResourceManager.GetString("lblWhichCropIsThisManureApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which cut or grazing in this application for?.
+        ///   Looks up a localized string similar to Which crops would you like to create a {0} N-max report for?.
+        /// </summary>
+        public static string lblWhichCropsWouldYouLikeToCreateNMaxReportFor {
+            get {
+                return ResourceManager.GetString("lblWhichCropsWouldYouLikeToCreateNMaxReportFor", resourceCulture);
             }
         }
         

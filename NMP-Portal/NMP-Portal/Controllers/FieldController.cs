@@ -108,7 +108,7 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogTrace($"Field Controller : Exception in BackActionForAddField() action : {ex.Message}, {ex.StackTrace}");
-                TempData["ErrorOnBackButton"] = ex.Message;
+                TempData["AddFieldError"] = ex.Message;
                 return View("AddField", model);
             }
         }
@@ -304,6 +304,11 @@ namespace NMP.Portal.Controllers
                     }
 
                     _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
+                }
+                else
+                {
+                    TempData["AddFieldError"] = error.Message;
+                    return View("AddField", field);
                 }
                 return RedirectToAction("CheckAnswer");
             }
