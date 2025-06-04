@@ -1556,18 +1556,33 @@ namespace NMP.Portal.Controllers
                                         ManureQuantity = model.Quantity != null ? model.Quantity : null,
                                         DryMatterPercent = model.DryMatterPercent,
                                         UricAcid = model.UricAcid,
-                                        EncryptedCounter = _fieldDataProtector.Protect(counter.ToString()),
-                                        WindspeedID=model.WindspeedID.Value,
-                                        RainfallWithinSixHoursID = model.RainfallWithinSixHoursID.Value,
-                                        Rainfall=model.TotalRainfall.Value,
-                                        MoistureID = model.MoistureTypeId.Value,
-                                        SoilDrainageEndDate=model.SoilDrainageEndDate.Value,
-                                        EndOfDrain=model.SoilDrainageEndDate.Value,
+                                        EncryptedCounter = _fieldDataProtector.Protect(counter.ToString())
 
                                     };
                                     if (model.ApplicationDate != null)
                                     {
                                         organicManure.ApplicationDate = model.ApplicationDate.Value;
+                                    }
+                                    if (model.WindspeedID != null)
+                                    {
+                                        organicManure.WindspeedID = model.WindspeedID.Value;
+                                    }
+                                    if (model.RainfallWithinSixHoursID != null)
+                                    {
+                                        organicManure.RainfallWithinSixHoursID = model.RainfallWithinSixHoursID.Value;
+                                    }
+                                    if (model.TotalRainfall != null)
+                                    {
+                                        organicManure.Rainfall = model.TotalRainfall.Value;
+                                    }
+                                    if (model.MoistureTypeId != null)
+                                    {
+                                        organicManure.MoistureID = model.MoistureTypeId.Value;
+                                    }
+                                    if (model.SoilDrainageEndDate != null)
+                                    {
+                                        organicManure.SoilDrainageEndDate = model.SoilDrainageEndDate.Value;
+                                        organicManure.EndOfDrain = model.SoilDrainageEndDate.Value;
                                     }
                                     counter++;
                                     if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
