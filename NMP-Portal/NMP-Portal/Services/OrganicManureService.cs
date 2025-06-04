@@ -1599,7 +1599,7 @@ namespace NMP.Portal.Services
             return (soilTypeSoilTexture, error);
         }
 
-        public async Task<(decimal, Error)> FetchTotalNBasedByManIdAppDateAndIsGreenCompost(int managementId, DateTime startDate, DateTime endDate, bool confirm, bool isGreenFoodCompost, int? organicManureId)
+        public async Task<(decimal, Error)> FetchTotalNBasedByFieldIdAppDateAndIsGreenCompost(int fieldId, DateTime startDate, DateTime endDate, bool confirm, bool isGreenFoodCompost, int? organicManureId)
         {
             Error error = null;
             decimal totalN = 0;
@@ -1615,7 +1615,7 @@ namespace NMP.Portal.Services
                     url += $"&organicManureID={organicManureId.Value}";
                 }
 
-                url = string.Format(url, managementId, fromdate, toDate, confirm, isGreenFoodCompost);
+                url = string.Format(url, fieldId, fromdate, toDate, confirm, isGreenFoodCompost);
                 var response = await httpClient.GetAsync(url);
                 //var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchTotalNBasedByManIdAppDateAndIsGreenCompostAsyncAPI, managementId, fromdate, toDate, confirm,isGreenFoodCompost, organicManureId));
                 string result = await response.Content.ReadAsStringAsync();
