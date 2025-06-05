@@ -4469,4 +4469,67 @@ live</value>
   <data name="lblPrivate_beta_disclaimer_sub_heading_for_NmaxReport" xml:space="preserve">
     <value>Any recommendations and advice given in the private beta version of this service cannot be used:</value>
   </data>
+  <data name="lblAdjustedNMaxLimit" xml:space="preserve">
+    <value>Adjusted N-max limit</value>
+  </data>
+  <data name="lblCropArea" xml:space="preserve">
+    <value>Crop area</value>
+  </data>
+  <data name="lblCropYield" xml:space="preserve">
+    <value>Crop yield</value>
+  </data>
+  <data name="lblHectareForReport" xml:space="preserve">
+    <value>ha</value>
+  </data>
+  <data name="lblMaximumLimitForNApplied" xml:space="preserve">
+    <value>Maximum limit for N applied</value>
+  </data>
+  <data name="lblMillingWheat" xml:space="preserve">
+    <value>Milling Wheat</value>
+  </data>
+  <data name="lblPaperCrumbleOrStrawMulch" xml:space="preserve">
+    <value>Paper crumble or straw mulch</value>
+  </data>
+  <data name="lblSoilTypeAdjustment" xml:space="preserve">
+    <value>Soil type adjustment</value>
+  </data>
+  <data name="lblTonnesForReport" xml:space="preserve">
+    <value>t</value>
+  </data>
+  <data name="lblYieldAdjustment" xml:space="preserve">
+    <value>Yield adjustment</value>
+  </data>
+  <data name="lbDoNotComply" xml:space="preserve">
+    <value>do not comply</value>
+  </data>
+  <data name="lblComply" xml:space="preserve">
+    <value>comply</value>
+  </data>
+  <data name="LblCropTypeFields" xml:space="preserve">
+    <value>{0} fields</value>
+  </data>
+  <data name="lblNitrogenApplicationsForCropTypeFields" xml:space="preserve">
+    <value>Nitrogen applications for {0} fields</value>
+  </data>
+  <data name="lblNitrogenApplicationsToCropTypeContent1" xml:space="preserve">
+    <value>Nitrogen applications to {0}</value>
+  </data>
+  <data name="lblNitrogenApplicationsToCropTypeContent2" xml:space="preserve">
+    <value>with the N-max limit, based on field records.</value>
+  </data>
+  <data name="lblNMaxLimitForCropTypeFieldsBeforeAdjustmentsPerHectare" xml:space="preserve">
+    <value>N-max limit for {0} fields before adjustments: {1}kg per hectare.</value>
+  </data>
+  <data name="lblNMaxLimitForWinterWheatFields" xml:space="preserve">
+    <value>N-max limit for {0} fields</value>
+  </data>
+  <data name="lblTotal" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="lblPerHa" xml:space="preserve">
+    <value>Per ha</value>
+  </data>
+  <data name="lblNMaxReportSummaryContent" xml:space="preserve">
+    <value>To comply with the N-max limit for each crop type the total nitrogen (N) applied in fertiliser and crop available nitrogen from organic manures must not be greater than the adjusted N-max limit.</value>
+  </data>
 </root>

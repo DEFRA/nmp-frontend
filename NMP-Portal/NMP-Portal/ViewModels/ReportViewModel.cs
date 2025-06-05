@@ -18,5 +18,6 @@ namespace NMP.Portal.ViewModels
         public List<NutrientResponseWrapper>? Nutrients { get; set; }
         public List<string>? CropTypeList { get; set; }
         public Farm? Farm { get; set; }
+        public List<NMaxReportResponse>? NMaxLimitReport { get; set; }
     }
 }
