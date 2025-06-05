@@ -43,5 +43,6 @@ namespace NMP.Portal.Services
         Task<(List<SwardManagementResponse>, Error)> FetchSwardManagementBySwardTypeId(int swardTypeId);
 
         Task<(SwardTypeResponse, Error)> FetchSwardTypeBySwardTypeId(int swardTypeId);
+        Task<(List<CropTypeLinkingResponse>, Error)> FetchCropTypeLinking();
     }
 }

@@ -74,27 +74,43 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    (List<HarvestYearPlanResponse> cropTypeList, Error error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
-                    if (string.IsNullOrWhiteSpace(error.Message))
+                    (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
+                    if (string.IsNullOrWhiteSpace(error.Message)&& farm!=null)
                     {
-                        var SelectListItem = cropTypeList.Select(f => new SelectListItem
+                        (List<HarvestYearPlanResponse> cropTypeList, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
+                        if (string.IsNullOrWhiteSpace(error.Message) && cropTypeList != null && cropTypeList.Count > 0)
                         {
-                            Value = f.CropTypeID.ToString(),
-                            Text = f.CropTypeName
-                        }).ToList();
-                        ViewBag.CropTypeList = SelectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
+                            (List<CropTypeLinkingResponse> cropTypeLinking, error) = await _cropService.FetchCropTypeLinking();
+                            if (error==null&& cropTypeLinking!=null&& cropTypeLinking.Count>0)
+                            {
+                                if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England)
+                                {
+                                    cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitEngland != null).ToList();
+                                }
+                                else
+                                {
+                                    cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitWales != null).ToList();
+                                }
+                                cropTypeList = cropTypeList
+                                .Where(crop => cropTypeLinking
+                                .Any(link => link.CropTypeId == crop.CropTypeID))
+                                .ToList();
+                                var SelectListItem = cropTypeList.Select(f => new SelectListItem
+                                {
+                                    Value = f.CropTypeID.ToString(),
+                                    Text = f.CropTypeName
+                                }).ToList();
+                                ViewBag.CropTypeList = SelectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
+                            }
+                        }
                     }
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogTrace($"Report Controller : Exception in ExportFieldsOrCropType() action : {ex.Message}, {ex.StackTrace}");
-                TempData["ErrorOnHarvestYearOverview"] = ex.Message;
-                return RedirectToAction("HarvestYearOverview", new
-                {
-                    id = model.EncryptedFarmId,
-                    year = model.EncryptedHarvestYear
-                });
+                TempData["ErrorOnReportSelection"] = ex.Message;
+                return RedirectToAction("ReportType");
             }
             return View(model);
         }
@@ -140,36 +156,63 @@ namespace NMP.Portal.Controllers
                 else
                 {
                     //fetch crop type
-                    (List<HarvestYearPlanResponse> cropTypeList, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
-                    if (string.IsNullOrWhiteSpace(error.Message))
+                    (Farm farm,  error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
+                    if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                     {
-                        var SelectListItem = cropTypeList.Select(f => new SelectListItem
+                        (List<HarvestYearPlanResponse> cropTypeList, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
+                        if (string.IsNullOrWhiteSpace(error.Message))
                         {
-                            Value = f.CropTypeID.ToString(),
-                            Text = f.CropTypeName
-                        }).ToList();
-
-
-                        if (model.CropTypeList == null || model.CropTypeList.Count == 0)
-                        {
-                            ModelState.AddModelError("CropTypeList", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropType.ToLower()));
+                            (List<CropTypeLinkingResponse> cropTypeLinking, error) = await _cropService.FetchCropTypeLinking();
+                            if (error == null && cropTypeLinking != null && cropTypeLinking.Count > 0)
+                            {
+                                if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England)
+                                {
+                                    cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitEngland != null).ToList();
+                                }
+                                else
+                                {
+                                    cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitWales != null).ToList();
+                                }
+                                cropTypeList = cropTypeList
+                                .Where(crop => cropTypeLinking
+                                .Any(link => link.CropTypeId == crop.CropTypeID))
+                                .ToList();
+                                var SelectListItem = cropTypeList.Select(f => new SelectListItem
+                                {
+                                    Value = f.CropTypeID.ToString(),
+                                    Text = f.CropTypeName
+                                }).ToList();
+                                if (model.CropTypeList == null || model.CropTypeList.Count == 0)
+                                {
+                                    ModelState.AddModelError("CropTypeList", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropType.ToLower()));
+                                }
+                                if (!ModelState.IsValid)
+                                {
+                                    ViewBag.CropTypeList = SelectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
+                                    return View("ExportFieldsOrCropType", model);
+                                }
+                                if (model.CropTypeList.Count == 1 && model.CropTypeList[0] == Resource.lblSelectAll)
+                                {
+                                    model.CropTypeList = SelectListItem.Select(item => item.Value).ToList();
+                                }
+                                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                                ViewBag.CropTypeList = SelectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
+                            }
+                            else
+                            {
+                                TempData["ErrorOnSelectField"] = error != null ? error.Message : null;
+                                    return View(model);
+                            }
+                            return RedirectToAction("NMaxReport");
                         }
-                        if (!ModelState.IsValid)
+                        else
                         {
-                            ViewBag.CropTypeList = SelectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
-                            return View("ExportFieldsOrCropType", model);
+                            TempData["ErrorOnSelectField"] = error.Message;
+                            return View(model);
                         }
-                        if (model.CropTypeList.Count == 1 && model.CropTypeList[0] == Resource.lblSelectAll)
-                        {
-                            model.CropTypeList = SelectListItem.Select(item => item.Value).ToList();
-                        }
-                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
-
-                        return RedirectToAction("NMaxReport");
+                       
                     }
-                    return View(model);
                 }
-
             }
             catch (Exception ex)
             {
@@ -177,6 +220,7 @@ namespace NMP.Portal.Controllers
                 TempData["ErrorOnSelectField"] = ex.Message;
                 return View(model);
             }
+            return View(model);
         }
 
         [HttpGet]
@@ -400,7 +444,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                
+
                 if (model.CropTypeList != null)
                 {
                     (model.Farm, Error error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
