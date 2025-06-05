@@ -4526,14 +4526,8 @@ live</value>
   <data name="lblTotal" xml:space="preserve">
     <value>Total</value>
   </data>
-  <data name="String2" xml:space="preserve">
-    <value />
-  </data>
   <data name="lblPerHa" xml:space="preserve">
     <value>Per ha</value>
-  </data>
-  <data name="String3" xml:space="preserve">
-    <value>N-max compliant</value>
   </data>
   <data name="lblNMaxReportSummaryContent" xml:space="preserve">
     <value>To comply with the N-max limit for each crop type the total nitrogen (N) applied in fertiliser and crop available nitrogen from organic manures must not be greater than the adjusted N-max limit.</value>
