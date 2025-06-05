@@ -4466,4 +4466,7 @@ live</value>
   <data name="lblSummary" xml:space="preserve">
     <value>Summary</value>
   </data>
+  <data name="lblPrivate_beta_disclaimer_sub_heading_for_NmaxReport" xml:space="preserve">
+    <value>Any recommendations and advice given in the private beta version of this service cannot be used:</value>
+  </data>
 </root>

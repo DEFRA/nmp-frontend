@@ -6544,6 +6544,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Any recommendations and advice given in the private beta version of this service cannot be used:.
+        /// </summary>
+        public static string lblPrivate_beta_disclaimer_sub_heading_for_NmaxReport {
+            get {
+                return ResourceManager.GetString("lblPrivate_beta_disclaimer_sub_heading_for_NmaxReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to to demonstrate compliance with any regulation or legislation, such as NVZ rules.
         /// </summary>
         public static string lblPrivate_beta_disclaimer_sub_heading_line1 {
@@ -9928,7 +9937,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Which cut or grazing in this application for?.
         ///   Looks up a localized string similar to Which crops would you like to create a {0} N-max report for?.
         /// </summary>
         public static string lblWhichCropsWouldYouLikeToCreateNMaxReportFor {
@@ -9938,7 +9946,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Which cut or grazing in this application for ?.
+        ///   Looks up a localized string similar to Which cut or grazing in this application for?.
         /// </summary>
         public static string lblWhichCutOrGrazingInThisApplicationForAllField {
             get {

@@ -168,6 +168,7 @@ namespace NMP.Portal.Helpers
         public const string FetchGrassGrowthClassesAsyncAPI = "grass-growth/byFieldIds";
 
         public const string UpdateOrganicManureAsyncAPI = "organic-manures";
+        public const string FetchCropTypeLinkingsAsyncAPI = "crop-type-linkings";
 
         //Grass API Urls
         public const string FetchDefoliationSequencesBySwardTypeIdAndNumberOfCutAsyncAPI = "vendors/rb209/Grass/DefoliationSequences/{0}/{1}/{2}";
