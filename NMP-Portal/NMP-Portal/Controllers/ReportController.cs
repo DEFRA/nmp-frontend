@@ -97,12 +97,20 @@ namespace NMP.Portal.Controllers
                                 .Where(crop => cropTypeLinking
                                 .Any(link => link.CropTypeId == crop.CropTypeID))
                                 .DistinctBy(x => x.CropTypeID).ToList();
-                                var SelectListItem = cropTypeList.Select(f => new SelectListItem
+                                if (cropTypeList.Count > 0)
                                 {
-                                    Value = f.CropTypeID.ToString(),
-                                    Text = f.CropTypeName
-                                }).ToList();
-                                ViewBag.CropTypeList = SelectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
+                                    var SelectListItem = cropTypeList.Select(f => new SelectListItem
+                                    {
+                                        Value = f.CropTypeID.ToString(),
+                                        Text = f.CropTypeName
+                                    }).ToList();
+                                    ViewBag.CropTypeList = SelectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
+                                }
+                                else
+                                {
+                                    TempData["ErrorOnReportSelection"] =Resource.lblNoCropTypesAvailable;
+                                    return RedirectToAction("ReportType");
+                                }
                             }
                         }
                     }
