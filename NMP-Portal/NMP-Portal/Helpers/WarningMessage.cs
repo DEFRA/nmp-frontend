@@ -33,11 +33,11 @@ namespace NMP.Portal.Helpers
             }
             if (!isPerennial)
             {
-                if (isSandyShallowSoil && isFieldTypeArable && (fieldDetail.SowingDate >= september16 || fieldDetail.SowingDate == null))
+                if (isSandyShallowSoil && isFieldTypeArable && (sowingDate >= september16 || sowingDate == null))
                 {
                     closedPeriod = string.Format(Resource.lbl1Augto31Dec,Resource.lblAugust,Resource.lblDecember);
                 }
-                else if (isSandyShallowSoil && isFieldTypeArable && fieldDetail.SowingDate < september16)
+                else if (isSandyShallowSoil && isFieldTypeArable && sowingDate < september16)
                 {
                     closedPeriod = string.Format(Resource.lbl16Septo31Dec,Resource.lblSeptember,Resource.lblDecember);
                 }
@@ -48,11 +48,11 @@ namespace NMP.Portal.Helpers
             }
             else
             {
-                if (isSandyShallowSoil && isFieldTypeArable && (fieldDetail.SowingDate >= september16 || fieldDetail.SowingDate == null))
+                if (isSandyShallowSoil && isFieldTypeArable && (sowingDate >= september16 || fieldDetail.SowingDate == null))
                 {
                     closedPeriod = string.Format(Resource.lbl1Augto31Dec,Resource.lblAugust,Resource.lblDecember);
                 }
-                else if (isSandyShallowSoil && isFieldTypeArable && fieldDetail.SowingDate < september16)
+                else if (isSandyShallowSoil && isFieldTypeArable && sowingDate < september16)
                 {
                     closedPeriod = string.Format(Resource.lbl16Septo31Dec,Resource.lblSeptember,Resource.lblDecember);
                 }
@@ -62,11 +62,11 @@ namespace NMP.Portal.Helpers
                 }
                 if (fieldDetail.SowingDate != null)
                 {
-                    if (isSandyShallowSoil && isFieldTypeArable && fieldDetail.SowingDate.Value.Year < harvestYear)
+                    if (isSandyShallowSoil && isFieldTypeArable && sowingDate.Value.Year < harvestYear)
                     {
                         closedPeriod = string.Format(Resource.lbl16Septo31Dec,Resource.lblSeptember,Resource.lblDecember);
                     }
-                    else if (!isSandyShallowSoil && isFieldTypeArable && fieldDetail.SowingDate.Value.Year < harvestYear)
+                    else if (!isSandyShallowSoil && isFieldTypeArable && sowingDate.Value.Year < harvestYear)
                     {
                         closedPeriod = string.Format(Resource.lbl1Octto31Jan,Resource.lblOctober,Resource.lblJanuary);
                     }
