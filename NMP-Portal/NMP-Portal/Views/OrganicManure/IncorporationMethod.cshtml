@@ -226,6 +226,9 @@
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @string.Format(Resource.lblWhatIsTheIncorporationMethod, isOtherManure ? Model.OtherMaterialName : Model.ManureTypeName)
                     </govuk-radios-fieldset-legend>
+                    <govuk-radios-hint>
+                        @string.Format(Resource.lblTheseOptionsComeFromMannerNpk, Resource.lblIncorporationMethods)
+                    </govuk-radios-hint>
                     @if (ViewBag.IncorporationMethod != null && ViewBag.IncorporationMethod.Count > 0)
                     {
                         @foreach (var item in ViewBag.IncorporationMethod)

@@ -201,6 +201,9 @@
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @Resource.lblRainfallWithin6Hours
                     </govuk-radios-fieldset-legend>
+                    <govuk-radios-hint>
+                        @string.Format(Resource.lblTheseOptionsComeFromMannerNpk, Resource.lblRainfallTypes)
+                    </govuk-radios-hint>
                     @if (ViewBag.RainTypes != null && ViewBag.RainTypes.Count > 0)
                     {
                         @foreach (var item in ViewBag.RainTypes)
