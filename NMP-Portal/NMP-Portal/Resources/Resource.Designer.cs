@@ -5616,6 +5616,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No crop types available..
+        /// </summary>
+        public static string lblNoCropTypesAvailable {
+            get {
+                return ResourceManager.GetString("lblNoCropTypesAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No, Enter a different target yield for each fields.
         /// </summary>
         public static string lblNoEnterADifferentTargetYieldForEachFields {
