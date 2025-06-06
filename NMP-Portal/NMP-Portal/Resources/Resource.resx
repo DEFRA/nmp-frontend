@@ -4532,4 +4532,7 @@ live</value>
   <data name="lblNMaxReportSummaryContent" xml:space="preserve">
     <value>To comply with the N-max limit for each crop type the total nitrogen (N) applied in fertiliser and crop available nitrogen from organic manures must not be greater than the adjusted N-max limit.</value>
   </data>
+  <data name="lblNoCropTypesAvailable" xml:space="preserve">
+    <value>No crop types available.</value>
+  </data>
 </root>
