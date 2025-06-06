@@ -92,8 +92,8 @@ namespace NMP.Portal.Helpers
             if (isFieldTypeGrass)
             {
                 closedPeriod = isSandyShallowSoil
-                    ? string.Format(Resource.lbl1Novto31Dec,Resource.lblNovember,Resource.lblDecember)
-                    : string.Format(Resource.lbl1Novto15Jan,Resource.lblNovember,Resource.lblJanuary);
+                    ? string.Format(Resource.lbl1Septo31Dec, Resource.lblSeptember, Resource.lblDecember)
+                    : string.Format(Resource.lbl15Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
             }
             else if (isFieldTypeArable)
             {
