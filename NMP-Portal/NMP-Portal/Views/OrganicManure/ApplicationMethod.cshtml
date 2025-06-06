@@ -202,6 +202,9 @@
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @string.Format(Resource.lblHowAreYouGoingToApplyTheManure, Model.ManureTypeName)
                     </govuk-radios-fieldset-legend>
+                    <govuk-radios-hint>
+                        @string.Format(Resource.lblTheseOptionsComeFromMannerNpk, Resource.lblApplicationMethods)
+                    </govuk-radios-hint>
                     @if (ViewBag.ApplicationMethodList != null && ViewBag.ApplicationMethodList.Count > 0)
                     {
                         @foreach (var applicationMethod in ViewBag.ApplicationMethodList)

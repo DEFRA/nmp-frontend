@@ -45,20 +45,8 @@
             </div>
             @if (Model != null && Model.CountryID == (int)NMP.Portal.Enums.FarmCountry.England)
             {
-                <h1 class="govuk-heading-l">@Resource.lblNitrateVulnerableZones</h1>
-                <p class="govuk-body">
-                    @Resource.lblFirstRuleOfNVZForEngland
-                </p>
-                <p class="govuk-body">
-                    @Resource.lblSecondRuleOfNVZForEngland
-                </p>
-                <p class="govuk-body">
-                    @Resource.lblThirdRuleOfNVZForEngland
-                    <a target="_blank" href="https://www.gov.uk/government/collections/nitrate-vulnerable-zones">@Resource.lblFourthRuleOfNVZForEngland</a>
-                    @Resource.lblOpenInANewWindow
-                </p>
-                <br />
-                <h1 class="govuk-heading-l">@Resource.lblFarmingRulesForWater</h1>
+                <h1 class="govuk-heading-l">@Resource.lblRegulations_for_England</h1>
+                <h2 class="govuk-heading-m">@Resource.lblFarmingRulesForWater</h2>
                 <p class="govuk-body">
                     @Resource.lblFarmingRuleOfWaterFirstForEngland
                 </p>
@@ -73,6 +61,21 @@
                     <a target="_blank" href="https://www.gov.uk/guidance/rules-for-farmers-and-land-managers-to-prevent-water-pollution#assess-pollution-risks">@Resource.lblFarmingRuleOfWaterFifthForEngland</a>
                     @Resource.lblOpenInANewWindow
                 </p>
+                <br />
+                <h2 class="govuk-heading-m">@Resource.lblNitrateVulnerableZones</h2>
+                <p class="govuk-body">
+                    @Resource.lblFirstRuleOfNVZForEngland
+                </p>
+                <p class="govuk-body">
+                    @Resource.lblSecondRuleOfNVZForEngland
+                </p>
+                <p class="govuk-body">
+                    @Resource.lblThirdRuleOfNVZForEngland
+                    <a target="_blank" href="https://www.gov.uk/government/collections/nitrate-vulnerable-zones">@Resource.lblFourthRuleOfNVZForEngland</a>
+                    @Resource.lblOpenInANewWindow
+                </p>
+               
+               
             }
             else @if (Model != null && Model.CountryID == (int)NMP.Portal.Enums.FarmCountry.Wales)
             {

@@ -201,6 +201,9 @@
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @Resource.lblHowWetWasTheTopsoil
                     </govuk-radios-fieldset-legend>
+                    <govuk-radios-hint>
+                        @string.Format(Resource.lblTheseOptionsComeFromMannerNpk, Resource.lblMoistureTypes)
+                    </govuk-radios-hint>
                     @if (ViewBag.MoisterTypes != null && ViewBag.MoisterTypes.Count > 0)
                     {
                         @foreach (var item in ViewBag.MoisterTypes)
