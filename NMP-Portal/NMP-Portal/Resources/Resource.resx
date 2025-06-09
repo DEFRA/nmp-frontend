@@ -4365,7 +4365,7 @@ live</value>
     <value>How many grazings will you have in {0}?</value>
   </data>
   <data name="lblTheseOptionsComeFromRB209" xml:space="preserve">
-    <value>{0}. These options come from the AHDB Nutrient Management Guide (RB209).</value>
+    <value>Select one option. These are the {0} from the AHDB Nutrient Management Guide (RB209).</value>
   </data>
   <data name="lblWhatIsTheCutOrderInTheseFields" xml:space="preserve">
     <value>What is the cut order in {0}?</value>
@@ -4534,6 +4534,63 @@ live</value>
   </data>
   <data name="lblNoCropTypesAvailable" xml:space="preserve">
     <value>No crop types available.</value>
+  </data>
+  <data name="lblApplicationMethods" xml:space="preserve">
+    <value>application methods</value>
+  </data>
+  <data name="lblCropGroups" xml:space="preserve">
+    <value>crop groups</value>
+  </data>
+  <data name="lblCroupTypes" xml:space="preserve">
+    <value>crop types</value>
+  </data>
+  <data name="lblCutsAndGrazingOrder" xml:space="preserve">
+    <value>cuts and grazing order</value>
+  </data>
+  <data name="lblIncorporationDelays" xml:space="preserve">
+    <value>incorporation delays</value>
+  </data>
+  <data name="lblIncorporationMethods" xml:space="preserve">
+    <value>incorporation methods</value>
+  </data>
+  <data name="lblManureGroups" xml:space="preserve">
+    <value>manure groups</value>
+  </data>
+  <data name="lblManureTypes" xml:space="preserve">
+    <value>manure types</value>
+  </data>
+  <data name="lblMoistureTypes" xml:space="preserve">
+    <value>moisture types</value>
+  </data>
+  <data name="lblPotatoGroups" xml:space="preserve">
+    <value>potato groups</value>
+  </data>
+  <data name="lblPotentialCuts" xml:space="preserve">
+    <value>Potential Cuts</value>
+  </data>
+  <data name="lblRainfallTypes" xml:space="preserve">
+    <value>rainfall types</value>
+  </data>
+  <data name="lblRegulations_for_England" xml:space="preserve">
+    <value>Regulations for England</value>
+  </data>
+  <data name="lblSoilTypes" xml:space="preserve">
+    <value>soil types</value>
+  </data>
+  <data name="lblSwardManagements" xml:space="preserve">
+    <value>sward management options</value>
+  </data>
+  <data name="lblSwardTypes" xml:space="preserve">
+    <value>sward types</value>
+  </data>
+  <data name="lblTheseOptionsComeFromMannerNpk" xml:space="preserve">
+    <value>Select one option. These are the {0} from MANNER-NPK.</value>
+  </data>
+  <data name="lblValuesAreSourcedFromManner" xml:space="preserve">
+    <value>These values are taken from the MANNER-NPK.</value>
+  </data>
+  <data name="lblWindSpeeds" xml:space="preserve">
+    <value>wind speeds</value>
   </data>
   <data name="lblInorganicNRate" xml:space="preserve">
     <value>Inorganic N rate</value>

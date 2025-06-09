@@ -139,7 +139,7 @@
                         @* @(Model.WantToApplySns == true ? Resource.lblWhatWasThePreviousCropGroup : Resource.lblWhatIsTheCurrentCropGroup) *@
                         @string.Format(Resource.lblWhatWasThePreviousCropGroup, Model.LastHarvestYear)
                     </govuk-radios-fieldset-legend>
-                    <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
+                    <govuk-radios-hint>@string.Format(Resource.lblTheseOptionsComeFromRB209, Resource.lblCropGroups)</govuk-radios-hint>
 
                     @if (ViewBag.CropGroupList != null)
                     {

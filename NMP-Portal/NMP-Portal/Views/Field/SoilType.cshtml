@@ -110,7 +110,7 @@
                         @string.Format(Resource.lblWhatIsSoilType, Model.Name)
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>
-                        @Resource.lblSelectOneOption
+                        @string.Format(Resource.lblTheseOptionsComeFromRB209, Resource.lblSoilTypes)
                     </govuk-radios-hint>
                     @if (ViewBag.SoilTypesList != null)
                     {
