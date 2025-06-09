@@ -128,6 +128,8 @@ namespace NMP.Portal.Helpers
         public const string UpdateFertiliserAPI = "/fertiliser-manures";
         public const string FetchFieldWithSameDateAndManureTypeAPI = "/organic-manures/OrganicManuresData/{0}?farmId={1}&harvestYear={2}";
         public const string FetchManagementPeriodByCropIdAsyncAPI = "management-periods/crops/{0}?shortSummary={1}";
+        public const string FetchFertiliserTotalNByManagementPeriodIDAPI = "/fertiliser-manures/total-nitrogen-by/{0}";
+        public const string FetchOragnicManureAvailableNByManagementPeriodIDAPI = "/organic-manure/total-nitrogen-by/{0}";
         //Manner APi Url
         public const string FetchMannerApplicationMethodByIdAsyncAPI = "vendors/manner/application-methods/{0}";
         public const string FetchMannerIncorporationDelaysByMethodIdAndApplicableForAsyncAPI = "vendors/manner/incorporation-delays/by-incorp-method-and-applicable-for/{0}?applicableFor={1}";//    vendors/manner/incorporation-delays/by-incorp-method/{0}";

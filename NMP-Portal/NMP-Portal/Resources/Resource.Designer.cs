@@ -4481,6 +4481,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Inorganic N rate.
+        /// </summary>
+        public static string lblInorganicNRate {
+            get {
+                return ResourceManager.GetString("lblInorganicNRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inorganic N total.
+        /// </summary>
+        public static string lblInorganicNTotal {
+            get {
+                return ResourceManager.GetString("lblInorganicNTotal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to integrated MANNER-NPK calculations.
         /// </summary>
         public static string lblIntegratedMANNERNPKCalculations {
@@ -5743,6 +5761,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to N rate (all sources).
+        /// </summary>
+        public static string lblNRate {
+            get {
+                return ResourceManager.GetString("lblNRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to N total (all sources).
+        /// </summary>
+        public static string lblNTotal {
+            get {
+                return ResourceManager.GetString("lblNTotal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to NULL.
         /// </summary>
         public static string lblNull {
@@ -6000,6 +6036,24 @@ namespace NMP.Portal.Resources {
         public static string lblorganicAndInorganicMaterial {
             get {
                 return ResourceManager.GetString("lblorganicAndInorganicMaterial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Organic crop available N rate.
+        /// </summary>
+        public static string lblOrganicCropAvailableNRate {
+            get {
+                return ResourceManager.GetString("lblOrganicCropAvailableNRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Organic crop available N total.
+        /// </summary>
+        public static string lblOrganicCropAvailableNTotal {
+            get {
+                return ResourceManager.GetString("lblOrganicCropAvailableNTotal", resourceCulture);
             }
         }
         
