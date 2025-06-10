@@ -9089,15 +9089,41 @@ namespace NMP.Portal.Controllers
                         {
                             return RedirectToAction("DoubleCrop", new { q = model.DoubleCropEncryptedCounter });
                         }
-                        // if (model.FieldGroup == Resource.lblSelectSpecificFields && (!model.IsComingFromRecommendation))
-                        //{
-                        return RedirectToAction("ManureType");
-                        //}
-                        //return RedirectToAction("FieldGroup", new
-                        //{
-                        //    q = model.EncryptedFarmId,
-                        //    r = model.EncryptedHarvestYear
-                        //});
+                        //// if (model.FieldGroup == Resource.lblSelectSpecificFields && (!model.IsComingFromRecommendation))
+                        ////{
+                        //return RedirectToAction("ManureType");
+                        ////}
+                        ////return RedirectToAction("FieldGroup", new
+                        ////{
+                        ////    q = model.EncryptedFarmId,
+                        ////    r = model.EncryptedHarvestYear
+                        ////});
+
+
+                        if (model.FieldGroup == Resource.lblSelectSpecificFields && model.IsComingFromRecommendation)
+                        {
+                            if (model.FieldList.Count > 0 && model.FieldList.Count == 1)
+                            {
+                                string fieldId = model.FieldList[0];
+                                return RedirectToAction("Recommendations", "Crop", new
+                                {
+                                    q = model.EncryptedFarmId,
+                                    r = _fieldDataProtector.Protect(fieldId),
+                                    s = model.EncryptedHarvestYear
+
+                                });
+                            }
+                        }
+                        else if (model.FieldGroup == Resource.lblSelectSpecificFields && (!model.IsComingFromRecommendation))
+                        {
+                            return RedirectToAction("Fields");
+                        }
+                        return RedirectToAction("FieldGroup", new
+                        {
+                            q = model.EncryptedFarmId,
+                            r = model.EncryptedHarvestYear
+                        });
+
                     }
                     model.FieldID = model.OrganicManures[index].FieldID.Value;
                     model.FieldName = (await _fieldService.FetchFieldByFieldId(model.OrganicManures[index].FieldID.Value)).Name;
@@ -9425,11 +9451,11 @@ namespace NMP.Portal.Controllers
                     }
                     model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("OrganicManure", model);
-                    //if (model.IsCheckAnswer && (!model.IsAnyChangeInSameDefoliationFlag) && (!model.IsAnyChangeInField) && (!model.IsManureTypeChange))
-                    //{
-                    //    return RedirectToAction("CheckAnswer");
-                    //}
-                    //return RedirectToAction("ManureApplyingDate");
+                    if (model.IsCheckAnswer && (!model.IsAnyChangeInSameDefoliationFlag) && (!model.IsAnyChangeInField) && (!model.IsManureTypeChange))
+                    {
+                        return RedirectToAction("CheckAnswer");
+                    }
+                    return RedirectToAction("ManureApplyingDate");
                 }
 
                 if (model.DefoliationCurrentCounter == model.OrganicManures.Count)
@@ -9537,18 +9563,37 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("OtherMaterialName");
             }
-            if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value && model.IsDoubleCropAvailable)
+            if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
             {
                 return RedirectToAction("Defoliation", new { q = model.DefoliationEncryptedCounter });
             }
-            else if (model.IsDoubleCropAvailable)
+            if (model.IsDoubleCropAvailable)
             {
                 return RedirectToAction("DoubleCrop", new { q = model.DoubleCropEncryptedCounter });
             }
-            else
+            if (model.FieldGroup == Resource.lblSelectSpecificFields && model.IsComingFromRecommendation)
             {
-                return RedirectToAction("ManureType");
+                if (model.FieldList.Count > 0 && model.FieldList.Count == 1)
+                {
+                    string fieldId = model.FieldList[0];
+                    return RedirectToAction("Recommendations", "Crop", new
+                    {
+                        q = model.EncryptedFarmId,
+                        r = _fieldDataProtector.Protect(fieldId),
+                        s = model.EncryptedHarvestYear
+
+                    });
+                }
             }
+            else if (model.FieldGroup == Resource.lblSelectSpecificFields && (!model.IsComingFromRecommendation))
+            {
+                return RedirectToAction("Fields");
+            }
+            return RedirectToAction("FieldGroup", new
+            {
+                q = model.EncryptedFarmId,
+                r = model.EncryptedHarvestYear
+            });
         }
     }
 }
