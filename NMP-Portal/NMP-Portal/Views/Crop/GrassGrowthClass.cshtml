@@ -181,7 +181,7 @@
                             <p class="govuk-body">@Resource.lblThisGrowthClassGivesARangeForAnnualDryMatterYieldOf</p>
                             @if (ViewBag.YieldMin != null && ViewBag.YieldMax != null)
                             {
-                                <p class="govuk-body"><b>@string.Format(Resource.lblDryMatterYieldRangeTonnesPerHectare, ViewBag.YieldMin.Yield, ViewBag.YieldMax.Yield)</b></p>
+                                <p class="govuk-body"><b>@string.Format(Resource.lblDryMatterYieldRangeTonnesPerHectare, ViewBag.YieldMin.YieldId, ViewBag.YieldMax.YieldId)</b></p>
                             }
 
                             <govuk-radios asp-for="@Model.GrassGrowthClassQuestion">
