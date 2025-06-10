@@ -916,6 +916,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Adjustment for 3 or more cuts.
+        /// </summary>
+        public static string lblAdjustmentForThreeOrMoreCuts {
+            get {
+                return ResourceManager.GetString("lblAdjustmentForThreeOrMoreCuts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Adjustment value.
         /// </summary>
         public static string lblAdjustmentValue {

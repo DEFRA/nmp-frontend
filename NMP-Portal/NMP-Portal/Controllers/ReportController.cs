@@ -526,42 +526,43 @@ namespace NMP.Portal.Controllers
                                             int soilTypeAdjustment = 0;
                                             int millingWheat = 0;
                                             decimal yieldAdjustment = 0;
-
                                             int paperCrumbleOrStrawMulch = 0;
+                                            decimal grassCut = 0;
 
-                                            //if (crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterWheat || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SpringWheat
-                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterBarley || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SpringBarley
-                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SugarBeet
-                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup1 || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup2
-                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup3 || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup4
-                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.ForageMaize || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterBeans
-                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SpringBeans || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Peas
-                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Asparagus || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Carrots
-                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Radish || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Swedes
-                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.CelerySelfBlanching || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Courgettes
-                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.DwarfBeans || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Lettuce
-                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.BulbOnions || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SaladOnions
-                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Parsnips || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.RunnerBeans
-                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Sweetcorn || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Turnips
-                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Beetroot || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.BrusselSprouts
-                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Cabbage || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Calabrese
-                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Cauliflower || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Leeks)
-                                            //{
-                                            //    if (manureTypeCondition)
-                                            //    {
-                                            //        paperCrumbleOrStrawMulch = 80;
-                                            //    }
+                                            if (crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SugarBeet
+                                            || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup1 || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup2
+                                            || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup3 || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup4
+                                            || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.ForageMaize || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterBeans
+                                            || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SpringBeans || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Peas
+                                            || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Asparagus || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Carrots
+                                            || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Radish || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Swedes
+                                            || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.CelerySelfBlanching || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Courgettes
+                                            || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.DwarfBeans || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Lettuce
+                                            || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.BulbOnions || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SaladOnions
+                                            || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Parsnips || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.RunnerBeans
+                                            || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Sweetcorn || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Turnips
+                                            || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Beetroot || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.BrusselSprouts
+                                            || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Cabbage || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Calabrese
+                                            || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Cauliflower || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Leeks)
+                                            {
+                                                if (manureTypeCondition)
+                                                {
+                                                    paperCrumbleOrStrawMulch = 80;
+                                                }
 
-                                            //}
-                                            //else if (crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Grass)
-                                            //{
-                                            //    if (manureTypeCondition)
-                                            //    {
-                                            //        paperCrumbleOrStrawMulch = 80;
-                                            //    }
-                                            //}
-                                            //else
-                                            if (crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterWheat ||
+                                            }
+                                            else if (crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                            {
+                                                if (manureTypeCondition)
+                                                {
+                                                    paperCrumbleOrStrawMulch = 80;
+                                                }
+                                                if(crop.PotentialCut>=3)
+                                                {
+                                                    grassCut = 40;
+                                                }
+                                            }
+                                            else if (crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterWheat ||
                                                 crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SpringWheat ||
                                                 crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterBarley ||
                                                 crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SpringBarley ||
@@ -622,20 +623,26 @@ namespace NMP.Portal.Controllers
                                                         yieldAdjustment = (int)Math.Round(((crop.Yield.Value - 3.5m) / 0.1m) * 6);
                                                     }
                                                 }
-                                                (CropTypeLinkingResponse cropTypeLinkingResponse, error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID.Value);
-                                                if (error == null && cropTypeLinkingResponse != null)
+                                                
+                                            }
+
+                                            (CropTypeLinkingResponse cropTypeLinkingResponse, error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID.Value);
+                                            if (error == null && cropTypeLinkingResponse != null)
+                                            {
+                                                nMaxLimit = model.Farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England ?
+                                                    ((cropTypeLinkingResponse.NMaxLimitEngland != null) ? cropTypeLinkingResponse.NMaxLimitEngland.Value : 0) :
+                                                    ((cropTypeLinkingResponse.NMaxLimitWales != null) ? cropTypeLinkingResponse.NMaxLimitWales.Value : 0);
+                                                int nMaxLimitForCropType = nMaxLimit;
+                                                if (nMaxLimit!=null&&nMaxLimit > 0)
                                                 {
-                                                    nMaxLimit = model.Farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England ?
-                                                        ((cropTypeLinkingResponse.NMaxLimitEngland != null) ? cropTypeLinkingResponse.NMaxLimitEngland.Value : 0) :
-                                                        ((cropTypeLinkingResponse.NMaxLimitWales != null) ? cropTypeLinkingResponse.NMaxLimitWales.Value : 0);
-                                                    int nMaxLimitForCropType = nMaxLimit;
-                                                    nMaxLimitForCropType = Convert.ToInt32(Math.Round(nMaxLimitForCropType + soilTypeAdjustment + yieldAdjustment + millingWheat + paperCrumbleOrStrawMulch, 0));
+                                                    nMaxLimitForCropType = Convert.ToInt32(Math.Round(nMaxLimitForCropType + soilTypeAdjustment + yieldAdjustment + millingWheat + paperCrumbleOrStrawMulch + grassCut, 0));
                                                     var nMaxLimitReport = new NMaxLimitReportResponse
                                                     {
                                                         FieldId = field.ID.Value,
                                                         FieldName = field.Name,
                                                         CropTypeName = cropTypeName,
                                                         CropArea = field.CroppedArea.Value,
+                                                        AdjustmentForThreeOrMoreCuts = grassCut,
                                                         CropYield = crop.Yield != null ? crop.Yield.Value : null,
                                                         SoilTypeAdjustment = soilTypeAdjustment,
                                                         YieldAdjustment = yieldAdjustment,
@@ -685,18 +692,15 @@ namespace NMP.Portal.Controllers
                                                     {
                                                         nitrogenApplicationsForNMaxReportResponse.Add(nitrogenResponse);
                                                     }
-
-                                                }
-                                                else
-                                                {
-                                                    TempData["ErrorOnSelectField"] = error.Message;
-                                                    return RedirectToAction("ExportFieldsOrCropType");
-                                                    //TempData["NMaxReport"] = error.Message;
-                                                    //return View(model);
                                                 }
                                             }
-
-
+                                            else
+                                            {
+                                                TempData["ErrorOnSelectField"] = error.Message;
+                                                return RedirectToAction("ExportFieldsOrCropType");
+                                                //TempData["NMaxReport"] = error.Message;
+                                                //return View(model);
+                                            }
 
                                         }
                                         else

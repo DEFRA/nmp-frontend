@@ -4610,4 +4610,7 @@ live</value>
   <data name="lblOrganicCropAvailableNTotal" xml:space="preserve">
     <value>Organic crop available N total</value>
   </data>
+  <data name="lblAdjustmentForThreeOrMoreCuts" xml:space="preserve">
+    <value>Adjustment for 3 or more cuts</value>
+  </data>
 </root>
