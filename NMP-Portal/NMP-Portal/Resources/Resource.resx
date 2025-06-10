@@ -4434,7 +4434,7 @@ live</value>
     <value>Is this application for the same cut or grazing in all the selected grass fields?</value>
   </data>
   <data name="lblWhichCutOrGrazingInThisApplicationForAllField" xml:space="preserve">
-    <value>Which cut or grazing in this application for?</value>
+    <value>Which cut or grazing in this application for in these fields?</value>
   </data>
   <data name="lblWhichCropIsThisManureApplication" xml:space="preserve">
     <value>Which crop is this manure application for in {0}?</value>
