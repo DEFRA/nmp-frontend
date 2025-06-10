@@ -10297,7 +10297,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Which cut or grazing in this application for?.
+        ///   Looks up a localized string similar to Which cut or grazing in this application for in these fields?.
         /// </summary>
         public static string lblWhichCutOrGrazingInThisApplicationForAllField {
             get {
