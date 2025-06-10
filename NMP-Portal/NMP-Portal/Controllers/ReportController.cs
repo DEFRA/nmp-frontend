@@ -25,10 +25,12 @@ namespace NMP.Portal.Controllers
         private readonly IFieldService _fieldService;
         private readonly ICropService _cropService;
         private readonly IOrganicManureService _organicManureService;
+        private readonly IFertiliserManureService _fertiliserManureService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         public ReportController(ILogger<ReportController> logger, IDataProtectionProvider dataProtectionProvider, IHttpContextAccessor httpContextAccessor, IAddressLookupService addressLookupService,
             IUserFarmService userFarmService, IFarmService farmService,
-            IFieldService fieldService, ICropService cropService, IOrganicManureService organicManureService)
+            IFieldService fieldService, ICropService cropService, IOrganicManureService organicManureService,
+            IFertiliserManureService fertiliserManureService)
         {
             _logger = logger;
             _dataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.ReportController");
@@ -39,6 +41,7 @@ namespace NMP.Portal.Controllers
             _fieldService = fieldService;
             _cropService = cropService;
             _organicManureService = organicManureService;
+            _fertiliserManureService = fertiliserManureService;
             _httpContextAccessor = httpContextAccessor;
         }
         public IActionResult Index()
@@ -77,7 +80,7 @@ namespace NMP.Portal.Controllers
                 else
                 {
                     (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
-                    if (string.IsNullOrWhiteSpace(error.Message)&& farm!=null)
+                    if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                     {
                         (List<HarvestYearPlanResponse> cropTypeList, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
                         if (string.IsNullOrWhiteSpace(error.Message) && cropTypeList != null && cropTypeList.Count > 0)
@@ -108,7 +111,7 @@ namespace NMP.Portal.Controllers
                                 }
                                 else
                                 {
-                                    TempData["ErrorOnReportSelection"] =Resource.lblNoCropTypesAvailable;
+                                    TempData["ErrorOnReportSelection"] = Resource.lblNoCropTypesAvailable;
                                     return RedirectToAction("ReportType");
                                 }
                             }
@@ -166,7 +169,7 @@ namespace NMP.Portal.Controllers
                 else
                 {
                     //fetch crop type
-                    (Farm farm,  error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
+                    (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
                     if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                     {
                         (List<HarvestYearPlanResponse> cropTypeList, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
@@ -416,7 +419,7 @@ namespace NMP.Portal.Controllers
             {
                 if (model.ReportType == null)
                 {
-                    ModelState.AddModelError("ReportType",Resource.MsgSelectAnOptionBeforeContinuing);
+                    ModelState.AddModelError("ReportType", Resource.MsgSelectAnOptionBeforeContinuing);
                 }
                 if (!ModelState.IsValid)
                 {
@@ -510,183 +513,206 @@ namespace NMP.Portal.Controllers
                                                 }
                                             }
                                             cropTypeName = (await _fieldService.FetchCropTypeById(crop.CropTypeID.Value));
-                                            int? cropGroupId = null;
-                                            List<CropTypeResponse> cropTypeResponseList = (await _fieldService.FetchAllCropTypes());
-                                            if (cropTypeResponseList != null)
-                                            {
-                                                CropTypeResponse cropTypeResponse = cropTypeResponseList.Where(x => x.CropTypeId == crop.CropTypeID).FirstOrDefault();
-                                                if (cropTypeResponse != null)
-                                                {
-                                                    cropGroupId = cropTypeResponse.CropGroupId;
-                                                }
-                                            }
+                                            //int? cropGroupId = null;
+                                            //List<CropTypeResponse> cropTypeResponseList = (await _fieldService.FetchAllCropTypes());
+                                            //if (cropTypeResponseList != null)
+                                            //{
+                                            //    CropTypeResponse cropTypeResponse = cropTypeResponseList.Where(x => x.CropTypeId == crop.CropTypeID).FirstOrDefault();
+                                            //    if (cropTypeResponse != null)
+                                            //    {
+                                            //        cropGroupId = cropTypeResponse.CropGroupId;
+                                            //    }
+                                            //}
                                             int soilTypeAdjustment = 0;
                                             int millingWheat = 0;
                                             decimal yieldAdjustment = 0;
 
-                                            if (cropGroupId != null)
+                                            int paperCrumbleOrStrawMulch = 0;
+
+                                            //if (crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterWheat || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SpringWheat
+                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterBarley || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SpringBarley
+                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SugarBeet
+                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup1 || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup2
+                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup3 || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup4
+                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.ForageMaize || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterBeans
+                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SpringBeans || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Peas
+                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Asparagus || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Carrots
+                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Radish || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Swedes
+                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.CelerySelfBlanching || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Courgettes
+                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.DwarfBeans || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Lettuce
+                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.BulbOnions || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SaladOnions
+                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Parsnips || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.RunnerBeans
+                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Sweetcorn || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Turnips
+                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Beetroot || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.BrusselSprouts
+                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Cabbage || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Calabrese
+                                            //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Cauliflower || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Leeks)
+                                            //{
+                                            //    if (manureTypeCondition)
+                                            //    {
+                                            //        paperCrumbleOrStrawMulch = 80;
+                                            //    }
+
+                                            //}
+                                            //else if (crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                            //{
+                                            //    if (manureTypeCondition)
+                                            //    {
+                                            //        paperCrumbleOrStrawMulch = 80;
+                                            //    }
+                                            //}
+                                            //else
+                                            if (crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterWheat ||
+                                                crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SpringWheat ||
+                                                crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterBarley ||
+                                                crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SpringBarley ||
+                                                crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape)
                                             {
-                                                int paperCrumbleOrStrawMulch = 0;
-
-                                                //if (crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterWheat || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SpringWheat
-                                                //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterBarley || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SpringBarley
-                                                //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SugarBeet
-                                                //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup1 || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup2
-                                                //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup3 || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup4
-                                                //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.ForageMaize || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterBeans
-                                                //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SpringBeans || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Peas
-                                                //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Asparagus || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Carrots
-                                                //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Radish || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Swedes
-                                                //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.CelerySelfBlanching || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Courgettes
-                                                //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.DwarfBeans || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Lettuce
-                                                //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.BulbOnions || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SaladOnions
-                                                //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Parsnips || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.RunnerBeans
-                                                //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Sweetcorn || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Turnips
-                                                //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Beetroot || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.BrusselSprouts
-                                                //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Cabbage || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Calabrese
-                                                //|| crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Cauliflower || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Leeks)
-                                                //{
-                                                //    if (manureTypeCondition)
-                                                //    {
-                                                //        paperCrumbleOrStrawMulch = 80;
-                                                //    }
-
-                                                //}
-                                                //else if (crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.Grass)
-                                                //{
-                                                //    if (manureTypeCondition)
-                                                //    {
-                                                //        paperCrumbleOrStrawMulch = 80;
-                                                //    }
-                                                //}
-                                                //else
-                                                if (crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterWheat ||
-                                                    crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SpringWheat ||
-                                                    crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterBarley ||
-                                                    crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SpringBarley ||
-                                                    crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape)
+                                                if (manureTypeCondition)
                                                 {
-                                                    if (manureTypeCondition)
+                                                    paperCrumbleOrStrawMulch = 80;
+                                                }
+                                                if (crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterWheat)
+                                                {
+                                                    if (field.SoilTypeID != null && field.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.Shallow)
                                                     {
-                                                        paperCrumbleOrStrawMulch = 80;
+                                                        soilTypeAdjustment = 20;
                                                     }
-                                                    if (crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterWheat)
+                                                    if (crop.CropInfo1 != null && crop.CropInfo1 == (int)NMP.Portal.Enums.CropInfoOne.Milling)
                                                     {
-                                                        if (field.SoilTypeID != null && field.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.Shallow)
-                                                        {
-                                                            soilTypeAdjustment = 20;
-                                                        }
-                                                        if (crop.CropInfo1 != null && crop.CropInfo1 == (int)NMP.Portal.Enums.CropInfoOne.Milling)
-                                                        {
-                                                            millingWheat = 40;
-                                                        }
-                                                        if (crop.Yield != null && crop.Yield > 8.0m)
-                                                        {
-                                                            yieldAdjustment = (int)Math.Round(((crop.Yield.Value - 8.0m) / 0.1m) * 2);
-                                                        }
+                                                        millingWheat = 40;
                                                     }
-                                                    else if (crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SpringWheat)
+                                                    if (crop.Yield != null && crop.Yield > 8.0m)
                                                     {
-                                                        if (crop.CropInfo1 != null && crop.CropInfo1 == (int)NMP.Portal.Enums.CropInfoOne.Milling)
-                                                        {
-                                                            millingWheat = 40;
-                                                        }
-                                                        if (crop.Yield != null && crop.Yield > 7.0m)
-                                                        {
-                                                            yieldAdjustment = (int)Math.Round(((crop.Yield.Value - 7.0m) / 0.1m) * 2);
-                                                        }
-                                                    }
-                                                    else if (crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterBarley)
-                                                    {
-                                                        if (field.SoilTypeID != null && field.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.Shallow)
-                                                        {
-                                                            soilTypeAdjustment = 20;
-                                                        }
-                                                        if (crop.Yield != null && crop.Yield > 6.5m)
-                                                        {
-                                                            yieldAdjustment = (int)Math.Round(((crop.Yield.Value - 6.5m) / 0.1m) * 2);
-                                                        }
-                                                    }
-                                                    else if (crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SpringBarley)
-                                                    {
-                                                        if (crop.Yield != null && crop.Yield > 5.5m)
-                                                        {
-                                                            yieldAdjustment = (int)Math.Round(((crop.Yield.Value - 5.5m) / 0.1m) * 2);
-                                                        }
-                                                    }
-                                                    else if (crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape)
-                                                    {
-                                                        if (crop.Yield != null && crop.Yield > 3.5m)
-                                                        {
-                                                            yieldAdjustment = (int)Math.Round(((crop.Yield.Value - 3.5m) / 0.1m) * 6);
-                                                        }
-                                                    }
-                                                    (CropTypeLinkingResponse cropTypeLinkingResponse, error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID.Value);
-                                                    if (error == null && cropTypeLinkingResponse != null)
-                                                    {
-                                                        nMaxLimit = model.Farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England ?
-                                                            ((cropTypeLinkingResponse.NMaxLimitEngland != null) ? cropTypeLinkingResponse.NMaxLimitEngland.Value : 0) :
-                                                            ((cropTypeLinkingResponse.NMaxLimitWales != null) ? cropTypeLinkingResponse.NMaxLimitWales.Value : 0);
-                                                        int nMaxLimitForCropType = nMaxLimit;
-                                                        nMaxLimitForCropType = Convert.ToInt32(Math.Round(nMaxLimitForCropType + soilTypeAdjustment + yieldAdjustment + millingWheat + paperCrumbleOrStrawMulch, 0));
-                                                        var nMaxLimitReport = new NMaxLimitReportResponse
-                                                        {
-                                                            FieldId = field.ID.Value,
-                                                            FieldName = field.Name,
-                                                            CropTypeName = cropTypeName,
-                                                            CropArea = field.CroppedArea.Value,
-                                                            CropYield = crop.Yield != null ? crop.Yield.Value : null,
-                                                            SoilTypeAdjustment = soilTypeAdjustment,
-                                                            YieldAdjustment = yieldAdjustment,
-                                                            MillingWheat = millingWheat,
-                                                            PaperCrumbleOrStrawMulch = paperCrumbleOrStrawMulch,
-                                                            AdjustedNMaxLimit = nMaxLimitForCropType,
-                                                            MaximumLimitForNApplied = nMaxLimitForCropType * field.CroppedArea.Value
-                                                        };
-                                                        nMaxLimitReportResponse.Add(nMaxLimitReport);
-                                                        //var nitrogenResponse = new NitrogenApplicationsForNMaxReportResponse
-                                                        //{
-                                                        //    FieldId = 1,
-                                                        //    FieldName = "Field A",
-                                                        //    CropTypeName = "Wheat",
-                                                        //    CropArea = 20.5m,
-                                                        //    InorganicNRate = 1.2m,
-                                                        //    InorganicNTotal = 24.6m,
-                                                        //    OrganicCropAvailableNRate = 0.5m,
-                                                        //    OrganicCropAvailableNTotal = 10.2m,
-                                                        //    NRate = 1.7m,
-                                                        //    NTotal = 34.8m
-                                                        //};
-                                                        //if(nitrogenResponse!=null)
-                                                        //{
-                                                        //    NitrogenApplicationsForNMaxReportResponse.Add(nitrogenResponse);
-                                                        //}
-                                                        //NMaxLimitReportResponse.Add(nMaxLimitReport);
-
-                                                    }
-                                                    else
-                                                    {
-                                                        TempData["NMaxReport"] = error.Message;
-                                                        return View(model);
+                                                        yieldAdjustment = (int)Math.Round(((crop.Yield.Value - 8.0m) / 0.1m) * 2);
                                                     }
                                                 }
+                                                else if (crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SpringWheat)
+                                                {
+                                                    if (crop.CropInfo1 != null && crop.CropInfo1 == (int)NMP.Portal.Enums.CropInfoOne.Milling)
+                                                    {
+                                                        millingWheat = 40;
+                                                    }
+                                                    if (crop.Yield != null && crop.Yield > 7.0m)
+                                                    {
+                                                        yieldAdjustment = (int)Math.Round(((crop.Yield.Value - 7.0m) / 0.1m) * 2);
+                                                    }
+                                                }
+                                                else if (crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterBarley)
+                                                {
+                                                    if (field.SoilTypeID != null && field.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.Shallow)
+                                                    {
+                                                        soilTypeAdjustment = 20;
+                                                    }
+                                                    if (crop.Yield != null && crop.Yield > 6.5m)
+                                                    {
+                                                        yieldAdjustment = (int)Math.Round(((crop.Yield.Value - 6.5m) / 0.1m) * 2);
+                                                    }
+                                                }
+                                                else if (crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SpringBarley)
+                                                {
+                                                    if (crop.Yield != null && crop.Yield > 5.5m)
+                                                    {
+                                                        yieldAdjustment = (int)Math.Round(((crop.Yield.Value - 5.5m) / 0.1m) * 2);
+                                                    }
+                                                }
+                                                else if (crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape)
+                                                {
+                                                    if (crop.Yield != null && crop.Yield > 3.5m)
+                                                    {
+                                                        yieldAdjustment = (int)Math.Round(((crop.Yield.Value - 3.5m) / 0.1m) * 6);
+                                                    }
+                                                }
+                                                (CropTypeLinkingResponse cropTypeLinkingResponse, error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID.Value);
+                                                if (error == null && cropTypeLinkingResponse != null)
+                                                {
+                                                    nMaxLimit = model.Farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England ?
+                                                        ((cropTypeLinkingResponse.NMaxLimitEngland != null) ? cropTypeLinkingResponse.NMaxLimitEngland.Value : 0) :
+                                                        ((cropTypeLinkingResponse.NMaxLimitWales != null) ? cropTypeLinkingResponse.NMaxLimitWales.Value : 0);
+                                                    int nMaxLimitForCropType = nMaxLimit;
+                                                    nMaxLimitForCropType = Convert.ToInt32(Math.Round(nMaxLimitForCropType + soilTypeAdjustment + yieldAdjustment + millingWheat + paperCrumbleOrStrawMulch, 0));
+                                                    var nMaxLimitReport = new NMaxLimitReportResponse
+                                                    {
+                                                        FieldId = field.ID.Value,
+                                                        FieldName = field.Name,
+                                                        CropTypeName = cropTypeName,
+                                                        CropArea = field.CroppedArea.Value,
+                                                        CropYield = crop.Yield != null ? crop.Yield.Value : null,
+                                                        SoilTypeAdjustment = soilTypeAdjustment,
+                                                        YieldAdjustment = yieldAdjustment,
+                                                        MillingWheat = millingWheat,
+                                                        PaperCrumbleOrStrawMulch = paperCrumbleOrStrawMulch,
+                                                        AdjustedNMaxLimit = nMaxLimitForCropType,
+                                                        MaximumLimitForNApplied = nMaxLimitForCropType * field.CroppedArea.Value
+                                                    };
+                                                    nMaxLimitReportResponse.Add(nMaxLimitReport);
+                                                    decimal totalFertiliserN = 0;
+                                                    decimal totalOrganicAvailableN = 0;
+                                                    (List<ManagementPeriod> ManPeriodList, error) = await _cropService.FetchManagementperiodByCropId(crop.ID.Value, false);
+                                                    if (string.IsNullOrWhiteSpace(error.Message) && ManPeriodList != null && ManPeriodList.Count > 0)
+                                                    {
+                                                        foreach (var managementPeriod in ManPeriodList)
+                                                        {
+                                                            (decimal totalNitrogen, error) = await _fertiliserManureService.FetchTotalNByManagementPeriodID(managementPeriod.ID.Value);
+                                                            if (error == null)
+                                                            {
+                                                                totalFertiliserN = totalFertiliserN + totalNitrogen;
+                                                            }
+                                                        }
+                                                        foreach (var managementPeriod in ManPeriodList)
+                                                        {
+                                                            (decimal totalNitrogen, error) = await _organicManureService.FetchAvailableNByManagementPeriodID(managementPeriod.ID.Value);
+                                                            if (error == null)
+                                                            {
+                                                                totalOrganicAvailableN = totalOrganicAvailableN + totalNitrogen;
+                                                            }
+                                                        }
+                                                    }
+                                                    var nitrogenResponse = new NitrogenApplicationsForNMaxReportResponse
+                                                    {
+                                                        FieldId = field.ID.Value,
+                                                        FieldName = field.Name,
+                                                        CropTypeName = cropTypeName,
+                                                        CropArea = field.CroppedArea.Value,
+                                                        InorganicNRate = totalFertiliserN,
+                                                        InorganicNTotal = totalFertiliserN * field.CroppedArea.Value,
+                                                        OrganicCropAvailableNRate = totalOrganicAvailableN,
+                                                        OrganicCropAvailableNTotal = totalOrganicAvailableN * field.CroppedArea.Value,
+                                                        NRate = totalFertiliserN + totalOrganicAvailableN,
+                                                        NTotal = (totalFertiliserN + totalOrganicAvailableN) * field.CroppedArea.Value
+                                                    };
 
+                                                    if (nitrogenResponse != null)
+                                                    {
+                                                        nitrogenApplicationsForNMaxReportResponse.Add(nitrogenResponse);
+                                                    }
 
-                                                
+                                                }
+                                                else
+                                                {
+                                                    TempData["ErrorOnSelectField"] = error.Message;
+                                                    return RedirectToAction("ExportFieldsOrCropType");
+                                                    //TempData["NMaxReport"] = error.Message;
+                                                    //return View(model);
+                                                }
                                             }
+
+
 
                                         }
                                         else
                                         {
-                                            TempData["NMaxReport"] = error.Message;
-                                            return View(model);
+                                            TempData["ErrorOnSelectField"] = error.Message;
+                                            return RedirectToAction("ExportFieldsOrCropType");
                                         }
                                     }
                                 }
                                 else
                                 {
-                                    TempData["NMaxReport"] = error.Message;
-                                    return View(model);
+
+                                    TempData["ErrorOnSelectField"] = error.Message;
+                                    return RedirectToAction("ExportFieldsOrCropType");
+                                    //TempData["NMaxReport"] = error.Message;
+                                    //return View(model);
                                 }
 
                                 //}
@@ -697,7 +723,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     CropTypeName = cropTypeName,
                                     NmaxLimit = nMaxLimit,
-                                    IsComply = true,
+                                    IsComply = (nMaxLimitReportResponse == null && nitrogenApplicationsForNMaxReportResponse == null) ? false : (nMaxLimitReportResponse.Sum(x => x.MaximumLimitForNApplied) > nitrogenApplicationsForNMaxReportResponse.Sum(x => x.NTotal) ? true : false),
                                     NMaxLimitReportResponse = nMaxLimitReportResponse,
                                     NitrogenApplicationsForNMaxReportResponse = (nitrogenApplicationsForNMaxReportResponse != null && nitrogenApplicationsForNMaxReportResponse.Count > 0) ? nitrogenApplicationsForNMaxReportResponse : null
                                 };
@@ -709,16 +735,21 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        TempData["NMaxReport"] = error.Message;
-                        return View(model);
+
+                        TempData["ErrorOnSelectField"] = error.Message;
+                        return RedirectToAction("ExportFieldsOrCropType");
+                        //TempData["NMaxReport"] = error.Message;
+                        //return View(model);
                     }
                 }
                 else
                 {
-                    TempData["NMaxReport"] = error.Message;
-                    return View(model);
-                }
+                    //TempData["NMaxReport"] = error.Message;
+                    //return View(model);
 
+                    TempData["ErrorOnSelectField"] = error.Message;
+                    return RedirectToAction("ExportFieldsOrCropType");
+                }
 
             }
 

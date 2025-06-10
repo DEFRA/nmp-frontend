@@ -555,3 +555,56 @@ hr.seperator_forty {
 .margin-bottom-none {
     margin-bottom: 0;
 }
+.new_nmax_table, .new_nmax_rates_table, .new_nmax_table_grass, .new_nmax_rates_table_grass {
+    margin-bottom: 40px;
+    font-size: 17px;
+}
+
+
+.new_nmax_rates_table th {
+    margin-right: 5px;
+}
+
+.new_nmax_rates_table .col_1 {
+    width: 122px;
+}
+
+.new_nmax_rates_table .col_2 {
+    width: 45px;
+}
+
+.new_nmax_rates_table .col_7, .new_nmax_rates_table .col_8 {
+    width: 100px;
+}
+
+.new_nmax_table_grass th {
+    margin-right: 5px;
+}
+
+.new_nmax_table_grass .col_1 {
+    width: 122px;
+}
+
+.new_nmax_table_grass .col_2 {
+    width: 45px;
+}
+
+.new_nmax_table_grass .col_6, .new_nmax_table_grass .col_7 {
+    width: 100px;
+}
+
+.new_nmax_rates_table_grass th {
+    margin-right: 5px;
+}
+
+.new_nmax_rates_table_grass .col_1 {
+    width: 122px;
+}
+
+.new_nmax_rates_table_grass .col_2 {
+    width: 45px;
+}
+
+.new_nmax_rates_table_grass .col_7, .new_nmax_rates_table_grass .col_8 {
+    width: 100px;
+}

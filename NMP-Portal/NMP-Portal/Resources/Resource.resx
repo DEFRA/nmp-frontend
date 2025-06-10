@@ -4592,4 +4592,22 @@ live</value>
   <data name="lblWindSpeeds" xml:space="preserve">
     <value>wind speeds</value>
   </data>
+  <data name="lblInorganicNRate" xml:space="preserve">
+    <value>Inorganic N rate</value>
+  </data>
+  <data name="lblInorganicNTotal" xml:space="preserve">
+    <value>Inorganic N total</value>
+  </data>
+  <data name="lblNRate" xml:space="preserve">
+    <value>N rate (all sources)</value>
+  </data>
+  <data name="lblNTotal" xml:space="preserve">
+    <value>N total (all sources)</value>
+  </data>
+  <data name="lblOrganicCropAvailableNRate" xml:space="preserve">
+    <value>Organic crop available N rate</value>
+  </data>
+  <data name="lblOrganicCropAvailableNTotal" xml:space="preserve">
+    <value>Organic crop available N total</value>
+  </data>
 </root>
