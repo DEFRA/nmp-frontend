@@ -9425,11 +9425,11 @@ namespace NMP.Portal.Controllers
                     }
                     model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("OrganicManure", model);
-                    //if (model.IsCheckAnswer && (!model.IsAnyChangeInSameDefoliationFlag) && (!model.IsAnyChangeInField) && (!model.IsManureTypeChange))
-                    //{
-                    //    return RedirectToAction("CheckAnswer");
-                    //}
-                    //return RedirectToAction("ManureApplyingDate");
+                    if (model.IsCheckAnswer && (!model.IsAnyChangeInSameDefoliationFlag) && (!model.IsAnyChangeInField) && (!model.IsManureTypeChange))
+                    {
+                        return RedirectToAction("CheckAnswer");
+                    }
+                    return RedirectToAction("ManureApplyingDate");
                 }
 
                 if (model.DefoliationCurrentCounter == model.OrganicManures.Count)
