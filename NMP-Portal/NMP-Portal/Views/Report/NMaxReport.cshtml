@@ -153,7 +153,7 @@
                             @string.Format(Resource.lblNMaxLimitForWinterWheatFields, nMaxLimit.CropTypeName)
                         </h3>
                         <p class="govuk-body">
-                            @string.Format(Resource.lblNitrogenApplicationsToCropTypeContent1,nMaxLimit.CropTypeName)
+                            @string.Format(Resource.lblNitrogenApplicationsToCropTypeContent1, nMaxLimit.CropTypeName)
                             <span class="strong">
                                 @if (nMaxLimit.IsComply)
                                 {
@@ -175,21 +175,24 @@
                                     <th scope="col" class="govuk-table__header">@Resource.lblField</th>
                                     <th scope="col" class="govuk-table__header">@Resource.lblCropArea</th>
                                     <th scope="col" class="govuk-table__header">
-                                        @Resource.lblInorganicNRate
+                                        @(nMaxLimit.CropTypeName == Resource.lblGrass ? Resource.lblAdjustmentForThreeOrMoreCuts : Resource.lblCropYield)
                                         <br><span class="nonbold">@Resource.lblPerHa</span>
                                     </th>
-                                    <th scope="col" class="govuk-table__header">
-                                        @Resource.lblSoilTypeAdjustment
-                                        <br><span class="nonbold">@string.Format("{0} {1}", Resource.lblN,Resource.lblPerHa)</span>
-                                    </th>
-                                    <th scope="col" class="govuk-table__header">
-                                        @Resource.lblYieldAdjustment
-                                        <br><span class="nonbold">@string.Format("{0} {1}", Resource.lblN, Resource.lblPerHa)</span>
-                                    </th>
-                                    <th scope="col" class="govuk-table__header">
-                                        @Resource.lblMillingWheat
-                                        <br><span class="nonbold">@string.Format("{0} {1}", Resource.lblN, Resource.lblPerHa)</span>
-                                    </th>
+                                    @if (nMaxLimit.CropTypeName != Resource.lblGrass)
+                                    {
+                                        <th scope="col" class="govuk-table__header">
+                                            @Resource.lblSoilTypeAdjustment
+                                            <br><span class="nonbold">@string.Format("{0} {1}", Resource.lblN, Resource.lblPerHa)</span>
+                                        </th>
+                                        <th scope="col" class="govuk-table__header">
+                                            @Resource.lblYieldAdjustment
+                                            <br><span class="nonbold">@string.Format("{0} {1}", Resource.lblN, Resource.lblPerHa)</span>
+                                        </th>
+                                        <th scope="col" class="govuk-table__header">
+                                            @Resource.lblMillingWheat
+                                            <br><span class="nonbold">@string.Format("{0} {1}", Resource.lblN, Resource.lblPerHa)</span>
+                                        </th>
+                                    }
                                     <th scope="col" class="govuk-table__header">
                                         @Resource.lblPaperCrumbleOrStrawMulch
                                         <br><span class="nonbold">@string.Format("{0} {1}", Resource.lblN, Resource.lblPerHa)</span>
@@ -208,12 +211,19 @@
                                     <tr class="govuk-table__row">
                                         <td class="govuk-table__cell">@nMaxLimitReportResponse.FieldName</td>
                                         <td class="govuk-table__cell">@string.Format("{0}{1}", nMaxLimitReportResponse.CropArea, Resource.lblHectareForReport)</td>
-                                        <td class="govuk-table__cell">
-                                            @(nMaxLimitReportResponse.CropYield != null ? string.Format("{0}{1}", nMaxLimitReportResponse.CropYield, Resource.lblTonnesForReport) : Resource.lblHyphen)
-                                        </td>
-                                        <td class="govuk-table__cell">@((nMaxLimitReportResponse.SoilTypeAdjustment != null && nMaxLimitReportResponse.SoilTypeAdjustment > 0) ? string.Format("{0}{1}", nMaxLimitReportResponse.SoilTypeAdjustment, Resource.lblkg) : Resource.lblHyphen)</td>
-                                        <td class="govuk-table__cell">@((nMaxLimitReportResponse.YieldAdjustment != null && nMaxLimitReportResponse.YieldAdjustment > 0) ? string.Format("{0}{1}", nMaxLimitReportResponse.YieldAdjustment, Resource.lblkg) : Resource.lblHyphen)</td>
-                                        <td class="govuk-table__cell">@((nMaxLimitReportResponse.MillingWheat != null && nMaxLimitReportResponse.MillingWheat > 0) ? string.Format("{0}{1}", nMaxLimitReportResponse.MillingWheat, Resource.lblkg) : Resource.lblHyphen)</td>
+                                        @if (nMaxLimit.CropTypeName != Resource.lblGrass)
+                                        {
+                                            <td class="govuk-table__cell">
+                                                @(nMaxLimitReportResponse.CropYield != null ? string.Format("{0}{1}", nMaxLimitReportResponse.CropYield, Resource.lblTonnesForReport) : Resource.lblHyphen)
+                                            </td>
+                                            <td class="govuk-table__cell">@((nMaxLimitReportResponse.SoilTypeAdjustment != null && nMaxLimitReportResponse.SoilTypeAdjustment > 0) ? string.Format("{0}{1}", nMaxLimitReportResponse.SoilTypeAdjustment, Resource.lblkg) : Resource.lblHyphen)</td>
+                                            <td class="govuk-table__cell">@((nMaxLimitReportResponse.YieldAdjustment != null && nMaxLimitReportResponse.YieldAdjustment > 0) ? string.Format("{0}{1}", nMaxLimitReportResponse.YieldAdjustment, Resource.lblkg) : Resource.lblHyphen)</td>
+                                            <td class="govuk-table__cell">@((nMaxLimitReportResponse.MillingWheat != null && nMaxLimitReportResponse.MillingWheat > 0) ? string.Format("{0}{1}", nMaxLimitReportResponse.MillingWheat, Resource.lblkg) : Resource.lblHyphen)</td>
+                                        }
+                                        else
+                                        {
+                                            <td class="govuk-table__cell">@((nMaxLimitReportResponse.AdjustmentForThreeOrMoreCuts != null && nMaxLimitReportResponse.AdjustmentForThreeOrMoreCuts > 0) ? string.Format("{0}{1}", nMaxLimitReportResponse.AdjustmentForThreeOrMoreCuts, Resource.lblkg) : Resource.lblHyphen)</td>
+                                        }
                                         <td class="govuk-table__cell">@((nMaxLimitReportResponse.PaperCrumbleOrStrawMulch != null && nMaxLimitReportResponse.PaperCrumbleOrStrawMulch > 0) ? string.Format("{0}{1}", nMaxLimitReportResponse.PaperCrumbleOrStrawMulch, Resource.lblkg) : Resource.lblHyphen)</td>
                                         <td class="govuk-table__cell">@((nMaxLimitReportResponse.AdjustedNMaxLimit != null && nMaxLimitReportResponse.AdjustedNMaxLimit > 0) ? string.Format("{0}{1}", nMaxLimitReportResponse.AdjustedNMaxLimit, Resource.lblkg) : Resource.lblHyphen)</td>
                                         <td class="govuk-table__cell">@((nMaxLimitReportResponse.MaximumLimitForNApplied != null && nMaxLimitReportResponse.MaximumLimitForNApplied > 0) ? string.Format("{0}{1}", nMaxLimitReportResponse.MaximumLimitForNApplied, Resource.lblkg) : Resource.lblHyphen)</td>
@@ -224,11 +234,14 @@
                                         <tr class="govuk-table__row total_row">
                                             <th scope="col" class="govuk-table__header">@Resource.lblTotal</th>
                                             <th scope="col" class="govuk-table__header">@(nMaxLimit.NMaxLimitReportResponse.Sum(x => x.CropArea) > 0 ? string.Format("{0}{1}", nMaxLimit.NMaxLimitReportResponse.Sum(x => x.CropArea), Resource.lblHectareForReport) : Resource.lblHyphen)</th>
+                                            @if (nMaxLimit.CropTypeName != Resource.lblGrass)
+                                            {
                                             <th scope="col" class="nonbold govuk-table__header">@Resource.lblHyphen</th>
                                             <th scope="col" class="govuk-table__header">
                                                 @Resource.lblHyphen
                                             </th>
                                             <th scope="col" class="nonbold govuk-table__header">@Resource.lblHyphen</th>
+                                            }
                                             <th scope="col" class="govuk-table__header">@Resource.lblHyphen</th>
                                             <th scope="col" class="nonbold govuk-table__header">@Resource.lblHyphen</th>
                                             <th scope="col" class="govuk-table__header">@Resource.lblHyphen</th>
