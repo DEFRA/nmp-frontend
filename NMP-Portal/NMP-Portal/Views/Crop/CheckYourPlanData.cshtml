@@ -1,0 +1,73 @@
+﻿@using NMP.Portal.Resources
+@using NMP.Portal.ViewModels
+
+@model PlanViewModel
+@{
+    ViewData["Title"] = Resource.lblCheckYourPlanData;
+
+    int index = Model.HarvestYear.FindIndex(h => h.Year == Model.Year);
+
+}
+
+@section BeforeContent {
+
+    <govuk-back-link asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+}
+
+@if (ViewBag.Error != null)
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@ViewBag.Error</govuk-error-summary-item>
+            </govuk-error-summary>
+        </div>
+    </div>
+}
+@if (Model != null)
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-l">
+                @string.Format(Resource.lblCheckYourYearData, Model.Year - 1)
+            </h1>
+
+            <h3 class="govuk-heading-s">
+                @string.Format(Resource.lblYourYearPlanWasLastUpdatedOn, Model.Year - 1, Model.HarvestYear[index + 1].LastModifiedOn?.ToString("dd MMM yyyy"))
+            </h3>
+
+            <p class="govuk-body">
+                @string.Format(Resource.lblYourRecommWillbeBasedOnYourYearData, Model.Year, Model.Year - 1)
+            </p>
+
+            <p class="govuk-body">@Resource.lblYouShouldCheck</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>@Resource.lblSoilAnalysisForEachField</li>
+                <li>@Resource.lblOrganicAndInorganicMaterialApplications</li>
+                <li>@Resource.lblCropPlantingDates</li>
+                <li>@Resource.lblYieldsOfAnyArableCrops</li>
+                <li>@Resource.lblCutsGrazingsAndTheYieldOfAnyGrassFields</li>
+            </ul>
+
+            <p class="govuk-body">
+                <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.HarvestYear[index+1].EncryptedYear">
+                    @string.Format(Resource.lblCheckYourPlan, Model.Year - 1)
+                </a>
+            </p>
+
+            <p class="govuk-body">
+                <a asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.HarvestYear[index].EncryptedYear" asp-route-isPlanRecord="true">
+                    @string.Format(Resource.lblContinueToCreateAPlanFor, Model.Year)
+                </a>
+            </p>
+
+
+            <br>
+            <p class="govuk-body cancel-link">
+                <a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a>
+            </p>
+        </div>
+    </div>
+}
+
