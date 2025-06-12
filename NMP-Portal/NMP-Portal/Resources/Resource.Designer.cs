@@ -916,15 +916,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adjustment for 3 or more cuts.
-        /// </summary>
-        public static string lblAdjustmentForThreeOrMoreCuts {
-            get {
-                return ResourceManager.GetString("lblAdjustmentForThreeOrMoreCuts", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Adjustment value.
         /// </summary>
         public static string lblAdjustmentValue {
@@ -3814,6 +3805,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Grass cut only adjustment.
+        /// </summary>
+        public static string lblGrassCutOnlyAdjustment {
+            get {
+                return ResourceManager.GetString("lblGrassCutOnlyAdjustment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Grass details for {0}.
         /// </summary>
         public static string lblGrassDetailsForField {
@@ -4125,6 +4125,15 @@ namespace NMP.Portal.Resources {
         public static string lblHelpYouComplyWithEnvironmentalRegulations {
             get {
                 return ResourceManager.GetString("lblHelpYouComplyWithEnvironmentalRegulations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to high.
+        /// </summary>
+        public static string lblHigh {
+            get {
+                return ResourceManager.GetString("lblHigh", resourceCulture);
             }
         }
         
@@ -5085,6 +5094,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to low.
+        /// </summary>
+        public static string lblLow {
+            get {
+                return ResourceManager.GetString("lblLow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Magnesium.
         /// </summary>
         public static string lblMagnesium {
@@ -5324,6 +5342,15 @@ namespace NMP.Portal.Resources {
         public static string lblMay {
             get {
                 return ResourceManager.GetString("lblMay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to medium.
+        /// </summary>
+        public static string lblMedium {
+            get {
+                return ResourceManager.GetString("lblMedium", resourceCulture);
             }
         }
         
@@ -5625,7 +5652,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nitrogen applications for {0} fields.
+        ///   Looks up a localized string similar to Nitrogen applications for {0} .
         /// </summary>
         public static string lblNitrogenApplicationsForCropTypeFields {
             get {
@@ -5661,6 +5688,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} nitrogen (N) vegetables.
+        /// </summary>
+        public static string lblNitrogenNVegetables {
+            get {
+                return ResourceManager.GetString("lblNitrogenNVegetables", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to added function: N-max NVZ compliance module.
         /// </summary>
         public static string lblNMaxComplainceModule {
@@ -5679,7 +5715,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to N-max limit for {0} fields before adjustments: {1}kg per hectare..
+        ///   Looks up a localized string similar to N-max limit for {0} before adjustments: {1}kg per hectare..
         /// </summary>
         public static string lblNMaxLimitForCropTypeFieldsBeforeAdjustmentsPerHectare {
             get {
@@ -5688,7 +5724,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to N-max limit for {0} fields.
+        ///   Looks up a localized string similar to N-max limit for {0} .
         /// </summary>
         public static string lblNMaxLimitForWinterWheatFields {
             get {
@@ -9753,6 +9789,33 @@ namespace NMP.Portal.Resources {
         public static string lblVarietyNameWithOptional {
             get {
                 return ResourceManager.GetString("lblVarietyNameWithOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vegetable group 1 .
+        /// </summary>
+        public static string lblVegetableGroupOne {
+            get {
+                return ResourceManager.GetString("lblVegetableGroupOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vegetable group 3.
+        /// </summary>
+        public static string lblVegetableGroupThree {
+            get {
+                return ResourceManager.GetString("lblVegetableGroupThree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vegetable group 2.
+        /// </summary>
+        public static string lblVegetableGroupTwo {
+            get {
+                return ResourceManager.GetString("lblVegetableGroupTwo", resourceCulture);
             }
         }
         
