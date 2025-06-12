@@ -236,7 +236,7 @@
             <p class="govuk-body cancel-link">
                 @if (string.IsNullOrWhiteSpace(Model.EncryptedOrgManureId) && (!Model.IsCheckAnswer))
                 {
-                    <a asp-action="CreateOrganicManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
+                    <a asp-action="CreateManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
                 }
                 else
                 {
