@@ -4634,4 +4634,40 @@ live</value>
   <data name="lblVegetableGroupTwo" xml:space="preserve">
     <value>Vegetable group 2</value>
   </data>
+  <data name="lblCheckYourPlanData" xml:space="preserve">
+    <value>Check your plan data</value>
+  </data>
+  <data name="lblCheckYourYearData" xml:space="preserve">
+    <value>Check your {0} data</value>
+  </data>
+  <data name="lblCropPlantingDates" xml:space="preserve">
+    <value>crop planting dates</value>
+  </data>
+  <data name="lblCutsGrazingsAndTheYieldOfAnyGrassFields" xml:space="preserve">
+    <value>cuts, grazings and the yield of any grass fields</value>
+  </data>
+  <data name="lblOrganicAndInorganicMaterialApplications" xml:space="preserve">
+    <value>organic and inorganic material applications</value>
+  </data>
+  <data name="lblSoilAnalysisForEachField" xml:space="preserve">
+    <value>soil analysis for each field</value>
+  </data>
+  <data name="lblYieldsOfAnyArableCrops" xml:space="preserve">
+    <value>yields of any arable crops</value>
+  </data>
+  <data name="lblYourRecommWillbeBasedOnYourYearData" xml:space="preserve">
+    <value>Your {0} recommendations will be based on your {1} data, so it is important that it is up to date.</value>
+  </data>
+  <data name="lblYourYearPlanWasLastUpdatedOn" xml:space="preserve">
+    <value>Your {0} plan was last updated on {1}.</value>
+  </data>
+  <data name="lblYouShouldCheck" xml:space="preserve">
+    <value>You should check:</value>
+  </data>
+  <data name="lblCheckYourPlan" xml:space="preserve">
+    <value>Check your {0} plan</value>
+  </data>
+  <data name="lblContinueToCreateAPlanFor" xml:space="preserve">
+    <value>Continue to create a plan for {0}</value>
+  </data>
 </root>

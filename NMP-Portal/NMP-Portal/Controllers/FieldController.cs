@@ -137,10 +137,11 @@ namespace NMP.Portal.Controllers
                     (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmID);
                     model.isEnglishRules = farm.EnglishRules;
                     model.FarmName = farm.Name;
-                    model.LastHarvestYear = farm.LastHarvestYear;
+                    model.LastHarvestYear = farm.LastHarvestYear;  //if there is no plan created.
                     model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Portal.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
                     model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
 
+                    //if plan created then check the latest, less than or equal to current year.
                     List<PlanSummaryResponse> cropPlans = await _cropService.FetchPlanSummaryByFarmId(model.FarmID, 0);
                     cropPlans.RemoveAll(x => x.Year == 0);
                     if (cropPlans.Count() > 0)
@@ -2524,6 +2525,7 @@ namespace NMP.Portal.Controllers
                 ViewBag.PreviousGrassesYear = previousYears;
                 return View(model);
             }
+            //below condition is for select all
             if (model.PreviousGrassYears?.Count == 1 && model.PreviousGrassYears[0] == 0)
             {
                 List<int> previousYears = new List<int>();
@@ -2533,8 +2535,9 @@ namespace NMP.Portal.Controllers
                 previousYears.Add(lastHarvestYear - 2);
                 model.PreviousGrassYears = previousYears;
             }
-            model.IsPreviousYearGrass = (model.PreviousGrassYears != null && model.PreviousGrassYears.Contains(lastHarvestYear)) ? true : false;
             lastHarvestYear = model.LastHarvestYear ?? 0;
+            model.IsPreviousYearGrass = (model.PreviousGrassYears != null && model.PreviousGrassYears.Contains(lastHarvestYear)) ? true : false;
+            
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             
             if(model.PreviousGrassYears?.Count==3)
