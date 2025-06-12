@@ -4509,7 +4509,7 @@ live</value>
     <value>{0} fields</value>
   </data>
   <data name="lblNitrogenApplicationsForCropTypeFields" xml:space="preserve">
-    <value>Nitrogen applications for {0} fields</value>
+    <value>Nitrogen applications for {0} </value>
   </data>
   <data name="lblNitrogenApplicationsToCropTypeContent1" xml:space="preserve">
     <value>Nitrogen applications to {0}</value>
@@ -4518,10 +4518,10 @@ live</value>
     <value>with the N-max limit, based on field records.</value>
   </data>
   <data name="lblNMaxLimitForCropTypeFieldsBeforeAdjustmentsPerHectare" xml:space="preserve">
-    <value>N-max limit for {0} fields before adjustments: {1}kg per hectare.</value>
+    <value>N-max limit for {0} before adjustments: {1}kg per hectare.</value>
   </data>
   <data name="lblNMaxLimitForWinterWheatFields" xml:space="preserve">
-    <value>N-max limit for {0} fields</value>
+    <value>N-max limit for {0} </value>
   </data>
   <data name="lblTotal" xml:space="preserve">
     <value>Total</value>
@@ -4610,7 +4610,28 @@ live</value>
   <data name="lblOrganicCropAvailableNTotal" xml:space="preserve">
     <value>Organic crop available N total</value>
   </data>
-  <data name="lblAdjustmentForThreeOrMoreCuts" xml:space="preserve">
-    <value>Adjustment for 3 or more cuts</value>
+  <data name="lblGrassCutOnlyAdjustment" xml:space="preserve">
+    <value>Grass cut only adjustment</value>
+  </data>
+  <data name="lblHigh" xml:space="preserve">
+    <value>high</value>
+  </data>
+  <data name="lblLow" xml:space="preserve">
+    <value>low</value>
+  </data>
+  <data name="lblMedium" xml:space="preserve">
+    <value>medium</value>
+  </data>
+  <data name="lblNitrogenNVegetables" xml:space="preserve">
+    <value>{0} nitrogen (N) vegetables</value>
+  </data>
+  <data name="lblVegetableGroupOne" xml:space="preserve">
+    <value>Vegetable group 1 </value>
+  </data>
+  <data name="lblVegetableGroupThree" xml:space="preserve">
+    <value>Vegetable group 3</value>
+  </data>
+  <data name="lblVegetableGroupTwo" xml:space="preserve">
+    <value>Vegetable group 2</value>
   </data>
 </root>
