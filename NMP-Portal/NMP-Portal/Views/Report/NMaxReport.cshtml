@@ -338,14 +338,14 @@
                                             <th scope="col" class="govuk-table__header">@(nMaxLimit.NitrogenApplicationsForNMaxReportResponse.Sum(x => x.CropArea) > 0 ? string.Format("{0}{1}", nMaxLimit.NitrogenApplicationsForNMaxReportResponse.Sum(x => x.CropArea), Resource.lblHectareForReport) : Resource.lblHyphen)</th>
                                             <th scope="col" class="nonbold govuk-table__header">@Resource.lblHyphen</th>
                                             <th scope="col" class="govuk-table__header">
-                                                @(nMaxLimit.NitrogenApplicationsForNMaxReportResponse.Sum(x => x.InorganicNTotal) > 0 ? string.Format("{0}{1}", nMaxLimit.NitrogenApplicationsForNMaxReportResponse.Sum(x => x.InorganicNTotal), Resource.lblkg) : Resource.lblHyphen)
+                                                @(nMaxLimit.NitrogenApplicationsForNMaxReportResponse.Sum(x => x.InorganicNTotal) != 0 ? string.Format("{0}{1}", nMaxLimit.NitrogenApplicationsForNMaxReportResponse.Sum(x => x.InorganicNTotal), Resource.lblkg) : Resource.lblHyphen)
                                             </th>
                                             <th scope="col" class="nonbold govuk-table__header">@Resource.lblHyphen</th>
                                             <th scope="col" class="govuk-table__header">
-                                                @(nMaxLimit.NitrogenApplicationsForNMaxReportResponse.Sum(x => x.OrganicCropAvailableNTotal) > 0 ? string.Format("{0}{1}", nMaxLimit.NitrogenApplicationsForNMaxReportResponse.Sum(x => x.OrganicCropAvailableNTotal), Resource.lblkg) : Resource.lblHyphen)
+                                                @(nMaxLimit.NitrogenApplicationsForNMaxReportResponse.Sum(x => x.OrganicCropAvailableNTotal) !=0 ? string.Format("{0}{1}", nMaxLimit.NitrogenApplicationsForNMaxReportResponse.Sum(x => x.OrganicCropAvailableNTotal), Resource.lblkg) : Resource.lblHyphen)
                                             </th>
                                             <th scope="col" class="govuk-table__header">@Resource.lblHyphen</th>
-                                            <th scope="col" class="govuk-table__header">@(nMaxLimit.NitrogenApplicationsForNMaxReportResponse.Sum(x => x.NTotal) > 0 ? string.Format("{0}{1}", nMaxLimit.NitrogenApplicationsForNMaxReportResponse.Sum(x => x.NTotal), Resource.lblkg) : Resource.lblHyphen)</th>
+                                            <th scope="col" class="govuk-table__header">@(nMaxLimit.NitrogenApplicationsForNMaxReportResponse.Sum(x => x.NTotal) != 0 ? string.Format("{0}{1}", nMaxLimit.NitrogenApplicationsForNMaxReportResponse.Sum(x => x.NTotal), Resource.lblkg) : Resource.lblHyphen)</th>
                                         </tr>
                                     }
 
