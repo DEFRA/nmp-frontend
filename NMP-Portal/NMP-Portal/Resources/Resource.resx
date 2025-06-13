@@ -4676,7 +4676,7 @@ live</value>
   </data>
   <data name="lblTool" xml:space="preserve">
     <value>tool</value>
-
+</data>
   <data name="lblCopyExistingPlan" xml:space="preserve">
     <value>Copy existing plan</value>
   </data>
