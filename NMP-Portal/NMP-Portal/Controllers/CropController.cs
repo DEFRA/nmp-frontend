@@ -5918,7 +5918,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("HarvestYearForPlan", new { q = q, year = _farmDataProtector.Protect(farm.LastHarvestYear.ToString()), isPlanRecord = false });
                 }
-
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                 bool isPreviousYearPlanExist = false;
                 if (model.HarvestYear.Any(x=>x.Year < model.Year && x.IsAnyPlan==true) )
                 {
@@ -5945,6 +5945,53 @@ namespace NMP.Portal.Controllers
             }
 
             
+        }
+
+        [HttpGet]
+        public IActionResult CopyExistingPlan(string q)
+        {
+            _logger.LogTrace($"Crop Controller : CopyExistingPlan() action called");
+            PlanViewModel model = new PlanViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+            }
+            else if (string.IsNullOrWhiteSpace(q))
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+            if (!string.IsNullOrEmpty(q))
+            {
+                model.FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(q));
+                model.EncryptedFarmId = q;
+            }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("CropData", model);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CopyExistingPlan(PlanViewModel model)
+        {
+            _logger.LogTrace($"Crop Controller : CopyExistingPlan() post action called");
+            if (model.CopyExistingPlan == null)
+            {
+                ModelState.AddModelError("CopyExistingPlan", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("CropData", model);
+            if (model.IsCheckAnswer)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
+            if (model.CopyExistingPlan != null && !(model.CopyExistingPlan.Value))
+            {
+                return RedirectToAction("CropGroups");
+            }
+            return RedirectToAction("CropGroups");
         }
     }
 }
