@@ -57,7 +57,7 @@
             </p>
 
             <p class="govuk-body">
-                <a asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.HarvestYear[index].EncryptedYear" asp-route-isPlanRecord="true">
+                <a asp-action="CopyExistingPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.HarvestYear[index].EncryptedYear" asp-route-isPlanRecord="true">
                     @string.Format(Resource.lblContinueToCreateAPlanFor, Model.Year)
                 </a>
             </p>

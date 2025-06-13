@@ -4670,4 +4670,10 @@ live</value>
   <data name="lblContinueToCreateAPlanFor" xml:space="preserve">
     <value>Continue to create a plan for {0}</value>
   </data>
+  <data name="lblCopyExistingPlan" xml:space="preserve">
+    <value>Copy existing plan</value>
+  </data>
+  <data name="lblWouldYouLikeToStartWithCopyOfPlanFromPreviousYear" xml:space="preserve">
+    <value>Would you like to start with a copy of a plan from a previous year?</value>
+  </data>
 </root>
