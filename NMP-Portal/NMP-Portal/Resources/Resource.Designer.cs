@@ -502,7 +502,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This tool was developed by the Department for Environment, Food &amp; Rural Affairs (Defra), the Agriculture and Horticulture Development Board (AHDB), ADAS and the RSK group. Nutrient recommendations are derived from RB209 Application Programming Interface (API); RB209 is the intellectual property of AHDB..
+        ///   Looks up a localized string similar to This {0} was developed by the Department for Environment, Food &amp; Rural Affairs (Defra), the Agriculture and Horticulture Development Board (AHDB), ADAS and the RSK group. Nutrient recommendations are derived from RB209 Application Programming Interface (API); RB209 is the intellectual property of AHDB..
         /// </summary>
         public static string lblAboutRecommendationGuidenceAdviceContent1 {
             get {
@@ -511,7 +511,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to While Defra and partners seek to ensure that the information provided by this tool is accurate at the time of use, Defra and partners accept no liability for loss, damage or injury howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to information contained in or omitted from this tool..
+        ///   Looks up a localized string similar to While Defra and partners seek to ensure that the information provided by this {0} is accurate at the time of use, Defra and partners accept no liability for loss, damage or injury howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to information contained in or omitted from this tool..
         /// </summary>
         public static string lblAboutRecommendationGuidenceAdviceContent2 {
             get {
@@ -520,7 +520,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Users are responsible for the accuracy of their own data and the application of guidance provided. This tool should not be relied upon as the sole source of nutrient management guidance. Always consider local conditions and, if necessary, consult a FACTS Qualified Adviser before making nutrient management decisions..
+        ///   Looks up a localized string similar to Users are responsible for the accuracy of their own data and the application of guidance provided. This {0} should not be relied upon as the sole source of nutrient management guidance. Always consider local conditions and, if necessary, consult a FACTS Qualified Adviser before making nutrient management decisions..
         /// </summary>
         public static string lblAboutRecommendationGuidenceAdviceContent3 {
             get {
@@ -7732,6 +7732,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to service.
+        /// </summary>
+        public static string lblService {
+            get {
+                return ResourceManager.GetString("lblService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Release schedule for this tool.
         /// </summary>
         public static string lblServiceReleaseSchedule {
@@ -9069,6 +9078,15 @@ namespace NMP.Portal.Resources {
         public static string lblTonPerHa {
             get {
                 return ResourceManager.GetString("lblTonPerHa", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to tool.
+        /// </summary>
+        public static string lblTool {
+            get {
+                return ResourceManager.GetString("lblTool", resourceCulture);
             }
         }
         

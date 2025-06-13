@@ -3500,10 +3500,10 @@ cubic metres per hectare  not set</value>
     <value>About the recommendations, guidance and advice</value>
   </data>
   <data name="lblAboutRecommendationGuidenceAdviceContent1" xml:space="preserve">
-    <value>This tool was developed by the Department for Environment, Food &amp; Rural Affairs (Defra), the Agriculture and Horticulture Development Board (AHDB), ADAS and the RSK group. Nutrient recommendations are derived from RB209 Application Programming Interface (API); RB209 is the intellectual property of AHDB.</value>
+    <value>This {0} was developed by the Department for Environment, Food &amp; Rural Affairs (Defra), the Agriculture and Horticulture Development Board (AHDB), ADAS and the RSK group. Nutrient recommendations are derived from RB209 Application Programming Interface (API); RB209 is the intellectual property of AHDB.</value>
   </data>
   <data name="lblAboutRecommendationGuidenceAdviceContent2" xml:space="preserve">
-    <value>While Defra and partners seek to ensure that the information provided by this tool is accurate at the time of use, Defra and partners accept no liability for loss, damage or injury howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to information contained in or omitted from this tool.</value>
+    <value>While Defra and partners seek to ensure that the information provided by this {0} is accurate at the time of use, Defra and partners accept no liability for loss, damage or injury howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to information contained in or omitted from this tool.</value>
   </data>
   <data name="lblGetHelpAndFeedback" xml:space="preserve">
     <value>Get help or give feedback</value>
@@ -3819,7 +3819,7 @@ live</value>
     <value>Check the &lt;a href="/ReleaseSchedule" &gt;release schedule&lt;/a&gt; to see what features have been added to the test version of the tool.</value>
   </data>
   <data name="lblAboutRecommendationGuidenceAdviceContent3" xml:space="preserve">
-    <value>Users are responsible for the accuracy of their own data and the application of guidance provided. This tool should not be relied upon as the sole source of nutrient management guidance. Always consider local conditions and, if necessary, consult a FACTS Qualified Adviser before making nutrient management decisions.</value>
+    <value>Users are responsible for the accuracy of their own data and the application of guidance provided. This {0} should not be relied upon as the sole source of nutrient management guidance. Always consider local conditions and, if necessary, consult a FACTS Qualified Adviser before making nutrient management decisions.</value>
   </data>
   <data name="lblAbout_this_service" xml:space="preserve">
     <value>About this tool</value>
@@ -4669,5 +4669,11 @@ live</value>
   </data>
   <data name="lblContinueToCreateAPlanFor" xml:space="preserve">
     <value>Continue to create a plan for {0}</value>
+  </data>
+  <data name="lblService" xml:space="preserve">
+    <value>service</value>
+  </data>
+  <data name="lblTool" xml:space="preserve">
+    <value>tool</value>
   </data>
 </root>
