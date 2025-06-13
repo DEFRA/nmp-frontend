@@ -4,10 +4,26 @@
     ViewData["Title"] = Resource.lblCropGroup;
     int otherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
     int grassGroupId = (int)NMP.Portal.Enums.CropGroup.Grass;
+
+    var action = "";
+    if (Model.IsCheckAnswer)
+    {
+        action = "CheckAnswer";
+    }
+    if (Model.CopyExistingPlan != null)
+    {
+        action = "CopyExistingPlan";
+    }
+    else
+    {
+        action = "HarvestYearForPlan";
+    }
 }
 
+
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" :"HarvestYearForPlan")" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@action" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+    @* <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" :"HarvestYearForPlan")" asp-controller="Crop">@Resource.lblBack</govuk-back-link> *@
 }
 <form asp-action="CropGroups" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()

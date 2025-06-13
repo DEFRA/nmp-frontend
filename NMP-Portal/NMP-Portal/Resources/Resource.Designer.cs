@@ -1897,6 +1897,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy existing plan.
+        /// </summary>
+        public static string lblCopyExistingPlan {
+            get {
+                return ResourceManager.GetString("lblCopyExistingPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to © Crown copyright.
         /// </summary>
         public static string lblCopyRight {
@@ -10689,6 +10698,15 @@ namespace NMP.Portal.Resources {
         public static string lblWouldYouLikeToAddAnEstimateOfNitrogenMineralisation {
             get {
                 return ResourceManager.GetString("lblWouldYouLikeToAddAnEstimateOfNitrogenMineralisation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Would you like to start with a copy of a plan from a previous year?.
+        /// </summary>
+        public static string lblWouldYouLikeToStartWithCopyOfPlanFromPreviousYear {
+            get {
+                return ResourceManager.GetString("lblWouldYouLikeToStartWithCopyOfPlanFromPreviousYear", resourceCulture);
             }
         }
         
