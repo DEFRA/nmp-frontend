@@ -5991,7 +5991,119 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("CropGroups");
             }
-            return RedirectToAction("CropGroups");
+            return RedirectToAction("CopyPlanYears");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> CopyPlanYears()
+        {
+            _logger.LogTrace($"Crop Controller : CopyPlanYears() action called");
+            PlanViewModel? model = new PlanViewModel();
+            Error? error = null;
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+                }
+                else 
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+                return View(model);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Crop Controller: Exception in CopyPlanYears() action : {ex.Message}", ex.StackTrace);
+                TempData["Error"] = string.Concat(error == null ? "" : error.Message, ex.Message);
+                return RedirectToAction("FarmSummary", "Farm");
+            }
+
+            
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CopyPlanYears(PlanViewModel model)
+        {
+            _logger.LogTrace("Crop Controller : CopyPlanYears() action posted");
+            if (model.CopyYear == null)
+            {
+                ModelState.AddModelError("CopyYear", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblYear.ToLower()));
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+            if (model.IsCheckAnswer)
+            {
+                for (int i = 0; i < model.Crops.Count; i++)
+                {
+                    model.Crops[i].Year = model.Year.Value;
+                }
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                return RedirectToAction("CheckAnswer");
+            }
+            return RedirectToAction("CopyOrganicInorganicApplications");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CopyOrganicInorganicApplications()
+        {
+            _logger.LogTrace($"Crop Controller : CopyOrganicInorganicApplications() action called");
+            PlanViewModel? model = new PlanViewModel();
+            Error? error = null;
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+                return View(model);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Crop Controller: Exception in CopyOrganicInorganicApplications() action : {ex.Message}", ex.StackTrace);
+                TempData["Error"] = string.Concat(error == null ? "" : error.Message, ex.Message);
+                return RedirectToAction("FarmSummary", "Farm");
+            }
+
+
+        }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult CopyOrganicInorganicApplications(PlanViewModel model)
+        //{
+        //    _logger.LogTrace("Crop Controller : CopyOrganicInorganicApplications() action posted");
+        //    if (model.CopyYear == null)
+        //    {
+        //        ModelState.AddModelError("CopyYear", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblYear.ToLower()));
+        //    }
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return View(model);
+        //    }
+        //    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+        //    if (model.IsCheckAnswer)
+        //    {
+        //        for (int i = 0; i < model.Crops.Count; i++)
+        //        {
+        //            model.Crops[i].Year = model.Year.Value;
+        //        }
+        //        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+        //        return RedirectToAction("CheckAnswer");
+        //    }
+        //    return RedirectToAction("CropGroups");
+        //}
     }
 }

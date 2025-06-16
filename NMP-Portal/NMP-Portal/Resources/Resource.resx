@@ -4684,4 +4684,10 @@ live</value>
     <value>Would you like to start with a copy of a plan from a previous year?</value>
 
   </data>
+  <data name="lblCopyPlanYears" xml:space="preserve">
+    <value>Copy Plan Years</value>
+  </data>
+  <data name="lblWhichPlanWouldYouLikeToCopyFor" xml:space="preserve">
+    <value>Which plan would you like to copy for {0}?</value>
+  </data>
 </root>
