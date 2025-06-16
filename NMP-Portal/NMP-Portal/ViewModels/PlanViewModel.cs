@@ -97,5 +97,9 @@ namespace NMP.Portal.ViewModels
         public string? EncryptedCropOrder { get; set; } = string.Empty;
         public string? EncryptedCropType { get; set; } = string.Empty;
         public string? EncryptedCropGroupName { get; set; } = string.Empty;
+        public int? FarmID { get; set; }
+        public bool? CopyExistingPlan { get; set; }
+
+        public int? CopyYear { get; set; }
     }
 }
