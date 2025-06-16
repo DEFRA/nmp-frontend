@@ -4676,12 +4676,18 @@ live</value>
   </data>
   <data name="lblTool" xml:space="preserve">
     <value>tool</value>
-
+  </data>
   <data name="lblCopyExistingPlan" xml:space="preserve">
     <value>Copy existing plan</value>
   </data>
   <data name="lblWouldYouLikeToStartWithCopyOfPlanFromPreviousYear" xml:space="preserve">
     <value>Would you like to start with a copy of a plan from a previous year?</value>
 
+  </data>
+  <data name="lblCopyPlanYears" xml:space="preserve">
+    <value>Copy Plan Years</value>
+  </data>
+  <data name="lblWhichPlanWouldYouLikeToCopyFor" xml:space="preserve">
+    <value>Which plan would you like to copy for {0}?</value>
   </data>
 </root>

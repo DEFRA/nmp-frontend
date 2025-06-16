@@ -1906,6 +1906,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy Plan Years.
+        /// </summary>
+        public static string lblCopyPlanYears {
+            get {
+                return ResourceManager.GetString("lblCopyPlanYears", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to © Crown copyright.
         /// </summary>
         public static string lblCopyRight {
@@ -10644,6 +10653,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhichHarvestWouldYouLikeToPlanFor {
             get {
                 return ResourceManager.GetString("lblWhichHarvestWouldYouLikeToPlanFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which plan would you like to copy for {0}?.
+        /// </summary>
+        public static string lblWhichPlanWouldYouLikeToCopyFor {
+            get {
+                return ResourceManager.GetString("lblWhichPlanWouldYouLikeToCopyFor", resourceCulture);
             }
         }
         
