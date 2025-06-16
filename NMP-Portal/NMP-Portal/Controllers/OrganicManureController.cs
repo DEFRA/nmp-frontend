@@ -363,7 +363,7 @@ namespace NMP.Portal.Controllers
                                         {
                                             model.CropOrder = Convert.ToInt32(cropList.Select(x => x.CropOrder).FirstOrDefault());
                                         }
-                                       
+
                                     }
 
                                     (List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldIdForManID, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup, model.CropOrder);
@@ -1629,7 +1629,7 @@ namespace NMP.Portal.Controllers
                                     }
                                     model.OrganicManures.Add(organicManure);
                                 }
-                                
+
                             }
                             model.DefoliationCurrentCounter = 0;
                         }
@@ -1638,7 +1638,7 @@ namespace NMP.Portal.Controllers
                             TempData["ManureTypeError"] = error.Message;
                             return View(model);
                         }
-                    }                    
+                    }
 
 
                     foreach (var organic in model.OrganicManures)
@@ -4705,7 +4705,7 @@ namespace NMP.Portal.Controllers
 
                             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                             {
-                                _httpContextAccessor.HttpContext?.Session.Remove("OrganicManure");                                
+                                _httpContextAccessor.HttpContext?.Session.Remove("OrganicManure");
                                 TempData["ErrorOnHarvestYearOverview"] = error.Message;
                                 return RedirectToAction("HarvestYearOverview", "Crop", new
                                 {
@@ -8978,7 +8978,7 @@ namespace NMP.Portal.Controllers
             }
         }
         [HttpGet]
-        public IActionResult IsSameDefoliationForAll()
+        public async Task<IActionResult> IsSameDefoliationForAll()
         {
             _logger.LogTrace($"OrganicManure Controller : IsSameDefoliationForAll() action called");
             Error error = new Error();
@@ -8996,6 +8996,103 @@ namespace NMP.Portal.Controllers
             {
                 model.IsAnyChangeInSameDefoliationFlag = false;
             }
+
+
+            List<List<SelectListItem>> allDefoliations = new List<List<SelectListItem>>();
+            foreach (var organic in model.OrganicManures)
+            {
+                List<Crop> cropList = await _cropService.FetchCropsByFieldId(Convert.ToInt32(organic.FieldID));
+
+                if (cropList.Count > 0)
+                {
+                    cropList = cropList.Where(x => x.Year == model.HarvestYear && x.CropOrder == model.CropOrder).ToList();
+                }
+
+                if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
+                {
+                    var cropId = cropList.Select(x => x.ID.Value).FirstOrDefault();
+                    (List<ManagementPeriod> ManagementPeriod, error) = await _cropService.FetchManagementperiodByCropId(cropId, false);
+
+                    if (ManagementPeriod != null)
+                    {
+                        List<int> defoliationList = ManagementPeriod.Select(x => x.Defoliation.Value).ToList();
+                        List<SelectListItem> defoliationSelectList = new List<SelectListItem>();
+                        //var defoliationIdsList = ManagementPeriod.Select(x => x.Defoliation.Value.ToString()).ToList();
+
+                        (Crop crop, error) = await _cropService.FetchCropById(cropId);
+                        if (string.IsNullOrWhiteSpace(error.Message) && crop != null && crop.DefoliationSequenceID != null)
+                        {
+                            (DefoliationSequenceResponse defoliationSequence, error) = await _cropService.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+                            if (error == null && defoliationSequence != null)
+                            {
+                                string description = defoliationSequence.DefoliationSequenceDescription;
+                                string[] defoliationParts = description.Split(',')
+                                                                        .Select(x => x.Trim())
+                                                                        .ToArray();
+                                List<SelectListItem> allDefoliationWithName = new List<SelectListItem>();
+                                foreach (int defoliation in defoliationList)
+                                {
+                                    string text = (defoliation > 0 && defoliation <= defoliationParts.Length)
+                                    ? $"{Enum.GetName(typeof(PotentialCut), defoliation)} - {defoliationParts[defoliation - 1]}"
+                                    : defoliation.ToString();
+
+                                    allDefoliationWithName.Add(new SelectListItem
+                                    {
+                                        Text = text,
+                                        Value = defoliation.ToString()
+                                    });
+
+
+                                }
+                                allDefoliations.Add(allDefoliationWithName);
+                            }
+                        }
+
+
+                    }
+
+                }
+            }
+            if (allDefoliations.Count > 0)
+            {
+                List<List<string>> defoliationSequenceList = allDefoliations
+            .Select(list => list.Select(item => item.Text).ToList())
+            .ToList();
+
+                if (defoliationSequenceList.Count > 0)
+                {
+                    List<string> commonDefoliations = defoliationSequenceList.Count > 0
+                    ? defoliationSequenceList.Aggregate((prev, next) => prev.Intersect(next).ToList())
+                    : new List<string>();
+                    if (commonDefoliations.Count > 0)
+                    {
+
+                        List<SelectListItem> flattenedList = allDefoliations
+                       .SelectMany(list => list)
+                       .ToList();
+
+                        if (flattenedList.Count > 0)
+                        {
+                            List<SelectListItem> commonDefoliationItems = flattenedList
+                            .Where(item => commonDefoliations.Contains(item.Text))
+                            .GroupBy(item => item.Text)
+                            .Select(g => g.First())
+                            .ToList();
+                            model.NeedToShowSameDefoliationForAll = true;
+                        }
+                    }
+                    else
+                    {
+                        model.IsSameDefoliationForAll = false;
+                        model.NeedToShowSameDefoliationForAll = false;
+                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                        return RedirectToAction("Defoliation");
+                    }
+
+                }
+            }
+
+
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
             return View(model);
         }
@@ -9081,7 +9178,7 @@ namespace NMP.Portal.Controllers
                         model.DefoliationEncryptedCounter = string.Empty;
                         _httpContextAccessor.HttpContext.Session.SetObjectAsJson("OrganicManure", model);
 
-                        if (model.GrassCropCount != null && model.GrassCropCount.Value > 1)
+                        if (model.GrassCropCount != null && model.GrassCropCount.Value > 1 && model.NeedToShowSameDefoliationForAll)
                         {
                             return RedirectToAction("IsSameDefoliationForAll");
                         }
@@ -9089,41 +9186,11 @@ namespace NMP.Portal.Controllers
                         {
                             return RedirectToAction("DoubleCrop", new { q = model.DoubleCropEncryptedCounter });
                         }
-                        //// if (model.FieldGroup == Resource.lblSelectSpecificFields && (!model.IsComingFromRecommendation))
-                        ////{
-                        //return RedirectToAction("ManureType");
-                        ////}
-                        ////return RedirectToAction("FieldGroup", new
-                        ////{
-                        ////    q = model.EncryptedFarmId,
-                        ////    r = model.EncryptedHarvestYear
-                        ////});
+                        return RedirectToAction("ManureType");
+                       
 
 
-                        if (model.FieldGroup == Resource.lblSelectSpecificFields && model.IsComingFromRecommendation)
-                        {
-                            if (model.FieldList.Count > 0 && model.FieldList.Count == 1)
-                            {
-                                string fieldId = model.FieldList[0];
-                                return RedirectToAction("Recommendations", "Crop", new
-                                {
-                                    q = model.EncryptedFarmId,
-                                    r = _fieldDataProtector.Protect(fieldId),
-                                    s = model.EncryptedHarvestYear
-
-                                });
-                            }
-                        }
-                        else if (model.FieldGroup == Resource.lblSelectSpecificFields && (!model.IsComingFromRecommendation))
-                        {
-                            return RedirectToAction("Fields");
-                        }
-                        return RedirectToAction("FieldGroup", new
-                        {
-                            q = model.EncryptedFarmId,
-                            r = model.EncryptedHarvestYear
-                        });
-
+                       
                     }
                     model.FieldID = model.OrganicManures[index].FieldID.Value;
                     model.FieldName = (await _fieldService.FetchFieldByFieldId(model.OrganicManures[index].FieldID.Value)).Name;
@@ -9134,11 +9201,11 @@ namespace NMP.Portal.Controllers
 
                 if (model.IsSameDefoliationForAll.HasValue && model.IsSameDefoliationForAll.Value)
                 {
-                    List<List<string>> allDefoliations = new List<List<string>>();
-
-                    foreach (var fertiliser in model.OrganicManures)
+                    //List<List<string>> allDefoliations = new List<List<string>>();
+                    List<List<SelectListItem>> allDefoliations = new List<List<SelectListItem>>();
+                    foreach (var organic in model.OrganicManures)
                     {
-                        List<Crop> cropList = await _cropService.FetchCropsByFieldId(Convert.ToInt32(fertiliser.FieldID));
+                        List<Crop> cropList = await _cropService.FetchCropsByFieldId(Convert.ToInt32(organic.FieldID));
 
                         if (cropList.Count > 0)
                         {
@@ -9152,20 +9219,94 @@ namespace NMP.Portal.Controllers
 
                             if (ManagementPeriod != null)
                             {
-                                var defoliations = ManagementPeriod.Select(x => x.Defoliation.Value.ToString()).ToList();
-                                allDefoliations.Add(defoliations);
+                                List<int> defoliationList = ManagementPeriod.Select(x => x.Defoliation.Value).ToList();
+                                List<SelectListItem> defoliationSelectList = new List<SelectListItem>();
+                                //var defoliationIdsList = ManagementPeriod.Select(x => x.Defoliation.Value.ToString()).ToList();
+
+                                (Crop crop, error) = await _cropService.FetchCropById(cropId);
+                                if (string.IsNullOrWhiteSpace(error.Message) && crop != null && crop.DefoliationSequenceID != null)
+                                {
+                                    (DefoliationSequenceResponse defoliationSequence, error) = await _cropService.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+                                    if (error == null && defoliationSequence != null)
+                                    {
+                                        string description = defoliationSequence.DefoliationSequenceDescription;
+                                        string[] defoliationParts = description.Split(',')
+                                                                                .Select(x => x.Trim())
+                                                                                .ToArray();
+                                        List<SelectListItem> allDefoliationWithName = new List<SelectListItem>();
+                                        foreach (int defoliation in defoliationList)
+                                        {
+                                            string text = (defoliation > 0 && defoliation <= defoliationParts.Length)
+                                            ? $"{Enum.GetName(typeof(PotentialCut), defoliation)} - {defoliationParts[defoliation - 1]}"
+                                            : defoliation.ToString();
+
+                                            allDefoliationWithName.Add(new SelectListItem
+                                            {
+                                                Text = text,
+                                                Value = defoliation.ToString()
+                                            });
+
+
+                                        }
+                                        allDefoliations.Add(allDefoliationWithName);
+                                    }
+                                }
+
+
+                            }
+
+                        }
+                    }
+                    if (allDefoliations.Count > 0)
+                    {
+                        List<List<string>> defoliationValues = allDefoliations
+                    .Select(list => list.Select(item => item.Text).ToList())
+                    .ToList();
+
+                        if (defoliationValues.Count > 0)
+                        {
+                            List<string> commonDefoliations = defoliationValues.Count > 0
+                            ? defoliationValues.Aggregate((prev, next) => prev.Intersect(next).ToList())
+                            : new List<string>();
+
+                            if (commonDefoliations.Count > 0)
+                            {
+                                List<SelectListItem> flattenedList = allDefoliations
+                                .SelectMany(list => list)
+                                .ToList();
+
+                                if (flattenedList.Count > 0)
+                                {
+                                    List<SelectListItem> commonDefoliationItems = flattenedList
+                                    .Where(item => commonDefoliations.Contains(item.Text))
+                                    .GroupBy(item => item.Text)
+                                    .Select(g => g.First())
+                                    .ToList();
+                                    foreach (var item in commonDefoliationItems)
+                                    {
+                                        if (item.Text.Contains(Resource.lblSilage, StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            item.Text = item.Text.Replace(Resource.lblSilage, Resource.lblCut, StringComparison.OrdinalIgnoreCase);
+
+                                        }
+                                        if (item.Text.Contains(Resource.lblHay, StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            item.Text = item.Text.Replace(Resource.lblHay, Resource.lblCut, StringComparison.OrdinalIgnoreCase);
+
+                                        }
+                                    }
+
+                                    //ViewBag.DefoliationList = commonDefoliationItems;
+                                    ViewBag.DefoliationList = commonDefoliationItems.Select(f => new SelectListItem
+                                    {
+                                        Value = f.Value,
+                                        Text = f.Text.ToString()
+                                    }).ToList();
+                                }
                             }
                         }
                     }
 
-                    // Find common defoliation across all field entries
-                    List<int> commonDefoliations = allDefoliations.Count > 0
-                  ? allDefoliations
-                      .Aggregate((prevList, nextList) => prevList.Intersect(nextList).ToList())
-                      .Select(int.Parse)
-                      .ToList()
-                  : new List<int>();
-                    ViewBag.DefoliationList = commonDefoliations;
                 }
                 else
                 {
@@ -9185,8 +9326,56 @@ namespace NMP.Portal.Controllers
 
                             if (ManagementPeriod != null)
                             {
-                                ViewBag.DefoliationList = ManagementPeriod.Select(x => x.Defoliation.Value).ToList();
+                                List<int> defoliationList = ManagementPeriod.Select(x => x.Defoliation.Value).ToList();
 
+                                List<SelectListItem> defoliationSelectList = new List<SelectListItem>();
+
+                                (Crop crop, error) = await _cropService.FetchCropById(cropId);
+                                if (string.IsNullOrWhiteSpace(error.Message) && crop != null && crop.DefoliationSequenceID != null)
+                                {
+                                    (DefoliationSequenceResponse defoliationSequence, error) = await _cropService.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+                                    if (error == null && defoliationSequence != null)
+                                    {
+                                        string description = defoliationSequence.DefoliationSequenceDescription;
+                                        string[] defoliationParts = description.Split(',')
+                                                                                .Select(x => x.Trim())
+                                                                                .ToArray();
+
+                                        foreach (int defoliation in defoliationList)
+                                        {
+                                            string text = (defoliation > 0 && defoliation <= defoliationParts.Length)
+                                            ? $"{Enum.GetName(typeof(PotentialCut), defoliation)} - {defoliationParts[defoliation - 1]}"
+                                            : defoliation.ToString();
+
+                                            defoliationSelectList.Add(new SelectListItem
+                                            {
+                                                Text = text,
+                                                Value = defoliation.ToString()
+                                            });
+                                            foreach (var item in defoliationSelectList)
+                                            {
+                                                if (item.Text.Contains(Resource.lblSilage, StringComparison.OrdinalIgnoreCase))
+                                                {
+                                                    item.Text = item.Text.Replace(Resource.lblSilage, Resource.lblCut, StringComparison.OrdinalIgnoreCase);
+
+                                                }
+                                                if (item.Text.Contains(Resource.lblHay, StringComparison.OrdinalIgnoreCase))
+                                                {
+                                                    item.Text = item.Text.Replace(Resource.lblHay, Resource.lblCut, StringComparison.OrdinalIgnoreCase);
+
+                                                }
+                                            }
+
+                                        }
+                                    }
+                                }
+
+                                //ViewBag.DefoliationList = defoliationSelectList;
+                                ViewBag.DefoliationList = defoliationSelectList.Select(f => new SelectListItem
+                                {
+                                    Value = f.Value,
+                                    Text = f.Text.ToString()
+                                }).ToList();
                             }
                         }
                     }
@@ -9232,8 +9421,8 @@ namespace NMP.Portal.Controllers
                 {
                     if (model.IsSameDefoliationForAll.HasValue && model.IsSameDefoliationForAll.Value)
                     {
-                        List<List<string>> allDefoliations = new List<List<string>>();
-
+                        //List<List<string>> allDefoliations = new List<List<string>>();
+                        List<List<SelectListItem>> allDefoliations = new List<List<SelectListItem>>();
                         foreach (var organic in model.OrganicManures)
                         {
                             List<Crop> cropList = await _cropService.FetchCropsByFieldId(Convert.ToInt32(organic.FieldID));
@@ -9250,20 +9439,93 @@ namespace NMP.Portal.Controllers
 
                                 if (ManagementPeriod != null)
                                 {
-                                    var defoliations = ManagementPeriod.Select(x => x.Defoliation.Value.ToString()).ToList();
-                                    allDefoliations.Add(defoliations);
+                                    List<int> defoliationList = ManagementPeriod.Select(x => x.Defoliation.Value).ToList();
+                                    List<SelectListItem> defoliationSelectList = new List<SelectListItem>();
+                                    //var defoliationIdsList = ManagementPeriod.Select(x => x.Defoliation.Value.ToString()).ToList();
+
+                                    (Crop crop, error) = await _cropService.FetchCropById(cropId);
+                                    if (string.IsNullOrWhiteSpace(error.Message) && crop != null && crop.DefoliationSequenceID != null)
+                                    {
+                                        (DefoliationSequenceResponse defoliationSequence, error) = await _cropService.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+                                        if (error == null && defoliationSequence != null)
+                                        {
+                                            string description = defoliationSequence.DefoliationSequenceDescription;
+                                            string[] defoliationParts = description.Split(',')
+                                                                                    .Select(x => x.Trim())
+                                                                                    .ToArray();
+                                            List<SelectListItem> allDefoliationWithName = new List<SelectListItem>();
+                                            foreach (int defoliation in defoliationList)
+                                            {
+                                                string text = (defoliation > 0 && defoliation <= defoliationParts.Length)
+                                                ? $"{Enum.GetName(typeof(PotentialCut), defoliation)} - {defoliationParts[defoliation - 1]}"
+                                                : defoliation.ToString();
+
+                                                allDefoliationWithName.Add(new SelectListItem
+                                                {
+                                                    Text = text,
+                                                    Value = defoliation.ToString()
+                                                });
+
+                                            }
+                                            allDefoliations.Add(allDefoliationWithName);
+                                        }
+                                    }
+
+
+                                }
+
+                            }
+                        }
+                        if (allDefoliations.Count > 0)
+                        {
+                            List<List<string>> defoliationValues = allDefoliations
+                        .Select(list => list.Select(item => item.Text).ToList())
+                        .ToList();
+
+                            if (defoliationValues.Count > 0)
+                            {
+                                List<string> commonDefoliations = defoliationValues.Count > 0
+                                ? defoliationValues.Aggregate((prev, next) => prev.Intersect(next).ToList())
+                                : new List<string>();
+
+                                if (commonDefoliations.Count > 0)
+                                {
+                                    List<SelectListItem> flattenedList = allDefoliations
+                                .SelectMany(list => list)
+                                .ToList();
+
+                                    if (flattenedList.Count > 0)
+                                    {
+                                        List<SelectListItem> commonDefoliationItems = flattenedList
+                                        .Where(item => commonDefoliations.Contains(item.Text))
+                                        .GroupBy(item => item.Text)
+                                        .Select(g => g.First())
+                                        .ToList();
+
+                                        foreach (var item in commonDefoliationItems)
+                                        {
+                                            if (item.Text.Contains(Resource.lblSilage, StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                item.Text = item.Text.Replace(Resource.lblSilage, Resource.lblCut, StringComparison.OrdinalIgnoreCase);
+
+                                            }
+                                            if (item.Text.Contains(Resource.lblHay, StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                item.Text = item.Text.Replace(Resource.lblHay, Resource.lblCut, StringComparison.OrdinalIgnoreCase);
+
+                                            }
+                                        }
+                                        //ViewBag.DefoliationList = commonDefoliationItems;
+                                        ViewBag.DefoliationList = commonDefoliationItems.Select(f => new SelectListItem
+                                        {
+                                            Value = f.Value,
+                                            Text = f.Text.ToString()
+                                        }).ToList();
+                                    }
                                 }
                             }
                         }
 
-                        // Find common defoliation across all field entries
-                        List<int> commonDefoliations = allDefoliations.Count > 0
-                      ? allDefoliations
-                          .Aggregate((prevList, nextList) => prevList.Intersect(nextList).ToList())
-                          .Select(int.Parse)
-                          .ToList()
-                      : new List<int>();
-                        ViewBag.DefoliationList = commonDefoliations;
                     }
                     else
                     {
@@ -9283,7 +9545,60 @@ namespace NMP.Portal.Controllers
 
                                 if (ManagementPeriod != null)
                                 {
-                                    ViewBag.DefoliationList = ManagementPeriod.Select(x => x.Defoliation.Value).ToList();
+                                    List<int> defoliationList = ManagementPeriod.Select(x => x.Defoliation.Value).ToList();
+
+                                    List<SelectListItem> defoliationSelectList = new List<SelectListItem>();
+
+                                    (Crop crop, error) = await _cropService.FetchCropById(cropId);
+                                    if (string.IsNullOrWhiteSpace(error.Message) && crop != null && crop.DefoliationSequenceID != null)
+                                    {
+                                        (DefoliationSequenceResponse defoliationSequence, error) = await _cropService.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+                                        if (error == null && defoliationSequence != null)
+                                        {
+                                            string description = defoliationSequence.DefoliationSequenceDescription;
+                                            string[] defoliationParts = description.Split(',')
+                                                                                    .Select(x => x.Trim())
+                                                                                    .ToArray();
+
+                                            foreach (int defoliation in defoliationList)
+                                            {
+                                                string text = (defoliation > 0 && defoliation <= defoliationParts.Length)
+                                                ? $"{Enum.GetName(typeof(PotentialCut), defoliation)} - {defoliationParts[defoliation - 1]}"
+                                                : defoliation.ToString();
+
+                                                defoliationSelectList.Add(new SelectListItem
+                                                {
+                                                    Text = text,
+                                                    Value = defoliation.ToString()
+                                                });
+                                                foreach (var item in defoliationSelectList)
+                                                {
+                                                    //if (item.Text.Contains(Resource.lblSilage, StringComparison.OrdinalIgnoreCase) || item.Text.Contains(Resource.lblHay, StringComparison.OrdinalIgnoreCase))
+                                                    //{
+                                                    //    item.Text.Replace(Resource.lblSilage, Resource.lblCut);
+                                                    //}
+                                                    if (item.Text.Contains(Resource.lblSilage, StringComparison.OrdinalIgnoreCase))
+                                                    {
+                                                        item.Text = item.Text.Replace(Resource.lblSilage, Resource.lblCut, StringComparison.OrdinalIgnoreCase);
+
+                                                    }
+                                                    if (item.Text.Contains(Resource.lblHay, StringComparison.OrdinalIgnoreCase))
+                                                    {
+                                                        item.Text = item.Text.Replace(Resource.lblHay, Resource.lblCut, StringComparison.OrdinalIgnoreCase);
+
+                                                    }
+                                                }
+
+                                            }
+                                        }
+                                    }
+
+                                    //ViewBag.DefoliationList = defoliationSelectList;
+                                    ViewBag.DefoliationList = defoliationSelectList.Select(f => new SelectListItem
+                                    {
+                                        Value = f.Value,
+                                        Text = f.Text.ToString()
+                                    }).ToList();
 
                                 }
                             }
@@ -9419,7 +9734,7 @@ namespace NMP.Portal.Controllers
                                     }
                                 }
                             }
-                        }                        
+                        }
                         model.OrganicManures[i].ManagementPeriodID = managementPeriodID.Value;
 
 
@@ -9470,7 +9785,7 @@ namespace NMP.Portal.Controllers
                 {
                     if (model.IsSameDefoliationForAll.HasValue && model.IsSameDefoliationForAll.Value)
                     {
-                        List<List<string>> allDefoliations = new List<List<string>>();
+                        List<List<SelectListItem>> allDefoliations = new List<List<SelectListItem>>();
 
                         foreach (var organic in model.OrganicManures)
                         {
@@ -9488,20 +9803,91 @@ namespace NMP.Portal.Controllers
 
                                 if (ManagementPeriod != null)
                                 {
-                                    var defoliations = ManagementPeriod.Select(x => x.Defoliation.Value.ToString()).ToList();
-                                    allDefoliations.Add(defoliations);
+                                    List<int> defoliationList = ManagementPeriod.Select(x => x.Defoliation.Value).ToList();
+                                    List<SelectListItem> defoliationSelectList = new List<SelectListItem>();
+                                    //var defoliationIdsList = ManagementPeriod.Select(x => x.Defoliation.Value.ToString()).ToList();
+
+                                    (Crop crop, error) = await _cropService.FetchCropById(cropId);
+                                    if (string.IsNullOrWhiteSpace(error.Message) && crop != null && crop.DefoliationSequenceID != null)
+                                    {
+                                        (DefoliationSequenceResponse defoliationSequence, error) = await _cropService.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+                                        if (error == null && defoliationSequence != null)
+                                        {
+                                            string description = defoliationSequence.DefoliationSequenceDescription;
+                                            string[] defoliationParts = description.Split(',')
+                                                                                    .Select(x => x.Trim())
+                                                                                    .ToArray();
+                                            List<SelectListItem> allDefoliationWithName = new List<SelectListItem>();
+                                            foreach (int defoliation in defoliationList)
+                                            {
+                                                string text = (defoliation > 0 && defoliation <= defoliationParts.Length)
+                                                ? $"{Enum.GetName(typeof(PotentialCut), defoliation)} - {defoliationParts[defoliation - 1]}"
+                                                : defoliation.ToString();
+
+                                                allDefoliationWithName.Add(new SelectListItem
+                                                {
+                                                    Text = text,
+                                                    Value = defoliation.ToString()
+                                                });
+
+                                            }
+                                            allDefoliations.Add(allDefoliationWithName);
+                                        }
+                                    }
+
+
                                 }
                             }
                         }
+                        if (allDefoliations.Count > 0)
+                        {
+                            List<List<string>> defoliationValues = allDefoliations
+                        .Select(list => list.Select(item => item.Text).ToList())
+                        .ToList();
 
-                        // Find common defoliation across all field entries
-                        List<int> commonDefoliations = allDefoliations.Count > 0
-                      ? allDefoliations
-                          .Aggregate((prevList, nextList) => prevList.Intersect(nextList).ToList())
-                          .Select(int.Parse)
-                          .ToList()
-                      : new List<int>();
-                        ViewBag.DefoliationList = commonDefoliations;
+                            if (defoliationValues.Count > 0)
+                            {
+                                List<string> commonDefoliations = defoliationValues.Count > 0
+                                ? defoliationValues.Aggregate((prev, next) => prev.Intersect(next).ToList())
+                                : new List<string>();
+
+                                if (commonDefoliations.Count > 0)
+                                {
+                                    List<SelectListItem> flattenedList = allDefoliations
+                                .SelectMany(list => list)
+                                .ToList();
+
+                                    if (flattenedList.Count > 0)
+                                    {
+                                        List<SelectListItem> commonDefoliationItems = flattenedList
+                                        .Where(item => commonDefoliations.Contains(item.Text))
+                                        .GroupBy(item => item.Text)
+                                        .Select(g => g.First())
+                                        .ToList();
+
+                                        foreach (var item in commonDefoliationItems)
+                                        {
+                                            if (item.Text.Contains(Resource.lblSilage, StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                    item.Text = item.Text.Replace(Resource.lblSilage, Resource.lblCut, StringComparison.OrdinalIgnoreCase);
+                                                
+                                            }
+                                            if (item.Text.Contains(Resource.lblHay, StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                item.Text = item.Text.Replace(Resource.lblHay, Resource.lblCut, StringComparison.OrdinalIgnoreCase);
+
+                                            }
+                                        }
+                                        //ViewBag.DefoliationList = commonDefoliationItems;
+                                        ViewBag.DefoliationList = commonDefoliationItems.Select(f => new SelectListItem
+                                        {
+                                            Value = f.Value,
+                                            Text = f.Text.ToString()
+                                        }).ToList();
+                                    }
+                                }
+                            }
+                        }
                     }
                     else
                     {
@@ -9521,8 +9907,53 @@ namespace NMP.Portal.Controllers
 
                                 if (ManagementPeriod != null)
                                 {
-                                    ViewBag.DefoliationList = ManagementPeriod.Select(x => x.Defoliation.Value).ToList();
+                                    // ViewBag.DefoliationList = ManagementPeriod.Select(x => x.Defoliation.Value).ToList();
+                                    List<int> defoliationList = ManagementPeriod.Select(x => x.Defoliation.Value).ToList();
 
+                                    List<SelectListItem> defoliationSelectList = new List<SelectListItem>();
+
+                                    (Crop crop, error) = await _cropService.FetchCropById(cropId);
+                                    if (string.IsNullOrWhiteSpace(error.Message) && crop != null && crop.DefoliationSequenceID != null)
+                                    {
+                                        (DefoliationSequenceResponse defoliationSequence, error) = await _cropService.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+                                        if (error == null && defoliationSequence != null)
+                                        {
+                                            string description = defoliationSequence.DefoliationSequenceDescription;
+                                            string[] defoliationParts = description.Split(',')
+                                                                                    .Select(x => x.Trim())
+                                                                                    .ToArray();
+
+                                            foreach (int defoliation in defoliationList)
+                                            {
+                                                string text = (defoliation > 0 && defoliation <= defoliationParts.Length)
+                                                ? $"{Enum.GetName(typeof(PotentialCut), defoliation)} - {defoliationParts[defoliation - 1]}"
+                                                : defoliation.ToString();
+                                                if (text.Contains(Resource.lblSilage, StringComparison.OrdinalIgnoreCase))
+                                                {
+                                                    text = text.Replace(Resource.lblSilage, Resource.lblCut, StringComparison.OrdinalIgnoreCase);
+
+                                                }
+                                                if (text.Contains(Resource.lblHay, StringComparison.OrdinalIgnoreCase))
+                                                {
+                                                    text = text.Replace(Resource.lblHay, Resource.lblCut, StringComparison.OrdinalIgnoreCase);
+
+                                                }
+                                                defoliationSelectList.Add(new SelectListItem
+                                                {
+                                                    Text = text,
+                                                    Value = defoliation.ToString()
+                                                });
+
+                                            }
+                                        }
+                                    }
+
+                                    //ViewBag.DefoliationList = defoliationSelectList;
+                                    ViewBag.DefoliationList = defoliationSelectList.Select(f => new SelectListItem
+                                    {
+                                        Value = f.Value,
+                                        Text = f.Text.ToString()
+                                    }).ToList();
                                 }
                             }
                         }
