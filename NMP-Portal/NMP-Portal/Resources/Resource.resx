@@ -4428,13 +4428,13 @@ live</value>
     <value>Lay duration</value>
   </data>
   <data name="lblWhichCutOrGrazingInThisApplicationForInField" xml:space="preserve">
-    <value>Which cut or grazing in this application for in {0}?</value>
+    <value>Which cut or grazing in this organic material application for in {0}?</value>
   </data>
   <data name="lblForMultipleDefoliation" xml:space="preserve">
     <value>Is this application for the same cut or grazing in all the selected grass fields?</value>
   </data>
   <data name="lblWhichCutOrGrazingInThisApplicationForAllField" xml:space="preserve">
-    <value>Which cut or grazing in this application for in these fields?</value>
+    <value>Which cut or grazing in this organic material application for in these fields?</value>
   </data>
   <data name="lblWhichCropIsThisManureApplication" xml:space="preserve">
     <value>Which crop is this manure application for in {0}?</value>
@@ -4688,6 +4688,16 @@ live</value>
   <data name="lblWhichPlanWouldYouLikeToCopyFor" xml:space="preserve">
     <value>Which plan would you like to copy for {0}?</value>
   </data>
+
+  <data name="lblCut" xml:space="preserve">
+    <value>Cut</value>
+  </data>
+  <data name="lblHay" xml:space="preserve">
+    <value>hay</value>
+  </data>
+  <data name="lblSilage" xml:space="preserve">
+    <value>Silage</value>
+</data>
   <data name="lblDoYouWantToIncludeOrganicMaterialInorganicFertiliserApplications" xml:space="preserve">
     <value>Do you want to include organic material and inorganic fertiliser applications?</value>
   </data>

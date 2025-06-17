@@ -2410,6 +2410,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cut.
+        /// </summary>
+        public static string lblCut {
+            get {
+                return ResourceManager.GetString("lblCut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to cuts and grazing order.
         /// </summary>
         public static string lblCutsAndGrazingOrder {
@@ -4017,6 +4026,15 @@ namespace NMP.Portal.Resources {
         public static string lblHawManyCutsTypicallyEachYear {
             get {
                 return ResourceManager.GetString("lblHawManyCutsTypicallyEachYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to hay.
+        /// </summary>
+        public static string lblHay {
+            get {
+                return ResourceManager.GetString("lblHay", resourceCulture);
             }
         }
         
@@ -7867,6 +7885,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Silage.
+        /// </summary>
+        public static string lblSilage {
+            get {
+                return ResourceManager.GetString("lblSilage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Single Business Identifier.
         /// </summary>
         public static string lblSingleBusinessIdentifier {
@@ -10585,7 +10612,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Which cut or grazing in this application for in these fields?.
+        ///   Looks up a localized string similar to Which cut or grazing in this organic material application for in these fields?.
         /// </summary>
         public static string lblWhichCutOrGrazingInThisApplicationForAllField {
             get {
@@ -10594,7 +10621,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Which cut or grazing in this application for in {0}?.
+        ///   Looks up a localized string similar to Which cut or grazing in this organic material application for in {0}?.
         /// </summary>
         public static string lblWhichCutOrGrazingInThisApplicationForInField {
             get {

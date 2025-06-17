@@ -104,6 +104,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules" value="@Model.isEnglishRules.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManureTypeChange" value="@Model.IsManureTypeChange.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManureTypeLiquid" value="@Model.IsManureTypeLiquid.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NeedToShowSameDefoliationForAll" value="@Model.NeedToShowSameDefoliationForAll.ToString().ToLower()"></govuk-input>
 
 
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
