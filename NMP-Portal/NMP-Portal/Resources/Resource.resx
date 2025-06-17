@@ -4670,24 +4670,40 @@ live</value>
   <data name="lblContinueToCreateAPlanFor" xml:space="preserve">
     <value>Continue to create a plan for {0}</value>
   </data>
-
   <data name="lblService" xml:space="preserve">
     <value>service</value>
   </data>
   <data name="lblTool" xml:space="preserve">
     <value>tool</value>
-</data>
+  </data>
   <data name="lblCopyExistingPlan" xml:space="preserve">
     <value>Copy existing plan</value>
   </data>
   <data name="lblWouldYouLikeToStartWithCopyOfPlanFromPreviousYear" xml:space="preserve">
     <value>Would you like to start with a copy of a plan from a previous year?</value>
-
   </data>
   <data name="lblCopyPlanYears" xml:space="preserve">
     <value>Copy Plan Years</value>
   </data>
   <data name="lblWhichPlanWouldYouLikeToCopyFor" xml:space="preserve">
     <value>Which plan would you like to copy for {0}?</value>
+  </data>
+  <data name="lblDoYouWantToIncludeOrganicMaterialInorganicFertiliserApplications" xml:space="preserve">
+    <value>Do you want to include organic material and inorganic fertiliser applications?</value>
+  </data>
+  <data name="lblIncludeInorganicFertiliserApplications" xml:space="preserve">
+    <value>Include inorganic fertiliser applications</value>
+  </data>
+  <data name="lblIncludeNoneOfThese" xml:space="preserve">
+    <value>Include none of these</value>
+  </data>
+  <data name="lblIncludeOrganicMaterialApplications" xml:space="preserve">
+    <value>Include organic material applications</value>
+  </data>
+  <data name="lblOrganicInorganicCopy" xml:space="preserve">
+    <value>Organic inorganic copy</value>
+  </data>
+  <data name="lblSelectAllThatApplyApplicationDateWillBeUpdated" xml:space="preserve">
+    <value>Select all that apply. Application dates will be updated for harvest year {0}. These can be changed later.</value>
   </data>
 </root>
