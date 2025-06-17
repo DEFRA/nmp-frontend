@@ -195,6 +195,9 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
+                (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
+                model.IsEnglishRules = farm.EnglishRules;
+
                 List<CropGroupResponse> cropGroups = await _fieldService.FetchCropGroups();
                 var country = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
                 var cropGroupsList = cropGroups.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.RB209Country.All).ToList();
