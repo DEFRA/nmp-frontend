@@ -99,7 +99,7 @@ namespace NMP.Portal.ViewModels
         public string? EncryptedCropGroupName { get; set; } = string.Empty;
         public int? FarmID { get; set; }
         public bool? CopyExistingPlan { get; set; }
-
         public int? CopyYear { get; set; }
+        public int? OrganicInorganicCopy { get; set; }
     }
 }

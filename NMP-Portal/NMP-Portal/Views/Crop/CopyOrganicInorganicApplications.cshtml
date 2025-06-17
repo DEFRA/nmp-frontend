@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblCopyPlanYears;
+    ViewData["Title"] = Resource.lblOrganicInorganicCopy;
 }
 
 @section BeforeContent {
@@ -11,7 +11,7 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        @* <form asp-action="CopyPlanYears" asp-controller="Crop" method="post" autocomplete="off">
+        <form asp-action="CopyOrganicInorganicApplications" asp-controller="Crop" method="post" autocomplete="off">
             @Html.AntiForgeryToken()
 
             @if (TempData["ErrorOnHarvestYear"] != null)
@@ -59,6 +59,9 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCropOrder"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
 
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingPlan"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyYear"></govuk-input>
+
                 @if (Model.HarvestYear != null && Model.HarvestYear.Count > 0)
                 {
                     @for (int i = 0; i < Model.HarvestYear.Count; i++)
@@ -99,28 +102,25 @@
                 }
             </div>
             <div class="govuk-form-group">
-                <govuk-radios class="govuk-radios" asp-for="@Model.CopyYear">
-                    <govuk-radios-fieldset>
-                        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                            @string.Format(Resource.lblWhichPlanWouldYouLikeToCopyFor, Model.Year)
-                        </govuk-radios-fieldset-legend>
-                        @foreach (var year in Model.HarvestYear)
-                        {
-                            if (year.IsAnyPlan)
-                            {
-                                <govuk-radios-item value=@year.Year>@year.Year</govuk-radios-item>
-
-                            }
-
-                        }
-                    </govuk-radios-fieldset>
-                </govuk-radios>
+                <govuk-checkboxes name="OrganicInorganicCopy" asp-for="@Model.OrganicInorganicCopy">
+                    <govuk-checkboxes-fieldset>
+                        <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                            @Resource.lblDoYouWantToIncludeOrganicMaterialInorganicFertiliserApplications
+                        </govuk-checkboxes-fieldset-legend>
+                        <govuk-checkboxes-hint>
+                            @string.Format(Resource.lblSelectAllThatApplyApplicationDateWillBeUpdated,Model.Year)
+                        </govuk-checkboxes-hint>
+                        <govuk-checkboxes-item value=@((int)NMP.Portal.Enums.OrganicInorganicCopy.OrganicMaterial)>@Resource.lblIncludeOrganicMaterialApplications</govuk-checkboxes-item>
+                        <govuk-checkboxes-item value=@((int)NMP.Portal.Enums.OrganicInorganicCopy.InorganicFertiliser)>@Resource.lblIncludeInorganicFertiliserApplications</govuk-checkboxes-item>
+                        <govuk-checkboxes-divider>or</govuk-checkboxes-divider>
+                        <govuk-checkboxes-item value=@((int)NMP.Portal.Enums.OrganicInorganicCopy.None) behavior="Exclusive">@Resource.lblIncludeNoneOfThese</govuk-checkboxes-item>
+                    </govuk-checkboxes-fieldset>
+                </govuk-checkboxes>
             </div>
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
-        </form> *@
-        <h2>Work in progress</h2>
+        </form>
         <p class="govuk-body cancel-link">
             @if (!Model.IsCheckAnswer)
             {

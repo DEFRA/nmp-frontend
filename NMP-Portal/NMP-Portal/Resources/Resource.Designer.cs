@@ -2725,6 +2725,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you want to include organic material and inorganic fertiliser applications?.
+        /// </summary>
+        public static string lblDoYouWantToIncludeOrganicMaterialInorganicFertiliserApplications {
+            get {
+                return ResourceManager.GetString("lblDoYouWantToIncludeOrganicMaterialInorganicFertiliserApplications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you want to use existing nutrient values for {0}?.
         /// </summary>
         public static string lblDoYouWantToUseExistingNutrientValuesFor {
@@ -4517,6 +4526,33 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Include inorganic fertiliser applications.
+        /// </summary>
+        public static string lblIncludeInorganicFertiliserApplications {
+            get {
+                return ResourceManager.GetString("lblIncludeInorganicFertiliserApplications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Include none of these.
+        /// </summary>
+        public static string lblIncludeNoneOfThese {
+            get {
+                return ResourceManager.GetString("lblIncludeNoneOfThese", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Include organic material applications.
+        /// </summary>
+        public static string lblIncludeOrganicMaterialApplications {
+            get {
+                return ResourceManager.GetString("lblIncludeOrganicMaterialApplications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to incorporation delays.
         /// </summary>
         public static string lblIncorporationDelays {
@@ -6283,6 +6319,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Organic inorganic copy.
+        /// </summary>
+        public static string lblOrganicInorganicCopy {
+            get {
+                return ResourceManager.GetString("lblOrganicInorganicCopy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to organic manure.
         /// </summary>
         public static string lblOrganicManure {
@@ -7683,6 +7728,15 @@ namespace NMP.Portal.Resources {
         public static string lblSelectAllThatApply {
             get {
                 return ResourceManager.GetString("lblSelectAllThatApply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select all that apply. Application dates will be updated for harvest year {0}. These can be changed later..
+        /// </summary>
+        public static string lblSelectAllThatApplyApplicationDateWillBeUpdated {
+            get {
+                return ResourceManager.GetString("lblSelectAllThatApplyApplicationDateWillBeUpdated", resourceCulture);
             }
         }
         
