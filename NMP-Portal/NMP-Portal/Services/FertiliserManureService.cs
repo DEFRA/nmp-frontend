@@ -544,10 +544,10 @@ namespace NMP.Portal.Services
 
             return (fertiliser, error);
         }
-        public async Task<(decimal, Error)> FetchTotalNByManagementPeriodID(int managementPeriodID)
+        public async Task<(decimal?, Error)> FetchTotalNByManagementPeriodID(int managementPeriodID)
         {
             Error error = null;
-            decimal totalN = 0;
+            decimal? totalN = null;
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
@@ -558,7 +558,7 @@ namespace NMP.Portal.Services
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        totalN = responseWrapper.Data.TotalN != null ? responseWrapper.Data.TotalN.ToObject<decimal>() : 0;
+                        totalN = responseWrapper.Data.TotalN;//!= null ? responseWrapper.Data.TotalN.ToObject<decimal>() : 0
                     }
                 }
                 else

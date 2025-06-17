@@ -1069,7 +1069,13 @@ namespace NMP.Portal.Controllers
                 {
                     if (manureGroupList.Count > 0)
                     {
-
+                        foreach (var manureGroup in manureGroupList)
+                        {
+                            if (manureGroup.Name == Resource.lblOtherOrganicMaterials)
+                            {
+                                manureGroup.Name = manureGroup.Name.Replace(Resource.lblOtherOrganicMaterials, Resource.lblAnotherTypeOfOrganicMaterial);
+                            }
+                        }
                         var SelectListItem = manureGroupList.Select(f => new SelectListItem
                         {
                             Value = f.Id.ToString(),
@@ -1138,6 +1144,13 @@ namespace NMP.Portal.Controllers
 
                         if (manureGroupList.Count > 0)
                         {
+                            foreach (var manureGroupName in manureGroupList)
+                            {
+                                if (manureGroupName.Name == Resource.lblOtherOrganicMaterials)
+                                {
+                                    manureGroupName.Name = manureGroupName.Name.Replace(Resource.lblOtherOrganicMaterials, Resource.lblAnotherTypeOfOrganicMaterial);
+                                }
+                            }
 
                             var SelectListItem = manureGroupList.Select(f => new SelectListItem
                             {
@@ -1248,7 +1261,14 @@ namespace NMP.Portal.Controllers
                 {
                     if (manureTypeList.Count > 0)
                     {
-                        var manures = manureTypeList.OrderBy(m => m.SortOrder).ToList();
+                        foreach (var manureType in manureTypeList)
+                        {
+                            if (manureType.Name.Contains(Resource.lblFYM,StringComparison.OrdinalIgnoreCase))
+                            {
+                                manureType.Name = manureType.Name.Replace(Resource.lblFYM, Resource.lblFarmyardManure);
+                            }
+                        }
+                        var manures = manureTypeList.OrderBy(m => m.SortOrder).ToList();                        
                         var SelectListItem = manures.Select(f => new SelectListItem
                         {
                             Value = f.Id.ToString(),
@@ -1301,6 +1321,14 @@ namespace NMP.Portal.Controllers
                     {
                         if (manureTypeList.Count > 0)
                         {
+
+                            foreach (var manureTypes in manureTypeList)
+                            {
+                                if (manureTypes.Name.Contains(Resource.lblFYM, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    manureTypes.Name = manureTypes.Name.Replace(Resource.lblFYM, Resource.lblFarmyardManure);
+                                }
+                            }
                             var manures = manureTypeList.OrderBy(m => m.SortOrder).ToList();
                             var SelectListItem = manures.Select(f => new SelectListItem
                             {
