@@ -539,8 +539,8 @@ namespace NMP.Portal.Controllers
                                 {
                                     foreach (string cropTypeId in vegetableGroup1List)
                                     {
-                                         nitrogenApplicationsForNMaxReportResponse = new List<NitrogenApplicationsForNMaxReportResponse>();
-                                         nMaxLimitReportResponse = new List<NMaxLimitReportResponse>();
+                                        nitrogenApplicationsForNMaxReportResponse = new List<NitrogenApplicationsForNMaxReportResponse>();
+                                        nMaxLimitReportResponse = new List<NMaxLimitReportResponse>();
                                         (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, nMaxLimit, error) = await GetNMaxReportData(harvestYearPlanResponse, Convert.ToInt32(cropTypeId), model,
                                             nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse);
                                         if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
@@ -592,7 +592,7 @@ namespace NMP.Portal.Controllers
                                             NMaxLimitReportResponse = nMaxLimitReportResponse,
                                             NitrogenApplicationsForNMaxReportResponse = (nitrogenApplicationsForNMaxReportResponse != null && nitrogenApplicationsForNMaxReportResponse.Count > 0) ? nitrogenApplicationsForNMaxReportResponse : null
                                         };
-                                        model.NMaxLimitReport.Add(fullReport);                                        
+                                        model.NMaxLimitReport.Add(fullReport);
                                     }
                                 }
                                 if (vegetableGroup3List.Count > 0)
@@ -864,25 +864,39 @@ namespace NMP.Portal.Controllers
                                             MaximumLimitForNApplied = nMaxLimitForCropType * field.CroppedArea.Value
                                         };
                                         nMaxLimitReportResponse.Add(nMaxLimitData);
-                                        decimal totalFertiliserN = 0;
-                                        decimal totalOrganicAvailableN = 0;
+                                        decimal? totalFertiliserN = null;
+                                        decimal? totalOrganicAvailableN = null;
                                         (List<ManagementPeriod> ManPeriodList, error) = await _cropService.FetchManagementperiodByCropId(crop.ID.Value, false);
                                         if (string.IsNullOrWhiteSpace(error.Message) && ManPeriodList != null && ManPeriodList.Count > 0)
                                         {
                                             foreach (var managementPeriod in ManPeriodList)
                                             {
-                                                (decimal totalNitrogen, error) = await _fertiliserManureService.FetchTotalNByManagementPeriodID(managementPeriod.ID.Value);
+                                                (decimal? totalNitrogen, error) = await _fertiliserManureService.FetchTotalNByManagementPeriodID(managementPeriod.ID.Value);
                                                 if (error == null)
                                                 {
-                                                    totalFertiliserN = totalFertiliserN + totalNitrogen;
+                                                    if (totalNitrogen != null)
+                                                    {
+                                                        if (totalFertiliserN == null)
+                                                        {
+                                                            totalFertiliserN = 0;
+                                                        }
+                                                        totalFertiliserN = totalFertiliserN + totalNitrogen;
+                                                    }
                                                 }
                                             }
                                             foreach (var managementPeriod in ManPeriodList)
                                             {
-                                                (decimal totalNitrogen, error) = await _organicManureService.FetchAvailableNByManagementPeriodID(managementPeriod.ID.Value);
+                                                (decimal? totalNitrogen, error) = await _organicManureService.FetchAvailableNByManagementPeriodID(managementPeriod.ID.Value);
                                                 if (error == null)
                                                 {
-                                                    totalOrganicAvailableN = totalOrganicAvailableN + totalNitrogen;
+                                                    if (totalNitrogen != null)
+                                                    {
+                                                        if (totalOrganicAvailableN == null)
+                                                        {
+                                                            totalOrganicAvailableN = 0;
+                                                        }
+                                                        totalOrganicAvailableN = totalOrganicAvailableN + totalNitrogen;
+                                                    }
                                                 }
                                             }
                                         }
@@ -892,12 +906,12 @@ namespace NMP.Portal.Controllers
                                             FieldName = field.Name,
                                             CropTypeName = cropTypeName,
                                             CropArea = field.CroppedArea.Value,
-                                            InorganicNRate = totalFertiliserN,
-                                            InorganicNTotal = totalFertiliserN * field.CroppedArea.Value,
-                                            OrganicCropAvailableNRate = totalOrganicAvailableN,
-                                            OrganicCropAvailableNTotal = totalOrganicAvailableN * field.CroppedArea.Value,
-                                            NRate = totalFertiliserN + totalOrganicAvailableN,
-                                            NTotal = (totalFertiliserN + totalOrganicAvailableN) * field.CroppedArea.Value
+                                            InorganicNRate = totalFertiliserN != null ? totalFertiliserN : null,
+                                            InorganicNTotal = (totalFertiliserN != null ? totalFertiliserN * field.CroppedArea.Value : null),
+                                            OrganicCropAvailableNRate = totalOrganicAvailableN != null ? totalOrganicAvailableN : null,
+                                            OrganicCropAvailableNTotal = (totalOrganicAvailableN != null ? totalOrganicAvailableN * field.CroppedArea.Value : null),
+                                            NRate = (totalFertiliserN == null && totalOrganicAvailableN == null) ? null : (totalFertiliserN ?? 0) + (totalOrganicAvailableN ?? 0),
+                                            NTotal = (totalFertiliserN == null && totalOrganicAvailableN == null) ? null : ((totalFertiliserN ?? 0) + (totalOrganicAvailableN ?? 0)) * field.CroppedArea.Value,
                                         };
 
                                         if (nitrogenResponse != null)
