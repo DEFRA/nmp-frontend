@@ -187,14 +187,14 @@
                     </h1>
                 </legand>
 
-                @if (ViewBag.closingPeriod != null && Model.IsWithinNVZ == true)
+                @if (ViewBag.ClosedPeriod != null && Model.IsWithinNVZ == true)
                 {
                     <div id="closed-date" class="govuk-body">
                         <p>
                             @Resource.lblYourClosedPeriodForSpreading
                         </p>
                         <h3 class="govuk-heading-s closed-date">
-                            @ViewBag.closingPeriod
+                            @ViewBag.ClosedPeriod
                         </h3>
                         <p>
                             @Resource.lblBasedOnYourCropSoilTypeAndFarmDetails
