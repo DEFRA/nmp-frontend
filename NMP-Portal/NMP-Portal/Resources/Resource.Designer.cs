@@ -1114,6 +1114,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Another type of organic material.
+        /// </summary>
+        public static string lblAnotherTypeOfOrganicMaterial {
+            get {
+                return ResourceManager.GetString("lblAnotherTypeOfOrganicMaterial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Any changes you make may affect the nutrient recommendations for any harvest years where this analysis applies..
         /// </summary>
         public static string lblAnyChangesYouMakeMayAffectTheNutrientRecommendation {
@@ -3481,6 +3490,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to farmyard manure.
+        /// </summary>
+        public static string lblFarmyardManure {
+            get {
+                return ResourceManager.GetString("lblFarmyardManure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to February.
         /// </summary>
         public static string lblFebruary {
@@ -3792,6 +3810,15 @@ namespace NMP.Portal.Resources {
         public static string lblFromManures {
             get {
                 return ResourceManager.GetString("lblFromManures", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FYM.
+        /// </summary>
+        public static string lblFYM {
+            get {
+                return ResourceManager.GetString("lblFYM", resourceCulture);
             }
         }
         

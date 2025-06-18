@@ -4688,7 +4688,6 @@ live</value>
   <data name="lblWhichPlanWouldYouLikeToCopyFor" xml:space="preserve">
     <value>Which plan would you like to copy for {0}?</value>
   </data>
-
   <data name="lblCut" xml:space="preserve">
     <value>Cut</value>
   </data>
@@ -4697,7 +4696,7 @@ live</value>
   </data>
   <data name="lblSilage" xml:space="preserve">
     <value>Silage</value>
-</data>
+  </data>
   <data name="lblDoYouWantToIncludeOrganicMaterialInorganicFertiliserApplications" xml:space="preserve">
     <value>Do you want to include organic material and inorganic fertiliser applications?</value>
   </data>
@@ -4715,5 +4714,14 @@ live</value>
   </data>
   <data name="lblSelectAllThatApplyApplicationDateWillBeUpdated" xml:space="preserve">
     <value>Select all that apply. Application dates will be updated for harvest year {0}. These can be changed later.</value>
+  </data>
+  <data name="lblAnotherTypeOfOrganicMaterial" xml:space="preserve">
+    <value>Another type of organic material</value>
+  </data>
+  <data name="lblFarmyardManure" xml:space="preserve">
+    <value>farmyard manure</value>
+  </data>
+  <data name="lblFYM" xml:space="preserve">
+    <value>FYM</value>
   </data>
 </root>
