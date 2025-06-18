@@ -3527,7 +3527,7 @@ cubic metres per hectare  not set</value>
     <value>This is the plan for testing this tool, adding new features and rolling it out across the country.</value>
   </data>
   <data name="lblAllModulesLive" xml:space="preserve">
-    <value>all the modules for England and Wales are live on &lt;a href="https://www.gov.uk/" target="_blank"&gt;GOV.UK&lt;/a&gt; and available for general use</value>
+    <value>NMPT-GB for England and Wales are live on &lt;a href="https://www.gov.uk/" target="_blank"&gt;GOV.UK&lt;/a&gt; and available for general use</value>
   </data>
   <data name="lblArableCoreFunctions" xml:space="preserve">
     <value>Core functions, arable:</value>
@@ -3541,8 +3541,8 @@ cubic metres per hectare  not set</value>
   <data name="lblExistingManureStorageCapacity" xml:space="preserve">
     <value>added function: existing manure storage capacity NVZ compliance module</value>
   </data>
-  <data name="lblMarchToJuly2025" xml:space="preserve">
-    <value>March to July 2025 - England and Wales private beta test</value>
+  <data name="lblMarchToAugust2025" xml:space="preserve">
+    <value>March to August 2025 - England and Wales private beta test</value>
   </data>
   <data name="lblGrasslandCoreFunctions" xml:space="preserve">
     <value>Core functions, grassland:</value>
@@ -3550,14 +3550,14 @@ cubic metres per hectare  not set</value>
   <data name="lblIntegratedMANNERNPKCalculations" xml:space="preserve">
     <value>integrated MANNER-NPK calculations</value>
   </data>
-  <data name="lblJuly2025Schedule" xml:space="preserve">
-    <value>July 2025 - England and Wales full tool live</value>
+  <data name="lblAugust2025Schedule" xml:space="preserve">
+    <value>August 2025 - England and Wales full tool live</value>
   </data>
   <data name="lblLivestockManureLimitComplianceModule" xml:space="preserve">
     <value>added function: livestock manure nitrogen (N) farm limit NVZ compliance module</value>
   </data>
   <data name="lblMannerNPKStandAloneFrontEnd" xml:space="preserve">
-    <value>added function: MANNER-NPK stand-alone front-end</value>
+    <value>added function: MANNER-NPK stand-alone module</value>
   </data>
   <data name="lblNMaxComplainceModule" xml:space="preserve">
     <value>added function: N-max NVZ compliance module</value>
@@ -3566,7 +3566,7 @@ cubic metres per hectare  not set</value>
     <value>a limited number of selected farmers and advisers across England and Wales are invited to test the tool and provide feedback prior to the public release</value>
   </data>
   <data name="lblNMPTLaunchesToUsersInScotland" xml:space="preserve">
-    <value>the tool launches to users in Scotland</value>
+    <value>NMPT-GB launches to users in Scotland</value>
   </data>
   <data name="lblNMPTLiveForGeneralUse" xml:space="preserve">
     <value>tool launches for cross-border farms</value>
@@ -3828,7 +3828,7 @@ live</value>
     <value>The first step is to set up your farm. The farm will contain your fields, and the fields will have the crops and nutrients applied to them. If you have more than one holding, it's best to add a separate farm for each one.</value>
   </data>
   <data name="lblRegulations_line1" xml:space="preserve">
-    <value>You can use the recommendations and outputs from this tool to demonstrate compliance with environmental regulations. This tool will warn you if you enter field or nutrient management information that will breach rules relating to inorganic fertilisers, organic manures or other materials containing nitrogen.</value>
+    <value>You can use the recommendations and outputs from NMPT-GB to demonstrate compliance with environmental regulations. This tool will warn you if you enter field or nutrient management information that will breach rules relating to inorganic fertilisers, organic manures or other materials containing nitrogen.</value>
   </data>
   <data name="lblRegulations_line2" xml:space="preserve">
     <value>You must follow the appropriate regulations, depending on where your farm is:</value>
@@ -3879,16 +3879,16 @@ live</value>
     <value>Saving your data</value>
   </data>
   <data name="lblSaving_your_data_line1" xml:space="preserve">
-    <value>The tool will save the data you input regularly. There will be a Check Your Answers page at the end of each section, and when you select Submit here, your data will be saved up to this point. You will then be able to leave and resume here.</value>
+    <value>NMPT-GB will save the data you input regularly. There will be a Check Your Answers page at the end of each section, and when you select Submit here, your data will be saved up to this point. You will then be able to leave and resume here. Creating a plan or report will also save your data.</value>
   </data>
   <data name="lblSoil_Analysis_line1" xml:space="preserve">
-    <value>You should sample the soil from your fields every 3 to 4 years and get it tested for pH, phosphorus, potassium and magnesium.</value>
+    <value>Good management of pH, soil phosphate, potash and magnesium depends on soil sampling and analysis. Soil sampling and analysis should be carried out every 3 to 5 years, at an appropriate time in the crop rotation.</value>
   </data>
   <data name="lblSoil_Analysis_line2" xml:space="preserve">
-    <value>You will be asked to enter the data from the analysis as you progress through the tool, in order to create your nutrient management plan.</value>
+    <value>You must follow the appropriate soil analysis regulations for your region.</value>
   </data>
   <data name="lblSoil_Analysis_line3" xml:space="preserve">
-    <value>​If you do not enter a soil analysis, or if your most recent soil analysis is more than 5 years old, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop.</value>
+    <value>You will be asked to enter the data from your analysis as you progress through NMPT-GB, in order to create your nutrient management plan.</value>
   </data>
   <data name="lblTermsOfUse" xml:space="preserve">
     <value>Terms of use</value>
@@ -3969,7 +3969,7 @@ live</value>
     <value>England: &lt;a href="https://www.gov.uk/guidance/rules-for-farmers-and-land-managers-to-prevent-water-pollution#assess-pollution-risks" target="_blank" &gt;Farming rules for water&lt;/a&gt; and  &lt;a href="https://www.gov.uk/government/collections/nitrate-vulnerable-zones" target="_blank"&gt;Nitrate vulnerable zones (NVZs)&lt;/a&gt;</value>
   </data>
   <data name="lblRegulations" xml:space="preserve">
-    <value>Regulations</value>
+    <value>Regulations to follow</value>
   </data>
   <data name="lblWalesWaterResourceRegulations" xml:space="preserve">
     <value>Wales: &lt;a href="https://www.gov.wales/water-resources-control-agricultural-pollution-wales-regulations-2021-guidance-farmers-and-land" target="_blank"&gt;The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021&lt;/a&gt;</value>
@@ -4038,7 +4038,7 @@ live</value>
     <value>Crop, field and soil details</value>
   </data>
   <data name="lblSoil_Analysis_line4" xml:space="preserve">
-    <value>The tool also accounts for Soil Nitrogen Supply (SNS). You can add SNS data for a field at the end of the planning process.</value>
+    <value>​If you do not enter a soil analysis, or if your most recent soil analysis is more than 5 years old, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop. ​</value>
   </data>
   <data name="lblAddTheseAnalysisResults" xml:space="preserve">
     <value>Add these analysis results</value>
@@ -4723,5 +4723,71 @@ live</value>
   </data>
   <data name="lblFYM" xml:space="preserve">
     <value>FYM</value>
+  </data>
+  <data name="lblAboutTheNutrientManagementPlanningToolGB" xml:space="preserve">
+    <value>About the Nutrient Management Planning Tool GB (NMPT-GB)</value>
+  </data>
+  <data name="lblAboutTheNutrientManagementPlanningToolGBLine1" xml:space="preserve">
+    <value>Before you start</value>
+  </data>
+  <data name="lblAboutTheNutrientManagementPlanningToolGBLine2" xml:space="preserve">
+    <value>You will need the following:</value>
+  </data>
+  <data name="lblAboutTheNutrientManagementPlanningToolGBLine3" xml:space="preserve">
+    <value>field information: size, cropped area and manure non-spreading area</value>
+  </data>
+  <data name="lblAboutTheNutrientManagementPlanningToolGBLine4" xml:space="preserve">
+    <value>details of fertiliser or organic material applications</value>
+  </data>
+  <data name="lblAboutTheNutrientManagementPlanningToolGBLine5" xml:space="preserve">
+    <value>Other data you might need (if applicable to your farm):</value>
+  </data>
+  <data name="lblAboutTheNutrientManagementPlanningToolGBLine6" xml:space="preserve">
+    <value>manure imports and exports</value>
+  </data>
+  <data name="lblCoreFunctionsGrassland" xml:space="preserve">
+    <value>Core functions, grassland:</value>
+  </data>
+  <data name="lblCropInformation" xml:space="preserve">
+    <value>crop information</value>
+  </data>
+  <data name="lblCrossBorderHoldings" xml:space="preserve">
+    <value>Cross-border holdings</value>
+  </data>
+  <data name="lblCrossBorderHoldingsContent1" xml:space="preserve">
+    <value>Farmers with a cross-border holding (a farm with land in more than one part of Great Britain) will need to set up 2 separate farms - one in each region - and manage them separately within NMPT-GB.</value>
+  </data>
+  <data name="lblCrossBorderHoldingsContent2" xml:space="preserve">
+    <value>For instance, if your holding has land in both England and Scotland, you would need to create 2 farms in NMPT-GB.</value>
+  </data>
+  <data name="lblCrossBorderHoldingsContent3" xml:space="preserve">
+    <value>This means that NMPT-GB will be using the appropriate calculations and following the relevant regulations for each farm.</value>
+  </data>
+  <data name="lblCurrentFunctionContent1" xml:space="preserve">
+    <value>This is what NMPT-GB can currently do in this test phase. This list will grow as we develop the tool.</value>
+  </data>
+  <data name="lblCurrentFunctionContent2" xml:space="preserve">
+    <value>Core functions, arable:</value>
+  </data>
+  <data name="lblCurrentFunctions" xml:space="preserve">
+    <value>Current functions</value>
+  </data>
+  <data name="lblLivestockInformation" xml:space="preserve">
+    <value>livestock information</value>
+  </data>
+  <data name="lblPlannedUpcomingFunction" xml:space="preserve">
+    <value>Planned upcoming functions</value>
+  </data>
+  <data name="lblPlannedUpcomingFunctionContent1" xml:space="preserve">
+    <value>This is the plan for adding new functions (subject to change as we go through testing).</value>
+  </data>
+  <data name="lblSoilAnalysisData" xml:space="preserve">
+    <value>soil analysis data</value>
+  </data>
+  <data name="lblSoil_Analysis_line5" xml:space="preserve">
+    <value>The tool also accounts for Soil Nitrogen Supply (SNS). You can add SNS data for a field at the end of the planning process.</value>
+  </data>
+  <data name="lblWaterResourcesRegulation2021Content" xml:space="preserve">
+    <value>Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021 content</value>
   </data>
 </root>
