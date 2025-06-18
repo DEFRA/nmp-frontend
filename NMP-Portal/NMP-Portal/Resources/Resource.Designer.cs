@@ -556,6 +556,69 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About the Nutrient Management Planning Tool GB (NMPT-GB).
+        /// </summary>
+        public static string lblAboutTheNutrientManagementPlanningToolGB {
+            get {
+                return ResourceManager.GetString("lblAboutTheNutrientManagementPlanningToolGB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Before you start.
+        /// </summary>
+        public static string lblAboutTheNutrientManagementPlanningToolGBLine1 {
+            get {
+                return ResourceManager.GetString("lblAboutTheNutrientManagementPlanningToolGBLine1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You will need the following:.
+        /// </summary>
+        public static string lblAboutTheNutrientManagementPlanningToolGBLine2 {
+            get {
+                return ResourceManager.GetString("lblAboutTheNutrientManagementPlanningToolGBLine2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to field information: size, cropped area and manure non-spreading area.
+        /// </summary>
+        public static string lblAboutTheNutrientManagementPlanningToolGBLine3 {
+            get {
+                return ResourceManager.GetString("lblAboutTheNutrientManagementPlanningToolGBLine3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to details of fertiliser or organic material applications.
+        /// </summary>
+        public static string lblAboutTheNutrientManagementPlanningToolGBLine4 {
+            get {
+                return ResourceManager.GetString("lblAboutTheNutrientManagementPlanningToolGBLine4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Other data you might need (if applicable to your farm):.
+        /// </summary>
+        public static string lblAboutTheNutrientManagementPlanningToolGBLine5 {
+            get {
+                return ResourceManager.GetString("lblAboutTheNutrientManagementPlanningToolGBLine5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to manure imports and exports.
+        /// </summary>
+        public static string lblAboutTheNutrientManagementPlanningToolGBLine6 {
+            get {
+                return ResourceManager.GetString("lblAboutTheNutrientManagementPlanningToolGBLine6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to About these values.
         /// </summary>
         public static string lblAboutTheseValues {
@@ -979,7 +1042,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to all the modules for England and Wales are live on &lt;a href=&quot;https://www.gov.uk/&quot; target=&quot;_blank&quot;&gt;GOV.UK&lt;/a&gt; and available for general use.
+        ///   Looks up a localized string similar to NMPT-GB for England and Wales are live on &lt;a href=&quot;https://www.gov.uk/&quot; target=&quot;_blank&quot;&gt;GOV.UK&lt;/a&gt; and available for general use.
         /// </summary>
         public static string lblAllModulesLive {
             get {
@@ -1317,6 +1380,15 @@ namespace NMP.Portal.Resources {
         public static string lblAugust {
             get {
                 return ResourceManager.GetString("lblAugust", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to August 2025 - England and Wales full tool live.
+        /// </summary>
+        public static string lblAugust2025Schedule {
+            get {
+                return ResourceManager.GetString("lblAugust2025Schedule", resourceCulture);
             }
         }
         
@@ -1933,6 +2005,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Core functions, grassland:.
+        /// </summary>
+        public static string lblCoreFunctionsGrassland {
+            get {
+                return ResourceManager.GetString("lblCoreFunctionsGrassland", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Country.
         /// </summary>
         public static string lblCountry {
@@ -2221,6 +2302,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to crop information.
+        /// </summary>
+        public static string lblCropInformation {
+            get {
+                return ResourceManager.GetString("lblCropInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Crop information 1.
         /// </summary>
         public static string lblCropInformation1 {
@@ -2392,6 +2482,42 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cross-border holdings.
+        /// </summary>
+        public static string lblCrossBorderHoldings {
+            get {
+                return ResourceManager.GetString("lblCrossBorderHoldings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Farmers with a cross-border holding (a farm with land in more than one part of Great Britain) will need to set up 2 separate farms - one in each region - and manage them separately within NMPT-GB..
+        /// </summary>
+        public static string lblCrossBorderHoldingsContent1 {
+            get {
+                return ResourceManager.GetString("lblCrossBorderHoldingsContent1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For instance, if your holding has land in both England and Scotland, you would need to create 2 farms in NMPT-GB..
+        /// </summary>
+        public static string lblCrossBorderHoldingsContent2 {
+            get {
+                return ResourceManager.GetString("lblCrossBorderHoldingsContent2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This means that NMPT-GB will be using the appropriate calculations and following the relevant regulations for each farm..
+        /// </summary>
+        public static string lblCrossBorderHoldingsContent3 {
+            get {
+                return ResourceManager.GetString("lblCrossBorderHoldingsContent3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to crop types.
         /// </summary>
         public static string lblCroupTypes {
@@ -2415,6 +2541,33 @@ namespace NMP.Portal.Resources {
         public static string lblCurrentFields {
             get {
                 return ResourceManager.GetString("lblCurrentFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This is what NMPT-GB can currently do in this test phase. This list will grow as we develop the tool..
+        /// </summary>
+        public static string lblCurrentFunctionContent1 {
+            get {
+                return ResourceManager.GetString("lblCurrentFunctionContent1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Core functions, arable:.
+        /// </summary>
+        public static string lblCurrentFunctionContent2 {
+            get {
+                return ResourceManager.GetString("lblCurrentFunctionContent2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current functions.
+        /// </summary>
+        public static string lblCurrentFunctions {
+            get {
+                return ResourceManager.GetString("lblCurrentFunctions", resourceCulture);
             }
         }
         
@@ -4859,15 +5012,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to July 2025 - England and Wales full tool live.
-        /// </summary>
-        public static string lblJuly2025Schedule {
-            get {
-                return ResourceManager.GetString("lblJuly2025Schedule", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to June.
         /// </summary>
         public static string lblJune {
@@ -5184,6 +5328,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to livestock information.
+        /// </summary>
+        public static string lblLivestockInformation {
+            get {
+                return ResourceManager.GetString("lblLivestockInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to added function: livestock manure nitrogen (N) farm limit NVZ compliance module.
         /// </summary>
         public static string lblLivestockManureLimitComplianceModule {
@@ -5301,7 +5454,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to added function: MANNER-NPK stand-alone front-end.
+        ///   Looks up a localized string similar to added function: MANNER-NPK stand-alone module.
         /// </summary>
         public static string lblMannerNPKStandAloneFrontEnd {
             get {
@@ -5418,11 +5571,11 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to March to July 2025 - England and Wales private beta test.
+        ///   Looks up a localized string similar to March to August 2025 - England and Wales private beta test.
         /// </summary>
-        public static string lblMarchToJuly2025 {
+        public static string lblMarchToAugust2025 {
             get {
-                return ResourceManager.GetString("lblMarchToJuly2025", resourceCulture);
+                return ResourceManager.GetString("lblMarchToAugust2025", resourceCulture);
             }
         }
         
@@ -5877,7 +6030,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to the tool launches to users in Scotland.
+        ///   Looks up a localized string similar to NMPT-GB launches to users in Scotland.
         /// </summary>
         public static string lblNMPTLaunchesToUsersInScotland {
             get {
@@ -6778,6 +6931,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Planned upcoming functions.
+        /// </summary>
+        public static string lblPlannedUpcomingFunction {
+            get {
+                return ResourceManager.GetString("lblPlannedUpcomingFunction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This is the plan for adding new functions (subject to change as we go through testing)..
+        /// </summary>
+        public static string lblPlannedUpcomingFunctionContent1 {
+            get {
+                return ResourceManager.GetString("lblPlannedUpcomingFunctionContent1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Planning and recording.
         /// </summary>
         public static string lblPlanningAndRecording {
@@ -7318,7 +7489,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Regulations.
+        ///   Looks up a localized string similar to Regulations to follow.
         /// </summary>
         public static string lblRegulations {
             get {
@@ -7336,7 +7507,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can use the recommendations and outputs from this tool to demonstrate compliance with environmental regulations. This tool will warn you if you enter field or nutrient management information that will breach rules relating to inorganic fertilisers, organic manures or other materials containing nitrogen..
+        ///   Looks up a localized string similar to You can use the recommendations and outputs from NMPT-GB to demonstrate compliance with environmental regulations. This tool will warn you if you enter field or nutrient management information that will breach rules relating to inorganic fertilisers, organic manures or other materials containing nitrogen..
         /// </summary>
         public static string lblRegulations_line1 {
             get {
@@ -7669,7 +7840,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The tool will save the data you input regularly. There will be a Check Your Answers page at the end of each section, and when you select Submit here, your data will be saved up to this point. You will then be able to leave and resume here..
+        ///   Looks up a localized string similar to NMPT-GB will save the data you input regularly. There will be a Check Your Answers page at the end of each section, and when you select Submit here, your data will be saved up to this point. You will then be able to leave and resume here. Creating a plan or report will also save your data..
         /// </summary>
         public static string lblSaving_your_data_line1 {
             get {
@@ -8038,7 +8209,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You should sample the soil from your fields every 3 to 4 years and get it tested for pH, phosphorus, potassium and magnesium..
+        ///   Looks up a localized string similar to Good management of pH, soil phosphate, potash and magnesium depends on soil sampling and analysis. Soil sampling and analysis should be carried out every 3 to 5 years, at an appropriate time in the crop rotation..
         /// </summary>
         public static string lblSoil_Analysis_line1 {
             get {
@@ -8047,7 +8218,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You will be asked to enter the data from the analysis as you progress through the tool, in order to create your nutrient management plan..
+        ///   Looks up a localized string similar to You must follow the appropriate soil analysis regulations for your region..
         /// </summary>
         public static string lblSoil_Analysis_line2 {
             get {
@@ -8056,7 +8227,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ​If you do not enter a soil analysis, or if your most recent soil analysis is more than 5 years old, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop..
+        ///   Looks up a localized string similar to You will be asked to enter the data from your analysis as you progress through NMPT-GB, in order to create your nutrient management plan..
         /// </summary>
         public static string lblSoil_Analysis_line3 {
             get {
@@ -8065,11 +8236,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The tool also accounts for Soil Nitrogen Supply (SNS). You can add SNS data for a field at the end of the planning process..
+        ///   Looks up a localized string similar to ​If you do not enter a soil analysis, or if your most recent soil analysis is more than 5 years old, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop. ​.
         /// </summary>
         public static string lblSoil_Analysis_line4 {
             get {
                 return ResourceManager.GetString("lblSoil_Analysis_line4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The tool also accounts for Soil Nitrogen Supply (SNS). You can add SNS data for a field at the end of the planning process..
+        /// </summary>
+        public static string lblSoil_Analysis_line5 {
+            get {
+                return ResourceManager.GetString("lblSoil_Analysis_line5", resourceCulture);
             }
         }
         
@@ -8079,6 +8259,15 @@ namespace NMP.Portal.Resources {
         public static string lblSoilAnalysis {
             get {
                 return ResourceManager.GetString("lblSoilAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to soil analysis data.
+        /// </summary>
+        public static string lblSoilAnalysisData {
+            get {
+                return ResourceManager.GetString("lblSoilAnalysisData", resourceCulture);
             }
         }
         
@@ -10032,6 +10221,15 @@ namespace NMP.Portal.Resources {
         public static string lblWalesWaterResourceRegulations {
             get {
                 return ResourceManager.GetString("lblWalesWaterResourceRegulations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021 content.
+        /// </summary>
+        public static string lblWaterResourcesRegulation2021Content {
+            get {
+                return ResourceManager.GetString("lblWaterResourcesRegulation2021Content", resourceCulture);
             }
         }
         
