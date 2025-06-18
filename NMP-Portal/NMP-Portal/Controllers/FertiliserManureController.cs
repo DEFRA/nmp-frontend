@@ -2881,9 +2881,9 @@ namespace NMP.Portal.Controllers
 
                     if (error == null)
                     {
-                        nitrogenInFourWeek = nitrogenInFourWeek + Convert.ToDecimal(model.N);
+                        //nitrogenInFourWeek = nitrogenInFourWeek + Convert.ToDecimal(model.N);
 
-                        if (totalNitrogen > 100 || model.N.Value > 50 || nitrogenInFourWeek > 50)
+                        if (totalNitrogen > 100 || model.N.Value > 50 || nitrogenInFourWeek > 0)  //nitrogenInFourWeek>0 means check Nitrogen applied within 28 days
                         {
                             if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
                             {
@@ -2928,7 +2928,7 @@ namespace NMP.Portal.Controllers
                     int maxNitrogenRate = 0;
                     if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.Asparagus)
                     {
-                        if (model.N.Value > 50)
+                        if (totalNitrogen > 50)
                         {
                             isNitrogenRateExceeded = true;
                             maxNitrogenRate = 50;
@@ -2936,7 +2936,7 @@ namespace NMP.Portal.Controllers
                     }
                     if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.BulbOnions)
                     {
-                        if (model.N.Value > 40)
+                        if (totalNitrogen > 40)
                         {
                             isNitrogenRateExceeded = true;
                             maxNitrogenRate = 40;
@@ -2944,7 +2944,7 @@ namespace NMP.Portal.Controllers
                     }
                     if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.SaladOnions)
                     {
-                        if (model.N.Value > 40)
+                        if (totalNitrogen > 40)
                         {
                             isNitrogenRateExceeded = true;
                             maxNitrogenRate = 40;
@@ -3072,7 +3072,7 @@ namespace NMP.Portal.Controllers
 
                     }
                     // (decimal nitrogenWithinWarningPeriod, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, start, end,null, false);
-                    if (model.N.Value > 40 || nitrogenWithinWarningPeriod > 80)
+                    if (model.N.Value > 40 || (nitrogenWithinWarningPeriod + model.N.Value) > 80)
                     {
                         isNitrogenRateExceeded = true;
                     }
