@@ -5162,6 +5162,11 @@ namespace NMP.Portal.Controllers
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                     if (model.SwardTypeId == (int)NMP.Portal.Enums.SwardType.Grass)
                     {
+                        if(model.IsCheckAnswer)
+                        {
+                            model.GrassGrowthClassCounter = 0;
+                            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                        }
                         return RedirectToAction("GrassGrowthClass");
                     }
                     else
@@ -5176,6 +5181,11 @@ namespace NMP.Portal.Controllers
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                     if (model.SwardTypeId == (int)NMP.Portal.Enums.SwardType.Grass)
                     {
+                        if (model.IsCheckAnswer)
+                        {
+                            model.GrassGrowthClassCounter = 0;
+                            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                        }
                         return RedirectToAction("GrassGrowthClass");
                     }
                     else
@@ -5190,6 +5200,11 @@ namespace NMP.Portal.Controllers
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                     if (model.SwardTypeId == (int)NMP.Portal.Enums.SwardType.Grass)
                     {
+                        if (model.IsCheckAnswer)
+                        {
+                            model.GrassGrowthClassCounter = 0;
+                            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                        }
                         return RedirectToAction("GrassGrowthClass");
                     }
                     else
