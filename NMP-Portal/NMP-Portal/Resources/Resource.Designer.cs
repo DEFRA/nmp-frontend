@@ -2527,6 +2527,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to cubic meters.
+        /// </summary>
+        public static string lblCubicMeters {
+            get {
+                return ResourceManager.GetString("lblCubicMeters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Current crop type.
         /// </summary>
         public static string lblCurrentCropType {

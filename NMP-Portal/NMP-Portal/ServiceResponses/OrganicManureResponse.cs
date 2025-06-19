@@ -8,6 +8,8 @@ namespace NMP.Portal.ServiceResponses
         public int ID { get; set; }
         [JsonProperty("TypeOfManure")]
         public string? TypeOfManure { get; set; }
+        [JsonProperty("ManureTypeId")]
+        public int? ManureTypeId { get; set; }
         [JsonProperty("ApplicationDate")]
         public DateTime? ApplicationDate { get; set; }
         [JsonProperty("Field")]
@@ -20,5 +22,6 @@ namespace NMP.Portal.ServiceResponses
         public decimal? Rate { get; set; }
         public string? EncryptedId { get; set; }
         public string? EncryptedFieldName { get; set; }
+        public string? RateUnit { get; set; }
     }
 }
