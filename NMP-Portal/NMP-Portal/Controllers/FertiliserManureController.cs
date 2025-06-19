@@ -1211,7 +1211,61 @@ namespace NMP.Portal.Controllers
                     if (error == null)
                     {
                         WarningMessage warning = new WarningMessage();
-                        ViewBag.closingPeriod = warning.ClosedPeriodForFertiliser(cropTypeResponse.CropTypeId);
+                        string closedPeriod = warning.ClosedPeriodForFertiliser(cropTypeResponse.CropTypeId);
+
+                        //model.ClosedPeriod = closedPeriod;
+                        if (!string.IsNullOrWhiteSpace(closedPeriod))
+                        {
+                            int harvestYear = model.HarvestYear ?? 0;
+                            //int startYear = harvestYear;
+                            //int endYear = harvestYear + 1;
+                            string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
+                            Regex regex = new Regex(pattern);
+                            if (closedPeriod != null)
+                            {
+                                Match match = regex.Match(closedPeriod);
+                                if (match.Success)
+                                {
+                                    int startDay = int.Parse(match.Groups[1].Value);
+                                    string startMonthStr = match.Groups[2].Value;
+                                    int endDay = int.Parse(match.Groups[3].Value);
+                                    string endMonthStr = match.Groups[4].Value;
+
+                                    Dictionary<int, string> dtfi = new Dictionary<int, string>();
+                                    dtfi.Add(0, Resource.lblJanuary);
+                                    dtfi.Add(1, Resource.lblFebruary);
+                                    dtfi.Add(2, Resource.lblMarch);
+                                    dtfi.Add(3, Resource.lblApril);
+                                    dtfi.Add(4, Resource.lblMay);
+                                    dtfi.Add(5, Resource.lblJune);
+                                    dtfi.Add(6, Resource.lblJuly);
+                                    dtfi.Add(7, Resource.lblAugust);
+                                    dtfi.Add(8, Resource.lblSeptember);
+                                    dtfi.Add(9, Resource.lblOctober);
+                                    dtfi.Add(10, Resource.lblNovember);
+                                    dtfi.Add(11, Resource.lblDecember);
+                                    int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1; // Array.IndexOf(dtfi.Values, startMonthStr) + 1;
+                                    int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;//Array.IndexOf(dtfi.AbbreviatedMonthNames, endMonthStr) + 1;
+                                    DateTime? closedPeriodStartDate = null;
+                                    DateTime? closedPeriodEndDate = null;
+                                    if (startMonth <= endMonth)
+                                    {
+                                        closedPeriodStartDate = new DateTime(harvestYear - 1, startMonth, startDay);
+                                        closedPeriodEndDate = new DateTime(harvestYear - 1, endMonth, endDay);
+                                    }
+                                    else if (startMonth >= endMonth)
+                                    {
+                                        closedPeriodStartDate = new DateTime(harvestYear - 1, startMonth, startDay);
+                                        closedPeriodEndDate = new DateTime(harvestYear, endMonth, endDay);
+                                    }
+                                    string formattedStartDate = closedPeriodStartDate?.ToString("d MMMM yyyy");
+                                    string formattedEndDate = closedPeriodEndDate?.ToString("d MMMM yyyy");
+                                    ViewBag.ClosedPeriod = $"{formattedStartDate} to {formattedEndDate}";
+                                }
+                            }
+
+
+                        }
 
                     }
 
@@ -1332,7 +1386,61 @@ namespace NMP.Portal.Controllers
                             if (error == null)
                             {
                                 WarningMessage warning = new WarningMessage();
-                                ViewBag.closingPeriod = warning.ClosedPeriodForFertiliser(cropTypeResponse.CropTypeId);
+                                string closedPeriod = warning.ClosedPeriodForFertiliser(cropTypeResponse.CropTypeId);
+
+                                //model.ClosedPeriod = closedPeriod;
+                                if (!string.IsNullOrWhiteSpace(closedPeriod))
+                                {
+                                    int harvestYear = model.HarvestYear ?? 0;
+                                    //int startYear = harvestYear;
+                                    //int endYear = harvestYear + 1;
+                                    string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
+                                    Regex regex = new Regex(pattern);
+                                    if (closedPeriod != null)
+                                    {
+                                        Match match = regex.Match(closedPeriod);
+                                        if (match.Success)
+                                        {
+                                            int startDay = int.Parse(match.Groups[1].Value);
+                                            string startMonthStr = match.Groups[2].Value;
+                                            int endDay = int.Parse(match.Groups[3].Value);
+                                            string endMonthStr = match.Groups[4].Value;
+
+                                            Dictionary<int, string> dtfi = new Dictionary<int, string>();
+                                            dtfi.Add(0, Resource.lblJanuary);
+                                            dtfi.Add(1, Resource.lblFebruary);
+                                            dtfi.Add(2, Resource.lblMarch);
+                                            dtfi.Add(3, Resource.lblApril);
+                                            dtfi.Add(4, Resource.lblMay);
+                                            dtfi.Add(5, Resource.lblJune);
+                                            dtfi.Add(6, Resource.lblJuly);
+                                            dtfi.Add(7, Resource.lblAugust);
+                                            dtfi.Add(8, Resource.lblSeptember);
+                                            dtfi.Add(9, Resource.lblOctober);
+                                            dtfi.Add(10, Resource.lblNovember);
+                                            dtfi.Add(11, Resource.lblDecember);
+                                            int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1; // Array.IndexOf(dtfi.Values, startMonthStr) + 1;
+                                            int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;//Array.IndexOf(dtfi.AbbreviatedMonthNames, endMonthStr) + 1;
+                                            DateTime? closedPeriodStartDate = null;
+                                            DateTime? closedPeriodEndDate = null;
+                                            if (startMonth <= endMonth)
+                                            {
+                                                closedPeriodStartDate = new DateTime(harvestYear - 1, startMonth, startDay);
+                                                closedPeriodEndDate = new DateTime(harvestYear - 1, endMonth, endDay);
+                                            }
+                                            else if (startMonth >= endMonth)
+                                            {
+                                                closedPeriodStartDate = new DateTime(harvestYear - 1, startMonth, startDay);
+                                                closedPeriodEndDate = new DateTime(harvestYear, endMonth, endDay);
+                                            }
+                                            string formattedStartDate = closedPeriodStartDate?.ToString("d MMMM yyyy");
+                                            string formattedEndDate = closedPeriodEndDate?.ToString("d MMMM yyyy");
+                                            ViewBag.ClosedPeriod = $"{formattedStartDate} to {formattedEndDate}";
+                                        }
+                                    }
+
+
+                                }
                             }
                         }
                     }
@@ -1867,7 +1975,7 @@ namespace NMP.Portal.Controllers
                                 (CropTypeResponse cropTypeResponse, error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
                                 if (error == null)
                                 {
-                                    int year = model.Date.Value.Year;
+                                    int year = model.HarvestYear.Value;
                                     WarningMessage warning = new WarningMessage();
                                     string closedPeriod = warning.ClosedPeriodForFertiliser(cropTypeResponse.CropTypeId) ?? string.Empty;
 
@@ -1899,9 +2007,19 @@ namespace NMP.Portal.Controllers
                                             int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1; // Array.IndexOf(dtfi.Values, startMonthStr) + 1;
                                             int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;//Array.IndexOf(dtfi.AbbreviatedMonthNames, endMonthStr) + 1;
 
-                                            DateTime startDate = new DateTime(year, startMonth, startDay);
-                                            DateTime endDate = new DateTime(year + 1, endMonth, endDay);
+                                            DateTime startDate = new DateTime();
+                                            DateTime endDate = new DateTime();
 
+                                            if (startMonth <= endMonth)
+                                            {
+                                                startDate = new DateTime(year - 1, startMonth, startDay);
+                                                endDate = new DateTime(year - 1, endMonth, endDay);
+                                            }
+                                            else if (startMonth >= endMonth)
+                                            {
+                                                startDate = new DateTime(year - 1, startMonth, startDay);
+                                                endDate = new DateTime(year, endMonth, endDay);
+                                            }
 
                                             List<int> managementIds = new List<int>();
                                             if (int.TryParse(model.FieldGroup, out int fieldGroup))
@@ -2222,7 +2340,7 @@ namespace NMP.Portal.Controllers
                             (CropTypeResponse cropTypeResponse, error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
                             if (error == null)
                             {
-                                int year = model.Date.Value.Year;
+                                int year = model.HarvestYear.Value;
                                 WarningMessage warning = new WarningMessage();
                                 string closedPeriod = warning.ClosedPeriodForFertiliser(cropTypeResponse.CropTypeId) ?? string.Empty;
 
@@ -2254,8 +2372,19 @@ namespace NMP.Portal.Controllers
                                         int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1; // Array.IndexOf(dtfi.Values, startMonthStr) + 1;
                                         int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;//Array.IndexOf(dtfi.AbbreviatedMonthNames, endMonthStr) + 1;
 
-                                        DateTime startDate = new DateTime(year, startMonth, startDay);
-                                        DateTime endDate = new DateTime(year + 1, endMonth, endDay);
+                                        DateTime startDate = new DateTime();
+                                        DateTime endDate = new DateTime();
+
+                                        if (startMonth <= endMonth)
+                                        {
+                                            startDate = new DateTime(year - 1, startMonth, startDay);
+                                            endDate = new DateTime(year - 1, endMonth, endDay);
+                                        }
+                                        else if (startMonth >= endMonth)
+                                        {
+                                            startDate = new DateTime(year - 1, startMonth, startDay);
+                                            endDate = new DateTime(year, endMonth, endDay);
+                                        }
 
 
                                         List<int> managementIds = new List<int>();
