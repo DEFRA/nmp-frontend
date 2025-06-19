@@ -4733,6 +4733,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Include organic material applications and inorganic fertiliser applications.
+        /// </summary>
+        public static string lblIncludeOrganicMaterialInorganicFertiliser {
+            get {
+                return ResourceManager.GetString("lblIncludeOrganicMaterialInorganicFertiliser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to incorporation delays.
         /// </summary>
         public static string lblIncorporationDelays {

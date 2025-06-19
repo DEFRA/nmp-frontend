@@ -3,6 +3,33 @@
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
     ViewData["Title"] = Resource.lblCheckYourAnswers;
+    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+    var organicInorganicCopy = "";
+    var selection = "";
+
+    bool hasOrganic = (Model.OrganicInorganicCopy & NMP.Portal.Enums.OrganicInorganicCopy.OrganicMaterial) == NMP.Portal.Enums.OrganicInorganicCopy.OrganicMaterial;
+    bool hasInorganic = (Model.OrganicInorganicCopy & NMP.Portal.Enums.OrganicInorganicCopy.InorganicFertiliser) == NMP.Portal.Enums.OrganicInorganicCopy.InorganicFertiliser;
+    bool isNone = Model.OrganicInorganicCopy == NMP.Portal.Enums.OrganicInorganicCopy.None;
+
+    if (hasOrganic && hasInorganic)
+    {
+        selection = Resource.lblIncludeOrganicMaterialInorganicFertiliser;
+    }
+    else if (hasOrganic)
+    {
+        selection = Resource.lblIncludeOrganicMaterialApplications;
+    }
+    else if (hasInorganic)
+    {
+        selection = Resource.lblIncludeInorganicFertiliserApplications;
+    }
+    else if (isNone)
+    {
+        selection = Resource.lblIncludeNoneOfThese;
+    }
+
+
 }
 
 @section BeforeContent {
@@ -112,11 +139,42 @@
             
             <div class="check-answers">
 
-                <h2>work in progress</h2>
-                @* <govuk-summary-list>
-                    
-
-                </govuk-summary-list> *@
+                <govuk-summary-list>
+                    <govuk-summary-list-row class=@((!Model.CopyExistingPlan.HasValue)?"govuk-error-message":"")>
+                        <govuk-summary-list-row-key>
+                            @Resource.lblWouldYouLikeToStartWithCopyOfPlanFromPreviousYear
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @(Model.CopyExistingPlan.HasValue ? (Model.CopyExistingPlan == true ? Resource.lblYes : Resource.lblNo) : Resource.lblNotSet)
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action asp-action="CopyExistingPlan" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+                    <govuk-summary-list-row class=@((!Model.CopyYear.HasValue)?"govuk-error-message":"")>
+                        <govuk-summary-list-row-key>
+                            @string.Format(Resource.lblWhichPlanWouldYouLikeToCopyFor, Model.Year)
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @(Model.CopyYear.HasValue ? Model.CopyYear : Resource.lblNotSet)
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action asp-action="CopyPlanYears" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+                    <govuk-summary-list-row class=@((!Model.OrganicInorganicCopy.HasValue)?"govuk-error-message":"")>
+                        <govuk-summary-list-row-key>
+                            @Resource.lblDoYouWantToIncludeOrganicMaterialInorganicFertiliserApplications
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @(Model.OrganicInorganicCopy.HasValue ? selection :
+                                Resource.lblNotSet)
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action asp-action="CopyOrganicInorganicApplications" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+                </govuk-summary-list>
             </div>
             
             <govuk-button type="submit" class="margin-bottom-forty">

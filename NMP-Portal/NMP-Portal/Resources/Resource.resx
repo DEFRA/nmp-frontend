@@ -4790,4 +4790,7 @@ live</value>
   <data name="lblWaterResourcesRegulation2021Content" xml:space="preserve">
     <value>Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021 content</value>
   </data>
+  <data name="lblIncludeOrganicMaterialInorganicFertiliser" xml:space="preserve">
+    <value>Include organic material applications and inorganic fertiliser applications</value>
+  </data>
 </root>
