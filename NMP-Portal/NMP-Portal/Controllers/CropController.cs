@@ -2986,6 +2986,19 @@ namespace NMP.Portal.Controllers
                                     harvestYearPlans.OrganicManureList.ForEach(m => m.EncryptedId = _cropDataProtector.Protect(m.ID.ToString()));
                                     ViewBag.Organic = _cropDataProtector.Protect(Resource.lblOrganic);
                                     harvestYearPlans.OrganicManureList.ForEach(m => m.EncryptedFieldName = _cropDataProtector.Protect(m.Field.ToString()));
+                                    foreach (var organic in harvestYearPlans.OrganicManureList)
+                                    {
+                                        (ManureType manureType, error) = await _organicManureService.FetchManureTypeByManureTypeId(organic.ManureTypeId.Value);
+                                        if (error == null)
+                                        {
+                                            organic.RateUnit = manureType.IsLiquid.Value ? Resource.lblCubicMeters : Resource.lbltonnes;
+                                        }
+                                        else
+                                        {
+                                            TempData["ErrorOnHarvestYearOverview"] = error.Message;
+                                            return View("HarvestYearOverview", model);
+                                        }
+                                    }
                                 }
 
 
@@ -3530,18 +3543,34 @@ namespace NMP.Portal.Controllers
                                         {
                                             foreach (var item in recData.OrganicManures)
                                             {
-                                                var orgManure = new OrganicManureData
+                                                (ManureType manureType, error) = await _organicManureService.FetchManureTypeByManureTypeId(item.ManureTypeID);
+                                                if (error == null)
                                                 {
-                                                    ID = item.ID,
-                                                    ManureTypeName = item.ManureTypeName,
-                                                    ApplicationMethodName = item.ApplicationMethodName,
-                                                    ApplicationDate = item.ApplicationDate,
-                                                    ApplicationRate = item.ApplicationRate,
-                                                    EncryptedId = _cropDataProtector.Protect(item.ID.ToString()),
-                                                    EncryptedFieldName = _cropDataProtector.Protect(model.FieldName),
-                                                    EncryptedManureTypeName = _cropDataProtector.Protect(item.ManureTypeName)
-                                                };
-                                                model.OrganicManures.Add(orgManure);
+                                                    var orgManure = new OrganicManureData
+                                                    {
+                                                        ID = item.ID,
+                                                        ManureTypeName = item.ManureTypeName,
+                                                        ApplicationMethodName = item.ApplicationMethodName,
+                                                        ApplicationDate = item.ApplicationDate,
+                                                        ApplicationRate = item.ApplicationRate,
+                                                        EncryptedId = _cropDataProtector.Protect(item.ID.ToString()),
+                                                        EncryptedFieldName = _cropDataProtector.Protect(model.FieldName),
+                                                        EncryptedManureTypeName = _cropDataProtector.Protect(item.ManureTypeName),
+                                                        RateUnit = manureType.IsLiquid.Value ? Resource.lblCubicMeters : Resource.lbltonnes
+                                                    };
+                                                    //orgManure.RateUnit = manureType.IsLiquid.Value ? Resource.lblCubicMeters : Resource.lbltonnes;
+
+                                                    model.OrganicManures.Add(orgManure);
+                                                }
+                                                else
+                                                {
+                                                    return RedirectToAction("HarvestYearOverview", new
+                                                    {
+                                                        id = q,
+                                                        year = s
+                                                    });
+                                                }
+
                                             }
                                             ViewBag.OrganicManure = _cropDataProtector.Protect(Resource.lblOrganic);
                                             model.OrganicManures = model.OrganicManures.OrderByDescending(x => x.ApplicationDate).ToList();
@@ -5133,6 +5162,11 @@ namespace NMP.Portal.Controllers
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                     if (model.SwardTypeId == (int)NMP.Portal.Enums.SwardType.Grass)
                     {
+                        if(model.IsCheckAnswer)
+                        {
+                            model.GrassGrowthClassCounter = 0;
+                            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                        }
                         return RedirectToAction("GrassGrowthClass");
                     }
                     else
@@ -5147,6 +5181,11 @@ namespace NMP.Portal.Controllers
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                     if (model.SwardTypeId == (int)NMP.Portal.Enums.SwardType.Grass)
                     {
+                        if (model.IsCheckAnswer)
+                        {
+                            model.GrassGrowthClassCounter = 0;
+                            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                        }
                         return RedirectToAction("GrassGrowthClass");
                     }
                     else
@@ -5161,6 +5200,11 @@ namespace NMP.Portal.Controllers
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                     if (model.SwardTypeId == (int)NMP.Portal.Enums.SwardType.Grass)
                     {
+                        if (model.IsCheckAnswer)
+                        {
+                            model.GrassGrowthClassCounter = 0;
+                            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                        }
                         return RedirectToAction("GrassGrowthClass");
                     }
                     else
@@ -5947,7 +5991,7 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("PlansAndRecordsOverview", "Crop", new { id = q });
             }
 
-            
+
         }
 
         [HttpGet]
@@ -6009,7 +6053,7 @@ namespace NMP.Portal.Controllers
                 {
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
                 }
-                else 
+                else
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
@@ -6024,7 +6068,7 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("FarmSummary", "Farm");
             }
 
-            
+
         }
 
         [HttpPost]
@@ -6097,7 +6141,7 @@ namespace NMP.Portal.Controllers
                 return View(model);
             }
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
-            
+
             return RedirectToAction("CopyCheckAnswer");
         }
 
@@ -6131,6 +6175,6 @@ namespace NMP.Portal.Controllers
 
         }
 
-        
+
     }
 }
