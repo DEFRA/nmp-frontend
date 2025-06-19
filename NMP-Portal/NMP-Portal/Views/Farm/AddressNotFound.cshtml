@@ -21,8 +21,15 @@
             @Resource.lblOr <a class="govuk-link change-link" asp-action="ManualAddress" asp-controller="Farm">@Resource.lblEnterTheAddressManually</a>
         </div>
         <br />
-        <div class="govuk-body">
-            <a class="govuk-link change-link" asp-action="CreateFarmCancel" asp-controller="Farm">@Resource.lblCancel</a></p>
-        </div>
+        <p class="govuk-body cancel-link">
+             @if (!Model.IsCheckAnswer)
+            {
+                <a class="govuk-link" asp-action="CreateFarmCancel" asp-controller="Farm">@Resource.lblCancel</a>
+            }
+            else
+            {
+                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="Farm">@Resource.lblCancel</a>
+            }
+        </p>
     </div>
 </div>

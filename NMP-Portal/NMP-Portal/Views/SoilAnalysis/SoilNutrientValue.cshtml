@@ -17,7 +17,7 @@
 }
 
 @section BeforeContent {
-    @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value)
+    @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value && (!Model.IsCheckAnswer))
     {
         <govuk-back-link asp-action="SoilNutrientValueType" asp-controller="SoilAnalysis">@Resource.lblBack</govuk-back-link>
     }
@@ -37,6 +37,7 @@
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="SoilNutrientValue" method="post" autocomplete="off" asp-controller="SoilAnalysis">
             @Html.AntiForgeryToken()
+            <div hidden="true">
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Date"></govuk-date-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SulphurDeficient" value="@Model.SulphurDeficient.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilNutrientValueTypeIndex" value="@Model.IsSoilNutrientValueTypeIndex.ToString().ToLower()"></govuk-input>
@@ -48,7 +49,8 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphorusMethodologyID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isSoilAnalysisAdded" value="@Model.isSoilAnalysisAdded.ToString().ToLower()"></govuk-input>
-           
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
+           </div>
             <div class="govuk-form-group">
                 <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
                     <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblAddSoilAnalysis, Model.FieldName)</h1>
@@ -121,7 +123,7 @@
                 </govuk-button>
             
 
-            @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value)
+            @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value && (!Model.IsCheckAnswer))
             {
                 <p class="govuk-body cancel-link"><a asp-action="FieldSoilAnalysisDetail" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
             }

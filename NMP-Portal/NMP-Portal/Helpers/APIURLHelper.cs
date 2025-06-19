@@ -119,13 +119,17 @@ namespace NMP.Portal.Helpers
         public const string FetchExcessWinterRainfallOptionAPI = "/excess-winter-rainfall-options";
         public const string AddOrUpdateExcessWinterRainfallAPI = "/excessRainfalls/{0}?year={1}";
         public const string FetchExcessWinterRainfallOptionByIdAPI = "/excess-winter-rainfall-options/value/{0}";
-        public const string FetchCropGroupNameByCropIdGroupNameAndYearAPI = "/crops/GroupNameExist/{0}?newGroupName={1}&year={2}";
+        public const string FetchCropGroupNameByCropIdGroupNameAndYearAPI = "/crops/GroupNameExist/{0}?newGroupName={1}&year={2}&farmId={3}";
         public const string UpdateCropGroupNameWithVarietyAPI = "crops/CropGroupName/{0}?cropGroupName={1}&variety={2}&year={3}";
+        public const string UpdateCropAPI = "crops";
         public const string DeleteSNSAnalysisAPI = "/snsAnalysis/{0}";
         public const string FetchFertiliserByIdAPI = "/fertiliser-manures/{0}";
         public const string FetchFieldWithSameDateAndNutrientAPI = "/fertiliser-manures/FertliserData/{0}?farmId={1}&harvestYear={2}";
         public const string UpdateFertiliserAPI = "/fertiliser-manures";
-
+        public const string FetchFieldWithSameDateAndManureTypeAPI = "/organic-manures/OrganicManuresData/{0}?farmId={1}&harvestYear={2}";
+        public const string FetchManagementPeriodByCropIdAsyncAPI = "management-periods/crops/{0}?shortSummary={1}";
+        public const string FetchFertiliserTotalNByManagementPeriodIDAPI = "/fertiliser-manures/total-nitrogen-by/{0}";
+        public const string FetchOragnicManureAvailableNByManagementPeriodIDAPI = "/organic-manure/total-nitrogen-by/{0}";
         //Manner APi Url
         public const string FetchMannerApplicationMethodByIdAsyncAPI = "vendors/manner/application-methods/{0}";
         public const string FetchMannerIncorporationDelaysByMethodIdAndApplicableForAsyncAPI = "vendors/manner/incorporation-delays/by-incorp-method-and-applicable-for/{0}?applicableFor={1}";//    vendors/manner/incorporation-delays/by-incorp-method/{0}";
@@ -163,5 +167,20 @@ namespace NMP.Portal.Helpers
         public const string AddSnsAnalysisAsyncAPI = "sns-analyses";
 
         public const string FetchGrassSeasonsAsyncAPI = "vendors/rb209/Grassland/GrasslandSeasons/{0}";
+        public const string FetchGrassGrowthClassesAsyncAPI = "grass-growth/byFieldIds";
+
+        public const string UpdateOrganicManureAsyncAPI = "organic-manures";
+        public const string FetchCropTypeLinkingsAsyncAPI = "crop-type-linkings";
+
+        //Grass API Urls
+        public const string FetchDefoliationSequencesBySwardTypeIdAndNumberOfCutAsyncAPI = "vendors/rb209/Grass/DefoliationSequences/{0}/{1}/{2}";
+        public const string FetchPotentialCutsBySwardTypeIdAndSwardManagementIdAsyncAPI = "vendors/rb209/Grass/PotentialCuts/{0}/{1}";
+        public const string FetchSwardManagementsAsyncAPI = "vendors/rb209/Grass/SwardManagements";
+        public const string FetchSwardTypesAsyncAPI = "vendors/rb209/Grass/SwardTypes";
+        public const string FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassIdAsyncAPI = "vendors/rb209/Grass/YieldRangesEnglandAndWales/{0}/{1}";
+        public const string FetchDefoliationSequencesByIdAsyncAPI = "vendors/rb209/Grass/DefoliationSequence/{0}";
+        public const string FetchSwardManagementBySwardTypeIdAsyncAPI = "vendors/rb209/Grass/SwardManagements/{0}";
+        public const string FetchSwardTypeBySwardTypeIdAsyncAPI = "vendors/rb209/Grass/SwardType/{0}";
+        public const string FetchSwardManagementBySwardManagementIdAsyncAPI = "vendors/rb209/Grass/SwardManagement/{0}";
     }
 }

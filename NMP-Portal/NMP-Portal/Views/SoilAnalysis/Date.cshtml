@@ -7,7 +7,7 @@
 }
 
 @section BeforeContent {
-    @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value)
+    @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value && (!Model.IsCheckAnswer))
     {
         <govuk-back-link asp-action="SulphurDeficient" asp-controller="SoilAnalysis">@Resource.lblBack</govuk-back-link>
     }
@@ -18,8 +18,8 @@
     }
 }
 <form asp-action="Date" asp-controller="SoilAnalysis" method="post" autocomplete="off">
-    @Html.AntiForgeryToken()  
-    
+    @Html.AntiForgeryToken()
+    <div hidden="true">
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PH"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MagnesiumIndex"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphorusIndex"></govuk-input>
@@ -37,6 +37,8 @@
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilNutrientValueTypeIndex" value="@Model.IsSoilNutrientValueTypeIndex.ToString().ToLower()"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SulphurDeficient" value="@Model.SulphurDeficient.ToString().ToLower()"></govuk-input>
     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isSoilAnalysisAdded" value="@Model.isSoilAnalysisAdded.ToString().ToLower()"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
+    </div>
     <div class="govuk-grid-row">
 
         <div class="govuk-grid-column-two-thirds">
@@ -68,7 +70,7 @@
                 @Resource.lblContinue
             </govuk-button>
 
-            @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value)
+            @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value && (!Model.IsCheckAnswer))
             {
                 <p class="govuk-body cancel-link"><a asp-action="FieldSoilAnalysisDetail" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
 

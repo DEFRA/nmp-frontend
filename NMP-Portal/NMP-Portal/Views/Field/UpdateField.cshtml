@@ -46,6 +46,7 @@
             <h1 class="govuk-heading-l">
                 @string.Format( Resource.lblUpdateXField,Model.Name)
             </h1>
+            <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherReference"></govuk-input>
@@ -61,6 +62,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilOverChalk" value="@Model.SoilOverChalk.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId"></govuk-input>
+            </div>
             <govuk-summary-list>
                 <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
@@ -114,7 +116,7 @@
                         @Resource.lblTotalFieldArea
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
-                        @Model.TotalArea
+                        @(Model.TotalArea == null ? Resource.lblNotEntered : (Model.TotalArea == 0) ? ((int)Model.TotalArea) : string.Format("{0} {1}",  Model.TotalArea, Resource.lblhectar))                      
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
                         <govuk-summary-list-row-action asp-action="FieldMeasurements" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange</govuk-summary-list-row-action>
@@ -125,7 +127,7 @@
                         @Resource.lblCroppedAreaForCheckAnswere
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
-                        @(Model.CroppedArea == null ? Resource.lblNotEntered : Model.CroppedArea)
+                         @(Model.CroppedArea == null ? Resource.lblNotEntered : (Model.CroppedArea == 0) ? ((int)Model.CroppedArea) : string.Format("{0} {1}",Model.CroppedArea, Resource.lblhectar))
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
                         <govuk-summary-list-row-action asp-action="FieldMeasurements" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange</govuk-summary-list-row-action>
@@ -136,7 +138,7 @@
                         @Resource.lblManureNonSpreadingAreaForCheckAnswere
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
-                        @(Model.ManureNonSpreadingArea == null ? Resource.lblNotEntered : Model.ManureNonSpreadingArea)
+                        @(Model.ManureNonSpreadingArea == null ? Resource.lblNotEntered : Model.ManureNonSpreadingArea == 0 ? ((int)Model.ManureNonSpreadingArea) : string.Format("{0} {1}", Model.ManureNonSpreadingArea, Resource.lblhectar))
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
                         <govuk-summary-list-row-action asp-action="FieldMeasurements" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange</govuk-summary-list-row-action>
@@ -217,7 +219,9 @@
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblUpdateThisField
             </govuk-button>
-            <p class="govuk-body cancel-link"><a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
+            <p class="govuk-body cancel-link">
+                <a asp-action="Cancel" asp-controller="Field">@Resource.lblCancel</a>
+            </p>
         </div>
     </div>
 </form>

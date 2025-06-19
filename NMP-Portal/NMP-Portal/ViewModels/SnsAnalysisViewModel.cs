@@ -48,5 +48,6 @@ namespace NMP.Portal.ViewModels
         public bool? RecentSoilAnalysisQuestion { get; set; }
         public bool IsRecentSoilAnalysisQuestionChange { get; set; } = false;
         public bool? IsSnsRemove { get; set; }
+        public bool? IsCancel { get; set; }
     }
 }

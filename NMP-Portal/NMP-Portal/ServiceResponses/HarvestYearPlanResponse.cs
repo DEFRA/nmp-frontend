@@ -41,6 +41,14 @@ namespace NMP.Portal.ServiceResponses
         public DateTime? SowingDate { get; set; }
         [JsonProperty("cropOrder")]
         public int? CropOrder { get; set; }
+        [JsonProperty("DefoliationSequenceID")]
+        public int? DefoliationSequenceID { get; set; }
+        [JsonProperty("SwardTypeID")]
+        public int? SwardTypeID { get; set; }
+        [JsonProperty("SwardManagementID")]
+        public int? SwardManagementID { get; set; }
+        public int? PotentialCut { get; set; }
+        public int? Establishment { get; set; }
         [JsonProperty("TotalOrganicManures")]
         public int OrganicManuresCount { get; set; }
 

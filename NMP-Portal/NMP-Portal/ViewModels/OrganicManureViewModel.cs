@@ -1,6 +1,8 @@
 ﻿using NMP.Portal.Models;
 using NMP.Portal.Resources;
+using NMP.Portal.ServiceResponses;
 using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 
 namespace NMP.Portal.ViewModels
 {
@@ -129,5 +131,26 @@ namespace NMP.Portal.ViewModels
         public DateTime? ClosedPeriodEndDate { get; set; }
         public string? ClosedPeriodForUI { get; set; } = string.Empty;
         public bool? IsWithinNVZ { get; set; }
+        public string? EncryptedOrgManureId { get; set; } = string.Empty;
+        public List<FertiliserAndOrganicManureUpdateResponse>? UpdatedOrganicIds { get; set; }
+        public string? FieldName { get; set; }
+        public bool? IsApplicationDateChange { get; set; } = false;
+        public bool? IsDeleteOrganic { get; set; }
+        public bool? IsCancel { get; set; }
+        public bool? Defoliation { get; set; }
+        public List<DoubleCrop>? DoubleCrop { get; set; }
+        public int DoubleCropCurrentCounter { get; set; }
+        public string? DoubleCropEncryptedCounter { get; set; }
+        public int? FieldID { get; set; }
+        public bool IsDoubleCropAvailable { get; set; } = false;
+        public bool IsAnyChangeInField { get; set; } = false;
+        public bool IsAnyChangeInSameDefoliationFlag { get; set; } = false;
+        public bool? IsSameDefoliationForAll { get; set; }
+        public int DefoliationCurrentCounter { get; set; } = 0;
+        public string? DefoliationEncryptedCounter { get; set; }
+        public string? EncryptedCounter { get; set; }
+        public bool? IsAnyCropIsGrass { get; set; }
+        public int? GrassCropCount { get; set; }
+        public bool NeedToShowSameDefoliationForAll { get; set; } = true;
     }
 }

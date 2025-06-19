@@ -34,15 +34,16 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds-from-desktop">
-            @if (TempData["AddFieldError"] != null)
+            @if (TempData["CheckAnswerError"] != null)
             {
                 <govuk-error-summary>
-                    <govuk-error-summary-item href="#">@TempData["AddFieldError"]</govuk-error-summary-item>
+                    <govuk-error-summary-item href="#">@TempData["CheckAnswerError"]</govuk-error-summary-item>
                 </govuk-error-summary>
             }
             <h1 class="govuk-heading-l">
                 @Resource.lblCheckYourAnswers
             </h1>
+            <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCalculateNitrogen" value="@Model.IsCalculateNitrogen"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumberOfShoots"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SeasonId" value="@Model.SeasonId"></govuk-input>
@@ -77,7 +78,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"></govuk-input>
-
+            </div>
             <div class="check-answers">
             <govuk-summary-list>
 
@@ -340,7 +341,16 @@
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblAddTheseAnalysisResults
             </govuk-button>
-            <p class="govuk-body cancel-link"><a asp-action="SnsAnalysisCancel" asp-controller="SnsAnalysis" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
+            <p class="govuk-body cancel-link">
+                @* @if (!Model.IsCheckAnswer)
+                { *@
+                    <a class="govuk-link" asp-action="Cancel" asp-controller="SnsAnalysis">@Resource.lblCancel</a>
+               @*  }
+                else
+                {
+                    <a class="govuk-link" asp-action="CheckAnswer" asp-controller="SnsAnalysis">@Resource.lblCancel</a>
+                } *@
+            </p>
         </div>
     </div>
 </form>

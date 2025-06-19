@@ -6,15 +6,47 @@
 
 @section BeforeContent {
     <govuk-back-link asp-action="Index" asp-controller="Home">@Resource.lblBack</govuk-back-link>
-} 
+}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-l">
-            @Resource.lblAbout_this_service
+            @Resource.lblAboutTheNutrientManagementPlanningToolGB
         </h1>
+        <h2 class="govuk-heading-m">@Resource.lblAboutTheNutrientManagementPlanningToolGBLine1</h2>
         <p class="govuk-body">
             @Resource.lblAbout_this_service_line1
         </p>
+        <p class="govuk-body">
+            @Resource.lblAboutTheNutrientManagementPlanningToolGBLine2
+        </p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>
+                @Resource.lblSoilAnalysisData
+            </li>
+            <li>
+                @Resource.lblAboutTheNutrientManagementPlanningToolGBLine3
+            </li>
+            <li>
+                @Resource.lblCropInformation
+            </li>
+            <li>
+                @Resource.lblAboutTheNutrientManagementPlanningToolGBLine4
+            </li>
+        </ul>
+        <div class="govuk-body">
+            <p class="govuk-body">
+                @Resource.lblAboutTheNutrientManagementPlanningToolGBLine5
+            </p>
+        </div>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>
+                @Resource.lblLivestockInformation
+            </li>
+            <li>
+                @Resource.lblAboutTheNutrientManagementPlanningToolGBLine6
+            </li>
+
+        </ul>
         <h1 class="govuk-heading-l">@Resource.lblRegulations</h1>
         <p class="govuk-body">
             @Resource.lblRegulations_line1
@@ -22,21 +54,23 @@
         <p class="govuk-body">
             @Resource.lblRegulations_line2
         </p>
+        <ul class ="govuk-list govuk-list--bullet">
+            <li>
         <p class="govuk-body">
             @Html.Raw(Resource.lblEnglandNVZWaterFarmingRules)
         </p>
+        </li>
+            <li>
         <p class="govuk-body">
             @Html.Raw(Resource.lblWalesWaterResourceRegulations)
         </p>
+            </li>
+            <li>
         <p class="govuk-body">
             @Html.Raw(Resource.lblEnglandNVZActionProgramme)
         </p>
-        <h2 class="govuk-heading-s">
-            @Resource.lblSaving_your_data
-        </h2>
-        <p class="govuk-body">
-            @Resource.lblSaving_your_data_line1
-        </p>
+            </li>
+        </ul>
         <h2 class="govuk-heading-s">
             @Resource.lblSoilAnalysis
         </h2>
@@ -46,12 +80,35 @@
         <p class="govuk-body">
             @Resource.lblSoil_Analysis_line2
         </p>
-        <p class="govuk-body margin-bottom-forty">
+        <p class="govuk-body">
             @Resource.lblSoil_Analysis_line3
         </p>
-        <p class="govuk-body margin-bottom-forty">
+        <p class="govuk-body">
             @Resource.lblSoil_Analysis_line4
-        </p>    
+        </p>
+        <p class="govuk-body margin-bottom-forty">
+            @Resource.lblSoil_Analysis_line5
+        </p>
+        <h2 class="govuk-heading-s">
+            @Resource.lblCrossBorderHoldings
+        </h2>
+        <p class="govuk-body">
+            @Resource.lblCrossBorderHoldingsContent1
+        </p>
+        <p class="govuk-body">
+            @Resource.lblCrossBorderHoldingsContent2
+        </p>
+
+        <p class="govuk-body  margin-bottom-forty">
+            @Resource.lblCrossBorderHoldingsContent3
+        </p>
+
+        <h2 class="govuk-heading-s">
+            @Resource.lblSaving_your_data
+        </h2>
+        <p class="govuk-body  margin-bottom-forty">
+            @Resource.lblSaving_your_data_line1
+        </p>
         <form class="form margin-top-forty" asp-action="Index" asp-controller="AboutService" method="post">
             <div class="govuk-form-group margin-bottom-forty">
                 <govuk-checkboxes name="DoNotShowAboutThisService" asp-for="@Model.DoNotShowAboutThisService">
