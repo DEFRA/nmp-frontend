@@ -4793,4 +4793,7 @@ live</value>
   <data name="lblCubicMeters" xml:space="preserve">
     <value>cubic meters</value>
   </data>
+  <data name="lblIncludeOrganicMaterialInorganicFertiliser" xml:space="preserve">
+    <value>Include organic material applications and inorganic fertiliser applications</value>
+  </data>
 </root>
