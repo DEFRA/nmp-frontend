@@ -1,4 +1,6 @@
-﻿namespace NMP.Portal.Models
+﻿using Newtonsoft.Json;
+
+namespace NMP.Portal.Models
 {
     public class OrganicManureData:OrganicManure
     {
@@ -9,5 +11,6 @@
         public string? EncryptedId { get; set; }
         public string? EncryptedFieldName { get; set; }
         public string? EncryptedManureTypeName { get; set; }
+        public string? RateUnit { get; set; }
     }
 }
