@@ -69,5 +69,6 @@ namespace NMP.Portal.ViewModels
         public int DoubleCropCurrentCounter { get; set; }
         public string? DoubleCropEncryptedCounter { get; set; }
         public bool IsDoubleCropAvailable { get; set; } = false;
+        public bool NeedToShowSameDefoliationForAll { get; set; } = true;
     }
 }
