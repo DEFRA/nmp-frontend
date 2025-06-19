@@ -1,4 +1,5 @@
-﻿using NMP.Portal.Models;
+﻿using NMP.Portal.Enums;
+using NMP.Portal.Models;
 using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
 using System.ComponentModel.DataAnnotations;
@@ -100,6 +101,6 @@ namespace NMP.Portal.ViewModels
         public int? FarmID { get; set; }
         public bool? CopyExistingPlan { get; set; }
         public int? CopyYear { get; set; }
-        public int? OrganicInorganicCopy { get; set; }
+        public OrganicInorganicCopy? OrganicInorganicCopy { get; set; }
     }
 }
