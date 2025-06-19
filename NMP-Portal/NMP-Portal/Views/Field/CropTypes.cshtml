@@ -62,6 +62,7 @@
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.GrassTypicalCutID"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.HasGreaterThan30PercentClover"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.SoilNitrogenSupplyItemID"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.LayDuration"></govuk-input>
         @if (Model.PreviousGrassYears != null && Model.PreviousGrassYears.Count > 0)
         {
             @for (int i = 0; i < Model.PreviousGrassYears.Count; i++)
@@ -88,7 +89,7 @@
                         @* @(Model.WantToApplySns == true ? Resource.lblWhatWasThePreviousCropType : Resource.lblWhatIsTheCurrentCropType) *@
                         @string.Format(Resource.lblWhatWasThePreviousCropType, Model.LastHarvestYear)
                     </govuk-radios-fieldset-legend>
-                    <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
+                    <govuk-radios-hint>@string.Format(Resource.lblTheseOptionsComeFromRB209, Resource.lblCroupTypes)</govuk-radios-hint>
                     @if (ViewBag.CropTypeList != null)
                     {
                         @foreach (var item in ViewBag.CropTypeList)

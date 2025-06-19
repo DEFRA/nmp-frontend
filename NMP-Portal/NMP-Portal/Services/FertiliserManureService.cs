@@ -315,7 +315,7 @@ namespace NMP.Portal.Services
             }
             return (fertilisers, error);
         }
-        public async Task<(decimal, Error)> FetchTotalNBasedOnManIdAndAppDate(int managementId, DateTime startDate, DateTime endDate,int? fertiliserId, bool confirm)
+        public async Task<(decimal, Error)> FetchTotalNBasedOnFieldIdAndAppDate(int fieldId, DateTime startDate, DateTime endDate,int? fertiliserId, bool confirm)
         {
             Error error = null;
             decimal totalN = 0;
@@ -331,7 +331,7 @@ namespace NMP.Portal.Services
                     url += $"&fertiliserId={fertiliserId.Value}";
                 }
 
-                url = string.Format(url, managementId, fromdate, toDate, confirm);
+                url = string.Format(url, fieldId, fromdate, toDate, confirm);
                 var response = await httpClient.GetAsync(url);
                 //var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchTotalNFromFertiliserBasedOnManIdAndAppDateAsyncAPI, managementId, fromdate, toDate, fertiliserId, confirm));
                 string result = await response.Content.ReadAsStringAsync();
@@ -543,6 +543,55 @@ namespace NMP.Portal.Services
             }
 
             return (fertiliser, error);
+        }
+        public async Task<(decimal?, Error)> FetchTotalNByManagementPeriodID(int managementPeriodID)
+        {
+            Error error = null;
+            decimal? totalN = null;
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchFertiliserTotalNByManagementPeriodIDAPI, managementPeriodID));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode)
+                {
+                    if (responseWrapper != null && responseWrapper.Data != null)
+                    {
+                        totalN = responseWrapper.Data.TotalN;//!= null ? responseWrapper.Data.TotalN.ToObject<decimal>() : 0
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = new Error();
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                if (error == null)
+                {
+                    error = new Error();
+                }
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                if (error == null)
+                {
+                    error = new Error();
+                }
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (totalN, error);
         }
     }
 }

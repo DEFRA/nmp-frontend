@@ -1,0 +1,117 @@
+﻿@using NMP.Portal.Resources
+@model NMP.Portal.ViewModels.ReportViewModel
+@{
+    ViewData["Title"] = Resource.lblField;
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="ReportType" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+}
+@if (TempData["ErrorOnSelectField"] != null)
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["ErrorOnSelectField"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        </div>
+    </div>
+}
+
+@if (Model != null)
+{
+    <form asp-action="ExportFieldsOrCropType" asp-controller="Report" method="post" autocomplete="off">
+        @Html.AntiForgeryToken()
+        <div hidden="true">
+
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportType"></govuk-input>
+            @if (Model.ReportType != null && Model.ReportType == (int)NMP.Portal.Enums.ReportType.CropAndFieldManagementReport && Model.CropTypeList != null && Model.CropTypeList.Count > 0)
+            {
+                    @for (int i = 0; i < Model.CropTypeList.Count; i++)
+                    {
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeList[i]" value="@Model.CropTypeList[i]"></govuk-input>
+                    }
+            }
+            else @if (Model.ReportType != null && Model.ReportType == (int)NMP.Portal.Enums.ReportType.NMaxReport)
+            {
+                @if (Model.FieldList != null && Model.FieldList.Count > 0)
+                {
+                    @for (int i = 0; i < Model.FieldList.Count; i++)
+                    {
+                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldList[i]" value="@Model.FieldList[i]"></govuk-input>
+                    }
+                }
+            }
+        </div>
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                @if (Model.ReportType != null && Model.ReportType == (int)NMP.Portal.Enums.ReportType.CropAndFieldManagementReport)
+                {
+                    <govuk-checkboxes asp-for="FieldList">
+                        <govuk-checkboxes-fieldset>
+                            <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                                @string.Format(Resource.lblWhichFieldsWouldYouLikeToCreateA2025CropAndFieldManagementReportFor, Model.Year)
+                            </govuk-checkboxes-fieldset-legend>
+
+                            <govuk-checkboxes-hint>
+                                @Resource.lblSelectAllThatApply
+                            </govuk-checkboxes-hint>
+                            @if (ViewBag.fieldList != null)
+                            {
+                                @foreach (var item in ViewBag.fieldList)
+                                {
+                                    <govuk-checkboxes-item value="@item.Value">@item.Text</govuk-checkboxes-item>
+                                }
+                            }
+
+                            <govuk-checkboxes-divider>or</govuk-checkboxes-divider>
+                            <govuk-checkboxes-item value=@Resource.lblSelectAll behavior="Exclusive">@Resource.lblSelectAll</govuk-checkboxes-item>
+                        </govuk-checkboxes-fieldset>
+                    </govuk-checkboxes>
+                    <govuk-button type="submit" class="margin-bottom-forty">
+                        @Resource.lblContinue
+                    </govuk-button>
+                }
+                else
+                {
+                    <govuk-checkboxes asp-for="CropTypeList">
+                        <govuk-checkboxes-fieldset>
+                            <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                                @string.Format(Resource.lblWhichCropsWouldYouLikeToCreateNMaxReportFor, Model.Year)
+                            </govuk-checkboxes-fieldset-legend>
+
+                            <govuk-checkboxes-hint>
+                                @Resource.lblSelectAllThatApply
+                            </govuk-checkboxes-hint>
+                            @if (ViewBag.CropTypeList != null)
+                            {
+                                @foreach (var item in ViewBag.CropTypeList)
+                                {
+                                    <govuk-checkboxes-item value="@item.Value">@item.Text</govuk-checkboxes-item>
+                                }
+                            }
+
+                            <govuk-checkboxes-divider>or</govuk-checkboxes-divider>
+                            <govuk-checkboxes-item value=@Resource.lblSelectAll behavior="Exclusive">@Resource.lblSelectAll</govuk-checkboxes-item>
+                        </govuk-checkboxes-fieldset>
+                    </govuk-checkboxes>
+                    <govuk-button type="submit" class="margin-bottom-forty">
+                        @Resource.lblContinue
+                    </govuk-button>
+                }
+                <p class="govuk-body cancel-link">
+                    <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">
+                        @Resource.lblCancel
+                    </a>
+                </p>
+
+            </div>
+
+        </div>
+    </form>
+}

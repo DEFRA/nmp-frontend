@@ -54,5 +54,21 @@ namespace NMP.Portal.ViewModels
         public List<FertiliserAndOrganicManureUpdateResponse>? UpdatedFertiliserIds { get; set; }
         public bool? IsDeleteFertliser { get; set; }
         public bool? IsCancel { get; set; }
+        public int? Defoliation { get; set; }
+        public bool? IsAnyCropIsGrass { get; set; }
+        public int DefoliationCurrentCounter { get; set; } = 0;
+        public string? DefoliationEncryptedCounter { get; set; }
+        public int? FieldID { get; set; }
+        public bool? IsSameDefoliationForAll { get; set; }
+
+        public bool IsCropGroupChange { get; set; } = false;
+        public bool IsAnyChangeInField { get; set; } = false;
+        public int? GrassCropCount { get; set; }
+        public bool IsAnyChangeInSameDefoliationFlag { get; set; } = false;
+        public List<DoubleCrop>? DoubleCrop { get; set; }
+        public int DoubleCropCurrentCounter { get; set; }
+        public string? DoubleCropEncryptedCounter { get; set; }
+        public bool IsDoubleCropAvailable { get; set; } = false;
+        public bool NeedToShowSameDefoliationForAll { get; set; } = true;
     }
 }

@@ -484,3 +484,127 @@ a:focus, .govuk-link:focus {
     display: block;
     width: 66%;
 }
+.nmax_header h1 {
+    margin-bottom: 20px;
+}
+.new_nmax_table_crop th {
+    margin-right: 5px;
+}
+
+.new_nmax_table_crop .col_1 {
+    width: 122px;
+}
+
+.new_nmax_table_crop .col_2 {
+    width: 45px;
+}
+
+.new_nmax_table_crop .col_3 {
+    width: 52px;
+}
+
+.new_nmax_table_crop .col_4 {
+    width: 94px;
+}
+
+.new_nmax_table_crop .col_5 {
+    width: 94px;
+}
+
+.new_nmax_table_crop .col_6 {
+    width: 70px;
+}
+
+.new_nmax_table_crop .col_7 {
+    width: 120px;
+}
+
+.new_nmax_table_crop .col_8 {
+    width: 100px;
+}
+
+.new_nmax_table_crop .col_9 {
+    width: 100px;
+}
+
+.new_nmax_rates_table th {
+    margin-right: 5px;
+}
+
+.new_nmax_rates_table .col_1 {
+    width: 122px;
+}
+
+.new_nmax_rates_table .col_2 {
+    width: 45px;
+}
+
+.new_nmax_rates_table .col_7, .new_nmax_rates_table .col_8 {
+    width: 100px;
+}
+.total_row {
+    background-color: #f3f2f1;
+    font-weight: bold;
+}
+hr.seperator_forty {
+    margin: 40px 0 40px 0;
+}
+.strong {
+    font-weight: bold;
+}
+.margin-bottom-none {
+    margin-bottom: 0;
+}
+.new_nmax_table, .new_nmax_rates_table, .new_nmax_table_grass, .new_nmax_rates_table_grass {
+    margin-bottom: 40px;
+    font-size: 17px;
+}
+
+
+.new_nmax_rates_table th {
+    margin-right: 5px;
+}
+
+.new_nmax_rates_table .col_1 {
+    width: 122px;
+}
+
+.new_nmax_rates_table .col_2 {
+    width: 45px;
+}
+
+.new_nmax_rates_table .col_7, .new_nmax_rates_table .col_8 {
+    width: 100px;
+}
+
+.new_nmax_table_grass th {
+    margin-right: 5px;
+}
+
+.new_nmax_table_grass .col_1 {
+    width: 122px;
+}
+
+.new_nmax_table_grass .col_2 {
+    width: 45px;
+}
+
+.new_nmax_table_grass .col_6, .new_nmax_table_grass .col_7 {
+    width: 100px;
+}
+
+.new_nmax_rates_table_grass th {
+    margin-right: 5px;
+}
+
+.new_nmax_rates_table_grass .col_1 {
+    width: 122px;
+}
+
+.new_nmax_rates_table_grass .col_2 {
+    width: 45px;
+}
+
+.new_nmax_rates_table_grass .col_7, .new_nmax_rates_table_grass .col_8 {
+    width: 100px;
+}
