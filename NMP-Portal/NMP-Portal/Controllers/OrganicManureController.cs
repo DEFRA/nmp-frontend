@@ -9186,10 +9186,10 @@ namespace NMP.Portal.Controllers
                             return RedirectToAction("DoubleCrop", new { q = model.DoubleCropEncryptedCounter });
                         }
                         return RedirectToAction("ManureType");
-                       
 
 
-                       
+
+
                     }
                     model.FieldID = model.OrganicManures[index].FieldID.Value;
                     model.FieldName = (await _fieldService.FetchFieldByFieldId(model.OrganicManures[index].FieldID.Value)).Name;
@@ -9283,15 +9283,18 @@ namespace NMP.Portal.Controllers
                                     .ToList();
                                     foreach (var item in commonDefoliationItems)
                                     {
-                                        if (item.Text.Contains(Resource.lblSilage, StringComparison.OrdinalIgnoreCase))
+                                        var parts = item.Text.Split('-');
+                                        if (parts.Length == 2)
                                         {
-                                            item.Text = item.Text.Replace(Resource.lblSilage, Resource.lblCut, StringComparison.OrdinalIgnoreCase);
+                                            var left = parts[0].Trim();
+                                            var right = parts[1].Trim();
 
-                                        }
-                                        if (item.Text.Contains(Resource.lblHay, StringComparison.OrdinalIgnoreCase))
-                                        {
-                                            item.Text = item.Text.Replace(Resource.lblHay, Resource.lblCut, StringComparison.OrdinalIgnoreCase);
+                                            if (!string.IsNullOrWhiteSpace(right))
+                                            {
+                                                right = char.ToUpper(right[0]) + right.Substring(1);
+                                            }
 
+                                            item.Text = $"{left} - {right}";
                                         }
                                     }
 
@@ -9353,15 +9356,18 @@ namespace NMP.Portal.Controllers
                                             });
                                             foreach (var item in defoliationSelectList)
                                             {
-                                                if (item.Text.Contains(Resource.lblSilage, StringComparison.OrdinalIgnoreCase))
+                                                var parts = item.Text.Split('-');
+                                                if (parts.Length == 2)
                                                 {
-                                                    item.Text = item.Text.Replace(Resource.lblSilage, Resource.lblCut, StringComparison.OrdinalIgnoreCase);
+                                                    var left = parts[0].Trim();
+                                                    var right = parts[1].Trim();
 
-                                                }
-                                                if (item.Text.Contains(Resource.lblHay, StringComparison.OrdinalIgnoreCase))
-                                                {
-                                                    item.Text = item.Text.Replace(Resource.lblHay, Resource.lblCut, StringComparison.OrdinalIgnoreCase);
+                                                    if (!string.IsNullOrWhiteSpace(right))
+                                                    {
+                                                        right = char.ToUpper(right[0]) + right.Substring(1);
+                                                    }
 
+                                                    item.Text = $"{left} - {right}";
                                                 }
                                             }
 
@@ -9503,15 +9509,18 @@ namespace NMP.Portal.Controllers
 
                                         foreach (var item in commonDefoliationItems)
                                         {
-                                            if (item.Text.Contains(Resource.lblSilage, StringComparison.OrdinalIgnoreCase))
+                                            var parts = item.Text.Split('-');
+                                            if (parts.Length == 2)
                                             {
-                                                item.Text = item.Text.Replace(Resource.lblSilage, Resource.lblCut, StringComparison.OrdinalIgnoreCase);
+                                                var left = parts[0].Trim();
+                                                var right = parts[1].Trim();
 
-                                            }
-                                            if (item.Text.Contains(Resource.lblHay, StringComparison.OrdinalIgnoreCase))
-                                            {
-                                                item.Text = item.Text.Replace(Resource.lblHay, Resource.lblCut, StringComparison.OrdinalIgnoreCase);
+                                                if (!string.IsNullOrWhiteSpace(right))
+                                                {
+                                                    right = char.ToUpper(right[0]) + right.Substring(1);
+                                                }
 
+                                                item.Text = $"{left} - {right}";
                                             }
                                         }
                                         //ViewBag.DefoliationList = commonDefoliationItems;
@@ -9572,19 +9581,18 @@ namespace NMP.Portal.Controllers
                                                 });
                                                 foreach (var item in defoliationSelectList)
                                                 {
-                                                    //if (item.Text.Contains(Resource.lblSilage, StringComparison.OrdinalIgnoreCase) || item.Text.Contains(Resource.lblHay, StringComparison.OrdinalIgnoreCase))
-                                                    //{
-                                                    //    item.Text.Replace(Resource.lblSilage, Resource.lblCut);
-                                                    //}
-                                                    if (item.Text.Contains(Resource.lblSilage, StringComparison.OrdinalIgnoreCase))
+                                                    var parts = item.Text.Split('-');
+                                                    if (parts.Length == 2)
                                                     {
-                                                        item.Text = item.Text.Replace(Resource.lblSilage, Resource.lblCut, StringComparison.OrdinalIgnoreCase);
+                                                        var left = parts[0].Trim();
+                                                        var right = parts[1].Trim();
 
-                                                    }
-                                                    if (item.Text.Contains(Resource.lblHay, StringComparison.OrdinalIgnoreCase))
-                                                    {
-                                                        item.Text = item.Text.Replace(Resource.lblHay, Resource.lblCut, StringComparison.OrdinalIgnoreCase);
+                                                        if (!string.IsNullOrWhiteSpace(right))
+                                                        {
+                                                            right = char.ToUpper(right[0]) + right.Substring(1);
+                                                        }
 
+                                                        item.Text = $"{left} - {right}";
                                                     }
                                                 }
 
@@ -9630,9 +9638,21 @@ namespace NMP.Portal.Controllers
                                                                                .ToArray();
 
                                         string selectedDefoliation = (model.OrganicManures[model.DefoliationCurrentCounter].Defoliation.Value > 0 && model.OrganicManures[model.DefoliationCurrentCounter].Defoliation.Value <= defoliationParts.Length)
-                                            ? $"{Enum.GetName(typeof(PotentialCut), model.OrganicManures[model.DefoliationCurrentCounter].Defoliation.Value)} ({defoliationParts[model.OrganicManures[model.DefoliationCurrentCounter].Defoliation.Value - 1]})"
+                                            ? $"{Enum.GetName(typeof(PotentialCut), model.OrganicManures[model.DefoliationCurrentCounter].Defoliation.Value)} -{defoliationParts[model.OrganicManures[model.DefoliationCurrentCounter].Defoliation.Value - 1]}"
                                             : $"{model.OrganicManures[model.DefoliationCurrentCounter].Defoliation.Value}";
+                                        var parts = selectedDefoliation.Split('-');
+                                        if (parts.Length == 2)
+                                        {
+                                            var left = parts[0].Trim();
+                                            var right = parts[1].Trim();
 
+                                            if (!string.IsNullOrWhiteSpace(right))
+                                            {
+                                                right = char.ToUpper(right[0]) + right.Substring(1);
+                                            }
+
+                                            selectedDefoliation = $"{left} - {right}";
+                                        }
                                         model.OrganicManures[model.DefoliationCurrentCounter].DefoliationName = selectedDefoliation;
                                     }
                                 }
@@ -9752,11 +9772,22 @@ namespace NMP.Portal.Controllers
                                     string[] defoliationParts = description.Split(',')
                                                                            .Select(x => x.Trim())
                                                                            .ToArray();
-
                                     string selectedDefoliation = (model.OrganicManures[i].Defoliation.Value > 0 && model.OrganicManures[i].Defoliation.Value <= defoliationParts.Length)
-                                        ? $"{Enum.GetName(typeof(PotentialCut), model.OrganicManures[i].Defoliation.Value)} ({defoliationParts[model.OrganicManures[i].Defoliation.Value - 1]})"
-                                        : $"{model.OrganicManures[i].Defoliation.Value}";
+                                 ? $"{Enum.GetName(typeof(PotentialCut), model.OrganicManures[i].Defoliation.Value)} -{defoliationParts[model.OrganicManures[i].Defoliation.Value - 1]}"
+                                 : $"{model.OrganicManures[i].Defoliation.Value}";
+                                    var parts = selectedDefoliation.Split('-');
+                                    if (parts.Length == 2)
+                                    {
+                                        var left = parts[0].Trim();
+                                        var right = parts[1].Trim();
 
+                                        if (!string.IsNullOrWhiteSpace(right))
+                                        {
+                                            right = char.ToUpper(right[0]) + right.Substring(1);
+                                        }
+
+                                        selectedDefoliation = $"{left} - {right}";
+                                    }
                                     model.OrganicManures[i].DefoliationName = selectedDefoliation;
                                 }
                             }
@@ -9866,15 +9897,18 @@ namespace NMP.Portal.Controllers
 
                                         foreach (var item in commonDefoliationItems)
                                         {
-                                            if (item.Text.Contains(Resource.lblSilage, StringComparison.OrdinalIgnoreCase))
+                                            var parts = item.Text.Split('-');
+                                            if (parts.Length == 2)
                                             {
-                                                    item.Text = item.Text.Replace(Resource.lblSilage, Resource.lblCut, StringComparison.OrdinalIgnoreCase);
-                                                
-                                            }
-                                            if (item.Text.Contains(Resource.lblHay, StringComparison.OrdinalIgnoreCase))
-                                            {
-                                                item.Text = item.Text.Replace(Resource.lblHay, Resource.lblCut, StringComparison.OrdinalIgnoreCase);
+                                                var left = parts[0].Trim();
+                                                var right = parts[1].Trim();
 
+                                                if (!string.IsNullOrWhiteSpace(right))
+                                                {
+                                                    right = char.ToUpper(right[0]) + right.Substring(1);
+                                                }
+
+                                                item.Text = $"{left} - {right}";
                                             }
                                         }
                                         //ViewBag.DefoliationList = commonDefoliationItems;
@@ -9927,15 +9961,19 @@ namespace NMP.Portal.Controllers
                                                 string text = (defoliation > 0 && defoliation <= defoliationParts.Length)
                                                 ? $"{Enum.GetName(typeof(PotentialCut), defoliation)} - {defoliationParts[defoliation - 1]}"
                                                 : defoliation.ToString();
-                                                if (text.Contains(Resource.lblSilage, StringComparison.OrdinalIgnoreCase))
+                                               
+                                                var parts = text.Split('-');
+                                                if (parts.Length == 2)
                                                 {
-                                                    text = text.Replace(Resource.lblSilage, Resource.lblCut, StringComparison.OrdinalIgnoreCase);
+                                                    var left = parts[0].Trim();
+                                                    var right = parts[1].Trim();
 
-                                                }
-                                                if (text.Contains(Resource.lblHay, StringComparison.OrdinalIgnoreCase))
-                                                {
-                                                    text = text.Replace(Resource.lblHay, Resource.lblCut, StringComparison.OrdinalIgnoreCase);
+                                                    if (!string.IsNullOrWhiteSpace(right))
+                                                    {
+                                                        right = char.ToUpper(right[0]) + right.Substring(1);
+                                                    }
 
+                                                    text = $"{left} - {right}";
                                                 }
                                                 defoliationSelectList.Add(new SelectListItem
                                                 {

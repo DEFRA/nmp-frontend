@@ -4428,13 +4428,13 @@ live</value>
     <value>Lay duration</value>
   </data>
   <data name="lblWhichCutOrGrazingInThisApplicationForInField" xml:space="preserve">
-    <value>Which cut or grazing in this organic material application for in {0}?</value>
+    <value>Which cut or grazing is this organic material application for in {0}?</value>
   </data>
   <data name="lblForMultipleDefoliation" xml:space="preserve">
     <value>Is this application for the same cut or grazing in all the selected grass fields?</value>
   </data>
   <data name="lblWhichCutOrGrazingInThisApplicationForAllField" xml:space="preserve">
-    <value>Which cut or grazing in this organic material application for in these fields?</value>
+    <value>Which cut or grazing is this organic material application for in these fields?</value>
   </data>
   <data name="lblWhichCropIsThisManureApplication" xml:space="preserve">
     <value>Which crop is this manure application for in {0}?</value>
