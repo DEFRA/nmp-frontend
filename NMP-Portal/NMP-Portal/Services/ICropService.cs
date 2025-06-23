@@ -44,5 +44,7 @@ namespace NMP.Portal.Services
 
         Task<(SwardTypeResponse, Error)> FetchSwardTypeBySwardTypeId(int swardTypeId);
         Task<(List<CropTypeLinkingResponse>, Error)> FetchCropTypeLinking();
+
+        Task<(bool, Error)> CopyCropNutrientManagementPlan(int farmID, int harvestYear, int copyYear, bool isOrganic, bool isFertiliser);
     }
 }

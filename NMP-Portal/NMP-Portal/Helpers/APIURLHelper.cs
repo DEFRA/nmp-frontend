@@ -182,5 +182,6 @@ namespace NMP.Portal.Helpers
         public const string FetchSwardManagementBySwardTypeIdAsyncAPI = "vendors/rb209/Grass/SwardManagements/{0}";
         public const string FetchSwardTypeBySwardTypeIdAsyncAPI = "vendors/rb209/Grass/SwardType/{0}";
         public const string FetchSwardManagementBySwardManagementIdAsyncAPI = "vendors/rb209/Grass/SwardManagement/{0}";
+        public const string CopyCropNutrientManagementPlanAsyncAPI = "crops/copyplans";
     }
 }
