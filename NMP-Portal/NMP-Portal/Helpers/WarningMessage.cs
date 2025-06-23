@@ -15,7 +15,7 @@ namespace NMP.Portal.Helpers
         public string? ClosedPeriodNonOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, bool isPerennial)
         {
             string? closedPeriod = null;
-            DateTime september16 = new DateTime(harvestYear - 1, 9, 16);
+            DateTime september16 = new DateTime(harvestYear, 9, 16);
 
             var isSandyShallowSoil = fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.LightSand ||
                                      fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.Shallow;
@@ -81,7 +81,7 @@ namespace NMP.Portal.Helpers
         public string? ClosedPeriodOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, int cropTypeId, int? cropInfo1, bool isPerennial)
         {
             string? closedPeriod = null;
-            DateTime september16 = new DateTime(harvestYear - 1, 9, 16);
+            DateTime september16 = new DateTime(harvestYear, 9, 16);
 
             var isSandyShallowSoil = fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.LightSand ||
                                      fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.Shallow;
@@ -529,7 +529,7 @@ namespace NMP.Portal.Helpers
         public string? WarningPeriodOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, int cropTypeId, int? cropInfo1, bool isPerennial)
         {
             string? WarningPeriod = null;
-            DateTime september16 = new DateTime(harvestYear - 1, 9, 16);
+            DateTime september16 = new DateTime(harvestYear, 9, 16);
 
             var isSandyShallowSoil = fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.LightSand ||
                                      fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.Shallow;
