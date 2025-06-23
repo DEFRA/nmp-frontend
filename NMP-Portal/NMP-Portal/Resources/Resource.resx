@@ -4796,4 +4796,16 @@ live</value>
   <data name="lblIncludeOrganicMaterialInorganicFertiliser" xml:space="preserve">
     <value>Include organic material applications and inorganic fertiliser applications</value>
   </data>
+  <data name="lblDoYouWantToIncludeOrganicMaterialInorganicFertiliserApplicationsNotSet" xml:space="preserve">
+    <value>Do you want to include organic material and inorganic fertiliser applications not set</value>
+  </data>
+  <data name="lblWhichPlanWouldYouLikeToCopyForNotSet" xml:space="preserve">
+    <value>Which plan would you like to copy for {0} not set</value>
+  </data>
+  <data name="lblWouldYouLikeToStartWithCopyOfPlanFromPreviousYearNotSet" xml:space="preserve">
+    <value>Would you like to start with a copy of a plan from a previous year not set</value>
+  </data>
+  <data name="lblDryMatterYields" xml:space="preserve">
+    <value>dry matter yields</value>
+  </data>
 </root>
