@@ -4629,9 +4629,25 @@ namespace NMP.Portal.Controllers
                                                                                        .Select(x => x.Trim())
                                                                                        .ToArray();
 
-                                                string selectedDefoliation = (defoliation > 0 && defoliation.Value <= defoliationParts.Length)
-                                                    ? $"{Enum.GetName(typeof(PotentialCut), defoliation.Value)} ({defoliationParts[defoliation.Value - 1]})"
-                                                    : $"{defoliation}";
+                                                //string selectedDefoliation = (defoliation > 0 && defoliation.Value <= defoliationParts.Length)
+                                                //    ? $"{Enum.GetName(typeof(PotentialCut), defoliation.Value)} ({defoliationParts[defoliation.Value - 1]})"
+                                                //    : $"{defoliation}";
+                                                string selectedDefoliation = (defoliation> 0 && defoliation.Value <= defoliationParts.Length)
+                                            ? $"{Enum.GetName(typeof(PotentialCut), defoliation.Value)} - {defoliationParts[defoliation.Value - 1]}"
+                                            : $"{defoliation}";
+                                                var parts = selectedDefoliation.Split('-');
+                                                if (parts.Length == 2)
+                                                {
+                                                    var left = parts[0].Trim();
+                                                    var right = parts[1].Trim();
+
+                                                    if (!string.IsNullOrWhiteSpace(right))
+                                                    {
+                                                        right = char.ToUpper(right[0]) + right.Substring(1);
+                                                    }
+
+                                                    selectedDefoliation = $"{left} - {right}";
+                                                }
                                                 model.IsAnyCropIsGrass = true;
                                                 model.IsSameDefoliationForAll = true;
                                                 model.GrassCropCount = 1;
@@ -9773,7 +9789,7 @@ namespace NMP.Portal.Controllers
                                                                            .Select(x => x.Trim())
                                                                            .ToArray();
                                     string selectedDefoliation = (model.OrganicManures[i].Defoliation.Value > 0 && model.OrganicManures[i].Defoliation.Value <= defoliationParts.Length)
-                                 ? $"{Enum.GetName(typeof(PotentialCut), model.OrganicManures[i].Defoliation.Value)} -{defoliationParts[model.OrganicManures[i].Defoliation.Value - 1]}"
+                                 ? $"{Enum.GetName(typeof(PotentialCut), model.OrganicManures[i].Defoliation.Value)} - {defoliationParts[model.OrganicManures[i].Defoliation.Value - 1]}"
                                  : $"{model.OrganicManures[i].Defoliation.Value}";
                                     var parts = selectedDefoliation.Split('-');
                                     if (parts.Length == 2)
