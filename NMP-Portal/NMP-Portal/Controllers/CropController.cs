@@ -6290,11 +6290,9 @@ namespace NMP.Portal.Controllers
 
             foreach (var entry in defoliationSequence)
             {
-                int count = entry.Value;
                 string word = entry.Key;
-
-                // Pluralize
-                if (count > 1)
+                
+                if (entry.Value > 1)
                 {
                     if (word.EndsWith("s") || word.EndsWith("x") || word.EndsWith("z") ||
                         word.EndsWith("sh") || word.EndsWith("ch"))
