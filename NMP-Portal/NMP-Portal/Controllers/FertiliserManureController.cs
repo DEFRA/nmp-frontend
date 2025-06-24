@@ -1481,7 +1481,7 @@ namespace NMP.Portal.Controllers
                             if (error == null)
                             {
                                 WarningMessage warning = new WarningMessage();
-                                ViewBag.closingPeriod = warning.ClosedPeriodForFertiliser(cropTypeResponse.CropTypeId);
+                                ViewBag.ClosedPeriod = warning.ClosedPeriodForFertiliser(cropTypeResponse.CropTypeId);
                             }
                         }
                         _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
