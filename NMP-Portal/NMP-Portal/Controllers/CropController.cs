@@ -6307,7 +6307,7 @@ namespace NMP.Portal.Controllers
 
                 
                 word = char.ToUpper(word[0]) + word.Substring(1);
-                result.Add($"{count} {word}");
+                result.Add($"{entry.Value} {word}");
             }
 
             return string.Join(", ", result);
