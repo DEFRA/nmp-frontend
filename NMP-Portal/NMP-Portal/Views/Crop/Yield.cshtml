@@ -87,6 +87,18 @@
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCropType"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCropOrder"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingPlan"></govuk-input>
+
+        @if (Model.HarvestYear != null && Model.HarvestYear.Count > 0)
+        {
+            @for (int i = 0; i < Model.HarvestYear.Count; i++)
+            {
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear[i].Year" value="@Model.HarvestYear[i].Year"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear[i].EncryptedYear" value="@Model.HarvestYear[i].EncryptedYear"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear[i].LastModifiedOn" value="@Model.HarvestYear[i].LastModifiedOn"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear[i].IsAnyPlan" value="@Model.HarvestYear[i].IsAnyPlan"></govuk-input>
+            }
+        }
         @if (Model.FieldList != null && Model.FieldList.Count > 0)
         {
             @for (int i = 0; i < Model.FieldList.Count; i++)
