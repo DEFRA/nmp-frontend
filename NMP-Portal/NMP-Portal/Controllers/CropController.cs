@@ -5997,21 +5997,6 @@ namespace NMP.Portal.Controllers
                 }
                 if (isPreviousYearPlanExist)
                 {
-                    //to remove base year from HarvestYear list
-                    foreach (var yr in model.HarvestYear)
-                    {
-                        (List<HarvestYearPlanResponse> harvestYearPlanResponseForFilter, error) = await _cropService.FetchHarvestYearPlansByFarmId(yr.Year, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
-                        if (harvestYearPlanResponseForFilter.Count > 0)
-                        {
-                            var baseYearCrops = harvestYearPlanResponseForFilter.All(x => x.CropInfo1 == null && x.Yield == null && x.DefoliationSequenceID == null);
-                            if (baseYearCrops)
-                            {
-                                model.HarvestYear = model.HarvestYear.Where(x => x.Year != yr.Year).ToList();
-                                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
-                            }
-                        }
-                    }
-                    //end
                     return View(model);
                 }
                 else
@@ -6211,8 +6196,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                model.IsCheckAnswer = true;
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+
                 return View(model);
 
             }
