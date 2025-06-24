@@ -2972,9 +2972,17 @@ namespace NMP.Portal.Controllers
                                             FieldName = plan.FieldName,
                                             PlantingDate = plan.PlantingDate,
                                             Yield = plan.Yield,
-                                            Variety = plan.CropVariety,
-                                            Management = plan.Management,
+                                            Variety = plan.CropVariety
                                         };
+                                        if (plan.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                        {
+                                            List<string> defoliationList = plan.Management
+                                                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                                .Select(s => s.Trim())
+                                                .ToList();
+                                            fieldDetail.Management = ShorthandDefoliationSequence(defoliationList);
+
+                                        }
 
                                         newField.FieldData.Add(fieldDetail);
 
@@ -3401,6 +3409,15 @@ namespace NMP.Portal.Controllers
                                     PotentialCut = recommendation.Crops.PotentialCut,
 
                                 };
+                                if (recommendation.Crops.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                {
+                                    List<string> defoliationList = recommendation.Crops.DefoliationSequenceName
+                                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                        .Select(s => s.Trim())
+                                        .ToList();
+                                    crop.DefoliationSequenceName = ShorthandDefoliationSequence(defoliationList);
+
+                                }
                                 if (!string.IsNullOrWhiteSpace(crop.CropTypeName))
                                 {
                                     crop.EncryptedCropTypeName = _cropDataProtector.Protect(crop.CropTypeName);
@@ -6246,5 +6263,29 @@ namespace NMP.Portal.Controllers
             }
         }
 
+        private static string ShorthandDefoliationSequence(List<string> data)
+        {
+            if (data == null && data.Count == 0)
+            {
+                return "";
+            }
+
+            Dictionary<string, int> defoliationSequence = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (string item in data)
+            {
+                string name = item.Trim().ToLower();
+                if (defoliationSequence.ContainsKey(name))
+                {
+                    defoliationSequence[name]++;
+                }
+                else
+                {
+                    defoliationSequence[name] = 1;
+                }
+            }
+
+            return string.Join(", ", defoliationSequence.Select(list => $"{list.Value} {char.ToUpper(list.Key[0]) + list.Key.Substring(1)}"));
+        }
     }
 }
