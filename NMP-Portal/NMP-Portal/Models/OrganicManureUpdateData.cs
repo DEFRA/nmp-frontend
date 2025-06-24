@@ -35,5 +35,7 @@
         public int MoistureID { get; set; }
         public decimal AutumnCropNitrogenUptake { get; set; }
         public decimal? AvailableNForNMax { get; set; }
+        public int? AvailableNForNextYear { get; set; }
+        public int? AvailableNForNextDefoliation { get; set; }
     }
 }
