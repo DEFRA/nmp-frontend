@@ -5696,6 +5696,8 @@ namespace NMP.Portal.Controllers
                                                     organic.TotalSO3 = mannerCalculateNutrientResponse.TotalSO3;
                                                     organic.TotalK2O = mannerCalculateNutrientResponse.TotalK2O;
                                                     organic.TotalMgO = mannerCalculateNutrientResponse.TotalMgO;
+                                                    organic.AvailableNForNextYear = mannerCalculateNutrientResponse.FollowingCropYear2AvailableN;
+                                                    organic.AvailableNForNextDefoliation = mannerCalculateNutrientResponse.NextGrassNCropCurrentYear;
                                                     organic.AvailableNForNMax = currentApplicationNitrogen != null ? currentApplicationNitrogen : mannerCalculateNutrientResponse.CurrentCropAvailableN;
                                                 }
                                                 else
@@ -8532,7 +8534,9 @@ namespace NMP.Portal.Controllers
                                                                 RainfallWithinSixHoursID = organic.RainfallWithinSixHoursID,
                                                                 MoistureID = organic.MoistureID,
                                                                 AutumnCropNitrogenUptake = organic.AutumnCropNitrogenUptake,
-                                                                AvailableNForNMax = currentApplicationNitrogen != null ? currentApplicationNitrogen : mannerCalculateNutrientResponse.CurrentCropAvailableN
+                                                                AvailableNForNMax = currentApplicationNitrogen != null ? currentApplicationNitrogen : mannerCalculateNutrientResponse.CurrentCropAvailableN,
+                                                                AvailableNForNextYear = mannerCalculateNutrientResponse.FollowingCropYear2AvailableN,
+                                                                AvailableNForNextDefoliation = mannerCalculateNutrientResponse.NextGrassNCropCurrentYear
 
                                                             };
 

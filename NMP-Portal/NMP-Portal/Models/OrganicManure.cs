@@ -49,5 +49,7 @@ namespace NMP.Portal.Models
         public int? FieldID { get; set; }
         public string? FieldName { get; set; }
         public string? EncryptedCounter { get; set; }
+        public int? AvailableNForNextYear { get; set; }
+        public int? AvailableNForNextDefoliation { get; set; }
     }
 }

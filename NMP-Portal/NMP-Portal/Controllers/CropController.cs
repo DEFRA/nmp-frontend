@@ -6286,7 +6286,31 @@ namespace NMP.Portal.Controllers
                 }
             }
 
-            return string.Join(", ", defoliationSequence.Select(list => $"{list.Value} {char.ToUpper(list.Key[0]) + list.Key.Substring(1)}"));
+            List<string> result = new List<string>();
+
+            foreach (var entry in defoliationSequence)
+            {
+                string word = entry.Key;
+                
+                if (entry.Value > 1)
+                {
+                    if (word.EndsWith("s") || word.EndsWith("x") || word.EndsWith("z") ||
+                        word.EndsWith("sh") || word.EndsWith("ch"))
+                    {
+                        word += "es";
+                    }
+                    else
+                    {
+                        word += "s";
+                    }
+                }
+
+                
+                word = char.ToUpper(word[0]) + word.Substring(1);
+                result.Add($"{entry.Value} {word}");
+            }
+
+            return string.Join(", ", result);
         }
     }
 }
