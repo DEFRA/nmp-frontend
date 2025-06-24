@@ -18,6 +18,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Numerics;
 using System.Reflection;
 using System.Security.Claims;
 using System.Xml.Linq;
@@ -2974,7 +2975,7 @@ namespace NMP.Portal.Controllers
                                             Yield = plan.Yield,
                                             Variety = plan.CropVariety
                                         };
-                                        if (plan.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                        if (plan.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass&&!string.IsNullOrWhiteSpace(plan.Management))
                                         {
                                             List<string> defoliationList = plan.Management
                                                 .Split(',', StringSplitOptions.RemoveEmptyEntries)
@@ -3409,7 +3410,7 @@ namespace NMP.Portal.Controllers
                                     PotentialCut = recommendation.Crops.PotentialCut,
 
                                 };
-                                if (recommendation.Crops.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                if (recommendation.Crops.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && !string.IsNullOrWhiteSpace(recommendation.Crops.DefoliationSequenceName))
                                 {
                                     List<string> defoliationList = recommendation.Crops.DefoliationSequenceName
                                         .Split(',', StringSplitOptions.RemoveEmptyEntries)
