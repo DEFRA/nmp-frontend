@@ -3563,7 +3563,7 @@ cubic metres per hectare  not set</value>
     <value>added function: N-max NVZ compliance module</value>
   </data>
   <data name="lblNMPTBetaTest1" xml:space="preserve">
-    <value>a limited number of selected farmers and advisers across England and Wales are invited to test the tool and provide feedback prior to the public release</value>
+    <value>A limited number of selected farmers and advisers across England and Wales are invited to test the tool and provide feedback prior to the public release</value>
   </data>
   <data name="lblNMPTLaunchesToUsersInScotland" xml:space="preserve">
     <value>NMPT-GB launches to users in Scotland</value>
@@ -4566,7 +4566,7 @@ live</value>
     <value>potato groups</value>
   </data>
   <data name="lblPotentialCuts" xml:space="preserve">
-    <value>Potential Cuts</value>
+    <value>potential cuts</value>
   </data>
   <data name="lblRainfallTypes" xml:space="preserve">
     <value>rainfall types</value>
@@ -4795,5 +4795,23 @@ live</value>
   </data>
   <data name="lblIncludeOrganicMaterialInorganicFertiliser" xml:space="preserve">
     <value>Include organic material applications and inorganic fertiliser applications</value>
+  </data>
+  <data name="lblDoYouWantToIncludeOrganicMaterialInorganicFertiliserApplicationsNotSet" xml:space="preserve">
+    <value>Do you want to include organic material and inorganic fertiliser applications not set</value>
+  </data>
+  <data name="lblWhichPlanWouldYouLikeToCopyForNotSet" xml:space="preserve">
+    <value>Which plan would you like to copy for {0} not set</value>
+  </data>
+  <data name="lblWouldYouLikeToStartWithCopyOfPlanFromPreviousYearNotSet" xml:space="preserve">
+    <value>Would you like to start with a copy of a plan from a previous year not set</value>
+  </data>
+  <data name="lblDryMatterYields" xml:space="preserve">
+    <value>dry matter yields</value>
+  </data>
+  <data name="lblWhichCutOrGrazingInThisInorganicApplicationForAllField" xml:space="preserve">
+    <value>Which cut or grazing is this inorganic material application for in these fields?</value>
+  </data>
+  <data name="lblWhichCutOrGrazingInThisInorganicApplicationForInField" xml:space="preserve">
+    <value>Which cut or grazing is this inorganic material application for in {0}?</value>
   </data>
 </root>

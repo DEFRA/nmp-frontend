@@ -307,7 +307,7 @@
                                 {
                                     <govuk-summary-list-row class=@((!fertiliser.Defoliation.HasValue)?"govuk-error-message":"")>
                                         <govuk-summary-list-row-key>
-                                            @Resource.lblWhichCutOrGrazingInThisApplicationForAllField
+                                            @Resource.lblWhichCutOrGrazingInThisInorganicApplicationForAllField
                                         </govuk-summary-list-row-key>
                                         <govuk-summary-list-row-value>
                                             
@@ -327,7 +327,7 @@
                             {
                                 <govuk-summary-list-row class=@((!fertiliser.Defoliation.HasValue)?"govuk-error-message":"")>
                                     <govuk-summary-list-row-key>
-                                        @string.Format(Resource.lblWhichCutOrGrazingInThisApplicationForInField, fertiliser.FieldName)
+                                        @string.Format(Resource.lblWhichCutOrGrazingInThisInorganicApplicationForInField, fertiliser.FieldName)
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value>
                                         @* @fertiliser.Defoliation *@

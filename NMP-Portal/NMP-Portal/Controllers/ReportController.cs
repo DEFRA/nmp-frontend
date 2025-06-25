@@ -10,6 +10,7 @@ using NMP.Portal.ServiceResponses;
 using NMP.Portal.Services;
 using NMP.Portal.ViewModels;
 using System.Diagnostics.Metrics;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using Error = NMP.Portal.ServiceResponses.Error;
 
 namespace NMP.Portal.Controllers
@@ -291,21 +292,54 @@ namespace NMP.Portal.Controllers
                     int totalArableArea = 0;
                     foreach (var fieldData in model.CropAndFieldReport.Farm.Fields)
                     {
+                        List<int> fieldIdsForGrowthClass = new List<int>();
+                        fieldIdsForGrowthClass.Add(fieldData.ID.Value);
 
                         totalFarmArea += fieldData.TotalArea.Value;
                         if (fieldData.Crops != null && fieldData.Crops.Count > 0)
                         {
-
                             // * fieldData.Crops.Count;
                             foreach (var cropData in fieldData.Crops)
                             {
+                                (List<GrassGrowthClassResponse> grassGrowthClasses, error) = await _cropService.FetchGrassGrowthClass(fieldIdsForGrowthClass);
+                                if (string.IsNullOrWhiteSpace(error.Message))
+                                {
+
+                                    if (cropData.SwardTypeID == (int)NMP.Portal.Enums.SwardType.Grass)
+                                    {
+                                        cropData.GrowthClass = grassGrowthClasses.FirstOrDefault().GrassGrowthClassName;
+                                    }
+
+                                }
+                                else
+                                {
+                                    TempData["ErrorOnSelectField"] = error.Message;
+                                    return RedirectToAction("ExportFieldsOrCropType");
+                                }
                                 totalCount++;
                                 if (cropData.CropOrder == 1)
                                 {
                                     cropData.SwardManagementName = cropData.SwardManagementName;
                                     cropData.EstablishmentName = cropData.EstablishmentName;
                                     cropData.SwardTypeName = cropData.SwardTypeName;
-                                    cropData.DefoliationSequenceName = cropData.DefoliationSequenceName;
+                                    if (cropData.Establishment != null)
+                                    {
+                                        if (cropData.Establishment != (int)NMP.Portal.Enums.Season.Autumn &&
+                                        cropData.Establishment != (int)NMP.Portal.Enums.Season.Spring)
+                                        {
+                                            cropData.EstablishmentName = Resource.lblExistingSwards;
+                                        }
+                                        else if (cropData.Establishment == (int)NMP.Portal.Enums.Season.Spring)
+                                        {
+                                            cropData.EstablishmentName = Resource.lblSpringSown;
+                                        }
+                                        //else if (cropData.Establishment == (int)NMP.Portal.Enums.Season.Spring)
+                                        //{
+                                        //    cropData.EstablishmentName = Resource.lblautumn;
+                                        //}
+                                    }
+
+                                    //cropData.DefoliationSequenceName = cropData.DefoliationSequenceName;
                                     if (cropData.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
                                     {
                                         totalGrassArea += (int)Math.Round(fieldData.TotalArea.Value);
@@ -324,6 +358,14 @@ namespace NMP.Portal.Controllers
                                         if (grassError == null && defResponse.Count > 0)
                                         {
                                             defolicationName = defResponse.Where(x => x.DefoliationSequenceId == cropData.DefoliationSequenceID).Select(x => x.DefoliationSequenceDescription).FirstOrDefault();
+                                            if (!string.IsNullOrWhiteSpace(defolicationName))
+                                            {
+                                                List<string> defoliationList = defolicationName
+                                                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                                .Select(s => s.Trim())
+                                                .ToList();
+                                                cropData.DefoliationSequenceName = ShorthandDefoliationSequence(defoliationList);
+                                            }
                                         }
                                     }
                                 }
@@ -333,7 +375,7 @@ namespace NMP.Portal.Controllers
                                     foreach (var manData in cropData.ManagementPeriods)
                                     {
                                         var defolicationParts = (!string.IsNullOrWhiteSpace(defolicationName)) ? defolicationName.Split(',') : null;
-                                        if (manData != null)
+                                        if (defolicationParts != null)
                                         {
                                             manData.DefoliationSequenceName = (defolicationParts != null && defIndex < defolicationParts.Length) ? defolicationParts[defIndex] : string.Empty;
                                         }
@@ -528,7 +570,7 @@ namespace NMP.Portal.Controllers
                             string vegetableGroup = string.Empty;
                             List<NitrogenApplicationsForNMaxReportResponse> nitrogenApplicationsForNMaxReportResponse = new List<NitrogenApplicationsForNMaxReportResponse>();
                             List<NMaxLimitReportResponse> nMaxLimitReportResponse = new List<NMaxLimitReportResponse>();
-                            if ((!isVegetableCropType)&&
+                            if ((!isVegetableCropType) &&
                                 (vegetableGroup1List.Contains(cropType) ||
                                 vegetableGroup2List.Contains(cropType) ||
                                 vegetableGroup3List.Contains(cropType)) && (vegetableGroup1List.Count > 0 ||
@@ -633,7 +675,7 @@ namespace NMP.Portal.Controllers
                             {
                                 continue;
                             }
-                            (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse,nMaxLimit, error) = await GetNMaxReportData(harvestYearPlanResponse, Convert.ToInt32(cropType), model,
+                            (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, nMaxLimit, error) = await GetNMaxReportData(harvestYearPlanResponse, Convert.ToInt32(cropType), model,
                                            nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse);
                             cropTypeName = (await _fieldService.FetchCropTypeById(Convert.ToInt32(cropType)));
                             if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
@@ -686,7 +728,7 @@ namespace NMP.Portal.Controllers
             }
             return View(model);
         }
-        private async Task<(List<NitrogenApplicationsForNMaxReportResponse>, List<NMaxLimitReportResponse>,int nMaxLimit, Error?)> GetNMaxReportData(HarvestYearResponseHeader harvestYearPlanResponse, int cropTypeId, ReportViewModel model,
+        private async Task<(List<NitrogenApplicationsForNMaxReportResponse>, List<NMaxLimitReportResponse>, int nMaxLimit, Error?)> GetNMaxReportData(HarvestYearResponseHeader harvestYearPlanResponse, int cropTypeId, ReportViewModel model,
             List<NitrogenApplicationsForNMaxReportResponse> nitrogenApplicationsForNMaxReportResponse, List<NMaxLimitReportResponse> nMaxLimitReportResponse)
         {
             List<CropDetailResponse> cropDetails = harvestYearPlanResponse.CropDetails.Where(x => x.CropTypeID == cropTypeId).ToList();
@@ -923,7 +965,7 @@ namespace NMP.Portal.Controllers
                                 }
                                 else
                                 {
-                                    return (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse,nMaxLimit, error);
+                                    return (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, nMaxLimit, error);
                                     TempData["ErrorOnSelectField"] = error.Message;
                                     //return RedirectToAction("ExportFieldsOrCropType");
                                 }
@@ -949,5 +991,54 @@ namespace NMP.Portal.Controllers
             }
             return (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, nMaxLimit, error);
         }
+        private static string ShorthandDefoliationSequence(List<string> data)
+        {
+            if (data == null && data.Count == 0)
+            {
+                return "";
+            }
+
+            Dictionary<string, int> defoliationSequence = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (string item in data)
+            {
+                string name = item.Trim().ToLower();
+                if (defoliationSequence.ContainsKey(name))
+                {
+                    defoliationSequence[name]++;
+                }
+                else
+                {
+                    defoliationSequence[name] = 1;
+                }
+            }
+
+            List<string> result = new List<string>();
+
+            foreach (var entry in defoliationSequence)
+            {                
+                string word = entry.Key;
+
+                if (entry.Value > 1)
+                {
+                    if (word.EndsWith("s") || word.EndsWith("x") || word.EndsWith("z") ||
+                        word.EndsWith("sh") || word.EndsWith("ch"))
+                    {
+                        word += "es";
+                    }
+                    else
+                    {
+                        word += "s";
+                    }
+                }
+
+
+                word = char.ToUpper(word[0]) + word.Substring(1);
+                result.Add($"{entry.Value} {word}");
+            }
+
+            return string.Join(", ", result);
+        }
+
     }
 }

@@ -19,6 +19,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Numerics;
 using System.Reflection;
 using System.Security.Claims;
 using System.Xml.Linq;
@@ -2337,7 +2338,9 @@ namespace NMP.Portal.Controllers
                     if (defoliationSequenceResponse != null)
                     {
                         var defoliations = defoliationSequenceResponse.DefoliationSequenceDescription;
-                        string[] arrDefoliations = defoliations.Split(',');
+                        string[] arrDefoliations = defoliations.Split(',').Select(s => CultureInfo.CurrentCulture.TextInfo.ToTitleCase(s.Trim()))
+                                                       .ToArray();
+
                         ViewBag.DefoliationSequenceName = arrDefoliations;
 
                     }
@@ -2971,9 +2974,17 @@ namespace NMP.Portal.Controllers
                                             FieldName = plan.FieldName,
                                             PlantingDate = plan.PlantingDate,
                                             Yield = plan.Yield,
-                                            Variety = plan.CropVariety,
-                                            Management = plan.Management,
+                                            Variety = plan.CropVariety
                                         };
+                                        if (plan.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass&&!string.IsNullOrWhiteSpace(plan.Management))
+                                        {
+                                            List<string> defoliationList = plan.Management
+                                                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                                .Select(s => s.Trim())
+                                                .ToList();
+                                            fieldDetail.Management = ShorthandDefoliationSequence(defoliationList);
+
+                                        }
 
                                         newField.FieldData.Add(fieldDetail);
 
@@ -3400,6 +3411,15 @@ namespace NMP.Portal.Controllers
                                     PotentialCut = recommendation.Crops.PotentialCut,
 
                                 };
+                                if (recommendation.Crops.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && !string.IsNullOrWhiteSpace(recommendation.Crops.DefoliationSequenceName))
+                                {
+                                    List<string> defoliationList = recommendation.Crops.DefoliationSequenceName
+                                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                        .Select(s => s.Trim())
+                                        .ToList();
+                                    crop.DefoliationSequenceName = ShorthandDefoliationSequence(defoliationList);
+
+                                }
                                 if (!string.IsNullOrWhiteSpace(crop.CropTypeName))
                                 {
                                     crop.EncryptedCropTypeName = _cropDataProtector.Protect(crop.CropTypeName);
@@ -4895,7 +4915,7 @@ namespace NMP.Portal.Controllers
             }
             else
             {
-                return RedirectToAction("SowingDateQuestion");
+                return RedirectToAction("SwardType");
             }
         }
 
@@ -5163,7 +5183,7 @@ namespace NMP.Portal.Controllers
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                     if (model.SwardTypeId == (int)NMP.Portal.Enums.SwardType.Grass)
                     {
-                        if(model.IsCheckAnswer)
+                        if (model.IsCheckAnswer)
                         {
                             model.GrassGrowthClassCounter = 0;
                             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
@@ -5324,7 +5344,7 @@ namespace NMP.Portal.Controllers
                             {
                                 ViewBag.YieldMin = yieldRangesEnglandAndWalesResponses.First();
                                 ViewBag.YieldMax = yieldRangesEnglandAndWalesResponses.Last();
-                                ViewBag.YieldRanges = yieldRangesEnglandAndWalesResponses;
+                                ViewBag.YieldRanges = yieldRangesEnglandAndWalesResponses.OrderByDescending(x => x.YieldId);
                             }
 
                         }
@@ -5377,7 +5397,7 @@ namespace NMP.Portal.Controllers
                     {
                         ViewBag.YieldMin = yieldRangesEnglandAndWalesResponses.First();
                         ViewBag.YieldMax = yieldRangesEnglandAndWalesResponses.Last();
-                        ViewBag.YieldRanges = yieldRangesEnglandAndWalesResponses;
+                        ViewBag.YieldRanges = yieldRangesEnglandAndWalesResponses.OrderByDescending(x => x.YieldId);
                     }
                     if (model.GrassGrowthClassQuestion != null)
                     {
@@ -5447,7 +5467,7 @@ namespace NMP.Portal.Controllers
                 {
                     ViewBag.YieldMin = yieldRangesEnglandAndWalesResponses.First();
                     ViewBag.YieldMax = yieldRangesEnglandAndWalesResponses.Last();
-                    ViewBag.YieldRanges = yieldRangesEnglandAndWalesResponses;
+                    ViewBag.YieldRanges = yieldRangesEnglandAndWalesResponses.OrderByDescending(x => x.YieldId);
                 }
                 return View(model);
             }
@@ -5503,7 +5523,7 @@ namespace NMP.Portal.Controllers
                         {
                             ViewBag.YieldMin = yieldRangesEnglandAndWalesResponses.First();
                             ViewBag.YieldMax = yieldRangesEnglandAndWalesResponses.Last();
-                            ViewBag.YieldRanges = yieldRangesEnglandAndWalesResponses;
+                            ViewBag.YieldRanges = yieldRangesEnglandAndWalesResponses.OrderByDescending(x => x.YieldId);
                         }
                     }
 
@@ -5603,7 +5623,7 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        ViewBag.YieldRanges = yieldRangesEnglandAndWalesResponses;
+                        ViewBag.YieldRanges = yieldRangesEnglandAndWalesResponses.OrderByDescending(x => x.YieldId);
                     }
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                 }
@@ -5633,7 +5653,7 @@ namespace NMP.Portal.Controllers
                     {
                         ViewBag.YieldMin = yieldRangesEnglandAndWalesResponses.First();
                         ViewBag.YieldMax = yieldRangesEnglandAndWalesResponses.Last();
-                        ViewBag.YieldRanges = yieldRangesEnglandAndWalesResponses;
+                        ViewBag.YieldRanges = yieldRangesEnglandAndWalesResponses.OrderByDescending(x => x.YieldId);
                     }
                 }
 
@@ -5683,7 +5703,7 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        ViewBag.YieldRanges = yieldRangesEnglandAndWalesResponses;
+                        ViewBag.YieldRanges = yieldRangesEnglandAndWalesResponses.OrderByDescending(x => x.YieldId);
                     }
                     return View(model);
                 }
@@ -5731,7 +5751,7 @@ namespace NMP.Portal.Controllers
                             }
                             else
                             {
-                                ViewBag.YieldRanges = yieldRangesEnglandAndWalesResponses;
+                                ViewBag.YieldRanges = yieldRangesEnglandAndWalesResponses.OrderByDescending(x => x.YieldId);
                             }
                         }
 
@@ -5968,7 +5988,7 @@ namespace NMP.Portal.Controllers
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                 bool isPreviousYearPlanExist = false;
-                if (model.HarvestYear.Any(x=>x.Year < model.Year && x.IsAnyPlan==true) )
+                if (model.HarvestYear.Any(x => x.Year < model.Year && x.IsAnyPlan == true))
                 {
                     isPreviousYearPlanExist = true;
                 }
@@ -5976,8 +5996,23 @@ namespace NMP.Portal.Controllers
                 {
                     isPreviousYearPlanExist = false;
                 }
-                if(isPreviousYearPlanExist)
+                if (isPreviousYearPlanExist)
                 {
+                    //to remove base year from HarvestYear list
+                    foreach (var yr in model.HarvestYear)
+                    {
+                        (List<HarvestYearPlanResponse> harvestYearPlanResponseForFilter, error) = await _cropService.FetchHarvestYearPlansByFarmId(yr.Year, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
+                        if (harvestYearPlanResponseForFilter.Count > 0)
+                        {
+                            var baseYearCrops = harvestYearPlanResponseForFilter.All(x => x.CropInfo1 == null && x.Yield == null && x.DefoliationSequenceID == null);
+                            if (baseYearCrops)
+                            {
+                                model.HarvestYear = model.HarvestYear.Where(x => x.Year != yr.Year).ToList();
+                                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                            }
+                        }
+                    }
+                    //end
                     return View(model);
                 }
                 else
@@ -6057,6 +6092,21 @@ namespace NMP.Portal.Controllers
                 else
                 {
                     return RedirectToAction("FarmList", "Farm");
+                }
+                foreach (var year in model.HarvestYear)
+                {
+                    (List<HarvestYearPlanResponse> harvestYearPlanResponseForFilter, error) = await _cropService.FetchHarvestYearPlansByFarmId(year.Year, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
+                    if (harvestYearPlanResponseForFilter.Count > 0)
+                    {
+                        var baseYearCrops = harvestYearPlanResponseForFilter.All(x => x.CropInfo1 == null && x.Yield == null && x.DefoliationSequenceID == null);
+                        if (baseYearCrops)
+                        {
+                            model.HarvestYear = model.HarvestYear.Where(x => x.Year != year.Year).ToList();
+                            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                        }
+                    }
+
+
                 }
 
                 return View(model);
@@ -6162,7 +6212,8 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-
+                model.IsCheckAnswer = true;
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                 return View(model);
 
             }
@@ -6176,6 +6227,107 @@ namespace NMP.Portal.Controllers
 
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CopyCheckAnswer(PlanViewModel model)
+        {
+            _logger.LogTrace("Crop Controller : CopyCheckAnswer() post action called");
+            if (model != null)
+            {
 
+                if (model.CopyExistingPlan == null)
+                {
+                    ModelState.AddModelError("CopyExistingPlan", Resource.lblWouldYouLikeToStartWithCopyOfPlanFromPreviousYearNotSet);
+                }
+                if (model.CopyYear == null)
+                {
+                    ModelState.AddModelError("CopyYear", string.Format(Resource.lblWhichPlanWouldYouLikeToCopyForNotSet, model.Year));
+                }
+                if (model.OrganicInorganicCopy == null)
+                {
+                    ModelState.AddModelError("OrganicInorganicCopy", Resource.lblDoYouWantToIncludeOrganicMaterialInorganicFertiliserApplicationsNotSet);
+                }
+            }
+            if (!ModelState.IsValid)
+            {
+                return View("CopyCheckAnswer", model);
+            }
+            Error error = null;
+            bool isOrganic = false;
+            bool isFertiliser = false;
+            isOrganic = (model.OrganicInorganicCopy & OrganicInorganicCopy.OrganicMaterial) != 0;
+            isFertiliser = (model.OrganicInorganicCopy & OrganicInorganicCopy.InorganicFertiliser) != 0;
+
+            (bool success, error) = await _cropService.CopyCropNutrientManagementPlan(Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)), model.Year ?? 0, model.CopyYear ?? 0, isOrganic, isFertiliser);
+
+            if (error.Message == null && success)
+            {
+                model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
+                _httpContextAccessor.HttpContext?.Session.Remove("CropData");
+                return RedirectToAction("HarvestYearOverview", new
+                {
+                    id = model.EncryptedFarmId,
+                    year = model.EncryptedHarvestYear,
+                    q = _farmDataProtector.Protect(success.ToString()),
+                    r = model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass ? _cropDataProtector.Protect(string.Format(Resource.MsgCropsAddedForYear, Resource.lblGrass, model.Year)) : _cropDataProtector.Protect(string.Format(Resource.MsgCropsAddedForYear, Resource.lblCrops, model.Year)),
+                    v = model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass ? _cropDataProtector.Protect(Resource.lblSelectAFieldToSeeItsNutrientRecommendations) : _cropDataProtector.Protect(Resource.MsgForSuccessCrop)
+
+                });
+            }
+            else
+            {
+                TempData["ErrorCopyPlan"] = Resource.MsgWeCouldNotCreateYourPlanPleaseTryAgainLater;
+                return RedirectToAction("CopyCheckAnswer");
+            }
+        }
+
+        private static string ShorthandDefoliationSequence(List<string> data)
+        {
+            if (data == null && data.Count == 0)
+            {
+                return "";
+            }
+
+            Dictionary<string, int> defoliationSequence = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (string item in data)
+            {
+                string name = item.Trim().ToLower();
+                if (defoliationSequence.ContainsKey(name))
+                {
+                    defoliationSequence[name]++;
+                }
+                else
+                {
+                    defoliationSequence[name] = 1;
+                }
+            }
+
+            List<string> result = new List<string>();
+
+            foreach (var entry in defoliationSequence)
+            {
+                string word = entry.Key;
+                
+                if (entry.Value > 1)
+                {
+                    if (word.EndsWith("s") || word.EndsWith("x") || word.EndsWith("z") ||
+                        word.EndsWith("sh") || word.EndsWith("ch"))
+                    {
+                        word += "es";
+                    }
+                    else
+                    {
+                        word += "s";
+                    }
+                }
+
+                
+                word = char.ToUpper(word[0]) + word.Substring(1);
+                result.Add($"{entry.Value} {word}");
+            }
+
+            return string.Join(", ", result);
+        }
     }
 }

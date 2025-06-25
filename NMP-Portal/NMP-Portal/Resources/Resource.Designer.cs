@@ -2905,6 +2905,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you want to include organic material and inorganic fertiliser applications not set.
+        /// </summary>
+        public static string lblDoYouWantToIncludeOrganicMaterialInorganicFertiliserApplicationsNotSet {
+            get {
+                return ResourceManager.GetString("lblDoYouWantToIncludeOrganicMaterialInorganicFertiliserApplicationsNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you want to use existing nutrient values for {0}?.
         /// </summary>
         public static string lblDoYouWantToUseExistingNutrientValuesFor {
@@ -2955,6 +2964,15 @@ namespace NMP.Portal.Resources {
         public static string lblDryMatterYieldRangeTonnesPerHectare {
             get {
                 return ResourceManager.GetString("lblDryMatterYieldRangeTonnesPerHectare", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to dry matter yields.
+        /// </summary>
+        public static string lblDryMatterYields {
+            get {
+                return ResourceManager.GetString("lblDryMatterYields", resourceCulture);
             }
         }
         
@@ -6039,7 +6057,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to a limited number of selected farmers and advisers across England and Wales are invited to test the tool and provide feedback prior to the public release.
+        ///   Looks up a localized string similar to A limited number of selected farmers and advisers across England and Wales are invited to test the tool and provide feedback prior to the public release.
         /// </summary>
         public static string lblNMPTBetaTest1 {
             get {
@@ -7183,7 +7201,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Potential Cuts.
+        ///   Looks up a localized string similar to potential cuts.
         /// </summary>
         public static string lblPotentialCuts {
             get {
@@ -10873,6 +10891,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Which cut or grazing is this inorganic material application for in these fields?.
+        /// </summary>
+        public static string lblWhichCutOrGrazingInThisInorganicApplicationForAllField {
+            get {
+                return ResourceManager.GetString("lblWhichCutOrGrazingInThisInorganicApplicationForAllField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which cut or grazing is this inorganic material application for in {0}?.
+        /// </summary>
+        public static string lblWhichCutOrGrazingInThisInorganicApplicationForInField {
+            get {
+                return ResourceManager.GetString("lblWhichCutOrGrazingInThisInorganicApplicationForInField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which fields do you plan to grow {0} in?.
         /// </summary>
         public static string lblWhichFieldsDoYouPlanToGrow {
@@ -10990,6 +11026,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Which plan would you like to copy for {0} not set.
+        /// </summary>
+        public static string lblWhichPlanWouldYouLikeToCopyForNotSet {
+            get {
+                return ResourceManager.GetString("lblWhichPlanWouldYouLikeToCopyForNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which variety name would you like to plan for?.
         /// </summary>
         public static string lblWhichVarietyNameWouldYouLikeToPlanFor {
@@ -11067,6 +11112,15 @@ namespace NMP.Portal.Resources {
         public static string lblWouldYouLikeToStartWithCopyOfPlanFromPreviousYear {
             get {
                 return ResourceManager.GetString("lblWouldYouLikeToStartWithCopyOfPlanFromPreviousYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Would you like to start with a copy of a plan from a previous year not set.
+        /// </summary>
+        public static string lblWouldYouLikeToStartWithCopyOfPlanFromPreviousYearNotSet {
+            get {
+                return ResourceManager.GetString("lblWouldYouLikeToStartWithCopyOfPlanFromPreviousYearNotSet", resourceCulture);
             }
         }
         
