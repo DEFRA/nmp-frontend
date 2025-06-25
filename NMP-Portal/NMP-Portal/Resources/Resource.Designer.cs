@@ -3670,6 +3670,33 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nutrient management planning.
+        /// </summary>
+        public static string lblFarmSummaryContent1 {
+            get {
+                return ResourceManager.GetString("lblFarmSummaryContent1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create nutrient management plans, get nutrient recommendations from the AHDB Nutrient Management Guide (RB209), add organic material and inorganic fertiliser applications..
+        /// </summary>
+        public static string lblFarmSummaryContent2 {
+            get {
+                return ResourceManager.GetString("lblFarmSummaryContent2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View, create or update a plan.
+        /// </summary>
+        public static string lblFarmSummaryContent3 {
+            get {
+                return ResourceManager.GetString("lblFarmSummaryContent3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to farmyard manure.
         /// </summary>
         public static string lblFarmyardManure {
@@ -11382,6 +11409,15 @@ namespace NMP.Portal.Resources {
         public static string lblYouHaveNotEnteredAnyExcessWinterRainfall {
             get {
                 return ResourceManager.GetString("lblYouHaveNotEnteredAnyExcessWinterRainfall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have not entered any field.
+        /// </summary>
+        public static string lblYouHaveNotEnteredAnyField {
+            get {
+                return ResourceManager.GetString("lblYouHaveNotEnteredAnyField", resourceCulture);
             }
         }
         
