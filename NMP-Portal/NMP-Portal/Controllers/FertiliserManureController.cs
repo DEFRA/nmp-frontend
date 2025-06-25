@@ -2573,11 +2573,11 @@ namespace NMP.Portal.Controllers
                     {
                         if (model.IsSameDefoliationForAll.HasValue && (model.IsSameDefoliationForAll.Value) && (model.GrassCropCount > 1))
                         {
-                            ModelState.AddModelError(string.Concat("FertiliserManures[", i, "].Defoliation"), string.Format("{0} {1}", Resource.lblWhichCutOrGrazingInThisApplicationForAllField, Resource.lblNotSet));
+                            ModelState.AddModelError(string.Concat("FertiliserManures[", i, "].Defoliation"), string.Format("{0} {1}", Resource.lblWhichCutOrGrazingInThisInorganicApplicationForAllField, Resource.lblNotSet));
                         }
                         else
                         {
-                            ModelState.AddModelError(string.Concat("FertiliserManures[", i, "].Defoliation"), string.Format("{0} {1}", string.Format(Resource.lblWhichCutOrGrazingInThisApplicationForInField, fertiliser.FieldName), Resource.lblNotSet));
+                            ModelState.AddModelError(string.Concat("FertiliserManures[", i, "].Defoliation"), string.Format("{0} {1}", string.Format(Resource.lblWhichCutOrGrazingInThisInorganicApplicationForInField, fertiliser.FieldName), Resource.lblNotSet));
                         }
                     }
                     i++;
@@ -3385,12 +3385,12 @@ namespace NMP.Portal.Controllers
                     {
                         if (model.IsSameDefoliationForAll.HasValue && (model.IsSameDefoliationForAll.Value) && (model.GrassCropCount > 1))
                         {
-                            ModelState.AddModelError(string.Concat("FertiliserManures[", i, "].Defoliation"), string.Format("{0} {1}", Resource.lblWhichCutOrGrazingInThisApplicationForAllField, Resource.lblNotSet));
+                            ModelState.AddModelError(string.Concat("FertiliserManures[", i, "].Defoliation"), string.Format("{0} {1}", Resource.lblWhichCutOrGrazingInThisInorganicApplicationForAllField, Resource.lblNotSet));
                             break;
                         }
                         else
                         {
-                            ModelState.AddModelError(string.Concat("FertiliserManures[", i, "].Defoliation"), string.Format("{0} {1}", string.Format(Resource.lblWhichCutOrGrazingInThisApplicationForInField, fertiliser.FieldName), Resource.lblNotSet));
+                            ModelState.AddModelError(string.Concat("FertiliserManures[", i, "].Defoliation"), string.Format("{0} {1}", string.Format(Resource.lblWhichCutOrGrazingInThisInorganicApplicationForInField, fertiliser.FieldName), Resource.lblNotSet));
                             break;
                         }
                     }
