@@ -4914,7 +4914,7 @@ namespace NMP.Portal.Controllers
             }
             else
             {
-                return RedirectToAction("SowingDateQuestion");
+                return RedirectToAction("SwardType");
             }
         }
 
