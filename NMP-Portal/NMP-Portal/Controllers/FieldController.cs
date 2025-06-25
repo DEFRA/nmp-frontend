@@ -296,6 +296,7 @@ namespace NMP.Portal.Controllers
                         field.PreviousGrasses.HasGreaterThan30PercentClover = fieldResponse.PreviousGrasses[0].HasGreaterThan30PercentClover;
                         field.PreviousGrasses.SoilNitrogenSupplyItemID = fieldResponse.PreviousGrasses[0].SoilNitrogenSupplyItemID;
                         field.PreviousGrasses.HasGrassInLastThreeYear = fieldResponse.PreviousGrasses[0].HasGrassInLastThreeYear;
+                        field.PreviousGrasses.LayDuration = fieldResponse.PreviousGrasses[0].LayDuration;
                         field.PreviousGrassYears = PreviousGrassYears;
 
                     }
@@ -2552,6 +2553,7 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("LayDuration");
             }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange))
             {
                 return RedirectToAction("CheckAnswer");
