@@ -7201,7 +7201,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Potential Cuts.
+        ///   Looks up a localized string similar to potential cuts.
         /// </summary>
         public static string lblPotentialCuts {
             get {
@@ -10887,6 +10887,24 @@ namespace NMP.Portal.Resources {
         public static string lblWhichCutOrGrazingInThisApplicationForInField {
             get {
                 return ResourceManager.GetString("lblWhichCutOrGrazingInThisApplicationForInField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which cut or grazing is this inorganic material application for in these fields?.
+        /// </summary>
+        public static string lblWhichCutOrGrazingInThisInorganicApplicationForAllField {
+            get {
+                return ResourceManager.GetString("lblWhichCutOrGrazingInThisInorganicApplicationForAllField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which cut or grazing is this inorganic material application for in {0}?.
+        /// </summary>
+        public static string lblWhichCutOrGrazingInThisInorganicApplicationForInField {
+            get {
+                return ResourceManager.GetString("lblWhichCutOrGrazingInThisInorganicApplicationForInField", resourceCulture);
             }
         }
         
