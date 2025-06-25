@@ -4808,4 +4808,16 @@ live</value>
   <data name="lblDryMatterYields" xml:space="preserve">
     <value>dry matter yields</value>
   </data>
+  <data name="lblFarmSummaryContent1" xml:space="preserve">
+    <value>Nutrient management planning</value>
+  </data>
+  <data name="lblFarmSummaryContent2" xml:space="preserve">
+    <value>Create nutrient management plans, get nutrient recommendations from the AHDB Nutrient Management Guide (RB209), add organic material and inorganic fertiliser applications.</value>
+  </data>
+  <data name="lblFarmSummaryContent3" xml:space="preserve">
+    <value>View, create or update a plan</value>
+  </data>
+  <data name="lblYouHaveNotEnteredAnyField" xml:space="preserve">
+    <value>You have not entered any field</value>
+  </data>
 </root>
