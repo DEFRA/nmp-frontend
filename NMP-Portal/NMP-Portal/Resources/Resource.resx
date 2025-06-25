@@ -4566,7 +4566,7 @@ live</value>
     <value>potato groups</value>
   </data>
   <data name="lblPotentialCuts" xml:space="preserve">
-    <value>Potential Cuts</value>
+    <value>potential cuts</value>
   </data>
   <data name="lblRainfallTypes" xml:space="preserve">
     <value>rainfall types</value>
@@ -4807,5 +4807,11 @@ live</value>
   </data>
   <data name="lblDryMatterYields" xml:space="preserve">
     <value>dry matter yields</value>
+  </data>
+  <data name="lblWhichCutOrGrazingInThisInorganicApplicationForAllField" xml:space="preserve">
+    <value>Which cut or grazing is this inorganic material application for in these fields?</value>
+  </data>
+  <data name="lblWhichCutOrGrazingInThisInorganicApplicationForInField" xml:space="preserve">
+    <value>Which cut or grazing is this inorganic material application for in {0}?</value>
   </data>
 </root>
