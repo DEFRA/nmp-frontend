@@ -4844,4 +4844,19 @@ live</value>
   <data name="lblWhatTypeOfReportDoYouWantToCreateFromYourYearData" xml:space="preserve">
     <value>What type of report do you want to create from your {0} data?</value>
   </data>
+  <data name="lblDemonstrateComplianceWithTheLivestockManure" xml:space="preserve">
+    <value>Demonstrate compliance with the livestock manure nitrogen (N) farm limit for the farm</value>
+  </data>
+  <data name="lblLivestockManureNitrogenFarmLimit" xml:space="preserve">
+    <value>Livestock manure nitrogen (N) farm limit report</value>
+  </data>
+  <data name="lblImportsExports" xml:space="preserve">
+    <value>Imports and exports</value>
+  </data>
+  <data name="lblIncludesAllLivestockNumbersForTheYear" xml:space="preserve">
+    <value>Includes all livestock numbers for the year.</value>
+  </data>
+  <data name="lblLivestockNumbers" xml:space="preserve">
+    <value>Livestock numbers</value>
+  </data>
 </root>
