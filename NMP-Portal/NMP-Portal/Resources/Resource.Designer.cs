@@ -3490,6 +3490,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Farm and field details for NVZ records.
+        /// </summary>
+        public static string lblFarmAndFieldDetailsForNVZRecords {
+            get {
+                return ResourceManager.GetString("lblFarmAndFieldDetailsForNVZRecords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rainfall.
         /// </summary>
         public static string lblFarmAvgAnnualRainfall {
@@ -3837,6 +3846,15 @@ namespace NMP.Portal.Resources {
         public static string lblFieldPlanYear {
             get {
                 return ResourceManager.GetString("lblFieldPlanYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Field records and nutrient management planning.
+        /// </summary>
+        public static string lblFieldRecordsAndNutrientManagementPlanning {
+            get {
+                return ResourceManager.GetString("lblFieldRecordsAndNutrientManagementPlanning", resourceCulture);
             }
         }
         
@@ -4792,6 +4810,24 @@ namespace NMP.Portal.Resources {
         public static string lblIncludeOrganicMaterialInorganicFertiliser {
             get {
                 return ResourceManager.GetString("lblIncludeOrganicMaterialInorganicFertiliser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Includes details about your fields, crops and recommendations..
+        /// </summary>
+        public static string lblIncludesDetailsAboutYourFieldsCropsAndRec {
+            get {
+                return ResourceManager.GetString("lblIncludesDetailsAboutYourFieldsCropsAndRec", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Includes N-max, livestock manure nitrogen(N) farm limit, and organic material storage.
+        /// </summary>
+        public static string lblIncludesNmaxLivestockManureNitrogen {
+            get {
+                return ResourceManager.GetString("lblIncludesNmaxLivestockManureNitrogen", resourceCulture);
             }
         }
         
@@ -10716,6 +10752,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhatTypeOfOrganicMaterialAreYouUsingInThisApplication {
             get {
                 return ResourceManager.GetString("lblWhatTypeOfOrganicMaterialAreYouUsingInThisApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What type of report do you want to create?.
+        /// </summary>
+        public static string lblWhatTypeOfReportDoYouWantToCreate {
+            get {
+                return ResourceManager.GetString("lblWhatTypeOfReportDoYouWantToCreate", resourceCulture);
             }
         }
         
