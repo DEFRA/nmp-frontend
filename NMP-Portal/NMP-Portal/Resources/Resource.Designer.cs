@@ -11107,6 +11107,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Which farm information and planning report do you want to create?.
+        /// </summary>
+        public static string lblWhichFarmInformationAndPlanningReportDoYouWantToCreate {
+            get {
+                return ResourceManager.GetString("lblWhichFarmInformationAndPlanningReportDoYouWantToCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which fields do you plan to grow {0} in?.
         /// </summary>
         public static string lblWhichFieldsDoYouPlanToGrow {
@@ -11211,6 +11220,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhichHarvestWouldYouLikeToPlanFor {
             get {
                 return ResourceManager.GetString("lblWhichHarvestWouldYouLikeToPlanFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which NVZ compliance report do you want to create?.
+        /// </summary>
+        public static string lblWhichNVZComplianceReport {
+            get {
+                return ResourceManager.GetString("lblWhichNVZComplianceReport", resourceCulture);
             }
         }
         

@@ -51,15 +51,7 @@
             <div class="govuk-grid-column-two-thirds">
 
                 <h1 class="govuk-heading-l">
-                    @if (Model.Year == null)
-                    {
-                        @Resource.lblWhatTypeOfReportDoYouWantToCreate
-
-                    }
-                    else
-                    {
-                        @string.Format(Resource.lblWhatTypeOfReportDoYouWantToCreateFromYourYearData, Model.Year)
-                    }
+                    @Resource.lblWhichFarmInformationAndPlanningReportDoYouWantToCreate
                 </h1>
 
 
@@ -68,7 +60,7 @@
                         <govuk-radios-fieldset-legend is-page-heading="false">
 
                         </govuk-radios-fieldset-legend>
-                        <govuk-radios-item value="@cropFieldManagementReport">
+                        <govuk-radios-item value="@cropFieldManagementReport" disabled>
                             @Resource.lblFieldRecordsAndNutrientManagementPlanning
                             <govuk-radios-item-hint>
                                 @Resource.lblIncludesDetailsAboutYourFieldsCropsAndRec

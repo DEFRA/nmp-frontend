@@ -8,7 +8,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnReportSelection"] != null)
 {

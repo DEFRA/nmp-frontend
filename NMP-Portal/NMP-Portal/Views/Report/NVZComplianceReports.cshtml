@@ -50,15 +50,7 @@
             <div class="govuk-grid-column-two-thirds">
 
                 <h1 class="govuk-heading-l">
-                    @if (Model.Year == null)
-                    {
-                        @Resource.lblWhatTypeOfReportDoYouWantToCreate
-
-                    }
-                    else
-                    {
-                        @string.Format(Resource.lblWhatTypeOfReportDoYouWantToCreateFromYourYearData, Model.Year)
-                    }
+                    @Resource.lblWhichNVZComplianceReport
                 </h1>
 
 
@@ -67,7 +59,7 @@
                         <govuk-radios-fieldset-legend is-page-heading="false">
 
                         </govuk-radios-fieldset-legend>
-                        <govuk-radios-item value="@nmaxReport">
+                        <govuk-radios-item value="@nmaxReport" disabled>
                             @Resource.lblNMaxReport
                             <govuk-radios-item-hint>
                                 @Resource.lblDemonstrateComplianceWithTheNMaxLimitForEachCrop

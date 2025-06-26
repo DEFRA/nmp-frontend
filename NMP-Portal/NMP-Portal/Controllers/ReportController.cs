@@ -1169,11 +1169,10 @@ namespace NMP.Portal.Controllers
                 {
                     return View(model);
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
-
                 if (model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
                 {
                     model.ReportType = (int)NMP.Portal.Enums.ReportType.CropAndFieldManagementReport;
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                     return RedirectToAction("ExportFieldsOrCropType");
                 }
             }
@@ -1230,6 +1229,7 @@ namespace NMP.Portal.Controllers
                 if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.NmaxReport)
                 {
                     model.ReportType = (int)NMP.Portal.Enums.ReportType.NMaxReport;
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                     return RedirectToAction("ExportFieldsOrCropType");
                 }
                 return View(model);

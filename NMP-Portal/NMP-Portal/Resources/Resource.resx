@@ -4883,4 +4883,10 @@ live</value>
   <data name="lblLivestockNumbers" xml:space="preserve">
     <value>Livestock numbers</value>
   </data>
+  <data name="lblWhichFarmInformationAndPlanningReportDoYouWantToCreate" xml:space="preserve">
+    <value>Which farm information and planning report do you want to create?</value>
+  </data>
+  <data name="lblWhichNVZComplianceReport" xml:space="preserve">
+    <value>Which NVZ compliance report do you want to create?</value>
+  </data>
 </root>
