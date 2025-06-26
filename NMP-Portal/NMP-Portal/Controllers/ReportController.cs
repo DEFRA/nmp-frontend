@@ -413,7 +413,7 @@ namespace NMP.Portal.Controllers
             return View(model);
         }
         [HttpGet]
-        public async Task<IActionResult> ReportType(string i, string j)
+        public async Task<IActionResult> ReportType(string i, string? j)
         {
             _logger.LogTrace("Report Controller : ReportType() action called");
             ReportViewModel model = null;
@@ -1045,9 +1045,9 @@ namespace NMP.Portal.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> ReportOptions(string i, string j)
+        public async Task<IActionResult> ReportOptions(string f, string? h)
         {
-            _logger.LogTrace("Report Controller : ReportType() action called");
+            _logger.LogTrace("Report Controller : ReportOptions() action called");
             ReportViewModel model = null;
             try
             {
@@ -1056,25 +1056,27 @@ namespace NMP.Portal.Controllers
                     model = new ReportViewModel();
                     model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
-                else if (string.IsNullOrWhiteSpace(i) && string.IsNullOrWhiteSpace(j))
+                else if (string.IsNullOrWhiteSpace(f) && string.IsNullOrWhiteSpace(h))
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
                 if (model == null)
                 {
                     model = new ReportViewModel();
-                    if (!(string.IsNullOrWhiteSpace(i) && string.IsNullOrWhiteSpace(j)))
+                    if (!string.IsNullOrWhiteSpace(f))
                     {
-
-                        model.EncryptedFarmId = i;
-                        model.EncryptedHarvestYear = j;
+                        model.EncryptedFarmId = f;
                         model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId.ToString()));
-                        model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedHarvestYear.ToString()));
                         (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
                         if (farm != null)
                         {
                             model.FarmName = farm.Name;
                         }
+                    }
+                    if (!string.IsNullOrWhiteSpace(h))
+                    {
+                        model.EncryptedHarvestYear = h;
+                        model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedHarvestYear.ToString()));
                     }
                 }
             }
@@ -1094,30 +1096,25 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult ReportOptions(ReportViewModel model)
         {
-            _logger.LogTrace("Report Controller : ReportType() post action called");
+            _logger.LogTrace("Report Controller : ReportOptions() post action called");
             try
             {
-                if (model.ReportType == null)
+                if (model.ReportOption == null)
                 {
-                    ModelState.AddModelError("ReportType", Resource.MsgSelectAnOptionBeforeContinuing);
+                    ModelState.AddModelError("ReportOption", Resource.MsgSelectAnOptionBeforeContinuing);
                 }
                 if (!ModelState.IsValid)
                 {
-                    return View("ReportType", model);
+                    return View("ReportOption", model);
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
-                //if (model.ReportType != null && model.ReportType == (int)NMP.Portal.Enums.ReportType.CropAndFieldManagementReport)
-                //{
-                return RedirectToAction("ExportFieldsOrCropType");
-                //}
-                //else
-                //{
-                //    return RedirectToAction("ExportCrops");
-                //}
+                
+                return RedirectToAction("ReportType", new {i = model.EncryptedFarmId,j = model.EncryptedHarvestYear});
+               
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Report Controller : Exception in ReportType() post action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogTrace($"Report Controller : Exception in ReportOptions() post action : {ex.Message}, {ex.StackTrace}");
                 TempData["ErrorOnReportSelection"] = ex.Message;
                 return View(model);
             }

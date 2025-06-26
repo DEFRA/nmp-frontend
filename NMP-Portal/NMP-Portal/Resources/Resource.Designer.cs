@@ -10765,6 +10765,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What type of report do you want to create from your {0} data?.
+        /// </summary>
+        public static string lblWhatTypeOfReportDoYouWantToCreateFromYourYearData {
+            get {
+                return ResourceManager.GetString("lblWhatTypeOfReportDoYouWantToCreateFromYourYearData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What was the length of the ley in {0}?.
         /// </summary>
         public static string lblWhatWasTheLengthOfTheLayInYear {
