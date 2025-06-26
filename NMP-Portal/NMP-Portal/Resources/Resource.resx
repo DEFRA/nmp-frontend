@@ -4422,7 +4422,7 @@ live</value>
     <value>3 years or more</value>
   </data>
   <data name="lblWhatWasTheLengthOfTheLayInYear" xml:space="preserve">
-    <value>What was the length of the lay in {0}?</value>
+    <value>What was the length of the ley in {0}?</value>
   </data>
   <data name="lblLayDuration" xml:space="preserve">
     <value>Lay duration</value>
@@ -4813,5 +4813,17 @@ live</value>
   </data>
   <data name="lblWhichCutOrGrazingInThisInorganicApplicationForInField" xml:space="preserve">
     <value>Which cut or grazing is this inorganic material application for in {0}?</value>
+  </data>
+  <data name="lblFarmSummaryContent1" xml:space="preserve">
+    <value>Nutrient management planning</value>
+  </data>
+  <data name="lblFarmSummaryContent2" xml:space="preserve">
+    <value>Create nutrient management plans, get nutrient recommendations from the AHDB Nutrient Management Guide (RB209), add organic material and inorganic fertiliser applications.</value>
+  </data>
+  <data name="lblFarmSummaryContent3" xml:space="preserve">
+    <value>View, create or update a plan</value>
+  </data>
+  <data name="lblYouHaveNotEnteredAnyField" xml:space="preserve">
+    <value>You have not entered any field</value>
   </data>
 </root>

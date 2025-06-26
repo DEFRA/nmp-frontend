@@ -608,3 +608,7 @@ hr.seperator_forty {
 .new_nmax_rates_table_grass .col_7, .new_nmax_rates_table_grass .col_8 {
     width: 100px;
 }
+
+hr.seperator_thirty {
+    margin: 30px 0 30px 0;
+}
