@@ -120,23 +120,23 @@
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazedOnly)
                         {
-                            @string.Format(Resource.lblHowManyGrazingsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName + " " + Resource.lblField : Resource.lblTheseFields))
+                            @string.Format(Resource.lblHowManyGrazingsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields))
                         }
                         @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.CutForSilageOnly)
                         {
-                            @string.Format(Resource.lblHowManyCutsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName + " " + Resource.lblField : Resource.lblTheseFields))
+                            @string.Format(Resource.lblHowManyCutsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName  : Resource.lblTheseFields))
                         }
                         @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.CutForHayOnly)
                         {
-                            @string.Format(Resource.lblHowManyCutsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName + " " + Resource.lblField : Resource.lblTheseFields))
+                            @string.Format(Resource.lblHowManyCutsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields))
                         }
                         @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazingAndSilage)
                         {
-                            @string.Format(Resource.lblHowManyCutsAndGrazingsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName + " " + Resource.lblField : Resource.lblTheseFields))
+                            @string.Format(Resource.lblHowManyCutsAndGrazingsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields))
                         }
                         @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazingAndHay)
                         {
-                            @string.Format(Resource.lblHowManyCutsAndGrazingsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName + " " + Resource.lblField : Resource.lblTheseFields))
+                            @string.Format(Resource.lblHowManyCutsAndGrazingsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields))
                         }
 
 

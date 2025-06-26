@@ -338,6 +338,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     model.OrganicManures.Clear();
                                 }
+                                model.IsDoubleCropAvailable = false;
                                 foreach (string fieldIdForManID in model.FieldList)
                                 {
                                     List<Crop> cropList = await _cropService.FetchCropsByFieldId(Convert.ToInt32(fieldIdForManID));
@@ -963,6 +964,7 @@ namespace NMP.Portal.Controllers
                     {
                         return RedirectToAction("FarmList", "Farm");
                     }
+                    model.IsDoubleCropAvailable = false;
                     foreach (string field in model.FieldList)
                     {
                         List<Crop> cropList = await _cropService.FetchCropsByFieldId(Convert.ToInt32(field));
