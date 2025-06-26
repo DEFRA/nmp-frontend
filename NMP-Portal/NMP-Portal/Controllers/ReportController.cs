@@ -1042,28 +1042,7 @@ namespace NMP.Portal.Controllers
 
             return string.Join(", ", result);
         }
-        [HttpGet]
-        public async Task<IActionResult> ReportOptions(string f, string h)
-        {
-            _logger.LogTrace("Report Controller : ReportOptions() action called");
-            ReportViewModel model = null;
-            try
-            {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
-                {
-                    model = new ReportViewModel();
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
-                }
-                else if (string.IsNullOrWhiteSpace(f))
-                {
-                    return RedirectToAction("FarmList", "Farm");
-                }
-                if (model == null)
-                {
-                    model = new ReportViewModel();
-                    if (!string.IsNullOrWhiteSpace(f))
-                    {
-
+        
 
         [HttpGet]
         public async Task<IActionResult> ReportOptions(string f, string? h)

@@ -127,24 +127,7 @@
 
                 </ul>
             </div>
-          @*   <div>
-                <h2 class="govuk-heading-m">@Resource.lblFarmAndFieldDetails</h2>
-                <ul class="menu-list govuk-list">
-                    <li>
-                        <a class="govuk-link" asp-action="FarmDetails" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblUpdateFarmDetails</a>
-                    </li>
-                    @if (ViewBag.FieldCount != null && ViewBag.FieldCount > 0)
-                    {
-                        <li>
-                            <a class="govuk-link" asp-action="ManageFarmFields" asp-controller="Field" asp-route-Id="@Model.EncryptedFarmId">
-                                @Resource.lblUpdateFieldsOrSoilAnalysis
-                            </a>
-                        </li>
-                    }
-
-                </ul>
-            </div> *@
-
+         
         </div>
     </div>
 }
