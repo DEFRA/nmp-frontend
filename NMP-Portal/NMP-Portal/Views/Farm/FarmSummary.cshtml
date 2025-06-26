@@ -67,12 +67,12 @@
             }
             <div>
                 <hr class="seperator_thirty">
-                <ul class="menu-list govuk-list">
+
+                <h2 class="govuk-heading-m">@Resource.lblFarmSummaryContent1</h2>
+
+                <p class="govuk-hint">@Resource.lblFarmSummaryContent2</p>
+                <ul class="menu-list govuk-list govuk-list--spaced">
                     <li>
-                        <h2 class="govuk-heading-m">@Resource.lblFarmSummaryContent1</h2>
-
-                        <p class="govuk-body">@Resource.lblFarmSummaryContent2</p>
-
                         @if (ViewBag.FieldCount != null && (ViewBag.FieldCount > 0))
                         {
                             <a class="govuk-link" asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId">
@@ -87,22 +87,47 @@
                         }
 
                     </li>
-                    <li>
-                        <h2 class="govuk-heading-m">@Resource.lblFarmSummaryContent4</h2>
-
-                        <p class="govuk-body">@Resource.lblFarmSummaryContent5</p>
-
-                        <a class="govuk-link" asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId">
-                            @Resource.lblFarmSummaryContent6
-                        </a>
-
-                    </li>
                 </ul>
 
             </div>
-
-            <hr class="seperator_five" />
             <div>
+                <hr class="seperator_thirty">
+                <h2 class="govuk-heading-m">@Resource.lblFarmSummaryContent4</h2>
+                <p class="govuk-hint">@Resource.lblFarmSummaryContent5</p>
+                <ul class="menu-list govuk-list govuk-list--spaced">
+                    <li>
+                        <a class="govuk-link" asp-action="ReportOptions" asp-controller="Report" asp-route-f="@Model.EncryptedFarmId">@Resource.lblFarmSummaryContent6</a>
+                    </li>
+                </ul>
+            </div>
+            @* <hr class="seperator_five" /> *@
+            <div>
+                <hr class="seperator_thirty">
+                <h2 class="govuk-heading-m">@Resource.lblFarmSummaryContent7</h2>
+                <p class="govuk-hint">@Resource.lblFarmSummaryContent7</p>
+                <ul class="menu-list govuk-list">
+                    <li>
+                        <a class="govuk-link" asp-action="FarmDetails" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblUpdateFarmDetails</a>
+                    </li>
+                    @if (ViewBag.FieldCount != null && ViewBag.FieldCount > 0)
+                    {
+                    <li>
+                        <a class="govuk-link" asp-action="ManageFarmFields" asp-controller="Field" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblUpdateFieldsOrSoilAnalysis</a>
+                    </li>
+                    }
+                    <li>
+                        <a class="govuk-link" href="#">@Resource.lblFarmSummaryContent9</a>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="#">@Resource.lblFarmSummaryContent10</a>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="#">@Resource.lblFarmSummaryContent11</a>
+                    </li>
+
+                </ul>
+            </div>
+          @*   <div>
                 <h2 class="govuk-heading-m">@Resource.lblFarmAndFieldDetails</h2>
                 <ul class="menu-list govuk-list">
                     <li>
@@ -118,7 +143,7 @@
                     }
 
                 </ul>
-            </div>
+            </div> *@
 
         </div>
     </div>

@@ -4835,4 +4835,19 @@ live</value>
   <data name="lblFarmSummaryContent6" xml:space="preserve">
     <value>Create a report</value>
   </data>
+  <data name="lblFarmSummaryContent10" xml:space="preserve">
+    <value>Update organic material imports and exports</value>
+  </data>
+  <data name="lblFarmSummaryContent11" xml:space="preserve">
+    <value>Update organic material storage</value>
+  </data>
+  <data name="lblFarmSummaryContent7" xml:space="preserve">
+    <value>Manage farm and field details</value>
+  </data>
+  <data name="lblFarmSummaryContent8" xml:space="preserve">
+    <value>Add or update the farm information.</value>
+  </data>
+  <data name="lblFarmSummaryContent9" xml:space="preserve">
+    <value>Update livestock numbers</value>
+  </data>
 </root>

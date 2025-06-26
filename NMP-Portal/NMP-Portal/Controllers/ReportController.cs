@@ -1042,6 +1042,49 @@ namespace NMP.Portal.Controllers
 
             return string.Join(", ", result);
         }
+        [HttpGet]
+        public async Task<IActionResult> ReportOptions(string f, string h)
+        {
+            _logger.LogTrace("Report Controller : ReportOptions() action called");
+            ReportViewModel model = null;
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = new ReportViewModel();
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else if (string.IsNullOrWhiteSpace(f))
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+                if (model == null)
+                {
+                    model = new ReportViewModel();
+                    if (!string.IsNullOrWhiteSpace(f))
+                    {
 
+                        model.EncryptedFarmId = f;
+                        model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId.ToString()));
+                        (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
+                        if (farm != null)
+                        {
+                            model.FarmName = farm.Name;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in ReportType() action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnHarvestYearOverview"] = ex.Message;
+                return RedirectToAction("HarvestYearOverview", new
+                {
+                    id = model.EncryptedFarmId,
+                    year = model.EncryptedHarvestYear
+                });
+            }
+            return View(model);
+        }
     }
 }
