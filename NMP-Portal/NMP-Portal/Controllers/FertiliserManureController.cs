@@ -3204,9 +3204,9 @@ namespace NMP.Portal.Controllers
                 {
                     bool isNitrogenRateExceeded = false;
                     int maxNitrogenRate = 0;
-                    string startString = $"{startPeriod} {model.HarvestYear}";
+                    string startString = $"{startPeriod} {startDate.Year}";
                     DateTime start = DateTime.ParseExact(startString, "d MMMM yyyy", CultureInfo.InvariantCulture);
-                    string endString = $"{endPeriod} {model.HarvestYear}";
+                    string endString = $"{endPeriod} {startDate.Year}";  //because closed period start and 31 october will be in same year
                     DateTime end = DateTime.ParseExact(endString, "d MMMM yyyy", CultureInfo.InvariantCulture);
                     decimal nitrogenWithinWarningPeriod = 0;
                     //if we are coming for update then we will exclude the fertiliserId.
