@@ -3697,6 +3697,33 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reports and outputs.
+        /// </summary>
+        public static string lblFarmSummaryContent4 {
+            get {
+                return ResourceManager.GetString("lblFarmSummaryContent4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create reports for NVZ compliance (N-max, Livestock manure nitrogen (N) farm limit, organic material inventory and storage) and farm information and planning..
+        /// </summary>
+        public static string lblFarmSummaryContent5 {
+            get {
+                return ResourceManager.GetString("lblFarmSummaryContent5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a report.
+        /// </summary>
+        public static string lblFarmSummaryContent6 {
+            get {
+                return ResourceManager.GetString("lblFarmSummaryContent6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to farmyard manure.
         /// </summary>
         public static string lblFarmyardManure {

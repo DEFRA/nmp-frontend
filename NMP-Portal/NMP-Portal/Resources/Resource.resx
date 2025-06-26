@@ -4826,4 +4826,13 @@ live</value>
   <data name="lblYouHaveNotEnteredAnyField" xml:space="preserve">
     <value>You have not entered any field</value>
   </data>
+  <data name="lblFarmSummaryContent4" xml:space="preserve">
+    <value>Reports and outputs</value>
+  </data>
+  <data name="lblFarmSummaryContent5" xml:space="preserve">
+    <value>Create reports for NVZ compliance (N-max, Livestock manure nitrogen (N) farm limit, organic material inventory and storage) and farm information and planning.</value>
+  </data>
+  <data name="lblFarmSummaryContent6" xml:space="preserve">
+    <value>Create a report</value>
+  </data>
 </root>
