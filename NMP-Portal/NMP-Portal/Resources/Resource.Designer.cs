@@ -1636,7 +1636,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Based on your data, the grass growth class for {0} Field is:.
+        ///   Looks up a localized string similar to Based on your data, the grass growth class for {0} is:.
         /// </summary>
         public static string lblBasedOnYourDataTheGrassGrowthClassForXField {
             get {
@@ -8983,7 +8983,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Target dry matter yield for {0} Field.
+        ///   Looks up a localized string similar to Target dry matter yield for {0}.
         /// </summary>
         public static string lblTargetDryMatterYieldForField {
             get {
@@ -10684,7 +10684,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the total target dry matter yield for {0} Field in {1}?.
+        ///   Looks up a localized string similar to What is the total target dry matter yield for {0} in {1}?.
         /// </summary>
         public static string lblWhatIsTheTotalTargetDryMatterYieldForField {
             get {
@@ -10747,7 +10747,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What was the length of the lay in {0}?.
+        ///   Looks up a localized string similar to What was the length of the ley in {0}?.
         /// </summary>
         public static string lblWhatWasTheLengthOfTheLayInYear {
             get {

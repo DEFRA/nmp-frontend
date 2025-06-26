@@ -129,7 +129,7 @@
             <govuk-radios asp-for="@Model.SwardTypeId">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblWhatIsTheSwardTypeForTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName + " " + Resource.lblField : Resource.lblTheseFields), Model.Crops[0].Year)
+                        @string.Format(Resource.lblWhatIsTheSwardTypeForTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields), Model.Crops[0].Year)
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>@string.Format(Resource.lblTheseOptionsComeFromRB209, Resource.lblSwardTypes)</govuk-radios-hint>
                     @if (ViewBag.SwardType != null)

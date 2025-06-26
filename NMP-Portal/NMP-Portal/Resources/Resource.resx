@@ -4200,7 +4200,7 @@ live</value>
     <value>Based on your data, the grass growth class for these Field is:</value>
   </data>
   <data name="lblBasedOnYourDataTheGrassGrowthClassForXField" xml:space="preserve">
-    <value>Based on your data, the grass growth class for {0} Field is:</value>
+    <value>Based on your data, the grass growth class for {0} is:</value>
   </data>
   <data name="lblDoYouWantToEnterTheSameTargetYieldForTheseFields" xml:space="preserve">
     <value>Do you want to enter the same target yield for these fields? </value>
@@ -4212,7 +4212,7 @@ live</value>
     <value>No, Enter a different target yield for each fields</value>
   </data>
   <data name="lblTargetDryMatterYieldForField" xml:space="preserve">
-    <value>Target dry matter yield for {0} Field</value>
+    <value>Target dry matter yield for {0}</value>
   </data>
   <data name="lblThisGivesTheFollowingRangeForAnnualDryMatterYield" xml:space="preserve">
     <value>This gives the following range for annual dry matter yield.</value>
@@ -4224,7 +4224,7 @@ live</value>
     <value>We use the target annual dry matter yield to give nitrogen (N) recommendations for grass.</value>
   </data>
   <data name="lblWhatIsTheTotalTargetDryMatterYieldForField" xml:space="preserve">
-    <value>What is the total target dry matter yield for {0} Field in {1}?</value>
+    <value>What is the total target dry matter yield for {0} in {1}?</value>
   </data>
   <data name="lblYesEnterTheSameTargetYieldForTheseFields" xml:space="preserve">
     <value>Yes, Enter the same target yield for these fields</value>
@@ -4422,7 +4422,7 @@ live</value>
     <value>3 years or more</value>
   </data>
   <data name="lblWhatWasTheLengthOfTheLayInYear" xml:space="preserve">
-    <value>What was the length of the lay in {0}?</value>
+    <value>What was the length of the ley in {0}?</value>
   </data>
   <data name="lblLayDuration" xml:space="preserve">
     <value>Lay duration</value>
