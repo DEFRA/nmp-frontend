@@ -4826,6 +4826,24 @@ live</value>
   <data name="lblYouHaveNotEnteredAnyField" xml:space="preserve">
     <value>You have not entered any field</value>
   </data>
+  <data name="lblFarmAndFieldDetailsForNVZRecords" xml:space="preserve">
+    <value>Farm and field details for NVZ records</value>
+  </data>
+  <data name="lblFieldRecordsAndNutrientManagementPlanning" xml:space="preserve">
+    <value>Field records and nutrient management planning</value>
+  </data>
+  <data name="lblIncludesDetailsAboutYourFieldsCropsAndRec" xml:space="preserve">
+    <value>Includes details about your fields, crops and recommendations.</value>
+  </data>
+  <data name="lblIncludesNmaxLivestockManureNitrogen" xml:space="preserve">
+    <value>Includes N-max, livestock manure nitrogen(N) farm limit, and organic material storage</value>
+  </data>
+  <data name="lblWhatTypeOfReportDoYouWantToCreate" xml:space="preserve">
+    <value>What type of report do you want to create?</value>
+  </data>
+  <data name="lblWhatTypeOfReportDoYouWantToCreateFromYourYearData" xml:space="preserve">
+    <value>What type of report do you want to create from your {0} data?</value>
+  </data>
   <data name="lblFarmSummaryContent4" xml:space="preserve">
     <value>Reports and outputs</value>
   </data>

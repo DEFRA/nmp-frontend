@@ -413,7 +413,7 @@ namespace NMP.Portal.Controllers
             return View(model);
         }
         [HttpGet]
-        public async Task<IActionResult> ReportType(string i, string j)
+        public async Task<IActionResult> ReportType(string i, string? j)
         {
             _logger.LogTrace("Report Controller : ReportType() action called");
             ReportViewModel model = null;
@@ -1064,6 +1064,28 @@ namespace NMP.Portal.Controllers
                     if (!string.IsNullOrWhiteSpace(f))
                     {
 
+
+        [HttpGet]
+        public async Task<IActionResult> ReportOptions(string f, string? h)
+        {
+            _logger.LogTrace("Report Controller : ReportOptions() action called");
+            ReportViewModel model = null;
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = new ReportViewModel();
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else if (string.IsNullOrWhiteSpace(f) && string.IsNullOrWhiteSpace(h))
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+                if (model == null)
+                {
+                    model = new ReportViewModel();
+                    if (!string.IsNullOrWhiteSpace(f))
+                    {
                         model.EncryptedFarmId = f;
                         model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId.ToString()));
                         (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
@@ -1071,6 +1093,11 @@ namespace NMP.Portal.Controllers
                         {
                             model.FarmName = farm.Name;
                         }
+                    }
+                    if (!string.IsNullOrWhiteSpace(h))
+                    {
+                        model.EncryptedHarvestYear = h;
+                        model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedHarvestYear.ToString()));
                     }
                 }
             }
@@ -1086,5 +1113,33 @@ namespace NMP.Portal.Controllers
             }
             return View(model);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ReportOptions(ReportViewModel model)
+        {
+            _logger.LogTrace("Report Controller : ReportOptions() post action called");
+            try
+            {
+                if (model.ReportOption == null)
+                {
+                    ModelState.AddModelError("ReportOption", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+                if (!ModelState.IsValid)
+                {
+                    return View("ReportOptions", model);
+                }
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                
+                return RedirectToAction("ReportType", new {i = model.EncryptedFarmId,j = model.EncryptedHarvestYear});
+               
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in ReportOptions() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnReportSelection"] = ex.Message;
+                return View(model);
+            }
+        }
+
     }
 }
