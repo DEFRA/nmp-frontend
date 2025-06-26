@@ -1105,7 +1105,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (!ModelState.IsValid)
                 {
-                    return View("ReportOption", model);
+                    return View("ReportOptions", model);
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                 
