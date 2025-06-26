@@ -4422,7 +4422,7 @@ live</value>
     <value>3 years or more</value>
   </data>
   <data name="lblWhatWasTheLengthOfTheLayInYear" xml:space="preserve">
-    <value>What was the length of the lay in {0}?</value>
+    <value>What was the length of the ley in {0}?</value>
   </data>
   <data name="lblLayDuration" xml:space="preserve">
     <value>Lay duration</value>

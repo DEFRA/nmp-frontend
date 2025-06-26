@@ -10720,7 +10720,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What was the length of the lay in {0}?.
+        ///   Looks up a localized string similar to What was the length of the ley in {0}?.
         /// </summary>
         public static string lblWhatWasTheLengthOfTheLayInYear {
             get {
