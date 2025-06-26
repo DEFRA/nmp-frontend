@@ -3688,6 +3688,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update organic material imports and exports.
+        /// </summary>
+        public static string lblFarmSummaryContent10 {
+            get {
+                return ResourceManager.GetString("lblFarmSummaryContent10", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update organic material storage.
+        /// </summary>
+        public static string lblFarmSummaryContent11 {
+            get {
+                return ResourceManager.GetString("lblFarmSummaryContent11", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create nutrient management plans, get nutrient recommendations from the AHDB Nutrient Management Guide (RB209), add organic material and inorganic fertiliser applications..
         /// </summary>
         public static string lblFarmSummaryContent2 {
@@ -3702,6 +3720,60 @@ namespace NMP.Portal.Resources {
         public static string lblFarmSummaryContent3 {
             get {
                 return ResourceManager.GetString("lblFarmSummaryContent3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reports and outputs.
+        /// </summary>
+        public static string lblFarmSummaryContent4 {
+            get {
+                return ResourceManager.GetString("lblFarmSummaryContent4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create reports for NVZ compliance (N-max, Livestock manure nitrogen (N) farm limit, organic material inventory and storage) and farm information and planning..
+        /// </summary>
+        public static string lblFarmSummaryContent5 {
+            get {
+                return ResourceManager.GetString("lblFarmSummaryContent5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a report.
+        /// </summary>
+        public static string lblFarmSummaryContent6 {
+            get {
+                return ResourceManager.GetString("lblFarmSummaryContent6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage farm and field details.
+        /// </summary>
+        public static string lblFarmSummaryContent7 {
+            get {
+                return ResourceManager.GetString("lblFarmSummaryContent7", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add or update the farm information..
+        /// </summary>
+        public static string lblFarmSummaryContent8 {
+            get {
+                return ResourceManager.GetString("lblFarmSummaryContent8", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update livestock numbers.
+        /// </summary>
+        public static string lblFarmSummaryContent9 {
+            get {
+                return ResourceManager.GetString("lblFarmSummaryContent9", resourceCulture);
             }
         }
         
