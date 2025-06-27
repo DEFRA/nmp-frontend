@@ -3,6 +3,6 @@
     public enum ReportOption
     {
         FieldRecordsAndPlan=1,
-        FarmAndFieldDetailsForNVZRecord=1
+        FarmAndFieldDetailsForNVZRecord=2
     }
 }
