@@ -2581,6 +2581,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current year - {0}.
+        /// </summary>
+        public static string lblCurrentYearForReport {
+            get {
+                return ResourceManager.GetString("lblCurrentYearForReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cut.
         /// </summary>
         public static string lblCut {
@@ -4071,6 +4080,15 @@ namespace NMP.Portal.Resources {
         public static string lblForMultipleDefoliation {
             get {
                 return ResourceManager.GetString("lblForMultipleDefoliation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which year would you like to create a Crop and field management report for?.
+        /// </summary>
+        public static string lblForYearForReport {
+            get {
+                return ResourceManager.GetString("lblForYearForReport", resourceCulture);
             }
         }
         
@@ -6008,6 +6026,15 @@ namespace NMP.Portal.Resources {
         public static string lblNewSwards {
             get {
                 return ResourceManager.GetString("lblNewSwards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next year - {1}.
+        /// </summary>
+        public static string lblNextYearForReport {
+            get {
+                return ResourceManager.GetString("lblNextYearForReport", resourceCulture);
             }
         }
         
@@ -13859,6 +13886,15 @@ namespace NMP.Portal.Resources {
         public static string MsgSelectAWindConditionBeforeContinuing {
             get {
                 return ResourceManager.GetString("MsgSelectAWindConditionBeforeContinuing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the farm information and planning report you want to create..
+        /// </summary>
+        public static string MsgSelectTheFarmInformationAndPlanningReportYouWantToCreate {
+            get {
+                return ResourceManager.GetString("MsgSelectTheFarmInformationAndPlanningReportYouWantToCreate", resourceCulture);
             }
         }
         

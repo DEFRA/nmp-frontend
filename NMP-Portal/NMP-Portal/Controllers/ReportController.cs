@@ -467,7 +467,7 @@ namespace NMP.Portal.Controllers
             {
                 if (model.ReportType == null)
                 {
-                    ModelState.AddModelError("ReportType", Resource.MsgSelectAnOptionBeforeContinuing);
+                    ModelState.AddModelError("ReportType", Resource.MsgSelectTheFarmInformationAndPlanningReportYouWantToCreate);
                 }
                 if (!ModelState.IsValid)
                 {
@@ -476,7 +476,14 @@ namespace NMP.Portal.Controllers
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                 //if (model.ReportType != null && model.ReportType == (int)NMP.Portal.Enums.ReportType.CropAndFieldManagementReport)
                 //{
-                return RedirectToAction("ExportFieldsOrCropType");
+                if (model.Year != null)
+                {
+                    return RedirectToAction("ExportFieldsOrCropType");
+                }
+                else
+                {
+                    return RedirectToAction("Year");
+                }
                 //}
                 //else
                 //{

@@ -4868,4 +4868,16 @@ live</value>
   <data name="lblFarmSummaryContent9" xml:space="preserve">
     <value>Update livestock numbers</value>
   </data>
+  <data name="lblCurrentYearForReport" xml:space="preserve">
+    <value>Current year - {0}</value>
+  </data>
+  <data name="lblForYearForReport" xml:space="preserve">
+    <value>Which year would you like to create a Crop and field management report for?</value>
+  </data>
+  <data name="lblNextYearForReport" xml:space="preserve">
+    <value>Next year - {1}</value>
+  </data>
+  <data name="MsgSelectTheFarmInformationAndPlanningReportYouWantToCreate" xml:space="preserve">
+    <value>Select the farm information and planning report you want to create.</value>
+  </data>
 </root>
