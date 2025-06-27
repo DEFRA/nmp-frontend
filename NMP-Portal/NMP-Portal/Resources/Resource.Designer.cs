@@ -2716,6 +2716,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Demonstrate compliance with the livestock manure nitrogen (N) farm limit for the farm.
+        /// </summary>
+        public static string lblDemonstrateComplianceWithTheLivestockManure {
+            get {
+                return ResourceManager.GetString("lblDemonstrateComplianceWithTheLivestockManure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Demonstrate compliance with the N-max limit for each crop..
         /// </summary>
         public static string lblDemonstrateComplianceWithTheNMaxLimitForEachCrop {
@@ -4868,6 +4877,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Imports and exports.
+        /// </summary>
+        public static string lblImportsExports {
+            get {
+                return ResourceManager.GetString("lblImportsExports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Include inorganic fertiliser applications.
         /// </summary>
         public static string lblIncludeInorganicFertiliserApplications {
@@ -4900,6 +4918,15 @@ namespace NMP.Portal.Resources {
         public static string lblIncludeOrganicMaterialInorganicFertiliser {
             get {
                 return ResourceManager.GetString("lblIncludeOrganicMaterialInorganicFertiliser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Includes all livestock numbers for the year..
+        /// </summary>
+        public static string lblIncludesAllLivestockNumbersForTheYear {
+            get {
+                return ResourceManager.GetString("lblIncludesAllLivestockNumbersForTheYear", resourceCulture);
             }
         }
         
@@ -5531,6 +5558,24 @@ namespace NMP.Portal.Resources {
         public static string lblLivestockManureLimitComplianceModule {
             get {
                 return ResourceManager.GetString("lblLivestockManureLimitComplianceModule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Livestock manure nitrogen (N) farm limit report.
+        /// </summary>
+        public static string lblLivestockManureNitrogenFarmLimit {
+            get {
+                return ResourceManager.GetString("lblLivestockManureNitrogenFarmLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Livestock numbers.
+        /// </summary>
+        public static string lblLivestockNumbers {
+            get {
+                return ResourceManager.GetString("lblLivestockNumbers", resourceCulture);
             }
         }
         
@@ -11089,6 +11134,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Which farm information and planning report do you want to create?.
+        /// </summary>
+        public static string lblWhichFarmInformationAndPlanningReportDoYouWantToCreate {
+            get {
+                return ResourceManager.GetString("lblWhichFarmInformationAndPlanningReportDoYouWantToCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which fields do you plan to grow {0} in?.
         /// </summary>
         public static string lblWhichFieldsDoYouPlanToGrow {
@@ -11193,6 +11247,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhichHarvestWouldYouLikeToPlanFor {
             get {
                 return ResourceManager.GetString("lblWhichHarvestWouldYouLikeToPlanFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which NVZ compliance report do you want to create?.
+        /// </summary>
+        public static string lblWhichNVZComplianceReport {
+            get {
+                return ResourceManager.GetString("lblWhichNVZComplianceReport", resourceCulture);
             }
         }
         

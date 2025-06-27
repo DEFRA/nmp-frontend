@@ -4868,6 +4868,27 @@ live</value>
   <data name="lblFarmSummaryContent9" xml:space="preserve">
     <value>Update livestock numbers</value>
   </data>
+  <data name="lblDemonstrateComplianceWithTheLivestockManure" xml:space="preserve">
+    <value>Demonstrate compliance with the livestock manure nitrogen (N) farm limit for the farm</value>
+  </data>
+  <data name="lblLivestockManureNitrogenFarmLimit" xml:space="preserve">
+    <value>Livestock manure nitrogen (N) farm limit report</value>
+  </data>
+  <data name="lblImportsExports" xml:space="preserve">
+    <value>Imports and exports</value>
+  </data>
+  <data name="lblIncludesAllLivestockNumbersForTheYear" xml:space="preserve">
+    <value>Includes all livestock numbers for the year.</value>
+  </data>
+  <data name="lblLivestockNumbers" xml:space="preserve">
+    <value>Livestock numbers</value>
+  </data>
+  <data name="lblWhichFarmInformationAndPlanningReportDoYouWantToCreate" xml:space="preserve">
+    <value>Which farm information and planning report do you want to create?</value>
+  </data>
+  <data name="lblWhichNVZComplianceReport" xml:space="preserve">
+    <value>Which NVZ compliance report do you want to create?</value>
+  </data>
   <data name="lblCurrentYearForReport" xml:space="preserve">
     <value>Current year - {0}</value>
   </data>
