@@ -4893,12 +4893,21 @@ live</value>
     <value>Current year - {0}</value>
   </data>
   <data name="lblForYearForReport" xml:space="preserve">
-    <value>Which year would you like to create a Crop and field management report for?</value>
+    <value>Which year would you like to create a {0} report for?</value>
   </data>
   <data name="lblNextYearForReport" xml:space="preserve">
-    <value>Next year - {1}</value>
+    <value>Next year - {0}</value>
   </data>
   <data name="MsgSelectTheFarmInformationAndPlanningReportYouWantToCreate" xml:space="preserve">
     <value>Select the farm information and planning report you want to create.</value>
+  </data>
+  <data name="lblNVZComplianceReport" xml:space="preserve">
+    <value>NVZ compliance report</value>
+  </data>
+  <data name="lblSelectAOptionBeforeContinuing" xml:space="preserve">
+    <value>Select a {0} before continuing.</value>
+  </data>
+  <data name="MsgSelectTheReportYouWantToCreate" xml:space="preserve">
+    <value>Select the {0} you want to create.</value>
   </data>
 </root>

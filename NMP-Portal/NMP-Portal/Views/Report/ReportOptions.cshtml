@@ -2,13 +2,20 @@
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
     ViewData["Title"] = Resource.lblField;
-
     var fieldRecordsAndPlan = (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan;
     var farmAndFieldDetailsForNVZRecord = (int)NMP.Portal.Enums.ReportOption.FarmAndFieldDetailsForNVZRecord;
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+    @if (string.IsNullOrWhiteSpace(Model.EncryptedHarvestYear))
+    {
+        <govuk-back-link asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+    }
+    else
+    {
+        <govuk-back-link asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
+    }
+    
 }
 @if (TempData["ErrorOnReportSelection"] != null)
 {
@@ -31,6 +38,8 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -61,7 +70,7 @@
                     }
                 </h1>
 
-                
+
                 <govuk-radios asp-for="@Model.ReportOption">
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend is-page-heading="false">
@@ -86,9 +95,18 @@
                     @Resource.lblContinue
                 </govuk-button>
                 <p class="govuk-body cancel-link">
-                    <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">
-                        @Resource.lblCancel
-                    </a>
+                    @if (!string.IsNullOrWhiteSpace(Model.EncryptedHarvestYear))
+                    {
+                        <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">
+                            @Resource.lblCancel
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+                            @Resource.lblCancel
+                        </a>
+                    }
                 </p>
 
             </div>

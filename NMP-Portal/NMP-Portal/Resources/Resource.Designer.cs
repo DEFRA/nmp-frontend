@@ -4093,7 +4093,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Which year would you like to create a Crop and field management report for?.
+        ///   Looks up a localized string similar to Which year would you like to create a {0} report for?.
         /// </summary>
         public static string lblForYearForReport {
             get {
@@ -6075,7 +6075,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Next year - {1}.
+        ///   Looks up a localized string similar to Next year - {0}.
         /// </summary>
         public static string lblNextYearForReport {
             get {
@@ -6594,6 +6594,15 @@ namespace NMP.Portal.Resources {
         public static string lblNVZAndFarmingRulesFor {
             get {
                 return ResourceManager.GetString("lblNVZAndFarmingRulesFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NVZ compliance report.
+        /// </summary>
+        public static string lblNVZComplianceReport {
+            get {
+                return ResourceManager.GetString("lblNVZComplianceReport", resourceCulture);
             }
         }
         
@@ -8178,6 +8187,15 @@ namespace NMP.Portal.Resources {
         public static string lblSelectAllThatApplyApplicationDateWillBeUpdated {
             get {
                 return ResourceManager.GetString("lblSelectAllThatApplyApplicationDateWillBeUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a {0} before continuing..
+        /// </summary>
+        public static string lblSelectAOptionBeforeContinuing {
+            get {
+                return ResourceManager.GetString("lblSelectAOptionBeforeContinuing", resourceCulture);
             }
         }
         
@@ -13958,6 +13976,15 @@ namespace NMP.Portal.Resources {
         public static string MsgSelectTheFarmInformationAndPlanningReportYouWantToCreate {
             get {
                 return ResourceManager.GetString("MsgSelectTheFarmInformationAndPlanningReportYouWantToCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the {0} you want to create..
+        /// </summary>
+        public static string MsgSelectTheReportYouWantToCreate {
+            get {
+                return ResourceManager.GetString("MsgSelectTheReportYouWantToCreate", resourceCulture);
             }
         }
         

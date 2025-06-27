@@ -31,6 +31,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportOption"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -59,7 +60,7 @@
                         <govuk-radios-fieldset-legend is-page-heading="false">
 
                         </govuk-radios-fieldset-legend>
-                        <govuk-radios-item value="@nmaxReport" disabled>
+                        <govuk-radios-item value="@nmaxReport">
                             @Resource.lblNMaxReport
                             <govuk-radios-item-hint>
                                 @Resource.lblDemonstrateComplianceWithTheNMaxLimitForEachCrop
@@ -78,9 +79,18 @@
                     @Resource.lblContinue
                 </govuk-button>
                 <p class="govuk-body cancel-link">
-                    <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">
-                        @Resource.lblCancel
-                    </a>
+                    @if (!string.IsNullOrWhiteSpace(Model.EncryptedHarvestYear))
+                    {
+                        <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">
+                            @Resource.lblCancel
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+                            @Resource.lblCancel
+                        </a>
+                    }
                 </p>
 
             </div>
