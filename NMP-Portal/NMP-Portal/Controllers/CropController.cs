@@ -2818,6 +2818,11 @@ namespace NMP.Portal.Controllers
             PlanViewModel? model = null;
             try
             {
+
+                if (HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    HttpContext?.Session.Remove("ReportData");
+                }
                 if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
                 {
                     _httpContextAccessor.HttpContext?.Session.Remove("FertiliserManure");

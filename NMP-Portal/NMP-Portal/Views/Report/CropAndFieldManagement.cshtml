@@ -35,9 +35,6 @@
             <hr>
         </div>
     </div>
-    @*     <form asp-action="ExportFieldsOrCropType" asp-controller="Report" method="post" autocomplete="off">
-            @Html.AntiForgeryToken()
- *@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             <h1 class="govuk-heading-xl">
@@ -696,8 +693,6 @@
         }
     }
     <hr class="seperator_five">
-    @*  <div class="govuk-grid-row">
-                <div class="govuk-grid-column-full"> *@
     <h2 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h2>
     <p class="govuk-body">
         @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent1, Resource.lblTool)
@@ -708,7 +703,4 @@
     <p class="govuk-body">
         @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent3, Resource.lblTool)
     </p>
-    @* </div>
-            </div> *@@*
-        </form>     *@
 }

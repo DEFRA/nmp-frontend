@@ -22,5 +22,6 @@ namespace NMP.Portal.ViewModels
         public int? ReportOption { get; set; }
         public int? FieldAndPlanReportOption { get; set; }
         public int? NVZReportOption { get; set; }
+        public string? ReportTypeName { get; set; } = string.Empty;
     }
 }

@@ -2581,6 +2581,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current year - {0}.
+        /// </summary>
+        public static string lblCurrentYearForReport {
+            get {
+                return ResourceManager.GetString("lblCurrentYearForReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cut.
         /// </summary>
         public static string lblCut {
@@ -4080,6 +4089,15 @@ namespace NMP.Portal.Resources {
         public static string lblForMultipleDefoliation {
             get {
                 return ResourceManager.GetString("lblForMultipleDefoliation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which year would you like to create a {0} report for?.
+        /// </summary>
+        public static string lblForYearForReport {
+            get {
+                return ResourceManager.GetString("lblForYearForReport", resourceCulture);
             }
         }
         
@@ -6057,6 +6075,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Next year - {0}.
+        /// </summary>
+        public static string lblNextYearForReport {
+            get {
+                return ResourceManager.GetString("lblNextYearForReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to NH4N.
         /// </summary>
         public static string lblNH4N {
@@ -6567,6 +6594,15 @@ namespace NMP.Portal.Resources {
         public static string lblNVZAndFarmingRulesFor {
             get {
                 return ResourceManager.GetString("lblNVZAndFarmingRulesFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NVZ compliance report.
+        /// </summary>
+        public static string lblNVZComplianceReport {
+            get {
+                return ResourceManager.GetString("lblNVZComplianceReport", resourceCulture);
             }
         }
         
@@ -8151,6 +8187,15 @@ namespace NMP.Portal.Resources {
         public static string lblSelectAllThatApplyApplicationDateWillBeUpdated {
             get {
                 return ResourceManager.GetString("lblSelectAllThatApplyApplicationDateWillBeUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a {0} before continuing..
+        /// </summary>
+        public static string lblSelectAOptionBeforeContinuing {
+            get {
+                return ResourceManager.GetString("lblSelectAOptionBeforeContinuing", resourceCulture);
             }
         }
         
@@ -13922,6 +13967,24 @@ namespace NMP.Portal.Resources {
         public static string MsgSelectAWindConditionBeforeContinuing {
             get {
                 return ResourceManager.GetString("MsgSelectAWindConditionBeforeContinuing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the farm information and planning report you want to create..
+        /// </summary>
+        public static string MsgSelectTheFarmInformationAndPlanningReportYouWantToCreate {
+            get {
+                return ResourceManager.GetString("MsgSelectTheFarmInformationAndPlanningReportYouWantToCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the {0} you want to create..
+        /// </summary>
+        public static string MsgSelectTheReportYouWantToCreate {
+            get {
+                return ResourceManager.GetString("MsgSelectTheReportYouWantToCreate", resourceCulture);
             }
         }
         
