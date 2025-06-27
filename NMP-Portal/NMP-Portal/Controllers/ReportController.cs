@@ -413,7 +413,7 @@ namespace NMP.Portal.Controllers
             return View(model);
         }
         [HttpGet]
-        public async Task<IActionResult> ReportType(string i, string j)
+        public async Task<IActionResult> ReportType(string i, string? j)
         {
             _logger.LogTrace("Report Controller : ReportType() action called");
             ReportViewModel model = null;
@@ -1042,6 +1042,204 @@ namespace NMP.Portal.Controllers
 
             return string.Join(", ", result);
         }
+        
 
+        [HttpGet]
+        public async Task<IActionResult> ReportOptions(string f, string? h)
+        {
+            _logger.LogTrace("Report Controller : ReportOptions() action called");
+            ReportViewModel model = null;
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = new ReportViewModel();
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else if (string.IsNullOrWhiteSpace(f) && string.IsNullOrWhiteSpace(h))
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+                if (model == null)
+                {
+                    model = new ReportViewModel();
+                    if (!string.IsNullOrWhiteSpace(f))
+                    {
+                        model.EncryptedFarmId = f;
+                        model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId.ToString()));
+                        (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
+                        if (farm != null)
+                        {
+                            model.FarmName = farm.Name;
+                        }
+                    }
+                    if (!string.IsNullOrWhiteSpace(h))
+                    {
+                        model.EncryptedHarvestYear = h;
+                        model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedHarvestYear.ToString()));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in ReportType() action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnHarvestYearOverview"] = ex.Message;
+                return RedirectToAction("HarvestYearOverview", new
+                {
+                    id = model.EncryptedFarmId,
+                    year = model.EncryptedHarvestYear
+                });
+            }
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ReportOptions(ReportViewModel model)
+        {
+            _logger.LogTrace("Report Controller : ReportOptions() post action called");
+            try
+            {
+                if (model.ReportOption == null)
+                {
+                    ModelState.AddModelError("ReportOption", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+
+                if(model.ReportOption==(int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
+                {
+                    return RedirectToAction("FieldAndPlanReports", model);
+                }
+                if (model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FarmAndFieldDetailsForNVZRecord)
+                {
+                    return RedirectToAction("NVZComplianceReports", model);
+                }
+
+                //return RedirectToAction("ReportType", new {i = model.EncryptedFarmId,j = model.EncryptedHarvestYear});
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in ReportOptions() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnReportSelection"] = ex.Message;
+                return View(model);
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> FieldAndPlanReports()
+        {
+            _logger.LogTrace("Report Controller : FieldAndPlanReports() action called");
+            ReportViewModel model = null;
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = new ReportViewModel();
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in FieldAndPlanReports() action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorFieldAndPlanReports"] = ex.Message;
+                return View(model);
+            }
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult FieldAndPlanReports(ReportViewModel model)
+        {
+            _logger.LogTrace("Report Controller : FieldAndPlanReports() post action called");
+            try
+            {
+                if (model.FieldAndPlanReportOption == null)
+                {
+                    ModelState.AddModelError("FieldAndPlanReportOption", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                if (model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
+                {
+                    model.ReportType = (int)NMP.Portal.Enums.ReportType.CropAndFieldManagementReport;
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                    return RedirectToAction("ExportFieldsOrCropType");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in FieldAndPlanReports() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorFieldAndPlanReports"] = ex.Message;
+                return View(model);
+            }
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> NVZComplianceReports()
+        {
+            _logger.LogTrace("Report Controller : NVZComplianceReports() action called");
+            ReportViewModel model = null;
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = new ReportViewModel();
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in NVZComplianceReports() action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorNVZComplianceReports"] = ex.Message;
+                return View(model);
+            }
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult NVZComplianceReports(ReportViewModel model)
+        {
+            _logger.LogTrace("Report Controller : NVZComplianceReports() post action called");
+            try
+            {
+                if (model.NVZReportOption == null)
+                {
+                    ModelState.AddModelError("NVZReportOption", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.NmaxReport)
+                {
+                    model.ReportType = (int)NMP.Portal.Enums.ReportType.NMaxReport;
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                    return RedirectToAction("ExportFieldsOrCropType");
+                }
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in NVZComplianceReports() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorNVZComplianceReports"] = ex.Message;
+                return View(model);
+            }
+        }
     }
 }

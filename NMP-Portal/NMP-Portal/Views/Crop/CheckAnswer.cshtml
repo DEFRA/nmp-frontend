@@ -371,7 +371,7 @@
                     {
                         <govuk-summary-list-row class=@((!Model.CurrentSward.HasValue)?"govuk-error-message":"")>
                             <govuk-summary-list-row-key>
-                                @string.Format(Resource.lblAreTheseNewSwardOrExistingSwardInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName + " " + Resource.lblField : Resource.lblTheseFields))
+                                @string.Format(Resource.lblAreTheseNewSwardOrExistingSwardInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields))
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
                                 @(Model.CurrentSward == null ? Resource.lblNotEntered : currentSward)
@@ -573,7 +573,7 @@
                     {
                         <govuk-summary-list-row class=@((!Model.SwardTypeId.HasValue)?"govuk-error-message":"")>
                             <govuk-summary-list-row-key>
-                                @string.Format(Resource.lblWhatIsTheSwardTypeForTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName + " " + Resource.lblField : Resource.lblTheseFields), Model.Crops[0].Year)
+                                @string.Format(Resource.lblWhatIsTheSwardTypeForTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields), Model.Crops[0].Year)
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
                                 @(Model.SwardTypeId == null ? Resource.lblNotEntered : ViewBag.SwardType)
@@ -588,7 +588,7 @@
 
                         <govuk-summary-list-row class=@((!Model.SwardManagementId.HasValue)?"govuk-error-message":"")>
                             <govuk-summary-list-row-key>
-                                @string.Format(Resource.lblHowWillTheseFieldsBeManaged, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName + " " + Resource.lblField : Resource.lblTheseFields))
+                                @string.Format(Resource.lblHowWillTheseFieldsBeManaged, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName  : Resource.lblTheseFields))
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
                                 @(Model.SwardManagementId == null ? Resource.lblNotEntered : ViewBag.SwardManagementName)
@@ -605,23 +605,23 @@
                             <govuk-summary-list-row-key>
                                 @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazedOnly)
                                 {
-                                    @string.Format(Resource.lblHowManyGrazingsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName + " " + Resource.lblField : Resource.lblTheseFields))
+                                    @string.Format(Resource.lblHowManyGrazingsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields))
                                 }
                                 @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.CutForSilageOnly)
                                 {
-                                    @string.Format(Resource.lblHowManyCutsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName + " " + Resource.lblField : Resource.lblTheseFields))
+                                    @string.Format(Resource.lblHowManyCutsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields))
                                 }
                                 @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.CutForHayOnly)
                                 {
-                                    @string.Format(Resource.lblHowManyCutsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName + " " + Resource.lblField : Resource.lblTheseFields))
+                                    @string.Format(Resource.lblHowManyCutsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields))
                                 }
                                 @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazingAndSilage)
                                 {
-                                    @string.Format(Resource.lblHowManyCutsAndGrazingsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName + " " + Resource.lblField : Resource.lblTheseFields))
+                                    @string.Format(Resource.lblHowManyCutsAndGrazingsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields))
                                 }
                                 @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazingAndHay)
                                 {
-                                    @string.Format(Resource.lblHowManyCutsAndGrazingsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName + " " + Resource.lblField : Resource.lblTheseFields))
+                                    @string.Format(Resource.lblHowManyCutsAndGrazingsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields))
                                 }
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
@@ -644,19 +644,19 @@
                                     }
                                     @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.CutForSilageOnly)
                                     {
-                                        @string.Format(Resource.lblWhatIsTheCutOrderInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName + " " + Resource.lblField : Resource.lblTheseFields))
+                                        @string.Format(Resource.lblWhatIsTheCutOrderInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields))
                                     }
                                     @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.CutForHayOnly)
                                     {
-                                        @string.Format(Resource.lblWhatIsTheCutOrderInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName + " " + Resource.lblField : Resource.lblTheseFields))
+                                        @string.Format(Resource.lblWhatIsTheCutOrderInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields))
                                     }
                                     @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazingAndSilage)
                                     {
-                                        @string.Format(Resource.lblWhatIsTheCutAndGrazingOrderInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName + " " + Resource.lblField : Resource.lblTheseFields))
+                                        @string.Format(Resource.lblWhatIsTheCutAndGrazingOrderInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields))
                                     }
                                     @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazingAndHay)
                                     {
-                                        @string.Format(Resource.lblWhatIsTheCutAndGrazingOrderInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName + " " + Resource.lblField : Resource.lblTheseFields))
+                                        @string.Format(Resource.lblWhatIsTheCutAndGrazingOrderInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields))
                                     }
                                 </govuk-summary-list-row-key>
                                 @if (Model.DefoliationSequenceId == null)

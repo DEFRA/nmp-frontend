@@ -19,5 +19,8 @@ namespace NMP.Portal.ViewModels
         public List<string>? CropTypeList { get; set; }
         public Farm? Farm { get; set; }
         public List<NMaxReportResponse>? NMaxLimitReport { get; set; }
+        public int? ReportOption { get; set; }
+        public int? FieldAndPlanReportOption { get; set; }
+        public int? NVZReportOption { get; set; }
     }
 }

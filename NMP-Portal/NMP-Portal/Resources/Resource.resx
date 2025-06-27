@@ -4200,7 +4200,7 @@ live</value>
     <value>Based on your data, the grass growth class for these Field is:</value>
   </data>
   <data name="lblBasedOnYourDataTheGrassGrowthClassForXField" xml:space="preserve">
-    <value>Based on your data, the grass growth class for {0} Field is:</value>
+    <value>Based on your data, the grass growth class for {0} is:</value>
   </data>
   <data name="lblDoYouWantToEnterTheSameTargetYieldForTheseFields" xml:space="preserve">
     <value>Do you want to enter the same target yield for these fields? </value>
@@ -4212,7 +4212,7 @@ live</value>
     <value>No, Enter a different target yield for each fields</value>
   </data>
   <data name="lblTargetDryMatterYieldForField" xml:space="preserve">
-    <value>Target dry matter yield for {0} Field</value>
+    <value>Target dry matter yield for {0}</value>
   </data>
   <data name="lblThisGivesTheFollowingRangeForAnnualDryMatterYield" xml:space="preserve">
     <value>This gives the following range for annual dry matter yield.</value>
@@ -4224,7 +4224,7 @@ live</value>
     <value>We use the target annual dry matter yield to give nitrogen (N) recommendations for grass.</value>
   </data>
   <data name="lblWhatIsTheTotalTargetDryMatterYieldForField" xml:space="preserve">
-    <value>What is the total target dry matter yield for {0} Field in {1}?</value>
+    <value>What is the total target dry matter yield for {0} in {1}?</value>
   </data>
   <data name="lblYesEnterTheSameTargetYieldForTheseFields" xml:space="preserve">
     <value>Yes, Enter the same target yield for these fields</value>
@@ -4825,5 +4825,68 @@ live</value>
   </data>
   <data name="lblYouHaveNotEnteredAnyField" xml:space="preserve">
     <value>You have not entered any field</value>
+  </data>
+  <data name="lblFarmAndFieldDetailsForNVZRecords" xml:space="preserve">
+    <value>Farm and field details for NVZ records</value>
+  </data>
+  <data name="lblFieldRecordsAndNutrientManagementPlanning" xml:space="preserve">
+    <value>Field records and nutrient management planning</value>
+  </data>
+  <data name="lblIncludesDetailsAboutYourFieldsCropsAndRec" xml:space="preserve">
+    <value>Includes details about your fields, crops and recommendations.</value>
+  </data>
+  <data name="lblIncludesNmaxLivestockManureNitrogen" xml:space="preserve">
+    <value>Includes N-max, livestock manure nitrogen(N) farm limit, and organic material storage</value>
+  </data>
+  <data name="lblWhatTypeOfReportDoYouWantToCreate" xml:space="preserve">
+    <value>What type of report do you want to create?</value>
+  </data>
+  <data name="lblWhatTypeOfReportDoYouWantToCreateFromYourYearData" xml:space="preserve">
+    <value>What type of report do you want to create from your {0} data?</value>
+  </data>
+  <data name="lblFarmSummaryContent4" xml:space="preserve">
+    <value>Reports and outputs</value>
+  </data>
+  <data name="lblFarmSummaryContent5" xml:space="preserve">
+    <value>Create reports for NVZ compliance (N-max, Livestock manure nitrogen (N) farm limit, organic material inventory and storage) and farm information and planning.</value>
+  </data>
+  <data name="lblFarmSummaryContent6" xml:space="preserve">
+    <value>Create a report</value>
+  </data>
+  <data name="lblFarmSummaryContent10" xml:space="preserve">
+    <value>Update organic material imports and exports</value>
+  </data>
+  <data name="lblFarmSummaryContent11" xml:space="preserve">
+    <value>Update organic material storage</value>
+  </data>
+  <data name="lblFarmSummaryContent7" xml:space="preserve">
+    <value>Manage farm and field details</value>
+  </data>
+  <data name="lblFarmSummaryContent8" xml:space="preserve">
+    <value>Add or update the farm information.</value>
+  </data>
+  <data name="lblFarmSummaryContent9" xml:space="preserve">
+    <value>Update livestock numbers</value>
+  </data>
+  <data name="lblDemonstrateComplianceWithTheLivestockManure" xml:space="preserve">
+    <value>Demonstrate compliance with the livestock manure nitrogen (N) farm limit for the farm</value>
+  </data>
+  <data name="lblLivestockManureNitrogenFarmLimit" xml:space="preserve">
+    <value>Livestock manure nitrogen (N) farm limit report</value>
+  </data>
+  <data name="lblImportsExports" xml:space="preserve">
+    <value>Imports and exports</value>
+  </data>
+  <data name="lblIncludesAllLivestockNumbersForTheYear" xml:space="preserve">
+    <value>Includes all livestock numbers for the year.</value>
+  </data>
+  <data name="lblLivestockNumbers" xml:space="preserve">
+    <value>Livestock numbers</value>
+  </data>
+  <data name="lblWhichFarmInformationAndPlanningReportDoYouWantToCreate" xml:space="preserve">
+    <value>Which farm information and planning report do you want to create?</value>
+  </data>
+  <data name="lblWhichNVZComplianceReport" xml:space="preserve">
+    <value>Which NVZ compliance report do you want to create?</value>
   </data>
 </root>

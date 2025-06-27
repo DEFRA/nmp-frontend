@@ -124,19 +124,19 @@
                         }
                         @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.CutForSilageOnly)
                         {
-                            @string.Format(Resource.lblWhatIsTheCutOrderInTheseFields, (Model.FieldList.Count==1? Model.Crops[0].FieldName + " " + Resource.lblField : Resource.lblTheseFields))
+                            @string.Format(Resource.lblWhatIsTheCutOrderInTheseFields, (Model.FieldList.Count==1? Model.Crops[0].FieldName  : Resource.lblTheseFields))
                         }
                         @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.CutForHayOnly)
                         {
-                            @string.Format(Resource.lblWhatIsTheCutOrderInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName + " " + Resource.lblField : Resource.lblTheseFields))
+                            @string.Format(Resource.lblWhatIsTheCutOrderInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields))
                         }
                         @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazingAndSilage)
                         {
-                            @string.Format(Resource.lblWhatIsTheCutAndGrazingOrderInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName + " " + Resource.lblField : Resource.lblTheseFields))
+                            @string.Format(Resource.lblWhatIsTheCutAndGrazingOrderInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields))
                         }
                         @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazingAndHay)
                         {
-                            @string.Format(Resource.lblWhatIsTheCutAndGrazingOrderInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName + " " + Resource.lblField : Resource.lblTheseFields))
+                            @string.Format(Resource.lblWhatIsTheCutAndGrazingOrderInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName  : Resource.lblTheseFields))
                         }
 
                     </govuk-radios-fieldset-legend>

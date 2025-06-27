@@ -1,0 +1,98 @@
+﻿@using NMP.Portal.Resources
+@model NMP.Portal.ViewModels.ReportViewModel
+@{
+    ViewData["Title"] = Resource.lblField;
+
+    var fieldRecordsAndPlan = (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan;
+    var farmAndFieldDetailsForNVZRecord = (int)NMP.Portal.Enums.ReportOption.FarmAndFieldDetailsForNVZRecord;
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+}
+@if (TempData["ErrorOnReportSelection"] != null)
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["ErrorOnReportSelection"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        </div>
+    </div>
+}
+
+@if (Model != null)
+{
+    <form asp-action="ReportOptions" asp-controller="Report" method="post" autocomplete="off">
+        @Html.AntiForgeryToken()
+        <div hidden="true">
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
+            @if (Model.FieldList != null && Model.FieldList.Count > 0)
+            {
+                @for (int i = 0; i < Model.FieldList.Count; i++)
+                {
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldList[i]" value="@Model.FieldList[i]"></govuk-input>
+                }
+            }
+            @if (Model.CropTypeList != null && Model.CropTypeList.Count > 0)
+            {
+                @for (int i = 0; i < Model.CropTypeList.Count; i++)
+                {
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeList[i]" value="@Model.CropTypeList[i]"></govuk-input>
+                }
+            }
+        </div>
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+
+                <h1 class="govuk-heading-l">
+                    @if (Model.Year == null)
+                    {
+                        @Resource.lblWhatTypeOfReportDoYouWantToCreate
+
+                    }
+                    else
+                    {
+                        @string.Format(Resource.lblWhatTypeOfReportDoYouWantToCreateFromYourYearData, Model.Year)
+                    }
+                </h1>
+
+                
+                <govuk-radios asp-for="@Model.ReportOption">
+                    <govuk-radios-fieldset>
+                        <govuk-radios-fieldset-legend is-page-heading="false">
+
+                        </govuk-radios-fieldset-legend>
+                        <govuk-radios-item value="@fieldRecordsAndPlan">
+                            @Resource.lblFieldRecordsAndNutrientManagementPlanning
+                            <govuk-radios-item-hint>
+                                @Resource.lblIncludesDetailsAboutYourFieldsCropsAndRec
+                            </govuk-radios-item-hint>
+                        </govuk-radios-item>
+                        <govuk-radios-item value="@farmAndFieldDetailsForNVZRecord">
+                            @Resource.lblFarmAndFieldDetailsForNVZRecords
+                            <govuk-radios-item-hint>
+                                @Resource.lblIncludesNmaxLivestockManureNitrogen
+                            </govuk-radios-item-hint>
+                        </govuk-radios-item>
+                    </govuk-radios-fieldset>
+                </govuk-radios>
+
+                <govuk-button type="submit" class="margin-bottom-forty">
+                    @Resource.lblContinue
+                </govuk-button>
+                <p class="govuk-body cancel-link">
+                    <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">
+                        @Resource.lblCancel
+                    </a>
+                </p>
+
+            </div>
+
+        </div>
+    </form>
+}
