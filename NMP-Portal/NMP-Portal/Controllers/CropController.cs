@@ -2980,7 +2980,7 @@ namespace NMP.Portal.Controllers
                                             Yield = plan.Yield,
                                             Variety = plan.CropVariety
                                         };
-                                        if (plan.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass&&!string.IsNullOrWhiteSpace(plan.Management))
+                                        if (plan.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && !string.IsNullOrWhiteSpace(plan.Management))
                                         {
                                             List<string> defoliationList = plan.Management
                                                 .Split(',', StringSplitOptions.RemoveEmptyEntries)
@@ -3226,7 +3226,7 @@ namespace NMP.Portal.Controllers
                 int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
                 (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(farmId);
                 model.FarmName = farm.Name;
-                List<PlanSummaryResponse> planSummaryResponse = await _cropService.FetchPlanSummaryByFarmId(farmId, 0);            
+                List<PlanSummaryResponse> planSummaryResponse = await _cropService.FetchPlanSummaryByFarmId(farmId, 0);
                 planSummaryResponse.RemoveAll(x => x.Year == 0);
                 planSummaryResponse = planSummaryResponse.OrderByDescending(x => x.Year).ToList();
                 model.EncryptedHarvestYearList = new List<string>();
@@ -3488,10 +3488,10 @@ namespace NMP.Portal.Controllers
 
                                 int defIndex = 0;
                                 if (recommendation.RecommendationData.Count > 0)
-                                {                                    
+                                {
                                     foreach (var recData in recommendation.RecommendationData)
                                     {
-                                        string part = (defolicationParts != null && defIndex < defolicationParts.Length) ? defolicationParts[defIndex].Trim():string.Empty;
+                                        string part = (defolicationParts != null && defIndex < defolicationParts.Length) ? defolicationParts[defIndex].Trim() : string.Empty;
                                         string defoliationSequenceName = (!string.IsNullOrWhiteSpace(part)) ? char.ToUpper(part[0]).ToString() + part.Substring(1) : string.Empty;
                                         var ManagementPeriods = new ManagementPeriodViewModel
                                         {
@@ -6287,6 +6287,24 @@ namespace NMP.Portal.Controllers
             }
         }
 
+        public async Task<IActionResult> BackCopyCheckAnswer()
+        {
+            _logger.LogTrace("Crop Controller : BackCopyCheckAnswer() action called");
+            PlanViewModel? model = null;
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+
+            model.IsCheckAnswer = false;
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("CropData", model);
+            return RedirectToAction("CopyOrganicInorganicApplications");
+        }
+
         private static string ShorthandDefoliationSequence(List<string> data)
         {
             if (data == null && data.Count == 0)
@@ -6314,7 +6332,7 @@ namespace NMP.Portal.Controllers
             foreach (var entry in defoliationSequence)
             {
                 string word = entry.Key;
-                
+
                 if (entry.Value > 1)
                 {
                     if (word.EndsWith("s") || word.EndsWith("x") || word.EndsWith("z") ||
@@ -6328,7 +6346,7 @@ namespace NMP.Portal.Controllers
                     }
                 }
 
-                
+
                 word = char.ToUpper(word[0]) + word.Substring(1);
                 result.Add($"{entry.Value} {word}");
             }
