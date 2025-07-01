@@ -475,6 +475,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About derogation.
+        /// </summary>
+        public static string lblAboutDerogation {
+            get {
+                return ResourceManager.GetString("lblAboutDerogation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This tool is currently in a private beta phase. This means that we are testing the tool with a group of invited users. As such, some functionality may not work as expected and some features have not yet been developed..
         /// </summary>
         public static string lblAboutGetHelpAndFeedback {
@@ -4246,6 +4255,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to  Grassland derogations for livestock manure in nitrate vulnerable zone .
+        /// </summary>
+        public static string lblGrasslandDerogationsForLivestockManureInNitrateVulnerableZone {
+            get {
+                return ResourceManager.GetString("lblGrasslandDerogationsForLivestockManureInNitrateVulnerableZone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Grass management.
         /// </summary>
         public static string lblGrassManagement {
@@ -5589,6 +5607,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Livestock manure nitrogen (N) farm limit report {0}.
+        /// </summary>
+        public static string lblLivestockManureNitrogenFarmLimitReport {
+            get {
+                return ResourceManager.GetString("lblLivestockManureNitrogenFarmLimitReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Livestock numbers.
         /// </summary>
         public static string lblLivestockNumbers {
@@ -6026,6 +6053,15 @@ namespace NMP.Portal.Resources {
         public static string lblMoreAboutTheseWaterResourceRegulation {
             get {
                 return ResourceManager.GetString("lblMoreAboutTheseWaterResourceRegulation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to More information:.
+        /// </summary>
+        public static string lblMoreInformation {
+            get {
+                return ResourceManager.GetString("lblMoreInformation", resourceCulture);
             }
         }
         
@@ -11580,6 +11616,33 @@ namespace NMP.Portal.Resources {
         public static string lblYouCanAlso {
             get {
                 return ResourceManager.GetString("lblYouCanAlso", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can apply for a derogation if at least 80% of the agricultural area of your holding is grass..
+        /// </summary>
+        public static string lblYouCanApplyForADerogationIfAtLeast80Percent {
+            get {
+                return ResourceManager.GetString("lblYouCanApplyForADerogationIfAtLeast80Percent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can apply for a grassland derogation to use a higher limit of up to 250kg of nitrogen per hectare, if the nitrogen comes from grazing livestock manure..
+        /// </summary>
+        public static string lblYouCanApplyForAGrasslandDerogationToUseAHigherLimit {
+            get {
+                return ResourceManager.GetString("lblYouCanApplyForAGrasslandDerogationToUseAHigherLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can apply up to 170kg per hectare of nitrogen in livestock manure on your holding in a nitrate vulnerable zone (NVZ) in each calendar year..
+        /// </summary>
+        public static string lblYouCanApplyUpTo170kgPerHectareOfNitrogen {
+            get {
+                return ResourceManager.GetString("lblYouCanApplyUpTo170kgPerHectareOfNitrogen", resourceCulture);
             }
         }
         
