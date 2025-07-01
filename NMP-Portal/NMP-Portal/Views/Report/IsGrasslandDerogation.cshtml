@@ -1,16 +1,12 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblYear;
+    ViewData["Title"] = Resource.lblGrasslandDerogation;
 
-    var currentYear = DateTime.Now.Year;
-    var nextYear = DateTime.Now.Year + 1;
-    var backAction = (Model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
-        ? "FieldAndPlanReports" : "NVZComplianceReports";
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@backAction" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="Year" asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnYear"] != null)
 {
@@ -25,7 +21,7 @@
 
 @if (Model != null)
 {
-    <form asp-action="Year" asp-controller="Report" method="post" autocomplete="off">
+    <form asp-action="IsGrasslandDerogation" asp-controller="Report" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
         <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
@@ -36,6 +32,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportTypeName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -53,40 +50,32 @@
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-                
+
                 <h1 class="govuk-heading-l">
-                    @if (Model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
-                    {
-                        @string.Format(Resource.lblForYearForReport, Model.ReportTypeName)
-                    }
-                    @if (Model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.LivestockManureNFarmLimitReport)
-                    {
-                        @Resource.lblWhichYearWouldYouLikeToCreateALivestockReport
-                    }
-                    
+                    @string.Format(Resource.lblDoesFarmHaveAGrasslandDerogation, Model.FarmName, Model.Year)
                 </h1>
 
+                <h2>Work in progress</h2>
+                @* <govuk-radios asp-for="@Model.Year">
+            <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend is-page-heading="false">
+            </govuk-radios-fieldset-legend>
 
-                <govuk-radios asp-for="@Model.Year">
-                    <govuk-radios-fieldset>
-                        <govuk-radios-fieldset-legend is-page-heading="false">
-                        </govuk-radios-fieldset-legend>
-                        
-                            <govuk-radios-hint>
-                                @Resource.lblSelectOneOption
-                            </govuk-radios-hint>
-                        <govuk-radios-item value="@currentYear">
-                            @string.Format(Resource.lblCurrentYearForReport, currentYear)
-                        </govuk-radios-item>
-                        <govuk-radios-item value="@nextYear">
-                            @string.Format(Resource.lblNextYearForReport, nextYear)
-                        </govuk-radios-item>
-                    </govuk-radios-fieldset>
-                </govuk-radios>
+            <govuk-radios-hint>
+            @Resource.lblSelectOneOption
+            </govuk-radios-hint>
+            <govuk-radios-item value="@currentYear">
+            @string.Format(Resource.lblCurrentYearForReport, currentYear)
+            </govuk-radios-item>
+            <govuk-radios-item value="@nextYear">
+            @string.Format(Resource.lblNextYearForReport, nextYear)
+            </govuk-radios-item>
+            </govuk-radios-fieldset>
+            </govuk-radios>
 
-                <govuk-button type="submit" class="margin-bottom-forty">
-                    @Resource.lblContinue
-                </govuk-button>
+            <govuk-button type="submit" class="margin-bottom-forty">
+            @Resource.lblContinue
+            </govuk-button> *@
                 <p class="govuk-body cancel-link">
                     <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
                         @Resource.lblCancel
