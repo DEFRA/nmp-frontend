@@ -1420,5 +1420,60 @@ namespace NMP.Portal.Controllers
             }
             return View(model);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult IsGrasslandDerogation(ReportViewModel model)
+        {
+            _logger.LogTrace("Report Controller : IsGrasslandDerogation() post action called");
+            try
+            {
+                if (model.IsGrasslandDerogation == null)
+                {
+                    ModelState.AddModelError("IsGrasslandDerogation", string.Format(Resource.lblSelectAOptionBeforeContinuing, Resource.lblYear.ToLower()));
+                }
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                
+                return RedirectToAction("LivestockManureNitrogenReportChecklist");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in IsGrasslandDerogation() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnIsGrasslandDerogation"] = ex.Message;
+                return View(model);
+            }
+        }
+        [HttpGet]
+        public IActionResult LivestockManureNitrogenReportChecklist()
+        {
+            _logger.LogTrace("Report Controller : LivestockManureNitrogenReportChecklist() action called");
+            ReportViewModel model = new ReportViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in LivestockManureNitrogenReportChecklist() action : {ex.Message}, {ex.StackTrace}");
+
+                TempData["ErrorOnLivestockManureNitrogenReportChecklist"] = ex.Message;
+                return RedirectToAction("ErrorOnLivestockManureNitrogenReportChecklist");
+
+            }
+            return View(model);
+        }
     }
 }

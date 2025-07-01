@@ -4919,4 +4919,25 @@ live</value>
   <data name="lblWhichYearWouldYouLikeToCreateALivestockReport" xml:space="preserve">
     <value>Which year would you like to create a Livestock manure nitrogen (N) farm limit report for?</value>
   </data>
+  <data name="lblAboutDerogation" xml:space="preserve">
+    <value>About derogation</value>
+  </data>
+  <data name="lblGrasslandDerogationsForLivestockManureInNitrateVulnerableZone" xml:space="preserve">
+    <value> Grassland derogations for livestock manure in nitrate vulnerable zone </value>
+  </data>
+  <data name="lblLivestockManureNitrogenFarmLimitReport" xml:space="preserve">
+    <value>Livestock manure nitrogen (N) farm limit report {0}</value>
+  </data>
+  <data name="lblMoreInformation" xml:space="preserve">
+    <value>More information:</value>
+  </data>
+  <data name="lblYouCanApplyForADerogationIfAtLeast80Percent" xml:space="preserve">
+    <value>You can apply for a derogation if at least 80% of the agricultural area of your holding is grass.</value>
+  </data>
+  <data name="lblYouCanApplyForAGrasslandDerogationToUseAHigherLimit" xml:space="preserve">
+    <value>You can apply for a grassland derogation to use a higher limit of up to 250kg of nitrogen per hectare, if the nitrogen comes from grazing livestock manure.</value>
+  </data>
+  <data name="lblYouCanApplyUpTo170kgPerHectareOfNitrogen" xml:space="preserve">
+    <value>You can apply up to 170kg per hectare of nitrogen in livestock manure on your holding in a nitrate vulnerable zone (NVZ) in each calendar year.</value>
+  </data>
 </root>
