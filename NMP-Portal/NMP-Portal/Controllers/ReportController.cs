@@ -1288,6 +1288,11 @@ namespace NMP.Portal.Controllers
                         return RedirectToAction("Year");
                     }
                 }
+                if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.LivestockManureNFarmLimitReport)
+                {
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                     return RedirectToAction("Year");
+                }
                 return View(model);
             }
             catch (Exception ex)
@@ -1373,7 +1378,10 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
-
+                if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.LivestockManureNFarmLimitReport)
+                {
+                    return RedirectToAction("IsGrasslandDerogation");
+                }
                 return RedirectToAction("ExportFieldsOrCropType");
             }
             catch (Exception ex)
@@ -1382,6 +1390,35 @@ namespace NMP.Portal.Controllers
                 TempData["ErrorOnYear"] = ex.Message;
                 return View(model);
             }            
+        }
+
+        [HttpGet]
+        public IActionResult IsGrasslandDerogation()
+        {
+            _logger.LogTrace("Report Controller : IsGrasslandDerogation() action called");
+            ReportViewModel model = new ReportViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+                
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in IsGrasslandDerogation() action : {ex.Message}, {ex.StackTrace}");
+                
+                    TempData["ErrorOnYear"] = ex.Message;
+                    return RedirectToAction("ErrorOnYear");
+                
+            }
+            return View(model);
         }
     }
 }

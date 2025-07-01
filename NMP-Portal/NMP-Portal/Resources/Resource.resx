@@ -4910,4 +4910,13 @@ live</value>
   <data name="MsgSelectTheReportYouWantToCreate" xml:space="preserve">
     <value>Select the {0} you want to create.</value>
   </data>
+  <data name="lblDoesFarmHaveAGrasslandDerogation" xml:space="preserve">
+    <value>Does {0} have a grassland derogation for {1}</value>
+  </data>
+  <data name="lblGrasslandDerogation" xml:space="preserve">
+    <value>Grassland derogation</value>
+  </data>
+  <data name="lblWhichYearWouldYouLikeToCreateALivestockReport" xml:space="preserve">
+    <value>Which year would you like to create a Livestock manure nitrogen (N) farm limit report for?</value>
+  </data>
 </root>

@@ -2779,6 +2779,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Does {0} have a grassland derogation for {1}.
+        /// </summary>
+        public static string lblDoesFarmHaveAGrasslandDerogation {
+            get {
+                return ResourceManager.GetString("lblDoesFarmHaveAGrasslandDerogation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Did {0} typically have clover content of 30% or more across the last season?.
         /// </summary>
         public static string lblDoesFieldTypicallyHaveMoreThan30PercentClover {
@@ -4224,6 +4233,15 @@ namespace NMP.Portal.Resources {
         public static string lblGrasslandCoreFunctions {
             get {
                 return ResourceManager.GetString("lblGrasslandCoreFunctions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Grassland derogation.
+        /// </summary>
+        public static string lblGrasslandDerogation {
+            get {
+                return ResourceManager.GetString("lblGrasslandDerogation", resourceCulture);
             }
         }
         
@@ -11301,6 +11319,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhichVarietyNameWouldYouLikeToPlanFor {
             get {
                 return ResourceManager.GetString("lblWhichVarietyNameWouldYouLikeToPlanFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which year would you like to create a Livestock manure nitrogen (N) farm limit report for?.
+        /// </summary>
+        public static string lblWhichYearWouldYouLikeToCreateALivestockReport {
+            get {
+                return ResourceManager.GetString("lblWhichYearWouldYouLikeToCreateALivestockReport", resourceCulture);
             }
         }
         
