@@ -56,7 +56,8 @@
             <div class="govuk-grid-column-two-thirds">
                 
                 <h1 class="govuk-heading-l">
-                    @if (Model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
+                    @if (Model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport||
+                   Model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.NmaxReport)
                     {
                         @string.Format(Resource.lblForYearForReport, Model.ReportTypeName)
                     }

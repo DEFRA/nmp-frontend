@@ -781,6 +781,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add crops.
+        /// </summary>
+        public static string lblAddCrops {
+            get {
+                return ResourceManager.GetString("lblAddCrops", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} addresses found.
         /// </summary>
         public static string lblAdddressFound {
@@ -6242,6 +6251,15 @@ namespace NMP.Portal.Resources {
         public static string lblNitrogenNVegetables {
             get {
                 return ResourceManager.GetString("lblNitrogenNVegetables", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to N-max.
+        /// </summary>
+        public static string lblNMax {
+            get {
+                return ResourceManager.GetString("lblNMax", resourceCulture);
             }
         }
         
@@ -11728,6 +11746,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have not entered any crop information for {0}.
+        /// </summary>
+        public static string lblYouHaveNotEnteredAnyCropInformation {
+            get {
+                return ResourceManager.GetString("lblYouHaveNotEnteredAnyCropInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have not entered any excess winter rainfall..
         /// </summary>
         public static string lblYouHaveNotEnteredAnyExcessWinterRainfall {
@@ -13265,6 +13292,15 @@ namespace NMP.Portal.Resources {
         public static string MsgForGreenAreaIndex {
             get {
                 return ResourceManager.GetString("MsgForGreenAreaIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An N-max report is not available.You need to add your crop information, and information about any organic and inorganic material applied..
+        /// </summary>
+        public static string MsgForIfPlanIsNotCreated {
+            get {
+                return ResourceManager.GetString("MsgForIfPlanIsNotCreated", resourceCulture);
             }
         }
         
