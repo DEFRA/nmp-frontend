@@ -102,7 +102,7 @@ namespace NMP.Portal.Controllers
 
                     }
                 }
-                if (ViewBag.NoPlan == null || ViewBag.NoField == null)
+                if (ViewBag.NoPlan == null && ViewBag.NoField == null)
                 {
                 if (model.FieldAndPlanReportOption != null && model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
                 {
