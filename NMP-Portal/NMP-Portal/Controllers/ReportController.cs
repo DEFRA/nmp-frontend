@@ -66,9 +66,47 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
+                Error error = null;
+                ViewBag.EncryptedYear = _farmDataProtector.Protect(model.Year.Value.ToString());
+                if (string.IsNullOrWhiteSpace(model.EncryptedHarvestYear))
+                {
+                    (error, List<Field> fields) = await _fieldService.FetchFieldByFarmId(model.FarmId.Value, Resource.lblTrue);
+                    if (string.IsNullOrWhiteSpace(error.Message))
+                    {
+                        if (fields.Count > 0)
+                        {
+                            int fieldCount = 0;
+                            foreach (var field in fields)
+                            {
+                                List<Crop> cropList = await _cropService.FetchCropsByFieldId(field.ID.Value);
+                                if (cropList.Count > 0)
+                                {
+                                    cropList = cropList.Where(x => x.Year == model.Year).ToList();
+                                    if (cropList.Count == 0)
+                                    {
+                                        fieldCount++;
+                                    }
+                                }
+                            }
+                            if (fields.Count == fieldCount)
+                            {
+                                ViewBag.NoPlan = string.Format(Resource.lblYouHaveNotEnteredAnyCropInformation, model.Year);
+
+                            }
+                        }
+                        else
+                        {
+                            ViewBag.NoField = Resource.lblYouHaveNotEnteredAnyField;
+
+                        }
+
+                    }
+                }
+                if (ViewBag.NoPlan == null && ViewBag.NoField == null)
+                {
                 if (model.FieldAndPlanReportOption != null && model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
                 {
-                    (List<HarvestYearPlanResponse> fieldList, Error error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
+                    (List<HarvestYearPlanResponse> fieldList, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
                     if (string.IsNullOrWhiteSpace(error.Message))
                     {
                         var SelectListItem = fieldList.Select(f => new SelectListItem
@@ -80,8 +118,8 @@ namespace NMP.Portal.Controllers
                     }
                 }
                 else if (model.NVZReportOption != null && model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.NmaxReport)
-                    {
-                    (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
+                {
+                    (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
                     if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                     {
                         (List<HarvestYearPlanResponse> cropTypeList, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
@@ -116,7 +154,8 @@ namespace NMP.Portal.Controllers
 
                                     if(string.IsNullOrWhiteSpace(model.EncryptedHarvestYear))
                                     {
-                                        return View(model);
+                                        TempData["ErrorOnYear"] = Resource.lblNoCropTypesAvailable; ;
+                                        return View("Year", model);
                                     }
                                     else
                                     {
@@ -134,6 +173,7 @@ namespace NMP.Portal.Controllers
                                 }
                             }
                         }
+                    }
                     }
                 }
             }
@@ -1291,7 +1331,7 @@ namespace NMP.Portal.Controllers
                 if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.LivestockManureNFarmLimitReport)
                 {
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
-                     return RedirectToAction("Year");
+                    return RedirectToAction("Year");
                 }
                 return View(model);
             }
@@ -1317,7 +1357,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                if(model.FieldAndPlanReportOption!=null)
+                if (model.FieldAndPlanReportOption != null)
                 {
                     if(model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
                     {
@@ -1337,7 +1377,7 @@ namespace NMP.Portal.Controllers
                 {
                     if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.NmaxReport)
                     {
-                        model.ReportTypeName = Resource.lblNMaxReport;
+                        model.ReportTypeName = Resource.lblNMax;
                     }
                     else if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.LivestockManureNFarmLimitReport)
                     {
@@ -1389,7 +1429,7 @@ namespace NMP.Portal.Controllers
                 _logger.LogTrace($"Report Controller : Exception in Year() post action : {ex.Message}, {ex.StackTrace}");
                 TempData["ErrorOnYear"] = ex.Message;
                 return View(model);
-            }            
+            }
         }
 
         [HttpGet]
@@ -1407,16 +1447,16 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                
+
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             catch (Exception ex)
             {
                 _logger.LogTrace($"Report Controller : Exception in IsGrasslandDerogation() action : {ex.Message}, {ex.StackTrace}");
-                
-                    TempData["ErrorOnYear"] = ex.Message;
-                    return RedirectToAction("ErrorOnYear");
-                
+
+                TempData["ErrorOnYear"] = ex.Message;
+                return RedirectToAction("ErrorOnYear");
+
             }
             return View(model);
         }
@@ -1437,7 +1477,7 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
-                
+
                 return RedirectToAction("LivestockManureNitrogenReportChecklist");
             }
             catch (Exception ex)
