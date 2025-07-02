@@ -113,7 +113,7 @@
             <govuk-radios asp-for="@Model.GrassSeason">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblWhatIsTheSwardInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName  : Resource.lblTheseFields), Model.Year)
+                        @string.Format(Resource.lblWhenIsTheSwardInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields), Model.Year)
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
                     @if (ViewBag.GrassSeason != null)

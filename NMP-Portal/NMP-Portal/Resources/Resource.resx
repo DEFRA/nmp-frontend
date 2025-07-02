@@ -4157,8 +4157,8 @@ live</value>
   <data name="lblNewSwards" xml:space="preserve">
     <value>New swards</value>
   </data>
-  <data name="lblWhatIsTheSwardInTheseFields" xml:space="preserve">
-    <value>What is the sward in {0} in {1}?</value>
+  <data name="lblWhenIsTheSwardInTheseFields" xml:space="preserve">
+    <value>When was the sward sown in {0} in {1}?</value>
   </data>
   <data name="lblSpringSown" xml:space="preserve">
     <value>Spring sown (April to June)</value>

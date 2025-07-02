@@ -10900,15 +10900,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the sward in {0} in {1}?.
-        /// </summary>
-        public static string lblWhatIsTheSwardInTheseFields {
-            get {
-                return ResourceManager.GetString("lblWhatIsTheSwardInTheseFields", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to What is the sward type for {0} in {1}?.
         /// </summary>
         public static string lblWhatIsTheSwardTypeForTheseFields {
@@ -11130,6 +11121,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields {
             get {
                 return ResourceManager.GetString("lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When was the sward sown in {0} in {1}?.
+        /// </summary>
+        public static string lblWhenIsTheSwardInTheseFields {
+            get {
+                return ResourceManager.GetString("lblWhenIsTheSwardInTheseFields", resourceCulture);
             }
         }
         
