@@ -1307,7 +1307,7 @@ namespace NMP.Portal.Controllers
             {
                 if (model.NVZReportOption == null)
                 {
-                    ModelState.AddModelError("NVZReportOption",string.Format(Resource.MsgSelectTheReportYouWantToCreate,Resource.MsgSelectTheReportYouWantToCreate));
+                    ModelState.AddModelError("NVZReportOption",string.Format(Resource.MsgSelectTheReportYouWantToCreate,Resource.lblNVZComplianceReport));
                 }
                 if (!ModelState.IsValid)
                 {
