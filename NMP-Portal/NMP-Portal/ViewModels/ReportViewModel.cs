@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using NMP.Portal.Models;
+using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
 using System.ComponentModel.DataAnnotations;
 
@@ -26,5 +27,14 @@ namespace NMP.Portal.ViewModels
         public int? NVZReportOption { get; set; }
         public string? ReportTypeName { get; set; } = string.Empty;
         public bool? IsGrasslandDerogation { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheTotalFarmArea))]
+        public decimal? TotalFarmArea { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheTotalAreaInAnNVZ))]
+        public decimal? TotalAreaInNVZ { get; set; }
+        public decimal? LivestockNumbers { get; set; }
+        public decimal? ImportsExportsOfLivestockManure { get; set; }
+        public bool IsCheckList { get; set; } = false;
     }
 }

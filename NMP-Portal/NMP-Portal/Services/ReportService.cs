@@ -1,0 +1,158 @@
+﻿using Azure;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using NMP.Portal.Helpers;
+using NMP.Portal.Models;
+using NMP.Portal.Resources;
+using NMP.Portal.ServiceResponses;
+using NMP.Portal.ViewModels;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json.Nodes;
+
+namespace NMP.Portal.Services
+{
+    public class ReportService : Service, IReportService
+    {
+        private readonly ILogger<FarmService> _logger;
+        public ReportService(ILogger<FarmService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory) : base
+        (httpContextAccessor, clientFactory)
+        {
+            _logger = logger;
+        }
+        public async Task<(NutrientsLoadingFarmDetail, Error)> AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetail nutrientsLoadingFarmDetails)
+        {
+            string jsonData = JsonConvert.SerializeObject(nutrientsLoadingFarmDetails);
+            NutrientsLoadingFarmDetail nutrientsLoadingFarmDetail = null;
+            Error error = new Error();
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+
+                var response = await httpClient.PostAsync(APIURLHelper.AddNutrientsLoadingFarmDetailsAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+                {
+
+                    JObject nutrientsLoadingFarmDetailsJObject = responseWrapper.Data["NutrientsLoadingFarmDetails"] as JObject;
+                    if (nutrientsLoadingFarmDetailsJObject != null)
+                    {
+                        nutrientsLoadingFarmDetail = nutrientsLoadingFarmDetailsJObject.ToObject<NutrientsLoadingFarmDetail>();
+                    }
+
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (nutrientsLoadingFarmDetail, error);
+        }
+        public async Task<(NutrientsLoadingFarmDetail, Error)> FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(int farmId, int year)
+        {
+            NutrientsLoadingFarmDetail nutrientsLoadingFarmDetail = null;
+            Error error = new Error();
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchNutrientsLoadingFarmDetailsByfarmIdAndYearAPI, farmId, year));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+                {
+                    JObject nutrientsLoadingFarmDetailsJObject = responseWrapper.Data["NutrientsLoadingFarmDetails"] as JObject;
+                    if (nutrientsLoadingFarmDetailsJObject != null)
+                    {
+                        nutrientsLoadingFarmDetail = nutrientsLoadingFarmDetailsJObject.ToObject<NutrientsLoadingFarmDetail>();
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (nutrientsLoadingFarmDetail, error);
+        }
+        public async Task<(NutrientsLoadingFarmDetail, Error)> UpdateNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetail nutrientsLoadingFarmDetails)
+        {
+            string jsonData = JsonConvert.SerializeObject(nutrientsLoadingFarmDetails);
+            NutrientsLoadingFarmDetail nutrientsLoadingFarmDetail = null;
+            Error error = new Error();
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+
+                var response = await httpClient.PutAsync(APIURLHelper.UpdateNutrientsLoadingFarmDetailsAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+                {
+
+                    JObject nutrientsLoadingFarmDetailsJObject = responseWrapper.Data["NutrientsLoadingFarmDetails"] as JObject;
+                    if (nutrientsLoadingFarmDetailsJObject != null)
+                    {
+                        nutrientsLoadingFarmDetail = nutrientsLoadingFarmDetailsJObject.ToObject<NutrientsLoadingFarmDetail>();
+                    }
+
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (nutrientsLoadingFarmDetail, error);
+        }
+    }
+}
