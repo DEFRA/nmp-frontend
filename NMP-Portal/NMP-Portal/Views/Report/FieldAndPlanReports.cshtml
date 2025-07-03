@@ -11,12 +11,12 @@
 @section BeforeContent {
     <govuk-back-link asp-action="ReportOptions" asp-controller="Report" asp-route-f="@Model.EncryptedFarmId" asp-route-h="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
 }
-@if (TempData["ErrorFieldAndPlanReports"] != null)
+@if (TempData["ErrorOnFieldAndPlanReports"] != null)
 {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <govuk-error-summary>
-                <govuk-error-summary-item href="#">@TempData["ErrorFieldAndPlanReports"]</govuk-error-summary-item>
+                <govuk-error-summary-item href="#">@TempData["ErrorOnFieldAndPlanReports"]</govuk-error-summary-item>
             </govuk-error-summary>
         </div>
     </div>
@@ -34,6 +34,12 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportOption"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsGrasslandDerogation"></govuk-input>
+
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalFarmArea"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalAreaInNVZ"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockNumbers"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ImportsExportsOfLivestockManure"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckList" value="@Model.IsCheckList"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)

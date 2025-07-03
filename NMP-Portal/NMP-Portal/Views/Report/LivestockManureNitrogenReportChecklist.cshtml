@@ -1,19 +1,55 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblGrasslandDerogation;
-    
+    ViewData["Title"] = Resource.lblLivestockManureNitrogenChecklist;
+
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="IsGrasslandDerogation" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="BackCheckList" asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
-@if (TempData["ErrorOnYear"] != null)
+@if (TempData["ErrorOnLivestockManureNitrogenReportChecklist"] != null)
 {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <govuk-error-summary>
-                <govuk-error-summary-item href="#">@TempData["ErrorOnYear"]</govuk-error-summary-item>
+                <govuk-error-summary-item href="#">@TempData["ErrorOnLivestockManureNitrogenReportChecklist"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        </div>
+    </div>
+}
+@if (!ViewData.ModelState.IsValid)
+{
+    var errorAction = "";
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <govuk-error-summary>
+                @foreach (var state in ViewData.ModelState)
+                {
+                    foreach (var error in state.Value.Errors)
+                    {
+                        if (error.ErrorMessage.Equals(string.Format(Resource.MsgDerogationForYearMustBeCompleted, Model.Year)))
+                        {
+                            errorAction = "IsGrasslandDerogation";
+                        }
+                        if (error.ErrorMessage.Equals(string.Format(Resource.MsgFarmAreaForYearMustBeCompleted, Model.Year)))
+                        {
+                            errorAction = "FarmAreaForLivestockManure";
+                        }
+                        if (error.ErrorMessage.Equals(string.Format(Resource.MsgLivestockNumbersForYearMustBeCompleted, Model.Year)))
+                        {
+                            errorAction = "#LivestockManureNitrogenReportChecklist";
+                        }
+                        if (error.ErrorMessage.Equals(string.Format(Resource.MsgImportsAndExportsOfManureForYearMustBeCompleted, Model.Year)))
+                        {
+                            errorAction = "#LivestockManureNitrogenReportChecklist";
+                        }
+
+                        <govuk-error-summary-item href="@errorAction">
+                            @error.ErrorMessage
+                        </govuk-error-summary-item>
+                    }
+                }
             </govuk-error-summary>
         </div>
     </div>
@@ -21,60 +57,159 @@
 
 @if (Model != null)
 {
-    <form asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report" method="post" autocomplete="off">
-        @Html.AntiForgeryToken()
-        <div hidden="true">
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportOption"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportTypeName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsGrasslandDerogation"></govuk-input>
-            @if (Model.FieldList != null && Model.FieldList.Count > 0)
-            {
-                @for (int i = 0; i < Model.FieldList.Count; i++)
-                {
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldList[i]" value="@Model.FieldList[i]"></govuk-input>
-                }
-            }
-            @if (Model.CropTypeList != null && Model.CropTypeList.Count > 0)
-            {
-                @for (int i = 0; i < Model.CropTypeList.Count; i++)
-                {
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeList[i]" value="@Model.CropTypeList[i]"></govuk-input>
-                }
-            }
-        </div>
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <form asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report" method="post" autocomplete="off">
+                @Html.AntiForgeryToken()
+                <div hidden="true">
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportOption"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportTypeName"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsGrasslandDerogation"></govuk-input>
+
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalFarmArea"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalAreaInNVZ"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockNumbers"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ImportsExportsOfLivestockManure"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckList" value="@Model.IsCheckList"></govuk-input>
+
+
+                    @if (Model.FieldList != null && Model.FieldList.Count > 0)
+                    {
+                        @for (int i = 0; i < Model.FieldList.Count; i++)
+                        {
+                            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldList[i]" value="@Model.FieldList[i]"></govuk-input>
+                        }
+                    }
+                    @if (Model.CropTypeList != null && Model.CropTypeList.Count > 0)
+                    {
+                        @for (int i = 0; i < Model.CropTypeList.Count; i++)
+                        {
+                            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeList[i]" value="@Model.CropTypeList[i]"></govuk-input>
+                        }
+                    }
+                </div>
 
                 <h1 class="govuk-heading-l">
                     @string.Format(Resource.lblLivestockManureNitrogenFarmLimitReport, Model.Year)
                 </h1>
 
-                <h2>work in progress</h2>
+                <p class="govuk-hint">
+                    @Resource.lblCompleteEachSectionToCreateTheReport
+                </p>
 
-                @* <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsGrasslandDerogation">
-                    <govuk-radios-fieldset>
-                        <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>
-                        <govuk-radios-item value=@no>@Resource.lblNo</govuk-radios-item>
-                    </govuk-radios-fieldset>
-                </govuk-radios>
+                <div class="check-answers margin-bottom-forty">
+                    <ul class="govuk-task-list">
+
+                        <li class="govuk-task-list__item govuk-task-list__item--with-link">
+                            <div class="govuk-task-list__name-and-hint">
+                                <a class="govuk-link govuk-task-list__link" asp-action="IsGrasslandDerogation" asp-controller="Report" aria-describedby="IsGrasslandDerogation">
+                                    @Resource.lblDerogation
+                                </a>
+                            </div>
+                            <div class="govuk-task-list__status" id="IsGrasslandDerogation">
+                                @if (Model.IsGrasslandDerogation != null)
+                                {
+                                    @Resource.lblCompleted
+                                }
+                                else
+                                {
+                                    <strong class="govuk-tag govuk-tag--blue">
+                                        @Resource.lblIncomplete
+                                    </strong>
+                                }
+                            </div>
+                        </li>
+
+                        <!-- AREA -->
+                        <li class="govuk-task-list__item govuk-task-list__item--with-link">
+                            <div class="govuk-task-list__name-and-hint">
+                                <a class="govuk-link govuk-task-list__link" asp-action="FarmAreaForLivestockManure" asp-controller="Report" aria-describedby="TotalFarmArea">
+                                    @Resource.lblFarmArea
+                                </a>
+                            </div>
+                            <div class="govuk-task-list__status" id="TotalFarmArea">
+                                @if (Model.TotalFarmArea != null && Model.TotalAreaInNVZ != null)
+                                {
+                                    @Resource.lblCompleted
+                                }
+                                else
+                                {
+                                    <strong class="govuk-tag govuk-tag--blue">
+                                        @Resource.lblIncomplete
+                                    </strong>
+                                }
+                            </div>
+                        </li>
+
+
+                        <!-- LIVESTOCK -->
+                        <li class="govuk-task-list__item govuk-task-list__item--with-link">
+                            <div class="govuk-task-list__name-and-hint">
+                                <a class="govuk-link govuk-task-list__link" href="#" aria-describedby="LivestockNumbers">
+                                    @Resource.lblLivestockNumbers
+                                </a>
+                            </div>
+                            <div class="govuk-task-list__status" id="LivestockNumbers">
+                                @if (Model.LivestockNumbers != null)
+                                {
+                                    @Resource.lblCompleted
+                                }
+                                else
+                                {
+                                    <strong class="govuk-tag govuk-tag--blue">
+                                        @Resource.lblIncomplete
+                                    </strong>
+                                }
+                            </div>
+                        </li>
+
+                        <!-- IMPORTS AND EXPORTS -->
+                        <li class="govuk-task-list__item govuk-task-list__item--with-link">
+
+                            <div class="govuk-task-list__name-and-hint">
+
+                                <a class="govuk-link govuk-task-list__link" href="#" aria-describedby="ImportsExportsOfLivestockManure">
+                                    @Resource.lblImportsExportsOfLivestockManure
+                                </a>
+
+                            </div>
+                            <div class="govuk-task-list__status" id="ImportsExportsOfLivestockManure">
+                                @if (Model.ImportsExportsOfLivestockManure != null)
+                                {
+                                    @Resource.lblCompleted
+                                }
+                                else
+                                {
+                                    <strong class="govuk-tag govuk-tag--blue">
+                                        @Resource.lblIncomplete
+                                    </strong>
+                                }
+                            </div>
+
+                        </li>
+
+                    </ul>
+                </div>
+
+
                 <govuk-button type="submit" class="margin-bottom-forty">
-                    @Resource.lblContinue
-                </govuk-button> *@
+                    @Resource.lblCreateReport
+                </govuk-button>
                 <p class="govuk-body cancel-link">
                     <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
                         @Resource.lblCancel
                     </a>
                 </p>
 
-            </div>
 
+            </form>
         </div>
-    </form>
+    </div>
 }
