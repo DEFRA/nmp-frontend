@@ -619,7 +619,7 @@
                                 {
                                     @string.Format(Resource.lblHowManyCutsAndGrazingsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields))
                                 }
-                                @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazingAndHay)
+                                else @* (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazingAndHay *@
                                 {
                                     @string.Format(Resource.lblHowManyCutsAndGrazingsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields))
                                 }

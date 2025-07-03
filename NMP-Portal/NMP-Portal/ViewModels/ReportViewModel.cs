@@ -1,5 +1,7 @@
-﻿using NMP.Portal.Models;
+﻿using Microsoft.AspNetCore.Cors;
+using NMP.Portal.Models;
 using NMP.Portal.ServiceResponses;
+using System.ComponentModel.DataAnnotations;
 
 namespace NMP.Portal.ViewModels
 {
@@ -22,5 +24,7 @@ namespace NMP.Portal.ViewModels
         public int? ReportOption { get; set; }
         public int? FieldAndPlanReportOption { get; set; }
         public int? NVZReportOption { get; set; }
+        public string? ReportTypeName { get; set; } = string.Empty;
+        public bool? IsGrasslandDerogation { get; set; }
     }
 }

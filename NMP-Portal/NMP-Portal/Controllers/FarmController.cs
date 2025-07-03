@@ -998,6 +998,10 @@ namespace NMP.Portal.Controllers
             {
                 ViewBag.Success = "false";
             }
+            if (HttpContext.Session.Keys.Contains("ReportData"))
+            {
+                HttpContext?.Session.Remove("ReportData");
+            }
             ViewBag.FieldCount = 0;
 
             FarmViewModel? farmData = null;

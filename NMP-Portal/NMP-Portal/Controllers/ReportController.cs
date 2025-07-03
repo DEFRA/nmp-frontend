@@ -66,9 +66,47 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                if (model.ReportType != null && model.ReportType == (int)NMP.Portal.Enums.ReportType.CropAndFieldManagementReport)
+                Error error = null;
+                ViewBag.EncryptedYear = _farmDataProtector.Protect(model.Year.Value.ToString());
+                if (string.IsNullOrWhiteSpace(model.EncryptedHarvestYear))
                 {
-                    (List<HarvestYearPlanResponse> fieldList, Error error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
+                    (error, List<Field> fields) = await _fieldService.FetchFieldByFarmId(model.FarmId.Value, Resource.lblTrue);
+                    if (string.IsNullOrWhiteSpace(error.Message))
+                    {
+                        if (fields.Count > 0)
+                        {
+                            int fieldCount = 0;
+                            foreach (var field in fields)
+                            {
+                                List<Crop> cropList = await _cropService.FetchCropsByFieldId(field.ID.Value);
+                                if (cropList.Count > 0)
+                                {
+                                    cropList = cropList.Where(x => x.Year == model.Year).ToList();
+                                    if (cropList.Count == 0)
+                                    {
+                                        fieldCount++;
+                                    }
+                                }
+                            }
+                            if (fields.Count == fieldCount)
+                            {
+                                ViewBag.NoPlan = string.Format(Resource.lblYouHaveNotEnteredAnyCropInformation, model.Year);
+
+                            }
+                        }
+                        else
+                        {
+                            ViewBag.NoField = Resource.lblYouHaveNotEnteredAnyField;
+
+                        }
+
+                    }
+                }
+                if (ViewBag.NoPlan == null && ViewBag.NoField == null)
+                {
+                if (model.FieldAndPlanReportOption != null && model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
+                {
+                    (List<HarvestYearPlanResponse> fieldList, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
                     if (string.IsNullOrWhiteSpace(error.Message))
                     {
                         var SelectListItem = fieldList.Select(f => new SelectListItem
@@ -79,9 +117,9 @@ namespace NMP.Portal.Controllers
                         ViewBag.fieldList = SelectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
                     }
                 }
-                else
+                else if (model.NVZReportOption != null && model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.NmaxReport)
                 {
-                    (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
+                    (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
                     if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                     {
                         (List<HarvestYearPlanResponse> cropTypeList, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
@@ -113,19 +151,54 @@ namespace NMP.Portal.Controllers
                                 }
                                 else
                                 {
-                                    TempData["ErrorOnReportSelection"] = Resource.lblNoCropTypesAvailable;
-                                    return RedirectToAction("ReportType");
+
+                                    if(string.IsNullOrWhiteSpace(model.EncryptedHarvestYear))
+                                    {
+                                        TempData["ErrorOnYear"] = Resource.lblNoCropTypesAvailable; ;
+                                        return View("Year", model);
+                                    }
+                                    else
+                                    {
+                                        if (model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
+                                        {
+                                            TempData["ErrorFieldAndPlanReports"] = Resource.lblNoCropTypesAvailable; ;
+                                            return RedirectToAction("FieldAndPlanReports");
+                                        }
+                                        else
+                                        {
+                                            TempData["ErrorNVZComplianceReports"] = Resource.lblNoCropTypesAvailable; ;
+                                            return RedirectToAction("NVZComplianceReports");
+                                        }
+                                    }
                                 }
                             }
                         }
+                    }
                     }
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogTrace($"Report Controller : Exception in ExportFieldsOrCropType() action : {ex.Message}, {ex.StackTrace}");
-                TempData["ErrorOnReportSelection"] = ex.Message;
-                return RedirectToAction("ReportType");
+                if (string.IsNullOrWhiteSpace(model.EncryptedHarvestYear))
+                {
+                    TempData["ErrorOnYear"] = ex.Message;
+                    return RedirectToAction("Year");
+                }
+                else
+                {
+                    if (model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
+                    {
+                        TempData["ErrorFieldAndPlanReports"] = ex.Message;
+                        return RedirectToAction("FieldAndPlanReports");
+                    }
+                    else
+                    {
+                        TempData["ErrorNVZComplianceReports"] = ex.Message;
+                        return RedirectToAction("NVZComplianceReports");
+                    }
+
+                }
             }
             return View(model);
         }
@@ -139,7 +212,7 @@ namespace NMP.Portal.Controllers
                 int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
                 //fetch field
                 Error error = null;
-                if (model.ReportType != null && model.ReportType == (int)NMP.Portal.Enums.ReportType.CropAndFieldManagementReport)
+                if (model.FieldAndPlanReportOption != null && model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
                 {
                     (List<HarvestYearPlanResponse> fieldList, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
                     if (string.IsNullOrWhiteSpace(error.Message))
@@ -157,7 +230,7 @@ namespace NMP.Portal.Controllers
                         if (!ModelState.IsValid)
                         {
                             ViewBag.fieldList = selectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
-                            return View("ExportFields", model);
+                            return View(model);
                         }
                         if (model.FieldList.Count == 1 && model.FieldList[0] == Resource.lblSelectAll)
                         {
@@ -168,7 +241,7 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("CropAndFieldManagement");
 
                 }
-                else
+                else if (model.NVZReportOption != null && model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.NmaxReport)
                 {
                     //fetch crop type
                     (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
@@ -204,7 +277,7 @@ namespace NMP.Portal.Controllers
                                 if (!ModelState.IsValid)
                                 {
                                     ViewBag.CropTypeList = SelectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
-                                    return View("ExportFieldsOrCropType", model);
+                                    return View(model);
                                 }
                                 if (model.CropTypeList.Count == 1 && model.CropTypeList[0] == Resource.lblSelectAll)
                                 {
@@ -373,7 +446,7 @@ namespace NMP.Portal.Controllers
                                 var defolicationParts = (!string.IsNullOrWhiteSpace(defolicationName)) ? defolicationName.Split(',') : null;
                                 if (cropData.ManagementPeriods != null)
                                 {
-                                    
+
                                     foreach (var manData in cropData.ManagementPeriods)
                                     {
                                         string part = (defolicationParts != null && defIndex < defolicationParts.Length) ? defolicationParts[defIndex].Trim() : string.Empty;
@@ -467,7 +540,7 @@ namespace NMP.Portal.Controllers
             {
                 if (model.ReportType == null)
                 {
-                    ModelState.AddModelError("ReportType", Resource.MsgSelectAnOptionBeforeContinuing);
+                    ModelState.AddModelError("ReportType", Resource.MsgSelectTheFarmInformationAndPlanningReportYouWantToCreate);
                 }
                 if (!ModelState.IsValid)
                 {
@@ -476,7 +549,14 @@ namespace NMP.Portal.Controllers
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                 //if (model.ReportType != null && model.ReportType == (int)NMP.Portal.Enums.ReportType.CropAndFieldManagementReport)
                 //{
-                return RedirectToAction("ExportFieldsOrCropType");
+                if (model.Year != null)
+                {
+                    return RedirectToAction("ExportFieldsOrCropType");
+                }
+                else
+                {
+                    return RedirectToAction("Year");
+                }
                 //}
                 //else
                 //{
@@ -1019,7 +1099,7 @@ namespace NMP.Portal.Controllers
             List<string> result = new List<string>();
 
             foreach (var entry in defoliationSequence)
-            {                
+            {
                 string word = entry.Key;
 
                 if (entry.Value > 1)
@@ -1042,7 +1122,7 @@ namespace NMP.Portal.Controllers
 
             return string.Join(", ", result);
         }
-        
+
 
         [HttpGet]
         public async Task<IActionResult> ReportOptions(string f, string? h)
@@ -1129,7 +1209,7 @@ namespace NMP.Portal.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> FieldAndPlanReports()
+        public IActionResult FieldAndPlanReports()
         {
             _logger.LogTrace("Report Controller : FieldAndPlanReports() action called");
             ReportViewModel model = null;
@@ -1144,7 +1224,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -1163,17 +1243,25 @@ namespace NMP.Portal.Controllers
             {
                 if (model.FieldAndPlanReportOption == null)
                 {
-                    ModelState.AddModelError("FieldAndPlanReportOption", Resource.MsgSelectAnOptionBeforeContinuing);
+                    ModelState.AddModelError("FieldAndPlanReportOption", Resource.MsgSelectTheFarmInformationAndPlanningReportYouWantToCreate);
                 }
                 if (!ModelState.IsValid)
                 {
                     return View(model);
                 }
+                model.NVZReportOption = null;
                 if (model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
                 {
-                    model.ReportType = (int)NMP.Portal.Enums.ReportType.CropAndFieldManagementReport;
+                    //model.ReportType = (int)NMP.Portal.Enums.ReportType.CropAndFieldManagementReport;
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
-                    return RedirectToAction("ExportFieldsOrCropType");
+                    if (!string.IsNullOrWhiteSpace(model.EncryptedHarvestYear))
+                    {
+                        return RedirectToAction("ExportFieldsOrCropType");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Year");
+                    }
                 }
             }
             catch (Exception ex)
@@ -1186,7 +1274,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> NVZComplianceReports()
+        public IActionResult NVZComplianceReports()
         {
             _logger.LogTrace("Report Controller : NVZComplianceReports() action called");
             ReportViewModel model = null;
@@ -1219,18 +1307,31 @@ namespace NMP.Portal.Controllers
             {
                 if (model.NVZReportOption == null)
                 {
-                    ModelState.AddModelError("NVZReportOption", Resource.MsgSelectAnOptionBeforeContinuing);
+                    ModelState.AddModelError("NVZReportOption",string.Format(Resource.MsgSelectTheReportYouWantToCreate,Resource.lblNVZComplianceReport));
                 }
                 if (!ModelState.IsValid)
                 {
                     return View(model);
                 }
+                model.FieldAndPlanReportOption = null;
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                 if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.NmaxReport)
                 {
-                    model.ReportType = (int)NMP.Portal.Enums.ReportType.NMaxReport;
+                    //model.ReportType = (int)NMP.Portal.Enums.ReportType.NMaxReport;
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
-                    return RedirectToAction("ExportFieldsOrCropType");
+                    if (!string.IsNullOrWhiteSpace(model.EncryptedHarvestYear))
+                    {
+                        return RedirectToAction("ExportFieldsOrCropType");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Year");
+                    }
+                }
+                if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.LivestockManureNFarmLimitReport)
+                {
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                    return RedirectToAction("Year");
                 }
                 return View(model);
             }
@@ -1240,6 +1341,179 @@ namespace NMP.Portal.Controllers
                 TempData["ErrorNVZComplianceReports"] = ex.Message;
                 return View(model);
             }
+        }
+        [HttpGet]
+        public IActionResult Year()
+        {
+            _logger.LogTrace("Report Controller : Year() action called");
+            ReportViewModel model = new ReportViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+                if (model.FieldAndPlanReportOption != null)
+                {
+                    if(model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
+                    {
+                        model.ReportTypeName = Resource.lblFieldRecordsAndNutrientManagementPlanning;
+                    }
+                    else if (model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.LivestockNumbersReport)
+                    {
+                        model.ReportTypeName = Resource.lblLivestockNumbers;
+                    }
+                    else if (model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.ImportsAndExportsReport)
+                    {
+                        model.ReportTypeName = Resource.lblImportsExports;
+                    }
+                    // = Enum.GetName(typeof(FieldAndPlanReportOption), model.FieldAndPlanReportOption);
+                }
+                else if (model.NVZReportOption != null)
+                {
+                    if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.NmaxReport)
+                    {
+                        model.ReportTypeName = Resource.lblNMax;
+                    }
+                    else if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.LivestockManureNFarmLimitReport)
+                    {
+                        model.ReportTypeName = Resource.lblLivestockManureNitrogenFarmLimit;
+                    }
+                }
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in Year() action : {ex.Message}, {ex.StackTrace}");
+                if (model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
+                {
+                    TempData["ErrorFieldAndPlanReports"] = ex.Message;
+                    return RedirectToAction("FieldAndPlanReports");
+                }
+                else
+                {
+                    TempData["ErrorNVZComplianceReports"] = ex.Message;
+                    return RedirectToAction("NVZComplianceReports");
+                }
+            }
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Year(ReportViewModel model)
+        {
+            _logger.LogTrace("Report Controller : Year() post action called");
+            try
+            {
+                if (model.Year == null)
+                {
+                    ModelState.AddModelError("Year",string.Format(Resource.lblSelectAOptionBeforeContinuing,Resource.lblYear.ToLower()));
+                }
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.LivestockManureNFarmLimitReport)
+                {
+                    return RedirectToAction("IsGrasslandDerogation");
+                }
+                return RedirectToAction("ExportFieldsOrCropType");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in Year() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnYear"] = ex.Message;
+                return View(model);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult IsGrasslandDerogation()
+        {
+            _logger.LogTrace("Report Controller : IsGrasslandDerogation() action called");
+            ReportViewModel model = new ReportViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in IsGrasslandDerogation() action : {ex.Message}, {ex.StackTrace}");
+
+                TempData["ErrorOnYear"] = ex.Message;
+                return RedirectToAction("ErrorOnYear");
+
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult IsGrasslandDerogation(ReportViewModel model)
+        {
+            _logger.LogTrace("Report Controller : IsGrasslandDerogation() post action called");
+            try
+            {
+                if (model.IsGrasslandDerogation == null)
+                {
+                    ModelState.AddModelError("IsGrasslandDerogation", string.Format(Resource.lblSelectAOptionBeforeContinuing, Resource.lblYear.ToLower()));
+                }
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+
+                return RedirectToAction("LivestockManureNitrogenReportChecklist");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in IsGrasslandDerogation() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnIsGrasslandDerogation"] = ex.Message;
+                return View(model);
+            }
+        }
+        [HttpGet]
+        public IActionResult LivestockManureNitrogenReportChecklist()
+        {
+            _logger.LogTrace("Report Controller : LivestockManureNitrogenReportChecklist() action called");
+            ReportViewModel model = new ReportViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in LivestockManureNitrogenReportChecklist() action : {ex.Message}, {ex.StackTrace}");
+
+                TempData["ErrorOnLivestockManureNitrogenReportChecklist"] = ex.Message;
+                return RedirectToAction("ErrorOnLivestockManureNitrogenReportChecklist");
+
+            }
+            return View(model);
         }
     }
 }

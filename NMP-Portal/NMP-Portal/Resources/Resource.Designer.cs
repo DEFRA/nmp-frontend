@@ -475,6 +475,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About derogation.
+        /// </summary>
+        public static string lblAboutDerogation {
+            get {
+                return ResourceManager.GetString("lblAboutDerogation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This tool is currently in a private beta phase. This means that we are testing the tool with a group of invited users. As such, some functionality may not work as expected and some features have not yet been developed..
         /// </summary>
         public static string lblAboutGetHelpAndFeedback {
@@ -768,6 +777,15 @@ namespace NMP.Portal.Resources {
         public static string lblAddBusinessInformation {
             get {
                 return ResourceManager.GetString("lblAddBusinessInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add crops.
+        /// </summary>
+        public static string lblAddCrops {
+            get {
+                return ResourceManager.GetString("lblAddCrops", resourceCulture);
             }
         }
         
@@ -2581,6 +2599,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current year - {0}.
+        /// </summary>
+        public static string lblCurrentYearForReport {
+            get {
+                return ResourceManager.GetString("lblCurrentYearForReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cut.
         /// </summary>
         public static string lblCut {
@@ -2766,6 +2793,15 @@ namespace NMP.Portal.Resources {
         public static string lblDo_not_show_this_information_again {
             get {
                 return ResourceManager.GetString("lblDo_not_show_this_information_again", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Does {0} have a grassland derogation for {1}.
+        /// </summary>
+        public static string lblDoesFarmHaveAGrasslandDerogation {
+            get {
+                return ResourceManager.GetString("lblDoesFarmHaveAGrasslandDerogation", resourceCulture);
             }
         }
         
@@ -4084,6 +4120,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Which year would you like to create a {0} report for?.
+        /// </summary>
+        public static string lblForYearForReport {
+            get {
+                return ResourceManager.GetString("lblForYearForReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Four.
         /// </summary>
         public static string lblFour {
@@ -4206,6 +4251,24 @@ namespace NMP.Portal.Resources {
         public static string lblGrasslandCoreFunctions {
             get {
                 return ResourceManager.GetString("lblGrasslandCoreFunctions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Grassland derogation.
+        /// </summary>
+        public static string lblGrasslandDerogation {
+            get {
+                return ResourceManager.GetString("lblGrasslandDerogation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  Grassland derogations for livestock manure in nitrate vulnerable zone .
+        /// </summary>
+        public static string lblGrasslandDerogationsForLivestockManureInNitrateVulnerableZone {
+            get {
+                return ResourceManager.GetString("lblGrasslandDerogationsForLivestockManureInNitrateVulnerableZone", resourceCulture);
             }
         }
         
@@ -5553,6 +5616,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Livestock manure nitrogen (N) farm limit report {0}.
+        /// </summary>
+        public static string lblLivestockManureNitrogenFarmLimitReport {
+            get {
+                return ResourceManager.GetString("lblLivestockManureNitrogenFarmLimitReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Livestock numbers.
         /// </summary>
         public static string lblLivestockNumbers {
@@ -5994,6 +6066,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to More information:.
+        /// </summary>
+        public static string lblMoreInformation {
+            get {
+                return ResourceManager.GetString("lblMoreInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Moving your data to the live version of the tool.
         /// </summary>
         public static string lblMovingDataToLive {
@@ -6053,6 +6134,15 @@ namespace NMP.Portal.Resources {
         public static string lblNewSwards {
             get {
                 return ResourceManager.GetString("lblNewSwards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next year - {0}.
+        /// </summary>
+        public static string lblNextYearForReport {
+            get {
+                return ResourceManager.GetString("lblNextYearForReport", resourceCulture);
             }
         }
         
@@ -6161,6 +6251,15 @@ namespace NMP.Portal.Resources {
         public static string lblNitrogenNVegetables {
             get {
                 return ResourceManager.GetString("lblNitrogenNVegetables", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to N-max.
+        /// </summary>
+        public static string lblNMax {
+            get {
+                return ResourceManager.GetString("lblNMax", resourceCulture);
             }
         }
         
@@ -6567,6 +6666,15 @@ namespace NMP.Portal.Resources {
         public static string lblNVZAndFarmingRulesFor {
             get {
                 return ResourceManager.GetString("lblNVZAndFarmingRulesFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NVZ compliance report.
+        /// </summary>
+        public static string lblNVZComplianceReport {
+            get {
+                return ResourceManager.GetString("lblNVZComplianceReport", resourceCulture);
             }
         }
         
@@ -8151,6 +8259,15 @@ namespace NMP.Portal.Resources {
         public static string lblSelectAllThatApplyApplicationDateWillBeUpdated {
             get {
                 return ResourceManager.GetString("lblSelectAllThatApplyApplicationDateWillBeUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a {0} before continuing..
+        /// </summary>
+        public static string lblSelectAOptionBeforeContinuing {
+            get {
+                return ResourceManager.GetString("lblSelectAOptionBeforeContinuing", resourceCulture);
             }
         }
         
@@ -10783,15 +10900,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the sward in {0} in {1}?.
-        /// </summary>
-        public static string lblWhatIsTheSwardInTheseFields {
-            get {
-                return ResourceManager.GetString("lblWhatIsTheSwardInTheseFields", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to What is the sward type for {0} in {1}?.
         /// </summary>
         public static string lblWhatIsTheSwardTypeForTheseFields {
@@ -11013,6 +11121,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields {
             get {
                 return ResourceManager.GetString("lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When was the sward sown in {0} in {1}?.
+        /// </summary>
+        public static string lblWhenIsTheSwardInTheseFields {
+            get {
+                return ResourceManager.GetString("lblWhenIsTheSwardInTheseFields", resourceCulture);
             }
         }
         
@@ -11256,6 +11373,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhichVarietyNameWouldYouLikeToPlanFor {
             get {
                 return ResourceManager.GetString("lblWhichVarietyNameWouldYouLikeToPlanFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which year would you like to create a Livestock manure nitrogen (N) farm limit report for?.
+        /// </summary>
+        public static string lblWhichYearWouldYouLikeToCreateALivestockReport {
+            get {
+                return ResourceManager.GetString("lblWhichYearWouldYouLikeToCreateALivestockReport", resourceCulture);
             }
         }
         
@@ -11512,6 +11638,33 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can apply for a derogation if at least 80% of the agricultural area of your holding is grass..
+        /// </summary>
+        public static string lblYouCanApplyForADerogationIfAtLeast80Percent {
+            get {
+                return ResourceManager.GetString("lblYouCanApplyForADerogationIfAtLeast80Percent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can apply for a grassland derogation to use a higher limit of up to 250kg of nitrogen per hectare, if the nitrogen comes from grazing livestock manure..
+        /// </summary>
+        public static string lblYouCanApplyForAGrasslandDerogationToUseAHigherLimit {
+            get {
+                return ResourceManager.GetString("lblYouCanApplyForAGrasslandDerogationToUseAHigherLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can apply up to 170kg per hectare of nitrogen in livestock manure on your holding in a nitrate vulnerable zone (NVZ) in each calendar year..
+        /// </summary>
+        public static string lblYouCanApplyUpTo170kgPerHectareOfNitrogen {
+            get {
+                return ResourceManager.GetString("lblYouCanApplyUpTo170kgPerHectareOfNitrogen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You can change your planting date later..
         /// </summary>
         public static string lblYouCanChangeYourPlantingDateLater {
@@ -11589,6 +11742,15 @@ namespace NMP.Portal.Resources {
         public static string lblYouHaveNotAddedAnyFarms {
             get {
                 return ResourceManager.GetString("lblYouHaveNotAddedAnyFarms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have not entered any crop information for {0}.
+        /// </summary>
+        public static string lblYouHaveNotEnteredAnyCropInformation {
+            get {
+                return ResourceManager.GetString("lblYouHaveNotEnteredAnyCropInformation", resourceCulture);
             }
         }
         
@@ -13134,6 +13296,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An N-max report is not available.You need to add your crop information, and information about any organic and inorganic material applied..
+        /// </summary>
+        public static string MsgForIfPlanIsNotCreated {
+            get {
+                return ResourceManager.GetString("MsgForIfPlanIsNotCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The NVZ Action Programme states that the application rate of manufactured nitrogen (N) fertiliser on {0} between {1} and {2} must not exceed {3}kg per hectare.
         /// </summary>
         public static string MsgForMaxNitrogenForFertiliserExceptBrassicas {
@@ -13922,6 +14093,24 @@ namespace NMP.Portal.Resources {
         public static string MsgSelectAWindConditionBeforeContinuing {
             get {
                 return ResourceManager.GetString("MsgSelectAWindConditionBeforeContinuing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the farm information and planning report you want to create..
+        /// </summary>
+        public static string MsgSelectTheFarmInformationAndPlanningReportYouWantToCreate {
+            get {
+                return ResourceManager.GetString("MsgSelectTheFarmInformationAndPlanningReportYouWantToCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the {0} you want to create..
+        /// </summary>
+        public static string MsgSelectTheReportYouWantToCreate {
+            get {
+                return ResourceManager.GetString("MsgSelectTheReportYouWantToCreate", resourceCulture);
             }
         }
         

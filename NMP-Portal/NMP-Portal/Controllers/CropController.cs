@@ -2308,47 +2308,61 @@ namespace NMP.Portal.Controllers
 
                 }
 
-                (SwardManagementResponse swardManagementResponse, error) = await _cropService.FetchSwardManagementBySwardManagementId(model.SwardManagementId ?? 0);
-                if (error != null)
+                if (model.SwardManagementId != null)
                 {
-                    TempData["SwardManagementError"] = error.Message;
-                    return RedirectToAction("SwardType");
-                }
-                else
-                {
-                    if (swardManagementResponse != null)
+                    (SwardManagementResponse swardManagementResponse, error) = await _cropService.FetchSwardManagementBySwardManagementId(model.SwardManagementId ?? 0);
+                    if (error != null)
                     {
-                        ViewBag.SwardManagementName = swardManagementResponse.SwardManagement;
-
+                        TempData["SwardManagementError"] = error.Message;
+                        return RedirectToAction("SwardType");
                     }
                     else
                     {
-                        model.SwardManagementId = null;
-                    }
-                }
+                        if (swardManagementResponse != null)
+                        {
+                            ViewBag.SwardManagementName = swardManagementResponse.SwardManagement;
 
-                (DefoliationSequenceResponse defoliationSequenceResponse, error) = await _cropService.FetchDefoliationSequencesById(model.DefoliationSequenceId ?? 0);
-                if (error != null && !string.IsNullOrWhiteSpace(error.Message))
-                {
-                    TempData["DefoliationSequenceError"] = error.Message;
-                    return RedirectToAction("Defoliation");
+                        }
+                        else
+                        {
+                            model.SwardManagementId = null;
+                        }
+                    }
                 }
                 else
                 {
-                    if (defoliationSequenceResponse != null)
+                    model.SwardManagementId = null;
+                }
+
+                if (model.DefoliationSequenceId != null)
+                {
+                    (DefoliationSequenceResponse defoliationSequenceResponse, error) = await _cropService.FetchDefoliationSequencesById(model.DefoliationSequenceId ?? 0);
+                    if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                     {
-                        var defoliations = defoliationSequenceResponse.DefoliationSequenceDescription;
-                        string[] arrDefoliations = defoliations.Split(',').Select(s => CultureInfo.CurrentCulture.TextInfo.ToTitleCase(s.Trim()))
-                                                       .ToArray();
-
-                        ViewBag.DefoliationSequenceName = arrDefoliations;
-
+                        TempData["DefoliationSequenceError"] = error.Message;
+                        return RedirectToAction("Defoliation");
                     }
                     else
                     {
-                        model.DefoliationSequenceId = null;
-                    }
+                        if (defoliationSequenceResponse != null)
+                        {
+                            var defoliations = defoliationSequenceResponse.DefoliationSequenceDescription;
+                            string[] arrDefoliations = defoliations.Split(',').Select(s => CultureInfo.CurrentCulture.TextInfo.ToTitleCase(s.Trim()))
+                                                           .ToArray();
 
+                            ViewBag.DefoliationSequenceName = arrDefoliations;
+
+                        }
+                        else
+                        {
+                            model.DefoliationSequenceId = null;
+                        }
+
+                    }
+                }
+                else
+                {
+                    model.DefoliationSequenceId = null;
                 }
             }
             if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
@@ -2819,6 +2833,11 @@ namespace NMP.Portal.Controllers
             PlanViewModel? model = null;
             try
             {
+
+                if (HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    HttpContext?.Session.Remove("ReportData");
+                }
                 if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
                 {
                     _httpContextAccessor.HttpContext?.Session.Remove("FertiliserManure");
@@ -2976,7 +2995,7 @@ namespace NMP.Portal.Controllers
                                             Yield = plan.Yield,
                                             Variety = plan.CropVariety
                                         };
-                                        if (plan.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass&&!string.IsNullOrWhiteSpace(plan.Management))
+                                        if (plan.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && !string.IsNullOrWhiteSpace(plan.Management))
                                         {
                                             List<string> defoliationList = plan.Management
                                                 .Split(',', StringSplitOptions.RemoveEmptyEntries)
@@ -3222,7 +3241,7 @@ namespace NMP.Portal.Controllers
                 int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
                 (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(farmId);
                 model.FarmName = farm.Name;
-                List<PlanSummaryResponse> planSummaryResponse = await _cropService.FetchPlanSummaryByFarmId(farmId, 0);            
+                List<PlanSummaryResponse> planSummaryResponse = await _cropService.FetchPlanSummaryByFarmId(farmId, 0);
                 planSummaryResponse.RemoveAll(x => x.Year == 0);
                 planSummaryResponse = planSummaryResponse.OrderByDescending(x => x.Year).ToList();
                 model.EncryptedHarvestYearList = new List<string>();
@@ -3484,10 +3503,10 @@ namespace NMP.Portal.Controllers
 
                                 int defIndex = 0;
                                 if (recommendation.RecommendationData.Count > 0)
-                                {                                    
+                                {
                                     foreach (var recData in recommendation.RecommendationData)
                                     {
-                                        string part = (defolicationParts != null && defIndex < defolicationParts.Length) ? defolicationParts[defIndex].Trim():string.Empty;
+                                        string part = (defolicationParts != null && defIndex < defolicationParts.Length) ? defolicationParts[defIndex].Trim() : string.Empty;
                                         string defoliationSequenceName = (!string.IsNullOrWhiteSpace(part)) ? char.ToUpper(part[0]).ToString() + part.Substring(1) : string.Empty;
                                         var ManagementPeriods = new ManagementPeriodViewModel
                                         {
@@ -4729,6 +4748,25 @@ namespace NMP.Portal.Controllers
                 if (model.CropInfo2 == null && model.CropGroupId == cerealsGroupId)
                 {
                     ModelState.AddModelError("CropInfo2", string.Format(Resource.MsgCropInfo2NotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType));
+                }
+                if (model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                {
+                    if (model.SwardManagementId == null)
+                    {
+                        ModelState.AddModelError("SwardManagementId", string.Format("{0} {1}", string.Format(Resource.lblHowWillTheseFieldsBeManaged, (model.FieldList.Count == 1 ? model.Crops[0].FieldName : Resource.lblTheseFields)), Resource.lblNotSet));
+                    }
+                    if (model.SwardTypeId == null)
+                    {
+                        ModelState.AddModelError("SwardTypeId", string.Format("{0} {1}", string.Format(Resource.lblWhatIsTheSwardTypeForTheseFields, (model.FieldList.Count == 1 ? model.Crops[0].FieldName : Resource.lblTheseFields), model.Crops[0].Year), Resource.lblNotSet));
+                    }
+                    if (model.GrassSeason == null)
+                    {
+                        ModelState.AddModelError("GrassSeason", string.Format("{0} {1}", string.Format(Resource.lblAreTheseNewSwardOrExistingSwardInTheseFields, (model.FieldList.Count == 1 ? model.Crops[0].FieldName : Resource.lblTheseFields)), Resource.lblNotSet));
+                    }
+                    if (model.DefoliationSequenceId == null)
+                    {
+                        ModelState.AddModelError("DefoliationSequenceId", string.Format("{0} {1}", string.Format(Resource.lblHowManyCutsAndGrazingsWillYouHaveInTheseFields, (model.FieldList.Count == 1 ? model.Crops[0].FieldName : Resource.lblTheseFields)), Resource.lblNotSet));
+                    }
                 }
                 if (!ModelState.IsValid)
                 {
@@ -6283,6 +6321,24 @@ namespace NMP.Portal.Controllers
             }
         }
 
+        public async Task<IActionResult> BackCopyCheckAnswer()
+        {
+            _logger.LogTrace("Crop Controller : BackCopyCheckAnswer() action called");
+            PlanViewModel? model = null;
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+
+            model.IsCheckAnswer = false;
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("CropData", model);
+            return RedirectToAction("CopyOrganicInorganicApplications");
+        }
+
         private static string ShorthandDefoliationSequence(List<string> data)
         {
             if (data == null && data.Count == 0)
@@ -6310,7 +6366,7 @@ namespace NMP.Portal.Controllers
             foreach (var entry in defoliationSequence)
             {
                 string word = entry.Key;
-                
+
                 if (entry.Value > 1)
                 {
                     if (word.EndsWith("s") || word.EndsWith("x") || word.EndsWith("z") ||
@@ -6324,7 +6380,7 @@ namespace NMP.Portal.Controllers
                     }
                 }
 
-                
+
                 word = char.ToUpper(word[0]) + word.Substring(1);
                 result.Add($"{entry.Value} {word}");
             }
