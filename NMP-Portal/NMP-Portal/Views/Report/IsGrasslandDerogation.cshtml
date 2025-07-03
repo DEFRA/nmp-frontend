@@ -7,14 +7,34 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="Year" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(Model.IsCheckList ? "LivestockManureNitrogenReportChecklist" : "Year") asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
-@if (TempData["ErrorOnYear"] != null)
+@if (TempData["ErrorOnIsGrasslandDerogation"] != null)
 {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <govuk-error-summary>
-                <govuk-error-summary-item href="#">@TempData["ErrorOnYear"]</govuk-error-summary-item>
+                <govuk-error-summary-item href="#">@TempData["ErrorOnIsGrasslandDerogation"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        </div>
+    </div>
+}
+@if (TempData["FetchNutrientsLoadingFarmDetailsError"] != null)
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["FetchNutrientsLoadingFarmDetailsError"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        </div>
+    </div>
+}
+@if (TempData["DerogationSaveError"] != null)
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["DerogationSaveError"]</govuk-error-summary-item>
             </govuk-error-summary>
         </div>
     </div>
@@ -34,6 +54,12 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
+
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalFarmArea"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalAreaInNVZ"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockNumbers"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ImportsExportsOfLivestockManure"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckList" value="@Model.IsCheckList"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -90,9 +116,18 @@
                     @Resource.lblContinue
                 </govuk-button>
                 <p class="govuk-body cancel-link">
-                    <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
-                        @Resource.lblCancel
-                    </a>
+                    @if(!Model.IsCheckList)
+                    {
+                        <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+                            @Resource.lblCancel
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report">
+                            @Resource.lblCancel
+                        </a>
+                    }
                 </p>
 
             </div>

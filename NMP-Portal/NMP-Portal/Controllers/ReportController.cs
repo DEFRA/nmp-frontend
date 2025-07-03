@@ -19,7 +19,7 @@ namespace NMP.Portal.Controllers
     public class ReportController : Controller
     {
         private readonly ILogger<ReportController> _logger;
-        private readonly IDataProtector _dataProtector;
+        private readonly IDataProtector _reportDataProtector;
         private readonly IDataProtector _farmDataProtector;
         private readonly IAddressLookupService _addressLookupService;
         private readonly IUserFarmService _userFarmService;
@@ -28,14 +28,15 @@ namespace NMP.Portal.Controllers
         private readonly ICropService _cropService;
         private readonly IOrganicManureService _organicManureService;
         private readonly IFertiliserManureService _fertiliserManureService;
+        private readonly IReportService _reportService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         public ReportController(ILogger<ReportController> logger, IDataProtectionProvider dataProtectionProvider, IHttpContextAccessor httpContextAccessor, IAddressLookupService addressLookupService,
             IUserFarmService userFarmService, IFarmService farmService,
             IFieldService fieldService, ICropService cropService, IOrganicManureService organicManureService,
-            IFertiliserManureService fertiliserManureService)
+            IFertiliserManureService fertiliserManureService, IReportService reportService)
         {
             _logger = logger;
-            _dataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.ReportController");
+            _reportDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.ReportController");
             _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
             _addressLookupService = addressLookupService;
             _userFarmService = userFarmService;
@@ -45,6 +46,7 @@ namespace NMP.Portal.Controllers
             _organicManureService = organicManureService;
             _fertiliserManureService = fertiliserManureService;
             _httpContextAccessor = httpContextAccessor;
+            _reportService = reportService;
         }
         public IActionResult Index()
         {
@@ -80,7 +82,7 @@ namespace NMP.Portal.Controllers
                     }
                 }
                 else if (model.NVZReportOption != null && model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.NmaxReport)
-                    {
+                {
                     (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
                     if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                     {
@@ -114,7 +116,7 @@ namespace NMP.Portal.Controllers
                                 else
                                 {
 
-                                    if(string.IsNullOrWhiteSpace(model.EncryptedHarvestYear))
+                                    if (string.IsNullOrWhiteSpace(model.EncryptedHarvestYear))
                                     {
                                         return View(model);
                                     }
@@ -1149,7 +1151,7 @@ namespace NMP.Portal.Controllers
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
 
-                if(model.ReportOption==(int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
+                if (model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
                 {
                     return RedirectToAction("FieldAndPlanReports", model);
                 }
@@ -1164,7 +1166,7 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogTrace($"Report Controller : Exception in ReportOptions() post action : {ex.Message}, {ex.StackTrace}");
-                TempData["ErrorOnReportSelection"] = ex.Message;
+                TempData["ErrorOnReportOptions"] = ex.Message;
                 return View(model);
             }
         }
@@ -1189,8 +1191,8 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogTrace($"Report Controller : Exception in FieldAndPlanReports() action : {ex.Message}, {ex.StackTrace}");
-                TempData["ErrorFieldAndPlanReports"] = ex.Message;
-                return View(model);
+                TempData["ErrorOnReportOptions"] = ex.Message;
+                return RedirectToAction("ReportOptions");
             }
             return View(model);
         }
@@ -1227,7 +1229,7 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogTrace($"Report Controller : Exception in FieldAndPlanReports() post action : {ex.Message}, {ex.StackTrace}");
-                TempData["ErrorFieldAndPlanReports"] = ex.Message;
+                TempData["ErrorOnFieldAndPlanReports"] = ex.Message;
                 return View(model);
             }
             return View(model);
@@ -1253,8 +1255,8 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogTrace($"Report Controller : Exception in NVZComplianceReports() action : {ex.Message}, {ex.StackTrace}");
-                TempData["ErrorNVZComplianceReports"] = ex.Message;
-                return View(model);
+                TempData["ErrorOnReportOptions"] = ex.Message;
+                return RedirectToAction("ReportOptions");
             }
             return View(model);
         }
@@ -1267,7 +1269,7 @@ namespace NMP.Portal.Controllers
             {
                 if (model.NVZReportOption == null)
                 {
-                    ModelState.AddModelError("NVZReportOption",string.Format(Resource.MsgSelectTheReportYouWantToCreate,Resource.MsgSelectTheReportYouWantToCreate));
+                    ModelState.AddModelError("NVZReportOption", string.Format(Resource.MsgSelectTheReportYouWantToCreate, Resource.MsgSelectTheReportYouWantToCreate));
                 }
                 if (!ModelState.IsValid)
                 {
@@ -1291,14 +1293,14 @@ namespace NMP.Portal.Controllers
                 if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.LivestockManureNFarmLimitReport)
                 {
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
-                     return RedirectToAction("Year");
+                    return RedirectToAction("Year");
                 }
                 return View(model);
             }
             catch (Exception ex)
             {
                 _logger.LogTrace($"Report Controller : Exception in NVZComplianceReports() post action : {ex.Message}, {ex.StackTrace}");
-                TempData["ErrorNVZComplianceReports"] = ex.Message;
+                TempData["ErrorOnNVZComplianceReports"] = ex.Message;
                 return View(model);
             }
         }
@@ -1317,9 +1319,9 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                if(model.FieldAndPlanReportOption!=null)
+                if (model.FieldAndPlanReportOption != null)
                 {
-                    if(model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
+                    if (model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
                     {
                         model.ReportTypeName = Resource.lblFieldRecordsAndNutrientManagementPlanning;
                     }
@@ -1351,12 +1353,12 @@ namespace NMP.Portal.Controllers
                 _logger.LogTrace($"Report Controller : Exception in Year() action : {ex.Message}, {ex.StackTrace}");
                 if (model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
                 {
-                    TempData["ErrorFieldAndPlanReports"] = ex.Message;
+                    TempData["ErrorOnFieldAndPlanReports"] = ex.Message;
                     return RedirectToAction("FieldAndPlanReports");
                 }
                 else
                 {
-                    TempData["ErrorNVZComplianceReports"] = ex.Message;
+                    TempData["ErrorOnNVZComplianceReports"] = ex.Message;
                     return RedirectToAction("NVZComplianceReports");
                 }
             }
@@ -1371,7 +1373,7 @@ namespace NMP.Portal.Controllers
             {
                 if (model.Year == null)
                 {
-                    ModelState.AddModelError("Year",string.Format(Resource.lblSelectAOptionBeforeContinuing,Resource.lblYear.ToLower()));
+                    ModelState.AddModelError("Year", string.Format(Resource.lblSelectAOptionBeforeContinuing, Resource.lblYear.ToLower()));
                 }
                 if (!ModelState.IsValid)
                 {
@@ -1389,11 +1391,11 @@ namespace NMP.Portal.Controllers
                 _logger.LogTrace($"Report Controller : Exception in Year() post action : {ex.Message}, {ex.StackTrace}");
                 TempData["ErrorOnYear"] = ex.Message;
                 return View(model);
-            }            
+            }
         }
 
         [HttpGet]
-        public IActionResult IsGrasslandDerogation()
+        public async Task<IActionResult> IsGrasslandDerogation()
         {
             _logger.LogTrace("Report Controller : IsGrasslandDerogation() action called");
             ReportViewModel model = new ReportViewModel();
@@ -1407,23 +1409,43 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                if (!model.IsCheckList)
+                {
+
+                    (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetails, Error error) = await _reportService.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.FarmId ?? 0, model.Year ?? 0);
+                    if (!string.IsNullOrWhiteSpace(error.Message))
+                    {
+                        TempData["FetchNutrientsLoadingFarmDetailsError"] = error.Message;
+                        return View(model);
+                    }
+                    if (nutrientsLoadingFarmDetails != null)
+                    {
+                        model.IsGrasslandDerogation = nutrientsLoadingFarmDetails.Derogation;
+                        model.TotalFarmArea = nutrientsLoadingFarmDetails.TotalFarmed;
+                        model.TotalAreaInNVZ = nutrientsLoadingFarmDetails.LandInNVZ;
+
+                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                        return RedirectToAction("LivestockManureNitrogenReportChecklist", model);
+                    }
+
+
+                }
+
             }
             catch (Exception ex)
             {
                 _logger.LogTrace($"Report Controller : Exception in IsGrasslandDerogation() action : {ex.Message}, {ex.StackTrace}");
-                
-                    TempData["ErrorOnYear"] = ex.Message;
-                    return RedirectToAction("ErrorOnYear");
-                
+
+                TempData["ErrorOnYear"] = ex.Message;
+                return RedirectToAction("Year");
+
             }
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult IsGrasslandDerogation(ReportViewModel model)
+        public async Task<IActionResult> IsGrasslandDerogation(ReportViewModel model)
         {
             _logger.LogTrace("Report Controller : IsGrasslandDerogation() post action called");
             try
@@ -1436,8 +1458,26 @@ namespace NMP.Portal.Controllers
                 {
                     return View(model);
                 }
+                var NutrientsLoadingFarmDetailsData = new NutrientsLoadingFarmDetail()
+                {
+                    FarmID = model.FarmId,
+                    CalendarYear = model.Year,
+                    LandInNVZ = model.TotalAreaInNVZ,
+                    LandNotNVZ = model.TotalFarmArea - model.TotalAreaInNVZ,
+                    TotalFarmed = model.TotalFarmArea,
+                    ManureTotal = null,
+                    Derogation = model.IsGrasslandDerogation,
+                    GrassPercentage = null,
+                    ContingencyPlan = false
+                };
+                (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData, Error error) = await _reportService.AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetailsData);
+                if (!string.IsNullOrWhiteSpace(error.Message))
+                {
+                    TempData["DerogationSaveError"] = error.Message;
+                    return View(model);
+                }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
-                
+
                 return RedirectToAction("LivestockManureNitrogenReportChecklist");
             }
             catch (Exception ex)
@@ -1462,7 +1502,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-
+                model.IsCheckList = true;
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             catch (Exception ex)
@@ -1470,10 +1510,170 @@ namespace NMP.Portal.Controllers
                 _logger.LogTrace($"Report Controller : Exception in LivestockManureNitrogenReportChecklist() action : {ex.Message}, {ex.StackTrace}");
 
                 TempData["ErrorOnLivestockManureNitrogenReportChecklist"] = ex.Message;
-                return RedirectToAction("ErrorOnLivestockManureNitrogenReportChecklist");
+                return View(model);
 
             }
             return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult LivestockManureNitrogenReportChecklist(ReportViewModel model)
+        {
+            _logger.LogTrace("Report Controller : LivestockManureNitrogenReportChecklist() post action called");
+            try
+            {
+                if (model.IsGrasslandDerogation == null)
+                {
+                    ModelState.AddModelError(string.Empty, string.Format(Resource.MsgDerogationForYearMustBeCompleted, model.Year));
+                }
+                if (model.TotalFarmArea == null || model.TotalAreaInNVZ == null)
+                {
+                    ModelState.AddModelError(string.Empty, string.Format(Resource.MsgFarmAreaForYearMustBeCompleted, model.Year));
+                }
+                if (model.LivestockNumbers == null)
+                {
+                    ModelState.AddModelError(string.Empty, string.Format(Resource.MsgLivestockNumbersForYearMustBeCompleted, model.Year));
+                }
+                if (model.ImportsExportsOfLivestockManure == null)
+                {
+                    ModelState.AddModelError(string.Empty, string.Format(Resource.MsgImportsAndExportsOfManureForYearMustBeCompleted, model.Year));
+                }
+                if (!ModelState.IsValid)
+                {
+                    return View("~/Views/Report/LivestockManureNitrogenReportChecklist.cshtml", model);
+                }
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+
+                return RedirectToAction("LivestockManureNitrogenReportChecklist");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in LivestockManureNitrogenReportChecklist() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnLivestockManureNitrogenReportChecklist"] = ex.Message;
+                return View(model);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult FarmAreaForLivestockManure()
+        {
+            _logger.LogTrace("Report Controller : FarmAreaForLivestockManure() action called");
+            ReportViewModel model = new ReportViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in FarmAreaForLivestockManure() action : {ex.Message}, {ex.StackTrace}");
+
+                TempData["ErrorOnLivestockManureNitrogenReportChecklist"] = ex.Message;
+                return RedirectToAction("LivestockManureNitrogenReportChecklist");
+
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> FarmAreaForLivestockManure(ReportViewModel model)
+        {
+            _logger.LogTrace("Report Controller : FarmAreaForLivestockManure() post action called");
+            try
+            {
+                if (model.TotalFarmArea == null)
+                {
+                    ModelState.AddModelError("TotalFarmArea", Resource.MsgEnterTotalFarmArea);
+                }
+                if (model.TotalAreaInNVZ == null)
+                {
+                    ModelState.AddModelError("TotalAreaInNVZ", Resource.MsgEnterTotalAreaInNVZ);
+                }
+                if (model.TotalFarmArea <= 0)
+                {
+                    ModelState.AddModelError("TotalFarmArea", Resource.MsgTotalFarmAreaShouldBeGreaterThanZero);
+                }
+                if (model.TotalAreaInNVZ < 0)
+                {
+                    ModelState.AddModelError("TotalAreaInNVZ", Resource.MsgTotalAreaInNVZShouldNotBeLessThanZero);
+                }
+                if (model.TotalAreaInNVZ > model.TotalFarmArea)
+                {
+                    ModelState.AddModelError("TotalAreaInNVZ", Resource.MsgTotalAreaInNVZShouldNotBeMoreThanTotalFarmArea);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+
+                var NutrientsLoadingFarmDetailsData = new NutrientsLoadingFarmDetail()
+                {
+                    FarmID = model.FarmId,
+                    CalendarYear = model.Year,
+                    LandInNVZ = model.TotalAreaInNVZ,
+                    LandNotNVZ = model.TotalFarmArea - model.TotalAreaInNVZ,
+                    TotalFarmed = model.TotalFarmArea,
+                    ManureTotal = null,
+                    Derogation = model.IsGrasslandDerogation,
+                    GrassPercentage = null,
+                    ContingencyPlan = false
+                };
+                (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData, Error error) = await _reportService.UpdateNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetailsData);
+                if (!string.IsNullOrWhiteSpace(error.Message))
+                {
+                    TempData["FarmDetailsSaveError"] = error.Message;
+                    return View(model);
+                }
+
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+
+                return RedirectToAction("LivestockManureNitrogenReportChecklist");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in FarmAreaForLivestockManure() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnFarmAreaForLivestockManure"] = ex.Message;
+                return View(model);
+            }
+        }
+
+        public IActionResult BackCheckList()
+        {
+            _logger.LogTrace("Report Controller : BackCheckList() action called");
+            ReportViewModel model = new ReportViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+                model.IsCheckList = false;
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in BackCheckList() action : {ex.Message}, {ex.StackTrace}");
+
+                TempData["ErrorOnLivestockManureNitrogenReportChecklist"] = ex.Message;
+                return RedirectToAction("LivestockManureNitrogenReportChecklist");
+
+            }
+            return RedirectToAction("Year");
         }
     }
 }

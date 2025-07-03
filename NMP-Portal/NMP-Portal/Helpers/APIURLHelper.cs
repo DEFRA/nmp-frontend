@@ -183,5 +183,8 @@ namespace NMP.Portal.Helpers
         public const string FetchSwardTypeBySwardTypeIdAsyncAPI = "vendors/rb209/Grass/SwardType/{0}";
         public const string FetchSwardManagementBySwardManagementIdAsyncAPI = "vendors/rb209/Grass/SwardManagement/{0}";
         public const string CopyCropNutrientManagementPlanAsyncAPI = "crops/copyplans";
+        public const string AddNutrientsLoadingFarmDetailsAPI = "nutrientsLoadingFarmDetails";
+        public const string FetchNutrientsLoadingFarmDetailsByfarmIdAndYearAPI = "nutrientsLoadingFarmDetails/{0}?year={1}";
+        public const string UpdateNutrientsLoadingFarmDetailsAsyncAPI = "nutrientsLoadingFarmDetails";
     }
 }

@@ -4940,4 +4940,64 @@ live</value>
   <data name="lblYouCanApplyUpTo170kgPerHectareOfNitrogen" xml:space="preserve">
     <value>You can apply up to 170kg per hectare of nitrogen in livestock manure on your holding in a nitrate vulnerable zone (NVZ) in each calendar year.</value>
   </data>
+  <data name="lblCompleted" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="lblCompleteEachSectionToCreateTheReport" xml:space="preserve">
+    <value>Complete each section to create the report. You can complete the sections in any order.</value>
+  </data>
+  <data name="lblDerogation" xml:space="preserve">
+    <value>Derogation</value>
+  </data>
+  <data name="lblDoNotIncludeSurfaceWaterBuildingYards" xml:space="preserve">
+    <value>Do not include surface water, buildings, yards and woodland, unless used for grazing.</value>
+  </data>
+  <data name="lblFarmArea" xml:space="preserve">
+    <value>Farm area</value>
+  </data>
+  <data name="lblImportsExportsOfLivestockManure" xml:space="preserve">
+    <value>Imports and exports of livestock manure</value>
+  </data>
+  <data name="lblIncomplete" xml:space="preserve">
+    <value>Incomplete</value>
+  </data>
+  <data name="lblLivestockManureNitrogenChecklist" xml:space="preserve">
+    <value>Livestock manure nitrogen checklist</value>
+  </data>
+  <data name="lblWhatIsTheTotalAreaInAnNVZ" xml:space="preserve">
+    <value>What is the total area in an NVZ?</value>
+  </data>
+  <data name="lblWhatIsTheTotalFarmArea" xml:space="preserve">
+    <value>What is the total farm area?</value>
+  </data>
+  <data name="MsgDerogationForYearMustBeCompleted" xml:space="preserve">
+    <value>Derogation for {0} must be completed</value>
+  </data>
+  <data name="MsgEnterTotalAreaInNVZ" xml:space="preserve">
+    <value>Enter total area in NVZ</value>
+  </data>
+  <data name="MsgEnterTotalFarmArea" xml:space="preserve">
+    <value>Enter total farm area</value>
+  </data>
+  <data name="MsgFarmAreaForYearMustBeCompleted" xml:space="preserve">
+    <value>Farm area for {0} must be completed</value>
+  </data>
+  <data name="MsgImportsAndExportsOfManureForYearMustBeCompleted" xml:space="preserve">
+    <value>Imports and exports of manure for {0} must be completed</value>
+  </data>
+  <data name="MsgLivestockNumbersForYearMustBeCompleted" xml:space="preserve">
+    <value>Livestock numbers for {0} must be completed</value>
+  </data>
+  <data name="MsgTotalAreaInNVZShouldNotBeLessThanZero" xml:space="preserve">
+    <value>Total area in NVZ should not be less than 0</value>
+  </data>
+  <data name="MsgTotalAreaInNVZShouldNotBeMoreThanTotalFarmArea" xml:space="preserve">
+    <value>Total area in NVZ should not be more than total farm area</value>
+  </data>
+  <data name="MsgTotalFarmAreaShouldBeGreaterThanZero" xml:space="preserve">
+    <value>Total farm area should be greater than 0</value>
+  </data>
+  <data name="lblCreateReport" xml:space="preserve">
+    <value>Create report</value>
+  </data>
 </root>
