@@ -781,6 +781,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add crops.
+        /// </summary>
+        public static string lblAddCrops {
+            get {
+                return ResourceManager.GetString("lblAddCrops", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} addresses found.
         /// </summary>
         public static string lblAdddressFound {
@@ -6327,6 +6336,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to N-max.
+        /// </summary>
+        public static string lblNMax {
+            get {
+                return ResourceManager.GetString("lblNMax", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to added function: N-max NVZ compliance module.
         /// </summary>
         public static string lblNMaxComplainceModule {
@@ -10963,15 +10981,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the sward in {0} in {1}?.
-        /// </summary>
-        public static string lblWhatIsTheSwardInTheseFields {
-            get {
-                return ResourceManager.GetString("lblWhatIsTheSwardInTheseFields", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to What is the sward type for {0} in {1}?.
         /// </summary>
         public static string lblWhatIsTheSwardTypeForTheseFields {
@@ -11211,6 +11220,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields {
             get {
                 return ResourceManager.GetString("lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When was the sward sown in {0} in {1}?.
+        /// </summary>
+        public static string lblWhenIsTheSwardInTheseFields {
+            get {
+                return ResourceManager.GetString("lblWhenIsTheSwardInTheseFields", resourceCulture);
             }
         }
         
@@ -11823,6 +11841,15 @@ namespace NMP.Portal.Resources {
         public static string lblYouHaveNotAddedAnyFarms {
             get {
                 return ResourceManager.GetString("lblYouHaveNotAddedAnyFarms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have not entered any crop information for {0}.
+        /// </summary>
+        public static string lblYouHaveNotEnteredAnyCropInformation {
+            get {
+                return ResourceManager.GetString("lblYouHaveNotEnteredAnyCropInformation", resourceCulture);
             }
         }
         
@@ -13400,6 +13427,15 @@ namespace NMP.Portal.Resources {
         public static string MsgForGreenAreaIndex {
             get {
                 return ResourceManager.GetString("MsgForGreenAreaIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An N-max report is not available.You need to add your crop information, and information about any organic and inorganic material applied..
+        /// </summary>
+        public static string MsgForIfPlanIsNotCreated {
+            get {
+                return ResourceManager.GetString("MsgForIfPlanIsNotCreated", resourceCulture);
             }
         }
         
