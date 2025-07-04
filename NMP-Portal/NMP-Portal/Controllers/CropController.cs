@@ -2733,7 +2733,7 @@ namespace NMP.Portal.Controllers
                 else
                 {
                     //if yield null then save as 0
-                    crop.Yield = crop.Yield ?? 0;
+                    crop.Yield = crop.Yield;
 
                     crop.DefoliationSequenceID = model.DefoliationSequenceId;
                     crop.SwardTypeID = model.SwardTypeId;
