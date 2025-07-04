@@ -975,14 +975,14 @@ namespace NMP.Portal.Services
             return (managementPeriodList, error);
         }
         //grass
-        public async Task<(List<DefoliationSequenceResponse>,Error)> FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(int swardManagementId, int numberOfCut,bool isNewSward)
+        public async Task<(List<DefoliationSequenceResponse>,Error)> FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(int swardTypeId, int swardManagementId, int numberOfCut,bool isNewSward)
         {
             Error error = null;
             List<DefoliationSequenceResponse> defoliationSequenceResponses = new List<DefoliationSequenceResponse>();
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCutAsyncAPI, swardManagementId, numberOfCut, isNewSward));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCutAsyncAPI, swardTypeId, swardManagementId, numberOfCut, isNewSward));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if ((response.IsSuccessStatusCode && responseWrapper != null) || responseWrapper.Data != null)
