@@ -50,7 +50,15 @@
     bool secondCropOnly = Model.Crops.All(crop => crop.CropOrder == 2);
     bool firstAndSecondCrop = Model.Crops.Any(crop => crop.CropOrder == 1) && Model.Crops.Any(crop => crop.CropOrder == 2);
 
-    var currentSward = Model.CurrentSward == (int)NMP.Portal.Enums.CurrentSward.NewSward ? Resource.lblNewSwards : Resource.lblExistingSwards;
+    var currentSward = "";
+    if(Model.CurrentSward == (int)NMP.Portal.Enums.CurrentSward.NewSward)
+    {
+        currentSward = Resource.lblNewSwards;
+    }
+    if (Model.CurrentSward == (int)NMP.Portal.Enums.CurrentSward.ExistingSward)
+    {
+        currentSward = Resource.lblExistingSwards;
+    }
     var potentialCutName = "";
     if (Model.PotentialCut == (int)NMP.Portal.Enums.PotentialCut.One)
     {
@@ -246,36 +254,32 @@
                                 @Model.CropGroup
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
-                                {
-                                    <govuk-summary-list-row-action asp-action="CropGroups" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
-                                }
+                                <govuk-summary-list-row-action asp-action="CropGroups" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     }
-                    @if (Model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass)
-                    {
-                        <govuk-summary-list-row class=@((!Model.CropTypeID.HasValue)?"govuk-error-message":"")>
-                            <govuk-summary-list-row-key>
-                                @Resource.lblCropType
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                                @(Model.CropTypeID.HasValue ? (Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other ? Model.OtherCropName :
-                                    Model.CropType) : Resource.lblNotSet)
-                            </govuk-summary-list-row-value>
-                            <govuk-summary-list-row-actions>
 
-                                <govuk-summary-list-row-action asp-action="CropTypes" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
+                    <govuk-summary-list-row class=@((!Model.CropTypeID.HasValue)?"govuk-error-message":"")>
+                        <govuk-summary-list-row-key>
+                            @Resource.lblWhatIsTheCropType
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @(Model.CropTypeID.HasValue ? (Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other ? Model.OtherCropName :
+                                Model.CropType) : Resource.lblNotSet)
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
 
-                            </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row>
-                    }
+                            <govuk-summary-list-row-action asp-action="CropTypes" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
+
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+
 
                     @if (Model.IsComingFromRecommendation == null)
                     {
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key>
-                                @string.Format(Resource.lblWhichFieldsDoYouPlanToGrow, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType)
+                                @string.Format(Resource.lblWhichFieldsWouldYouLikeToPlanFor, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType)
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
                                 @if (firstCropOnly)
@@ -324,18 +328,20 @@
                                 }
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
+
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>
+                                @Resource.lblWhatWouldYouLikeToCallThisCropGroup
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @(Model.CropGroupName == null ? Resource.lblNotEntered : Model.CropGroupName)
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="CropGroupName" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
                     }
-                    <govuk-summary-list-row>
-                        <govuk-summary-list-row-key>
-                            @Resource.lblCropGroupName
-                        </govuk-summary-list-row-key>
-                        <govuk-summary-list-row-value>
-                            @(Model.CropGroupName == null ? Resource.lblNotEntered : Model.CropGroupName)
-                        </govuk-summary-list-row-value>
-                        <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="CropGroupName" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
-                        </govuk-summary-list-row-actions>
-                    </govuk-summary-list-row>
+
                     @if (Model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass)
                     {
                         @if (Model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Potatoes)
@@ -371,16 +377,13 @@
                     {
                         <govuk-summary-list-row class=@((!Model.CurrentSward.HasValue)?"govuk-error-message":"")>
                             <govuk-summary-list-row-key>
-                                @string.Format(Resource.lblAreTheseNewSwardOrExistingSwardInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields))
+                                @(Model.FieldList.Count == 1 ? Resource.lblIsThisANewSwardOrExistingSward : string.Format(Resource.lblAreTheseNewSwardOrExistingSwardInTheseFields, Resource.lblTheseFields))
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
                                 @(Model.CurrentSward == null ? Resource.lblNotEntered : currentSward)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
-                                {
-                                    <govuk-summary-list-row-action asp-action="CurrentSward" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
-                                }
+                                <govuk-summary-list-row-action asp-action="CurrentSward" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
 
@@ -579,25 +582,19 @@
                                 @(Model.SwardTypeId == null ? Resource.lblNotEntered : ViewBag.SwardType)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
-                                {
-                                    <govuk-summary-list-row-action asp-action="SwardType" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
-                                }
+                                <govuk-summary-list-row-action asp-action="SwardType" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
 
                         <govuk-summary-list-row class=@((!Model.SwardManagementId.HasValue)?"govuk-error-message":"")>
                             <govuk-summary-list-row-key>
-                                @string.Format(Resource.lblHowWillTheseFieldsBeManaged, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName  : Resource.lblTheseFields))
+                                @string.Format(Resource.lblHowWillTheseFieldsBeManaged, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields))
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
                                 @(Model.SwardManagementId == null ? Resource.lblNotEntered : ViewBag.SwardManagementName)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
-                                {
-                                    <govuk-summary-list-row-action asp-action="GrassManagement" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
-                                }
+                                <govuk-summary-list-row-action asp-action="GrassManagement" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
 
@@ -628,10 +625,7 @@
                                 @(Model.PotentialCut == null ? Resource.lblNotEntered : potentialCutName)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
-                                {
-                                    <govuk-summary-list-row-action asp-action="Defoliation" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
-                                }
+                                <govuk-summary-list-row-action asp-action="Defoliation" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                         @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazingAndSilage || Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazingAndHay)
@@ -675,76 +669,68 @@
                                     </govuk-summary-list-row-value>
                                 }
                                 <govuk-summary-list-row-actions>
-                                    @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
-                                    {
-                                        <govuk-summary-list-row-action asp-action="DefoliationSequence" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
-                                    }
+                                    <govuk-summary-list-row-action asp-action="DefoliationSequence" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
                         }
 
-                        @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
+
+                        @if (Model.SwardTypeId == (int)NMP.Portal.Enums.SwardType.Grass)
                         {
-                            @if (Model.SwardTypeId == (int)NMP.Portal.Enums.SwardType.Grass)
+                            @if (Model.GrassGrowthClassQuestion == null)
                             {
-                                @if (Model.GrassGrowthClassQuestion == null)
+                                @foreach (var crop in Model.Crops)
                                 {
-                                    @foreach (var crop in Model.Crops)
-                                    {
-                                        <govuk-summary-list-row class=@((!crop.Yield.HasValue)?"govuk-error-message":"")>
-                                            <govuk-summary-list-row-key>
-                                                @string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField, crop.FieldName, Model.Crops[0].Year)
-                                            </govuk-summary-list-row-key>
-                                            <govuk-summary-list-row-value>
-                                                @(crop.Yield == null ? Resource.lblNotEntered : (string.Concat(Convert.ToInt32(crop.Yield).ToString(), " ", Resource.lblTonnesPerHectare)))
-                                            </govuk-summary-list-row-value>
-                                            <govuk-summary-list-row-actions>
-                                                @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
-                                                {
-                                                    <govuk-summary-list-row-action asp-action="GrassGrowthClass" asp-controller="Crop" asp-route-q="@crop.EncryptedCounter">@Resource.lblChange</govuk-summary-list-row-action>
-                                                }
-                                            </govuk-summary-list-row-actions>
-                                        </govuk-summary-list-row>
-                                    }
-                                }
-                                else
-                                {
-                                    <govuk-summary-list-row class=@((!Model.GrassGrowthClassQuestion.HasValue)?"govuk-error-message":"")>
+                                    <govuk-summary-list-row class=@((!crop.Yield.HasValue)?"govuk-error-message":"")>
                                         <govuk-summary-list-row-key>
-                                            @string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField, Model.FieldName, Model.Crops[0].Year)
+                                            @string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField, crop.FieldName, Model.Crops[0].Year)
                                         </govuk-summary-list-row-key>
                                         <govuk-summary-list-row-value>
-                                            @(Model.GrassGrowthClassQuestion == null ? Resource.lblNotEntered : (Model.GrassGrowthClassQuestion == 1 ? Resource.lblYesEnterTheSameTargetYieldForTheseFields : Resource.lblNoEnterADifferentTargetYieldForEachFields))
+                                            @(crop.Yield == null ? Resource.lblNotEntered : (string.Concat(Convert.ToInt32(crop.Yield).ToString(), " ", Resource.lblTonnesPerHectare)))
                                         </govuk-summary-list-row-value>
                                         <govuk-summary-list-row-actions>
-                                            <govuk-summary-list-row-action asp-action="GrassGrowthClass" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
+                                            <govuk-summary-list-row-action asp-action="GrassGrowthClass" asp-controller="Crop" asp-route-q="@crop.EncryptedCounter">@Resource.lblChange</govuk-summary-list-row-action>
                                         </govuk-summary-list-row-actions>
                                     </govuk-summary-list-row>
+                                }
+                            }
+                            else
+                            {
+                                <govuk-summary-list-row class=@((!Model.GrassGrowthClassQuestion.HasValue)?"govuk-error-message":"")>
+                                    <govuk-summary-list-row-key>
+                                        @string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField, Model.FieldName, Model.Crops[0].Year)
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @(Model.GrassGrowthClassQuestion == null ? Resource.lblNotEntered : (Model.GrassGrowthClassQuestion == 1 ? Resource.lblYesEnterTheSameTargetYieldForTheseFields : Resource.lblNoEnterADifferentTargetYieldForEachFields))
+                                    </govuk-summary-list-row-value>
+                                    <govuk-summary-list-row-actions>
+                                        <govuk-summary-list-row-action asp-action="GrassGrowthClass" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
+                                    </govuk-summary-list-row-actions>
+                                </govuk-summary-list-row>
 
-                                    @foreach (var crop in Model.Crops)
+                                @foreach (var crop in Model.Crops)
+                                {
+                                    <govuk-summary-list-row class=@((!crop.Yield.HasValue)?"govuk-error-message":"")>
+                                        <govuk-summary-list-row-key>
+                                            @(Model.GrassGrowthClassQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForFields, Model.Crops[0].Year) : string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldFor, crop.FieldName, crop.Year))
+                                        </govuk-summary-list-row-key>
+                                        <govuk-summary-list-row-value>
+                                            @(crop.Yield == null ? Resource.lblNotEntered : (string.Concat(Convert.ToInt32(crop.Yield).ToString(), " ", Resource.lblTonnesPerHectare)))
+                                        </govuk-summary-list-row-value>
+                                        <govuk-summary-list-row-actions>
+
+                                            <govuk-summary-list-row-action asp-action="DryMatterYield" asp-controller="Crop" asp-route-q="@crop.EncryptedCounter">@Resource.lblChange</govuk-summary-list-row-action>
+
+                                        </govuk-summary-list-row-actions>
+                                    </govuk-summary-list-row>
+                                    @if (Model.GrassGrowthClassQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
                                     {
-                                        <govuk-summary-list-row class=@((!crop.Yield.HasValue)?"govuk-error-message":"")>
-                                            <govuk-summary-list-row-key>
-                                                @(Model.GrassGrowthClassQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForFields, Model.Crops[0].Year) : string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldFor, crop.FieldName, crop.Year))
-                                            </govuk-summary-list-row-key>
-                                            <govuk-summary-list-row-value>
-                                                @(crop.Yield == null ? Resource.lblNotEntered : (string.Concat(Convert.ToInt32(crop.Yield).ToString(), " ", Resource.lblTonnesPerHectare)))
-                                            </govuk-summary-list-row-value>
-                                            <govuk-summary-list-row-actions>
-
-                                                <govuk-summary-list-row-action asp-action="DryMatterYield" asp-controller="Crop" asp-route-q="@crop.EncryptedCounter">@Resource.lblChange</govuk-summary-list-row-action>
-
-                                            </govuk-summary-list-row-actions>
-                                        </govuk-summary-list-row>
-                                        @if (Model.GrassGrowthClassQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
-                                        {
-                                            break;
-                                        }
+                                        break;
                                     }
                                 }
                             }
-
                         }
+
                     }
 
                 </govuk-summary-list>

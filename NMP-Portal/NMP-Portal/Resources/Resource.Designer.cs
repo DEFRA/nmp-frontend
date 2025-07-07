@@ -5291,6 +5291,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Is this a new sward or existing sward?.
+        /// </summary>
+        public static string lblIsThisANewSwardOrExistingSward {
+            get {
+                return ResourceManager.GetString("lblIsThisANewSwardOrExistingSward", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Is this field more than 300 metres above sea level?.
         /// </summary>
         public static string lblIsThisFieldAboveForFieldCheckAnswere {
@@ -11409,6 +11418,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhichFieldsWouldYouLikeToPlanAnOrganic {
             get {
                 return ResourceManager.GetString("lblWhichFieldsWouldYouLikeToPlanAnOrganic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which fields would you like to plan {0} for?.
+        /// </summary>
+        public static string lblWhichFieldsWouldYouLikeToPlanFor {
+            get {
+                return ResourceManager.GetString("lblWhichFieldsWouldYouLikeToPlanFor", resourceCulture);
             }
         }
         

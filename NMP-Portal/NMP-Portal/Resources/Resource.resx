@@ -5012,4 +5012,10 @@ live</value>
   <data name="lblCreateReport" xml:space="preserve">
     <value>Create report</value>
   </data>
+  <data name="lblIsThisANewSwardOrExistingSward" xml:space="preserve">
+    <value>Is this a new sward or existing sward?</value>
+  </data>
+  <data name="lblWhichFieldsWouldYouLikeToPlanFor" xml:space="preserve">
+    <value>Which fields would you like to plan {0} for?</value>
+  </data>
 </root>
