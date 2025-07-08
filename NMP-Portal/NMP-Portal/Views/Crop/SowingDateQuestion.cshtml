@@ -147,7 +147,7 @@
                         @Resource.lblYouCanChangeYourPlantingDateLater
                     </govuk-radios-hint>
 
-                    <govuk-radios-item value="@YesIHaveASingleDateForAllTheseFields">@((Model.Crops.Count > 1 || (!string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))) ? Resource.lblYesIHaveASingleDateForAllTheseFields : Resource.lblYes)</govuk-radios-item>
+                    <govuk-radios-item value="@YesIHaveASingleDateForAllTheseFields">@(Model.Crops.Count > 1 ? Resource.lblYesIHaveASingleDateForAllTheseFields : Resource.lblYes)</govuk-radios-item>
                     @if (Model.Crops.Count > 1)
                     {
                         <govuk-radios-item value="@YesIHaveDifferentDatesForEachOfTheseFields">@Resource.lblYesIHaveDifferentDatesForEachOfTheseFields</govuk-radios-item>
