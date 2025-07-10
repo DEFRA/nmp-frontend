@@ -5246,7 +5246,7 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("CheckAnswer");
             }
-            else if (planViewModel.SwardManagementId == model.SwardManagementId)
+            else if (!model.IsAnyChangeInField)
             {
                 //model.SwardManagementId = null;
                 model.PotentialCut = null;
@@ -5321,7 +5321,7 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("CheckAnswer");
             }
-            else if (planViewModel.PotentialCut == model.PotentialCut)
+            else if (!model.IsAnyChangeInField)
             {
                 //model.SwardManagementId = null;
                 //model.PotentialCut = null;
@@ -5461,7 +5461,7 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("CheckAnswer");
             }
-            else if (planViewModel.DefoliationSequenceId == model.DefoliationSequenceId)
+            else if (!model.IsAnyChangeInField)
             {
                 //model.SwardManagementId = null;
                 //model.PotentialCut = null;
@@ -5674,7 +5674,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("CheckAnswer");
                 }
-                else if (planViewModelBeforeUpdate.GrassGrowthClassQuestion == model.GrassGrowthClassQuestion && !model.IsAnyChangeInField)
+                else if (!model.IsAnyChangeInField)
                 {
                     model.Yield = null;
                     model.Crops.ForEach(x=>x.Yield = null);
