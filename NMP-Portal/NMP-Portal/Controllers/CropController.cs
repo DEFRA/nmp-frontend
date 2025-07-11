@@ -2151,7 +2151,7 @@ namespace NMP.Portal.Controllers
                             model.DefoliationSequenceId = harvestYearPlanResponse.FirstOrDefault().DefoliationSequenceID;
                             model.SwardTypeId = harvestYearPlanResponse.FirstOrDefault().SwardTypeID;
                             model.PotentialCut = harvestYearPlanResponse.FirstOrDefault().PotentialCut;
-                            if(model.CropGroupId==(int)NMP.Portal.Enums.CropGroup.Grass)
+                            if (harvestYearPlanResponse[i].CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
                             {
                                 model.CurrentSward = (harvestYearPlanResponse.FirstOrDefault().Establishment == null || harvestYearPlanResponse.FirstOrDefault().Establishment == 0) ? (int)NMP.Portal.Enums.CurrentSward.ExistingSward : (int)NMP.Portal.Enums.CurrentSward.NewSward;
                             }
@@ -4913,11 +4913,19 @@ namespace NMP.Portal.Controllers
                     List<CropData> cropEntries = new List<CropData>();
                     foreach (Crop crop in model.Crops)
                     {
-                        crop.DefoliationSequenceID = model.DefoliationSequenceId;
-                        crop.SwardTypeID = model.SwardTypeId;
-                        crop.SwardManagementID = model.SwardManagementId;
-                        crop.PotentialCut = model.PotentialCut;
-                        crop.Establishment = model.CurrentSward;
+                        if(model.CropGroupId==(int)NMP.Portal.Enums.CropGroup.Grass)
+                        {
+                            crop.CropTypeID = model.CropTypeID;
+                            crop.CropInfo1 = model.CropInfo1;
+                            crop.CropInfo2 = model.CropInfo2;
+                            crop.DefoliationSequenceID = model.DefoliationSequenceId;
+                            crop.SwardTypeID = model.SwardTypeId;
+                            crop.SwardManagementID = model.SwardManagementId;
+                            crop.PotentialCut = model.PotentialCut;
+                            crop.Establishment = model.CurrentSward;
+                        }
+                       
+
                         List<ManagementPeriod> managementPeriods = new List<ManagementPeriod>();
 
                         (List<ManagementPeriod> managementPeriodList, error) = await _cropService.FetchManagementperiodByCropId(crop.ID.Value, false);
