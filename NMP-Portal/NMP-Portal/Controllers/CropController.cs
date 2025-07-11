@@ -476,7 +476,7 @@ namespace NMP.Portal.Controllers
                     }
                 }
 
-                
+
 
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                 if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) && model.IsComingFromRecommendation == true)
@@ -499,12 +499,12 @@ namespace NMP.Portal.Controllers
                 model.SwardManagementId = null;
                 model.PotentialCut = null;
                 model.DefoliationSequenceId = null;
-                
+
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
 
             }
-            
-                return RedirectToAction("CropTypes");
+
+            return RedirectToAction("CropTypes");
         }
 
         [HttpGet]
@@ -879,7 +879,7 @@ namespace NMP.Portal.Controllers
                 TempData["CropTypeError"] = ex.Message;
                 return View(model);
             }
-            if(!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) && model.IsComingFromRecommendation == true)
+            if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) && model.IsComingFromRecommendation == true)
             {
                 return RedirectToAction("CropGroupName");
             }
@@ -1385,7 +1385,7 @@ namespace NMP.Portal.Controllers
             }
             else
             {
-                if(!model.IsCheckAnswer)
+                if (!model.IsCheckAnswer)
                 {
                     return RedirectToAction("SowingDate");
                 }
@@ -2151,8 +2151,15 @@ namespace NMP.Portal.Controllers
                             model.DefoliationSequenceId = harvestYearPlanResponse.FirstOrDefault().DefoliationSequenceID;
                             model.SwardTypeId = harvestYearPlanResponse.FirstOrDefault().SwardTypeID;
                             model.PotentialCut = harvestYearPlanResponse.FirstOrDefault().PotentialCut;
-                            model.CurrentSward = (harvestYearPlanResponse.FirstOrDefault().Establishment == null || harvestYearPlanResponse.FirstOrDefault().Establishment ==0) ? (int)NMP.Portal.Enums.CurrentSward.ExistingSward : (int)NMP.Portal.Enums.CurrentSward.NewSward;
-                            model.GrassSeason= harvestYearPlanResponse.FirstOrDefault().Establishment;
+                            if(model.CropGroupId==(int)NMP.Portal.Enums.CropGroup.Grass)
+                            {
+                                model.CurrentSward = (harvestYearPlanResponse.FirstOrDefault().Establishment == null || harvestYearPlanResponse.FirstOrDefault().Establishment == 0) ? (int)NMP.Portal.Enums.CurrentSward.ExistingSward : (int)NMP.Portal.Enums.CurrentSward.NewSward;
+                            }
+                            else
+                            {
+                                model.CurrentSward = null;
+                            }
+                            model.GrassSeason = harvestYearPlanResponse.FirstOrDefault().Establishment;
                             crop.EncryptedCounter = _fieldDataProtector.Protect(counter.ToString());
                             if (decimal.TryParse(harvestYearPlanResponse[i].Yield, out decimal yield))
                             {
@@ -2338,7 +2345,7 @@ namespace NMP.Portal.Controllers
                 harvestYearPlanResponse = harvestYearPlanResponse
                     .Where(x => fieldIdsForFilter.Contains(x.FieldID))
                     .ToList();
-                
+
             }
             //ViewBag.FieldOptions = fieldList;
 
@@ -4772,6 +4779,7 @@ namespace NMP.Portal.Controllers
                 int otherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
                 int cerealsGroupId = (int)NMP.Portal.Enums.CropGroup.Cereals;
                 int potatoesGroupId = (int)NMP.Portal.Enums.CropGroup.Potatoes;
+                int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
                 foreach (var crop in model.Crops)
                 {
                     if (crop.SowingDate == null)
@@ -4837,7 +4845,7 @@ namespace NMP.Portal.Controllers
                     {
                         ModelState.AddModelError("SwardTypeId", string.Format("{0} {1}", string.Format(Resource.lblWhatIsTheSwardTypeForTheseFields, (model.FieldList.Count == 1 ? model.Crops[0].FieldName : Resource.lblTheseFields), model.Crops[0].Year), Resource.lblNotSet));
                     }
-                    if (model.GrassSeason == null && model.CurrentSward==(int)NMP.Portal.Enums.CurrentSward.NewSward)
+                    if (model.GrassSeason == null && model.CurrentSward == (int)NMP.Portal.Enums.CurrentSward.NewSward)
                     {
                         ModelState.AddModelError("GrassSeason", string.Format("{0} {1}", string.Format(Resource.lblAreTheseNewSwardOrExistingSwardInTheseFields, (model.FieldList.Count == 1 ? model.Crops[0].FieldName : Resource.lblTheseFields)), Resource.lblNotSet));
                     }
@@ -4910,15 +4918,76 @@ namespace NMP.Portal.Controllers
                         crop.SwardManagementID = model.SwardManagementId;
                         crop.PotentialCut = model.PotentialCut;
                         crop.Establishment = model.CurrentSward;
+                        List<ManagementPeriod> managementPeriods = new List<ManagementPeriod>();
+
                         (List<ManagementPeriod> managementPeriodList, error) = await _cropService.FetchManagementperiodByCropId(crop.ID.Value, false);
-                        if(model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass)
+                        if (model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass)
                         {
                             if (managementPeriodList != null && managementPeriodList.Any())
                             {
-                                managementPeriodList = new List<ManagementPeriod> { managementPeriodList.First() };
+                                //managementPeriods = new List<ManagementPeriod> { managementPeriodList.First() };
+
+                                managementPeriods.Add(new ManagementPeriod
+                                {
+                                    Defoliation = 1,
+                                    Utilisation1ID = 2,
+                                    ModifiedOn = DateTime.Now,
+                                    ModifiedByID = userId
+                                });
                             }
                         }
-                        if (string.IsNullOrWhiteSpace(error.Message))
+                        if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass)
+                        {
+                           
+                            string defoliationSequence = "";
+                            (DefoliationSequenceResponse defoliationSequenceResponse, error) = await _cropService.FetchDefoliationSequencesById(model.DefoliationSequenceId.Value);
+                            if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+                            {
+                                TempData["ErrorCreatePlan"] = error.Message;
+                                return RedirectToAction("CheckAnswer");
+                            }
+                            else
+                            {
+                                defoliationSequence = defoliationSequenceResponse.DefoliationSequence;
+                            }
+                            int defoliation = 1;
+                            int utilisation1 = 0;
+                            if (defoliationSequence != null)
+                            {
+                                foreach (char c in defoliationSequence)
+                                {
+                                    if (c == 'E')
+                                    {
+                                        utilisation1 = (int)NMP.Portal.Enums.Utilisation1.Establishment;
+                                    }
+                                    else if (c == 'G')
+                                    {
+                                        utilisation1 = (int)NMP.Portal.Enums.Utilisation1.Grazing;
+                                    }
+                                    else if (c == 'S')
+                                    {
+                                        utilisation1 = (int)NMP.Portal.Enums.Utilisation1.Silage;
+                                    }
+                                    else if (c == 'H')
+                                    {
+                                        utilisation1 = (int)NMP.Portal.Enums.Utilisation1.Hay;
+                                    }
+
+                                    managementPeriods.Add(new ManagementPeriod
+                                    {
+                                        Defoliation = defoliation,
+                                        Utilisation1ID = utilisation1,
+                                        Yield = crop.Yield ?? 0 / model.PotentialCut,
+                                        //CreatedOn = DateTime.Now,
+                                        //CreatedByID = userId,
+                                        ModifiedOn= DateTime.Now,
+                                        ModifiedByID=userId
+                                    });
+                                    defoliation++;
+                                }
+                            }
+                        }
+                        if (error == null || string.IsNullOrWhiteSpace(error.Message))
                         {
                             crop.FieldName = null;
                             crop.EncryptedCounter = null;
@@ -4927,7 +4996,7 @@ namespace NMP.Portal.Controllers
                             CropData cropEntry = new CropData
                             {
                                 Crop = crop,
-                                ManagementPeriods = managementPeriodList
+                                ManagementPeriods = managementPeriods
                             };
                             cropEntries.Add(cropEntry);
                         }
@@ -5064,7 +5133,7 @@ namespace NMP.Portal.Controllers
                 TempData["CurrentSwardError"] = ex.Message;
                 return RedirectToAction("CurrentSward");
             }
-            
+
         }
 
         [HttpGet]
@@ -5118,11 +5187,11 @@ namespace NMP.Portal.Controllers
                 {
                     planViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
                 }
-                if(planViewModel.GrassSeason==model.GrassSeason && !model.IsAnyChangeInField)
+                if (planViewModel.GrassSeason == model.GrassSeason && !model.IsAnyChangeInField)
                 {
                     return RedirectToAction("CheckAnswer");
                 }
-                else if(planViewModel.GrassSeason != model.GrassSeason)
+                else if (planViewModel.GrassSeason != model.GrassSeason)
                 {
                     model.SowingDateQuestion = null;
                     model.SowingDate = null;
@@ -5704,7 +5773,7 @@ namespace NMP.Portal.Controllers
                 else if (!model.IsAnyChangeInField)
                 {
                     model.Yield = null;
-                    model.Crops.ForEach(x=>x.Yield = null);
+                    model.Crops.ForEach(x => x.Yield = null);
                 }
             }
             if (!ModelState.IsValid)
@@ -5735,8 +5804,8 @@ namespace NMP.Portal.Controllers
                 return View(model);
             }
 
-           
-            
+
+
             foreach (var crop in model.Crops)
             {
                 fieldIds.Add(crop.FieldID ?? 0);
@@ -5829,7 +5898,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("CheckAnswer");
                 }
-                if(model.IsCheckAnswer && !model.IsAnyChangeInField && model.GrassGrowthClassCounter < model.Crops.Count)
+                if (model.IsCheckAnswer && !model.IsAnyChangeInField && model.GrassGrowthClassCounter < model.Crops.Count)
                 {
                     if (model.Crops[model.GrassGrowthClassCounter].Yield == null)
                     {
