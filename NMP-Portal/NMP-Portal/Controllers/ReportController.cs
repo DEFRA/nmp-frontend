@@ -1984,8 +1984,8 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Report Controller : Exception in ImportExportOption() post action : {ex.Message}, {ex.StackTrace}");
-                TempData["ErrorOnImportExportOption"] = ex.Message;
+                _logger.LogTrace($"Report Controller : Exception in LivestockImportExportDate() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnLivestockImportExportDate"] = ex.Message;
                 return View(model);
             }
         }
