@@ -1891,10 +1891,10 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("ManureTypeId", Resource.MsgSelectAnOptionBeforeContinuing);
                 }
-
+                Error error = null;
                 if (!ModelState.IsValid)
                 {
-                    (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
+                    (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
                     if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                     {
                         (List<ManureType> ManureTypes, error) = await _organicManureService.FetchManureTypeList((int)NMP.Portal.Enums.ManureGroup.LivestockManure, farm.CountryID.Value);
@@ -1910,7 +1910,11 @@ namespace NMP.Portal.Controllers
                     }
                     return View(model);
                 }
-
+                (ManureType manureType, error) = await _organicManureService.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
+                if (error == null && manureType != null)
+                {
+                    model.ManureTypeName = manureType.Name;
+                }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                 return RedirectToAction("LivestockImportExportDate");
 
@@ -1946,6 +1950,125 @@ namespace NMP.Portal.Controllers
                 _logger.LogTrace($"Report Controller : Exception in LivestockImportExportDate() action : {ex.Message}, {ex.StackTrace}");
                 TempData["ErrorOnManureType"] = ex.Message;
                 return RedirectToAction("ManureType");
+
+            }
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult LivestockImportExportDate(ReportViewModel model)
+        {
+            _logger.LogTrace("Report Controller : LivestockImportExportDate() post action called");
+            try
+            {
+                if (model.LivestockImportExportDate == null)
+                {
+                    ModelState.AddModelError("LivestockImportExportDate", Resource.MsgEnterADateBeforeContinuing);
+                }
+                if (model.LivestockImportExportDate != null)
+                {
+                    if (model.LivestockImportExportDate.Value.Date.Year != model.Year)
+                    {
+                        ModelState.AddModelError("LivestockImportExportDate", Resource.lblThisDateIsOutsideTheSelectedCalenderYear);
+                    }
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                return RedirectToAction("LivestockQuantity");
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in ImportExportOption() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnImportExportOption"] = ex.Message;
+                return View(model);
+            }
+        }
+        [HttpGet]
+        public IActionResult LivestockQuantity()
+        {
+            _logger.LogTrace("Report Controller : LivestockQuantity() action called");
+            ReportViewModel model = new ReportViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in LivestockQuantity() action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnLivestockImportExportDate"] = ex.Message;
+                return RedirectToAction("LivestockImportExportDate");
+
+            }
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult LivestockQuantity(ReportViewModel model)
+        {
+            _logger.LogTrace("Report Controller : LivestockQuantity() post action called");
+            try
+            {
+                if (model.LivestockQuantity == null)
+                {
+                    ModelState.AddModelError("LivestockQuantity", Resource.lblEnterTheAmountYouImportedInTonnes);
+                }
+                if (model.LivestockQuantity != null && model.LivestockQuantity < 0)
+                {
+                    ModelState.AddModelError("LivestockQuantity", string.Format(Resource.lblEnterAPositiveValueOfPropertyName, Resource.lblLivestockQuantity));
+                }
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                return RedirectToAction("LivestockNutrientValue");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in LivestockQuantity() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnLivestockQuantity"] = ex.Message;
+                return View(model);
+            }
+        }
+        [HttpGet]
+        public IActionResult LivestockNutrientValue()
+        {
+            _logger.LogTrace("Report Controller : LivestockNutrientValue() action called");
+            ReportViewModel model = new ReportViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in LivestockNutrientValue() action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnLivestockQuantity"] = ex.Message;
+                return RedirectToAction("LivestockQuantity");
 
             }
             return View(model);

@@ -3355,6 +3355,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter the amount you imported in tonnes.
+        /// </summary>
+        public static string lblEnterTheAmountYouImportedInTonnes {
+            get {
+                return ResourceManager.GetString("lblEnterTheAmountYouImportedInTonnes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the application rate.
         /// </summary>
         public static string lblEnterTheApplicationRate {
@@ -4823,6 +4832,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How much did you {0}?.
+        /// </summary>
+        public static string lblHowMuchDidYouImport {
+            get {
+                return ResourceManager.GetString("lblHowMuchDidYouImport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How much nitrogen (N) has been applied to {0} each year (on average)?.
         /// </summary>
         public static string lblHowMuchNitrogenHasBeenAppliedToFieldEachYear {
@@ -5774,6 +5792,15 @@ namespace NMP.Portal.Resources {
         public static string lblLivestockNumbers {
             get {
                 return ResourceManager.GetString("lblLivestockNumbers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Livestock Quantity.
+        /// </summary>
+        public static string lblLivestockQuantity {
+            get {
+                return ResourceManager.GetString("lblLivestockQuantity", resourceCulture);
             }
         }
         
@@ -6756,6 +6783,15 @@ namespace NMP.Portal.Resources {
         public static string lblNutrientValues {
             get {
                 return ResourceManager.GetString("lblNutrientValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nutrient values for {0}.
+        /// </summary>
+        public static string lblNutrientValuesForManureTypeName {
+            get {
+                return ResourceManager.GetString("lblNutrientValuesForManureTypeName", resourceCulture);
             }
         }
         
@@ -9703,6 +9739,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This date is outside the selected calender year..
+        /// </summary>
+        public static string lblThisDateIsOutsideTheSelectedCalenderYear {
+            get {
+                return ResourceManager.GetString("lblThisDateIsOutsideTheSelectedCalenderYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This gives the following range for annual dry matter yield..
         /// </summary>
         public static string lblThisGivesTheFollowingRangeForAnnualDryMatterYield {
@@ -11278,7 +11323,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When did you this livestock manure?.
+        ///   Looks up a localized string similar to When did you {0} this livestock manure?.
         /// </summary>
         public static string lblWhenDidYouThisLivestockManure {
             get {
