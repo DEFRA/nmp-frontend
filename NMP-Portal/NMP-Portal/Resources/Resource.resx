@@ -5060,4 +5060,7 @@ live</value>
   <data name="lblThisDateIsOutsideTheSelectedCalenderYear" xml:space="preserve">
     <value>This date is outside the selected calender year.</value>
   </data>
+  <data name="lblLivestockQuantityWIthoutSpace" xml:space="preserve">
+    <value>LivestockQuantity</value>
+  </data>
 </root>

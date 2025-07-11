@@ -61,7 +61,7 @@
             <div class="govuk-grid-column-two-thirds">
                 <h1 class="govuk-heading-l">
                     @(string.Format(Resource.lblWhenDidYouThisLivestockManure, Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
-                        Resource.lblImport : Resource.lblExport))
+                        Resource.lblImport.ToLower() : Resource.lblExport.ToLower()))
                 </h1>
 
                 <govuk-date-input asp-for="@Model.LivestockImportExportDate" pattern="[0-9]*">

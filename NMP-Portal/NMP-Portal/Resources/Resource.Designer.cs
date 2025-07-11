@@ -5805,6 +5805,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to LivestockQuantity.
+        /// </summary>
+        public static string lblLivestockQuantityWIthoutSpace {
+            get {
+                return ResourceManager.GetString("lblLivestockQuantityWIthoutSpace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to low.
         /// </summary>
         public static string lblLow {

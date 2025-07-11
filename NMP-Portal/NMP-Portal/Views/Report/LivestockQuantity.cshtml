@@ -61,7 +61,7 @@
             <div class="govuk-grid-column-two-thirds">
                 <h1 class="govuk-heading-l">
                     @(string.Format(Resource.lblHowMuchDidYouImport, Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
-                        Resource.lblImport : Resource.lblExport))
+                        Resource.lblImport.ToLower() : Resource.lblExport.ToLower()))
                 </h1>
                     <govuk-input asp-for=@Model.LivestockQuantity inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                     <govuk-input-label is-page-heading="false" class="govuk-label--l">

@@ -9,6 +9,7 @@ using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
 using NMP.Portal.Services;
 using NMP.Portal.ViewModels;
+using System;
 using System.Diagnostics.Metrics;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Error = NMP.Portal.ServiceResponses.Error;
@@ -2025,11 +2026,30 @@ namespace NMP.Portal.Controllers
             {
                 if (model.LivestockQuantity == null)
                 {
-                    ModelState.AddModelError("LivestockQuantity", Resource.lblEnterTheAmountYouImportedInTonnes);
+                    if ((!ModelState.IsValid) && ModelState.ContainsKey("LivestockQuantity"))
+                    {
+                        var areaError = ModelState["LivestockQuantity"].Errors.Count > 0 ?
+                                        ModelState["LivestockQuantity"].Errors[0].ErrorMessage.ToString() : null;
+
+                        if (areaError != null && areaError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["LivestockQuantity"].RawValue, Resource.lblLivestockQuantityWIthoutSpace)))
+                        {
+                            ModelState["LivestockQuantity"].Errors.Clear();
+                            ModelState["LivestockQuantity"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblQuantity.ToLower()));
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("LivestockQuantity", Resource.lblEnterTheAmountYouImportedInTonnes);
+                        }
+                    }
+                    
                 }
                 if (model.LivestockQuantity != null && model.LivestockQuantity < 0)
                 {
-                    ModelState.AddModelError("LivestockQuantity", string.Format(Resource.lblEnterAPositiveValueOfPropertyName, Resource.lblLivestockQuantity));
+                    ModelState.AddModelError("LivestockQuantity", string.Format(Resource.lblEnterAPositiveValueOfPropertyName, Resource.lblQuantity.ToLower()));
+                }
+                if (model.LivestockQuantity != null && model.LivestockQuantity > 999999)
+                {
+                    ModelState.AddModelError("LivestockQuantity", string.Format(Resource.MsgEnterValueInBetween, Resource.lblQuantity, 0,999999));
                 }
                 if (!ModelState.IsValid)
                 {
