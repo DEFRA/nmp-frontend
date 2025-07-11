@@ -2151,7 +2151,7 @@ namespace NMP.Portal.Controllers
                             model.DefoliationSequenceId = harvestYearPlanResponse.FirstOrDefault().DefoliationSequenceID;
                             model.SwardTypeId = harvestYearPlanResponse.FirstOrDefault().SwardTypeID;
                             model.PotentialCut = harvestYearPlanResponse.FirstOrDefault().PotentialCut;
-                            if(model.CropGroupId==(int)NMP.Portal.Enums.CropGroup.Grass)
+                            if (harvestYearPlanResponse[i].CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
                             {
                                 model.CurrentSward = (harvestYearPlanResponse.FirstOrDefault().Establishment == null || harvestYearPlanResponse.FirstOrDefault().Establishment == 0) ? (int)NMP.Portal.Enums.CurrentSward.ExistingSward : (int)NMP.Portal.Enums.CurrentSward.NewSward;
                             }
