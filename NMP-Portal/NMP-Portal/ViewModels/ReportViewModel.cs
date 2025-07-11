@@ -34,7 +34,13 @@ namespace NMP.Portal.ViewModels
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheTotalAreaInAnNVZ))]
         public decimal? TotalAreaInNVZ { get; set; }
         public decimal? LivestockNumbers { get; set; }
+        public bool? LivestockImportExportQuestion { get; set; }
         public decimal? ImportsExportsOfLivestockManure { get; set; }
         public bool IsCheckList { get; set; } = false;
+        public int? ImportExport { get; set; }
+        public int? ManureTypeId { get; set; }
+        public string? ManureTypeName { get; set; }
+        public DateTime? LivestockImportExportDate { get; set; }
+        public int? LivestockQuantity { get; set; }
     }
 }
