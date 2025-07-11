@@ -5018,4 +5018,31 @@ live</value>
   <data name="lblWhichFieldsWouldYouLikeToPlanFor" xml:space="preserve">
     <value>Which fields would you like to plan {0} for?</value>
   </data>
+  <data name="lblDidYouHaveAnyImportsAndExports" xml:space="preserve">
+    <value>Did you have any imports and exports of livestock manure at {0} in {1}?</value>
+  </data>
+  <data name="MsgSelectYesIfYouHadAnyImportsOrExportsOfLivestockManure" xml:space="preserve">
+    <value>Select yes if you had any imports or exports of livestock manure</value>
+  </data>
+  <data name="lblDoYouWantToAddAnImportOrAnExportOfLivestockManure" xml:space="preserve">
+    <value>Do you want to add an import or an export of livestock manure?</value>
+  </data>
+  <data name="lblExport" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="lblExporting" xml:space="preserve">
+    <value>exporting</value>
+  </data>
+  <data name="lblImport" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="lblImporting" xml:space="preserve">
+    <value>importing</value>
+  </data>
+  <data name="lblWhatTypeOfLivestockManureAreYouImportingOrExporting" xml:space="preserve">
+    <value>What type of livestock manure are you {0}?</value>
+  </data>
+  <data name="lblWhenDidYouThisLivestockManure" xml:space="preserve">
+    <value>When did you this livestock manure?</value>
+  </data>
 </root>
