@@ -240,17 +240,21 @@
                         </govuk-summary-list-row-actions>
                         } *@
                         </govuk-summary-list-row>
-                        <govuk-summary-list-row>
-                            <govuk-summary-list-row-key>
-                                @Resource.lblCropGroup
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                                @Model.CropGroup
-                            </govuk-summary-list-row-value>
-                            <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="CropGroups" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
-                            </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row>
+                        @if(Model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass)
+                        {
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    @Resource.lblCropGroup
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @Model.CropGroup
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="CropGroups" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                        }
+                        
                     }
 
                     <govuk-summary-list-row class=@((!Model.CropTypeID.HasValue)?"govuk-error-message":"")>
@@ -318,7 +322,7 @@
                             <govuk-summary-list-row-actions>
                                 @if (!(!string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate) && (ViewBag.IsFieldChange != null && ViewBag.IsFieldChange)))
                                 {
-                                    <govuk-summary-list-row-action class="@(ViewBag.FieldOptions.Count==1? "disabled": "")" asp-action="CropFields" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
+                                    <govuk-summary-list-row-action class="@(ViewBag.FieldOptions != null && ViewBag.FieldOptions.Count==1? "disabled": "")" asp-action="CropFields" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
                                 }
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
@@ -387,17 +391,21 @@
                     {
                         @if (Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass)
                         {
-                            <govuk-summary-list-row class=@((!Model.GrassSeason.HasValue)?"govuk-error-message":"")>
-                                <govuk-summary-list-row-key>
-                                    @string.Format(Resource.lblWhenIsTheSwardInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields), Model.Year)
-                                </govuk-summary-list-row-key>
-                                <govuk-summary-list-row-value>
-                                    @(Model.GrassSeason == null ? Resource.lblNotEntered : Model.GrassSeasonName)
-                                </govuk-summary-list-row-value>
-                                <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="GrassSeason" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
-                                </govuk-summary-list-row-actions>
-                            </govuk-summary-list-row>
+                            @if(Model.GrassSeason != null  && Model.GrassSeason != 0)
+                            {
+                                <govuk-summary-list-row class=@((!Model.GrassSeason.HasValue)?"govuk-error-message":"")>
+                                    <govuk-summary-list-row-key>
+                                        @string.Format(Resource.lblWhenIsTheSwardInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields), Model.Year)
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @(Model.GrassSeason == null ? Resource.lblNotEntered : Model.GrassSeasonName)
+                                    </govuk-summary-list-row-value>
+                                    <govuk-summary-list-row-actions>
+                                        <govuk-summary-list-row-action asp-action="GrassSeason" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
+                                    </govuk-summary-list-row-actions>
+                                </govuk-summary-list-row>
+                            }
+                            
                         }
 
                         <govuk-summary-list-row class=@((!Model.SowingDateQuestion.HasValue)?"govuk-error-message":"")>
@@ -665,7 +673,7 @@
                                 @if (Model.DefoliationSequenceId == null)
                                 {
                                     <govuk-summary-list-row-value>
-                                        @Resource.lblNotEntered;
+                                        @Resource.lblNotEntered
                                     </govuk-summary-list-row-value>
                                 }
                                 else
