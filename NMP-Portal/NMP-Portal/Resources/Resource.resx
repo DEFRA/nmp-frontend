@@ -5043,6 +5043,24 @@ live</value>
     <value>What type of livestock manure are you {0}?</value>
   </data>
   <data name="lblWhenDidYouThisLivestockManure" xml:space="preserve">
-    <value>When did you this livestock manure?</value>
+    <value>When did you {0} this livestock manure?</value>
+  </data>
+  <data name="lblHowMuchDidYouImport" xml:space="preserve">
+    <value>How much did you {0}?</value>
+  </data>
+  <data name="lblEnterTheAmountYouImportedInTonnes" xml:space="preserve">
+    <value>Enter the amount you imported in tonnes</value>
+  </data>
+  <data name="lblLivestockQuantity" xml:space="preserve">
+    <value>Livestock Quantity</value>
+  </data>
+  <data name="lblNutrientValuesForManureTypeName" xml:space="preserve">
+    <value>Nutrient values for {0}</value>
+  </data>
+  <data name="lblThisDateIsOutsideTheSelectedCalenderYear" xml:space="preserve">
+    <value>This date is outside the selected calender year.</value>
+  </data>
+  <data name="lblLivestockQuantityWIthoutSpace" xml:space="preserve">
+    <value>LivestockQuantity</value>
   </data>
 </root>

@@ -1,27 +1,25 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblImportsExports;
-    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
-    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+    ViewData["Title"] = Resource.lblNutrient;
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@(Model.IsCheckList ? "LivestockManureNitrogenReportChecklist" : "Year") asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(Model.IsCheckList ? "LivestockQuantity" : "Year") asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
-@if (TempData["ErrorOnLivestockImportExportQuestion"] != null)
+@if (TempData["ErrorOnLivestockNutrientValue"] != null)
 {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <govuk-error-summary>
-                <govuk-error-summary-item href="#">@TempData["ErrorOnLivestockImportExportQuestion"]</govuk-error-summary-item>
+                <govuk-error-summary-item href="#">@TempData["ErrorOnLivestockNutrientValue"]</govuk-error-summary-item>
             </govuk-error-summary>
         </div>
     </div>
 }
 @if (Model != null)
 {
-    <form asp-action="LivestockImportExportQuestion" asp-controller="Report" method="post" autocomplete="off">
+    <form asp-action="LivestockNutrientValue" asp-controller="Report" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
         <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
@@ -33,17 +31,17 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
-
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalFarmArea"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalAreaInNVZ"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockNumbers"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckList" value="@Model.IsCheckList"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsGrasslandDerogation" value="@Model.IsGrasslandDerogation"></govuk-input>
-            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeId"></govuk-input>
-            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockImportExportQuestion" value="@Model.LivestockImportExportQuestion"></govuk-input>
             <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ImportExport"></govuk-input>
             <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockQuantity"></govuk-input>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockImportExportDate"></govuk-date-input>
+            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeId"></govuk-input>
+            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeName"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -63,21 +61,16 @@
             <div class="govuk-grid-column-two-thirds">
 
                 <h1 class="govuk-heading-l">
-                    @string.Format(Resource.lblDidYouHaveAnyImportsAndExports, Model.FarmName, Model.Year)
-                </h1>                
+                    @string.Format(Resource.lblNutrientValuesForManureTypeName,Model.ManureTypeName)
+                </h1>
 
-                <govuk-radios class="govuk-radios--inline" asp-for="@Model.LivestockImportExportQuestion">
-                    <govuk-radios-fieldset>
-                        <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--l">
-                        </govuk-radios-fieldset-legend>
-                        <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
-                        <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>
-                        <govuk-radios-item value=@no>@Resource.lblNo</govuk-radios-item>
-                    </govuk-radios-fieldset>
-                </govuk-radios>
-                <govuk-button type="submit" class="margin-bottom-forty">
-                    @Resource.lblContinue
-                </govuk-button>
+                <govuk-notification-banner>
+                    <govuk-notification-banner-title>
+                        @Resource.lblImportant
+                    </govuk-notification-banner-title>
+                    Work is under construction.
+                </govuk-notification-banner>
+               
                 <p class="govuk-body cancel-link">
                     @if (!Model.IsCheckList)
                     {
