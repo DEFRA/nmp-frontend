@@ -1918,6 +1918,16 @@ namespace NMP.Portal.Controllers
                     model.IsManureTypeLiquid = manureType.IsLiquid.Value;
                     model.ManureTypeName = manureType.Name;
                 }
+
+                ReportViewModel reportViewModel = new ReportViewModel();
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    reportViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                if(reportViewModel!=null&&reportViewModel.ManureTypeId!=model.ManureTypeId)
+                {
+                    model.IsDefaultValueChange = true;
+                }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                 return RedirectToAction("LivestockImportExportDate");
 
@@ -2069,7 +2079,51 @@ namespace NMP.Portal.Controllers
             }
         }
         [HttpGet]
-        public async  Task<IActionResult> LivestockDefaultNutrientValue()
+        public async  Task<IActionResult> UpdateLivestockImportExport(string q)
+        {
+            _logger.LogTrace($"Report Controller : UpdateLivestockImportExport() action called");
+            ReportViewModel model = new ReportViewModel();           
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
+                (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(decryptedFarmId);
+                if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
+                {
+                    model.FarmName = farm.Name;
+                    model.FarmId = decryptedFarmId;
+                    model.EncryptedFarmId = q;
+                    List<HarvestYear> harvestYearList = new List<HarvestYear>();
+                    (List<NutrientsLoadingManures> nutrientsLoadingManuresList, error) = await _reportService.FetchNutrientsLoadingManuresByFarmId(decryptedFarmId);
+                    if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingManuresList != null && nutrientsLoadingManuresList.Count > 0)
+                    {
+                        HarvestYear harvestYear = new HarvestYear();
+                        foreach (var nutrientsLoadingManure in nutrientsLoadingManuresList)
+                        {
+                            harvestYear.LastModifiedOn = nutrientsLoadingManure.ModifiedOn != null ? nutrientsLoadingManure.ModifiedOn.Value : nutrientsLoadingManure.CreatedOn.Value;
+                            harvestYear.Year = nutrientsLoadingManure.ManureDate.Value.Year;
+                            harvestYearList.Add(harvestYear);
+                        }
+
+                        harvestYearList.OrderBy(x => x.Year).ToList();
+                        model.HarvestYear = harvestYearList;
+                    }
+                    else
+                    {
+                        TempData["Error"] = error.Message;
+                        return RedirectToAction("FarmSummary", "Farm", new { q = q });
+                    }
+                }
+                else
+                {
+                    TempData["Error"] = error.Message;
+                    return RedirectToAction("FarmSummary", "Farm", new { q = q });
+                }
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+            }
+            return View(model);
+        }
+        [HttpGet]
+        public async Task<IActionResult> LivestockDefaultNutrientValue()
         {
             _logger.LogTrace("Report Controller : LivestockDefaultNutrientValue() action called");
             ReportViewModel model = new ReportViewModel();
@@ -2085,26 +2139,18 @@ namespace NMP.Portal.Controllers
                 }
                 Error? error = null;
                 FarmManureTypeResponse? farmManure = null;
-                ReportViewModel reportViewModel = new ReportViewModel();
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
-                {
-                    reportViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
-                }
                 (List<FarmManureTypeResponse> farmManureTypeList, error) = await _organicManureService.FetchFarmManureTypeByFarmId(model.FarmId ?? 0);
                 if (error == null)
                 {
                     (ManureType manureType, error) = await _organicManureService.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
 
-                    if (error == null && manureType!=null && farmManureTypeList.Count > 0)
+                    if (error == null && manureType != null && farmManureTypeList.Count > 0)
                     {
-                        bool previousDefaultFarmManureValueDate = false;
                         farmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == model.ManureTypeId);
-                        if(reportViewModel!=null&&  model.DefaultFarmManureValueDate != reportViewModel.DefaultFarmManureValueDate)
+                        
+                        if (model.IsDefaultValueChange)
                         {
-                            previousDefaultFarmManureValueDate = true;
-                        }
-                        if (string.IsNullOrWhiteSpace(model.DefaultNutrientValue)&&(!previousDefaultFarmManureValueDate))
-                        {
+                            model.IsDefaultValueChange = false;
                             if (farmManure != null)
                             {
                                 model.ManureType.DryMatter = farmManure.DryMatter;
@@ -2164,50 +2210,6 @@ namespace NMP.Portal.Controllers
                 TempData["ErrorOnLivestockQuantity"] = ex.Message;
                 return RedirectToAction("LivestockQuantity");
 
-            }
-            return View(model);
-        }
-        [HttpGet]
-        public async Task<IActionResult> UpdateLivestockImportExport(string q)
-        {
-            _logger.LogTrace($"Report Controller : UpdateLivestockImportExport() action called");
-            ReportViewModel model = new ReportViewModel();           
-            if (!string.IsNullOrWhiteSpace(q))
-            {
-                int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
-                (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(decryptedFarmId);
-                if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
-                {
-                    model.FarmName = farm.Name;
-                    model.FarmId = decryptedFarmId;
-                    model.EncryptedFarmId = q;
-                    List<HarvestYear> harvestYearList = new List<HarvestYear>();
-                    (List<NutrientsLoadingManures> nutrientsLoadingManuresList, error) = await _reportService.FetchNutrientsLoadingManuresByFarmId(decryptedFarmId);
-                    if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingManuresList != null && nutrientsLoadingManuresList.Count > 0)
-                    {
-                        HarvestYear harvestYear = new HarvestYear();
-                        foreach (var nutrientsLoadingManure in nutrientsLoadingManuresList)
-                        {
-                            harvestYear.LastModifiedOn = nutrientsLoadingManure.ModifiedOn != null ? nutrientsLoadingManure.ModifiedOn.Value : nutrientsLoadingManure.CreatedOn.Value;
-                            harvestYear.Year = nutrientsLoadingManure.ManureDate.Value.Year;
-                            harvestYearList.Add(harvestYear);
-                        }
-
-                        harvestYearList.OrderBy(x => x.Year).ToList();
-                        model.HarvestYear = harvestYearList;
-                    }
-                    else
-                    {
-                        TempData["Error"] = error.Message;
-                        return RedirectToAction("FarmSummary", "Farm", new { q = q });
-                    }
-                }
-                else
-                {
-                    TempData["Error"] = error.Message;
-                    return RedirectToAction("FarmSummary", "Farm", new { q = q });
-                }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             return View(model);
         }

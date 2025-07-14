@@ -40,6 +40,7 @@ namespace NMP.Portal.ViewModels
         public int? ImportExport { get; set; }
         public int? ManureTypeId { get; set; }
         public string? ManureTypeName { get; set; }
+        public bool IsDefaultValueChange { get; set; } = false;
         public DateTime? LivestockImportExportDate { get; set; }
         public int? LivestockQuantity { get; set; }
         public List<HarvestYear>? HarvestYear { get; set; }

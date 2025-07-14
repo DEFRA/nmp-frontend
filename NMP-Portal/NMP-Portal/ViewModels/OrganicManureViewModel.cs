@@ -152,5 +152,6 @@ namespace NMP.Portal.ViewModels
         public bool? IsAnyCropIsGrass { get; set; }
         public int? GrassCropCount { get; set; }
         public bool NeedToShowSameDefoliationForAll { get; set; } = true;
+        public bool IsDefaultValueChange { get; set; } = false;
     }
 }
