@@ -763,6 +763,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add another year.
+        /// </summary>
+        public static string lblAddAnotherYear {
+            get {
+                return ResourceManager.GetString("lblAddAnotherYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add a soil mineral nitrogen analysis result for {0}.
         /// </summary>
         public static string lblAddASoilMineralNitrogenAnalysisResultForCrop {
@@ -1722,6 +1731,15 @@ namespace NMP.Portal.Resources {
         public static string lblCalculateSoilNitrogenMineralisation {
             get {
                 return ResourceManager.GetString("lblCalculateSoilNitrogenMineralisation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Calendar year.
+        /// </summary>
+        public static string lblCalendarYear {
+            get {
+                return ResourceManager.GetString("lblCalendarYear", resourceCulture);
             }
         }
         
@@ -5985,6 +6003,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manure imports and exports.
+        /// </summary>
+        public static string lblManureImportsAndExports {
+            get {
+                return ResourceManager.GetString("lblManureImportsAndExports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manure non spreading area.
         /// </summary>
         public static string lblManureNonSpreadArea {
@@ -7116,6 +7143,15 @@ namespace NMP.Portal.Resources {
         public static string lblOrganicMaterialApplicationsForSorting {
             get {
                 return ResourceManager.GetString("lblOrganicMaterialApplicationsForSorting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Organic material imports and exports.
+        /// </summary>
+        public static string lblOrganicMaterialImportsAndExports {
+            get {
+                return ResourceManager.GetString("lblOrganicMaterialImportsAndExports", resourceCulture);
             }
         }
         
@@ -10455,6 +10491,15 @@ namespace NMP.Portal.Resources {
         public static string lblUpdateXField {
             get {
                 return ResourceManager.GetString("lblUpdateXField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update {0} imports or exports.
+        /// </summary>
+        public static string lblUpdateYearImportsOrExports {
+            get {
+                return ResourceManager.GetString("lblUpdateYearImportsOrExports", resourceCulture);
             }
         }
         

@@ -5063,4 +5063,19 @@ live</value>
   <data name="lblLivestockQuantityWIthoutSpace" xml:space="preserve">
     <value>LivestockQuantity</value>
   </data>
+  <data name="lblAddAnotherYear" xml:space="preserve">
+    <value>Add another year</value>
+  </data>
+  <data name="lblCalendarYear" xml:space="preserve">
+    <value>Calendar year</value>
+  </data>
+  <data name="lblManureImportsAndExports" xml:space="preserve">
+    <value>Manure imports and exports</value>
+  </data>
+  <data name="lblOrganicMaterialImportsAndExports" xml:space="preserve">
+    <value>Organic material imports and exports</value>
+  </data>
+  <data name="lblUpdateYearImportsOrExports" xml:space="preserve">
+    <value>Update {0} imports or exports</value>
+  </data>
 </root>
