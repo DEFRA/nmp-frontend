@@ -42,6 +42,7 @@ namespace NMP.Portal.ViewModels
         public string? ManureTypeName { get; set; }
         public DateTime? LivestockImportExportDate { get; set; }
         public int? LivestockQuantity { get; set; }
+        public List<HarvestYear>? HarvestYear { get; set; }
         public string? DefaultNutrientValue { get; set; }
         public decimal? N { get; set; }
         public decimal? P2O5 { get; set; }
