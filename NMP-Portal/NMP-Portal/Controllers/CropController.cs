@@ -4799,6 +4799,7 @@ namespace NMP.Portal.Controllers
                 i = 0;
                 foreach (var crop in model.Crops)
                 {
+                    if((crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && crop.SwardTypeID == (int)NMP.Portal.Enums.SwardType.Grass) || crop.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)
                     if (crop.Yield == null)
                     {
                         if (model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
