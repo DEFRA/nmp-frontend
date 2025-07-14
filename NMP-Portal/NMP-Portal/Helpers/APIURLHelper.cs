@@ -173,7 +173,7 @@ namespace NMP.Portal.Helpers
         public const string FetchCropTypeLinkingsAsyncAPI = "crop-type-linkings";
 
         //Grass API Urls
-        public const string FetchDefoliationSequencesBySwardTypeIdAndNumberOfCutAsyncAPI = "vendors/rb209/Grass/DefoliationSequences/{0}/{1}/{2}";
+        public const string FetchDefoliationSequencesBySwardTypeIdAndNumberOfCutAsyncAPI = "vendors/rb209/Grass/DefoliationSequences/{0}/{1}/{2}/{3}";
         public const string FetchPotentialCutsBySwardTypeIdAndSwardManagementIdAsyncAPI = "vendors/rb209/Grass/PotentialCuts/{0}/{1}";
         public const string FetchSwardManagementsAsyncAPI = "vendors/rb209/Grass/SwardManagements";
         public const string FetchSwardTypesAsyncAPI = "vendors/rb209/Grass/SwardTypes";
@@ -186,5 +186,6 @@ namespace NMP.Portal.Helpers
         public const string AddNutrientsLoadingFarmDetailsAPI = "nutrientsLoadingFarmDetails";
         public const string FetchNutrientsLoadingFarmDetailsByfarmIdAndYearAPI = "nutrientsLoadingFarmDetails/{0}?year={1}";
         public const string UpdateNutrientsLoadingFarmDetailsAsyncAPI = "nutrientsLoadingFarmDetails";
+        public const string FetchNutrientsloadingFarmDetailsFarmIdAPI = "/nutrientsLoadingManures/{0}";
     }
 }

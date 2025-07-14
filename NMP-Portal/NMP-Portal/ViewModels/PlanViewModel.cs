@@ -102,5 +102,6 @@ namespace NMP.Portal.ViewModels
         public bool? CopyExistingPlan { get; set; }
         public int? CopyYear { get; set; }
         public OrganicInorganicCopy? OrganicInorganicCopy { get; set; }
+        public string? GrassSeasonName { get; set; }
     }
 }

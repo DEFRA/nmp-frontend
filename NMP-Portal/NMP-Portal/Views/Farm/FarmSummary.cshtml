@@ -82,10 +82,10 @@
                         else
                         {
                             <p class="govuk-body">
-        @Resource.lblToStartCreatingPlanAndRecords
-                            <a class="govuk-link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">
-                                @Resource.lblAddYourFields
-                            </a>
+                                @Resource.lblToStartCreatingPlanAndRecords
+                                <a class="govuk-link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">
+                                    @Resource.lblAddYourFields
+                                </a>
                             </p>
                         }
 
@@ -114,23 +114,26 @@
                     </li>
                     @if (ViewBag.FieldCount != null && ViewBag.FieldCount > 0)
                     {
-                    <li>
-                        <a class="govuk-link" asp-action="ManageFarmFields" asp-controller="Field" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblUpdateFieldsOrSoilAnalysis</a>
-                    </li>
+                        <li>
+                            <a class="govuk-link" asp-action="ManageFarmFields" asp-controller="Field" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblUpdateFieldsOrSoilAnalysis</a>
+                        </li>
                     }
-                    <li>
-                        <a class="govuk-link" href="#">@Resource.lblFarmSummaryContent9</a>
-                    </li>
-                    <li>
-                        <a class="govuk-link" href="#">@Resource.lblFarmSummaryContent10</a>
-                    </li>
-                    <li>
-                        <a class="govuk-link" href="#">@Resource.lblFarmSummaryContent11</a>
-                    </li>
+                    @* <li>
+                <a class="govuk-link" href="#">@Resource.lblFarmSummaryContent9</a>
+                </li>*@
+                    @if (ViewBag.LiveStockHaveImportExportData != null)
+                    {
+                        <li>
+                            <a class="govuk-link" asp-controller="Report" asp-action="UpdateLivestockImportExport" asp-route-q="@Model.EncryptedFarmId">@Resource.lblFarmSummaryContent10</a>
+                        </li>
+                    }
+                    @*  <li>
+                <a class="govuk-link" href="#">@Resource.lblFarmSummaryContent11</a>
+                </li> *@
 
                 </ul>
             </div>
-         
+
         </div>
     </div>
 }

@@ -146,7 +146,7 @@
                     {
                         @foreach (var potentialCut in ViewBag.PotentialCuts)
                         {
-                            <govuk-radios-item value="@(Model.CurrentSward != (int)NMP.Portal.Enums.CurrentSward.NewSward ? potentialCut.PotentialCutId : potentialCut.PotentialCutId+1)">@potentialCut.PotentialCutText</govuk-radios-item>
+                            <govuk-radios-item value="@(potentialCut.PotentialCutId)">@potentialCut.PotentialCutText</govuk-radios-item>
                         }
                     }
 
