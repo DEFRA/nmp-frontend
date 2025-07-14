@@ -345,7 +345,7 @@ namespace NMP.Portal.Controllers
                                         var crop = new Crop
                                         {
                                             Year = model.Year.Value,
-                                            ID = harvestYearPlanResponse[0].CropID,
+                                            ID = harvestYearPlanResponse.Count > 0 ? harvestYearPlanResponse[0].CropID : null,
                                             CropTypeID = model.CropTypeID,
                                             OtherCropName = model.OtherCropName,
                                             FieldID = fieldId,
