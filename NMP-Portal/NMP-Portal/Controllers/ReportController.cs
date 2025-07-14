@@ -2093,5 +2093,51 @@ namespace NMP.Portal.Controllers
             }
             return View(model);
         }
+        [HttpGet]
+        public async Task<IActionResult> OrganicManureImportAndExportDetail(string q)
+        {
+            NutrientsLoadingManuresViewModel model = new NutrientsLoadingManuresViewModel();
+            if (HttpContext.Session.Keys.Contains<string>("NutrientsLoadingManuresData"))
+            {
+                model = HttpContext.Session.GetObjectFromJson<NutrientsLoadingManuresViewModel>("NutrientsLoadingManuresData");
+            }
+            _logger.LogTrace($"OrganicManureImportAndExport Controller : Index() action called");
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
+                (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(decryptedFarmId);
+                if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
+                {
+                    model.FarmName = farm.Name;
+                    List<HarvestYear> harvestYearList = new List<HarvestYear>();
+                    (List<NutrientsLoadingManures> nutrientsLoadingManuresList, error) = await _organicManureImportAndExportService.FetchNutrientsLoadingManuresByFarmId(decryptedFarmId);
+                    if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingManuresList != null && nutrientsLoadingManuresList.Count > 0)
+                    {
+                        HarvestYear harvestYear = new HarvestYear();
+                        foreach (var nutrientsLoadingManure in nutrientsLoadingManuresList)
+                        {
+                            harvestYear.LastModifiedOn = nutrientsLoadingManuresList.Where(x => x.Date.Value.Year == DateTime.Now.Year) != null ? nutrientsLoadingManuresList.Where(x => x.Date.Value.Year == DateTime.Now.Year).Select(x => x.ModifiedOn).FirstOrDefault() :
+                                nutrientsLoadingManuresList.Where(x => x.Date.Value.Year == DateTime.Now.Year).Select(x => x.CreatedOn).FirstOrDefault();
+                            harvestYear.Year = DateTime.Now.Year;
+                            harvestYearList.Add(harvestYear);
+                        }
+
+                        harvestYearList.OrderBy(x => x.Year).ToList();
+                    }
+                    else
+                    {
+                        TempData["Error"] = error.Message;
+                        return RedirectToAction("FarmSummary", "Farm", new { q = q });
+                    }
+                }
+                else
+                {
+                    TempData["Error"] = error.Message;
+                    return RedirectToAction("FarmSummary", "Farm", new { q = q });
+                }
+                HttpContext?.Session.SetObjectAsJson("NutrientsLoadingManuresData", model);
+            }
+            return View(model);
+        }
     }
 }
