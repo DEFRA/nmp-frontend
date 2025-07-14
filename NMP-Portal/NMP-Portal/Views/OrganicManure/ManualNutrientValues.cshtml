@@ -210,7 +210,6 @@
                     }
                 }
             </div>
-            <div class="govuk-form-group">
                 <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
                     <h1 class="govuk-fieldset__heading">@((Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials) ? Resource.lblAddAnalysisValuesForMixedManure : string.Format(Resource.lblEnterTheValuesForYour, Model.ManureTypeName))</h1>
                 </legand>
@@ -250,13 +249,11 @@
                     <govuk-input-label is-page-heading="true">@Resource.lblMagnesiumMgO</govuk-input-label>
                     <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
                 </govuk-input>
-            </div>
 
-            <div class="govuk-form-group">
+            
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>
-            </div>
             <p class="govuk-body cancel-link">
                 @if (!Model.IsCheckAnswer)
                 {

@@ -87,50 +87,49 @@
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
 
-                <div class="govuk-form-group">
-                    <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                        <h1 class="govuk-fieldset__heading">@((Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials) ? Resource.lblAddAnalysisValuesForMixedManure : string.Format(Resource.lblEnterTheValuesForYour, Model.ManureTypeName))</h1>
-                    </legand>
-                    <govuk-input asp-for=@Model.DryMatterPercent inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                        <govuk-input-label is-page-heading="true">@Resource.lblDryMatter</govuk-input-label>
-                        <govuk-input-suffix>@Resource.lblPercentage</govuk-input-suffix>
-                    </govuk-input>
-                    <govuk-input asp-for=@Model.N inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                        <govuk-input-label is-page-heading="true">@Resource.lblTotalNitrogenN</govuk-input-label>
-                        <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
-                    </govuk-input>
-                    <govuk-input asp-for=@Model.NH4N inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                        <govuk-input-label is-page-heading="true">@Resource.lblAmmoniumHypenN</govuk-input-label>
-                        <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
-                    </govuk-input>
-                    <govuk-input asp-for=@Model.UricAcid inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                        <govuk-input-label is-page-heading="true">@Resource.lblUricAcidN</govuk-input-label>
-                        <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
-                    </govuk-input>
-                    <govuk-input asp-for=@Model.NO3N inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                        <govuk-input-label is-page-heading="true">@Resource.lblNitrateHypenN</govuk-input-label>
-                        <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
-                    </govuk-input>
-                    <govuk-input asp-for=@Model.P2O5 inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                        <govuk-input-label is-page-heading="true">@Resource.lblPhosphateP2O5</govuk-input-label>
-                        <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
-                    </govuk-input>
-                    <govuk-input asp-for=@Model.K2O inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                        <govuk-input-label is-page-heading="true">@Resource.lblPotashK2O</govuk-input-label>
-                        <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
-                    </govuk-input>
-                    <govuk-input asp-for=@Model.SO3 inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                        <govuk-input-label is-page-heading="true">@Resource.lblSulphurSO3</govuk-input-label>
-                        <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
-                    </govuk-input>
-                    <govuk-input asp-for=@Model.MgO inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                        <govuk-input-label is-page-heading="true">@Resource.lblMagnesiumMgO</govuk-input-label>
-                        <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
-                    </govuk-input>
+                <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                    <h1 class="govuk-fieldset__heading">@((Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials) ? Resource.lblAddAnalysisValuesForMixedManure : string.Format(Resource.lblEnterTheValuesForYour, Model.ManureTypeName))</h1>
+                </legand>
+                <govuk-input asp-for=@Model.DryMatterPercent inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="true">@Resource.lblDryMatter</govuk-input-label>
+                    <govuk-input-suffix>@Resource.lblPercentage</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.N inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="true">@Resource.lblTotalNitrogenN</govuk-input-label>
+                    <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.NH4N inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="true">@Resource.lblAmmoniumHypenN</govuk-input-label>
+                    <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.UricAcid inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="true">@Resource.lblUricAcidN</govuk-input-label>
+                    <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.NO3N inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="true">@Resource.lblNitrateHypenN</govuk-input-label>
+                    <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.P2O5 inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="true">@Resource.lblPhosphateP2O5</govuk-input-label>
+                    <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.K2O inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="true">@Resource.lblPotashK2O</govuk-input-label>
+                    <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.SO3 inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="true">@Resource.lblSulphurSO3</govuk-input-label>
+                    <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.MgO inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="true">@Resource.lblMagnesiumMgO</govuk-input-label>
+                    <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
+                </govuk-input>
+
                     <govuk-button type="submit" class="margin-bottom-forty">
                         @Resource.lblContinue
                     </govuk-button>
-                </div>
                 <p class="govuk-body cancel-link">
                     @if (!Model.IsCheckList)
                     {
