@@ -5076,6 +5076,6 @@ live</value>
     <value>Organic material imports and exports</value>
   </data>
   <data name="lblUpdateYearImportsOrExports" xml:space="preserve">
-    <value>Update 2025 imports or exports</value>
+    <value>Update {0} imports or exports</value>
   </data>
 </root>

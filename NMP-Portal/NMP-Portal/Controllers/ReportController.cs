@@ -2094,14 +2094,10 @@ namespace NMP.Portal.Controllers
             return View(model);
         }
         [HttpGet]
-        public async Task<IActionResult> OrganicManureImportAndExportDetail(string q)
+        public async Task<IActionResult> UpdateLivestockImportExport(string q)
         {
-            NutrientsLoadingManuresViewModel model = new NutrientsLoadingManuresViewModel();
-            if (HttpContext.Session.Keys.Contains<string>("NutrientsLoadingManuresData"))
-            {
-                model = HttpContext.Session.GetObjectFromJson<NutrientsLoadingManuresViewModel>("NutrientsLoadingManuresData");
-            }
-            _logger.LogTrace($"OrganicManureImportAndExport Controller : Index() action called");
+            _logger.LogTrace($"Report Controller : UpdateLivestockImportExport() action called");
+            ReportViewModel model = new ReportViewModel();           
             if (!string.IsNullOrWhiteSpace(q))
             {
                 int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
@@ -2109,20 +2105,22 @@ namespace NMP.Portal.Controllers
                 if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                 {
                     model.FarmName = farm.Name;
+                    model.FarmId = decryptedFarmId;
+                    model.EncryptedFarmId = q;
                     List<HarvestYear> harvestYearList = new List<HarvestYear>();
-                    (List<NutrientsLoadingManures> nutrientsLoadingManuresList, error) = await _organicManureImportAndExportService.FetchNutrientsLoadingManuresByFarmId(decryptedFarmId);
+                    (List<NutrientsLoadingManures> nutrientsLoadingManuresList, error) = await _reportService.FetchNutrientsLoadingManuresByFarmId(decryptedFarmId);
                     if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingManuresList != null && nutrientsLoadingManuresList.Count > 0)
                     {
                         HarvestYear harvestYear = new HarvestYear();
                         foreach (var nutrientsLoadingManure in nutrientsLoadingManuresList)
                         {
-                            harvestYear.LastModifiedOn = nutrientsLoadingManuresList.Where(x => x.Date.Value.Year == DateTime.Now.Year) != null ? nutrientsLoadingManuresList.Where(x => x.Date.Value.Year == DateTime.Now.Year).Select(x => x.ModifiedOn).FirstOrDefault() :
-                                nutrientsLoadingManuresList.Where(x => x.Date.Value.Year == DateTime.Now.Year).Select(x => x.CreatedOn).FirstOrDefault();
-                            harvestYear.Year = DateTime.Now.Year;
+                            harvestYear.LastModifiedOn = nutrientsLoadingManure.ModifiedOn != null ? nutrientsLoadingManure.ModifiedOn.Value : nutrientsLoadingManure.CreatedOn.Value;
+                            harvestYear.Year = nutrientsLoadingManure.ManureDate.Value.Year;
                             harvestYearList.Add(harvestYear);
                         }
 
                         harvestYearList.OrderBy(x => x.Year).ToList();
+                        model.HarvestYear = harvestYearList;
                     }
                     else
                     {
@@ -2135,7 +2133,7 @@ namespace NMP.Portal.Controllers
                     TempData["Error"] = error.Message;
                     return RedirectToAction("FarmSummary", "Farm", new { q = q });
                 }
-                HttpContext?.Session.SetObjectAsJson("NutrientsLoadingManuresData", model);
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             return View(model);
         }

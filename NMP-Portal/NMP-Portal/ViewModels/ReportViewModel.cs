@@ -42,6 +42,6 @@ namespace NMP.Portal.ViewModels
         public string? ManureTypeName { get; set; }
         public DateTime? LivestockImportExportDate { get; set; }
         public int? LivestockQuantity { get; set; }
-        public List<HarvestYear>? HarvestYear { get; set; };
+        public List<HarvestYear>? HarvestYear { get; set; }
     }
 }

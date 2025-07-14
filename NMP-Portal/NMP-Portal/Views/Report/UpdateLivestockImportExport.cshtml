@@ -27,7 +27,7 @@
         }
         <span class="name govuk-caption-l">@Model.FarmName</span>
         <h1 class="govuk-heading-l" id="header">@Resource.lblOrganicMaterialImportsAndExports</h1>
-        <p><a href="#">@Resource.lblAddAnotherYear</a></p>
+        <p class="govuk-body"><a href="#">@Resource.lblAddAnotherYear</a></p>
 
 
     </div>
@@ -49,8 +49,8 @@
                         <th scope="row" class="govuk-table__header">
                             @harvestYearData.Year
                         </th>
-                        <td class="govuk-table__cell">@harvestYearData.LastModifiedOn</td>
-                        <td class="govuk-table__cell"><a href="#">@string.Format(Resource.lblUpdateYearImportsOrExports, currentYear)</a></td>
+                        <td class="govuk-table__cell">@harvestYearData.LastModifiedOn?.ToString("dd MMM yyyy")</td>
+                        <td class="govuk-table__cell"><a href="#">@string.Format(Resource.lblUpdateYearImportsOrExports, harvestYearData.Year)</a></td>
                     </tr>
                 }
             </tbody>

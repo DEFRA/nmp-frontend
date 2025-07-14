@@ -168,7 +168,7 @@ namespace NMP.Portal.Services
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        var nutrientsLoadingManures = responseWrapper.Data.ToObject<List<NutrientsLoadingManures>>();
+                        var nutrientsLoadingManures = responseWrapper.Data.NutrientsLoadingFarmDetails.ToObject<List<NutrientsLoadingManures>>();
                         if (nutrientsLoadingManures != null)
                         {
                             NutrientsLoadingManuresList = nutrientsLoadingManures;

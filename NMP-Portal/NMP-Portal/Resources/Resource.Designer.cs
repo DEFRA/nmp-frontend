@@ -10495,7 +10495,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Update 2025 imports or exports.
+        ///   Looks up a localized string similar to Update {0} imports or exports.
         /// </summary>
         public static string lblUpdateYearImportsOrExports {
             get {
