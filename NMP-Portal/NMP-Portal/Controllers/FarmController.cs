@@ -39,9 +39,10 @@ namespace NMP.Portal.Controllers
         private readonly IFarmService _farmService;
         private readonly IFieldService _fieldService;
         private readonly ICropService _cropService;
+        private readonly IReportService _reportService;
         public FarmController(ILogger<FarmController> logger, IDataProtectionProvider dataProtectionProvider, IHttpContextAccessor httpContextAccessor, IAddressLookupService addressLookupService,
             IUserFarmService userFarmService, IFarmService farmService,
-            IFieldService fieldService, ICropService cropService)
+            IFieldService fieldService, ICropService cropService, IReportService reportService)
         {
             _logger = logger;
             _dataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
@@ -50,6 +51,7 @@ namespace NMP.Portal.Controllers
             _farmService = farmService;
             _fieldService = fieldService;
             _cropService = cropService;
+            _reportService = reportService;
         }
         public IActionResult Index()
         {
@@ -998,6 +1000,10 @@ namespace NMP.Portal.Controllers
             {
                 ViewBag.Success = "false";
             }
+            if (HttpContext.Session.Keys.Contains("ReportData"))
+            {
+                HttpContext?.Session.Remove("ReportData");
+            }
             ViewBag.FieldCount = 0;
 
             FarmViewModel? farmData = null;
@@ -1014,7 +1020,19 @@ namespace NMP.Portal.Controllers
                         TempData["Error"] = error.Message;
                         return RedirectToAction("FarmList");
                     }
-
+                    (List<NutrientsLoadingManures> nutrientsLoadingManuresList, error) = await _reportService.FetchNutrientsLoadingManuresByFarmId(farm.ID);
+                    if (!string.IsNullOrWhiteSpace(error.Message))
+                    {
+                        TempData["Error"] = error.Message;
+                        return RedirectToAction("FarmList");
+                    }
+                    else
+                    {
+                        if (nutrientsLoadingManuresList.Count > 0)
+                        {
+                            ViewBag.LiveStockHaveImportExportData = true;
+                        }
+                    }
                     if (farm != null)
                     {
                         farmData = new FarmViewModel();

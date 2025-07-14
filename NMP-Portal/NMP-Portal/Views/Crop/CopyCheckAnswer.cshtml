@@ -33,7 +33,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="CopyOrganicInorganicApplications" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="BackCopyCheckAnswer" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
 }
 
 
@@ -42,10 +42,10 @@
         <form asp-action="CopyCheckAnswer" asp-controller="Crop" method="post" autocomplete="off">
             @Html.AntiForgeryToken()
 
-            @if (TempData["ErrorCreatePlan"] != null)
+            @if (TempData["ErrorCopyPlan"] != null)
             {
                 <govuk-error-summary>
-                    <govuk-error-summary-item href="#">@TempData["ErrorCreatePlan"]</govuk-error-summary-item>
+                    <govuk-error-summary-item href="#">@TempData["ErrorCopyPlan"]</govuk-error-summary-item>
                 </govuk-error-summary>
             }
             <div hidden="true">

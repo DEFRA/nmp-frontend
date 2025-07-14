@@ -338,6 +338,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     model.OrganicManures.Clear();
                                 }
+                                model.IsDoubleCropAvailable = false;
                                 foreach (string fieldIdForManID in model.FieldList)
                                 {
                                     List<Crop> cropList = await _cropService.FetchCropsByFieldId(Convert.ToInt32(fieldIdForManID));
@@ -963,6 +964,7 @@ namespace NMP.Portal.Controllers
                     {
                         return RedirectToAction("FarmList", "Farm");
                     }
+                    model.IsDoubleCropAvailable = false;
                     foreach (string field in model.FieldList)
                     {
                         List<Crop> cropList = await _cropService.FetchCropsByFieldId(Convert.ToInt32(field));
@@ -4629,9 +4631,25 @@ namespace NMP.Portal.Controllers
                                                                                        .Select(x => x.Trim())
                                                                                        .ToArray();
 
-                                                string selectedDefoliation = (defoliation > 0 && defoliation.Value <= defoliationParts.Length)
-                                                    ? $"{Enum.GetName(typeof(PotentialCut), defoliation.Value)} ({defoliationParts[defoliation.Value - 1]})"
-                                                    : $"{defoliation}";
+                                                //string selectedDefoliation = (defoliation > 0 && defoliation.Value <= defoliationParts.Length)
+                                                //    ? $"{Enum.GetName(typeof(PotentialCut), defoliation.Value)} ({defoliationParts[defoliation.Value - 1]})"
+                                                //    : $"{defoliation}";
+                                                string selectedDefoliation = (defoliation> 0 && defoliation.Value <= defoliationParts.Length)
+                                            ? $"{Enum.GetName(typeof(PotentialCut), defoliation.Value)} - {defoliationParts[defoliation.Value - 1]}"
+                                            : $"{defoliation}";
+                                                var parts = selectedDefoliation.Split('-');
+                                                if (parts.Length == 2)
+                                                {
+                                                    var left = parts[0].Trim();
+                                                    var right = parts[1].Trim();
+
+                                                    if (!string.IsNullOrWhiteSpace(right))
+                                                    {
+                                                        right = char.ToUpper(right[0]) + right.Substring(1);
+                                                    }
+
+                                                    selectedDefoliation = $"{left} - {right}";
+                                                }
                                                 model.IsAnyCropIsGrass = true;
                                                 model.IsSameDefoliationForAll = true;
                                                 model.GrassCropCount = 1;
@@ -5680,6 +5698,8 @@ namespace NMP.Portal.Controllers
                                                     organic.TotalSO3 = mannerCalculateNutrientResponse.TotalSO3;
                                                     organic.TotalK2O = mannerCalculateNutrientResponse.TotalK2O;
                                                     organic.TotalMgO = mannerCalculateNutrientResponse.TotalMgO;
+                                                    organic.AvailableNForNextYear = mannerCalculateNutrientResponse.FollowingCropYear2AvailableN;
+                                                    organic.AvailableNForNextDefoliation = mannerCalculateNutrientResponse.NextGrassNCropCurrentYear;
                                                     organic.AvailableNForNMax = currentApplicationNitrogen != null ? currentApplicationNitrogen : mannerCalculateNutrientResponse.CurrentCropAvailableN;
                                                 }
                                                 else
@@ -8516,7 +8536,9 @@ namespace NMP.Portal.Controllers
                                                                 RainfallWithinSixHoursID = organic.RainfallWithinSixHoursID,
                                                                 MoistureID = organic.MoistureID,
                                                                 AutumnCropNitrogenUptake = organic.AutumnCropNitrogenUptake,
-                                                                AvailableNForNMax = currentApplicationNitrogen != null ? currentApplicationNitrogen : mannerCalculateNutrientResponse.CurrentCropAvailableN
+                                                                AvailableNForNMax = currentApplicationNitrogen != null ? currentApplicationNitrogen : mannerCalculateNutrientResponse.CurrentCropAvailableN,
+                                                                AvailableNForNextYear = mannerCalculateNutrientResponse.FollowingCropYear2AvailableN,
+                                                                AvailableNForNextDefoliation = mannerCalculateNutrientResponse.NextGrassNCropCurrentYear
 
                                                             };
 
@@ -9773,7 +9795,7 @@ namespace NMP.Portal.Controllers
                                                                            .Select(x => x.Trim())
                                                                            .ToArray();
                                     string selectedDefoliation = (model.OrganicManures[i].Defoliation.Value > 0 && model.OrganicManures[i].Defoliation.Value <= defoliationParts.Length)
-                                 ? $"{Enum.GetName(typeof(PotentialCut), model.OrganicManures[i].Defoliation.Value)} -{defoliationParts[model.OrganicManures[i].Defoliation.Value - 1]}"
+                                 ? $"{Enum.GetName(typeof(PotentialCut), model.OrganicManures[i].Defoliation.Value)} - {defoliationParts[model.OrganicManures[i].Defoliation.Value - 1]}"
                                  : $"{model.OrganicManures[i].Defoliation.Value}";
                                     var parts = selectedDefoliation.Split('-');
                                     if (parts.Length == 2)

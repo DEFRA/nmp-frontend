@@ -975,14 +975,14 @@ namespace NMP.Portal.Services
             return (managementPeriodList, error);
         }
         //grass
-        public async Task<(List<DefoliationSequenceResponse>,Error)> FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(int swardManagementId, int numberOfCut,bool isNewSward)
+        public async Task<(List<DefoliationSequenceResponse>,Error)> FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(int swardTypeId, int swardManagementId, int numberOfCut,bool isNewSward)
         {
             Error error = null;
             List<DefoliationSequenceResponse> defoliationSequenceResponses = new List<DefoliationSequenceResponse>();
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCutAsyncAPI, swardManagementId, numberOfCut, isNewSward));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCutAsyncAPI, swardTypeId, swardManagementId, numberOfCut, isNewSward));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if ((response.IsSuccessStatusCode && responseWrapper != null) || responseWrapper.Data != null)
@@ -1367,6 +1367,57 @@ namespace NMP.Portal.Services
                 throw new Exception(error.Message, ex);
             }
             return (cropTypeLinkingResponse, error);
+        }
+
+        public async Task<(bool, Error)> CopyCropNutrientManagementPlan(int farmID, int harvestYear, int copyYear, bool isOrganic, bool isFertiliser)
+        {
+            bool success = false;
+            Error error = new Error();
+            try
+            {
+                var requestData = new
+                {
+                    farmID = farmID,
+                    harvestYear = harvestYear,
+                    copyYear = copyYear,
+                    isOrganic = isOrganic,
+                    isFertiliser = isFertiliser
+                };
+
+                string jsonData = JsonConvert.SerializeObject(requestData);
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.PostAsync(string.Format(APIURLHelper.CopyCropNutrientManagementPlanAsyncAPI), new StringContent(jsonData, Encoding.UTF8, "application/json"));
+
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+                {
+                    var cropResponses = responseWrapper.Data.Recommendations;
+                    if (cropResponses != null)
+                    {
+                        success = true;
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+            return (success, error);
         }
 
     }

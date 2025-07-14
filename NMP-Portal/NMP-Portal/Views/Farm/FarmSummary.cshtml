@@ -49,47 +49,65 @@
                 <h1 class="govuk-heading-xl">@Model.Name</h1>
                 <p class="govuk-body address">@Model.FullAddress</p>
             </div>
-            @if (ViewBag.FieldCount != null && ViewBag.FieldCount == 0)
-            {
-                <p class="govuk-body">
-                    @Resource.lblToStartCreatingPlanAndRecords
-                    <a class="govuk-link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">
-                        @Resource.lblAddYourFields
-                    </a>
-                </p>
-            }
+            @* @if (ViewBag.FieldCount != null && ViewBag.FieldCount == 0)
+        {
+        <p class="govuk-body">
+        @Resource.lblToStartCreatingPlanAndRecords
+        <a class="govuk-link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">
+        @Resource.lblAddYourFields
+        </a>
+        </p>
+        } *@
+
             @if (ViewBag.FieldCount != null && (ViewBag.FieldCount > 0))
             {
-
                 <p class="govuk-body">
                     @string.Format(Resource.lblFieldsCount, ViewBag.FieldCount)
                 </p>
-                <div>
-
-                    <ul class="menu-list govuk-list">
-                        <li>
-                            <h2 class="govuk-heading-m">@Resource.lblPlanningAndRecording</h2>
-                            @*  @if(Model.IsPlanExist)
-                    { *@
-                            <a class="govuk-link" asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId">
-                                @Resource.lblViewCreateOrUpdateAPlan
-                            </a>
-                            @*  }
-                    else
-                    {
-                    <a class="govuk-link" asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">
-                    @Resource.lblCreateACropNutrientManagementPlan
-                    </a>
-                    } *@
-
-                        </li>
-                    </ul>
-
-                </div>
             }
-            <hr class="seperator_five" />
             <div>
-                <h2 class="govuk-heading-m">@Resource.lblFarmAndFieldDetails</h2>
+                <hr class="seperator_thirty">
+
+                <h2 class="govuk-heading-m">@Resource.lblFarmSummaryContent1</h2>
+
+                <p class="govuk-hint">@Resource.lblFarmSummaryContent2</p>
+                <ul class="menu-list govuk-list govuk-list--spaced">
+                    <li>
+                        @if (ViewBag.FieldCount != null && (ViewBag.FieldCount > 0))
+                        {
+                            <a class="govuk-link" asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId">
+                                @Resource.lblFarmSummaryContent3
+                            </a>
+                        }
+                        else
+                        {
+                            <p class="govuk-body">
+                                @Resource.lblToStartCreatingPlanAndRecords
+                                <a class="govuk-link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">
+                                    @Resource.lblAddYourFields
+                                </a>
+                            </p>
+                        }
+
+                    </li>
+                </ul>
+
+            </div>
+            <div>
+                <hr class="seperator_thirty">
+                <h2 class="govuk-heading-m">@Resource.lblFarmSummaryContent4</h2>
+                <p class="govuk-hint">@Resource.lblFarmSummaryContent5</p>
+                <ul class="menu-list govuk-list govuk-list--spaced">
+                    <li>
+                        <a class="govuk-link" asp-action="ReportOptions" asp-controller="Report" asp-route-f="@Model.EncryptedFarmId">@Resource.lblFarmSummaryContent6</a>
+                    </li>
+                </ul>
+            </div>
+            @* <hr class="seperator_five" /> *@
+            <div>
+                <hr class="seperator_thirty">
+                <h2 class="govuk-heading-m">@Resource.lblFarmSummaryContent7</h2>
+                <p class="govuk-hint">@Resource.lblFarmSummaryContent7</p>
                 <ul class="menu-list govuk-list">
                     <li>
                         <a class="govuk-link" asp-action="FarmDetails" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblUpdateFarmDetails</a>
@@ -97,11 +115,21 @@
                     @if (ViewBag.FieldCount != null && ViewBag.FieldCount > 0)
                     {
                         <li>
-                            <a class="govuk-link" asp-action="ManageFarmFields" asp-controller="Field" asp-route-Id="@Model.EncryptedFarmId">
-                                @Resource.lblUpdateFieldsOrSoilAnalysis
-                            </a>
+                            <a class="govuk-link" asp-action="ManageFarmFields" asp-controller="Field" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblUpdateFieldsOrSoilAnalysis</a>
                         </li>
                     }
+                    @* <li>
+                <a class="govuk-link" href="#">@Resource.lblFarmSummaryContent9</a>
+                </li>*@
+                    @if (ViewBag.LiveStockHaveImportExportData != null)
+                    {
+                        <li>
+                            <a class="govuk-link" asp-controller="Report" asp-action="UpdateLivestockImportExport" asp-route-q="@Model.EncryptedFarmId">@Resource.lblFarmSummaryContent10</a>
+                        </li>
+                    }
+                    @*  <li>
+                <a class="govuk-link" href="#">@Resource.lblFarmSummaryContent11</a>
+                </li> *@
 
                 </ul>
             </div>

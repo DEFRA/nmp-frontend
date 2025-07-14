@@ -35,9 +35,6 @@
             <hr>
         </div>
     </div>
-    @*     <form asp-action="ExportFieldsOrCropType" asp-controller="Report" method="post" autocomplete="off">
-            @Html.AntiForgeryToken()
- *@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             <h1 class="govuk-heading-xl">
@@ -284,10 +281,17 @@
                                                 @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
                                                 {
                                                     <th scope="col" class="govuk-table__header">@Resource.lblEstablishment</th>
+                                                  
+                                                    <th scope="col" class="govuk-table__header">@Resource.lblSowingDate</th>
+                                                    
                                                     <th scope="col" class="govuk-table__header">@Resource.lblSward</th>
                                                     <th scope="col" class="govuk-table__header">@Resource.lblManagement</th>
-                                                    <th scope="col" class="govuk-table__header">@Resource.lblTargetYield</th>
-                                                    <th scope="col" class="govuk-table__header">@Resource.lblUnits</th>
+                                                    @if(crop.SwardTypeID==(int)NMP.Portal.Enums.SwardType.Grass)
+                                                    {
+                                                    <th scope="col" class="govuk-table__header">@Resource.lblGrassGrowthClass</th>
+                                                    <th scope="col" class="govuk-table__header">@Resource.lblTotalDryMatterYield</th>
+                                                     <th scope="col" class="govuk-table__header">@Resource.lblUnits</th> 
+                                                    }
                                                 }
                                                 else
                                                 {
@@ -309,7 +313,7 @@
                                                     {
                                                         @crop.CropTypeName
                                                     }
-                                                </td>
+                                                </td>                                                   
                                                 @if (crop.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)
                                                 {
                                                     <td class="govuk-table__cell">@(crop.Yield != null ? crop.Yield : Resource.lblNotEntered)</td>
@@ -318,12 +322,17 @@
                                                 }
                                                 else
                                                 {
+                                                    <td class="govuk-table__cell">@(crop.SowingDate != null ? crop.SowingDate.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotEntered)</td>
                                                     <td class="govuk-table__cell">@(string.IsNullOrWhiteSpace(crop.SwardTypeName) ? Resource.lblNotEntered : crop.SwardTypeName)</td>
                                                     <td class="govuk-table__cell">
                                                         @(string.IsNullOrWhiteSpace(crop.DefoliationSequenceName) ? Resource.lblNotEntered : crop.DefoliationSequenceName)
                                                     </td>
-                                                    <td class="govuk-table__cell">@(crop.Yield != null ? string.Format(Resource.lblYieldTonnesPerHectare, crop.Yield) : Resource.lblNotEntered)</td>
-                                                    <td class="govuk-table__cell">@(Resource.lblTotalDryMatterYield)</td>
+                                                    @if (crop.SwardTypeID == (int)NMP.Portal.Enums.SwardType.Grass)
+                                                    {
+                                                        <td class="govuk-table__cell">@(crop.GrowthClass != null ? crop.GrowthClass : Resource.lblNotEntered)</td>
+                                                        <td class="govuk-table__cell">@(crop.Yield != null ? string.Format(Resource.lblYieldTonnesPerHectare, crop.Yield) : Resource.lblNotEntered)</td>
+                                                         <td class="govuk-table__cell">@(Resource.lblTotalDryMatterYield)</td>
+                                                    }
                                                 }
                                             </tr>
                                         </tbody>
@@ -684,8 +693,6 @@
         }
     }
     <hr class="seperator_five">
-    @*  <div class="govuk-grid-row">
-                <div class="govuk-grid-column-full"> *@
     <h2 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h2>
     <p class="govuk-body">
         @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent1, Resource.lblTool)
@@ -696,7 +703,4 @@
     <p class="govuk-body">
         @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent3, Resource.lblTool)
     </p>
-    @* </div>
-            </div> *@@*
-        </form>     *@
 }

@@ -126,7 +126,7 @@
                                                         <tr class="govuk-table__row">
                                                             <td class="govuk-table__cell">@Resource.lblNitrogen</td>
                                                             <td class="govuk-table__cell">
-                                                                @(recommendation.NIndex == null ? Resource.lblHyphen : recommendation.NIndex)
+                                                                @(string.IsNullOrWhiteSpace(recommendation.NIndex) ? Resource.lblHyphen : recommendation.NIndex)
                                                             </td>
                                                             <td class="govuk-table__cell">@(recommendation.CropN == null ? Resource.lblHyphen : recommendation.CropN == 0 ? recommendation.CropN : string.Concat(recommendation.CropN, Resource.lblkg))</td>
                                                             <td class="govuk-table__cell">@(recommendation.ManureN == null ? Resource.lblHyphen : recommendation.ManureN == 0 ? recommendation.ManureN : string.Concat(recommendation.ManureN, Resource.lblkg))</td>
@@ -136,7 +136,7 @@
                                                         <tr class="govuk-table__row">
                                                             <td class="govuk-table__cell">@Resource.lblPhosphateP2O5</td>
                                                             <td class="govuk-table__cell">
-                                                                @(recommendation.PIndex == null ? Resource.lblHyphen : recommendation.PIndex)
+                                                                @(string.IsNullOrWhiteSpace(recommendation.PIndex) ? Resource.lblHyphen : recommendation.PIndex)
                                                             </td>
                                                             <td class="govuk-table__cell">@(recommendation.CropP2O5 == null ? Resource.lblHyphen : recommendation.CropP2O5 == 0 ? recommendation.CropP2O5 : string.Concat(recommendation.CropP2O5, Resource.lblkg))</td>
                                                             <td class="govuk-table__cell">@(recommendation.ManureP2O5 == null ? Resource.lblHyphen : recommendation.ManureP2O5 == 0 ? recommendation.ManureP2O5 : string.Concat(recommendation.ManureP2O5, Resource.lblkg))</td>
@@ -146,7 +146,7 @@
                                                         <tr class="govuk-table__row">
                                                             <td class="govuk-table__cell">@Resource.lblPotashK2O</td>
                                                             <td class="govuk-table__cell">
-                                                                @(recommendation.KIndex == null ? Resource.lblHyphen : recommendation.KIndex)
+                                                                @(string.IsNullOrWhiteSpace(recommendation.KIndex) ? Resource.lblHyphen : recommendation.KIndex)
                                                             </td>
                                                             <td class="govuk-table__cell">@(recommendation.CropK2O == null ? Resource.lblHyphen : recommendation.CropK2O == 0 ? recommendation.CropK2O : string.Concat(recommendation.CropK2O, Resource.lblkg))</td>
                                                             <td class="govuk-table__cell">@(recommendation.ManureK2O == null ? Resource.lblHyphen : recommendation.ManureK2O == 0 ? recommendation.ManureK2O : string.Concat(recommendation.ManureK2O, Resource.lblkg))</td>
@@ -156,7 +156,7 @@
                                                         <tr class="govuk-table__row">
                                                             <td class="govuk-table__cell"> @Resource.lblSulphurSO3</td>
                                                             <td class="govuk-table__cell">
-                                                                @(recommendation.SIndex == null ? Resource.lblHyphen : recommendation.SIndex)
+                                                                @(string.IsNullOrWhiteSpace(recommendation.SIndex)? Resource.lblHyphen : recommendation.SIndex)
                                                             </td>
                                                             <td class="govuk-table__cell">@(recommendation.CropSO3 == null ? Resource.lblHyphen : recommendation.CropSO3 == 0 ? recommendation.CropSO3 : string.Concat(recommendation.CropSO3, Resource.lblkg))</td>
                                                             <td class="govuk-table__cell">@(recommendation.ManureSO3 == null ? Resource.lblHyphen : recommendation.ManureSO3 == 0 ? recommendation.ManureSO3 : string.Concat(recommendation.ManureSO3, Resource.lblkg))</td>
@@ -177,7 +177,7 @@
                                                         <tr class="govuk-table__row">
                                                             <td class="govuk-table__cell"> @Resource.lblMagnesiumMgO</td>
                                                             <td class="govuk-table__cell">
-                                                                @(recommendation.MgIndex == null ? Resource.lblHyphen : recommendation.MgIndex)
+                                                                @(string.IsNullOrWhiteSpace(recommendation.MgIndex) ? Resource.lblHyphen : recommendation.MgIndex)
                                                             </td>
                                                             <td class="govuk-table__cell">@(recommendation.CropMgO == null ? Resource.lblHyphen : recommendation.CropMgO == 0 ? recommendation.CropMgO : string.Concat(recommendation.CropMgO, Resource.lblkg))</td>
                                                             <td class="govuk-table__cell">@(recommendation.ManureMgO == null ? Resource.lblHyphen : recommendation.ManureMgO == 0 ? recommendation.ManureMgO : string.Concat(recommendation.ManureMgO, Resource.lblkg))</td>
@@ -188,7 +188,7 @@
                                                         <tr class="govuk-table__row">
                                                             <td class="govuk-table__cell">@Resource.lblLime</td>
                                                             <td class="govuk-table__cell">
-                                                                @(recommendation.LimeIndex == null ? Resource.lblHyphen : recommendation.LimeIndex)
+                                                                @(string.IsNullOrWhiteSpace(recommendation.LimeIndex) ? Resource.lblHyphen : recommendation.LimeIndex)
                                                             </td>
                                                             <td class="govuk-table__cell">@(recommendation.CropLime == null ? Resource.lblHyphen : recommendation.CropLime == 0 ? recommendation.CropLime : string.Concat(recommendation.CropLime, " ", Resource.lbltonnes))</td>
                                                             <td class="govuk-table__cell">@(recommendation.ManureLime == null ? Resource.lblHyphen : recommendation.ManureLime == 0 ? recommendation.ManureLime : string.Concat(recommendation.ManureLime, " ", Resource.lbltonnes))</td>
@@ -270,13 +270,13 @@
                                         <hr class="seperator_five">
                                         <h2 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h2>
                                         <p class="govuk-body">
-                                            @Resource.lblAboutRecommendationGuidenceAdviceContent1
+                                            @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent1, Resource.lblTool)
                                         </p>
                                         <p class="govuk-body">
-                                            @Resource.lblAboutRecommendationGuidenceAdviceContent2
+                                            @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent2, Resource.lblTool)
                                         </p>
                                         <p class="govuk-body margin-bottom-forty">
-                                            @Resource.lblAboutRecommendationGuidenceAdviceContent3
+                                            @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent3, Resource.lblTool)
                                         </p>
                                         <p class="govuk-body mt-5 margin-top-forty"><a class="govuk-link " href="#">@Resource.lblBackToTheTop</a></p>
 
@@ -333,7 +333,7 @@
                                                         <tr class="govuk-table__row">
                                                             <td class="govuk-table__cell">@Resource.lblNitrogen</td>
                                                             <td class="govuk-table__cell">
-                                                                @(recommendation.NIndex == null ? Resource.lblHyphen : recommendation.NIndex)
+                                                                @(string.IsNullOrWhiteSpace(recommendation.NIndex) ? Resource.lblHyphen : recommendation.NIndex)
                                                             </td>
                                                             <td class="govuk-table__cell">@(recommendation.CropN == null ? Resource.lblHyphen : recommendation.CropN == 0 ? recommendation.CropN : string.Concat(recommendation.CropN, Resource.lblkg))</td>
                                                             <td class="govuk-table__cell">@(recommendation.ManureN == null ? 0 : recommendation.ManureN == 0 ? recommendation.ManureN : string.Concat(recommendation.ManureN, Resource.lblkg))</td>
@@ -343,7 +343,7 @@
                                                         <tr class="govuk-table__row">
                                                             <td class="govuk-table__cell">@Resource.lblPhosphateP2O5</td>
                                                             <td class="govuk-table__cell">
-                                                                @(recommendation.PIndex == null ? Resource.lblHyphen : recommendation.PIndex)
+                                                                @(string.IsNullOrWhiteSpace(recommendation.PIndex) ? Resource.lblHyphen : recommendation.PIndex)
                                                             </td>
                                                             <td class="govuk-table__cell">@(recommendation.CropP2O5 == null ? Resource.lblHyphen : recommendation.CropP2O5 == 0 ? recommendation.CropP2O5 : string.Concat(recommendation.CropP2O5, Resource.lblkg))</td>
                                                             <td class="govuk-table__cell">@(recommendation.ManureP2O5 == null ? 0 : recommendation.ManureP2O5 == 0 ? recommendation.ManureP2O5 : string.Concat(recommendation.ManureP2O5, Resource.lblkg))</td>
@@ -353,7 +353,7 @@
                                                         <tr class="govuk-table__row">
                                                             <td class="govuk-table__cell">@Resource.lblPotashK2O</td>
                                                             <td class="govuk-table__cell">
-                                                                @(recommendation.KIndex == null ? Resource.lblHyphen : recommendation.KIndex)
+                                                                @(string.IsNullOrWhiteSpace(recommendation.KIndex) ? Resource.lblHyphen : recommendation.KIndex)
                                                             </td>
                                                             <td class="govuk-table__cell">@(recommendation.CropK2O == null ? Resource.lblHyphen : recommendation.CropK2O == 0 ? recommendation.CropK2O : string.Concat(recommendation.CropK2O, Resource.lblkg))</td>
                                                             <td class="govuk-table__cell">@(recommendation.ManureK2O == null ? 0 : recommendation.ManureK2O == 0 ? recommendation.ManureK2O : string.Concat(recommendation.ManureK2O, Resource.lblkg))</td>
@@ -363,7 +363,7 @@
                                                         <tr class="govuk-table__row">
                                                             <td class="govuk-table__cell"> @Resource.lblSulphurSO3</td>
                                                             <td class="govuk-table__cell">
-                                                                @(recommendation.SIndex == null ? Resource.lblHyphen : recommendation.SIndex)
+                                                                @(string.IsNullOrWhiteSpace(recommendation.SIndex) ? Resource.lblHyphen : recommendation.SIndex)
                                                             </td>
                                                             <td class="govuk-table__cell">@(recommendation.CropSO3 == null ? Resource.lblHyphen : recommendation.CropSO3 == 0 ? recommendation.CropSO3 : string.Concat(recommendation.CropSO3, Resource.lblkg))</td>
                                                             <td class="govuk-table__cell">@(recommendation.ManureSO3 == null ? 0 : recommendation.ManureSO3 == 0 ? recommendation.ManureSO3 : string.Concat(recommendation.ManureSO3, Resource.lblkg))</td>
@@ -383,7 +383,7 @@
                                                         <tr class="govuk-table__row">
                                                             <td class="govuk-table__cell"> @Resource.lblMagnesiumMgO</td>
                                                             <td class="govuk-table__cell">
-                                                                @(recommendation.MgIndex == null ? Resource.lblHyphen : recommendation.MgIndex)
+                                                                @(string.IsNullOrWhiteSpace(recommendation.MgIndex) ? Resource.lblHyphen : recommendation.MgIndex)
                                                             </td>
                                                             <td class="govuk-table__cell">@(recommendation.CropMgO == null ? Resource.lblHyphen : recommendation.CropMgO == 0 ? recommendation.CropMgO : string.Concat(recommendation.CropMgO, Resource.lblkg))</td>
                                                             <td class="govuk-table__cell">@(recommendation.ManureMgO == null ? 0 : recommendation.ManureMgO == 0 ? recommendation.ManureMgO : string.Concat(recommendation.ManureMgO, Resource.lblkg))</td>
@@ -394,7 +394,7 @@
                                                         <tr class="govuk-table__row">
                                                             <td class="govuk-table__cell">@Resource.lblLime</td>
                                                             <td class="govuk-table__cell">
-                                                                @(recommendation.LimeIndex == null ? Resource.lblHyphen : recommendation.LimeIndex)
+                                                                @(string.IsNullOrWhiteSpace(recommendation.LimeIndex) ? Resource.lblHyphen : recommendation.LimeIndex)
                                                             </td>
                                                             <td class="govuk-table__cell">@(recommendation.CropLime == null ? Resource.lblHyphen : recommendation.CropLime == 0 ? recommendation.CropLime : string.Concat(recommendation.CropLime, " ", Resource.lbltonnes))</td>
                                                             <td class="govuk-table__cell">@(recommendation.ManureLime == null ? 0 : recommendation.ManureLime == 0 ? recommendation.ManureLime : string.Concat(recommendation.ManureLime, " ", Resource.lbltonnes))</td>
@@ -474,13 +474,13 @@
                                         <hr class="seperator_five">
                                         <h2 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h2>
                                         <p class="govuk-body">
-                                            @Resource.lblAboutRecommendationGuidenceAdviceContent1
+                                            @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent1, Resource.lblTool)
                                         </p>
                                         <p class="govuk-body">
-                                            @Resource.lblAboutRecommendationGuidenceAdviceContent2
+                                            @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent2, Resource.lblTool)
                                         </p>
                                         <p class="govuk-body margin-bottom-forty">
-                                            @Resource.lblAboutRecommendationGuidenceAdviceContent3
+                                            @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent3, Resource.lblTool)
                                         </p>
                                         <p class="govuk-body mt-5 margin-top-forty"><a class="govuk-link" href="#">@Resource.lblBackToTheTop</a></p>
                                     }

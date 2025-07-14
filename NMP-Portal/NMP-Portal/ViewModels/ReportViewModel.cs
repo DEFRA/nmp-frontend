@@ -1,5 +1,8 @@
-﻿using NMP.Portal.Models;
+﻿using Microsoft.AspNetCore.Cors;
+using NMP.Portal.Models;
+using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
+using System.ComponentModel.DataAnnotations;
 
 namespace NMP.Portal.ViewModels
 {
@@ -19,5 +22,26 @@ namespace NMP.Portal.ViewModels
         public List<string>? CropTypeList { get; set; }
         public Farm? Farm { get; set; }
         public List<NMaxReportResponse>? NMaxLimitReport { get; set; }
+        public int? ReportOption { get; set; }
+        public int? FieldAndPlanReportOption { get; set; }
+        public int? NVZReportOption { get; set; }
+        public string? ReportTypeName { get; set; } = string.Empty;
+        public bool? IsGrasslandDerogation { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheTotalFarmArea))]
+        public decimal? TotalFarmArea { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheTotalAreaInAnNVZ))]
+        public decimal? TotalAreaInNVZ { get; set; }
+        public decimal? LivestockNumbers { get; set; }
+        public bool? LivestockImportExportQuestion { get; set; }
+        public decimal? ImportsExportsOfLivestockManure { get; set; }
+        public bool IsCheckList { get; set; } = false;
+        public int? ImportExport { get; set; }
+        public int? ManureTypeId { get; set; }
+        public string? ManureTypeName { get; set; }
+        public DateTime? LivestockImportExportDate { get; set; }
+        public int? LivestockQuantity { get; set; }
+        public List<HarvestYear>? HarvestYear { get; set; }
     }
 }
