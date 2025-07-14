@@ -249,10 +249,10 @@
                     <govuk-input-label is-page-heading="true">@Resource.lblMagnesiumMgO</govuk-input-label>
                     <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
                 </govuk-input>
+                <govuk-button type="submit" class="margin-bottom-forty">
+                    @Resource.lblContinue
+                </govuk-button>
             </div>
-            <govuk-button type="submit" class="margin-bottom-forty">
-                @Resource.lblContinue
-            </govuk-button>
             <p class="govuk-body cancel-link">
                 @if (!Model.IsCheckAnswer)
                 {

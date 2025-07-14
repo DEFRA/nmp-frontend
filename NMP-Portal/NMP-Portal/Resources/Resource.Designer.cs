@@ -6805,6 +6805,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nutrient values for {0} you added on {1}?.
+        /// </summary>
+        public static string lblNutrientValuesForManureTypeNameYouAddedOnDate {
+            get {
+                return ResourceManager.GetString("lblNutrientValuesForManureTypeNameYouAddedOnDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nutrient values for {0}.
         /// </summary>
         public static string lblNutrientValuesForMixedManure {
@@ -11625,6 +11634,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhichYearWouldYouLikeToCreateALivestockReport {
             get {
                 return ResourceManager.GetString("lblWhichYearWouldYouLikeToCreateALivestockReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Who are you {0} this livestock manure from?.
+        /// </summary>
+        public static string lblWhoAreYouThisLivestockManureFrom {
+            get {
+                return ResourceManager.GetString("lblWhoAreYouThisLivestockManureFrom", resourceCulture);
             }
         }
         

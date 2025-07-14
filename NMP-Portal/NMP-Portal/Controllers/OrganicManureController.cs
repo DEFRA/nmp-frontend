@@ -2426,7 +2426,7 @@ namespace NMP.Portal.Controllers
                     if (error == null && farmManureTypeList.Count > 0)//&&(string.IsNullOrWhiteSpace(model.DefaultNutrientValue) || model.DefaultNutrientValue== Resource.lblYesUseTheseValues))
                     {
                         farmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == model.ManureTypeId);
-                        if (string.IsNullOrWhiteSpace(model.DefaultNutrientValue))
+                        if (string.IsNullOrWhiteSpace(model.DefaultNutrientValue) || (!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblYes))
                         {
                             if (farmManure != null)
                             {
@@ -2454,6 +2454,7 @@ namespace NMP.Portal.Controllers
                         {
                             if (farmManure != null)
                             {
+                                model.DefaultFarmManureValueDate = farmManure.ModifiedOn == null ? farmManure.CreatedOn : farmManure.ModifiedOn;
                                 ViewBag.FarmManureApiOption = Resource.lblTrue;
                                 if ((!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblYesUseTheseValues) || (model.IsThisDefaultValueOfRB209 != null && (!model.IsThisDefaultValueOfRB209.Value)))
                                 {
@@ -2548,7 +2549,7 @@ namespace NMP.Portal.Controllers
                     if (error == null && farmManureTypeList.Count > 0)//&&(string.IsNullOrWhiteSpace(model.DefaultNutrientValue) || model.DefaultNutrientValue== Resource.lblYesUseTheseValues))
                     {
                         farmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == model.ManureTypeId);
-                        if (string.IsNullOrWhiteSpace(model.DefaultNutrientValue))
+                        if (string.IsNullOrWhiteSpace(model.DefaultNutrientValue) || (!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblYes))
                         {
                             if (farmManure != null)
                             {
