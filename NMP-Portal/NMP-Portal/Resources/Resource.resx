@@ -4923,7 +4923,7 @@ live</value>
     <value>About derogation</value>
   </data>
   <data name="lblGrasslandDerogationsForLivestockManureInNitrateVulnerableZone" xml:space="preserve">
-    <value> Grassland derogations for livestock manure in nitrate vulnerable zone </value>
+    <value>Grassland derogations for livestock manure in nitrate vulnerable zones</value>
   </data>
   <data name="lblLivestockManureNitrogenFarmLimitReport" xml:space="preserve">
     <value>Livestock manure nitrogen (N) farm limit report {0}</value>
@@ -4932,13 +4932,13 @@ live</value>
     <value>More information:</value>
   </data>
   <data name="lblYouCanApplyForADerogationIfAtLeast80Percent" xml:space="preserve">
-    <value>You can apply for a derogation if at least 80% of the agricultural area of your holding is grass.</value>
+    <value>You can only apply for a grassland derogation if at least 80% of the agricultural area of your holding is grass.</value>
   </data>
   <data name="lblYouCanApplyForAGrasslandDerogationToUseAHigherLimit" xml:space="preserve">
-    <value>You can apply for a grassland derogation to use a higher limit of up to 250kg of nitrogen per hectare, if the nitrogen comes from grazing livestock manure.</value>
+    <value>You can apply for grassland derogation to use up to 250kg of nitrogen per hectare from grazing livestock manure.</value>
   </data>
   <data name="lblYouCanApplyUpTo170kgPerHectareOfNitrogen" xml:space="preserve">
-    <value>You can apply up to 170kg per hectare of nitrogen in livestock manure on your holding in a nitrate vulnerable zone (NVZ) in each calendar year.</value>
+    <value>You can apply up to 170kg per hectare of nitrogen in livestock manure on your holding in a nitrate vulnerable zone (NVZ) in each calendar year. This limit is the loading limit and applies as an average across your holding.</value>
   </data>
   <data name="lblYouHaveNotEnteredAnyCropInformation" xml:space="preserve">
     <value>You have not entered any crop information for {0}</value>
@@ -5077,5 +5077,35 @@ live</value>
   </data>
   <data name="lblUpdateYearImportsOrExports" xml:space="preserve">
     <value>Update {0} imports or exports</value>
+  </data>
+  <data name="lblWhoAreYouThisLivestockManureFrom" xml:space="preserve">
+    <value>Who are you {0} this livestock manure from?</value>
+  </data>
+  <data name="lblNutrientValuesForManureTypeNameYouAddedOnDate" xml:space="preserve">
+    <value>Nutrient values for {0} you added on {1}?</value>
+  </data>
+  <data name="lblYouMustComplyWithTheConditions" xml:space="preserve">
+    <value>You must comply with the conditions of a derogation and the NVZ rules if your application is successful.</value>
+  </data>
+  <data name="lblLivestockComment" xml:space="preserve">
+    <value>Livestock Comments</value>
+  </data>
+  <data name="lblLivestockCommentContent1" xml:space="preserve">
+    <value>Comments about this {0} (optional)</value>
+  </data>
+  <data name="lblLivestockCommentContent2" xml:space="preserve">
+    <value>Comments will be viewable on some reports. Do not include personal or financial information.</value>
+  </data>
+  <data name="lblOptional" xml:space="preserve">
+    <value>(optional)</value>
+  </data>
+  <data name="MsgEnterTheNameOfThePersonOrOrganisationYouAreFrom" xml:space="preserve">
+    <value>Enter the name of the person or organisation you are {0} from</value>
+  </data>
+  <data name="lblAddAnImportOrExportForYear" xml:space="preserve">
+    <value>Add an import or export for {0}</value>
+  </data>
+  <data name="lblName" xml:space="preserve">
+    <value>Name</value>
   </data>
 </root>

@@ -40,8 +40,43 @@ namespace NMP.Portal.ViewModels
         public int? ImportExport { get; set; }
         public int? ManureTypeId { get; set; }
         public string? ManureTypeName { get; set; }
+        public bool IsDefaultValueChange { get; set; } = false;
         public DateTime? LivestockImportExportDate { get; set; }
         public int? LivestockQuantity { get; set; }
         public List<HarvestYear>? HarvestYear { get; set; }
+        public string? DefaultNutrientValue { get; set; }
+        public decimal? N { get; set; }
+        public decimal? P2O5 { get; set; }
+        public decimal? K2O { get; set; }
+        public decimal? MgO { get; set; }
+        public decimal? SO3 { get; set; }
+        public decimal? DryMatterPercent { get; set; }
+        public decimal? UricAcid { get; set; }
+        public decimal? NH4N { get; set; }
+        public decimal? NO3N { get; set; }
+        public bool? IsDefaultNutrient { get; set; } = false;
+        public ManureType ManureType { get; set; }
+        public DateTime? DefaultFarmManureValueDate { get; set; }
+        public bool? IsThisDefaultValueOfRB209 { get; set; }
+        public bool? IsManureTypeLiquid { get; set; }
+        public bool IsAnyNeedToStoreNutrientValueForFuture { get; set; } = false;
+        public string? ReceiverName { get; set; }
+        //[Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblTownOrCity))]
+        public string? Address1 { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblAddressLine2))]
+        public string? Address2 { get; set; }
+
+        //[Display(ResourceType = typeof(Resource), Name = nameof(string.Format("{0} {1}",Resource.lblTownOrCity,Resource.lblOptional)))]
+        public string? Address3 { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblCounty))]
+        public string? Address4 { get; set; }
+        [StringLength(8, MinimumLength = 6, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgPostcodeMinMaxValidation))]
+        [RegularExpression(@"^[A-Za-z]{1,2}\d{1,2}[A-Za-z]?\s*\d[A-Za-z]{2}$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgPostcodeMinMaxValidation))]
+        //[Required(ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterTheFarmPostcode))]
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheFarmPostcode))]
+        public string? Postcode { get; set; } = string.Empty;
+        public string? Comment { get; set; } = string.Empty;
     }
 }
