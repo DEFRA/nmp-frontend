@@ -1,25 +1,30 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblDate;
+    ViewData["Title"] = Resource.lblNutrient;
+    var suffixUnit = "";
+    if (Model.IsManureTypeLiquid != null)
+    {
+        suffixUnit = Model.IsManureTypeLiquid.Value ? Resource.lblKgPerMeterCube : Resource.lblKgPerTonne;
+    }
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@(Model.IsCheckList ? "ManureType" : "Year") asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(Model.IsCheckList ?"LivestockDefaultNutrientValue" : "Year") asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
-@if (TempData["ErrorOnLivestockImportExportDate"] != null)
+@if (TempData["ErrorOnLivestockManualNutrientValue"] != null)
 {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <govuk-error-summary>
-                <govuk-error-summary-item href="#">@TempData["ErrorOnLivestockImportExportDate"]</govuk-error-summary-item>
+                <govuk-error-summary-item href="#">@TempData["ErrorOnLivestockManualNutrientValue"]</govuk-error-summary-item>
             </govuk-error-summary>
         </div>
     </div>
 }
 @if (Model != null)
 {
-    <form asp-action="LivestockImportExportDate" asp-controller="Report" method="post" autocomplete="off">
+    <form asp-action="LivestockManualNutrientValue" asp-controller="Report" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
         <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
@@ -31,18 +36,23 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
-
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalFarmArea"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalAreaInNVZ"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockNumbers"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckList" value="@Model.IsCheckList"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsGrasslandDerogation" value="@Model.IsGrasslandDerogation"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockImportExportQuestion" value="@Model.LivestockImportExportQuestion"></govuk-input>
-            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeId"></govuk-input>
-            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeName"></govuk-input>
             <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ImportExport"></govuk-input>
             <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockQuantity"></govuk-input>
-
+            <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockImportExportDate"></govuk-date-input>
+            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeId"></govuk-input>
+            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReceiverName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address3"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Postcode"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.DryMatter"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.TotalN"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.NH4N"></govuk-input>
@@ -52,21 +62,6 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.K2O"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.MgO"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.SO3"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DryMatterPercent"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.N"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NH4N"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NO3N"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.UricAcid"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.P2O5"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.K2O"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MgO"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SO3"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReceiverName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address3"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Postcode"></govuk-input>
 
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManureTypeLiquid"></govuk-input>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefaultFarmManureValueDate" value="@Model.DefaultFarmManureValueDate"></govuk-date-input>
@@ -91,24 +86,50 @@
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-                <h1 class="govuk-heading-l">
-                    @(string.Format(Resource.lblWhenDidYouThisLivestockManure, Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
-                        Resource.lblImport.ToLower() : Resource.lblExport.ToLower()))
-                </h1>
 
-                <govuk-date-input asp-for="@Model.LivestockImportExportDate" pattern="[0-9]*">
-                    <govuk-date-input-fieldset>
-                        <govuk-date-input-fieldset-legend is-page-heading="false" class="govuk-fieldset">
-                        </govuk-date-input-fieldset-legend>
-                        <govuk-date-input-hint>
-                            <p>@Resource.lblSampleDate</p>
-                        </govuk-date-input-hint>
-                    </govuk-date-input-fieldset>
-                </govuk-date-input>
+                <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                    <h1 class="govuk-fieldset__heading">@((Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials) ? Resource.lblAddAnalysisValuesForMixedManure : string.Format(Resource.lblEnterTheValuesForYour, Model.ManureTypeName))</h1>
+                </legand>
+                <govuk-input asp-for=@Model.DryMatterPercent inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="true">@Resource.lblDryMatter</govuk-input-label>
+                    <govuk-input-suffix>@Resource.lblPercentage</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.N inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="true">@Resource.lblTotalNitrogenN</govuk-input-label>
+                    <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.NH4N inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="true">@Resource.lblAmmoniumHypenN</govuk-input-label>
+                    <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.UricAcid inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="true">@Resource.lblUricAcidN</govuk-input-label>
+                    <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.NO3N inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="true">@Resource.lblNitrateHypenN</govuk-input-label>
+                    <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.P2O5 inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="true">@Resource.lblPhosphateP2O5</govuk-input-label>
+                    <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.K2O inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="true">@Resource.lblPotashK2O</govuk-input-label>
+                    <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.SO3 inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="true">@Resource.lblSulphurSO3</govuk-input-label>
+                    <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.MgO inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="true">@Resource.lblMagnesiumMgO</govuk-input-label>
+                    <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
+                </govuk-input>
 
-                <govuk-button type="submit" class="margin-bottom-forty">
-                    @Resource.lblContinue
-                </govuk-button>
+                    <govuk-button type="submit" class="margin-bottom-forty">
+                        @Resource.lblContinue
+                    </govuk-button>
                 <p class="govuk-body cancel-link">
                     @if (!Model.IsCheckList)
                     {
