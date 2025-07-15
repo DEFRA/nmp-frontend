@@ -109,6 +109,7 @@
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address3"></govuk-input>
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4"></govuk-input>
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Postcode"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Comment"></govuk-input>
 
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManureTypeLiquid"></govuk-input>
                     <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefaultFarmManureValueDate" value="@Model.DefaultFarmManureValueDate"></govuk-date-input>
@@ -221,7 +222,7 @@
 
                             </div>
                             <div class="govuk-task-list__status" id="ImportsExportsOfLivestockManure">
-                                @if (Model.ImportsExportsOfLivestockManure != null)
+                                @if (Model.LivestockImportExportQuestion != null && (!Model.LivestockImportExportQuestion.Value))
                                 {
                                     @Resource.lblCompleted
                                 }

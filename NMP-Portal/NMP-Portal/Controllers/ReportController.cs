@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 using NMP.Portal.Enums;
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
@@ -1924,7 +1925,7 @@ namespace NMP.Portal.Controllers
                 {
                     reportViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
-                if(reportViewModel!=null&&reportViewModel.ManureTypeId!=model.ManureTypeId)
+                if (reportViewModel != null && reportViewModel.ManureTypeId != model.ManureTypeId)
                 {
                     model.IsDefaultValueChange = true;
                 }
@@ -2082,7 +2083,7 @@ namespace NMP.Portal.Controllers
         public async  Task<IActionResult> UpdateLivestockImportExport(string q)
         {
             _logger.LogTrace($"Report Controller : UpdateLivestockImportExport() action called");
-            ReportViewModel model = new ReportViewModel();           
+            ReportViewModel model = new ReportViewModel();
             if (!string.IsNullOrWhiteSpace(q))
             {
                 int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
@@ -2147,7 +2148,7 @@ namespace NMP.Portal.Controllers
                     if (error == null && manureType != null && farmManureTypeList.Count > 0)
                     {
                         farmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == model.ManureTypeId);
-                        
+
                         if (model.IsDefaultValueChange)
                         {
                             model.IsDefaultValueChange = false;
@@ -2261,7 +2262,7 @@ namespace NMP.Portal.Controllers
                     else
                     {
                         if (farmManure != null)
-                        {                            
+                        {
                             if ((!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblYesUseTheseValues) || (model.IsThisDefaultValueOfRB209 != null && (!model.IsThisDefaultValueOfRB209.Value)))
                             {
                                 ViewBag.FarmManureApiOption = Resource.lblTrue;
@@ -2743,6 +2744,90 @@ namespace NMP.Portal.Controllers
                     TempData["ErrorOnLivestockDefaultNutrientValue"] = ex.Message;
                     return RedirectToAction("LivestockDefaultNutrientValue");
                 }
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult LivestockReceiver(ReportViewModel model)
+        {
+            _logger.LogTrace($"Report Controller : LivestockReceiver() post action called");
+            if (string.IsNullOrEmpty(model.ReceiverName))
+            {
+                ModelState.AddModelError("ReceiverName",string.Format(Resource.MsgEnterTheNameOfThePersonOrOrganisationYouAreFrom,model.ImportExport==(int)NMP.Portal.Enums.ImportExport.Import?
+                    Resource.lblImporting : Resource.lblExporting));
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            HttpContext.Session.SetObjectAsJson("ReportData", model);
+
+            return RedirectToAction("LivestockComment");
+        }
+        [HttpGet]
+        public IActionResult LivestockComment()
+        {
+            _logger.LogTrace("Report Controller : LivestockComment() action called");
+            ReportViewModel model = new ReportViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in LivestockComment() action : {ex.Message}, {ex.StackTrace}");
+
+                TempData["ErrorOnLivestockReceiver"] = ex.Message;
+                return RedirectToAction("LivestockReceiver");
+
+            }
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult LivestockComment(ReportViewModel model)
+        {
+            _logger.LogTrace($"Report Controller : LivestockComment() post action called");
+            
+            HttpContext.Session.SetObjectAsJson("ReportData", model);
+
+            return RedirectToAction("LivestockImportExportCheckAnswer");
+        }
+        [HttpGet]
+        public IActionResult LivestockImportExportCheckAnswer()
+        {
+            _logger.LogTrace("Report Controller : LivestockImportExportCheckAnswer() action called");
+            ReportViewModel model = new ReportViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in LivestockImportExportCheckAnswer() action : {ex.Message}, {ex.StackTrace}");
+
+                TempData["ErrorOnLivestockComment"] = ex.Message;
+                return RedirectToAction("LivestockComment");
+
             }
             return View(model);
         }
