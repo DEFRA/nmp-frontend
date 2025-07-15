@@ -15,5 +15,14 @@ namespace NMP.Portal.ViewModels
         public string? EncryptedCropId { get; set; }
         public bool? IsSnsExist { get; set; } = false;
         public SnsAnalysis? SnsAnalysisData { get; set; }
+        public string? SwardTypeName { get; set; }
+        public string? SwardManagementName { get; set; }
+        public string? EstablishmentName { get; set; }
+        public string? DefoliationSequenceName { get; set; }
+        public string? EncryptedCropGroupName
+        {
+            get; set;
+        }
+        public string? GrowthClass { get; set; }
     }
 }

@@ -1,0 +1,10 @@
+﻿namespace NMP.Portal.Models
+{
+    public class NutrientsLoadingManures
+    {
+        public int? FarmId { get; set; }
+        public DateTime? ManureDate { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public DateTime? ModifiedOn { get; set; }
+    }
+}

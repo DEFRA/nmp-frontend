@@ -55,6 +55,16 @@
                 @Resource.lblContinue
             </govuk-button>
         </form>
-        <p class="govuk-body cancel-link"><a asp-action="CreateFarmCancel" asp-controller="Farm">@Resource.lblCancel</a></p>
+        <p class="govuk-body cancel-link">
+            @if (Model!=null&&(Model.IsCheckAnswer))
+            {
+                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="Farm">@Resource.lblCancel</a>
+            }
+            else
+            {
+
+                <a class="govuk-link" asp-action="CreateFarmCancel" asp-controller="Farm">@Resource.lblCancel</a>
+            }
+        </p>
     </div>
 </div>

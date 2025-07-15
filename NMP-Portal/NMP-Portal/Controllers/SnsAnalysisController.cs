@@ -1634,7 +1634,7 @@ namespace NMP.Portal.Controllers
             }
             else
             {
-                TempData["AddFieldError"] = Resource.MsgWeCouldNotAddYourFieldPleaseTryAgainLater;
+                TempData["CheckAnswerError"] = Resource.MsgWeCouldNotAddYourFieldPleaseTryAgainLater;
                 return RedirectToAction("CheckAnswer");
             }
             SnsAnalysis sns = new SnsAnalysis
@@ -1671,7 +1671,7 @@ namespace NMP.Portal.Controllers
             }
             else
             {
-                TempData["AddFieldError"] = Resource.MsgWeCouldNotAddYourSnsPleaseTryAgainLater;
+                TempData["CheckAnswerError"] = Resource.MsgWeCouldNotAddYourSnsPleaseTryAgainLater;
                 return RedirectToAction("CheckAnswer");
             }
 
@@ -1755,6 +1755,58 @@ namespace NMP.Portal.Controllers
                 
             }
             return View(model);
+
+        }
+        [HttpGet]
+        public IActionResult Cancel()
+        {
+            _logger.LogTrace("SnsAnalysis Controller : Cancel() action called");
+            SnsAnalysisViewModel model = new SnsAnalysisViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("SnsData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<SnsAnalysisViewModel>("SnsData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"SnsAnalysis Controller : Exception in Cancel() action : {ex.Message}, {ex.StackTrace}");
+                TempData["CheckAnswerError"] = ex.Message;
+                return RedirectToAction("CheckAnswer");
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Cancel(SnsAnalysisViewModel model)
+        {
+            _logger.LogTrace("SnsAnalysis Controller : Cancel() post action called");
+            if (model.IsCancel == null)
+            {
+                ModelState.AddModelError("IsCancel", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View("Cancel", model);
+            }
+            if (!model.IsCancel.Value)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
+            else
+            {
+                HttpContext?.Session.Remove("SnsData");
+                return RedirectToAction("Recommendations", "Crop", new { q = model.EncryptedFarmId, r = model.EncryptedFieldId, s = model.EncryptedHarvestYear});
+                
+            }
 
         }
     }

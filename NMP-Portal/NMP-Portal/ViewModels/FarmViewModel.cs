@@ -17,6 +17,6 @@ namespace NMP.Portal.ViewModels
         public bool? FarmRemove { get; set; }
         public int? ArableArea { get; set; }
         public int? GrassArea { get; set; }
-
+        public bool? IsCancel { get; set; }
     }
 }

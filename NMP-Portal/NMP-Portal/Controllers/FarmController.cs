@@ -39,9 +39,10 @@ namespace NMP.Portal.Controllers
         private readonly IFarmService _farmService;
         private readonly IFieldService _fieldService;
         private readonly ICropService _cropService;
+        private readonly IReportService _reportService;
         public FarmController(ILogger<FarmController> logger, IDataProtectionProvider dataProtectionProvider, IHttpContextAccessor httpContextAccessor, IAddressLookupService addressLookupService,
             IUserFarmService userFarmService, IFarmService farmService,
-            IFieldService fieldService, ICropService cropService)
+            IFieldService fieldService, ICropService cropService, IReportService reportService)
         {
             _logger = logger;
             _dataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
@@ -50,6 +51,7 @@ namespace NMP.Portal.Controllers
             _farmService = farmService;
             _fieldService = fieldService;
             _cropService = cropService;
+            _reportService = reportService;
         }
         public IActionResult Index()
         {
@@ -162,6 +164,10 @@ namespace NMP.Portal.Controllers
             {
                 model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
             return View(model);
         }
         [HttpPost]
@@ -214,6 +220,10 @@ namespace NMP.Portal.Controllers
             {
                 model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
             return View(model);
         }
 
@@ -237,6 +247,10 @@ namespace NMP.Portal.Controllers
             if (HttpContext.Session.Keys.Contains("FarmData"))
             {
                 model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
             }
             return View(model);
         }
@@ -495,6 +509,10 @@ namespace NMP.Portal.Controllers
             if (HttpContext.Session.Keys.Contains("FarmData"))
             {
                 model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
             }
             if (model.Rainfall == 0 || model.Rainfall == null)
             {
@@ -975,12 +993,16 @@ namespace NMP.Portal.Controllers
                 ViewBag.Success = _dataProtector.Unprotect(q);
                 if (!string.IsNullOrWhiteSpace(r))
                 {
-                    TempData["successMsg"]= _dataProtector.Unprotect(r);
+                    TempData["successMsg"] = _dataProtector.Unprotect(r);
                 }
             }
             else
             {
                 ViewBag.Success = "false";
+            }
+            if (HttpContext.Session.Keys.Contains("ReportData"))
+            {
+                HttpContext?.Session.Remove("ReportData");
             }
             ViewBag.FieldCount = 0;
 
@@ -998,7 +1020,19 @@ namespace NMP.Portal.Controllers
                         TempData["Error"] = error.Message;
                         return RedirectToAction("FarmList");
                     }
-
+                    (List<NutrientsLoadingManures> nutrientsLoadingManuresList, error) = await _reportService.FetchNutrientsLoadingManuresByFarmId(farm.ID);
+                    if (!string.IsNullOrWhiteSpace(error.Message))
+                    {
+                        TempData["Error"] = error.Message;
+                        return RedirectToAction("FarmList");
+                    }
+                    else
+                    {
+                        if (nutrientsLoadingManuresList.Count > 0)
+                        {
+                            ViewBag.LiveStockHaveImportExportData = true;
+                        }
+                    }
                     if (farm != null)
                     {
                         farmData = new FarmViewModel();
@@ -1279,6 +1313,58 @@ namespace NMP.Portal.Controllers
 
             HttpContext.Session.SetObjectAsJson("FarmData", farm);
             return RedirectToAction("CheckAnswer");
+        }
+        [HttpGet]
+        public IActionResult Cancel()
+        {
+            _logger.LogTrace("Farm Controller : Cancel() action called");
+            FarmViewModel model = new FarmViewModel();
+            try
+            {
+                if (HttpContext.Session.Keys.Contains("FarmData"))
+                {
+                    model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"farm Controller : Exception in Cancel() action : {ex.Message}, {ex.StackTrace}");
+                TempData["AddFarmError"] = ex.Message;
+                return RedirectToAction("CheckAnswer");
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Cancel(FarmViewModel model)
+        {
+            _logger.LogTrace("Farm Controller : Cancel() post action called");
+            if (model.IsCancel == null)
+            {
+                ModelState.AddModelError("IsCancel", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View("Cancel", model);
+            }
+            if (!model.IsCancel.Value)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
+            else
+            {
+                HttpContext?.Session.Remove("FarmData");
+                return RedirectToAction("FarmList", "Farm");
+
+            }
+
         }
     }
 }

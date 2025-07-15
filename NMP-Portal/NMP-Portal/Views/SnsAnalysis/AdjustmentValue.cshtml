@@ -20,7 +20,7 @@
         }
         <form asp-action="AdjustmentValue" method="post" asp-controller="SnsAnalysis" autocomplete="off">
             @Html.AntiForgeryToken()
-
+            <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCalculateNitrogen" value="@Model.IsCalculateNitrogen"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumberOfShoots"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SeasonId" value="@Model.SeasonId"></govuk-input>
@@ -55,7 +55,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"></govuk-input>
-
+            </div>
             <govuk-input asp-for=@Model.AdjustmentValue inputmode="number" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="true" class="govuk-label--l">@Resource.lblWhatIsTheAdjustmentValuePerHectare</govuk-input-label>
                 <govuk-input-suffix>@Resource.lblKgPerHectare</govuk-input-suffix>
@@ -65,6 +65,16 @@
                 @Resource.lblContinue
             </govuk-button>
         </form>
-        <p class="govuk-body cancel-link"><a asp-action="SnsAnalysisCancel" asp-controller="SnsAnalysis" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
+        <p class="govuk-body cancel-link">
+            @if (!Model.IsCheckAnswer)
+            {
+                <a class="govuk-link" asp-action="SnsAnalysisCancel" asp-controller="SnsAnalysis" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
+            }
+            else
+            {
+                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="SnsAnalysis">@Resource.lblCancel</a>
+            }
+        </p>
+        @* <p class="govuk-body cancel-link"><a asp-action="SnsAnalysisCancel" asp-controller="SnsAnalysis" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p> *@
     </div>
 </div>

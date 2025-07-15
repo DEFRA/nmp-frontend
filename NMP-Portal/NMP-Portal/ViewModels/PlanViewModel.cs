@@ -1,5 +1,7 @@
-﻿using NMP.Portal.Models;
+﻿using NMP.Portal.Enums;
+using NMP.Portal.Models;
 using NMP.Portal.Resources;
+using NMP.Portal.ServiceResponses;
 using System.ComponentModel.DataAnnotations;
 
 namespace NMP.Portal.ViewModels
@@ -21,7 +23,7 @@ namespace NMP.Portal.ViewModels
         public string? FieldName { get; set; }
         public int? FieldID { get; set; }
         public new int? Year { get; set; }
-        public DateTime SowingDate { get; set; }
+        public DateTime? SowingDate { get; set; }
         public List<string>? FieldList { get; set; }
         public List<Crop>? Crops { get; set; }
         public int? SowingDateQuestion { get; set; }
@@ -71,7 +73,7 @@ namespace NMP.Portal.ViewModels
         public int? CropOrder { get; set; }
         public List<int>? organicManureIds { get; set; }
         public List<string>? SelectedField { get; set; }
-        public bool? isComingFromRecommendation { get; set; }
+        public bool? IsComingFromRecommendation { get; set; }
         public bool? IsExcessWinterRainfallCheckAnswer { get; set; }
         public bool? IsExcessWinterRainfallUpdated { get; set; }
         public string? EncryptedIsCropUpdate { get; set; }
@@ -80,5 +82,26 @@ namespace NMP.Portal.ViewModels
         // grass properties
         public int? CurrentSward { get; set; }
         public int? GrassSeason { get; set; }
+
+        public int GrassGrowthClassCounter { get; set; } = 0;
+        public int GrassGrowthClassDistinctCount { get; set; } = 0;
+        public string? GrassGrowthClassEncryptedCounter { get; set; }
+        public int? GrassGrowthClassQuestion { get; set; }
+
+        public int DryMatterYieldCounter { get; set; } = 0;
+        public string? DryMatterYieldEncryptedCounter { get; set; }
+        public bool? IsCancel { get; set; }
+        public int? SwardTypeId { get; set; }
+        public int? SwardManagementId { get; set; }
+        public int? PotentialCut { get; set; }
+        public int? DefoliationSequenceId { get; set; }
+        public string? EncryptedCropOrder { get; set; } = string.Empty;
+        public string? EncryptedCropType { get; set; } = string.Empty;
+        public string? EncryptedCropGroupName { get; set; } = string.Empty;
+        public int? FarmID { get; set; }
+        public bool? CopyExistingPlan { get; set; }
+        public int? CopyYear { get; set; }
+        public OrganicInorganicCopy? OrganicInorganicCopy { get; set; }
+        public string? GrassSeasonName { get; set; }
     }
 }

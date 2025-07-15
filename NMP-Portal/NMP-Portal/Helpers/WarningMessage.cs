@@ -15,7 +15,7 @@ namespace NMP.Portal.Helpers
         public string? ClosedPeriodNonOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, bool isPerennial)
         {
             string? closedPeriod = null;
-            DateTime september16 = new DateTime(harvestYear, 9, 16);
+            DateTime september16 = new DateTime(harvestYear - 1, 9, 16);
 
             var isSandyShallowSoil = fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.LightSand ||
                                      fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.Shallow;
@@ -25,50 +25,50 @@ namespace NMP.Portal.Helpers
 
             if (isSandyShallowSoil && isFieldTypeGrass)
             {
-                closedPeriod = string.Format(Resource.lbl1Septo31Dec,Resource.lblSeptember,Resource.lblDecember);
+                closedPeriod = string.Format(Resource.lbl1Septo31Dec, Resource.lblSeptember, Resource.lblDecember);
             }
             else if (!isSandyShallowSoil && isFieldTypeGrass)
             {
-                closedPeriod = string.Format(Resource.lbl15Octto31Jan,Resource.lblOctober, Resource.lblJanuary);
+                closedPeriod = string.Format(Resource.lbl15Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
             }
             if (!isPerennial)
             {
-                if (isSandyShallowSoil && isFieldTypeArable && (fieldDetail.SowingDate >= september16 || fieldDetail.SowingDate == null))
+                if (isSandyShallowSoil && isFieldTypeArable && (sowingDate >= september16 || sowingDate == null))
                 {
-                    closedPeriod = string.Format(Resource.lbl1Augto31Dec,Resource.lblAugust,Resource.lblDecember);
+                    closedPeriod = string.Format(Resource.lbl1Augto31Dec, Resource.lblAugust, Resource.lblDecember);
                 }
-                else if (isSandyShallowSoil && isFieldTypeArable && fieldDetail.SowingDate < september16)
+                else if (isSandyShallowSoil && isFieldTypeArable && sowingDate < september16)
                 {
-                    closedPeriod = string.Format(Resource.lbl16Septo31Dec,Resource.lblSeptember,Resource.lblDecember);
+                    closedPeriod = string.Format(Resource.lbl16Septo31Dec, Resource.lblSeptember, Resource.lblDecember);
                 }
                 else if (isFieldTypeArable && !isSandyShallowSoil)
                 {
-                    closedPeriod = string.Format(Resource.lbl1Octto31Jan,Resource.lblOctober,Resource.lblJanuary);
+                    closedPeriod = string.Format(Resource.lbl1Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
                 }
             }
             else
             {
-                if (isSandyShallowSoil && isFieldTypeArable && (fieldDetail.SowingDate >= september16 || fieldDetail.SowingDate == null))
+                if (isSandyShallowSoil && isFieldTypeArable && (sowingDate >= september16 || fieldDetail.SowingDate == null))
                 {
-                    closedPeriod = string.Format(Resource.lbl1Augto31Dec,Resource.lblAugust,Resource.lblDecember);
+                    closedPeriod = string.Format(Resource.lbl1Augto31Dec, Resource.lblAugust, Resource.lblDecember);
                 }
-                else if (isSandyShallowSoil && isFieldTypeArable && fieldDetail.SowingDate < september16)
+                else if (isSandyShallowSoil && isFieldTypeArable && sowingDate < september16)
                 {
-                    closedPeriod = string.Format(Resource.lbl16Septo31Dec,Resource.lblSeptember,Resource.lblDecember);
+                    closedPeriod = string.Format(Resource.lbl16Septo31Dec, Resource.lblSeptember, Resource.lblDecember);
                 }
                 else if (isFieldTypeArable && !isSandyShallowSoil)
                 {
-                    closedPeriod = string.Format(Resource.lbl1Octto31Jan,Resource.lblOctober,Resource.lblJanuary);
+                    closedPeriod = string.Format(Resource.lbl1Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
                 }
                 if (fieldDetail.SowingDate != null)
                 {
-                    if (isSandyShallowSoil && isFieldTypeArable && fieldDetail.SowingDate.Value.Year < harvestYear)
+                    if (isSandyShallowSoil && isFieldTypeArable && sowingDate.Value.Year < harvestYear)
                     {
-                        closedPeriod = string.Format(Resource.lbl16Septo31Dec,Resource.lblSeptember,Resource.lblDecember);
+                        closedPeriod = string.Format(Resource.lbl16Septo31Dec, Resource.lblSeptember, Resource.lblDecember);
                     }
-                    else if (!isSandyShallowSoil && isFieldTypeArable && fieldDetail.SowingDate.Value.Year < harvestYear)
+                    else if (!isSandyShallowSoil && isFieldTypeArable && sowingDate.Value.Year < harvestYear)
                     {
-                        closedPeriod = string.Format(Resource.lbl1Octto31Jan,Resource.lblOctober,Resource.lblJanuary);
+                        closedPeriod = string.Format(Resource.lbl1Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
                     }
                 }
 
@@ -81,7 +81,7 @@ namespace NMP.Portal.Helpers
         public string? ClosedPeriodOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, int cropTypeId, int? cropInfo1, bool isPerennial)
         {
             string? closedPeriod = null;
-            DateTime september16 = new DateTime(harvestYear, 9, 16);
+            DateTime september16 = new DateTime(harvestYear - 1, 9, 16);
 
             var isSandyShallowSoil = fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.LightSand ||
                                      fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.Shallow;
@@ -92,8 +92,8 @@ namespace NMP.Portal.Helpers
             if (isFieldTypeGrass)
             {
                 closedPeriod = isSandyShallowSoil
-                    ? string.Format(Resource.lbl1Novto31Dec,Resource.lblNovember,Resource.lblDecember)
-                    : string.Format(Resource.lbl1Novto15Jan,Resource.lblNovember,Resource.lblJanuary);
+                    ? string.Format(Resource.lbl1Septo31Dec, Resource.lblSeptember, Resource.lblDecember)
+                    : string.Format(Resource.lbl15Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
             }
             else if (isFieldTypeArable)
             {
@@ -187,7 +187,7 @@ namespace NMP.Portal.Helpers
             return closedPeriod;
         }
 
-        public bool ClosedPeriodWarningMessage(DateTime applicationDate, string? closedPeriod, string cropType, FieldDetailResponse fieldDetail,bool IsRegisteredOrganic)
+        public bool ClosedPeriodWarningMessage(DateTime applicationDate, string? closedPeriod, string cropType, FieldDetailResponse fieldDetail, bool IsRegisteredOrganic)
         {
             bool isWithinClosedPeriod = false;
 
@@ -257,11 +257,11 @@ namespace NMP.Portal.Helpers
 
 
                     }
-                    
+
                     return isWithinClosedPeriod;
                 }
             }
-            
+
             return isWithinClosedPeriod;
         }
 
@@ -373,7 +373,7 @@ namespace NMP.Portal.Helpers
 
                 }
             }
-            
+
             return message;
         }
 
@@ -400,7 +400,7 @@ namespace NMP.Portal.Helpers
             }
             return message;
         }
-        public string NitrogenLimitForFertiliserExceptBrassicasWarningMessage( int cropType, string cropTypeName, decimal totalNitrogen, decimal nitrogenOfSingleApp)
+        public string NitrogenLimitForFertiliserExceptBrassicasWarningMessage(int cropType, string cropTypeName, decimal totalNitrogen, decimal nitrogenOfSingleApp)
         {
             string message = string.Empty;
 
@@ -454,7 +454,7 @@ namespace NMP.Portal.Helpers
             bool? isWithinClosedPeriodAndFebruary = null;
             string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
             Regex regex = new Regex(pattern);
-            if(closedPeriod != null)
+            if (closedPeriod != null)
             {
                 Match match = regex.Match(closedPeriod);
                 if (match.Success)
@@ -522,14 +522,14 @@ namespace NMP.Portal.Helpers
 
                 }
             }
-            
+
             return isWithinClosedPeriodAndFebruary;
         }
 
         public string? WarningPeriodOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, int cropTypeId, int? cropInfo1, bool isPerennial)
         {
             string? WarningPeriod = null;
-            DateTime september16 = new DateTime(harvestYear, 9, 16);
+            DateTime september16 = new DateTime(harvestYear - 1, 9, 16);
 
             var isSandyShallowSoil = fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.LightSand ||
                                      fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.Shallow;
@@ -543,8 +543,8 @@ namespace NMP.Portal.Helpers
             if (isFieldTypeGrass)
             {
                 WarningPeriod = isSandyShallowSoil
-                    ? string.Format(Resource.lbl1Septo31Oct,Resource.lblSeptember,Resource.lblOctober)
-                    : string.Format(Resource.lbl15Octto31Oct,Resource.lblOctober,Resource.lblOctober);
+                    ? string.Format(Resource.lbl1Septo31Oct, Resource.lblSeptember, Resource.lblOctober)
+                    : string.Format(Resource.lbl15Octto31Oct, Resource.lblOctober, Resource.lblOctober);
             }
             else if (isFieldTypeArable)
             {
@@ -554,63 +554,63 @@ namespace NMP.Portal.Helpers
                     case (int)NMP.Portal.Enums.CropTypes.BulbOnions:            //Bulb Onions
                         if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
                         {
-                            WarningPeriod = string.Format(Resource.lbl1Augto28Feb,Resource.lblAugust, lastDayOfFeb, Resource.lblFebruary);
+                            WarningPeriod = string.Format(Resource.lbl1Augto28Feb, Resource.lblAugust, lastDayOfFeb, Resource.lblFebruary);
                         }
                         if (isSandyShallowSoil && (sowingDate < september16))
                         {
-                            WarningPeriod = string.Format(Resource.lbl16Septo28Feb,Resource.lblSeptember,lastDayOfFeb,Resource.lblFebruary); 
+                            WarningPeriod = string.Format(Resource.lbl16Septo28Feb, Resource.lblSeptember, lastDayOfFeb, Resource.lblFebruary);
                         }
                         if (!isSandyShallowSoil)
                         {
-                            WarningPeriod = string.Format(Resource.lbl1Octto28Feb,Resource.lblOctober ,lastDayOfFeb,Resource.lblFebruary);
+                            WarningPeriod = string.Format(Resource.lbl1Octto28Feb, Resource.lblOctober, lastDayOfFeb, Resource.lblFebruary);
                         }
                         break;
 
                     case (int)NMP.Portal.Enums.CropTypes.SaladOnions:            //Salad Onions
-                        
-                        if(cropInfo1 == 12)                                       // cropInfo1Id==12 for Overwintered
+
+                        if (cropInfo1 == 12)                                       // cropInfo1Id==12 for Overwintered
                         {
                             if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
                             {
-                                WarningPeriod =  string.Format(Resource.lbl1Augto28Feb,Resource.lblAugust ,lastDayOfFeb, Resource.lblFebruary);
+                                WarningPeriod = string.Format(Resource.lbl1Augto28Feb, Resource.lblAugust, lastDayOfFeb, Resource.lblFebruary);
                             }
                             if (isSandyShallowSoil && (sowingDate < september16))
                             {
-                                WarningPeriod =  string.Format(Resource.lbl16Septo28Feb, Resource.lblSeptember,lastDayOfFeb, Resource.lblFebruary);
+                                WarningPeriod = string.Format(Resource.lbl16Septo28Feb, Resource.lblSeptember, lastDayOfFeb, Resource.lblFebruary);
                             }
                             if (!isSandyShallowSoil)
                             {
-                                WarningPeriod = string.Format(Resource.lbl1Octto28Feb,Resource.lblOctober ,lastDayOfFeb,Resource.lblFebruary);
+                                WarningPeriod = string.Format(Resource.lbl1Octto28Feb, Resource.lblOctober, lastDayOfFeb, Resource.lblFebruary);
                             }
                         }
                         break;
 
-                        //Brassica is a crop group. under this below crop type comes..
-                        case (int)NMP.Portal.Enums.CropTypes.ForageRape:
-                        case (int)NMP.Portal.Enums.CropTypes.ForageSwedesRootsLifted:
-                        case (int)NMP.Portal.Enums.CropTypes.KaleGrazed:
-                        case (int)NMP.Portal.Enums.CropTypes.StubbleTurnipsGrazed:
-                        case (int)NMP.Portal.Enums.CropTypes.SwedesGrazed:
-                        case (int)NMP.Portal.Enums.CropTypes.TurnipsRootLifted:
-                        case (int)NMP.Portal.Enums.CropTypes.BrusselSprouts:
-                        case (int)NMP.Portal.Enums.CropTypes.Cabbage:
-                        case (int)NMP.Portal.Enums.CropTypes.Calabrese:
-                        case (int)NMP.Portal.Enums.CropTypes.Cauliflower:
-                        case (int)NMP.Portal.Enums.CropTypes.Radish:
-                        case (int)NMP.Portal.Enums.CropTypes.WildRocket:
-                        case (int)NMP.Portal.Enums.CropTypes.Swedes:
-                        case (int)NMP.Portal.Enums.CropTypes.Turnips:
+                    //Brassica is a crop group. under this below crop type comes..
+                    case (int)NMP.Portal.Enums.CropTypes.ForageRape:
+                    case (int)NMP.Portal.Enums.CropTypes.ForageSwedesRootsLifted:
+                    case (int)NMP.Portal.Enums.CropTypes.KaleGrazed:
+                    case (int)NMP.Portal.Enums.CropTypes.StubbleTurnipsGrazed:
+                    case (int)NMP.Portal.Enums.CropTypes.SwedesGrazed:
+                    case (int)NMP.Portal.Enums.CropTypes.TurnipsRootLifted:
+                    case (int)NMP.Portal.Enums.CropTypes.BrusselSprouts:
+                    case (int)NMP.Portal.Enums.CropTypes.Cabbage:
+                    case (int)NMP.Portal.Enums.CropTypes.Calabrese:
+                    case (int)NMP.Portal.Enums.CropTypes.Cauliflower:
+                    case (int)NMP.Portal.Enums.CropTypes.Radish:
+                    case (int)NMP.Portal.Enums.CropTypes.WildRocket:
+                    case (int)NMP.Portal.Enums.CropTypes.Swedes:
+                    case (int)NMP.Portal.Enums.CropTypes.Turnips:
                         if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
                         {
-                            WarningPeriod = string.Format(Resource.lbl1Augto28Feb,Resource.lblAugust ,lastDayOfFeb, Resource.lblFebruary);
+                            WarningPeriod = string.Format(Resource.lbl1Augto28Feb, Resource.lblAugust, lastDayOfFeb, Resource.lblFebruary);
                         }
                         if (isSandyShallowSoil && (sowingDate < september16))
                         {
-                            WarningPeriod = string.Format(Resource.lbl16Septo28Feb, Resource.lblSeptember ,lastDayOfFeb, Resource.lblFebruary);
+                            WarningPeriod = string.Format(Resource.lbl16Septo28Feb, Resource.lblSeptember, lastDayOfFeb, Resource.lblFebruary);
                         }
                         if (!isSandyShallowSoil)
                         {
-                            WarningPeriod = string.Format(Resource.lbl1Octto28Feb,Resource.lblOctober ,lastDayOfFeb, Resource.lblFebruary);
+                            WarningPeriod = string.Format(Resource.lbl1Octto28Feb, Resource.lblOctober, lastDayOfFeb, Resource.lblFebruary);
                         }
 
                         break;
@@ -619,15 +619,15 @@ namespace NMP.Portal.Helpers
 
                         if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
                         {
-                            WarningPeriod = string.Format(Resource.lbl1Augto31Oct,Resource.lblAugust,Resource.lblOctober);
+                            WarningPeriod = string.Format(Resource.lbl1Augto31Oct, Resource.lblAugust, Resource.lblOctober);
                         }
                         if (isSandyShallowSoil && (sowingDate < september16))
                         {
-                            WarningPeriod = string.Format(Resource.lbl16Septo31Oct,Resource.lblSeptember,Resource.lblOctober);
+                            WarningPeriod = string.Format(Resource.lbl16Septo31Oct, Resource.lblSeptember, Resource.lblOctober);
                         }
                         if (!isSandyShallowSoil)
                         {
-                            WarningPeriod = string.Format(Resource.lbl1Octto31Oct,Resource.lblOctober,Resource.lblOctober);
+                            WarningPeriod = string.Format(Resource.lbl1Octto31Oct, Resource.lblOctober, Resource.lblOctober);
                         }
                         break;
 
@@ -741,7 +741,7 @@ namespace NMP.Portal.Helpers
             {
                 if (applicationDate.Value >= startDate.Value && applicationDate.Value <= endDate.Value)
                 {
-                    isWithinDateRange=true;
+                    isWithinDateRange = true;
                 }
             }
             return isWithinDateRange;

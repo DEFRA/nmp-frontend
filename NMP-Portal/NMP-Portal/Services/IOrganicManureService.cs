@@ -34,11 +34,11 @@ namespace NMP.Portal.Services
         Task<(List<WindspeedResponse>, Error)> FetchWindspeedList();
         Task<(List<MoistureTypeResponse>, Error)> FetchMoisterTypeList();
         Task<bool> FetchIsPerennialByCropTypeId(int cropTypeId);
-        Task<(decimal, Error)> FetchTotalNBasedOnManIdAndAppDate(int managementId, DateTime startDate, DateTime endDate, bool confirm);
+        Task<(decimal, Error)> FetchTotalNBasedOnManIdAndAppDate(int managementId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId);
         Task<(CropTypeResponse, Error)> FetchCropTypeByFieldIdAndHarvestYear(int fieldId, int year,bool confirm);
         Task<(CropTypeLinkingResponse, Error)> FetchCropTypeLinkingByCropTypeId(int cropTypeId);
         Task<(List<int>, Error)> FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(int fieldId, int year,bool confirm);
-        Task<(decimal, Error)> FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(int managementId,int? fertliserId, bool confirm);
+        Task<(decimal, Error)> FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(int managementId, bool confirm, int? fertiliserId, int? organicManureId);
         Task<(bool, Error)> FetchOrganicManureExistanceByDateRange(int managementId, string dateFrom, string dateTo, bool isConfirm);
         Task<(NitrogenUptakeResponse, Error)> FetchAutumnCropNitrogenUptake(string jsonString);
         Task<(RainTypeResponse, Error)> FetchRainTypeById(int rainTypeId);
@@ -48,10 +48,13 @@ namespace NMP.Portal.Services
         Task<(List<FarmManureTypeResponse>, Error)> FetchFarmManureTypeByFarmId(int farmId);
         Task<(MannerCalculateNutrientResponse, Error)> FetchMannerCalculateNutrient(string jsonData);
         Task<(SoilTypeSoilTextureResponse, Error)> FetchSoilTypeSoilTextureBySoilTypeId(int soilTypeId);
-        Task<(decimal, Error)> FetchTotalNBasedByManIdAppDateAndIsGreenCompost(int managementId, DateTime startDate, DateTime endDate, bool confirm,bool isGreenFoodCompost);
+        Task<(decimal, Error)> FetchTotalNBasedByFieldIdAppDateAndIsGreenCompost(int fieldId, DateTime startDate, DateTime endDate, bool confirm,bool isGreenFoodCompost,int? organicManureId);
         Task<(OrganicManure, Error)> FetchOrganicManureById(int id);
         Task<(List<OrganicManure>, Error)> FetchOrganicManureByFarmIdAndYear(int farmId, int year);
-        Task<(string, Error)> DeleteOrganicManureByIdAsync(List<int> orgManureIds);
+        Task<(string, Error)> DeleteOrganicManureByIdAsync(string orgManureIds);
         Task<(bool, Error)> FetchFarmManureTypeCheckByFarmIdAndManureTypeId(int farmId, int ManureTypeId, string ManureTypeName);
+        Task<(List<FertiliserAndOrganicManureUpdateResponse>, Error)> FetchFieldWithSameDateAndManureType(int fertiliserId, int farmId, int harvestYear);
+        Task<(List<OrganicManure>, Error)> UpdateOrganicManure(string organicManureData);
+        Task<(decimal?, Error)> FetchAvailableNByManagementPeriodID(int managementPeriodID);
     }
 }

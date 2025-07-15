@@ -26,9 +26,25 @@ namespace NMP.Portal.Services
         Task<(ManagementPeriod, Error)> FetchManagementperiodById(int id);
         Task<(Crop, Error)> FetchCropById(int id);
         Task<(string, Error)> RemoveCropPlan(List<int> cropIds);
-        Task<(bool, Error)> IsCropsGroupNameExistForUpdate(string cropIds,string cropGroupName,int year);
-        Task<(List<Crop>, Error)> UpdateCropGroupName(string cropIds,string CropGroupName,string? varietyName,int year);
+        Task<(bool, Error)> IsCropsGroupNameExistForUpdate(string cropIds,string cropGroupName,int year, int farmId);
+        Task<(List<Crop>, Error)> UpdateCrop(string cropData);
         Task<List<GrassSeasonResponse>> FetchGrassSeasons();
+        Task<(List<GrassGrowthClassResponse>, Error)> FetchGrassGrowthClass(List<int> fieldIds);
 
+        Task<(List<DefoliationSequenceResponse>, Error)> FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(int swardTypeId,int swardManagementId, int numberOfCut,bool isNewSward);
+        Task<(List<PotentialCutResponse>,Error)> FetchPotentialCutsBySwardTypeIdAndSwardManagementId(int swardTypeId, int swardManagementId);
+        Task<(List<SwardManagementResponse>,Error)> FetchSwardManagements();
+        Task<(List<SwardTypeResponse>, Error)> FetchSwardTypes();
+        Task<(List<YieldRangesEnglandAndWalesResponse>, Error)> FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(int sequenceId, int grassGrowthClassId);
+
+        Task<(List<ManagementPeriod>, Error)> FetchManagementperiodByCropId(int cropId,bool isShortSummary);
+        Task<(DefoliationSequenceResponse, Error)> FetchDefoliationSequencesById(int defoliationId);
+        Task<(SwardManagementResponse, Error)> FetchSwardManagementBySwardManagementId(int swardManagementId);
+        Task<(List<SwardManagementResponse>, Error)> FetchSwardManagementBySwardTypeId(int swardTypeId);
+
+        Task<(SwardTypeResponse, Error)> FetchSwardTypeBySwardTypeId(int swardTypeId);
+        Task<(List<CropTypeLinkingResponse>, Error)> FetchCropTypeLinking();
+
+        Task<(bool, Error)> CopyCropNutrientManagementPlan(int farmID, int harvestYear, int copyYear, bool isOrganic, bool isFertiliser);
     }
 }

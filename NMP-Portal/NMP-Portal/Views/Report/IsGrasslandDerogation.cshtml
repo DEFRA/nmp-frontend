@@ -1,0 +1,143 @@
+﻿@using NMP.Portal.Resources
+@model NMP.Portal.ViewModels.ReportViewModel
+@{
+    ViewData["Title"] = Resource.lblGrasslandDerogation;
+    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action=@(Model.IsCheckList ? "LivestockManureNitrogenReportChecklist" : "Year") asp-controller="Report">@Resource.lblBack</govuk-back-link>
+}
+@if (TempData["ErrorOnIsGrasslandDerogation"] != null)
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["ErrorOnIsGrasslandDerogation"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        </div>
+    </div>
+}
+@if (TempData["FetchNutrientsLoadingFarmDetailsError"] != null)
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["FetchNutrientsLoadingFarmDetailsError"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        </div>
+    </div>
+}
+@if (TempData["DerogationSaveError"] != null)
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["DerogationSaveError"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        </div>
+    </div>
+}
+
+@if (Model != null)
+{
+    <form asp-action="IsGrasslandDerogation" asp-controller="Report" method="post" autocomplete="off">
+        @Html.AntiForgeryToken()
+        <div hidden="true">
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportOption"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportTypeName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
+
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalFarmArea"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalAreaInNVZ"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockNumbers"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ImportsExportsOfLivestockManure"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckList" value="@Model.IsCheckList"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockImportExportQuestion" value="@Model.LivestockImportExportQuestion"></govuk-input>
+            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeId"></govuk-input>
+            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeName"></govuk-input>
+            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ImportExport"></govuk-input>
+            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockQuantity"></govuk-input>
+            <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockImportExportDate"></govuk-date-input>
+            @if (Model.FieldList != null && Model.FieldList.Count > 0)
+            {
+                @for (int i = 0; i < Model.FieldList.Count; i++)
+                {
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldList[i]" value="@Model.FieldList[i]"></govuk-input>
+                }
+            }
+            @if (Model.CropTypeList != null && Model.CropTypeList.Count > 0)
+            {
+                @for (int i = 0; i < Model.CropTypeList.Count; i++)
+                {
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeList[i]" value="@Model.CropTypeList[i]"></govuk-input>
+                }
+            }
+        </div>
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+
+                <h1 class="govuk-heading-l">
+                    @string.Format(Resource.lblDoesFarmHaveAGrasslandDerogation, Model.FarmName, Model.Year)
+                </h1>
+
+                <govuk-details>
+                    <govuk-details-summary>
+                        @Resource.lblAboutDerogation
+                    </govuk-details-summary>
+
+                    <govuk-details-text class="explanations">
+
+                        <p class="govuk-body">@Resource.lblYouCanApplyUpTo170kgPerHectareOfNitrogen</p>
+
+                        <p class="govuk-body">@Resource.lblYouCanApplyForAGrasslandDerogationToUseAHigherLimit</p>
+
+
+                        <p class="govuk-body">@Resource.lblYouCanApplyForADerogationIfAtLeast80Percent</p>
+
+
+                        <p class="govuk-body">@Resource.lblMoreInformation <a target="_blank" href="https://www.gov.uk/guidance/grassland-derogations-for-livestock-manure-in-nitrate-vulnerable-zones">@Resource.lblGrasslandDerogationsForLivestockManureInNitrateVulnerableZone</a> @Resource.lblOpenInANewWindow</p>
+
+                    </govuk-details-text>
+                </govuk-details>
+
+                <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsGrasslandDerogation">
+
+                    <govuk-radios-fieldset>
+                        <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--l">
+                        </govuk-radios-fieldset-legend>
+
+                        <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>
+                        <govuk-radios-item value=@no>@Resource.lblNo</govuk-radios-item>
+                    </govuk-radios-fieldset>
+                </govuk-radios>
+                <govuk-button type="submit" class="margin-bottom-forty">
+                    @Resource.lblContinue
+                </govuk-button>
+                <p class="govuk-body cancel-link">
+                    @if(!Model.IsCheckList)
+                    {
+                        <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+                            @Resource.lblCancel
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report">
+                            @Resource.lblCancel
+                        </a>
+                    }
+                </p>
+
+            </div>
+
+        </div>
+    </form>
+}
