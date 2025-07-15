@@ -709,6 +709,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add an import or export for {0}.
+        /// </summary>
+        public static string lblAddAnImportOrExportForYear {
+            get {
+                return ResourceManager.GetString("lblAddAnImportOrExportForYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add an inorganic fertiliser application.
         /// </summary>
         public static string lblAddAnInorganicFertiliserApplication {
@@ -5760,6 +5769,33 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Livestock Comments.
+        /// </summary>
+        public static string lblLivestockComment {
+            get {
+                return ResourceManager.GetString("lblLivestockComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comments about this {0} (optional).
+        /// </summary>
+        public static string lblLivestockCommentContent1 {
+            get {
+                return ResourceManager.GetString("lblLivestockCommentContent1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comments will be viewable on some reports. Do not include personal or financial information..
+        /// </summary>
+        public static string lblLivestockCommentContent2 {
+            get {
+                return ResourceManager.GetString("lblLivestockCommentContent2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to livestock information.
         /// </summary>
         public static string lblLivestockInformation {
@@ -6314,6 +6350,15 @@ namespace NMP.Portal.Resources {
         public static string lblN {
             get {
                 return ResourceManager.GetString("lblN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string lblName {
+            get {
+                return ResourceManager.GetString("lblName", resourceCulture);
             }
         }
         
@@ -6990,6 +7035,15 @@ namespace NMP.Portal.Resources {
         public static string lblOpensInANewTab {
             get {
                 return ResourceManager.GetString("lblOpensInANewTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (optional).
+        /// </summary>
+        public static string lblOptional {
+            get {
+                return ResourceManager.GetString("lblOptional", resourceCulture);
             }
         }
         
@@ -13409,6 +13463,15 @@ namespace NMP.Portal.Resources {
         public static string MsgEnterTheFieldName {
             get {
                 return ResourceManager.GetString("MsgEnterTheFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the name of the person or organisation you are {0} from.
+        /// </summary>
+        public static string MsgEnterTheNameOfThePersonOrOrganisationYouAreFrom {
+            get {
+                return ResourceManager.GetString("MsgEnterTheNameOfThePersonOrOrganisationYouAreFrom", resourceCulture);
             }
         }
         
