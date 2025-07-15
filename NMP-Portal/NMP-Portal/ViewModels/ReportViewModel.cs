@@ -61,13 +61,13 @@ namespace NMP.Portal.ViewModels
         public bool? IsManureTypeLiquid { get; set; }
         public bool IsAnyNeedToStoreNutrientValueForFuture { get; set; } = false;
         public string? ReceiverName { get; set; }
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblAddressLine1))]
+        //[Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblTownOrCity))]
         public string? Address1 { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblAddressLine2))]
         public string? Address2 { get; set; }
 
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblTownOrCity))]
+        //[Display(ResourceType = typeof(Resource), Name = nameof(string.Format("{0} {1}",Resource.lblTownOrCity,Resource.lblOptional)))]
         public string? Address3 { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblCounty))]
@@ -77,5 +77,6 @@ namespace NMP.Portal.ViewModels
         //[Required(ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterTheFarmPostcode))]
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheFarmPostcode))]
         public string? Postcode { get; set; } = string.Empty;
+        public string? Comment { get; set; } = string.Empty;
     }
 }

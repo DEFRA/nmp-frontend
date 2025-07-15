@@ -14,12 +14,12 @@
                  (!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue) && (Model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis)?
                  "LivestockManualNutrientValue":"LivestockDefaultNutrientValue"): "Year") asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
-@if (TempData["ErrorOnLivestockDefaultNutrientValue"] != null)
+@if (TempData["ErrorOnLivestockReceiver"] != null)
 {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <govuk-error-summary>
-                <govuk-error-summary-item href="#">@TempData["ErrorOnLivestockDefaultNutrientValue"]</govuk-error-summary-item>
+                <govuk-error-summary-item href="#">@TempData["ErrorOnLivestockReceiver"]</govuk-error-summary-item>
             </govuk-error-summary>
         </div>
     </div>
@@ -93,48 +93,54 @@
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
 
-              
+                <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                    <h1 class="govuk-fieldset__heading">
+                        @string.Format(Resource.lblWhoAreYouThisLivestockManureFrom,
+                                 Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                                 Resource.lblImporting.ToLower() : Resource.lblExporting.ToLower())
+                    </h1>
+                </legand>
                 <div class="govuk-form-group">
-                    <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                        <h1 class="govuk-fieldset__heading">
-                            @string.Format(Resource.lblWhoAreYouThisLivestockManureFrom,
-                                     Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
-                                     Resource.lblImport.ToLower() : Resource.lblExport.ToLower())
-                            </h1>
-                    </legand>
-                    <div class="govuk-form-group">
-                        <govuk-input asp-for="@Model.Address1"></govuk-input>
-                    </div>
-
-                    <div class="govuk-form-group">
-                        <govuk-input asp-for="@Model.Address2"></govuk-input>
-                    </div>
-
-                    <div class="govuk-form-group">
-                        <govuk-input class="govuk-input--width-20" asp-for="@Model.Address3"></govuk-input>
-                    </div>
-
-                    <div class="govuk-form-group">
-                        <govuk-input class="govuk-input--width-20" asp-for="@Model.Address4"></govuk-input>
-                    </div>
-
-                    <div class="govuk-form-group">
-                        <govuk-input class="govuk-input--width-10" asp-for="@Model.Postcode">
-                            <govuk-input-label>@Resource.lblPostCode</govuk-input-label>
-                        </govuk-input>
-                    </div>
-                    <govuk-notification-banner>
-                        <govuk-notification-banner-title>
-                            @Resource.lblImportant
-                        </govuk-notification-banner-title>
-                        Work is under construction.
-                    </govuk-notification-banner>
-                  @*   <govuk-button type="submit" class="margin-bottom-forty">
-                        @Resource.lblContinue
-                    </govuk-button> *@
-
+                    <govuk-input asp-for="@Model.ReceiverName">
+                        <govuk-input-label>@Resource.lblName</govuk-input-label>
+                    </govuk-input>
                 </div>
-                <p class="govuk-body cancel-link">
+                <div class="govuk-form-group">
+                    <govuk-input asp-for="@Model.Address1" id="Address1">
+                        <govuk-input-label>@string.Format("{0} {1}", Resource.lblAddressLine1, Resource.lblOptional)</govuk-input-label>
+                    </govuk-input>
+                </div>
+
+                <div class="govuk-form-group">
+                    <govuk-input asp-for="@Model.Address2">
+                        <govuk-input-label>@Resource.lblAddressLine2</govuk-input-label>
+                    </govuk-input>
+                </div>
+
+                <div class="govuk-form-group">
+                    <govuk-input class="govuk-input--width-20" asp-for="@Model.Address3">
+                        <govuk-input-label>@string.Format("{0} {1}", Resource.lblTownOrCity, Resource.lblOptional)</govuk-input-label>
+                    </govuk-input>
+                </div>
+
+                <div class="govuk-form-group">
+                    <govuk-input class="govuk-input--width-20" asp-for="@Model.Address4">
+                        <govuk-input-label>@string.Format("{0} {1}", Resource.lblCountry, Resource.lblOptional)</govuk-input-label>
+                    </govuk-input>
+                </div>
+
+                <div class="govuk-form-group">
+                    <govuk-input class="govuk-input--width-10" asp-for="@Model.Postcode">
+                        <govuk-input-label>@string.Format("{0} {1}", Resource.lblPostCode, Resource.lblOptional)</govuk-input-label>
+                    </govuk-input>
+                </div>
+                @* <div class="govuk-form-group"> *@
+                    <govuk-button type="submit" class="margin-bottom-forty">
+                        @Resource.lblContinue
+                    </govuk-button>
+
+                @* </div> *@
+              @*   <p class="govuk-body cancel-link">
                     @if (!Model.IsCheckList)
                     {
                         <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
@@ -147,7 +153,7 @@
                             @Resource.lblCancel
                         </a>
                     }
-                </p>
+                </p> *@
 
             </div>
 

@@ -5087,4 +5087,25 @@ live</value>
   <data name="lblYouMustComplyWithTheConditions" xml:space="preserve">
     <value>You must comply with the conditions of a derogation and the NVZ rules if your application is successful.</value>
   </data>
+  <data name="lblLivestockComment" xml:space="preserve">
+    <value>Livestock Comments</value>
+  </data>
+  <data name="lblLivestockCommentContent1" xml:space="preserve">
+    <value>Comments about this {0} (optional)</value>
+  </data>
+  <data name="lblLivestockCommentContent2" xml:space="preserve">
+    <value>Comments will be viewable on some reports. Do not include personal or financial information.</value>
+  </data>
+  <data name="lblOptional" xml:space="preserve">
+    <value>(optional)</value>
+  </data>
+  <data name="MsgEnterTheNameOfThePersonOrOrganisationYouAreFrom" xml:space="preserve">
+    <value>Enter the name of the person or organisation you are {0} from</value>
+  </data>
+  <data name="lblAddAnImportOrExportForYear" xml:space="preserve">
+    <value>Add an import or export for {0}</value>
+  </data>
+  <data name="lblName" xml:space="preserve">
+    <value>Name</value>
+  </data>
 </root>
