@@ -4390,7 +4390,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  Grassland derogations for livestock manure in nitrate vulnerable zone .
+        ///   Looks up a localized string similar to Grassland derogations for livestock manure in nitrate vulnerable zones.
         /// </summary>
         public static string lblGrasslandDerogationsForLivestockManureInNitrateVulnerableZone {
             get {
@@ -11998,7 +11998,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can apply for a derogation if at least 80% of the agricultural area of your holding is grass..
+        ///   Looks up a localized string similar to You can only apply for a grassland derogation if at least 80% of the agricultural area of your holding is grass..
         /// </summary>
         public static string lblYouCanApplyForADerogationIfAtLeast80Percent {
             get {
@@ -12007,7 +12007,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can apply for a grassland derogation to use a higher limit of up to 250kg of nitrogen per hectare, if the nitrogen comes from grazing livestock manure..
+        ///   Looks up a localized string similar to You can apply for grassland derogation to use up to 250kg of nitrogen per hectare from grazing livestock manure..
         /// </summary>
         public static string lblYouCanApplyForAGrasslandDerogationToUseAHigherLimit {
             get {
@@ -12016,7 +12016,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can apply up to 170kg per hectare of nitrogen in livestock manure on your holding in a nitrate vulnerable zone (NVZ) in each calendar year..
+        ///   Looks up a localized string similar to You can apply up to 170kg per hectare of nitrogen in livestock manure on your holding in a nitrate vulnerable zone (NVZ) in each calendar year. This limit is the loading limit and applies as an average across your holding..
         /// </summary>
         public static string lblYouCanApplyUpTo170kgPerHectareOfNitrogen {
             get {
@@ -12183,6 +12183,15 @@ namespace NMP.Portal.Resources {
         public static string lblYouMustAllowAtLeast3WeeksBetweenApplications {
             get {
                 return ResourceManager.GetString("lblYouMustAllowAtLeast3WeeksBetweenApplications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must comply with the conditions of a derogation and the NVZ rules if your application is successful..
+        /// </summary>
+        public static string lblYouMustComplyWithTheConditions {
+            get {
+                return ResourceManager.GetString("lblYouMustComplyWithTheConditions", resourceCulture);
             }
         }
         
