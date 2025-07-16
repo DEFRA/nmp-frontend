@@ -4,10 +4,23 @@
     ViewData["Title"] = Resource.lblImportsExports;
     var import = (int)NMP.Portal.Enums.ImportExport.Import;
     var export = (int)NMP.Portal.Enums.ImportExport.Export;
+    var backAction = "";
+    if (Model.IsCheckList)
+    {
+        backAction = "LivestockImportExportQuestion";
+    }
+    else if(Model.IsManageImportExport)
+    {
+        backAction = "ManageImportExport";
+    }
+    else
+    {
+        backAction = "Year";
+    }
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@(Model.IsCheckList ? "LivestockImportExportQuestion" : "Year") asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@backAction asp-controller="Report" asp-route-q="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnImportExportOption"] != null)
 {
