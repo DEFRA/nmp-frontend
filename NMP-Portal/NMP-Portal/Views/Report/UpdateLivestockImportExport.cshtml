@@ -50,7 +50,7 @@
                             @harvestYearData.Year
                         </th>
                         <td class="govuk-table__cell">@harvestYearData.LastModifiedOn?.ToString("dd MMM yyyy")</td>
-                        <td class="govuk-table__cell"><a href="#">@string.Format(Resource.lblUpdateYearImportsOrExports, harvestYearData.Year)</a></td>
+                        <td class="govuk-table__cell"><a asp-action="ManageImportExport" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@harvestYearData.EncryptedYear">@string.Format(Resource.lblUpdateYearImportsOrExports, harvestYearData.Year)</a></td>
                     </tr>
                 }
             </tbody>
