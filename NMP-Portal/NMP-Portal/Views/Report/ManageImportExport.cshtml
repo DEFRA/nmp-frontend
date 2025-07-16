@@ -34,7 +34,7 @@
             </govuk-error-summary>
         }
         <span class="name govuk-caption-l">@Model.FarmName</span>
-        <h1 class="govuk-heading-l" id="header">@Resource.lblOrganicMaterialImportsAndExports</h1>
+        <h1 class="govuk-heading-l" id="header">@string.Format(Resource.lblOrganicMaterialImportsAndExportsYear, Model.Year)</h1>
 
         <p class="govuk-body">
             <a class="govuk-button" asp-action="ImportExportOption" asp-controller="Report">
