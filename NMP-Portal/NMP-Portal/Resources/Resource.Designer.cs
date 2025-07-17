@@ -2986,6 +2986,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you have a date for when you sowed your {0}, or when you will sow it?.
+        /// </summary>
+        public static string lblDoYouHaveADateForWhenYouSowedYour {
+            get {
+                return ResourceManager.GetString("lblDoYouHaveADateForWhenYouSowedYour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you have a recent soil mineral nitrogen (N) analysis result for {0}?.
         /// </summary>
         public static string lblDoYouHaveARecentSoilMineralNitrogenAnalysis {
@@ -3387,15 +3396,6 @@ namespace NMP.Portal.Resources {
         public static string lblEnterRainfallAmount {
             get {
                 return ResourceManager.GetString("lblEnterRainfallAmount", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to What is the planting date for {0} in these fields?.
-        /// </summary>
-        public static string lblEnterSingleDateForAllField {
-            get {
-                return ResourceManager.GetString("lblEnterSingleDateForAllField", resourceCulture);
             }
         }
         
@@ -11287,11 +11287,38 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the planting date for {0} in these fields?.
+        /// </summary>
+        public static string lblWhatIsThePlantingDateForYearInTheseField {
+            get {
+                return ResourceManager.GetString("lblWhatIsThePlantingDateForYearInTheseField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the potato variety name?.
         /// </summary>
         public static string lblWhatIsThePotatoVarietyName {
             get {
                 return ResourceManager.GetString("lblWhatIsThePotatoVarietyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the sowing date for {0} in these fields?.
+        /// </summary>
+        public static string lblWhatIsTheSowingDateForCrop {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheSowingDateForCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the sowing date for {0} in {1}?.
+        /// </summary>
+        public static string lblWhatIsTheSowingDateForCropInField {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheSowingDateForCropInField", resourceCulture);
             }
         }
         
