@@ -141,7 +141,14 @@
             <govuk-radios asp-for="@Model.SowingDateQuestion">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @(string.Format(Resource.lblDoYouHaveADateForWhenYouPlantedYour, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType))
+                        @if(Model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass)
+                        {
+                            @(string.Format(Resource.lblDoYouHaveADateForWhenYouPlantedYour, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType))
+                        }
+                        else
+                        {
+                            @(string.Format(Resource.lblDoYouHaveADateForWhenYouSowedYour, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType))
+                        }
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>
                         @Resource.lblYouCanChangeYourPlantingDateLater

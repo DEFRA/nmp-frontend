@@ -1531,7 +1531,7 @@ namespace NMP.Portal.Controllers
 
             if (farm != null && (string.IsNullOrWhiteSpace(error.Message)))
             {
-                (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropService.FetchHarvestYearPlansByFarmId(farm.LastHarvestYear.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
+                (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.LastHarvestYear.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
 
                 if (harvestYearPlanResponse != null && harvestYearPlanResponse.Count > 0)
                 {

@@ -889,7 +889,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblPotatoForField" xml:space="preserve">
     <value>Which fields do you plan to grow {0} potato in?</value>
   </data>
-  <data name="lblEnterSingleDateForAllField" xml:space="preserve">
+  <data name="lblWhatIsThePlantingDateForYearInTheseField" xml:space="preserve">
     <value>What is the planting date for {0} in these fields?</value>
   </data>
   <data name="lblYouCanChangeYourPlantingDateLater" xml:space="preserve">
@@ -5143,5 +5143,14 @@ live</value>
   </data>
   <data name="lblYouHaveNotAddedAnyImports" xml:space="preserve">
     <value>You have not added any imports.</value>
+  </data>
+  <data name="lblDoYouHaveADateForWhenYouSowedYour" xml:space="preserve">
+    <value>Do you have a date for when you sowed your {0}, or when you will sow it?</value>
+  </data>
+  <data name="lblWhatIsTheSowingDateForCrop" xml:space="preserve">
+    <value>What is the sowing date for {0} in these fields?</value>
+  </data>
+  <data name="lblWhatIsTheSowingDateForCropInField" xml:space="preserve">
+    <value>What is the sowing date for {0} in {1}?</value>
   </data>
 </root>
