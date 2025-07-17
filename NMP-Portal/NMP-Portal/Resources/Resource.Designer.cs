@@ -709,6 +709,33 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add an export.
+        /// </summary>
+        public static string lblAddAnExport {
+            get {
+                return ResourceManager.GetString("lblAddAnExport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add an import.
+        /// </summary>
+        public static string lblAddAnImport {
+            get {
+                return ResourceManager.GetString("lblAddAnImport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add an import or export.
+        /// </summary>
+        public static string lblAddAnImportOrExport {
+            get {
+                return ResourceManager.GetString("lblAddAnImportOrExport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add an import or export for {0}.
         /// </summary>
         public static string lblAddAnImportOrExportForYear {
@@ -2167,6 +2194,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create a report from this information.
+        /// </summary>
+        public static string lblCreateAReportFromThisInformation {
+            get {
+                return ResourceManager.GetString("lblCreateAReportFromThisInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Created on {0}.
         /// </summary>
         public static string lblCreatedOnDate {
@@ -3621,6 +3657,15 @@ namespace NMP.Portal.Resources {
         public static string lblExporting {
             get {
                 return ResourceManager.GetString("lblExporting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exports.
+        /// </summary>
+        public static string lblExports {
+            get {
+                return ResourceManager.GetString("lblExports", resourceCulture);
             }
         }
         
@@ -5084,6 +5129,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Imports.
+        /// </summary>
+        public static string lblImports {
+            get {
+                return ResourceManager.GetString("lblImports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Imports and exports.
         /// </summary>
         public static string lblImportsExports {
@@ -5098,6 +5152,15 @@ namespace NMP.Portal.Resources {
         public static string lblImportsExportsOfLivestockManure {
             get {
                 return ResourceManager.GetString("lblImportsExportsOfLivestockManure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Imports and exports {0}.
+        /// </summary>
+        public static string lblImportsExportsYear {
+            get {
+                return ResourceManager.GetString("lblImportsExportsYear", resourceCulture);
             }
         }
         
@@ -7224,6 +7287,15 @@ namespace NMP.Portal.Resources {
         public static string lblOrganicMaterialImportsAndExports {
             get {
                 return ResourceManager.GetString("lblOrganicMaterialImportsAndExports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Organic material imports and exports {0}.
+        /// </summary>
+        public static string lblOrganicMaterialImportsAndExportsYear {
+            get {
+                return ResourceManager.GetString("lblOrganicMaterialImportsAndExportsYear", resourceCulture);
             }
         }
         
@@ -9469,6 +9541,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Supplier.
+        /// </summary>
+        public static string lblSupplier {
+            get {
+                return ResourceManager.GetString("lblSupplier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Supply from manures.
         /// </summary>
         public static string lblSupplyFromManures {
@@ -10302,6 +10383,15 @@ namespace NMP.Portal.Resources {
         public static string lblTotalRainfallSinceApplication {
             get {
                 return ResourceManager.GetString("lblTotalRainfallSinceApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Totals.
+        /// </summary>
+        public static string lblTotals {
+            get {
+                return ResourceManager.GetString("lblTotals", resourceCulture);
             }
         }
         
@@ -12115,11 +12205,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have not added any exports..
+        /// </summary>
+        public static string lblYouHaveNotAddedAnyExports {
+            get {
+                return ResourceManager.GetString("lblYouHaveNotAddedAnyExports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have not added any farms..
         /// </summary>
         public static string lblYouHaveNotAddedAnyFarms {
             get {
                 return ResourceManager.GetString("lblYouHaveNotAddedAnyFarms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have not added any imports..
+        /// </summary>
+        public static string lblYouHaveNotAddedAnyImports {
+            get {
+                return ResourceManager.GetString("lblYouHaveNotAddedAnyImports", resourceCulture);
             }
         }
         

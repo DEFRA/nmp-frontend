@@ -5078,6 +5078,24 @@ live</value>
   <data name="lblUpdateYearImportsOrExports" xml:space="preserve">
     <value>Update {0} imports or exports</value>
   </data>
+  <data name="lblAddAnImportOrExport" xml:space="preserve">
+    <value>Add an import or export</value>
+  </data>
+  <data name="lblCreateAReportFromThisInformation" xml:space="preserve">
+    <value>Create a report from this information</value>
+  </data>
+  <data name="lblExports" xml:space="preserve">
+    <value>Exports</value>
+  </data>
+  <data name="lblImports" xml:space="preserve">
+    <value>Imports</value>
+  </data>
+  <data name="lblImportsExportsYear" xml:space="preserve">
+    <value>Imports and exports {0}</value>
+  </data>
+  <data name="lblTotals" xml:space="preserve">
+    <value>Totals</value>
+  </data>
   <data name="lblWhoAreYouThisLivestockManureFrom" xml:space="preserve">
     <value>Who are you {0} this livestock manure from?</value>
   </data>
@@ -5107,6 +5125,24 @@ live</value>
   </data>
   <data name="lblName" xml:space="preserve">
     <value>Name</value>
+  </data>
+  <data name="lblAddAnExport" xml:space="preserve">
+    <value>Add an export</value>
+  </data>
+  <data name="lblAddAnImport" xml:space="preserve">
+    <value>Add an import</value>
+  </data>
+  <data name="lblOrganicMaterialImportsAndExportsYear" xml:space="preserve">
+    <value>Organic material imports and exports {0}</value>
+  </data>
+  <data name="lblSupplier" xml:space="preserve">
+    <value>Supplier</value>
+  </data>
+  <data name="lblYouHaveNotAddedAnyExports" xml:space="preserve">
+    <value>You have not added any exports.</value>
+  </data>
+  <data name="lblYouHaveNotAddedAnyImports" xml:space="preserve">
+    <value>You have not added any imports.</value>
   </data>
   <data name="lblTotalNitrogenInThisImportOrExport" xml:space="preserve">
     <value>Total nitrogen (N) in this {0}</value>
