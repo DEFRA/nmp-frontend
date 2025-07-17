@@ -997,6 +997,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add {0} imports or exports.
+        /// </summary>
+        public static string lblAddYearImportsOrExports {
+            get {
+                return ResourceManager.GetString("lblAddYearImportsOrExports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add your fields.
         /// </summary>
         public static string lblAddYourFields {
@@ -10185,6 +10194,15 @@ namespace NMP.Portal.Resources {
         public static string lblTotalNitrogen {
             get {
                 return ResourceManager.GetString("lblTotalNitrogen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total nitrogen (N) in this {0}.
+        /// </summary>
+        public static string lblTotalNitrogenInThisImportOrExport {
+            get {
+                return ResourceManager.GetString("lblTotalNitrogenInThisImportOrExport", resourceCulture);
             }
         }
         

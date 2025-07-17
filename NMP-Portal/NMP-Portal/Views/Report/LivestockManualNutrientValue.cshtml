@@ -89,7 +89,7 @@
             <div class="govuk-grid-column-two-thirds">
 
                 <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                    <h1 class="govuk-fieldset__heading">@((Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials) ? Resource.lblAddAnalysisValuesForMixedManure : string.Format(Resource.lblEnterTheValuesForYour, Model.ManureTypeName))</h1>
+                    <h1 class="govuk-fieldset__heading">@(string.Format(Resource.lblEnterTheValuesForYour, Model.ManureTypeName))</h1>
                 </legand>
                 <govuk-input asp-for=@Model.DryMatterPercent inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                     <govuk-input-label is-page-heading="true">@Resource.lblDryMatter</govuk-input-label>

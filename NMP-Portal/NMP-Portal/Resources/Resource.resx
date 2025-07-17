@@ -5108,4 +5108,10 @@ live</value>
   <data name="lblName" xml:space="preserve">
     <value>Name</value>
   </data>
+  <data name="lblTotalNitrogenInThisImportOrExport" xml:space="preserve">
+    <value>Total nitrogen (N) in this {0}</value>
+  </data>
+  <data name="lblAddYearImportsOrExports" xml:space="preserve">
+    <value>Add {0} imports or exports</value>
+  </data>
 </root>
