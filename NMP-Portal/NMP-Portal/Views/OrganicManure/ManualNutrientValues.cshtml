@@ -126,6 +126,7 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyChangeInSameDefoliationFlag" value="@Model.IsAnyChangeInSameDefoliationFlag.ToString().ToLower()"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSameDefoliationForAll"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NeedToShowSameDefoliationForAll" value="@Model.NeedToShowSameDefoliationForAll.ToString().ToLower()"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDefaultValueChange" value="@Model.IsDefaultValueChange"></govuk-input>
 
                 @if (Model.FieldList != null && Model.FieldList.Count > 0)
                 {
@@ -209,7 +210,6 @@
                     }
                 }
             </div>
-            <div class="govuk-form-group">
                 <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
                     <h1 class="govuk-fieldset__heading">@((Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials) ? Resource.lblAddAnalysisValuesForMixedManure : string.Format(Resource.lblEnterTheValuesForYour, Model.ManureTypeName))</h1>
                 </legand>
@@ -249,10 +249,11 @@
                     <govuk-input-label is-page-heading="true">@Resource.lblMagnesiumMgO</govuk-input-label>
                     <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
                 </govuk-input>
-            </div>
-            <govuk-button type="submit" class="margin-bottom-forty">
-                @Resource.lblContinue
-            </govuk-button>
+
+            
+                <govuk-button type="submit" class="margin-bottom-forty">
+                    @Resource.lblContinue
+                </govuk-button>
             <p class="govuk-body cancel-link">
                 @if (!Model.IsCheckAnswer)
                 {

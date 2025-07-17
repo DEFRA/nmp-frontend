@@ -1249,7 +1249,7 @@ namespace NMP.Portal.Controllers
                 {
                     if (manureTypeList.Count > 0)
                     {
-                        var manures = manureTypeList.OrderBy(m => m.SortOrder).ToList();                        
+                        var manures = manureTypeList.OrderBy(m => m.SortOrder).ToList();
                         var SelectListItem = manures.Select(f => new SelectListItem
                         {
                             Value = f.Id.ToString(),
@@ -1355,6 +1355,7 @@ namespace NMP.Portal.Controllers
                             model.K2O = null;
                             model.MgO = null;
                             model.NO3N = null;
+                            model.IsDefaultValueChange = true;
                             //model.DefaultNutrientValue = null;
                         }
                     }
@@ -2426,8 +2427,9 @@ namespace NMP.Portal.Controllers
                     if (error == null && farmManureTypeList.Count > 0)//&&(string.IsNullOrWhiteSpace(model.DefaultNutrientValue) || model.DefaultNutrientValue== Resource.lblYesUseTheseValues))
                     {
                         farmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == model.ManureTypeId);
-                        if (string.IsNullOrWhiteSpace(model.DefaultNutrientValue))
+                        if (model.IsDefaultValueChange)
                         {
+                            model.IsDefaultValueChange = false;
                             if (farmManure != null)
                             {
                                 model.ManureType.DryMatter = farmManure.DryMatter;
@@ -2454,6 +2456,7 @@ namespace NMP.Portal.Controllers
                         {
                             if (farmManure != null)
                             {
+                                model.DefaultFarmManureValueDate = farmManure.ModifiedOn == null ? farmManure.CreatedOn : farmManure.ModifiedOn;
                                 ViewBag.FarmManureApiOption = Resource.lblTrue;
                                 if ((!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblYesUseTheseValues) || (model.IsThisDefaultValueOfRB209 != null && (!model.IsThisDefaultValueOfRB209.Value)))
                                 {
@@ -2548,8 +2551,9 @@ namespace NMP.Portal.Controllers
                     if (error == null && farmManureTypeList.Count > 0)//&&(string.IsNullOrWhiteSpace(model.DefaultNutrientValue) || model.DefaultNutrientValue== Resource.lblYesUseTheseValues))
                     {
                         farmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == model.ManureTypeId);
-                        if (string.IsNullOrWhiteSpace(model.DefaultNutrientValue))
+                        if (model.IsDefaultValueChange)
                         {
+                            model.IsDefaultValueChange = false;
                             if (farmManure != null)
                             {
                                 model.ManureType.DryMatter = farmManure.DryMatter;
@@ -9983,7 +9987,7 @@ namespace NMP.Portal.Controllers
                                                 string text = (defoliation > 0 && defoliation <= defoliationParts.Length)
                                                 ? $"{Enum.GetName(typeof(PotentialCut), defoliation)} - {defoliationParts[defoliation - 1]}"
                                                 : defoliation.ToString();
-                                               
+
                                                 var parts = text.Split('-');
                                                 if (parts.Length == 2)
                                                 {
