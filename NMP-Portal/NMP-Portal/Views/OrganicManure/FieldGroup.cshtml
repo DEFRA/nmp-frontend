@@ -98,6 +98,7 @@
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyCropIsGrass" value="@Model.IsAnyCropIsGrass.ToString().ToLower()"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyChangeInSameDefoliationFlag" value="@Model.IsAnyChangeInSameDefoliationFlag.ToString().ToLower()"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSameDefoliationForAll"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDefaultValueChange" value="@Model.IsDefaultValueChange"></govuk-input>
 
         @if (Model != null)
         {

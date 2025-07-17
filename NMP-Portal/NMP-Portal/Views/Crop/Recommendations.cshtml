@@ -126,7 +126,14 @@
                                                         <tr class="govuk-table__row">
                                                             <td class="govuk-table__cell">@Resource.lblNitrogen</td>
                                                             <td class="govuk-table__cell">
-                                                                @(string.IsNullOrWhiteSpace(recommendation.NIndex) ? Resource.lblHyphen : recommendation.NIndex)
+                                                                @if(Model.CropGroupID != (int)NMP.Portal.Enums.CropGroup.Grass)
+                                                                {
+                                                                    @(string.IsNullOrWhiteSpace(recommendation.NIndex) ? Resource.lblHyphen : recommendation.NIndex)
+                                                                }
+                                                                else
+                                                                {
+                                                                    @string.Empty
+                                                                }
                                                             </td>
                                                             <td class="govuk-table__cell">@(recommendation.CropN == null ? Resource.lblHyphen : recommendation.CropN == 0 ? recommendation.CropN : string.Concat(recommendation.CropN, Resource.lblkg))</td>
                                                             <td class="govuk-table__cell">@(recommendation.ManureN == null ? Resource.lblHyphen : recommendation.ManureN == 0 ? recommendation.ManureN : string.Concat(recommendation.ManureN, Resource.lblkg))</td>

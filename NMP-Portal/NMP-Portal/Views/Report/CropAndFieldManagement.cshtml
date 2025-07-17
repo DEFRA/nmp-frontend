@@ -185,7 +185,16 @@
                                                     <td class="govuk-table__cell">
                                                         @Resource.lblNitrogen
                                                     </td>
-                                                    <td class="govuk-table__cell">@(mp.Recommendation.NIndex == null ? Resource.lblHyphen : mp.Recommendation.NIndex)</td>
+                                                    <td class="govuk-table__cell">
+                                                        @if (crop.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)
+                                                        {
+                                                            @(mp.Recommendation.NIndex == null ? Resource.lblHyphen : mp.Recommendation.NIndex)
+                                                        }
+                                                        else
+                                                        {
+                                                            @string.Empty
+                                                        }
+                                                    </td>
                                                     <td class="govuk-table__cell">@(mp.Recommendation.CropN == null ? Resource.lblHyphen : mp.Recommendation.CropN == 0 ? mp.Recommendation.CropN : string.Concat(mp.Recommendation.CropN, Resource.lblkg))</td>
                                                     <td class="govuk-table__cell">@(mp.Recommendation.ManureN == null ? Resource.lblHyphen : mp.Recommendation.ManureN == 0 ? mp.Recommendation.ManureN : string.Concat(mp.Recommendation.ManureN, Resource.lblkg))</td>
                                                     <td class="govuk-table__cell">@(mp.Recommendation.FertilizerN == null ? Resource.lblHyphen : mp.Recommendation.FertilizerN < 0 ? 0 : mp.Recommendation.FertilizerN == 0 ? mp.Recommendation.FertilizerN : string.Concat(mp.Recommendation.FertilizerN, Resource.lblkg))</td>
@@ -252,7 +261,7 @@
                                                         @(mp.Recommendation.LimeIndex == null ? Resource.lblHyphen : mp.Recommendation.LimeIndex)
                                                     <td class="govuk-table__cell">@(mp.Recommendation.CropLime == null ? Resource.lblHyphen : mp.Recommendation.CropLime == 0 ? mp.Recommendation.CropLime : string.Concat(mp.Recommendation.CropLime, " ", Resource.lbltonnes))</td>
                                                     <td class="govuk-table__cell">@(mp.Recommendation.ManureLime == null ? Resource.lblHyphen : mp.Recommendation.ManureLime == 0 ? mp.Recommendation.ManureLime : string.Concat(mp.Recommendation.ManureLime, " ", Resource.lbltonnes))</td>
-                                                    <td class="govuk-table__cell">@(mp.Recommendation.FertilizerLime == null ? Resource.lblHyphen : mp.Recommendation.FertilizerLime < 0 ? 0 : mp.Recommendation.FertilizerLime == 0 ? mp.Recommendation.FertilizerLime : string.Concat(mp.Recommendation.FertilizerLime," ", Resource.lbltonnes))</td>
+                                                    <td class="govuk-table__cell">@(mp.Recommendation.FertilizerLime == null ? Resource.lblHyphen : mp.Recommendation.FertilizerLime < 0 ? 0 : mp.Recommendation.FertilizerLime == 0 ? mp.Recommendation.FertilizerLime : string.Concat(mp.Recommendation.FertilizerLime, " ", Resource.lbltonnes))</td>
                                                     <td class="govuk-table__cell">@(mp.Recommendation.FertiliserAppliedLime == null ? 0 : mp.Recommendation.FertiliserAppliedLime < 0 ? 0 : mp.Recommendation.FertiliserAppliedLime == 0 ? mp.Recommendation.FertiliserAppliedLime : string.Concat(mp.Recommendation.FertiliserAppliedLime, " ", Resource.lbltonnes))</td>
                                                 </tr>
                                             </tbody>
@@ -281,16 +290,16 @@
                                                 @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
                                                 {
                                                     <th scope="col" class="govuk-table__header">@Resource.lblEstablishment</th>
-                                                  
+
                                                     <th scope="col" class="govuk-table__header">@Resource.lblSowingDate</th>
-                                                    
+
                                                     <th scope="col" class="govuk-table__header">@Resource.lblSward</th>
                                                     <th scope="col" class="govuk-table__header">@Resource.lblManagement</th>
-                                                    @if(crop.SwardTypeID==(int)NMP.Portal.Enums.SwardType.Grass)
+                                                    @if (crop.SwardTypeID == (int)NMP.Portal.Enums.SwardType.Grass)
                                                     {
-                                                    <th scope="col" class="govuk-table__header">@Resource.lblGrassGrowthClass</th>
-                                                    <th scope="col" class="govuk-table__header">@Resource.lblTotalDryMatterYield</th>
-                                                     <th scope="col" class="govuk-table__header">@Resource.lblUnits</th> 
+                                                        <th scope="col" class="govuk-table__header">@Resource.lblGrassGrowthClass</th>
+                                                        <th scope="col" class="govuk-table__header">@Resource.lblTotalDryMatterYield</th>
+                                                        <th scope="col" class="govuk-table__header">@Resource.lblUnits</th>
                                                     }
                                                 }
                                                 else
@@ -313,7 +322,7 @@
                                                     {
                                                         @crop.CropTypeName
                                                     }
-                                                </td>                                                   
+                                                </td>
                                                 @if (crop.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)
                                                 {
                                                     <td class="govuk-table__cell">@(crop.Yield != null ? crop.Yield : Resource.lblNotEntered)</td>
@@ -331,7 +340,7 @@
                                                     {
                                                         <td class="govuk-table__cell">@(crop.GrowthClass != null ? crop.GrowthClass : Resource.lblNotEntered)</td>
                                                         <td class="govuk-table__cell">@(crop.Yield != null ? string.Format(Resource.lblYieldTonnesPerHectare, crop.Yield) : Resource.lblNotEntered)</td>
-                                                         <td class="govuk-table__cell">@(Resource.lblTotalDryMatterYield)</td>
+                                                        <td class="govuk-table__cell">@(Resource.lblTotalDryMatterYield)</td>
                                                     }
                                                 }
                                             </tr>
