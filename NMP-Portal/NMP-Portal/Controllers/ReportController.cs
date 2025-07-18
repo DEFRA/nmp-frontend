@@ -3134,25 +3134,29 @@ namespace NMP.Portal.Controllers
                     (List<NutrientsLoadingManures> nutrientsLoadingManuresList, error) = await _reportService.FetchNutrientsLoadingManuresByFarmId(decryptedFarmId);
                     if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingManuresList != null && nutrientsLoadingManuresList.Count > 0)
                     {
-                        HarvestYear harvestYear = new HarvestYear();
-                        foreach (var nutrientsLoadingManure in nutrientsLoadingManuresList)
+                        nutrientsLoadingManuresList = nutrientsLoadingManuresList.Where(x => x.ManureDate.Value.Year == model.Year.Value).ToList();
+                        if (nutrientsLoadingManuresList.Count > 0)
                         {
-                            harvestYear.LastModifiedOn = nutrientsLoadingManure.ModifiedOn != null ? nutrientsLoadingManure.ModifiedOn.Value : nutrientsLoadingManure.CreatedOn.Value;
-                            harvestYear.Year = nutrientsLoadingManure.ManureDate.Value.Year;
-                            harvestYearList.Add(harvestYear);
-                        }
+                            HarvestYear harvestYear = new HarvestYear();
+                            foreach (var nutrientsLoadingManure in nutrientsLoadingManuresList)
+                            {
+                                harvestYear.LastModifiedOn = nutrientsLoadingManure.ModifiedOn != null ? nutrientsLoadingManure.ModifiedOn.Value : nutrientsLoadingManure.CreatedOn.Value;
+                                harvestYear.Year = nutrientsLoadingManure.ManureDate.Value.Year;
+                                harvestYearList.Add(harvestYear);
+                            }
 
-                        harvestYearList.OrderBy(x => x.Year).ToList();
-                        model.HarvestYear = harvestYearList;
-                        ViewBag.ImportList = nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblImport.ToUpper()).ToList();
-                        decimal? totalImports = (nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblImport.ToUpper()).Sum(x => x.Quantity)) * 1000;
-                        ViewBag.TotalImportsInKg = totalImports;
-                        ViewBag.ExportList = nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblExport.ToUpper()).ToList();
-                        decimal? totalExports = (nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblExport.ToUpper()).Sum(x => x.Quantity)) * 1000;
-                        ViewBag.TotalExportsInKg = totalExports;
-                        ViewBag.NetTotal = totalImports - totalExports;
-                        ViewBag.IsImport = _reportDataProtector.Protect(Resource.lblImport);
-                        ViewBag.IsExport = _reportDataProtector.Protect(Resource.lblExport);
+                            harvestYearList.OrderBy(x => x.Year).ToList();
+                            model.HarvestYear = harvestYearList;
+                            ViewBag.ImportList = nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblImport.ToUpper()).ToList();
+                            decimal? totalImports = (nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblImport.ToUpper()).Sum(x => x.Quantity)) * 1000;
+                            ViewBag.TotalImportsInKg = totalImports;
+                            ViewBag.ExportList = nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblExport.ToUpper()).ToList();
+                            decimal? totalExports = (nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblExport.ToUpper()).Sum(x => x.Quantity)) * 1000;
+                            ViewBag.TotalExportsInKg = totalExports;
+                            ViewBag.NetTotal = totalImports - totalExports;
+                            ViewBag.IsImport = _reportDataProtector.Protect(Resource.lblImport);
+                            ViewBag.IsExport = _reportDataProtector.Protect(Resource.lblExport);
+                        }
                     }
                     else
                     {
