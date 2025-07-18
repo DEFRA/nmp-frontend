@@ -844,6 +844,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to added.
+        /// </summary>
+        public static string lblAdded {
+            get {
+                return ResourceManager.GetString("lblAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add excess winter rainfall for harvest year {0}..
         /// </summary>
         public static string lblAddExcessWinterRainfallForHarvestYear {
@@ -867,6 +876,15 @@ namespace NMP.Portal.Resources {
         public static string lblAddFieldFor {
             get {
                 return ResourceManager.GetString("lblAddFieldFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add {0}.
+        /// </summary>
+        public static string lblAddImportOrExport {
+            get {
+                return ResourceManager.GetString("lblAddImportOrExport", resourceCulture);
             }
         }
         
@@ -1020,6 +1038,15 @@ namespace NMP.Portal.Resources {
         public static string lblAddToPlan {
             get {
                 return ResourceManager.GetString("lblAddToPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add {0} imports or exports.
+        /// </summary>
+        public static string lblAddYearImportsOrExports {
+            get {
+                return ResourceManager.GetString("lblAddYearImportsOrExports", resourceCulture);
             }
         }
         
@@ -10306,6 +10333,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total nitrogen (N) in this {0}.
+        /// </summary>
+        public static string lblTotalNitrogenInThisImportOrExport {
+            get {
+                return ResourceManager.GetString("lblTotalNitrogenInThisImportOrExport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total nitrogen (N) must be equal to or greater than sum of ammonium (N), uric acid (N) and nitrate (N).
         /// </summary>
         public static string lblTotalNitrogenMustBeGreaterOrEqualToAmmoniumUricacidNitrate {
@@ -10554,6 +10590,15 @@ namespace NMP.Portal.Resources {
         public static string lblUpdateCropGroupNameForHarvestYear {
             get {
                 return ResourceManager.GetString("lblUpdateCropGroupNameForHarvestYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to updated.
+        /// </summary>
+        public static string lblUpdated {
+            get {
+                return ResourceManager.GetString("lblUpdated", resourceCulture);
             }
         }
         
@@ -14075,6 +14120,33 @@ namespace NMP.Portal.Resources {
         public static string MsgIfUserEnterDecimalValueInRainfall {
             get {
                 return ResourceManager.GetString("MsgIfUserEnterDecimalValueInRainfall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have {0} an organic material {1}.
+        /// </summary>
+        public static string MsgImportExportSuccessMsgContent1 {
+            get {
+                return ResourceManager.GetString("MsgImportExportSuccessMsgContent1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add another import or export.
+        /// </summary>
+        public static string MsgImportExportSuccessMsgContent2 {
+            get {
+                return ResourceManager.GetString("MsgImportExportSuccessMsgContent2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a livestock manure nitrogen (n) farm limit report for {0}.
+        /// </summary>
+        public static string MsgImportExportSuccessMsgContent3 {
+            get {
+                return ResourceManager.GetString("MsgImportExportSuccessMsgContent3", resourceCulture);
             }
         }
         

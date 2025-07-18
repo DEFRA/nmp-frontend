@@ -198,5 +198,94 @@ namespace NMP.Portal.Services
             }
             return (NutrientsLoadingManuresList, error);
         }
+        public async Task<(NutrientsLoadingManures, Error)> AddNutrientsLoadingManuresAsync(string nutrientsLoadingManure)
+        {
+            NutrientsLoadingManures nutrientsLoadingManureData = null;
+            Error error = new Error();
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+
+                var response = await httpClient.PostAsync(APIURLHelper.AddNutrientsLoadingManureAPI, new StringContent(nutrientsLoadingManure, Encoding.UTF8, "application/json"));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+                {
+
+                    JObject nutrientsLoadingManureDataObj = responseWrapper.Data as JObject;
+                    if (nutrientsLoadingManureDataObj != null)
+                    {
+                        nutrientsLoadingManureData = nutrientsLoadingManureDataObj.ToObject<NutrientsLoadingManures>();
+                    }
+
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (nutrientsLoadingManureData, error);
+        }
+        public async Task<(List<NutrientsLoadingFarmDetail>, Error)> FetchNutrientsLoadingFarmDetailsByFarmId(int farmId)
+        {
+            Error error = new Error();
+            List<NutrientsLoadingFarmDetail> nutrientsLoadingFarmDetailList = new List<NutrientsLoadingFarmDetail>();
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchNutrientsLoadingFarmDetailsByFarmIdAPI, farmId));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode)
+                {
+                    if (responseWrapper != null && responseWrapper.Data != null)
+                    {
+                        var nutrientsLoadingFarmDetail = responseWrapper.Data.ToObject<List<NutrientsLoadingFarmDetail>>();
+                        if (nutrientsLoadingFarmDetail != null)
+                        {
+                            nutrientsLoadingFarmDetailList = nutrientsLoadingFarmDetail;
+                        }
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (nutrientsLoadingFarmDetailList, error);
+        }
     }
 }
