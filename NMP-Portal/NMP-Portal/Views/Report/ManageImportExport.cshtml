@@ -25,8 +25,38 @@
 
     </govuk-breadcrumbs>
 }
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        @if (TempData["succesMsgContent1"] != null)
+        {
+            <govuk-notification-banner type="Success">
+                <p class="govuk-notification-banner__heading">
+                    @TempData["succesMsgContent1"]
+                </p>
+                @if (TempData["succesMsgContent2"] != null)
+                {
+                    <p class="govuk-body">
+                        <a asp-action="ImportExportOption" asp-controller="Report" asp-route-q="@Model.IsComingFromImportExportOverviewPage">
+                            @TempData["succesMsgContent2"]
+                        </a>
+                    </p>
+                }
+                @if (TempData["succesMsgContent3"] != null)
+                {
+                    <p class="govuk-body">
+                        <a href="#">
+                            @TempData["succesMsgContent3"]
+                        </a>
+                    </p>
+                }
+            </govuk-notification-banner>
+        }
+    </div>
+</div>
 <div class="govuk-grid-row margin-bottom-thirty">
     <div class="govuk-grid-column-full">
+
         @if (TempData["OrganicMaterialImportsAndExportsError"] != null)
         {
             <govuk-error-summary>
@@ -42,7 +72,7 @@
             </a>
         </p>
         <p class="govuk-body"><a class="govuk-link" asp-action="ReportOptions" asp-controller="Report" asp-route-f="@Model.EncryptedFarmId">@Resource.lblCreateAReportFromThisInformation</a></p>
-        
+
         <govuk-tabs>
             <govuk-tabs-item id="imports" label=@Resource.lblImports>
                 <h2 class="govuk-heading-m non-standard">@Resource.lblImports</h2>

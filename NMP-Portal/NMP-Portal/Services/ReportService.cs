@@ -212,7 +212,7 @@ namespace NMP.Portal.Services
                 if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
                 {
 
-                    JObject nutrientsLoadingManureDataObj = responseWrapper.Data["NutrientsLoadingManures"] as JObject;
+                    JObject nutrientsLoadingManureDataObj = responseWrapper.Data as JObject;
                     if (nutrientsLoadingManureDataObj != null)
                     {
                         nutrientsLoadingManureData = nutrientsLoadingManureDataObj.ToObject<NutrientsLoadingManures>();

@@ -844,6 +844,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to added.
+        /// </summary>
+        public static string lblAdded {
+            get {
+                return ResourceManager.GetString("lblAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add excess winter rainfall for harvest year {0}..
         /// </summary>
         public static string lblAddExcessWinterRainfallForHarvestYear {
@@ -10540,6 +10549,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to updated.
+        /// </summary>
+        public static string lblUpdated {
+            get {
+                return ResourceManager.GetString("lblUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Update excess winter rainfall.
         /// </summary>
         public static string lblUpdateExcessWinterRainfall {
@@ -14030,6 +14048,33 @@ namespace NMP.Portal.Resources {
         public static string MsgIfUserEnterDecimalValueInRainfall {
             get {
                 return ResourceManager.GetString("MsgIfUserEnterDecimalValueInRainfall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have {0} an organic material {1}.
+        /// </summary>
+        public static string MsgImportExportSuccessMsgContent1 {
+            get {
+                return ResourceManager.GetString("MsgImportExportSuccessMsgContent1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add another import or export.
+        /// </summary>
+        public static string MsgImportExportSuccessMsgContent2 {
+            get {
+                return ResourceManager.GetString("MsgImportExportSuccessMsgContent2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a livestock manure nitrogen (n) farm limit report for {0}.
+        /// </summary>
+        public static string MsgImportExportSuccessMsgContent3 {
+            get {
+                return ResourceManager.GetString("MsgImportExportSuccessMsgContent3", resourceCulture);
             }
         }
         
