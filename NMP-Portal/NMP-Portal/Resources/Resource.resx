@@ -3563,7 +3563,7 @@ cubic metres per hectare  not set</value>
     <value>added function: N-max NVZ compliance module</value>
   </data>
   <data name="lblNMPTBetaTest1" xml:space="preserve">
-    <value>A limited number of selected farmers and advisers across England and Wales are invited to test the tool and provide feedback prior to the public release</value>
+    <value>A limited number of selected farmers and advisers across England and Wales are invited to test the tool and provide feedback prior to the public release.</value>
   </data>
   <data name="lblNMPTLaunchesToUsersInScotland" xml:space="preserve">
     <value>NMPT-GB launches to users in Scotland</value>

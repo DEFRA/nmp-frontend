@@ -224,7 +224,7 @@
 
                             </div>
                             <div class="govuk-task-list__status" id="ImportsExportsOfLivestockManure">
-                                @if (Model.LivestockImportExportQuestion != null && (!Model.LivestockImportExportQuestion.Value))
+                                @if (ViewBag.IsNutrientsLoadingManureshaveData!=null)
                                 {
                                     @Resource.lblCompleted
                                 }
