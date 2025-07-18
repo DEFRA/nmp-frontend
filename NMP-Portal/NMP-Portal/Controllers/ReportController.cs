@@ -2862,7 +2862,12 @@ namespace NMP.Portal.Controllers
                         harvestYearList.OrderBy(x => x.Year).ToList();
                         model.HarvestYear = harvestYearList;
                         ViewBag.ImportList = nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblImport.ToUpper()).ToList();
+                        decimal? totalImports = (nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblImport.ToUpper()).Sum(x => x.Quantity) ) * 1000;
+                        ViewBag.TotalImportsInKg = totalImports;
                         ViewBag.ExportList = nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblExport.ToUpper()).ToList();
+                        decimal? totalExports = (nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblExport.ToUpper()).Sum(x => x.Quantity)) * 1000;
+                        ViewBag.TotalExportsInKg = totalExports;
+                        ViewBag.NetTotal = totalImports - totalExports;
                     }
                     else
                     {
@@ -2880,6 +2885,7 @@ namespace NMP.Portal.Controllers
             if(!string.IsNullOrWhiteSpace(y))
             {
                 model.Year = Convert.ToInt32(_reportDataProtector.Unprotect(y));
+                model.EncryptedHarvestYear = y;
                 
             }
             model.IsManageImportExport = true;
