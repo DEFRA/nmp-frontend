@@ -127,10 +127,31 @@
 
             </govuk-tabs-item>
             <govuk-tabs-item id="totals" label=@Resource.lblTotals>
-                <h2 class="govuk-heading-m non-standard">@Resource.lblTotals</h2>
+                <h2 class="govuk-heading-m non-standard">@string.Format(Resource.lblTotalImportsAndExportsForYear, Model.Year)</h2>
                 @if (ViewBag.ImportList != null || ViewBag.ExportList != null)
                 {
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-two-thirds">
+                            <table class="govuk-table margin-bottom-forty">
+                                <tbody class="govuk-table__body">
+                                    <tr class="govuk-table__row">
+                                        <th scope="col" class="govuk-table__header">@Resource.lblTotalImportedOrganicMaterial</th>
+                                        <td scope="col" class="govuk-table__cell">@string.Format("{0}{1}", ViewBag.TotalImportsInKg, Resource.lblkg)</td>
+                                    </tr>
 
+                                    <tr class="govuk-table__row">
+                                        <th scope="col" class="govuk-table__header">@Resource.lblTotalExportedOrganicMaterial</th>
+                                        <td scope="col" class="govuk-table__cell">@string.Format("{0}{1}", ViewBag.TotalExportsInKg, Resource.lblkg)</td>
+                                    </tr>
+
+                                    <tr class="govuk-table__row">
+                                        <th scope="col" class="govuk-table__header">@Resource.lblNetTotal</th>
+                                        <th scope="col" class="govuk-table__cell">+ @string.Format("{0}{1}", ViewBag.NetTotal, Resource.lblkg)</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 }
                 else
                 {

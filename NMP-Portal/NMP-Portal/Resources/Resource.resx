@@ -5144,6 +5144,18 @@ live</value>
   <data name="lblYouHaveNotAddedAnyImports" xml:space="preserve">
     <value>You have not added any imports.</value>
   </data>
+  <data name="lblNetTotal" xml:space="preserve">
+    <value>Net total</value>
+  </data>
+  <data name="lblTotalExportedOrganicMaterial" xml:space="preserve">
+    <value>Total exported organic material</value>
+  </data>
+  <data name="lblTotalImportedOrganicMaterial" xml:space="preserve">
+    <value>Total imported organic material</value>
+  </data>
+  <data name="lblTotalImportsAndExportsForYear" xml:space="preserve">
+    <value>Total imports and exports for {0}</value>
+  </data>
   <data name="lblDoYouHaveADateForWhenYouSowedYour" xml:space="preserve">
     <value>Do you have a date for when you sowed your {0}, or when you will sow it?</value>
   </data>

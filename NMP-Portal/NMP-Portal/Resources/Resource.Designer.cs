@@ -6444,6 +6444,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Net total.
+        /// </summary>
+        public static string lblNetTotal {
+            get {
+                return ResourceManager.GetString("lblNetTotal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New swards.
         /// </summary>
         public static string lblNewSwards {
@@ -10216,6 +10225,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total exported organic material.
+        /// </summary>
+        public static string lblTotalExportedOrganicMaterial {
+            get {
+                return ResourceManager.GetString("lblTotalExportedOrganicMaterial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total farm area.
         /// </summary>
         public static string lblTotalFarmArea {
@@ -10239,6 +10257,24 @@ namespace NMP.Portal.Resources {
         public static string lblTotalGrassArea {
             get {
                 return ResourceManager.GetString("lblTotalGrassArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total imported organic material.
+        /// </summary>
+        public static string lblTotalImportedOrganicMaterial {
+            get {
+                return ResourceManager.GetString("lblTotalImportedOrganicMaterial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total imports and exports for {0}.
+        /// </summary>
+        public static string lblTotalImportsAndExportsForYear {
+            get {
+                return ResourceManager.GetString("lblTotalImportsAndExportsForYear", resourceCulture);
             }
         }
         
