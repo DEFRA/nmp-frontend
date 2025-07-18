@@ -1189,10 +1189,6 @@ namespace NMP.Portal.Controllers
                             {
                                 crop.CropInfo1 = model.CropInfo1.Value;
                             }
-                            if (!string.IsNullOrWhiteSpace(model.CropGroupName))
-                            {
-                                crop.CropGroupName = model.CropGroupName;
-                            }
                             if (model.CropInfo2.HasValue)
                             {
                                 crop.CropInfo2 = model.CropInfo2.Value;
