@@ -5144,6 +5144,18 @@ live</value>
   <data name="lblYouHaveNotAddedAnyImports" xml:space="preserve">
     <value>You have not added any imports.</value>
   </data>
+  <data name="lblNetTotal" xml:space="preserve">
+    <value>Net total</value>
+  </data>
+  <data name="lblTotalExportedOrganicMaterial" xml:space="preserve">
+    <value>Total exported organic material</value>
+  </data>
+  <data name="lblTotalImportedOrganicMaterial" xml:space="preserve">
+    <value>Total imported organic material</value>
+  </data>
+  <data name="lblTotalImportsAndExportsForYear" xml:space="preserve">
+    <value>Total imports and exports for {0}</value>
+  </data>
   <data name="lblDoYouHaveADateForWhenYouSowedYour" xml:space="preserve">
     <value>Do you have a date for when you sowed your {0}, or when you will sow it?</value>
   </data>
@@ -5152,5 +5164,29 @@ live</value>
   </data>
   <data name="lblWhatIsTheSowingDateForCropInField" xml:space="preserve">
     <value>What is the sowing date for {0} in {1}?</value>
+  </data>
+  <data name="lblTotalNitrogenInThisImportOrExport" xml:space="preserve">
+    <value>Total nitrogen (N) in this {0}</value>
+  </data>
+  <data name="lblAddYearImportsOrExports" xml:space="preserve">
+    <value>Add {0} imports or exports</value>
+  </data>
+  <data name="MsgImportExportSuccessMsgContent1" xml:space="preserve">
+    <value>You have {0} an organic material {1}</value>
+  </data>
+  <data name="MsgImportExportSuccessMsgContent2" xml:space="preserve">
+    <value>Add another import or export</value>
+  </data>
+  <data name="MsgImportExportSuccessMsgContent3" xml:space="preserve">
+    <value>Create a livestock manure nitrogen (n) farm limit report for {0}</value>
+  </data>
+  <data name="lblAdded" xml:space="preserve">
+    <value>added</value>
+  </data>
+  <data name="lblUpdated" xml:space="preserve">
+    <value>updated</value>
+  </data>
+  <data name="lblAddImportOrExport" xml:space="preserve">
+    <value>Add {0}</value>
   </data>
 </root>

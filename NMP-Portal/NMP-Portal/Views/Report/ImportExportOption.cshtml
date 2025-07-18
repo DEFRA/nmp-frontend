@@ -5,13 +5,22 @@
     var import = (int)NMP.Portal.Enums.ImportExport.Import;
     var export = (int)NMP.Portal.Enums.ImportExport.Export;
     var backAction = "";
-    if (Model.IsCheckList)
+    if (Model.IsCheckAnswer)
     {
-        backAction = "LivestockImportExportQuestion";
+        backAction = "LivestockImportExportCheckAnswer";
     }
-    else if(Model.IsManageImportExport)
+    else if (!string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
+    {
+        backAction = "UpdateLivestockImportExport";
+    }
+   
+    else if (Model.IsManageImportExport)
     {
         backAction = "ManageImportExport";
+    }
+    else if (Model.IsCheckList)
+    {
+        backAction = "LivestockImportExportQuestion";
     }
     else
     {
@@ -20,7 +29,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@backAction asp-controller="Report" asp-route-q="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@backAction asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnImportExportOption"] != null)
 {
@@ -90,6 +99,9 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyNeedToStoreNutrientValueForFuture"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefaultNutrientValue"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDefaultValueChange" value="@Model.IsDefaultValueChange"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManageImportExport" value="@Model.IsManageImportExport"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromImportExportOverviewPage"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -125,17 +137,41 @@
                     @Resource.lblContinue
                 </govuk-button>
                 <p class="govuk-body cancel-link">
-                    @if (!Model.IsCheckList)
+                    @if (Model.IsCheckAnswer)
                     {
-                        <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+                        <a asp-action="LivestockImportExportCheckAnswer" asp-controller="Report">
                             @Resource.lblCancel
                         </a>
                     }
                     else
                     {
-                        <a asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report">
-                            @Resource.lblCancel
-                        </a>
+                        @if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
+                        {
+                            @if (Model.IsManageImportExport)
+                            {
+                                <a asp-action="ManageImportExport" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@Model.EncryptedHarvestYear">
+                                    @Resource.lblCancel
+                                </a>
+                            }
+                            else @if (!Model.IsCheckList)
+                            {
+                                <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+                                    @Resource.lblCancel
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report">
+                                    @Resource.lblCancel
+                                </a>
+                            }
+                        }
+                        else
+                        {
+                            <a asp-action="UpdateLivestockImportExport" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId">
+                                @Resource.lblCancel
+                            </a>
+                        }
                     }
                 </p>
 
