@@ -6687,7 +6687,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A limited number of selected farmers and advisers across England and Wales are invited to test the tool and provide feedback prior to the public release.
+        ///   Looks up a localized string similar to A limited number of selected farmers and advisers across England and Wales are invited to test the tool and provide feedback prior to the public release..
         /// </summary>
         public static string lblNMPTBetaTest1 {
             get {
