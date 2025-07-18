@@ -9,17 +9,18 @@
     {
         backAction = "LivestockImportExportCheckAnswer";
     }
-    else if (Model.IsCheckList)
+    else if (!string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
     {
-        backAction = "LivestockImportExportQuestion";
+        backAction = "UpdateLivestockImportExport";
     }
+   
     else if (Model.IsManageImportExport)
     {
         backAction = "ManageImportExport";
     }
-    else if (!string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
+    else if (Model.IsCheckList)
     {
-        backAction = "UpdateLivestockImportExport";
+        backAction = "LivestockImportExportQuestion";
     }
     else
     {
@@ -98,8 +99,9 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyNeedToStoreNutrientValueForFuture"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefaultNutrientValue"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDefaultValueChange" value="@Model.IsDefaultValueChange"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManageImportExport" value="@Model.IsManageImportExport"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsImportExportChange" value="@Model.IsImportExportChange.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromImportExportOverviewPage"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -145,15 +147,15 @@
                     {
                         @if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
                         {
-                            @if (!Model.IsCheckList)
+                            @if (Model.IsManageImportExport)
                             {
-                                <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+                                <a asp-action="ManageImportExport" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@Model.EncryptedHarvestYear">
                                     @Resource.lblCancel
                                 </a>
                             }
-                            else if (Model.IsManageImportExport)
+                            else @if (!Model.IsCheckList)
                             {
-                                <a asp-action="ManageImportExport" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@Model.EncryptedHarvestYear">
+                                <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
                                     @Resource.lblCancel
                                 </a>
                             }

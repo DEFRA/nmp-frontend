@@ -880,6 +880,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add {0}.
+        /// </summary>
+        public static string lblAddImportOrExport {
+            get {
+                return ResourceManager.GetString("lblAddImportOrExport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Plan an application of inorganic fertiliser to one or more fields.
         /// </summary>
         public static string lblAddInorganicFertiliser {
@@ -3004,6 +3013,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you have a date for when you sowed your {0}, or when you will sow it?.
+        /// </summary>
+        public static string lblDoYouHaveADateForWhenYouSowedYour {
+            get {
+                return ResourceManager.GetString("lblDoYouHaveADateForWhenYouSowedYour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you have a recent soil mineral nitrogen (N) analysis result for {0}?.
         /// </summary>
         public static string lblDoYouHaveARecentSoilMineralNitrogenAnalysis {
@@ -3405,15 +3423,6 @@ namespace NMP.Portal.Resources {
         public static string lblEnterRainfallAmount {
             get {
                 return ResourceManager.GetString("lblEnterRainfallAmount", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to What is the planting date for {0} in these fields?.
-        /// </summary>
-        public static string lblEnterSingleDateForAllField {
-            get {
-                return ResourceManager.GetString("lblEnterSingleDateForAllField", resourceCulture);
             }
         }
         
@@ -6458,6 +6467,15 @@ namespace NMP.Portal.Resources {
         public static string lblNationalGridReferenceForCheckAnswere {
             get {
                 return ResourceManager.GetString("lblNationalGridReferenceForCheckAnswere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Net total.
+        /// </summary>
+        public static string lblNetTotal {
+            get {
+                return ResourceManager.GetString("lblNetTotal", resourceCulture);
             }
         }
         
@@ -10234,6 +10252,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total exported organic material.
+        /// </summary>
+        public static string lblTotalExportedOrganicMaterial {
+            get {
+                return ResourceManager.GetString("lblTotalExportedOrganicMaterial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total farm area.
         /// </summary>
         public static string lblTotalFarmArea {
@@ -10257,6 +10284,24 @@ namespace NMP.Portal.Resources {
         public static string lblTotalGrassArea {
             get {
                 return ResourceManager.GetString("lblTotalGrassArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total imported organic material.
+        /// </summary>
+        public static string lblTotalImportedOrganicMaterial {
+            get {
+                return ResourceManager.GetString("lblTotalImportedOrganicMaterial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total imports and exports for {0}.
+        /// </summary>
+        public static string lblTotalImportsAndExportsForYear {
+            get {
+                return ResourceManager.GetString("lblTotalImportsAndExportsForYear", resourceCulture);
             }
         }
         
@@ -11323,11 +11368,38 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the planting date for {0} in these fields?.
+        /// </summary>
+        public static string lblWhatIsThePlantingDateForYearInTheseField {
+            get {
+                return ResourceManager.GetString("lblWhatIsThePlantingDateForYearInTheseField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the potato variety name?.
         /// </summary>
         public static string lblWhatIsThePotatoVarietyName {
             get {
                 return ResourceManager.GetString("lblWhatIsThePotatoVarietyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the sowing date for {0} in these fields?.
+        /// </summary>
+        public static string lblWhatIsTheSowingDateForCrop {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheSowingDateForCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the sowing date for {0} in {1}?.
+        /// </summary>
+        public static string lblWhatIsTheSowingDateForCropInField {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheSowingDateForCropInField", resourceCulture);
             }
         }
         

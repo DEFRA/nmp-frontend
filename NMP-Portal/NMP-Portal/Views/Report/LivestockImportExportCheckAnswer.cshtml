@@ -3,7 +3,11 @@
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
     ViewData["Title"] = Resource.lblCheckYourAnswers;
-    string importExport = Enum.GetName(typeof(NMP.Portal.Enums.ImportExport), Model.ImportExport);
+    string importExport="";
+    @if (Model.IsImport == null)
+    {
+        importExport = Enum.GetName(typeof(NMP.Portal.Enums.ImportExport), Model.ImportExport);
+    }
     var livestockImportExportQuestion = "";
     @if (Model.LivestockImportExportQuestion != null)
     {
@@ -22,8 +26,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@(Model.IsCheckList ?
-                 "BackLivestockImportExportCheckAnswer": "Year") asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="LivestockComment" asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnCheckYourAnswers"] != null)
 {
@@ -92,8 +95,10 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Postcode"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReceiverName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Comment"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManageImportExport" value="@Model.IsManageImportExport"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsImportExportChange" value="@Model.IsImportExportChange.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsImport"></govuk-input>
+
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -121,31 +126,34 @@
                         </h1>
                 </div>
                 <govuk-summary-list>
-                    @if(!Model.IsManageImportExport||string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
+                    @if (!Model.IsManageImportExport && string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
                     {
-                    <govuk-summary-list-row>
-                        <govuk-summary-list-row-key class=@((!Model.LivestockImportExportQuestion.HasValue) ? "govuk-error-message" : "")>
-                            @string.Format(Resource.lblDidYouHaveAnyImportsAndExports, Model.FarmName, Model.Year)
-                        </govuk-summary-list-row-key>
-                        <govuk-summary-list-row-value>
-                            @livestockImportExportQuestion
-                        </govuk-summary-list-row-value>
-                        <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="LivestockImportExportQuestion" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
-                        </govuk-summary-list-row-actions>
-                    </govuk-summary-list-row>
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key class=@((!Model.LivestockImportExportQuestion.HasValue) ? "govuk-error-message" : "")>
+                                @string.Format(Resource.lblDidYouHaveAnyImportsAndExports, Model.FarmName, Model.Year)
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @livestockImportExportQuestion
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="LivestockImportExportQuestion" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
                     }
-                    <govuk-summary-list-row>
-                        <govuk-summary-list-row-key class=@((!Model.ImportExport.HasValue) ? "govuk-error-message" : "")>
-                            @Resource.lblDoYouWantToAddAnImportOrAnExportOfLivestockManure
-                        </govuk-summary-list-row-key>
-                        <govuk-summary-list-row-value>
-                            @importExport
-                        </govuk-summary-list-row-value>
-                        <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="ImportExportOption" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
-                        </govuk-summary-list-row-actions>
-                    </govuk-summary-list-row>
+                    @if (Model.IsImport == null)
+                    {
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key class=@((!Model.ImportExport.HasValue) ? "govuk-error-message" : "")>
+                                @Resource.lblDoYouWantToAddAnImportOrAnExportOfLivestockManure
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @importExport
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="ImportExportOption" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+                    }
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key class=@((!Model.ManureTypeId.HasValue) ? "govuk-error-message" : "")>
                             @string.Format(Resource.lblWhatTypeOfLivestockManureAreYouImportingOrExporting,
@@ -350,13 +358,28 @@
                     </govuk-summary-list-row>
                 </govuk-summary-list>
                 <govuk-button type="submit" class="margin-bottom-forty">
-                    @Resource.lblContinue
+                    @if(Model.ImportExport!=null)
+                    {
+                    @(Model.ImportExport == (int)NMP.Portal.Enums.ImportExport.Import ? string.Format(Resource.lblAddImportOrExport, Resource.lblImport.ToLower()) :
+                                string.Format(Resource.lblAddImportOrExport, Resource.lblExport.ToLower()))
+                    }
+                    else @if(Model.IsImport!=null)
+                    {
+                        if(Model.IsImport.Value)
+                        {
+                            @(string.Format(Resource.lblAddImportOrExport, Resource.lblImport.ToLower()))
+                        }
+                        else
+                        {
+                            @(string.Format(Resource.lblAddImportOrExport, Resource.lblExport.ToLower()))
+                        }
+                    }
                 </govuk-button>
                 <p class="govuk-body cancel-link">
-                   
-                        <a a asp-action="Cancel" asp-controller="Report">
-                            @Resource.lblCancel
-                        </a>
+
+                    <a a asp-action="Cancel" asp-controller="Report">
+                        @Resource.lblCancel
+                    </a>
                 </p>
 
             </div>

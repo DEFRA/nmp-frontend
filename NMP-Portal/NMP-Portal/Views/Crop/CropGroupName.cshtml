@@ -2,12 +2,25 @@
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
     ViewData["Title"] = Resource.lblCropGroupName;
+    var backAction = "";
+    if (Model.IsCheckAnswer && (!Model.IsCropGroupChange) && (!Model.IsCropTypeChange) && (!Model.IsAnyChangeInField))
+    {
+        backAction = "CheckAnswer";
+    }
+    else if(Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass)
+    {
+        backAction = "CropGroups";
+    }
+    else
+    {
+        backAction = "CropFields";
+    }
 }
 
 @section BeforeContent {
     @* @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
     { *@
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer&& (!Model.IsCropGroupChange)&& (!Model.IsCropTypeChange)&& (!Model.IsAnyChangeInField) ? "CheckAnswer" :"CropFields")" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
    @*  }
     else
     {

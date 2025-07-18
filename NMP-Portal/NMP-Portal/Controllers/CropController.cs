@@ -1189,6 +1189,10 @@ namespace NMP.Portal.Controllers
                             {
                                 crop.CropInfo1 = model.CropInfo1.Value;
                             }
+                            if (!string.IsNullOrWhiteSpace(model.CropGroupName))
+                            {
+                                crop.CropGroupName = model.CropGroupName;
+                            }
                             if (model.CropInfo2.HasValue)
                             {
                                 crop.CropInfo2 = model.CropInfo2.Value;
@@ -5204,7 +5208,7 @@ namespace NMP.Portal.Controllers
                 {
                     planViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
                 }
-                if (planViewModel.GrassSeason == model.GrassSeason && !model.IsAnyChangeInField)
+                if (model.IsCheckAnswer && planViewModel.GrassSeason == model.GrassSeason && !model.IsAnyChangeInField)
                 {
                     return RedirectToAction("CheckAnswer");
                 }
@@ -5281,7 +5285,7 @@ namespace NMP.Portal.Controllers
             {
                 planViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
             }
-            if (planViewModel.SwardTypeId == model.SwardTypeId && !model.IsAnyChangeInField)
+            if (model.IsCheckAnswer && planViewModel.SwardTypeId == model.SwardTypeId && !model.IsAnyChangeInField)
             {
                 return RedirectToAction("CheckAnswer");
             }
@@ -5355,7 +5359,7 @@ namespace NMP.Portal.Controllers
             {
                 planViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
             }
-            if (planViewModel.SwardManagementId == model.SwardManagementId && !model.IsAnyChangeInField)
+            if (model.IsCheckAnswer && planViewModel.SwardManagementId == model.SwardManagementId && !model.IsAnyChangeInField)
             {
                 return RedirectToAction("CheckAnswer");
             }
@@ -5430,7 +5434,7 @@ namespace NMP.Portal.Controllers
             {
                 planViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
             }
-            if (planViewModel.PotentialCut == model.PotentialCut && !model.IsAnyChangeInField)
+            if (model.IsCheckAnswer && planViewModel.PotentialCut == model.PotentialCut && !model.IsAnyChangeInField)
             {
                 return RedirectToAction("CheckAnswer");
             }
@@ -5570,7 +5574,7 @@ namespace NMP.Portal.Controllers
             {
                 planViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
             }
-            if (planViewModel.DefoliationSequenceId == model.DefoliationSequenceId && !model.IsAnyChangeInField)
+            if (model.IsCheckAnswer && planViewModel.DefoliationSequenceId == model.DefoliationSequenceId && !model.IsAnyChangeInField)
             {
                 return RedirectToAction("CheckAnswer");
             }
@@ -5798,14 +5802,14 @@ namespace NMP.Portal.Controllers
             }
             if (model.Crops.Count == 1 || model.GrassGrowthClassDistinctCount > 1)
             {
-                if (planViewModelBeforeUpdate.Crops[model.GrassGrowthClassCounter].Yield == model.Crops[model.GrassGrowthClassCounter].Yield && !model.IsAnyChangeInField)
+                if (model.IsCheckAnswer && planViewModelBeforeUpdate.Crops[model.GrassGrowthClassCounter].Yield == model.Crops[model.GrassGrowthClassCounter].Yield && !model.IsAnyChangeInField)
                 {
                     return RedirectToAction("CheckAnswer");
                 }
             }
             if (model.Crops.Count > 1 && model.GrassGrowthClassDistinctCount == 1)
             {
-                if (planViewModelBeforeUpdate.GrassGrowthClassQuestion == model.GrassGrowthClassQuestion && !model.IsAnyChangeInField)
+                if (model.IsCheckAnswer && planViewModelBeforeUpdate.GrassGrowthClassQuestion == model.GrassGrowthClassQuestion && !model.IsAnyChangeInField)
                 {
                     return RedirectToAction("CheckAnswer");
                 }

@@ -81,8 +81,9 @@ namespace NMP.Portal.ViewModels
         public bool IsCheckAnswer { get; set; } = false;
         public bool IsManageImportExport { get; set; } = false;
         public string? IsComingFromImportExportOverviewPage { get; set; } = string.Empty;
-        public bool IsImportExportChange { get; set; } = false;
         public bool IsDefaultNutrientChange { get; set; } = false;
+        public bool IsManureTypeChange { get; set; } = false;
         public bool? IsCancel { get; set; }
+        public bool? IsImport { get; set; }
     }
 }

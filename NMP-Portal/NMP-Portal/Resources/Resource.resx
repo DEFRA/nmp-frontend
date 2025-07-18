@@ -889,7 +889,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblPotatoForField" xml:space="preserve">
     <value>Which fields do you plan to grow {0} potato in?</value>
   </data>
-  <data name="lblEnterSingleDateForAllField" xml:space="preserve">
+  <data name="lblWhatIsThePlantingDateForYearInTheseField" xml:space="preserve">
     <value>What is the planting date for {0} in these fields?</value>
   </data>
   <data name="lblYouCanChangeYourPlantingDateLater" xml:space="preserve">
@@ -5144,6 +5144,27 @@ live</value>
   <data name="lblYouHaveNotAddedAnyImports" xml:space="preserve">
     <value>You have not added any imports.</value>
   </data>
+  <data name="lblNetTotal" xml:space="preserve">
+    <value>Net total</value>
+  </data>
+  <data name="lblTotalExportedOrganicMaterial" xml:space="preserve">
+    <value>Total exported organic material</value>
+  </data>
+  <data name="lblTotalImportedOrganicMaterial" xml:space="preserve">
+    <value>Total imported organic material</value>
+  </data>
+  <data name="lblTotalImportsAndExportsForYear" xml:space="preserve">
+    <value>Total imports and exports for {0}</value>
+  </data>
+  <data name="lblDoYouHaveADateForWhenYouSowedYour" xml:space="preserve">
+    <value>Do you have a date for when you sowed your {0}, or when you will sow it?</value>
+  </data>
+  <data name="lblWhatIsTheSowingDateForCrop" xml:space="preserve">
+    <value>What is the sowing date for {0} in these fields?</value>
+  </data>
+  <data name="lblWhatIsTheSowingDateForCropInField" xml:space="preserve">
+    <value>What is the sowing date for {0} in {1}?</value>
+  </data>
   <data name="lblTotalNitrogenInThisImportOrExport" xml:space="preserve">
     <value>Total nitrogen (N) in this {0}</value>
   </data>
@@ -5164,5 +5185,8 @@ live</value>
   </data>
   <data name="lblUpdated" xml:space="preserve">
     <value>updated</value>
+  </data>
+  <data name="lblAddImportOrExport" xml:space="preserve">
+    <value>Add {0}</value>
   </data>
 </root>

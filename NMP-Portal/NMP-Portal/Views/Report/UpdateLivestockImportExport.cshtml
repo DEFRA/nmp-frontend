@@ -62,7 +62,7 @@
                                 }
                                 else
                                 {
-                                    <a asp-action="ImportExportOption" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@harvestYearData.EncryptedYear">
+                                    <a asp-action="ImportExportOption" asp-controller="Report" asp-route-r=@harvestYearData.EncryptedYear>
                                         @string.Format(Resource.lblAddYearImportsOrExports, harvestYearData.Year)
                                     </a>
                                 }
