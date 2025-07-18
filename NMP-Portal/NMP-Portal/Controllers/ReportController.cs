@@ -3085,6 +3085,9 @@ namespace NMP.Portal.Controllers
                 model.Address2 = null;
                 model.Address4 = null;
                 model.Comment = null;
+                model.IsCheckAnswer = false;
+                model.IsManureTypeChange = false;
+                model.LivestockImportExportQuestion = null;
                 HttpContext.Session.SetObjectAsJson("ReportData", model);
                 return RedirectToAction("ManageImportExport", new
                 {
