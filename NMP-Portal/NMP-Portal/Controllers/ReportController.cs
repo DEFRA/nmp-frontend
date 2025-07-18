@@ -1338,7 +1338,14 @@ namespace NMP.Portal.Controllers
                 if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.LivestockManureNFarmLimitReport)
                 {
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
-                    return RedirectToAction("Year");
+                    if (!string.IsNullOrWhiteSpace(model.EncryptedHarvestYear))
+                    {
+                        return RedirectToAction("IsGrasslandDerogation");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Year");
+                    }
                 }
                 return View(model);
             }
@@ -1548,14 +1555,14 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmList", "Farm");
                 }
                 model.IsCheckList = true;
-                model.EncryptedHarvestYear = _reportDataProtector.Protect(model.Year.ToString());
+                ViewBag.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
                 (List<NutrientsLoadingManures> nutrientsLoadingManuresList, Error error) = await _reportService.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
                 if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingManuresList.Count > 0)
                 {
                     nutrientsLoadingManuresList = nutrientsLoadingManuresList.Where(x => x.ManureDate.Value.Year == model.Year).ToList();
                     if (nutrientsLoadingManuresList.Count > 0)
                     {
-                        ViewBag.IsNutrientsLoadingManureshaveData = true;
+                        ViewBag.IsNutrientsLoadingManureshaveData = _reportDataProtector.Protect(Resource.lblTrue);
                     }
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
@@ -1600,20 +1607,22 @@ namespace NMP.Portal.Controllers
                         {
                             ModelState.AddModelError(string.Empty, string.Format(Resource.MsgImportsAndExportsOfManureForYearMustBeCompleted, model.Year));
                         }
+                        else if (nutrientsLoadingManuresList.Count > 0)
+                        {
+                            ViewBag.IsNutrientsLoadingManureshaveData = _reportDataProtector.Protect(Resource.lblTrue);
+                        }
                     }
                     else
                     {
                         ModelState.AddModelError(string.Empty, string.Format(Resource.MsgImportsAndExportsOfManureForYearMustBeCompleted, model.Year));
                     }
                 }
-                //if (model.ImportsExportsOfLivestockManure == null)
-                //{
-                //    ModelState.AddModelError(string.Empty, string.Format(Resource.MsgImportsAndExportsOfManureForYearMustBeCompleted, model.Year));
-                //}
+                ViewBag.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
                 if (!ModelState.IsValid)
                 {
                     return View("~/Views/Report/LivestockManureNitrogenReportChecklist.cshtml", model);
                 }
+
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
 
                 return RedirectToAction("LivestockManureNitrogenReportChecklist");
@@ -1831,15 +1840,16 @@ namespace NMP.Portal.Controllers
                 }
                 if (!string.IsNullOrWhiteSpace(r))
                 {
-                    int year = Convert.ToInt32(_reportDataProtector.Unprotect(r));
+                    int year = Convert.ToInt32(_farmDataProtector.Unprotect(r));
                     if (year != null)
                     {
                         model.Year = year;
-                        model.EncryptedHarvestYear = r;
+                        ViewBag.EncryptedHarvestYear = r;
                         model.IsComingFromImportExportOverviewPage = r;
                         model.IsCheckList = false;
                     }
                 }
+                ViewBag.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             catch (Exception ex)
@@ -1868,7 +1878,7 @@ namespace NMP.Portal.Controllers
                 {
                     return View(model);
                 }
-
+                ViewBag.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
                 if (model.IsCheckAnswer)
                 {
                     return RedirectToAction("LivestockImportExportCheckAnswer");
@@ -2211,7 +2221,7 @@ namespace NMP.Portal.Controllers
                                 harvestYearList.Add(new HarvestYear
                                 {
                                     Year = year,
-                                    EncryptedYear = _reportDataProtector.Protect(year.ToString()),
+                                    EncryptedYear = _farmDataProtector.Protect(year.ToString()),
                                     LastModifiedOn = lastModifyDate
                                 });
                             }
@@ -3085,7 +3095,7 @@ namespace NMP.Portal.Controllers
             nutrientsLoadingManure.NH4N = model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis ? model.NH4N : model.ManureType.NH4N;
             nutrientsLoadingManure.NO3N = model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis ? model.NO3N : model.ManureType.NO3N;
 
-            model.EncryptedHarvestYear = _reportDataProtector.Protect(model.Year.ToString());
+            ViewBag.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
             var jsonData = new
             {
                 NutrientsLoadingManure = nutrientsLoadingManure,
@@ -3118,7 +3128,7 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("ManageImportExport", new
                 {
                     q = model.EncryptedFarmId,
-                    y = model.EncryptedHarvestYear,
+                    y = _farmDataProtector.Protect(model.Year.ToString()),
                     r = successMsg,
                     s = Resource.lblTrue
                 });
@@ -3146,18 +3156,18 @@ namespace NMP.Portal.Controllers
                     {
 
                         HttpContext?.Session.Remove("ReportData");
-                        model.IsComingFromImportExportOverviewPage = _reportDataProtector.Protect(Resource.lblTrue);
+                        //model.IsComingFromImportExportOverviewPage = _reportDataProtector.Protect(Resource.lblTrue);
                         TempData["succesMsgContent1"] = _reportDataProtector.Unprotect(r);
                         TempData["succesMsgContent2"] = Resource.MsgImportExportSuccessMsgContent2;
-                        TempData["succesMsgContent3"] = string.Format(Resource.MsgImportExportSuccessMsgContent3, _reportDataProtector.Unprotect(y));
+                        TempData["succesMsgContent3"] = string.Format(Resource.MsgImportExportSuccessMsgContent3, _farmDataProtector.Unprotect(y));
                     }
                     model.FarmName = farm.Name;
                     model.FarmId = decryptedFarmId;
                     model.EncryptedFarmId = q;
                     if (!string.IsNullOrWhiteSpace(y))
                     {
-                        model.Year = Convert.ToInt32(_reportDataProtector.Unprotect(y));
-                        model.EncryptedHarvestYear = y;
+                        model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(y));
+                        ViewBag.EncryptedHarvestYear = y;
                     }
                     List<HarvestYear> harvestYearList = new List<HarvestYear>();
                     (List<NutrientsLoadingManures> nutrientsLoadingManuresList, error) = await _reportService.FetchNutrientsLoadingManuresByFarmId(decryptedFarmId);
@@ -3179,9 +3189,40 @@ namespace NMP.Portal.Controllers
                                 harvestYearList.OrderBy(x => x.Year).ToList();
                                 model.HarvestYear = harvestYearList;
                                 ViewBag.ImportList = nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblImport.ToUpper()).ToList();
+                                string unit = "";
+                                (Farm farmData, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
+                                if (string.IsNullOrWhiteSpace(error.Message) && farmData != null)
+                                {
+                                    (List<ManureType> ManureTypes, error) = await _organicManureService.FetchManureTypeList((int)NMP.Portal.Enums.ManureGroup.LivestockManure, farmData.CountryID.Value);
+                                    if (error == null && ManureTypes != null && ManureTypes.Count > 0)
+                                    {
+                                        var allImportData = nutrientsLoadingManuresList
+                                       .Where(x => x.ManureLookupType?.ToUpper() == Resource.lblImport.ToUpper())
+                                       .Select(x => new
+                                       {
+                                           Manure = x,
+                                           Unit = (ManureTypes.FirstOrDefault(mt => mt.Id.HasValue && mt.Id.Value == x.ManureTypeID)?.IsLiquid ?? false)
+                                            ? Resource.lbltonnes
+                                            : Resource.lblCubicMeters
+                                            })
+                                       .ToList();
+                                        ViewBag.ImportList = allImportData;
+                                        var allExportData = nutrientsLoadingManuresList
+                                       .Where(x => x.ManureLookupType?.ToUpper() == Resource.lblExport.ToUpper())
+                                       .Select(x => new
+                                       {
+                                           Manure = x,
+                                           Unit = (ManureTypes.FirstOrDefault(mt => mt.Id.HasValue && mt.Id.Value == x.ManureTypeID)?.IsLiquid ?? false)
+                                            ? Resource.lbltonnes
+                                            : Resource.lblCubicMeters
+                                       })
+                                       .ToList();
+                                        ViewBag.ExportList = allExportData;
+                                    }
+                                }
                                 decimal? totalImports = (nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblImport.ToUpper()).Sum(x => x.Quantity)) * 1000;
                                 ViewBag.TotalImportsInKg = totalImports;
-                                ViewBag.ExportList = nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblExport.ToUpper()).ToList();
+                                //ViewBag.ExportList = nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblExport.ToUpper()).ToList();
                                 decimal? totalExports = (nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblExport.ToUpper()).Sum(x => x.Quantity)) * 1000;
                                 ViewBag.TotalExportsInKg = totalExports;
                                 ViewBag.NetTotal = totalImports - totalExports;
@@ -3217,8 +3258,8 @@ namespace NMP.Portal.Controllers
             }
             if (!string.IsNullOrWhiteSpace(y))
             {
-                model.Year = Convert.ToInt32(_reportDataProtector.Unprotect(y));
-                model.EncryptedHarvestYear = y;
+                model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(y));
+                ViewBag.EncryptedHarvestYear = y;
             }
 
             model.IsManageImportExport = true;
@@ -3291,14 +3332,14 @@ namespace NMP.Portal.Controllers
                 HttpContext.Session.SetObjectAsJson("ReportData", model);
                 if (string.IsNullOrWhiteSpace(model.IsComingFromImportExportOverviewPage))
                 {
-                    if (!model.IsCheckList)
+                    if (model.IsManageImportExport)
                     {
-                        return RedirectToAction("FarmSummary", "Farm", new { Id = model.EncryptedFarmId });
+                        return RedirectToAction("ManageImportExport", "Report", new { q = model.EncryptedFarmId, y = _farmDataProtector.Protect(model.Year.Value.ToString()) });
 
                     }
-                    else if (model.IsManageImportExport)
+                    else if (!model.IsCheckList)
                     {
-                        return RedirectToAction("ManageImportExport", "Report", new { q = model.EncryptedFarmId, y = model.EncryptedHarvestYear });
+                        return RedirectToAction("FarmSummary", "Farm", new { Id = model.EncryptedFarmId });
 
                     }
                     else

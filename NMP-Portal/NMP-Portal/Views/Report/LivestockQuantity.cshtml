@@ -2,6 +2,11 @@
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
     ViewData["Title"] = Resource.lblLivestockQuantity;
+    string unit = "";
+    @if (Model.IsManureTypeLiquid != null)
+    {
+        unit = Model.IsManureTypeLiquid.Value ? Resource.lblCubicMeters : Resource.lbltonnes;
+    }
 }
 
 @section BeforeContent {
@@ -105,7 +110,7 @@
                     <govuk-input asp-for=@Model.LivestockQuantity inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                     <govuk-input-label is-page-heading="false" class="govuk-label--l">
                     </govuk-input-label>
-                        <govuk-input-suffix>@Resource.lbltonnes</govuk-input-suffix>
+                    <govuk-input-suffix>@unit</govuk-input-suffix>
                     </govuk-input>
                 
 

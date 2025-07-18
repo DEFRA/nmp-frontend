@@ -93,12 +93,12 @@
                             @foreach (var import in ViewBag.ImportList)
                             {
                                 <tr class="govuk-table__row">
-                                    <td class="govuk-table__cell">@import.ManureType</td>
-                                    <td class="govuk-table__cell">@import.ManureDate?.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))</td>
+                                    <td class="govuk-table__cell">@import.Manure.ManureType</td>
+                                    <td class="govuk-table__cell">@import.Manure.ManureDate?.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))</td>
                                     <td class="govuk-table__cell">
-                                        @string.Format("{0} {1}", import.Quantity, Resource.lbltonnes)
+                                        @string.Format("{0} {1}", import.Manure.Quantity, import.Unit)
                                     </td>
-                                    <td class="govuk-table__cell">@import.FarmName</td>
+                                    <td class="govuk-table__cell">@import.Manure.FarmName</td>
 
                                     <td class="govuk-table__cell"><a href="#">@Resource.lblViewOrChange</a></td>
                                 </tr>
@@ -135,12 +135,12 @@
                             @foreach (var import in ViewBag.ExportList)
                             {
                                 <tr class="govuk-table__row">
-                                    <td class="govuk-table__cell">@import.ManureType</td>
-                                    <td class="govuk-table__cell">@import.ManureDate?.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))</td>
+                                    <td class="govuk-table__cell">@import.Manure.ManureType</td>
+                                    <td class="govuk-table__cell">@import.Manure.ManureDate?.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))</td>
                                     <td class="govuk-table__cell">
-                                        @string.Format("{0} {1}", @import.Quantity, Resource.lbltonnes)
+                                        @string.Format("{0} {1}", @import.Manure.Quantity, import.Unit)
                                     </td>
-                                    <td class="govuk-table__cell">@import.FarmName</td>
+                                    <td class="govuk-table__cell">@import.Manure.FarmName</td>
                                     <td class="govuk-table__cell"><a href="#">@Resource.lblViewOrChange</a></td>
                                 </tr>
                             }
