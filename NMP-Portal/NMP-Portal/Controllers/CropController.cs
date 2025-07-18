@@ -1193,6 +1193,10 @@ namespace NMP.Portal.Controllers
                             {
                                 crop.CropInfo2 = model.CropInfo2.Value;
                             }
+                            if (!string.IsNullOrWhiteSpace(model.CropGroupName))
+                            {
+                                crop.CropGroupName = model.CropGroupName;
+                            }
                             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
                             {
                                 PlanViewModel planViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
