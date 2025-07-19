@@ -2,7 +2,7 @@
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
     ViewData["Title"] = Resource.lblField;
-    var backAction = (Model.EncryptedHarvestYear == null) ? "Year" :
+    var backAction = ((Model.IsComingFromPlan.HasValue&&!Model.IsComingFromPlan.Value)) ? "Year" :
         ((Model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
         ? "FieldAndPlanReports" : "NVZComplianceReports");
 }
@@ -81,7 +81,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefaultNutrientValue"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDefaultValueChange" value="@Model.IsDefaultValueChange"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManageImportExport" value="@Model.IsManageImportExport"></govuk-input>
-            
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromPlan"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
             @if (Model.ReportType != null && Model.ReportType == (int)NMP.Portal.Enums.ReportType.CropAndFieldManagementReport && Model.CropTypeList != null && Model.CropTypeList.Count > 0)
             {
@@ -216,7 +216,7 @@
                     }
                 }
                 <p class="govuk-body cancel-link">
-                    @if (!string.IsNullOrWhiteSpace(Model.EncryptedHarvestYear))
+                    @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
                     {
                         <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">
                             @Resource.lblCancel
