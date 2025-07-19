@@ -30,7 +30,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="LivestockComment" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="BackLivestockImportExportCheckAnswer" asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnCheckYourAnswers"] != null)
 {
@@ -103,6 +103,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsImport"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromPlan"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromImportExportOverviewPage"></govuk-input>
 
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
@@ -382,7 +383,7 @@
                 </govuk-button>
                 <p class="govuk-body cancel-link">
 
-                    <a a asp-action="Cancel" asp-controller="Report">
+                    <a  asp-action="Cancel" asp-controller="Report">
                         @Resource.lblCancel
                     </a>
                 </p>

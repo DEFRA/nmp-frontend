@@ -2211,6 +2211,7 @@ namespace NMP.Portal.Controllers
                     model.EncryptedFarmId = q;
                     List<HarvestYear> harvestYearList = new List<HarvestYear>();
 
+                    model.IsComingFromImportExportOverviewPage = _reportDataProtector.Protect(Resource.lblTrue);
                     (List<NutrientsLoadingFarmDetail> nutrientsLoadingFarmDetailList, error) = await _reportService.FetchNutrientsLoadingFarmDetailsByFarmId(decryptedFarmId);
                     if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingFarmDetailList != null && nutrientsLoadingFarmDetailList.Count > 0)
                     {
@@ -3166,6 +3167,14 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = new ReportViewModel();
             if (!string.IsNullOrWhiteSpace(q))
             {
+                if (string.IsNullOrWhiteSpace(model.IsComingFromImportExportOverviewPage))
+                {
+                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                    {
+                        model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    }
+                }
+
                 int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
                 (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(decryptedFarmId);
                 if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
@@ -3173,7 +3182,7 @@ namespace NMP.Portal.Controllers
                     if (!string.IsNullOrWhiteSpace(r) && !string.IsNullOrWhiteSpace(s))
                     {
 
-                        HttpContext?.Session.Remove("ReportData");
+                        //HttpContext?.Session.Remove("ReportData");
                         //model.IsComingFromImportExportOverviewPage = _reportDataProtector.Protect(Resource.lblTrue);
                         TempData["succesMsgContent1"] = _reportDataProtector.Unprotect(r);
                         TempData["succesMsgContent2"] = Resource.MsgImportExportSuccessMsgContent2;
@@ -3259,11 +3268,15 @@ namespace NMP.Portal.Controllers
                         nutrientsLoadingManuresList = nutrientsLoadingManuresList.Where(x => x.ManureDate.Value.Year == model.Year).ToList();
                         if (nutrientsLoadingManuresList.Count == 0)
                         {
+                            model.IsManageImportExport = false;
+                            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                             return RedirectToAction("LivestockImportExportQuestion", model);
                         }
                     }
                     else
                     {
+                        model.IsManageImportExport = false;
+                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                         return RedirectToAction("LivestockImportExportQuestion", model);
                     }
                 }
@@ -3348,13 +3361,13 @@ namespace NMP.Portal.Controllers
                 model.IsManureTypeChange = false;
                 model.LivestockImportExportQuestion = null;
                 HttpContext.Session.SetObjectAsJson("ReportData", model);
-                if (string.IsNullOrWhiteSpace(model.IsComingFromImportExportOverviewPage))
+                if (model.IsManageImportExport)
                 {
-                    if (model.IsManageImportExport)
-                    {
-                        return RedirectToAction("ManageImportExport", "Report", new { q = model.EncryptedFarmId, y = _farmDataProtector.Protect(model.Year.Value.ToString()) });
+                    return RedirectToAction("ManageImportExport", "Report", new { q = model.EncryptedFarmId, y = _farmDataProtector.Protect(model.Year.Value.ToString()) });
 
-                    }
+                }
+                else if (string.IsNullOrWhiteSpace(model.IsComingFromImportExportOverviewPage))
+                {                    
                     else if (!model.IsCheckList)
                     {
                         return RedirectToAction("FarmSummary", "Farm", new { Id = model.EncryptedFarmId });
