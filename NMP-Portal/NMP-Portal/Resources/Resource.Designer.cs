@@ -6255,15 +6255,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to m³.
-        /// </summary>
-        public static string lblMeterCubic {
-            get {
-                return ResourceManager.GetString("lblMeterCubic", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Metric units.
         /// </summary>
         public static string lblMetricUnits {
