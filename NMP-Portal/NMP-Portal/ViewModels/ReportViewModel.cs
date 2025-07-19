@@ -85,5 +85,6 @@ namespace NMP.Portal.ViewModels
         public bool IsManureTypeChange { get; set; } = false;
         public bool? IsCancel { get; set; }
         public bool? IsImport { get; set; }
+        public bool? IsComingFromPlan { get; set; } = false;
     }
 }
