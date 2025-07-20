@@ -181,11 +181,11 @@ namespace NMP.Portal.Controllers
                             cropList = cropList.Where(x => x.Year == model.HarvestYear).ToList();
                         }
 
-                        if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass))
+                        if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass || (x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID == null)))
                         {
                             fieldsToRemove.Add(fieldId);
                         }
-                        if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
+                        if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                         {
                             model.IsAnyCropIsGrass = true;
                         }
@@ -274,9 +274,9 @@ namespace NMP.Portal.Controllers
                                 }
                                 if (cropList.Count > 0)
                                 {
-                                    if (cropList.Any(c => c.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
+                                    if (cropList.Any(c => c.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && c.DefoliationSequenceID != null))
                                     {
-                                        if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
+                                        if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                                         {
                                             (List<ManagementPeriod> ManagementPeriod, error) = await _cropService.FetchManagementperiodByCropId(cropList.Select(x => x.ID.Value).FirstOrDefault(), false);
                                             var managementPeriodIdsToRemove = ManagementPeriod
@@ -526,11 +526,11 @@ namespace NMP.Portal.Controllers
 
                                     }
 
-                                    if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass))
+                                    if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass || (x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID == null)))
                                     {
                                         fieldsToRemove.Add(field);
                                     }
-                                    if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
+                                    if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                                     {
                                         model.IsAnyCropIsGrass = true;
                                     }
@@ -732,9 +732,9 @@ namespace NMP.Portal.Controllers
                                     }
                                     if (cropList.Count > 0)
                                     {
-                                        if (cropList.Any(c => c.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
+                                        if (cropList.Any(c => c.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && c.DefoliationSequenceID != null))
                                         {
-                                            if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
+                                            if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                                             {
                                                 (List<ManagementPeriod> ManagementPeriod, error) = await _cropService.FetchManagementperiodByCropId(cropList.Select(x => x.ID.Value).FirstOrDefault(), false);
                                                 var managementPeriodIdsToRemove = ManagementPeriod
@@ -939,11 +939,11 @@ namespace NMP.Portal.Controllers
                             cropList = cropList.Where(x => x.Year == model.HarvestYear && x.CropOrder == model.CropOrder).ToList();
                         }
 
-                        if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass))
+                        if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass || (x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID == null)))
                         {
                             fieldsToRemove.Add(field);
                         }
-                        if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
+                        if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                         {
                             model.IsAnyCropIsGrass = true;
                         }
@@ -1077,9 +1077,9 @@ namespace NMP.Portal.Controllers
                             }
                             if (cropList.Count > 0)
                             {
-                                if (cropList.Any(c => c.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
+                                if (cropList.Any(c => c.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && c.DefoliationSequenceID != null))
                                 {
-                                    if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
+                                    if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                                     {
 
                                         (List<ManagementPeriod> managementPeriod, error) = await _cropService.FetchManagementperiodByCropId(cropList.Select(x => x.ID.Value).FirstOrDefault(), false);
@@ -2303,9 +2303,9 @@ namespace NMP.Portal.Controllers
                                         if (cropList != null && cropList.Count > 0)
                                         {
                                             cropList = cropList.Where(x => x.Year == model.HarvestYear).ToList();
-                                            if (cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
+                                            if (cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                                             {
-                                                int cropId = cropList.Where(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass).
+                                                int cropId = cropList.Where(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null).
                                                     Select(x => x.ID.Value).FirstOrDefault();
                                                 (List<ManagementPeriod> managementPeriods, updateFertilserError) = await _cropService.FetchManagementperiodByCropId(cropId, false);
                                                 if (managementPeriods.Count > 0)
@@ -2559,7 +2559,7 @@ namespace NMP.Portal.Controllers
                         cropList = cropList.Where(x => x.Year == model.HarvestYear && x.CropOrder == model.CropOrder).ToList();
                     }
 
-                    if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
+                    if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                     {
                         grassFieldIds.Add(field);
                     }
@@ -3371,7 +3371,7 @@ namespace NMP.Portal.Controllers
                         cropList = cropList.Where(x => x.Year == model.HarvestYear && x.CropOrder == model.CropOrder).ToList();
                     }
 
-                    if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
+                    if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                     {
                         grassFieldIds.Add(field);
                     }
@@ -4018,7 +4018,7 @@ namespace NMP.Portal.Controllers
                             cropList = cropList.Where(x => x.Year == model.HarvestYear && x.CropOrder == model.CropOrder).ToList();
                         }
 
-                        if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
+                        if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                         {
                             var cropId = cropList.Select(x => x.ID.Value).FirstOrDefault();
                             (List<ManagementPeriod> ManagementPeriod, error) = await _cropService.FetchManagementperiodByCropId(cropId, false);
@@ -4127,7 +4127,7 @@ namespace NMP.Portal.Controllers
                             cropList = cropList.Where(x => x.Year == model.HarvestYear && x.CropOrder == model.CropOrder).ToList();
                         }
 
-                        if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
+                        if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                         {
                             var cropId = cropList.Select(x => x.ID.Value).FirstOrDefault();
                             (List<ManagementPeriod> ManagementPeriod, error) = await _cropService.FetchManagementperiodByCropId(cropId, false);
@@ -4252,7 +4252,7 @@ namespace NMP.Portal.Controllers
                                 cropList = cropList.Where(x => x.Year == model.HarvestYear && x.CropOrder == model.CropOrder).ToList();
                             }
 
-                            if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
+                            if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                             {
                                 var cropId = cropList.Select(x => x.ID.Value).FirstOrDefault();
                                 (List<ManagementPeriod> ManagementPeriod, error) = await _cropService.FetchManagementperiodByCropId(cropId, false);
@@ -4360,7 +4360,7 @@ namespace NMP.Portal.Controllers
                                 cropList = cropList.Where(x => x.Year == model.HarvestYear && x.CropOrder == model.CropOrder).ToList();
                             }
 
-                            if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
+                            if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                             {
                                 var cropId = cropList.Select(x => x.ID.Value).FirstOrDefault();
                                 (List<ManagementPeriod> ManagementPeriod, error) = await _cropService.FetchManagementperiodByCropId(cropId, false);
@@ -4479,7 +4479,7 @@ namespace NMP.Portal.Controllers
                                 cropList = cropList.Where(x => x.Year == model.HarvestYear && x.CropOrder == model.CropOrder).ToList();
                             }
                             int? managementPeriodID = null;
-                            if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
+                            if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                             {
                                 var cropId = cropList.Select(x => x.ID.Value).FirstOrDefault();
                                 (List<ManagementPeriod> managementPeriodList, error) = await _cropService.FetchManagementperiodByCropId(cropId, false);
@@ -4541,7 +4541,7 @@ namespace NMP.Portal.Controllers
                             cropList = cropList.Where(x => x.Year == model.HarvestYear && x.CropOrder == model.CropOrder).ToList();
                         }
                         int? managementPeriodID = null;
-                        if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
+                        if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                         {
                             var cropId = cropList.Select(x => x.ID.Value).FirstOrDefault();
                             (List<ManagementPeriod> managementPeriodList, error) = await _cropService.FetchManagementperiodByCropId(cropId, false);
@@ -4570,7 +4570,7 @@ namespace NMP.Portal.Controllers
                                 }
                             }
                         }
-                        model.FertiliserManures[i].ManagementPeriodID = managementPeriodID.Value;
+                        model.FertiliserManures[i].ManagementPeriodID = managementPeriodID??0;
 
 
                         (ManagementPeriod managementPeriod, error) = await _cropService.FetchManagementperiodById(model.FertiliserManures[i].ManagementPeriodID);
@@ -4648,7 +4648,7 @@ namespace NMP.Portal.Controllers
                                 cropList = cropList.Where(x => x.Year == model.HarvestYear && x.CropOrder == model.CropOrder).ToList();
                             }
 
-                            if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
+                            if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                             {
                                 var cropId = cropList.Select(x => x.ID.Value).FirstOrDefault();
                                 (List<ManagementPeriod> ManagementPeriod, error) = await _cropService.FetchManagementperiodByCropId(cropId, false);
@@ -4755,7 +4755,7 @@ namespace NMP.Portal.Controllers
                                 cropList = cropList.Where(x => x.Year == model.HarvestYear && x.CropOrder == model.CropOrder).ToList();
                             }
 
-                            if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
+                            if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                             {
                                 var cropId = cropList.Select(x => x.ID.Value).FirstOrDefault();
                                 (List<ManagementPeriod> ManagementPeriod, error) = await _cropService.FetchManagementperiodByCropId(cropId, false);
@@ -4932,7 +4932,7 @@ namespace NMP.Portal.Controllers
                     cropList = cropList.Where(x => x.Year == model.HarvestYear && x.CropOrder == model.CropOrder).ToList();
                 }
 
-                if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
+                if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                 {
                     var cropId = cropList.Select(x => x.ID.Value).FirstOrDefault();
                     (List<ManagementPeriod> ManagementPeriod, error) = await _cropService.FetchManagementperiodByCropId(cropId, false);
