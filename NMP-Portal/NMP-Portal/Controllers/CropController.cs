@@ -1848,6 +1848,10 @@ namespace NMP.Portal.Controllers
                         model.IsAnyChangeInField = false;
                     }
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                    if (model.IsAnyChangeInField || model.IsCropGroupChange || model.IsCropTypeChange)
+                    {
+                        return RedirectToAction("CropInfoOne");
+                    }
                     return RedirectToAction("CheckAnswer");
                 }
                 else
@@ -5865,7 +5869,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("CheckAnswer");
                 }
-                else if (!model.IsAnyChangeInField)
+                else if (model.IsAnyChangeInField)
                 {
                     model.Yield = null;
                     model.Crops.ForEach(x => x.Yield = null);
