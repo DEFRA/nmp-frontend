@@ -3368,7 +3368,7 @@ namespace NMP.Portal.Controllers
                 }
                 else if (string.IsNullOrWhiteSpace(model.IsComingFromImportExportOverviewPage))
                 {                    
-                    else if (!model.IsCheckList)
+                    if (!model.IsCheckList)
                     {
                         return RedirectToAction("FarmSummary", "Farm", new { Id = model.EncryptedFarmId });
 
