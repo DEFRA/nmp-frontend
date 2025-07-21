@@ -7,7 +7,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@((Model.IsComingFromPlan.HasValue&&!Model.IsComingFromPlan.Value) ? "Year":(Model.IsCheckList ? "LivestockManureNitrogenReportChecklist" : "NVZComplianceReports")) asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@((Model.IsCheckList ? "LivestockManureNitrogenReportChecklist":(Model.IsComingFromPlan.HasValue&&!Model.IsComingFromPlan.Value) ? "Year": "NVZComplianceReports")) asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnIsGrasslandDerogation"] != null)
 {
@@ -160,9 +160,21 @@
                 <p class="govuk-body cancel-link">
                     @if(!Model.IsCheckList)
                     {
-                        <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+                        @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
+                        {
+                            <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">
+                                @Resource.lblCancel
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+                                @Resource.lblCancel
+                            </a>
+                        }
+                        @* <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
                             @Resource.lblCancel
-                        </a>
+                        </a> *@
                     }
                     else
                     {
