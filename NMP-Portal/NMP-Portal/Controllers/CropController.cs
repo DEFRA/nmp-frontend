@@ -1193,6 +1193,10 @@ namespace NMP.Portal.Controllers
                             {
                                 crop.CropInfo2 = model.CropInfo2.Value;
                             }
+                            if (!string.IsNullOrWhiteSpace(model.CropGroupName))
+                            {
+                                crop.CropGroupName = model.CropGroupName;
+                            }
                             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropData"))
                             {
                                 PlanViewModel planViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropData");
@@ -1844,6 +1848,10 @@ namespace NMP.Portal.Controllers
                         model.IsAnyChangeInField = false;
                     }
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                    if (model.IsAnyChangeInField || model.IsCropGroupChange || model.IsCropTypeChange)
+                    {
+                        return RedirectToAction("CropInfoOne");
+                    }
                     return RedirectToAction("CheckAnswer");
                 }
                 else
@@ -3979,7 +3987,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public IActionResult CropGroupName()//string? q
+        public async Task<IActionResult> CropGroupName()//string? q
         {
             _logger.LogTrace("Crop Controller : CropGroupName() action called");
             PlanViewModel model = new PlanViewModel();
@@ -3995,6 +4003,58 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmList", "Farm");
                 }
 
+                Error error = null;
+                int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
+                List<Field> fieldList = await _fieldService.FetchFieldsByFarmId(farmID);
+                if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
+                {
+                    (List<HarvestYearPlanResponse> harvestYearPlanResponseForFilter, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
+                    if (string.IsNullOrWhiteSpace(error.Message) && harvestYearPlanResponseForFilter.Count > 0)
+                    {
+                        harvestYearPlanResponseForFilter = harvestYearPlanResponseForFilter.Where(x => x.CropGroupName == model.PreviousCropGroupName).ToList();
+                        if (harvestYearPlanResponseForFilter != null)
+                        {
+                            var fieldIds = harvestYearPlanResponseForFilter.Select(x => x.FieldID).ToList();
+                            fieldList = fieldList.Where(x => fieldIds.Contains(x.ID.Value)).ToList();
+                        }
+                    }
+                }
+                var SelectListItem = fieldList.Select(f => new SelectListItem
+                {
+                    Value = f.ID.ToString(),
+                    Text = f.Name
+                }).ToList();
+
+                List<int> fieldsAllowedForSecondCrop = new List<int>();
+                List<int> fieldRemoveList = new List<int>();
+                (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
+                List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = harvestYearPlanResponse.Where(x => x.CropInfo1 != null &&
+               x.Yield != null).ToList();
+                if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
+                {
+                    fieldRemoveList = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) ? false : true, model.Crops);
+                    foreach (var removeFieldId in fieldRemoveList)
+                    {
+                        SelectListItem.RemoveAll(x => x.Value == removeFieldId.ToString());
+                    }
+                }
+                else
+                {
+                    //Fetch fields allowed for second crop based on first crop
+                    fieldsAllowedForSecondCrop = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) ? false : true, model.Crops);
+
+                    if (harvestYearPlanResponse.Count() > 0 || SelectListItem.Count == 1)
+                    {
+                        var harvestFieldIds = harvestYearPlanResponse.Select(x => x.FieldID.ToString()).ToList();
+                        SelectListItem = SelectListItem.Where(x => !harvestFieldIds.Contains(x.Value) || fieldsAllowedForSecondCrop.Contains(int.Parse(x.Value))).ToList();
+                    }
+                }
+                //}
+                if (SelectListItem.Count == 1)
+                {
+                    return RedirectToAction("CropTypes");
+                }
+                ViewBag.fieldList = SelectListItem;
 
 
             }
@@ -5809,7 +5869,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("CheckAnswer");
                 }
-                else if (!model.IsAnyChangeInField)
+                else if (model.IsAnyChangeInField)
                 {
                     model.Yield = null;
                     model.Crops.ForEach(x => x.Yield = null);
