@@ -110,6 +110,7 @@
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4"></govuk-input>
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Postcode"></govuk-input>
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Comment"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromImportExportOverviewPage"></govuk-input>
 
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManureTypeLiquid"></govuk-input>
                     <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefaultFarmManureValueDate" value="@Model.DefaultFarmManureValueDate"></govuk-date-input>
@@ -117,7 +118,9 @@
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyNeedToStoreNutrientValueForFuture"></govuk-input>
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefaultNutrientValue"></govuk-input>
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDefaultValueChange" value="@Model.IsDefaultValueChange"></govuk-input>
-
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManageImportExport" value="@Model.IsManageImportExport"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromPlan"></govuk-input>
                     @if (Model.FieldList != null && Model.FieldList.Count > 0)
                     {
                         @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -216,13 +219,13 @@
                                @*  <a class="govuk-link govuk-task-list__link" href="#" aria-describedby="ImportsExportsOfLivestockManure">
                                     @Resource.lblImportsExportsOfLivestockManure
                                 </a> *@
-                                <a class="govuk-link govuk-task-list__link" asp-action="LivestockImportExportQuestion" asp-controller="Report" aria-describedby="ImportsExportsOfLivestockManure">
+                                <a class="govuk-link govuk-task-list__link" asp-action="ManageImportExport" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@Model.EncryptedHarvestYear" aria-describedby="ImportsExportsOfLivestockManure">
                                     @Resource.lblImportsExportsOfLivestockManure
                                 </a>
 
                             </div>
                             <div class="govuk-task-list__status" id="ImportsExportsOfLivestockManure">
-                                @if (Model.LivestockImportExportQuestion != null && (!Model.LivestockImportExportQuestion.Value))
+                                @if (ViewBag.IsNutrientsLoadingManureshaveData!=null)
                                 {
                                     @Resource.lblCompleted
                                 }
@@ -244,9 +247,18 @@
                     @Resource.lblCreateReport
                 </govuk-button>
                 <p class="govuk-body cancel-link">
-                    <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
-                        @Resource.lblCancel
-                    </a>
+                    @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
+                    {
+                        <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">
+                            @Resource.lblCancel
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+                            @Resource.lblCancel
+                        </a>
+                    }
                 </p>
 
 

@@ -9,7 +9,14 @@
     }
     else if(Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass)
     {
-        backAction = "CropGroups";
+        if (ViewBag.fieldList.Count == 1)
+        {
+            backAction = "CropGroups";
+        }
+        if (ViewBag.fieldList.Count > 1)
+        {
+            backAction = "CropFields";
+        }
     }
     else
     {

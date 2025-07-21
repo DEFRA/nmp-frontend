@@ -1020,7 +1020,7 @@ namespace NMP.Portal.Controllers
                         TempData["Error"] = error.Message;
                         return RedirectToAction("FarmList");
                     }
-                    (List<NutrientsLoadingManures> nutrientsLoadingManuresList, error) = await _reportService.FetchNutrientsLoadingManuresByFarmId(farm.ID);
+                    (List<NutrientsLoadingFarmDetail> nutrientsLoadingFarmDetailList, error) = await _reportService.FetchNutrientsLoadingFarmDetailsByFarmId(farm.ID);
                     if (!string.IsNullOrWhiteSpace(error.Message))
                     {
                         TempData["Error"] = error.Message;
@@ -1028,7 +1028,7 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        if (nutrientsLoadingManuresList.Count > 0)
+                        if (nutrientsLoadingFarmDetailList.Count > 0)
                         {
                             ViewBag.LiveStockHaveImportExportData = true;
                         }

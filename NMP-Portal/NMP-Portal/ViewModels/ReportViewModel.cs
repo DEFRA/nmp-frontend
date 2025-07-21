@@ -78,6 +78,13 @@ namespace NMP.Portal.ViewModels
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheFarmPostcode))]
         public string? Postcode { get; set; } = string.Empty;
         public string? Comment { get; set; } = string.Empty;
+        public bool IsCheckAnswer { get; set; } = false;
         public bool IsManageImportExport { get; set; } = false;
+        public string? IsComingFromImportExportOverviewPage { get; set; } = string.Empty;
+        public bool IsDefaultNutrientChange { get; set; } = false;
+        public bool IsManureTypeChange { get; set; } = false;
+        public bool? IsCancel { get; set; }
+        public bool? IsImport { get; set; }
+        public bool? IsComingFromPlan { get; set; } = false;
     }
 }
