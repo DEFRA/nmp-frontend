@@ -7,18 +7,19 @@
 }
 
 @section BeforeContent {
-    @if (string.IsNullOrWhiteSpace(Model.EncryptedHarvestYear) && !Model.IsManageImportExport)
+    @if ((Model.IsComingFromPlan.HasValue&&!Model.IsComingFromPlan.Value) && !Model.IsManageImportExport)
     {
         <govuk-back-link asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+    }
+    else if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
+    {
+        <govuk-back-link asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
     }
     else if(Model.IsManageImportExport)
     {
         <govuk-back-link asp-action="ManageImportExport" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
     }
-    else
-    {
-        <govuk-back-link asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
-    }
+    
     
 }
 @if (TempData["ReportOptions"] != null)
@@ -92,6 +93,8 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDefaultValueChange" value="@Model.IsDefaultValueChange"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManageImportExport" value="@Model.IsManageImportExport"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromPlan"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromImportExportOverviewPage"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -134,7 +137,7 @@
                                 @Resource.lblIncludesDetailsAboutYourFieldsCropsAndRec
                             </govuk-radios-item-hint>
                         </govuk-radios-item>
-                        <govuk-radios-item value="@farmAndFieldDetailsForNVZRecord">
+                        <govuk-radios-item value="@farmAndFieldDetailsForNVZRecord" disabled="true">
                             @Resource.lblFarmAndFieldDetailsForNVZRecords
                             <govuk-radios-item-hint>
                                 @Resource.lblIncludesNmaxLivestockManureNitrogen
@@ -147,7 +150,7 @@
                     @Resource.lblContinue
                 </govuk-button>
                 <p class="govuk-body cancel-link">
-                    @if (!string.IsNullOrWhiteSpace(Model.EncryptedHarvestYear))
+                    @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
                     {
                         <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">
                             @Resource.lblCancel
