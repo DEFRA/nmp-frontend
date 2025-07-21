@@ -5189,4 +5189,10 @@ live</value>
   <data name="lblAddImportOrExport" xml:space="preserve">
     <value>Add {0}</value>
   </data>
+  <data name="lblDryMatterContent" xml:space="preserve">
+    <value>Dry Matter content:</value>
+  </data>
+  <data name="lblUpdateAnOrganicMaterialImportOrExport" xml:space="preserve">
+    <value>Update an organic material import or export</value>
+  </data>
 </root>

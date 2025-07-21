@@ -3148,6 +3148,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dry Matter content:.
+        /// </summary>
+        public static string lblDryMatterContent {
+            get {
+                return ResourceManager.GetString("lblDryMatterContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dry matter percentage.
         /// </summary>
         public static string lblDryMatterPercent {
@@ -10563,6 +10572,15 @@ namespace NMP.Portal.Resources {
         public static string lblUpdateAnOrganicMaterialApplicationForHarvestYear {
             get {
                 return ResourceManager.GetString("lblUpdateAnOrganicMaterialApplicationForHarvestYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update an organic material import or export.
+        /// </summary>
+        public static string lblUpdateAnOrganicMaterialImportOrExport {
+            get {
+                return ResourceManager.GetString("lblUpdateAnOrganicMaterialImportOrExport", resourceCulture);
             }
         }
         
