@@ -1897,11 +1897,11 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
                 model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                 if (model.IsCheckAnswer)
                 {
                     return RedirectToAction("LivestockImportExportCheckAnswer");
-                }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                }                
                 return RedirectToAction("ManureType");
             }
             catch (Exception ex)
@@ -2938,6 +2938,24 @@ namespace NMP.Portal.Controllers
                 ModelState.AddModelError("ReceiverName", string.Format(Resource.MsgEnterTheNameOfThePersonOrOrganisationYouAreFrom, model.ImportExport == (int)NMP.Portal.Enums.ImportExport.Import ?
                     Resource.lblImporting : Resource.lblExporting));
             }
+
+            if(!string.IsNullOrWhiteSpace(model.Address1)&&model.Address1.Length>50)
+            {
+                ModelState.AddModelError("Address1", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblAddressLine1,50));
+            }
+            if (!string.IsNullOrWhiteSpace(model.Address2) && model.Address2.Length > 50)
+            {
+                ModelState.AddModelError("Address2", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblAddressLine2ForErrorMsg,50));
+            }
+            if (!string.IsNullOrWhiteSpace(model.Address3) && model.Address3.Length > 50)
+            {
+                ModelState.AddModelError("Address3", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblTownOrCity,50));
+            }
+            if (!string.IsNullOrWhiteSpace(model.Address4) && model.Address4.Length > 50)
+            {
+                ModelState.AddModelError("Address4", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblCountry,50));
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -2983,6 +3001,15 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Report Controller : LivestockComment() post action called");
 
+            if (!string.IsNullOrWhiteSpace(model.Comment) && model.Comment.Length > 255)
+            {
+                ModelState.AddModelError("Comment", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblComment,255));
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
             HttpContext.Session.SetObjectAsJson("ReportData", model);
             return RedirectToAction("LivestockImportExportCheckAnswer");
         }
