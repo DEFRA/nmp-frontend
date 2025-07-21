@@ -1742,7 +1742,7 @@ namespace NMP.Portal.Controllers
             }
         }
 
-        public IActionResult BackCheckList()
+        public async Task<IActionResult> BackCheckList()
         {
             _logger.LogTrace("Report Controller : BackCheckList() action called");
             ReportViewModel model = new ReportViewModel();
@@ -1771,7 +1771,27 @@ namespace NMP.Portal.Controllers
             //{
             //    return RedirectToAction("Year");
             //}
-            return RedirectToAction("IsGrasslandDerogation");
+            (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetails, Error error) = await _reportService.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.FarmId ?? 0, model.Year ?? 0);
+            if (!string.IsNullOrWhiteSpace(error.Message))
+            {
+                TempData["ErrorOnLivestockManureNitrogenReportChecklist"] = error.Message;
+                return RedirectToAction("LivestockManureNitrogenReportChecklist");
+            }
+            if (nutrientsLoadingFarmDetails != null)
+            {
+                if (model.IsComingFromPlan.HasValue && (!model.IsComingFromPlan.Value))
+                {
+                    return RedirectToAction("Year");
+                }
+                else
+                {
+                    return RedirectToAction("NVZComplianceReports");
+                }
+            }
+            else{
+                return RedirectToAction("IsGrasslandDerogation");
+            }
+
         }
 
         [HttpGet]
