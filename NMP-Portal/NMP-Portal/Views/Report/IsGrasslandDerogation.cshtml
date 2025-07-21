@@ -7,7 +7,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@((Model.IsComingFromPlan.HasValue&&!Model.IsComingFromPlan.Value) ? "Year":(Model.IsCheckList ? "LivestockManureNitrogenReportChecklist" : "NVZComplianceReports")) asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@((Model.IsCheckList ? "LivestockManureNitrogenReportChecklist":(Model.IsComingFromPlan.HasValue&&!Model.IsComingFromPlan.Value) ? "Year": "NVZComplianceReports")) asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnIsGrasslandDerogation"] != null)
 {
