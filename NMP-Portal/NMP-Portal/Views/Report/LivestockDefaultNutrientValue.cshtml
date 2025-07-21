@@ -89,6 +89,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsImport"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManureTypeChange"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromImportExportOverviewPage"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromPlan"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -209,15 +210,15 @@
                     }
                     else
                     {
-                        @if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
+                        if (Model.IsManageImportExport)
                         {
-                            @if (Model.IsManageImportExport)
-                            {
-                                <a asp-action="ManageImportExport" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@Model.EncryptedHarvestYear">
-                                    @Resource.lblCancel
-                                </a>
-                            }
-                            else @if (!Model.IsCheckList)
+                            <a asp-action="ManageImportExport" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@Model.EncryptedHarvestYear">
+                                @Resource.lblCancel
+                            </a>
+                        }
+                        else @if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
+                        {
+                            @if (!Model.IsCheckList)
                             {
                                 <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
                                     @Resource.lblCancel
@@ -230,12 +231,12 @@
                                 </a>
                             }
                         }
-                    else
-                    {
-                        <a asp-action="UpdateLivestockImportExport" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId">
-                            @Resource.lblCancel
-                        </a>
-                    }
+                        else
+                        {
+                            <a asp-action="UpdateLivestockImportExport" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId">
+                                @Resource.lblCancel
+                            </a>
+                        }
                     }
                 </p>
 
