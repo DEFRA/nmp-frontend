@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Routing;
 using Newtonsoft.Json;
 using NMP.Portal.Enums;
 using NMP.Portal.Helpers;
@@ -1132,7 +1133,7 @@ namespace NMP.Portal.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> ReportOptions(string f, string? h)
+        public async Task<IActionResult> ReportOptions(string f, string? h,string? r)
         {
             _logger.LogTrace("Report Controller : ReportOptions() action called");
             ReportViewModel model = null;
@@ -1170,6 +1171,12 @@ namespace NMP.Portal.Controllers
                     {
                         model.IsComingFromPlan = false;
                     }
+                }
+
+                if (!string.IsNullOrWhiteSpace(r))
+                {
+                    model.IsManageImportExport = true;
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                 }
             }
             catch (Exception ex)
@@ -1560,6 +1567,7 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmList", "Farm");
                 }
                 model.IsCheckList = true;
+                model.IsManageImportExport = false;
                 model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
                 (List<NutrientsLoadingManures> nutrientsLoadingManuresList, Error error) = await _reportService.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
                 if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingManuresList.Count > 0)
@@ -3220,6 +3228,7 @@ namespace NMP.Portal.Controllers
                     {
                         model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                     }
+                    ViewBag.IsManageImportExport = _reportDataProtector.Protect(Resource.lblTrue);
                 }
 
                 int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
