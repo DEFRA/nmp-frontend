@@ -11,7 +11,7 @@
     {
         <govuk-back-link asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
     }
-    else if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
+    else if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value) && !Model.IsManageImportExport)
     {
         <govuk-back-link asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
     }
