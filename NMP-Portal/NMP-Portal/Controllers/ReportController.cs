@@ -1133,7 +1133,7 @@ namespace NMP.Portal.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> ReportOptions(string f, string? h,string? r)
+        public async Task<IActionResult> ReportOptions(string f, string? h, string? r)
         {
             _logger.LogTrace("Report Controller : ReportOptions() action called");
             ReportViewModel model = null;
@@ -1620,7 +1620,7 @@ namespace NMP.Portal.Controllers
                     if (nutrientsLoadingManuresList.Count > 0)
                     {
                         nutrientsLoadingManuresList = nutrientsLoadingManuresList.Where(x => x.ManureDate.Value.Year == model.Year).ToList();
-                        if (nutrientsLoadingManuresList.Count == 0 && ((!model.LivestockImportExportQuestion.HasValue)||
+                        if (nutrientsLoadingManuresList.Count == 0 && ((!model.LivestockImportExportQuestion.HasValue) ||
                             model.LivestockImportExportQuestion.HasValue && model.LivestockImportExportQuestion.Value))
                         {
                             ModelState.AddModelError(string.Empty, string.Format(Resource.MsgImportsAndExportsOfManureForYearMustBeCompleted, model.Year));
@@ -1796,7 +1796,8 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("NVZComplianceReports");
                 }
             }
-            else{
+            else
+            {
                 return RedirectToAction("IsGrasslandDerogation");
             }
 
@@ -1929,7 +1930,7 @@ namespace NMP.Portal.Controllers
                 if (model.IsCheckAnswer)
                 {
                     return RedirectToAction("LivestockImportExportCheckAnswer");
-                }                
+                }
                 return RedirectToAction("ManureType");
             }
             catch (Exception ex)
@@ -2967,21 +2968,21 @@ namespace NMP.Portal.Controllers
                     Resource.lblImporting : Resource.lblExporting));
             }
 
-            if(!string.IsNullOrWhiteSpace(model.Address1)&&model.Address1.Length>50)
+            if (!string.IsNullOrWhiteSpace(model.Address1) && model.Address1.Length > 50)
             {
-                ModelState.AddModelError("Address1", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblAddressLine1,50));
+                ModelState.AddModelError("Address1", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblAddressLine1, 50));
             }
             if (!string.IsNullOrWhiteSpace(model.Address2) && model.Address2.Length > 50)
             {
-                ModelState.AddModelError("Address2", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblAddressLine2ForErrorMsg,50));
+                ModelState.AddModelError("Address2", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblAddressLine2ForErrorMsg, 50));
             }
             if (!string.IsNullOrWhiteSpace(model.Address3) && model.Address3.Length > 50)
             {
-                ModelState.AddModelError("Address3", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblTownOrCity,50));
+                ModelState.AddModelError("Address3", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblTownOrCity, 50));
             }
             if (!string.IsNullOrWhiteSpace(model.Address4) && model.Address4.Length > 50)
             {
-                ModelState.AddModelError("Address4", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblCountry,50));
+                ModelState.AddModelError("Address4", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblCountry, 50));
             }
 
             if (!ModelState.IsValid)
@@ -3031,7 +3032,7 @@ namespace NMP.Portal.Controllers
 
             if (!string.IsNullOrWhiteSpace(model.Comment) && model.Comment.Length > 255)
             {
-                ModelState.AddModelError("Comment", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblComment,255));
+                ModelState.AddModelError("Comment", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblComment, 255));
             }
 
             if (!ModelState.IsValid)
@@ -3069,7 +3070,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public IActionResult LivestockImportExportCheckAnswer()
+        public async Task<IActionResult> LivestockImportExportCheckAnswer(string? i)
         {
             _logger.LogTrace("Report Controller : LivestockImportExportCheckAnswer() action called");
             ReportViewModel model = new ReportViewModel();
@@ -3086,6 +3087,74 @@ namespace NMP.Portal.Controllers
                 model.IsCheckAnswer = true;
                 model.IsManureTypeChange = false;
                 model.IsDefaultValueChange = false;
+                if (!string.IsNullOrWhiteSpace(i))
+                {
+                    int decryptedId = Convert.ToInt32(_reportDataProtector.Unprotect(i));
+                    if (decryptedId > 0)
+                    {
+                        (NutrientsLoadingManures nutrientsLoadingManure, Error error) = await _reportService.FetchNutrientsLoadingManuresByIdAsync(decryptedId);
+                        if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingManure != null)
+                        {
+                            model.ImportExport = (int)Enum.Parse(typeof(NMP.Portal.Enums.ImportExport), nutrientsLoadingManure.ManureLookupType);
+                            model.ManureTypeId = nutrientsLoadingManure.ManureTypeID;
+                            model.DefaultFarmManureValueDate = nutrientsLoadingManure.ManureDate;
+                            model.LivestockQuantity = nutrientsLoadingManure.Quantity.Value;
+                            model.ReceiverName = nutrientsLoadingManure.FarmName;
+                            model.Address1 = nutrientsLoadingManure.Address1;
+                            model.Address2 = nutrientsLoadingManure.Address2;
+                            model.Address3 = nutrientsLoadingManure.Address3;
+                            model.Address4 = nutrientsLoadingManure.Address4;
+                            model.Postcode = nutrientsLoadingManure.PostCode;
+                            model.Comment = nutrientsLoadingManure.Comments;
+                            model.IsComingFromPlan = false;
+                            (ManureType manureType, error) = await _organicManureService.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
+                            if (error == null && manureType != null)
+                            {
+                                model.ManureTypeName = manureType.Name;
+                                model.IsManureTypeLiquid = manureType.IsLiquid;
+                            }
+                            model.N = nutrientsLoadingManure.NContent;
+                            model.FarmId = nutrientsLoadingManure.FarmID;
+                            model.Year = nutrientsLoadingManure.ManureDate.Value.Year;
+                            model.P2O5 = nutrientsLoadingManure.PContent;
+                            model.ManureType.TotalN = nutrientsLoadingManure.NContent;
+                            model.ManureType.P2O5 = nutrientsLoadingManure.PContent;
+                            (List<FarmManureTypeResponse> farmManureTypeResponse, error) = await _organicManureService.FetchFarmManureTypeByFarmId(model.FarmId.Value);
+                            if (error == null && farmManureTypeResponse != null && farmManureTypeResponse.Count > 0)
+                            {
+                                FarmManureTypeResponse farmManureType = farmManureTypeResponse.Where(x => x.ManureTypeID == model.ManureTypeId && x.ManureTypeName == model.ManureTypeName).FirstOrDefault();
+                                if (farmManureType != null)
+                                {
+                                    if (farmManureType.TotalN == model.N && farmManureType.P2O5 == model.P2O5)
+                                    {
+                                        model.DefaultNutrientValue = Resource.lblYesUseTheseValues;
+                                    }
+
+                                    model.DefaultFarmManureValueDate = farmManureType.ModifiedOn == null ? farmManureType.CreatedOn : farmManureType.ModifiedOn;
+                                }
+                                else
+                                {
+                                    model.DefaultNutrientValue = Resource.lblYes;
+                                }
+                            }
+                            else if (farmManureTypeResponse.Count == 0)
+                            {
+                                model.DefaultNutrientValue = Resource.lblYes;
+                            }
+                            if (string.IsNullOrWhiteSpace(model.DefaultNutrientValue))
+                            {
+                                if (manureType.TotalN == model.N && manureType.P2O5 == model.P2O5)
+                                {
+                                    model.DefaultNutrientValue = Resource.lblYesUseTheseStandardNutrientValues;
+                                }
+                                else
+                                {
+                                    model.DefaultNutrientValue = Resource.lblIwantToEnterARecentOrganicMaterialAnalysis;
+                                }
+                            }
+                        }
+                    }
+                }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             catch (Exception ex)
@@ -3423,7 +3492,7 @@ namespace NMP.Portal.Controllers
 
                 }
                 else if (string.IsNullOrWhiteSpace(model.IsComingFromImportExportOverviewPage))
-                {                    
+                {
                     if (!model.IsCheckList)
                     {
                         return RedirectToAction("FarmSummary", "Farm", new { Id = model.EncryptedFarmId });
