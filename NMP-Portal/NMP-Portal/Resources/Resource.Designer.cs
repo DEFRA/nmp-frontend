@@ -2680,7 +2680,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to cubic meters.
+        ///   Looks up a localized string similar to cubic metres.
         /// </summary>
         public static string lblCubicMeters {
             get {
@@ -5444,7 +5444,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Is field above 300 meters.
+        ///   Looks up a localized string similar to Is field above 300 metres.
         /// </summary>
         public static string lblIsFieldAbove300Meters {
             get {
@@ -6255,7 +6255,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to cubic meters per hectare.
+        ///   Looks up a localized string similar to cubic metres per hectare.
         /// </summary>
         public static string lblMeterCubePerHa {
             get {
@@ -10279,7 +10279,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total exported organic material.
+        ///   Looks up a localized string similar to Total nitrogen exported via organic material.
         /// </summary>
         public static string lblTotalExportedOrganicMaterial {
             get {
@@ -10315,7 +10315,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total imported organic material.
+        ///   Looks up a localized string similar to Total nitrogen imported via organic material.
         /// </summary>
         public static string lblTotalImportedOrganicMaterial {
             get {
@@ -10347,6 +10347,15 @@ namespace NMP.Portal.Resources {
         public static string lblTotalMagnesiumOxide {
             get {
                 return ResourceManager.GetString("lblTotalMagnesiumOxide", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total N Content.
+        /// </summary>
+        public static string lblTotalNContent {
+            get {
+                return ResourceManager.GetString("lblTotalNContent", resourceCulture);
             }
         }
         
@@ -11508,6 +11517,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhatTypeOfLivestockManureAreYouImportingOrExporting {
             get {
                 return ResourceManager.GetString("lblWhatTypeOfLivestockManureAreYouImportingOrExporting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to add an import or an export organic material?.
+        /// </summary>
+        public static string lblWhatTypeOfLivestockManureAreYouImportingOrExportingOrganicMaterial {
+            get {
+                return ResourceManager.GetString("lblWhatTypeOfLivestockManureAreYouImportingOrExportingOrganicMaterial", resourceCulture);
             }
         }
         
@@ -13296,7 +13314,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state you must not spread more than 30 cubic meters per hectare of slurry in a single application from the end of the closed spreading period until the end of February..
+        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state you must not spread more than 30 cubic metres per hectare of slurry in a single application from the end of the closed spreading period until the end of February..
         /// </summary>
         public static string MsgEndPeriodEndFebWarningPara1st30SlurryEngland {
             get {
@@ -13386,7 +13404,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Water Resources Regulations state you must not spread more than 30 cubic meters per hectare of slurry in a single application from the end of the closed spreading period until the end of February..
+        ///   Looks up a localized string similar to The Water Resources Regulations state you must not spread more than 30 cubic metres per hectare of slurry in a single application from the end of the closed spreading period until the end of February..
         /// </summary>
         public static string MsgEndPeriodEndFebWarningPara30SlurryWales {
             get {
