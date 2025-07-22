@@ -3304,10 +3304,10 @@ namespace NMP.Portal.Controllers
                                         ViewBag.ExportList = allExportData;
                                     }
                                 }
-                                decimal? totalImports = (nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblImport.ToUpper()).Sum(x => x.Quantity)) * 1000;
+                                decimal? totalImports = (nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblImport.ToUpper()).Sum(x => x.NTotal)) * 1000;
                                 ViewBag.TotalImportsInKg = totalImports;
                                 //ViewBag.ExportList = nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblExport.ToUpper()).ToList();
-                                decimal? totalExports = (nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblExport.ToUpper()).Sum(x => x.Quantity)) * 1000;
+                                decimal? totalExports = (nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblExport.ToUpper()).Sum(x => x.NTotal)) * 1000;
                                 ViewBag.TotalExportsInKg = totalExports;
                                 decimal netTotal = Math.Round((totalImports ?? 0) - (totalExports ?? 0), 0);                              
                                 ViewBag.NetTotal = string.Format("{0}{1}", netTotal > 0 ? "+": "-", netTotal);

@@ -5201,4 +5201,7 @@ live</value>
   <data name="lblWhatTypeOfLivestockManureAreYouImportingOrExportingOrganicMaterial" xml:space="preserve">
     <value>Do you want to add an import or an export organic material?</value>
   </data>
+  <data name="lblTotalNContent" xml:space="preserve">
+    <value>Total N Content</value>
+  </data>
 </root>

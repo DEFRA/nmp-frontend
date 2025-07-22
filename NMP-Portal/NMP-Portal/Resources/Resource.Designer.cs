@@ -10351,6 +10351,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total N Content.
+        /// </summary>
+        public static string lblTotalNContent {
+            get {
+                return ResourceManager.GetString("lblTotalNContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total Nitrogen (N).
         /// </summary>
         public static string lblTotalNitrogen {
