@@ -292,7 +292,6 @@ namespace NMP.Portal.Controllers
                             PreviousGrassYears.Add(year.HarvestYear.Value);
                         }
                         field.PreviousGrasses.GrassManagementOptionID = fieldResponse.PreviousGrasses[0].GrassManagementOptionID;
-                        field.PreviousGrasses.GrassTypicalCutID = fieldResponse.PreviousGrasses[0].GrassTypicalCutID;
                         field.PreviousGrasses.HasGreaterThan30PercentClover = fieldResponse.PreviousGrasses[0].HasGreaterThan30PercentClover;
                         field.PreviousGrasses.SoilNitrogenSupplyItemID = fieldResponse.PreviousGrasses[0].SoilNitrogenSupplyItemID;
                         field.PreviousGrasses.HasGrassInLastThreeYear = fieldResponse.PreviousGrasses[0].HasGrassInLastThreeYear;
@@ -1302,10 +1301,7 @@ namespace NMP.Portal.Controllers
                 }
                 List<CommonResponse> grassManagements = await _fieldService.GetGrassManagementOptions();
                 ViewBag.GrassManagementOptions = grassManagements?.FirstOrDefault(x => x.Id == model.PreviousGrasses.GrassManagementOptionID)?.Name;
-
-                List<CommonResponse> grassTypicalCuts = await _fieldService.GetGrassTypicalCuts();
-                ViewBag.GrassTypicalCuts = grassTypicalCuts?.FirstOrDefault(x => x.Id == model.PreviousGrasses.GrassTypicalCutID)?.Name;
-
+               
                 List<CommonResponse> soilNitrogenSupplyItems = await _fieldService.GetSoilNitrogenSupplyItems();
                 ViewBag.SoilNitrogenSupplyItems = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == model.PreviousGrasses.SoilNitrogenSupplyItemID)?.Name;
                 model.IsHasGrassInLastThreeYearChange = false;
@@ -1398,15 +1394,7 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("PreviousGrasses.GrassManagementOptionID", string.Format("{0} {1}", Resource.lblHowWasTheGrassTypicallyManagedEachYear, Resource.lblNotSet));
                 }
-                else
-                {
-                    if (model.PreviousGrasses.GrassManagementOptionID!= (int)NMP.Portal.Enums.GrassManagementOption.GrazedOnly&& model.PreviousGrasses.GrassTypicalCutID == null)
-                    {
-                        
-                            ModelState.AddModelError("PreviousGrasses.GrassTypicalCutID", string.Format("{0} {1}", Resource.lblHawManyCutsTypicallyEachYear, Resource.lblNotSet));
-                        
-                    }
-                }
+                
                 if (model.PreviousGrasses.HasGreaterThan30PercentClover == null)
                 {
                     ModelState.AddModelError("PreviousGrasses.HasGreaterThan30PercentClover", string.Format("{0} {1}", string.Format(Resource.lblDoesFieldTypicallyHaveMoreThan30PercentClover, model.Name), Resource.lblNotSet));
@@ -1504,9 +1492,7 @@ namespace NMP.Portal.Controllers
                 List<CommonResponse> grassManagements = await _fieldService.GetGrassManagementOptions();
                 ViewBag.GrassManagementOptions = grassManagements?.FirstOrDefault(x => x.Id == model.PreviousGrasses.GrassManagementOptionID)?.Name;
 
-                List<CommonResponse> grassTypicalCuts = await _fieldService.GetGrassTypicalCuts();
-                ViewBag.GrassTypicalCuts = grassTypicalCuts?.FirstOrDefault(x => x.Id == model.PreviousGrasses.GrassTypicalCutID)?.Name;
-
+                
                 List<CommonResponse> soilNitrogenSupplyItems = await _fieldService.GetSoilNitrogenSupplyItems();
                 ViewBag.SoilNitrogenSupplyItems = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == model.PreviousGrasses.SoilNitrogenSupplyItemID)?.Name;
 
@@ -1572,7 +1558,6 @@ namespace NMP.Portal.Controllers
                         HarvestYear = year,
                         LayDuration=model.PreviousGrasses.LayDuration,
                         GrassManagementOptionID = model.PreviousGrasses.GrassManagementOptionID,
-                        GrassTypicalCutID = model.PreviousGrasses.GrassTypicalCutID,
                         HasGreaterThan30PercentClover = model.PreviousGrasses.HasGreaterThan30PercentClover,
                         SoilNitrogenSupplyItemID = model.PreviousGrasses.SoilNitrogenSupplyItemID,
                         CreatedOn = System.DateTime.Now
@@ -2416,7 +2401,6 @@ namespace NMP.Portal.Controllers
                             model.CropType = string.Empty;
                             model.PreviousGrasses.HarvestYear = null;
                             model.PreviousGrasses.GrassManagementOptionID = null;
-                            model.PreviousGrasses.GrassTypicalCutID = null;
                             model.PreviousGrasses.HasGreaterThan30PercentClover = null;
                             model.PreviousGrasses.SoilNitrogenSupplyItemID = null;
                             model.PreviousGrassYears = null;
@@ -2465,7 +2449,6 @@ namespace NMP.Portal.Controllers
                 model.CropType = string.Empty;
                 model.PreviousGrasses.HarvestYear = null;
                 model.PreviousGrasses.GrassManagementOptionID = null;
-                model.PreviousGrasses.GrassTypicalCutID = null;
                 model.PreviousGrasses.HasGreaterThan30PercentClover = null;
                 model.PreviousGrasses.SoilNitrogenSupplyItemID = null;
                 model.PreviousGrassYears = null;
@@ -2608,54 +2591,10 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("CheckAnswer");
             }
 
-            return RedirectToAction("GrassTypicalCuts");
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GrassTypicalCuts()
-        {
-            _logger.LogTrace($"Field Controller : GrassTypicalCuts() action called");
-            Error error = new Error();
-
-            FieldViewModel model = new FieldViewModel();
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
-            {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
-            }
-            else
-            {
-                return RedirectToAction("FarmList", "Farm");
-            }
-            List<CommonResponse> commonResponses = await _fieldService.GetGrassTypicalCuts();
-            ViewBag.GrassTypicalCuts = commonResponses;
-            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> GrassTypicalCuts(FieldViewModel model)
-        {
-            _logger.LogTrace($"Field Controller : GrassTypicalCuts() post action called");
-
-            if (model.PreviousGrasses.GrassTypicalCutID == null)
-            {
-                ModelState.AddModelError("PreviousGrasses.GrassTypicalCutID", Resource.MsgSelectAnOptionBeforeContinuing);
-            }
-            if (!ModelState.IsValid)
-            {
-                List<CommonResponse> commonResponses = await _fieldService.GetGrassTypicalCuts();
-                ViewBag.GrassTypicalCuts = commonResponses;
-                return View(model);
-            }
-            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
-            if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange))
-            {
-                return RedirectToAction("CheckAnswer");
-            }
-
             return RedirectToAction("HasGreaterThan30PercentClover");
         }
+
+        
 
         [HttpGet]
         public async Task<IActionResult> HasGreaterThan30PercentClover()
