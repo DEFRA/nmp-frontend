@@ -1796,7 +1796,8 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("NVZComplianceReports");
                 }
             }
-            else{
+            else
+            {
                 return RedirectToAction("IsGrasslandDerogation");
             }
 
@@ -1929,7 +1930,7 @@ namespace NMP.Portal.Controllers
                 if (model.IsCheckAnswer)
                 {
                     return RedirectToAction("LivestockImportExportCheckAnswer");
-                }                
+                }
                 return RedirectToAction("ManureType");
             }
             catch (Exception ex)
@@ -3308,7 +3309,8 @@ namespace NMP.Portal.Controllers
                                 //ViewBag.ExportList = nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblExport.ToUpper()).ToList();
                                 decimal? totalExports = (nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblExport.ToUpper()).Sum(x => x.Quantity)) * 1000;
                                 ViewBag.TotalExportsInKg = totalExports;
-                                ViewBag.NetTotal = totalImports - totalExports;
+                                decimal netTotal = Math.Round((totalImports ?? 0) - (totalExports ?? 0), 0);                              
+                                ViewBag.NetTotal = string.Format("{0}{1}", netTotal > 0 ? "+": "-", netTotal);
                                 ViewBag.IsImport = _reportDataProtector.Protect(Resource.lblImport);
                                 ViewBag.IsExport = _reportDataProtector.Protect(Resource.lblExport);
                             }
@@ -3423,7 +3425,7 @@ namespace NMP.Portal.Controllers
 
                 }
                 else if (string.IsNullOrWhiteSpace(model.IsComingFromImportExportOverviewPage))
-                {                    
+                {
                     if (!model.IsCheckList)
                     {
                         return RedirectToAction("FarmSummary", "Farm", new { Id = model.EncryptedFarmId });
