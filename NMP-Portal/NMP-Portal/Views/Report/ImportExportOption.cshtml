@@ -9,15 +9,15 @@
     {
         backAction = "LivestockImportExportCheckAnswer";
     }
-    else if (!string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
-    {
-        backAction = "UpdateLivestockImportExport";
-    }
-   
     else if (Model.IsManageImportExport)
     {
         backAction = "ManageImportExport";
     }
+    else   if (!string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
+    {
+        backAction = "UpdateLivestockImportExport";
+    }
+   
     else if (Model.IsCheckList)
     {
         backAction = "LivestockImportExportQuestion";
