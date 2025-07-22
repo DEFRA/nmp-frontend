@@ -5189,6 +5189,15 @@ live</value>
   <data name="lblAddImportOrExport" xml:space="preserve">
     <value>Add {0}</value>
   </data>
+  <data name="lblAddressLine2ForErrorMsg" xml:space="preserve">
+    <value>Address line 2</value>
+  </data>
+  <data name="lblComment" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="lblModelPropertyCannotBeLongerThanNumberCharacters" xml:space="preserve">
+    <value>{0} cannot be longer than {1} characters.</value>
+  </data>
   <data name="lblDryMatterContent" xml:space="preserve">
     <value>Dry Matter content:</value>
   </data>

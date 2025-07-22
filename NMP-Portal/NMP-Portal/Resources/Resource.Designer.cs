@@ -952,6 +952,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Address line 2.
+        /// </summary>
+        public static string lblAddressLine2ForErrorMsg {
+            get {
+                return ResourceManager.GetString("lblAddressLine2ForErrorMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add soil analysis for {0}.
         /// </summary>
         public static string lblAddSoilAnalysis {
@@ -2010,6 +2019,15 @@ namespace NMP.Portal.Resources {
         public static string lblClimatePostcode {
             get {
                 return ResourceManager.GetString("lblClimatePostcode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comment.
+        /// </summary>
+        public static string lblComment {
+            get {
+                return ResourceManager.GetString("lblComment", resourceCulture);
             }
         }
         
@@ -6350,6 +6368,15 @@ namespace NMP.Portal.Resources {
         public static string lblmm {
             get {
                 return ResourceManager.GetString("lblmm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} cannot be longer than {1} characters..
+        /// </summary>
+        public static string lblModelPropertyCannotBeLongerThanNumberCharacters {
+            get {
+                return ResourceManager.GetString("lblModelPropertyCannotBeLongerThanNumberCharacters", resourceCulture);
             }
         }
         
