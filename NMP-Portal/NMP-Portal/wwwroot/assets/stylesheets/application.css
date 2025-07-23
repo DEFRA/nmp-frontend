@@ -671,37 +671,3 @@ hr.seperator_thirty {
     font-stretch: normal;
     font-style: normal;
 }
-.govuk-summary-list__value > :last-child {
-    margin-bottom: 0;
-}
-.nutrient_values {
-    padding: 0;
-    padding-top: 10px !important;
-    padding-bottom: 5px !important;
-}
-.nutrient_list {
-    vertical-align: text-top;
-}
-.nutrient_values li {
-    list-style-type: none;
-    padding: 0 0 5px 0;
-    width: 100%;
-}
-    .nutrient_values li span {
-        float: right;
-        text-align: left;
-    }
-
-@media (min-width: 48.0625em) {
-    .govuk-grid-column-two-thirds-from-desktop {
-        width: 66.6666666667%;
-        float: left;
-    }
-}
-.check-answers dt.govuk-summary-list__key {
-    width: 45%;
-}
-.check-answers .nutrient_list dd.govuk-summary-list__value {
-    width: 72%;
-    padding: 0;
-}

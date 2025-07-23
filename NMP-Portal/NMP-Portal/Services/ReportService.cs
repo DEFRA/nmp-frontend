@@ -374,14 +374,14 @@ namespace NMP.Portal.Services
             }
             return (livestockGroup, error);
         }
-        public async Task<(NutrientsLoadingManures, Error)> FetchNutrientsLoadingManuresByIdAsync(int farmId)
+        public async Task<(NutrientsLoadingManures, Error)> FetchNutrientsLoadingManuresByIdAsync(int id)
         {
             Error error = new Error();
             NutrientsLoadingManures NutrientsLoadingManure = new NutrientsLoadingManures();
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchNutrientsLoadingManureByIdAPI, farmId));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchNutrientsLoadingManureByIdAPI, id));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
