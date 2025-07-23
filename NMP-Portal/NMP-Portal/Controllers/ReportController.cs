@@ -3500,6 +3500,164 @@ namespace NMP.Portal.Controllers
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
             return View(model);
         }
+
+        [HttpGet]
+        public IActionResult IsAnyLivestock()
+        {
+            _logger.LogTrace("Report Controller : IsAnyLivestock() action called");
+            ReportViewModel model = new ReportViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in IsAnyLivestock() action : {ex.Message}, {ex.StackTrace}");
+
+                TempData["ErrorOnLivestockManureNitrogenReportChecklist"] = ex.Message;
+                return RedirectToAction("LivestockManureNitrogenReportChecklist");
+
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult IsAnyLivestock(ReportViewModel model)
+        {
+            _logger.LogTrace("Report Controller : IsAnyLivestock() post action called");
+            try
+            {
+                if (model.IsAnyLivestock == null)
+                {
+                    ModelState.AddModelError("IsAnyLivestock", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+
+                return RedirectToAction("LivestockGroup");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in IsAnyLivestock() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnIsAnyLivestock"] = ex.Message;
+                return View(model);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> LivestockGroup()
+        {
+            _logger.LogTrace("Report Controller : LivestockGroup() action called");
+            ReportViewModel model = new ReportViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+                (List<CommonResponse> livestockGroups, Error error) = await _reportService.FetchLivestockGroupList();
+                if(error==null)
+                {
+                    ViewBag.LivestockGroups = livestockGroups;
+                }
+                else
+                {
+                    TempData["ErrorOnIsAnyLivestock"] = error.Message;
+                    return RedirectToAction("IsAnyLivestock");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in LivestockGroup() action : {ex.Message}, {ex.StackTrace}");
+
+                TempData["ErrorOnIsAnyLivestock"] = ex.Message;
+                return RedirectToAction("IsAnyLivestock");
+
+            }
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LivestockGroup(ReportViewModel model)
+        {
+            _logger.LogTrace("Report Controller : LivestockGroup() post action called");
+            try
+            {
+                if (model.LivestockGroupId == null)
+                {
+                    ModelState.AddModelError("LivestockGroupId", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                (CommonResponse livestockGroup, Error error) = await _reportService.FetchLivestockGroupById(model.LivestockGroupId??0);
+                if(error==null)
+                {
+                    model.LivestockGroupName = livestockGroup.Name;
+                }
+                else
+                {
+                    TempData["ErrorOnLivestockGroup"] = error.Message;
+                    return View(model);
+                }
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+
+                return RedirectToAction("LivestockType");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in LivestockGroup() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnLivestockGroup"] = ex.Message;
+                return View(model);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> LivestockType()
+        {
+            _logger.LogTrace("Report Controller : LivestockType() action called");
+            ReportViewModel model = new ReportViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in LivestockType() action : {ex.Message}, {ex.StackTrace}");
+
+                TempData["ErrorOnIsAnyLivestock"] = ex.Message;
+                return RedirectToAction("IsAnyLivestock");
+
+            }
+            return View(model);
+        }
+
         [HttpGet]
         public IActionResult Cancel()
         {

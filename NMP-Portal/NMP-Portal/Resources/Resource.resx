@@ -5198,11 +5198,26 @@ live</value>
   <data name="lblModelPropertyCannotBeLongerThanNumberCharacters" xml:space="preserve">
     <value>{0} cannot be longer than {1} characters.</value>
   </data>
+  <data name="lblDidYouHaveAnyLivestockOn" xml:space="preserve">
+    <value>Did you have any livestock on {0} in {1}</value>
+  </data>
+  <data name="lblIncludeCattleSheepPigsGoats" xml:space="preserve">
+    <value>Include cattle, sheep, pigs, goats, horses, poultry and dear. </value>
+  </data>
+  <data name="lblIsAnyLivestock" xml:space="preserve">
+    <value>Is any livestock</value>
+  </data>
+  <data name="lblWhatTypeOfLivestockWouldYouLikeToAddFor" xml:space="preserve">
+    <value>What type of Livestock would you like to add for {0}?</value>
+  </data>
   <data name="lblWhatTypeOfLivestockManureAreYouImportingOrExportingOrganicMaterial" xml:space="preserve">
     <value>Do you want to add an import or an export organic material?</value>
   </data>
   <data name="lblTotalNContent" xml:space="preserve">
     <value>Total N Content</value>
+  </data>
+  <data name="lblWhatTypeOfLivestockGroupWouldYouLikeToAdd" xml:space="preserve">
+    <value>What type of {0} would you like to add?</value>
   </data>
   <data name="lblDryMatterContent" xml:space="preserve">
     <value>Dry Matter content:</value>

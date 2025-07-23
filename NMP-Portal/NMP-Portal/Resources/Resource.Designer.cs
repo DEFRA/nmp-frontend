@@ -2932,6 +2932,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Did you have any livestock on {0} in {1}.
+        /// </summary>
+        public static string lblDidYouHaveAnyLivestockOn {
+            get {
+                return ResourceManager.GetString("lblDidYouHaveAnyLivestockOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Discs.
         /// </summary>
         public static string lblDiscs {
@@ -5210,6 +5219,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Include cattle, sheep, pigs, goats, horses, poultry and dear. .
+        /// </summary>
+        public static string lblIncludeCattleSheepPigsGoats {
+            get {
+                return ResourceManager.GetString("lblIncludeCattleSheepPigsGoats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Include inorganic fertiliser applications.
         /// </summary>
         public static string lblIncludeInorganicFertiliserApplications {
@@ -5449,6 +5467,15 @@ namespace NMP.Portal.Resources {
         public static string lblIsAbove300SeaLevel {
             get {
                 return ResourceManager.GetString("lblIsAbove300SeaLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is any livestock.
+        /// </summary>
+        public static string lblIsAnyLivestock {
+            get {
+                return ResourceManager.GetString("lblIsAnyLivestock", resourceCulture);
             }
         }
         
@@ -11539,6 +11566,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What type of {0} would you like to add?.
+        /// </summary>
+        public static string lblWhatTypeOfLivestockGroupWouldYouLikeToAdd {
+            get {
+                return ResourceManager.GetString("lblWhatTypeOfLivestockGroupWouldYouLikeToAdd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What type of livestock manure are you {0}?.
         /// </summary>
         public static string lblWhatTypeOfLivestockManureAreYouImportingOrExporting {
@@ -11553,6 +11589,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhatTypeOfLivestockManureAreYouImportingOrExportingOrganicMaterial {
             get {
                 return ResourceManager.GetString("lblWhatTypeOfLivestockManureAreYouImportingOrExportingOrganicMaterial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What type of Livestock would you like to add for {0}?.
+        /// </summary>
+        public static string lblWhatTypeOfLivestockWouldYouLikeToAddFor {
+            get {
+                return ResourceManager.GetString("lblWhatTypeOfLivestockWouldYouLikeToAddFor", resourceCulture);
             }
         }
         
