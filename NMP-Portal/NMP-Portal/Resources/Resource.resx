@@ -5216,4 +5216,7 @@ live</value>
   <data name="lblTotalNContent" xml:space="preserve">
     <value>Total N Content</value>
   </data>
+  <data name="lblWhatTypeOfLivestockGroupWouldYouLikeToAdd" xml:space="preserve">
+    <value>What type of {0} would you like to add?</value>
+  </data>
 </root>
