@@ -5660,6 +5660,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} kg per cubic metre {1}.
+        /// </summary>
+        public static string lblKgPerCubicMeterWithNutrient {
+            get {
+                return ResourceManager.GetString("lblKgPerCubicMeterWithNutrient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to kg per hectare.
         /// </summary>
         public static string lblKgPerHectare {

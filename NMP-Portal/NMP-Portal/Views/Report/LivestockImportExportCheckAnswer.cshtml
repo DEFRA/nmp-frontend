@@ -242,42 +242,42 @@
                                     @if ((Model.N.HasValue) && Model.N.Value > 0)
                                     {
                                         totalN = Model.N.Value;
-                                        @string.Format(Resource.lblKgPerTonneWithNutrient, Model.N.Value, Resource.lblNitrogen)
+                                        @string.Format((Model.IsManureTypeLiquid!=null&&Model.IsManureTypeLiquid.Value) ?Resource.lblKgPerCubicMeterWithNutrient:Resource.lblKgPerTonneWithNutrient, Model.N.Value, Resource.lblNitrogen)
                                         <br />
                                     }
                                     @if ((Model.NH4N.HasValue) && Model.NH4N.Value > 0)
                                     {
-                                        @string.Format(Resource.lblKgPerTonneWithNutrient, Model.NH4N.Value, Resource.lblAmmoniumHypenN)
+                                        @string.Format((Model.IsManureTypeLiquid!=null&&Model.IsManureTypeLiquid.Value) ?Resource.lblKgPerCubicMeterWithNutrient:Resource.lblKgPerTonneWithNutrient, Model.NH4N.Value, Resource.lblAmmoniumHypenN)
                                         <br />
                                     }
                                     @if ((Model.UricAcid.HasValue) && Model.UricAcid.Value > 0)
                                     {
-                                        @string.Format(Resource.lblKgPerTonneWithNutrient, Model.UricAcid.Value, Resource.lblUricAcid)
+                                        @string.Format((Model.IsManureTypeLiquid!=null&&Model.IsManureTypeLiquid.Value) ?Resource.lblKgPerCubicMeterWithNutrient:Resource.lblKgPerTonneWithNutrient, Model.UricAcid.Value, Resource.lblUricAcid)
                                         <br />
                                     }
                                     @if ((Model.NO3N.HasValue) && Model.NO3N.Value > 0)
                                     {
-                                        @string.Format(Resource.lblKgPerTonneWithNutrient, Model.NO3N.Value, Resource.lblNitrate)
+                                        @string.Format((Model.IsManureTypeLiquid!=null&&Model.IsManureTypeLiquid.Value) ?Resource.lblKgPerCubicMeterWithNutrient:Resource.lblKgPerTonneWithNutrient, Model.NO3N.Value, Resource.lblNitrate)
                                         <br />
                                     }
                                     @if ((Model.P2O5.HasValue) && Model.P2O5.Value > 0)
                                     {
-                                        @string.Format(Resource.lblKgPerTonneWithNutrient, Model.P2O5.Value, Resource.lblPhosphateP2O5)
+                                        @string.Format((Model.IsManureTypeLiquid!=null&&Model.IsManureTypeLiquid.Value) ?Resource.lblKgPerCubicMeterWithNutrient:Resource.lblKgPerTonneWithNutrient, Model.P2O5.Value, Resource.lblPhosphateP2O5)
                                         <br />
                                     }
                                     @if ((Model.K2O.HasValue) && Model.K2O.Value > 0)
                                     {
-                                        @string.Format(Resource.lblKgPerTonneWithNutrient, Model.K2O.Value, Resource.lblPotashK2O)
+                                        @string.Format((Model.IsManureTypeLiquid!=null&&Model.IsManureTypeLiquid.Value) ?Resource.lblKgPerCubicMeterWithNutrient:Resource.lblKgPerTonneWithNutrient, Model.K2O.Value, Resource.lblPotashK2O)
                                         <br />
                                     }
                                     @if ((Model.SO3.HasValue) && Model.SO3.Value > 0)
                                     {
-                                        @string.Format(Resource.lblKgPerTonneWithNutrient, Model.SO3.Value, Resource.lblSulphurSO3)
+                                        @string.Format((Model.IsManureTypeLiquid!=null&&Model.IsManureTypeLiquid.Value) ?Resource.lblKgPerCubicMeterWithNutrient:Resource.lblKgPerTonneWithNutrient, Model.SO3.Value, Resource.lblSulphurSO3)
                                         <br />
                                     }
                                     @if ((Model.MgO.HasValue) && Model.MgO.Value > 0)
                                     {
-                                        @string.Format(Resource.lblKgPerTonneWithNutrient, Model.MgO.Value, Resource.lblMagnesiumMgO)
+                                        @string.Format((Model.IsManureTypeLiquid!=null&&Model.IsManureTypeLiquid.Value) ?Resource.lblKgPerCubicMeterWithNutrient:Resource.lblKgPerTonneWithNutrient, Model.MgO.Value, Resource.lblMagnesiumMgO)
                                         <br />
                                     }
                                 }
@@ -286,49 +286,49 @@
                                     @if ((Model.ManureType.DryMatter.HasValue) && Model.ManureType.DryMatter.Value > 0)
                                     {
                                         @string.Format("{0}% {1}", Model.ManureType.DryMatter.Value, Resource.lblDryMatterPercent)
-                                        @* @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.DryMatter.Value, Resource.lblDryMatterPercent) *@
+                                        @* @string.Format((Model.IsManureTypeLiquid!=null&&Model.IsManureTypeLiquid.Value) ?Resource.lblKgPerCubicMeterWithNutrient:Resource.lblKgPerTonneWithNutrient, Model.ManureType.DryMatter.Value, Resource.lblDryMatterPercent) *@
                                         <br />
                                     }
                                     @if ((Model.ManureType.TotalN.HasValue) && Model.ManureType.TotalN.Value > 0)
                                     {
 
                                         totalN = Model.ManureType.TotalN.Value;
-                                        @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.TotalN.Value, Resource.lblNitrogen)
+                                        @string.Format((Model.IsManureTypeLiquid!=null&&Model.IsManureTypeLiquid.Value) ?Resource.lblKgPerCubicMeterWithNutrient:Resource.lblKgPerTonneWithNutrient, Model.ManureType.TotalN.Value, Resource.lblNitrogen)
                                         <br />
                                     }
                                     @if ((Model.ManureType.NH4N.HasValue) && Model.ManureType.NH4N.Value > 0)
                                     {
-                                        @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.NH4N.Value, Resource.lblAmmoniumHypenN)
+                                        @string.Format((Model.IsManureTypeLiquid!=null&&Model.IsManureTypeLiquid.Value) ?Resource.lblKgPerCubicMeterWithNutrient:Resource.lblKgPerTonneWithNutrient, Model.ManureType.NH4N.Value, Resource.lblAmmoniumHypenN)
                                         <br />
                                     }
                                     @if ((Model.ManureType.Uric.HasValue) && Model.ManureType.Uric.Value > 0)
                                     {
-                                        @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.Uric.Value, Resource.lblUricAcid)
+                                        @string.Format((Model.IsManureTypeLiquid!=null&&Model.IsManureTypeLiquid.Value) ?Resource.lblKgPerCubicMeterWithNutrient:Resource.lblKgPerTonneWithNutrient, Model.ManureType.Uric.Value, Resource.lblUricAcid)
                                         <br />
                                     }
                                     @if ((Model.ManureType.NO3N.HasValue) && Model.ManureType.NO3N.Value > 0)
                                     {
-                                        @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.NO3N.Value, Resource.lblNitrate)
+                                        @string.Format((Model.IsManureTypeLiquid!=null&&Model.IsManureTypeLiquid.Value) ?Resource.lblKgPerCubicMeterWithNutrient:Resource.lblKgPerTonneWithNutrient, Model.ManureType.NO3N.Value, Resource.lblNitrate)
                                         <br />
                                     }
                                     @if ((Model.ManureType.P2O5.HasValue) && Model.ManureType.P2O5.Value > 0)
                                     {
-                                        @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.P2O5.Value, Resource.lblPhosphateP2O5)
+                                        @string.Format((Model.IsManureTypeLiquid!=null&&Model.IsManureTypeLiquid.Value) ?Resource.lblKgPerCubicMeterWithNutrient:Resource.lblKgPerTonneWithNutrient, Model.ManureType.P2O5.Value, Resource.lblPhosphateP2O5)
                                         <br />
                                     }
                                     @if ((Model.ManureType.K2O.HasValue) && Model.ManureType.K2O.Value > 0)
                                     {
-                                        @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.K2O.Value, Resource.lblPotashK2O)
+                                        @string.Format((Model.IsManureTypeLiquid!=null&&Model.IsManureTypeLiquid.Value) ?Resource.lblKgPerCubicMeterWithNutrient:Resource.lblKgPerTonneWithNutrient, Model.ManureType.K2O.Value, Resource.lblPotashK2O)
                                         <br />
                                     }
                                     @if ((Model.ManureType.SO3.HasValue) && Model.ManureType.SO3.Value > 0)
                                     {
-                                        @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.SO3.Value, Resource.lblSulphurSO3)
+                                        @string.Format((Model.IsManureTypeLiquid!=null&&Model.IsManureTypeLiquid.Value) ?Resource.lblKgPerCubicMeterWithNutrient:Resource.lblKgPerTonneWithNutrient, Model.ManureType.SO3.Value, Resource.lblSulphurSO3)
                                         <br />
                                     }
                                     @if ((Model.ManureType.MgO.HasValue) && Model.ManureType.MgO.Value > 0)
                                     {
-                                        @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.MgO.Value, Resource.lblMagnesiumMgO)
+                                        @string.Format((Model.IsManureTypeLiquid!=null&&Model.IsManureTypeLiquid.Value) ?Resource.lblKgPerCubicMeterWithNutrient:Resource.lblKgPerTonneWithNutrient, Model.ManureType.MgO.Value, Resource.lblMagnesiumMgO)
                                         <br />
                                     }
                                 }
