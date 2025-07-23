@@ -5471,7 +5471,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Is field above 300 meters.
         ///   Looks up a localized string similar to Is field above 300 metres.
         /// </summary>
         public static string lblIsFieldAbove300Meters {
@@ -11540,6 +11539,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What type of {0} would you like to add?.
+        /// </summary>
+        public static string lblWhatTypeOfLivestockGroupWouldYouLikeToAdd {
+            get {
+                return ResourceManager.GetString("lblWhatTypeOfLivestockGroupWouldYouLikeToAdd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What type of livestock manure are you {0}?.
         /// </summary>
         public static string lblWhatTypeOfLivestockManureAreYouImportingOrExporting {
@@ -11549,20 +11557,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What type of Livestock would you like to add for {0}?.
-        /// </summary>
-        public static string lblWhatTypeOfLivestockWouldYouLikeToAddFor {
-            get {
-                return ResourceManager.GetString("lblWhatTypeOfLivestockWouldYouLikeToAddFor", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Do you want to add an import or an export organic material?.
         /// </summary>
         public static string lblWhatTypeOfLivestockManureAreYouImportingOrExportingOrganicMaterial {
             get {
                 return ResourceManager.GetString("lblWhatTypeOfLivestockManureAreYouImportingOrExportingOrganicMaterial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What type of Livestock would you like to add for {0}?.
+        /// </summary>
+        public static string lblWhatTypeOfLivestockWouldYouLikeToAddFor {
+            get {
+                return ResourceManager.GetString("lblWhatTypeOfLivestockWouldYouLikeToAddFor", resourceCulture);
             }
         }
         
