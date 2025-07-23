@@ -189,5 +189,7 @@ namespace NMP.Portal.Helpers
         public const string FetchNutrientsloadingFarmDetailsFarmIdAPI = "/nutrientsLoadingManures/{0}";
         public const string AddNutrientsLoadingManureAPI = "nutrientsLoadingManures";
         public const string FetchNutrientsLoadingFarmDetailsByFarmIdAPI = "nutrientsLoadingFarmDetailsByFarmId/{0}";
+        public const string FetchNutrientsLoadingManureByIdAPI = "nutrientsLoadingManuresById/{0}";
+        public const string UpdateNutrientsLoadingManureAsyncAPI = "nutrientsLoadingManures";
     }
 }

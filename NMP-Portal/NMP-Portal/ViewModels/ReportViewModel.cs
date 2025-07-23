@@ -87,5 +87,6 @@ namespace NMP.Portal.ViewModels
         public bool? IsImport { get; set; }
         public bool? IsComingFromPlan { get; set; } = false;
         public string? EncryptedId { get; set; } = string.Empty;
+        public bool? IsComingFromSuccessMsg { get; set; } = false;
     }
 }

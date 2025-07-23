@@ -5148,10 +5148,10 @@ live</value>
     <value>Net total</value>
   </data>
   <data name="lblTotalExportedOrganicMaterial" xml:space="preserve">
-    <value>Total nitrogen exported via organic material</value>
+    <value>Total nitrogen (N) exported from organic material</value>
   </data>
   <data name="lblTotalImportedOrganicMaterial" xml:space="preserve">
-    <value>Total nitrogen imported via organic material</value>
+    <value>Total nitrogen (N) imported from organic material</value>
   </data>
   <data name="lblTotalImportsAndExportsForYear" xml:space="preserve">
     <value>Total imports and exports for {0}</value>
@@ -5186,8 +5186,8 @@ live</value>
   <data name="lblUpdated" xml:space="preserve">
     <value>updated</value>
   </data>
-  <data name="lblAddImportOrExport" xml:space="preserve">
-    <value>Add {0}</value>
+  <data name="lblAddOrUpdateImportOrExport" xml:space="preserve">
+    <value>{0} {1}</value>
   </data>
   <data name="lblAddressLine2ForErrorMsg" xml:space="preserve">
     <value>Address line 2</value>
@@ -5209,5 +5209,8 @@ live</value>
   </data>
   <data name="lblUpdateAnOrganicMaterialImportOrExport" xml:space="preserve">
     <value>Update an organic material import or export</value>
+  </data>
+  <data name="lblRemoveThis" xml:space="preserve">
+    <value>remove this {0}</value>
   </data>
 </root>

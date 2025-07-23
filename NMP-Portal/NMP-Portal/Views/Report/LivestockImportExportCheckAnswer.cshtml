@@ -111,6 +111,8 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsImport"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromPlan"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromImportExportOverviewPage"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromSuccessMsg"></govuk-input>
 
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
@@ -456,29 +458,50 @@
                                          Resource.lblImport.ToLower() : Resource.lblExport.ToLower())
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @(Math.Round(totalN * Model.LivestockQuantity.Value, 0))
+                                @(string.Format("{0}{1}", Math.Round(totalN * Model.LivestockQuantity.Value, 0), Resource.lblkg))
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     </govuk-summary-list>
                 </div>
+                @if (!string.IsNullOrWhiteSpace(Model.EncryptedId))
+                {
+                <p class="govuk-body margin-bottom-forty">
+                    @Resource.lblYouCanAlso
+                    <a href="#">
+                        @string.Format(Resource.lblRemoveThis,
+                                 Model.ImportExport == (int)NMP.Portal.Enums.ImportExport.Import ? Resource.lblImport.ToLower() : Resource.lblExport.ToLower())
+
+                    </a>
+                </p>
+                }
                 <govuk-button type="submit" class="margin-bottom-forty">
-                    @if (Model.ImportExport != null)
+                    @if (string.IsNullOrWhiteSpace(Model.EncryptedId))
                     {
-                        @(Model.ImportExport == (int)NMP.Portal.Enums.ImportExport.Import ? string.Format(Resource.lblAddImportOrExport, Resource.lblImport.ToLower()) :
-                            string.Format(Resource.lblAddImportOrExport, Resource.lblExport.ToLower()))
-                    }
-                    else @if (Model.IsImport != null)
-                    {
-                        if (Model.IsImport.Value)
+                        @if (Model.ImportExport != null)
                         {
-                            @(string.Format(Resource.lblAddImportOrExport, Resource.lblImport.ToLower()))
+                            @(
+                                Model.ImportExport == (int)NMP.Portal.Enums.ImportExport.Import ? string.Format(Resource.lblAddOrUpdateImportOrExport,  char.ToUpper(Resource.lblAdd[0]) + Resource.lblAdd.Substring(1), Resource.lblImport.ToLower()) :
+                                string.Format(Resource.lblAddOrUpdateImportOrExport, char.ToUpper(Resource.lblAdd[0]) + Resource.lblAdd.Substring(1), Resource.lblExport.ToLower())
+                                )
                         }
                         else
+                        @if (Model.IsImport != null)
                         {
-                            @(string.Format(Resource.lblAddImportOrExport, Resource.lblExport.ToLower()))
+                            if (Model.IsImport.Value)
+                            {
+                                @(string.Format(Resource.lblAddOrUpdateImportOrExport, char.ToUpper(Resource.lblAdd[0]) + Resource.lblAdd.Substring(1), Resource.lblImport.ToLower()))
+                            }
+                            else
+                            {
+                                @(string.Format(Resource.lblAddOrUpdateImportOrExport, char.ToUpper(Resource.lblAdd[0]) + Resource.lblAdd.Substring(1), Resource.lblExport.ToLower()))
+                            }
                         }
+                    }
+                    else
+                    {
+                        @Resource.lblUpdate
                     }
                 </govuk-button>
                 <p class="govuk-body cancel-link">
