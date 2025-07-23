@@ -3383,7 +3383,28 @@ namespace NMP.Portal.Controllers
                     }
                     ViewBag.IsManageImportExport = _reportDataProtector.Protect(Resource.lblTrue);
                 }
-
+                if(!string.IsNullOrWhiteSpace(model.EncryptedId))
+                {
+                    model.ImportExport = null;
+                    model.LivestockImportExportDate = null;
+                    model.ManureTypeId = null;
+                    model.ManureTypeName = null;
+                    model.DefaultFarmManureValueDate = null;
+                    model.DefaultNutrientValue = null;
+                    model.LivestockQuantity = null;
+                    model.ReceiverName = null;
+                    model.Postcode = null;
+                    model.Address1 = null;
+                    model.Address3 = null;
+                    model.Address2 = null;
+                    model.Address4 = null;
+                    model.Comment = null;
+                    model.IsImport = null;
+                    model.IsCheckAnswer = false;
+                    model.IsManureTypeChange = false;
+                    model.LivestockImportExportQuestion = null;
+                    model.EncryptedId = null;
+                }
                 model.IsComingFromSuccessMsg = false;
                 int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
                 (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(decryptedFarmId);
