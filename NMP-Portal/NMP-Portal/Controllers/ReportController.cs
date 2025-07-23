@@ -1568,12 +1568,21 @@ namespace NMP.Portal.Controllers
                 }
                 model.IsCheckList = true;
                 model.IsManageImportExport = false;
+                Error error = null;
                 model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
                 if (!string.IsNullOrWhiteSpace(q))
                 {
                     model.IsComingFromSuccessMsg = true;
+                    (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetails, error) = await _reportService.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.FarmId ?? 0, model.Year ?? 0);
+                    if (nutrientsLoadingFarmDetails != null)
+                    {
+                        model.IsGrasslandDerogation = nutrientsLoadingFarmDetails.Derogation;
+                        model.TotalFarmArea = nutrientsLoadingFarmDetails.TotalFarmed;
+                        model.TotalAreaInNVZ = nutrientsLoadingFarmDetails.LandInNVZ;                        
+                    }
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                 }
-                (List<NutrientsLoadingManures> nutrientsLoadingManuresList, Error error) = await _reportService.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
+                (List<NutrientsLoadingManures> nutrientsLoadingManuresList,  error) = await _reportService.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
                 if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingManuresList.Count > 0)
                 {
                     nutrientsLoadingManuresList = nutrientsLoadingManuresList.Where(x => x.ManureDate.Value.Year == model.Year).ToList();
