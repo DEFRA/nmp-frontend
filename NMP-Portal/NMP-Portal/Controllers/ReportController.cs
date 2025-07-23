@@ -1796,7 +1796,8 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("NVZComplianceReports");
                 }
             }
-            else{
+            else
+            {
                 return RedirectToAction("IsGrasslandDerogation");
             }
 
@@ -1929,7 +1930,7 @@ namespace NMP.Portal.Controllers
                 if (model.IsCheckAnswer)
                 {
                     return RedirectToAction("LivestockImportExportCheckAnswer");
-                }                
+                }
                 return RedirectToAction("ManureType");
             }
             catch (Exception ex)
@@ -3303,12 +3304,13 @@ namespace NMP.Portal.Controllers
                                         ViewBag.ExportList = allExportData;
                                     }
                                 }
-                                decimal? totalImports = (nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblImport.ToUpper()).Sum(x => x.Quantity)) * 1000;
+                                decimal? totalImports = (nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblImport.ToUpper()).Sum(x => x.NTotal)) * 1000;
                                 ViewBag.TotalImportsInKg = totalImports;
                                 //ViewBag.ExportList = nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblExport.ToUpper()).ToList();
-                                decimal? totalExports = (nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblExport.ToUpper()).Sum(x => x.Quantity)) * 1000;
+                                decimal? totalExports = (nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblExport.ToUpper()).Sum(x => x.NTotal)) * 1000;
                                 ViewBag.TotalExportsInKg = totalExports;
-                                ViewBag.NetTotal = totalImports - totalExports;
+                                decimal netTotal = Math.Round((totalImports ?? 0) - (totalExports ?? 0), 0);                              
+                                ViewBag.NetTotal = string.Format("{0}{1}", netTotal > 0 ? "+": "-", netTotal);
                                 ViewBag.IsImport = _reportDataProtector.Protect(Resource.lblImport);
                                 ViewBag.IsExport = _reportDataProtector.Protect(Resource.lblExport);
                             }
@@ -3353,6 +3355,91 @@ namespace NMP.Portal.Controllers
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
             return View(model);
         }
+
+        [HttpGet]
+        public IActionResult IsAnyLivestock()
+        {
+            _logger.LogTrace("Report Controller : IsAnyLivestock() action called");
+            ReportViewModel model = new ReportViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in IsAnyLivestock() action : {ex.Message}, {ex.StackTrace}");
+
+                TempData["ErrorOnLivestockManureNitrogenReportChecklist"] = ex.Message;
+                return RedirectToAction("LivestockManureNitrogenReportChecklist");
+
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult IsAnyLivestock(ReportViewModel model)
+        {
+            _logger.LogTrace("Report Controller : IsAnyLivestock() post action called");
+            try
+            {
+                if (model.IsAnyLivestock == null)
+                {
+                    ModelState.AddModelError("IsAnyLivestock", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+
+                return RedirectToAction("LivestockType");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in IsAnyLivestock() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnIsAnyLivestock"] = ex.Message;
+                return View(model);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> LivestockType()
+        {
+            _logger.LogTrace("Report Controller : LivestockType() action called");
+            ReportViewModel model = new ReportViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in LivestockType() action : {ex.Message}, {ex.StackTrace}");
+
+                TempData["ErrorOnIsAnyLivestock"] = ex.Message;
+                return RedirectToAction("IsAnyLivestock");
+
+            }
+            return View(model);
+        }
+
         [HttpGet]
         public IActionResult Cancel()
         {
@@ -3423,7 +3510,7 @@ namespace NMP.Portal.Controllers
 
                 }
                 else if (string.IsNullOrWhiteSpace(model.IsComingFromImportExportOverviewPage))
-                {                    
+                {
                     if (!model.IsCheckList)
                     {
                         return RedirectToAction("FarmSummary", "Farm", new { Id = model.EncryptedFarmId });

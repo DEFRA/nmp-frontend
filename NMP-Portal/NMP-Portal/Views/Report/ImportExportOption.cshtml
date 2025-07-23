@@ -122,7 +122,14 @@
             <div class="govuk-grid-column-two-thirds">
 
                 <h1 class="govuk-heading-l">
-                    @Resource.lblDoYouWantToAddAnImportOrAnExportOfLivestockManure
+                    @if (Model.IsManageImportExport || !string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
+                    {
+                        @Resource.lblWhatTypeOfLivestockManureAreYouImportingOrExportingOrganicMaterial
+                    }
+                    else
+                    {
+                        @Resource.lblDoYouWantToAddAnImportOrAnExportOfLivestockManure
+                    }
                 </h1>
 
                 <govuk-radios class="govuk-radios" asp-for="@Model.ImportExport">
