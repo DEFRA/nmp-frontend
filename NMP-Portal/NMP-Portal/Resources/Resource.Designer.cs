@@ -880,15 +880,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add {0}.
-        /// </summary>
-        public static string lblAddImportOrExport {
-            get {
-                return ResourceManager.GetString("lblAddImportOrExport", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Plan an application of inorganic fertiliser to one or more fields.
         /// </summary>
         public static string lblAddInorganicFertiliser {
@@ -912,6 +903,15 @@ namespace NMP.Portal.Resources {
         public static string lblAddNewSoilAnalysis {
             get {
                 return ResourceManager.GetString("lblAddNewSoilAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} {1}.
+        /// </summary>
+        public static string lblAddOrUpdateImportOrExport {
+            get {
+                return ResourceManager.GetString("lblAddOrUpdateImportOrExport", resourceCulture);
             }
         }
         
@@ -3171,6 +3171,15 @@ namespace NMP.Portal.Resources {
         public static string lblDryMatter {
             get {
                 return ResourceManager.GetString("lblDryMatter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dry Matter content:.
+        /// </summary>
+        public static string lblDryMatterContent {
+            get {
+                return ResourceManager.GetString("lblDryMatterContent", resourceCulture);
             }
         }
         
@@ -5647,6 +5656,15 @@ namespace NMP.Portal.Resources {
         public static string lblKgNitrogen {
             get {
                 return ResourceManager.GetString("lblKgNitrogen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} kg per cubic metre {1}.
+        /// </summary>
+        public static string lblKgPerCubicMeterWithNutrient {
+            get {
+                return ResourceManager.GetString("lblKgPerCubicMeterWithNutrient", resourceCulture);
             }
         }
         
@@ -8452,6 +8470,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to remove this {0}.
+        /// </summary>
+        public static string lblRemoveThis {
+            get {
+                return ResourceManager.GetString("lblRemoveThis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to remove this application.
         /// </summary>
         public static string lblRemoveThisApplication {
@@ -10306,7 +10333,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total nitrogen exported via organic material.
+        ///   Looks up a localized string similar to Total nitrogen (N) exported from organic material.
         /// </summary>
         public static string lblTotalExportedOrganicMaterial {
             get {
@@ -10342,7 +10369,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total nitrogen imported via organic material.
+        ///   Looks up a localized string similar to Total nitrogen (N) imported from organic material.
         /// </summary>
         public static string lblTotalImportedOrganicMaterial {
             get {
@@ -10626,6 +10653,15 @@ namespace NMP.Portal.Resources {
         public static string lblUpdateAnOrganicMaterialApplicationForHarvestYear {
             get {
                 return ResourceManager.GetString("lblUpdateAnOrganicMaterialApplicationForHarvestYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update an organic material import or export.
+        /// </summary>
+        public static string lblUpdateAnOrganicMaterialImportOrExport {
+            get {
+                return ResourceManager.GetString("lblUpdateAnOrganicMaterialImportOrExport", resourceCulture);
             }
         }
         
