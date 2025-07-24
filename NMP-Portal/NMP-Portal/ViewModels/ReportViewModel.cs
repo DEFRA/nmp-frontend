@@ -89,5 +89,7 @@ namespace NMP.Portal.ViewModels
         public bool? IsAnyLivestock { get; set; }
         public int? LivestockGroupId { get; set; }
         public string? LivestockGroupName { get; set; } = string.Empty;
+        public int? LivestockTypeId { get; set; }
+        public string? LivestockTypeName { get; set; } = string.Empty;
     }
 }

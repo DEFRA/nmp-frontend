@@ -3453,6 +3453,7 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> LivestockGroup(ReportViewModel model)
         {
             _logger.LogTrace("Report Controller : LivestockGroup() post action called");
+            Error error = new Error();
             try
             {
                 if (model.LivestockGroupId == null)
@@ -3461,9 +3462,14 @@ namespace NMP.Portal.Controllers
                 }
                 if (!ModelState.IsValid)
                 {
+                    (List<CommonResponse> livestockGroups, error) = await _reportService.FetchLivestockGroupList();
+                    if (error == null)
+                    {
+                        ViewBag.LivestockGroups = livestockGroups;
+                    }
                     return View(model);
                 }
-                (CommonResponse livestockGroup, Error error) = await _reportService.FetchLivestockGroupById(model.LivestockGroupId??0);
+                (CommonResponse livestockGroup,  error) = await _reportService.FetchLivestockGroupById(model.LivestockGroupId??0);
                 if(error==null)
                 {
                     model.LivestockGroupName = livestockGroup.Name;
@@ -3500,19 +3506,87 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-
+                (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
+                if (error == null)
+                {
+                    ViewBag.LivestockTypes = livestockTypes;
+                }
+                else
+                {
+                    TempData["ErrorOnLivestockGroup"] = error.Message;
+                    return RedirectToAction("LivestockGroup");
+                }
             }
             catch (Exception ex)
             {
                 _logger.LogTrace($"Report Controller : Exception in LivestockType() action : {ex.Message}, {ex.StackTrace}");
 
-                TempData["ErrorOnIsAnyLivestock"] = ex.Message;
-                return RedirectToAction("IsAnyLivestock");
+                TempData["ErrorOnLivestockGroup"] = ex.Message;
+                return RedirectToAction("LivestockGroup");
 
             }
             return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LivestockType(ReportViewModel model)
+        {
+            _logger.LogTrace("Report Controller : LivestockType() post action called");
+            try
+            {
+                if (model.LivestockTypeId == null)
+                {
+                    ModelState.AddModelError("LivestockTypeId", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+                if (!ModelState.IsValid)
+                {
+                    (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
+                    if (error == null)
+                    {
+                        ViewBag.LivestockTypes = livestockTypes;
+                    }
+                    return View(model);
+                }
+                
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+
+                return RedirectToAction("LivestockNumberQuestion");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in LivestockType() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnLivestockType"] = ex.Message;
+                return View(model);
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> LivestockNumberQuestion()
+        {
+            _logger.LogTrace("Report Controller : LivestockNumberQuestion() action called");
+            ReportViewModel model = new ReportViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in LivestockNumberQuestion() action : {ex.Message}, {ex.StackTrace}");
+
+                TempData["ErrorOnLivestockType"] = ex.Message;
+                return RedirectToAction("LivestockType");
+
+            }
+            return View(model);
+        }
         [HttpGet]
         public IActionResult Cancel()
         {

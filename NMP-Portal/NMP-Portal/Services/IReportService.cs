@@ -13,5 +13,6 @@ namespace NMP.Portal.Services
         Task<(List<NutrientsLoadingFarmDetail>, Error)> FetchNutrientsLoadingFarmDetailsByFarmId(int farmId);
         Task<(List<CommonResponse>, Error)> FetchLivestockGroupList();
         Task<(CommonResponse, Error)> FetchLivestockGroupById(int livestockGroupId);
+        Task<(List<LivestockTypeResponse>, Error)> FetchLivestockTypesByGroupId(int livestockGroupId);
     }
 }
