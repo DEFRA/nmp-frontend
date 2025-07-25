@@ -7,14 +7,14 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="LivestockType" asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
-@if (TempData["ErrorOnIsAnyLivestock"] != null)
+@if (TempData["ErrorOnLivestockType"] != null)
 {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <govuk-error-summary>
-                <govuk-error-summary-item href="#">@TempData["ErrorOnIsAnyLivestock"]</govuk-error-summary-item>
+                <govuk-error-summary-item href="#">@TempData["ErrorOnLivestockType"]</govuk-error-summary-item>
             </govuk-error-summary>
         </div>
     </div>
@@ -22,7 +22,7 @@
 
 @if (Model != null)
 {
-    <form asp-action="IsANyLivestock" asp-controller="Report" method="post" autocomplete="off">
+    <form asp-action="LivestockNumberQuestion" asp-controller="Report" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
         <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
@@ -82,8 +82,8 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManageImportExport" value="@Model.IsManageImportExport"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromPlan"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromSuccessMsg"></govuk-input>
 
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestock"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockTypeId"></govuk-input>
@@ -108,17 +108,17 @@
                 <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsAnyLivestock">
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                            @string.Format(Resource.lblDidYouHaveAnyLivestockOn, Model.FarmName, Model.Year)
+                            @Resource.lblHowWouldYouLikeToEnterYourLivestockNumbers
                         </govuk-radios-fieldset-legend>
-                        <govuk-radios-hint>@Resource.lblIncludeCattleSheepPigsGoats <br /> <br /> @Resource.lblSelectOneOption</govuk-radios-hint>
-                        <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>
-                        <govuk-radios-item value="@no">@Resource.lblNo</govuk-radios-item>
+                        @* <govuk-radios-hint>@Resource.lblIncludeCattleSheepPigsGoats <br /> @Resource.lblSelectOneOption</govuk-radios-hint>
+                    <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>
+                    <govuk-radios-item value="@no">@Resource.lblNo</govuk-radios-item> *@
                     </govuk-radios-fieldset>
                 </govuk-radios>
-
-                <govuk-button type="submit" class="margin-bottom-forty">
-                    @Resource.lblContinue
-                </govuk-button>
+                <h2>work in progress</h2>
+                @* <govuk-button type="submit" class="margin-bottom-forty">
+            @Resource.lblContinue
+            </govuk-button> *@
 
                 <p class="govuk-body cancel-link">
                     <a asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report">

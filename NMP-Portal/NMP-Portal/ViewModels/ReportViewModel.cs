@@ -91,5 +91,7 @@ namespace NMP.Portal.ViewModels
         public string? LivestockGroupName { get; set; } = string.Empty;
         public string? EncryptedId { get; set; } = string.Empty;
         public bool? IsComingFromSuccessMsg { get; set; } = false;
+        public int? LivestockTypeId { get; set; }
+        public string? LivestockTypeName { get; set; } = string.Empty;
     }
 }
