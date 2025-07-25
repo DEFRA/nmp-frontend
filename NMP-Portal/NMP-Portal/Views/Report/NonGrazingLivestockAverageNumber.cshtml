@@ -21,7 +21,7 @@
 
 @if (Model != null)
 {
-    <form asp-action="LivestockNumberQuestion" asp-controller="Report" method="post" autocomplete="off">
+    <form asp-action="NonGrazingLivestockAverageNumber" asp-controller="Report" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
         <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
@@ -104,20 +104,22 @@
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
 
-                <govuk-radios class="govuk-radios--inline" asp-for="@Model.LivestockNumberQuestion">
-                    <govuk-radios-fieldset>
-                        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                            @Resource.lblHowWouldYouLikeToEnterYourLivestockNumbers
-                        </govuk-radios-fieldset-legend>
-                        <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
-                        <govuk-radios-item value=@((int)NMP.Portal.Enums.LivestockNumberQuestion.ANumberForEachMonth)>@Resource.lblEnterANumberForEachMonth</govuk-radios-item>
-                        <govuk-radios-item value=@((int)NMP.Portal.Enums.LivestockNumberQuestion.AverageNumberForTheYear)>@Resource.lblEnterTheAverageNumberForTheYear</govuk-radios-item>
-                    </govuk-radios-fieldset>
-                </govuk-radios>
-                <govuk-button type="submit" class="margin-bottom-forty">
+                @* <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblAverageNumberOfThisLivestockGroup, Model.LivestockGroupName, Model.Year)</h1>
+            </legand> *@
+                @* <govuk-input name="TotalArea" asp-for=@Model.AverageNumber type="number" step="any" spellcheck="false">
+                    <govuk-input-label is-page-heading="true" class="govuk-label--l">@string.Format(Resource.lblAverageNumberOfThisLivestockGroup, Model.LivestockGroupName, Model.Year)</govuk-input-label>
+                    <govuk-input-suffix>@Model.LivestockGroupName</govuk-input-suffix>
+                </govuk-input> *@
+                <h1 class="govuk-heading-l">
+                    Number of places, occupancy and nitrogen (N) standard
+                </h1>
+                <h2>Work in progress</h2>
+
+                @* <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>
-
+ *@
                 <p class="govuk-body cancel-link">
                     <a asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report">
                         @Resource.lblCancel

@@ -3725,8 +3725,20 @@ namespace NMP.Portal.Controllers
                 }
                 
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                var cattle = (int)NMP.Portal.Enums.LivestockGroup.Cattle;
+                var pigs = (int)NMP.Portal.Enums.LivestockGroup.Pigs;
+                var poultry = (int)NMP.Portal.Enums.LivestockGroup.Poultry;
+                var sheep = (int)NMP.Portal.Enums.LivestockGroup.Sheep;
+                var goatsDeerOrHorses = (int)NMP.Portal.Enums.LivestockGroup.GoatsDeerOrHorses;
 
-                return RedirectToAction("LivestockNumberQuestion");
+                if (model.LivestockGroupId == cattle || model.LivestockGroupId == sheep || model.LivestockGroupId == goatsDeerOrHorses)
+                {
+                    return RedirectToAction("LivestockNumberQuestion");
+                }
+                else
+                {
+                    return RedirectToAction("NonGrazingLivestockAverageNumber");
+                }
             }
             catch (Exception ex)
             {
@@ -3762,6 +3774,150 @@ namespace NMP.Portal.Controllers
             }
             return View(model);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LivestockNumberQuestion(ReportViewModel model)
+        {
+            _logger.LogTrace("Report Controller : LivestockNumberQuestion() post action called");
+            try
+            {
+                if (model.LivestockNumberQuestion == null)
+                {
+                    ModelState.AddModelError("LivestockNumberQuestion", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                if(model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.ANumberForEachMonth)
+                {
+                    return RedirectToAction("LivestockNumbersMonthly");
+                }
+                else
+                {
+                    return RedirectToAction("AverageNumber");
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in LivestockNumberQuestion() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnLivestockNumberQuestion"] = ex.Message;
+                return View(model);
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> LivestockNumbersMonthly()
+        {
+            _logger.LogTrace("Report Controller : AverageNumber() action called");
+            ReportViewModel model = new ReportViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in AverageNumber() action : {ex.Message}, {ex.StackTrace}");
+
+                TempData["ErrorOnLivestockNumberQuestion"] = ex.Message;
+                return RedirectToAction("LivestockNumberQuestion");
+
+            }
+            return View(model);
+        }
+        [HttpGet]
+        public async Task<IActionResult> AverageNumber()
+        {
+            _logger.LogTrace("Report Controller : AverageNumber() action called");
+            ReportViewModel model = new ReportViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in AverageNumber() action : {ex.Message}, {ex.StackTrace}");
+
+                TempData["ErrorOnLivestockNumberQuestion"] = ex.Message;
+                return RedirectToAction("LivestockType");
+
+            }
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AverageNumber(ReportViewModel model)
+        {
+            _logger.LogTrace("Report Controller : AverageNumber() post action called");
+            try
+            {
+                if (model.AverageNumber == null)
+                {
+                    ModelState.AddModelError("AverageNumber", string.Format(Resource.MsgEnterTheAverageNumberOfThisTypeFor,model.Year));
+                }
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+
+                return RedirectToAction("AverageNumber");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in AverageNumber() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnAverageNumber"] = ex.Message;
+                return View(model);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> NonGrazingLivestockAverageNumber()  //pig, poultry
+        {
+            _logger.LogTrace("Report Controller : AverageNumber() action called");
+            ReportViewModel model = new ReportViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in AverageNumber() action : {ex.Message}, {ex.StackTrace}");
+
+                TempData["ErrorOnLivestockNumberQuestion"] = ex.Message;
+                return RedirectToAction("LivestockType");
+
+            }
+            return View(model);
+        }
+
         [HttpGet]
         public IActionResult Cancel()
         {

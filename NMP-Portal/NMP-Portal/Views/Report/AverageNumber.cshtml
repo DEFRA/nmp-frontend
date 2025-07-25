@@ -6,7 +6,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="LivestockType" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="LivestockNumberQuestion" asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnLivestockType"] != null)
 {
@@ -21,7 +21,7 @@
 
 @if (Model != null)
 {
-    <form asp-action="LivestockNumberQuestion" asp-controller="Report" method="post" autocomplete="off">
+    <form asp-action="AverageNumber" asp-controller="Report" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
         <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
@@ -104,16 +104,15 @@
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
 
-                <govuk-radios class="govuk-radios--inline" asp-for="@Model.LivestockNumberQuestion">
-                    <govuk-radios-fieldset>
-                        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                            @Resource.lblHowWouldYouLikeToEnterYourLivestockNumbers
-                        </govuk-radios-fieldset-legend>
-                        <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
-                        <govuk-radios-item value=@((int)NMP.Portal.Enums.LivestockNumberQuestion.ANumberForEachMonth)>@Resource.lblEnterANumberForEachMonth</govuk-radios-item>
-                        <govuk-radios-item value=@((int)NMP.Portal.Enums.LivestockNumberQuestion.AverageNumberForTheYear)>@Resource.lblEnterTheAverageNumberForTheYear</govuk-radios-item>
-                    </govuk-radios-fieldset>
-                </govuk-radios>
+                <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                    <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblAverageNumberOfThisLivestockGroup, Model.LivestockGroupName, Model.Year)</h1>
+                </legand>
+                <h2>@string.Format(Resource.lblSelectedLivestockType,Model.LivestockGroupName)</h2>
+                <govuk-input name="TotalArea" asp-for=@Model.AverageNumber type="number" step="any" spellcheck="false">
+                    <govuk-input-label is-page-heading="false">@string.Format(Resource.lblWhatIsTheAverageNumberOfThisCattleType, Model.Year)</govuk-input-label>
+                    <govuk-input-suffix>@Model.LivestockGroupName</govuk-input-suffix>
+                </govuk-input>
+
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>
