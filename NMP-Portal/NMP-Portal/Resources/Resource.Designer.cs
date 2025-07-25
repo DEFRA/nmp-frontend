@@ -5102,6 +5102,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How would you like to enter your livestock numbers?.
+        /// </summary>
+        public static string lblHowWouldYouLikeToEnterYourLivestockNumbers {
+            get {
+                return ResourceManager.GetString("lblHowWouldYouLikeToEnterYourLivestockNumbers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How would you like to enter your soil nutrient values?.
         /// </summary>
         public static string lblHowWouldYouLikeToEnterYourSoilNutrientValues {

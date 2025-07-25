@@ -5231,4 +5231,7 @@ live</value>
   <data name="lblKgPerCubicMeterWithNutrient" xml:space="preserve">
     <value>{0} kg per cubic metre {1}</value>
   </data>
+  <data name="lblHowWouldYouLikeToEnterYourLivestockNumbers" xml:space="preserve">
+    <value>How would you like to enter your livestock numbers?</value>
+  </data>
 </root>

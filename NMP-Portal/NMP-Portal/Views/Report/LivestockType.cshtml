@@ -86,6 +86,7 @@
 
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestock"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupId"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -104,20 +105,23 @@
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
 
-                <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsAnyLivestock">
+                <govuk-radios class="govuk-radios" asp-for="@Model.LivestockTypeId">
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                             @string.Format(Resource.lblWhatTypeOfLivestockGroupWouldYouLikeToAdd, Model.LivestockGroupName)
                         </govuk-radios-fieldset-legend>
-                        @* <govuk-radios-hint>@Resource.lblIncludeCattleSheepPigsGoats <br /> @Resource.lblSelectOneOption</govuk-radios-hint>
-                        <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>
-                        <govuk-radios-item value="@no">@Resource.lblNo</govuk-radios-item> *@
+                        @if (ViewBag.LivestockTypes != null && ViewBag.LivestockTypes.Count > 0)
+                        {
+                            foreach (var livestockType in ViewBag.LivestockTypes)
+                            {
+                                <govuk-radios-item value="@livestockType.ID">@livestockType.Name</govuk-radios-item>
+                            }
+                        }
                     </govuk-radios-fieldset>
                 </govuk-radios>
-                <h2>work in progress</h2>
-                @* <govuk-button type="submit" class="margin-bottom-forty">
+                <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
-                </govuk-button> *@
+                </govuk-button>
 
                 <p class="govuk-body cancel-link">
                     <a asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report">
