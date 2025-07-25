@@ -93,5 +93,7 @@ namespace NMP.Portal.ViewModels
         public bool? IsComingFromSuccessMsg { get; set; } = false;
         public int? LivestockTypeId { get; set; }
         public string? LivestockTypeName { get; set; } = string.Empty;
+        public int? LivestockNumberQuestion { get; set; }
+        public decimal? AverageNumber { get; set; }
     }
 }
