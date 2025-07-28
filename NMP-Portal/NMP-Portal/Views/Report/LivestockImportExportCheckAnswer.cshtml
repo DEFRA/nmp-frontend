@@ -2,8 +2,15 @@
 @using System.Globalization
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblCheckYourAnswers;
-    string importExport="";
+    @if (!string.IsNullOrWhiteSpace(Model.EncryptedId))
+    {
+        ViewData["Title"] = Resource.lblUpdateAnOrganicMaterialImportOrExport;
+    }
+    else
+    {
+        ViewData["Title"] = Resource.lblCheckAnswer;
+    }
+    string importExport = "";
     @if (Model.IsImport == null)
     {
         importExport = Enum.GetName(typeof(NMP.Portal.Enums.ImportExport), Model.ImportExport);
@@ -27,6 +34,13 @@
         unit = Model.IsManureTypeLiquid.Value ? Resource.lblCubicMeters : Resource.lbltonnes;
     }
     decimal totalN = 0;
+    var allAddress = new List<string>();
+
+    if (!string.IsNullOrWhiteSpace(Model.Address1)) allAddress.Add(Model.Address1);
+    if (!string.IsNullOrWhiteSpace(Model.Address2)) allAddress.Add(Model.Address2);
+    if (!string.IsNullOrWhiteSpace(Model.Address3)) allAddress.Add(Model.Address3);
+    if (!string.IsNullOrWhiteSpace(Model.Address4)) allAddress.Add(Model.Address4);
+    if (!string.IsNullOrWhiteSpace(Model.Postcode)) allAddress.Add(Model.Postcode);
 }
 
 @section BeforeContent {
@@ -85,6 +99,9 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.K2O"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MgO"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SO3"></govuk-input>
+            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupId"></govuk-input>
+            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupIdForFilter"></govuk-input>
 
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManureTypeLiquid"></govuk-input>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefaultFarmManureValueDate" value="@Model.DefaultFarmManureValueDate"></govuk-date-input>
@@ -104,6 +121,17 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsImport"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromPlan"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromImportExportOverviewPage"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromSuccessMsg"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherMaterialName"></govuk-input>
+
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestock"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockTypeId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockTypeName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockNumberQuestion"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AverageNumber"></govuk-input>
 
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
@@ -122,73 +150,98 @@
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-
-
                 <div class="govuk-form-group">
                     <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
                         <h1 class="govuk-fieldset__heading">
-                            @string.Format(Resource.lblAddAnImportOrExportForYear,
-                                     Model.Year)
+                            @if (string.IsNullOrWhiteSpace(Model.EncryptedId))
+                            {
+                                @string.Format(Resource.lblAddAnImportOrExportForYear,
+                                Model.Year)
+                                                }
+                            else
+                            {
+                                @Resource.lblUpdateAnOrganicMaterialImportOrExport
+                            }
+
                         </h1>
                 </div>
-                <govuk-summary-list>
-                    @if (!Model.IsManageImportExport && string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
-                    {
+                <div class="check-answers margin-bottom-forty">
+                    <govuk-summary-list>
+                        @if (!Model.IsManageImportExport && string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
+                        {
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key class=@((!Model.LivestockImportExportQuestion.HasValue) ? "govuk-error-message" : "")>
+                                    @string.Format(Resource.lblDidYouHaveAnyImportsAndExports, Model.FarmName, Model.Year)
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @livestockImportExportQuestion
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="LivestockImportExportQuestion" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                        }
+                        @if (Model.IsImport == null)
+                        {
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key class=@((!Model.ImportExport.HasValue) ? "govuk-error-message" : "")>
+                                    @Resource.lblDoYouWantToAddAnImportOrAnExportOfLivestockManure
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @importExport
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="ImportExportOption" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                        }
                         <govuk-summary-list-row>
-                            <govuk-summary-list-row-key class=@((!Model.LivestockImportExportQuestion.HasValue) ? "govuk-error-message" : "")>
-                                @string.Format(Resource.lblDidYouHaveAnyImportsAndExports, Model.FarmName, Model.Year)
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                                @livestockImportExportQuestion
-                            </govuk-summary-list-row-value>
-                            <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="LivestockImportExportQuestion" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
-                            </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row>
-                    }
-                    @if (Model.IsImport == null)
-                    {
-                        <govuk-summary-list-row>
-                            <govuk-summary-list-row-key class=@((!Model.ImportExport.HasValue) ? "govuk-error-message" : "")>
-                                @Resource.lblDoYouWantToAddAnImportOrAnExportOfLivestockManure
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                                @importExport
-                            </govuk-summary-list-row-value>
-                            <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="ImportExportOption" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
-                            </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row>
-                    }
-                    <govuk-summary-list-row>
-                        <govuk-summary-list-row-key class=@((!Model.ManureTypeId.HasValue) ? "govuk-error-message" : "")>
-                            @string.Format(Resource.lblWhatTypeOfLivestockManureAreYouImportingOrExporting,
-                                     Model.ImportExport == (int)NMP.Portal.Enums.ImportExport.Import ? Resource.lblImporting :
-                                     Resource.lblExporting)
+                            <govuk-summary-list-row-key class=@((!Model.ManureTypeId.HasValue) ? "govuk-error-message" : "")>
+                                @string.Format(Resource.lblWhatTypeOfLivestockManureAreYouImportingOrExporting,
+                                Model.ImportExport == (int)NMP.Portal.Enums.ImportExport.Import ? Resource.lblImporting :
+                                Resource.lblExporting)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
                             @Model.ManureTypeName
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="ManureType" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="ManureGroup" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
+                    @if (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
+                        {
+                            @if (!(Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials))
+                            {
+                                <govuk-summary-list-row class=@(Model.OtherMaterialName==null?"govuk-error-message":"")>
+                                    <govuk-summary-list-row-key>
+                                        @string.Format(Resource.lblWhatIsTheNameOfTheMaterial, (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials) ? Resource.lblSolid : Resource.lblLiquid)
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @((Model.OtherMaterialName != null) ? Model.OtherMaterialName : Resource.lblNotSet)
+                                    </govuk-summary-list-row-value>
+                                    <govuk-summary-list-row-actions>
+                                        <govuk-summary-list-row-action asp-action="OtherMaterialName" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
+                                    </govuk-summary-list-row-actions>
+                                </govuk-summary-list-row>
+                            }
+
+                        }
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key class=@((!Model.LivestockImportExportDate.HasValue) ? "govuk-error-message" : "")>
                             @(string.Format(Resource.lblWhenDidYouThisLivestockManure, Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
-                                Resource.lblImport.ToLower() : Resource.lblExport.ToLower()))
-                        </govuk-summary-list-row-key>
-                        <govuk-summary-list-row-value>
-                            @((!Model.LivestockImportExportDate.HasValue) ? Resource.lblNotSet : (Model.LivestockImportExportDate.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))))
-                        </govuk-summary-list-row-value>
-                        <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="LivestockImportExportDate" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
-                        </govuk-summary-list-row-actions>
-                    </govuk-summary-list-row>
-                    <govuk-summary-list-row>
-                        <govuk-summary-list-row-key class=@((!Model.LivestockQuantity.HasValue) ? "govuk-error-message" : "")>
+                                                        Resource.lblImport.ToLower() : Resource.lblExport.ToLower()))
+                                                                                                                 </govuk-summary-list-row-key>
+                                                                                                                 <govuk-summary-list-row-value>
+                                                                                                                     @((!Model.LivestockImportExportDate.HasValue) ? Resource.lblNotSet : (Model.LivestockImportExportDate.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))))
+                                                                                                                 </govuk-summary-list-row-value>
+                                                                                                                 <govuk-summary-list-row-actions>
+                                                                                                                     <govuk-summary-list-row-action asp-action="LivestockImportExportDate" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
+                                                                                                                 </govuk-summary-list-row-actions>
+                                                                                                             </govuk-summary-list-row>
+                                                                                                             <govuk-summary-list-row>
+                                                                                                                 <govuk-summary-list-row-key class=@((!Model.LivestockQuantity.HasValue) ? "govuk-error-message" : "")>
                             @(string.Format(Resource.lblHowMuchDidYouImport, Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
-                                Resource.lblImport.ToLower() : Resource.lblExport.ToLower()))
+                                                        Resource.lblImport.ToLower() : Resource.lblExport.ToLower()))
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
                             @((!Model.LivestockQuantity.HasValue) ? Resource.lblNotSet : string.Format("{0} {1}", Model.LivestockQuantity.Value, unit))
@@ -197,10 +250,12 @@
                             <govuk-summary-list-row-action asp-action="LivestockQuantity" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
-                    <govuk-summary-list-row>
-                        <govuk-summary-list-row-key class=@(string.IsNullOrWhiteSpace(Model.DefaultNutrientValue)? "govuk-error-message" : "")>
-                            @(Model.DefaultNutrientValue == Resource.lblYesUseTheseValues ? string.Format(Resource.lblNutrientValuesForManureTypeNameYouAddedOnDate, Model.ManureTypeName, Model.DefaultFarmManureValueDate.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))) :
-                                string.Format(Resource.lblNutrientValuesForManureTypeName, Model.ManureTypeName))
+                    @if (!(Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials))
+                        {
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key class=@(string.IsNullOrWhiteSpace(Model.DefaultNutrientValue)? "govuk-error-message" : "")>
+                                    @(Model.DefaultNutrientValue == Resource.lblYesUseTheseValues ? string.Format(Resource.lblNutrientValuesForManureTypeNameYouAddedOnDate, Model.ManureTypeName, Model.DefaultFarmManureValueDate.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))) :
+                                                                string.Format(Resource.lblNutrientValuesForManureTypeName, Model.ManureTypeName))
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
                             @((!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue)) ? (Model.DefaultNutrientValue == Resource.lblYes ? Resource.lblYesUseTheseStandardNutrientValues : Model.DefaultNutrientValue) : Resource.lblNotSet)
@@ -209,138 +264,357 @@
                             <govuk-summary-list-row-action asp-action="LivestockDefaultNutrientValue" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
-                    <govuk-summary-list-row>
-                        <govuk-summary-list-row-key>
-                            @string.Format(Resource.lblNutrientValuesForMixedManure, Model.ManureTypeName)
-                        </govuk-summary-list-row-key>
-                        <govuk-summary-list-row-value>
-                            @if (!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue) && (Model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis))
+                                        }
+                        @if (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
+                        {
+                            @if (Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
                             {
-                                totalN = Model.N.Value;
-                                @if ((Model.DryMatterPercent.HasValue) && Model.DryMatterPercent.Value > 0)
+                                @if (Model.DefaultNutrientValue == Resource.lblYes)
                                 {
-                                    @string.Format("{0}% {1}", Model.DryMatterPercent.Value, Resource.lblDryMatterPercent)
-                                    <br />
+                                    <govuk-summary-list-row class=@(string.IsNullOrWhiteSpace(Model.DefaultNutrientValue)?"govuk-error-message":"")>
+                                        <govuk-summary-list-row-key>
+                                            @string.Format(Resource.lblDoYouWantToUseExistingNutrientValuesFor, Model.OtherMaterialName)
+                                        </govuk-summary-list-row-key>
+                                        <govuk-summary-list-row-value>
+                                            @(!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue) ? (Model.DefaultFarmManureValueDate != null ? string.Format(Resource.lblYesUseTheseValuesFromDate, Model.DefaultFarmManureValueDate.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))) : Resource.lblYesUseTheseStandardNutrientValues) : Resource.lblNotSet)
+                                        </govuk-summary-list-row-value>
+                                        <govuk-summary-list-row-actions>
+                                            <govuk-summary-list-row-action asp-action="LivestockDefaultNutrientValue" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
+                                        </govuk-summary-list-row-actions>
+                                    </govuk-summary-list-row>
+                                    <govuk-summary-list-row>
+                                        <govuk-summary-list-row-key>
+                                            @string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)
+                                        </govuk-summary-list-row-key>
+                                        <govuk-summary-list-row-value>
+                                            @if ((Model.ManureType.DryMatter.HasValue) && Model.ManureType.DryMatter.Value > 0)
+                                            {
+                                                @string.Format("{0}% {1}", Model.ManureType.DryMatter.Value, Resource.lblDryMatterPercent)
+                                                <br />
+                                            }
+                                            @if ((Model.ManureType.TotalN.HasValue) && Model.ManureType.TotalN.Value > 0)
+                                            {
+                                                totalN = Model.ManureType.TotalN.Value;
+                                                @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.TotalN.Value, Resource.lblNitrogen)
+                                                <br />
+                                            }
+                                            @if ((Model.ManureType.NH4N.HasValue) && Model.ManureType.NH4N.Value > 0)
+                                            {
+                                                @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.NH4N.Value, Resource.lblAmmoniumHypenN)
+                                                <br />
+                                            }
+                                            @if ((Model.ManureType.Uric.HasValue) && Model.ManureType.Uric.Value > 0)
+                                            {
+                                                @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.Uric.Value, Resource.lblUricAcid)
+                                                <br />
+                                            }
+                                            @if ((Model.ManureType.NO3N.HasValue) && Model.ManureType.NO3N.Value > 0)
+                                            {
+                                                @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.NO3N.Value, Resource.lblNitrate)
+                                                <br />
+                                            }
+                                            @if ((Model.ManureType.P2O5.HasValue) && Model.ManureType.P2O5.Value > 0)
+                                            {
+                                                @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.P2O5.Value, Resource.lblPhosphateP2O5)
+                                                <br />
+                                            }
+                                            @if ((Model.ManureType.K2O.HasValue) && Model.ManureType.K2O.Value > 0)
+                                            {
+                                                @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.K2O.Value, Resource.lblPotashK2O)
+                                                <br />
+                                            }
+                                            @if ((Model.ManureType.SO3.HasValue) && Model.ManureType.SO3.Value > 0)
+                                            {
+                                                @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.SO3.Value, Resource.lblSulphurSO3)
+                                                <br />
+                                            }
+                                            @if ((Model.ManureType.MgO.HasValue) && Model.ManureType.MgO.Value > 0)
+                                            {
+                                                @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.MgO.Value, Resource.lblMagnesiumMgO)
+                                                <br />
+                                            }
+
+                                        </govuk-summary-list-row-value>
+                                        <govuk-summary-list-row-actions>
+                                        </govuk-summary-list-row-actions>
+                                    </govuk-summary-list-row>
                                 }
-                                @if ((Model.N.HasValue) && Model.N.Value > 0)
+                                else
                                 {
-                                    @string.Format("{0} {1}", string.Format((Model.IsManureTypeLiquid!=null&&Model.IsManureTypeLiquid.Value) ? Resource.lblValueKgPerMeterCube : Resource.lblValueKgPerTon, Model.N.Value), Resource.lblNitrogen)
-                                    <br />
-                                }
-                                @if ((Model.NH4N.HasValue) && Model.NH4N.Value > 0)
-                                {
-                                    @string.Format("{0} {1}", string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblValueKgPerMeterCube : Resource.lblValueKgPerTon, Model.NH4N.Value), Resource.lblAmmoniumHypenN)
-                                    <br />
-                                }
-                                @if ((Model.UricAcid.HasValue) && Model.UricAcid.Value > 0)
-                                {
-                                    @string.Format("{0} {1}", string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblValueKgPerMeterCube : Resource.lblValueKgPerTon, Model.UricAcid.Value), Resource.lblUricAcid)
-                                    <br />
-                                }
-                                @if ((Model.NO3N.HasValue) && Model.NO3N.Value > 0)
-                                {
-                                    @string.Format("{0} {1}", string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblValueKgPerMeterCube : Resource.lblValueKgPerTon, Model.NO3N.Value), Resource.lblNitrate)
-                                    <br />
-                                }
-                                @if ((Model.P2O5.HasValue) && Model.P2O5.Value > 0)
-                                {
-                                    @string.Format("{0} {1}", string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblValueKgPerMeterCube : Resource.lblValueKgPerTon, Model.P2O5.Value), Resource.lblPhosphateP2O5)
-                                    <br />
-                                }
-                                @if ((Model.K2O.HasValue) && Model.K2O.Value > 0)
-                                {
-                                    @string.Format("{0} {1}", string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblValueKgPerMeterCube : Resource.lblValueKgPerTon, Model.K2O.Value), Resource.lblPotashK2O)
-                                    <br />
-                                }
-                                @if ((Model.SO3.HasValue) && Model.SO3.Value > 0)
-                                {
-                                    @string.Format("{0} {1}", string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblValueKgPerMeterCube : Resource.lblValueKgPerTon, Model.SO3.Value), Resource.lblSulphurSO3)
-                                    <br />
-                                }
-                                @if ((Model.MgO.HasValue) && Model.MgO.Value > 0)
-                                {
-                                    @string.Format("{0} {1}", string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblValueKgPerMeterCube : Resource.lblValueKgPerTon, Model.MgO.Value), Resource.lblMagnesiumMgO)
-                                    <br />
+                                    <govuk-summary-list-row>
+                                        <govuk-summary-list-row-key>
+                                            @string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)
+                                        </govuk-summary-list-row-key>
+                                        <govuk-summary-list-row-value>
+                                            @if ((Model.DryMatterPercent.HasValue) && Model.DryMatterPercent.Value > 0)
+                                            {
+                                                @string.Format("{0}% {1}", Model.DryMatterPercent.Value, Resource.lblDryMatterPercent)
+                                                <br />
+                                            }
+                                            @if ((Model.N.HasValue) && Model.N.Value > 0)
+                                            {
+                                                totalN = Model.N.Value;
+                                                @string.Format(Resource.lblKgPerTonneWithNutrient, Model.N.Value, Resource.lblNitrogen)
+                                                <br />
+                                            }
+                                            @if ((Model.NH4N.HasValue) && Model.NH4N.Value > 0)
+                                            {
+                                                @string.Format(Resource.lblKgPerTonneWithNutrient, Model.NH4N.Value, Resource.lblAmmoniumHypenN)
+                                                <br />
+                                            }
+                                            @if ((Model.UricAcid.HasValue) && Model.UricAcid.Value > 0)
+                                            {
+                                                @string.Format(Resource.lblKgPerTonneWithNutrient, Model.UricAcid.Value, Resource.lblUricAcid)
+                                                <br />
+                                            }
+                                            @if ((Model.NO3N.HasValue) && Model.NO3N.Value > 0)
+                                            {
+                                                @string.Format(Resource.lblKgPerTonneWithNutrient, Model.NO3N.Value, Resource.lblNitrate)
+                                                <br />
+                                            }
+                                            @if ((Model.P2O5.HasValue) && Model.P2O5.Value > 0)
+                                            {
+                                                @string.Format(Resource.lblKgPerTonneWithNutrient, Model.P2O5.Value, Resource.lblPhosphateP2O5)
+                                                <br />
+                                            }
+                                            @if ((Model.K2O.HasValue) && Model.K2O.Value > 0)
+                                            {
+                                                @string.Format(Resource.lblKgPerTonneWithNutrient, Model.K2O.Value, Resource.lblPotashK2O)
+                                                <br />
+                                            }
+                                            @if ((Model.SO3.HasValue) && Model.SO3.Value > 0)
+                                            {
+                                                @string.Format(Resource.lblKgPerTonneWithNutrient, Model.SO3.Value, Resource.lblSulphurSO3)
+                                                <br />
+                                            }
+                                            @if ((Model.MgO.HasValue) && Model.MgO.Value > 0)
+                                            {
+                                                @string.Format(Resource.lblKgPerTonneWithNutrient, Model.MgO.Value, Resource.lblMagnesiumMgO)
+                                                <br />
+                                            }
+
+
+                                        </govuk-summary-list-row-value>
+                                        <govuk-summary-list-row-actions>
+                                            <govuk-summary-list-row-action asp-action="LivestockManualNutrientValue" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
+                                        </govuk-summary-list-row-actions>
+                                    </govuk-summary-list-row>
                                 }
                             }
                             else
                             {
-                                totalN = Model.ManureType.TotalN.Value;
-                                @if ((Model.ManureType.DryMatter.HasValue) && Model.ManureType.DryMatter.Value > 0)
-                                {
-                                    @string.Format("{0}% {1}", Model.ManureType.DryMatter.Value, Resource.lblDryMatterPercent)
-                                    @* @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.DryMatter.Value, Resource.lblDryMatterPercent) *@
-                                    <br />
-                                }
-                                @if ((Model.ManureType.TotalN.HasValue) && Model.ManureType.TotalN.Value > 0)
-                                {
-                                    @string.Format("{0} {1}", string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblValueKgPerMeterCube : Resource.lblValueKgPerTon,  Model.ManureType.TotalN.Value), Resource.lblNitrogen)
-                                    <br />
-                                }
-                                @if ((Model.ManureType.NH4N.HasValue) && Model.ManureType.NH4N.Value > 0)
-                                {
-                                    @string.Format("{0} {1}", string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblValueKgPerMeterCube : Resource.lblValueKgPerTon,  Model.ManureType.NH4N.Value), Resource.lblAmmoniumHypenN)
-                                    <br />
-                                }
-                                @if ((Model.ManureType.Uric.HasValue) && Model.ManureType.Uric.Value > 0)
-                                {
-                                    @string.Format("{0} {1}", string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblValueKgPerMeterCube : Resource.lblValueKgPerTon,  Model.ManureType.Uric.Value), Resource.lblUricAcid)
-                                    <br />
-                                }
-                                @if ((Model.ManureType.NO3N.HasValue) && Model.ManureType.NO3N.Value > 0)
-                                {
-                                    @string.Format("{0} {1}", string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblValueKgPerMeterCube : Resource.lblValueKgPerTon, Model.ManureType.NO3N.Value), Resource.lblNitrate)
-                                    <br />
-                                }
-                                @if ((Model.ManureType.P2O5.HasValue) && Model.ManureType.P2O5.Value > 0)
-                                {
-                                    @string.Format("{0} {1}", string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblValueKgPerMeterCube : Resource.lblValueKgPerTon,  Model.ManureType.P2O5.Value), Resource.lblPhosphateP2O5)
-                                    <br />
-                                }
-                                @if ((Model.ManureType.K2O.HasValue) && Model.ManureType.K2O.Value > 0)
-                                {
-                                    @string.Format("{0} {1}", string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblValueKgPerMeterCube : Resource.lblValueKgPerTon,  Model.ManureType.K2O.Value), Resource.lblPotashK2O)
-                                    <br />
-                                }
-                                @if ((Model.ManureType.SO3.HasValue) && Model.ManureType.SO3.Value > 0)
-                                {
-                                    @string.Format("{0} {1}", string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblValueKgPerMeterCube : Resource.lblValueKgPerTon,  Model.ManureType.SO3.Value), Resource.lblSulphurSO3)
-                                    <br />
-                                }
-                                @if ((Model.ManureType.MgO.HasValue) && Model.ManureType.MgO.Value > 0)
-                                {
-                                    @string.Format("{0} {1}", string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblValueKgPerMeterCube : Resource.lblValueKgPerTon,  Model.ManureType.MgO.Value), Resource.lblMagnesiumMgO)
-                                    <br />
-                                }
-                            }
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key>
+                                        @string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @if ((Model.DryMatterPercent.HasValue) && Model.DryMatterPercent.Value > 0)
+                                        {
+                                            @string.Format("{0}% {1}", Model.DryMatterPercent.Value, Resource.lblDryMatterPercent)
+                                            <br />
+                                        }
+                                        @if ((Model.N.HasValue) && Model.N.Value > 0)
+                                        {
+                                            totalN = Model.N.Value;
+                                            @string.Format(Resource.lblKgPerTonneWithNutrient, Model.N.Value, Resource.lblNitrogen)
+                                            <br />
+                                        }
+                                        @if ((Model.NH4N.HasValue) && Model.NH4N.Value > 0)
+                                        {
+                                            @string.Format(Resource.lblKgPerTonneWithNutrient, Model.NH4N.Value, Resource.lblAmmoniumHypenN)
+                                            <br />
+                                        }
+                                        @if ((Model.UricAcid.HasValue) && Model.UricAcid.Value > 0)
+                                        {
+                                            @string.Format(Resource.lblKgPerTonneWithNutrient, Model.UricAcid.Value, Resource.lblUricAcid)
+                                            <br />
+                                        }
+                                        @if ((Model.NO3N.HasValue) && Model.NO3N.Value > 0)
+                                        {
+                                            @string.Format(Resource.lblKgPerTonneWithNutrient, Model.NO3N.Value, Resource.lblNitrate)
+                                            <br />
+                                        }
+                                        @if ((Model.P2O5.HasValue) && Model.P2O5.Value > 0)
+                                        {
+                                            @string.Format(Resource.lblKgPerTonneWithNutrient, Model.P2O5.Value, Resource.lblPhosphateP2O5)
+                                            <br />
+                                        }
+                                        @if ((Model.K2O.HasValue) && Model.K2O.Value > 0)
+                                        {
+                                            @string.Format(Resource.lblKgPerTonneWithNutrient, Model.K2O.Value, Resource.lblPotashK2O)
+                                            <br />
+                                        }
+                                        @if ((Model.SO3.HasValue) && Model.SO3.Value > 0)
+                                        {
+                                            @string.Format(Resource.lblKgPerTonneWithNutrient, Model.SO3.Value, Resource.lblSulphurSO3)
+                                            <br />
+                                        }
+                                        @if ((Model.MgO.HasValue) && Model.MgO.Value > 0)
+                                        {
+                                            @string.Format(Resource.lblKgPerTonneWithNutrient, Model.MgO.Value, Resource.lblMagnesiumMgO)
+                                            <br />
+                                        }
 
-                        </govuk-summary-list-row-value>
-                        <govuk-summary-list-row-actions>
-                            @if (!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue) && (Model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis))
-                            {
-                                <govuk-summary-list-row-action asp-action="LivestockManualNutrientValue" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
-                            }
 
-                        </govuk-summary-list-row-actions>
-                    </govuk-summary-list-row>
-                    <govuk-summary-list-row>
-                        <govuk-summary-list-row-key class=@(string.IsNullOrWhiteSpace(Model.ReceiverName) ? "govuk-error-message" : "")>
-                            @string.Format(Resource.lblWhoAreYouThisLivestockManureFrom,
-                                     Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
-                                     Resource.lblImporting.ToLower() : Resource.lblExporting.ToLower())
+                                    </govuk-summary-list-row-value>
+                                    <govuk-summary-list-row-actions>
+                                        <govuk-summary-list-row-action asp-action="LivestockManualNutrientValue" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
+                                    </govuk-summary-list-row-actions>
+                                </govuk-summary-list-row>
+                            }
+                        }
+                        else
+                        {
+                            
+                            <govuk-summary-list-row>
+
+                                <govuk-summary-list-row-key>
+                                    @string.Format(Resource.lblNutrientValuesForMixedManure, Model.ManureTypeName)
+                                </govuk-summary-list-row-key>
+
+                                <govuk-summary-list-row-value>
+                                    @if (!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue) && (Model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis))
+                                    {
+                                        @if ((Model.DryMatterPercent.HasValue) && Model.DryMatterPercent.Value > 0)
+                                        {
+                                            @string.Format("{0}% {1}", Model.DryMatterPercent.Value, Resource.lblDryMatterPercent)
+                                            <br />
+                                        }
+                                        @if ((Model.N.HasValue) && Model.N.Value > 0)
+                                        {
+                                            totalN = Model.N.Value;
+                                            @string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblKgPerCubicMeterWithNutrient : Resource.lblKgPerTonneWithNutrient, Model.N.Value, Resource.lblNitrogen)
+                                            <br />
+                                        }
+                                        @if ((Model.NH4N.HasValue) && Model.NH4N.Value > 0)
+                                        {
+                                            @string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblKgPerCubicMeterWithNutrient : Resource.lblKgPerTonneWithNutrient, Model.NH4N.Value, Resource.lblAmmoniumHypenN)
+                                            <br />
+                                        }
+                                        @if ((Model.UricAcid.HasValue) && Model.UricAcid.Value > 0)
+                                        {
+                                            @string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblKgPerCubicMeterWithNutrient : Resource.lblKgPerTonneWithNutrient, Model.UricAcid.Value, Resource.lblUricAcid)
+                                            <br />
+                                        }
+                                        @if ((Model.NO3N.HasValue) && Model.NO3N.Value > 0)
+                                        {
+                                            @string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblKgPerCubicMeterWithNutrient : Resource.lblKgPerTonneWithNutrient, Model.NO3N.Value, Resource.lblNitrate)
+                                            <br />
+                                        }
+                                        @if ((Model.P2O5.HasValue) && Model.P2O5.Value > 0)
+                                        {
+                                            @string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblKgPerCubicMeterWithNutrient : Resource.lblKgPerTonneWithNutrient, Model.P2O5.Value, Resource.lblPhosphateP2O5)
+                                            <br />
+                                        }
+                                        @if ((Model.K2O.HasValue) && Model.K2O.Value > 0)
+                                        {
+                                            @string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblKgPerCubicMeterWithNutrient : Resource.lblKgPerTonneWithNutrient, Model.K2O.Value, Resource.lblPotashK2O)
+                                            <br />
+                                        }
+                                        @if ((Model.SO3.HasValue) && Model.SO3.Value > 0)
+                                        {
+                                            @string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblKgPerCubicMeterWithNutrient : Resource.lblKgPerTonneWithNutrient, Model.SO3.Value, Resource.lblSulphurSO3)
+                                            <br />
+                                        }
+                                        @if ((Model.MgO.HasValue) && Model.MgO.Value > 0)
+                                        {
+                                            @string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblKgPerCubicMeterWithNutrient : Resource.lblKgPerTonneWithNutrient, Model.MgO.Value, Resource.lblMagnesiumMgO)
+                                            <br />
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @if ((Model.ManureType.DryMatter.HasValue) && Model.ManureType.DryMatter.Value > 0)
+                                        {
+                                            @string.Format("{0}% {1}", Model.ManureType.DryMatter.Value, Resource.lblDryMatterPercent)
+                                            @* @string.Format((Model.IsManureTypeLiquid!=null&&Model.IsManureTypeLiquid.Value) ?Resource.lblKgPerCubicMeterWithNutrient:Resource.lblKgPerTonneWithNutrient, Model.ManureType.DryMatter.Value, Resource.lblDryMatterPercent) *@
+                                            <br />
+                                        }
+                                        @if ((Model.ManureType.TotalN.HasValue) && Model.ManureType.TotalN.Value > 0)
+                                        {
+
+                                            totalN = Model.ManureType.TotalN.Value;
+                                            @string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblKgPerCubicMeterWithNutrient : Resource.lblKgPerTonneWithNutrient, Model.ManureType.TotalN.Value, Resource.lblNitrogen)
+                                            <br />
+                                        }
+                                        @if ((Model.ManureType.NH4N.HasValue) && Model.ManureType.NH4N.Value > 0)
+                                        {
+                                            @string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblKgPerCubicMeterWithNutrient : Resource.lblKgPerTonneWithNutrient, Model.ManureType.NH4N.Value, Resource.lblAmmoniumHypenN)
+                                            <br />
+                                        }
+                                        @if ((Model.ManureType.Uric.HasValue) && Model.ManureType.Uric.Value > 0)
+                                        {
+                                            @string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblKgPerCubicMeterWithNutrient : Resource.lblKgPerTonneWithNutrient, Model.ManureType.Uric.Value, Resource.lblUricAcid)
+                                            <br />
+                                        }
+                                        @if ((Model.ManureType.NO3N.HasValue) && Model.ManureType.NO3N.Value > 0)
+                                        {
+                                            @string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblKgPerCubicMeterWithNutrient : Resource.lblKgPerTonneWithNutrient, Model.ManureType.NO3N.Value, Resource.lblNitrate)
+                                            <br />
+                                        }
+                                        @if ((Model.ManureType.P2O5.HasValue) && Model.ManureType.P2O5.Value > 0)
+                                        {
+                                            @string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblKgPerCubicMeterWithNutrient : Resource.lblKgPerTonneWithNutrient, Model.ManureType.P2O5.Value, Resource.lblPhosphateP2O5)
+                                            <br />
+                                        }
+                                        @if ((Model.ManureType.K2O.HasValue) && Model.ManureType.K2O.Value > 0)
+                                        {
+                                            @string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblKgPerCubicMeterWithNutrient : Resource.lblKgPerTonneWithNutrient, Model.ManureType.K2O.Value, Resource.lblPotashK2O)
+                                            <br />
+                                        }
+                                        @if ((Model.ManureType.SO3.HasValue) && Model.ManureType.SO3.Value > 0)
+                                        {
+                                            @string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblKgPerCubicMeterWithNutrient : Resource.lblKgPerTonneWithNutrient, Model.ManureType.SO3.Value, Resource.lblSulphurSO3)
+                                            <br />
+                                        }
+                                        @if ((Model.ManureType.MgO.HasValue) && Model.ManureType.MgO.Value > 0)
+                                        {
+                                            @string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblKgPerCubicMeterWithNutrient : Resource.lblKgPerTonneWithNutrient, Model.ManureType.MgO.Value, Resource.lblMagnesiumMgO)
+                                            <br />
+                                        }
+                                    }
+
+                                </govuk-summary-list-row-value>
+
+                                <govuk-summary-list-row-actions>
+                                    @if (!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue) &&
+                                                                (Model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis))
+                                    {
+                                        <govuk-summary-list-row-action asp-action="LivestockManualNutrientValue" asp-controller="Report">
+                                            @Resource.lblChange
+                                        </govuk-summary-list-row-action>
+                                    }
+                                </govuk-summary-list-row-actions>
+
+                            </govuk-summary-list-row>
+                        }
+
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key class=@(string.IsNullOrWhiteSpace(Model.ReceiverName) ? "govuk-error-message" : "")>
+                                @string.Format(Resource.lblWhoAreYouThisLivestockManureFrom,
+                                Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                                Resource.lblImporting.ToLower() : Resource.lblExporting.ToLower())
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @(string.IsNullOrWhiteSpace(Model.ReceiverName) ? Resource.lblNotSet : Model.ReceiverName)
-                        </govuk-summary-list-row-value>
-                        <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="LivestockReceiver" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
-                        </govuk-summary-list-row-actions>
-                    </govuk-summary-list-row>
-                    <govuk-summary-list-row>
-                        <govuk-summary-list-row-key>
-                            @string.Format(Resource.lblLivestockCommentContent1,
-                                     Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
-                                     Resource.lblImport.ToLower() : Resource.lblExport.ToLower())
+                            @(string.IsNullOrWhiteSpace(Model.ReceiverName) ?
+                                                        Resource.lblNotSet : Model.ReceiverName)
+                            @for (int i = 0; i < allAddress.Count; i++)
+                                {
+                                    <br />
+                                    @allAddress[i]
+                                    @((i < allAddress.Count - 1) ? "," : "")
+                                }
+
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="LivestockReceiver" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>
+                                @string.Format(Resource.lblLivestockCommentContent1,
+                                Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                                Resource.lblImport.ToLower() : Resource.lblExport.ToLower())
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
                             @(string.IsNullOrWhiteSpace(Model.Comment) ? Resource.lblNotEntered : Model.Comment)
@@ -353,37 +627,59 @@
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
                             @string.Format(Resource.lblTotalNitrogenInThisImportOrExport,
-                                     Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
-                                     Resource.lblImport.ToLower() : Resource.lblExport.ToLower())
+                                                        Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                                                        Resource.lblImport.ToLower() : Resource.lblExport.ToLower())
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @(Math.Round(totalN * Model.LivestockQuantity.Value, 0))
+                            @(string.Format("{0}{1}", Math.Round(totalN * Model.LivestockQuantity.Value, 0), Resource.lblkg))
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 </govuk-summary-list>
+            </div>
+            @if (!string.IsNullOrWhiteSpace(Model.EncryptedId))
+                {
+                    <p class="govuk-body margin-bottom-forty">
+                        @Resource.lblYouCanAlso
+                        <a href="#">
+                            @string.Format(Resource.lblRemoveThis,
+                            Model.ImportExport == (int)NMP.Portal.Enums.ImportExport.Import ? Resource.lblImport.ToLower() : Resource.lblExport.ToLower())
+
+                </a>
+            </p>
+                        }
                 <govuk-button type="submit" class="margin-bottom-forty">
-                    @if(Model.ImportExport!=null)
+                    @if (string.IsNullOrWhiteSpace(Model.EncryptedId))
                     {
-                    @(Model.ImportExport == (int)NMP.Portal.Enums.ImportExport.Import ? string.Format(Resource.lblAddImportOrExport, Resource.lblImport.ToLower()) :
-                                string.Format(Resource.lblAddImportOrExport, Resource.lblExport.ToLower()))
-                    }
-                    else @if(Model.IsImport!=null)
-                    {
-                        if(Model.IsImport.Value)
+                        @if (Model.ImportExport != null)
                         {
-                            @(string.Format(Resource.lblAddImportOrExport, Resource.lblImport.ToLower()))
-                        }
+                            @(
+                                            Model.ImportExport == (int)NMP.Portal.Enums.ImportExport.Import ? string.Format(Resource.lblAddOrUpdateImportOrExport, char.ToUpper(Resource.lblAdd[0]) + Resource.lblAdd.Substring(1), Resource.lblImport.ToLower()) :
+                                            string.Format(Resource.lblAddOrUpdateImportOrExport, char.ToUpper(Resource.lblAdd[0]) + Resource.lblAdd.Substring(1), Resource.lblExport.ToLower())
+                                            )
+                                        }
                         else
+                        @if (Model.IsImport != null)
                         {
-                            @(string.Format(Resource.lblAddImportOrExport, Resource.lblExport.ToLower()))
+                            if (Model.IsImport.Value)
+                            {
+                                @(string.Format(Resource.lblAddOrUpdateImportOrExport, char.ToUpper(Resource.lblAdd[0]) + Resource.lblAdd.Substring(1), Resource.lblImport.ToLower()))
+                            }
+                            else
+                            {
+                                @(string.Format(Resource.lblAddOrUpdateImportOrExport, char.ToUpper(Resource.lblAdd[0]) + Resource.lblAdd.Substring(1), Resource.lblExport.ToLower()))
+                            }
                         }
+                    }
+                    else
+                    {
+                        @Resource.lblUpdate
                     }
                 </govuk-button>
                 <p class="govuk-body cancel-link">
 
-                    <a  asp-action="Cancel" asp-controller="Report">
+                    <a asp-action="Cancel" asp-controller="Report">
                         @Resource.lblCancel
                     </a>
                 </p>

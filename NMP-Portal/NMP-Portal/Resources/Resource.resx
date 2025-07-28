@@ -5148,10 +5148,10 @@ live</value>
     <value>Net total</value>
   </data>
   <data name="lblTotalExportedOrganicMaterial" xml:space="preserve">
-    <value>Total nitrogen exported via organic material</value>
+    <value>Total nitrogen (N) exported from organic material</value>
   </data>
   <data name="lblTotalImportedOrganicMaterial" xml:space="preserve">
-    <value>Total nitrogen imported via organic material</value>
+    <value>Total nitrogen (N) imported from organic material</value>
   </data>
   <data name="lblTotalImportsAndExportsForYear" xml:space="preserve">
     <value>Total imports and exports for {0}</value>
@@ -5186,8 +5186,8 @@ live</value>
   <data name="lblUpdated" xml:space="preserve">
     <value>updated</value>
   </data>
-  <data name="lblAddImportOrExport" xml:space="preserve">
-    <value>Add {0}</value>
+  <data name="lblAddOrUpdateImportOrExport" xml:space="preserve">
+    <value>{0} {1}</value>
   </data>
   <data name="lblAddressLine2ForErrorMsg" xml:space="preserve">
     <value>Address line 2</value>
@@ -5198,10 +5198,70 @@ live</value>
   <data name="lblModelPropertyCannotBeLongerThanNumberCharacters" xml:space="preserve">
     <value>{0} cannot be longer than {1} characters.</value>
   </data>
+  <data name="lblDidYouHaveAnyLivestockOn" xml:space="preserve">
+    <value>Did you have any livestock on {0} in {1}</value>
+  </data>
+  <data name="lblIncludeCattleSheepPigsGoats" xml:space="preserve">
+    <value>Include cattle, sheep, pigs, goats, horses, poultry and dear. </value>
+  </data>
+  <data name="lblIsAnyLivestock" xml:space="preserve">
+    <value>Is any livestock</value>
+  </data>
+  <data name="lblWhatTypeOfLivestockWouldYouLikeToAddFor" xml:space="preserve">
+    <value>What type of Livestock would you like to add for {0}?</value>
+  </data>
   <data name="lblWhatTypeOfLivestockManureAreYouImportingOrExportingOrganicMaterial" xml:space="preserve">
     <value>Do you want to add an import or an export organic material?</value>
   </data>
   <data name="lblTotalNContent" xml:space="preserve">
     <value>Total N Content</value>
+  </data>
+  <data name="lblWhatTypeOfLivestockGroupWouldYouLikeToAdd" xml:space="preserve">
+    <value>What type of {0} would you like to add?</value>
+  </data>
+  <data name="lblDryMatterContent" xml:space="preserve">
+    <value>Dry Matter content:</value>
+  </data>
+  <data name="lblUpdateAnOrganicMaterialImportOrExport" xml:space="preserve">
+    <value>Update an organic material import or export</value>
+  </data>
+  <data name="lblRemoveThis" xml:space="preserve">
+    <value>remove this {0}</value>
+  </data>
+  <data name="lblKgPerCubicMeterWithNutrient" xml:space="preserve">
+    <value>{0} kg per cubic metre {1}</value>
+  </data>
+  <data name="lblHowWouldYouLikeToEnterYourLivestockNumbers" xml:space="preserve">
+    <value>How would you like to enter your livestock numbers?</value>
+  </data>
+  <data name="lblEnterANumberForEachMonth" xml:space="preserve">
+    <value>Enter a number for each month</value>
+  </data>
+  <data name="lblEnterTheAverageNumberForTheYear" xml:space="preserve">
+    <value>Enter the average number for the year</value>
+  </data>
+  <data name="lblLivestockNumberQuestion" xml:space="preserve">
+    <value>livestock number question</value>
+  </data>
+  <data name="lblAverageNumberOfThisLivestockGroup" xml:space="preserve">
+    <value>Average number of this {0} type in {1}</value>
+  </data>
+  <data name="lblSelectedLivestockType" xml:space="preserve">
+    <value>Selected livestock type: {0}</value>
+  </data>
+  <data name="lblWhatIsTheAverageNumberOfThisLivestockType" xml:space="preserve">
+    <value>What is the average number of this {0} type in {1}?</value>
+  </data>
+  <data name="MsgEnterTheAverageNumberOfThisTypeFor" xml:space="preserve">
+    <value>Enter the average number of this type for {0}.</value>
+  </data>
+  <data name="lblWhatTypeOfOrganicMaterialAreYouImportingOrExporting" xml:space="preserve">
+    <value>What type of organic material are you {0}?</value>
+  </data>
+  <data name="lblLivestockAverageNumber" xml:space="preserve">
+    <value>Livestock average number</value>
+  </data>
+  <data name="lblNitrogenStandard" xml:space="preserve">
+    <value>Nitrogen (N) standard: {0}kg per animal, per year.</value>
   </data>
 </root>

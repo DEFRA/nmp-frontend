@@ -1,37 +1,41 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
-@using System.Globalization
 @{
-    ViewData["Title"] = Resource.lblNutrient;
-    var unit = "";
-    if (Model.IsManureTypeLiquid == null)
-    {
-        Model.IsManureTypeLiquid = false;
-    }
-    if (Model.IsManureTypeLiquid != null)
-    {
-        unit = Model.IsManureTypeLiquid.Value ? Resource.lblValueKgPerMeterCube : Resource.lblValueKgPerTon;
-    }
+    ViewData["Title"] = Resource.lblManureGroup;
+    // var backAction = "";
+    // if (Model.IsImport != null)
+    // {
+    //     backAction = "ManageImportExport";
+    // }
+    // else if (Model.IsCheckAnswer)
+    // {
+    //     backAction = "LivestockImportExportCheckAnswer";
+    // }
+    // else
+    // {
+    //     backAction = "ImportExportOption";
+    // }
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@(Model.IsCheckAnswer &&(!Model.IsManureTypeChange)?
-                 "LivestockImportExportCheckAnswer": (Model.IsManureTypeChange?"ManureType" :"LivestockQuantity") ) asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="backActionForManureGroup" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
 }
-@if (TempData["ErrorOnLivestockDefaultNutrientValue"] != null)
+@if (TempData["ErrorOnManureGroup"] != null)
 {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <govuk-error-summary>
-                <govuk-error-summary-item href="#">@TempData["ErrorOnLivestockDefaultNutrientValue"]</govuk-error-summary-item>
+                <govuk-error-summary-item href="#">@TempData["ErrorOnManureGroup"]</govuk-error-summary-item>
             </govuk-error-summary>
         </div>
     </div>
 }
+
 @if (Model != null)
 {
-    <form asp-action="LivestockDefaultNutrientValue" asp-controller="Report" method="post" autocomplete="off">
+    <form asp-action="ManureGroup" asp-controller="Report" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
+
         <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
@@ -51,8 +55,7 @@
             <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ImportExport"></govuk-input>
             <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockQuantity"></govuk-input>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockImportExportDate"></govuk-date-input>
-            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeId"></govuk-input>
-            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeName"></govuk-input>
+
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.DryMatter"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.TotalN"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.NH4N"></govuk-input>
@@ -78,14 +81,12 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Postcode"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Comment"></govuk-input>
-            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupId"></govuk-input>
-            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupIdForFilter"></govuk-input>
 
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManureTypeLiquid"></govuk-input>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefaultFarmManureValueDate" value="@Model.DefaultFarmManureValueDate"></govuk-date-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsThisDefaultValueOfRB209" value="@Model.IsThisDefaultValueOfRB209"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyNeedToStoreNutrientValueForFuture"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefaultNutrientValue"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDefaultValueChange" value="@Model.IsDefaultValueChange"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManageImportExport" value="@Model.IsManageImportExport"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
@@ -95,15 +96,10 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromPlan"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromSuccessMsg"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherMaterialName"></govuk-input>
-
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestock"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupId"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockTypeId"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockTypeName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockNumberQuestion"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AverageNumber"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -121,104 +117,36 @@
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-                @if (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
-                {
-                    <h1 class="govuk-heading-l">@string.Format(Resource.lblDoYouWantToUseExistingNutrientValuesFor, Model.OtherMaterialName)</h1>
-                }
-                else    @if (ViewBag.FarmManureApiOption != null && ViewBag.FarmManureApiOption == Resource.lblTrue)
-                {
-                    @if (Model.DefaultFarmManureValueDate.HasValue)
-                    {
-                        <h1 class="govuk-heading-l">@string.Format(Resource.lblNutrientValuesForManureTypeNameYouAddedOnDate, Model.ManureTypeName, Model.DefaultFarmManureValueDate.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")))</h1>
-                    }
-                }
-                else{
-                <h1 class="govuk-heading-l">
-                    @string.Format(Resource.lblNutrientValuesForManureTypeName,Model.ManureTypeName)
-                </h1>
-                }
-                
-                <table class="govuk-table">
-                    <thead class="govuk-table__head">
-                        <tr class="govuk-table__row">
-                            <th id="field_name" scope="col" class="govuk-table__header">@Resource.lblNutrient</th>
-                            <th scope="col" class="govuk-table__header alignRight">@Resource.lblValue </th>
-                        </tr>
-                    </thead>
-                    <tbody class="govuk-table__body">
-                        <tr class="govuk-table__row">
-                            <td class="govuk-table__cell">@Resource.lblDryMatter</td>
-                            <td class="govuk-table__cell alignRight">
-                                @string.Format(Resource.lblValuePercent, Model.ManureType.DryMatter)
-                            </td>
-                        </tr>
-                        <tr class="govuk-table__row">
-                            <td class="govuk-table__cell">@Resource.lblTotalNitrogen</td>
-                            <td class="govuk-table__cell alignRight">@(Model.ManureType.TotalN != null ? string.Format(unit, Model.ManureType.TotalN) : string.Empty)</td>
-                        </tr>
-                        <tr class="govuk-table__row">
-                            <td class="govuk-table__cell">@Resource.lblAmmoniumHypenN​</td>
-                            <td class="govuk-table__cell alignRight">@(Model.ManureType.NH4N != null ? string.Format(unit, Model.ManureType.NH4N) : string.Empty)</td>
-                        </tr>
-                        <tr class="govuk-table__row">
-                            <td class="govuk-table__cell">@Resource.lblUricAcidN​</td>
-                            <td class="govuk-table__cell alignRight">@(Model.ManureType.Uric != null ? string.Format(unit, Model.ManureType.Uric) : string.Empty)</td>
-                        </tr>
-                        <tr class="govuk-table__row">
-                            <td class="govuk-table__cell">@Resource.lblNitrateHypenN​</td>
-                            <td class="govuk-table__cell alignRight">@(Model.ManureType.NO3N != null ? string.Format(unit, Model.ManureType.NO3N) : string.Empty)</td>
-                        </tr>
-                        <tr class="govuk-table__row">
-                            <td class="govuk-table__cell">@Resource.lblTotalPhosphateOnly</td>
-                            <td class="govuk-table__cell alignRight">@(Model.ManureType.P2O5 != null ? string.Format(unit, Model.ManureType.P2O5) : string.Empty)</td>
-                        </tr>
-                        <tr class="govuk-table__row">
-                            <td class="govuk-table__cell">@Resource.lblTotalPotashWithNutrient</td>
-                            <td class="govuk-table__cell alignRight">@(Model.ManureType.K2O != null ? string.Format(unit, Model.ManureType.K2O) : string.Empty)</td>
-                        </tr>
-                        <tr class="govuk-table__row">
-                            <td class="govuk-table__cell">@Resource.lblTotalSulphur</td>
-                            <td class="govuk-table__cell alignRight">@(Model.ManureType.SO3 != null ? string.Format(unit, Model.ManureType.SO3) : string.Empty)</td>
-                        </tr>
-                        <tr class="govuk-table__row">
-                            <td class="govuk-table__cell">@Resource.lblTotalMagnesium</td>
-                            <td class="govuk-table__cell alignRight">@(Model.ManureType.MgO != null ? string.Format(unit, Model.ManureType.MgO) : string.Empty)</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <govuk-radios asp-for="@Model.DefaultNutrientValue">
+
+                <govuk-radios class="govuk-radios" asp-for="@Model.ManureGroupIdForFilter">
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        </govuk-radios-fieldset-legend>
-
-                        @if (ViewBag.FarmManureApiOption != null && ViewBag.FarmManureApiOption == Resource.lblTrue)
+                            @string.Format(Resource.lblWhatTypeOfOrganicMaterialAreYouImportingOrExporting,
+                            Model.ImportExport == (int)NMP.Portal.Enums.ImportExport.Import ? Resource.lblImporting :
+                            Resource.lblExporting
+                                                )
+                    </govuk-radios-fieldset-legend>
+                    @if (ViewBag.FarmManureTypeList != null)
                         {
-                            <govuk-radios-item value="@Resource.lblYesUseTheseValues">@Resource.lblYesUseTheseValues</govuk-radios-item>
-                            <govuk-radios-item value="@Resource.lblIwantToEnterARecentOrganicMaterialAnalysis">@Resource.lblIwantToEnterARecentOrganicMaterialAnalysis</govuk-radios-item>
-                            <govuk-radios-item value="@Resource.lblYesUseTheseStandardNutrientValues">@Resource.lblUseValuesFromRB209</govuk-radios-item>
+                            @foreach (var item in ViewBag.FarmManureTypeList)
+                            {
+                                <govuk-radios-item value="@item.Value">@item.Text</govuk-radios-item>
+                            }
+                            <govuk-radios-divider>@Resource.lblOr</govuk-radios-divider>
                         }
-                        else @if (ViewBag.RB209ApiOption != null && ViewBag.RB209ApiOption == Resource.lblTrue)
+                        @if (ViewBag.ManureGroups != null && ViewBag.ManureGroups.Count > 0)
                         {
-                            <govuk-radios-item value="@Resource.lblYesUseTheseStandardNutrientValues">@Resource.lblYesUseTheseStandardNutrientValues</govuk-radios-item>
-                            <govuk-radios-item value="@Resource.lblYesUseTheseValues">@string.Format(Resource.lblNoIWantToUseTheUpdatedValuesFromDate, Model.DefaultFarmManureValueDate.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))) </govuk-radios-item>
-                            <govuk-radios-item value="@Resource.lblIwantToEnterARecentOrganicMaterialAnalysis">@Resource.lblIwantToEnterARecentOrganicMaterialAnalysis</govuk-radios-item>
-
-                        }
-                        else if ((Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials) && Model.DefaultFarmManureValueDate != null)
-                        {
-                            <govuk-radios-item value="@Resource.lblYes">@string.Format(Resource.lblYesUseTheseValuesFromDate, Model.DefaultFarmManureValueDate.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))) </govuk-radios-item>
-                            <govuk-radios-item value="@Resource.lblIwantToEnterARecentOrganicMaterialAnalysis">@Resource.lblIwantToEnterARecentOrganicMaterialAnalysis</govuk-radios-item>
-                        }
-                        else
-                        {
-                            <govuk-radios-item value="@Resource.lblYes">@Resource.lblYesUseTheseStandardNutrientValues</govuk-radios-item>
-                            <govuk-radios-item value="@Resource.lblIwantToEnterARecentOrganicMaterialAnalysis">@Resource.lblIwantToEnterARecentOrganicMaterialAnalysis</govuk-radios-item>
+                            foreach (var manureGroup in ViewBag.ManureGroups)
+                            {
+                                <govuk-radios-item value="@manureGroup.Id">@manureGroup.Name</govuk-radios-item>
+                            }
                         }
                     </govuk-radios-fieldset>
                 </govuk-radios>
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>
+
                 <p class="govuk-body cancel-link">
                     @if (Model.IsCheckAnswer)
                     {
@@ -234,7 +162,8 @@
                                 @Resource.lblCancel
                             </a>
                         }
-                        else @if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
+                        else
+                @if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
                         {
                             @if (!Model.IsCheckList)
                             {

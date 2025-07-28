@@ -4097,10 +4097,10 @@ namespace NMP.Portal.Controllers
                     }
                 }
                 //}
-                if (SelectListItem.Count == 1)
-                {
-                    return RedirectToAction("CropTypes");
-                }
+                //if (SelectListItem.Count == 1)
+                //{
+                //    return RedirectToAction("CropTypes");
+                //}
                 ViewBag.fieldList = SelectListItem;
 
 
