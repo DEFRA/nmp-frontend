@@ -1396,8 +1396,8 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblHowLongIsTheGapBetweenApplicationAndIncoporation" xml:space="preserve">
     <value>How long is there between application and incorporation for your {0}?</value>
   </data>
-  <data name="lblIncorprationDelay" xml:space="preserve">
-    <value>Incorpration Delay</value>
+  <data name="lblIncorporationDelay" xml:space="preserve">
+    <value>Incorporation Delay</value>
   </data>
   <data name="lblL" xml:space="preserve">
     <value>L</value>
@@ -3269,7 +3269,7 @@ cubic metres per hectare  not set</value>
     <value>You have updated a soil analysis for {0}.</value>
   </data>
   <data name="lblContentIfSoilAnalysisNotApplied" xml:space="preserve">
-    <value>You have not entered a soil analysis for {0} . Without this, any recommendations we give will be based on the RB209 default values instead.</value>
+    <value>You have not entered a soil analysis for {0}. Without this, any recommendations we give will be based on the RB209 default values instead.</value>
   </data>
   <data name="MsgTheDateMustInclude" xml:space="preserve">
     <value>The date must include the day/month/year.</value>

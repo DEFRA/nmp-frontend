@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.OrganicManureViewModel
 @{
-    ViewData["Title"] = Resource.lblIncorprationDelay;
+    ViewData["Title"] = Resource.lblIncorporationDelay;
     var isOtherManure = (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials) ? true : false;
 }
 @section BeforeContent {
