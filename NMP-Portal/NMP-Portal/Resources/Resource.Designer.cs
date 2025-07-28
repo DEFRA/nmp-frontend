@@ -2086,7 +2086,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have not entered a soil analysis for {0} . Without this, any recommendations we give will be based on the RB209 default values instead..
+        ///   Looks up a localized string similar to You have not entered a soil analysis for {0}. Without this, any recommendations we give will be based on the RB209 default values instead..
         /// </summary>
         public static string lblContentIfSoilAnalysisNotApplied {
             get {
@@ -5336,6 +5336,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Incorporation Delay.
+        /// </summary>
+        public static string lblIncorporationDelay {
+            get {
+                return ResourceManager.GetString("lblIncorporationDelay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to incorporation delays.
         /// </summary>
         public static string lblIncorporationDelays {
@@ -5359,15 +5368,6 @@ namespace NMP.Portal.Resources {
         public static string lblIncorporationMethods {
             get {
                 return ResourceManager.GetString("lblIncorporationMethods", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Incorpration Delay.
-        /// </summary>
-        public static string lblIncorprationDelay {
-            get {
-                return ResourceManager.GetString("lblIncorprationDelay", resourceCulture);
             }
         }
         
