@@ -5234,4 +5234,25 @@ live</value>
   <data name="lblHowWouldYouLikeToEnterYourLivestockNumbers" xml:space="preserve">
     <value>How would you like to enter your livestock numbers?</value>
   </data>
+  <data name="lblEnterANumberForEachMonth" xml:space="preserve">
+    <value>Enter a number for each month</value>
+  </data>
+  <data name="lblEnterTheAverageNumberForTheYear" xml:space="preserve">
+    <value>Enter the average number for the year</value>
+  </data>
+  <data name="lblLivestockNumberQuestion" xml:space="preserve">
+    <value>livestock number question</value>
+  </data>
+  <data name="lblAverageNumberOfThisLivestockGroup" xml:space="preserve">
+    <value>Average number of this {0} type in {1}</value>
+  </data>
+  <data name="lblSelectedLivestockType" xml:space="preserve">
+    <value>Selected livestock type: {0}</value>
+  </data>
+  <data name="lblWhatIsTheAverageNumberOfThisCattleType" xml:space="preserve">
+    <value>What is the average number of this cattle type in {0}?</value>
+  </data>
+  <data name="MsgEnterTheAverageNumberOfThisTypeFor" xml:space="preserve">
+    <value>Enter the average number of this type for {0}.</value>
+  </data>
 </root>
