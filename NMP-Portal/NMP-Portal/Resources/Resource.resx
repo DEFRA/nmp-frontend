@@ -5264,4 +5264,13 @@ live</value>
   <data name="lblNitrogenStandard" xml:space="preserve">
     <value>Nitrogen (N) standard: {0}kg per animal, per year.</value>
   </data>
+  <data name="lblEnterHowManyOfThis" xml:space="preserve">
+    <value>Enter how many of this {0} type did you have in {1} {2}.</value>
+  </data>
+  <data name="lblHowManyOfThisTypeDidYouHaveIn" xml:space="preserve">
+    <value>How many of this {0} type did you have in {1} {2}?</value>
+  </data>
+  <data name="lblMonthlyTotalsForThis" xml:space="preserve">
+    <value>Monthly totals for this {0} type in {1}</value>
+  </data>
 </root>

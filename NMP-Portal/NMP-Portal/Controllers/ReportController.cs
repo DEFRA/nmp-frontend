@@ -4001,7 +4001,8 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-
+                (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
+                ViewBag.Nitrogen = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
             }
             catch (Exception ex)
             {
@@ -4013,6 +4014,83 @@ namespace NMP.Portal.Controllers
             }
             return View(model);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LivestockNumbersMonthly(ReportViewModel model)
+        {
+            _logger.LogTrace("Report Controller : LivestockNumbersMonthly() post action called");
+            try
+            {
+                if (model.NumbersInJanuary == null)
+                {
+                    ModelState.AddModelError("NumbersInJanuary", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblJanuary, model.Year));
+                }
+                if (model.NumbersInFebruary == null)
+                {
+                    ModelState.AddModelError("NumbersInFebruary", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblFebruary, model.Year));
+                }
+                if (model.NumbersInMarch == null)
+                {
+                    ModelState.AddModelError("NumbersInMarch", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblMarch, model.Year));
+                }
+                if (model.NumbersInApril == null)
+                {
+                    ModelState.AddModelError("NumbersInApril", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblApril, model.Year));
+                }
+                if (model.NumbersInMay == null)
+                {
+                    ModelState.AddModelError("NumbersInMay", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblMay, model.Year));
+                }
+
+                if (model.NumbersInJune == null)
+                {
+                    ModelState.AddModelError("NumbersInJune", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblJune, model.Year));
+                }
+                if (model.NumbersInJuly == null)
+                {
+                    ModelState.AddModelError("NumbersInJuly", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblJuly, model.Year));
+                }
+                if (model.NumbersInAugust == null)
+                {
+                    ModelState.AddModelError("NumbersInAugust", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblAugust, model.Year));
+                }
+                if (model.NumbersInSeptember == null)
+                {
+                    ModelState.AddModelError("NumbersInSeptember", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblSeptember, model.Year));
+                }
+                if (model.NumbersInOctober == null)
+                {
+                    ModelState.AddModelError("NumbersInOctober", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblOctober, model.Year));
+                }
+                if (model.NumbersInNovember == null)
+                {
+                    ModelState.AddModelError("NumbersInNovember", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblNovember, model.Year));
+                }
+                if (model.NumbersInDecember == null)
+                {
+                    ModelState.AddModelError("NumbersInDecember", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblDecember, model.Year));
+                }
+                if (!ModelState.IsValid)
+                {
+                    (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
+                    ViewBag.Nitrogen = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+
+                    return View(model);
+                }
+                model.AverageNumber = null;
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+
+                return RedirectToAction("LivestockCheckAnswer");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in LivestockNumbersMonthly() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnLivestockNumbersMonthly"] = ex.Message;
+                return View(model);
+            }
+        }
+
         [HttpGet]
         public async Task<IActionResult> AverageNumber()
         {
@@ -4059,6 +4137,18 @@ namespace NMP.Portal.Controllers
 
                     return View(model);
                 }
+                model.NumbersInJanuary = null;
+                model.NumbersInFebruary = null;
+                model.NumbersInMarch = null;
+                model.NumbersInApril = null;
+                model.NumbersInMay = null;
+                model.NumbersInJune = null;
+                model.NumbersInJuly = null;
+                model.NumbersInAugust = null;
+                model.NumbersInSeptember = null;
+                model.NumbersInOctober = null;
+                model.NumbersInNovember = null;
+                model.NumbersInDecember = null;
 
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
 
@@ -4147,6 +4237,10 @@ namespace NMP.Portal.Controllers
             if (model.AverageNumber != null)
             {
                 return RedirectToAction("AverageNumber");
+            }
+            if (model.NumbersInJanuary != null)
+            {
+                return RedirectToAction("LivestockNumbersMonthly");
             }
             return RedirectToAction("AverageNumber");
 
