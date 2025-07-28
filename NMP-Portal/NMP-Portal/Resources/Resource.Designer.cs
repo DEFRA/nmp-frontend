@@ -3463,6 +3463,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter how many of this {0} type did you have in {1} {2}..
+        /// </summary>
+        public static string lblEnterHowManyOfThis {
+            get {
+                return ResourceManager.GetString("lblEnterHowManyOfThis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The value &apos;{0}&apos; is not valid for {1}..
         /// </summary>
         public static string lblEnterNumericValue {
@@ -4985,6 +4994,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How many of this {0} type did you have in {1} {2}?.
+        /// </summary>
+        public static string lblHowManyOfThisTypeDidYouHaveIn {
+            get {
+                return ResourceManager.GetString("lblHowManyOfThisTypeDidYouHaveIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How moist the topsoil is when the material is applied.
         /// </summary>
         public static string lblHowMoistTheTopsoilIs {
@@ -6476,6 +6494,15 @@ namespace NMP.Portal.Resources {
         public static string lblMoistureTypes {
             get {
                 return ResourceManager.GetString("lblMoistureTypes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Monthly totals for this {0} type in {1}.
+        /// </summary>
+        public static string lblMonthlyTotalsForThis {
+            get {
+                return ResourceManager.GetString("lblMonthlyTotalsForThis", resourceCulture);
             }
         }
         
