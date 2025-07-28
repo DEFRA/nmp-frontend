@@ -1100,8 +1100,6 @@ namespace NMP.Portal.Controllers
                             ViewBag.FarmManureTypeList = selectListItems;
                         }
                     }
-
-
                 }
                 else
                 {
@@ -4770,12 +4768,28 @@ namespace NMP.Portal.Controllers
                                 FarmManureTypeResponse farmManureType = farmManureTypeResponse.Where(x => x.ManureTypeID == model.ManureTypeId && x.ManureTypeName == model.ManureTypeName).FirstOrDefault();
                                 if (farmManureType != null)
                                 {
-                                    if (farmManureType.TotalN == model.N && farmManureType.MgO == model.MgO && farmManureType.P2O5 == model.P2O5 &&
-                                        farmManureType.NH4N == model.NH4N && farmManureType.NO3N == model.NO3N
-                                        && farmManureType.SO3 == model.SO3 && farmManureType.K2O == model.K2O
-                                        && farmManureType.DryMatter == model.DryMatterPercent && farmManureType.Uric == model.UricAcid)
+                                    if (model.ManureTypeId != null && (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials) &&
+                                   farmManureType.ManureTypeName.Equals(organicManure.ManureTypeName))
                                     {
-                                        model.DefaultNutrientValue = Resource.lblYesUseTheseValues;
+                                        if (farmManureType.TotalN == model.N && farmManureType.P2O5 == model.P2O5 &&
+                                        farmManureType.DryMatter  == model.DryMatterPercent && farmManureType.Uric == model.UricAcid &&
+                                        farmManureType.NH4N == model.NH4N && farmManureType.NO3N == model.NO3N &&
+                                        farmManureType.SO3 == model.SO3 && farmManureType.K2O == model.K2O &&
+                                        farmManureType.MgO == model.MgO)
+                                        {
+                                            model.DefaultNutrientValue = Resource.lblYes;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (farmManureType.TotalN == model.N && farmManureType.P2O5 == model.P2O5 &&
+                                        farmManureType.DryMatter == model.DryMatterPercent && farmManureType.Uric == model.UricAcid &&
+                                        farmManureType.NH4N == model.NH4N && farmManureType.NO3N == model.NO3N &&
+                                        farmManureType.SO3 == model.SO3 && farmManureType.K2O == model.K2O &&
+                                        farmManureType.MgO == model.MgO)
+                                        {
+                                            model.DefaultNutrientValue = Resource.lblYesUseTheseValues;
+                                        }
                                     }
 
                                     if (model.ManureTypeId != null && (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials) &&
