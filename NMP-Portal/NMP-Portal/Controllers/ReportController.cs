@@ -2070,11 +2070,11 @@ namespace NMP.Portal.Controllers
                 {
                     reportViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
-                if (reportViewModel != null && reportViewModel.ManureTypeId != null && reportViewModel.ManureTypeId != model.ManureTypeId)
+                if (reportViewModel != null  && reportViewModel.ManureTypeId != model.ManureTypeId)
                 {
                     model.IsDefaultValueChange = true;
                     model.IsManureTypeChange = true;
-                    if (manureType != null)
+                    if (manureType != null&& reportViewModel.ManureTypeId != null)
                     {
                         model.ManureType = manureType;
                         model.DryMatterPercent = manureType.DryMatter;
@@ -3504,6 +3504,16 @@ namespace NMP.Portal.Controllers
                 model.ManureGroupId = null;
                 model.ManureGroupIdForFilter = null;
                 model.ManureGroupName = null;
+                model.ManureType = new ManureType();
+                model.N = null;
+                model.NH4N = null;
+                model.DryMatterPercent = null;
+                model.NO3N = null;
+                model.SO3 = null;
+                model.K2O = null;
+                model.MgO = null;
+                model.P2O5 = null;
+                model.UricAcid = null;
                 HttpContext.Session.SetObjectAsJson("ReportData", model);
                 return RedirectToAction("ManageImportExport", new
                 {
@@ -3554,6 +3564,16 @@ namespace NMP.Portal.Controllers
                         model.ManureGroupIdForFilter = null;
                         model.ManureGroupName = null;
                         model.LivestockImportExportQuestion = null;
+                        model.ManureType = new ManureType();
+                        model.N = null;
+                        model.NH4N = null;
+                        model.DryMatterPercent = null;
+                        model.NO3N = null;
+                        model.SO3 = null;
+                        model.K2O = null;
+                        model.MgO = null;
+                        model.P2O5 = null;
+                        model.UricAcid = null;
                     }
                     ViewBag.IsManageImportExport = _reportDataProtector.Protect(Resource.lblTrue);
                 }
@@ -4141,6 +4161,16 @@ namespace NMP.Portal.Controllers
                 model.ManureGroupId = null;
                 model.ManureGroupIdForFilter = null;
                 model.ManureGroupName = null;
+                model.ManureType = new ManureType();
+                model.N = null;
+                model.NH4N = null;
+                model.DryMatterPercent = null;
+                model.NO3N = null;
+                model.SO3 = null;
+                model.K2O = null;
+                model.MgO = null;
+                model.P2O5 = null;
+                model.UricAcid = null;
                 HttpContext.Session.SetObjectAsJson("ReportData", model);
                 if (model.IsManageImportExport)
                 {
