@@ -91,5 +91,9 @@ namespace NMP.Portal.ViewModels
         public string? LivestockGroupName { get; set; } = string.Empty;
         public string? EncryptedId { get; set; } = string.Empty;
         public bool? IsComingFromSuccessMsg { get; set; } = false;
+        public int? ManureGroupId { get; set; }
+        public string? ManureGroupName { get; set; }
+        public int? ManureGroupIdForFilter { get; set; }
+        public string? OtherMaterialName { get; set; }
     }
 }

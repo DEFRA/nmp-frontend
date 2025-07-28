@@ -5231,4 +5231,7 @@ live</value>
   <data name="lblKgPerCubicMeterWithNutrient" xml:space="preserve">
     <value>{0} kg per cubic metre {1}</value>
   </data>
+  <data name="lblWhatTypeOfOrganicMaterialAreYouImportingOrExporting" xml:space="preserve">
+    <value>What type of organic material are you {0}?</value>
+  </data>
 </root>

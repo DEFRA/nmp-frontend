@@ -11620,6 +11620,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What type of organic material are you {0}?.
+        /// </summary>
+        public static string lblWhatTypeOfOrganicMaterialAreYouImportingOrExporting {
+            get {
+                return ResourceManager.GetString("lblWhatTypeOfOrganicMaterialAreYouImportingOrExporting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What type of organic material are you using in this application?.
         /// </summary>
         public static string lblWhatTypeOfOrganicMaterialAreYouUsing {
