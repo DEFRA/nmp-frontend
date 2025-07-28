@@ -1,19 +1,20 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblLivestockNumberQuestion;
-
+    ViewData["Title"] = Resource.lblIsAnyLivestock;
+    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="LivestockType" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="BackLivestockCheckAnswer" asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
-@if (TempData["ErrorOnLivestockType"] != null)
+@if (TempData["ErrorOnLivestockCheckAnswer"] != null)
 {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <govuk-error-summary>
-                <govuk-error-summary-item href="#">@TempData["ErrorOnLivestockType"]</govuk-error-summary-item>
+                <govuk-error-summary-item href="#">@TempData["ErrorOnLivestockCheckAnswer"]</govuk-error-summary-item>
             </govuk-error-summary>
         </div>
     </div>
@@ -21,7 +22,7 @@
 
 @if (Model != null)
 {
-    <form asp-action="NonGrazingLivestockAverageNumber" asp-controller="Report" method="post" autocomplete="off">
+    <form asp-action="LivestockCheckAnswer" asp-controller="Report" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
         <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
@@ -81,6 +82,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManageImportExport" value="@Model.IsManageImportExport"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromPlan"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromSuccessMsg"></govuk-input>
 
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestock"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupId"></govuk-input>
@@ -106,23 +108,15 @@
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
+                <h2>Add livestock details for</h2>
+                <h3>Check your answers</h3>
 
-                @* <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
-            <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblAverageNumberOfThisLivestockGroup, Model.LivestockGroupName, Model.Year)</h1>
-            </legand> *@
-                @* <govuk-input name="TotalArea" asp-for=@Model.AverageNumber type="number" step="any" spellcheck="false">
-                    <govuk-input-label is-page-heading="true" class="govuk-label--l">@string.Format(Resource.lblAverageNumberOfThisLivestockGroup, Model.LivestockGroupName, Model.Year)</govuk-input-label>
-                    <govuk-input-suffix>@Model.LivestockGroupName</govuk-input-suffix>
-                </govuk-input> *@
-                <h1 class="govuk-heading-l">
-                    Number of places, occupancy and nitrogen (N) standard
-                </h1>
-                <h2>Work in progress</h2>
-
+                <h3>Need to work on this</h3>
+                
                 @* <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
-                </govuk-button>
- *@
+                </govuk-button> *@
+
                 <p class="govuk-body cancel-link">
                     <a asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report">
                         @Resource.lblCancel

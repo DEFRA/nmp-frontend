@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblLivestockNumberQuestion;
+    ViewData["Title"] = Resource.lblLivestockAverageNumber;
 
 }
 
@@ -83,9 +83,12 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromPlan"></govuk-input>
 
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestock"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockTypeId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockTypeName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockNumberQuestion"></govuk-input>
+            @* <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AverageNumber"></govuk-input> *@
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -107,9 +110,10 @@
                 <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
                     <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblAverageNumberOfThisLivestockGroup, Model.LivestockGroupName, Model.Year)</h1>
                 </legand>
-                <h2>@string.Format(Resource.lblSelectedLivestockType,Model.LivestockGroupName)</h2>
-                <govuk-input name="TotalArea" asp-for=@Model.AverageNumber type="number" step="any" spellcheck="false">
-                    <govuk-input-label is-page-heading="false">@string.Format(Resource.lblWhatIsTheAverageNumberOfThisCattleType, Model.Year)</govuk-input-label>
+                <p class="govuk-body">@string.Format(Resource.lblSelectedLivestockType, Model.LivestockTypeName)</p>
+                <p class="govuk-body">@string.Format(Resource.lblNitrogenStandard, ViewBag.Nitrogen)</p>
+                <govuk-input asp-for=@Model.AverageNumber type="number" step="any" spellcheck="false">
+                    <govuk-input-label is-page-heading="false">@string.Format(Resource.lblWhatIsTheAverageNumberOfThisLivestockType, Model.LivestockGroupName ,Model.Year)</govuk-input-label>
                     <govuk-input-suffix>@Model.LivestockGroupName</govuk-input-suffix>
                 </govuk-input>
 

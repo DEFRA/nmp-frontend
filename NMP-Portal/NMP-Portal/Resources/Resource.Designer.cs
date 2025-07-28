@@ -5958,6 +5958,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Livestock average number.
+        /// </summary>
+        public static string lblLivestockAverageNumber {
+            get {
+                return ResourceManager.GetString("lblLivestockAverageNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Livestock Comments.
         /// </summary>
         public static string lblLivestockComment {
@@ -6719,6 +6728,15 @@ namespace NMP.Portal.Resources {
         public static string lblNitrogenNVegetables {
             get {
                 return ResourceManager.GetString("lblNitrogenNVegetables", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nitrogen (N) standard: {0}kg per animal, per year..
+        /// </summary>
+        public static string lblNitrogenStandard {
+            get {
+                return ResourceManager.GetString("lblNitrogenStandard", resourceCulture);
             }
         }
         
@@ -11314,11 +11332,11 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the average number of this cattle type in {0}?.
+        ///   Looks up a localized string similar to What is the average number of this {0} type in {1}?.
         /// </summary>
-        public static string lblWhatIsTheAverageNumberOfThisCattleType {
+        public static string lblWhatIsTheAverageNumberOfThisLivestockType {
             get {
-                return ResourceManager.GetString("lblWhatIsTheAverageNumberOfThisCattleType", resourceCulture);
+                return ResourceManager.GetString("lblWhatIsTheAverageNumberOfThisLivestockType", resourceCulture);
             }
         }
         
