@@ -63,10 +63,10 @@
 <div class="govuk-grid-row margin-bottom-thirty">
     <div class="govuk-grid-column-full">
 
-        @if (TempData["OrganicMaterialImportsAndExportsError"] != null)
+        @if (TempData["ManageImportExportError"] != null)
         {
             <govuk-error-summary>
-                <govuk-error-summary-item href="#">@TempData["OrganicMaterialImportsAndExportsError"]</govuk-error-summary-item>
+                <govuk-error-summary-item href="#">@TempData["ManageImportExportError"]</govuk-error-summary-item>
             </govuk-error-summary>
         }
         <span class="name govuk-caption-l">@Model.FarmName</span>
@@ -117,7 +117,7 @@
                 {
                     <p class="govuk-body">@Resource.lblYouHaveNotAddedAnyImports</p>
                     <p class="govuk-body">
-                        <a class="" asp-action="ManureType" asp-controller="Report" asp-route-q="@ViewBag.IsImport">@Resource.lblAddAnImport</a>
+                        <a class="" asp-action="ManureGroup" asp-controller="Report" asp-route-q="@ViewBag.IsImport">@Resource.lblAddAnImport</a>
                     </p>
                 }
             </govuk-tabs-item>
@@ -134,7 +134,7 @@
                                 <th scope="col" class="govuk-table__header">@Resource.lblDate</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblQuantity</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblSupplier</th>
-                                <th scope="col" class="govuk-table__header"></th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblAction</th>
                             </tr>
                         </thead>
                         <tbody class="govuk-table__body">
@@ -157,7 +157,7 @@
                 {
                     <p class="govuk-body">@Resource.lblYouHaveNotAddedAnyExports</p>
                     <p class="govuk-body">
-                        <a class="" asp-action="ManureType" asp-controller="Report" asp-route-q="@ViewBag.IsExport">@Resource.lblAddAnExport</a>
+                        <a class="" asp-action="ManureGroup" asp-controller="Report" asp-route-q="@ViewBag.IsExport">@Resource.lblAddAnExport</a>
                     </p>
                 }
 
