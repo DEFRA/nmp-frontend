@@ -3890,9 +3890,11 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("LivestockTypeId", Resource.MsgSelectAnOptionBeforeContinuing);
                 }
+                (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
+                model.LivestockTypeName = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Name;
+                
                 if (!ModelState.IsValid)
                 {
-                    (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
                     if (error == null)
                     {
                         ViewBag.LivestockTypes = livestockTypes;
@@ -4026,7 +4028,8 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-
+                (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
+                ViewBag.Nitrogen = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
             }
             catch (Exception ex)
             {
@@ -4051,12 +4054,15 @@ namespace NMP.Portal.Controllers
                 }
                 if (!ModelState.IsValid)
                 {
+                    (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
+                    ViewBag.Nitrogen = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+
                     return View(model);
                 }
 
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
 
-                return RedirectToAction("AverageNumber");
+                return RedirectToAction("LivestockCheckAnswer");
             }
             catch (Exception ex)
             {
@@ -4069,7 +4075,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> NonGrazingLivestockAverageNumber()  //pig, poultry
         {
-            _logger.LogTrace("Report Controller : AverageNumber() action called");
+            _logger.LogTrace("Report Controller : NonGrazingLivestockAverageNumber() action called");
             ReportViewModel model = new ReportViewModel();
             try
             {
@@ -4085,6 +4091,36 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogTrace($"Report Controller : Exception in NonGrazingLivestockAverageNumber() action : {ex.Message}, {ex.StackTrace}");
+
+                TempData["ErrorOnLivestockType"] = ex.Message;
+                return RedirectToAction("LivestockType");
+
+            }
+            return View(model);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> LivestockCheckAnswer()
+        {
+            _logger.LogTrace("Report Controller : AverageNumber() action called");
+            ReportViewModel model = new ReportViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+                (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
+                ViewBag.Nitrogen = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+            }
+            catch (Exception ex)
+            {
                 _logger.LogTrace($"Report Controller : Exception in AverageNumber() action : {ex.Message}, {ex.StackTrace}");
 
                 TempData["ErrorOnLivestockNumberQuestion"] = ex.Message;
@@ -4092,6 +4128,28 @@ namespace NMP.Portal.Controllers
 
             }
             return View(model);
+        }
+
+        public IActionResult BackLivestockCheckAnswer()
+        {
+            _logger.LogTrace($"Farm Controller : BackLivestockCheckAnswer() action called");
+            ReportViewModel? model = null;
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+            model.IsCheckAnswer = false;
+            HttpContext.Session.SetObjectAsJson("FarmData", model);
+            if (model.AverageNumber != null)
+            {
+                return RedirectToAction("AverageNumber");
+            }
+            return RedirectToAction("AverageNumber");
+
         }
 
         [HttpGet]

@@ -5249,13 +5249,19 @@ live</value>
   <data name="lblSelectedLivestockType" xml:space="preserve">
     <value>Selected livestock type: {0}</value>
   </data>
-  <data name="lblWhatIsTheAverageNumberOfThisCattleType" xml:space="preserve">
-    <value>What is the average number of this cattle type in {0}?</value>
+  <data name="lblWhatIsTheAverageNumberOfThisLivestockType" xml:space="preserve">
+    <value>What is the average number of this {0} type in {1}?</value>
   </data>
   <data name="MsgEnterTheAverageNumberOfThisTypeFor" xml:space="preserve">
     <value>Enter the average number of this type for {0}.</value>
   </data>
   <data name="lblWhatTypeOfOrganicMaterialAreYouImportingOrExporting" xml:space="preserve">
     <value>What type of organic material are you {0}?</value>
+  </data>
+  <data name="lblLivestockAverageNumber" xml:space="preserve">
+    <value>Livestock average number</value>
+  </data>
+  <data name="lblNitrogenStandard" xml:space="preserve">
+    <value>Nitrogen (N) standard: {0}kg per animal, per year.</value>
   </data>
 </root>
