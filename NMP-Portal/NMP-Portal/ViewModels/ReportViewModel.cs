@@ -95,5 +95,9 @@ namespace NMP.Portal.ViewModels
         public string? LivestockTypeName { get; set; } = string.Empty;
         public int? LivestockNumberQuestion { get; set; }
         public decimal? AverageNumber { get; set; }
+        public int? ManureGroupId { get; set; }
+        public string? ManureGroupName { get; set; }
+        public int? ManureGroupIdForFilter { get; set; }
+        public string? OtherMaterialName { get; set; }
     }
 }

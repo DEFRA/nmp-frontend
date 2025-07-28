@@ -5255,6 +5255,9 @@ live</value>
   <data name="MsgEnterTheAverageNumberOfThisTypeFor" xml:space="preserve">
     <value>Enter the average number of this type for {0}.</value>
   </data>
+  <data name="lblWhatTypeOfOrganicMaterialAreYouImportingOrExporting" xml:space="preserve">
+    <value>What type of organic material are you {0}?</value>
+  </data>
   <data name="lblLivestockAverageNumber" xml:space="preserve">
     <value>Livestock average number</value>
   </data>

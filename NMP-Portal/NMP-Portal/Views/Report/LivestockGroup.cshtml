@@ -72,6 +72,9 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Postcode"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Comment"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromImportExportOverviewPage"></govuk-input>
+            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupId"></govuk-input>
+            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupIdForFilter"></govuk-input>
 
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManureTypeLiquid"></govuk-input>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefaultFarmManureValueDate" value="@Model.DefaultFarmManureValueDate"></govuk-date-input>
@@ -88,6 +91,8 @@
             @* <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupId"></govuk-input> *@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockTypeId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherMaterialName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManureTypeChange"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockTypeName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockNumberQuestion"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AverageNumber"></govuk-input>
@@ -128,9 +133,43 @@
                 </govuk-button>
 
                 <p class="govuk-body cancel-link">
-                    <a asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report">
-                        @Resource.lblCancel
-                    </a>
+                    @if (Model.IsCheckAnswer)
+                    {
+                        <a asp-action="LivestockImportExportCheckAnswer" asp-controller="Report">
+                            @Resource.lblCancel
+                        </a>
+                    }
+                    else
+                    {
+                        if (Model.IsManageImportExport)
+                        {
+                            <a asp-action="ManageImportExport" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@Model.EncryptedHarvestYear">
+                                @Resource.lblCancel
+                            </a>
+                        }
+                        else
+ @if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
+                        {
+                            @if (!Model.IsCheckList)
+                            {
+                                <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+                                    @Resource.lblCancel
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report">
+                                    @Resource.lblCancel
+                                </a>
+                            }
+                        }
+                        else
+                        {
+                            <a asp-action="UpdateLivestockImportExport" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId">
+                                @Resource.lblCancel
+                            </a>
+                        }
+                    }
                 </p>
 
             </div>
