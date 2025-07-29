@@ -99,6 +99,18 @@ namespace NMP.Portal.ViewModels
         public string? ManureGroupName { get; set; }
         public int? ManureGroupIdForFilter { get; set; }
         public string? OtherMaterialName { get; set; }
+        public decimal? NumbersInJanuary { get; set; }
+        public decimal? NumbersInFebruary { get; set; }
+        public decimal? NumbersInMarch { get; set; }
+        public decimal? NumbersInApril { get; set; }
+        public decimal? NumbersInMay { get; set; }
+        public decimal? NumbersInJune { get; set; }
+        public decimal? NumbersInJuly { get; set; }
+        public decimal? NumbersInAugust { get; set; }
+        public decimal? NumbersInSeptember { get; set; }
+        public decimal? NumbersInOctober { get; set; }
+        public decimal? NumbersInNovember { get; set; }
+        public decimal? NumbersInDecember { get; set; }
         public bool? IsDeleteLivestockImportExport { get; set; }
     }
 }
