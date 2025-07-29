@@ -613,8 +613,8 @@
                             </div>
                         </div>
                     }
-                    @if (crop.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)
-                    {
+                  @*   @if (crop.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)
+                    { *@
                         @if (crop.ManagementPeriods != null && crop.ManagementPeriods.Count > 0)
                         {
                             var cropManagementPeriods = crop.ManagementPeriods.Where(mp => mp.CropID == crop.ID);
@@ -692,7 +692,7 @@
                                 }
                             }
                         }
-                    }
+                    @* } *@
                     @if (totalCount != 0)
                     {
                         <div id="printbreak"></div>
