@@ -99,5 +99,6 @@ namespace NMP.Portal.ViewModels
         public string? ManureGroupName { get; set; }
         public int? ManureGroupIdForFilter { get; set; }
         public string? OtherMaterialName { get; set; }
+        public bool? IsDeleteLivestockImportExport { get; set; }
     }
 }
