@@ -1552,7 +1552,7 @@ namespace NMP.Portal.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> LivestockManureNitrogenReportChecklist(string? q)
+        public async Task<IActionResult> LivestockManureNitrogenReportChecklist(string? q, string? r)
         {
             _logger.LogTrace("Report Controller : LivestockManureNitrogenReportChecklist() action called");
             ReportViewModel model = new ReportViewModel();
@@ -1582,7 +1582,11 @@ namespace NMP.Portal.Controllers
                     }
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                 }
-                (List<NutrientsLoadingManures> nutrientsLoadingManuresList,error) = await _reportService.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
+                if (!string.IsNullOrWhiteSpace(r))
+                {
+                    TempData["succesMsgContent"] = _reportDataProtector.Unprotect(r);
+                }
+                (List<NutrientsLoadingManures> nutrientsLoadingManuresList, error) = await _reportService.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
                 if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingManuresList.Count > 0)
                 {
                     nutrientsLoadingManuresList = nutrientsLoadingManuresList.Where(x => x.ManureDate.Value.Year == model.Year).ToList();
@@ -2277,12 +2281,16 @@ namespace NMP.Portal.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> UpdateLivestockImportExport(string q)
+        public async Task<IActionResult> UpdateLivestockImportExport(string q, string? r)//q=FarmId, r=success msg
         {
-            _logger.LogTrace($"Report Controller : UpdateLivestockImportExport() action called");
+            _logger.LogTrace($"Report Controller : UpdateLivestockImportExport({q},{r}) action called");
             ReportViewModel model = new ReportViewModel();
             if (!string.IsNullOrWhiteSpace(q))
             {
+                if (!string.IsNullOrWhiteSpace(r))
+                {
+                    TempData["succesMsgContent"] = _reportDataProtector.Unprotect(r);
+                }
                 int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
                 (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(decryptedFarmId);
                 if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
@@ -3520,7 +3528,7 @@ namespace NMP.Portal.Controllers
                     q = model.EncryptedFarmId,
                     y = _farmDataProtector.Protect(model.Year.ToString()),
                     r = successMsg,
-                    s = Resource.lblTrue
+                    s = _reportDataProtector.Protect(Resource.lblTrue)
                 });
             }
             else
@@ -3586,14 +3594,15 @@ namespace NMP.Portal.Controllers
                 (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(decryptedFarmId);
                 if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                 {
-                    if (!string.IsNullOrWhiteSpace(r) && !string.IsNullOrWhiteSpace(s))
+                    if (!string.IsNullOrWhiteSpace(r))
                     {
-                        ViewBag.isComingFromSuccessMsg = _reportDataProtector.Protect(Resource.lblTrue);
-                        //HttpContext?.Session.Remove("ReportData");
-                        //model.IsComingFromImportExportOverviewPage = _reportDataProtector.Protect(Resource.lblTrue);
                         TempData["succesMsgContent1"] = _reportDataProtector.Unprotect(r);
-                        TempData["succesMsgContent2"] = Resource.MsgImportExportSuccessMsgContent2;
-                        TempData["succesMsgContent3"] = string.Format(Resource.MsgImportExportSuccessMsgContent3, _farmDataProtector.Unprotect(y));
+                        if (!string.IsNullOrWhiteSpace(s))
+                        {
+                            ViewBag.isComingFromSuccessMsg = _reportDataProtector.Protect(Resource.lblTrue);
+                            TempData["succesMsgContent2"] = Resource.MsgImportExportSuccessMsgContent2;
+                            TempData["succesMsgContent3"] = string.Format(Resource.MsgImportExportSuccessMsgContent3, _farmDataProtector.Unprotect(y));
+                        }
                     }
                     model.FarmName = farm.Name;
                     model.FarmId = decryptedFarmId;
@@ -3901,7 +3910,7 @@ namespace NMP.Portal.Controllers
                     }
                     return View(model);
                 }
-                
+
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                 var cattle = (int)NMP.Portal.Enums.LivestockGroup.Cattle;
                 var pigs = (int)NMP.Portal.Enums.LivestockGroup.Pigs;
@@ -3977,7 +3986,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("AverageNumber");
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -4605,7 +4614,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> OtherMaterialName()
+        public IActionResult OtherMaterialName()
         {
             _logger.LogTrace("Report Controller : OtherMaterialName() action called");
             ReportViewModel? model = new ReportViewModel();
@@ -4670,6 +4679,132 @@ namespace NMP.Portal.Controllers
             }
 
             return RedirectToAction("LivestockImportExportDate");
+        }
+        [HttpGet]
+        public IActionResult DeleteLivestockImportExport()
+        {
+            _logger.LogTrace("Report Controller : DeleteLivestockImportExport() action called");
+            ReportViewModel? model = new ReportViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in DeleteLivestockImportExport() get action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnCheckYourAnswers"] = ex.Message;
+                return RedirectToAction("LivestockImportExportCheckAnswer");
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteLivestockImportExport(ReportViewModel model)
+        {
+            _logger.LogTrace("Report Controller : DeleteLivestockImportExport() post action called");
+            try
+            {
+                if (model.IsDeleteLivestockImportExport == null)
+                {
+                    ModelState.AddModelError("IsDeleteLivestockImportExport", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                if (!model.IsDeleteLivestockImportExport.Value)
+                {
+                    return RedirectToAction("LivestockImportExportCheckAnswer");
+                }
+                else
+                {
+                    if (!string.IsNullOrWhiteSpace(model.EncryptedId))
+                    {
+                        Error error = null;
+                        int id = Convert.ToInt32(_reportDataProtector.Unprotect(model.EncryptedId));
+                        (string success, error) = await _reportService.DeleteNutrientsLoadingManureByIdAsync(id);
+                        if (!string.IsNullOrWhiteSpace(error.Message))
+                        {
+                            TempData["DeleteLivestockImportExportError"] = error.Message;
+                            return View(model);
+                        }
+                        else
+                        {
+                            string successMsg = _reportDataProtector.Protect(string.Format(Resource.lblYouHaveRemovedImportExport,
+                                model.ImportExport == (int)NMP.Portal.Enums.ImportExport.Import ? Resource.lblImport.ToLower() :
+                            Resource.lblExport.ToLower()));
+                            (List<NutrientsLoadingManures> nutrientsLoadingManureList, error) = await _reportService.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
+                            if (!string.IsNullOrWhiteSpace(error.Message))
+                            {
+                                TempData["DeleteLivestockImportExportError"] = error.Message;
+                                return View(model);
+                            }
+                            else if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingManureList.Count > 0)
+                            {
+                                if (nutrientsLoadingManureList.Any(x => x.ManureDate.Value.Year == model.Year))
+                                {
+                                    return RedirectToAction("ManageImportExport", new
+                                    {
+                                        q = model.EncryptedFarmId,
+                                        y = _farmDataProtector.Protect(model.Year.ToString()),
+                                        r = successMsg
+                                    });
+
+                                }
+                                else if (!model.IsCheckList)
+                                {
+                                    return RedirectToAction("UpdateLivestockImportExport", new
+                                    {
+                                        q = model.EncryptedFarmId,
+                                        r = successMsg,
+                                    });
+                                }
+                                else
+                                {
+                                    return RedirectToAction("LivestockManureNitrogenReportChecklist", new { r = successMsg });
+                                }
+                            }
+                            else if (model.IsCheckList)
+                            {
+                                return RedirectToAction("LivestockManureNitrogenReportChecklist", new { r = successMsg });
+                            }
+                            else
+                            {
+                                successMsg = _farmDataProtector.Protect(string.Format(Resource.lblYouHaveRemovedImportExport,
+                            model.ImportExport == (int)NMP.Portal.Enums.ImportExport.Import ? Resource.lblImport.ToLower() :
+                        Resource.lblExport.ToLower()));
+                                return RedirectToAction("FarmSummary", "Farm", new
+                                {
+                                    id = model.EncryptedFarmId,
+                                    q = _farmDataProtector.Protect(Resource.lblTrue),
+                                    r = successMsg,
+                                });
+                            }
+                        }
+
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in DeleteLivestockImportExport() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["DeleteLivestockImportExportError"] = ex.Message;
+                return View(model);
+            }
+
+            return View(model);
         }
     }
 

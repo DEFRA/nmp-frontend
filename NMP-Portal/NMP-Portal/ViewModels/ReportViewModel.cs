@@ -111,5 +111,6 @@ namespace NMP.Portal.ViewModels
         public decimal? NumbersInOctober { get; set; }
         public decimal? NumbersInNovember { get; set; }
         public decimal? NumbersInDecember { get; set; }
+        public bool? IsDeleteLivestockImportExport { get; set; }
     }
 }

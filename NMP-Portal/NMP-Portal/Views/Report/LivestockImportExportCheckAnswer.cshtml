@@ -654,7 +654,7 @@
                 {
                     <p class="govuk-body margin-bottom-forty">
                         @Resource.lblYouCanAlso
-                        <a href="#">
+                        <a asp-action="DeleteLivestockImportExport" asp-controller="Report">
                             @string.Format(Resource.lblRemoveThis,
                             Model.ImportExport == (int)NMP.Portal.Enums.ImportExport.Import ? Resource.lblImport.ToLower() : Resource.lblExport.ToLower())
 

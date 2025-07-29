@@ -2878,6 +2878,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This will remove all the data about this import. You will not be able to get it back..
+        /// </summary>
+        public static string lblDeletLivestockImportExportContentOne {
+            get {
+                return ResourceManager.GetString("lblDeletLivestockImportExportContentOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Demonstrate compliance with the livestock manure nitrogen (N) farm limit for the farm.
         /// </summary>
         public static string lblDemonstrateComplianceWithTheLivestockManure {
@@ -8443,6 +8452,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove an organic material {0}.
+        /// </summary>
+        public static string lblRemoveAnOrganicMaterial {
+            get {
+                return ResourceManager.GetString("lblRemoveAnOrganicMaterial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove an organic material application from {0}.
         /// </summary>
         public static string lblRemoveAnOrganicMaterialApplicationFromField {
@@ -12615,6 +12633,15 @@ namespace NMP.Portal.Resources {
         public static string lblYouHaveRemovedField {
             get {
                 return ResourceManager.GetString("lblYouHaveRemovedField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have removed organic material {0}.
+        /// </summary>
+        public static string lblYouHaveRemovedImportExport {
+            get {
+                return ResourceManager.GetString("lblYouHaveRemovedImportExport", resourceCulture);
             }
         }
         

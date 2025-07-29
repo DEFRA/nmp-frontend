@@ -5273,4 +5273,13 @@ live</value>
   <data name="lblMonthlyTotalsForThis" xml:space="preserve">
     <value>Monthly totals for this {0} type in {1}</value>
   </data>
+  <data name="lblDeletLivestockImportExportContentOne" xml:space="preserve">
+    <value>This will remove all the data about this import. You will not be able to get it back.</value>
+  </data>
+  <data name="lblRemoveAnOrganicMaterial" xml:space="preserve">
+    <value>Remove an organic material {0}</value>
+  </data>
+  <data name="lblYouHaveRemovedImportExport" xml:space="preserve">
+    <value>You have removed organic material {0}</value>
+  </data>
 </root>
