@@ -18,6 +18,19 @@
         </div>
     </div>
 }
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        @if (TempData["succesMsgContent"] != null)
+        {
+            <govuk-notification-banner type="Success">
+                <p class="govuk-notification-banner__heading">
+                    @TempData["succesMsgContent"]
+                </p>
+            </govuk-notification-banner>
+        }
+    </div>
+</div>
 @if (!ViewData.ModelState.IsValid)
 {
     var errorAction = "";
