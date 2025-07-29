@@ -111,5 +111,9 @@ namespace NMP.Portal.ViewModels
         public decimal? NumbersInOctober { get; set; }
         public decimal? NumbersInNovember { get; set; }
         public decimal? NumbersInDecember { get; set; }
+
+        public decimal? AverageNumberOfPlaces { get; set; }
+        public decimal? AverageOccupancy { get; set; }
+        public decimal? NitrogenStandardPer1000Places { get; set; }
     }
 }

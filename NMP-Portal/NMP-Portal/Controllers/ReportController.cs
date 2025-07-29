@@ -4189,7 +4189,56 @@ namespace NMP.Portal.Controllers
             }
             return View(model);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> NonGrazingLivestockAverageNumber(ReportViewModel model)
+        {
+            _logger.LogTrace("Report Controller : NonGrazingLivestockAverageNumber() post action called");
+            try
+            {
+                if (model.AverageNumberOfPlaces == null)
+                {
+                    ModelState.AddModelError("AverageNumberOfPlaces", string.Format(Resource.MsgEnterTheAverageNumberOfPlaces, model.Year));
+                }
+                if (model.AverageOccupancy == null)
+                {
+                    ModelState.AddModelError("AverageOccupancy", Resource.MsgEnterTheAverageOccupancy);
+                }
+                if (model.NitrogenStandardPer1000Places == null)
+                {
+                    ModelState.AddModelError("NitrogenStandardPer1000Places",Resource.MsgEnterTheNitrogenStandardPerAnimal);
+                }
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                model.NumbersInJanuary = null;
+                model.NumbersInFebruary = null;
+                model.NumbersInMarch = null;
+                model.NumbersInApril = null;
+                model.NumbersInMay = null;
+                model.NumbersInJune = null;
+                model.NumbersInJuly = null;
+                model.NumbersInAugust = null;
+                model.NumbersInSeptember = null;
+                model.NumbersInOctober = null;
+                model.NumbersInNovember = null;
+                model.NumbersInDecember = null;
 
+                model.LivestockNumberQuestion = null;
+                model.AverageNumber = null;
+
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+
+                return RedirectToAction("LivestockCheckAnswer");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in NonGrazingLivestockAverageNumber() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnNonGrazingLivestockAverageNumber"] = ex.Message;
+                return View(model);
+            }
+        }
 
         [HttpGet]
         public async Task<IActionResult> LivestockCheckAnswer()
@@ -4241,6 +4290,10 @@ namespace NMP.Portal.Controllers
             if (model.NumbersInJanuary != null)
             {
                 return RedirectToAction("LivestockNumbersMonthly");
+            }
+            if (model.AverageOccupancy != null)
+            {
+                return RedirectToAction("NonGrazingLivestockAverageNumber");
             }
             return RedirectToAction("AverageNumber");
 
