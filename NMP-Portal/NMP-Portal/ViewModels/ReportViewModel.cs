@@ -112,5 +112,9 @@ namespace NMP.Portal.ViewModels
         public decimal? NumbersInNovember { get; set; }
         public decimal? NumbersInDecember { get; set; }
         public bool? IsDeleteLivestockImportExport { get; set; }
+
+        public decimal? AverageNumberOfPlaces { get; set; }
+        public decimal? AverageOccupancy { get; set; }
+        public decimal? NitrogenStandardPer1000Places { get; set; }
     }
 }
