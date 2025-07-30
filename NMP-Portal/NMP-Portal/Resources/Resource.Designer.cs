@@ -3418,6 +3418,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a positive value..
+        /// </summary>
+        public static string lblEnterAPositiveValue {
+            get {
+                return ResourceManager.GetString("lblEnterAPositiveValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a positive value of {0}.
         /// </summary>
         public static string lblEnterAPositiveValueOfPropertyName {
