@@ -5336,4 +5336,7 @@ live</value>
   <data name="MsgEnterTheNitrogenStandardPerAnimal" xml:space="preserve">
     <value>Enter the Nitrogen (N) standard per animal, per year</value>
   </data>
+  <data name="lblEnterAPositiveValue" xml:space="preserve">
+    <value>Enter a positive value.</value>
+  </data>
 </root>
