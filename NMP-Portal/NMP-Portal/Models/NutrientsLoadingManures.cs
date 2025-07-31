@@ -7,7 +7,7 @@
         public string? ManureLookupType { get; set; }
         public int ManureTypeID { get; set; }
         public string? ManureType { get; set; }
-        public decimal? Quantity { get; set; }
+        public int? Quantity { get; set; }
         public decimal? NContent { get; set; }
         public decimal? NTotal { get; set; }
         public decimal? PContent { get; set; }
@@ -30,6 +30,6 @@
         public DateTime? CreatedOn { get; set; }
         public int? CreatedByID { get; set; }
         public DateTime? ModifiedOn { get; set; }
-        //public int ModifiedByID { get; set; }
+        public string? EncryptedID { get; set; } = string.Empty;
     }
 }

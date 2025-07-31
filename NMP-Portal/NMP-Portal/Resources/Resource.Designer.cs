@@ -502,6 +502,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About occupancy and nitrogen (N) standard.
+        /// </summary>
+        public static string lblAboutOccupancyAndNitrogenStandard {
+            get {
+                return ResourceManager.GetString("lblAboutOccupancyAndNitrogenStandard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to About the recommendations, guidance and advice.
         /// </summary>
         public static string lblAboutRecommendationGuidenceAdvice {
@@ -880,15 +889,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add {0}.
-        /// </summary>
-        public static string lblAddImportOrExport {
-            get {
-                return ResourceManager.GetString("lblAddImportOrExport", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Plan an application of inorganic fertiliser to one or more fields.
         /// </summary>
         public static string lblAddInorganicFertiliser {
@@ -912,6 +912,15 @@ namespace NMP.Portal.Resources {
         public static string lblAddNewSoilAnalysis {
             get {
                 return ResourceManager.GetString("lblAddNewSoilAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} {1}.
+        /// </summary>
+        public static string lblAddOrUpdateImportOrExport {
+            get {
+                return ResourceManager.GetString("lblAddOrUpdateImportOrExport", resourceCulture);
             }
         }
         
@@ -948,6 +957,15 @@ namespace NMP.Portal.Resources {
         public static string lblAddressLine2 {
             get {
                 return ResourceManager.GetString("lblAddressLine2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Address line 2.
+        /// </summary>
+        public static string lblAddressLine2ForErrorMsg {
+            get {
+                return ResourceManager.GetString("lblAddressLine2ForErrorMsg", resourceCulture);
             }
         }
         
@@ -1582,6 +1600,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Average number of this {0} type in {1}.
+        /// </summary>
+        public static string lblAverageNumberOfThisLivestockGroup {
+            get {
+                return ResourceManager.GetString("lblAverageNumberOfThisLivestockGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Average rainfall (in mm) between manure application and end of soil drainage.
         /// </summary>
         public static string lblAverageRainfallBetweenManAppAndEndOfSoilDrainage {
@@ -2014,6 +2041,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Comment.
+        /// </summary>
+        public static string lblComment {
+            get {
+                return ResourceManager.GetString("lblComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Completed.
         /// </summary>
         public static string lblCompleted {
@@ -2059,7 +2095,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have not entered a soil analysis for {0} . Without this, any recommendations we give will be based on the RB209 default values instead..
+        ///   Looks up a localized string similar to You have not entered a soil analysis for {0}. Without this, any recommendations we give will be based on the RB209 default values instead..
         /// </summary>
         public static string lblContentIfSoilAnalysisNotApplied {
             get {
@@ -2662,7 +2698,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to cubic meters.
+        ///   Looks up a localized string similar to cubic metres.
         /// </summary>
         public static string lblCubicMeters {
             get {
@@ -2851,6 +2887,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This will remove all the data about this import. You will not be able to get it back..
+        /// </summary>
+        public static string lblDeletLivestockImportExportContentOne {
+            get {
+                return ResourceManager.GetString("lblDeletLivestockImportExportContentOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Demonstrate compliance with the livestock manure nitrogen (N) farm limit for the farm.
         /// </summary>
         public static string lblDemonstrateComplianceWithTheLivestockManure {
@@ -2910,6 +2955,15 @@ namespace NMP.Portal.Resources {
         public static string lblDidYouHaveAnyImportsAndExports {
             get {
                 return ResourceManager.GetString("lblDidYouHaveAnyImportsAndExports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Did you have any livestock on {0} in {1}.
+        /// </summary>
+        public static string lblDidYouHaveAnyLivestockOn {
+            get {
+                return ResourceManager.GetString("lblDidYouHaveAnyLivestockOn", resourceCulture);
             }
         }
         
@@ -3148,6 +3202,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dry Matter content:.
+        /// </summary>
+        public static string lblDryMatterContent {
+            get {
+                return ResourceManager.GetString("lblDryMatterContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dry matter percentage.
         /// </summary>
         public static string lblDryMatterPercent {
@@ -3328,6 +3391,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a number for each month.
+        /// </summary>
+        public static string lblEnterANumberForEachMonth {
+            get {
+                return ResourceManager.GetString("lblEnterANumberForEachMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a number from 0 to 250, to 1 decimal place..
         /// </summary>
         public static string lblEnterANumberFrom0To250 {
@@ -3342,6 +3414,15 @@ namespace NMP.Portal.Resources {
         public static string lblEnterANumberWhichIsAnIntegerValue {
             get {
                 return ResourceManager.GetString("lblEnterANumberWhichIsAnIntegerValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a positive value..
+        /// </summary>
+        public static string lblEnterAPositiveValue {
+            get {
+                return ResourceManager.GetString("lblEnterAPositiveValue", resourceCulture);
             }
         }
         
@@ -3409,6 +3490,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter how many of this {0} type did you have in {1} {2}..
+        /// </summary>
+        public static string lblEnterHowManyOfThis {
+            get {
+                return ResourceManager.GetString("lblEnterHowManyOfThis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The value &apos;{0}&apos; is not valid for {1}..
         /// </summary>
         public static string lblEnterNumericValue {
@@ -3468,6 +3558,15 @@ namespace NMP.Portal.Resources {
         public static string lblEnterTheAreaAndQuantity {
             get {
                 return ResourceManager.GetString("lblEnterTheAreaAndQuantity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the average number for the year.
+        /// </summary>
+        public static string lblEnterTheAverageNumberForTheYear {
+            get {
+                return ResourceManager.GetString("lblEnterTheAverageNumberForTheYear", resourceCulture);
             }
         }
         
@@ -4300,6 +4399,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For example, for 10,000 places enter 10.
+        /// </summary>
+        public static string lblForExampleFor10000PlacesEnter10 {
+            get {
+                return ResourceManager.GetString("lblForExampleFor10000PlacesEnter10", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If you don&apos;t know the exact application date enter an estimate. You can change it later..
         /// </summary>
         public static string lblForFertiliserSecond {
@@ -4922,6 +5030,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How many of this {0} type did you have in {1} {2}?.
+        /// </summary>
+        public static string lblHowManyOfThisTypeDidYouHaveIn {
+            get {
+                return ResourceManager.GetString("lblHowManyOfThisTypeDidYouHaveIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How moist the topsoil is when the material is applied.
         /// </summary>
         public static string lblHowMoistTheTopsoilIs {
@@ -5066,6 +5183,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How would you like to enter your livestock numbers?.
+        /// </summary>
+        public static string lblHowWouldYouLikeToEnterYourLivestockNumbers {
+            get {
+                return ResourceManager.GetString("lblHowWouldYouLikeToEnterYourLivestockNumbers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How would you like to enter your soil nutrient values?.
         /// </summary>
         public static string lblHowWouldYouLikeToEnterYourSoilNutrientValues {
@@ -5080,6 +5206,24 @@ namespace NMP.Portal.Resources {
         public static string lblHyphen {
             get {
                 return ResourceManager.GetString("lblHyphen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If the occupancy on your farm is different to the value shown here, you can change it..
+        /// </summary>
+        public static string lblIfTheOccupancyOnYourFarmIsDifferentToTheValueShownHere {
+            get {
+                return ResourceManager.GetString("lblIfTheOccupancyOnYourFarmIsDifferentToTheValueShownHere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you change this value, you must keep the occupancy value the same..
+        /// </summary>
+        public static string lblIfYouChangeThisValueYouMustKeepTheOccupancy {
+            get {
+                return ResourceManager.GetString("lblIfYouChangeThisValueYouMustKeepTheOccupancy", resourceCulture);
             }
         }
         
@@ -5183,6 +5327,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Include cattle, sheep, pigs, goats, horses, poultry and dear. .
+        /// </summary>
+        public static string lblIncludeCattleSheepPigsGoats {
+            get {
+                return ResourceManager.GetString("lblIncludeCattleSheepPigsGoats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Include inorganic fertiliser applications.
         /// </summary>
         public static string lblIncludeInorganicFertiliserApplications {
@@ -5255,6 +5408,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Incorporation Delay.
+        /// </summary>
+        public static string lblIncorporationDelay {
+            get {
+                return ResourceManager.GetString("lblIncorporationDelay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to incorporation delays.
         /// </summary>
         public static string lblIncorporationDelays {
@@ -5278,15 +5440,6 @@ namespace NMP.Portal.Resources {
         public static string lblIncorporationMethods {
             get {
                 return ResourceManager.GetString("lblIncorporationMethods", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Incorpration Delay.
-        /// </summary>
-        public static string lblIncorprationDelay {
-            get {
-                return ResourceManager.GetString("lblIncorprationDelay", resourceCulture);
             }
         }
         
@@ -5426,7 +5579,16 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Is field above 300 meters.
+        ///   Looks up a localized string similar to Is any livestock.
+        /// </summary>
+        public static string lblIsAnyLivestock {
+            get {
+                return ResourceManager.GetString("lblIsAnyLivestock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is field above 300 metres.
         /// </summary>
         public static string lblIsFieldAbove300Meters {
             get {
@@ -5602,6 +5764,15 @@ namespace NMP.Portal.Resources {
         public static string lblKgNitrogen {
             get {
                 return ResourceManager.GetString("lblKgNitrogen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} kg per cubic metre {1}.
+        /// </summary>
+        public static string lblKgPerCubicMeterWithNutrient {
+            get {
+                return ResourceManager.GetString("lblKgPerCubicMeterWithNutrient", resourceCulture);
             }
         }
         
@@ -5823,6 +5994,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Length of time you have these animals on the farm..
+        /// </summary>
+        public static string lblLengthOfTimeYouHaveTheseAnimalsOnTheFarm {
+            get {
+                return ResourceManager.GetString("lblLengthOfTimeYouHaveTheseAnimalsOnTheFarm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All content is available under the.
         /// </summary>
         public static string lblLicenseText {
@@ -5855,6 +6035,15 @@ namespace NMP.Portal.Resources {
         public static string lblLiquid {
             get {
                 return ResourceManager.GetString("lblLiquid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Livestock average number.
+        /// </summary>
+        public static string lblLivestockAverageNumber {
+            get {
+                return ResourceManager.GetString("lblLivestockAverageNumber", resourceCulture);
             }
         }
         
@@ -5927,6 +6116,15 @@ namespace NMP.Portal.Resources {
         public static string lblLivestockManureNitrogenFarmLimitReport {
             get {
                 return ResourceManager.GetString("lblLivestockManureNitrogenFarmLimitReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to livestock number question.
+        /// </summary>
+        public static string lblLivestockNumberQuestion {
+            get {
+                return ResourceManager.GetString("lblLivestockNumberQuestion", resourceCulture);
             }
         }
         
@@ -6237,7 +6435,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to cubic meters per hectare.
+        ///   Looks up a localized string similar to cubic metres per hectare.
         /// </summary>
         public static string lblMeterCubePerHa {
             get {
@@ -6345,11 +6543,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} cannot be longer than {1} characters..
+        /// </summary>
+        public static string lblModelPropertyCannotBeLongerThanNumberCharacters {
+            get {
+                return ResourceManager.GetString("lblModelPropertyCannotBeLongerThanNumberCharacters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to moisture types.
         /// </summary>
         public static string lblMoistureTypes {
             get {
                 return ResourceManager.GetString("lblMoistureTypes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Monthly totals for this {0} type in {1}.
+        /// </summary>
+        public static string lblMonthlyTotalsForThis {
+            get {
+                return ResourceManager.GetString("lblMonthlyTotalsForThis", resourceCulture);
             }
         }
         
@@ -6597,11 +6813,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nitrogen (N) standard.
+        /// </summary>
+        public static string lblNitrogenNStandard {
+            get {
+                return ResourceManager.GetString("lblNitrogenNStandard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} nitrogen (N) vegetables.
         /// </summary>
         public static string lblNitrogenNVegetables {
             get {
                 return ResourceManager.GetString("lblNitrogenNVegetables", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nitrogen (N) standard: {0}kg per animal, per year..
+        /// </summary>
+        public static string lblNitrogenStandard {
+            get {
+                return ResourceManager.GetString("lblNitrogenStandard", resourceCulture);
             }
         }
         
@@ -6886,6 +7120,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Number of places, occupancy and nitrogen (N) standard.
+        /// </summary>
+        public static string lblNumberOfPlacesOccupancyAndNitrogenStandard {
+            get {
+                return ResourceManager.GetString("lblNumberOfPlacesOccupancyAndNitrogenStandard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Number of shoots.
         /// </summary>
         public static string lblNumberOfShoots {
@@ -7071,6 +7314,15 @@ namespace NMP.Portal.Resources {
         public static string lblNVZFieldForFieldCheckAnswere {
             get {
                 return ResourceManager.GetString("lblNVZFieldForFieldCheckAnswere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Occupancy.
+        /// </summary>
+        public static string lblOccupancy {
+            get {
+                return ResourceManager.GetString("lblOccupancy", resourceCulture);
             }
         }
         
@@ -7602,6 +7854,15 @@ namespace NMP.Portal.Resources {
         public static string lblPhosphorusPerLitreOfSoilOption {
             get {
                 return ResourceManager.GetString("lblPhosphorusPerLitreOfSoilOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to places.
+        /// </summary>
+        public static string lblPlaces {
+            get {
+                return ResourceManager.GetString("lblPlaces", resourceCulture);
             }
         }
         
@@ -8281,6 +8542,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove an organic material {0}.
+        /// </summary>
+        public static string lblRemoveAnOrganicMaterial {
+            get {
+                return ResourceManager.GetString("lblRemoveAnOrganicMaterial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove an organic material application from {0}.
         /// </summary>
         public static string lblRemoveAnOrganicMaterialApplicationFromField {
@@ -8394,6 +8664,15 @@ namespace NMP.Portal.Resources {
         public static string lblRemoveTheSoilNitrogenSupplyAnalysis {
             get {
                 return ResourceManager.GetString("lblRemoveTheSoilNitrogenSupplyAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to remove this {0}.
+        /// </summary>
+        public static string lblRemoveThis {
+            get {
+                return ResourceManager.GetString("lblRemoveThis", resourceCulture);
             }
         }
         
@@ -8673,6 +8952,15 @@ namespace NMP.Portal.Resources {
         public static string lblSelectAtLeastOneYearBeforeContinuing {
             get {
                 return ResourceManager.GetString("lblSelectAtLeastOneYearBeforeContinuing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected livestock type: {0}.
+        /// </summary>
+        public static string lblSelectedLivestockType {
+            get {
+                return ResourceManager.GetString("lblSelectedLivestockType", resourceCulture);
             }
         }
         
@@ -9739,6 +10027,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The nitrogen (N) standard figure is the average nitrogen (N) produced by this type of animal..
+        /// </summary>
+        public static string lblTheNitrogenStandardFigureIsTheAverageNitrogenProduced {
+            get {
+                return ResourceManager.GetString("lblTheNitrogenStandardFigureIsTheAverageNitrogenProduced", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to the nutrients available, soil nitrogen supply and other soil analysis results.
         /// </summary>
         public static string lblTheNutrientsInYourSoil {
@@ -9780,6 +10077,15 @@ namespace NMP.Portal.Resources {
         public static string lblThereAreFieldsInThisPlan {
             get {
                 return ResourceManager.GetString("lblThereAreFieldsInThisPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to These animals are counted by the number of places for them on the farm. Occupancy means the proportion of the year that these places are occupied by animals. For example, if your production cycle lasts 42 days, and the empty period is 7 days (total 49 days), then your occupancy is 86%..
+        /// </summary>
+        public static string lblTheseAnimalsAreCountedByTheNumberOfPlacesForThem {
+            get {
+                return ResourceManager.GetString("lblTheseAnimalsAreCountedByTheNumberOfPlacesForThem", resourceCulture);
             }
         }
         
@@ -10054,6 +10360,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to thousand places.
+        /// </summary>
+        public static string lblThousandPlaces {
+            get {
+                return ResourceManager.GetString("lblThousandPlaces", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Three.
         /// </summary>
         public static string lblThree {
@@ -10252,7 +10567,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total exported organic material.
+        ///   Looks up a localized string similar to Total nitrogen (N) exported from organic material.
         /// </summary>
         public static string lblTotalExportedOrganicMaterial {
             get {
@@ -10288,7 +10603,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total imported organic material.
+        ///   Looks up a localized string similar to Total nitrogen (N) imported from organic material.
         /// </summary>
         public static string lblTotalImportedOrganicMaterial {
             get {
@@ -10320,6 +10635,15 @@ namespace NMP.Portal.Resources {
         public static string lblTotalMagnesiumOxide {
             get {
                 return ResourceManager.GetString("lblTotalMagnesiumOxide", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total N Content.
+        /// </summary>
+        public static string lblTotalNContent {
+            get {
+                return ResourceManager.GetString("lblTotalNContent", resourceCulture);
             }
         }
         
@@ -10563,6 +10887,15 @@ namespace NMP.Portal.Resources {
         public static string lblUpdateAnOrganicMaterialApplicationForHarvestYear {
             get {
                 return ResourceManager.GetString("lblUpdateAnOrganicMaterialApplicationForHarvestYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update an organic material import or export.
+        /// </summary>
+        public static string lblUpdateAnOrganicMaterialImportOrExport {
+            get {
+                return ResourceManager.GetString("lblUpdateAnOrganicMaterialImportOrExport", resourceCulture);
             }
         }
         
@@ -11161,6 +11494,33 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the average number of places for this livestock type in {0}?.
+        /// </summary>
+        public static string lblWhatIsTheAverageNumberOfPlacesForThisLivestockTypeIn {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheAverageNumberOfPlacesForThisLivestockTypeIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the average number of this {0} type in {1}?.
+        /// </summary>
+        public static string lblWhatIsTheAverageNumberOfThisLivestockType {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheAverageNumberOfThisLivestockType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the average occupancy?.
+        /// </summary>
+        public static string lblWhatIsTheAverageOccupancy {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheAverageOccupancy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the crop height?.
         /// </summary>
         public static string lblWhatIsTheCropHeight {
@@ -11341,6 +11701,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the Nitrogen (N) standard per animal, per year?.
+        /// </summary>
+        public static string lblWhatIsTheNitrogenNStandardPerAnimalPerYear {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheNitrogenNStandardPerAnimalPerYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the number of shoots per square metre?.
         /// </summary>
         public static string lblWhatIsTheNumberOfShootsPerSquareMetre {
@@ -11476,6 +11845,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What type of {0} would you like to add?.
+        /// </summary>
+        public static string lblWhatTypeOfLivestockGroupWouldYouLikeToAdd {
+            get {
+                return ResourceManager.GetString("lblWhatTypeOfLivestockGroupWouldYouLikeToAdd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What type of livestock manure are you {0}?.
         /// </summary>
         public static string lblWhatTypeOfLivestockManureAreYouImportingOrExporting {
@@ -11485,11 +11863,38 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you want to add an import or an export organic material?.
+        /// </summary>
+        public static string lblWhatTypeOfLivestockManureAreYouImportingOrExportingOrganicMaterial {
+            get {
+                return ResourceManager.GetString("lblWhatTypeOfLivestockManureAreYouImportingOrExportingOrganicMaterial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What type of Livestock would you like to add for {0}?.
+        /// </summary>
+        public static string lblWhatTypeOfLivestockWouldYouLikeToAddFor {
+            get {
+                return ResourceManager.GetString("lblWhatTypeOfLivestockWouldYouLikeToAddFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What type of {0} are you using in this application?.
         /// </summary>
         public static string lblWhatTypeOfManureGroupAreYouUsingInThisApplication {
             get {
                 return ResourceManager.GetString("lblWhatTypeOfManureGroupAreYouUsingInThisApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What type of organic material are you {0}?.
+        /// </summary>
+        public static string lblWhatTypeOfOrganicMaterialAreYouImportingOrExporting {
+            get {
+                return ResourceManager.GetString("lblWhatTypeOfOrganicMaterialAreYouImportingOrExporting", resourceCulture);
             }
         }
         
@@ -12372,6 +12777,15 @@ namespace NMP.Portal.Resources {
         public static string lblYouHaveRemovedField {
             get {
                 return ResourceManager.GetString("lblYouHaveRemovedField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have removed organic material {0}.
+        /// </summary>
+        public static string lblYouHaveRemovedImportExport {
+            get {
+                return ResourceManager.GetString("lblYouHaveRemovedImportExport", resourceCulture);
             }
         }
         
@@ -13269,7 +13683,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state you must not spread more than 30 cubic meters per hectare of slurry in a single application from the end of the closed spreading period until the end of February..
+        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state you must not spread more than 30 cubic metres per hectare of slurry in a single application from the end of the closed spreading period until the end of February..
         /// </summary>
         public static string MsgEndPeriodEndFebWarningPara1st30SlurryEngland {
             get {
@@ -13359,7 +13773,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Water Resources Regulations state you must not spread more than 30 cubic meters per hectare of slurry in a single application from the end of the closed spreading period until the end of February..
+        ///   Looks up a localized string similar to The Water Resources Regulations state you must not spread more than 30 cubic metres per hectare of slurry in a single application from the end of the closed spreading period until the end of February..
         /// </summary>
         public static string MsgEndPeriodEndFebWarningPara30SlurryWales {
             get {
@@ -13656,6 +14070,33 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter the average number of places for this livestock type in {0}..
+        /// </summary>
+        public static string MsgEnterTheAverageNumberOfPlaces {
+            get {
+                return ResourceManager.GetString("MsgEnterTheAverageNumberOfPlaces", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the average number of this type for {0}..
+        /// </summary>
+        public static string MsgEnterTheAverageNumberOfThisTypeFor {
+            get {
+                return ResourceManager.GetString("MsgEnterTheAverageNumberOfThisTypeFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the average occupancy..
+        /// </summary>
+        public static string MsgEnterTheAverageOccupancy {
+            get {
+                return ResourceManager.GetString("MsgEnterTheAverageOccupancy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the date in numbers. For example, 27 3 2023.
         /// </summary>
         public static string MsgEnterTheDateInNumber {
@@ -13697,6 +14138,15 @@ namespace NMP.Portal.Resources {
         public static string MsgEnterTheNameOfThePersonOrOrganisationYouAreFrom {
             get {
                 return ResourceManager.GetString("MsgEnterTheNameOfThePersonOrOrganisationYouAreFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the Nitrogen (N) standard per animal, per year.
+        /// </summary>
+        public static string MsgEnterTheNitrogenStandardPerAnimal {
+            get {
+                return ResourceManager.GetString("MsgEnterTheNitrogenStandardPerAnimal", resourceCulture);
             }
         }
         

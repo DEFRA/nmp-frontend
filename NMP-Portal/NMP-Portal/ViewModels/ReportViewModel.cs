@@ -86,5 +86,66 @@ namespace NMP.Portal.ViewModels
         public bool? IsCancel { get; set; }
         public bool? IsImport { get; set; }
         public bool? IsComingFromPlan { get; set; } = false;
+        public bool? IsAnyLivestock { get; set; }
+        public int? LivestockGroupId { get; set; }
+        public string? LivestockGroupName { get; set; } = string.Empty;
+        public string? EncryptedId { get; set; } = string.Empty;
+        public bool? IsComingFromSuccessMsg { get; set; } = false;
+        public int? LivestockTypeId { get; set; }
+        public string? LivestockTypeName { get; set; } = string.Empty;
+        public int? LivestockNumberQuestion { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        public decimal? AverageNumber { get; set; }
+        public int? ManureGroupId { get; set; }
+        public string? ManureGroupName { get; set; }
+        public int? ManureGroupIdForFilter { get; set; }
+        public string? OtherMaterialName { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        public decimal? NumbersInJanuary { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        public decimal? NumbersInFebruary { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        public decimal? NumbersInMarch { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        public decimal? NumbersInApril { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        public decimal? NumbersInMay { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        public decimal? NumbersInJune { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        public decimal? NumbersInJuly { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        public decimal? NumbersInAugust { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        public decimal? NumbersInSeptember { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        public decimal? NumbersInOctober { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        public decimal? NumbersInNovember { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        public decimal? NumbersInDecember { get; set; }
+        public bool? IsDeleteLivestockImportExport { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        public decimal? AverageNumberOfPlaces { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        public decimal? AverageOccupancy { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        public decimal? NitrogenStandardPer1000Places { get; set; }
     }
 }

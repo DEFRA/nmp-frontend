@@ -244,8 +244,8 @@
                                             </div>
                                         }
 
-                                        @if (crop.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)
-                                        {
+@*                                         @if (crop.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)
+                                        { *@
                                             @if (Model.RecommendationComments != null && Model.RecommendationComments.Count > 0)
                                             {
 
@@ -271,7 +271,7 @@
                                                     }
                                                 </div>
                                             }
-                                        }
+                                        @* } *@
 
 
                                         <hr class="seperator_five">
@@ -449,8 +449,8 @@
                                             </div>
                                         }
 
-                                        @if (crop.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)
-                                        {
+                                     @*    @if (crop.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)
+                                        { *@
                                             @if (Model.RecommendationComments != null && Model.RecommendationComments.Count > 0)
                                             {
 
@@ -477,7 +477,7 @@
                                                 </div>
 
                                             }
-                                        }
+                                        @* } *@
                                         <hr class="seperator_five">
                                         <h2 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h2>
                                         <p class="govuk-body">

@@ -1187,7 +1187,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Field soil analysis detail</value>
   </data>
   <data name="lblIsFieldAbove300Meters" xml:space="preserve">
-    <value>Is field above 300 meters</value>
+    <value>Is field above 300 metres</value>
   </data>
   <data name="lblIsFieldWithinNVZ" xml:space="preserve">
     <value>Is field within an NVZ</value>
@@ -1396,8 +1396,8 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblHowLongIsTheGapBetweenApplicationAndIncoporation" xml:space="preserve">
     <value>How long is there between application and incorporation for your {0}?</value>
   </data>
-  <data name="lblIncorprationDelay" xml:space="preserve">
-    <value>Incorpration Delay</value>
+  <data name="lblIncorporationDelay" xml:space="preserve">
+    <value>Incorporation Delay</value>
   </data>
   <data name="lblL" xml:space="preserve">
     <value>L</value>
@@ -3020,7 +3020,7 @@ cubic metres per hectare  not set</value>
     <value>Field {0}</value>
   </data>
   <data name="lblMeterCubePerHa" xml:space="preserve">
-    <value>cubic meters per hectare</value>
+    <value>cubic metres per hectare</value>
   </data>
   <data name="lblTonPerHa" xml:space="preserve">
     <value>tonnes per hectare</value>
@@ -3269,7 +3269,7 @@ cubic metres per hectare  not set</value>
     <value>You have updated a soil analysis for {0}.</value>
   </data>
   <data name="lblContentIfSoilAnalysisNotApplied" xml:space="preserve">
-    <value>You have not entered a soil analysis for {0} . Without this, any recommendations we give will be based on the RB209 default values instead.</value>
+    <value>You have not entered a soil analysis for {0}. Without this, any recommendations we give will be based on the RB209 default values instead.</value>
   </data>
   <data name="MsgTheDateMustInclude" xml:space="preserve">
     <value>The date must include the day/month/year.</value>
@@ -3374,7 +3374,7 @@ cubic metres per hectare  not set</value>
     <value>You must allow at least 3 weeks between applications from the end of the closed spreading period to the end of February</value>
   </data>
   <data name="MsgEndPeriodEndFebWarningPara1st30SlurryEngland" xml:space="preserve">
-    <value>The Nitrate Vulnerable Zone (NVZ) rules state you must not spread more than 30 cubic meters per hectare of slurry in a single application from the end of the closed spreading period until the end of February.</value>
+    <value>The Nitrate Vulnerable Zone (NVZ) rules state you must not spread more than 30 cubic metres per hectare of slurry in a single application from the end of the closed spreading period until the end of February.</value>
   </data>
   <data name="MsgEndPeriodEndFebWarningPara1st8PoultryEngland" xml:space="preserve">
     <value>The Nitrate Vulnerable Zone (NVZ) rules state you must not spread more than 8 tonnes per hectare of poultry manure in a single application from the end of the closed spreading period until the end of February.</value>
@@ -3395,7 +3395,7 @@ cubic metres per hectare  not set</value>
     <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider allowing more time between applications.</value>
   </data>
   <data name="MsgEndPeriodEndFebWarningPara30SlurryWales" xml:space="preserve">
-    <value>The Water Resources Regulations state you must not spread more than 30 cubic meters per hectare of slurry in a single application from the end of the closed spreading period until the end of February.</value>
+    <value>The Water Resources Regulations state you must not spread more than 30 cubic metres per hectare of slurry in a single application from the end of the closed spreading period until the end of February.</value>
   </data>
   <data name="MsgEndPeriodEndFebWarningPara8PoultryWales" xml:space="preserve">
     <value>The Water Resources Regulations state you must not spread more than 8 tonnes per hectare of poultry manure in a single application from the end of the closed spreading period until the end of February.</value>
@@ -4791,7 +4791,7 @@ live</value>
     <value>Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021 content</value>
   </data>
   <data name="lblCubicMeters" xml:space="preserve">
-    <value>cubic meters</value>
+    <value>cubic metres</value>
   </data>
   <data name="lblIncludeOrganicMaterialInorganicFertiliser" xml:space="preserve">
     <value>Include organic material applications and inorganic fertiliser applications</value>
@@ -5148,10 +5148,10 @@ live</value>
     <value>Net total</value>
   </data>
   <data name="lblTotalExportedOrganicMaterial" xml:space="preserve">
-    <value>Total exported organic material</value>
+    <value>Total nitrogen (N) exported from organic material</value>
   </data>
   <data name="lblTotalImportedOrganicMaterial" xml:space="preserve">
-    <value>Total imported organic material</value>
+    <value>Total nitrogen (N) imported from organic material</value>
   </data>
   <data name="lblTotalImportsAndExportsForYear" xml:space="preserve">
     <value>Total imports and exports for {0}</value>
@@ -5186,7 +5186,157 @@ live</value>
   <data name="lblUpdated" xml:space="preserve">
     <value>updated</value>
   </data>
-  <data name="lblAddImportOrExport" xml:space="preserve">
-    <value>Add {0}</value>
+  <data name="lblAddOrUpdateImportOrExport" xml:space="preserve">
+    <value>{0} {1}</value>
+  </data>
+  <data name="lblAddressLine2ForErrorMsg" xml:space="preserve">
+    <value>Address line 2</value>
+  </data>
+  <data name="lblComment" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="lblModelPropertyCannotBeLongerThanNumberCharacters" xml:space="preserve">
+    <value>{0} cannot be longer than {1} characters.</value>
+  </data>
+  <data name="lblDidYouHaveAnyLivestockOn" xml:space="preserve">
+    <value>Did you have any livestock on {0} in {1}</value>
+  </data>
+  <data name="lblIncludeCattleSheepPigsGoats" xml:space="preserve">
+    <value>Include cattle, sheep, pigs, goats, horses, poultry and dear. </value>
+  </data>
+  <data name="lblIsAnyLivestock" xml:space="preserve">
+    <value>Is any livestock</value>
+  </data>
+  <data name="lblWhatTypeOfLivestockWouldYouLikeToAddFor" xml:space="preserve">
+    <value>What type of Livestock would you like to add for {0}?</value>
+  </data>
+  <data name="lblWhatTypeOfLivestockManureAreYouImportingOrExportingOrganicMaterial" xml:space="preserve">
+    <value>Do you want to add an import or an export organic material?</value>
+  </data>
+  <data name="lblTotalNContent" xml:space="preserve">
+    <value>Total N Content</value>
+  </data>
+  <data name="lblWhatTypeOfLivestockGroupWouldYouLikeToAdd" xml:space="preserve">
+    <value>What type of {0} would you like to add?</value>
+  </data>
+  <data name="lblDryMatterContent" xml:space="preserve">
+    <value>Dry Matter content:</value>
+  </data>
+  <data name="lblUpdateAnOrganicMaterialImportOrExport" xml:space="preserve">
+    <value>Update an organic material import or export</value>
+  </data>
+  <data name="lblRemoveThis" xml:space="preserve">
+    <value>remove this {0}</value>
+  </data>
+  <data name="lblKgPerCubicMeterWithNutrient" xml:space="preserve">
+    <value>{0} kg per cubic metre {1}</value>
+  </data>
+  <data name="lblHowWouldYouLikeToEnterYourLivestockNumbers" xml:space="preserve">
+    <value>How would you like to enter your livestock numbers?</value>
+  </data>
+  <data name="lblEnterANumberForEachMonth" xml:space="preserve">
+    <value>Enter a number for each month</value>
+  </data>
+  <data name="lblEnterTheAverageNumberForTheYear" xml:space="preserve">
+    <value>Enter the average number for the year</value>
+  </data>
+  <data name="lblLivestockNumberQuestion" xml:space="preserve">
+    <value>livestock number question</value>
+  </data>
+  <data name="lblAverageNumberOfThisLivestockGroup" xml:space="preserve">
+    <value>Average number of this {0} type in {1}</value>
+  </data>
+  <data name="lblSelectedLivestockType" xml:space="preserve">
+    <value>Selected livestock type: {0}</value>
+  </data>
+  <data name="lblWhatIsTheAverageNumberOfThisLivestockType" xml:space="preserve">
+    <value>What is the average number of this {0} type in {1}?</value>
+  </data>
+  <data name="MsgEnterTheAverageNumberOfThisTypeFor" xml:space="preserve">
+    <value>Enter the average number of this type for {0}.</value>
+  </data>
+  <data name="lblWhatTypeOfOrganicMaterialAreYouImportingOrExporting" xml:space="preserve">
+    <value>What type of organic material are you {0}?</value>
+  </data>
+  <data name="lblLivestockAverageNumber" xml:space="preserve">
+    <value>Livestock average number</value>
+  </data>
+  <data name="lblNitrogenStandard" xml:space="preserve">
+    <value>Nitrogen (N) standard: {0}kg per animal, per year.</value>
+  </data>
+  <data name="lblEnterHowManyOfThis" xml:space="preserve">
+    <value>Enter how many of this {0} type did you have in {1} {2}.</value>
+  </data>
+  <data name="lblHowManyOfThisTypeDidYouHaveIn" xml:space="preserve">
+    <value>How many of this {0} type did you have in {1} {2}?</value>
+  </data>
+  <data name="lblMonthlyTotalsForThis" xml:space="preserve">
+    <value>Monthly totals for this {0} type in {1}</value>
+  </data>
+  <data name="lblDeletLivestockImportExportContentOne" xml:space="preserve">
+    <value>This will remove all the data about this import. You will not be able to get it back.</value>
+  </data>
+  <data name="lblRemoveAnOrganicMaterial" xml:space="preserve">
+    <value>Remove an organic material {0}</value>
+  </data>
+  <data name="lblYouHaveRemovedImportExport" xml:space="preserve">
+    <value>You have removed organic material {0}</value>
+  </data>
+  <data name="lblAboutOccupancyAndNitrogenStandard" xml:space="preserve">
+    <value>About occupancy and nitrogen (N) standard</value>
+  </data>
+  <data name="lblForExampleFor10000PlacesEnter10" xml:space="preserve">
+    <value>For example, for 10,000 places enter 10</value>
+  </data>
+  <data name="lblIfTheOccupancyOnYourFarmIsDifferentToTheValueShownHere" xml:space="preserve">
+    <value>If the occupancy on your farm is different to the value shown here, you can change it.</value>
+  </data>
+  <data name="lblIfYouChangeThisValueYouMustKeepTheOccupancy" xml:space="preserve">
+    <value>If you change this value, you must keep the occupancy value the same.</value>
+  </data>
+  <data name="lblLengthOfTimeYouHaveTheseAnimalsOnTheFarm" xml:space="preserve">
+    <value>Length of time you have these animals on the farm.</value>
+  </data>
+  <data name="lblNitrogenNStandard" xml:space="preserve">
+    <value>Nitrogen (N) standard</value>
+  </data>
+  <data name="lblNumberOfPlacesOccupancyAndNitrogenStandard" xml:space="preserve">
+    <value>Number of places, occupancy and nitrogen (N) standard</value>
+  </data>
+  <data name="lblOccupancy" xml:space="preserve">
+    <value>Occupancy</value>
+  </data>
+  <data name="lblPlaces" xml:space="preserve">
+    <value>places</value>
+  </data>
+  <data name="lblTheNitrogenStandardFigureIsTheAverageNitrogenProduced" xml:space="preserve">
+    <value>The nitrogen (N) standard figure is the average nitrogen (N) produced by this type of animal.</value>
+  </data>
+  <data name="lblTheseAnimalsAreCountedByTheNumberOfPlacesForThem" xml:space="preserve">
+    <value>These animals are counted by the number of places for them on the farm. Occupancy means the proportion of the year that these places are occupied by animals. For example, if your production cycle lasts 42 days, and the empty period is 7 days (total 49 days), then your occupancy is 86%.</value>
+  </data>
+  <data name="lblThousandPlaces" xml:space="preserve">
+    <value>thousand places</value>
+  </data>
+  <data name="lblWhatIsTheAverageNumberOfPlacesForThisLivestockTypeIn" xml:space="preserve">
+    <value>What is the average number of places for this livestock type in {0}?</value>
+  </data>
+  <data name="lblWhatIsTheAverageOccupancy" xml:space="preserve">
+    <value>What is the average occupancy?</value>
+  </data>
+  <data name="lblWhatIsTheNitrogenNStandardPerAnimalPerYear" xml:space="preserve">
+    <value>What is the Nitrogen (N) standard per animal, per year?</value>
+  </data>
+  <data name="MsgEnterTheAverageNumberOfPlaces" xml:space="preserve">
+    <value>Enter the average number of places for this livestock type in {0}.</value>
+  </data>
+  <data name="MsgEnterTheAverageOccupancy" xml:space="preserve">
+    <value>Enter the average occupancy.</value>
+  </data>
+  <data name="MsgEnterTheNitrogenStandardPerAnimal" xml:space="preserve">
+    <value>Enter the Nitrogen (N) standard per animal, per year</value>
+  </data>
+  <data name="lblEnterAPositiveValue" xml:space="preserve">
+    <value>Enter a positive value.</value>
   </data>
 </root>
