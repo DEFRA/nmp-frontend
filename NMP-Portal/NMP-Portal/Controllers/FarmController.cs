@@ -464,6 +464,22 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("Postcode", Resource.MsgEnterAPostcode);
             }
+            if (!string.IsNullOrWhiteSpace(farm.Address1) && farm.Address1.Length > 50)
+            {
+                ModelState.AddModelError("Address1", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblAddressLine1,50));
+            }
+            if (!string.IsNullOrWhiteSpace(farm.Address2) && farm.Address2.Length > 50)
+            {
+                ModelState.AddModelError("Address2", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblAddressLine2ForErrorMsg, 50));
+            }
+            if (!string.IsNullOrWhiteSpace(farm.Address3) && farm.Address3.Length > 50)
+            {
+                ModelState.AddModelError("Address3", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblTownOrCity, 50));
+            }
+            if (!string.IsNullOrWhiteSpace(farm.Address4) && farm.Address4.Length > 50)
+            {
+                ModelState.AddModelError("Address4", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblCountry,50));
+            }
             if (!string.IsNullOrWhiteSpace(farm.Postcode))
             {
                 int id = 0;
@@ -1020,7 +1036,7 @@ namespace NMP.Portal.Controllers
                         TempData["Error"] = error.Message;
                         return RedirectToAction("FarmList");
                     }
-                    (List<NutrientsLoadingManures> nutrientsLoadingManuresList, error) = await _reportService.FetchNutrientsLoadingManuresByFarmId(farm.ID);
+                    (List<NutrientsLoadingFarmDetail> nutrientsLoadingFarmDetailList, error) = await _reportService.FetchNutrientsLoadingFarmDetailsByFarmId(farm.ID);
                     if (!string.IsNullOrWhiteSpace(error.Message))
                     {
                         TempData["Error"] = error.Message;
@@ -1028,7 +1044,7 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        if (nutrientsLoadingManuresList.Count > 0)
+                        if (nutrientsLoadingFarmDetailList.Count > 0)
                         {
                             ViewBag.LiveStockHaveImportExportData = true;
                         }
