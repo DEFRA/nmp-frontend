@@ -2377,14 +2377,16 @@ namespace NMP.Portal.Controllers
             if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
             {
                 ViewBag.FieldOptions = harvestYearPlanResponse.Where(x => x.CropGroupName == model.PreviousCropGroupName).Select(x => x.FieldID).ToList();
-
                 var fieldIdsForFilter = fieldList.Select(f => f.ID);
                 harvestYearPlanResponse = harvestYearPlanResponse
                     .Where(x => fieldIdsForFilter.Contains(x.FieldID))
                     .ToList();
 
             }
-            //ViewBag.FieldOptions = fieldList;
+            else
+            {
+                ViewBag.FieldOptions = fieldList;
+            }
 
             //Fetch fields allowed for second crop based on first crop
             var grassTypeId = (int)NMP.Portal.Enums.CropTypes.Grass;

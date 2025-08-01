@@ -1,0 +1,425 @@
+﻿@using NMP.Portal.Resources
+@model NMP.Portal.ViewModels.ReportViewModel
+@{
+    ViewData["Title"] = Resource.lblIsAnyLivestock;
+    var dataLists = new List<(string Name, dynamic Data)>
+    {
+        ("Cattle", ViewBag.CattleList),
+        ("Pigs", ViewBag.PigsList),
+        ("Poultry", ViewBag.PoultryList),
+        ("Sheep", ViewBag.SheepList),
+        ("GoatsDeerAndHorses", ViewBag.GoatsDeerAndHorsesList)
+    };
+
+    var nonEmptyLists = dataLists.Where(x => x.Data != null && x.Data.Count > 0).ToList();
+
+}
+
+@section BeforeContent {
+    <govuk-breadcrumbs class="govuk-breadcrumbs-link">
+        <govuk-breadcrumbs-item asp-action="FarmList" asp-controller="Farm">
+            @Resource.lblAllFarm
+        </govuk-breadcrumbs-item>
+        <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+            @Model.FarmName
+        </govuk-breadcrumbs-item>
+        <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
+            @string.Format(Resource.lblLivestockDetailsYear, Model.Year)
+        </govuk-breadcrumbs-item>
+
+    </govuk-breadcrumbs>
+}
+@if (TempData["ErrorOnManageLivestock"] != null)
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["ErrorOnManageLivestock"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        </div>
+    </div>
+}
+
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        @if (TempData["succesMsgContent1"] != null)
+        {
+            <govuk-notification-banner type="Success">
+                <p class="govuk-notification-banner__heading">
+                    @TempData["succesMsgContent1"]
+                </p>
+                @if (TempData["succesMsgContent2"] != null)
+                {
+                    <p class="govuk-body">
+                        <a asp-action="IsAnyLivestock" asp-controller="Report" class="govuk-notification-banner__link">
+                            @TempData["succesMsgContent2"]
+                        </a>
+                    </p>
+                }
+                @if (TempData["succesMsgContent3"] != null)
+                {
+                    <p class="govuk-body">
+                        <a class="govuk-notification-banner__link" asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report" asp-route-q="@ViewBag.isComingFromSuccessMsg">
+                            @TempData["succesMsgContent3"]
+                        </a>
+                    </p>
+                }
+            </govuk-notification-banner>
+        }
+    </div>
+</div>
+
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+
+        @if (TempData["ManageLivestockError"] != null)
+        {
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["ManageLivestockError"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        }
+        <span class="name govuk-caption-l">@Model.FarmName</span>
+        <h1 class="govuk-heading-l" id="header">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</h1>
+
+        <p class="govuk-body">
+            <a class="govuk-button" asp-action="IsAnyLivestock" asp-controller="Report">
+                @Resource.lblAddALivestockType
+            </a>
+        </p>
+
+        @if (nonEmptyLists.Count == 1)
+        {
+            @if (ViewBag.CattleList != null && ViewBag.CattleList.Count > 0)
+            {
+                <h2 class="govuk-heading-l">@Resource.lblCattle</h2>
+                <div class="margin-bottom-thirty">
+                    <table class="govuk-table data-table">
+                        <thead class="govuk-table__head">
+                            <tr class="govuk-table__row">
+                                <th scope="col" class="govuk-table__header livestock-type">@Resource.lblCattleType</th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblAverageForTheYear</th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
+                                <th scope="col" class="govuk-table__header"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="govuk-table__body">
+                            @foreach (var cattle in ViewBag.CattleList)
+                            {
+                                <tr class="govuk-table__row">
+                                    <td class="govuk-table__cell">@cattle.LivestockTypeName</td>
+                                    <td class="govuk-table__cell">@cattle.Units</td>
+                                    <td class="govuk-table__cell">@cattle.NByUnit</td>
+                                    <td class="govuk-table__cell">@cattle.TotalNProduced</td>
+                                    <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
+                                    @* <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@cattle.EncryptedID">@Resource.lblChange</a></td> *@
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            @if (ViewBag.PigsList != null && ViewBag.PigsList.Count > 0)
+            {
+                <h2 class="govuk-heading-l">@Resource.lblPigs</h2>
+                <div class="margin-bottom-thirty">
+                    <table class="govuk-table sortable-table recomendation-table data-table">
+                        <thead class="govuk-table__head">
+                            <tr class="govuk-table__row">
+                                <th scope="col" class="govuk-table__header">@Resource.lblCattleType</th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblAverageForTheYear</th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblOccupancy</th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
+                                <th scope="col" class="govuk-table__header"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="govuk-table__body">
+                            @foreach (var pig in ViewBag.PigsList)
+                            {
+                                <tr class="govuk-table__row">
+                                    <td class="govuk-table__cell">@pig.LivestockTypeName</td>
+                                    <td class="govuk-table__cell">@pig.Units</td>
+                                    <td class="govuk-table__cell">@pig.Occupancy</td>
+                                    <td class="govuk-table__cell">@pig.NByUnit</td>
+                                    <td class="govuk-table__cell">@pig.TotalNProduced</td>
+                                    <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
+@*                                     <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@pig.EncryptedID">@Resource.lblChange</a></td>
+ *@                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            @if (ViewBag.PoultryList != null && ViewBag.PoultryList.Count > 0)
+            {
+                <h2 class="govuk-heading-l">@Resource.lblPoultry</h2>
+                <div class="margin-bottom-thirty">
+                    <table class="govuk-table sortable-table recomendation-table data-table">
+                        <thead class="govuk-table__head">
+                            <tr class="govuk-table__row">
+                                <th scope="col" class="govuk-table__header">@Resource.lblCattleType</th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblAverageForTheYear</th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblOccupancy</th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
+                                <th scope="col" class="govuk-table__header"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="govuk-table__body">
+                            @foreach (var poultry in ViewBag.PoultryList)
+                            {
+                                <tr class="govuk-table__row">
+                                    <td class="govuk-table__cell">@poultry.LivestockTypeName</td>
+                                    <td class="govuk-table__cell">@poultry.Units</td>
+                                    <td class="govuk-table__cell">@poultry.Occupancy</td>
+                                    <td class="govuk-table__cell">@poultry.NByUnit</td>
+                                    <td class="govuk-table__cell">@poultry.TotalNProduced</td>
+                                    <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
+@*                                     <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@poultry.EncryptedID">@Resource.lblChange</a></td>
+ *@                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            @if (ViewBag.SheepList != null && ViewBag.SheepList.Count > 0)
+            {
+                <h2 class="govuk-heading-l">@Resource.lblSheep</h2>
+                <div class="margin-bottom-thirty">
+                    <table class="govuk-table sortable-table recomendation-table data-table">
+                        <thead class="govuk-table__head">
+                            <tr class="govuk-table__row">
+                                <th scope="col" class="govuk-table__header">@Resource.lblCattleType</th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblAverageForTheYear</th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
+                                <th scope="col" class="govuk-table__header"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="govuk-table__body">
+                            @foreach (var sheep in ViewBag.SheepList)
+                            {
+                                <tr class="govuk-table__row">
+                                    <td class="govuk-table__cell">@sheep.LivestockTypeName</td>
+                                    <td class="govuk-table__cell">@sheep.Units</td>
+                                    <td class="govuk-table__cell">@sheep.NByUnit</td>
+                                    <td class="govuk-table__cell">@sheep.TotalNProduced</td>
+                                    <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
+@*                                     <td class="govuk-table__cell"><a disabled asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@sheep.EncryptedID">@Resource.lblChange</a></td>
+ *@                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            @if (ViewBag.GoatsDeerAndHorsesList != null && ViewBag.GoatsDeerAndHorsesList.Count > 0)
+            {
+                <h2 class="govuk-heading-l">@Resource.lblGoatsDeerAndHorses</h2>
+                <div class="margin-bottom-thirty">
+                    <table class="govuk-table sortable-table recomendation-table data-table">
+                        <thead class="govuk-table__head">
+                            <tr class="govuk-table__row">
+                                <th scope="col" class="govuk-table__header">@Resource.lblCattleType</th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblAverageForTheYear</th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
+                                <th scope="col" class="govuk-table__header"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="govuk-table__body">
+                            @foreach (var goatsDeerAndHorse in ViewBag.GoatsDeerAndHorsesList)
+                            {
+                                <tr class="govuk-table__row">
+                                    <td class="govuk-table__cell">@goatsDeerAndHorse.LivestockTypeName</td>
+                                    <td class="govuk-table__cell">@goatsDeerAndHorse.Units</td>
+                                    <td class="govuk-table__cell">@goatsDeerAndHorse.NByUnit</td>
+                                    <td class="govuk-table__cell">@goatsDeerAndHorse.TotalNProduced</td>
+                                    <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
+@*                                     <td class="govuk-table__cell"><a disabled asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@goatsDeerAndHorse.EncryptedID">@Resource.lblChange</a></td>
+ *@                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        }
+        else if (nonEmptyLists.Count > 1)
+        {
+            <p class="govuk-body"><a class="govuk-link" asp-action="ReportOptions" asp-controller="Report" asp-route-f="@Model.EncryptedFarmId" asp-route-r="@ViewBag.IsManageLivestock">@Resource.lblCreateAReportFromThisInformation</a></p>
+
+            <govuk-tabs>
+                @if (ViewBag.CattleList != null && ViewBag.CattleList.Count > 0)
+                {
+                    <govuk-tabs-item id="cattle" label=@Resource.lblCattle>
+                        <h2 class="govuk-heading-l">@Resource.lblCattle</h2>
+                        <div class="margin-bottom-thirty">
+                            <table class="govuk-table data-table">
+                                <thead class="govuk-table__head">
+                                    <tr class="govuk-table__row">
+                                        <th scope="col" class="govuk-table__header livestock-type">@Resource.lblCattleType</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblAverageForTheYear</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
+                                        <th scope="col" class="govuk-table__header"></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="govuk-table__body">
+                                    @foreach (var cattle in ViewBag.CattleList)
+                                    {
+                                        <tr class="govuk-table__row">
+                                            <td class="govuk-table__cell">@cattle.LivestockTypeName</td>
+                                            <td class="govuk-table__cell">@cattle.Units</td>
+                                            <td class="govuk-table__cell">@cattle.NByUnit</td>
+                                            <td class="govuk-table__cell">@cattle.TotalNProduced</td>
+                                            <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
+@*                                             <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@cattle.EncryptedID">@Resource.lblChange</a></td>
+ *@                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </govuk-tabs-item>
+                }
+                @if (ViewBag.PigsList != null && ViewBag.PigsList.Count > 0)
+                {
+                    <govuk-tabs-item id="pigs" label=@Resource.lblPigs>
+                        <h2 class="govuk-heading-l">@Resource.lblPigs</h2>
+                        <div class="margin-bottom-thirty">
+                            <table class="govuk-table sortable-table recomendation-table data-table">
+                                <thead class="govuk-table__head">
+                                    <tr class="govuk-table__row">
+                                        <th scope="col" class="govuk-table__header">@Resource.lblCattleType</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblAverageForTheYear</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblOccupancy</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
+                                        <th scope="col" class="govuk-table__header"></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="govuk-table__body">
+                                    @foreach (var pig in ViewBag.PigsList)
+                                    {
+                                        <tr class="govuk-table__row">
+                                            <td class="govuk-table__cell">@pig.LivestockTypeName</td>
+                                            <td class="govuk-table__cell">@pig.Units</td>
+                                            <td class="govuk-table__cell">@pig.Occupancy</td>
+                                            <td class="govuk-table__cell">@pig.NByUnit</td>
+                                            <td class="govuk-table__cell">@pig.TotalNProduced</td>
+                                            <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
+@*                                             <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@pig.EncryptedID">@Resource.lblChange</a></td>
+ *@                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </govuk-tabs-item>
+                }
+                @if (ViewBag.PoultryList != null && ViewBag.PoultryList.Count > 0)
+                {
+                    <govuk-tabs-item id="totals" label=@Resource.lblPoultry>
+                        <h2 class="govuk-heading-l">@Resource.lblPoultry</h2>
+                        <div class="margin-bottom-thirty">
+                            <table class="govuk-table sortable-table recomendation-table data-table">
+                                <thead class="govuk-table__head">
+                                    <tr class="govuk-table__row">
+                                        <th scope="col" class="govuk-table__header">@Resource.lblCattleType</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblAverageForTheYear</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblOccupancy</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
+                                        <th scope="col" class="govuk-table__header"></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="govuk-table__body">
+                                    @foreach (var poultry in ViewBag.PoultryList)
+                                    {
+                                        <tr class="govuk-table__row">
+                                            <td class="govuk-table__cell">@poultry.LivestockTypeName</td>
+                                            <td class="govuk-table__cell">@poultry.Units</td>
+                                            <td class="govuk-table__cell">@poultry.Occupancy</td>
+                                            <td class="govuk-table__cell">@poultry.NByUnit</td>
+                                            <td class="govuk-table__cell">@poultry.TotalNProduced</td>
+                                            <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
+@*                                             <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@poultry.EncryptedID">@Resource.lblChange</a></td>
+ *@                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </govuk-tabs-item>
+                }
+                @if (ViewBag.SheepList != null && ViewBag.SheepList.Count > 0)
+                {
+                    <govuk-tabs-item id="totals" label=@Resource.lblSheep>
+                        <h2 class="govuk-heading-l">@Resource.lblSheep</h2>
+                        <div class="margin-bottom-thirty">
+                            <table class="govuk-table sortable-table recomendation-table data-table">
+                                <thead class="govuk-table__head">
+                                    <tr class="govuk-table__row">
+                                        <th scope="col" class="govuk-table__header">@Resource.lblCattleType</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblAverageForTheYear</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
+                                        <th scope="col" class="govuk-table__header"></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="govuk-table__body">
+                                    @foreach (var sheep in ViewBag.SheepList)
+                                    {
+                                        <tr class="govuk-table__row">
+                                            <td class="govuk-table__cell">@sheep.LivestockTypeName</td>
+                                            <td class="govuk-table__cell">@sheep.Units</td>
+                                            <td class="govuk-table__cell">@sheep.NByUnit</td>
+                                            <td class="govuk-table__cell">@sheep.TotalNProduced</td>
+                                            <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
+@*                                             <td class="govuk-table__cell"><a disabled asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@sheep.EncryptedID">@Resource.lblChange</a></td>
+ *@                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </govuk-tabs-item>
+                }
+                @if (ViewBag.GoatsDeerAndHorsesList != null && ViewBag.GoatsDeerAndHorsesList.Count > 0)
+                {
+                    <govuk-tabs-item id="totals" label=@Resource.lblGoatsDeerAndHorses>
+                        <h2 class="govuk-heading-l">@Resource.lblGoatsDeerAndHorses</h2>
+                        <div class="margin-bottom-thirty">
+                            <table class="govuk-table sortable-table recomendation-table data-table">
+                                <thead class="govuk-table__head">
+                                    <tr class="govuk-table__row">
+                                        <th scope="col" class="govuk-table__header">@Resource.lblCattleType</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblAverageForTheYear</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblAction</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="govuk-table__body">
+                                    @foreach (var goatsDeerAndHorse in ViewBag.GoatsDeerAndHorsesList)
+                                    {
+                                        <tr class="govuk-table__row">
+                                            <td class="govuk-table__cell">@goatsDeerAndHorse.LivestockTypeName</td>
+                                            <td class="govuk-table__cell">@goatsDeerAndHorse.Units</td>
+                                            <td class="govuk-table__cell">@goatsDeerAndHorse.NByUnit</td>
+                                            <td class="govuk-table__cell">@goatsDeerAndHorse.TotalNProduced</td>
+                                            <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
+@*                                             <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@goatsDeerAndHorse.EncryptedID">@Resource.lblChange</a></td>
+ *@                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </govuk-tabs-item>
+                }
+            </govuk-tabs>
+        }
+
+
+
+    </div>
+</div>
