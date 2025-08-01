@@ -142,7 +142,6 @@ namespace NMP.Portal.Controllers
                     model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
                     //DateTime harvestEndDate = new DateTime(model.LastHarvestYear.Value, 7, 31);
                     DateTime currentDate = DateTime.Now;
-                    currentDate = new DateTime(2032, 8, 1); // YYYY, MM, DD
                     DateTime harvestYearEndDate = new DateTime(currentDate.Year, 7, 31);
 
 
