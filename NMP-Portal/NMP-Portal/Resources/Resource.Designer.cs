@@ -691,6 +691,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add a livestock type.
+        /// </summary>
+        public static string lblAddALivestockType {
+            get {
+                return ResourceManager.GetString("lblAddALivestockType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add analysis values for {0}..
         /// </summary>
         public static string lblAddAnalysisValues {
@@ -898,11 +907,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add livestock details for {0}.
+        /// </summary>
+        public static string lblAddLivestockDetailsFor {
+            get {
+                return ResourceManager.GetString("lblAddLivestockDetailsFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add manures to this {0} plan.
         /// </summary>
         public static string lblAddManuresToThisPlan {
             get {
                 return ResourceManager.GetString("lblAddManuresToThisPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add more livestock.
+        /// </summary>
+        public static string lblAddMoreLivestock {
+            get {
+                return ResourceManager.GetString("lblAddMoreLivestock", resourceCulture);
             }
         }
         
@@ -1600,6 +1627,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Average for the year.
+        /// </summary>
+        public static string lblAverageForTheYear {
+            get {
+                return ResourceManager.GetString("lblAverageForTheYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Average number of this {0} type in {1}.
         /// </summary>
         public static string lblAverageNumberOfThisLivestockGroup {
@@ -1839,6 +1875,24 @@ namespace NMP.Portal.Resources {
         public static string lblCancel {
             get {
                 return ResourceManager.GetString("lblCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cattle.
+        /// </summary>
+        public static string lblCattle {
+            get {
+                return ResourceManager.GetString("lblCattle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cattle type.
+        /// </summary>
+        public static string lblCattleType {
+            get {
+                return ResourceManager.GetString("lblCattleType", resourceCulture);
             }
         }
         
@@ -2208,6 +2262,15 @@ namespace NMP.Portal.Resources {
         public static string lblCreateACropNutrientManagementPlan {
             get {
                 return ResourceManager.GetString("lblCreateACropNutrientManagementPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a Livestock manure nitrogen (N) farm limit report for {0}.
+        /// </summary>
+        public static string lblCreateALivestockManureNitrogenFarmLimitReport {
+            get {
+                return ResourceManager.GetString("lblCreateALivestockManureNitrogenFarmLimitReport", resourceCulture);
             }
         }
         
@@ -2991,6 +3054,15 @@ namespace NMP.Portal.Resources {
         public static string lblDoesFarmHaveAGrasslandDerogation {
             get {
                 return ResourceManager.GetString("lblDoesFarmHaveAGrasslandDerogation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Does {0} have derogation for {1}?.
+        /// </summary>
+        public static string lblDoesFarmHaveDerogationFor {
+            get {
+                return ResourceManager.GetString("lblDoesFarmHaveDerogationFor", resourceCulture);
             }
         }
         
@@ -4516,6 +4588,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Goats, Deer and Horses.
+        /// </summary>
+        public static string lblGoatsDeerAndHorses {
+            get {
+                return ResourceManager.GetString("lblGoatsDeerAndHorses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Grass.
         /// </summary>
         public static string lblGrass {
@@ -5832,6 +5913,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0}kg per year.
+        /// </summary>
+        public static string lblKgPerYear {
+            get {
+                return ResourceManager.GetString("lblKgPerYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} kg Phasphate (P2O5).
         /// </summary>
         public static string lblKgPhosphate {
@@ -6071,6 +6161,15 @@ namespace NMP.Portal.Resources {
         public static string lblLivestockCommentContent2 {
             get {
                 return ResourceManager.GetString("lblLivestockCommentContent2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Livestock details {0}.
+        /// </summary>
+        public static string lblLivestockDetailsYear {
+            get {
+                return ResourceManager.GetString("lblLivestockDetailsYear", resourceCulture);
             }
         }
         
@@ -6836,6 +6935,15 @@ namespace NMP.Portal.Resources {
         public static string lblNitrogenStandard {
             get {
                 return ResourceManager.GetString("lblNitrogenStandard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nitrogen (N) standard per animal, per year.
+        /// </summary>
+        public static string lblNitrogenStandardPerAnimalPerYear {
+            get {
+                return ResourceManager.GetString("lblNitrogenStandardPerAnimalPerYear", resourceCulture);
             }
         }
         
@@ -7858,6 +7966,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pigs.
+        /// </summary>
+        public static string lblPigs {
+            get {
+                return ResourceManager.GetString("lblPigs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to places.
         /// </summary>
         public static string lblPlaces {
@@ -8151,6 +8268,15 @@ namespace NMP.Portal.Resources {
         public static string lblPotentialCuts {
             get {
                 return ResourceManager.GetString("lblPotentialCuts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Poultry.
+        /// </summary>
+        public static string lblPoultry {
+            get {
+                return ResourceManager.GetString("lblPoultry", resourceCulture);
             }
         }
         
@@ -9069,6 +9195,15 @@ namespace NMP.Portal.Resources {
         public static string lblShallow {
             get {
                 return ResourceManager.GetString("lblShallow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sheep.
+        /// </summary>
+        public static string lblSheep {
+            get {
+                return ResourceManager.GetString("lblSheep", resourceCulture);
             }
         }
         
@@ -10689,6 +10824,15 @@ namespace NMP.Portal.Resources {
         public static string lblTotalNitrogenWithNutrient {
             get {
                 return ResourceManager.GetString("lblTotalNitrogenWithNutrient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total number of this {0}, per month.
+        /// </summary>
+        public static string lblTotalNumberOfThisTypePerMonth {
+            get {
+                return ResourceManager.GetString("lblTotalNumberOfThisTypePerMonth", resourceCulture);
             }
         }
         
@@ -12673,6 +12817,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have added livestock.
+        /// </summary>
+        public static string lblYouHaveAddedLivestock {
+            get {
+                return ResourceManager.GetString("lblYouHaveAddedLivestock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have no inorganic fertiliser applications planned for {0} in {1}..
         /// </summary>
         public static string lblYouHaveNoInorganicFertiliserApplicationForFieldInYear {
@@ -13139,6 +13292,33 @@ namespace NMP.Portal.Resources {
         public static string MsgAutumnCropNitrogenUptakeNotSet {
             get {
                 return ResourceManager.GetString("MsgAutumnCropNitrogenUptakeNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Average number of this type for {0} not set.
+        /// </summary>
+        public static string MsgAverageNumberNotSet {
+            get {
+                return ResourceManager.GetString("MsgAverageNumberNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the average number of places for this livestock type in {0} not set..
+        /// </summary>
+        public static string MsgAverageNumberOfPlacesNotSet {
+            get {
+                return ResourceManager.GetString("MsgAverageNumberOfPlacesNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the average occupancy not set..
+        /// </summary>
+        public static string MsgAverageOccupancyNotSet {
+            get {
+                return ResourceManager.GetString("MsgAverageOccupancyNotSet", resourceCulture);
             }
         }
         
@@ -14664,11 +14844,38 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What type of Livestock would you like to add for {0} not set..
+        /// </summary>
+        public static string MsgLivestockGroupNotSet {
+            get {
+                return ResourceManager.GetString("MsgLivestockGroupNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How would you like to enter your livestock numbers not set..
+        /// </summary>
+        public static string MsgLivestockNumberQuestionNotSet {
+            get {
+                return ResourceManager.GetString("MsgLivestockNumberQuestionNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Livestock numbers for {0} must be completed.
         /// </summary>
         public static string MsgLivestockNumbersForYearMustBeCompleted {
             get {
                 return ResourceManager.GetString("MsgLivestockNumbersForYearMustBeCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What type of {0} would you like to add not set..
+        /// </summary>
+        public static string MsgLivestockTypeNotSet {
+            get {
+                return ResourceManager.GetString("MsgLivestockTypeNotSet", resourceCulture);
             }
         }
         
@@ -14790,6 +14997,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the Nitrogen (N) standard per animal, per year not set..
+        /// </summary>
+        public static string MsgNitrogenStandardPer1000PlacesNotSet {
+            get {
+                return ResourceManager.GetString("MsgNitrogenStandardPer1000PlacesNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The NVZ Action Programme requires that the average nitrogen (N) application rate (from manufactured nitrogen fertiliser and crop-available nitrogen (N) from livestock manures) across the whole farm area of a specified crop type does not exceed the N-max limit for that crop type..
         /// </summary>
         public static string MsgNMaxLimit {
@@ -14894,6 +15110,15 @@ namespace NMP.Portal.Resources {
         public static string MsgNmptServiceNotAvailable {
             get {
                 return ResourceManager.GetString("MsgNmptServiceNotAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How many of this {0} type did you have in {1} {2} not set..
+        /// </summary>
+        public static string MsgNumbersForEachMonthNotSet {
+            get {
+                return ResourceManager.GetString("MsgNumbersForEachMonthNotSet", resourceCulture);
             }
         }
         

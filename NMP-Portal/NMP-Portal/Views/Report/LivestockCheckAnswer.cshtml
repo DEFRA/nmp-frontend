@@ -4,6 +4,13 @@
     ViewData["Title"] = Resource.lblIsAnyLivestock;
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+
+    var cattle = (int)NMP.Portal.Enums.LivestockGroup.Cattle;
+    var pigs = (int)NMP.Portal.Enums.LivestockGroup.Pigs;
+    var poultry = (int)NMP.Portal.Enums.LivestockGroup.Poultry;
+    var sheep = (int)NMP.Portal.Enums.LivestockGroup.Sheep;
+    var goatsDeerOrHorses = (int)NMP.Portal.Enums.LivestockGroup.GoatsDeerOrHorses;
+
 }
 
 @section BeforeContent {
@@ -83,6 +90,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromPlan"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromSuccessMsg"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsGrasslandDerogation"></govuk-input>
 
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestock"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupId"></govuk-input>
@@ -106,6 +114,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AverageNumberOfPlaces"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AverageOccupancy"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NitrogenStandardPer1000Places"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsLivestockCheckAnswer" value="@Model.IsLivestockCheckAnswer.ToString().ToLower()"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -123,14 +132,196 @@
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-                <h2>Add livestock details for</h2>
-                <h3>Check your answers</h3>
+                <h1 class="govuk-heading-l">
+                    @(string.Format(Resource.lblAddLivestockDetailsFor, Model.Year))
+                </h1>
+                <h2 class="govuk-heading-m">
+                    @Resource.lblCheckYourAnswers
+                </h2>
 
-                <h3>Need to work on this</h3>
-                
-                @* <govuk-button type="submit" class="margin-bottom-forty">
+                <div class="check-answers">
+                    <govuk-summary-list>
+                       @*  <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>
+                                @(string.Format(Resource.lblDoesFarmHaveDerogationFor, Model.FarmName, Model.Year))
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @(Model.IsGrasslandDerogation==true ? Resource.lblYes : Resource.lblNo)
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="IsGrasslandDerogation" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row> *@
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>
+                                @string.Format(Resource.lblDidYouHaveAnyLivestockOn, Model.FarmName, Model.Year)
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @(Model.IsAnyLivestock == true ? Resource.lblYes : Resource.lblNo)
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="IsAnyLivestock" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>
+                                @string.Format(Resource.lblWhatTypeOfLivestockWouldYouLikeToAddFor, Model.Year)
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @Model.LivestockGroupName
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="LivestockGroup" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>
+                                @string.Format(Resource.lblWhatTypeOfLivestockGroupWouldYouLikeToAdd, Model.LivestockGroupName)
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @Model.LivestockTypeName
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="LivestockType" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+                        @if (Model.LivestockGroupId == cattle || Model.LivestockGroupId == sheep || Model.LivestockGroupId == goatsDeerOrHorses)
+                        {
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    @Resource.lblHowWouldYouLikeToEnterYourLivestockNumbers
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @(Model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.ANumberForEachMonth ? Resource.lblEnterANumberForEachMonth : Resource.lblEnterTheAverageNumberForTheYear)
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="LivestockNumberQuestion" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                            @if (Model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.ANumberForEachMonth)
+                            {
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key>
+                                        @(string.Format(Resource.lblTotalNumberOfThisTypePerMonth, Model.LivestockGroupName))
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+
+                                        <table class="nutrient_values">
+                                            <tbody>
+                                                <tr><td>@Resource.lblJanuary:</td>   <td>@(string.Concat(Model.NumbersInJanuary?.ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblFebruary:</td>  <td>@(string.Concat(Model.NumbersInFebruary?.ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblMarch:</td>     <td>@(string.Concat(Model.NumbersInMarch?.ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblApril:</td>     <td>@(string.Concat(Model.NumbersInApril?.ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblMay:</td>       <td>@(string.Concat(Model.NumbersInMay?.ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblJune:</td>      <td>@(string.Concat(Model.NumbersInJune?.ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblJuly:</td>      <td>@(string.Concat(Model.NumbersInJuly?.ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblAugust:</td>    <td>@(string.Concat(Model.NumbersInAugust?.ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblSeptember:</td> <td>@(string.Concat(Model.NumbersInSeptember?.ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblOctober:</td>   <td>@(string.Concat(Model.NumbersInOctober?.ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblNovember:</td>  <td>@(string.Concat(Model.NumbersInNovember?.ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblDecember:</td>  <td>@(string.Concat(Model.NumbersInDecember?.ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
+                                            </tbody>
+                                        </table>
+
+                                        @* <ul class="nutrient_values">
+                            <li>@Resource.lblJanuary:  <span> @(string.Concat(Model.NumbersInJanuary, Model.LivestockGroupName))</span></li>
+                            <li>@Resource.lblFebruary: <span> @(string.Concat(Model.NumbersInFebruary, Model.LivestockGroupName))</span></li>
+                            <li>@Resource.lblMarch:    <span> @(string.Concat(Model.NumbersInMarch, Model.LivestockGroupName))</span></li>
+                            <li>@Resource.lblApril:    <span> @(string.Concat(Model.NumbersInApril, Model.LivestockGroupName))</span></li>
+                            <li>@Resource.lblMay:      <span> @(string.Concat(Model.NumbersInMay, Model.LivestockGroupName))</span></li>
+                            <li>@Resource.lblJune:     <span> @(string.Concat(Model.NumbersInJune, Model.LivestockGroupName))</span></li>
+                            <li>@Resource.lblJuly:     <span> @(string.Concat(Model.NumbersInJuly, Model.LivestockGroupName))</span></li>
+                            <li>@Resource.lblAugust:   <span> @(string.Concat(Model.NumbersInAugust, Model.LivestockGroupName))</span></li>
+                            <li>@Resource.lblSeptember:<span> @(string.Concat(Model.NumbersInSeptember, Model.LivestockGroupName))</span></li>
+                            <li>@Resource.lblOctober:  <span> @(string.Concat(Model.NumbersInOctober, Model.LivestockGroupName))</span></li>
+                            <li>@Resource.lblNovember: <span> @(string.Concat(Model.NumbersInNovember, Model.LivestockGroupName))</span></li>
+                            <li>@Resource.lblDecember: <span> @(string.Concat(Model.NumbersInDecember, Model.LivestockGroupName))</span></li>
+                            </ul> *@
+                                    </govuk-summary-list-row-value>
+                                    <govuk-summary-list-row-actions>
+                                        <govuk-summary-list-row-action asp-action="LivestockNumberQuestion" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
+                                    </govuk-summary-list-row-actions>
+                                </govuk-summary-list-row>
+                            }
+                            else
+                            {
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key>
+                                        @string.Format(Resource.lblAverageNumberOfThisLivestockGroup, Model.LivestockGroupName, Model.Year)
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @(string.Concat(Model.AverageNumber, " " + Model.LivestockGroupName?.ToLower()))
+                                    </govuk-summary-list-row-value>
+                                    <govuk-summary-list-row-actions>
+                                        <govuk-summary-list-row-action asp-action="LivestockNumberQuestion" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
+                                    </govuk-summary-list-row-actions>
+                                </govuk-summary-list-row>
+                            }
+                        }
+                        else
+                        {
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    @string.Format(Resource.lblWhatIsTheAverageNumberOfPlacesForThisLivestockTypeIn, Model.Year)
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @(string.Concat(Model.AverageNumberOfPlaces, Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs ? Resource.lblPlaces : Resource.lblThousandPlaces))
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="NonGrazingLivestockAverageNumber" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    @Resource.lblWhatIsTheAverageOccupancy
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @(string.Concat(Model.AverageOccupancy, Resource.lblPercentage))
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="NonGrazingLivestockAverageNumber" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    @Resource.lblWhatIsTheNitrogenNStandardPerAnimalPerYear
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @(string.Concat(Model.NitrogenStandardPer1000Places, Resource.lblkg))
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="NonGrazingLivestockAverageNumber" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                        }
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>
+                                @Resource.lblNitrogenStandardPerAnimalPerYear
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @(string.Format(Resource.lblKgPerYear, ViewBag.Nitrogen))
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>
+                                @Resource.lblTotalNitrogen
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @(string.Format(Resource.lblKgPerYear, ViewBag.Phosphorus))
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+                    </govuk-summary-list>
+                </div>
+
+                <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
-                </govuk-button> *@
+                </govuk-button>
 
                 <p class="govuk-body cancel-link">
                     <a asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report">
