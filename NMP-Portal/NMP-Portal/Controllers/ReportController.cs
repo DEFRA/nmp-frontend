@@ -4573,6 +4573,7 @@ namespace NMP.Portal.Controllers
                     if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
                     {
                         model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                        model.IsAnyLivestock = null;
                         model.LivestockTypeId = null;
                         model.AverageOccupancy = null;
                         model.NumbersInJanuary = null;
@@ -4588,6 +4589,7 @@ namespace NMP.Portal.Controllers
                         model.NumbersInNovember = null;
                         model.NumbersInDecember = null;
                     }
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                     ViewBag.IsManageImportExport = _reportDataProtector.Protect(Resource.lblTrue);
                 }
                 if (!string.IsNullOrWhiteSpace(model.EncryptedId))

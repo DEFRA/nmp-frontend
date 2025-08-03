@@ -6354,6 +6354,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manage livestock.
+        /// </summary>
+        public static string lblManageLivestock {
+            get {
+                return ResourceManager.GetString("lblManageLivestock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Management.
         /// </summary>
         public static string lblManagement {
@@ -7228,7 +7237,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of places, occupancy and nitrogen (N) standard.
+        ///   Looks up a localized string similar to Number of places, occupancy and nitrogen (N) standard: {0}.
         /// </summary>
         public static string lblNumberOfPlacesOccupancyAndNitrogenStandard {
             get {
@@ -11638,7 +11647,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the average number of places for this livestock type in {0}?.
+        ///   Looks up a localized string similar to What is the average number of places for this {0} type in {1}?.
         /// </summary>
         public static string lblWhatIsTheAverageNumberOfPlacesForThisLivestockTypeIn {
             get {
