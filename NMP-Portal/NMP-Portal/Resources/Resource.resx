@@ -5429,4 +5429,13 @@ live</value>
   <data name="lblSheepType" xml:space="preserve">
     <value>Sheep type</value>
   </data>
+  <data name="lblWhatPercentageOfTheLandIsFarmedAsGrass" xml:space="preserve">
+    <value>What percentage of the land is farmed as grass?</value>
+  </data>
+  <data name="MsgEnterPercentageOfTheLandIsFarmedAsGrass" xml:space="preserve">
+    <value>Enter percentage of the land is farmed as grass?</value>
+  </data>
+  <data name="MsgGrassPercentageMustBeBetween0And100" xml:space="preserve">
+    <value>Grass percentage must be between 0 and 100.</value>
+  </data>
 </root>
