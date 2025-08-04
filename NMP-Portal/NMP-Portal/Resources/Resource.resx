@@ -5417,4 +5417,16 @@ live</value>
   <data name="lblManageLivestock" xml:space="preserve">
     <value>Manage livestock</value>
   </data>
+  <data name="lblOtherType" xml:space="preserve">
+    <value>Other type</value>
+  </data>
+  <data name="lblPigType" xml:space="preserve">
+    <value>Pig type</value>
+  </data>
+  <data name="lblPoultryType" xml:space="preserve">
+    <value>Poultry type</value>
+  </data>
+  <data name="lblSheepType" xml:space="preserve">
+    <value>Sheep type</value>
+  </data>
 </root>
