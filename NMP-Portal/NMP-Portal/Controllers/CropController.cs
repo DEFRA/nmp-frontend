@@ -1648,10 +1648,10 @@ namespace NMP.Portal.Controllers
             }
             else
             {
-                if (model.IsCheckAnswer && !model.IsCropGroupChange && !model.IsAnyChangeInField)
-                {
-                    return RedirectToAction("CheckAnswer");
-                }
+                //if (model.IsCheckAnswer && !model.IsCropGroupChange && !model.IsAnyChangeInField)
+                //{
+                //    return RedirectToAction("CheckAnswer");
+                //}
                 return View(model);
             }
         }
