@@ -5301,7 +5301,7 @@ live</value>
     <value>Nitrogen (N) standard</value>
   </data>
   <data name="lblNumberOfPlacesOccupancyAndNitrogenStandard" xml:space="preserve">
-    <value>Number of places, occupancy and nitrogen (N) standard</value>
+    <value>Number of places, occupancy and nitrogen (N) standard: {0}</value>
   </data>
   <data name="lblOccupancy" xml:space="preserve">
     <value>Occupancy</value>
@@ -5319,7 +5319,7 @@ live</value>
     <value>thousand places</value>
   </data>
   <data name="lblWhatIsTheAverageNumberOfPlacesForThisLivestockTypeIn" xml:space="preserve">
-    <value>What is the average number of places for this livestock type in {0}?</value>
+    <value>What is the average number of places for this {0} type in {1}?</value>
   </data>
   <data name="lblWhatIsTheAverageOccupancy" xml:space="preserve">
     <value>What is the average occupancy?</value>
@@ -5413,5 +5413,8 @@ live</value>
   </data>
   <data name="MsgNumbersForEachMonthNotSet" xml:space="preserve">
     <value>How many of this {0} type did you have in {1} {2} not set.</value>
+  </data>
+  <data name="lblManageLivestock" xml:space="preserve">
+    <value>Manage livestock</value>
   </data>
 </root>

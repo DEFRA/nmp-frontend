@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblIsAnyLivestock;
+    ViewData["Title"] = Resource.lblManageLivestock;
     var dataLists = new List<(string Name, dynamic Data)>
     {
         ("Cattle", ViewBag.CattleList),
@@ -13,6 +13,11 @@
 
     var nonEmptyLists = dataLists.Where(x => x.Data != null && x.Data.Count > 0).ToList();
 
+    decimal totalNitrogenCattle = 0;
+    decimal totalNitrogenPigs = 0;
+    decimal totalNitrogenPoultry = 0;
+    decimal totalNitrogenSheep = 0;
+    decimal totalNitrogenGoatsDeerAndHorses = 0;
 }
 
 @section BeforeContent {
@@ -115,9 +120,17 @@
                                     <td class="govuk-table__cell">@cattle.NByUnit</td>
                                     <td class="govuk-table__cell">@cattle.TotalNProduced</td>
                                     <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
-                                    @* <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@cattle.EncryptedID">@Resource.lblChange</a></td> *@
+                                    @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@cattle.EncryptedID">@Resource.lblChange</a></td> *@
                                 </tr>
+                                totalNitrogenCattle = totalNitrogenCattle + cattle.TotalNProduced;
                             }
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell strong">@Resource.lblTotals</td>
+                                <td class="govuk-table__cell">-</td>
+                                <td class="govuk-table__cell">-</td>
+                                <td class="govuk-table__cell strong">@totalNitrogenCattle</td>
+                                <td class="govuk-table__cell">-</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -147,9 +160,18 @@
                                     <td class="govuk-table__cell">@pig.NByUnit</td>
                                     <td class="govuk-table__cell">@pig.TotalNProduced</td>
                                     <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
-@*                                     <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@pig.EncryptedID">@Resource.lblChange</a></td>
- *@                                </tr>
+                                    @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@pig.EncryptedID">@Resource.lblChange</a></td>*@
+                                </tr>
+                                totalNitrogenPigs = totalNitrogenPigs + pig.TotalNProduced;
                             }
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell strong">@Resource.lblTotals</td>
+                                <td class="govuk-table__cell">-</td>
+                                <td class="govuk-table__cell">-</td>
+                                <td class="govuk-table__cell">-</td>
+                                <td class="govuk-table__cell strong">@totalNitrogenPigs</td>
+                                <td class="govuk-table__cell">-</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -179,9 +201,18 @@
                                     <td class="govuk-table__cell">@poultry.NByUnit</td>
                                     <td class="govuk-table__cell">@poultry.TotalNProduced</td>
                                     <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
-@*                                     <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@poultry.EncryptedID">@Resource.lblChange</a></td>
- *@                                </tr>
+                                    @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@poultry.EncryptedID">@Resource.lblChange</a></td>*@
+                                </tr>
+                                totalNitrogenPoultry = totalNitrogenPoultry + poultry.TotalNProduced;
                             }
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell strong">@Resource.lblTotals</td>
+                                <td class="govuk-table__cell">-</td>
+                                <td class="govuk-table__cell">-</td>
+                                <td class="govuk-table__cell">-</td>
+                                <td class="govuk-table__cell strong">@totalNitrogenPoultry</td>
+                                <td class="govuk-table__cell">-</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -209,9 +240,17 @@
                                     <td class="govuk-table__cell">@sheep.NByUnit</td>
                                     <td class="govuk-table__cell">@sheep.TotalNProduced</td>
                                     <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
-@*                                     <td class="govuk-table__cell"><a disabled asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@sheep.EncryptedID">@Resource.lblChange</a></td>
- *@                                </tr>
+                                    @*<td class="govuk-table__cell"><a disabled asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@sheep.EncryptedID">@Resource.lblChange</a></td>*@
+                                </tr>
+                                totalNitrogenSheep = totalNitrogenSheep + sheep.TotalNProduced;
                             }
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell strong">@Resource.lblTotals</td>
+                                <td class="govuk-table__cell">-</td>
+                                <td class="govuk-table__cell">-</td>
+                                <td class="govuk-table__cell strong">@totalNitrogenSheep</td>
+                                <td class="govuk-table__cell">-</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -239,9 +278,17 @@
                                     <td class="govuk-table__cell">@goatsDeerAndHorse.NByUnit</td>
                                     <td class="govuk-table__cell">@goatsDeerAndHorse.TotalNProduced</td>
                                     <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
-@*                                     <td class="govuk-table__cell"><a disabled asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@goatsDeerAndHorse.EncryptedID">@Resource.lblChange</a></td>
- *@                                </tr>
+                                    @*<td class="govuk-table__cell"><a disabled asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@goatsDeerAndHorse.EncryptedID">@Resource.lblChange</a></td>*@
+                                </tr>
+                                totalNitrogenGoatsDeerAndHorses = totalNitrogenGoatsDeerAndHorses + goatsDeerAndHorse.TotalNProduced;
                             }
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell strong">@Resource.lblTotals</td>
+                                <td class="govuk-table__cell">-</td>
+                                <td class="govuk-table__cell">-</td>
+                                <td class="govuk-table__cell strong">@totalNitrogenGoatsDeerAndHorses</td>
+                                <td class="govuk-table__cell">-</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -276,9 +323,17 @@
                                             <td class="govuk-table__cell">@cattle.NByUnit</td>
                                             <td class="govuk-table__cell">@cattle.TotalNProduced</td>
                                             <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
-@*                                             <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@cattle.EncryptedID">@Resource.lblChange</a></td>
- *@                                        </tr>
+                                            @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@cattle.EncryptedID">@Resource.lblChange</a></td>*@
+                                        </tr>
+                                        totalNitrogenCattle = totalNitrogenCattle + cattle.TotalNProduced;
                                     }
+                                    <tr class="govuk-table__row">
+                                        <td class="govuk-table__cell strong">@Resource.lblTotals</td>
+                                        <td class="govuk-table__cell">-</td>
+                                        <td class="govuk-table__cell">-</td>
+                                        <td class="govuk-table__cell strong">@totalNitrogenCattle</td>
+                                        <td class="govuk-table__cell">-</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -310,9 +365,18 @@
                                             <td class="govuk-table__cell">@pig.NByUnit</td>
                                             <td class="govuk-table__cell">@pig.TotalNProduced</td>
                                             <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
-@*                                             <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@pig.EncryptedID">@Resource.lblChange</a></td>
- *@                                        </tr>
+                                            @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@pig.EncryptedID">@Resource.lblChange</a></td>*@
+                                        </tr>
+                                        totalNitrogenPigs = totalNitrogenPigs + pig.TotalNProduced;
                                     }
+                                    <tr class="govuk-table__row">
+                                        <td class="govuk-table__cell strong">@Resource.lblTotals</td>
+                                        <td class="govuk-table__cell">-</td>
+                                        <td class="govuk-table__cell">-</td>
+                                        <td class="govuk-table__cell">-</td>
+                                        <td class="govuk-table__cell">@totalNitrogenPigs</td>
+                                        <td class="govuk-table__cell strong">-</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -344,9 +408,18 @@
                                             <td class="govuk-table__cell">@poultry.NByUnit</td>
                                             <td class="govuk-table__cell">@poultry.TotalNProduced</td>
                                             <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
-@*                                             <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@poultry.EncryptedID">@Resource.lblChange</a></td>
- *@                                        </tr>
+                                            @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@poultry.EncryptedID">@Resource.lblChange</a></td>*@
+                                        </tr>
+                                        totalNitrogenPoultry = totalNitrogenPoultry + poultry.TotalNProduced;
                                     }
+                                    <tr class="govuk-table__row">
+                                        <td class="govuk-table__cell strong">@Resource.lblTotals</td>
+                                        <td class="govuk-table__cell">-</td>
+                                        <td class="govuk-table__cell">-</td>
+                                        <td class="govuk-table__cell">-</td>
+                                        <td class="govuk-table__cell strong">@totalNitrogenPoultry</td>
+                                        <td class="govuk-table__cell">-</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -376,9 +449,17 @@
                                             <td class="govuk-table__cell">@sheep.NByUnit</td>
                                             <td class="govuk-table__cell">@sheep.TotalNProduced</td>
                                             <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
-@*                                             <td class="govuk-table__cell"><a disabled asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@sheep.EncryptedID">@Resource.lblChange</a></td>
- *@                                        </tr>
+                                            @*<td class="govuk-table__cell"><a disabled asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@sheep.EncryptedID">@Resource.lblChange</a></td>*@
+                                        </tr>
+                                        totalNitrogenSheep = totalNitrogenSheep + sheep.TotalNProduced;
                                     }
+                                    <tr class="govuk-table__row">
+                                        <td class="govuk-table__cell strong">@Resource.lblTotals</td>
+                                        <td class="govuk-table__cell">-</td>
+                                        <td class="govuk-table__cell">-</td>
+                                        <td class="govuk-table__cell strong">@totalNitrogenSheep</td>
+                                        <td class="govuk-table__cell">-</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -408,9 +489,17 @@
                                             <td class="govuk-table__cell">@goatsDeerAndHorse.NByUnit</td>
                                             <td class="govuk-table__cell">@goatsDeerAndHorse.TotalNProduced</td>
                                             <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
-@*                                             <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@goatsDeerAndHorse.EncryptedID">@Resource.lblChange</a></td>
- *@                                        </tr>
+                                            @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@goatsDeerAndHorse.EncryptedID">@Resource.lblChange</a></td>*@
+                                        </tr>
+                                        totalNitrogenGoatsDeerAndHorses = totalNitrogenGoatsDeerAndHorses + goatsDeerAndHorse.TotalNProduced;
                                     }
+                                    <tr class="govuk-table__row">
+                                        <td class="govuk-table__cell strong">@Resource.lblTotals</td>
+                                        <td class="govuk-table__cell">-</td>
+                                        <td class="govuk-table__cell">-</td>
+                                        <td class="govuk-table__cell strong">@totalNitrogenGoatsDeerAndHorses</td>
+                                        <td class="govuk-table__cell">-</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
