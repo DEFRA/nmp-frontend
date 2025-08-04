@@ -7723,6 +7723,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Other type.
+        /// </summary>
+        public static string lblOtherType {
+            get {
+                return ResourceManager.GetString("lblOtherType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to kg per hectare.
         /// </summary>
         public static string lblOutpurKgPerHectare {
@@ -7980,6 +7989,15 @@ namespace NMP.Portal.Resources {
         public static string lblPigs {
             get {
                 return ResourceManager.GetString("lblPigs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pig type.
+        /// </summary>
+        public static string lblPigType {
+            get {
+                return ResourceManager.GetString("lblPigType", resourceCulture);
             }
         }
         
@@ -8295,6 +8313,15 @@ namespace NMP.Portal.Resources {
         public static string lblPoultryManure {
             get {
                 return ResourceManager.GetString("lblPoultryManure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Poultry type.
+        /// </summary>
+        public static string lblPoultryType {
+            get {
+                return ResourceManager.GetString("lblPoultryType", resourceCulture);
             }
         }
         
@@ -9213,6 +9240,15 @@ namespace NMP.Portal.Resources {
         public static string lblSheep {
             get {
                 return ResourceManager.GetString("lblSheep", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sheep type.
+        /// </summary>
+        public static string lblSheepType {
+            get {
+                return ResourceManager.GetString("lblSheepType", resourceCulture);
             }
         }
         

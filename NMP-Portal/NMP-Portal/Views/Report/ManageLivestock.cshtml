@@ -142,7 +142,7 @@
                     <table class="govuk-table sortable-table recomendation-table data-table">
                         <thead class="govuk-table__head">
                             <tr class="govuk-table__row">
-                                <th scope="col" class="govuk-table__header">@Resource.lblCattleType</th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblPigType</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblAverageForTheYear</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblOccupancy</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
@@ -183,7 +183,7 @@
                     <table class="govuk-table sortable-table recomendation-table data-table">
                         <thead class="govuk-table__head">
                             <tr class="govuk-table__row">
-                                <th scope="col" class="govuk-table__header">@Resource.lblCattleType</th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblPoultryType</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblAverageForTheYear</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblOccupancy</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
@@ -224,7 +224,7 @@
                     <table class="govuk-table sortable-table recomendation-table data-table">
                         <thead class="govuk-table__head">
                             <tr class="govuk-table__row">
-                                <th scope="col" class="govuk-table__header">@Resource.lblCattleType</th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblSheepType</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblAverageForTheYear</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
@@ -262,7 +262,7 @@
                     <table class="govuk-table sortable-table recomendation-table data-table">
                         <thead class="govuk-table__head">
                             <tr class="govuk-table__row">
-                                <th scope="col" class="govuk-table__header">@Resource.lblCattleType</th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblOtherType</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblAverageForTheYear</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
@@ -347,7 +347,7 @@
                             <table class="govuk-table sortable-table recomendation-table data-table">
                                 <thead class="govuk-table__head">
                                     <tr class="govuk-table__row">
-                                        <th scope="col" class="govuk-table__header">@Resource.lblCattleType</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblPigType</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblAverageForTheYear</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblOccupancy</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
@@ -384,13 +384,13 @@
                 }
                 @if (ViewBag.PoultryList != null && ViewBag.PoultryList.Count > 0)
                 {
-                    <govuk-tabs-item id="totals" label=@Resource.lblPoultry>
+                    <govuk-tabs-item id="poultry" label=@Resource.lblPoultry>
                         <h2 class="govuk-heading-l">@Resource.lblPoultry</h2>
                         <div class="margin-bottom-thirty">
                             <table class="govuk-table sortable-table recomendation-table data-table">
                                 <thead class="govuk-table__head">
                                     <tr class="govuk-table__row">
-                                        <th scope="col" class="govuk-table__header">@Resource.lblCattleType</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblPoultryType</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblAverageForTheYear</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblOccupancy</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
@@ -427,13 +427,13 @@
                 }
                 @if (ViewBag.SheepList != null && ViewBag.SheepList.Count > 0)
                 {
-                    <govuk-tabs-item id="totals" label=@Resource.lblSheep>
+                    <govuk-tabs-item id="sheep" label=@Resource.lblSheep>
                         <h2 class="govuk-heading-l">@Resource.lblSheep</h2>
                         <div class="margin-bottom-thirty">
                             <table class="govuk-table sortable-table recomendation-table data-table">
                                 <thead class="govuk-table__head">
                                     <tr class="govuk-table__row">
-                                        <th scope="col" class="govuk-table__header">@Resource.lblCattleType</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblSheepType</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblAverageForTheYear</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
@@ -467,13 +467,13 @@
                 }
                 @if (ViewBag.GoatsDeerAndHorsesList != null && ViewBag.GoatsDeerAndHorsesList.Count > 0)
                 {
-                    <govuk-tabs-item id="totals" label=@Resource.lblGoatsDeerAndHorses>
+                    <govuk-tabs-item id="goatsDeerAndHorses" label=@Resource.lblGoatsDeerAndHorses>
                         <h2 class="govuk-heading-l">@Resource.lblGoatsDeerAndHorses</h2>
                         <div class="margin-bottom-thirty">
                             <table class="govuk-table sortable-table recomendation-table data-table">
                                 <thead class="govuk-table__head">
                                     <tr class="govuk-table__row">
-                                        <th scope="col" class="govuk-table__header">@Resource.lblCattleType</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblOtherType</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblAverageForTheYear</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
