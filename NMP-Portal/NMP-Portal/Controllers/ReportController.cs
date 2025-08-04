@@ -2074,11 +2074,11 @@ namespace NMP.Portal.Controllers
                 {
                     reportViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
-                if (reportViewModel != null  && reportViewModel.ManureTypeId != model.ManureTypeId)
+                if (reportViewModel != null && reportViewModel.ManureTypeId != model.ManureTypeId)
                 {
                     model.IsDefaultValueChange = true;
                     model.IsManureTypeChange = true;
-                    if (manureType != null&& reportViewModel.ManureTypeId != null)
+                    if (manureType != null && reportViewModel.ManureTypeId != null)
                     {
                         model.ManureType = manureType;
                         model.DryMatterPercent = manureType.DryMatter;
@@ -3759,8 +3759,25 @@ namespace NMP.Portal.Controllers
                 {
                     return View(model);
                 }
+                ReportViewModel reportModel = new ReportViewModel();
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    reportModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                if (model.IsLivestockCheckAnswer)
+                {
+                    if (model.IsAnyLivestock == reportModel.IsAnyLivestock)
+                    {
+                        return RedirectToAction("LivestockCheckAnswer");
+                    }
+                }
 
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+
+                if (model.IsAnyLivestock == false)
+                {
+                    return RedirectToAction("LivestockManureNitrogenReportChecklist");
+                }
 
                 return RedirectToAction("LivestockGroup");
             }
@@ -3829,8 +3846,8 @@ namespace NMP.Portal.Controllers
                     }
                     return View(model);
                 }
-                (CommonResponse livestockGroup,  error) = await _reportService.FetchLivestockGroupById(model.LivestockGroupId??0);
-                if(error==null)
+                (CommonResponse livestockGroup, error) = await _reportService.FetchLivestockGroupById(model.LivestockGroupId ?? 0);
+                if (error == null)
                 {
                     model.LivestockGroupName = livestockGroup.Name;
                 }
@@ -3839,6 +3856,20 @@ namespace NMP.Portal.Controllers
                     TempData["ErrorOnLivestockGroup"] = error.Message;
                     return View(model);
                 }
+
+                ReportViewModel reportModel = new ReportViewModel();
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    reportModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                if (model.IsLivestockCheckAnswer)
+                {
+                    if (model.LivestockGroupId == reportModel.LivestockGroupId)
+                    {
+                        return RedirectToAction("LivestockCheckAnswer");
+                    }
+                }
+
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
 
                 return RedirectToAction("LivestockType");
@@ -3901,7 +3932,7 @@ namespace NMP.Portal.Controllers
                 }
                 (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
                 model.LivestockTypeName = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Name;
-                
+
                 if (!ModelState.IsValid)
                 {
                     if (error == null)
@@ -3909,6 +3940,19 @@ namespace NMP.Portal.Controllers
                         ViewBag.LivestockTypes = livestockTypes;
                     }
                     return View(model);
+                }
+
+                ReportViewModel reportModel = new ReportViewModel();
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    reportModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                if (model.IsLivestockCheckAnswer)
+                {
+                    if (model.LivestockTypeId == reportModel.LivestockTypeId)
+                    {
+                        return RedirectToAction("LivestockCheckAnswer");
+                    }
                 }
 
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
@@ -3977,8 +4021,21 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
 
+                ReportViewModel reportModel = new ReportViewModel();
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    reportModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                if (model.IsLivestockCheckAnswer)
+                {
+                    if (model.LivestockNumberQuestion == reportModel.LivestockNumberQuestion)
+                    {
+                        return RedirectToAction("LivestockCheckAnswer");
+                    }
+                }
+
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
-                if(model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.ANumberForEachMonth)
+                if (model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.ANumberForEachMonth)
                 {
                     return RedirectToAction("LivestockNumbersMonthly");
                 }
@@ -4031,55 +4088,72 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace("Report Controller : LivestockNumbersMonthly() post action called");
             try
             {
-                if (model.NumbersInJanuary == null)
+                if (model.NumbersInJanuary == null &&
+                    model.NumbersInFebruary == null &&
+                    model.NumbersInMarch == null &&
+                    model.NumbersInApril == null &&
+                    model.NumbersInMay == null &&
+                    model.NumbersInJune == null &&
+                    model.NumbersInJuly == null &&
+                    model.NumbersInAugust == null &&
+                    model.NumbersInSeptember == null &&
+                    model.NumbersInOctober == null &&
+                    model.NumbersInNovember == null &&
+                    model.NumbersInDecember == null)
                 {
-                    ModelState.AddModelError("NumbersInJanuary", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblJanuary, model.Year));
-                }
-                if (model.NumbersInFebruary == null)
-                {
-                    ModelState.AddModelError("NumbersInFebruary", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblFebruary, model.Year));
-                }
-                if (model.NumbersInMarch == null)
-                {
-                    ModelState.AddModelError("NumbersInMarch", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblMarch, model.Year));
-                }
-                if (model.NumbersInApril == null)
-                {
-                    ModelState.AddModelError("NumbersInApril", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblApril, model.Year));
-                }
-                if (model.NumbersInMay == null)
-                {
-                    ModelState.AddModelError("NumbersInMay", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblMay, model.Year));
+                    ModelState.AddModelError("NumbersInJanuary", Resource.MsgEnterAtLeastOneValue);
                 }
 
-                if (model.NumbersInJune == null)
-                {
-                    ModelState.AddModelError("NumbersInJune", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblJune, model.Year));
-                }
-                if (model.NumbersInJuly == null)
-                {
-                    ModelState.AddModelError("NumbersInJuly", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblJuly, model.Year));
-                }
-                if (model.NumbersInAugust == null)
-                {
-                    ModelState.AddModelError("NumbersInAugust", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblAugust, model.Year));
-                }
-                if (model.NumbersInSeptember == null)
-                {
-                    ModelState.AddModelError("NumbersInSeptember", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblSeptember, model.Year));
-                }
-                if (model.NumbersInOctober == null)
-                {
-                    ModelState.AddModelError("NumbersInOctober", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblOctober, model.Year));
-                }
-                if (model.NumbersInNovember == null)
-                {
-                    ModelState.AddModelError("NumbersInNovember", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblNovember, model.Year));
-                }
-                if (model.NumbersInDecember == null)
-                {
-                    ModelState.AddModelError("NumbersInDecember", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblDecember, model.Year));
-                }
+
+                //if (model.NumbersInJanuary == null)
+                //{
+                //    ModelState.AddModelError("NumbersInJanuary", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblJanuary, model.Year));
+                //}
+                //if (model.NumbersInFebruary == null)
+                //{
+                //    ModelState.AddModelError("NumbersInFebruary", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblFebruary, model.Year));
+                //}
+                //if (model.NumbersInMarch == null)
+                //{
+                //    ModelState.AddModelError("NumbersInMarch", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblMarch, model.Year));
+                //}
+                //if (model.NumbersInApril == null)
+                //{
+                //    ModelState.AddModelError("NumbersInApril", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblApril, model.Year));
+                //}
+                //if (model.NumbersInMay == null)
+                //{
+                //    ModelState.AddModelError("NumbersInMay", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblMay, model.Year));
+                //}
+
+                //if (model.NumbersInJune == null)
+                //{
+                //    ModelState.AddModelError("NumbersInJune", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblJune, model.Year));
+                //}
+                //if (model.NumbersInJuly == null)
+                //{
+                //    ModelState.AddModelError("NumbersInJuly", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblJuly, model.Year));
+                //}
+                //if (model.NumbersInAugust == null)
+                //{
+                //    ModelState.AddModelError("NumbersInAugust", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblAugust, model.Year));
+                //}
+                //if (model.NumbersInSeptember == null)
+                //{
+                //    ModelState.AddModelError("NumbersInSeptember", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblSeptember, model.Year));
+                //}
+                //if (model.NumbersInOctober == null)
+                //{
+                //    ModelState.AddModelError("NumbersInOctober", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblOctober, model.Year));
+                //}
+                //if (model.NumbersInNovember == null)
+                //{
+                //    ModelState.AddModelError("NumbersInNovember", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblNovember, model.Year));
+                //}
+                //if (model.NumbersInDecember == null)
+                //{
+                //    ModelState.AddModelError("NumbersInDecember", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblDecember, model.Year));
+                //}
                 if (!ModelState.IsValid)
                 {
                     (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
@@ -4087,6 +4161,31 @@ namespace NMP.Portal.Controllers
 
                     return View(model);
                 }
+
+                ReportViewModel reportModel = new ReportViewModel();
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    reportModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                if (model.IsLivestockCheckAnswer)
+                {
+                    if (model.NumbersInJanuary == reportModel.NumbersInJanuary &&
+                    model.NumbersInFebruary == reportModel.NumbersInFebruary &&
+                    model.NumbersInMarch == reportModel.NumbersInMarch &&
+                    model.NumbersInApril == reportModel.NumbersInApril &&
+                    model.NumbersInMay == reportModel.NumbersInMay &&
+                    model.NumbersInJune == reportModel.NumbersInJune &&
+                    model.NumbersInJuly == reportModel.NumbersInJuly &&
+                    model.NumbersInAugust == reportModel.NumbersInAugust &&
+                    model.NumbersInSeptember == reportModel.NumbersInSeptember &&
+                    model.NumbersInOctober == reportModel.NumbersInOctober &&
+                    model.NumbersInNovember == reportModel.NumbersInNovember &&
+                    model.NumbersInDecember == reportModel.NumbersInDecember)
+                    {
+                        return RedirectToAction("LivestockCheckAnswer");
+                    }
+                }
+
                 model.AverageNumber = null;
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
 
@@ -4137,7 +4236,7 @@ namespace NMP.Portal.Controllers
             {
                 if (model.AverageNumber == null)
                 {
-                    ModelState.AddModelError("AverageNumber", string.Format(Resource.MsgEnterTheAverageNumberOfThisTypeFor,model.Year));
+                    ModelState.AddModelError("AverageNumber", string.Format(Resource.MsgEnterTheAverageNumberOfThisTypeFor, model.Year));
                 }
                 if (!ModelState.IsValid)
                 {
@@ -4159,6 +4258,18 @@ namespace NMP.Portal.Controllers
                 model.NumbersInNovember = null;
                 model.NumbersInDecember = null;
 
+                ReportViewModel reportModel = new ReportViewModel();
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    reportModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                if (model.IsLivestockCheckAnswer)
+                {
+                    if (model.AverageNumber == reportModel.AverageNumber)
+                    {
+                        return RedirectToAction("LivestockCheckAnswer");
+                    }
+                }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
 
                 return RedirectToAction("LivestockCheckAnswer");
@@ -4215,7 +4326,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.NitrogenStandardPer1000Places == null)
                 {
-                    ModelState.AddModelError("NitrogenStandardPer1000Places",Resource.MsgEnterTheNitrogenStandardPerAnimal);
+                    ModelState.AddModelError("NitrogenStandardPer1000Places", Resource.MsgEnterTheNitrogenStandardPerAnimal);
                 }
                 if (!ModelState.IsValid)
                 {
@@ -4236,6 +4347,19 @@ namespace NMP.Portal.Controllers
 
                 model.LivestockNumberQuestion = null;
                 model.AverageNumber = null;
+
+                ReportViewModel reportModel = new ReportViewModel();
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    reportModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                if (model.IsLivestockCheckAnswer)
+                {
+                    if (model.AverageNumberOfPlaces == reportModel.AverageNumberOfPlaces && model.AverageOccupancy == reportModel.AverageOccupancy && model.NitrogenStandardPer1000Places == reportModel.NitrogenStandardPer1000Places)
+                    {
+                        return RedirectToAction("LivestockCheckAnswer");
+                    }
+                }
 
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
 
@@ -4266,6 +4390,9 @@ namespace NMP.Portal.Controllers
                 }
                 (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
                 ViewBag.Nitrogen = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+                ViewBag.Phosphorus = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+                model.IsLivestockCheckAnswer = true;
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             catch (Exception ex)
             {
@@ -4275,6 +4402,370 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("LivestockType");
 
             }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LivestockCheckAnswer(ReportViewModel model)
+        {
+            _logger.LogTrace("Report Controller : LivestockCheckAnswer() post action called");
+            Error error = new Error();
+            try
+            {
+                var cattle = (int)NMP.Portal.Enums.LivestockGroup.Cattle;
+                var pigs = (int)NMP.Portal.Enums.LivestockGroup.Pigs;
+                var poultry = (int)NMP.Portal.Enums.LivestockGroup.Poultry;
+                var sheep = (int)NMP.Portal.Enums.LivestockGroup.Sheep;
+                var goatsDeerOrHorses = (int)NMP.Portal.Enums.LivestockGroup.GoatsDeerOrHorses;
+                if (model.LivestockGroupId == null)
+                {
+                    ModelState.AddModelError("LivestockGroupId", string.Format(Resource.MsgLivestockGroupNotSet, model.Year));
+                }
+                if (model.LivestockTypeId == null)
+                {
+                    ModelState.AddModelError("LivestockTypeId", string.Format(Resource.MsgLivestockTypeNotSet, model.Year));
+                }
+                if (model.LivestockGroupId == cattle || model.LivestockGroupId == sheep || model.LivestockGroupId == goatsDeerOrHorses)
+                {
+                    if (model.LivestockNumberQuestion == null)
+                    {
+                        ModelState.AddModelError("LivestockNumberQuestion", Resource.MsgLivestockNumberQuestionNotSet);
+                    }
+                    else
+                    {
+                        if (model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.ANumberForEachMonth)
+                        {
+                            if (model.NumbersInJanuary == null &&
+                                model.NumbersInFebruary == null &&
+                                model.NumbersInMarch == null &&
+                                model.NumbersInApril == null &&
+                                model.NumbersInMay == null &&
+                                model.NumbersInJune == null &&
+                                model.NumbersInJuly == null &&
+                                model.NumbersInAugust == null &&
+                                model.NumbersInSeptember == null &&
+                                model.NumbersInOctober == null &&
+                                model.NumbersInNovember == null &&
+                                model.NumbersInDecember == null)
+                            {
+                                ModelState.AddModelError("NumbersInJanuary", string.Format(Resource.MsgNumbersForEachMonthNotSet, model.LivestockGroupName, Resource.lblJanuary, model.Year));
+                            }
+
+                        }
+                        else
+                        {
+                            if (model.AverageNumber == null)
+                            {
+                                ModelState.AddModelError("AverageNumber", string.Format(Resource.MsgAverageNumberNotSet, model.Year));
+                            }
+                        }
+                    }
+                }
+                if (model.LivestockGroupId == pigs || model.LivestockGroupId == poultry)
+                {
+                    if (model.AverageNumberOfPlaces == null)
+                    {
+                        ModelState.AddModelError("AverageNumberOfPlaces", string.Format(Resource.MsgAverageNumberOfPlacesNotSet, model.Year));
+                    }
+                    if (model.AverageOccupancy == null)
+                    {
+                        ModelState.AddModelError("AverageOccupancy", Resource.MsgAverageOccupancyNotSet);
+                    }
+                    if (model.NitrogenStandardPer1000Places == null)
+                    {
+                        ModelState.AddModelError("NitrogenStandardPer1000Places", Resource.MsgNitrogenStandardPer1000PlacesNotSet);
+                    }
+                }
+
+
+                (List<LivestockTypeResponse> livestockTypes, error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
+                var nitrogen = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+                var phosphorus = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+                ViewBag.Nitrogen = nitrogen;
+                ViewBag.Phosphorus = phosphorus;
+
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                decimal totalNProduced = 0;
+                decimal totalPProduced = 0;
+                decimal averageNumberForYear = 0;
+                if (model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.ANumberForEachMonth)
+                {
+                    int sumOfEachMonth = (model.NumbersInJanuary ?? 0) + (model.NumbersInFebruary ?? 0) +
+                                         (model.NumbersInMarch ?? 0) + (model.NumbersInApril ?? 0) +
+                                         (model.NumbersInMay ?? 0) + (model.NumbersInJune ?? 0) +
+                                         (model.NumbersInJuly ?? 0) + (model.NumbersInAugust ?? 0) +
+                                         (model.NumbersInSeptember ?? 0) + (model.NumbersInOctober ?? 0) +
+                                         (model.NumbersInNovember ?? 0) + (model.NumbersInDecember ?? 0);
+
+                    averageNumberForYear = (decimal)(sumOfEachMonth / 12);
+                }
+                else if(model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.AverageNumberForTheYear)
+                {
+                    averageNumberForYear = model.AverageNumber ?? 0;
+                }
+                else
+                {
+                    averageNumberForYear = (model.AverageNumberOfPlaces ?? 0);
+                }
+                decimal averageNumberForYearRoundOfValue = Math.Round(averageNumberForYear, 1);
+
+                if (model.LivestockGroupId == cattle || model.LivestockGroupId == sheep || model.LivestockGroupId == goatsDeerOrHorses)
+                {
+                    totalNProduced = Math.Round(averageNumberForYearRoundOfValue * nitrogen ?? 0);
+                    totalPProduced = Math.Round(averageNumberForYearRoundOfValue * phosphorus ?? 0);
+                }
+                else
+                {
+                    totalNProduced = Math.Round(averageNumberForYearRoundOfValue * (model.NitrogenStandardPer1000Places ?? 0));
+                    totalPProduced = Math.Round(averageNumberForYearRoundOfValue * phosphorus ?? 0);
+                }
+                
+
+                var nutrientsLoadingLiveStock = new NutrientsLoadingLiveStock()
+                {
+                    FarmID = model.FarmId,
+                    CalendarYear = model.Year,
+                    LiveStockTypeID = model.LivestockTypeId,
+                    Units = averageNumberForYear,
+                    NByUnit = nitrogen,
+                    TotalNProduced = totalNProduced,
+                    Occupancy = model.AverageOccupancy,
+                    PByUnit = phosphorus,
+                    TotalPProduced = (int)totalPProduced,
+                    Jan = model.NumbersInJanuary,
+                    Feb = model.NumbersInFebruary,
+                    Mar = model.NumbersInMarch,
+                    Apr = model.NumbersInApril,
+                    May = model.NumbersInMay,
+                    June = model.NumbersInJune,
+                    July = model.NumbersInJuly,
+                    Aug = model.NumbersInAugust,
+                    Sep = model.NumbersInSeptember,
+                    Oct = model.NumbersInOctober,
+                    Nov = model.NumbersInNovember,
+                    Dec = model.NumbersInDecember
+                };
+                (NutrientsLoadingLiveStock nutrientsLoadingLiveStockData, error) = await _reportService.AddNutrientsLoadingLiveStockAsync(nutrientsLoadingLiveStock);
+
+                if (!string.IsNullOrWhiteSpace(error.Message))
+                {
+                    TempData["ErrorOnLivestockCheckAnswer"] = error.Message;
+                    return View(model);
+                }
+                else
+                {
+                    bool success = true;
+                    string successMsg = Resource.lblYouHaveAddedLivestock;
+
+                    //_httpContextAccessor.HttpContext?.Session.Remove("ReportData");
+
+                    return RedirectToAction("ManageLivestock", "Report", new
+                    {
+                        q = model.EncryptedFarmId,
+                        y = model.EncryptedHarvestYear,
+                        r = _reportDataProtector.Protect(successMsg),
+                        s = _reportDataProtector.Protect(success.ToString())
+                    });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in LivestockCheckAnswer() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnLivestockCheckAnswer"] = ex.Message;
+                return View(model);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ManageLivestock(string q, string y, string r, string s)
+        {
+            _logger.LogTrace($"Report Controller : ManageLivestock() action called");
+            ReportViewModel model = new ReportViewModel();
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                if (string.IsNullOrWhiteSpace(model.IsComingFromImportExportOverviewPage))
+                {
+                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                    {
+                        model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+
+                        model.LivestockGroupId = null;
+                        model.IsAnyLivestock = null;
+                        model.LivestockTypeId = null;
+                        model.LivestockNumberQuestion = null;
+                        model.AverageNumber = null;
+                        model.NumbersInJanuary = null;
+                        model.NumbersInFebruary = null;
+                        model.NumbersInMarch = null;
+                        model.NumbersInApril = null;
+                        model.NumbersInMay = null;
+                        model.NumbersInJune = null;
+                        model.NumbersInJuly = null;
+                        model.NumbersInAugust = null;
+                        model.NumbersInSeptember = null;
+                        model.NumbersInOctober = null;
+                        model.NumbersInNovember = null;
+                        model.NumbersInDecember = null;
+                        model.AverageNumberOfPlaces = null;
+                        model.AverageOccupancy = null;
+                        model.NitrogenStandardPer1000Places = null;
+                        model.IsLivestockCheckAnswer = false;
+                    }
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                    ViewBag.IsManageImportExport = _reportDataProtector.Protect(Resource.lblTrue);
+                }
+                if (!string.IsNullOrWhiteSpace(model.EncryptedId))
+                {
+                    model.EncryptedId = null;
+                }
+                model.IsComingFromSuccessMsg = false;
+                int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
+                (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(decryptedFarmId);
+                if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
+                {
+                    if (!string.IsNullOrWhiteSpace(r))
+                    {
+                        TempData["succesMsgContent1"] = _reportDataProtector.Unprotect(r);
+                        if (!string.IsNullOrWhiteSpace(s))
+                        {
+                            ViewBag.isComingFromSuccessMsg = _reportDataProtector.Protect(Resource.lblTrue);
+                            TempData["succesMsgContent2"] = Resource.lblAddMoreLivestock;
+                            TempData["succesMsgContent3"] = string.Format(Resource.lblCreateALivestockManureNitrogenFarmLimitReport, _farmDataProtector.Unprotect(y));
+                        }
+                    }
+                    model.FarmName = farm.Name;
+                    model.FarmId = decryptedFarmId;
+                    model.EncryptedFarmId = q;
+                    if (!string.IsNullOrWhiteSpace(y))
+                    {
+                        model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(y));
+                        model.EncryptedHarvestYear = y;
+                    }
+                    List<HarvestYear> harvestYearList = new List<HarvestYear>();
+                    (List<NutrientsLoadingLiveStock> nutrientsLoadingLiveStockList, error) = await _reportService.FetchLivestockByFarmIdAndYear(decryptedFarmId, model.Year ?? 0);
+
+                    if (string.IsNullOrWhiteSpace(error.Message))
+                    {
+                        if (nutrientsLoadingLiveStockList != null && nutrientsLoadingLiveStockList.Count > 0)
+                        {
+                            (List<CommonResponse> livestockGroups, error) = await _reportService.FetchLivestockGroupList();
+                            if (livestockGroups != null && livestockGroups.Count > 0)
+                            {
+                                int? cattleLivestockId = livestockGroups.FirstOrDefault(x => x.Id == (int)NMP.Portal.Enums.LivestockGroup.Cattle).Id;
+
+                                int? pigsLivestockId = livestockGroups.FirstOrDefault(x => x.Id == (int)NMP.Portal.Enums.LivestockGroup.Pigs).Id;
+
+                                int? poultryLivestockId = livestockGroups.FirstOrDefault(x => x.Id == (int)NMP.Portal.Enums.LivestockGroup.Poultry).Id;
+
+                                int? sheepLivestockId = livestockGroups.FirstOrDefault(x => x.Id == (int)NMP.Portal.Enums.LivestockGroup.Sheep).Id;
+
+                                int? goatsDeerOrHorsesLivestockId = livestockGroups.FirstOrDefault(x => x.Id == (int)NMP.Portal.Enums.LivestockGroup.GoatsDeerOrHorses).Id;
+
+                                (List<LivestockTypeResponse> cattleLivestockTypes, error) = await _reportService.FetchLivestockTypesByGroupId(cattleLivestockId ?? 0);
+
+                                (List<LivestockTypeResponse> pigsLivestockTypes, error) = await _reportService.FetchLivestockTypesByGroupId(pigsLivestockId ?? 0);
+
+                                (List<LivestockTypeResponse> poultryLivestockTypes, error) = await _reportService.FetchLivestockTypesByGroupId(poultryLivestockId ?? 0);
+
+                                (List<LivestockTypeResponse> sheepLivestockTypes, error) = await _reportService.FetchLivestockTypesByGroupId(sheepLivestockId ?? 0);
+
+                                (List<LivestockTypeResponse> goatsDeerOrHorsesLivestockTypes, error) = await _reportService.FetchLivestockTypesByGroupId(goatsDeerOrHorsesLivestockId ?? 0);
+
+                                var cattleTypeDict = cattleLivestockTypes.ToDictionary(x => x.ID);
+                                var pigsTypeDict = pigsLivestockTypes.ToDictionary(x => x.ID);
+                                var poultryTypeDict = poultryLivestockTypes.ToDictionary(x => x.ID);
+                                var sheepTypeDict = sheepLivestockTypes.ToDictionary(x => x.ID);
+                                var goatsDeerOrHorsesTypeDict = goatsDeerOrHorsesLivestockTypes.ToDictionary(x => x.ID);
+
+
+                                ViewBag.CattleList = nutrientsLoadingLiveStockList
+                                    .Where(x => x.CalendarYear == model.Year && cattleTypeDict.ContainsKey(x.LiveStockTypeID ?? 0))
+                                    .Select(x => new
+                                    {
+                                        EncryptedID = _reportDataProtector.Protect(x.ID.ToString()),
+                                        LivestockTypeName = cattleTypeDict[x.LiveStockTypeID ?? 0].Name,
+                                        x.Units,
+                                        x.NByUnit,
+                                        x.TotalNProduced
+                                    })
+                                    .ToList();
+
+                                ViewBag.PigsList = nutrientsLoadingLiveStockList
+                                    .Where(x => x.CalendarYear == model.Year && pigsTypeDict.ContainsKey(x.LiveStockTypeID ?? 0))
+                                    .Select(x => new
+                                    {
+                                        EncryptedID = _reportDataProtector.Protect(x.ID.ToString()),
+                                        LivestockTypeName = pigsTypeDict[x.LiveStockTypeID ?? 0].Name,
+                                        x.Units,
+                                        x.Occupancy,
+                                        x.NByUnit,
+                                        x.TotalNProduced
+                                    })
+                                    .ToList();
+
+                                ViewBag.PoultryList = nutrientsLoadingLiveStockList
+                                    .Where(x => x.CalendarYear == model.Year && poultryTypeDict.ContainsKey(x.LiveStockTypeID ?? 0))
+                                    .Select(x => new
+                                    {
+                                        EncryptedID = _reportDataProtector.Protect(x.ID.ToString()),
+                                        LivestockTypeName = poultryTypeDict[x.LiveStockTypeID ?? 0].Name,
+                                        x.Units,
+                                        x.Occupancy,
+                                        x.NByUnit,
+                                        x.TotalNProduced
+                                    })
+                                    .ToList();
+
+                                ViewBag.SheepList = nutrientsLoadingLiveStockList
+                                    .Where(x => x.CalendarYear == model.Year && sheepTypeDict.ContainsKey(x.LiveStockTypeID ?? 0))
+                                    .Select(x => new
+                                    {
+                                        EncryptedID = _reportDataProtector.Protect(x.ID.ToString()),
+                                        LivestockTypeName = sheepTypeDict[x.LiveStockTypeID ?? 0].Name,
+                                        x.Units,
+                                        x.NByUnit,
+                                        x.TotalNProduced
+                                    })
+                                    .ToList();
+
+                                ViewBag.GoatsDeerAndHorsesList = nutrientsLoadingLiveStockList
+                                    .Where(x => x.CalendarYear == model.Year && goatsDeerOrHorsesTypeDict.ContainsKey(x.LiveStockTypeID ?? 0))
+                                    .Select(x => new
+                                    {
+                                        EncryptedID = _reportDataProtector.Protect(x.ID.ToString()),
+                                        LivestockTypeName = goatsDeerOrHorsesTypeDict[x.LiveStockTypeID ?? 0].Name,
+                                        x.Units,
+                                        x.NByUnit,
+                                        x.TotalNProduced
+                                    })
+                                    .ToList();
+
+
+                            }
+
+                        }
+                    }
+                }
+                else
+                {
+                    TempData["Error"] = error.Message;
+                    return RedirectToAction("FarmSummary", "Farm", new { q = q });
+                }
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+            }
+            if (!string.IsNullOrWhiteSpace(y))
+            {
+                model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(y));
+                model.EncryptedHarvestYear = y;
+            }
+
+            model.IsManageLivestock = true;
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
             return View(model);
         }
 
@@ -4290,7 +4781,7 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-            model.IsCheckAnswer = false;
+            model.IsLivestockCheckAnswer = false;
             HttpContext.Session.SetObjectAsJson("FarmData", model);
             if (model.AverageNumber != null)
             {
