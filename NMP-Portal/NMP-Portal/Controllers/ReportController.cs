@@ -1663,7 +1663,7 @@ namespace NMP.Portal.Controllers
 
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
 
-                return RedirectToAction("LivestockManureNitrogenReportChecklist");
+                return RedirectToAction("LivestockManureNFarmLimitReport");
             }
             catch (Exception ex)
             {
