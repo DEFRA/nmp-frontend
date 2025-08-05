@@ -4503,7 +4503,7 @@ namespace NMP.Portal.Controllers
 
                     averageNumberForYear = (decimal)(sumOfEachMonth / 12);
                 }
-                else if(model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.AverageNumberForTheYear)
+                else if (model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.AverageNumberForTheYear)
                 {
                     averageNumberForYear = model.AverageNumber ?? 0;
                 }
@@ -4523,7 +4523,7 @@ namespace NMP.Portal.Controllers
                     totalNProduced = Math.Round(averageNumberForYearRoundOfValue * (model.NitrogenStandardPer1000Places ?? 0));
                     totalPProduced = Math.Round(averageNumberForYearRoundOfValue * phosphorus ?? 0);
                 }
-                
+
 
                 var nutrientsLoadingLiveStock = new NutrientsLoadingLiveStock()
                 {
@@ -5348,6 +5348,29 @@ namespace NMP.Portal.Controllers
                 return View(model);
             }
 
+            return View(model);
+        }
+        [HttpGet]
+        public async Task<IActionResult> LivestockManureNFarmLimitReport()
+        {
+            ReportViewModel model = new ReportViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+
+
+            (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
+            if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
+            {
+                model.Farm = new Farm();
+                model.Farm = farm;
+            }
+            _logger.LogTrace("Report Controller : CropAndFieldManagement() post action called");
             return View(model);
         }
     }

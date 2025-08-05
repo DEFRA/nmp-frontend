@@ -2122,6 +2122,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Compliance with NVZ livestock manure nitrogen (N) farm limit..
+        /// </summary>
+        public static string lblComplianceWithNVZLivestockManureNitrogenFarmLimit {
+            get {
+                return ResourceManager.GetString("lblComplianceWithNVZLivestockManureNitrogenFarmLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to comply.
         /// </summary>
         public static string lblComply {
@@ -2973,6 +2982,15 @@ namespace NMP.Portal.Resources {
         public static string lblDemonstrateComplianceWithTheNMaxLimitForEachCrop {
             get {
                 return ResourceManager.GetString("lblDemonstrateComplianceWithTheNMaxLimitForEachCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to derogated.
+        /// </summary>
+        public static string lblDerogated {
+            get {
+                return ResourceManager.GetString("lblDerogated", resourceCulture);
             }
         }
         
@@ -5804,6 +5822,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to  Key information.
+        /// </summary>
+        public static string lblKeyInformation {
+            get {
+                return ResourceManager.GetString("lblKeyInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to kg.
         /// </summary>
         public static string lblkg {
@@ -6165,6 +6192,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This assessment is based on the NVZ livestock manure farm limit of {0}kg of nitrogen (N) per hectare, and best practice guidance of {1}kg of nitrogen (N) per hectare for land outside of an NVZ..
+        /// </summary>
+        public static string lblLivestockContentTwoForNonDerogation {
+            get {
+                return ResourceManager.GetString("lblLivestockContentTwoForNonDerogation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Livestock details {0}.
         /// </summary>
         public static string lblLivestockDetailsYear {
@@ -6210,11 +6246,56 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Livestock manure nitrogen (N) farm limit {0}.
+        /// </summary>
+        public static string lblLivestockManureNitrogenFarmLimitForYear {
+            get {
+                return ResourceManager.GetString("lblLivestockManureNitrogenFarmLimitForYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Livestock manure nitrogen (N) farm limit report {0}.
         /// </summary>
         public static string lblLivestockManureNitrogenFarmLimitReport {
             get {
                 return ResourceManager.GetString("lblLivestockManureNitrogenFarmLimitReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Average livestock manure total nitrogen (N) loading.
+        /// </summary>
+        public static string lbllivestockManureReportContentFive {
+            get {
+                return ResourceManager.GetString("lbllivestockManureReportContentFive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Difference between livestock manure total nitrogen (N) capacity, and livestock manure total nitrogen (N) Loading.
+        /// </summary>
+        public static string lblLivestockManureReportContentFour {
+            get {
+                return ResourceManager.GetString("lblLivestockManureReportContentFour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Livestock manure total nitrogen (N) capacity.
+        /// </summary>
+        public static string lblLivestockManureTotalNitrogenCapacity {
+            get {
+                return ResourceManager.GetString("lblLivestockManureTotalNitrogenCapacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Livestock manure total nitrogen (N) loading.
+        /// </summary>
+        public static string lblLivestockManureTotalNitrogenLoading {
+            get {
+                return ResourceManager.GetString("lblLivestockManureTotalNitrogenLoading", resourceCulture);
             }
         }
         
@@ -6251,6 +6332,24 @@ namespace NMP.Portal.Resources {
         public static string lblLivestockQuantityWIthoutSpace {
             get {
                 return ResourceManager.GetString("lblLivestockQuantityWIthoutSpace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The information you entered does not indicate compliance. You must plan so that you do not exceed the limit..
+        /// </summary>
+        public static string lblLivestockReportContentOne {
+            get {
+                return ResourceManager.GetString("lblLivestockReportContentOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This assessment is based on the derogated NVZ livestock manure nitrogen (N) farm limit of {0}kg of nitrogen (N) per hectare for grazing livestock, {1}kg of nitrogen (N) per hectare for non-grazing livestock and best practice guidance of {2}kg of nitrogen (N) per hectare for land outside of an NVZ..
+        /// </summary>
+        public static string lblLivestockReportContentTwoForDerogation {
+            get {
+                return ResourceManager.GetString("lblLivestockReportContentTwoForDerogation", resourceCulture);
             }
         }
         
@@ -7164,6 +7263,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to not a derogated.
+        /// </summary>
+        public static string lblNotADerogated {
+            get {
+                return ResourceManager.GetString("lblNotADerogated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not entered.
         /// </summary>
         public static string lblNotEntered {
@@ -7800,6 +7908,15 @@ namespace NMP.Portal.Resources {
         public static string lblPercentageOfOrganicMatter {
             get {
                 return ResourceManager.GetString("lblPercentageOfOrganicMatter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}% of this farm is {0}.
+        /// </summary>
+        public static string lblPercentageOfThisFarm {
+            get {
+                return ResourceManager.GetString("lblPercentageOfThisFarm", resourceCulture);
             }
         }
         
@@ -10198,6 +10315,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The information entered indicates compliance..
+        /// </summary>
+        public static string lblTheInformationEnteredIndicatesCompliance {
+            get {
+                return ResourceManager.GetString("lblTheInformationEnteredIndicatesCompliance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to the organic materials and inorganic fertilisers you use and how you apply them.
         /// </summary>
         public static string lblTheManuresAndFertilisersYouUseAndHowYouApplyThem {
@@ -10459,6 +10585,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This farm has a grassland derogation for {0}.
+        /// </summary>
+        public static string lblThisFarmHasAGrasslandDerogationFor {
+            get {
+                return ResourceManager.GetString("lblThisFarmHasAGrasslandDerogationFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This gives the following range for annual dry matter yield..
         /// </summary>
         public static string lblThisGivesTheFollowingRangeForAnnualDryMatterYield {
@@ -10473,6 +10608,15 @@ namespace NMP.Portal.Resources {
         public static string lblThisGrowthClassGivesARangeForAnnualDryMatterYieldOf {
             get {
                 return ResourceManager.GetString("lblThisGrowthClassGivesARangeForAnnualDryMatterYieldOf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This is a {0} farm..
+        /// </summary>
+        public static string lblThisIsADerogatedFarm {
+            get {
+                return ResourceManager.GetString("lblThisIsADerogatedFarm", resourceCulture);
             }
         }
         

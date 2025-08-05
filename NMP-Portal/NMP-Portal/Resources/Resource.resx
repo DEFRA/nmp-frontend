@@ -5429,4 +5429,52 @@ live</value>
   <data name="lblSheepType" xml:space="preserve">
     <value>Sheep type</value>
   </data>
+  <data name="lblLivestockManureNitrogenFarmLimitForYear" xml:space="preserve">
+    <value>Livestock manure nitrogen (N) farm limit {0}</value>
+  </data>
+  <data name="lblThisIsADerogatedFarm" xml:space="preserve">
+    <value>This is a {0} farm.</value>
+  </data>
+  <data name="lblDerogated" xml:space="preserve">
+    <value>derogated</value>
+  </data>
+  <data name="lblThisFarmHasAGrasslandDerogationFor" xml:space="preserve">
+    <value>This farm has a grassland derogation for {0}</value>
+  </data>
+  <data name="lblPercentageOfThisFarm" xml:space="preserve">
+    <value>{0}% of this farm is {0}</value>
+  </data>
+  <data name="lblNotADerogated" xml:space="preserve">
+    <value>not a derogated</value>
+  </data>
+  <data name="lblComplianceWithNVZLivestockManureNitrogenFarmLimit" xml:space="preserve">
+    <value>Compliance with NVZ livestock manure nitrogen (N) farm limit.</value>
+  </data>
+  <data name="lblTheInformationEnteredIndicatesCompliance" xml:space="preserve">
+    <value>The information entered indicates compliance.</value>
+  </data>
+  <data name="lblLivestockReportContentOne" xml:space="preserve">
+    <value>The information you entered does not indicate compliance. You must plan so that you do not exceed the limit.</value>
+  </data>
+  <data name="lblLivestockReportContentTwoForDerogation" xml:space="preserve">
+    <value>This assessment is based on the derogated NVZ livestock manure nitrogen (N) farm limit of {0}kg of nitrogen (N) per hectare for grazing livestock, {1}kg of nitrogen (N) per hectare for non-grazing livestock and best practice guidance of {2}kg of nitrogen (N) per hectare for land outside of an NVZ.</value>
+  </data>
+  <data name="lblLivestockContentTwoForNonDerogation" xml:space="preserve">
+    <value>This assessment is based on the NVZ livestock manure farm limit of {0}kg of nitrogen (N) per hectare, and best practice guidance of {1}kg of nitrogen (N) per hectare for land outside of an NVZ.</value>
+  </data>
+  <data name="lblKeyInformation" xml:space="preserve">
+    <value> Key information</value>
+  </data>
+  <data name="lblLivestockManureTotalNitrogenCapacity" xml:space="preserve">
+    <value>Livestock manure total nitrogen (N) capacity</value>
+  </data>
+  <data name="lblLivestockManureTotalNitrogenLoading" xml:space="preserve">
+    <value>Livestock manure total nitrogen (N) loading</value>
+  </data>
+  <data name="lblLivestockManureReportContentFour" xml:space="preserve">
+    <value>Difference between livestock manure total nitrogen (N) capacity, and livestock manure total nitrogen (N) Loading</value>
+  </data>
+  <data name="lbllivestockManureReportContentFive" xml:space="preserve">
+    <value>Average livestock manure total nitrogen (N) loading</value>
+  </data>
 </root>
