@@ -149,5 +149,9 @@ namespace NMP.Portal.ViewModels
         public decimal? NitrogenStandardPer1000Places { get; set; }
         public bool IsManageLivestock { get; set; } = false;
         public bool IsLivestockCheckAnswer { get; set; } = false;
+
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatPercentageOfTheLandIsFarmedAsGrass))]
+        [Range(0, 100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgGrassPercentageMustBeBetween0And100))]
+        public int? GrassPercentage { get; set; }
     }
 }
