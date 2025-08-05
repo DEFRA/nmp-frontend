@@ -5435,7 +5435,7 @@ live</value>
   <data name="MsgEnterPercentageOfTheLandIsFarmedAsGrass" xml:space="preserve">
     <value>Enter percentage of the land is farmed as grass?</value>
   </data>
-  <data name="MsgGrassPercentageMustBeBetween0And100" xml:space="preserve">
-    <value>Grass percentage must be between 0 and 100.</value>
+  <data name="MsgGrassPercentageMustBeBetween80And100" xml:space="preserve">
+    <value>Grass percentage must be between 80 and 100.</value>
   </data>
 </root>
