@@ -11,7 +11,7 @@ namespace NMP.Portal.Models
         public decimal? TotalFarmed { get; set; }
         public bool? ManureTotal { get; set; }
         public bool? Derogation { get; set; }
-        public decimal? GrassPercentage { get; set; }
+        public int? GrassPercentage { get; set; }
         public bool? ContingencyPlan { get; set; } = false;
         public DateTime CreatedOn { get; set; }
         public int? CreatedByID { get; set; }

@@ -12034,6 +12034,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What percentage of the land is farmed as grass?.
+        /// </summary>
+        public static string lblWhatPercentageOfTheLandIsFarmedAsGrass {
+            get {
+                return ResourceManager.GetString("lblWhatPercentageOfTheLandIsFarmedAsGrass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What type of {0} would you like to add?.
         /// </summary>
         public static string lblWhatTypeOfLivestockGroupWouldYouLikeToAdd {
@@ -14268,6 +14277,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter percentage of the land is farmed as grass?.
+        /// </summary>
+        public static string MsgEnterPercentageOfTheLandIsFarmedAsGrass {
+            get {
+                return ResourceManager.GetString("MsgEnterPercentageOfTheLandIsFarmedAsGrass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a rainfall amount before continuing.
         /// </summary>
         public static string MsgEnterRainfallAmountBeforeContinuing {
@@ -14723,6 +14741,15 @@ namespace NMP.Portal.Resources {
         public static string MsgForSuccessCrop {
             get {
                 return ResourceManager.GetString("MsgForSuccessCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Grass percentage must be between 0 and 100..
+        /// </summary>
+        public static string MsgGrassPercentageMustBeBetween0And100 {
+            get {
+                return ResourceManager.GetString("MsgGrassPercentageMustBeBetween0And100", resourceCulture);
             }
         }
         

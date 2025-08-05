@@ -1599,6 +1599,9 @@ namespace NMP.Portal.Controllers
                 {
                     ViewBag.IsNutrientsLoadingManureshaveData = _reportDataProtector.Protect(Resource.lblTrue);
                 }
+                (List<NutrientsLoadingLiveStock> nutrientsLoadingLiveStockList, error) = await _reportService.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
+                ViewBag.NutrientLivestockData = nutrientsLoadingLiveStockList;
+
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             catch (Exception ex)
@@ -1717,6 +1720,13 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("TotalAreaInNVZ", Resource.MsgEnterTotalAreaInNVZ);
                 }
+                if(model.IsGrasslandDerogation==true)
+                {
+                    if (model.GrassPercentage == null)
+                    {
+                        ModelState.AddModelError("GrassPercentage", Resource.MsgEnterPercentageOfTheLandIsFarmedAsGrass);
+                    }
+                }
                 if (model.TotalFarmArea <= 0)
                 {
                     ModelState.AddModelError("TotalFarmArea", Resource.MsgTotalFarmAreaShouldBeGreaterThanZero);
@@ -1744,7 +1754,7 @@ namespace NMP.Portal.Controllers
                     TotalFarmed = model.TotalFarmArea,
                     ManureTotal = null,
                     Derogation = model.IsGrasslandDerogation,
-                    GrassPercentage = null,
+                    GrassPercentage = model.GrassPercentage,
                     ContingencyPlan = false
                 };
                 (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData, Error error) = await _reportService.UpdateNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetailsData);
@@ -3746,7 +3756,7 @@ namespace NMP.Portal.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult IsAnyLivestock(ReportViewModel model)
+        public async Task<IActionResult> IsAnyLivestock(ReportViewModel model)
         {
             _logger.LogTrace("Report Controller : IsAnyLivestock() post action called");
             try
@@ -3776,7 +3786,15 @@ namespace NMP.Portal.Controllers
 
                 if (model.IsAnyLivestock == false)
                 {
-                    return RedirectToAction("LivestockManureNitrogenReportChecklist");
+                    (List<NutrientsLoadingLiveStock> nutrientsLoadingLiveStockList, Error error) = await _reportService.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
+                    if(nutrientsLoadingLiveStockList.Count>0)
+                    {
+                        return RedirectToAction("ManageLivestock", new {q=model.EncryptedFarmId,y=model.EncryptedHarvestYear });
+                    }
+                    else
+                    {
+                        return RedirectToAction("LivestockManureNitrogenReportChecklist");
+                    }
                 }
 
                 return RedirectToAction("LivestockGroup");
@@ -4297,7 +4315,10 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-
+                (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
+                model.NitrogenStandardPer1000Places = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+                model.AverageOccupancy = (int)livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Occupancy;
+               
             }
             catch (Exception ex)
             {

@@ -147,12 +147,19 @@
                     <p class="govuk-hint">
                         @Resource.lblDoNotIncludeSurfaceWaterBuildingYards
                     </p>
-                    <govuk-input name="TotalFarmArea" asp-for=@Model.TotalFarmArea type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input asp-for=@Model.TotalFarmArea type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
                         <govuk-input-suffix>@Resource.lblHectares</govuk-input-suffix>
                     </govuk-input>
-                    <govuk-input name="TotalAreaInNVZ" asp-for=@Model.TotalAreaInNVZ type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input asp-for=@Model.TotalAreaInNVZ type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
                         <govuk-input-suffix>@Resource.lblHectares</govuk-input-suffix>
                     </govuk-input>
+                    @if(Model.IsGrasslandDerogation==true)
+                    {
+                        <govuk-input asp-for=@Model.GrassPercentage type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                            <govuk-input-suffix>@Resource.lblPercentage</govuk-input-suffix>
+                        </govuk-input>
+                    }
+                    
                 </div>
                 <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                     @Resource.lblContinue
