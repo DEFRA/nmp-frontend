@@ -5429,6 +5429,21 @@ live</value>
   <data name="lblSheepType" xml:space="preserve">
     <value>Sheep type</value>
   </data>
+  <data name="lblWhatPercentageOfTheLandIsFarmedAsGrass" xml:space="preserve">
+    <value>What percentage of the land is farmed as grass?</value>
+  </data>
+  <data name="MsgEnterPercentageOfTheLandIsFarmedAsGrass" xml:space="preserve">
+    <value>Enter percentage of the land is farmed as grass?</value>
+  </data>
+  <data name="MsgGrassPercentageMustBeBetween80And100" xml:space="preserve">
+    <value>Grass percentage must be between 80 and 100.</value>
+  </data>
+  <data name="MsgToHaveADerogationAtLeast80PercentOfYourFarm" xml:space="preserve">
+    <value>To have a derogation, at least 80% of your farm’s agricultural area must be grassland.</value>
+  </data>
+  <data name="lblPhosphateStandard" xml:space="preserve">
+    <value>Phosphate (P2O5) standard: {0}kg per animal, per year</value>
+  </data>
   <data name="lblLivestockManureNitrogenFarmLimitForYear" xml:space="preserve">
     <value>Livestock manure nitrogen (N) farm limit {0}</value>
   </data>

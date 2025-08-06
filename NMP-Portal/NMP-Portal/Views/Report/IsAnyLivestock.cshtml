@@ -4,10 +4,26 @@
     ViewData["Title"] = Resource.lblIsAnyLivestock;
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+    var action = "";
+    if (Model.IsLivestockCheckAnswer)
+    {
+        action = "LivestockCheckAnswer";
+    }
+    else
+    {
+        if (ViewBag.LiveStockList != null && ViewBag.LiveStockList.Count>0)
+        {
+            action = "ManageLivestock";
+        }
+        else
+        {
+            action = "LivestockManureNitrogenReportChecklist";
+        }
+    }
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsLivestockCheckAnswer ? "LivestockCheckAnswer" : "LivestockManureNitrogenReportChecklist")" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@action" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnIsAnyLivestock"] != null)
 {
@@ -87,6 +103,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromPlan"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromSuccessMsg"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsGrasslandDerogation"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassPercentage"></govuk-input>
 
             @* <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestock"></govuk-input> *@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupId"></govuk-input>

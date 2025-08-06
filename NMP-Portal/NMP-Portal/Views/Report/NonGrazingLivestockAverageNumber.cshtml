@@ -82,6 +82,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromPlan"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsGrasslandDerogation"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassPercentage"></govuk-input>
 
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestock"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupId"></govuk-input>
@@ -125,7 +126,7 @@
                     <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblNumberOfPlacesOccupancyAndNitrogenStandard, Model.LivestockGroupName)</h1>
                 </legand>
                 <p class="govuk-body">@string.Format(Resource.lblSelectedLivestockType, Model.LivestockTypeName)</p>
-
+                <p class="govuk-body">@string.Format(Resource.lblPhosphateStandard, ViewBag.Phosphate)</p>
                 <govuk-details>
                     <govuk-details-summary>
                         @Resource.lblAboutOccupancyAndNitrogenStandard
@@ -161,7 +162,7 @@
                 </govuk-input>
 
                 <govuk-input asp-for=@Model.AverageOccupancy type="number" step="any" spellcheck="false">
-                    <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheAverageOccupancy</govuk-input-label>
+                    @* <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheAverageOccupancy</govuk-input-label> *@
                     @if(Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs)
                     {
                         <govuk-input-hint>@Resource.lblLengthOfTimeYouHaveTheseAnimalsOnTheFarm</govuk-input-hint>

@@ -8182,6 +8182,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Phosphate (P2O5) standard: {0}kg per animal, per year.
+        /// </summary>
+        public static string lblPhosphateStandard {
+            get {
+                return ResourceManager.GetString("lblPhosphateStandard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What was the phosphorus (P) analysis type?.
         /// </summary>
         public static string lblPhosphorusAnalysisType {
@@ -12331,6 +12340,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What percentage of the land is farmed as grass?.
+        /// </summary>
+        public static string lblWhatPercentageOfTheLandIsFarmedAsGrass {
+            get {
+                return ResourceManager.GetString("lblWhatPercentageOfTheLandIsFarmedAsGrass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What type of {0} would you like to add?.
         /// </summary>
         public static string lblWhatTypeOfLivestockGroupWouldYouLikeToAdd {
@@ -14565,6 +14583,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter percentage of the land is farmed as grass?.
+        /// </summary>
+        public static string MsgEnterPercentageOfTheLandIsFarmedAsGrass {
+            get {
+                return ResourceManager.GetString("MsgEnterPercentageOfTheLandIsFarmedAsGrass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a rainfall amount before continuing.
         /// </summary>
         public static string MsgEnterRainfallAmountBeforeContinuing {
@@ -15020,6 +15047,15 @@ namespace NMP.Portal.Resources {
         public static string MsgForSuccessCrop {
             get {
                 return ResourceManager.GetString("MsgForSuccessCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Grass percentage must be between 80 and 100..
+        /// </summary>
+        public static string MsgGrassPercentageMustBeBetween80And100 {
+            get {
+                return ResourceManager.GetString("MsgGrassPercentageMustBeBetween80And100", resourceCulture);
             }
         }
         
@@ -16028,6 +16064,15 @@ namespace NMP.Portal.Resources {
         public static string MsgThisManureTypeNameAreadyExist {
             get {
                 return ResourceManager.GetString("MsgThisManureTypeNameAreadyExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To have a derogation, at least 80% of your farm’s agricultural area must be grassland..
+        /// </summary>
+        public static string MsgToHaveADerogationAtLeast80PercentOfYourFarm {
+            get {
+                return ResourceManager.GetString("MsgToHaveADerogationAtLeast80PercentOfYourFarm", resourceCulture);
             }
         }
         
