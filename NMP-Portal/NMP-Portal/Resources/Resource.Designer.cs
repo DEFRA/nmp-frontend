@@ -14745,11 +14745,11 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Grass percentage must be between 0 and 100..
+        ///   Looks up a localized string similar to Grass percentage must be between 80 and 100..
         /// </summary>
-        public static string MsgGrassPercentageMustBeBetween0And100 {
+        public static string MsgGrassPercentageMustBeBetween80And100 {
             get {
-                return ResourceManager.GetString("MsgGrassPercentageMustBeBetween0And100", resourceCulture);
+                return ResourceManager.GetString("MsgGrassPercentageMustBeBetween80And100", resourceCulture);
             }
         }
         
