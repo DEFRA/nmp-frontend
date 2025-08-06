@@ -6493,6 +6493,10 @@ namespace NMP.Portal.Controllers
                         }
                     }
                     //end
+                    if(model.HarvestYear.All(x=>x.IsAnyPlan==false))
+                    {
+                        return RedirectToAction("HarvestYearForPlan", new { q = q, year = _farmDataProtector.Protect(model.Year.ToString()), isPlanRecord = false });
+                    }
                     return View(model);
                 }
                 else
