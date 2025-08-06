@@ -120,6 +120,7 @@
                 </legand>
                 <p class="govuk-body">@string.Format(Resource.lblSelectedLivestockType, Model.LivestockTypeName)</p>
                 <p class="govuk-body">@string.Format(Resource.lblNitrogenStandard, ViewBag.Nitrogen)</p>
+                <p class="govuk-body">@string.Format(Resource.lblPhosphateStandard, ViewBag.Phosphate)</p>
                 <govuk-input asp-for=@Model.NumbersInJanuary type="number" step="any" spellcheck="false">
                     <govuk-input-label is-page-heading="false">@string.Format(Resource.lblHowManyOfThisTypeDidYouHaveIn, Model.LivestockGroupName, Resource.lblJanuary ,Model.Year)</govuk-input-label>
                     <govuk-input-suffix>@Model.LivestockGroupName</govuk-input-suffix>
