@@ -674,3 +674,6 @@ hr.seperator_thirty {
 .livestock-type {
     width: 25%;
 }
+.govuk-body-s {
+    font-size: 17px !important;
+}
