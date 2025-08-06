@@ -162,7 +162,7 @@
                 </govuk-input>
 
                 <govuk-input asp-for=@Model.AverageOccupancy type="number" step="any" spellcheck="false">
-                    <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheAverageOccupancy</govuk-input-label>
+                    @* <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheAverageOccupancy</govuk-input-label> *@
                     @if(Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs)
                     {
                         <govuk-input-hint>@Resource.lblLengthOfTimeYouHaveTheseAnimalsOnTheFarm</govuk-input-hint>

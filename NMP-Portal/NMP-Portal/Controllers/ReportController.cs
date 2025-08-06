@@ -1522,6 +1522,10 @@ namespace NMP.Portal.Controllers
                 {
                     return View(model);
                 }
+                if(model.IsGrasslandDerogation==false)
+                {
+                    model.GrassPercentage = null;
+                }
                 var NutrientsLoadingFarmDetailsData = new NutrientsLoadingFarmDetail()
                 {
                     FarmID = model.FarmId,
@@ -3727,7 +3731,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public IActionResult IsAnyLivestock()
+        public async Task<IActionResult> IsAnyLivestock()
         {
             _logger.LogTrace("Report Controller : IsAnyLivestock() action called");
             ReportViewModel model = new ReportViewModel();
@@ -3741,7 +3745,9 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-
+                (List<NutrientsLoadingLiveStock> nutrientsLoadingLiveStockList, Error error) = await _reportService.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
+                ViewBag.LiveStockList = nutrientsLoadingLiveStockList;
+                
             }
             catch (Exception ex)
             {
@@ -4803,7 +4809,7 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("FarmList", "Farm");
             }
             model.IsLivestockCheckAnswer = false;
-            HttpContext.Session.SetObjectAsJson("FarmData", model);
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
             if (model.AverageNumber != null)
             {
                 return RedirectToAction("AverageNumber");

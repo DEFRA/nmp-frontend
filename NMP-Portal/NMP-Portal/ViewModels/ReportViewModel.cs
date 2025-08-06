@@ -142,6 +142,7 @@ namespace NMP.Portal.ViewModels
         [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
         public decimal? AverageNumberOfPlaces { get; set; }
 
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheAverageOccupancy))]
         [Range(0, int.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
         public int? AverageOccupancy { get; set; }
 
@@ -151,7 +152,7 @@ namespace NMP.Portal.ViewModels
         public bool IsLivestockCheckAnswer { get; set; } = false;
 
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatPercentageOfTheLandIsFarmedAsGrass))]
-        [Range(0, 100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgGrassPercentageMustBeBetween0And100))]
+        [Range(80, 100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgGrassPercentageMustBeBetween80And100))]
         public int? GrassPercentage { get; set; }
     }
 }
