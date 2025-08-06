@@ -5442,6 +5442,6 @@ live</value>
     <value>To have a derogation, at least 80% of your farm’s agricultural area must be grassland.</value>
   </data>
   <data name="lblPhosphateStandard" xml:space="preserve">
-    <value>Phosphate (P2O5) standard per year: {0}kg</value>
+    <value>Phosphate (P2O5) standard: {0}kg per animal, per year</value>
   </data>
 </root>
