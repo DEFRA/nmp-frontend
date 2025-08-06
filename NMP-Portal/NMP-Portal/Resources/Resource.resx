@@ -5438,4 +5438,10 @@ live</value>
   <data name="MsgGrassPercentageMustBeBetween80And100" xml:space="preserve">
     <value>Grass percentage must be between 80 and 100.</value>
   </data>
+  <data name="MsgToHaveADerogationAtLeast80PercentOfYourFarm" xml:space="preserve">
+    <value>To have a derogation, at least 80% of your farm’s agricultural area must be grassland.</value>
+  </data>
+  <data name="lblPhosphateStandard" xml:space="preserve">
+    <value>Phosphate (P2O5) standard per year: {0}kg</value>
+  </data>
 </root>

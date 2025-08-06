@@ -4093,6 +4093,7 @@ namespace NMP.Portal.Controllers
                 }
                 (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
                 ViewBag.Nitrogen = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+                ViewBag.Phosphate = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
             }
             catch (Exception ex)
             {
@@ -4128,60 +4129,11 @@ namespace NMP.Portal.Controllers
                     ModelState.AddModelError("NumbersInJanuary", Resource.MsgEnterAtLeastOneValue);
                 }
 
-
-                //if (model.NumbersInJanuary == null)
-                //{
-                //    ModelState.AddModelError("NumbersInJanuary", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblJanuary, model.Year));
-                //}
-                //if (model.NumbersInFebruary == null)
-                //{
-                //    ModelState.AddModelError("NumbersInFebruary", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblFebruary, model.Year));
-                //}
-                //if (model.NumbersInMarch == null)
-                //{
-                //    ModelState.AddModelError("NumbersInMarch", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblMarch, model.Year));
-                //}
-                //if (model.NumbersInApril == null)
-                //{
-                //    ModelState.AddModelError("NumbersInApril", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblApril, model.Year));
-                //}
-                //if (model.NumbersInMay == null)
-                //{
-                //    ModelState.AddModelError("NumbersInMay", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblMay, model.Year));
-                //}
-
-                //if (model.NumbersInJune == null)
-                //{
-                //    ModelState.AddModelError("NumbersInJune", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblJune, model.Year));
-                //}
-                //if (model.NumbersInJuly == null)
-                //{
-                //    ModelState.AddModelError("NumbersInJuly", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblJuly, model.Year));
-                //}
-                //if (model.NumbersInAugust == null)
-                //{
-                //    ModelState.AddModelError("NumbersInAugust", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblAugust, model.Year));
-                //}
-                //if (model.NumbersInSeptember == null)
-                //{
-                //    ModelState.AddModelError("NumbersInSeptember", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblSeptember, model.Year));
-                //}
-                //if (model.NumbersInOctober == null)
-                //{
-                //    ModelState.AddModelError("NumbersInOctober", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblOctober, model.Year));
-                //}
-                //if (model.NumbersInNovember == null)
-                //{
-                //    ModelState.AddModelError("NumbersInNovember", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblNovember, model.Year));
-                //}
-                //if (model.NumbersInDecember == null)
-                //{
-                //    ModelState.AddModelError("NumbersInDecember", string.Format(Resource.lblEnterHowManyOfThis, model.LivestockGroupName, Resource.lblDecember, model.Year));
-                //}
                 if (!ModelState.IsValid)
                 {
                     (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
                     ViewBag.Nitrogen = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+                    ViewBag.Phosphate = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
 
                     return View(model);
                 }
@@ -4240,6 +4192,7 @@ namespace NMP.Portal.Controllers
                 }
                 (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
                 ViewBag.Nitrogen = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+                ViewBag.Phosphate = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
             }
             catch (Exception ex)
             {
@@ -4266,6 +4219,7 @@ namespace NMP.Portal.Controllers
                 {
                     (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
                     ViewBag.Nitrogen = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+                    ViewBag.Phosphate = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
 
                     return View(model);
                 }
@@ -4324,7 +4278,7 @@ namespace NMP.Portal.Controllers
                 (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
                 model.NitrogenStandardPer1000Places = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
                 model.AverageOccupancy = (int)livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Occupancy;
-               
+                ViewBag.Phosphate = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
             }
             catch (Exception ex)
             {
@@ -4357,6 +4311,10 @@ namespace NMP.Portal.Controllers
                 }
                 if (!ModelState.IsValid)
                 {
+                    (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
+                    model.NitrogenStandardPer1000Places = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+                    model.AverageOccupancy = (int)livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Occupancy;
+                    ViewBag.Phosphate = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
                     return View(model);
                 }
                 model.NumbersInJanuary = null;
@@ -4417,7 +4375,7 @@ namespace NMP.Portal.Controllers
                 }
                 (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
                 ViewBag.Nitrogen = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
-                ViewBag.Phosphorus = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+                ViewBag.Phosphate = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
                 model.IsLivestockCheckAnswer = true;
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
@@ -4510,7 +4468,8 @@ namespace NMP.Portal.Controllers
                 var nitrogen = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
                 var phosphorus = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
                 ViewBag.Nitrogen = nitrogen;
-                ViewBag.Phosphorus = phosphorus;
+                //ViewBag.Phosphorus = phosphorus;
+                ViewBag.Phosphate = phosphorus;
 
                 if (!ModelState.IsValid)
                 {

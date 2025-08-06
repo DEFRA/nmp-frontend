@@ -7921,6 +7921,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Phosphate (P2O5) standard per year: {0}kg.
+        /// </summary>
+        public static string lblPhosphateStandard {
+            get {
+                return ResourceManager.GetString("lblPhosphateStandard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What was the phosphorus (P) analysis type?.
         /// </summary>
         public static string lblPhosphorusAnalysisType {
@@ -15758,6 +15767,15 @@ namespace NMP.Portal.Resources {
         public static string MsgThisManureTypeNameAreadyExist {
             get {
                 return ResourceManager.GetString("MsgThisManureTypeNameAreadyExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To have a derogation, at least 80% of your farm’s agricultural area must be grassland..
+        /// </summary>
+        public static string MsgToHaveADerogationAtLeast80PercentOfYourFarm {
+            get {
+                return ResourceManager.GetString("MsgToHaveADerogationAtLeast80PercentOfYourFarm", resourceCulture);
             }
         }
         

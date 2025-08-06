@@ -152,7 +152,7 @@ namespace NMP.Portal.ViewModels
         public bool IsLivestockCheckAnswer { get; set; } = false;
 
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatPercentageOfTheLandIsFarmedAsGrass))]
-        [Range(80, 100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgGrassPercentageMustBeBetween80And100))]
+        [Range(80, 100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgToHaveADerogationAtLeast80PercentOfYourFarm))]
         public int? GrassPercentage { get; set; }
     }
 }
