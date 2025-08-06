@@ -102,50 +102,57 @@ namespace NMP.Portal.ViewModels
         public int? ManureGroupIdForFilter { get; set; }
         public string? OtherMaterialName { get; set; }
 
-        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
-        public decimal? NumbersInJanuary { get; set; }
+        [Range(0, int.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        public int? NumbersInJanuary { get; set; }
 
-        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
-        public decimal? NumbersInFebruary { get; set; }
+        [Range(0, int.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        public int? NumbersInFebruary { get; set; }
 
-        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
-        public decimal? NumbersInMarch { get; set; }
+        [Range(0, int.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        public int? NumbersInMarch { get; set; }
 
-        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
-        public decimal? NumbersInApril { get; set; }
+        [Range(0, int.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        public int? NumbersInApril { get; set; }
 
-        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
-        public decimal? NumbersInMay { get; set; }
+        [Range(0, int.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        public int? NumbersInMay { get; set; }
 
-        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
-        public decimal? NumbersInJune { get; set; }
+        [Range(0, int.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        public int? NumbersInJune { get; set; }
 
-        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
-        public decimal? NumbersInJuly { get; set; }
+        [Range(0, int.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        public int? NumbersInJuly { get; set; }
 
-        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
-        public decimal? NumbersInAugust { get; set; }
+        [Range(0, int.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        public int? NumbersInAugust { get; set; }
 
-        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
-        public decimal? NumbersInSeptember { get; set; }
+        [Range(0, int.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        public int? NumbersInSeptember { get; set; }
 
-        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
-        public decimal? NumbersInOctober { get; set; }
+        [Range(0, int.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        public int? NumbersInOctober { get; set; }
 
-        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
-        public decimal? NumbersInNovember { get; set; }
+        [Range(0, int.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        public int? NumbersInNovember { get; set; }
 
-        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
-        public decimal? NumbersInDecember { get; set; }
+        [Range(0, int.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        public int? NumbersInDecember { get; set; }
         public bool? IsDeleteLivestockImportExport { get; set; }
 
         [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
         public decimal? AverageNumberOfPlaces { get; set; }
 
-        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
-        public decimal? AverageOccupancy { get; set; }
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheAverageOccupancy))]
+        [Range(0, int.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        public int? AverageOccupancy { get; set; }
 
         [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
         public decimal? NitrogenStandardPer1000Places { get; set; }
+        public bool IsManageLivestock { get; set; } = false;
+        public bool IsLivestockCheckAnswer { get; set; } = false;
+
+        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatPercentageOfTheLandIsFarmedAsGrass))]
+        [Range(80, 100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgGrassPercentageMustBeBetween80And100))]
+        public int? GrassPercentage { get; set; }
     }
 }

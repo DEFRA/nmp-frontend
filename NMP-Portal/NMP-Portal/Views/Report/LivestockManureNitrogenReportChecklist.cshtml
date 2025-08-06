@@ -138,6 +138,7 @@
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromPlan"></govuk-input>
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherMaterialName"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassPercentage"></govuk-input>
 
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestock"></govuk-input>
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupId"></govuk-input>
@@ -161,6 +162,7 @@
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AverageNumberOfPlaces"></govuk-input>
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AverageOccupancy"></govuk-input>
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NitrogenStandardPer1000Places"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsLivestockCheckAnswer" value="@Model.IsLivestockCheckAnswer.ToString().ToLower()"></govuk-input>
                     @if (Model.FieldList != null && Model.FieldList.Count > 0)
                     {
                         @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -232,23 +234,34 @@
 
                         <!-- LIVESTOCK -->
                         <li class="govuk-task-list__item govuk-task-list__item--with-link">
-                            <div class="govuk-task-list__name-and-hint">
-                                <a class="govuk-link govuk-task-list__link" asp-action="IsAnyLivestock" asp-controller="Report" aria-describedby="LivestockNumbers">
-                                    @Resource.lblLivestockNumbers
-                                </a>
-                            </div>
-                            <div class="govuk-task-list__status" id="LivestockNumbers">
-                                @if (Model.LivestockNumbers != null)
-                                {
-                                    @Resource.lblCompleted
-                                }
-                                else
-                                {
-                                    <strong class="govuk-tag govuk-tag--blue">
-                                        @Resource.lblIncomplete
-                                    </strong>
-                                }
-                            </div>
+                            @if (ViewBag.NutrientLivestockData != null && ViewBag.NutrientLivestockData.Count > 0)
+                            {
+                                <div class="govuk-task-list__name-and-hint">
+                                    <a class="govuk-link govuk-task-list__link" asp-action="ManageLivestock" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@Model.EncryptedHarvestYear" aria-describedby="LivestockNumbers">
+                                        @Resource.lblLivestockNumbers
+                                    </a>
+                                </div>
+                                <div class="govuk-task-list__status" id="LivestockNumbers">
+                                    @if (ViewBag.NutrientLivestockData != null && ViewBag.NutrientLivestockData.Count > 0)
+                                    {
+                                        @Resource.lblCompleted
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="govuk-task-list__name-and-hint">
+                                    <a class="govuk-link govuk-task-list__link" asp-action="IsAnyLivestock" asp-controller="Report" aria-describedby="LivestockNumbers">
+                                        @Resource.lblLivestockNumbers
+                                    </a>
+                                </div>
+                                <div class="govuk-task-list__status" id="LivestockNumbers">
+                                        <strong class="govuk-tag govuk-tag--blue">
+                                            @Resource.lblIncomplete
+                                        </strong>
+                                </div>
+                            }
+                            
                         </li>
 
                         <!-- IMPORTS AND EXPORTS -->

@@ -1062,8 +1062,8 @@ namespace NMP.Portal.Controllers
                     ).ToList();
 
 
-               // List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = harvestYearPlanResponse.Where(x => (x.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass && x.CropInfo1 != null &&
-               //x.Yield != null) || (x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null) ).ToList();
+                // List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = harvestYearPlanResponse.Where(x => (x.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass && x.CropInfo1 != null &&
+                //x.Yield != null) || (x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null) ).ToList();
                 if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
                 {
                     fieldRemoveList = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) ? false : true, model.Crops);
@@ -1649,10 +1649,10 @@ namespace NMP.Portal.Controllers
             }
             else
             {
-                if (model.IsCheckAnswer && !model.IsCropGroupChange && !model.IsAnyChangeInField)
-                {
-                    return RedirectToAction("CheckAnswer");
-                }
+                //if (model.IsCheckAnswer && !model.IsCropGroupChange && !model.IsAnyChangeInField)
+                //{
+                //    return RedirectToAction("CheckAnswer");
+                //}
                 return View(model);
             }
         }
@@ -2378,14 +2378,16 @@ namespace NMP.Portal.Controllers
             if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
             {
                 ViewBag.FieldOptions = harvestYearPlanResponse.Where(x => x.CropGroupName == model.PreviousCropGroupName).Select(x => x.FieldID).ToList();
-
                 var fieldIdsForFilter = fieldList.Select(f => f.ID);
                 harvestYearPlanResponse = harvestYearPlanResponse
                     .Where(x => fieldIdsForFilter.Contains(x.FieldID))
                     .ToList();
 
             }
-            //ViewBag.FieldOptions = fieldList;
+            else
+            {
+                ViewBag.FieldOptions = fieldList;
+            }
 
             //Fetch fields allowed for second crop based on first crop
             var grassTypeId = (int)NMP.Portal.Enums.CropTypes.Grass;
@@ -4914,7 +4916,8 @@ namespace NMP.Portal.Controllers
                 i = 0;
                 foreach (var crop in model.Crops)
                 {
-                    if ((crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && crop.SwardTypeID == (int)NMP.Portal.Enums.SwardType.Grass) || crop.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)
+                    if ((model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && crop.SwardTypeID == (int)NMP.Portal.Enums.SwardType.Grass) || model.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)
+                    {
                         if (crop.Yield == null)
                         {
                             if (model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
@@ -4927,6 +4930,7 @@ namespace NMP.Portal.Controllers
                                 ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format(Resource.lblWhatIsTheExpectedYieldForSingleNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType));
                             }
                         }
+                    }
                     i++;
                 }
                 if (string.IsNullOrWhiteSpace(model.Variety) && model.CropGroupId == potatoesGroupId)
@@ -5253,7 +5257,7 @@ namespace NMP.Portal.Controllers
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                     if (model.IsCheckAnswer)
                     {
-                        if(model.SwardTypeId == null || model.Crops.Any(x=>x.Yield==null))
+                        if (model.SwardTypeId == null || model.Crops.Any(x => x.Yield == null))
                         {
                             return RedirectToAction("SwardType");
                         }
