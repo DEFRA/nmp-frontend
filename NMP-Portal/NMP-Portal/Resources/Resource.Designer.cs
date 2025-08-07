@@ -13276,7 +13276,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have not entered any field.
+        ///   Looks up a localized string similar to You have not entered any field or crop information for {0}.
         /// </summary>
         public static string lblYouHaveNotEnteredAnyField {
             get {
@@ -14943,7 +14943,16 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An N-max report is not available.You need to add your crop information, and information about any organic and inorganic material applied..
+        ///   Looks up a localized string similar to This report is not available. You need to add your field and crop information, and information about any organic and inorganic material applied..
+        /// </summary>
+        public static string MsgForIfFieldsAreNotCreated {
+            get {
+                return ResourceManager.GetString("MsgForIfFieldsAreNotCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This report is not available. You need to add your crop information, and information about any organic and inorganic material applied..
         /// </summary>
         public static string MsgForIfPlanIsNotCreated {
             get {
