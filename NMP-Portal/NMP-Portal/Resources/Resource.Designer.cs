@@ -5300,7 +5300,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How would you like to enter your soil nutrient values?.
+        ///   Looks up a localized string similar to How would you like to enter your soil analysis values?.
         /// </summary>
         public static string lblHowWouldYouLikeToEnterYourSoilNutrientValues {
             get {
@@ -7615,7 +7615,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How would you like to enter your soil nutrient values?.
+        ///   Looks up a localized string similar to How would you like to enter your soil analysis values?.
         /// </summary>
         public static string lblNutrientValueTypeForCheckAnswere {
             get {
@@ -15537,7 +15537,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How would you like to enter your soil nutrient values? not set.
+        ///   Looks up a localized string similar to How would you like to enter your soil analysis values? not set.
         /// </summary>
         public static string MsgNutrientValueTypeForCheckAnswereNotSet {
             get {

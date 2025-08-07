@@ -530,7 +530,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Sulphur deficient</value>
   </data>
   <data name="lblHowWouldYouLikeToEnterYourSoilNutrientValues" xml:space="preserve">
-    <value>How would you like to enter your soil nutrient values?</value>
+    <value>How would you like to enter your soil analysis values?</value>
   </data>
   <data name="lblAsAnIndex" xml:space="preserve">
     <value>As an index</value>
@@ -683,7 +683,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Is this field in a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
   <data name="lblNutrientValueTypeForCheckAnswere" xml:space="preserve">
-    <value>How would you like to enter your soil nutrient values?</value>
+    <value>How would you like to enter your soil analysis values?</value>
   </data>
   <data name="lblBasedOnARecentSoilNitrogenAnalysis" xml:space="preserve">
     <value>Based on a recent soil nitrogen (N) analysis</value>
@@ -2399,7 +2399,7 @@ cubic metres per hectare  not set</value>
     <value>Magnesium (Mg) not set</value>
   </data>
   <data name="MsgNutrientValueTypeForCheckAnswereNotSet" xml:space="preserve">
-    <value>How would you like to enter your soil nutrient values? not set</value>
+    <value>How would you like to enter your soil analysis values? not set</value>
   </data>
   <data name="MsgPhNotSet" xml:space="preserve">
     <value>Soil pH value not set</value>
