@@ -1523,7 +1523,7 @@ namespace NMP.Portal.Controllers
                 {
                     return View(model);
                 }
-                if(model.IsGrasslandDerogation==false)
+                if (model.IsGrasslandDerogation == false)
                 {
                     model.GrassPercentage = null;
                 }
@@ -1634,11 +1634,13 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError(string.Empty, string.Format(Resource.MsgFarmAreaForYearMustBeCompleted, model.Year));
                 }
-                if (model.LivestockNumbers == null)
+                (List<NutrientsLoadingLiveStock> nutrientsLoadingLiveStockList, Error error) = await _reportService.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
+                ViewBag.NutrientLivestockData = nutrientsLoadingLiveStockList;
+                if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingLiveStockList.Count == 0)
                 {
                     ModelState.AddModelError(string.Empty, string.Format(Resource.MsgLivestockNumbersForYearMustBeCompleted, model.Year));
                 }
-                (List<NutrientsLoadingManures> nutrientsLoadingManuresList, Error error) = await _reportService.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
+                (List<NutrientsLoadingManures> nutrientsLoadingManuresList, error) = await _reportService.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
                 if (string.IsNullOrWhiteSpace(error.Message))
                 {
                     if (nutrientsLoadingManuresList.Count > 0)
@@ -1725,7 +1727,7 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("TotalAreaInNVZ", Resource.MsgEnterTotalAreaInNVZ);
                 }
-                if(model.IsGrasslandDerogation==true)
+                if (model.IsGrasslandDerogation == true)
                 {
                     if (model.GrassPercentage == null)
                     {
@@ -3748,7 +3750,7 @@ namespace NMP.Portal.Controllers
                 }
                 (List<NutrientsLoadingLiveStock> nutrientsLoadingLiveStockList, Error error) = await _reportService.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
                 ViewBag.LiveStockList = nutrientsLoadingLiveStockList;
-                
+
             }
             catch (Exception ex)
             {
@@ -3794,7 +3796,7 @@ namespace NMP.Portal.Controllers
                 if (model.IsAnyLivestock == false)
                 {
                     (List<NutrientsLoadingLiveStock> nutrientsLoadingLiveStockList, Error error) = await _reportService.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
-                    if(nutrientsLoadingLiveStockList.Count>0)
+                    if (nutrientsLoadingLiveStockList.Count > 0)
                     {
                         return RedirectToAction("ManageLivestock", new {q=model.EncryptedFarmId,y=model.EncryptedHarvestYear });
                     }
@@ -5376,7 +5378,7 @@ namespace NMP.Portal.Controllers
                     && nutrientsLoadingFarmDetail.LandInNVZ > 0 && nutrientsLoadingFarmDetail.LandNotNVZ > 0)
                 {
                     ViewBag.IsAllInNVZ = true;
-                    ViewBag.TotalLivestockManureCapacity =(int)Math.Round((nutrientsLoadingFarmDetail.LandInNVZ.Value * 170) + (nutrientsLoadingFarmDetail.LandNotNVZ.Value * 250), 0);
+                    ViewBag.TotalLivestockManureCapacity = (int)Math.Round((nutrientsLoadingFarmDetail.LandInNVZ.Value * 170) + (nutrientsLoadingFarmDetail.LandNotNVZ.Value * 250), 0);
                 }
                 else if (nutrientsLoadingFarmDetail.LandInNVZ != null && nutrientsLoadingFarmDetail.LandInNVZ > 0)
                 {
