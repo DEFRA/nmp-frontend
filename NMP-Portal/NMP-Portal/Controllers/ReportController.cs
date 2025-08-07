@@ -5438,21 +5438,19 @@ namespace NMP.Portal.Controllers
             if (error == null && livestockList.Count > 0)
             {
                 var grazingLivestockList = livestockList.Where(mt => mt.IsGrazing.Value).Select(mt => mt.ID).ToList();
-                int areaReqForGrazingLivestock = (int)Math.Round(
-                 nutrientsLoadingLiveStockList
+                decimal areaReqForGrazingLivestock = nutrientsLoadingLiveStockList
                  .Where(x => grazingLivestockList.Contains(x.LiveStockTypeID.Value)
                  && x.TotalNProduced.HasValue)
-                 .Sum(x => x.TotalNProduced.Value), 0);
+                 .Sum(x => x.TotalNProduced.Value);
                 var nonGrazingLivestockList = livestockList.Where(mt => !mt.IsGrazing.Value).Select(mt => mt.ID).ToList();
-                int areaReqForNonGrazingLivestock = (int)Math.Round(
-                 nutrientsLoadingLiveStockList
+                decimal areaReqForNonGrazingLivestock = nutrientsLoadingLiveStockList
                  .Where(x => nonGrazingLivestockList.Contains(x.LiveStockTypeID.Value)
                  && x.TotalNProduced.HasValue)
-                 .Sum(x => x.TotalNProduced.Value), 0);
+                 .Sum(x => x.TotalNProduced.Value);
                 ViewBag.AreaReqForGrazingLivestock = areaReqForGrazingLivestock / 250;
                 if (nutrientsLoadingFarmDetail.LandNotNVZ != null && nutrientsLoadingFarmDetail.LandNotNVZ > 0)
                 {
-                    int capacityOfLandOutside = (int)Math.Round(nutrientsLoadingFarmDetail.LandNotNVZ.Value * 250);
+                    decimal capacityOfLandOutside = nutrientsLoadingFarmDetail.LandNotNVZ.Value * 250;
                     if (capacityOfLandOutside > areaReqForNonGrazingLivestock)
                     {
                         ViewBag.AreaReqForNonGrazingLivestock = areaReqForNonGrazingLivestock / 250;
