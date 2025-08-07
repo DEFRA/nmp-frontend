@@ -5543,4 +5543,16 @@ live</value>
   <data name="lblLivestockReportContentFifteen" xml:space="preserve">
     <value>The information you entered does not indicate compliance. You must plan so that you do not exceed the limit.</value>
   </data>
+  <data name="lblAreaRequiredForLivestockManure" xml:space="preserve">
+    <value>Area required for livestock manure</value>
+  </data>
+  <data name="lblForGrazingLivestockManure" xml:space="preserve">
+    <value>For grazing livestock manure</value>
+  </data>
+  <data name="lblForNonGrazingLivestockManure" xml:space="preserve">
+    <value>For non-grazing livestock manure</value>
+  </data>
+  <data name="lblTotalAreaRequired" xml:space="preserve">
+    <value>Total area required</value>
+  </data>
 </root>

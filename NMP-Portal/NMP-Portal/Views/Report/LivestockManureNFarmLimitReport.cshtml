@@ -158,6 +158,29 @@
                 </tbody>
             </table>
         }
+        else
+        {
+            <table class="data-table farm_area_derogated govuk-table">
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">@Resource.lblAreaRequiredForLivestockManure</th>
+                        <th scope="col" class="govuk-table__header">@Resource.lblAreas</th>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.lblForGrazingLivestockManure</td>
+                        <td class="govuk-table__cell">@(string.Format("{0} {1}",ViewBag.AreaReqForGrazingLivestock,Resource.lblhectar))</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.lblForNonGrazingLivestockManure</td>
+                        <td class="govuk-table__cell">@(string.Format("{0} {1}", ViewBag.AreaReqForNonGrazingLivestock, Resource.lblhectar))</td>
+                    </tr>
+                    <tr class="govuk-table__row total_row">
+                        <td class="govuk-table__cell">@Resource.lblTotalAreaRequired</td>
+                        <td class="govuk-table__cell">@(string.Format("{0} {1}", ViewBag.TotalAreaReqForLivestock, Resource.lblhectar))</td>
+                    </tr>
+                </tbody>
+            </table>
+        }
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full margin-bottom-ten">
                 <h2 class="govuk-heading-m">

@@ -5432,6 +5432,40 @@ namespace NMP.Portal.Controllers
             ViewBag.TotalNLoading = totalNLoading;
             ViewBag.AverageLivestockManureTotalNLoading = totalNLoading / (nutrientsLoadingFarmDetail.LandInNVZ + nutrientsLoadingFarmDetail.LandNotNVZ);
             ViewBag.ComplianceOrNot = totalLivestockManureCapacity > totalNLoading ? Resource.lblCompliance : Resource.lblNonCompliance;
+
+            // for derogation
+            (List<LivestockTypeResponse> livestockList, error) = await _reportService.FetchLivestockTypes();
+            if (error == null && livestockList.Count > 0)
+            {
+                var grazingLivestockList = livestockList.Where(mt => mt.IsGrazing.Value).Select(mt => mt.ID).ToList();
+                int areaReqForGrazingLivestock = (int)Math.Round(
+                 nutrientsLoadingLiveStockList
+                 .Where(x => grazingLivestockList.Contains(x.LiveStockTypeID.Value)
+                 && x.TotalNProduced.HasValue)
+                 .Sum(x => x.TotalNProduced.Value), 0);
+                var nonGrazingLivestockList = livestockList.Where(mt => !mt.IsGrazing.Value).Select(mt => mt.ID).ToList();
+                int areaReqForNonGrazingLivestock = (int)Math.Round(
+                 nutrientsLoadingLiveStockList
+                 .Where(x => nonGrazingLivestockList.Contains(x.LiveStockTypeID.Value)
+                 && x.TotalNProduced.HasValue)
+                 .Sum(x => x.TotalNProduced.Value), 0);
+                ViewBag.AreaReqForGrazingLivestock = areaReqForGrazingLivestock / 250;
+                if (nutrientsLoadingFarmDetail.LandNotNVZ != null && nutrientsLoadingFarmDetail.LandNotNVZ > 0)
+                {
+                    int capacityOfLandOutside = (int)Math.Round(nutrientsLoadingFarmDetail.LandNotNVZ.Value * 250);
+                    if (capacityOfLandOutside > areaReqForNonGrazingLivestock)
+                    {
+                        ViewBag.AreaReqForNonGrazingLivestock = areaReqForNonGrazingLivestock / 250;
+                    }
+                    else
+                    {
+                        ViewBag.AreaReqForNonGrazingLivestock = nutrientsLoadingFarmDetail.LandNotNVZ.Value + (areaReqForNonGrazingLivestock-capacityOfLandOutside) / 170;
+                    }
+                    //ViewBag.AreaReqForNonGrazingLivestock = areaReqForNonGrazingLivestock / 250;
+                    ViewBag.TotalAreaReqForLivestock = (areaReqForGrazingLivestock / 250) + (areaReqForNonGrazingLivestock / 250);
+                }
+            }
+
             _logger.LogTrace("Report Controller : CropAndFieldManagement() post action called");
             return View(model);
         }

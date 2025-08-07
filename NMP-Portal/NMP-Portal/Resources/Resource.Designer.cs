@@ -1447,6 +1447,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Area required for livestock manure.
+        /// </summary>
+        public static string lblAreaRequiredForLivestockManure {
+            get {
+                return ResourceManager.GetString("lblAreaRequiredForLivestockManure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Area.
         /// </summary>
         public static string lblAreas {
@@ -4516,11 +4525,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For grazing livestock manure.
+        /// </summary>
+        public static string lblForGrazingLivestockManure {
+            get {
+                return ResourceManager.GetString("lblForGrazingLivestockManure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Is this application for the same cut or grazing in all the selected grass fields?.
         /// </summary>
         public static string lblForMultipleDefoliation {
             get {
                 return ResourceManager.GetString("lblForMultipleDefoliation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For non-grazing livestock manure.
+        /// </summary>
+        public static string lblForNonGrazingLivestockManure {
+            get {
+                return ResourceManager.GetString("lblForNonGrazingLivestockManure", resourceCulture);
             }
         }
         
@@ -11022,6 +11049,15 @@ namespace NMP.Portal.Resources {
         public static string lblTotalArea {
             get {
                 return ResourceManager.GetString("lblTotalArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total area required.
+        /// </summary>
+        public static string lblTotalAreaRequired {
+            get {
+                return ResourceManager.GetString("lblTotalAreaRequired", resourceCulture);
             }
         }
         

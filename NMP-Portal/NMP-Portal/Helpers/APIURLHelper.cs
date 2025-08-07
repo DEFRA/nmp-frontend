@@ -197,5 +197,6 @@ namespace NMP.Portal.Helpers
         public const string FetchLivestockTypesByGroupIdAsyncAPI = "livestock-types/{0}";
         public const string AddNutrientsLoadingLivestockAPI = "nutrients-loading-live-stocks";
         public const string FetchNutrientsLoadingLivestockByFarmIdAndYearAsyncAPI = "nutrients-loading-live-stocks/{0}?year={1}";
+        public const string FetchLivestockTypesAsyncAPI = "livestock-types";
     }
 }
