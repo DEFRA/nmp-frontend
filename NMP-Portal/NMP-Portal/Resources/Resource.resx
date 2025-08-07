@@ -5438,6 +5438,117 @@ live</value>
   <data name="MsgGrassPercentageMustBeBetween80And100" xml:space="preserve">
     <value>Grass percentage must be between 80 and 100.</value>
   </data>
+  <data name="MsgToHaveADerogationAtLeast80PercentOfYourFarm" xml:space="preserve">
+    <value>To have a derogation, at least 80% of your farm’s agricultural area must be grassland.</value>
+  </data>
+  <data name="lblPhosphateStandard" xml:space="preserve">
+    <value>Phosphate (P2O5) standard: {0}kg per animal, per year</value>
+  </data>
+  <data name="lblLivestockManureNitrogenFarmLimitForYear" xml:space="preserve">
+    <value>Livestock manure nitrogen (N) farm limit {0}</value>
+  </data>
+  <data name="lblThisFarmHasAGrasslandDerogationForYear" xml:space="preserve">
+    <value>This farm has a grassland derogation for {0}.</value>
+  </data>
+  <data name="lblDerogated" xml:space="preserve">
+    <value>derogated</value>
+  </data>
+  <data name="lblThisFarmHasAGrasslandDerogationFor" xml:space="preserve">
+    <value>This farm has a grassland derogation for {0}</value>
+  </data>
+  <data name="lblPercentageOfThisFarm" xml:space="preserve">
+    <value>{0}% of this farm is {0}</value>
+  </data>
+  <data name="lblNotADerogated" xml:space="preserve">
+    <value>not a derogated</value>
+  </data>
+  <data name="lblComplianceWithNVZLivestockManureNitrogenFarmLimit" xml:space="preserve">
+    <value>Compliance with NVZ livestock manure nitrogen (N) farm limit.</value>
+  </data>
+  <data name="lblTheInformationEnteredIndicatesCompliance" xml:space="preserve">
+    <value>The information entered indicates compliance.</value>
+  </data>
+  <data name="lblLivestockReportContentOne" xml:space="preserve">
+    <value>The information you entered does not indicate compliance. You must plan so that you do not exceed the limit.</value>
+  </data>
+  <data name="lblLivestockReportContentTwoForDerogation" xml:space="preserve">
+    <value>This assessment is based on the derogated NVZ livestock manure N farm limit of {0}kg of N per hectare for grazing livestock, {1}kg of N per hectare for non-grazing livestock </value>
+  </data>
+  <data name="lblLivestockContentTwoForNonDerogation" xml:space="preserve">
+    <value>This assessment is based on the NVZ livestock manure farm limit of {0}kg of N per hectare</value>
+  </data>
+  <data name="lblKeyInformation" xml:space="preserve">
+    <value> Key information</value>
+  </data>
+  <data name="lblLivestockManureTotalNitrogenCapacity" xml:space="preserve">
+    <value>Livestock manure total nitrogen (N) capacity</value>
+  </data>
+  <data name="lblLivestockManureTotalNitrogenLoading" xml:space="preserve">
+    <value>Livestock manure total nitrogen (N) loading</value>
+  </data>
+  <data name="lblLivestockManureReportContentFour" xml:space="preserve">
+    <value>Difference between livestock manure total nitrogen (N) capacity, and livestock manure total nitrogen (N) Loading</value>
+  </data>
+  <data name="lbllivestockManureReportContentFive" xml:space="preserve">
+    <value>Average livestock manure total nitrogen (N) loading</value>
+  </data>
+  <data name="lblThisFarmDoesNotHaveAGrasslandDerogationForYear" xml:space="preserve">
+    <value>This farm does not have a grassland derogation for {0}</value>
+  </data>
+  <data name="lblLivestockReportContentThreeForDerogationOrNonDerogation" xml:space="preserve">
+    <value>and best practice guidance of 250kg of N per hectare for land outside of an NVZ.</value>
+  </data>
+  <data name="lblPercentageOfThisFarmIsGrass" xml:space="preserve">
+    <value>{0}% of this farm is grass.</value>
+  </data>
+  <data name="lblLivestockReportContentFour" xml:space="preserve">
+    <value>Farm area and livestock manure total nitrogen (N) capacity</value>
+  </data>
+  <data name="lblLivestockReportContentFive" xml:space="preserve">
+    <value>Area of holding inside or outside of an NVZ</value>
+  </data>
+  <data name="lblLivestockReportContentSix" xml:space="preserve">
+    <value> Livestock manure total nitrogen (N) capacity (per year)</value>
+  </data>
+  <data name="lblLivestockReportContentSeven" xml:space="preserve">
+    <value>Area inside an NVZ</value>
+  </data>
+  <data name="lblLivestockReportContentEight" xml:space="preserve">
+    <value>Area outside an NVZ</value>
+  </data>
+  <data name="lblLivestockReportContentNine" xml:space="preserve">
+    <value>Livestock manure total nitrogen (N) loading</value>
+  </data>
+  <data name="lblLivestockReportContentEleven" xml:space="preserve">
+    <value>Home-produced livestock manures</value>
+  </data>
+  <data name="lblLivestockReportContentTwelve" xml:space="preserve">
+    <value>Imported livestock manures</value>
+  </data>
+  <data name="lblLivestockReportContentThirteen" xml:space="preserve">
+    <value>Exported livestock manures</value>
+  </data>
+  <data name="lblLivestockReportContentTen" xml:space="preserve">
+    <value>Livestock total nitrogen (N)</value>
+  </data>
+  <data name="lblLivestockReportContentFourteen" xml:space="preserve">
+    <value>Average nitrogen loading per hectare</value>
+  </data>
+  <data name="lblCompliance" xml:space="preserve">
+    <value>Compliance</value>
+  </data>
+  <data name="lblNonCompliance" xml:space="preserve">
+    <value>Non-Compliance</value>
+  </data>
+  <data name="lblLivestockReportContentFifteen" xml:space="preserve">
+    <value>The information you entered does not indicate compliance. You must plan so that you do not exceed the limit.</value>
+  </data>
+  <data name="lblPhosphateStandardPerAnimalPerYear" xml:space="preserve">
+    <value>Phosphate (P2O5) standard per animal, per year</value>
+  </data>
+  <data name="lblPhosphateP2O5Standard" xml:space="preserve">
+    <value>Phosphate (P2O5) standard</value>
+  </data>
   <data name="MsgForIfFieldsAreNotCreated" xml:space="preserve">
     <value>This report is not available. You need to add your field and crop information, and information about any organic and inorganic material applied.</value>
   </data>
