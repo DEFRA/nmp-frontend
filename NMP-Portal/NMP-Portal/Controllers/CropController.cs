@@ -1096,9 +1096,9 @@ namespace NMP.Portal.Controllers
                     }
                 }
                 //}
-                if (SelectListItem.Count == 1)
+                if (SelectListItem.Count == 1 && model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass)
                 {
-                    return RedirectToAction("CropTypes");
+                    return RedirectToAction("CropGroupName");
                 }
                 ViewBag.fieldList = SelectListItem;
                 if (model.IsAnyChangeInField)
