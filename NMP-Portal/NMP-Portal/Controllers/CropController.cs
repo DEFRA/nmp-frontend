@@ -358,7 +358,7 @@ namespace NMP.Portal.Controllers
                                             FieldID = fieldId,
                                             Variety = model.Variety,
                                             EncryptedCounter = _fieldDataProtector.Protect(counter.ToString()),
-                                            //CropOrder = fieldsAllowedForSecondCrop.Contains(fieldId) ? 2 : 1
+                                            CropOrder = fieldsAllowedForSecondCrop.Contains(fieldId) ? 2 : 1
                                         };
                                         if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
                                         {
