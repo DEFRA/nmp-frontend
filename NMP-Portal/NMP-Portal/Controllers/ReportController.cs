@@ -104,7 +104,7 @@ namespace NMP.Portal.Controllers
                         }
                         else
                         {
-                            ViewBag.NoField = Resource.lblYouHaveNotEnteredAnyField;
+                            ViewBag.NoField = string.Format(Resource.lblYouHaveNotEnteredAnyField, model.Year);
 
                         }
 
