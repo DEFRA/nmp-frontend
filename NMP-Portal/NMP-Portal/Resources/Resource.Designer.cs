@@ -8182,11 +8182,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Phosphate (P2O5) standard.
+        /// </summary>
+        public static string lblPhosphateP2O5Standard {
+            get {
+                return ResourceManager.GetString("lblPhosphateP2O5Standard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Phosphate (P2O5) standard: {0}kg per animal, per year.
         /// </summary>
         public static string lblPhosphateStandard {
             get {
                 return ResourceManager.GetString("lblPhosphateStandard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phosphate (P2O5) standard per animal, per year.
+        /// </summary>
+        public static string lblPhosphateStandardPerAnimalPerYear {
+            get {
+                return ResourceManager.GetString("lblPhosphateStandardPerAnimalPerYear", resourceCulture);
             }
         }
         

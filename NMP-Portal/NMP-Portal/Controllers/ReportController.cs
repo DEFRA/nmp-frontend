@@ -4374,9 +4374,53 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
+                var cattle = (int)NMP.Portal.Enums.LivestockGroup.Cattle;
+                var pigs = (int)NMP.Portal.Enums.LivestockGroup.Pigs;
+                var poultry = (int)NMP.Portal.Enums.LivestockGroup.Poultry;
+                var sheep = (int)NMP.Portal.Enums.LivestockGroup.Sheep;
+                var goatsDeerOrHorses = (int)NMP.Portal.Enums.LivestockGroup.GoatsDeerOrHorses;
                 (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
-                ViewBag.Nitrogen = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
-                ViewBag.Phosphate = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+                var nitrogen = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+                var phosphorus = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+                ViewBag.Nitrogen = nitrogen;
+                ViewBag.Phosphate = phosphorus;
+
+                decimal totalNProduced = 0;
+                decimal totalPProduced = 0;
+                decimal averageNumberForYear = 0;
+                if (model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.ANumberForEachMonth)
+                {
+                    int sumOfEachMonth = (model.NumbersInJanuary ?? 0) + (model.NumbersInFebruary ?? 0) +
+                                         (model.NumbersInMarch ?? 0) + (model.NumbersInApril ?? 0) +
+                                         (model.NumbersInMay ?? 0) + (model.NumbersInJune ?? 0) +
+                                         (model.NumbersInJuly ?? 0) + (model.NumbersInAugust ?? 0) +
+                                         (model.NumbersInSeptember ?? 0) + (model.NumbersInOctober ?? 0) +
+                                         (model.NumbersInNovember ?? 0) + (model.NumbersInDecember ?? 0);
+
+                    averageNumberForYear = (decimal)(sumOfEachMonth / 12);
+                }
+                else if (model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.AverageNumberForTheYear)
+                {
+                    averageNumberForYear = model.AverageNumber ?? 0;
+                }
+                else
+                {
+                    averageNumberForYear = (model.AverageNumberOfPlaces ?? 0);
+                }
+                decimal averageNumberForYearRoundOfValue = Math.Round(averageNumberForYear, 1);
+
+                if (model.LivestockGroupId == cattle || model.LivestockGroupId == sheep || model.LivestockGroupId == goatsDeerOrHorses)
+                {
+                    totalNProduced = Math.Round(averageNumberForYearRoundOfValue * nitrogen ?? 0);
+                    totalPProduced = Math.Round(averageNumberForYearRoundOfValue * phosphorus ?? 0);
+                }
+                else
+                {
+                    totalNProduced = Math.Round(averageNumberForYearRoundOfValue * (model.NitrogenStandardPer1000Places ?? 0));
+                    totalPProduced = Math.Round(averageNumberForYearRoundOfValue * phosphorus ?? 0);
+                }
+                ViewBag.TotalNProduced = totalNProduced;
+                ViewBag.TotalPProduced = totalPProduced;
                 model.IsLivestockCheckAnswer = true;
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
@@ -4678,7 +4722,9 @@ namespace NMP.Portal.Controllers
                                         LivestockTypeName = cattleTypeDict[x.LiveStockTypeID ?? 0].Name,
                                         x.Units,
                                         x.NByUnit,
-                                        x.TotalNProduced
+                                        x.TotalNProduced,
+                                        x.PByUnit,
+                                        x.TotalPProduced
                                     })
                                     .ToList();
 
@@ -4691,7 +4737,9 @@ namespace NMP.Portal.Controllers
                                         x.Units,
                                         x.Occupancy,
                                         x.NByUnit,
-                                        x.TotalNProduced
+                                        x.TotalNProduced,
+                                        x.PByUnit,
+                                        x.TotalPProduced
                                     })
                                     .ToList();
 
@@ -4704,7 +4752,9 @@ namespace NMP.Portal.Controllers
                                         x.Units,
                                         x.Occupancy,
                                         x.NByUnit,
-                                        x.TotalNProduced
+                                        x.TotalNProduced,
+                                        x.PByUnit,
+                                        x.TotalPProduced
                                     })
                                     .ToList();
 
@@ -4716,7 +4766,9 @@ namespace NMP.Portal.Controllers
                                         LivestockTypeName = sheepTypeDict[x.LiveStockTypeID ?? 0].Name,
                                         x.Units,
                                         x.NByUnit,
-                                        x.TotalNProduced
+                                        x.TotalNProduced,
+                                        x.PByUnit,
+                                        x.TotalPProduced
                                     })
                                     .ToList();
 
@@ -4728,7 +4780,9 @@ namespace NMP.Portal.Controllers
                                         LivestockTypeName = goatsDeerOrHorsesTypeDict[x.LiveStockTypeID ?? 0].Name,
                                         x.Units,
                                         x.NByUnit,
-                                        x.TotalNProduced
+                                        x.TotalNProduced,
+                                        x.PByUnit,
+                                        x.TotalPProduced
                                     })
                                     .ToList();
 

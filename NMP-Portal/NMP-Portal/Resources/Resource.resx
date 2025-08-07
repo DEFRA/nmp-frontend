@@ -5543,4 +5543,10 @@ live</value>
   <data name="lblLivestockReportContentFifteen" xml:space="preserve">
     <value>The information you entered does not indicate compliance. You must plan so that you do not exceed the limit.</value>
   </data>
+  <data name="lblPhosphateStandardPerAnimalPerYear" xml:space="preserve">
+    <value>Phosphate (P2O5) standard per animal, per year</value>
+  </data>
+  <data name="lblPhosphateP2O5Standard" xml:space="preserve">
+    <value>Phosphate (P2O5) standard</value>
+  </data>
 </root>
