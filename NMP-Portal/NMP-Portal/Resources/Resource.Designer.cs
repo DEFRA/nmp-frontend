@@ -5336,7 +5336,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How would you like to enter your soil nutrient values?.
+        ///   Looks up a localized string similar to How would you like to enter your soil analysis values?.
         /// </summary>
         public static string lblHowWouldYouLikeToEnterYourSoilNutrientValues {
             get {
@@ -7651,7 +7651,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How would you like to enter your soil nutrient values?.
+        ///   Looks up a localized string similar to How would you like to enter your soil analysis values?.
         /// </summary>
         public static string lblNutrientValueTypeForCheckAnswere {
             get {
@@ -8218,11 +8218,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Phosphate (P2O5) standard.
+        /// </summary>
+        public static string lblPhosphateP2O5Standard {
+            get {
+                return ResourceManager.GetString("lblPhosphateP2O5Standard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Phosphate (P2O5) standard: {0}kg per animal, per year.
         /// </summary>
         public static string lblPhosphateStandard {
             get {
                 return ResourceManager.GetString("lblPhosphateStandard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phosphate (P2O5) standard per animal, per year.
+        /// </summary>
+        public static string lblPhosphateStandardPerAnimalPerYear {
+            get {
+                return ResourceManager.GetString("lblPhosphateStandardPerAnimalPerYear", resourceCulture);
             }
         }
         
@@ -13303,7 +13321,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have not entered any field.
+        ///   Looks up a localized string similar to You have not entered any field or crop information for {0}.
         /// </summary>
         public static string lblYouHaveNotEnteredAnyField {
             get {
@@ -14970,7 +14988,16 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An N-max report is not available.You need to add your crop information, and information about any organic and inorganic material applied..
+        ///   Looks up a localized string similar to This report is not available. You need to add your field and crop information, and information about any organic and inorganic material applied..
+        /// </summary>
+        public static string MsgForIfFieldsAreNotCreated {
+            get {
+                return ResourceManager.GetString("MsgForIfFieldsAreNotCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This report is not available. You need to add your crop information, and information about any organic and inorganic material applied..
         /// </summary>
         public static string MsgForIfPlanIsNotCreated {
             get {
@@ -15555,7 +15582,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How would you like to enter your soil nutrient values? not set.
+        ///   Looks up a localized string similar to How would you like to enter your soil analysis values? not set.
         /// </summary>
         public static string MsgNutrientValueTypeForCheckAnswereNotSet {
             get {
