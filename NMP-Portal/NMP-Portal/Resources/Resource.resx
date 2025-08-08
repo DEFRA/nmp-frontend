@@ -5552,4 +5552,19 @@ live</value>
   <data name="MsgForIfFieldsAreNotCreated" xml:space="preserve">
     <value>This report is not available. You need to add your field and crop information, and information about any organic and inorganic material applied.</value>
   </data>
+  <data name="lblAreaRequiredForLivestockManure" xml:space="preserve">
+    <value>Area required for livestock manure</value>
+  </data>
+  <data name="lblForGrazingLivestockManure" xml:space="preserve">
+    <value>For grazing livestock manure</value>
+  </data>
+  <data name="lblForNonGrazingLivestockManure" xml:space="preserve">
+    <value>For non-grazing livestock manure</value>
+  </data>
+  <data name="lblTotalAreaRequired" xml:space="preserve">
+    <value>Total area required</value>
+  </data>
+  <data name="lblGrassPercentageOfThisFarmIsGrass" xml:space="preserve">
+    <value>{0}% of this farm is grass.</value>
+  </data>
 </root>
