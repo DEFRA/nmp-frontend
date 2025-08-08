@@ -39,8 +39,8 @@
 </div>
 <div class="govuk-grid-row margin-bottom-ten">
     <div class="govuk-grid-column-full">
-    <span class="name govuk-caption-l">@Model.Farm.Name</span>
-    
+        <span class="name govuk-caption-l">@Model.Farm.Name</span>
+
         <h1 class="govuk-heading-xl margin-bottom-twenty">
             @string.Format(Resource.lblLivestockManureNitrogenFarmLimitForYear, Model.Year)
         </h1>
@@ -70,17 +70,25 @@
         </p>
     </div>
     <div class="govuk-grid-column-two-third">
-        <p class="govuk-body strong">
-            @if (Model.IsGrasslandDerogation != null && (!Model.IsGrasslandDerogation.Value))
-            {
+
+        @if (Model.IsGrasslandDerogation != null && (!Model.IsGrasslandDerogation.Value))
+        {
+            <p class="govuk-body">
                 @string.Format(Resource.lblThisFarmDoesNotHaveAGrasslandDerogationForYear, Model.Year)
-            }
-            else
-            {
+            </p>
+        }
+        else
+        {
+            <p class="govuk-body strong">
                 @string.Format(Resource.lblThisFarmHasAGrasslandDerogationForYear, Model.Year)
-                @* Resource.lblDerogated) *@
-            }
-        </p>
+                @if (Model.GrassPercentage != null && Model.GrassPercentage > 0)
+                {
+                    <br />
+                    @string.Format(Resource.lblGrassPercentageOfThisFarmIsGrass, Model.GrassPercentage)
+                }
+            </p>
+        }
+
     </div>
 
 </div>
@@ -168,7 +176,7 @@
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblForGrazingLivestockManure</td>
-                        <td class="govuk-table__cell">@(string.Format("{0} {1}",ViewBag.AreaReqForGrazingLivestock,Resource.lblhectar))</td>
+                        <td class="govuk-table__cell">@(string.Format("{0} {1}", ViewBag.AreaReqForGrazingLivestock, Resource.lblhectar))</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblForNonGrazingLivestockManure</td>
@@ -184,27 +192,42 @@
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full margin-bottom-ten">
                 <h2 class="govuk-heading-m">
-                    @Resource.lblLivestockReportContentFour
+                    @if (Model.IsGrasslandDerogation != null && (!Model.IsGrasslandDerogation.Value))
+                    {
+                        @Resource.lblLivestockReportContentFour
+                    }
+                    else
+                    {
+                        @Resource.lblFarmArea
+                    }
                 </h2>
-                <!-- <p class="govuk-body-s">The farm area does not include surface waters, areas of hardstanding, buildings or woodland (unless the woodland is used for grazing), and any land covered by a greenhouse.</p> -->
                 <table class="data-table n-table govuk-table">
                     <thead class="govuk-table__head">
                         <tr class="govuk-table__row">
                             <th scope="col" class="govuk-table__header">@Resource.lblLivestockReportContentFive</th>
                             <th scope="col" class="govuk-table__header">@Resource.lblAreas</th>
-                            <th scope="col" class="govuk-table__header">@Resource.lblLivestockReportContentSix</th>
+                            @if (Model.IsGrasslandDerogation != null && (!Model.IsGrasslandDerogation.Value))
+                            {
+                                <th scope="col" class="govuk-table__header">@Resource.lblLivestockReportContentSix</th>
+                            }
                         </tr>
                     </thead>
                     <tbody class="govuk-table__body">
                         <tr class="govuk-table__row">
                             <td class="govuk-table__cell">@Resource.lblLivestockReportContentSeven</td>
                             <td class="govuk-table__cell">@string.Format("{0} {1}", ViewBag.AreaInsideNVZ, Resource.lblHectares)</td>
-                            <td class="govuk-table__cell">@(ViewBag.AreaInsideNVZ != null ? (string.Format("{0}{1}", (ViewBag.AreaInsideNVZ * 170), Resource.lblkg)) : 0)</td>
+                            @if (Model.IsGrasslandDerogation != null && (!Model.IsGrasslandDerogation.Value))
+                            {
+                                <td class="govuk-table__cell">@(ViewBag.AreaInsideNVZ != null ? (string.Format("{0}{1}", (ViewBag.AreaInsideNVZ * 170), Resource.lblkg)) : 0)</td>
+                            }
                         </tr>
                         <tr class="govuk-table__row">
                             <td class="govuk-table__cell">@Resource.lblLivestockReportContentEight</td>
                             <td class="govuk-table__cell">@string.Format("{0} {1}", ViewBag.AreaOutsideNVZ, Resource.lblHectares)</td>
-                            <td class="govuk-table__cell">@(ViewBag.AreaOutsideNVZ != null ? (string.Format("{0}{1}", (ViewBag.AreaOutsideNVZ * 250), Resource.lblkg)) : 0)</td>
+                            @if (Model.IsGrasslandDerogation != null && (!Model.IsGrasslandDerogation.Value))
+                            {
+                                <td class="govuk-table__cell">@(ViewBag.AreaOutsideNVZ != null ? (string.Format("{0}{1}", (ViewBag.AreaOutsideNVZ * 250), Resource.lblkg)) : 0)</td>
+                            }
                         </tr>
                         <tr class="govuk-table__row total_row">
                             <th scope="col" class="govuk-table__header">
@@ -213,9 +236,12 @@
                             <th scope="col" class="govuk-table__header">
                                 @((ViewBag.AreaInsideNVZ != null && ViewBag.AreaOutsideNVZ != null) ? (string.Format("{0}{1}", ViewBag.AreaOutsideNVZ + ViewBag.AreaInsideNVZ, Resource.lblkg)) : string.Format("{0}{1}", ViewBag.AreaInsideNVZ, Resource.lblkg))
                             </th>
-                            <th scope="col" class="govuk-table__header">
-                                @((ViewBag.TotalLivestockManureCapacity != null) ? string.Format("{0}{1}", ViewBag.TotalLivestockManureCapacity, Resource.lblkg) : 0)
-                            </th>
+                            @if (Model.IsGrasslandDerogation != null && (!Model.IsGrasslandDerogation.Value))
+                            {
+                                <th scope="col" class="govuk-table__header">
+                                    @((ViewBag.TotalLivestockManureCapacity != null) ? string.Format("{0}{1}", ViewBag.TotalLivestockManureCapacity, Resource.lblkg) : 0)
+                                </th>
+                            }
                         </tr>
                     </tbody>
                 </table>

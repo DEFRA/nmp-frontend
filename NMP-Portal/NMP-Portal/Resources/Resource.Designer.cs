@@ -4732,6 +4732,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0}% of this farm is grass..
+        /// </summary>
+        public static string lblGrassPercentageOfThisFarmIsGrass {
+            get {
+                return ResourceManager.GetString("lblGrassPercentageOfThisFarmIsGrass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Grass typical cut.
         /// </summary>
         public static string lblGrassTypicalCut {
