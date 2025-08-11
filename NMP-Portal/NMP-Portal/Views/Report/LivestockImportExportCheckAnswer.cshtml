@@ -34,6 +34,7 @@
         unit = Model.IsManureTypeLiquid.Value ? Resource.lblCubicMeters : Resource.lbltonnes;
     }
     decimal totalN = 0;
+    decimal totalP2O5 = 0;
     var allAddress = new List<string>();
 
     if (!string.IsNullOrWhiteSpace(Model.Address1)) allAddress.Add(Model.Address1);
@@ -331,6 +332,7 @@
                                             }
                                             @if ((Model.ManureType.P2O5.HasValue) && Model.ManureType.P2O5.Value > 0)
                                             {
+                                                totalP2O5 = Model.ManureType.P2O5.Value;
                                                 @string.Format(Resource.lblKgPerTonneWithNutrient, Model.ManureType.P2O5.Value, Resource.lblPhosphateP2O5)
                                                 <br />
                                             }
@@ -390,6 +392,7 @@
                                             }
                                             @if ((Model.P2O5.HasValue) && Model.P2O5.Value > 0)
                                             {
+                                                totalP2O5 = Model.P2O5.Value;
                                                 @string.Format(Resource.lblKgPerTonneWithNutrient, Model.P2O5.Value, Resource.lblPhosphateP2O5)
                                                 <br />
                                             }
@@ -452,6 +455,7 @@
                                         }
                                         @if ((Model.P2O5.HasValue) && Model.P2O5.Value > 0)
                                         {
+                                            totalP2O5 = Model.P2O5.Value;
                                             @string.Format(Resource.lblKgPerTonneWithNutrient, Model.P2O5.Value, Resource.lblPhosphateP2O5)
                                             <br />
                                         }
@@ -519,6 +523,7 @@
                                         }
                                         @if ((Model.P2O5.HasValue) && Model.P2O5.Value > 0)
                                         {
+                                            totalP2O5 = Model.P2O5.Value;
                                             @string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblKgPerCubicMeterWithNutrient : Resource.lblKgPerTonneWithNutrient, Model.P2O5.Value, Resource.lblPhosphateP2O5)
                                             <br />
                                         }
@@ -570,6 +575,7 @@
                                         }
                                         @if ((Model.ManureType.P2O5.HasValue) && Model.ManureType.P2O5.Value > 0)
                                         {
+                                            totalP2O5 = Model.ManureType.P2O5.Value;
                                             @string.Format((Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblKgPerCubicMeterWithNutrient : Resource.lblKgPerTonneWithNutrient, Model.ManureType.P2O5.Value, Resource.lblPhosphateP2O5)
                                             <br />
                                         }
@@ -648,6 +654,19 @@
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
                             @(string.Format("{0}{1}", Math.Round(totalN * Model.LivestockQuantity.Value, 0), Resource.lblkg))
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            @string.Format(Resource.lblTotalPhosphateInThisImportOrExport,
+                                                        Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                                                        Resource.lblImport.ToLower() : Resource.lblExport.ToLower())
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @(string.Format("{0}{1}", Math.Round(totalP2O5 * Model.LivestockQuantity.Value, 0), Resource.lblkg))
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                         </govuk-summary-list-row-actions>

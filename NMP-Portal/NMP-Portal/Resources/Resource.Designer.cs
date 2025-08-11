@@ -11260,6 +11260,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total phosphate (P205) in this {0}.
+        /// </summary>
+        public static string lblTotalPhosphateInThisImportOrExport {
+            get {
+                return ResourceManager.GetString("lblTotalPhosphateInThisImportOrExport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total Phosphate (P2O5).
         /// </summary>
         public static string lblTotalPhosphateOnly {
