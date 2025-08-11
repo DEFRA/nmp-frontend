@@ -3058,7 +3058,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Did you have any livestock on {0} in {1}.
+        ///   Looks up a localized string similar to Did you have any livestock on {0} in {1}?.
         /// </summary>
         public static string lblDidYouHaveAnyLivestockOn {
             get {
@@ -5471,7 +5471,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Include cattle, sheep, pigs, goats, horses, poultry and dear. .
+        ///   Looks up a localized string similar to Include cattle, sheep, pigs, goats, horses, poultry and deer. .
         /// </summary>
         public static string lblIncludeCattleSheepPigsGoats {
             get {

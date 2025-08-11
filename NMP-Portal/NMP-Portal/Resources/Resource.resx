@@ -5199,10 +5199,10 @@ live</value>
     <value>{0} cannot be longer than {1} characters.</value>
   </data>
   <data name="lblDidYouHaveAnyLivestockOn" xml:space="preserve">
-    <value>Did you have any livestock on {0} in {1}</value>
+    <value>Did you have any livestock on {0} in {1}?</value>
   </data>
   <data name="lblIncludeCattleSheepPigsGoats" xml:space="preserve">
-    <value>Include cattle, sheep, pigs, goats, horses, poultry and dear. </value>
+    <value>Include cattle, sheep, pigs, goats, horses, poultry and deer. </value>
   </data>
   <data name="lblIsAnyLivestock" xml:space="preserve">
     <value>Is any livestock</value>
