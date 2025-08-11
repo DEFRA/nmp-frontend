@@ -105,7 +105,7 @@ namespace NMP.Portal.Controllers
                         }
                         else
                         {
-                            ViewBag.NoField = Resource.lblYouHaveNotEnteredAnyField;
+                            ViewBag.NoField = string.Format(Resource.lblYouHaveNotEnteredAnyField, model.Year);
 
                         }
 
@@ -1041,9 +1041,9 @@ namespace NMP.Portal.Controllers
                                             CropTypeName = cropTypeName,
                                             CropArea = field.CroppedArea.Value,
                                             InorganicNRate = totalFertiliserN != null ? totalFertiliserN : null,
-                                            InorganicNTotal = (totalFertiliserN != null ? totalFertiliserN * field.CroppedArea.Value : null),
+                                            InorganicNTotal = totalFertiliserN != null ? (int)Math.Round((totalFertiliserN.Value * field.CroppedArea.Value),0) : null,
                                             OrganicCropAvailableNRate = totalOrganicAvailableN != null ? totalOrganicAvailableN : null,
-                                            OrganicCropAvailableNTotal = (totalOrganicAvailableN != null ? totalOrganicAvailableN * field.CroppedArea.Value : null),
+                                            OrganicCropAvailableNTotal = (totalOrganicAvailableN != null ? (int)Math.Round((totalOrganicAvailableN.Value * field.CroppedArea.Value), 0) : null),
                                             NRate = (totalFertiliserN == null && totalOrganicAvailableN == null) ? null : (totalFertiliserN ?? 0) + (totalOrganicAvailableN ?? 0),
                                             NTotal = (totalFertiliserN == null && totalOrganicAvailableN == null) ? null : ((totalFertiliserN ?? 0) + (totalOrganicAvailableN ?? 0)) * field.CroppedArea.Value,
                                         };
@@ -1523,7 +1523,7 @@ namespace NMP.Portal.Controllers
                 {
                     return View(model);
                 }
-                if(model.IsGrasslandDerogation==false)
+                if (model.IsGrasslandDerogation == false)
                 {
                     model.GrassPercentage = null;
                 }
@@ -1634,11 +1634,13 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError(string.Empty, string.Format(Resource.MsgFarmAreaForYearMustBeCompleted, model.Year));
                 }
-                if (model.LivestockNumbers == null)
+                (List<NutrientsLoadingLiveStock> nutrientsLoadingLiveStockList, Error error) = await _reportService.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
+                ViewBag.NutrientLivestockData = nutrientsLoadingLiveStockList;
+                if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingLiveStockList.Count == 0)
                 {
                     ModelState.AddModelError(string.Empty, string.Format(Resource.MsgLivestockNumbersForYearMustBeCompleted, model.Year));
                 }
-                (List<NutrientsLoadingManures> nutrientsLoadingManuresList, Error error) = await _reportService.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
+                (List<NutrientsLoadingManures> nutrientsLoadingManuresList, error) = await _reportService.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
                 if (string.IsNullOrWhiteSpace(error.Message))
                 {
                     if (nutrientsLoadingManuresList.Count > 0)
@@ -1725,7 +1727,7 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("TotalAreaInNVZ", Resource.MsgEnterTotalAreaInNVZ);
                 }
-                if(model.IsGrasslandDerogation==true)
+                if (model.IsGrasslandDerogation == true)
                 {
                     if (model.GrassPercentage == null)
                     {
@@ -3748,7 +3750,7 @@ namespace NMP.Portal.Controllers
                 }
                 (List<NutrientsLoadingLiveStock> nutrientsLoadingLiveStockList, Error error) = await _reportService.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
                 ViewBag.LiveStockList = nutrientsLoadingLiveStockList;
-                
+
             }
             catch (Exception ex)
             {
@@ -3794,7 +3796,7 @@ namespace NMP.Portal.Controllers
                 if (model.IsAnyLivestock == false)
                 {
                     (List<NutrientsLoadingLiveStock> nutrientsLoadingLiveStockList, Error error) = await _reportService.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
-                    if(nutrientsLoadingLiveStockList.Count>0)
+                    if (nutrientsLoadingLiveStockList.Count > 0)
                     {
                         return RedirectToAction("ManageLivestock", new {q=model.EncryptedFarmId,y=model.EncryptedHarvestYear });
                     }
@@ -4374,9 +4376,53 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
+                var cattle = (int)NMP.Portal.Enums.LivestockGroup.Cattle;
+                var pigs = (int)NMP.Portal.Enums.LivestockGroup.Pigs;
+                var poultry = (int)NMP.Portal.Enums.LivestockGroup.Poultry;
+                var sheep = (int)NMP.Portal.Enums.LivestockGroup.Sheep;
+                var goatsDeerOrHorses = (int)NMP.Portal.Enums.LivestockGroup.GoatsDeerOrHorses;
                 (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
-                ViewBag.Nitrogen = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
-                ViewBag.Phosphate = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+                var nitrogen = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+                var phosphorus = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+                ViewBag.Nitrogen = nitrogen;
+                ViewBag.Phosphate = phosphorus;
+
+                decimal totalNProduced = 0;
+                decimal totalPProduced = 0;
+                decimal averageNumberForYear = 0;
+                if (model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.ANumberForEachMonth)
+                {
+                    int sumOfEachMonth = (model.NumbersInJanuary ?? 0) + (model.NumbersInFebruary ?? 0) +
+                                         (model.NumbersInMarch ?? 0) + (model.NumbersInApril ?? 0) +
+                                         (model.NumbersInMay ?? 0) + (model.NumbersInJune ?? 0) +
+                                         (model.NumbersInJuly ?? 0) + (model.NumbersInAugust ?? 0) +
+                                         (model.NumbersInSeptember ?? 0) + (model.NumbersInOctober ?? 0) +
+                                         (model.NumbersInNovember ?? 0) + (model.NumbersInDecember ?? 0);
+
+                    averageNumberForYear = (decimal)(sumOfEachMonth / 12);
+                }
+                else if (model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.AverageNumberForTheYear)
+                {
+                    averageNumberForYear = model.AverageNumber ?? 0;
+                }
+                else
+                {
+                    averageNumberForYear = (model.AverageNumberOfPlaces ?? 0);
+                }
+                decimal averageNumberForYearRoundOfValue = Math.Round(averageNumberForYear, 1);
+
+                if (model.LivestockGroupId == cattle || model.LivestockGroupId == sheep || model.LivestockGroupId == goatsDeerOrHorses)
+                {
+                    totalNProduced = Math.Round(averageNumberForYearRoundOfValue * nitrogen ?? 0);
+                    totalPProduced = Math.Round(averageNumberForYearRoundOfValue * phosphorus ?? 0);
+                }
+                else
+                {
+                    totalNProduced = Math.Round(averageNumberForYearRoundOfValue * (model.NitrogenStandardPer1000Places ?? 0));
+                    totalPProduced = Math.Round(averageNumberForYearRoundOfValue * phosphorus ?? 0);
+                }
+                ViewBag.TotalNProduced = totalNProduced;
+                ViewBag.TotalPProduced = totalPProduced;
                 model.IsLivestockCheckAnswer = true;
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
@@ -4678,7 +4724,9 @@ namespace NMP.Portal.Controllers
                                         LivestockTypeName = cattleTypeDict[x.LiveStockTypeID ?? 0].Name,
                                         x.Units,
                                         x.NByUnit,
-                                        x.TotalNProduced
+                                        x.TotalNProduced,
+                                        x.PByUnit,
+                                        x.TotalPProduced
                                     })
                                     .ToList();
 
@@ -4691,7 +4739,9 @@ namespace NMP.Portal.Controllers
                                         x.Units,
                                         x.Occupancy,
                                         x.NByUnit,
-                                        x.TotalNProduced
+                                        x.TotalNProduced,
+                                        x.PByUnit,
+                                        x.TotalPProduced
                                     })
                                     .ToList();
 
@@ -4704,7 +4754,9 @@ namespace NMP.Portal.Controllers
                                         x.Units,
                                         x.Occupancy,
                                         x.NByUnit,
-                                        x.TotalNProduced
+                                        x.TotalNProduced,
+                                        x.PByUnit,
+                                        x.TotalPProduced
                                     })
                                     .ToList();
 
@@ -4716,7 +4768,9 @@ namespace NMP.Portal.Controllers
                                         LivestockTypeName = sheepTypeDict[x.LiveStockTypeID ?? 0].Name,
                                         x.Units,
                                         x.NByUnit,
-                                        x.TotalNProduced
+                                        x.TotalNProduced,
+                                        x.PByUnit,
+                                        x.TotalPProduced
                                     })
                                     .ToList();
 
@@ -4728,7 +4782,9 @@ namespace NMP.Portal.Controllers
                                         LivestockTypeName = goatsDeerOrHorsesTypeDict[x.LiveStockTypeID ?? 0].Name,
                                         x.Units,
                                         x.NByUnit,
-                                        x.TotalNProduced
+                                        x.TotalNProduced,
+                                        x.PByUnit,
+                                        x.TotalPProduced
                                     })
                                     .ToList();
 
@@ -5357,7 +5413,11 @@ namespace NMP.Portal.Controllers
                 model.Farm = new Farm();
                 model.Farm = farm;
             }
-
+            else if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+            {
+                TempData["ErrorOnLivestockManureNitrogenReportChecklist"] = error.Message;
+                return RedirectToAction("LivestockManureNitrogenReportChecklist");
+            }
             (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetail, error) = await _reportService.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.Farm.ID, model.Year.Value);
             if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingFarmDetail != null)
             {
@@ -5376,13 +5436,18 @@ namespace NMP.Portal.Controllers
                     && nutrientsLoadingFarmDetail.LandInNVZ > 0 && nutrientsLoadingFarmDetail.LandNotNVZ > 0)
                 {
                     ViewBag.IsAllInNVZ = true;
-                    ViewBag.TotalLivestockManureCapacity =(int)Math.Round((nutrientsLoadingFarmDetail.LandInNVZ.Value * 170) + (nutrientsLoadingFarmDetail.LandNotNVZ.Value * 250), 0);
+                    ViewBag.TotalLivestockManureCapacity = (int)Math.Round((nutrientsLoadingFarmDetail.LandInNVZ.Value * 170) + (nutrientsLoadingFarmDetail.LandNotNVZ.Value * 250), 0);
                 }
                 else if (nutrientsLoadingFarmDetail.LandInNVZ != null && nutrientsLoadingFarmDetail.LandInNVZ > 0)
                 {
                     ViewBag.IsAllNotInNVZ = true;
                     ViewBag.TotalLivestockManureCapacity = (int)Math.Round(nutrientsLoadingFarmDetail.LandInNVZ.Value * 170, 0);
                 }
+            }
+            else if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+            {
+                TempData["ErrorOnLivestockManureNitrogenReportChecklist"] = error.Message;
+                return RedirectToAction("LivestockManureNitrogenReportChecklist");
             }
             int totalLivestockManureCapacity = ViewBag.TotalLivestockManureCapacity ?? 0;
             ViewBag.AreaInsideNVZ = nutrientsLoadingFarmDetail.LandInNVZ;
@@ -5392,12 +5457,20 @@ namespace NMP.Portal.Controllers
             {
                 ViewBag.LivestockManureTotalNCapacityForNVZ = nutrientsLoadingFarmDetail.LandInNVZ * 170;
                 ViewBag.LivestockManureTotalNCapacityForNotInNVZ = nutrientsLoadingFarmDetail.LandNotNVZ * 250;
-                ViewBag.LivestockManureTotalNCapacity = (nutrientsLoadingFarmDetail.LandInNVZ * 170) + (nutrientsLoadingFarmDetail.LandNotNVZ * 250);
-                //ViewBag.HomeProducedLivestockManures = nutrientsLoadingLiveStockList.Sum(x => x.TotalNProduced);
-
+                ViewBag.LivestockManureTotalNCapacity = (int)Math.Round(((nutrientsLoadingFarmDetail.LandInNVZ.Value * 170) + ((nutrientsLoadingFarmDetail.LandNotNVZ ?? 0) * 250)), 0);
+            }
+            else if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+            {
+                TempData["ErrorOnLivestockManureNitrogenReportChecklist"] = error.Message;
+                return RedirectToAction("LivestockManureNitrogenReportChecklist");
             }
             int totalImportedLivestock = 0;
             int totalExportedLivestock = 0;
+            int totalImportedGrazingLivestock = 0;
+            int totalImportedNonGrazingLivestock = 0;
+            int totalExportedGrazingLivestock = 0;
+            int totalExportedNonGrazingLivestock = 0;
+
             (List<NutrientsLoadingManures> nutrientsLoadingManureList, error) = await _reportService.FetchNutrientsLoadingManuresByFarmId(model.Farm.ID);
             if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingManureList.Count > 0)
             {
@@ -5408,28 +5481,148 @@ namespace NMP.Portal.Controllers
                     {
                         var selectedManureTypeIds = selectedManureTypes.Select(mt => mt.Id).ToList();
                         totalImportedLivestock = (int)Math.Round(
-                            nutrientsLoadingManureList
-                                .Where(x => selectedManureTypeIds.Contains(x.ManureTypeID)
-                                            && x.NTotal.HasValue && x.ManureLookupType == Resource.lblImport)
-                                .Sum(x => x.NTotal.Value), 0);
+                        nutrientsLoadingManureList
+                        .Where(x => selectedManureTypeIds.Contains(x.ManureTypeID)
+                        && x.NTotal.HasValue && x.ManureLookupType == Resource.lblImport)
+                        .Sum(x => x.NTotal.Value), 0);
                         totalExportedLivestock = (int)Math.Round(
-                           nutrientsLoadingManureList
-                               .Where(x => selectedManureTypeIds.Contains(x.ManureTypeID)
-                                           && x.NTotal.HasValue && x.ManureLookupType == Resource.lblExport)
-                               .Sum(x => x.NTotal.Value), 0);
+                        nutrientsLoadingManureList
+                        .Where(x => selectedManureTypeIds.Contains(x.ManureTypeID)
+                        && x.NTotal.HasValue && x.ManureLookupType == Resource.lblExport)
+                        .Sum(x => x.NTotal.Value), 0);
+
+                        totalImportedGrazingLivestock = (int)Math.Round(
+                        nutrientsLoadingManureList
+                       .Where(x => !Enum.GetValues(typeof(NonGrazingManureType))
+                       .Cast<NonGrazingManureType>()
+                       .Select(e => (int)e)
+                       .Contains(x.ManureTypeID)
+                       && x.NTotal.HasValue && x.ManureLookupType == Resource.lblImport)
+                       .Sum(x => x.NTotal.Value), 0);
+
+                        totalImportedNonGrazingLivestock = (int)Math.Round(
+                        nutrientsLoadingManureList
+                        .Where(x => Enum.GetValues(typeof(NonGrazingManureType))
+                        .Cast<NonGrazingManureType>()
+                        .Select(e => (int)e)
+                        .Contains(x.ManureTypeID)
+                        && x.NTotal.HasValue
+                        && x.ManureLookupType == Resource.lblImport)
+                        .Sum(x => x.NTotal.Value),
+                        0);
+
+                        totalExportedGrazingLivestock = (int)Math.Round(
+                        nutrientsLoadingManureList
+                        .Where(x => !Enum.GetValues(typeof(NonGrazingManureType))
+                        .Cast<NonGrazingManureType>()
+                        .Select(e => (int)e)
+                        .Contains(x.ManureTypeID)
+                        && x.NTotal.HasValue && x.ManureLookupType == Resource.lblExport)
+                        .Sum(x => x.NTotal.Value), 0);
+
+                        totalExportedNonGrazingLivestock = (int)Math.Round(
+                        nutrientsLoadingManureList
+                        .Where(x => Enum.GetValues(typeof(NonGrazingManureType))
+                        .Cast<NonGrazingManureType>()
+                        .Select(e => (int)e)
+                        .Contains(x.ManureTypeID)
+                        && x.NTotal.HasValue
+                        && x.ManureLookupType == Resource.lblExport)
+                        .Sum(x => x.NTotal.Value), 0);
+
 
                     }
                 }
-
+                else if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+                {
+                    TempData["ErrorOnLivestockManureNitrogenReportChecklist"] = error.Message;
+                    return RedirectToAction("LivestockManureNitrogenReportChecklist");
+                }
             }
-            int homeProducedLivestockManures = (int)Math.Round(nutrientsLoadingLiveStockList.Sum(x => x.TotalNProduced.Value), 0);
-            int totalNLoading = totalImportedLivestock + totalExportedLivestock + homeProducedLivestockManures;
+            else if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+            {
+                TempData["ErrorOnLivestockManureNitrogenReportChecklist"] = error.Message;
+                return RedirectToAction("LivestockManureNitrogenReportChecklist");
+            }
+            int homeProducedLivestockManures = nutrientsLoadingLiveStockList.Count > 0 ? (int)Math.Round(nutrientsLoadingLiveStockList.Sum(x => x.TotalNProduced.Value), 0) : 0;
+            int totalNLoading = (homeProducedLivestockManures + totalImportedLivestock) - totalExportedLivestock;
             ViewBag.TotalImportedLivestock = totalImportedLivestock;
             ViewBag.HomeProducedLivestockManures = homeProducedLivestockManures;
             ViewBag.TotalExportedLivestock = totalExportedLivestock;
             ViewBag.TotalNLoading = totalNLoading;
-            ViewBag.AverageLivestockManureTotalNLoading = totalNLoading / (nutrientsLoadingFarmDetail.LandInNVZ + nutrientsLoadingFarmDetail.LandNotNVZ);
+            ViewBag.AverageLivestockManureTotalNLoading = (int)Math.Round(totalNLoading / (nutrientsLoadingFarmDetail.LandInNVZ.Value + (nutrientsLoadingFarmDetail.LandNotNVZ ?? 0)), 0);
             ViewBag.ComplianceOrNot = totalLivestockManureCapacity > totalNLoading ? Resource.lblCompliance : Resource.lblNonCompliance;
+
+
+            List<int> grazingLivestockList = new List<int>();
+            List<int> nonGrazingLivestockList = new List<int>();
+            (List<LivestockTypeResponse> livestockList, error) = await _reportService.FetchLivestockTypes();
+            if (error == null && livestockList.Count > 0)
+            {
+                grazingLivestockList = livestockList.Where(mt => mt.IsGrazing.Value).Select(mt => mt.ID).ToList();
+                nonGrazingLivestockList = livestockList.Where(mt => !mt.IsGrazing.Value).Select(mt => mt.ID).ToList();
+                if (nutrientsLoadingLiveStockList.Count > 0)
+                {
+                    if(nutrientsLoadingLiveStockList.Any(x => grazingLivestockList.Contains(x.LiveStockTypeID.Value)))
+                            {
+                        ViewBag.NutrientsLoadingLiveStockGrazingList = nutrientsLoadingLiveStockList.Where(x => grazingLivestockList.Contains(x.LiveStockTypeID.Value)).ToList();
+                        ViewBag.NutrientsLoadingLiveStockGrazingTotalN = nutrientsLoadingLiveStockList.Where(x => grazingLivestockList.Contains(x.LiveStockTypeID.Value)).Sum(x => x.TotalNProduced);
+                        ViewBag.NutrientsLoadingLiveStockGrazingTotalP = nutrientsLoadingLiveStockList.Where(x => grazingLivestockList.Contains(x.LiveStockTypeID.Value)).Sum(x => x.TotalPProduced);
+                    }
+                    if (nutrientsLoadingLiveStockList.Any(x => nonGrazingLivestockList.Contains(x.LiveStockTypeID.Value)))
+                    {
+                        ViewBag.NutrientsLoadingLiveStockNonGrazingList = nutrientsLoadingLiveStockList.Where(x => nonGrazingLivestockList.Contains(x.LiveStockTypeID.Value)).ToList();
+                        ViewBag.NutrientsLoadingLiveStockNonGrazingTotalN = nutrientsLoadingLiveStockList.Where(x => nonGrazingLivestockList.Contains(x.LiveStockTypeID.Value)).Sum(x => x.TotalNProduced);
+                        ViewBag.NutrientsLoadingLiveStockNonGrazingTotalP = nutrientsLoadingLiveStockList.Where(x => nonGrazingLivestockList.Contains(x.LiveStockTypeID.Value)).Sum(x => x.TotalPProduced);
+                    }
+                }
+            }
+            else if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+            {
+                TempData["ErrorOnLivestockManureNitrogenReportChecklist"] = error.Message;
+                return RedirectToAction("LivestockManureNitrogenReportChecklist");
+            }
+
+            // for derogation
+            if (nutrientsLoadingFarmDetail != null && nutrientsLoadingFarmDetail.Derogation.Value)
+            {
+                if (grazingLivestockList.Count > 0 || nonGrazingLivestockList.Count > 0)
+                {
+                    decimal areaReqForGrazingLivestock = nutrientsLoadingLiveStockList
+                     .Where(x => grazingLivestockList.Contains(x.LiveStockTypeID.Value)
+                     && x.TotalNProduced.HasValue)
+                     .Sum(x => x.TotalNProduced.Value);
+                    areaReqForGrazingLivestock += totalImportedGrazingLivestock;
+                    areaReqForGrazingLivestock -= totalExportedGrazingLivestock;
+
+                    decimal areaReqForNonGrazingLivestock = nutrientsLoadingLiveStockList
+                     .Where(x => nonGrazingLivestockList.Contains(x.LiveStockTypeID.Value)
+                     && x.TotalNProduced.HasValue)
+                     .Sum(x => x.TotalNProduced.Value);
+
+                    areaReqForNonGrazingLivestock += totalImportedNonGrazingLivestock;
+                    areaReqForNonGrazingLivestock -= totalExportedNonGrazingLivestock;
+                    ViewBag.AreaReqForGrazingLivestock = Math.Round(areaReqForGrazingLivestock / 250, 2);
+                    ViewBag.AreaReqForNonGrazingLivestock = Math.Round(areaReqForNonGrazingLivestock / 170, 2);
+                    ViewBag.TotalAreaReqForLivestock = (ViewBag.AreaReqForNonGrazingLivestock != null &&
+                    ViewBag.AreaReqForGrazingLivestock != null) ? Math.Round(ViewBag.AreaReqForGrazingLivestock + ViewBag.AreaReqForNonGrazingLivestock, 2) : 0;
+                    if (nutrientsLoadingFarmDetail.LandNotNVZ != null && nutrientsLoadingFarmDetail.LandNotNVZ > 0)
+                    {
+                        decimal capacityOfLandOutside = (nutrientsLoadingFarmDetail.LandNotNVZ ?? 0) * 250;
+                        if (capacityOfLandOutside > areaReqForNonGrazingLivestock)
+                        {
+                            ViewBag.AreaReqForNonGrazingLivestock = Math.Round(areaReqForNonGrazingLivestock / 250, 2);
+                        }
+                        else
+                        {
+                            ViewBag.AreaReqForNonGrazingLivestock = Math.Round(nutrientsLoadingFarmDetail.LandNotNVZ.Value + (areaReqForNonGrazingLivestock - capacityOfLandOutside) / 170, 2);
+                        }
+                        //ViewBag.AreaReqForNonGrazingLivestock = areaReqForNonGrazingLivestock / 250;
+                        ViewBag.TotalAreaReqForLivestock = (ViewBag.AreaReqForNonGrazingLivestock != null &&
+                        ViewBag.AreaReqForGrazingLivestock != null) ? Math.Round(ViewBag.AreaReqForGrazingLivestock + ViewBag.AreaReqForNonGrazingLivestock, 2) : 0;
+                    }
+                }
+            }
             _logger.LogTrace("Report Controller : CropAndFieldManagement() post action called");
             return View(model);
         }

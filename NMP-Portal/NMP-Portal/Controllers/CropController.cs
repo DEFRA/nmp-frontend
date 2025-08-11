@@ -353,7 +353,7 @@ namespace NMP.Portal.Controllers
                                         var crop = new Crop
                                         {
                                             Year = model.Year.Value,
-                                            ID = harvestYearPlanResponse.Count > 0 ? harvestYearPlanResponse[0].CropID : null,
+                                            //ID = harvestYearPlanResponse.Count > 0 ? harvestYearPlanResponse[0].CropID : null,
                                             CropTypeID = model.CropTypeID,
                                             OtherCropName = model.OtherCropName,
                                             FieldID = fieldId,
@@ -361,6 +361,19 @@ namespace NMP.Portal.Controllers
                                             EncryptedCounter = _fieldDataProtector.Protect(counter.ToString()),
                                             CropOrder = fieldsAllowedForSecondCrop.Contains(fieldId) ? 2 : 1
                                         };
+                                        if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
+                                        {
+                                            (List<HarvestYearPlanResponse> harvestYearPlanResponseForUpdate, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
+                                            if (string.IsNullOrWhiteSpace(error.Message) && harvestYearPlanResponseForUpdate.Count > 0)
+                                            {
+                                                harvestYearPlanResponseForUpdate = harvestYearPlanResponseForUpdate.Where(x => x.CropGroupName == model.PreviousCropGroupName).ToList();
+                                                if (harvestYearPlanResponseForUpdate != null)
+                                                {
+                                                    crop.ID = harvestYearPlanResponseForUpdate.Where(x => x.FieldID == fieldId).Select(x => x.CropID).FirstOrDefault();
+                                                    crop.CropOrder = harvestYearPlanResponseForUpdate.Where(x => x.FieldID == fieldId).Select(x => x.CropOrder).FirstOrDefault();
+                                                }
+                                            }
+                                        }
                                         counter++;
                                         crop.FieldName = (await _fieldService.FetchFieldByFieldId(fieldId)).Name;
 
@@ -786,7 +799,7 @@ namespace NMP.Portal.Controllers
                     harvestYearPlanCount = harvestYearPlanResponse.Count();
                     foreach (var harvestYearPlan in harvestYearPlanResponse)
                     {
-                        if (harvestYearPlan.CropInfo1 == null && harvestYearPlan.Yield == null)
+                        if (harvestYearPlan.CropInfo1 == null && harvestYearPlan.Yield == null && harvestYearPlan.DefoliationSequenceID == null)
                         {
                             cropPlanCounter++;
                         }
@@ -1084,9 +1097,9 @@ namespace NMP.Portal.Controllers
                     }
                 }
                 //}
-                if (SelectListItem.Count == 1)
+                if (SelectListItem.Count == 1 && model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass)
                 {
-                    return RedirectToAction("CropTypes");
+                    return RedirectToAction("CropGroupName");
                 }
                 ViewBag.fieldList = SelectListItem;
                 if (model.IsAnyChangeInField)
