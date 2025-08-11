@@ -613,10 +613,10 @@
 
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key class=@(string.IsNullOrWhiteSpace(Model.ReceiverName) ? "govuk-error-message" : "")>
-                                @string.Format(Resource.lblWhoAreYouThisLivestockManureFrom,
-                                Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
-                                Resource.lblImporting.ToLower() : Resource.lblExporting.ToLower())
-                        </govuk-summary-list-row-key>
+                                @(Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import?
+                                                        Resource.lblWhoAreYouImportingThisLivestockManureFrom:
+                                                        Resource.lblWhoAreYouExportingThisLivestockManureTo)
+                            </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
                             @(string.IsNullOrWhiteSpace(Model.ReceiverName) ?
                                                         Resource.lblNotSet : Model.ReceiverName)

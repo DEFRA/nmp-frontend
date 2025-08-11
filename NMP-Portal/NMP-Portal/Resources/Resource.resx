@@ -5096,8 +5096,8 @@ live</value>
   <data name="lblTotals" xml:space="preserve">
     <value>Totals</value>
   </data>
-  <data name="lblWhoAreYouThisLivestockManureFrom" xml:space="preserve">
-    <value>Who are you {0} this livestock manure from?</value>
+  <data name="lblWhoAreYouImportingThisLivestockManureFrom" xml:space="preserve">
+    <value>Who are you importing this livestock manure from?</value>
   </data>
   <data name="lblNutrientValuesForManureTypeNameYouAddedOnDate" xml:space="preserve">
     <value>Nutrient values for {0} you added on {1}?</value>
@@ -5569,5 +5569,59 @@ live</value>
   </data>
   <data name="lblTotalPhosphateInThisImportOrExport" xml:space="preserve">
     <value>Total phosphate (P205) in this {0}</value>
+  </data>
+  <data name="lblGrazingLivestockManureTotalN" xml:space="preserve">
+    <value>Grazing livestock manure total nitrogen (N)</value>
+  </data>
+  <data name="lblLivestockReportContentSixteen" xml:space="preserve">
+    <value>Home-produced manures from any cattle, sheep, deer, goats, or horses, regardless of whether the animals are housed or not.</value>
+  </data>
+  <data name="lblLivestockReportContentSeventeen" xml:space="preserve">
+    <value>Average number for year</value>
+  </data>
+  <data name="lblLivestockReportContentEighteen" xml:space="preserve">
+    <value>Total nitrogen (N) produced</value>
+  </data>
+  <data name="lblLivestockReportContentNineteen" xml:space="preserve">
+    <value>Total livestock manure nitrogen (N) production</value>
+  </data>
+  <data name="lblLivestockReportContenttwenty" xml:space="preserve">
+    <value>Non-grazing livestock manure total nitrogen (N)</value>
+  </data>
+  <data name="lblLivestockReportContentTwentyOne" xml:space="preserve">
+    <value>Home-produced manures from any pigs or poultry, regardless of whether the animals are housed or not.</value>
+  </data>
+  <data name="lblLivestockReportContentTwentyTwo" xml:space="preserve">
+    <value>Number of places</value>
+  </data>
+  <data name="lblLivestockReportContentTwentyThree" xml:space="preserve">
+    <value>Typical nitrogen (N) standard</value>
+  </data>
+  <data name="lblLivestockReportContentTwentyFour" xml:space="preserve">
+    <value>Entered nitrogen (N) standard</value>
+  </data>
+  <data name="lblLivestockReportContentTwentyFive" xml:space="preserve">
+    <value>Total livestock manure nitrogen (N) production</value>
+  </data>
+  <data name="lblLivestockReportContentTwentySix" xml:space="preserve">
+    <value>Total phosphate P2O5 produced</value>
+  </data>
+  <data name="lblLivestockReportContentTwentySeven" xml:space="preserve">
+    <value>Grazing livestock manure total nitrogen (N) and phosphate (P2O5) production</value>
+  </data>
+  <data name="lblLivestockReportContentTwentyNine" xml:space="preserve">
+    <value>Home-produced manures from any cattle (excluding veal calves), sheep, deer, goats, or horses, regardless of whether the animals are housed or not.</value>
+  </data>
+  <data name="lblLivestockReportContentTwentyEight" xml:space="preserve">
+    <value>Home-produced manures from any pigs, poultry, or veal calves, regardless of whether the animals are housed or not.</value>
+  </data>
+  <data name="lblLivestockReportContentThirty" xml:space="preserve">
+    <value>Non-grazing livestock manure total nitrogen (N) and phosphate (P2O5) production</value>
+  </data>
+  <data name="lblLivestockReportContentThirtyOne" xml:space="preserve">
+    <value> Average for year</value>
+  </data>
+  <data name="lblWhoAreYouExportingThisLivestockManureTo" xml:space="preserve">
+    <value>Who are you exporting this livestock manure to?</value>
   </data>
 </root>
