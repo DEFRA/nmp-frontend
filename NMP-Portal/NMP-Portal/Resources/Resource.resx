@@ -5567,4 +5567,7 @@ live</value>
   <data name="lblGrassPercentageOfThisFarmIsGrass" xml:space="preserve">
     <value>{0}% of this farm is grass.</value>
   </data>
+  <data name="lblTotalPhosphateInThisImportOrExport" xml:space="preserve">
+    <value>Total phosphate (P205) in this {0}</value>
+  </data>
 </root>

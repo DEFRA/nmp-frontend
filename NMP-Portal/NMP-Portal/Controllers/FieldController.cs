@@ -2748,7 +2748,7 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("FarmList", "Farm");
             }
             List<CommonResponse> commonResponses = await _fieldService.GetSoilNitrogenSupplyItems();
-            ViewBag.SoilNitrogenSupplyItems = commonResponses.OrderByDescending(x => x.Id);
+            ViewBag.SoilNitrogenSupplyItems = commonResponses.OrderBy(x => x.Id);
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             return View(model);
         }
@@ -2766,7 +2766,7 @@ namespace NMP.Portal.Controllers
             if (!ModelState.IsValid)
             {
                 List<CommonResponse> commonResponses = await _fieldService.GetSoilNitrogenSupplyItems();
-                ViewBag.SoilNitrogenSupplyItems = commonResponses.OrderByDescending(x => x.Id);
+                ViewBag.SoilNitrogenSupplyItems = commonResponses.OrderBy(x => x.Id);
                 return View(model);
             }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
