@@ -5199,10 +5199,10 @@ live</value>
     <value>{0} cannot be longer than {1} characters.</value>
   </data>
   <data name="lblDidYouHaveAnyLivestockOn" xml:space="preserve">
-    <value>Did you have any livestock on {0} in {1}</value>
+    <value>Did you have any livestock on {0} in {1}?</value>
   </data>
   <data name="lblIncludeCattleSheepPigsGoats" xml:space="preserve">
-    <value>Include cattle, sheep, pigs, goats, horses, poultry and dear. </value>
+    <value>Include cattle, sheep, pigs, goats, horses, poultry and deer. </value>
   </data>
   <data name="lblIsAnyLivestock" xml:space="preserve">
     <value>Is any livestock</value>
@@ -5566,6 +5566,9 @@ live</value>
   </data>
   <data name="lblGrassPercentageOfThisFarmIsGrass" xml:space="preserve">
     <value>{0}% of this farm is grass.</value>
+  </data>
+  <data name="lblTotalPhosphateInThisImportOrExport" xml:space="preserve">
+    <value>Total phosphate (P205) in this {0}</value>
   </data>
   <data name="lblGrazingLivestockManureTotalN" xml:space="preserve">
     <value>Grazing livestock manure total nitrogen (N)</value>

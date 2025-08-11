@@ -3058,7 +3058,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Did you have any livestock on {0} in {1}.
+        ///   Looks up a localized string similar to Did you have any livestock on {0} in {1}?.
         /// </summary>
         public static string lblDidYouHaveAnyLivestockOn {
             get {
@@ -5480,7 +5480,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Include cattle, sheep, pigs, goats, horses, poultry and dear. .
+        ///   Looks up a localized string similar to Include cattle, sheep, pigs, goats, horses, poultry and deer. .
         /// </summary>
         public static string lblIncludeCattleSheepPigsGoats {
             get {
@@ -11409,6 +11409,15 @@ namespace NMP.Portal.Resources {
         public static string lblTotalPhosphate {
             get {
                 return ResourceManager.GetString("lblTotalPhosphate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total phosphate (P205) in this {0}.
+        /// </summary>
+        public static string lblTotalPhosphateInThisImportOrExport {
+            get {
+                return ResourceManager.GetString("lblTotalPhosphateInThisImportOrExport", resourceCulture);
             }
         }
         
