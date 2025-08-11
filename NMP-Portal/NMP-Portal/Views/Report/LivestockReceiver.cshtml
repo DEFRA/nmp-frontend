@@ -134,9 +134,9 @@
 
                 <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
                     <h1 class="govuk-fieldset__heading">
-                        @string.Format(Resource.lblWhoAreYouThisLivestockManureFrom,
-                                 Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
-                                 Resource.lblImporting.ToLower() : Resource.lblExporting.ToLower())
+                    @(Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                                        Resource.lblWhoAreYouImportingThisLivestockManureFrom :
+                                        Resource.lblWhoAreYouExportingThisLivestockManureTo)
                     </h1>
                 </legand>
                 <div class="govuk-form-group">

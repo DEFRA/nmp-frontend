@@ -4750,6 +4750,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Grazing livestock manure total nitrogen (N).
+        /// </summary>
+        public static string lblGrazingLivestockManureTotalN {
+            get {
+                return ResourceManager.GetString("lblGrazingLivestockManureTotalN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Green area index (GAI).
         /// </summary>
         public static string lblGreenAreaIndex {
@@ -6390,6 +6399,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total nitrogen (N) produced.
+        /// </summary>
+        public static string lblLivestockReportContentEighteen {
+            get {
+                return ResourceManager.GetString("lblLivestockReportContentEighteen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Home-produced livestock manures.
         /// </summary>
         public static string lblLivestockReportContentEleven {
@@ -6444,6 +6462,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total livestock manure nitrogen (N) production.
+        /// </summary>
+        public static string lblLivestockReportContentNineteen {
+            get {
+                return ResourceManager.GetString("lblLivestockReportContentNineteen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The information you entered does not indicate compliance. You must plan so that you do not exceed the limit..
         /// </summary>
         public static string lblLivestockReportContentOne {
@@ -6462,11 +6489,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Average number for year.
+        /// </summary>
+        public static string lblLivestockReportContentSeventeen {
+            get {
+                return ResourceManager.GetString("lblLivestockReportContentSeventeen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  Livestock manure total nitrogen (N) capacity (per year).
         /// </summary>
         public static string lblLivestockReportContentSix {
             get {
                 return ResourceManager.GetString("lblLivestockReportContentSix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Home-produced manures from any cattle, sheep, deer, goats, or horses, regardless of whether the animals are housed or not..
+        /// </summary>
+        public static string lblLivestockReportContentSixteen {
+            get {
+                return ResourceManager.GetString("lblLivestockReportContentSixteen", resourceCulture);
             }
         }
         
@@ -6489,6 +6534,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Non-grazing livestock manure total nitrogen (N) and phosphate (P2O5) production.
+        /// </summary>
+        public static string lblLivestockReportContentThirty {
+            get {
+                return ResourceManager.GetString("lblLivestockReportContentThirty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  Average for year.
+        /// </summary>
+        public static string lblLivestockReportContentThirtyOne {
+            get {
+                return ResourceManager.GetString("lblLivestockReportContentThirtyOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to and best practice guidance of 250kg of N per hectare for land outside of an NVZ..
         /// </summary>
         public static string lblLivestockReportContentThreeForDerogationOrNonDerogation {
@@ -6503,6 +6566,96 @@ namespace NMP.Portal.Resources {
         public static string lblLivestockReportContentTwelve {
             get {
                 return ResourceManager.GetString("lblLivestockReportContentTwelve", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Non-grazing livestock manure total nitrogen (N).
+        /// </summary>
+        public static string lblLivestockReportContenttwenty {
+            get {
+                return ResourceManager.GetString("lblLivestockReportContenttwenty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Home-produced manures from any pigs, poultry, or veal calves, regardless of whether the animals are housed or not..
+        /// </summary>
+        public static string lblLivestockReportContentTwentyEight {
+            get {
+                return ResourceManager.GetString("lblLivestockReportContentTwentyEight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total livestock manure nitrogen (N) production.
+        /// </summary>
+        public static string lblLivestockReportContentTwentyFive {
+            get {
+                return ResourceManager.GetString("lblLivestockReportContentTwentyFive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Entered nitrogen (N) standard.
+        /// </summary>
+        public static string lblLivestockReportContentTwentyFour {
+            get {
+                return ResourceManager.GetString("lblLivestockReportContentTwentyFour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Home-produced manures from any cattle (excluding veal calves), sheep, deer, goats, or horses, regardless of whether the animals are housed or not..
+        /// </summary>
+        public static string lblLivestockReportContentTwentyNine {
+            get {
+                return ResourceManager.GetString("lblLivestockReportContentTwentyNine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Home-produced manures from any pigs or poultry, regardless of whether the animals are housed or not..
+        /// </summary>
+        public static string lblLivestockReportContentTwentyOne {
+            get {
+                return ResourceManager.GetString("lblLivestockReportContentTwentyOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Grazing livestock manure total nitrogen (N) and phosphate (P2O5) production.
+        /// </summary>
+        public static string lblLivestockReportContentTwentySeven {
+            get {
+                return ResourceManager.GetString("lblLivestockReportContentTwentySeven", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total phosphate P2O5 produced.
+        /// </summary>
+        public static string lblLivestockReportContentTwentySix {
+            get {
+                return ResourceManager.GetString("lblLivestockReportContentTwentySix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Typical nitrogen (N) standard.
+        /// </summary>
+        public static string lblLivestockReportContentTwentyThree {
+            get {
+                return ResourceManager.GetString("lblLivestockReportContentTwentyThree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of places.
+        /// </summary>
+        public static string lblLivestockReportContentTwentyTwo {
+            get {
+                return ResourceManager.GetString("lblLivestockReportContentTwentyTwo", resourceCulture);
             }
         }
         
@@ -12907,11 +13060,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Who are you {0} this livestock manure from?.
+        ///   Looks up a localized string similar to Who are you exporting this livestock manure to?.
         /// </summary>
-        public static string lblWhoAreYouThisLivestockManureFrom {
+        public static string lblWhoAreYouExportingThisLivestockManureTo {
             get {
-                return ResourceManager.GetString("lblWhoAreYouThisLivestockManureFrom", resourceCulture);
+                return ResourceManager.GetString("lblWhoAreYouExportingThisLivestockManureTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Who are you importing this livestock manure from?.
+        /// </summary>
+        public static string lblWhoAreYouImportingThisLivestockManureFrom {
+            get {
+                return ResourceManager.GetString("lblWhoAreYouImportingThisLivestockManureFrom", resourceCulture);
             }
         }
         
