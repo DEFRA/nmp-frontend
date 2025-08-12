@@ -6564,7 +6564,7 @@ namespace NMP.Portal.Controllers
                     if (error == null)
                     {
                         int? nmaxLimitEnglandOrWales = (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales ? cropTypeLinking.NMaxLimitWales : cropTypeLinking.NMaxLimitEngland) ?? 0;
-                        if (nmaxLimitEnglandOrWales != null)
+                        if (nmaxLimitEnglandOrWales > 0)
                         {
                             (FieldDetailResponse fieldDetail, error) = await _fieldService.FetchFieldDetailByFieldIdAndHarvestYear(fieldId, model.HarvestYear.Value, false);
                             if (error == null)

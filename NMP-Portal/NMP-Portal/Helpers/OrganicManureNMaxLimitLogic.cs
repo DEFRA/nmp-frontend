@@ -50,20 +50,6 @@ namespace NMP.Portal.Helpers
                     nMaxLimit = nMaxLimit + (int)Math.Round(((yield.Value - 8.0m) / 0.1m) * 2);
                 }
             }
-            else if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WholecropWinterWheat)
-            {
-                if (soilType == Resource.lblShallow)
-                {
-                    nMaxLimit = nMaxLimit + 20;
-                }
-            }
-            else if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WholecropWinterBarley)
-            {
-                if (soilType == Resource.lblShallow)
-                {
-                    nMaxLimit = nMaxLimit + 20;
-                }
-            }
             else if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.SpringWheat)
             {
                 if (cropInfo1 == (int)NMP.Portal.Enums.CropInfoOne.Milling)
@@ -123,11 +109,7 @@ namespace NMP.Portal.Helpers
                 || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Beetroot || cropTypeId == (int)NMP.Portal.Enums.CropTypes.BrusselSprouts
                 || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Cabbage || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Calabrese
                 || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Cauliflower || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Leeks
-                || cropTypeId== (int)NMP.Portal.Enums.CropTypes.Grass
-                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.WholecropSpringBarley 
-                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.WholecropSpringWheat
-                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.WholecropWinterBarley 
-                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.WholecropWinterWheat)
+                || cropTypeId== (int)NMP.Portal.Enums.CropTypes.Grass)
             {
                 if (manureTypeCondition)
                 {
