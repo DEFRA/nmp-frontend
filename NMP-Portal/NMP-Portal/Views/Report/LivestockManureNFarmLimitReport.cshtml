@@ -455,3 +455,87 @@
         </div>
     </div>
 }
+@if (ViewBag.ImportOfLivestockManureList != null)
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full margin-bottom-ten">
+
+            <h2 class="govuk-heading-m">
+                @Resource.lblImportsOfLivestockManure
+                @* @Resource.lblExportsOfLivestockManure *@
+            </h2>
+            <table class="data-table govuk-table">
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">@Resource.lblDate</th>
+                        <th scope="col" class="govuk-table__header manure_type">@Resource.lblType</th>
+                        <th scope="col" class="govuk-table__header manure_quantity">@Resource.lblQuantity</th>
+                        <th scope="col" class="govuk-table__header manure_nitrogen">@Resource.lblNitrogen</th>
+                        <th scope="col" class="govuk-table__header manure_total_nitrogen">@Resource.lblTotalNitrogenN</th>
+                        <th scope="col" class="govuk-table__header">@Resource.lblSupplier</th>
+                    </tr>
+                    @foreach (var importOfLivestockManure in ViewBag.ImportOfLivestockManureList)
+                    {
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">@importOfLivestockManure.ManureDate </td>
+                            <td class="govuk-table__cell">@importOfLivestockManure.ManureType </td>
+                            <td class="govuk-table__cell">@string.Format("{0}{1}", importOfLivestockManure.Quantity, importOfLivestockManure.IsLiquid ? Resource.lbltonnes : Resource.lblCubicMeters) </td>
+                            <td class="govuk-table__cell">@string.Format("{0}{1}", importOfLivestockManure.NContent, importOfLivestockManure.IsLiquid ? Resource.lblKgPerTonne : Resource.lblKgPerMeterCube)</td>
+                            <td class="govuk-table__cell">@string.Format("{0}{1}", importOfLivestockManure.NTotal, Resource.lblkg)</td>
+                            <td class="govuk-table__cell">
+                                @{
+                                    var parts = new List<string>();
+                                    if (!string.IsNullOrEmpty(importOfLivestockManure.FarmName)) parts.Add(importOfLivestockManure.FarmName);
+                                    if (!string.IsNullOrEmpty(importOfLivestockManure.Address1)) parts.Add(importOfLivestockManure.Address1);
+                                    if (!string.IsNullOrEmpty(importOfLivestockManure.Address2)) parts.Add(importOfLivestockManure.Address2);
+                                    if (!string.IsNullOrEmpty(importOfLivestockManure.Address3)) parts.Add(importOfLivestockManure.Address3);
+                                    if (!string.IsNullOrEmpty(importOfLivestockManure.Address4)) parts.Add(importOfLivestockManure.Address4);
+                                    if (!string.IsNullOrEmpty(importOfLivestockManure.Postcode)) parts.Add(importOfLivestockManure.Postcode);
+
+                                    var displayString = string.Join(", ", parts);
+                                }
+
+                                @displayString
+                            </td>
+                        </tr>
+                        // <tr class="address_row">
+                        //     <td class="govuk-table__cell" colspan="6">Note: This is my note text for the above import.</td>
+                        // </tr>
+
+                        <tr class="govuk-table__row total_row">
+                            <td class="govuk-table__cell">@Resource.lblTotal</td>
+                            <td class="govuk-table__cell">-</td>
+                            <td class="govuk-table__cell">@string.Format("{0}{1}", ViewBag.TotalImportedLivestock, Resource.lbltonnes)</td>
+                            <td class="govuk-table__cell">-</td>
+                            <td class="govuk-table__cell">@string.Format("{0}{1}", ViewBag.TotalImportedLivestock, Resource.lblkg)</td>
+                            <td class="govuk-table__cell">-</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <!-- <table class="data-table govuk-table">
+              <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                  <th scope="col" class="govuk-table__header">Date</th>
+                  <th scope="col" class="govuk-table__header ">Type</th>
+                  <th scope="col" class="govuk-table__header ">Quantity</th>
+                  <th scope="col" class="govuk-table__header ">Nitrogen (N)</th>
+                  <th scope="col" class="govuk-table__header ">Total Nitrogen (N)</th>
+                </tr>
+                <tr class="govuk-table__row">
+                  <td class="govuk-table__cell">12/4/2025 </td>
+                  <td class="govuk-table__cell">Cattle FYM - fresh </td>
+                  <td class="govuk-table__cell">5,000 tonnes</td>
+                  <td class="govuk-table__cell">6kg per tonne</td>
+                  <td class="govuk-table__cell">30,000kg</td>
+                </tr>
+                <tr class="address_row">
+                  <td class="govuk-table__cell" colspan="5">Imported from: Mrs Jones, Jones Farming company, CB24 5JF</td>
+                </tr>
+              </tbody>
+            </table> -->
+            <!-- <p class="govuk-body">None</p> -->
+        </div>
+    </div>
+}

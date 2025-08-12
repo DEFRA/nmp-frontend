@@ -5624,4 +5624,10 @@ live</value>
   <data name="lblWhoAreYouExportingThisLivestockManureTo" xml:space="preserve">
     <value>Who are you exporting this livestock manure to?</value>
   </data>
+  <data name="lblImportsOfLivestockManure" xml:space="preserve">
+    <value>Imports of livestock manure</value>
+  </data>
+  <data name="lblExportsOfLivestockManure" xml:space="preserve">
+    <value>Exports of livestock manure</value>
+  </data>
 </root>

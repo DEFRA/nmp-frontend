@@ -3895,6 +3895,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exports of livestock manure.
+        /// </summary>
+        public static string lblExportsOfLivestockManure {
+            get {
+                return ResourceManager.GetString("lblExportsOfLivestockManure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to false.
         /// </summary>
         public static string lblFalse {
@@ -5476,6 +5485,15 @@ namespace NMP.Portal.Resources {
         public static string lblImportsExportsYear {
             get {
                 return ResourceManager.GetString("lblImportsExportsYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Imports of livestock manure.
+        /// </summary>
+        public static string lblImportsOfLivestockManure {
+            get {
+                return ResourceManager.GetString("lblImportsOfLivestockManure", resourceCulture);
             }
         }
         
