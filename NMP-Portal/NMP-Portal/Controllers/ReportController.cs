@@ -170,12 +170,12 @@ namespace NMP.Portal.Controllers
                                         {
                                             if (model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
                                             {
-                                                TempData["ErrorFieldAndPlanReports"] = Resource.lblNoCropTypesAvailable; ;
+                                                TempData["ErrorOnFieldAndPlanReports"] = Resource.lblNoCropTypesAvailable; ;
                                                 return RedirectToAction("FieldAndPlanReports");
                                             }
                                             else
                                             {
-                                                TempData["ErrorNVZComplianceReports"] = Resource.lblNoCropTypesAvailable; ;
+                                                TempData["ErrorOnNVZComplianceReports"] = Resource.lblNoCropTypesAvailable; ;
                                                 return RedirectToAction("NVZComplianceReports");
                                             }
                                         }
@@ -198,12 +198,12 @@ namespace NMP.Portal.Controllers
                 {
                     if (model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
                     {
-                        TempData["ErrorFieldAndPlanReports"] = ex.Message;
+                        TempData["ErrorOnFieldAndPlanReports"] = ex.Message;
                         return RedirectToAction("FieldAndPlanReports");
                     }
                     else
                     {
-                        TempData["ErrorNVZComplianceReports"] = ex.Message;
+                        TempData["ErrorOnNVZComplianceReports"] = ex.Message;
                         return RedirectToAction("NVZComplianceReports");
                     }
 
@@ -1018,6 +1018,8 @@ namespace NMP.Portal.Controllers
                                                     }
                                                 }
                                             }
+
+                                            //this will give sum of COALESCE(OrganicManures.AvailableNForNMax, OrganicManures.AvailableN)
                                             foreach (var managementPeriod in ManPeriodList)
                                             {
                                                 (decimal? totalNitrogen, error) = await _organicManureService.FetchAvailableNByManagementPeriodID(managementPeriod.ID.Value);
