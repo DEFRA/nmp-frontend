@@ -134,50 +134,90 @@ namespace NMP.Portal.Controllers
                             (List<HarvestYearPlanResponse> cropTypeList, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
                             if (string.IsNullOrWhiteSpace(error.Message) && cropTypeList != null && cropTypeList.Count > 0)
                             {
-                                (List<CropTypeLinkingResponse> cropTypeLinking, error) = await _cropService.FetchCropTypeLinking();
-                                if (error == null && cropTypeLinking != null && cropTypeLinking.Count > 0)
-                                {
-                                    if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England)
-                                    {
-                                        cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitEngland != null).ToList();
-                                    }
-                                    else
-                                    {
-                                        cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitWales != null).ToList();
-                                    }
-                                    cropTypeList = cropTypeList
-                                    .Where(crop => cropTypeLinking
-                                    .Any(link => link.CropTypeId == crop.CropTypeID))
-                                    .DistinctBy(x => x.CropTypeID).ToList();
-                                    if (cropTypeList.Count > 0)
-                                    {
-                                        var SelectListItem = cropTypeList.Select(f => new SelectListItem
-                                        {
-                                            Value = f.CropTypeID.ToString(),
-                                            Text = f.CropTypeName
-                                        }).ToList();
-                                        ViewBag.CropTypeList = SelectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
-                                    }
-                                    else
-                                    {
+                                List<HarvestYearPlanResponse> filteredList = new List<HarvestYearPlanResponse>();
 
-                                        if ((model.IsComingFromPlan.HasValue && (!model.IsComingFromPlan.Value)))
+                                foreach (var cropType in cropTypeList)
+                                {
+                                    Field field = await _fieldService.FetchFieldByFieldId(cropType.FieldID);
+                                    if (field != null && (!field.IsWithinNVZ.Value))
+                                    {
+                                        filteredList.Add(cropType);
+                                    }
+                                }
+                                if (filteredList.Count > 0)
+                                {
+                                    // Remove all matching cropTypes from cropTypeList
+                                    cropTypeList.RemoveAll(ct => filteredList.Contains(ct));
+                                }
+                                if (cropTypeList.Count > 0)
+                                {
+                                    (List<CropTypeLinkingResponse> cropTypeLinking, error) = await _cropService.FetchCropTypeLinking();
+                                    if (error == null && cropTypeLinking != null && cropTypeLinking.Count > 0)
+                                    {
+                                        if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England)
                                         {
-                                            TempData["ErrorOnYear"] = Resource.lblNoCropTypesAvailable; ;
-                                            return View("Year", model);
+                                            cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitEngland != null).ToList();
                                         }
                                         else
                                         {
-                                            if (model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
+                                            cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitWales != null).ToList();
+                                        }
+                                        cropTypeList = cropTypeList
+                                        .Where(crop => cropTypeLinking
+                                        .Any(link => link.CropTypeId == crop.CropTypeID))
+                                        .DistinctBy(x => x.CropTypeID).ToList();
+                                        if (cropTypeList.Count > 0)
+                                        {
+                                            var SelectListItem = cropTypeList.Select(f => new SelectListItem
                                             {
-                                                TempData["ErrorOnFieldAndPlanReports"] = Resource.lblNoCropTypesAvailable; ;
-                                                return RedirectToAction("FieldAndPlanReports");
+                                                Value = f.CropTypeID.ToString(),
+                                                Text = f.CropTypeName
+                                            }).ToList();
+                                            ViewBag.CropTypeList = SelectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
+                                        }
+                                        else
+                                        {
+
+                                            if ((model.IsComingFromPlan.HasValue && (!model.IsComingFromPlan.Value)))
+                                            {
+                                                TempData["ErrorOnYear"] = Resource.lblNoCropTypesAvailable; ;
+                                                return View("Year", model);
                                             }
                                             else
                                             {
-                                                TempData["ErrorOnNVZComplianceReports"] = Resource.lblNoCropTypesAvailable; ;
-                                                return RedirectToAction("NVZComplianceReports");
+                                                if (model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
+                                                {
+                                                    TempData["ErrorFieldAndPlanReports"] = Resource.lblNoCropTypesAvailable; ;
+                                                    return RedirectToAction("FieldAndPlanReports");
+                                                }
+                                                else
+                                                {
+                                                    TempData["ErrorNVZComplianceReports"] = Resource.lblNoCropTypesAvailable; ;
+                                                    return RedirectToAction("NVZComplianceReports");
+                                                }
                                             }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+
+                                    if ((model.IsComingFromPlan.HasValue && (!model.IsComingFromPlan.Value)))
+                                    {
+                                        TempData["ErrorOnYear"] = Resource.lblNoCropTypesAvailable; ;
+                                        return View("Year", model);
+                                    }
+                                    else
+                                    {
+                                        if (model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
+                                        {
+                                            TempData["ErrorFieldAndPlanReports"] = Resource.lblNoCropTypesAvailable; ;
+                                            return RedirectToAction("FieldAndPlanReports");
+                                        }
+                                        else
+                                        {
+                                            TempData["ErrorNVZComplianceReports"] = Resource.lblNoCropTypesAvailable; ;
+                                            return RedirectToAction("NVZComplianceReports");
                                         }
                                     }
                                 }
@@ -198,12 +238,12 @@ namespace NMP.Portal.Controllers
                 {
                     if (model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
                     {
-                        TempData["ErrorOnFieldAndPlanReports"] = ex.Message;
+                        TempData["ErrorFieldAndPlanReports"] = ex.Message;
                         return RedirectToAction("FieldAndPlanReports");
                     }
                     else
                     {
-                        TempData["ErrorOnNVZComplianceReports"] = ex.Message;
+                        TempData["ErrorNVZComplianceReports"] = ex.Message;
                         return RedirectToAction("NVZComplianceReports");
                     }
 
@@ -259,46 +299,86 @@ namespace NMP.Portal.Controllers
                         (List<HarvestYearPlanResponse> cropTypeList, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
                         if (string.IsNullOrWhiteSpace(error.Message))
                         {
-                            (List<CropTypeLinkingResponse> cropTypeLinking, error) = await _cropService.FetchCropTypeLinking();
-                            if (error == null && cropTypeLinking != null && cropTypeLinking.Count > 0)
+                            List<HarvestYearPlanResponse> filteredList = new List<HarvestYearPlanResponse>();
+
+                            foreach (var cropType in cropTypeList)
                             {
-                                if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England)
+                                Field field = await _fieldService.FetchFieldByFieldId(cropType.FieldID);
+                                if (field != null && (!field.IsWithinNVZ.Value))
                                 {
-                                    cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitEngland != null).ToList();
+                                    filteredList.Add(cropType);
+                                }
+                            }
+                            if (filteredList.Count > 0)
+                            {
+                                // Remove all matching cropTypes from cropTypeList
+                                cropTypeList.RemoveAll(ct => filteredList.Contains(ct));
+                            }
+                            if (cropTypeList.Count > 0)
+                            {
+                                (List<CropTypeLinkingResponse> cropTypeLinking, error) = await _cropService.FetchCropTypeLinking();
+                                if (error == null && cropTypeLinking != null && cropTypeLinking.Count > 0)
+                                {
+                                    if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England)
+                                    {
+                                        cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitEngland != null).ToList();
+                                    }
+                                    else
+                                    {
+                                        cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitWales != null).ToList();
+                                    }
+                                    cropTypeList = cropTypeList
+                                    .Where(crop => cropTypeLinking
+                                    .Any(link => link.CropTypeId == crop.CropTypeID))
+                                    .DistinctBy(x => x.CropTypeID).ToList();
+                                    var SelectListItem = cropTypeList.Select(f => new SelectListItem
+                                    {
+                                        Value = f.CropTypeID.ToString(),
+                                        Text = f.CropTypeName
+                                    }).ToList();
+                                    if (model.CropTypeList == null || model.CropTypeList.Count == 0)
+                                    {
+                                        ModelState.AddModelError("CropTypeList", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropType.ToLower()));
+                                    }
+                                    if (!ModelState.IsValid)
+                                    {
+                                        ViewBag.CropTypeList = SelectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
+                                        return View(model);
+                                    }
+                                    if (model.CropTypeList.Count == 1 && model.CropTypeList[0] == Resource.lblSelectAll)
+                                    {
+                                        model.CropTypeList = SelectListItem.Select(item => item.Value).ToList();
+                                    }
+                                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                                    ViewBag.CropTypeList = SelectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
                                 }
                                 else
                                 {
-                                    cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitWales != null).ToList();
-                                }
-                                cropTypeList = cropTypeList
-                                .Where(crop => cropTypeLinking
-                                .Any(link => link.CropTypeId == crop.CropTypeID))
-                                .DistinctBy(x => x.CropTypeID).ToList();
-                                var SelectListItem = cropTypeList.Select(f => new SelectListItem
-                                {
-                                    Value = f.CropTypeID.ToString(),
-                                    Text = f.CropTypeName
-                                }).ToList();
-                                if (model.CropTypeList == null || model.CropTypeList.Count == 0)
-                                {
-                                    ModelState.AddModelError("CropTypeList", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropType.ToLower()));
-                                }
-                                if (!ModelState.IsValid)
-                                {
-                                    ViewBag.CropTypeList = SelectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
+                                    TempData["ErrorOnSelectField"] = error != null ? error.Message : null;
                                     return View(model);
                                 }
-                                if (model.CropTypeList.Count == 1 && model.CropTypeList[0] == Resource.lblSelectAll)
-                                {
-                                    model.CropTypeList = SelectListItem.Select(item => item.Value).ToList();
-                                }
-                                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
-                                ViewBag.CropTypeList = SelectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
                             }
                             else
                             {
-                                TempData["ErrorOnSelectField"] = error != null ? error.Message : null;
-                                return View(model);
+
+                                if ((model.IsComingFromPlan.HasValue && (!model.IsComingFromPlan.Value)))
+                                {
+                                    TempData["ErrorOnYear"] = Resource.lblNoCropTypesAvailable; ;
+                                    return View("Year", model);
+                                }
+                                else
+                                {
+                                    if (model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
+                                    {
+                                        TempData["ErrorFieldAndPlanReports"] = Resource.lblNoCropTypesAvailable; ;
+                                        return RedirectToAction("FieldAndPlanReports");
+                                    }
+                                    else
+                                    {
+                                        TempData["ErrorNVZComplianceReports"] = Resource.lblNoCropTypesAvailable; ;
+                                        return RedirectToAction("NVZComplianceReports");
+                                    }
+                                }
                             }
                             return RedirectToAction("NMaxReport");
                         }
@@ -692,7 +772,7 @@ namespace NMP.Portal.Controllers
                                             CropTypeName = cropTypeName,
                                             NmaxLimit = nMaxLimit,
                                             VegetableGroup = vegetableGroup,
-                                            IsComply = (nMaxLimitReportResponse == null && nitrogenApplicationsForNMaxReportResponse == null) ? false : (nMaxLimitReportResponse.Sum(x => x.MaximumLimitForNApplied) > nitrogenApplicationsForNMaxReportResponse.Sum(x => x.NTotal) ? true : false),
+                                            IsComply = (nMaxLimitReportResponse == null && nitrogenApplicationsForNMaxReportResponse == null) ? false : (nMaxLimitReportResponse.Sum(x => x.MaximumLimitForNApplied) >= nitrogenApplicationsForNMaxReportResponse.Sum(x => x.NTotal) ? true : false),
                                             NMaxLimitReportResponse = nMaxLimitReportResponse,
                                             NitrogenApplicationsForNMaxReportResponse = (nitrogenApplicationsForNMaxReportResponse != null && nitrogenApplicationsForNMaxReportResponse.Count > 0) ? nitrogenApplicationsForNMaxReportResponse : null
                                         };
@@ -722,7 +802,7 @@ namespace NMP.Portal.Controllers
                                             CropTypeName = cropTypeName,
                                             NmaxLimit = nMaxLimit,
                                             VegetableGroup = vegetableGroup,
-                                            IsComply = (nMaxLimitReportResponse == null && nitrogenApplicationsForNMaxReportResponse == null) ? false : (nMaxLimitReportResponse.Sum(x => x.MaximumLimitForNApplied) > nitrogenApplicationsForNMaxReportResponse.Sum(x => x.NTotal) ? true : false),
+                                            IsComply = (nMaxLimitReportResponse == null && nitrogenApplicationsForNMaxReportResponse == null) ? false : (nMaxLimitReportResponse.Sum(x => x.MaximumLimitForNApplied) >= nitrogenApplicationsForNMaxReportResponse.Sum(x => x.NTotal) ? true : false),
                                             NMaxLimitReportResponse = nMaxLimitReportResponse,
                                             NitrogenApplicationsForNMaxReportResponse = (nitrogenApplicationsForNMaxReportResponse != null && nitrogenApplicationsForNMaxReportResponse.Count > 0) ? nitrogenApplicationsForNMaxReportResponse : null
                                         };
@@ -752,7 +832,7 @@ namespace NMP.Portal.Controllers
                                             CropTypeName = cropTypeName,
                                             NmaxLimit = nMaxLimit,
                                             VegetableGroup = vegetableGroup,
-                                            IsComply = (nMaxLimitReportResponse == null && nitrogenApplicationsForNMaxReportResponse == null) ? false : (nMaxLimitReportResponse.Sum(x => x.MaximumLimitForNApplied) > nitrogenApplicationsForNMaxReportResponse.Sum(x => x.NTotal) ? true : false),
+                                            IsComply = (nMaxLimitReportResponse == null && nitrogenApplicationsForNMaxReportResponse == null) ? false : (nMaxLimitReportResponse.Sum(x => x.MaximumLimitForNApplied) >= nitrogenApplicationsForNMaxReportResponse.Sum(x => x.NTotal) ? true : false),
                                             NMaxLimitReportResponse = nMaxLimitReportResponse,
                                             NitrogenApplicationsForNMaxReportResponse = (nitrogenApplicationsForNMaxReportResponse != null && nitrogenApplicationsForNMaxReportResponse.Count > 0) ? nitrogenApplicationsForNMaxReportResponse : null
                                         };
@@ -782,7 +862,7 @@ namespace NMP.Portal.Controllers
                                     CropTypeName = cropTypeName,
                                     NmaxLimit = nMaxLimit,
                                     VegetableGroup = (!string.IsNullOrWhiteSpace(vegetableGroup)) ? vegetableGroup : string.Empty,
-                                    IsComply = (nMaxLimitReportResponse == null && nitrogenApplicationsForNMaxReportResponse == null) ? false : (nMaxLimitReportResponse.Sum(x => x.MaximumLimitForNApplied) > nitrogenApplicationsForNMaxReportResponse.Sum(x => x.NTotal) ? true : false),
+                                    IsComply = (nMaxLimitReportResponse == null && nitrogenApplicationsForNMaxReportResponse == null) ? false : (nMaxLimitReportResponse.Sum(x => x.MaximumLimitForNApplied) >= nitrogenApplicationsForNMaxReportResponse.Sum(x => x.NTotal) ? true : false),
                                     NMaxLimitReportResponse = nMaxLimitReportResponse,
                                     NitrogenApplicationsForNMaxReportResponse = (nitrogenApplicationsForNMaxReportResponse != null && nitrogenApplicationsForNMaxReportResponse.Count > 0) ? nitrogenApplicationsForNMaxReportResponse : null
                                 };
@@ -1018,8 +1098,6 @@ namespace NMP.Portal.Controllers
                                                     }
                                                 }
                                             }
-
-                                            //this will give sum of COALESCE(OrganicManures.AvailableNForNMax, OrganicManures.AvailableN)
                                             foreach (var managementPeriod in ManPeriodList)
                                             {
                                                 (decimal? totalNitrogen, error) = await _organicManureService.FetchAvailableNByManagementPeriodID(managementPeriod.ID.Value);
@@ -1042,12 +1120,12 @@ namespace NMP.Portal.Controllers
                                             FieldName = field.Name,
                                             CropTypeName = cropTypeName,
                                             CropArea = field.CroppedArea.Value,
-                                            InorganicNRate = totalFertiliserN != null ? totalFertiliserN : null,
+                                            InorganicNRate = totalFertiliserN != null ? (int)Math.Round(totalFertiliserN.Value, 0) : null,
                                             InorganicNTotal = totalFertiliserN != null ? (int)Math.Round((totalFertiliserN.Value * field.CroppedArea.Value), 0) : null,
-                                            OrganicCropAvailableNRate = totalOrganicAvailableN != null ? totalOrganicAvailableN : null,
+                                            OrganicCropAvailableNRate = totalOrganicAvailableN != null ? (int)Math.Round(totalOrganicAvailableN.Value, 0) : null,
                                             OrganicCropAvailableNTotal = (totalOrganicAvailableN != null ? (int)Math.Round((totalOrganicAvailableN.Value * field.CroppedArea.Value), 0) : null),
-                                            NRate = (totalFertiliserN == null && totalOrganicAvailableN == null) ? null : (totalFertiliserN ?? 0) + (totalOrganicAvailableN ?? 0),
-                                            NTotal = (totalFertiliserN == null && totalOrganicAvailableN == null) ? null : ((totalFertiliserN ?? 0) + (totalOrganicAvailableN ?? 0)) * field.CroppedArea.Value,
+                                            NRate = (totalFertiliserN == null && totalOrganicAvailableN == null) ? null : (int)Math.Round((totalFertiliserN ?? 0) + (totalOrganicAvailableN ?? 0), 0),
+                                            NTotal = (totalFertiliserN == null && totalOrganicAvailableN == null) ? null : (int)Math.Round(((totalFertiliserN ?? 0) + (totalOrganicAvailableN ?? 0)) * field.CroppedArea.Value, 0),
                                         };
 
                                         if (nitrogenResponse != null)
@@ -3800,7 +3878,7 @@ namespace NMP.Portal.Controllers
                     (List<NutrientsLoadingLiveStock> nutrientsLoadingLiveStockList, Error error) = await _reportService.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
                     if (nutrientsLoadingLiveStockList.Count > 0)
                     {
-                        return RedirectToAction("ManageLivestock", new { q = model.EncryptedFarmId, y = model.EncryptedHarvestYear });
+                        return RedirectToAction("ManageLivestock", new {q=model.EncryptedFarmId,y=model.EncryptedHarvestYear });
                     }
                     else
                     {
@@ -5565,7 +5643,7 @@ namespace NMP.Portal.Controllers
                 nonGrazingLivestockList = livestockList.Where(mt => !mt.IsGrazing.Value).Select(mt => mt.ID).ToList();
                 if (nutrientsLoadingLiveStockList.Count > 0)
                 {
-                    if (nutrientsLoadingLiveStockList.Any(x => grazingLivestockList.Contains(x.LiveStockTypeID.Value)))
+                    if(nutrientsLoadingLiveStockList.Any(x => grazingLivestockList.Contains(x.LiveStockTypeID.Value)))
                     {
                         ViewBag.NutrientsLoadingLiveStockGrazingList = nutrientsLoadingLiveStockList.Where(x => grazingLivestockList.Contains(x.LiveStockTypeID.Value)).ToList();
                         ViewBag.NutrientsLoadingLiveStockGrazingTotalN = nutrientsLoadingLiveStockList.Where(x => grazingLivestockList.Contains(x.LiveStockTypeID.Value)).Sum(x => x.TotalNProduced);
