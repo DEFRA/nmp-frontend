@@ -4636,7 +4636,7 @@ namespace NMP.Portal.Controllers
                                                 //string selectedDefoliation = (defoliation > 0 && defoliation.Value <= defoliationParts.Length)
                                                 //    ? $"{Enum.GetName(typeof(PotentialCut), defoliation.Value)} ({defoliationParts[defoliation.Value - 1]})"
                                                 //    : $"{defoliation}";
-                                                string selectedDefoliation = (defoliation> 0 && defoliation.Value <= defoliationParts.Length)
+                                                string selectedDefoliation = (defoliation > 0 && defoliation.Value <= defoliationParts.Length)
                                             ? $"{Enum.GetName(typeof(PotentialCut), defoliation.Value)} - {defoliationParts[defoliation.Value - 1]}"
                                             : $"{defoliation}";
                                                 var parts = selectedDefoliation.Split('-');
@@ -4772,7 +4772,7 @@ namespace NMP.Portal.Controllers
                                    farmManureType.ManureTypeName.Equals(organicManure.ManureTypeName))
                                     {
                                         if (farmManureType.TotalN == model.N && farmManureType.P2O5 == model.P2O5 &&
-                                        farmManureType.DryMatter  == model.DryMatterPercent && farmManureType.Uric == model.UricAcid &&
+                                        farmManureType.DryMatter == model.DryMatterPercent && farmManureType.Uric == model.UricAcid &&
                                         farmManureType.NH4N == model.NH4N && farmManureType.NO3N == model.NO3N &&
                                         farmManureType.SO3 == model.SO3 && farmManureType.K2O == model.K2O &&
                                         farmManureType.MgO == model.MgO)
@@ -6564,7 +6564,7 @@ namespace NMP.Portal.Controllers
                     if (error == null)
                     {
                         int? nmaxLimitEnglandOrWales = (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales ? cropTypeLinking.NMaxLimitWales : cropTypeLinking.NMaxLimitEngland) ?? 0;
-                        if (nmaxLimitEnglandOrWales > 0)
+                        if (nmaxLimitEnglandOrWales != null)
                         {
                             (FieldDetailResponse fieldDetail, error) = await _fieldService.FetchFieldDetailByFieldIdAndHarvestYear(fieldId, model.HarvestYear.Value, false);
                             if (error == null)

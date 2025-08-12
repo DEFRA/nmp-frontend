@@ -684,10 +684,10 @@ namespace NMP.Portal.Controllers
                                         }
                                     }
                                 }
-                                
+
                             }
                             bool anyNewManId = false;
-                            
+
                             //foreach (string field in model.FieldList)
                             //{
                             //    List<Crop> cropList = await _cropService.FetchCropsByFieldId(Convert.ToInt32(field));
@@ -3281,7 +3281,7 @@ namespace NMP.Portal.Controllers
                     if (error == null)
                     {
                         int? nmaxLimitEnglandOrWales = (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales ? cropTypeLinking.NMaxLimitWales : cropTypeLinking.NMaxLimitEngland) ?? 0;
-                        if (nmaxLimitEnglandOrWales > 0)
+                        if (nmaxLimitEnglandOrWales != null)
                         {
                             (FieldDetailResponse fieldDetail, error) = await _fieldService.FetchFieldDetailByFieldIdAndHarvestYear(fieldId, model.HarvestYear.Value, false);
                             if (error == null)
@@ -3299,7 +3299,19 @@ namespace NMP.Portal.Controllers
                                         //string cropInfo1 = await _cropService.FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(crop[0].CropTypeID.Value, crop[0].CropInfo1.Value);
                                         OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
                                         nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(nmaxLimitEnglandOrWales ?? 0, crop[0].Yield == null ? null : crop[0].Yield.Value, fieldDetail.SoilTypeName, crop[0].CropInfo1 == null ? null : crop[0].CropInfo1.Value, crop[0].CropTypeID.Value, currentYearManureTypeIds, previousYearManureTypeIds, null);
-                                        if ((previousApplicationsN + currentApplicationNitrogen) > nMaxLimit)
+
+                                        //correction begin for user story NMPT-1742
+                                        decimal totalNitrogenApplied = 0;
+                                        if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
+                                        {
+                                            totalNitrogenApplied = previousApplicationsN;
+                                        }
+                                        else
+                                        {
+                                            totalNitrogenApplied = previousApplicationsN + currentApplicationNitrogen;
+                                        }
+                                        //end
+                                        if (totalNitrogenApplied > nMaxLimit)
                                         {
                                             model.IsNitrogenExceedWarning = true;
                                             (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
@@ -4395,7 +4407,7 @@ namespace NMP.Portal.Controllers
                                                 });
                                                 foreach (var item in defoliationSelectList)
                                                 {
-                                          
+
                                                     var parts = item.Text.Split('-');
                                                     if (parts.Length == 2)
                                                     {
@@ -4570,7 +4582,7 @@ namespace NMP.Portal.Controllers
                                 }
                             }
                         }
-                        model.FertiliserManures[i].ManagementPeriodID = managementPeriodID??0;
+                        model.FertiliserManures[i].ManagementPeriodID = managementPeriodID ?? 0;
 
 
                         (ManagementPeriod managementPeriod, error) = await _cropService.FetchManagementperiodById(model.FertiliserManures[i].ManagementPeriodID);
@@ -4783,7 +4795,7 @@ namespace NMP.Portal.Controllers
                                                 string text = (defoliation > 0 && defoliation <= defoliationParts.Length)
                                                 ? $"{Enum.GetName(typeof(PotentialCut), defoliation)} - {defoliationParts[defoliation - 1]}"
                                                 : defoliation.ToString();
-                                              
+
                                                 var parts = text.Split('-');
                                                 if (parts.Length == 2)
                                                 {
