@@ -19,7 +19,7 @@
         Model.IncorporationMethod.Value == (int)NMP.Portal.Enums.IncorporationMethod.ShallowInjection ||
         Model.IncorporationMethod.Value == (int)NMP.Portal.Enums.IncorporationMethod.DeepInjection) ? false : true;
     }
-
+    bool isAutumnNUptakeZero = Model.AutumnCropNitrogenUptakes?.All(x => x.AutumnCropNitrogenUptake == 0) ?? true;
     // switch (Model.DefaultNutrientValue)
     // {
     //     case true:
@@ -990,6 +990,8 @@
                     </govuk-summary-list-row>
                     @* } *@
                     @* } *@
+                    @if (!isAutumnNUptakeZero)
+                    {
                     @if (Model.FieldList != null && Model.FieldList.Count > 1)
                     {
                         <govuk-summary-list-row>
@@ -1020,7 +1022,7 @@
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     }
-
+                    }
                     <govuk-summary-list-row class=@((!Model.SoilDrainageEndDate.HasValue)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
                             @Resource.lblEndOfSoilDrainage

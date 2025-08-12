@@ -5,7 +5,7 @@
     int otherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
     int grassGroupId = (int)NMP.Portal.Enums.CropGroup.Grass;
 
-    var action = "";
+    var action = "HarvestYearForPlan";
     if (Model.IsCheckAnswer)
     {
         action = "CheckAnswer";
@@ -14,7 +14,7 @@
     {
         action = "CopyExistingPlan";
     }
-    else
+    else 
     {
         action = "HarvestYearForPlan";
     }

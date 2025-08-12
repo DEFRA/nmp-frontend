@@ -1812,19 +1812,41 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> Yield(PlanViewModel model)
         {
             _logger.LogTrace("Crop Controller : Yield() post action called");
-            if (model.Crops[model.YieldCurrentCounter].Yield == null)
+            decimal defaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value);
+            if (defaultYield == 0)
             {
-                ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", Resource.MsgEnterFigureBeforeContinuing);
-            }
-            if (model.Crops[model.YieldCurrentCounter].Yield > Convert.ToInt32(Resource.lblFiveDigit))
-            {
-                ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", Resource.MsgEnterAValueOfNoMoreThan5Digits);
-            }
-            if (model.Crops[model.YieldCurrentCounter].Yield < 0)
-            {
-                ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", string.Format(Resource.lblEnterAPositiveValueOfPropertyName, Resource.lblYield));
-            }
+                if (model.Crops[model.YieldCurrentCounter].Yield == null)
+                {
+                    ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", Resource.MsgEnterFigureBeforeContinuing);
+                }
 
+                if (model.Crops[model.YieldCurrentCounter].Yield > Convert.ToInt32(Resource.lblFiveDigit))
+                {
+                    ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", Resource.MsgEnterAValueOfNoMoreThan5Digits);
+                }
+                if (model.Crops[model.YieldCurrentCounter].Yield < 0)
+                {
+                    ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", string.Format(Resource.lblEnterAPositiveValueOfPropertyName, Resource.lblYield));
+                }
+            }
+            else
+            {
+                if (model.Crops[model.YieldCurrentCounter].Yield == null)
+                {
+                    model.Crops[model.YieldCurrentCounter].Yield = defaultYield;
+                }
+                else
+                {
+                    if (model.Crops[model.YieldCurrentCounter].Yield > Convert.ToInt32(Resource.lblFiveDigit))
+                    {
+                        ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", Resource.MsgEnterAValueOfNoMoreThan5Digits);
+                    }
+                    if (model.Crops[model.YieldCurrentCounter].Yield < 0)
+                    {
+                        ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", string.Format(Resource.lblEnterAPositiveValueOfPropertyName, Resource.lblYield));
+                    }
+                }
+            }
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -6506,7 +6528,7 @@ namespace NMP.Portal.Controllers
                         }
                     }
                     //end
-                    if(model.HarvestYear.All(x=>x.IsAnyPlan==false))
+                    if (model.HarvestYear.All(x => x.IsAnyPlan == false))
                     {
                         return RedirectToAction("HarvestYearForPlan", new { q = q, year = _farmDataProtector.Protect(model.Year.ToString()), isPlanRecord = false });
                     }
@@ -6514,7 +6536,7 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("HarvestYearForPlan", new { q = q, year = _farmDataProtector.Protect(farm.LastHarvestYear.ToString()), isPlanRecord = false });
+                    return RedirectToAction("HarvestYearForPlan", new { q = q, year = _farmDataProtector.Protect(model.Year.ToString()), isPlanRecord = true });
                 }
             }
             catch (Exception ex)
@@ -6844,5 +6866,7 @@ namespace NMP.Portal.Controllers
 
             return string.Join(", ", result);
         }
+      
+
     }
 }
