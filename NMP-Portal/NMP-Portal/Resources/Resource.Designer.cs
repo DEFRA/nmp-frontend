@@ -6471,6 +6471,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Grazing livestock total phosphate (P2O5).
+        /// </summary>
+        public static string lblLivestockReportContentFourty {
+            get {
+                return ResourceManager.GetString("lblLivestockReportContentFourty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Non-grazing livestock total phosphate (P2O5).
+        /// </summary>
+        public static string lblLivestockReportContentFourtyOne {
+            get {
+                return ResourceManager.GetString("lblLivestockReportContentFourtyOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Livestock manure total nitrogen (N) loading.
         /// </summary>
         public static string lblLivestockReportContentNine {
@@ -6561,11 +6579,83 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to  Grazing livestock total nitrogen (N).
+        /// </summary>
+        public static string lblLivestockReportContentThirtyEight {
+            get {
+                return ResourceManager.GetString("lblLivestockReportContentThirtyEight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to About farm area.
+        /// </summary>
+        public static string lblLivestockReportContentThirtyFive {
+            get {
+                return ResourceManager.GetString("lblLivestockReportContentThirtyFive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}kg of nitrogen (N).
+        /// </summary>
+        public static string lblLivestockReportContentThirtyFour {
+            get {
+                return ResourceManager.GetString("lblLivestockReportContentThirtyFour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Non-grazing livestock total nitrogen (N).
+        /// </summary>
+        public static string lblLivestockReportContentThirtyNine {
+            get {
+                return ResourceManager.GetString("lblLivestockReportContentThirtyNine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  Average for year.
         /// </summary>
         public static string lblLivestockReportContentThirtyOne {
             get {
                 return ResourceManager.GetString("lblLivestockReportContentThirtyOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Livestock manure total nitrogen (N) and phosphate (P2O5) loading.
+        /// </summary>
+        public static string lblLivestockReportContentThirtySeven {
+            get {
+                return ResourceManager.GetString("lblLivestockReportContentThirtySeven", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The farm area does not include surface waters, areas of hardstanding, buildings or woodland (unless the woodland is used for grazing), and any land covered by a greenhouse..
+        /// </summary>
+        public static string lblLivestockReportContentThirtySix {
+            get {
+                return ResourceManager.GetString("lblLivestockReportContentThirtySix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Livestock manure imports and exports net total:.
+        /// </summary>
+        public static string lblLivestockReportContentThirtyThree {
+            get {
+                return ResourceManager.GetString("lblLivestockReportContentThirtyThree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Imports and exports of livestock manure.
+        /// </summary>
+        public static string lblLivestockReportContentThirtyTwo {
+            get {
+                return ResourceManager.GetString("lblLivestockReportContentThirtyTwo", resourceCulture);
             }
         }
         
@@ -7619,6 +7709,15 @@ namespace NMP.Portal.Resources {
         public static string lblNotEntered {
             get {
                 return ResourceManager.GetString("lblNotEntered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note:{0}.
+        /// </summary>
+        public static string lblNoteWithComment {
+            get {
+                return ResourceManager.GetString("lblNoteWithComment", resourceCulture);
             }
         }
         
@@ -9060,6 +9159,15 @@ namespace NMP.Portal.Resources {
         public static string lblReadScheduleLink {
             get {
                 return ResourceManager.GetString("lblReadScheduleLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Receiver.
+        /// </summary>
+        public static string lblReceiver {
+            get {
+                return ResourceManager.GetString("lblReceiver", resourceCulture);
             }
         }
         
@@ -10761,6 +10869,24 @@ namespace NMP.Portal.Resources {
         public static string lblThereAreFieldsInThisPlan {
             get {
                 return ResourceManager.GetString("lblThereAreFieldsInThisPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are no exports of livestock manure.
+        /// </summary>
+        public static string lblThereAreNoExportsOfLivestockManure {
+            get {
+                return ResourceManager.GetString("lblThereAreNoExportsOfLivestockManure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are no imports of livestock manure.
+        /// </summary>
+        public static string lblThereAreNoImportsOfLivestockManure {
+            get {
+                return ResourceManager.GetString("lblThereAreNoImportsOfLivestockManure", resourceCulture);
             }
         }
         

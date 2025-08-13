@@ -27,7 +27,6 @@
         public decimal? MgO { get; set; }
         public decimal? SO3 { get; set; }
         public string? Comments { get; set; }
-        public bool? IsLiquid { get; set; }
         public DateTime? CreatedOn { get; set; }
         public int? CreatedByID { get; set; }
         public DateTime? ModifiedOn { get; set; }
