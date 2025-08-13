@@ -41,13 +41,27 @@ namespace NMP.Portal.Helpers
                 {
                     nMaxLimit = nMaxLimit + 20;
                 }
-                if (cropInfo1 ==(int)NMP.Portal.Enums.CropInfoOne.Milling)
+                if (cropInfo1 == (int)NMP.Portal.Enums.CropInfoOne.Milling)
                 {
                     nMaxLimit = nMaxLimit + 40;
                 }
                 if (yield > 8.0m)
                 {
                     nMaxLimit = nMaxLimit + (int)Math.Round(((yield.Value - 8.0m) / 0.1m) * 2);
+                }
+            }
+            else if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WholecropWinterWheat)
+            {
+                if (soilType == Resource.lblShallow)
+                {
+                    nMaxLimit = nMaxLimit + 20;
+                }
+            }
+            else if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WholecropWinterBarley)
+            {
+                if (soilType == Resource.lblShallow)
+                {
+                    nMaxLimit = nMaxLimit + 20;
                 }
             }
             else if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.SpringWheat)
@@ -94,7 +108,7 @@ namespace NMP.Portal.Helpers
 
             if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterWheat || cropTypeId == (int)NMP.Portal.Enums.CropTypes.SpringWheat
                 || cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterBarley || cropTypeId == (int)NMP.Portal.Enums.CropTypes.SpringBarley
-                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape|| cropTypeId == (int)NMP.Portal.Enums.CropTypes.SugarBeet
+                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape || cropTypeId == (int)NMP.Portal.Enums.CropTypes.SugarBeet
                 || cropTypeId == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup1 || cropTypeId == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup2
                 || cropTypeId == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup3 || cropTypeId == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup4
                 || cropTypeId == (int)NMP.Portal.Enums.CropTypes.ForageMaize || cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterBeans
@@ -109,7 +123,11 @@ namespace NMP.Portal.Helpers
                 || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Beetroot || cropTypeId == (int)NMP.Portal.Enums.CropTypes.BrusselSprouts
                 || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Cabbage || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Calabrese
                 || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Cauliflower || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Leeks
-                || cropTypeId== (int)NMP.Portal.Enums.CropTypes.Grass)
+                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass
+                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.WholecropSpringBarley
+                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.WholecropSpringWheat
+                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.WholecropWinterBarley
+                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.WholecropWinterWheat)
             {
                 if (manureTypeCondition)
                 {
