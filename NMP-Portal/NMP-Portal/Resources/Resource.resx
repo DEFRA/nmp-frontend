@@ -5624,4 +5624,52 @@ live</value>
   <data name="lblWhoAreYouExportingThisLivestockManureTo" xml:space="preserve">
     <value>Who are you exporting this livestock manure to?</value>
   </data>
+  <data name="lblImportsOfLivestockManure" xml:space="preserve">
+    <value>Imports of livestock manure</value>
+  </data>
+  <data name="lblExportsOfLivestockManure" xml:space="preserve">
+    <value>Exports of livestock manure</value>
+  </data>
+  <data name="lblNoteWithComment" xml:space="preserve">
+    <value>Note:{0}</value>
+  </data>
+  <data name="lblThereAreNoExportsOfLivestockManure" xml:space="preserve">
+    <value>There are no exports of livestock manure</value>
+  </data>
+  <data name="lblThereAreNoImportsOfLivestockManure" xml:space="preserve">
+    <value>There are no imports of livestock manure</value>
+  </data>
+  <data name="lblLivestockReportContentThirtyTwo" xml:space="preserve">
+    <value>Imports and exports of livestock manure</value>
+  </data>
+  <data name="lblLivestockReportContentThirtyThree" xml:space="preserve">
+    <value>Livestock manure imports and exports net total:</value>
+  </data>
+  <data name="lblLivestockReportContentThirtyFour" xml:space="preserve">
+    <value>{0}kg of nitrogen (N)</value>
+  </data>
+  <data name="lblReceiver" xml:space="preserve">
+    <value>Receiver</value>
+  </data>
+  <data name="lblLivestockReportContentThirtyFive" xml:space="preserve">
+    <value>About farm area</value>
+  </data>
+  <data name="lblLivestockReportContentThirtySix" xml:space="preserve">
+    <value>The farm area does not include surface waters, areas of hardstanding, buildings or woodland (unless the woodland is used for grazing), and any land covered by a greenhouse.</value>
+  </data>
+  <data name="lblLivestockReportContentThirtySeven" xml:space="preserve">
+    <value>Livestock manure total nitrogen (N) and phosphate (P2O5) loading</value>
+  </data>
+  <data name="lblLivestockReportContentThirtyEight" xml:space="preserve">
+    <value> Grazing livestock total nitrogen (N)</value>
+  </data>
+  <data name="lblLivestockReportContentThirtyNine" xml:space="preserve">
+    <value>Non-grazing livestock total nitrogen (N)</value>
+  </data>
+  <data name="lblLivestockReportContentFourty" xml:space="preserve">
+    <value>Grazing livestock total phosphate (P2O5)</value>
+  </data>
+  <data name="lblLivestockReportContentFourtyOne" xml:space="preserve">
+    <value>Non-grazing livestock total phosphate (P2O5)</value>
+  </data>
 </root>
