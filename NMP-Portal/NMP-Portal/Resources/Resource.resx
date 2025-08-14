@@ -5678,4 +5678,7 @@ live</value>
   <data name="lblWhatIsTheDifferentExpectedYieldForDefaultYield" xml:space="preserve">
     <value>What is the expected yield for {0} in {1} (optional)?</value>
   </data>
+  <data name="lblWhichCropIsThisFertiliserApplication" xml:space="preserve">
+    <value>Which crop is this fertilizer application for in {0}?</value>
+  </data>
 </root>
