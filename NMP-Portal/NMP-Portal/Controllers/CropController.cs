@@ -1750,6 +1750,11 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("FarmList", "Farm");
             }
+            decimal defaultYieldForCropType = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value);
+            if (defaultYieldForCropType > 0)
+            {
+                ViewBag.IsYieldOptional = Resource.lblYes;
+            }
             if (string.IsNullOrWhiteSpace(q) && model.Crops != null && model.Crops.Count > 0)
             {
                 model.YieldEncryptedCounter = _fieldDataProtector.Protect(model.YieldCurrentCounter.ToString());
@@ -1847,6 +1852,10 @@ namespace NMP.Portal.Controllers
                         ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", string.Format(Resource.lblEnterAPositiveValueOfPropertyName, Resource.lblYield));
                     }
                 }
+            }
+            if (defaultYield > 0)
+            {
+                ViewBag.IsYieldOptional = Resource.lblYes;
             }
             if (!ModelState.IsValid)
             {
@@ -2365,6 +2374,11 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmList", "Farm");
                 }
             }
+            decimal defaultYieldForCropType = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value);
+            if (defaultYieldForCropType > 0)
+            {
+                ViewBag.IsYieldOptional = Resource.lblYes;
+            }
             if (!string.IsNullOrWhiteSpace(model.CropGroupName))
             {
                 model.EncryptedCropGroupName = _cropDataProtector.Protect(model.CropGroupName);
@@ -2740,12 +2754,29 @@ namespace NMP.Portal.Controllers
                     {
                         if (model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
                         {
-                            ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format(Resource.lblWhatIsTheExpectedYieldForSingleNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType));
+                            decimal defaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value);
+                            if (defaultYield == 0)
+                            {
+                                ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format(Resource.lblWhatIsTheExpectedYieldForSingleNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType));
+                            }
+                            else
+                            {
+                                ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format("{0} {1}", string.Format(Resource.lblWhatIsTheExpectedYieldForSingleForDefaultYield, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType, Resource.lblNotSet.ToLower())));
+                            }
                             break;
                         }
                         else if (model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterDifferentFiguresForEachField)
                         {
-                            ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format(Resource.lblWhatIsTheDifferentExpectedYieldNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType, crop.FieldName));
+                            decimal defaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value);
+                            if (defaultYield == 0)
+                            {
+                                ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format(Resource.lblWhatIsTheDifferentExpectedYieldNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType, crop.FieldName));
+                            }
+                            else
+                            {
+                                ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format("{0} {1}", string.Format(Resource.lblWhatIsTheDifferentExpectedYieldForDefaultYield, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType, crop.FieldName), Resource.lblNotSet.ToLower()));
+                            }
+
                         }
                     }
                     i++;
@@ -4957,12 +4988,30 @@ namespace NMP.Portal.Controllers
                         {
                             if (model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
                             {
-                                ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format(Resource.lblWhatIsTheDifferentExpectedYieldNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? model.Variety : model.CropType, crop.FieldName));
+                                decimal defaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value);
+                                if (defaultYield == 0)
+                                {
+                                    ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format(Resource.lblWhatIsTheExpectedYieldForSingleNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType));
+                                }
+                                else
+                                {
+                                    ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format("{0} {1}", string.Format(Resource.lblWhatIsTheExpectedYieldForSingleForDefaultYield, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType, Resource.lblNotSet.ToLower())));
+                                }
+                                //ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format(Resource.lblWhatIsTheDifferentExpectedYieldNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? model.Variety : model.CropType, crop.FieldName));
                                 break;
                             }
                             else if (model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterDifferentFiguresForEachField)
                             {
-                                ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format(Resource.lblWhatIsTheExpectedYieldForSingleNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType));
+                                decimal defaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value);
+                                if (defaultYield == 0)
+                                {
+                                    ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format(Resource.lblWhatIsTheDifferentExpectedYieldNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType, crop.FieldName));
+                                }
+                                else
+                                {
+                                    ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format("{0} {1}", string.Format(Resource.lblWhatIsTheDifferentExpectedYieldForDefaultYield, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType, crop.FieldName), Resource.lblNotSet.ToLower()));
+                                }
+                                //ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format(Resource.lblWhatIsTheExpectedYieldForSingleNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType));
                             }
                         }
                     }
@@ -6867,7 +6916,7 @@ namespace NMP.Portal.Controllers
 
             return string.Join(", ", result);
         }
-      
+
 
     }
 }

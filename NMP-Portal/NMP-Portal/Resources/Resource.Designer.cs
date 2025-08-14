@@ -12448,6 +12448,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the expected yield for {0} in {1} (optional)?.
+        /// </summary>
+        public static string lblWhatIsTheDifferentExpectedYieldForDefaultYield {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheDifferentExpectedYieldForDefaultYield", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the expected yield for {0} in {1} not set?.
         /// </summary>
         public static string lblWhatIsTheDifferentExpectedYieldNotSet {
@@ -12471,6 +12480,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhatIsTheExpectedYieldForSingle {
             get {
                 return ResourceManager.GetString("lblWhatIsTheExpectedYieldForSingle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the expected yield for {0} in these fields (optional)?.
+        /// </summary>
+        public static string lblWhatIsTheExpectedYieldForSingleForDefaultYield {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheExpectedYieldForSingleForDefaultYield", resourceCulture);
             }
         }
         
