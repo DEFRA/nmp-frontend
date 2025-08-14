@@ -502,6 +502,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A new sward is one that is established in the current harvest year..
+        /// </summary>
+        public static string lblAboutNewSward {
+            get {
+                return ResourceManager.GetString("lblAboutNewSward", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to About occupancy and nitrogen (N) standard.
         /// </summary>
         public static string lblAboutOccupancyAndNitrogenStandard {
