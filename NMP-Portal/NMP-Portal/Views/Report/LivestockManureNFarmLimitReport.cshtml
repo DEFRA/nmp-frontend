@@ -233,7 +233,7 @@
                         </tr>
                         <tr class="govuk-table__row total_row">
                             <th scope="col" class="govuk-table__header">
-                                @Resource.lblTotal
+                                @Resource.lblTotals
                             </th>
                             <th scope="col" class="govuk-table__header">
                                 @((ViewBag.AreaInsideNVZ != null && ViewBag.AreaOutsideNVZ != null) ? (string.Format("{0} {1}", ViewBag.AreaOutsideNVZ + ViewBag.AreaInsideNVZ, Resource.lblHectares.ToLower())) : string.Format("{0} {1}", ViewBag.AreaInsideNVZ, Resource.lblHectares.ToLower()))

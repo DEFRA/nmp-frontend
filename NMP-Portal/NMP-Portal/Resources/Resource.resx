@@ -5672,4 +5672,10 @@ live</value>
   <data name="lblLivestockReportContentFourtyOne" xml:space="preserve">
     <value>Non-grazing livestock total phosphate (P2O5)</value>
   </data>
+  <data name="lblWhatIsTheExpectedYieldForSingleForDefaultYield" xml:space="preserve">
+    <value>What is the expected yield for {0} in these fields (optional)?</value>
+  </data>
+  <data name="lblWhatIsTheDifferentExpectedYieldForDefaultYield" xml:space="preserve">
+    <value>What is the expected yield for {0} in {1} (optional)?</value>
+  </data>
 </root>
