@@ -169,7 +169,15 @@
                     {
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key>
-                                @Resource.lblWhichFieldsWouldYouLikeToAddAnOrganic
+                                @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
+                                {
+                                    @Resource.lblWhichFieldsWouldYouLikeToAddInorganicFertiliserApplications
+                                }
+                                else
+                                {
+                                    @Resource.lblWhichFieldsWouldYouLikeToEditAnOrganic
+                                }
+                                @* @Resource.lblWhichFieldsWouldYouLikeToAddAnOrganic *@
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
                                 @Model.FieldGroupName
@@ -183,7 +191,15 @@
                     {
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key>
-                                @Resource.lblWhichFieldsWouldYouLikeToEditAnOrganic
+                                @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
+                                {
+                                    @Resource.lblWhichFieldsWouldYouLikeToAddInorganicFertiliserApplications
+                                }
+                                else
+                                {
+                                    @Resource.lblWhichFieldsWouldYouLikeToEditAnOrganic
+                                }
+                                @* @Resource.lblWhichFieldsWouldYouLikeToEditAnOrganic *@
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
                                 @Model.FieldName
@@ -199,7 +215,7 @@
                             <govuk-summary-list-row-key>
                                 @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
                                 {
-                                    @Resource.lblWhichFieldsWouldYouLikeToAddAnOrganic
+                                    @Resource.lblWhichFieldsWouldYouLikeToAddInorganicFertiliserApplications
                                 }
                                 else
                                 {
@@ -251,7 +267,7 @@
                         {
                             <govuk-summary-list-row class="govuk-error-message" )>
                                 <govuk-summary-list-row-key>
-                                    @string.Format(Resource.lblWhichCropIsThisManureApplication, Model.FieldName)
+                                    @string.Format(Resource.lblWhichCropIsThisFertiliserApplication, Model.FieldName)
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
                                     @Resource.lblNotSet
@@ -267,7 +283,7 @@
                             {
                                 <govuk-summary-list-row class=@((doubleCrop.CropID==null)?"govuk-error-message":"")>
                                     <govuk-summary-list-row-key>
-                                        @string.Format(Resource.lblWhichCropIsThisManureApplication, doubleCrop.FieldName)
+                                        @string.Format(Resource.lblWhichCropIsThisFertiliserApplication, doubleCrop.FieldName)
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value>
                                         @((doubleCrop.CropID == null) ? Resource.lblNotSet : string.Format("{0} {1} {2} {3} {4}", Resource.lblCrop, doubleCrop.CropOrder, "(", doubleCrop.CropName, ")"))

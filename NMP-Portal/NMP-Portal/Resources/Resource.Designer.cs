@@ -12988,6 +12988,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Which crop is this fertilizer application for in {0}?.
+        /// </summary>
+        public static string lblWhichCropIsThisFertiliserApplication {
+            get {
+                return ResourceManager.GetString("lblWhichCropIsThisFertiliserApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which crop is this manure application for in {0}?.
         /// </summary>
         public static string lblWhichCropIsThisManureApplication {
