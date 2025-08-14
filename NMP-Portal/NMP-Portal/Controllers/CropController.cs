@@ -1957,7 +1957,7 @@ namespace NMP.Portal.Controllers
                 List<CropInfoOneResponse> cropInfoOneResponse = await _cropService.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0);
                 var country = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
                 var cropInfoOneList = cropInfoOneResponse.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.RB209Country.All).ToList();
-                ViewBag.CropInfoOneList = cropInfoOneList.OrderBy(c => c.CropInfo1Name);
+                ViewBag.CropInfoOneList = cropInfoOneList.OrderBy(c => c.CropInfo1Id);
 
                 string? cropInfoOneQuestion = await _cropService.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0);
                 ViewBag.CropInfoOneQuestion = cropInfoOneQuestion;

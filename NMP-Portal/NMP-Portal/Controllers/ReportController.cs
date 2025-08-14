@@ -5587,7 +5587,8 @@ namespace NMP.Portal.Controllers
                        .Cast<NonGrazingManureType>()
                        .Select(e => (int)e)
                        .Contains(x.ManureTypeID)
-                       && x.NTotal.HasValue && x.ManureLookupType == Resource.lblImport)
+                       && x.NTotal.HasValue && x.ManureLookupType == Resource.lblImport
+                       && selectedManureTypeIds.Contains(x.ManureTypeID))
                        .Sum(x => x.NTotal.Value), 0);
 
                         ViewBag.TotalNImportedGrazingLivestock = totalImportedGrazingLivestock;
@@ -5599,7 +5600,8 @@ namespace NMP.Portal.Controllers
                         .Select(e => (int)e)
                         .Contains(x.ManureTypeID)
                         && x.NTotal.HasValue
-                        && x.ManureLookupType == Resource.lblImport)
+                        && x.ManureLookupType == Resource.lblImport
+                        && selectedManureTypeIds.Contains(x.ManureTypeID))
                         .Sum(x => x.NTotal.Value),
                         0);
 
@@ -5610,7 +5612,8 @@ namespace NMP.Portal.Controllers
                        .Cast<NonGrazingManureType>()
                        .Select(e => (int)e)
                        .Contains(x.ManureTypeID)
-                       && x.PTotal.HasValue && x.ManureLookupType == Resource.lblImport)
+                       && x.PTotal.HasValue && x.ManureLookupType == Resource.lblImport
+                       && selectedManureTypeIds.Contains(x.ManureTypeID))
                        .Sum(x => x.PTotal.Value), 0);
 
                         ViewBag.TotalPImportedNonGrazingLivestock = (int)Math.Round(
@@ -5620,7 +5623,8 @@ namespace NMP.Portal.Controllers
                         .Select(e => (int)e)
                         .Contains(x.ManureTypeID)
                         && x.PTotal.HasValue
-                        && x.ManureLookupType == Resource.lblImport)
+                        && x.ManureLookupType == Resource.lblImport
+                        && selectedManureTypeIds.Contains(x.ManureTypeID))
                         .Sum(x => x.PTotal.Value),
                         0);
 
@@ -5641,7 +5645,11 @@ namespace NMP.Portal.Controllers
                             : Resource.lbltonnes
                         })
                         .ToList();
-                        ViewBag.ImportOfLivestockManureList = allImportData;
+
+                        if (allImportData != null && allImportData.Count > 0)
+                        {
+                            ViewBag.ImportOfLivestockManureList = allImportData;
+                        }
 
                         totalNExportedLivestock = (int)Math.Round(
                         nutrientsLoadingManureList
@@ -5667,7 +5675,8 @@ namespace NMP.Portal.Controllers
                         .Cast<NonGrazingManureType>()
                         .Select(e => (int)e)
                         .Contains(x.ManureTypeID)
-                        && x.NTotal.HasValue && x.ManureLookupType == Resource.lblExport)
+                        && x.NTotal.HasValue && x.ManureLookupType == Resource.lblExport
+                        && selectedManureTypeIds.Contains(x.ManureTypeID))
                         .Sum(x => x.NTotal.Value), 0);
 
                         ViewBag.TotalNExportedGrazingLivestock = totalExportedGrazingLivestock;
@@ -5679,7 +5688,8 @@ namespace NMP.Portal.Controllers
                         .Select(e => (int)e)
                         .Contains(x.ManureTypeID)
                         && x.PTotal.HasValue
-                        && x.ManureLookupType == Resource.lblExport)
+                        && x.ManureLookupType == Resource.lblExport
+                        && selectedManureTypeIds.Contains(x.ManureTypeID))
                         .Sum(x => x.PTotal.Value), 0);
 
                         totalExportedNonGrazingLivestock = (int)Math.Round(
@@ -5689,7 +5699,8 @@ namespace NMP.Portal.Controllers
                         .Select(e => (int)e)
                         .Contains(x.ManureTypeID)
                         && x.NTotal.HasValue
-                        && x.ManureLookupType == Resource.lblExport)
+                        && x.ManureLookupType == Resource.lblExport
+                        && selectedManureTypeIds.Contains(x.ManureTypeID))
                         .Sum(x => x.NTotal.Value), 0);
                         ViewBag.TotalNExportedNonGrazingLivestock = totalExportedNonGrazingLivestock;
 
@@ -5700,7 +5711,8 @@ namespace NMP.Portal.Controllers
                         .Select(e => (int)e)
                         .Contains(x.ManureTypeID)
                         && x.PTotal.HasValue
-                        && x.ManureLookupType == Resource.lblExport)
+                        && x.ManureLookupType == Resource.lblExport
+                        && selectedManureTypeIds.Contains(x.ManureTypeID))
                         .Sum(x => x.PTotal.Value), 0);
 
 
@@ -5716,7 +5728,10 @@ namespace NMP.Portal.Controllers
                             : Resource.lbltonnes
                         })
                         .ToList();
-                        ViewBag.ExportOfLivestockManureList = allExportData;
+                        if (allExportData != null && allExportData.Count > 0)
+                        {
+                            ViewBag.ExportOfLivestockManureList = allExportData;
+                        }
                         nutrientsLoadingManureList
                         .Where(x => selectedManureTypeIds.Contains(x.ManureTypeID)
                         && x.ManureLookupType == Resource.lblExport);
@@ -5751,6 +5766,12 @@ namespace NMP.Portal.Controllers
             (List<LivestockTypeResponse> livestockList, error) = await _reportService.FetchLivestockTypes();
             if (error == null && livestockList.Count > 0)
             {
+                //if farm is Non derogated then need to set VealCalf is grazing 
+                if (nutrientsLoadingFarmDetail.Derogation != null && (!nutrientsLoadingFarmDetail.Derogation.Value))
+                {
+                    livestockList.Where(c => c.ID == (int)NMP.Portal.Enums.Livestock.VealCalf).ToList().ForEach(c => c.IsGrazing = true);
+
+                }
                 grazingLivestockList = livestockList.Where(mt => mt.IsGrazing.Value).Select(mt => mt.ID).ToList();
                 nonGrazingLivestockList = livestockList.Where(mt => !mt.IsGrazing.Value).Select(mt => mt.ID).ToList();
                 if (nutrientsLoadingLiveStockList.Count > 0)

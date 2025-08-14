@@ -502,6 +502,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A new sward is one that is established in the current harvest year..
+        /// </summary>
+        public static string lblAboutNewSward {
+            get {
+                return ResourceManager.GetString("lblAboutNewSward", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to About occupancy and nitrogen (N) standard.
         /// </summary>
         public static string lblAboutOccupancyAndNitrogenStandard {
@@ -7713,7 +7722,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Note:{0}.
+        ///   Looks up a localized string similar to Note: {0}.
         /// </summary>
         public static string lblNoteWithComment {
             get {
@@ -13002,6 +13011,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhichCountryIsIn {
             get {
                 return ResourceManager.GetString("lblWhichCountryIsIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which crop is this fertilizer application for in {0}?.
+        /// </summary>
+        public static string lblWhichCropIsThisFertiliserApplication {
+            get {
+                return ResourceManager.GetString("lblWhichCropIsThisFertiliserApplication", resourceCulture);
             }
         }
         

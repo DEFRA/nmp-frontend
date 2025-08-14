@@ -5631,7 +5631,7 @@ live</value>
     <value>Exports of livestock manure</value>
   </data>
   <data name="lblNoteWithComment" xml:space="preserve">
-    <value>Note:{0}</value>
+    <value>Note: {0}</value>
   </data>
   <data name="lblThereAreNoExportsOfLivestockManure" xml:space="preserve">
     <value>There are no exports of livestock manure</value>
@@ -5677,5 +5677,11 @@ live</value>
   </data>
   <data name="lblWhatIsTheDifferentExpectedYieldForDefaultYield" xml:space="preserve">
     <value>What is the expected yield for {0} in {1} (optional)?</value>
+  </data>
+  <data name="lblWhichCropIsThisFertiliserApplication" xml:space="preserve">
+    <value>Which crop is this fertilizer application for in {0}?</value>
+  </data>
+  <data name="lblAboutNewSward" xml:space="preserve">
+    <value>A new sward is one that is established in the current harvest year.</value>
   </data>
 </root>
