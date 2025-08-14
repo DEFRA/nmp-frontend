@@ -5631,7 +5631,7 @@ live</value>
     <value>Exports of livestock manure</value>
   </data>
   <data name="lblNoteWithComment" xml:space="preserve">
-    <value>Note:{0}</value>
+    <value>Note: {0}</value>
   </data>
   <data name="lblThereAreNoExportsOfLivestockManure" xml:space="preserve">
     <value>There are no exports of livestock manure</value>

@@ -449,7 +449,7 @@
                                                         </tr>
                                                         <tr class="govuk-table__row">
                                                             <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogenWithNutrient</th>
-                                                            <td class="govuk-table__cell">@(orgManure.N != null ? (orgManure.N > 0 ? string.Format(Resource.lblValueKg, orgManure.N) : orgManure.N) : Resource.lblNotEntered)</td>
+                                                            <td class="govuk-table__cell">@(orgManure.N != null ? (orgManure.N > 0 ? string.Format("{0}{1}", (orgManure.N * orgManure.ApplicationRate), Resource.lblKgPerHectare) : (orgManure.N * orgManure.ApplicationRate)) : Resource.lblNotEntered)</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -464,7 +464,7 @@
                                                         </tr>
                                                         <tr class="govuk-table__row">
                                                             <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphateOnly</th>
-                                                            <td class="govuk-table__cell">@(orgManure.P2O5 != null ? (orgManure.P2O5 > 0 ? string.Format(Resource.lblValueKg, orgManure.P2O5) : orgManure.P2O5) : Resource.lblNotEntered)</td>
+                                                            <td class="govuk-table__cell">@(orgManure.P2O5 != null ? (orgManure.P2O5 > 0 ? string.Format("{0}{1}", (orgManure.P2O5 * orgManure.ApplicationRate), Resource.lblKgPerHectare) : (orgManure.P2O5 * orgManure.ApplicationRate)) : Resource.lblNotEntered)</td>
                                                         </tr>
                                                         <tr class="govuk-table__row">
                                                             <th scope="col" class="govuk-table__header">@Resource.lblAvailablePhosphate</th>
@@ -472,7 +472,7 @@
                                                         </tr>
                                                         <tr class="govuk-table__row">
                                                             <th scope="col" class="govuk-table__header">@Resource.lblTotalPotashWithNutrient</th>
-                                                            <td class="govuk-table__cell">@(orgManure.K2O != null ? (orgManure.K2O > 0 ? string.Format(Resource.lblValueKg, orgManure.K2O) : orgManure.K2O) : Resource.lblNotEntered)</td>
+                                                            <td class="govuk-table__cell">@(orgManure.K2O != null ? (orgManure.K2O > 0 ? string.Format("{0}{1}", (orgManure.K2O * orgManure.ApplicationRate), Resource.lblKgPerHectare) : (orgManure.K2O * orgManure.ApplicationRate)) : Resource.lblNotEntered)</td>
                                                         </tr>
                                                         <tr class="govuk-table__row">
                                                             <th scope="col" class="govuk-table__header">@Resource.lblAvailablePotash</th>
