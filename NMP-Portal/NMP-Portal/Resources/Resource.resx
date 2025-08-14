@@ -5681,4 +5681,7 @@ live</value>
   <data name="lblWhichCropIsThisFertiliserApplication" xml:space="preserve">
     <value>Which crop is this fertilizer application for in {0}?</value>
   </data>
+  <data name="lblAboutNewSward" xml:space="preserve">
+    <value>A new sward is one that is established in the current harvest year.</value>
+  </data>
 </root>
