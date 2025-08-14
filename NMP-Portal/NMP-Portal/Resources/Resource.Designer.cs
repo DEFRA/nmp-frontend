@@ -7713,7 +7713,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Note:{0}.
+        ///   Looks up a localized string similar to Note: {0}.
         /// </summary>
         public static string lblNoteWithComment {
             get {
