@@ -1491,6 +1491,21 @@ namespace NMP.Portal.Controllers
                         model.ReportTypeName = Resource.lblLivestockManureNitrogenFarmLimit;
                     }
                 }
+
+                int currentYear = DateTime.Now.Year;
+                List<int> years = new List<int>();
+
+                // Next year
+                years.Add(currentYear + 1);
+                // Current year
+                years.Add(currentYear);
+
+                // Previous 4 years
+                for (int i = 1; i <= 4; i++)
+                {
+                    years.Add(currentYear - i);
+                }
+                ViewBag.Years = years;
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             catch (Exception ex)
@@ -1522,6 +1537,18 @@ namespace NMP.Portal.Controllers
                 }
                 if (!ModelState.IsValid)
                 {
+                    int currentYear = DateTime.Now.Year;
+                    List<int> years = new List<int>();
+                    // Next year
+                    years.Add(currentYear + 1);
+                    // Current year
+                    years.Add(currentYear);
+                    // Previous 4 years
+                    for (int i = 1; i <= 4; i++)
+                    {
+                        years.Add(currentYear - i);
+                    }
+                    ViewBag.Years = years;
                     return View(model);
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
