@@ -132,10 +132,10 @@
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-                
+
                 <h1 class="govuk-heading-l">
-                    @if (Model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport||
-                   Model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.NmaxReport)
+                    @if (Model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport ||
+                                    Model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.NmaxReport)
                     {
                         @string.Format(Resource.lblForYearForReport, Model.ReportTypeName)
                     }
@@ -143,7 +143,7 @@
                     {
                         @Resource.lblWhichYearWouldYouLikeToCreateALivestockReport
                     }
-                    
+
                 </h1>
 
 
@@ -151,16 +151,21 @@
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend is-page-heading="false">
                         </govuk-radios-fieldset-legend>
-                        
-                            <govuk-radios-hint>
-                                @Resource.lblSelectOneOption
-                            </govuk-radios-hint>
-                        <govuk-radios-item value="@currentYear">
-                            @string.Format(Resource.lblCurrentYearForReport, currentYear)
-                        </govuk-radios-item>
-                        <govuk-radios-item value="@nextYear">
-                            @string.Format(Resource.lblNextYearForReport, nextYear)
-                        </govuk-radios-item>
+
+                        <govuk-radios-hint>
+                            @Resource.lblSelectOneOption
+                        </govuk-radios-hint>
+                        @if (ViewBag.Years != null && ViewBag.Years.Count > 0)
+                        {
+                            foreach (int year in ViewBag.Years)
+                            {
+                                <govuk-radios-item value="@year">
+                                    @year
+                                </govuk-radios-item>
+                            }
+                        }
+
+
                     </govuk-radios-fieldset>
                 </govuk-radios>
 
