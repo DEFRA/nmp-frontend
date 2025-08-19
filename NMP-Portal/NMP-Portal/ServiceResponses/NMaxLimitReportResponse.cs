@@ -11,9 +11,9 @@
         public decimal YieldAdjustment { get; set; }
         public decimal MillingWheat { get; set; }
         public decimal PaperCrumbleOrStrawMulch { get; set; }
-        public decimal AdjustedNMaxLimit { get; set; }
+        public int AdjustedNMaxLimit { get; set; }
 
-        public decimal MaximumLimitForNApplied { get; set; }
+        public int MaximumLimitForNApplied { get; set; }
         public decimal AdjustmentForThreeOrMoreCuts { get; set; }
-}
+    }
 }
