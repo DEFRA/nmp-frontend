@@ -11980,6 +11980,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use the typical figure of {0} tonnes per hectare for this field.
+        /// </summary>
+        public static string lblUseTheStandardFigureForThisField {
+            get {
+                return ResourceManager.GetString("lblUseTheStandardFigureForThisField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use the typical figure of 8 tonnes per hectare for all these fields.
         /// </summary>
         public static string lblUseTheStandardFigureOf8TonnesPerHectareForAllTheseFields {
@@ -12925,11 +12934,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When are you applying inorganic fertiliser on {0}?.
+        /// </summary>
+        public static string lblWhenAreYouApplyingInorganicFertiliserForThisFields {
+            get {
+                return ResourceManager.GetString("lblWhenAreYouApplyingInorganicFertiliserForThisFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When are you applying {0} on these fields?.
         /// </summary>
         public static string lblWhenAreYouApplyingManureOnField {
             get {
                 return ResourceManager.GetString("lblWhenAreYouApplyingManureOnField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When are you applying {0} on {1}?.
+        /// </summary>
+        public static string lblWhenAreYouApplyingManureOnThisField {
+            get {
+                return ResourceManager.GetString("lblWhenAreYouApplyingManureOnThisField", resourceCulture);
             }
         }
         
@@ -12966,6 +12993,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields {
             get {
                 return ResourceManager.GetString("lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When do you plan to spread inorganic fertiliser on {0}?.
+        /// </summary>
+        public static string lblWhenDoYouPlanToSpreadInorganicFertiliserOnThisField {
+            get {
+                return ResourceManager.GetString("lblWhenDoYouPlanToSpreadInorganicFertiliserOnThisField", resourceCulture);
             }
         }
         
