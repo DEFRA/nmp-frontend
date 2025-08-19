@@ -372,12 +372,12 @@
                                 }
                                 else
                                 {
-                                    @Resource.lblWhenAreYouApplyingInorganicFertiliserForTheseFields
+                                    @(Model.FieldList.Count > 1 ? Resource.lblWhenAreYouApplyingInorganicFertiliserForTheseFields : string.Format(Resource.lblWhenAreYouApplyingInorganicFertiliserForThisFields,Model.FieldName))
                                 }
                             }
                             else
                             {
-                                @Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields
+                                @(Model.FieldList.Count > 1 ? Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields: string.Format( Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnThisField,Model.FieldName))
                             }
                             @* @Resource.lblWhenDoYouFirstPlanToSpreadInOrganicFertiliser *@
                         </govuk-summary-list-row-key>
