@@ -10938,7 +10938,6 @@ namespace NMP.Portal.Controllers
                         {
                             model.OrganicManures.Remove(item);
                         }
-                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FertiliserManure", model);
                     }
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("OrganicManure", model);
                     if (model.IsCheckAnswer && (!model.IsAnyChangeInSameDefoliationFlag) && (!model.IsAnyChangeInField))
@@ -11055,10 +11054,9 @@ namespace NMP.Portal.Controllers
                         {
                             model.OrganicManures.Remove(item);
                         }
-                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FertiliserManure", model);
                     }
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("OrganicManure", model);
-                    if (model.IsCheckAnswer && (!model.IsAnyChangeInSameDefoliationFlag) && (!model.IsAnyChangeInField) && (!model.IsManureTypeChange))
+                    if (model.IsCheckAnswer && (!model.IsAnyChangeInField) && (!model.IsManureTypeChange))
                     {
                         return RedirectToAction("CheckAnswer");
                     }
