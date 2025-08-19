@@ -488,7 +488,13 @@
                                 {
                                     <govuk-summary-list-row class=@((!organic.Defoliation.HasValue)?"govuk-error-message":"")>
                                         <govuk-summary-list-row-key>
+                                            @if (Model.GrassCropCount.HasValue&&Model.GrassCropCount>1)
+                                            {
                                             @Resource.lblWhichCutOrGrazingInThisApplicationForAllField
+                                            }
+                                            else{
+                                                @string.Format(Resource.lblWhichCutOrGrazingInThisApplicationForInField, organic.FieldName)
+                                            }
                                         </govuk-summary-list-row-key>
                                         <govuk-summary-list-row-value>
 
