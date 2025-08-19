@@ -156,11 +156,11 @@ namespace NMP.Portal.Controllers
                                     {
                                         if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England)
                                         {
-                                            cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitEngland != null).ToList();
+                                            cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitEngland != null&& x.NMaxLimitEngland>0).ToList();
                                         }
                                         else
                                         {
-                                            cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitWales != null).ToList();
+                                            cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitWales != null && x.NMaxLimitWales > 0).ToList();
                                         }
                                         cropTypeList = cropTypeList
                                         .Where(crop => cropTypeLinking
@@ -321,11 +321,11 @@ namespace NMP.Portal.Controllers
                                 {
                                     if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England)
                                     {
-                                        cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitEngland != null).ToList();
+                                        cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitEngland != null && x.NMaxLimitEngland > 0).ToList();
                                     }
                                     else
                                     {
-                                        cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitWales != null).ToList();
+                                        cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitWales != null && x.NMaxLimitWales > 0).ToList();
                                     }
                                     cropTypeList = cropTypeList
                                     .Where(crop => cropTypeLinking
@@ -1075,7 +1075,7 @@ namespace NMP.Portal.Controllers
                                             MillingWheat = millingWheat,
                                             PaperCrumbleOrStrawMulch = paperCrumbleOrStrawMulch,
                                             AdjustedNMaxLimit = nMaxLimitForCropType,
-                                            MaximumLimitForNApplied = nMaxLimitForCropType * field.CroppedArea.Value
+                                            MaximumLimitForNApplied =(int)Math.Round(nMaxLimitForCropType * field.CroppedArea.Value,0)
                                         };
                                         nMaxLimitReportResponse.Add(nMaxLimitData);
                                         decimal? totalFertiliserN = null;
@@ -1491,6 +1491,21 @@ namespace NMP.Portal.Controllers
                         model.ReportTypeName = Resource.lblLivestockManureNitrogenFarmLimit;
                     }
                 }
+
+                int currentYear = DateTime.Now.Year;
+                List<int> years = new List<int>();
+
+                // Next year
+                years.Add(currentYear + 1);
+                // Current year
+                years.Add(currentYear);
+
+                // Previous 4 years
+                for (int i = 1; i <= 4; i++)
+                {
+                    years.Add(currentYear - i);
+                }
+                ViewBag.Years = years;
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             catch (Exception ex)
@@ -1522,6 +1537,18 @@ namespace NMP.Portal.Controllers
                 }
                 if (!ModelState.IsValid)
                 {
+                    int currentYear = DateTime.Now.Year;
+                    List<int> years = new List<int>();
+                    // Next year
+                    years.Add(currentYear + 1);
+                    // Current year
+                    years.Add(currentYear);
+                    // Previous 4 years
+                    for (int i = 1; i <= 4; i++)
+                    {
+                        years.Add(currentYear - i);
+                    }
+                    ViewBag.Years = years;
                     return View(model);
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);

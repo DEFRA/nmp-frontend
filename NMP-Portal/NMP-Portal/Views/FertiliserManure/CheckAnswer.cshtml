@@ -323,7 +323,13 @@
                                 {
                                     <govuk-summary-list-row class=@((!fertiliser.Defoliation.HasValue)?"govuk-error-message":"")>
                                         <govuk-summary-list-row-key>
+                                            @if (Model.GrassCropCount.HasValue&&Model.GrassCropCount>1)
+                                            {
                                             @Resource.lblWhichCutOrGrazingInThisInorganicApplicationForAllField
+                                            }
+                                            else{
+                                                 @string.Format(Resource.lblWhichCutOrGrazingInThisInorganicApplicationForInField, fertiliser.FieldName)
+                                            }
                                         </govuk-summary-list-row-key>
                                         <govuk-summary-list-row-value>
                                             
