@@ -2855,10 +2855,10 @@ cubic metres per hectare  not set</value>
     <value>How many cuts typically each year?</value>
   </data>
   <data name="lblDoesFieldTypicallyHaveMoreThan30PercentClover" xml:space="preserve">
-    <value>Did {0} typically have clover content of 30% or more across the last season?</value>
+    <value>Did {0} typically have a clover content of 30% or more across the last season it was grass?</value>
   </data>
   <data name="lblHowMuchNitrogenHasBeenAppliedToFieldEachYear" xml:space="preserve">
-    <value>How much nitrogen (N) has been applied to {0} each year (on average)?</value>
+    <value>How much nitrogen (N) was applied to {0} each year that it was grass (on average)?</value>
   </data>
   <data name="lblSoilNitrogenSupplyItems" xml:space="preserve">
     <value>Soil nitrogen (N) supply items</value>
@@ -4947,7 +4947,7 @@ live</value>
     <value>Add crops</value>
   </data>
   <data name="MsgForIfPlanIsNotCreated" xml:space="preserve">
-    <value>This report is not available. You need to add your crop information, and information about any organic and inorganic material applied.</value>
+    <value>More information is needed to get a report. You need to add your field and crop information, and any organic material or inorganic fertiliser applied to them.</value>
   </data>
   <data name="lblNMax" xml:space="preserve">
     <value>N-max</value>
@@ -5550,7 +5550,7 @@ live</value>
     <value>Phosphate (P2O5) standard</value>
   </data>
   <data name="MsgForIfFieldsAreNotCreated" xml:space="preserve">
-    <value>This report is not available. You need to add your field and crop information, and information about any organic and inorganic material applied.</value>
+    <value>More information is needed to get a report. You need to add your field and crop information, and any organic material or inorganic fertiliser applied to them.</value>
   </data>
   <data name="lblAreaRequiredForLivestockManure" xml:space="preserve">
     <value>Area required for livestock manure</value>
@@ -5679,7 +5679,7 @@ live</value>
     <value>What is the expected yield for {0} in {1} (optional)?</value>
   </data>
   <data name="lblWhichCropIsThisFertiliserApplication" xml:space="preserve">
-    <value>Which crop is this fertilizer application for in {0}?</value>
+    <value>Which crop is this inorganic fertiliser application for in {0}?</value>
   </data>
   <data name="lblAboutNewSward" xml:space="preserve">
     <value>A new sward is one that is established in the current harvest year.</value>
