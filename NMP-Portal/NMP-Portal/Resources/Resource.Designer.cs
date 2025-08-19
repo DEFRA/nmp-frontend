@@ -3112,7 +3112,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Did {0} typically have clover content of 30% or more across the last season?.
+        ///   Looks up a localized string similar to Did {0} typically have a clover content of 30% or more across the last season it was grass?.
         /// </summary>
         public static string lblDoesFieldTypicallyHaveMoreThan30PercentClover {
             get {
@@ -15339,7 +15339,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This report is not available. You need to add your field and crop information, and information about any organic and inorganic material applied..
+        ///   Looks up a localized string similar to More information is needed to get a report. You need to add your field and crop information, and any organic material or inorganic fertiliser applied to them..
         /// </summary>
         public static string MsgForIfFieldsAreNotCreated {
             get {
@@ -15348,7 +15348,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This report is not available. You need to add your crop information, and information about any organic and inorganic material applied..
+        ///   Looks up a localized string similar to More information is needed to get a report. You need to add your field and crop information, and any organic material or inorganic fertiliser applied to them..
         /// </summary>
         public static string MsgForIfPlanIsNotCreated {
             get {
