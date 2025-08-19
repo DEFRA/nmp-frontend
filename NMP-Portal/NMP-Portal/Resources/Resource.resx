@@ -5684,4 +5684,16 @@ live</value>
   <data name="lblAboutNewSward" xml:space="preserve">
     <value>A new sward is one that is established in the current harvest year.</value>
   </data>
+  <data name="lblWhenAreYouApplyingManureOnThisField" xml:space="preserve">
+    <value>When are you applying {0} on {1}?</value>
+  </data>
+  <data name="lblWhenAreYouApplyingInorganicFertiliserForThisFields" xml:space="preserve">
+    <value>When are you applying inorganic fertiliser on {0}?</value>
+  </data>
+  <data name="lblWhenDoYouPlanToSpreadInorganicFertiliserOnThisField" xml:space="preserve">
+    <value>When do you plan to spread inorganic fertiliser on {0}?</value>
+  </data>
+  <data name="lblUseTheStandardFigureForThisField" xml:space="preserve">
+    <value>Use the typical figure of {0} tonnes per hectare for this field</value>
+  </data>
 </root>

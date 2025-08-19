@@ -27,7 +27,7 @@
     switch (Model.YieldQuestion)
     {
         case (int)NMP.Portal.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields:
-            yieldQuestion = string.Format(Resource.lblUseTheStandardFigure, ViewBag.DefaultYield);
+            yieldQuestion = Model.Crops.Count > 1 ? string.Format(Resource.lblUseTheStandardFigure, ViewBag.DefaultYield) : string.Format(Resource.lblUseTheStandardFigureForThisField, ViewBag.DefaultYield);
             break;
         case (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields:
             if (Model.Crops.Count == 1 && (ViewBag.DefaultYield != null && ViewBag.DefaultYield > 0))
@@ -492,7 +492,7 @@
                         {
                             <govuk-summary-list-row class=@((string.IsNullOrWhiteSpace(yieldQuestion))?"govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
-                                    @string.Format(Resource.lblHowDoYouWantToEnterTheExpectedYieldForInTheseFields, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType)
+                                    @(string.Format(Model.Crops.Count > 1 ? Resource.lblHowDoYouWantToEnterTheExpectedYieldForInTheseFields : Resource.lblYieldQuestionForSingleField, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType))
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
                                     @(yieldQuestion == null ? Resource.lblNotSet : yieldQuestion)
