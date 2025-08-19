@@ -3851,12 +3851,21 @@ namespace NMP.Portal.Controllers
 
                             if (cropList?.Count > 0)
                             {
-                                cropList = model.FieldGroup switch
+                                if (model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
                                 {
-                                    var g when g == Resource.lblSelectSpecificFields => cropList.Where(x => x.Year == model.HarvestYear).ToList(),
-                                    var g when int.TryParse(g, out int cropTypeId) => cropList.Where(x => x.Year == model.HarvestYear && x.CropTypeID == cropTypeId).ToList(),
-                                    _ => cropList.Where(x => x.Year == model.HarvestYear).ToList()
-                                };
+                                    cropList = cropList.Where(x => x.Year == model.HarvestYear).ToList();
+                                }
+                                else
+                                {
+                                    if (int.TryParse(model.FieldGroup, out int cropTypeId))
+                                    {
+                                        cropList = cropList.Where(x => x.Year == model.HarvestYear && x.CropTypeID == cropTypeId).ToList();
+                                    }
+                                    else
+                                    {
+                                        cropList = cropList.Where(x => x.Year == model.HarvestYear).ToList();
+                                    }
+                                }
                                 cropList = cropList
                                     .Where(x => x.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)
                                     .ToList();
