@@ -2858,7 +2858,7 @@ cubic metres per hectare  not set</value>
     <value>Did {0} typically have clover content of 30% or more across the last season?</value>
   </data>
   <data name="lblHowMuchNitrogenHasBeenAppliedToFieldEachYear" xml:space="preserve">
-    <value>How much nitrogen (N) has been applied to {0} each year (on average)?</value>
+    <value>How much nitrogen (N) was applied to {0} each year that it was grass (on average)?</value>
   </data>
   <data name="lblSoilNitrogenSupplyItems" xml:space="preserve">
     <value>Soil nitrogen (N) supply items</value>
@@ -5679,7 +5679,7 @@ live</value>
     <value>What is the expected yield for {0} in {1} (optional)?</value>
   </data>
   <data name="lblWhichCropIsThisFertiliserApplication" xml:space="preserve">
-    <value>Which crop is this fertilizer application for in {0}?</value>
+    <value>Which crop is this inorganic fertiliser application for in {0}?</value>
   </data>
   <data name="lblAboutNewSward" xml:space="preserve">
     <value>A new sward is one that is established in the current harvest year.</value>
