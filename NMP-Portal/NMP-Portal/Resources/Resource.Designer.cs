@@ -7867,6 +7867,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nutrient recommendations will be based on the latest soil analysis entered. .
+        /// </summary>
+        public static string lblNutrientRecommendationsWillBeBasedOnTheLatest {
+            get {
+                return ResourceManager.GetString("lblNutrientRecommendationsWillBeBasedOnTheLatest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nutrients.
         /// </summary>
         public static string lblNutrients {
@@ -13411,7 +13420,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} crop plan.
+        ///   Looks up a localized string similar to Select the field from your {0} crop plan.
         /// </summary>
         public static string lblYearCropPlan {
             get {

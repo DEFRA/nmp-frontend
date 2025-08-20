@@ -3281,7 +3281,7 @@ cubic metres per hectare  not set</value>
     <value>This may change your nutrient recommendations for {0} . Select the field from your</value>
   </data>
   <data name="lblYearCropPlan" xml:space="preserve">
-    <value>{0} crop plan</value>
+    <value>Select the field from your {0} crop plan</value>
   </data>
   <data name="lblAdd" xml:space="preserve">
     <value>add</value>
@@ -5695,5 +5695,8 @@ live</value>
   </data>
   <data name="lblUseTheStandardFigureForThisField" xml:space="preserve">
     <value>Use the typical figure of {0} tonnes per hectare for this field</value>
+  </data>
+  <data name="lblNutrientRecommendationsWillBeBasedOnTheLatest" xml:space="preserve">
+    <value>Nutrient recommendations will be based on the latest soil analysis entered. </value>
   </data>
 </root>
