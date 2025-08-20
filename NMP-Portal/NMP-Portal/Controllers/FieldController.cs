@@ -90,7 +90,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("CheckAnswer");
                 }
-                else if (!string.IsNullOrWhiteSpace(model.EncryptedFieldId)&& !string.IsNullOrWhiteSpace(model.EncryptedFieldId))
+                else if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && !string.IsNullOrWhiteSpace(model.EncryptedFieldId))
                 {
                     return RedirectToAction("UpdateField", new
                     {
