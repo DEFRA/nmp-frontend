@@ -86,8 +86,19 @@ namespace NMP.Portal.Controllers
                 }
                 int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(id));
                 int fieldCount = await _fieldService.FetchFieldCountByFarmIdAsync(Convert.ToInt32(farmID));
-
-                if (fieldCount > 0)
+                if (model.IsCheckAnswer)
+                {
+                    return RedirectToAction("CheckAnswer");
+                }
+                else if (!string.IsNullOrWhiteSpace(model.EncryptedFieldId)&& !string.IsNullOrWhiteSpace(model.EncryptedFieldId))
+                {
+                    return RedirectToAction("UpdateField", new
+                    {
+                        id = model.EncryptedFieldId,
+                        farmId = model.EncryptedFarmId
+                    });
+                }
+                else if (fieldCount > 0)
                 {
                     if (model != null && model.CopyExistingField != null && model.CopyExistingField.Value)
                     {
@@ -312,7 +323,7 @@ namespace NMP.Portal.Controllers
                                .Select(x => x.Year)
                                .FirstOrDefault();
 
-                                
+
                                 if (fieldResponse.PreviousGrasses.Count == 3)
                                 {
                                     field.IsPreviousYearGrass = true;
