@@ -111,7 +111,9 @@
                                 <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                                     @if (Model.IsSameDefoliationForAll.HasValue && Model.IsSameDefoliationForAll.Value&&Model.GrassCropCount>1)
                                     {
-                                        @Resource.lblWhichCutOrGrazingInThisInorganicApplicationForAllField
+                                        @((Model.GrassCropCount != null && Model.GrassCropCount == 1) ?
+                                                                string.Format(Resource.lblWhichCutOrGrazingInThisInorganicApplicationForInField, Model.FieldName) :
+                                                                Resource.lblWhichCutOrGrazingInThisInorganicApplicationForAllField)
                                     }
                                     else
                                     {
