@@ -5,22 +5,22 @@
 @{
     ViewData["Title"] = Resource.lblAddField;
     var backAction = "";
-    if (Model.IsCheckAnswer)
-    {
-        backAction = "CheckAnswer";
-    }
-    else if (!string.IsNullOrWhiteSpace(Model.EncryptedIsUpdate))
-    {
-        backAction = "UpdateField";
-    }
-    else
-    {
-        backAction = "BackActionForAddField";
-    }
+    // if (Model.IsCheckAnswer)
+    // {
+    //     backAction = "CheckAnswer";
+    // }
+    // else if (!string.IsNullOrWhiteSpace(Model.EncryptedIsUpdate))
+    // {
+    //     backAction = "UpdateField";
+    // }
+    // else
+    // {
+    //     backAction = "BackActionForAddField";
+    // }
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@backAction asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="BackActionForAddField" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
