@@ -7533,7 +7533,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to N-max limits for {0}.
+        ///   Looks up a localized string similar to N-max report for {0}.
         /// </summary>
         public static string lblNMaxLimitsForFarm {
             get {
