@@ -4458,7 +4458,7 @@ live</value>
     <value>N-max compliant</value>
   </data>
   <data name="lblNMaxLimitsForFarm" xml:space="preserve">
-    <value>N-max limits for {0}</value>
+    <value>N-max report for {0}</value>
   </data>
   <data name="lblSingleBusinessIdentifier" xml:space="preserve">
     <value>Single Business Identifier</value>

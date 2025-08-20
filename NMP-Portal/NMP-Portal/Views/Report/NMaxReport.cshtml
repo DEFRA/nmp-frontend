@@ -45,7 +45,7 @@
             @string.Format(Resource.lblNMaxLimitsForFarm, Model.FarmName)
         </h1>
         <h2 class="govuk-heading-l">@(string.Format(Resource.lblHarvestYearValue, Model.Year))</h2>
-        <p class="govuk-body">@string.Format(Resource.lblCreatedOnDate, Model.Farm.CreatedOn.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")))</p>
+        <p class="govuk-body">@string.Format(Resource.lblCreatedOnDate, DateTime.Now.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")))</p>
 
     </div>
 </div>

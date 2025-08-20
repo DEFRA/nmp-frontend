@@ -545,7 +545,7 @@
                             </div>
                         </div>
                     }
-                    @if (field.SoilAnalysis != null)
+                    @if (field.SoilAnalysis != null && field.SoilAnalysis.Count>0)
                     {
                         <div class="govuk-grid-row">
                             <div class="govuk-grid-column-full">
@@ -565,19 +565,22 @@
                                         </tr>
                                     </thead>
                                     <tbody class="govuk-table__body">
-                                        <tr class="govuk-table__row">
-                                            <td class="govuk-table__cell">@(field.SoilAnalysis.Date != null ? field.SoilAnalysis.Date.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotEntered)</td>
-                                            <td class="govuk-table__cell">@(field.SoilAnalysis.PH != null ? field.SoilAnalysis.PH : Resource.lblNotEntered)</td>
-                                            <td class="govuk-table__cell">
-                                                @(field.SoilAnalysis.PhosphorusIndex != null ? field.SoilAnalysis.PhosphorusIndex : Resource.lblNotEntered)
-                                            </td>
-                                            <td class="govuk-table__cell">
-                                                @(field.SoilAnalysis.PotassiumIndex != null ? field.SoilAnalysis.PotassiumIndex : Resource.lblNotEntered)
-                                            </td>
-                                            <td class="govuk-table__cell">
-                                                @(field.SoilAnalysis.MagnesiumIndex != null ? field.SoilAnalysis.MagnesiumIndex : Resource.lblNotEntered)
-                                            </td>
-                                        </tr>
+                                        @foreach (var soilAnalysis in field.SoilAnalysis)
+                                        {
+                                            <tr class="govuk-table__row">
+                                                <td class="govuk-table__cell">@(soilAnalysis.Date != null ? soilAnalysis.Date.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotEntered)</td>
+                                                <td class="govuk-table__cell">@(soilAnalysis.PH != null ? soilAnalysis.PH : Resource.lblNotEntered)</td>
+                                                <td class="govuk-table__cell">
+                                                    @(soilAnalysis.PhosphorusIndex != null ? soilAnalysis.PhosphorusIndex : Resource.lblNotEntered)
+                                                </td>
+                                                <td class="govuk-table__cell">
+                                                    @(soilAnalysis.PotassiumIndex != null ? soilAnalysis.PotassiumIndex : Resource.lblNotEntered)
+                                                </td>
+                                                <td class="govuk-table__cell">
+                                                    @(soilAnalysis.MagnesiumIndex != null ? soilAnalysis.MagnesiumIndex : Resource.lblNotEntered)
+                                                </td>
+                                            </tr>
+                                        }
                                     </tbody>
 
 
