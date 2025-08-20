@@ -156,7 +156,7 @@ namespace NMP.Portal.Controllers
                                     {
                                         if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England)
                                         {
-                                            cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitEngland != null&& x.NMaxLimitEngland>0).ToList();
+                                            cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitEngland != null && x.NMaxLimitEngland > 0).ToList();
                                         }
                                         else
                                         {
@@ -923,7 +923,7 @@ namespace NMP.Portal.Controllers
                         {
                             cropTypeName = cropData.CropTypeName;
                             Field field = await _fieldService.FetchFieldByFieldId(crop.FieldID.Value);
-                            if (field != null&&field.IsWithinNVZ.Value)
+                            if (field != null && field.IsWithinNVZ.Value)
                             {
                                 (List<int> currentYearManureTypeIds, error) = await _organicManureService.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(field.ID.Value), model.Year.Value, false);
                                 (List<int> previousYearManureTypeIds, error) = await _organicManureService.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(field.ID.Value), model.Year.Value - 1, false);
@@ -997,7 +997,8 @@ namespace NMP.Portal.Controllers
                                         crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SpringWheat ||
                                         crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterBarley ||
                                         crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SpringBarley ||
-                                        crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape)
+                                        crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape ||
+                                        crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WholecropSpringBarley || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WholecropSpringWheat || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WholecropWinterBarley || crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WholecropWinterWheat)
                                     {
                                         if (manureTypeCondition)
                                         {
@@ -1016,6 +1017,13 @@ namespace NMP.Portal.Controllers
                                             if (crop.Yield != null && crop.Yield > 8.0m)
                                             {
                                                 yieldAdjustment = (int)Math.Round(((crop.Yield.Value - 8.0m) / 0.1m) * 2);
+                                            }
+                                        }
+                                        else if (crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WholecropWinterWheat)
+                                        {
+                                            if (field.SoilTypeID != null && field.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.Shallow)
+                                            {
+                                                soilTypeAdjustment = 20;
                                             }
                                         }
                                         else if (crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SpringWheat)
@@ -1038,6 +1046,13 @@ namespace NMP.Portal.Controllers
                                             if (crop.Yield != null && crop.Yield > 6.5m)
                                             {
                                                 yieldAdjustment = (int)Math.Round(((crop.Yield.Value - 6.5m) / 0.1m) * 2);
+                                            }
+                                        }
+                                        else if (crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.WholecropWinterBarley)
+                                        {
+                                            if (field.SoilTypeID != null && field.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.Shallow)
+                                            {
+                                                soilTypeAdjustment = 20;
                                             }
                                         }
                                         else if (crop.CropTypeID.Value == (int)NMP.Portal.Enums.CropTypes.SpringBarley)
@@ -1074,7 +1089,7 @@ namespace NMP.Portal.Controllers
                                             MillingWheat = millingWheat,
                                             PaperCrumbleOrStrawMulch = paperCrumbleOrStrawMulch,
                                             AdjustedNMaxLimit = nMaxLimitForCropType,
-                                            MaximumLimitForNApplied =(int)Math.Round(nMaxLimitForCropType * field.CroppedArea.Value,0)
+                                            MaximumLimitForNApplied = (int)Math.Round(nMaxLimitForCropType * field.CroppedArea.Value, 0)
                                         };
                                         nMaxLimitReportResponse.Add(nMaxLimitData);
                                         decimal? totalFertiliserN = null;
@@ -1491,20 +1506,7 @@ namespace NMP.Portal.Controllers
                     }
                 }
 
-                int currentYear = DateTime.Now.Year;
-                List<int> years = new List<int>();
-
-                // Next year
-                years.Add(currentYear + 1);
-                // Current year
-                years.Add(currentYear);
-
-                // Previous 4 years
-                for (int i = 1; i <= 4; i++)
-                {
-                    years.Add(currentYear - i);
-                }
-                ViewBag.Years = years;
+                ViewBag.Years = GetReportYearsList();
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             catch (Exception ex)
@@ -1536,18 +1538,8 @@ namespace NMP.Portal.Controllers
                 }
                 if (!ModelState.IsValid)
                 {
-                    int currentYear = DateTime.Now.Year;
-                    List<int> years = new List<int>();
-                    // Next year
-                    years.Add(currentYear + 1);
-                    // Current year
-                    years.Add(currentYear);
-                    // Previous 4 years
-                    for (int i = 1; i <= 4; i++)
-                    {
-                        years.Add(currentYear - i);
-                    }
-                    ViewBag.Years = years;
+
+                    ViewBag.Years = GetReportYearsList();
                     return View(model);
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
@@ -5865,6 +5857,27 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace("Report Controller : CropAndFieldManagement() post action called");
             return View(model);
         }
+
+        private List<int> GetReportYearsList(int previousYears = 4)
+        {
+            int currentYear = DateTime.Now.Year;
+            List<int> years = new List<int>();
+
+            // Next year
+            years.Add(currentYear + 1);
+
+            // Current year
+            years.Add(currentYear);
+
+            // Previous years
+            for (int i = 1; i <= previousYears; i++)
+            {
+                years.Add(currentYear - i);
+            }
+
+            return years;
+        }
+
     }
 
 }
