@@ -1954,7 +1954,7 @@ namespace NMP.Portal.Controllers
                                             int cropYear = crop.FirstOrDefault(x => x.Year >= soilAnalysisResponse.FirstOrDefault().Year).Year;
                                             if (!string.IsNullOrWhiteSpace(s) && _soilAnalysisDataProtector.Unprotect(s) == Resource.lblAdd)
                                             {
-                                                ViewBag.SuccessMsgAdditionalContent = string.Format(Resource.lblAddSoilAnalysisSuccessMsg, cropYear);
+                                                ViewBag.SuccessMsgAdditionalContent = Resource.lblNutrientRecommendationsWillBeBasedOnTheLatest;
                                             }
                                             else
                                             {
