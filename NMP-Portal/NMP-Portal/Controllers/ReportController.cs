@@ -1542,8 +1542,9 @@ namespace NMP.Portal.Controllers
                     ViewBag.Years = GetReportYearsList();
                     return View(model);
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
-                if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.LivestockManureNFarmLimitReport)
+                model.IsCheckList = false;
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);               
+                if(model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.LivestockManureNFarmLimitReport)
                 {
                     return RedirectToAction("IsGrasslandDerogation");
                 }
@@ -1589,6 +1590,14 @@ namespace NMP.Portal.Controllers
 
                         _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                         return RedirectToAction("LivestockManureNitrogenReportChecklist", model);
+                    }
+                    else
+                    {
+                        model.IsGrasslandDerogation = null;
+                        model.TotalFarmArea = null;
+                        model.TotalAreaInNVZ = null;
+
+                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                     }
 
 
@@ -3929,7 +3938,9 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                (List<CommonResponse> livestockGroups, Error error) = await _reportService.FetchLivestockGroupList();
+                (List<NutrientsLoadingLiveStock> nutrientsLoadingLiveStockList, Error error) = await _reportService.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
+                ViewBag.LiveStockList = nutrientsLoadingLiveStockList;
+                (List<CommonResponse> livestockGroups,  error) = await _reportService.FetchLivestockGroupList();
                 if (error == null)
                 {
                     ViewBag.LivestockGroups = livestockGroups;
@@ -3964,6 +3975,8 @@ namespace NMP.Portal.Controllers
                 }
                 if (!ModelState.IsValid)
                 {
+                    (List<NutrientsLoadingLiveStock> nutrientsLoadingLiveStockList,  error) = await _reportService.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
+                    ViewBag.LiveStockList = nutrientsLoadingLiveStockList;
                     (List<CommonResponse> livestockGroups, error) = await _reportService.FetchLivestockGroupList();
                     if (error == null)
                     {
@@ -4474,12 +4487,14 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
+                (List<NutrientsLoadingLiveStock> nutrientsLoadingLiveStockList,Error error) = await _reportService.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
+                ViewBag.LiveStockList = nutrientsLoadingLiveStockList;
                 var cattle = (int)NMP.Portal.Enums.LivestockGroup.Cattle;
                 var pigs = (int)NMP.Portal.Enums.LivestockGroup.Pigs;
                 var poultry = (int)NMP.Portal.Enums.LivestockGroup.Poultry;
                 var sheep = (int)NMP.Portal.Enums.LivestockGroup.Sheep;
                 var goatsDeerOrHorses = (int)NMP.Portal.Enums.LivestockGroup.GoatsDeerOrHorses;
-                (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
+                (List<LivestockTypeResponse> livestockTypes,  error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
                 var nitrogen = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
                 var phosphorus = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
                 ViewBag.Nitrogen = nitrogen;
@@ -4547,7 +4562,9 @@ namespace NMP.Portal.Controllers
                 var pigs = (int)NMP.Portal.Enums.LivestockGroup.Pigs;
                 var poultry = (int)NMP.Portal.Enums.LivestockGroup.Poultry;
                 var sheep = (int)NMP.Portal.Enums.LivestockGroup.Sheep;
-                var goatsDeerOrHorses = (int)NMP.Portal.Enums.LivestockGroup.GoatsDeerOrHorses;
+                var goatsDeerOrHorses = (int)NMP.Portal.Enums.LivestockGroup.GoatsDeerOrHorses; 
+                (List<NutrientsLoadingLiveStock> nutrientsLoadingLiveStockList, error) = await _reportService.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
+                ViewBag.LiveStockList = nutrientsLoadingLiveStockList;
                 if (model.LivestockGroupId == null)
                 {
                     ModelState.AddModelError("LivestockGroupId", string.Format(Resource.MsgLivestockGroupNotSet, model.Year));
