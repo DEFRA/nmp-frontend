@@ -5699,4 +5699,7 @@ live</value>
   <data name="lblNutrientRecommendationsWillBeBasedOnTheLatest" xml:space="preserve">
     <value>Nutrient recommendations will be based on the latest soil analysis entered. </value>
   </data>
+  <data name="lblTypicalManagedQuestionHint" xml:space="preserve">
+    <value>If there's no typical answer, select what you did the last year that the field was grass.</value>
+  </data>
 </root>

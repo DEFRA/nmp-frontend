@@ -11728,6 +11728,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If there&apos;s no typical answer, select what you did the last year that the field was grass..
+        /// </summary>
+        public static string lblTypicalManagedQuestionHint {
+            get {
+                return ResourceManager.GetString("lblTypicalManagedQuestionHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Units.
         /// </summary>
         public static string lblUnits {
