@@ -251,7 +251,7 @@
                                     @string.Format(Resource.lblWhatIsTheAverageNumberOfPlacesForThisLivestockTypeIn, Model.LivestockGroupName, Model.Year)
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @(string.Concat(Model.AverageNumberOfPlaces, Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs ? Resource.lblPlaces : Resource.lblThousandPlaces))
+                                    @(string.Concat(Model.AverageNumberOfPlaces, Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs ? (" " + Resource.lblPlaces) : (" " + Resource.lblThousandPlaces)))
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
                                     <govuk-summary-list-row-action asp-action="NonGrazingLivestockAverageNumber" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
