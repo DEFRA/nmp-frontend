@@ -142,7 +142,7 @@
 
                 <div class="check-answers">
                     <govuk-summary-list>
-                       @*  <govuk-summary-list-row>
+                        @*  <govuk-summary-list-row>
                             <govuk-summary-list-row-key>
                                 @(string.Format(Resource.lblDoesFarmHaveDerogationFor, Model.FarmName, Model.Year))
                             </govuk-summary-list-row-key>
@@ -153,17 +153,20 @@
                                 <govuk-summary-list-row-action asp-action="IsGrasslandDerogation" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row> *@
-                        <govuk-summary-list-row>
-                            <govuk-summary-list-row-key>
-                                @string.Format(Resource.lblDidYouHaveAnyLivestockOn, Model.FarmName, Model.Year)
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                                @(Model.IsAnyLivestock == true ? Resource.lblYes : Resource.lblNo)
-                            </govuk-summary-list-row-value>
-                            <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="IsAnyLivestock" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
-                            </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row>
+                        @if (ViewBag.LiveStockList != null && ViewBag.LiveStockList.Count == 0)
+                        {
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    @string.Format(Resource.lblDidYouHaveAnyLivestockOn, Model.FarmName, Model.Year)
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @(Model.IsAnyLivestock == true ? Resource.lblYes : Resource.lblNo)
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="IsAnyLivestock" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                        }
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key>
                                 @string.Format(Resource.lblWhatTypeOfLivestockWouldYouLikeToAddFor, Model.Year)
