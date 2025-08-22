@@ -4345,6 +4345,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Field beans.
+        /// </summary>
+        public static string lblFieldBeans {
+            get {
+                return ResourceManager.GetString("lblFieldBeans", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Field details.
         /// </summary>
         public static string lblFieldDetails {
@@ -4809,6 +4818,33 @@ namespace NMP.Portal.Resources {
         public static string lblGroup {
             get {
                 return ResourceManager.GetString("lblGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group 1 vegetables.
+        /// </summary>
+        public static string lblGroup1Vegetables {
+            get {
+                return ResourceManager.GetString("lblGroup1Vegetables", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group 2 vegetables.
+        /// </summary>
+        public static string lblGroup2Vegetables {
+            get {
+                return ResourceManager.GetString("lblGroup2Vegetables", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group 3 vegetables.
+        /// </summary>
+        public static string lblGroup3Vegetables {
+            get {
+                return ResourceManager.GetString("lblGroup3Vegetables", resourceCulture);
             }
         }
         
@@ -8344,6 +8380,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Peas.
+        /// </summary>
+        public static string lblPeas {
+            get {
+                return ResourceManager.GetString("lblPeas", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to %.
         /// </summary>
         public static string lblPercentage {
@@ -8871,6 +8916,15 @@ namespace NMP.Portal.Resources {
         public static string lblPotato {
             get {
                 return ResourceManager.GetString("lblPotato", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Potatoes.
+        /// </summary>
+        public static string lblPotatoes {
+            get {
+                return ResourceManager.GetString("lblPotatoes", resourceCulture);
             }
         }
         
@@ -10531,11 +10585,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Spring barley.
+        /// </summary>
+        public static string lblSpringBarley {
+            get {
+                return ResourceManager.GetString("lblSpringBarley", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Spring sown (April to June).
         /// </summary>
         public static string lblSpringSown {
             get {
                 return ResourceManager.GetString("lblSpringSown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spring wheat.
+        /// </summary>
+        public static string lblSpringWheat {
+            get {
+                return ResourceManager.GetString("lblSpringWheat", resourceCulture);
             }
         }
         
@@ -13371,6 +13443,24 @@ namespace NMP.Portal.Resources {
         public static string lblWindspeedWhenTheMaterialIsApplied {
             get {
                 return ResourceManager.GetString("lblWindspeedWhenTheMaterialIsApplied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Winter barley.
+        /// </summary>
+        public static string lblWinterBarley {
+            get {
+                return ResourceManager.GetString("lblWinterBarley", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Winter wheat.
+        /// </summary>
+        public static string lblWinterWheat {
+            get {
+                return ResourceManager.GetString("lblWinterWheat", resourceCulture);
             }
         }
         
