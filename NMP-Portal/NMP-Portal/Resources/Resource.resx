@@ -5702,4 +5702,10 @@ live</value>
   <data name="lblTypicalManagedQuestionHint" xml:space="preserve">
     <value>If there's no typical answer, select what you did the last year that the field was grass.</value>
   </data>
+  <data name="lblThereAreNoGrazingOfLivestockManure" xml:space="preserve">
+    <value>There are no grazing of livestock manure</value>
+  </data>
+  <data name="lblThereAreNoNonGrazingOfLivestockManure" xml:space="preserve">
+    <value>There are no non-grazing of livestock manure</value>
+  </data>
 </root>
