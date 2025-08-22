@@ -34,7 +34,7 @@ namespace NMP.Portal.ViewModels
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheTotalAreaInAnNVZ))]
         public decimal? TotalAreaInNVZ { get; set; }
         public decimal? LivestockNumbers { get; set; }
-        public bool? LivestockImportExportQuestion { get; set; }
+        public bool? IsAnyLivestockImportExport { get; set; }
         public decimal? ImportsExportsOfLivestockManure { get; set; }
         public bool IsCheckList { get; set; } = false;
         public int? ImportExport { get; set; }
@@ -86,7 +86,7 @@ namespace NMP.Portal.ViewModels
         public bool? IsCancel { get; set; }
         public bool? IsImport { get; set; }
         public bool? IsComingFromPlan { get; set; } = false;
-        public bool? IsAnyLivestock { get; set; }
+        public bool? IsAnyLivestockNumber { get; set; }
         public int? LivestockGroupId { get; set; }
         public string? LivestockGroupName { get; set; } = string.Empty;
         public string? EncryptedId { get; set; } = string.Empty;
