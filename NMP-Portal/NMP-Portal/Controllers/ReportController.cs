@@ -5652,7 +5652,7 @@ namespace NMP.Portal.Controllers
                 (List<ManureType> selectedManureTypes, error) = await _organicManureService.FetchManureTypeList((int)NMP.Portal.Enums.ManureGroup.LivestockManure, model.Farm.CountryID.Value);
                 if (error == null && selectedManureTypes != null && selectedManureTypes.Count > 0)
                 {
-                    if (nutrientsLoadingManureList.Count>0)
+                    if (nutrientsLoadingManureList.Count > 0)
                     {
                         var selectedManureTypeIds = selectedManureTypes.Select(mt => mt.Id).ToList();
 

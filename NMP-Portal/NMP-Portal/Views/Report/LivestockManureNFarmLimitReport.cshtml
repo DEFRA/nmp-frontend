@@ -5,7 +5,9 @@
     ViewData["Title"] = Resource.lblLivestockManureNitrogenFarmLimit;
     int nutrientsLoadingLiveStockListGrazingCount = 0;
     int nutrientsLoadingLiveStockListNonGrazingCount = 0;
-    decimal TotalArea = (ViewBag.AreaOutsideNVZ ?? 0) + (ViewBag.AreaInsideNVZ ?? 0);
+    decimal TotalArea =
+    (ViewBag.AreaOutsideNVZ as decimal? ?? 0) +
+    (ViewBag.AreaInsideNVZ as decimal? ?? 0);
 }
 
 @section BeforeContent {
@@ -104,7 +106,7 @@
         <h3 class="govuk-heading-s">
             @if (Model.IsGrasslandDerogation != null && (Model.IsGrasslandDerogation.Value))
             {
-                @if ((ViewBag.TotalAreaReqForLivestock??0)>TotalArea)
+                @if ((ViewBag.TotalAreaReqForLivestock ?? 0) > TotalArea)
                 {
                     @Resource.lblLivestockReportContentFifteen
                 }
