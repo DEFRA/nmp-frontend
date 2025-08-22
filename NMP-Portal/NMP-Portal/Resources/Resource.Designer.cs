@@ -7461,7 +7461,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nitrogen applications to {0}.
+        ///   Looks up a localized string similar to Nitrogen(N) applications to {0}.
         /// </summary>
         public static string lblNitrogenApplicationsToCropTypeContent1 {
             get {

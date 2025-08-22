@@ -1564,6 +1564,7 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
                 model.FieldAndPlanReportOption = null;
+                model.IsCheckList = false;
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                 if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.NmaxReport)
                 {
@@ -5727,10 +5728,11 @@ namespace NMP.Portal.Controllers
             (List<NutrientsLoadingManures> nutrientsLoadingManureList, error) = await _reportService.FetchNutrientsLoadingManuresByFarmId(model.Farm.ID);
             if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingManureList.Count > 0)
             {
+                nutrientsLoadingManureList = nutrientsLoadingManureList.Where(x => x.ManureDate.Value.Year == model.Year).ToList();
                 (List<ManureType> selectedManureTypes, error) = await _organicManureService.FetchManureTypeList((int)NMP.Portal.Enums.ManureGroup.LivestockManure, model.Farm.CountryID.Value);
                 if (error == null && selectedManureTypes != null && selectedManureTypes.Count > 0)
                 {
-                    if (nutrientsLoadingManureList.Any(x => x.ManureDate.Value.Year == model.Year))
+                    if (nutrientsLoadingManureList.Count > 0)
                     {
                         var selectedManureTypeIds = selectedManureTypes.Select(mt => mt.Id).ToList();
 
@@ -5929,7 +5931,7 @@ namespace NMP.Portal.Controllers
 
             ViewBag.TotalNLoading = totalNLoading;
             ViewBag.AverageLivestockManureTotalNLoading = (int)Math.Round(totalNLoading / (nutrientsLoadingFarmDetail.LandInNVZ.Value + (nutrientsLoadingFarmDetail.LandNotNVZ ?? 0)), 0);
-            ViewBag.ComplianceOrNot = totalLivestockManureCapacity > totalNLoading ? Resource.lblCompliance : Resource.lblNonCompliance;
+            ViewBag.ComplianceOrNot = totalLivestockManureCapacity >= totalNLoading ? Resource.lblCompliance : Resource.lblNonCompliance;
 
 
             List<int> grazingLivestockList = new List<int>();
