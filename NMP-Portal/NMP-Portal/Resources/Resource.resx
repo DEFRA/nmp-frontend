@@ -4515,7 +4515,7 @@ live</value>
     <value>Nitrogen applications to {0}</value>
   </data>
   <data name="lblNitrogenApplicationsToCropTypeContent2" xml:space="preserve">
-    <value>with the N-max limit, based on field records.</value>
+    <value>with the N-max limit, based on the information you entered.</value>
   </data>
   <data name="lblNMaxLimitForCropTypeFieldsBeforeAdjustmentsPerHectare" xml:space="preserve">
     <value>N-max limit for {0} before adjustments: {1}kg per hectare.</value>

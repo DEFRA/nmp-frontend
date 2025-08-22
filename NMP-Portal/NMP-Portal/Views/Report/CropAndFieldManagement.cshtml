@@ -361,7 +361,7 @@
                                                 <caption class="govuk-table__caption govuk-table__caption--m">@string.Format(Resource.lblInorganicFertiliserAndLimeApplicationsForField, field.Name)</caption>
                                                 <thead class="govuk-table__head">
                                                     <tr class="govuk-table__row">
-                                                        <th scope="col" class="govuk-table__header">@Resource.lblDate</th>
+                                                        <th scope="col" class="govuk-table__header">@Resource.lblApplicationDate</th>
                                                         @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
                                                         {
                                                             <th scope="col" class="govuk-table__header">@Resource.lblForCutOrGrazing</th>
@@ -374,12 +374,12 @@
                                                     </tr>
                                                 </thead>
 
-                                                @foreach (var fertManure in mp.FertiliserManures)
+                                                @foreach (var fertManure in mp.FertiliserManures.OrderBy(f => f.ApplicationDate))
                                                 {
                                                     <tbody class="govuk-table__body">
                                                         <tr class="govuk-table__row">
                                                             <td class="govuk-table__cell">
-                                                                @(fertManure.ApplicationDate != null ? fertManure.ApplicationDate.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblHyphen)
+                                                                @(fertManure.ApplicationDate != null ? fertManure.ApplicationDate.Value.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblHyphen)
                                                             </td>
                                                             @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
                                                             {
