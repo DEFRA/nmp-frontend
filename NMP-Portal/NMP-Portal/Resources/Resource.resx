@@ -4512,7 +4512,7 @@ live</value>
     <value>Nitrogen applications for {0} </value>
   </data>
   <data name="lblNitrogenApplicationsToCropTypeContent1" xml:space="preserve">
-    <value>Nitrogen(N) applications to {0}</value>
+    <value>Nitrogen (N) applications to this crop indicate </value>
   </data>
   <data name="lblNitrogenApplicationsToCropTypeContent2" xml:space="preserve">
     <value>with the N-max limit, based on the information you entered.</value>
@@ -5707,5 +5707,8 @@ live</value>
   </data>
   <data name="lblThereAreNoNonGrazingOfLivestockManure" xml:space="preserve">
     <value>There are no non-grazing of livestock manure</value>
+  </data>
+  <data name="lblDoNotCompliance" xml:space="preserve">
+    <value>do not compliance</value>
   </data>
 </root>

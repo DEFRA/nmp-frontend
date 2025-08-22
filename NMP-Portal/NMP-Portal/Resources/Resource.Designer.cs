@@ -3130,6 +3130,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to do not compliance.
+        /// </summary>
+        public static string lblDoNotCompliance {
+            get {
+                return ResourceManager.GetString("lblDoNotCompliance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do not include surface water, buildings, yards and woodland, unless used for grazing..
         /// </summary>
         public static string lblDoNotIncludeSurfaceWaterBuildingYards {
@@ -7425,7 +7434,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nitrogen(N) applications to {0}.
+        ///   Looks up a localized string similar to Nitrogen (N) applications to this crop indicate .
         /// </summary>
         public static string lblNitrogenApplicationsToCropTypeContent1 {
             get {

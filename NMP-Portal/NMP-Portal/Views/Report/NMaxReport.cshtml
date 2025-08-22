@@ -158,15 +158,15 @@
                             @string.Format(Resource.lblNMaxLimitForWinterWheatFields, (!string.IsNullOrWhiteSpace(nMaxLimit.VegetableGroup)) ? nMaxLimit.CropTypeName:string.Format(Resource.LblCropTypeFields, nMaxLimit.CropTypeName))
                         </h3>
                         <p class="govuk-body">
-                            @string.Format(Resource.lblNitrogenApplicationsToCropTypeContent1, (!string.IsNullOrWhiteSpace(nMaxLimit.VegetableGroup)) ? nMaxLimit.VegetableGroup.ToLower() : nMaxLimit.CropTypeName)
+                            @Resource.lblNitrogenApplicationsToCropTypeContent1
                             <span class="strong">
                                 @if (nMaxLimit.IsComply)
                                 {
-                                    @Resource.lblComply
+                                    @Resource.lblCompliance.ToLower()
                                 }
                                 else
                                 {
-                                    @Resource.lbDoNotComply
+                                    @Resource.lblDoNotCompliance.ToLower()
                                 }
                             </span>
                             @Resource.lblNitrogenApplicationsToCropTypeContent2
