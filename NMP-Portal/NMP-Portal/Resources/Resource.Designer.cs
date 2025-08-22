@@ -7434,7 +7434,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to with the N-max limit, based on field records..
+        ///   Looks up a localized string similar to with the N-max limit, based on the information you entered..
         /// </summary>
         public static string lblNitrogenApplicationsToCropTypeContent2 {
             get {
@@ -11724,6 +11724,15 @@ namespace NMP.Portal.Resources {
         public static string lblTypeOfManure {
             get {
                 return ResourceManager.GetString("lblTypeOfManure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If there&apos;s no typical answer, select what you did the last year that the field was grass..
+        /// </summary>
+        public static string lblTypicalManagedQuestionHint {
+            get {
+                return ResourceManager.GetString("lblTypicalManagedQuestionHint", resourceCulture);
             }
         }
         

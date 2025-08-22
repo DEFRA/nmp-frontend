@@ -96,7 +96,7 @@
         <h1 class="govuk-heading-l" id="header">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</h1>
 
         <p class="govuk-body">
-            <a class="govuk-button" asp-action="IsAnyLivestock" asp-controller="Report">
+            <a class="govuk-button" asp-action="LivestockGroup" asp-controller="Report">
                 @Resource.lblAddALivestockType
             </a>
         </p>
@@ -125,10 +125,10 @@
                                 <tr class="govuk-table__row">
                                     <td class="govuk-table__cell">@cattle.LivestockTypeName</td>
                                     <td class="govuk-table__cell">@cattle.Units</td>
-                                    <td class="govuk-table__cell">@cattle.NByUnit</td>
-                                    <td class="govuk-table__cell">@cattle.TotalNProduced</td>
-                                    <td class="govuk-table__cell">@cattle.PByUnit</td>
-                                    <td class="govuk-table__cell">@cattle.TotalPProduced</td>
+                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", cattle.NByUnit, Resource.lblkg)</td>
+                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", cattle.TotalNProduced, Resource.lblkg)</td>
+                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", cattle.PByUnit, Resource.lblkg)</td>
+                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", cattle.TotalPProduced, Resource.lblkg)</td>
                                     <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                                     @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@cattle.EncryptedID">@Resource.lblChange</a></td> *@
                                 </tr>
@@ -139,9 +139,9 @@
                                 <td class="govuk-table__cell strong">@Resource.lblTotals</td>
                                 <td class="govuk-table__cell">-</td>
                                 <td class="govuk-table__cell">-</td>
-                                <td class="govuk-table__cell strong">@totalNitrogenCattle</td>
+                                <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalNitrogenCattle, Resource.lblkg)</td>
                                 <td class="govuk-table__cell">-</td>
-                                <td class="govuk-table__cell strong">@totalPhosphateCattle</td>
+                                <td class="govuk-table__cell strong"> @string.Format("{0}{1}", totalPhosphateCattle, Resource.lblkg) </td>
                                 <td class="govuk-table__cell">-</td>
                             </tr>
                         </tbody>
@@ -171,11 +171,11 @@
                                 <tr class="govuk-table__row">
                                     <td class="govuk-table__cell">@pig.LivestockTypeName</td>
                                     <td class="govuk-table__cell">@pig.Units</td>
-                                    <td class="govuk-table__cell">@pig.Occupancy</td>
-                                    <td class="govuk-table__cell">@pig.NByUnit</td>
-                                    <td class="govuk-table__cell">@pig.TotalNProduced</td>
-                                    <td class="govuk-table__cell">@pig.PByUnit</td>
-                                    <td class="govuk-table__cell">@pig.TotalPProduced</td>
+                                    <td class="govuk-table__cell">@string.Format("{0}{1}", pig.Occupancy, Resource.lblPercentage)</td>
+                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", pig.NByUnit, Resource.lblkg)</td>
+                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", pig.TotalNProduced, Resource.lblkg)</td>
+                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", pig.PByUnit, Resource.lblkg)</td>
+                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", pig.TotalPProduced, Resource.lblkg)</td>
                                     <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                                     @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@pig.EncryptedID">@Resource.lblChange</a></td>*@
                                 </tr>
@@ -187,9 +187,9 @@
                                 <td class="govuk-table__cell">-</td>
                                 <td class="govuk-table__cell">-</td>
                                 <td class="govuk-table__cell">-</td>
-                                <td class="govuk-table__cell strong">@totalNitrogenPigs</td>
+                                <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalNitrogenPigs, Resource.lblkg)</td>
                                 <td class="govuk-table__cell">-</td>
-                                <td class="govuk-table__cell strong">@totalPhosphatePigs</td>
+                                <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalPhosphatePigs, Resource.lblkg)</td>
                                 <td class="govuk-table__cell">-</td>
                             </tr>
                         </tbody>
@@ -219,11 +219,11 @@
                                 <tr class="govuk-table__row">
                                     <td class="govuk-table__cell">@poultry.LivestockTypeName</td>
                                     <td class="govuk-table__cell">@poultry.Units</td>
-                                    <td class="govuk-table__cell">@poultry.Occupancy</td>
-                                    <td class="govuk-table__cell">@poultry.NByUnit</td>
-                                    <td class="govuk-table__cell">@poultry.TotalNProduced</td>
-                                    <td class="govuk-table__cell">@poultry.PByUnit</td>
-                                    <td class="govuk-table__cell">@poultry.TotalPProduced</td>
+                                    <td class="govuk-table__cell">@string.Format("{0}{1}", poultry.Occupancy, Resource.lblPercentage)</td>
+                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", poultry.NByUnit, Resource.lblkg)</td>
+                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", poultry.TotalNProduced, Resource.lblkg)</td>
+                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", poultry.PByUnit, Resource.lblkg)</td>
+                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", poultry.TotalPProduced, Resource.lblkg)</td>
                                     <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                                     @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@poultry.EncryptedID">@Resource.lblChange</a></td>*@
                                 </tr>
@@ -235,9 +235,9 @@
                                 <td class="govuk-table__cell">-</td>
                                 <td class="govuk-table__cell">-</td>
                                 <td class="govuk-table__cell">-</td>
-                                <td class="govuk-table__cell strong">@totalNitrogenPoultry</td>
+                                <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalNitrogenPoultry, Resource.lblkg)</td>
                                 <td class="govuk-table__cell">-</td>
-                                <td class="govuk-table__cell strong">@totalPhosphatePoultry</td>
+                                <td class="govuk-table__cell strong"> @string.Format("{0}{1}", totalPhosphatePoultry, Resource.lblkg) </td>
                                 <td class="govuk-table__cell">-</td>
                             </tr>
                         </tbody>
@@ -266,10 +266,10 @@
                                 <tr class="govuk-table__row">
                                     <td class="govuk-table__cell">@sheep.LivestockTypeName</td>
                                     <td class="govuk-table__cell">@sheep.Units</td>
-                                    <td class="govuk-table__cell">@sheep.NByUnit</td>
-                                    <td class="govuk-table__cell">@sheep.TotalNProduced</td>
-                                    <td class="govuk-table__cell">@sheep.PByUnit</td>
-                                    <td class="govuk-table__cell">@sheep.TotalPProduced</td>
+                                    <td class="govuk-table__cell">@string.Format("{0}{1}", sheep.NByUnit, Resource.lblkg)</td>
+                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", sheep.TotalNProduced, Resource.lblkg)</td>
+                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", sheep.PByUnit, Resource.lblkg) </td>
+                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", sheep.TotalPProduced, Resource.lblkg)</td>
                                     <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                                     @*<td class="govuk-table__cell"><a disabled asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@sheep.EncryptedID">@Resource.lblChange</a></td>*@
                                 </tr>
@@ -280,9 +280,9 @@
                                 <td class="govuk-table__cell strong">@Resource.lblTotals</td>
                                 <td class="govuk-table__cell">-</td>
                                 <td class="govuk-table__cell">-</td>
-                                <td class="govuk-table__cell strong">@totalNitrogenSheep</td>
+                                <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalNitrogenSheep, Resource.lblkg)</td>
                                 <td class="govuk-table__cell">-</td>
-                                <td class="govuk-table__cell strong">@totalPhosphateSheep</td>
+                                <td class= "govuk-table__cell strong" > @string.Format("{0}{1}", totalPhosphateSheep, Resource.lblkg)</td>
                                 <td class="govuk-table__cell">-</td>
                             </tr>
                         </tbody>
@@ -311,10 +311,10 @@
                                 <tr class="govuk-table__row">
                                     <td class="govuk-table__cell">@goatsDeerAndHorse.LivestockTypeName</td>
                                     <td class="govuk-table__cell">@goatsDeerAndHorse.Units</td>
-                                    <td class="govuk-table__cell">@goatsDeerAndHorse.NByUnit</td>
-                                    <td class="govuk-table__cell">@goatsDeerAndHorse.TotalNProduced</td>
-                                    <td class="govuk-table__cell">@goatsDeerAndHorse.PByUnit</td>
-                                    <td class="govuk-table__cell">@goatsDeerAndHorse.TotalPProduced</td>
+                                    <td class="govuk-table__cell">@string.Format("{0}{1}", goatsDeerAndHorse.NByUnit, Resource.lblkg)</td>
+                                    <td class="govuk-table__cell">@string.Format("{0}{1}", goatsDeerAndHorse.TotalNProduced, Resource.lblkg)</td>
+                                    <td class="govuk-table__cell">@string.Format("{0}{1}", goatsDeerAndHorse.PByUnit, Resource.lblkg)</td>
+                                    <td class="govuk-table__cell">@string.Format("{0}{1}", goatsDeerAndHorse.TotalPProduced, Resource.lblkg)</td>
                                     <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                                     @*<td class="govuk-table__cell"><a disabled asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@goatsDeerAndHorse.EncryptedID">@Resource.lblChange</a></td>*@
                                 </tr>
@@ -325,9 +325,9 @@
                                 <td class="govuk-table__cell strong">@Resource.lblTotals</td>
                                 <td class="govuk-table__cell">-</td>
                                 <td class="govuk-table__cell">-</td>
-                                <td class="govuk-table__cell strong">@totalNitrogenGoatsDeerAndHorses</td>
+                                <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalNitrogenGoatsDeerAndHorses, Resource.lblkg)</td>
                                 <td class="govuk-table__cell">-</td>
-                                <td class="govuk-table__cell strong">@totalPhosphateGoatsDeerAndHorses</td>
+                                <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalPhosphateGoatsDeerAndHorses, Resource.lblkg)</td>
                                 <td class="govuk-table__cell">-</td>
                             </tr>
                         </tbody>
@@ -363,10 +363,10 @@
                                         <tr class="govuk-table__row">
                                             <td class="govuk-table__cell">@cattle.LivestockTypeName</td>
                                             <td class="govuk-table__cell">@cattle.Units</td>
-                                            <td class="govuk-table__cell">@cattle.NByUnit</td>
-                                            <td class="govuk-table__cell">@cattle.TotalNProduced</td>
-                                            <td class="govuk-table__cell">@cattle.PByUnit</td>
-                                            <td class="govuk-table__cell">@cattle.TotalPProduced</td>
+                                            <td class="govuk-table__cell">@string.Format("{0}{1}", cattle.NByUnit, Resource.lblkg)</td>
+                                            <td class="govuk-table__cell">@string.Format("{0}{1}", cattle.TotalNProduced, Resource.lblkg)</td>
+                                            <td class="govuk-table__cell">@string.Format("{0}{1}", cattle.PByUnit, Resource.lblkg)</td>
+                                            <td class="govuk-table__cell">@string.Format("{0}{1}", cattle.TotalPProduced, Resource.lblkg)</td>
                                             <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                                             @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@cattle.EncryptedID">@Resource.lblChange</a></td> *@
                                         </tr>
@@ -377,9 +377,9 @@
                                         <td class="govuk-table__cell strong">@Resource.lblTotals</td>
                                         <td class="govuk-table__cell">-</td>
                                         <td class="govuk-table__cell">-</td>
-                                        <td class="govuk-table__cell strong">@totalNitrogenCattle</td>
+                                        <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalNitrogenCattle, Resource.lblkg)</td>
                                         <td class="govuk-table__cell">-</td>
-                                        <td class="govuk-table__cell strong">@totalPhosphateCattle</td>
+                                        <td class="govuk-table__cell strong"> @string.Format("{0}{1}", totalPhosphateCattle, Resource.lblkg)</td>
                                         <td class="govuk-table__cell">-</td>
                                     </tr>
                                 </tbody>
@@ -411,11 +411,11 @@
                                         <tr class="govuk-table__row">
                                             <td class="govuk-table__cell">@pig.LivestockTypeName</td>
                                             <td class="govuk-table__cell">@pig.Units</td>
-                                            <td class="govuk-table__cell">@pig.Occupancy</td>
-                                            <td class="govuk-table__cell">@pig.NByUnit</td>
-                                            <td class="govuk-table__cell">@pig.TotalNProduced</td>
-                                            <td class="govuk-table__cell">@pig.PByUnit</td>
-                                            <td class="govuk-table__cell">@pig.TotalPProduced</td>
+                                            <td class="govuk-table__cell">@string.Format("{0}{1}", pig.Occupancy, Resource.lblPercentage)</td>
+                                            <td class="govuk-table__cell"> @string.Format("{0}{1}", pig.NByUnit, Resource.lblkg) </td>
+                                            <td class="govuk-table__cell"> @string.Format("{0}{1}", pig.TotalNProduced, Resource.lblkg) </td>
+                                            <td class="govuk-table__cell"> @string.Format("{0}{1}", pig.PByUnit, Resource.lblkg) </td>
+                                            <td class="govuk-table__cell"> @string.Format("{0}{1}", pig.TotalPProduced, Resource.lblkg) </td>
                                             <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                                             @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@pig.EncryptedID">@Resource.lblChange</a></td>*@
                                         </tr>
@@ -427,9 +427,9 @@
                                         <td class="govuk-table__cell">-</td>
                                         <td class="govuk-table__cell">-</td>
                                         <td class="govuk-table__cell">-</td>
-                                        <td class="govuk-table__cell strong">@totalNitrogenPigs</td>
+                                        <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalNitrogenPigs, Resource.lblkg)</td>
                                         <td class="govuk-table__cell">-</td>
-                                        <td class="govuk-table__cell strong">@totalPhosphatePigs</td>
+                                        <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalPhosphatePigs, Resource.lblkg) </td>
                                         <td class="govuk-table__cell">-</td>
                                     </tr>
                                 </tbody>
@@ -461,11 +461,11 @@
                                         <tr class="govuk-table__row">
                                             <td class="govuk-table__cell">@poultry.LivestockTypeName</td>
                                             <td class="govuk-table__cell">@poultry.Units</td>
-                                            <td class="govuk-table__cell">@poultry.Occupancy</td>
-                                            <td class="govuk-table__cell">@poultry.NByUnit</td>
-                                            <td class="govuk-table__cell">@poultry.TotalNProduced</td>
-                                            <td class="govuk-table__cell">@poultry.PByUnit</td>
-                                            <td class="govuk-table__cell">@poultry.TotalPProduced</td>
+                                            <td class="govuk-table__cell">@string.Format("{0}{1}", poultry.Occupancy, Resource.lblPercentage)</td>
+                                            <td class="govuk-table__cell">@string.Format("{0}{1}", poultry.NByUnit, Resource.lblkg)</td>
+                                            <td class="govuk-table__cell">@string.Format("{0}{1}", poultry.TotalNProduced, Resource.lblkg)</td>
+                                            <td class="govuk-table__cell">@string.Format("{0}{1}", poultry.PByUnit, Resource.lblkg)</td>
+                                            <td class="govuk-table__cell">@string.Format("{0}{1}", poultry.TotalPProduced, Resource.lblkg)</td>
                                             <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                                             @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@poultry.EncryptedID">@Resource.lblChange</a></td>*@
                                         </tr>
@@ -477,9 +477,9 @@
                                         <td class="govuk-table__cell">-</td>
                                         <td class="govuk-table__cell">-</td>
                                         <td class="govuk-table__cell">-</td>
-                                        <td class="govuk-table__cell strong">@totalNitrogenPoultry</td>
+                                        <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalNitrogenPoultry, Resource.lblkg)</td>
                                         <td class="govuk-table__cell">-</td>
-                                        <td class="govuk-table__cell strong">@totalPhosphatePoultry</td>
+                                        <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalPhosphatePoultry, Resource.lblkg)</td>
                                         <td class="govuk-table__cell">-</td>
                                     </tr>
                                 </tbody>
@@ -510,10 +510,10 @@
                                         <tr class="govuk-table__row">
                                             <td class="govuk-table__cell">@sheep.LivestockTypeName</td>
                                             <td class="govuk-table__cell">@sheep.Units</td>
-                                            <td class="govuk-table__cell">@sheep.NByUnit</td>
-                                            <td class="govuk-table__cell">@sheep.TotalNProduced</td>
-                                            <td class="govuk-table__cell">@sheep.PByUnit</td>
-                                            <td class="govuk-table__cell">@sheep.TotalPProduced</td>
+                                            <td class="govuk-table__cell">@string.Format("{0}{1}", sheep.NByUnit, Resource.lblkg)</td>
+                                            <td class="govuk-table__cell">@string.Format("{0}{1}", sheep.TotalNProduced, Resource.lblkg)</td>
+                                            <td class="govuk-table__cell">@string.Format("{0}{1}", sheep.PByUnit, Resource.lblkg)</td>
+                                            <td class="govuk-table__cell">@string.Format("{0}{1}", sheep.TotalPProduced, Resource.lblkg)</td>
                                             <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                                             @*<td class="govuk-table__cell"><a disabled asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@sheep.EncryptedID">@Resource.lblChange</a></td>*@
                                         </tr>
@@ -524,9 +524,9 @@
                                         <td class="govuk-table__cell strong">@Resource.lblTotals</td>
                                         <td class="govuk-table__cell">-</td>
                                         <td class="govuk-table__cell">-</td>
-                                        <td class="govuk-table__cell strong">@totalNitrogenSheep</td>
+                                        <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalNitrogenSheep, Resource.lblkg)</td>
                                         <td class="govuk-table__cell">-</td>
-                                        <td class="govuk-table__cell strong">@totalPhosphateSheep</td>
+                                        <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalPhosphateSheep, Resource.lblkg)</td>
                                         <td class="govuk-table__cell">-</td>
                                     </tr>
                                 </tbody>
@@ -557,10 +557,10 @@
                                         <tr class="govuk-table__row">
                                             <td class="govuk-table__cell">@goatsDeerAndHorse.LivestockTypeName</td>
                                             <td class="govuk-table__cell">@goatsDeerAndHorse.Units</td>
-                                            <td class="govuk-table__cell">@goatsDeerAndHorse.NByUnit</td>
-                                            <td class="govuk-table__cell">@goatsDeerAndHorse.TotalNProduced</td>
-                                            <td class="govuk-table__cell">@goatsDeerAndHorse.PByUnit</td>
-                                            <td class="govuk-table__cell">@goatsDeerAndHorse.TotalPProduced</td>
+                                            <td class="govuk-table__cell">@string.Format("{0}{1}", goatsDeerAndHorse.NByUnit, Resource.lblkg)</td>
+                                            <td class="govuk-table__cell">@string.Format("{0}{1}", goatsDeerAndHorse.TotalNProduced, Resource.lblkg)</td>
+                                            <td class="govuk-table__cell">@string.Format("{0}{1}", goatsDeerAndHorse.PByUnit, Resource.lblkg)</td>
+                                            <td class="govuk-table__cell">@string.Format("{0}{1}", goatsDeerAndHorse.TotalPProduced, Resource.lblkg)</td>
                                             <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                                             @*<td class="govuk-table__cell"><a disabled asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@goatsDeerAndHorse.EncryptedID">@Resource.lblChange</a></td>*@
                                         </tr>
@@ -571,9 +571,9 @@
                                         <td class="govuk-table__cell strong">@Resource.lblTotals</td>
                                         <td class="govuk-table__cell">-</td>
                                         <td class="govuk-table__cell">-</td>
-                                        <td class="govuk-table__cell strong">@totalNitrogenGoatsDeerAndHorses</td>
+                                        <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalNitrogenGoatsDeerAndHorses, Resource.lblkg)</td>
                                         <td class="govuk-table__cell">-</td>
-                                        <td class="govuk-table__cell strong">@totalPhosphateGoatsDeerAndHorses</td>
+                                        <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalPhosphateGoatsDeerAndHorses, Resource.lblkg)</td>
                                         <td class="govuk-table__cell">-</td>
                                     </tr>
                                 </tbody>
