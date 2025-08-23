@@ -5699,6 +5699,36 @@ live</value>
   <data name="lblNutrientRecommendationsWillBeBasedOnTheLatest" xml:space="preserve">
     <value>Nutrient recommendations will be based on the latest soil analysis entered. </value>
   </data>
+  <data name="lblWinterWheat" xml:space="preserve">
+    <value>Winter wheat</value>
+  </data>
+  <data name="lblSpringWheat" xml:space="preserve">
+    <value>Spring wheat</value>
+  </data>
+  <data name="lblWinterBarley" xml:space="preserve">
+    <value>Winter barley</value>
+  </data>
+  <data name="lblSpringBarley" xml:space="preserve">
+    <value>Spring barley</value>
+  </data>
+  <data name="lblPotatoes" xml:space="preserve">
+    <value>Potatoes</value>
+  </data>
+  <data name="lblFieldBeans" xml:space="preserve">
+    <value>Field beans</value>
+  </data>
+  <data name="lblPeas" xml:space="preserve">
+    <value>Peas</value>
+  </data>
+  <data name="lblGroup1Vegetables" xml:space="preserve">
+    <value>Group 1 vegetables</value>
+  </data>
+  <data name="lblGroup2Vegetables" xml:space="preserve">
+    <value>Group 2 vegetables</value>
+  </data>
+  <data name="lblGroup3Vegetables" xml:space="preserve">
+    <value>Group 3 vegetables</value>
+  </data>
   <data name="lblTypicalManagedQuestionHint" xml:space="preserve">
     <value>If there's no typical answer, select what you did the last year that the field was grass.</value>
   </data>
