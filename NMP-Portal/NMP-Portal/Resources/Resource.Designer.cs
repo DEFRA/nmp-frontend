@@ -3130,6 +3130,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to do not compliance.
+        /// </summary>
+        public static string lblDoNotCompliance {
+            get {
+                return ResourceManager.GetString("lblDoNotCompliance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do not include surface water, buildings, yards and woodland, unless used for grazing..
         /// </summary>
         public static string lblDoNotIncludeSurfaceWaterBuildingYards {
@@ -7461,7 +7470,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nitrogen(N) applications to {0}.
+        ///   Looks up a localized string similar to Nitrogen (N) applications to this crop indicate .
         /// </summary>
         public static string lblNitrogenApplicationsToCropTypeContent1 {
             get {
@@ -10972,11 +10981,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are no grazing of livestock manure.
+        /// </summary>
+        public static string lblThereAreNoGrazingOfLivestockManure {
+            get {
+                return ResourceManager.GetString("lblThereAreNoGrazingOfLivestockManure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There are no imports of livestock manure.
         /// </summary>
         public static string lblThereAreNoImportsOfLivestockManure {
             get {
                 return ResourceManager.GetString("lblThereAreNoImportsOfLivestockManure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are no non-grazing of livestock manure.
+        /// </summary>
+        public static string lblThereAreNoNonGrazingOfLivestockManure {
+            get {
+                return ResourceManager.GetString("lblThereAreNoNonGrazingOfLivestockManure", resourceCulture);
             }
         }
         

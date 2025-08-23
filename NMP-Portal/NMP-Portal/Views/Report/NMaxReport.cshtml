@@ -1,4 +1,4 @@
-﻿@using NMP.Portal.Resources
+@using NMP.Portal.Resources
 @using System.Globalization
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
@@ -165,14 +165,17 @@
                         </h3>
                         <p class="govuk-body">
                             @string.Format(Resource.lblNitrogenApplicationsToCropTypeContent1, (!string.IsNullOrWhiteSpace(groupName)) ? groupName.ToLower() : group.First().CropTypeName)
+
+                           <!-- @Resource.lblNitrogenApplicationsToCropTypeContent1 -->
+
                             <span class="strong">
                                 @if (group.First().IsComply)
                                 {
-                                    @Resource.lblComply
+                                    @Resource.lblCompliance.ToLower()
                                 }
                                 else
                                 {
-                                    @Resource.lbDoNotComply
+                                    @Resource.lblDoNotCompliance.ToLower()
                                 }
                             </span>
                             @Resource.lblNitrogenApplicationsToCropTypeContent2
