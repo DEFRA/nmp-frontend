@@ -15,16 +15,16 @@
     {
         importExport = Enum.GetName(typeof(NMP.Portal.Enums.ImportExport), Model.ImportExport);
     }
-    var livestockImportExportQuestion = "";
-    @if (Model.LivestockImportExportQuestion != null)
+    var IsAnyLivestockImportExport = "";
+    @if (Model.IsAnyLivestockImportExport != null)
     {
-        switch (Model.LivestockImportExportQuestion)
+        switch (Model.IsAnyLivestockImportExport)
         {
             case true:
-                livestockImportExportQuestion = Resource.lblYes;
+                IsAnyLivestockImportExport = Resource.lblYes;
                 break;
             case false:
-                livestockImportExportQuestion = Resource.lblNo;
+                IsAnyLivestockImportExport = Resource.lblNo;
                 break;
         }
     }
@@ -76,7 +76,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockNumbers"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckList" value="@Model.IsCheckList"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsGrasslandDerogation" value="@Model.IsGrasslandDerogation"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockImportExportQuestion" value="@Model.LivestockImportExportQuestion"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestockImportExport" value="@Model.IsAnyLivestockImportExport"></govuk-input>
             <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ImportExport"></govuk-input>
             <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockQuantity"></govuk-input>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockImportExportDate"></govuk-date-input>
@@ -127,7 +127,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherMaterialName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassPercentage"></govuk-input>
 
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestock"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestockNumber"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockTypeId"></govuk-input>
@@ -187,14 +187,14 @@
                         @if (!Model.IsManageImportExport && string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
                         {
                             <govuk-summary-list-row>
-                                <govuk-summary-list-row-key class=@((!Model.LivestockImportExportQuestion.HasValue) ? "govuk-error-message" : "")>
+                                <govuk-summary-list-row-key class=@((!Model.IsAnyLivestockImportExport.HasValue) ? "govuk-error-message" : "")>
                                     @string.Format(Resource.lblDidYouHaveAnyImportsAndExports, Model.FarmName, Model.Year)
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @livestockImportExportQuestion
+                                    @IsAnyLivestockImportExport
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="LivestockImportExportQuestion" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
+                                    <govuk-summary-list-row-action asp-action="IsAnyLivestockImportExport" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
                         }
