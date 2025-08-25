@@ -1591,6 +1591,18 @@ namespace NMP.Portal.Controllers
                         return RedirectToAction("Year");
                     }
                 }
+                if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.ExistingManureStorageCapacityReport)
+                {
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                    //if ((model.IsComingFromPlan.HasValue && model.IsComingFromPlan.Value))
+                    //{
+                    //    return RedirectToAction("IsGrasslandDerogation");
+                    //}
+                    //else
+                    //{
+                        return RedirectToAction("Year");
+                    //}
+                }
                 return View(model);
             }
             catch (Exception ex)
@@ -1684,6 +1696,10 @@ namespace NMP.Portal.Controllers
                 if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.LivestockManureNFarmLimitReport)
                 {
                     return RedirectToAction("IsGrasslandDerogation");
+                }
+                if(model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.ExistingManureStorageCapacityReport)
+                {
+                    return RedirectToAction("OrganicMaterialStorageNotAvailable");
                 }
                 return RedirectToAction("ExportFieldsOrCropType");
             }
@@ -6094,6 +6110,33 @@ namespace NMP.Portal.Controllers
 
             return years;
         }
+
+        [HttpGet]
+        public async Task<IActionResult> OrganicMaterialStorageNotAvailable()
+        {
+            _logger.LogTrace("Report Controller : OrganicMaterialStorageNotAvailable() action called");
+            ReportViewModel model = new ReportViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in OrganicMaterialStorageNotAvailable() action : {ex.Message}, {ex.StackTrace}");
+
+                TempData["ErrorOnYear"] = ex.Message;
+                return RedirectToAction("Year");
+            }
+            return View(model);
+        }
+        
 
         private static Dictionary<string, int[]> GetNmaxReportCropGroups()
         {
