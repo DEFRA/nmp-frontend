@@ -1897,6 +1897,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Capacity volume.
+        /// </summary>
+        public static string lblCapacityVolume {
+            get {
+                return ResourceManager.GetString("lblCapacityVolume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cattle.
         /// </summary>
         public static string lblCattle {
@@ -2064,6 +2073,15 @@ namespace NMP.Portal.Resources {
         public static string lblChooseTheOptionThatAppliesToYour {
             get {
                 return ResourceManager.GetString("lblChooseTheOptionThatAppliesToYour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Circumference.
+        /// </summary>
+        public static string lblCircumference {
+            get {
+                return ResourceManager.GetString("lblCircumference", resourceCulture);
             }
         }
         
@@ -3013,6 +3031,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Depth.
+        /// </summary>
+        public static string lblDepth {
+            get {
+                return ResourceManager.GetString("lblDepth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to derogated.
         /// </summary>
         public static string lblDerogated {
@@ -3072,6 +3099,15 @@ namespace NMP.Portal.Resources {
         public static string lblDidYouHaveAnyLivestockOn {
             get {
                 return ResourceManager.GetString("lblDidYouHaveAnyLivestockOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dirty water.
+        /// </summary>
+        public static string lblDirtyWater {
+            get {
+                return ResourceManager.GetString("lblDirtyWater", resourceCulture);
             }
         }
         
@@ -6237,6 +6273,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Length.
+        /// </summary>
+        public static string lblLength {
+            get {
+                return ResourceManager.GetString("lblLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Length of time you have these animals on the farm..
         /// </summary>
         public static string lblLengthOfTimeYouHaveTheseAnimalsOnTheFarm {
@@ -7133,6 +7178,24 @@ namespace NMP.Portal.Resources {
         public static string lblMeterCubePerHectare {
             get {
                 return ResourceManager.GetString("lblMeterCubePerHectare", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to metres.
+        /// </summary>
+        public static string lblMetres {
+            get {
+                return ResourceManager.GetString("lblMetres", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to metres cubed.
+        /// </summary>
+        public static string lblMetresCubed {
+            get {
+                return ResourceManager.GetString("lblMetresCubed", resourceCulture);
             }
         }
         
@@ -8304,6 +8367,15 @@ namespace NMP.Portal.Resources {
         public static string lblOrganicMaterialImportsAndExportsYear {
             get {
                 return ResourceManager.GetString("lblOrganicMaterialImportsAndExportsYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Organic material storage.
+        /// </summary>
+        public static string lblOrganicMaterialStorage {
+            get {
+                return ResourceManager.GetString("lblOrganicMaterialStorage", resourceCulture);
             }
         }
         
@@ -10000,6 +10072,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Slurry storage.
+        /// </summary>
+        public static string lblSlurryStorage {
+            get {
+                return ResourceManager.GetString("lblSlurryStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SNS.
         /// </summary>
         public static string lblSNS {
@@ -10455,6 +10536,15 @@ namespace NMP.Portal.Resources {
         public static string lblSolid {
             get {
                 return ResourceManager.GetString("lblSolid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Solid manure storage.
+        /// </summary>
+        public static string lblSolidManureStorage {
+            get {
+                return ResourceManager.GetString("lblSolidManureStorage", resourceCulture);
             }
         }
         
@@ -13416,6 +13506,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhoAreYouImportingThisLivestockManureFrom {
             get {
                 return ResourceManager.GetString("lblWhoAreYouImportingThisLivestockManureFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Width.
+        /// </summary>
+        public static string lblWidth {
+            get {
+                return ResourceManager.GetString("lblWidth", resourceCulture);
             }
         }
         

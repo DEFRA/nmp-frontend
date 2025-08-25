@@ -5741,4 +5741,37 @@ live</value>
   <data name="lblDoNotCompliance" xml:space="preserve">
     <value>do not compliance</value>
   </data>
+  <data name="lblOrganicMaterialStorage" xml:space="preserve">
+    <value>Organic material storage</value>
+  </data>
+  <data name="lblMetres" xml:space="preserve">
+    <value>metres</value>
+  </data>
+  <data name="lblLength" xml:space="preserve">
+    <value>Length</value>
+  </data>
+  <data name="lblWidth" xml:space="preserve">
+    <value>Width</value>
+  </data>
+  <data name="lblDepth" xml:space="preserve">
+    <value>Depth</value>
+  </data>
+  <data name="lblCircumference" xml:space="preserve">
+    <value>Circumference</value>
+  </data>
+  <data name="lblCapacityVolume" xml:space="preserve">
+    <value>Capacity volume</value>
+  </data>
+  <data name="lblMetresCubed" xml:space="preserve">
+    <value>metres cubed</value>
+  </data>
+  <data name="lblSlurryStorage" xml:space="preserve">
+    <value>Slurry storage</value>
+  </data>
+  <data name="lblDirtyWater" xml:space="preserve">
+    <value>Dirty water</value>
+  </data>
+  <data name="lblSolidManureStorage" xml:space="preserve">
+    <value>Solid manure storage</value>
+  </data>
 </root>

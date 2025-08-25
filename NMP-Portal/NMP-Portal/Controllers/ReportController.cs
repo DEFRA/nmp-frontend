@@ -168,7 +168,7 @@ namespace NMP.Portal.Controllers
                                         .Any(link => link.CropTypeId == crop.CropTypeID))
                                         .DistinctBy(x => x.CropTypeID).ToList();
 
-                                        
+
                                         if (cropTypeList.Count > 0)
                                         {
                                             //grouping of same type crops into one crop for nmax reporting
@@ -770,7 +770,7 @@ namespace NMP.Portal.Controllers
 
                                 var dbIds = cropTypeList.Select(c => c.CropTypeID).ToHashSet();
                                 // Get your dictionary of groups
-                                var cropGroups = GetNmaxReportCropGroups(); 
+                                var cropGroups = GetNmaxReportCropGroups();
                                 // Build reverse lookup: cropId -> groupIds[]
                                 var idToGroup = cropGroups
                                     .SelectMany(g => g.Value, (g, id) => new { id, groupIds = g.Value })
@@ -804,7 +804,7 @@ namespace NMP.Portal.Controllers
 
                             }
                         }
-                        
+
                     }
 
 
@@ -1930,12 +1930,12 @@ namespace NMP.Portal.Controllers
                         ViewBag.IsAnyLivestockImportExportFromFarmDetail = true;
                     }
                 }
-                if (!model.IsAnyLivestockNumber.HasValue&& nutrientsLoadingLiveStockList.Count==0&&
-                    ViewBag.IsAnyLivestockNumberFromFarmDetail==null)
+                if (!model.IsAnyLivestockNumber.HasValue && nutrientsLoadingLiveStockList.Count == 0 &&
+                    ViewBag.IsAnyLivestockNumberFromFarmDetail == null)
                 {
                     ModelState.AddModelError(string.Empty, string.Format(Resource.MsgLivestockNumbersForYearMustBeCompleted, model.Year));
                 }
-                if (!model.IsAnyLivestockImportExport.HasValue&&nutrientsLoadingManuresList.Count==0&&
+                if (!model.IsAnyLivestockImportExport.HasValue && nutrientsLoadingManuresList.Count == 0 &&
                     ViewBag.IsAnyLivestockImportExportFromFarmDetail == null)
                 {
                     ModelState.AddModelError(string.Empty, string.Format(Resource.MsgImportsAndExportsOfManureForYearMustBeCompleted, model.Year));
@@ -5770,11 +5770,11 @@ namespace NMP.Portal.Controllers
             ViewBag.AreaOutsideNVZ = nutrientsLoadingFarmDetail.LandNotNVZ;
             (List<NutrientsLoadingLiveStock> nutrientsLoadingLiveStockList, error) = await _reportService.FetchLivestockByFarmIdAndYear(model.Farm.ID, model.Year.Value);
             if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingLiveStockList.Count > 0)
-             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
-            {
-                TempData["ErrorOnLivestockManureNitrogenReportChecklist"] = error.Message;
-                return RedirectToAction("LivestockManureNitrogenReportChecklist");
-            }
+                if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+                {
+                    TempData["ErrorOnLivestockManureNitrogenReportChecklist"] = error.Message;
+                    return RedirectToAction("LivestockManureNitrogenReportChecklist");
+                }
             ViewBag.LivestockManureTotalNCapacityForNVZ = nutrientsLoadingFarmDetail.LandInNVZ * 170;
             ViewBag.LivestockManureTotalNCapacityForNotInNVZ = nutrientsLoadingFarmDetail.LandNotNVZ * 250;
             ViewBag.LivestockManureTotalNCapacity = (int)Math.Round(((nutrientsLoadingFarmDetail.LandInNVZ.Value * 170) + ((nutrientsLoadingFarmDetail.LandNotNVZ ?? 0) * 250)), 0);
@@ -6129,6 +6129,115 @@ namespace NMP.Portal.Controllers
                     return group.Key;
             }
             return string.Empty; // not in any group
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ManageStorageCapacity(string q, string y)
+        {
+            _logger.LogTrace($"Report Controller : ManageStorageCapacity() action called");
+            ReportViewModel model = new ReportViewModel();
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
+                (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(decryptedFarmId);
+                if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
+                {
+                    model.FarmName = farm.Name;
+                    model.FarmId = decryptedFarmId;
+                    model.EncryptedFarmId = q;
+                    if (!string.IsNullOrWhiteSpace(y))
+                    {
+                        model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(y));
+                        model.EncryptedHarvestYear = y;
+                    }
+                    List<HarvestYear> harvestYearList = new List<HarvestYear>();
+                    (List<StoreCapacity> storeCapacityList, error) = await _reportService.FetchStoreCapacityByFarmIdAndYear(decryptedFarmId, model.Year ?? 0);
+
+                    if (string.IsNullOrWhiteSpace(error.Message))
+                    {
+                        if (storeCapacityList != null && storeCapacityList.Count > 0)
+                        {
+                            (List<CommonResponse> materialStateList, error) = await _reportService.FetchMaterialStates();
+                            if (materialStateList != null && materialStateList.Count > 0)
+                            {
+                                int? dirtyWaterStorageId = materialStateList.FirstOrDefault(x => x.Id == (int)NMP.Portal.Enums.MaterialState.DirtyWaterStorage).Id;
+
+                                int? slurryStorageId = materialStateList.FirstOrDefault(x => x.Id == (int)NMP.Portal.Enums.MaterialState.SlurryStorage).Id;
+
+                                int? solidManureStorageId = materialStateList.FirstOrDefault(x => x.Id == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage).Id;
+
+
+                                (List<CommonResponse> dirtyWaterStorageList, error) = await _reportService.FetchMaterialStateById(dirtyWaterStorageId ?? 0);
+                                (List<CommonResponse> slurryStorageList, error) = await _reportService.FetchMaterialStateById(slurryStorageId ?? 0);
+                                (List<CommonResponse> solidManureStorageList, error) = await _reportService.FetchMaterialStateById(solidManureStorageId ?? 0);
+
+                                var dirtyWaterStorageDict = dirtyWaterStorageList.ToDictionary(x => x.Id);
+                                var slurryStorageDict = slurryStorageList.ToDictionary(x => x.Id);
+                                var solidManureStorageDict = solidManureStorageList.ToDictionary(x => x.Id);
+
+
+                                ViewBag.DirtyWaterList = storeCapacityList
+                                    .Where(x => x.Year == model.Year && dirtyWaterStorageDict.ContainsKey(x.MaterialStateID ?? 0))
+                                    .Select(x => new
+                                    {
+                                        MaterialStateName = dirtyWaterStorageDict[x.MaterialStateID ?? 0].Name,
+                                        x.StoreName,
+                                        x.Length,
+                                        x.Width,
+                                        x.Depth,
+                                        x.Diameter,
+                                        x.CapacityWeight,
+                                        x.CapacityVolume
+                                    })
+                                    .ToList();
+
+                                ViewBag.SlurryStorageList = storeCapacityList
+                                    .Where(x => x.Year == model.Year && slurryStorageDict.ContainsKey(x.MaterialStateID ?? 0))
+                                    .Select(x => new
+                                    {
+                                        MaterialStateName = slurryStorageDict[x.MaterialStateID ?? 0].Name,
+                                        x.Length,
+                                        x.Width,
+                                        x.Depth,
+                                        x.Diameter,
+                                        x.CapacityWeight
+                                    })
+                                    .ToList();
+
+                                ViewBag.SolidManureStorageList = storeCapacityList
+                                    .Where(x => x.Year == model.Year && solidManureStorageDict.ContainsKey(x.MaterialStateID ?? 0))
+                                    .Select(x => new
+                                    {
+                                        MaterialStateName = solidManureStorageDict[x.MaterialStateID ?? 0].Name,
+                                        x.Length,
+                                        x.Width,
+                                        x.Depth,
+                                        x.Diameter,
+                                        x.CapacityWeight
+                                    })
+                                    .ToList();
+
+                            }
+
+                        }
+                    }
+                }
+                else
+                {
+                    TempData["Error"] = error.Message;
+                    return RedirectToAction("FarmSummary", "Farm", new { q = q });
+                }
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+            }
+            if (!string.IsNullOrWhiteSpace(y))
+            {
+                model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(y));
+                model.EncryptedHarvestYear = y;
+            }
+
+            model.IsManageLivestock = true;
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+            return View(model);
         }
 
     }
