@@ -683,7 +683,7 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchNutrientsLoadingLivestockByFarmIdAndYearAsyncAPI, farmId, year));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchStoreCapacityAsyncAPI, farmId, year));
 
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -728,7 +728,7 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(APIURLHelper.FetchLivestockGroupListAsyncAPI);
+                var response = await httpClient.GetAsync(APIURLHelper.FetchMaterialStatesListAsyncAPI);
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
@@ -814,7 +814,7 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchLivestockGroupListAsyncAPI,id));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMaterialStatesListByIDAsyncAPI, id));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
