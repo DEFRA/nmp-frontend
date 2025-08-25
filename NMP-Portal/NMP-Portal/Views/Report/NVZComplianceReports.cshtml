@@ -5,6 +5,7 @@
 
     var nmaxReport = (int)NMP.Portal.Enums.NVZReportOption.NmaxReport;
     var livestockManureNFarmLimitReport = (int)NMP.Portal.Enums.NVZReportOption.LivestockManureNFarmLimitReport;
+    var existingManureStorageCapacityReport = (int)NMP.Portal.Enums.NVZReportOption.ExistingManureStorageCapacityReport;
 }
 
 @section BeforeContent {
@@ -149,6 +150,12 @@
                             @Resource.lblLivestockManureNitrogenFarmLimit
                             <govuk-radios-item-hint>
                                 @Resource.lblDemonstrateComplianceWithTheLivestockManure
+                            </govuk-radios-item-hint>
+                        </govuk-radios-item>
+                        <govuk-radios-item value="@existingManureStorageCapacityReport">
+                            @Resource.lblExistingManureStorageCapacityReport
+                            <govuk-radios-item-hint>
+                                @Resource.lblDemonstrateComplianceWithRulesForOrganicMaterialStorage
                             </govuk-radios-item-hint>
                         </govuk-radios-item>
                     </govuk-radios-fieldset>
