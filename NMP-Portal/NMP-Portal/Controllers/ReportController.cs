@@ -2202,7 +2202,7 @@ namespace NMP.Portal.Controllers
                         TotalFarmed = model.TotalFarmArea,
                         ManureTotal = null,
                         Derogation = model.IsGrasslandDerogation,
-                        GrassPercentage = null,
+                        GrassPercentage = model.GrassPercentage,
                         ContingencyPlan = false,
                         IsAnyLivestockImportExport = nutrientsLoadingManuresList.Count > 0 ? true : false,
                         IsAnyLivestockNumber = (!model.IsAnyLivestockNumber.HasValue) ?
@@ -4135,7 +4135,7 @@ namespace NMP.Portal.Controllers
                         TotalFarmed = model.TotalFarmArea,
                         ManureTotal = null,
                         Derogation = model.IsGrasslandDerogation,
-                        GrassPercentage = null,
+                        GrassPercentage = model.GrassPercentage,
                         ContingencyPlan = false,
                         IsAnyLivestockImportExport = (!model.IsAnyLivestockImportExport.HasValue) ?
                     null : (nutrientsLoadingManuresList.Count > 0 ? true : false),
