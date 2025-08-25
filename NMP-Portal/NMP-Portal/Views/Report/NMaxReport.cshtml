@@ -188,7 +188,8 @@
                                 <tr class="govuk-table__row">
                                     <th scope="col" class="govuk-table__header">@Resource.lblField</th>
                                     <th scope="col" class="govuk-table__header">@Resource.lblCropArea</th>
-                                    @if (!string.IsNullOrWhiteSpace(groupName))
+                                    @if (groupName.Equals(Resource.lblGroup1Vegetables)
+                                                            || groupName.Equals(Resource.lblGroup2Vegetables) || groupName.Equals(Resource.lblGroup3Vegetables))
                                     {
                                         <th scope="col" class="govuk-table__header">@Resource.lblCropType</th>
                                     }
@@ -197,7 +198,8 @@
                                         <br><span class="nonbold">@Resource.lblPerHa</span>
                                     </th>
 
-                                    @if (group.First().CropTypeName != Resource.lblGrass && string.IsNullOrWhiteSpace(groupName))
+                                    @if (group.First().CropTypeName != Resource.lblGrass && !(groupName.Equals(Resource.lblGroup1Vegetables)
+                                                            || groupName.Equals(Resource.lblGroup2Vegetables) || groupName.Equals(Resource.lblGroup3Vegetables)))
                                     {
                                         <th scope="col" class="govuk-table__header">
                                             @Resource.lblSoilTypeAdjustment
@@ -232,15 +234,15 @@
                                         <tr class="govuk-table__row">
                                             <td class="govuk-table__cell">@nMaxLimitReportResponse.FieldName</td>
                                             <td class="govuk-table__cell">@string.Format("{0}{1}", nMaxLimitReportResponse.CropArea, Resource.lblHectareForReport)</td>
-                                            @if (!string.IsNullOrWhiteSpace(groupName))
+                                            @if (groupName.Equals(Resource.lblGroup1Vegetables)
+                                                                    || groupName.Equals(Resource.lblGroup2Vegetables) || groupName.Equals(Resource.lblGroup3Vegetables))
                                             {
                                                 <td class="govuk-table__cell">@nMaxLimitReportResponse.CropTypeName</td>
                                                 <td class="govuk-table__cell">
                                                     @(nMaxLimitReportResponse.CropYield != null ? string.Format("{0}{1}", nMaxLimitReportResponse.CropYield, Resource.lblTonnesForReport) : Resource.lblHyphen)
                                                 </td>
                                             }
-                                            else
-                                            @if (group.First().CropTypeName != Resource.lblGrass)
+                                            else if (group.First().CropTypeName != Resource.lblGrass)
                                             {
                                                 <td class="govuk-table__cell">
                                                     @(nMaxLimitReportResponse.CropYield != null ? string.Format("{0}{1}", nMaxLimitReportResponse.CropYield, Resource.lblTonnesForReport) : Resource.lblHyphen)
@@ -269,12 +271,12 @@
                                     <th scope="col" class="govuk-table__header">
                                         @(reports.Where(r => r.NMaxLimitReportResponse != null).SelectMany(r => r.NMaxLimitReportResponse).Sum(x => x.CropArea) > 0 ? string.Format("{0}{1}", reports.Where(r => r.NMaxLimitReportResponse != null).SelectMany(r => r.NMaxLimitReportResponse).Sum(x => x.CropArea), Resource.lblHectareForReport) : Resource.lblHyphen)
                                     </th>
-                                    @if (!string.IsNullOrWhiteSpace(groupName))
+                                    @if (groupName.Equals(Resource.lblGroup1Vegetables)
+                                                            || groupName.Equals(Resource.lblGroup2Vegetables) || groupName.Equals(Resource.lblGroup3Vegetables))
                                     {
                                         <th scope="col" class="nonbold govuk-table__header">@Resource.lblHyphen</th>
                                     }
-                                    else
-                                    @if (reports.Any(r => r.CropTypeName != Resource.lblGrass))
+                                    else if (reports.Any(r => r.CropTypeName != Resource.lblGrass))
                                     {
                                         <th scope="col" class="nonbold govuk-table__header">@Resource.lblHyphen</th>
                                         <th scope="col" class="govuk-table__header">
