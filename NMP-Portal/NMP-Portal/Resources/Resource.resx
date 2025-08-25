@@ -5699,6 +5699,24 @@ live</value>
   <data name="lblNutrientRecommendationsWillBeBasedOnTheLatest" xml:space="preserve">
     <value>Nutrient recommendations will be based on the latest soil analysis entered. </value>
   </data>
+  <data name="lblExistingManureStorageCapacityReport" xml:space="preserve">
+    <value>Existing manure storage capacity report</value>
+  </data>
+  <data name="lblDemonstrateComplianceWithRulesForOrganicMaterialStorage" xml:space="preserve">
+    <value>Demonstrate compliance with rules for organic material storage.</value>
+  </data>
+  <data name="lblWhichYearWouldYouLikeToCreateExistingManureReport" xml:space="preserve">
+    <value>Which year would you like to create an Existing manure storage capacity report for?</value>
+  </data>
+  <data name="lblNotEnteredStorage" xml:space="preserve">
+    <value>Not entered storage</value>
+  </data>
+  <data name="lblYouHaveNotEnteredAnyOrganicMaterialStorageFor" xml:space="preserve">
+    <value>You have not entered any organic material storage for {0}</value>
+  </data>
+  <data name="lblAddOrganicMaterialStorage" xml:space="preserve">
+    <value>Add organic material storage</value>
+  </data>
   <data name="lblWinterWheat" xml:space="preserve">
     <value>Winter wheat</value>
   </data>
