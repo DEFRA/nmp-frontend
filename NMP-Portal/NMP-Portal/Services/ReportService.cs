@@ -735,7 +735,7 @@ namespace NMP.Portal.Services
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        var materialStates = responseWrapper.Data.LivestockGroups.ToObject<List<CommonResponse>>();
+                        var materialStates = responseWrapper.Data.records.ToObject<List<CommonResponse>>();
                         materialStatesList.AddRange(materialStates);
                     }
                 }
@@ -821,7 +821,7 @@ namespace NMP.Portal.Services
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                         materialState = responseWrapper.Data.LivestockGroups.ToObject<CommonResponse>();
+                         materialState = responseWrapper.Data.records.ToObject<CommonResponse>();
                         //materialStatesList.AddRange(materialStates);
                     }
                 }

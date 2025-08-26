@@ -7020,6 +7020,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manage store capacity.
+        /// </summary>
+        public static string lblManageStoreCapacity {
+            get {
+                return ResourceManager.GetString("lblManageStoreCapacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to added function: MANNER-NPK stand-alone module.
         /// </summary>
         public static string lblMannerNPKStandAloneFrontEnd {

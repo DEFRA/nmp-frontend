@@ -5792,4 +5792,7 @@ live</value>
   <data name="lblSolidManureStorage" xml:space="preserve">
     <value>Solid manure storage</value>
   </data>
+  <data name="lblManageStoreCapacity" xml:space="preserve">
+    <value>Manage store capacity</value>
+  </data>
 </root>

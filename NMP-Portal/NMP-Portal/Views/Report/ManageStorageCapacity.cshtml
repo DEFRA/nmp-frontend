@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblManageLivestock;
+    ViewData["Title"] = Resource.lblManageStoreCapacity;
     var dataLists = new List<(string Name, dynamic Data)>
     {
         ("DirtyWater", ViewBag.DirtyWaterList),
@@ -10,11 +10,12 @@
     };
 
     var nonEmptyLists = dataLists.Where(x => x.Data != null && x.Data.Count > 0).ToList();
-
+    var backAction = ((Model.IsComingFromPlan.HasValue && !Model.IsComingFromPlan.Value) ? "Year" :
+       "NVZComplianceReports");
 }
 
 @section BeforeContent {
-    <govuk-breadcrumbs class="govuk-breadcrumbs-link">
+    @*  <govuk-breadcrumbs class="govuk-breadcrumbs-link">
         <govuk-breadcrumbs-item asp-action="FarmList" asp-controller="Farm">
             @Resource.lblAllFarm
         </govuk-breadcrumbs-item>
@@ -25,7 +26,8 @@
             @string.Format(Resource.lblLivestockDetailsYear, Model.Year)
         </govuk-breadcrumbs-item>
 
-    </govuk-breadcrumbs>
+    </govuk-breadcrumbs> *@
+    <govuk-back-link asp-action="@backAction" asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnManageStorageCapacity"] != null)
 {
@@ -77,8 +79,8 @@
         <h1 class="govuk-heading-l" id="header">@string.Format(Resource.lblOrganicMaterialStorage, Model.Year)</h1>
 
         <p class="govuk-body">
-            <a class="govuk-button" asp-action="LivestockGroup" asp-controller="Report">
-                @Resource.lblAddALivestockType
+            <a class="govuk-button" href="#">
+                @Resource.lblAddOrganicMaterialStorage
             </a>
         </p>
 
@@ -86,7 +88,7 @@
         {
             @if (ViewBag.DirtyWaterList != null && ViewBag.DirtyWaterList.Count > 0)
             {
-                <h2 class="govuk-heading-l">@Resource.lblDirtyWater</h2>
+                <h2 class="govuk-heading-l non-standard">@Resource.lblDirtyWater</h2>
                 <div class="margin-bottom-thirty">
                     <table class="govuk-table data-table">
                         <thead class="govuk-table__head">
@@ -105,21 +107,24 @@
                             {
                                 <tr class="govuk-table__row">
                                     <td class="govuk-table__cell">@dirtyWater.StoreName</td>
-                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", dirtyWater.Length, Resource.lblMetres)</td>
-                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", dirtyWater.Width, Resource.lblMetres)</td>
-                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", dirtyWater.Depth, Resource.lblMetres)</td>
-                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", dirtyWater.Circumference, Resource.lblMetres)</td>
-                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", dirtyWater.CapacityVolume, Resource.lblMetresCubed)</td>
+                                    <td class="govuk-table__cell"> @(dirtyWater.Length == null ? Resource.lblHyphen : string.Format("{0} {1}", dirtyWater.Length, Resource.lblMetres))</td>
+                                    <td class="govuk-table__cell"> @(dirtyWater.Width == null ? Resource.lblHyphen : string.Format("{0} {1}", dirtyWater.Width, Resource.lblMetres))</td>
+                                    <td class="govuk-table__cell"> @(dirtyWater.Depth == null ? Resource.lblHyphen : string.Format("{0} {1}", dirtyWater.Depth, Resource.lblMetres))</td>
+                                    <td class="govuk-table__cell"> @(dirtyWater.Circumference==null?Resource.lblHyphen:string.Format("{0} {1}", dirtyWater.Circumference, Resource.lblMetres))</td>
+                                    @* <td class="govuk-table__cell"> @(dirtyWater.Diameter == null ? Resource.lblHyphen : string.Format("{0} {1}", dirtyWater.Diameter, Resource.lblMetres))</td> *@
+                                    <td class="govuk-table__cell"> @string.Format("{0} {1}", dirtyWater.CapacityVolume, Resource.lblMetresCubed)</td>
                                     <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                                     @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@cattle.EncryptedID">@Resource.lblChange</a></td> *@
                                 </tr>
-                            }                            
+                            }
+
+                        </tbody>
                     </table>
                 </div>
             }
             @if (ViewBag.SlurryStorageList != null && ViewBag.SlurryStorageList.Count > 0)
             {
-                <h2 class="govuk-heading-l">@Resource.lblSlurryStorage</h2>
+                <h2 class="govuk-heading-l non-standard">@Resource.lblSlurryStorage</h2>
                 <div class="margin-bottom-thirty">
                     <table class="govuk-table data-table">
                         <thead class="govuk-table__head">
@@ -138,21 +143,23 @@
                             {
                                 <tr class="govuk-table__row">
                                     <td class="govuk-table__cell">@slurryStorage.StoreName</td>
-                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", slurryStorage.Length, Resource.lblMetres)</td>
-                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", slurryStorage.Width, Resource.lblMetres)</td>
-                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", slurryStorage.Depth, Resource.lblMetres)</td>
-                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", slurryStorage.Circumference, Resource.lblMetres)</td>
-                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", slurryStorage.CapacityVolume, Resource.lblMetresCubed)</td>
+                                    <td class="govuk-table__cell"> @(slurryStorage.Length == null ? Resource.lblHyphen : string.Format("{0} {1}", slurryStorage.Length, Resource.lblMetres))</td>
+                                    <td class="govuk-table__cell"> @(slurryStorage.Width == null ? Resource.lblHyphen : string.Format("{0} {1}", slurryStorage.Width, Resource.lblMetres))</td>
+                                    <td class="govuk-table__cell"> @(slurryStorage.Depth == null ? Resource.lblHyphen : string.Format("{0} {1}", slurryStorage.Depth, Resource.lblMetres))</td>
+                                    <td class="govuk-table__cell"> @(slurryStorage.Circumference == null ? Resource.lblHyphen : string.Format("{0} {1}", slurryStorage.Circumference, Resource.lblMetres))</td>
+                                    @* <td class="govuk-table__cell"> @(dirtyWater.Diameter == null ? Resource.lblHyphen : string.Format("{0} {1}", dirtyWater.Diameter, Resource.lblMetres))</td> *@
+                                    <td class="govuk-table__cell"> @string.Format("{0} {1}", slurryStorage.CapacityVolume, Resource.lblMetresCubed)</td>
                                     <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                                     @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@cattle.EncryptedID">@Resource.lblChange</a></td> *@
                                 </tr>
+
                             }
                     </table>
                 </div>
             }
             @if (ViewBag.SolidManureStorageList != null && ViewBag.SolidManureStorageList.Count > 0)
             {
-                <h2 class="govuk-heading-l">@Resource.lblSolidManureStorage</h2>
+                <h2 class="govuk-heading-l non-standard">@Resource.lblSolidManureStorage</h2>
                 <div class="margin-bottom-thirty">
                     <table class="govuk-table data-table">
                         <thead class="govuk-table__head">
@@ -171,11 +178,12 @@
                             {
                                 <tr class="govuk-table__row">
                                     <td class="govuk-table__cell">@solidManureStorageList.StoreName</td>
-                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", solidManureStorageList.Length, Resource.lblMetres)</td>
-                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", solidManureStorageList.Width, Resource.lblMetres)</td>
-                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", solidManureStorageList.Depth, Resource.lblMetres)</td>
-                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", solidManureStorageList.Circumference, Resource.lblMetres)</td>
-                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", solidManureStorageList.CapacityVolume, Resource.lblMetresCubed)</td>
+                                    <td class="govuk-table__cell"> @(solidManureStorageList.Length == null ? Resource.lblHyphen : string.Format("{0} {1}", solidManureStorageList.Length, Resource.lblMetres))</td>
+                                    <td class="govuk-table__cell"> @(solidManureStorageList.Width == null ? Resource.lblHyphen : string.Format("{0} {1}", solidManureStorageList.Width, Resource.lblMetres))</td>
+                                    <td class="govuk-table__cell"> @(solidManureStorageList.Depth == null ? Resource.lblHyphen : string.Format("{0} {1}", solidManureStorageList.Depth, Resource.lblMetres))</td>
+                                    <td class="govuk-table__cell"> @(solidManureStorageList.Circumference == null ? Resource.lblHyphen : string.Format("{0} {1}", solidManureStorageList.Circumference, Resource.lblMetres))</td>
+                                    @* <td class="govuk-table__cell"> @(dirtyWater.Diameter == null ? Resource.lblHyphen : string.Format("{0} {1}", dirtyWater.Diameter, Resource.lblMetres))</td> *@
+                                    <td class="govuk-table__cell"> @string.Format("{0} {1}", solidManureStorageList.CapacityVolume, Resource.lblMetresCubed)</td>
                                     <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                                     @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@cattle.EncryptedID">@Resource.lblChange</a></td> *@
                                 </tr>
@@ -186,13 +194,11 @@
         }
         else if (nonEmptyLists.Count > 1)
         {
-            <p class="govuk-body"><a class="govuk-link" asp-action="ReportOptions" asp-controller="Report" asp-route-f="@Model.EncryptedFarmId" asp-route-r="@ViewBag.IsManageLivestock">@Resource.lblCreateAReportFromThisInformation</a></p>
-
             <govuk-tabs>
                 @if (ViewBag.DirtyWaterList != null && ViewBag.DirtyWaterList.Count > 0)
                 {
-                    <govuk-tabs-item id="cattle" label=@Resource.lblCattle>
-                        <h2 class="govuk-heading-l">@Resource.lblDirtyWater</h2>
+                    <govuk-tabs-item id="dirtyWaterList" label=@Resource.lblDirtyWater>
+                        <h2 class="govuk-heading-l non-standard">@Resource.lblDirtyWater</h2>
                         <div class="margin-bottom-thirty">
                             <table class="govuk-table data-table">
                                 <thead class="govuk-table__head">
@@ -211,23 +217,25 @@
                                     {
                                         <tr class="govuk-table__row">
                                             <td class="govuk-table__cell">@dirtyWater.StoreName</td>
-                                            <td class="govuk-table__cell"> @string.Format("{0}{1}", dirtyWater.Length, Resource.lblMetres)</td>
-                                            <td class="govuk-table__cell"> @string.Format("{0}{1}", dirtyWater.Width, Resource.lblMetres)</td>
-                                            <td class="govuk-table__cell"> @string.Format("{0}{1}", dirtyWater.Depth, Resource.lblMetres)</td>
-                                            <td class="govuk-table__cell"> @string.Format("{0}{1}", dirtyWater.Circumference, Resource.lblMetres)</td>
-                                            <td class="govuk-table__cell"> @string.Format("{0}{1}", dirtyWater.CapacityVolume, Resource.lblMetresCubed)</td>
+                                            <td class="govuk-table__cell"> @(dirtyWater.Length == null ? Resource.lblHyphen : string.Format("{0} {1}", dirtyWater.Length, Resource.lblMetres))</td>
+                                            <td class="govuk-table__cell"> @(dirtyWater.Width == null ? Resource.lblHyphen : string.Format("{0} {1}", dirtyWater.Width, Resource.lblMetres))</td>
+                                            <td class="govuk-table__cell"> @(dirtyWater.Depth == null ? Resource.lblHyphen : string.Format("{0} {1}", dirtyWater.Depth, Resource.lblMetres))</td>
+                                            <td class="govuk-table__cell"> @(dirtyWater.Circumference == null ? Resource.lblHyphen : string.Format("{0} {1}", dirtyWater.Circumference, Resource.lblMetres))</td>
+                                            @* <td class="govuk-table__cell"> @(dirtyWater.Diameter == null ? Resource.lblHyphen : string.Format("{0} {1}", dirtyWater.Diameter, Resource.lblMetres))</td> *@
+                                            <td class="govuk-table__cell"> @string.Format("{0} {1}", dirtyWater.CapacityVolume, Resource.lblMetresCubed)</td>
                                             <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                                             @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@cattle.EncryptedID">@Resource.lblChange</a></td> *@
                                         </tr>
                                     }
+                                    </tbody>
                             </table>
                         </div>
                     </govuk-tabs-item>
                 }
                 @if (ViewBag.SlurryStorageList != null && ViewBag.SlurryStorageList.Count > 0)
                 {
-                    <govuk-tabs-item id="pigs" label=@Resource.lblPigs>
-                        <h2 class="govuk-heading-l">@Resource.lblSlurryStorage</h2>
+                    <govuk-tabs-item id="slurryStorageList" label=@Resource.lblSlurryStorage>
+                        <h2 class="govuk-heading-l non-standard">@Resource.lblSlurryStorage</h2>
                         <div class="margin-bottom-thirty">
                             <table class="govuk-table data-table">
                                 <thead class="govuk-table__head">
@@ -246,23 +254,26 @@
                                     {
                                         <tr class="govuk-table__row">
                                             <td class="govuk-table__cell">@slurryStorage.StoreName</td>
-                                            <td class="govuk-table__cell"> @string.Format("{0}{1}", slurryStorage.Length, Resource.lblMetres)</td>
-                                            <td class="govuk-table__cell"> @string.Format("{0}{1}", slurryStorage.Width, Resource.lblMetres)</td>
-                                            <td class="govuk-table__cell"> @string.Format("{0}{1}", slurryStorage.Depth, Resource.lblMetres)</td>
-                                            <td class="govuk-table__cell"> @string.Format("{0}{1}", slurryStorage.Circumference, Resource.lblMetres)</td>
-                                            <td class="govuk-table__cell"> @string.Format("{0}{1}", slurryStorage.CapacityVolume, Resource.lblMetresCubed)</td>
+                                            <td class="govuk-table__cell"> @(slurryStorage.Length == null ? Resource.lblHyphen : string.Format("{0} {1}", slurryStorage.Length, Resource.lblMetres))</td>
+                                            <td class="govuk-table__cell"> @(slurryStorage.Width == null ? Resource.lblHyphen : string.Format("{0} {1}", slurryStorage.Width, Resource.lblMetres))</td>
+                                            <td class="govuk-table__cell"> @(slurryStorage.Depth == null ? Resource.lblHyphen : string.Format("{0} {1}", slurryStorage.Depth, Resource.lblMetres))</td>
+                                            <td class="govuk-table__cell"> @(slurryStorage.Circumference == null ? Resource.lblHyphen : string.Format("{0} {1}", slurryStorage.Circumference, Resource.lblMetres))</td>
+                                            @* <td class="govuk-table__cell"> @(dirtyWater.Diameter == null ? Resource.lblHyphen : string.Format("{0} {1}", dirtyWater.Diameter, Resource.lblMetres))</td> *@
+                                            <td class="govuk-table__cell"> @string.Format("{0} {1}", slurryStorage.CapacityVolume, Resource.lblMetresCubed)</td>
                                             <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                                             @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@cattle.EncryptedID">@Resource.lblChange</a></td> *@
                                         </tr>
+
                                     }
+                                </tbody>
                             </table>
                         </div>
                     </govuk-tabs-item>
                 }
                 @if (ViewBag.SolidManureStorageList != null && ViewBag.SolidManureStorageList.Count > 0)
                 {
-                    <govuk-tabs-item id="poultry" label=@Resource.lblPoultry>
-                        <h2 class="govuk-heading-l">@Resource.lblSolidManureStorage</h2>
+                    <govuk-tabs-item id="solidManureStorageList" label=@Resource.lblSolidManureStorage>
+                        <h2 class="govuk-heading-l non-standard">@Resource.lblSolidManureStorage</h2>
                         <div class="margin-bottom-thirty">
                             <table class="govuk-table data-table">
                                 <thead class="govuk-table__head">
@@ -281,15 +292,17 @@
                                     {
                                         <tr class="govuk-table__row">
                                             <td class="govuk-table__cell">@solidManureStorageList.StoreName</td>
-                                            <td class="govuk-table__cell"> @string.Format("{0}{1}", solidManureStorageList.Length, Resource.lblMetres)</td>
-                                            <td class="govuk-table__cell"> @string.Format("{0}{1}", solidManureStorageList.Width, Resource.lblMetres)</td>
-                                            <td class="govuk-table__cell"> @string.Format("{0}{1}", solidManureStorageList.Depth, Resource.lblMetres)</td>
-                                            <td class="govuk-table__cell"> @string.Format("{0}{1}", solidManureStorageList.Circumference, Resource.lblMetres)</td>
-                                            <td class="govuk-table__cell"> @string.Format("{0}{1}", solidManureStorageList.CapacityVolume, Resource.lblMetresCubed)</td>
+                                            <td class="govuk-table__cell"> @(solidManureStorageList.Length == null ? Resource.lblHyphen : string.Format("{0} {1}", solidManureStorageList.Length, Resource.lblMetres))</td>
+                                            <td class="govuk-table__cell"> @(solidManureStorageList.Width == null ? Resource.lblHyphen : string.Format("{0} {1}", solidManureStorageList.Width, Resource.lblMetres))</td>
+                                            <td class="govuk-table__cell"> @(solidManureStorageList.Depth == null ? Resource.lblHyphen : string.Format("{0} {1}", solidManureStorageList.Depth, Resource.lblMetres))</td>
+                                            <td class="govuk-table__cell"> @(solidManureStorageList.Circumference == null ? Resource.lblHyphen : string.Format("{0} {1}", solidManureStorageList.Circumference, Resource.lblMetres))</td>
+                                            @* <td class="govuk-table__cell"> @(dirtyWater.Diameter == null ? Resource.lblHyphen : string.Format("{0} {1}", dirtyWater.Diameter, Resource.lblMetres))</td> *@
+                                            <td class="govuk-table__cell"> @string.Format("{0} {1}", solidManureStorageList.CapacityVolume, Resource.lblMetresCubed)</td>
                                             <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                                             @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@cattle.EncryptedID">@Resource.lblChange</a></td> *@
                                         </tr>
                                     }
+                                </tbody>
                             </table>
                         </div>
                     </govuk-tabs-item>
