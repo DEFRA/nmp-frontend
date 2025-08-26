@@ -952,6 +952,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add organic material storage.
+        /// </summary>
+        public static string lblAddOrganicMaterialStorage {
+            get {
+                return ResourceManager.GetString("lblAddOrganicMaterialStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} {1}.
         /// </summary>
         public static string lblAddOrUpdateImportOrExport {
@@ -2995,6 +3004,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Demonstrate compliance with rules for organic material storage..
+        /// </summary>
+        public static string lblDemonstrateComplianceWithRulesForOrganicMaterialStorage {
+            get {
+                return ResourceManager.GetString("lblDemonstrateComplianceWithRulesForOrganicMaterialStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Demonstrate compliance with the livestock manure nitrogen (N) farm limit for the farm.
         /// </summary>
         public static string lblDemonstrateComplianceWithTheLivestockManure {
@@ -3873,6 +3891,15 @@ namespace NMP.Portal.Resources {
         public static string lblExistingManureStorageCapacity {
             get {
                 return ResourceManager.GetString("lblExistingManureStorageCapacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Existing manure storage capacity report.
+        /// </summary>
+        public static string lblExistingManureStorageCapacityReport {
+            get {
+                return ResourceManager.GetString("lblExistingManureStorageCapacityReport", resourceCulture);
             }
         }
         
@@ -7763,6 +7790,15 @@ namespace NMP.Portal.Resources {
         public static string lblNotEntered {
             get {
                 return ResourceManager.GetString("lblNotEntered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not entered storage.
+        /// </summary>
+        public static string lblNotEnteredStorage {
+            get {
+                return ResourceManager.GetString("lblNotEnteredStorage", resourceCulture);
             }
         }
         
@@ -13402,6 +13438,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Which year would you like to create an Existing manure storage capacity report for?.
+        /// </summary>
+        public static string lblWhichYearWouldYouLikeToCreateExistingManureReport {
+            get {
+                return ResourceManager.GetString("lblWhichYearWouldYouLikeToCreateExistingManureReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Who are you exporting this livestock manure to?.
         /// </summary>
         public static string lblWhoAreYouExportingThisLivestockManureTo {
@@ -13848,6 +13893,15 @@ namespace NMP.Portal.Resources {
         public static string lblYouHaveNotEnteredAnyField {
             get {
                 return ResourceManager.GetString("lblYouHaveNotEnteredAnyField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have not entered any organic material storage for {0}.
+        /// </summary>
+        public static string lblYouHaveNotEnteredAnyOrganicMaterialStorageFor {
+            get {
+                return ResourceManager.GetString("lblYouHaveNotEnteredAnyOrganicMaterialStorageFor", resourceCulture);
             }
         }
         
