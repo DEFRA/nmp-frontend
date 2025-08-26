@@ -6259,6 +6259,8 @@ namespace NMP.Portal.Controllers
                     {
                         model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                     }
+
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                     List<HarvestYear> harvestYearList = new List<HarvestYear>();
                     (List<StoreCapacity> storeCapacityList, error) = await _reportService.FetchStoreCapacityByFarmIdAndYear(decryptedFarmId, model.Year ?? 0);
 
@@ -6354,7 +6356,7 @@ namespace NMP.Portal.Controllers
                     TempData["Error"] = error.Message;
                     return RedirectToAction("FarmSummary", "Farm", new { q = q });
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+
                 
             }
             if (!string.IsNullOrWhiteSpace(y))
@@ -6363,8 +6365,6 @@ namespace NMP.Portal.Controllers
                 model.EncryptedHarvestYear = y;
             }
 
-            model.IsManageLivestock = true;
-            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
             return View(model);
         }
 
