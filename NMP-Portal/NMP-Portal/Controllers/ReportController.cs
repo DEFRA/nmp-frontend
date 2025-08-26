@@ -6055,7 +6055,7 @@ namespace NMP.Portal.Controllers
             ViewBag.TotalNImportedLivestock = totalNImportedLivestock;
             ViewBag.HomeProducedLivestockManures = homeProducedLivestockManures;
             ViewBag.TotalNExportedLivestock = totalNExportedLivestock;
-            int total = totalNImportedLivestock + totalNExportedLivestock;
+            int total = totalNImportedLivestock - totalNExportedLivestock;
             ViewBag.TotalImportExportTotalN = total > 0 ? $"+{total}" : total == 0 ? "0" : total.ToString();
 
             ViewBag.TotalNLoading = totalNLoading;
