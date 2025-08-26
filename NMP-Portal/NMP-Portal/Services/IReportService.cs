@@ -24,7 +24,6 @@ namespace NMP.Portal.Services
         Task<(List<LivestockTypeResponse>, Error)> FetchLivestockTypes();
         Task<(List<StoreCapacity>, Error)> FetchStoreCapacityByFarmIdAndYear(int farmId, int year);
         Task<(List<CommonResponse>, Error)> FetchMaterialStates();
-        Task<(List<StoreCapacity>, Error)> FetchStoreCapacityByMaterialStateId(int materialStateId);
         Task<(List<CommonResponse>, Error)> FetchMaterialStateById(int id);
     }
 }
