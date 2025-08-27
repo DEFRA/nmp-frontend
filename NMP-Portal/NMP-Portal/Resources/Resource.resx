@@ -4911,7 +4911,7 @@ live</value>
     <value>Select the {0} you want to create.</value>
   </data>
   <data name="lblDoesFarmHaveAGrasslandDerogation" xml:space="preserve">
-    <value>Does {0} have a grassland derogation for {1}</value>
+    <value>Does {0} have a grassland derogation for {1}?</value>
   </data>
   <data name="lblGrasslandDerogation" xml:space="preserve">
     <value>Grassland derogation</value>
@@ -5604,7 +5604,7 @@ live</value>
     <value>Total livestock manure nitrogen (N) production</value>
   </data>
   <data name="lblLivestockReportContentTwentySix" xml:space="preserve">
-    <value>Total phosphate P2O5 produced</value>
+    <value>Total phosphate (P2O5) produced</value>
   </data>
   <data name="lblLivestockReportContentTwentySeven" xml:space="preserve">
     <value>Grazing livestock manure total nitrogen (N) and phosphate (P2O5) production</value>
@@ -5758,5 +5758,41 @@ live</value>
   </data>
   <data name="lblDoNotCompliance" xml:space="preserve">
     <value>do not compliance</value>
+  </data>
+  <data name="lblOrganicMaterialStorage" xml:space="preserve">
+    <value>Organic material storage</value>
+  </data>
+  <data name="lblMetres" xml:space="preserve">
+    <value>metres</value>
+  </data>
+  <data name="lblLength" xml:space="preserve">
+    <value>Length</value>
+  </data>
+  <data name="lblWidth" xml:space="preserve">
+    <value>Width</value>
+  </data>
+  <data name="lblDepth" xml:space="preserve">
+    <value>Depth</value>
+  </data>
+  <data name="lblCircumference" xml:space="preserve">
+    <value>Circumference</value>
+  </data>
+  <data name="lblCapacityVolume" xml:space="preserve">
+    <value>Capacity volume</value>
+  </data>
+  <data name="lblMetresCubed" xml:space="preserve">
+    <value>metres cubed</value>
+  </data>
+  <data name="lblSlurryStorage" xml:space="preserve">
+    <value>Slurry storage</value>
+  </data>
+  <data name="lblDirtyWater" xml:space="preserve">
+    <value>Dirty water</value>
+  </data>
+  <data name="lblSolidManureStorage" xml:space="preserve">
+    <value>Solid manure storage</value>
+  </data>
+  <data name="lblManageStoreCapacity" xml:space="preserve">
+    <value>Manage store capacity</value>
   </data>
 </root>
