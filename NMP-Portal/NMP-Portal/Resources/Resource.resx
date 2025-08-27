@@ -4911,7 +4911,7 @@ live</value>
     <value>Select the {0} you want to create.</value>
   </data>
   <data name="lblDoesFarmHaveAGrasslandDerogation" xml:space="preserve">
-    <value>Does {0} have a grassland derogation for {1}</value>
+    <value>Does {0} have a grassland derogation for {1}?</value>
   </data>
   <data name="lblGrasslandDerogation" xml:space="preserve">
     <value>Grassland derogation</value>

@@ -2,6 +2,7 @@
 {
     public enum Livestock
     {
-        VealCalf=2
+        VealCalf=2,
+        OneOstrich=36
     }
 }
