@@ -1369,9 +1369,26 @@ namespace NMP.Portal.Controllers
                                         closedPeriodStartDate = new DateTime(harvestYear - 1, startMonth, startDay);
                                         closedPeriodEndDate = new DateTime(harvestYear, endMonth, endDay);
                                     }
+
                                     string formattedStartDate = closedPeriodStartDate?.ToString("d MMMM yyyy");
                                     string formattedEndDate = closedPeriodEndDate?.ToString("d MMMM yyyy");
-                                    ViewBag.ClosedPeriod = $"{formattedStartDate} to {formattedEndDate}";
+
+                                    Crop crop = null;
+                                    CropTypeLinkingResponse cropTypeLinkingResponse = new CropTypeLinkingResponse();
+                                    if (model.FertiliserManures.Any(x => x.FieldID == Convert.ToInt32(fieldId)))
+                                    {
+                                        int manId = model.FertiliserManures.Where(x => x.FieldID == Convert.ToInt32(fieldId)).Select(x => x.ManagementPeriodID).FirstOrDefault();
+
+                                        (ManagementPeriod managementPeriod, error) = await _cropService.FetchManagementperiodById(manId);
+                                        (crop, error) = await _cropService.FetchCropById(managementPeriod.CropID.Value);
+
+                                        (cropTypeLinkingResponse, error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID ?? 0);
+                                    }
+                                    //NMaxLimitEngland is 0 for England and Whales for crops Winter beans​ ,Spring beans​, Peas​ ,Market pick peas
+                                    if (cropTypeLinkingResponse.NMaxLimitEngland !=0 )
+                                    {
+                                        ViewBag.ClosedPeriod = $"{formattedStartDate} to {formattedEndDate}";
+                                    }
                                 }
                             }
 
@@ -1546,7 +1563,23 @@ namespace NMP.Portal.Controllers
                                             }
                                             string formattedStartDate = closedPeriodStartDate?.ToString("d MMMM yyyy");
                                             string formattedEndDate = closedPeriodEndDate?.ToString("d MMMM yyyy");
-                                            ViewBag.ClosedPeriod = $"{formattedStartDate} to {formattedEndDate}";
+
+                                            Crop crop = null;
+                                            CropTypeLinkingResponse cropTypeLinkingResponse = new CropTypeLinkingResponse();
+                                            if (model.FertiliserManures.Any(x => x.FieldID == Convert.ToInt32(fieldId)))
+                                            {
+                                                int manId = model.FertiliserManures.Where(x => x.FieldID == Convert.ToInt32(fieldId)).Select(x => x.ManagementPeriodID).FirstOrDefault();
+
+                                                (ManagementPeriod managementPeriod, error) = await _cropService.FetchManagementperiodById(manId);
+                                                (crop, error) = await _cropService.FetchCropById(managementPeriod.CropID.Value);
+
+                                                (cropTypeLinkingResponse, error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID ?? 0);
+                                            }
+                                            //NMaxLimitEngland is 0 for England and Whales for crops Winter beans​ ,Spring beans​, Peas​ ,Market pick peas
+                                            if (cropTypeLinkingResponse.NMaxLimitEngland != 0)
+                                            {
+                                                ViewBag.ClosedPeriod = $"{formattedStartDate} to {formattedEndDate}";
+                                            }
                                         }
                                     }
 
@@ -1578,7 +1611,22 @@ namespace NMP.Portal.Controllers
                             model.IsWarningMsgNeedToShow = false;
                         }
                     }
-                    (model, error) = await IsClosedPeriodWarningMessageShow(model, false);
+                    Crop crop = null;
+                    CropTypeLinkingResponse cropTypeLinkingResponse = null;
+                    if (model.FertiliserManures.Any(x => x.FieldID == Convert.ToInt32(model.FieldList[0])))
+                    {
+                        int manId = model.FertiliserManures.Where(x => x.FieldID == Convert.ToInt32(model.FieldList[0])).Select(x => x.ManagementPeriodID).FirstOrDefault();
+
+                        (ManagementPeriod managementPeriod, error) = await _cropService.FetchManagementperiodById(manId);
+                        (crop, error) = await _cropService.FetchCropById(managementPeriod.CropID.Value);
+
+                        (cropTypeLinkingResponse, error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID ?? 0);
+                    }
+                    //NMaxLimitEngland is 0 for England and Whales for crops Winter beans​ ,Spring beans​, Peas​ ,Market pick peas
+                    if (cropTypeLinkingResponse.NMaxLimitEngland != 0)
+                    {
+                        (model, error) = await IsClosedPeriodWarningMessageShow(model, false);
+                    }
 
                 }
                 if (model.IsClosedPeriodWarningOnlyForGrassAndOilseed || model.IsClosedPeriodWarning)
@@ -2262,6 +2310,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     model.FieldName = filteredList.Select(item => item.Text).FirstOrDefault();
                                     model.FieldList = filteredList.Select(item => item.Value).ToList();
+                                    model.FieldID = fertiliserResponse.Select(x => x.Id.Value).FirstOrDefault();
                                 }
                             }
                             foreach (string field in model.FieldList)
@@ -2459,7 +2508,23 @@ namespace NMP.Portal.Controllers
                 model.IsClosedPeriodWarning = false;
                 if (int.TryParse(model.FieldGroup, out int value) || (model.FieldGroup == Resource.lblSelectSpecificFields && model.FieldList.Count == 1))
                 {
-                    (model, error) = await IsClosedPeriodWarningMessageShow(model, true);
+                    Crop crop = null;
+                    CropTypeLinkingResponse cropTypeLinkingResponse = null;
+                    if (model.FertiliserManures.Any(x => x.FieldID == Convert.ToInt32(model.FieldList[0])))
+                    {
+                        int manId = model.FertiliserManures.Where(x => x.FieldID == Convert.ToInt32(model.FieldList[0])).Select(x => x.ManagementPeriodID).FirstOrDefault();
+
+                        (ManagementPeriod managementPeriod, error) = await _cropService.FetchManagementperiodById(manId);
+                        (crop, error) = await _cropService.FetchCropById(managementPeriod.CropID.Value);
+
+                        (cropTypeLinkingResponse, error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID ?? 0);
+                    }
+                    //NMaxLimitEngland is 0 for England and Whales for crops Winter beans​ ,Spring beans​, Peas​ ,Market pick peas
+                    if (cropTypeLinkingResponse.NMaxLimitEngland != 0)  
+                    {
+                        (model, error) = await IsClosedPeriodWarningMessageShow(model, false);
+                    }
+                    //(model, error) = await IsClosedPeriodWarningMessageShow(model, true);
                     //if (error != null)
                     //{
                     //    TempData["NutrientValuesError"] = error.Message;
