@@ -157,11 +157,11 @@ namespace NMP.Portal.Controllers
                                     {
                                         if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England)
                                         {
-                                            cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitEngland != null && x.NMaxLimitEngland > 0).ToList();
+                                            cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitEngland != null).ToList();
                                         }
                                         else
                                         {
-                                            cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitWales != null && x.NMaxLimitWales > 0).ToList();
+                                            cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitWales != null).ToList();
                                         }
                                         cropTypeList = cropTypeList
                                         .Where(crop => cropTypeLinking
@@ -370,11 +370,11 @@ namespace NMP.Portal.Controllers
                                 {
                                     if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England)
                                     {
-                                        cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitEngland != null && x.NMaxLimitEngland > 0).ToList();
+                                        cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitEngland != null).ToList();
                                     }
                                     else
                                     {
-                                        cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitWales != null && x.NMaxLimitWales > 0).ToList();
+                                        cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitWales != null).ToList();
                                     }
                                     cropTypeList = cropTypeList
                                     .Where(crop => cropTypeLinking
@@ -755,11 +755,11 @@ namespace NMP.Portal.Controllers
                             {
                                 if (model.Farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England)
                                 {
-                                    cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitEngland != null && x.NMaxLimitEngland > 0).ToList();
+                                    cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitEngland != null).ToList();
                                 }
                                 else
                                 {
-                                    cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitWales != null && x.NMaxLimitWales > 0).ToList();
+                                    cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitWales != null ).ToList();
                                 }
                                 cropTypeList = cropTypeList
                                 .Where(crop => cropTypeLinking
@@ -1055,7 +1055,7 @@ namespace NMP.Portal.Controllers
                         nMaxLimit = model.Farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England ?
                             ((cropTypeLinkingResponse.NMaxLimitEngland != null) ? cropTypeLinkingResponse.NMaxLimitEngland.Value : 0) :
                             ((cropTypeLinkingResponse.NMaxLimitWales != null) ? cropTypeLinkingResponse.NMaxLimitWales.Value : 0);
-                        if (nMaxLimit != null && nMaxLimit > 0)
+                        if (nMaxLimit != null)
                         {
                             cropTypeName = cropData.CropTypeName;
                             Field field = await _fieldService.FetchFieldByFieldId(crop.FieldID.Value);
@@ -1209,7 +1209,7 @@ namespace NMP.Portal.Controllers
                                     }
 
                                     int nMaxLimitForCropType = nMaxLimit;
-                                    if (nMaxLimit != null && nMaxLimit > 0)
+                                    if (nMaxLimit != null)
                                     {
                                         nMaxLimitForCropType = Convert.ToInt32(Math.Round(nMaxLimitForCropType + soilTypeAdjustment + yieldAdjustment + millingWheat + paperCrumbleOrStrawMulch + grassCut, 0));
                                         var nMaxLimitData = new NMaxLimitReportResponse
