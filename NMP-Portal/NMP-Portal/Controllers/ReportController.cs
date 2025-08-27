@@ -3490,7 +3490,7 @@ namespace NMP.Portal.Controllers
             }
             if (!string.IsNullOrWhiteSpace(model.Address4) && model.Address4.Length > 50)
             {
-                ModelState.AddModelError("Address4", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblCountry, 50));
+                ModelState.AddModelError("Address4", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblCounty, 50));
             }
 
             if (!ModelState.IsValid)
