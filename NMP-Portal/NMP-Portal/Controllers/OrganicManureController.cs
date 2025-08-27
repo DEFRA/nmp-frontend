@@ -354,15 +354,15 @@ namespace NMP.Portal.Controllers
                                         }
                                         else
                                         {
-                                            cropList = cropList.Where(x => x.Year == model.HarvestYear).ToList();
-                                            if (cropList != null && cropList.Count == 2)
-                                            {
-                                                model.IsDoubleCropAvailable = true;
-                                                int counter = 0;
-                                                model.DoubleCropCurrentCounter = counter;
-                                                model.FieldName = (await _fieldService.FetchFieldByFieldId(Convert.ToInt32(fieldIdForManID))).Name;
-                                                model.DoubleCropEncryptedCounter = _fieldDataProtector.Protect(counter.ToString());
-                                            }
+                                            cropList = cropList.Where(x => x.Year == model.HarvestYear).ToList();                                            
+                                        }
+                                        if (cropList != null && cropList.Count == 2)
+                                        {
+                                            model.IsDoubleCropAvailable = true;
+                                            int counter = 0;
+                                            model.DoubleCropCurrentCounter = counter;
+                                            model.FieldName = (await _fieldService.FetchFieldByFieldId(Convert.ToInt32(fieldIdForManID))).Name;
+                                            model.DoubleCropEncryptedCounter = _fieldDataProtector.Protect(counter.ToString());
                                         }
                                         //cropList = cropList.Where(x => x.Year == model.HarvestYear && x.CropTypeID == Convert.ToInt32(model.FieldGroup)).ToList();
                                         if (cropList.Count > 0)
@@ -414,6 +414,19 @@ namespace NMP.Portal.Controllers
                                         }
                                     }
                                 }
+                                var fieldIdsAlreadyProcessed = new List<int>();
+                                model.OrganicManures.RemoveAll(item =>
+                                {
+                                    if (fieldIdsAlreadyProcessed.Contains(item.FieldID.Value))
+                                    {
+                                        return true;
+                                    }
+                                    else
+                                    {
+                                        fieldIdsAlreadyProcessed.Add(item.FieldID.Value);
+                                        return false;
+                                    }
+                                });
                                 if (model.IsCheckAnswer && model.OrganicManures.Count > 0)
                                 {
                                     int i = 0;

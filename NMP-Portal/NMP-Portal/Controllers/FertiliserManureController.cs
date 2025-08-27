@@ -519,6 +519,14 @@ namespace NMP.Portal.Controllers
                                         if (int.TryParse(model.FieldGroup, out int cropTypeId))
                                         {
                                             cropList = cropList.Where(x => x.Year == model.HarvestYear && x.CropTypeID == cropTypeId).ToList();
+                                            if (cropList != null && cropList.Count == 2)
+                                            {
+                                                model.IsDoubleCropAvailable = true;
+                                                int counter = 0;
+                                                model.DoubleCropCurrentCounter = counter;
+                                                model.FieldName = (await _fieldService.FetchFieldByFieldId(Convert.ToInt32(field))).Name;
+                                                model.DoubleCropEncryptedCounter = _fieldDataProtector.Protect(counter.ToString());
+                                            }
                                         }
                                         else
                                         {
@@ -813,6 +821,19 @@ namespace NMP.Portal.Controllers
                                 model.GrassCropCount = grassCropCounter;
                                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
 
+                                var fieldIdsAlreadyProcessed = new List<int>();
+                                model.FertiliserManures.RemoveAll(item =>
+                                {
+                                    if (fieldIdsAlreadyProcessed.Contains(item.FieldID.Value))
+                                    {
+                                        return true;
+                                    }
+                                    else
+                                    {
+                                        fieldIdsAlreadyProcessed.Add(item.FieldID.Value);
+                                        return false;
+                                    }
+                                });
                                 if (model.IsDoubleCropAvailable)
                                 {
                                     return RedirectToAction("DoubleCrop");
@@ -842,6 +863,20 @@ namespace NMP.Portal.Controllers
                                         }
                                     }
                                 }
+
+                                var fieldIdsAlreadyProcessed = new List<int>();
+                                model.FertiliserManures.RemoveAll(item =>
+                                {
+                                    if (fieldIdsAlreadyProcessed.Contains(item.FieldID.Value))
+                                    {
+                                        return true;
+                                    }
+                                    else
+                                    {
+                                        fieldIdsAlreadyProcessed.Add(item.FieldID.Value);
+                                        return false;
+                                    }
+                                });
                                 model.GrassCropCount = null;
                                 model.IsSameDefoliationForAll = null;
                                 model.IsAnyChangeInSameDefoliationFlag = false;
