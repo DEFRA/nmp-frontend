@@ -3538,9 +3538,9 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Report Controller : LivestockComment() post action called");
 
-            if (!string.IsNullOrWhiteSpace(model.Comment) && model.Comment.Length > 255)
+            if (!string.IsNullOrWhiteSpace(model.Comment) && model.Comment.Length > 100)
             {
-                ModelState.AddModelError("Comment", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblComment, 255));
+                ModelState.AddModelError("Comment", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblComment, 100));
             }
 
             if (!ModelState.IsValid)
