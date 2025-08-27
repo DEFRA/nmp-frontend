@@ -3148,7 +3148,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Does {0} have a grassland derogation for {1}.
+        ///   Looks up a localized string similar to Does {0} have a grassland derogation for {1}?.
         /// </summary>
         public static string lblDoesFarmHaveAGrasslandDerogation {
             get {
