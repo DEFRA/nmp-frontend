@@ -5604,7 +5604,7 @@ live</value>
     <value>Total livestock manure nitrogen (N) production</value>
   </data>
   <data name="lblLivestockReportContentTwentySix" xml:space="preserve">
-    <value>Total phosphate P2O5 produced</value>
+    <value>Total phosphate (P2O5) produced</value>
   </data>
   <data name="lblLivestockReportContentTwentySeven" xml:space="preserve">
     <value>Grazing livestock manure total nitrogen (N) and phosphate (P2O5) production</value>

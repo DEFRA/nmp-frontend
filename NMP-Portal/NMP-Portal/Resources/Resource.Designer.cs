@@ -6867,7 +6867,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total phosphate P2O5 produced.
+        ///   Looks up a localized string similar to Total phosphate (P2O5) produced.
         /// </summary>
         public static string lblLivestockReportContentTwentySix {
             get {
