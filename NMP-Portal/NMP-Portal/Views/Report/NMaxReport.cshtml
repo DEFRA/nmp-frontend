@@ -257,7 +257,7 @@
                                             }
                                             <td class="govuk-table__cell">@((nMaxLimitReportResponse.PaperCrumbleOrStrawMulch != null && nMaxLimitReportResponse.PaperCrumbleOrStrawMulch > 0) ? string.Format("{0}{1}", nMaxLimitReportResponse.PaperCrumbleOrStrawMulch, Resource.lblkg) : Resource.lblHyphen)</td>
                                             <td class="govuk-table__cell">@((nMaxLimitReportResponse.AdjustedNMaxLimit != null && nMaxLimitReportResponse.AdjustedNMaxLimit > 0) ? string.Format("{0}{1}", nMaxLimitReportResponse.AdjustedNMaxLimit, Resource.lblkg) : Resource.lblHyphen)</td>
-                                            <td class="govuk-table__cell">@((nMaxLimitReportResponse.MaximumLimitForNApplied != null && nMaxLimitReportResponse.MaximumLimitForNApplied > 0) ? string.Format("{0}{1}", nMaxLimitReportResponse.MaximumLimitForNApplied, Resource.lblkg) : Resource.lblHyphen)</td>
+                                            <td class="govuk-table__cell">@((nMaxLimitReportResponse.MaximumLimitForNApplied == null) ? Resource.lblHyphen : (nMaxLimitReportResponse.MaximumLimitForNApplied > 0 ? string.Format("{0}{1}", nMaxLimitReportResponse.MaximumLimitForNApplied, Resource.lblkg) : nMaxLimitReportResponse.MaximumLimitForNApplied))</td>
                                         </tr>
                                     }
 
@@ -287,11 +287,8 @@
                                     <th scope="col" class="govuk-table__header">@Resource.lblHyphen</th>
                                     <th scope="col" class="nonbold govuk-table__header">@Resource.lblHyphen</th>
                                     <th scope="col" class="govuk-table__header">@Resource.lblHyphen</th>
-                                    <th scope="col" class="govuk-table__header">@(totalMaxLimitForNApplied > 0 ? string.Format("{0}{1}", totalMaxLimitForNApplied, Resource.lblkg) : Resource.lblHyphen)</th>
+                                    <th scope="col" class="govuk-table__header">@((totalMaxLimitForNApplied > 0) ? string.Format("{0}{1}", totalMaxLimitForNApplied, Resource.lblkg) : (totalMaxLimitForNApplied==null?Resource.lblHyphen:totalMaxLimitForNApplied))</th>
                                 </tr>
-
-
-
 
                             </tbody>
                         </table>
