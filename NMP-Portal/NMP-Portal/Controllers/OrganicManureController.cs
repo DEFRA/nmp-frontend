@@ -4464,17 +4464,20 @@ namespace NMP.Portal.Controllers
                 int i = 0;
                 foreach (var orgManure in model.OrganicManures)
                 {
-                    //orgManure.AutumnCropNitrogenUptake = model.AutumnCropNitrogenUptake ?? 0;
-                    var matchingUptake = model.AutumnCropNitrogenUptakes?
+                    if (model.AutumnCropNitrogenUptakes != null && model.AutumnCropNitrogenUptakes.Count > 0)
+                    {
+                        //orgManure.AutumnCropNitrogenUptake = model.AutumnCropNitrogenUptake ?? 0;
+                        var matchingUptake = model.AutumnCropNitrogenUptakes?
                      .FirstOrDefault(uptake => uptake.FieldName == orgManure.FieldName);
 
-                    if (matchingUptake != null)
-                    {
-                        orgManure.AutumnCropNitrogenUptake = matchingUptake.AutumnCropNitrogenUptake;
-                    }
-                    else
-                    {
-                        orgManure.AutumnCropNitrogenUptake = 0;
+                        if (matchingUptake != null)
+                        {
+                            orgManure.AutumnCropNitrogenUptake = matchingUptake.AutumnCropNitrogenUptake;
+                        }
+                        else
+                        {
+                            orgManure.AutumnCropNitrogenUptake = 0;
+                        }
                     }
                     orgManure.SoilDrainageEndDate = model.SoilDrainageEndDate.Value;
                     orgManure.RainfallWithinSixHoursID = model.RainfallWithinSixHoursID.Value;
