@@ -562,7 +562,14 @@ else{
                             <td class="col_2 govuk-table__cell">@nutrientsLoadingLiveStockNonGrazing.Units</td>
                             <td class="col_2 govuk-table__cell">@(nutrientsLoadingLiveStockNonGrazing.Occupancy != null ? string.Format("{0}{1}", nutrientsLoadingLiveStockNonGrazing.Occupancy, Resource.lblPercentage) : Resource.lblHyphen)</td>
                             <td class="col_2 govuk-table__cell">@string.Format("{0}{1}", nutrientsLoadingLiveStockNonGrazing.NByUnit, Resource.lblkg)</td>
-                            <td class="col_2 govuk-table__cell">@string.Format("{0}{1}", Math.Round((nutrientsLoadingLiveStockNonGrazing.TotalNProduced / nutrientsLoadingLiveStockNonGrazing.Units), 0), Resource.lblkg)</td>
+                            @if (nutrientsLoadingLiveStockNonGrazing.LiveStockTypeID!=(int)NMP.Portal.Enums.Livestock.VealCalf)
+                            {
+                                <td class="col_2 govuk-table__cell">@string.Format("{0}{1}", Math.Round((nutrientsLoadingLiveStockNonGrazing.TotalNProduced / nutrientsLoadingLiveStockNonGrazing.Units), 2), Resource.lblkg)</td>
+                            }
+                            else
+                            {
+                                <td class="col_2 govuk-table__cell">@Resource.lblHyphen</td>
+                            }
                             <td class="col_2 govuk-table__cell">@string.Format("{0}{1}", nutrientsLoadingLiveStockNonGrazing.TotalNProduced, Resource.lblkg)</td>
                             @if (Model.IsGrasslandDerogation != null && (Model.IsGrasslandDerogation.Value))
                             {
