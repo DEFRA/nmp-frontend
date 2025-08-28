@@ -5244,13 +5244,13 @@ live</value>
     <value>livestock number question</value>
   </data>
   <data name="lblAverageNumberOfThisLivestockGroup" xml:space="preserve">
-    <value>Average number of this {0} type in {1}</value>
+    <value>Average number of {0} in {1}</value>
   </data>
   <data name="lblSelectedLivestockType" xml:space="preserve">
     <value>Selected livestock type: {0}</value>
   </data>
   <data name="lblWhatIsTheAverageNumberOfThisLivestockType" xml:space="preserve">
-    <value>What is the average number of this {0} type in {1}?</value>
+    <value>What is the average number of {0} in {1}?</value>
   </data>
   <data name="MsgEnterTheAverageNumberOfThisTypeFor" xml:space="preserve">
     <value>Enter the average number of this type for {0}.</value>
@@ -5268,10 +5268,10 @@ live</value>
     <value>Enter how many of this {0} type did you have in {1} {2}.</value>
   </data>
   <data name="lblHowManyOfThisTypeDidYouHaveIn" xml:space="preserve">
-    <value>How many of this {0} type did you have in {1} {2}?</value>
+    <value>How many of {0} did you have in {1} {2}?</value>
   </data>
   <data name="lblMonthlyTotalsForThis" xml:space="preserve">
-    <value>Monthly totals for this {0} type in {1}</value>
+    <value>Monthly totals for {0} in {1}</value>
   </data>
   <data name="lblDeletLivestockImportExportContentOne" xml:space="preserve">
     <value>This will remove all the data about this import. You will not be able to get it back.</value>
@@ -5794,5 +5794,11 @@ live</value>
   </data>
   <data name="lblManageStoreCapacity" xml:space="preserve">
     <value>Manage store capacity</value>
+  </data>
+  <data name="lblGoat" xml:space="preserve">
+    <value>goat</value>
+  </data>
+  <data name="lblHorse" xml:space="preserve">
+    <value>horse</value>
   </data>
 </root>
