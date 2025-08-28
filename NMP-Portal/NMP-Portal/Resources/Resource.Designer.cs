@@ -1663,7 +1663,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Average number of this {0} type in {1}.
+        ///   Looks up a localized string similar to Average number of {0} in {1}.
         /// </summary>
         public static string lblAverageNumberOfThisLivestockGroup {
             get {
@@ -4741,6 +4741,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to goat.
+        /// </summary>
+        public static string lblGoat {
+            get {
+                return ResourceManager.GetString("lblGoat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Goats, Deer and Horses.
         /// </summary>
         public static string lblGoatsDeerAndHorses {
@@ -5173,6 +5182,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to horse.
+        /// </summary>
+        public static string lblHorse {
+            get {
+                return ResourceManager.GetString("lblHorse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How are you going to apply the {0}?.
         /// </summary>
         public static string lblHowAreYouGoingToApplyTheManure {
@@ -5309,7 +5327,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How many of this {0} type did you have in {1} {2}?.
+        ///   Looks up a localized string similar to How many of {0} did you have in {1} {2}?.
         /// </summary>
         public static string lblHowManyOfThisTypeDidYouHaveIn {
             get {
@@ -7344,7 +7362,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Monthly totals for this {0} type in {1}.
+        ///   Looks up a localized string similar to Monthly totals for {0} in {1}.
         /// </summary>
         public static string lblMonthlyTotalsForThis {
             get {
@@ -12637,7 +12655,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the average number of this {0} type in {1}?.
+        ///   Looks up a localized string similar to What is the average number of {0} in {1}?.
         /// </summary>
         public static string lblWhatIsTheAverageNumberOfThisLivestockType {
             get {
