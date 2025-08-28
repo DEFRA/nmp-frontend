@@ -1824,6 +1824,10 @@ namespace NMP.Portal.Controllers
                     WarningMessage warningMessage = new WarningMessage();
                     string closedPeriod = string.Empty;
                     bool isPerennial = false;
+
+                    List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
+                    int cropTypeId = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.CropTypeID).FirstOrDefault() ?? 0;
+
                     if (!farm.RegisteredOrganicProducer.Value && isHighReadilyAvailableNitrogen)
                     {
                         (CropTypeResponse cropTypeResponse, Error error3) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(model.FieldList[0]), model.HarvestYear ?? 0, false);
@@ -1835,8 +1839,7 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
-                        int cropTypeId = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.CropTypeID).FirstOrDefault() ?? 0;
+                       
                         isPerennial = await _organicManureService.FetchIsPerennialByCropTypeId(cropTypeId);
                         int? cropInfo1 = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.CropInfo1).FirstOrDefault();
                         closedPeriod = warningMessage.ClosedPeriodOrganicFarm(fieldDetail, model.HarvestYear ?? 0, cropTypeId, cropInfo1, isPerennial);
@@ -1886,7 +1889,17 @@ namespace NMP.Portal.Controllers
                                 }
                                 string formattedStartDate = model.ClosedPeriodStartDate?.ToString("d MMMM yyyy");
                                 string formattedEndDate = model.ClosedPeriodEndDate?.ToString("d MMMM yyyy");
-                                model.ClosedPeriodForUI = $"{formattedStartDate} to {formattedEndDate}";
+
+                                Crop crop = null;
+                                CropTypeLinkingResponse cropTypeLinkingResponse = new CropTypeLinkingResponse();
+                                
+                                (cropTypeLinkingResponse, error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(cropTypeId);
+                                //NMaxLimitEngland is 0 for England and Whales for crops Winter beans​ ,Spring beans​, Peas​ ,Market pick peas
+                                if (cropTypeLinkingResponse.NMaxLimitEngland != 0)
+                                {
+                                    model.ClosedPeriodForUI = $"{formattedStartDate} to {formattedEndDate}";
+                                }
+                                
                             }
                         }
 
@@ -1952,9 +1965,21 @@ namespace NMP.Portal.Controllers
 
                 if (!ModelState.IsValid)
                 {
+                   
+                    List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
+                    int cropTypeId = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.CropTypeID).FirstOrDefault() ?? 0;
+                    CropTypeLinkingResponse cropTypeLinkingResponse = new CropTypeLinkingResponse();
+                    (cropTypeLinkingResponse, error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(cropTypeId);
+
                     string formattedStartDate = model.ClosedPeriodStartDate?.ToString("d MMMM yyyy");
                     string formattedEndDate = model.ClosedPeriodEndDate?.ToString("d MMMM yyyy");
-                    model.ClosedPeriodForUI = $"{formattedStartDate} to {formattedEndDate}";
+                    //NMaxLimitEngland is 0 for England and Whales for crops Winter beans​ ,Spring beans​, Peas​ ,Market pick peas
+                    if (cropTypeLinkingResponse.NMaxLimitEngland != 0)
+                    {
+                        model.ClosedPeriodForUI = $"{formattedStartDate} to {formattedEndDate}";
+                    }
+                    
+                    //model.ClosedPeriodForUI = $"{formattedStartDate} to {formattedEndDate}";
                     return View(model);
                 }
 
@@ -2000,9 +2025,26 @@ namespace NMP.Portal.Controllers
 
                                         if (field.IsWithinNVZ.Value)
                                         {
+                                            CropTypeLinkingResponse cropTypeLinkingResponse = new CropTypeLinkingResponse();
                                             if (!(model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials))
                                             {
-                                                (model, error) = await IsClosedPeriodWarningMessage(model, field.IsWithinNVZ.Value, farm.RegisteredOrganicProducer.Value, false);
+                                                //skip elosed period warning message for crop which has 0 NMax
+                                                Crop crop = null;
+                                                if (model.OrganicManures.Any(x => x.FieldID == Convert.ToInt32(fieldId)))
+                                                {
+                                                    int manId = model.OrganicManures.Where(x => x.FieldID == Convert.ToInt32(fieldId)).Select(x => x.ManagementPeriodID).FirstOrDefault();
+
+                                                    (ManagementPeriod managementPeriod, error) = await _cropService.FetchManagementperiodById(manId);
+                                                    (crop, error) = await _cropService.FetchCropById(managementPeriod.CropID.Value);
+
+                                                    (cropTypeLinkingResponse, error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID??0);
+                                                }
+                                                //NMaxLimitEngland is 0 for England and Whales for crops Winter beans​ ,Spring beans​, Peas​ ,Market pick peas
+                                                if (cropTypeLinkingResponse.NMaxLimitEngland != 0)
+                                                {
+                                                    (model, error) = await IsClosedPeriodWarningMessage(model, field.IsWithinNVZ.Value, farm.RegisteredOrganicProducer.Value, false);
+                                                }
+                                                
 
                                             }
 
@@ -5252,25 +5294,43 @@ namespace NMP.Portal.Controllers
                                         {
                                             if (!(model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials))
                                             {
-                                                (model, error) = await IsClosedPeriodWarningMessage(model, field.IsWithinNVZ.Value, farm.RegisteredOrganicProducer.Value, true);
-                                                if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
+                                                Crop crop = null;
+                                                CropTypeLinkingResponse cropTypeLinkingResponse = new CropTypeLinkingResponse();
+                                                if (model.OrganicManures.Any(x => x.FieldID == Convert.ToInt32(fieldId)))
                                                 {
-                                                    if (string.IsNullOrWhiteSpace(model.EncryptedOrgManureId))
+                                                    int manId = model.OrganicManures.Where(x => x.FieldID == Convert.ToInt32(fieldId)).Select(x => x.ManagementPeriodID).FirstOrDefault();
+
+                                                    (ManagementPeriod managementPeriod, error) = await _cropService.FetchManagementperiodById(manId);
+                                                    (crop, error) = await _cropService.FetchCropById(managementPeriod.CropID.Value);
+
+                                                    (cropTypeLinkingResponse, error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID ?? 0);
+                                                }
+                                                //NMaxLimitEngland is 0 for England and Whales for crops Winter beans​ ,Spring beans​, Peas​ ,Market pick peas
+                                                if (cropTypeLinkingResponse.NMaxLimitEngland != 0)
+                                                {
+                                                    (model, error) = await IsClosedPeriodWarningMessage(model, field.IsWithinNVZ.Value, farm.RegisteredOrganicProducer.Value, true);
+
+                                                    if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
                                                     {
-                                                        TempData["ConditionsAffectingNutrientsError"] = error.Message;
-                                                        return RedirectToAction("ConditionsAffectingNutrients");
-                                                    }
-                                                    else
-                                                    {
-                                                        TempData["ErrorOnHarvestYearOverview"] = error.Message;
-                                                        _httpContextAccessor.HttpContext?.Session.Remove("OrganicManure");
-                                                        return RedirectToAction("HarvestYearOverview", "Crop", new
+                                                        if (string.IsNullOrWhiteSpace(model.EncryptedOrgManureId))
                                                         {
-                                                            id = model.EncryptedFarmId,
-                                                            year = model.EncryptedHarvestYear
-                                                        });
+                                                            TempData["ConditionsAffectingNutrientsError"] = error.Message;
+                                                            return RedirectToAction("ConditionsAffectingNutrients");
+                                                        }
+                                                        else
+                                                        {
+                                                            TempData["ErrorOnHarvestYearOverview"] = error.Message;
+                                                            _httpContextAccessor.HttpContext?.Session.Remove("OrganicManure");
+                                                            return RedirectToAction("HarvestYearOverview", "Crop", new
+                                                            {
+                                                                id = model.EncryptedFarmId,
+                                                                year = model.EncryptedHarvestYear
+                                                            });
+                                                        }
                                                     }
                                                 }
+                                                
+                                                
                                             }
 
 
