@@ -7,28 +7,6 @@
     {
         backAction = "CheckAnswer";
     }
-    else if (Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass)
-    {
-        if (ViewBag.fieldList.Count == 1)
-        {
-            backAction = "CropGroups";
-        }
-        if (ViewBag.fieldList.Count > 1)
-        {
-            backAction = "CropFields";
-        }
-    }
-    else if (Model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass)
-    {
-        if (ViewBag.fieldList.Count == 1)
-        {
-            backAction = "CropTypes";
-        }
-        else
-        {
-            backAction = "CropFields";
-        }
-    }
     else
     {
         backAction = "CropFields";
