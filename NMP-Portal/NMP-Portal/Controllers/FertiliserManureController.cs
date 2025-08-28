@@ -805,6 +805,7 @@ namespace NMP.Portal.Controllers
                                         model.IsAnyChangeInField = true;
                                     }
                                 }
+                                int counter = 1;
                                 foreach (var fertiliser in model.FertiliserManures)
                                 {
                                     (ManagementPeriod managementPeriod, error) = await _cropService.FetchManagementperiodById(fertiliser.ManagementPeriodID);
@@ -815,6 +816,8 @@ namespace NMP.Portal.Controllers
                                         {
                                             fertiliser.FieldID = crop.FieldID;
                                             fertiliser.FieldName = (await _fieldService.FetchFieldByFieldId(fertiliser.FieldID.Value)).Name;
+                                            fertiliser.EncryptedCounter = _fieldDataProtector.Protect(counter.ToString());
+                                            counter++;
                                         }
                                     }
                                 }
@@ -850,6 +853,7 @@ namespace NMP.Portal.Controllers
                             }
                             else
                             {
+                                int counter = 1;
                                 foreach (var fertiliser in model.FertiliserManures)
                                 {
                                     (ManagementPeriod managementPeriod, error) = await _cropService.FetchManagementperiodById(fertiliser.ManagementPeriodID);
@@ -860,6 +864,8 @@ namespace NMP.Portal.Controllers
                                         {
                                             fertiliser.FieldID = crop.FieldID;
                                             fertiliser.FieldName = (await _fieldService.FetchFieldByFieldId(fertiliser.FieldID.Value)).Name;
+                                            fertiliser.EncryptedCounter = _fieldDataProtector.Protect(counter.ToString());
+                                            counter++;
                                         }
                                     }
                                 }

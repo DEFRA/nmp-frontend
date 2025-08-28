@@ -10134,22 +10134,7 @@ namespace NMP.Portal.Controllers
                             TempData["ManureTypeError"] = error.Message;
                             return View(model);
                         }
-                    }
-
-
-                    foreach (var organic in model.OrganicManures)
-                    {
-                        (ManagementPeriod managementPeriod, error) = await _cropService.FetchManagementperiodById(organic.ManagementPeriodID);
-                        if (string.IsNullOrWhiteSpace(error.Message) && managementPeriod != null)
-                        {
-                            (Crop crop, error) = await _cropService.FetchCropById(managementPeriod.CropID.Value);
-                            if (string.IsNullOrWhiteSpace(error.Message) && crop != null)
-                            {
-                                organic.FieldID = crop.FieldID;
-                                organic.FieldName = (await _fieldService.FetchFieldByFieldId(organic.FieldID.Value)).Name;
-                            }
-                        }
-                    }
+                    }                  
 
                     int grassCropCounter = 0;
                     foreach (var field in model.FieldList)
@@ -10199,7 +10184,22 @@ namespace NMP.Portal.Controllers
                             }
                         }
                     }
-
+                    int orgCounter = 1;
+                    foreach (var organic in model.OrganicManures)
+                    {
+                        (ManagementPeriod managementPeriod, error) = await _cropService.FetchManagementperiodById(organic.ManagementPeriodID);
+                        if (string.IsNullOrWhiteSpace(error.Message) && managementPeriod != null)
+                        {
+                            (Crop crop, error) = await _cropService.FetchCropById(managementPeriod.CropID.Value);
+                            if (string.IsNullOrWhiteSpace(error.Message) && crop != null)
+                            {
+                                organic.FieldID = crop.FieldID;
+                                organic.FieldName = (await _fieldService.FetchFieldByFieldId(organic.FieldID.Value)).Name;
+                                organic.EncryptedCounter = _fieldDataProtector.Protect(orgCounter.ToString());
+                                orgCounter++;
+                            }
+                        }
+                    }
                     model.GrassCropCount = grassCropCounter;
                 }
 
@@ -11048,7 +11048,7 @@ namespace NMP.Portal.Controllers
                         }
                     }
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("OrganicManure", model);
-                    if (model.IsCheckAnswer  && (!model.IsAnyChangeInField) && (!model.IsManureTypeChange))
+                    if (model.IsCheckAnswer && (!model.IsAnyChangeInSameDefoliationFlag) && (!model.IsAnyChangeInField) && (!model.IsManureTypeChange))
                     {
                         return RedirectToAction("CheckAnswer");
                     }
