@@ -5771,7 +5771,7 @@ namespace NMP.Portal.Controllers
             {
                 List<Crop> cropList = new List<Crop>();
                 string cropTypeName = string.Empty;
-                if (model.DoubleCrop == null)
+                if (model.DoubleCrop == null || model.IsAnyChangeInField)
                 {
                     model.DoubleCrop = new List<DoubleCrop>();
                     int counter = 1;
@@ -6052,19 +6052,15 @@ namespace NMP.Portal.Controllers
             {
                 if (model.IsAnyCropIsGrass.Value)
                 {
-                    (Crop crop, error) = await _cropService.FetchCropById(model.DoubleCrop[model.DoubleCropCurrentCounter - 1].CropID);
-                    if (crop != null && string.IsNullOrWhiteSpace(error.Message))
+                    if (model.DoubleCropCurrentCounter == model.DoubleCrop.Count)
                     {
-                        if (crop.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)
+                        foreach (var doubleCrop in model.DoubleCrop)
                         {
-                            //var itemToRemove = model.FertiliserManures
-                            //.FirstOrDefault(x => x.FieldID == model.DoubleCrop[model.DoubleCropCurrentCounter - 1].FieldID);
-                            List<FertiliserManure> itemsToRemove = model.FertiliserManures
-                           .Where(x => x.FieldID == model.DoubleCrop[model.DoubleCropCurrentCounter - 1].FieldID).ToList();
-                            foreach (var item in itemsToRemove)
+                            (Crop crop, error) = await _cropService.FetchCropById(doubleCrop.CropID);
+                            if (crop != null && string.IsNullOrWhiteSpace(error.Message) &&
+                                crop.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)
                             {
-                                model.FertiliserManures.Remove(item);
-                                model.GrassCropCount--;
+                                model.FertiliserManures.RemoveAll(f => f.FieldID == doubleCrop.FieldID);
                             }
                         }
                     }
@@ -6172,7 +6168,7 @@ namespace NMP.Portal.Controllers
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FertiliserManure", model);
                     return RedirectToAction("CheckAnswer");
                 }
-                else if (model.IsCheckAnswer)
+                else if (model.IsCheckAnswer&&(!model.IsAnyChangeInField))
                 {
                     _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
                     if (model.IsCheckAnswer && model.IsAnyCropIsGrass.HasValue && (!model.IsAnyChangeInField) && (!isCurrentFieldGrass))
