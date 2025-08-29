@@ -1491,6 +1491,12 @@ namespace NMP.Portal.Controllers
             //    model.EncryptedCounter = q;
             //    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
             //}
+
+            if (model.FieldList.Count == 1)
+            {
+                Field field = await _fieldService.FetchFieldByFieldId(Convert.ToInt32(model.FieldList[0]));
+                model.FieldName = field.Name;
+            }
             model.IsClosedPeriodWarning = false;
             model.IsClosedPeriodWarningOnlyForGrassAndOilseed = false;
             model.IsWarningMsgNeedToShow = false;
