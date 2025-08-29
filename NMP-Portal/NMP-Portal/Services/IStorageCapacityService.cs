@@ -8,5 +8,9 @@ namespace NMP.Portal.Services
         Task<(List<StoreCapacity>, Error)> FetchStoreCapacityByFarmIdAndYear(int farmId, int year);
         Task<(List<CommonResponse>, Error)> FetchMaterialStates();
         Task<(List<StorageTypeResponse>, Error)> FetchStorageTypes();
+        Task<(CommonResponse, Error)> FetchMaterialStateById(int id);
+        Task<(StorageTypeResponse, Error)> FetchStorageTypeById(int id);
+        Task<(List<SolidManureTypeResponse>, Error)> FetchSolidManureType();
+        Task<(SolidManureTypeResponse, Error)> FetchSolidManureTypeById(int id);
     }
 }

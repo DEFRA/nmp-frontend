@@ -3038,6 +3038,10 @@ namespace NMP.Portal.Controllers
                 {
                     HttpContext?.Session.Remove("ReportData");
                 }
+                if (HttpContext.Session.Keys.Contains("StorageCapacityData"))
+                {
+                    HttpContext?.Session.Remove("StorageCapacityData");
+                }
                 if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
                 {
                     _httpContextAccessor.HttpContext?.Session.Remove("FertiliserManure");

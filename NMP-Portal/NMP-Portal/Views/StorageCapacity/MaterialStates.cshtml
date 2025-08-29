@@ -1,18 +1,18 @@
-﻿@using NMP.Portal.Resources
+﻿﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.StorageCapacityViewModel
 @{
     ViewData["Title"] = Resource.lblStorageType;
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="StoreName" asp-controller="StorageCapacity">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="OrganicMaterialStorageNotAvailable" asp-controller="StorageCapacity">@Resource.lblBack</govuk-back-link>
 }
-@if (TempData["ErrorOnStorageTypes"] != null)
+@if (TempData["ErrorOnMaterialStates"] != null)
 {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <govuk-error-summary>
-                <govuk-error-summary-item href="#">@TempData["ErrorOnStorageTypes"]</govuk-error-summary-item>
+                <govuk-error-summary-item href="#">@TempData["ErrorOnMaterialStates"]</govuk-error-summary-item>
             </govuk-error-summary>
         </div>
     </div>
@@ -20,7 +20,7 @@
 
 @if (Model != null)
 {
-    <form asp-action="StorageTypes" asp-controller="StorageCapacity" method="post" autocomplete="off">
+    <form asp-action="MaterialStates" asp-controller="StorageCapacity" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
         <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
@@ -32,40 +32,27 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StoreName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MaterialStateName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MaterialStateId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StoreName"></govuk-input>
+
 
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
 
-                <govuk-radios class="govuk-radios" asp-for="@Model.StorageTypeId">
+                <govuk-radios class="govuk-radios" asp-for="@Model.MaterialStateId">
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                            @string.Format(Resource.WhatKindOfStorageIsStoreName,Model.StoreName)
+                            @Resource.lblWhatKindOfManureStorageDoYouWantToAdd
                         </govuk-radios-fieldset-legend>
                         <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
-                        @if (Model.MaterialStateId == (int)NMP.Portal.Enums.MaterialState.DirtyWaterStorage ||
-                                            Model.MaterialStateId == (int)NMP.Portal.Enums.MaterialState.SlurryStorage)
+                        @if (ViewBag.MaterialStateList != null && ViewBag.MaterialStateList.Count > 0)
                         {
-                            @if (ViewBag.StorageTypes != null && ViewBag.StorageTypes.Count > 0)
+                            foreach (var materialState in ViewBag.MaterialStateList)
                             {
-                                foreach (var storageType in ViewBag.StorageTypes)
-                                {
-                                    <govuk-radios-item value="@storageType.ID">@storageType.Name</govuk-radios-item>
-                                }
-                            }
-                        }
-                        else
-                        {
-                            @if (ViewBag.SolidManureTypeList != null && ViewBag.SolidManureTypeList.Count > 0)
-                            {
-                                foreach (var solidManureType in ViewBag.SolidManureTypeList)
-                                {
-                                    <govuk-radios-item value="@solidManureType.ID">@solidManureType.Name</govuk-radios-item>
-                                }
+                                <govuk-radios-item value="@materialState.Id">@materialState.Name</govuk-radios-item>
                             }
                         }
                     </govuk-radios-fieldset>

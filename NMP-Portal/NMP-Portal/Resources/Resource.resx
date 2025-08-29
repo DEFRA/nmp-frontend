@@ -5819,4 +5819,11 @@ live</value>
   <data name="lblEnterANameForYourOrganicMaterialStore" xml:space="preserve">
     <value>Enter a name for your organic material store before continuing.</value>
   </data>
+
+  <data name="lblDimensions" xml:space="preserve">
+    <value>Dimensions</value>
+  </data>
+  <data name="WhatKindOfStorageIsStoreName" xml:space="preserve">
+    <value>What kind of storage is {0}?</value>
+  </data>
 </root>
