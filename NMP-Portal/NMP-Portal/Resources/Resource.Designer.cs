@@ -10819,6 +10819,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Storage name.
+        /// </summary>
+        public static string lblStorageName {
+            get {
+                return ResourceManager.GetString("lblStorageName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Storage type.
         /// </summary>
         public static string lblStorageType {
@@ -13011,6 +13020,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhatIsYourLastHarvestYear {
             get {
                 return ResourceManager.GetString("lblWhatIsYourLastHarvestYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What kind of manure storage do you want to add?.
+        /// </summary>
+        public static string lblWhatKindOfManureStorageDoYouWantToAdd {
+            get {
+                return ResourceManager.GetString("lblWhatKindOfManureStorageDoYouWantToAdd", resourceCulture);
             }
         }
         
