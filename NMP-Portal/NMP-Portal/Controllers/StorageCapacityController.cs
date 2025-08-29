@@ -85,12 +85,12 @@ namespace NMP.Portal.Controllers
                         model.EncryptedHarvestYear = y;
                     }
 
-                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
                     {
-                        model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("ReportData");
+                        model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("StorageCapacityData");
                     }
 
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
                     List<HarvestYear> harvestYearList = new List<HarvestYear>();
                     (List<StoreCapacity> storeCapacityList, error) = await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(decryptedFarmId, model.Year ?? 0);
 
@@ -282,8 +282,8 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
 
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
-                return RedirectToAction("StorageName");
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
+                return RedirectToAction("StoreName");
             }
             catch (Exception ex)
             {
@@ -294,9 +294,9 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> StorageName()
+        public async Task<IActionResult> StoreName()
         {
-            _logger.LogTrace("Report Controller : StorageTypes() action called");
+            _logger.LogTrace("Report Controller : StoreName() action called");
             StorageCapacityViewModel model = new StorageCapacityViewModel();
             try
             {
@@ -321,13 +321,41 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Report Controller : Exception in StorageTypes() action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogTrace($"Report Controller : Exception in StoreName() action : {ex.Message}, {ex.StackTrace}");
 
-                TempData["ErrorOnStorageTypes"] = ex.Message;
-                return RedirectToAction("LivestockGroup");
+                TempData["ErrorOnMaterialStates"] = ex.Message;
+                return RedirectToAction("MaterialStates");
 
             }
             return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> StoreName(StorageCapacityViewModel model)
+        {
+            _logger.LogTrace("Report Controller : StoreName() post action called");
+            try
+            {
+                if (string.IsNullOrWhiteSpace(model.StoreName))
+                {
+                    ModelState.AddModelError("StoreName", Resource.lblEnterANameForYourOrganicMaterialStore);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
+                return RedirectToAction("StorageTypes");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in StoreName() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnStoreName"] = ex.Message;
+                return View(model);
+            }
         }
     }
 }

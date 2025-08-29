@@ -5810,4 +5810,13 @@ live</value>
   <data name="lblStorageName" xml:space="preserve">
     <value>Storage name</value>
   </data>
+  <data name="lblWhatDoYouWantToCallThisManureStore" xml:space="preserve">
+    <value>What do you want to call this manure store?</value>
+  </data>
+  <data name="lblGiveTheStoreAUniqueName" xml:space="preserve">
+    <value>Give the store a unique name.</value>
+  </data>
+  <data name="lblEnterANameForYourOrganicMaterialStore" xml:space="preserve">
+    <value>Enter a name for your organic material store before continuing.</value>
+  </data>
 </root>

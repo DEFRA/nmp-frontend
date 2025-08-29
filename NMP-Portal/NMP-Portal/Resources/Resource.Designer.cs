@@ -3562,6 +3562,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a name for your organic material store before continuing..
+        /// </summary>
+        public static string lblEnterANameForYourOrganicMaterialStore {
+            get {
+                return ResourceManager.GetString("lblEnterANameForYourOrganicMaterialStore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter an application rate in {0}.
         /// </summary>
         public static string lblEnterAnApplicationRate {
@@ -4728,6 +4737,15 @@ namespace NMP.Portal.Resources {
         public static string lblGettingHelp {
             get {
                 return ResourceManager.GetString("lblGettingHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Give the store a unique name..
+        /// </summary>
+        public static string lblGiveTheStoreAUniqueName {
+            get {
+                return ResourceManager.GetString("lblGiveTheStoreAUniqueName", resourceCulture);
             }
         }
         
@@ -12579,6 +12597,15 @@ namespace NMP.Portal.Resources {
         public static string lblWeWillAssistYou {
             get {
                 return ResourceManager.GetString("lblWeWillAssistYou", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What do you want to call this manure store?.
+        /// </summary>
+        public static string lblWhatDoYouWantToCallThisManureStore {
+            get {
+                return ResourceManager.GetString("lblWhatDoYouWantToCallThisManureStore", resourceCulture);
             }
         }
         
