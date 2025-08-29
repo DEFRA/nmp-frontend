@@ -14745,7 +14745,16 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that the amount of crop available nitrogen from inorganic fertilisers and organic manures that you apply to this crop averaged across your whole farm must not exceed {0}kg per hectare..
+        ///   Looks up a localized string similar to Individual fields may have a higher adjusted limit, but you must stay within the {0}kg limit overall..
+        /// </summary>
+        public static string MsgCropNmaxLimitWarningPara1Additional {
+            get {
+                return ResourceManager.GetString("MsgCropNmaxLimitWarningPara1Additional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that the amount of crop-available nitrogen (N) from inorganic fertilisers and organic manures that you apply to this crop, averaged across your whole farm, must not exceed {0}kg of N per hectare..
         /// </summary>
         public static string MsgCropNmaxLimitWarningPara1England {
             get {
@@ -14763,7 +14772,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the amount of crop available nitrogen from inorganic fertilisers and organic manures you apply..
+        ///   Looks up a localized string similar to It is an offence to breach the NVZ rules, and you should consider reducing the amount of crop-available nitrogen (N) from inorganic fertilisers and organic manures that you apply..
         /// </summary>
         public static string MsgCropNmaxLimitWarningPara2England {
             get {

@@ -6937,7 +6937,7 @@ namespace NMP.Portal.Controllers
                                         {
                                             nMaxLimit = nmaxLimitEnglandOrWales ?? 0;
                                             OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
-                                            nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(nmaxLimitEnglandOrWales ?? 0, crop[0].Yield == null ? null : crop[0].Yield.Value, fieldDetail.SoilTypeName, crop[0].CropInfo1 == null ? null : crop[0].CropInfo1.Value, crop[0].CropTypeID.Value, currentYearManureTypeIds, previousYearManureTypeIds, model.ManureTypeId.Value);
+                                            //nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(nmaxLimitEnglandOrWales ?? 0, crop[0].Yield == null ? null : crop[0].Yield.Value, fieldDetail.SoilTypeName, crop[0].CropInfo1 == null ? null : crop[0].CropInfo1.Value, crop[0].CropTypeID.Value, currentYearManureTypeIds, previousYearManureTypeIds, model.ManureTypeId.Value);
 
                                             if (totalN > nMaxLimit)
                                             {
@@ -6949,6 +6949,7 @@ namespace NMP.Portal.Controllers
                                                     {
                                                         model.CropNmaxLimitWarningHeading = Resource.MsgCropNmaxLimitWarningHeadingEngland;
                                                         model.CropNmaxLimitWarningPara1 = string.Format(Resource.MsgCropNmaxLimitWarningPara1England, nMaxLimit);
+                                                        model.CropNmaxLimitWarningPara1Additional = string.Format(Resource.MsgCropNmaxLimitWarningPara1Additional, nMaxLimit);
                                                         model.CropNmaxLimitWarningPara2 = Resource.MsgCropNmaxLimitWarningPara2England;
                                                     }
 
@@ -6956,6 +6957,7 @@ namespace NMP.Portal.Controllers
                                                     {
                                                         model.CropNmaxLimitWarningHeading = Resource.MsgCropNmaxLimitWarningHeadingWales;
                                                         model.CropNmaxLimitWarningPara1 = string.Format(Resource.MsgCropNmaxLimitWarningPara1Wales, nMaxLimit);
+                                                        model.CropNmaxLimitWarningPara1Additional = string.Format(Resource.MsgCropNmaxLimitWarningPara1Additional, nMaxLimit);
                                                         model.CropNmaxLimitWarningPara2 = Resource.MsgCropNmaxLimitWarningPara2Wales;
                                                     }
 
@@ -6992,7 +6994,7 @@ namespace NMP.Portal.Controllers
                                                     nMaxLimit = nmaxLimitEnglandOrWales ?? 0;
                                                     //string cropInfo1 = await _cropService.FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(crop[0].CropTypeID.Value, crop[0].CropInfo1.Value);
                                                     OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
-                                                    nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(nmaxLimitEnglandOrWales ?? 0, crop[0].Yield == null ? null : crop[0].Yield.Value, fieldDetail.SoilTypeName, crop[0].CropInfo1 == null ? null : crop[0].CropInfo1.Value, crop[0].CropTypeID.Value, currentYearManureTypeIds, previousYearManureTypeIds, model.ManureTypeId.Value);
+                                                    //nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(nmaxLimitEnglandOrWales ?? 0, crop[0].Yield == null ? null : crop[0].Yield.Value, fieldDetail.SoilTypeName, crop[0].CropInfo1 == null ? null : crop[0].CropInfo1.Value, crop[0].CropTypeID.Value, currentYearManureTypeIds, previousYearManureTypeIds, model.ManureTypeId.Value);
                                                     if ((previousApplicationsN + availableNFromMannerOutput) > nMaxLimit)
                                                     {
                                                         model.IsNMaxLimitWarning = true;
@@ -7002,6 +7004,7 @@ namespace NMP.Portal.Controllers
                                                         {
                                                             model.CropNmaxLimitWarningHeading = Resource.MsgCropNmaxLimitWarningHeadingEngland;
                                                             model.CropNmaxLimitWarningPara1 = string.Format(Resource.MsgCropNmaxLimitWarningPara1England, nMaxLimit);
+                                                            model.CropNmaxLimitWarningPara1Additional = string.Format(Resource.MsgCropNmaxLimitWarningPara1Additional, nMaxLimit);
                                                             model.CropNmaxLimitWarningPara2 = Resource.MsgCropNmaxLimitWarningPara2England;
                                                         }
 
@@ -7009,6 +7012,7 @@ namespace NMP.Portal.Controllers
                                                         {
                                                             model.CropNmaxLimitWarningHeading = Resource.MsgCropNmaxLimitWarningHeadingWales;
                                                             model.CropNmaxLimitWarningPara1 = string.Format(Resource.MsgCropNmaxLimitWarningPara1Wales, nMaxLimit);
+                                                            model.CropNmaxLimitWarningPara1Additional = string.Format(Resource.MsgCropNmaxLimitWarningPara1Additional, nMaxLimit);
                                                             model.CropNmaxLimitWarningPara2 = Resource.MsgCropNmaxLimitWarningPara2Wales;
                                                         }
 

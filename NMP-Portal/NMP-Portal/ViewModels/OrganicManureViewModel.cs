@@ -107,6 +107,7 @@ namespace NMP.Portal.ViewModels
         public string? NmaxWarningPara2 { get; set; }
         public string? CropNmaxLimitWarningHeading { get; set; }
         public string? CropNmaxLimitWarningPara1 { get; set; }
+        public string? CropNmaxLimitWarningPara1Additional { get; set; }
         public string? CropNmaxLimitWarningPara2 { get; set; }
         public int? FarmCountryId { get; set; }
         public string? ClosedPeriod { get; set; } = string.Empty;
