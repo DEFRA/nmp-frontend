@@ -1596,7 +1596,7 @@ namespace NMP.Portal.Controllers
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                     if ((model.IsComingFromPlan.HasValue && model.IsComingFromPlan.Value))
                     {
-                        return RedirectToAction("ManageStorageCapacity", new { q = model.EncryptedFarmId, y = model.EncryptedHarvestYear });
+                        return RedirectToAction("ManageStorageCapacity", "StorageCapacity", new { q = model.EncryptedFarmId, y = model.EncryptedHarvestYear });
                     }
                     else
                     {
@@ -6258,126 +6258,7 @@ namespace NMP.Portal.Controllers
             return string.Empty; // not in any group
         }
 
-
-        [HttpGet]
-        public async Task<IActionResult> StorageType()
-        {
-            _logger.LogTrace("Report Controller : StorageType() action called");
-            ReportViewModel model = new ReportViewModel();
-            try
-            {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
-                {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
-                }
-                else
-                {
-                    return RedirectToAction("FarmList", "Farm");
-                }
-                if (model.MaterialStateId == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage)
-                {
-                    (List<SolidManureType> solidManureTypeList, Error error) = await _reportService.FetchSolidManureType();
-                    if (error == null)
-                    {
-                        ViewBag.SolidManureTypeList = solidManureTypeList;
-                    }
-                    else
-                    {
-                        TempData["ErrorOnStoreName"] = error.Message;
-                        return RedirectToAction("StoreName");
-                    }
-                }
-                else
-                {
-                    (List<StorageType> storageTypeList, Error error) = await _reportService.FetchStorageType();
-                    if (error == null)
-                    {
-                        ViewBag.StorageTypeList = storageTypeList;
-                    }
-                    else
-                    {
-                        TempData["ErrorOnStoreName"] = error.Message;
-                        return RedirectToAction("StoreName");
-                    }
-                }
                 
-            }
-            catch (Exception ex)
-            {
-                _logger.LogTrace($"Report Controller : Exception in StorageType() action : {ex.Message}, {ex.StackTrace}");
-
-                TempData["ErrorOnStoreName"] = ex.Message;
-                return RedirectToAction("StoreName");
-
-            }
-            return View(model);
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> StorageType(ReportViewModel model)
-        {
-            _logger.LogTrace("Report Controller : StorageType() post action called");
-            Error error = new Error();
-            try
-            {
-                if (model.LivestockGroupId == null)
-                {
-                    ModelState.AddModelError("LivestockGroupId", Resource.MsgSelectAnOptionBeforeContinuing);
-                }
-                if (!ModelState.IsValid)
-                {
-                    (List<StorageType> storageTypeList, error) = await _reportService.FetchStorageType();
-                    if (error == null)
-                    {
-                        ViewBag.StorageTypeList = storageTypeList;
-                    }
-                    return View(model);
-                }
-                (StorageType storageType, error) = await _reportService.FetchStorageTypeById(model.StorageTypeId.Value);
-                if (error == null)
-                {
-                    //model.StorageName = storageType.Name;
-                }
-                else
-                {
-                    TempData["ErrorOnStorageType"] = error.Message;
-                    return View(model);
-                }
-
-                //ReportViewModel reportModel = new ReportViewModel();
-                //if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
-                //{
-                //    reportModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
-                //}
-                //if (model.IsLivestockCheckAnswer)
-                //{
-                //    if (model.LivestockGroupId == reportModel.LivestockGroupId)
-                //    {
-                //        return RedirectToAction("LivestockCheckAnswer");
-                //    }
-                //}
-                if (model.StorageTypeId == (int)NMP.Portal.Enums.StorageTypes.SquareOrRectangularTank ||
-                    model.StorageTypeId == (int)NMP.Portal.Enums.StorageTypes.CircularTank ||
-                    model.StorageTypeId == (int)NMP.Portal.Enums.StorageTypes.EarthBankedLagoon)
-                {
-                    //dimension  
-                }
-                else
-                {
-                    //Capacity
-                }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
-
-                return RedirectToAction("LivestockType");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogTrace($"Report Controller : Exception in LivestockGroup() post action : {ex.Message}, {ex.StackTrace}");
-                TempData["ErrorOnLivestockGroup"] = ex.Message;
-                return View(model);
-            }
-        }
-
     }
 
 }

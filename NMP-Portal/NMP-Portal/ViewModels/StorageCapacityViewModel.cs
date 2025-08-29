@@ -16,6 +16,9 @@
 
         public int? StorageTypeId { get; set; }
         public string? StorageTypeName { get; set; } = string.Empty;
+        public int? MaterialStateId { get; set; }
+        public string? MaterialStateName { get; set; }
+        public string? StoreName { get; set; }
 
     }
 }
