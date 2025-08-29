@@ -1704,7 +1704,7 @@ namespace NMP.Portal.Controllers
                     //if (string.IsNullOrWhiteSpace(error.Message) && storeCapacityList.Count > 0)
                     //{
                     //    model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
-                        return RedirectToAction("ManageStorageCapacity", new { q = model.EncryptedFarmId, y = model.EncryptedHarvestYear });
+                        return RedirectToAction("ManageStorageCapacity","StorageCapacity", new { q = model.EncryptedFarmId, y = model.EncryptedHarvestYear });
                     //}
                     //return RedirectToAction("OrganicMaterialStorageNotAvailable");
                 }
