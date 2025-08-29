@@ -302,7 +302,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public IActionResult StoreName()
         {
-            _logger.LogTrace("Report Controller : StoreTypes() action called");
+            _logger.LogTrace("Report Controller : StoreName() action called");
             StorageCapacityViewModel model = new StorageCapacityViewModel();
             try
             {
@@ -317,8 +317,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Report Controller : Exception in StoreTypes() action : {ex.Message}, {ex.StackTrace}");
-
+                _logger.LogTrace($"Report Controller : Exception in StoreName() action : {ex.Message}, {ex.StackTrace}");
                 TempData["ErrorOnMaterialStates"] = ex.Message;
                 return RedirectToAction("MaterialStates");
 

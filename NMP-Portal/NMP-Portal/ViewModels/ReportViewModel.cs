@@ -154,7 +154,5 @@ namespace NMP.Portal.ViewModels
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatPercentageOfTheLandIsFarmedAsGrass))]
         [Range(80, 100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgToHaveADerogationAtLeast80PercentOfYourFarm))]
         public int? GrassPercentage { get; set; }
-        public int? MaterialStateId { get; set; }
-        public int? StorageTypeId { get; set; }
     }
 }
