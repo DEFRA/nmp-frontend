@@ -1915,9 +1915,15 @@ namespace NMP.Portal.Controllers
                     }
 
                 }
+                if (model.FieldList.Count == 1)
+                {
+                    Field field = await _fieldService.FetchFieldByFieldId(Convert.ToInt32(model.FieldList[0]));
+                    model.FieldName = field.Name;
+                }
                 model.IsWarningMsgNeedToShow = false;
                 model.IsClosedPeriodWarning = false;
                 model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false;
+                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
                 return View(model);
             }
             catch (Exception ex)
