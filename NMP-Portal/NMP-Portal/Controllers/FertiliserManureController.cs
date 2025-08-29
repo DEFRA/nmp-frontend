@@ -1491,6 +1491,12 @@ namespace NMP.Portal.Controllers
             //    model.EncryptedCounter = q;
             //    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
             //}
+
+            if (model.FieldList.Count == 1)
+            {
+                Field field = await _fieldService.FetchFieldByFieldId(Convert.ToInt32(model.FieldList[0]));
+                model.FieldName = field.Name;
+            }
             model.IsClosedPeriodWarning = false;
             model.IsClosedPeriodWarningOnlyForGrassAndOilseed = false;
             model.IsWarningMsgNeedToShow = false;
@@ -5844,28 +5850,50 @@ namespace NMP.Portal.Controllers
                 string cropTypeName = string.Empty;
                 if (model.DoubleCrop == null || model.IsAnyChangeInField)
                 {
-                    model.DoubleCrop = new List<DoubleCrop>();
-                    int counter = 1;
-                    foreach (string fieldId in model.FieldList)
+                    if (model.DoubleCrop == null)
                     {
-                        cropList = await _cropService.FetchCropsByFieldId(Convert.ToInt32(fieldId));
-                        cropList = cropList.Where(x => x.Year == model.HarvestYear).ToList();
-                        cropTypeName = await _fieldService.FetchCropTypeById(cropList.FirstOrDefault().CropTypeID.Value);
+                        model.DoubleCrop = new List<DoubleCrop>();
+                    }
+
+                    int counter = model.DoubleCrop.Count + 1;
+
+                    foreach (string fieldIdStr in model.FieldList)
+                    {
+                        int fieldId = Convert.ToInt32(fieldIdStr);
+
+                        bool isFieldAlreadyPresent = model.DoubleCrop.Any(dc => dc.FieldID == fieldId);
+                        if (model.IsAnyChangeInField && isFieldAlreadyPresent)
+                        {
+                            continue;
+                        }
+
+                        cropList = await _cropService.FetchCropsByFieldId(fieldId);
+                        cropList = cropList?.Where(x => x.Year == model.HarvestYear).ToList();
+
                         if (cropList != null && cropList.Count == 2)
                         {
-                            var doubleCrop = new DoubleCrop
+                            var cropTypeId = cropList.FirstOrDefault()?.CropTypeID;
+                            if (cropTypeId.HasValue)
                             {
-                                CropName = cropTypeName,
-                                CropOrder = cropList.FirstOrDefault().CropOrder.Value,
-                                FieldID = cropList.FirstOrDefault().FieldID.Value,
-                                FieldName = (await _fieldService.FetchFieldByFieldId(cropList.FirstOrDefault().FieldID.Value)).Name,
-                                EncryptedCounter = _fieldDataProtector.Protect(counter.ToString()), //model.DoubleCropEncryptedCounter,
-                                Counter = model.DoubleCropCurrentCounter,
-                            };
-                            model.DoubleCrop.Add(doubleCrop);
-                            counter++;
+                                cropTypeName = await _fieldService.FetchCropTypeById(cropTypeId.Value);
+                                var field = await _fieldService.FetchFieldByFieldId(fieldId);
+
+                                var doubleCrop = new DoubleCrop
+                                {
+                                    CropName = cropTypeName,
+                                    CropOrder = cropList.FirstOrDefault().CropOrder ?? 1,
+                                    FieldID = fieldId,
+                                    FieldName = field?.Name,
+                                    EncryptedCounter = _fieldDataProtector.Protect(counter.ToString()),
+                                    Counter = counter,
+                                };
+
+                                model.DoubleCrop.Add(doubleCrop);
+                                counter++;
+                            }
                         }
                     }
+                    //    model.DoubleCropCurrentCounter = counter;
                 }
                 cropList = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.DoubleCrop[model.DoubleCropCurrentCounter].FieldID));
                 cropList = cropList.Where(x => x.Year == model.HarvestYear).ToList();

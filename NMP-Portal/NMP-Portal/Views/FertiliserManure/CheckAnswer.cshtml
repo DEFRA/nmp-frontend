@@ -286,7 +286,7 @@
                                         @string.Format(Resource.lblWhichCropIsThisFertiliserApplication, doubleCrop.FieldName)
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value>
-                                        @((doubleCrop.CropID == null) ? Resource.lblNotSet : string.Format("{0} {1} {2} {3} {4}", Resource.lblCrop, doubleCrop.CropOrder, "(", doubleCrop.CropName, ")"))
+                                        @((doubleCrop.CropID == null) ? Resource.lblNotSet : string.Format("{0} {1} {2}{3}{4}", Resource.lblCrop, doubleCrop.CropOrder, "(", doubleCrop.CropName, ")"))
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
                                         <govuk-summary-list-row-action asp-action="DoubleCrop" asp-controller="FertiliserManure" asp-route-q="@doubleCrop.EncryptedCounter">@Resource.lblChange</govuk-summary-list-row-action>
