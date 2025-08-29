@@ -5801,4 +5801,7 @@ live</value>
   <data name="lblHorse" xml:space="preserve">
     <value>horse</value>
   </data>
+  <data name="lblStorageType" xml:space="preserve">
+    <value>Storage type</value>
+  </data>
 </root>

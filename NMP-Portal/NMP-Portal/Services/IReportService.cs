@@ -26,5 +26,8 @@ namespace NMP.Portal.Services
         Task<(List<CommonResponse>, Error)> FetchMaterialStates();
         Task<(List<CommonResponse>, Error)> FetchMaterialStateById(int id);
         Task<(List<StorageType>, Error)> FetchStorageType();
+        Task<(StorageType, Error)> FetchStorageTypeById(int id);
+        Task<(List<SolidManureType>, Error)> FetchSolidManureType();
+        Task<(SolidManureType, Error)> FetchSolidManureTypeById(int id);
     }
 }

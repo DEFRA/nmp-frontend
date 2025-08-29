@@ -10819,6 +10819,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Storage type.
+        /// </summary>
+        public static string lblStorageType {
+            get {
+                return ResourceManager.GetString("lblStorageType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Straw use.
         /// </summary>
         public static string lblStrawUse {

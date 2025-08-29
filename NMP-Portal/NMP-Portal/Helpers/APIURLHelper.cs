@@ -202,5 +202,8 @@ namespace NMP.Portal.Helpers
         public const string FetchMaterialStatesListAsyncAPI = "material-states";
         public const string FetchMaterialStatesListByIDAsyncAPI = "material-states/{0}";
         public const string FetchStorageTypeAsyncAPI = "storage-types";
+        public const string FetchStorageTypeByIdAsyncAPI = "storage-types/{0}";
+        public const string FetchSolidManureTypeAsyncAPI = "solid-manure-types";
+        public const string FetchSolidManureTypeByIdAsyncAPI = "solid-manure-types/{0}";
     }
 }
