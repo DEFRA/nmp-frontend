@@ -1,0 +1,71 @@
+﻿@using NMP.Portal.Resources
+@model NMP.Portal.ViewModels.StorageCapacityViewModel
+@{
+    ViewData["Title"] = Resource.lblStorageName;
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="StorageTypes" asp-controller="StorageCapacity">@Resource.lblBack</govuk-back-link>
+}
+@if (TempData["ErrorOnStorageTypes"] != null)
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["ErrorOnStorageTypes"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        </div>
+    </div>
+}
+
+@if (Model != null)
+{
+    <form asp-action="StorageTypes" asp-controller="Report" method="post" autocomplete="off">
+        @Html.AntiForgeryToken()
+        <div hidden="true">
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportOption"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportTypeName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
+
+        </div>
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+
+                @* <govuk-radios class="govuk-radios" asp-for="@Model.StorageTypeId">
+                    <govuk-radios-fieldset>
+                        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                            @Resource.lblWhatKindOfManureStorageDoYouWantToAdd
+                        </govuk-radios-fieldset-legend>
+                        <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
+                        @if (ViewBag.StorageTypes != null && ViewBag.StorageTypes.Count > 0)
+                        {
+                            foreach (var storageType in ViewBag.StorageTypes)
+                            {
+                                <govuk-radios-item value="@storageType.ID">@storageType.Name</govuk-radios-item>
+                            }
+                        }
+                    </govuk-radios-fieldset>
+                </govuk-radios>
+                <govuk-button type="submit" class="margin-bottom-forty">
+                    @Resource.lblContinue
+                </govuk-button> *@
+
+                <h1>Work in progress</h1>
+
+                <p class="govuk-body cancel-link">
+                    <a asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report">
+                        @Resource.lblCancel
+                    </a>
+                </p>
+
+            </div>
+
+        </div>
+    </form>
+}

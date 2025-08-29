@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
+using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
 using NMP.Portal.Services;
 using NMP.Portal.ViewModels;
@@ -22,6 +23,7 @@ namespace NMP.Portal.Controllers
         private readonly IOrganicManureService _organicManureService;
         private readonly IFertiliserManureService _fertiliserManureService;
         private readonly IReportService _reportService;
+        private readonly IStorageCapacityService _storageCapacityService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         public StorageCapacityController(ILogger<StorageCapacityController> logger,
             IDataProtectionProvider dataProtectionProvider,
@@ -33,6 +35,7 @@ namespace NMP.Portal.Controllers
             IOrganicManureService organicManureService,
             IFertiliserManureService fertiliserManureService,
             IReportService reportService,
+            IStorageCapacityService storageCapacityService,
             IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
@@ -47,6 +50,7 @@ namespace NMP.Portal.Controllers
             _organicManureService = organicManureService;
             _fertiliserManureService = fertiliserManureService;
             _reportService = reportService;
+            _storageCapacityService = storageCapacityService;
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -88,13 +92,13 @@ namespace NMP.Portal.Controllers
 
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                     List<HarvestYear> harvestYearList = new List<HarvestYear>();
-                    (List<StoreCapacity> storeCapacityList, error) = await _reportService.FetchStoreCapacityByFarmIdAndYear(decryptedFarmId, model.Year ?? 0);
+                    (List<StoreCapacity> storeCapacityList, error) = await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(decryptedFarmId, model.Year ?? 0);
 
                     if (string.IsNullOrWhiteSpace(error.Message))
                     {
                         if (storeCapacityList != null && storeCapacityList.Count > 0)
                         {
-                            (List<CommonResponse> materialStateList, error) = await _reportService.FetchMaterialStates();
+                            (List<CommonResponse> materialStateList, error) = await _storageCapacityService.FetchMaterialStates();
                             if (materialStateList != null && materialStateList.Count > 0)
                             {
                                 if (storeCapacityList
@@ -198,12 +202,12 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> OrganicMaterialStorageNotAvailable()
         {
             _logger.LogTrace("Report Controller : OrganicMaterialStorageNotAvailable() action called");
-            ReportViewModel model = new ReportViewModel();
+            StorageCapacityViewModel model = new StorageCapacityViewModel();
             try
             {
                 if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("ReportData");
                 }
                 else
                 {
@@ -216,6 +220,112 @@ namespace NMP.Portal.Controllers
 
                 TempData["ErrorOnYear"] = ex.Message;
                 return RedirectToAction("Year");
+            }
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> StorageTypes()
+        {
+            _logger.LogTrace("Report Controller : StorageTypes() action called");
+            StorageCapacityViewModel model = new StorageCapacityViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+                (List<StorageTypeResponse> storageTypes, Error error) = await _storageCapacityService.FetchStorageTypes();
+                if (error == null)
+                {
+                    ViewBag.StorageTypes = storageTypes;
+                }
+                else
+                {
+                    TempData["ErrorOnOrganicMaterialStorageNotAvailable"] = error.Message;
+                    return RedirectToAction("OrganicMaterialStorageNotAvailable");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in StorageTypes() action : {ex.Message}, {ex.StackTrace}");
+
+                TempData["ErrorOnStorageTypes"] = ex.Message;
+                return RedirectToAction("LivestockGroup");
+
+            }
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> StorageTypes(StorageCapacityViewModel model)
+        {
+            _logger.LogTrace("Report Controller : StorageTypes() post action called");
+            try
+            {
+                if (model.StorageTypeId == null)
+                {
+                    ModelState.AddModelError("StorageTypeId", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    (List<StorageTypeResponse> storageTypes, Error error) = await _storageCapacityService.FetchStorageTypes();
+                    if (error == null)
+                    {
+                        ViewBag.StorageTypes = storageTypes;
+                    }
+                    return View(model);
+                }
+
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                return RedirectToAction("StorageName");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in StorageTypes() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnStorageTypes"] = ex.Message;
+                return View(model);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> StorageName()
+        {
+            _logger.LogTrace("Report Controller : StorageTypes() action called");
+            StorageCapacityViewModel model = new StorageCapacityViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+                (List<StorageTypeResponse> storageTypes, Error error) = await _storageCapacityService.FetchStorageTypes();
+                if (error == null)
+                {
+                    ViewBag.StorageTypes = storageTypes;
+                }
+                else
+                {
+                    TempData["ErrorOnOrganicMaterialStorageNotAvailable"] = error.Message;
+                    return RedirectToAction("OrganicMaterialStorageNotAvailable");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in StorageTypes() action : {ex.Message}, {ex.StackTrace}");
+
+                TempData["ErrorOnStorageTypes"] = ex.Message;
+                return RedirectToAction("LivestockGroup");
+
             }
             return View(model);
         }
