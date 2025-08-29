@@ -3121,6 +3121,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dimensions.
+        /// </summary>
+        public static string lblDimensions {
+            get {
+                return ResourceManager.GetString("lblDimensions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dirty water.
         /// </summary>
         public static string lblDirtyWater {
@@ -3558,6 +3567,15 @@ namespace NMP.Portal.Resources {
         public static string lblEnterAFigure {
             get {
                 return ResourceManager.GetString("lblEnterAFigure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What do you want to call this manure store?.
+        /// </summary>
+        public static string lblEnterANameForYourOrganicMaterialStore {
+            get {
+                return ResourceManager.GetString("lblEnterANameForYourOrganicMaterialStore", resourceCulture);
             }
         }
         
@@ -17126,6 +17144,15 @@ namespace NMP.Portal.Resources {
         public static string UrlAHDBPotatoVarietyGroup {
             get {
                 return ResourceManager.GetString("UrlAHDBPotatoVarietyGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What kind of storage is {0}?.
+        /// </summary>
+        public static string WhatKindOfStorageIsStoreName {
+            get {
+                return ResourceManager.GetString("WhatKindOfStorageIsStoreName", resourceCulture);
             }
         }
     }

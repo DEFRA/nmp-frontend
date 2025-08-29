@@ -759,7 +759,7 @@ namespace NMP.Portal.Controllers
                                 }
                                 else
                                 {
-                                    cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitWales != null ).ToList();
+                                    cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitWales != null).ToList();
                                 }
                                 cropTypeList = cropTypeList
                                 .Where(crop => cropTypeLinking
@@ -1596,7 +1596,7 @@ namespace NMP.Portal.Controllers
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                     if ((model.IsComingFromPlan.HasValue && model.IsComingFromPlan.Value))
                     {
-                            return RedirectToAction("ManageStorageCapacity", new { q = model.EncryptedFarmId, y = model.EncryptedHarvestYear });
+                        return RedirectToAction("ManageStorageCapacity", "StorageCapacity", new { q = model.EncryptedFarmId, y = model.EncryptedHarvestYear });
                     }
                     else
                     {
@@ -2187,7 +2187,7 @@ namespace NMP.Portal.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async  Task<IActionResult> IsAnyLivestockImportExport(ReportViewModel model)
+        public async Task<IActionResult> IsAnyLivestockImportExport(ReportViewModel model)
         {
             _logger.LogTrace("Report Controller : IsAnyLivestockImportExport() post action called");
             try
@@ -4605,15 +4605,15 @@ namespace NMP.Portal.Controllers
                 (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
                 ViewBag.Nitrogen = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
                 ViewBag.Phosphate = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
-                if(model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
+                if (model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
                 {
                     ViewBag.LivestockCategory = model.LivestockGroupName;
                 }
                 else
                 {
-                    
+
                     string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[1];
-                    if(!string.IsNullOrWhiteSpace(groupName))
+                    if (!string.IsNullOrWhiteSpace(groupName))
                     {
                         if (groupName.Equals(Resource.lblGoat) || groupName.Equals(Resource.lblHorse))
                             groupName = groupName + "s";
@@ -6258,7 +6258,7 @@ namespace NMP.Portal.Controllers
             return string.Empty; // not in any group
         }
 
-
+                
     }
 
 }
