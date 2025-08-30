@@ -1,5 +1,5 @@
 ﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.ReportViewModel
+@model NMP.Portal.ViewModels.StorageCapacityViewModel
 @{
     ViewData["Title"] = Resource.lblNotEnteredStorage;
 
@@ -29,14 +29,23 @@
                 @string.Format(Resource.lblYouHaveNotEnteredAnyOrganicMaterialStorageFor, Model.Year)
             </h1>
             <p class="govuk-body">
-                <a class="govuk-button" href="#">
+                <a class="govuk-button" asp-action="MaterialStates" asp-controller="StorageCapacity">
                     @Resource.lblAddOrganicMaterialStorage
                 </a>
             </p>
             <p class="govuk-body cancel-link">
-                <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
-                    @Resource.lblCancel
-                </a>
+                @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
+                {
+                    <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">
+                        @Resource.lblCancel
+                    </a>
+                }
+                else
+                {
+                    <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+                        @Resource.lblCancel
+                    </a>
+                }
             </p>
 
         </div>
