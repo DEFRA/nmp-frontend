@@ -118,7 +118,9 @@
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @(Model.FieldList.Count == 1 ? Resource.lblIsThisANewSwardOrExistingSward : string.Format(Resource.lblAreTheseNewSwardOrExistingSwardInTheseFields, Resource.lblTheseFields))
                     </govuk-radios-fieldset-legend>
-                    <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
+                    <govuk-radios-hint>
+                        @Resource.lblAboutNewSward <br />
+                        @Resource.lblSelectOneOption</govuk-radios-hint>
 
                     <govuk-radios-item value="@valueNewSward">@Resource.lblNewSwards</govuk-radios-item>
                     <govuk-radios-item value="@valueExistingSward">@Resource.lblExistingSwards</govuk-radios-item>

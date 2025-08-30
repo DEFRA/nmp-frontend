@@ -90,7 +90,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherMaterialName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassPercentage"></govuk-input>
 
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestock"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestockNumber"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockTypeId"></govuk-input>
@@ -153,6 +153,9 @@
                         <h2 class="govuk-heading-l">
                             @ViewBag.NoField
                         </h2>
+                        <p class="govuk-body">
+                            @Resource.MsgForIfFieldsAreNotCreated
+                        </p>
                         <div class="margin-bottom-forty">
                         <a class="govuk-button add-button" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">
                             @Resource.lblAddField

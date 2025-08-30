@@ -282,11 +282,11 @@
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblTotalSulphur</td>
-                        <td class="govuk-table__cell alignRight">@(Model.ManureType.SO3 != null ? string.Format(unit, Model.ManureType.SO3) : string.Empty)</td>
+                        <td class="govuk-table__cell alignRight">@((Model.ManureType.SO3 != null && Model.ManureType.SO3 != 0) ? string.Format(unit, Model.ManureType.SO3) : string.Empty)</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblTotalMagnesium</td>
-                        <td class="govuk-table__cell alignRight">@(Model.ManureType.MgO != null ? string.Format(unit, Model.ManureType.MgO) : string.Empty)</td>
+                        <td class="govuk-table__cell alignRight">@((Model.ManureType.MgO != null && Model.ManureType.SO3 != 0) ? string.Format(unit, Model.ManureType.MgO) : string.Empty)</td>
                     </tr>
                 </tbody>
             </table>

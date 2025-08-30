@@ -21,5 +21,7 @@ namespace NMP.Portal.Services
         Task<(NutrientsLoadingLiveStock, Error)> AddNutrientsLoadingLiveStockAsync(NutrientsLoadingLiveStock nutrientsLoadingLiveStockData);
 
         Task<(List<NutrientsLoadingLiveStock>, Error)> FetchLivestockByFarmIdAndYear(int farmId, int year);
+        Task<(List<LivestockTypeResponse>, Error)> FetchLivestockTypes();
+       
     }
 }

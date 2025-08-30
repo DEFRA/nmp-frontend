@@ -115,7 +115,7 @@
                     }
                     @if (ViewBag.DefaultYield != null && ViewBag.DefaultYield > 0)
                     {
-                        <govuk-radios-item value="@UseTheStandardFigureForAllTheseFields">@string.Format(Resource.lblUseTheStandardFigure, ViewBag.DefaultYield)</govuk-radios-item>
+                        <govuk-radios-item value="@UseTheStandardFigureForAllTheseFields">@(Model.Crops.Count > 1 ? string.Format(Resource.lblUseTheStandardFigure, ViewBag.DefaultYield) : string.Format(Resource.lblUseTheStandardFigureForThisField, ViewBag.DefaultYield))</govuk-radios-item>
                     }
                 </govuk-radios-fieldset>
             </govuk-radios>

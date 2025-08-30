@@ -64,6 +64,7 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace($"Farm Controller : FarmList({q}) action called");
             HttpContext?.Session.Remove("FarmData");
             HttpContext?.Session.Remove("AddressList");
+            HttpContext?.Session.Remove("StorageCapacityData");
 
             FarmsViewModel model = new FarmsViewModel();
             Error error = null;

@@ -550,7 +550,7 @@ hr.seperator_forty {
     margin: 40px 0 40px 0;
 }
 .strong {
-    font-weight: bold;
+    font-weight: bold !important;
 }
 .margin-bottom-none {
     margin-bottom: 0;
@@ -673,4 +673,45 @@ hr.seperator_thirty {
 }
 .livestock-type {
     width: 25%;
+}
+.govuk-body-s {
+    font-size: 17px !important;
+}
+.n-table th {
+    width: 33%;
+}
+.farm_area_derogated th {
+    width: 50%;
+}
+@media (min-width: 40.0625em) {
+    p, .govuk-body, .govuk-body-m {
+        margin-bottom: 20px;
+    }
+}
+.address_row {
+    border-bottom: 2px solid darkgrey;
+}
+.manure_type {
+    width: 12%;
+}
+.manure_quantity {
+    width: 14.5%;
+}
+.manure_nitrogen {
+    width: 15%;
+}
+.manure_total_nitrogen {
+    width: 17%;
+}
+.manure_supplier_receiver {
+    min-width: 111px;
+}
+.govuk-table__cell {
+    white-space: normal !important;
+    word-break: keep-all !important;
+    overflow-wrap: break-word !important;
+}
+.total_row {
+    background-color: #f3f2f1;
+    font-weight: bold;
 }
