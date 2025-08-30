@@ -3308,13 +3308,13 @@ cubic metres per hectare  not set</value>
     <value>This application may take you over the maximum nitrogen limit for this crop</value>
   </data>
   <data name="MsgCropNmaxLimitWarningPara1England" xml:space="preserve">
-    <value>The Nitrate Vulnerable Zone (NVZ) rules state that the amount of crop available nitrogen from inorganic fertilisers and organic manures that you apply to this crop averaged across your whole farm must not exceed {0}kg per hectare.</value>
+    <value>The Nitrate Vulnerable Zone (NVZ) rules state that the amount of crop-available nitrogen (N) from inorganic fertilisers and organic manures that you apply to this crop, averaged across your whole farm, must not exceed {0}kg of N per hectare.</value>
   </data>
   <data name="MsgCropNmaxLimitWarningPara1Wales" xml:space="preserve">
     <value>The Water Resourcess Regulations state that the amount of crop available nitrogen from inorganic fertilisers and organic manures that you apply to this crop averaged across your whole farm must not exceed {0}kg per hectare.</value>
   </data>
   <data name="MsgCropNmaxLimitWarningPara2England" xml:space="preserve">
-    <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the amount of crop available nitrogen from inorganic fertilisers and organic manures you apply.</value>
+    <value>It is an offence to breach the NVZ rules, and you should consider reducing the amount of crop-available nitrogen (N) from inorganic fertilisers and organic manures that you apply.</value>
   </data>
   <data name="MsgNmaxWarningHeadingEngland" xml:space="preserve">
     <value>This application will take you over the organic manure nitrogen field limit for compost</value>
@@ -5810,13 +5810,22 @@ live</value>
   <data name="lblStorageName" xml:space="preserve">
     <value>Storage name</value>
   </data>
-  <data name="lblEnterANameForYourOrganicMaterialStore" xml:space="preserve">
+  <data name="lblWhatDoYouWantToCallThisManureStore" xml:space="preserve">
     <value>What do you want to call this manure store?</value>
+  </data>
+  <data name="lblGiveTheStoreAUniqueName" xml:space="preserve">
+    <value>Give the store a unique name.</value>
+  </data>
+  <data name="lblEnterANameForYourOrganicMaterialStore" xml:space="preserve">
+    <value>Enter a name for your organic material store before continuing.</value>
   </data>
   <data name="lblDimensions" xml:space="preserve">
     <value>Dimensions</value>
   </data>
   <data name="WhatKindOfStorageIsStoreName" xml:space="preserve">
     <value>What kind of storage is {0}?</value>
+  </data>
+  <data name="MsgCropNmaxLimitWarningPara1Additional" xml:space="preserve">
+    <value>Individual fields may have a higher adjusted limit, but you must stay within the {0}kg limit overall.</value>
   </data>
 </root>

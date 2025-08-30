@@ -3571,7 +3571,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What do you want to call this manure store?.
+        ///   Looks up a localized string similar to Enter a name for your organic material store before continuing..
         /// </summary>
         public static string lblEnterANameForYourOrganicMaterialStore {
             get {
@@ -4746,6 +4746,15 @@ namespace NMP.Portal.Resources {
         public static string lblGettingHelp {
             get {
                 return ResourceManager.GetString("lblGettingHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Give the store a unique name..
+        /// </summary>
+        public static string lblGiveTheStoreAUniqueName {
+            get {
+                return ResourceManager.GetString("lblGiveTheStoreAUniqueName", resourceCulture);
             }
         }
         
@@ -12601,6 +12610,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What do you want to call this manure store?.
+        /// </summary>
+        public static string lblWhatDoYouWantToCallThisManureStore {
+            get {
+                return ResourceManager.GetString("lblWhatDoYouWantToCallThisManureStore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the expected yield for {0} per hectare in these fields?.
         /// </summary>
         public static string lblWhatIsExpectedYieldForFields {
@@ -14727,7 +14745,16 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that the amount of crop available nitrogen from inorganic fertilisers and organic manures that you apply to this crop averaged across your whole farm must not exceed {0}kg per hectare..
+        ///   Looks up a localized string similar to Individual fields may have a higher adjusted limit, but you must stay within the {0}kg limit overall..
+        /// </summary>
+        public static string MsgCropNmaxLimitWarningPara1Additional {
+            get {
+                return ResourceManager.GetString("MsgCropNmaxLimitWarningPara1Additional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that the amount of crop-available nitrogen (N) from inorganic fertilisers and organic manures that you apply to this crop, averaged across your whole farm, must not exceed {0}kg of N per hectare..
         /// </summary>
         public static string MsgCropNmaxLimitWarningPara1England {
             get {
@@ -14745,7 +14772,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the amount of crop available nitrogen from inorganic fertilisers and organic manures you apply..
+        ///   Looks up a localized string similar to It is an offence to breach the NVZ rules, and you should consider reducing the amount of crop-available nitrogen (N) from inorganic fertilisers and organic manures that you apply..
         /// </summary>
         public static string MsgCropNmaxLimitWarningPara2England {
             get {

@@ -300,7 +300,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public IActionResult StoreName()
+        public async Task<IActionResult> StoreName()
         {
             _logger.LogTrace("Report Controller : StoreName() action called");
             StorageCapacityViewModel model = new StorageCapacityViewModel();

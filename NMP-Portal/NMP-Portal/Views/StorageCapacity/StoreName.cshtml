@@ -35,18 +35,21 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MaterialStateName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StoreName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MaterialStateId"></govuk-input>
-
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
 
-                <govuk-input asp-for="@Model.StoreName">
-                    <govuk-input-label is-page-heading="true" class="govuk-label--l">@Resource.lblEnterANameForYourOrganicMaterialStore</govuk-input-label>
+                <govuk-input asp-for="@Model.StoreName" autocomplete="off">
+                    <govuk-input-label is-page-heading="true" class="govuk-label--l">@Resource.lblWhatDoYouWantToCallThisManureStore</govuk-input-label>
+                    <govuk-input-hint>@Resource.lblGiveTheStoreAUniqueName</govuk-input-hint>
                 </govuk-input>
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>
+
+
                 <p class="govuk-body cancel-link">
                     @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
                     {
@@ -61,6 +64,7 @@
                         </a>
                     }
                 </p>
+
             </div>
 
         </div>
