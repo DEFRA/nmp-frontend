@@ -1,0 +1,83 @@
+﻿﻿@using NMP.Portal.Resources
+@model NMP.Portal.ViewModels.StorageCapacityViewModel
+@{
+    ViewData["Title"] = Resource.lblStorageType;
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="OrganicMaterialStorageNotAvailable" asp-controller="StorageCapacity">@Resource.lblBack</govuk-back-link>
+}
+@if (TempData["ErrorOnMaterialStates"] != null)
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["ErrorOnMaterialStates"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        </div>
+    </div>
+}
+
+@if (Model != null)
+{
+    <form asp-action="MaterialStates" asp-controller="StorageCapacity" method="post" autocomplete="off">
+        @Html.AntiForgeryToken()
+        <div hidden="true">
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportOption"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportTypeName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MaterialStateName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StoreName"></govuk-input>
+
+
+        </div>
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+
+                <govuk-radios class="govuk-radios" asp-for="@Model.MaterialStateId">
+                    <govuk-radios-fieldset>
+                        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                            @Resource.lblWhatKindOfManureStorageDoYouWantToAdd
+                        </govuk-radios-fieldset-legend>
+                        <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
+                        @if (ViewBag.MaterialStateList != null && ViewBag.MaterialStateList.Count > 0)
+                        {
+                            foreach (var materialState in ViewBag.MaterialStateList)
+                            {
+                                <govuk-radios-item value="@materialState.Id">@materialState.Name</govuk-radios-item>
+                            }
+                        }
+                    </govuk-radios-fieldset>
+                </govuk-radios>
+                <govuk-button type="submit" class="margin-bottom-forty">
+                    @Resource.lblContinue
+                </govuk-button>
+
+                <p class="govuk-body cancel-link">
+                    @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
+                    {
+                        <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">
+                            @Resource.lblCancel
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+                            @Resource.lblCancel
+                        </a>
+                    }
+                </p>
+
+            </div>
+
+        </div>
+    </form>
+}

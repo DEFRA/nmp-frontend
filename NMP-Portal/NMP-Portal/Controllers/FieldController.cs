@@ -86,8 +86,19 @@ namespace NMP.Portal.Controllers
                 }
                 int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(id));
                 int fieldCount = await _fieldService.FetchFieldCountByFarmIdAsync(Convert.ToInt32(farmID));
-
-                if (fieldCount > 0)
+                if (model.IsCheckAnswer)
+                {
+                    return RedirectToAction("CheckAnswer");
+                }
+                else if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && !string.IsNullOrWhiteSpace(model.EncryptedFieldId))
+                {
+                    return RedirectToAction("UpdateField", new
+                    {
+                        id = model.EncryptedFieldId,
+                        farmId = model.EncryptedFarmId
+                    });
+                }
+                else if (fieldCount > 0)
                 {
                     if (model != null && model.CopyExistingField != null && model.CopyExistingField.Value)
                     {
@@ -312,7 +323,7 @@ namespace NMP.Portal.Controllers
                                .Select(x => x.Year)
                                .FirstOrDefault();
 
-                                
+
                                 if (fieldResponse.PreviousGrasses.Count == 3)
                                 {
                                     field.IsPreviousYearGrass = true;
@@ -1954,7 +1965,7 @@ namespace NMP.Portal.Controllers
                                             int cropYear = crop.FirstOrDefault(x => x.Year >= soilAnalysisResponse.FirstOrDefault().Year).Year;
                                             if (!string.IsNullOrWhiteSpace(s) && _soilAnalysisDataProtector.Unprotect(s) == Resource.lblAdd)
                                             {
-                                                ViewBag.SuccessMsgAdditionalContent = string.Format(Resource.lblAddSoilAnalysisSuccessMsg, cropYear);
+                                                ViewBag.SuccessMsgAdditionalContent = Resource.lblNutrientRecommendationsWillBeBasedOnTheLatest;
                                             }
                                             else
                                             {
@@ -2748,7 +2759,7 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("FarmList", "Farm");
             }
             List<CommonResponse> commonResponses = await _fieldService.GetSoilNitrogenSupplyItems();
-            ViewBag.SoilNitrogenSupplyItems = commonResponses.OrderByDescending(x => x.Id);
+            ViewBag.SoilNitrogenSupplyItems = commonResponses.OrderBy(x => x.Id);
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             return View(model);
         }
@@ -2766,7 +2777,7 @@ namespace NMP.Portal.Controllers
             if (!ModelState.IsValid)
             {
                 List<CommonResponse> commonResponses = await _fieldService.GetSoilNitrogenSupplyItems();
-                ViewBag.SoilNitrogenSupplyItems = commonResponses.OrderByDescending(x => x.Id);
+                ViewBag.SoilNitrogenSupplyItems = commonResponses.OrderBy(x => x.Id);
                 return View(model);
             }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);

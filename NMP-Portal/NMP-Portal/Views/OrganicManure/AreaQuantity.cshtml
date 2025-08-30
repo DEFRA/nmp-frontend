@@ -9,6 +9,11 @@
     if (Model.IsEndClosedPeriodFebruaryWarning) trueWarningCount++;
     var isOtherManure = (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials) ? true : false;
 
+    var suffixUnit = "";
+    if (Model.IsManureTypeLiquid != null)
+    {
+        suffixUnit = Model.IsManureTypeLiquid.Value ? Resource.lblCubicMeters : Resource.lbltonnes;
+    }
 }
 @section BeforeContent {
     <govuk-back-link asp-action=@((Model.IsCheckAnswer&&(!Model.IsManureTypeChange)&&(!Model.IsFieldGroupChange)) ? "CheckAnswer" : "ApplicationRateMethod") asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
@@ -229,6 +234,7 @@
                                 @Model.CropNmaxLimitWarningHeading
                             </p>
                             <p class="govuk-body">@Model.CropNmaxLimitWarningPara1</p>
+                            <p class="govuk-body">@Model.CropNmaxLimitWarningPara1Additional</p>
                             @if (Model.CropNmaxLimitWarningPara2 != null)
                             {
                                 <p class="govuk-body">@Model.CropNmaxLimitWarningPara2</p>
@@ -305,6 +311,7 @@
                                     {
                                         <h2 class="govuk-heading-s">@Model.CropNmaxLimitWarningHeading</h2>
                                         <p class="govuk-body">@Model.CropNmaxLimitWarningPara1</p>
+                                        <p class="govuk-body">@Model.CropNmaxLimitWarningPara1Additional</p>
                                     }
                                     @if (Model.IsEndClosedPeriodFebruaryWarning)
                                     {
@@ -341,7 +348,7 @@
                     <govuk-input-suffix>@Resource.lblhectar</govuk-input-suffix>
                 </govuk-input>
                 <govuk-input asp-for=@Model.Quantity inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                    <govuk-input-suffix>@Resource.lbltonnes</govuk-input-suffix>
+                    <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
                 </govuk-input>
 
             </div>

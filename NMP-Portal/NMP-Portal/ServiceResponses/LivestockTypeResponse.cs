@@ -30,6 +30,8 @@ namespace NMP.Portal.ServiceResponses
 
         [JsonProperty("orderBy")]
         public int? OrderBy { get; set; }
-        
+        [JsonProperty("IsGrazing")]
+        public bool? IsGrazing { get; set; }
+
     }
 }

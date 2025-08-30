@@ -44,7 +44,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockNumbers"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckList" value="@Model.IsCheckList"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsGrasslandDerogation" value="@Model.IsGrasslandDerogation"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockImportExportQuestion" value="@Model.LivestockImportExportQuestion"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestockImportExport" value="@Model.IsAnyLivestockImportExport"></govuk-input>
             <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ImportExport"></govuk-input>
             <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockQuantity"></govuk-input>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockImportExportDate"></govuk-date-input>
@@ -90,7 +90,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManureTypeChange"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassPercentage"></govuk-input>
 
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestock"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestockNumber"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockTypeId"></govuk-input>
@@ -134,9 +134,9 @@
 
                 <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
                     <h1 class="govuk-fieldset__heading">
-                        @string.Format(Resource.lblWhoAreYouThisLivestockManureFrom,
-                                 Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
-                                 Resource.lblImporting.ToLower() : Resource.lblExporting.ToLower())
+                    @(Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                                        Resource.lblWhoAreYouImportingThisLivestockManureFrom :
+                                        Resource.lblWhoAreYouExportingThisLivestockManureTo)
                     </h1>
                 </legand>
                 <div class="govuk-form-group">
@@ -164,7 +164,7 @@
 
                 <div class="govuk-form-group">
                     <govuk-input class="govuk-input--width-20" asp-for="@Model.Address4">
-                        <govuk-input-label>@string.Format("{0} {1}", Resource.lblCountry, Resource.lblOptional)</govuk-input-label>
+                        <govuk-input-label>@string.Format("{0} {1}", Resource.lblCounty, Resource.lblOptional)</govuk-input-label>
                     </govuk-input>
                 </div>
 

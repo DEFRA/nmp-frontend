@@ -19,7 +19,7 @@
         Model.IncorporationMethod.Value == (int)NMP.Portal.Enums.IncorporationMethod.ShallowInjection ||
         Model.IncorporationMethod.Value == (int)NMP.Portal.Enums.IncorporationMethod.DeepInjection) ? false : true;
     }
-
+    bool isAutumnNUptakeZero = Model.AutumnCropNitrogenUptakes?.All(x => x.AutumnCropNitrogenUptake == 0) ?? true;
     // switch (Model.DefaultNutrientValue)
     // {
     //     case true:
@@ -451,7 +451,7 @@
                                         @string.Format(Resource.lblWhichCropIsThisManureApplication, doubleCrop.FieldName)
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value>
-                                        @((doubleCrop.CropID == null) ? Resource.lblNotSet : string.Format("{0} {1} {2} {3} {4}", Resource.lblCrop, doubleCrop.CropOrder, "(", doubleCrop.CropName, ")"))
+                                        @((doubleCrop.CropID == null) ? Resource.lblNotSet : string.Format("{0} {1} {2}{3}{4}", Resource.lblCrop, doubleCrop.CropOrder, "(", doubleCrop.CropName, ")"))
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
                                         <govuk-summary-list-row-action asp-action="DoubleCrop" asp-controller="OrganicManure" asp-route-q="@doubleCrop.EncryptedCounter">@Resource.lblChange</govuk-summary-list-row-action>
@@ -488,7 +488,13 @@
                                 {
                                     <govuk-summary-list-row class=@((!organic.Defoliation.HasValue)?"govuk-error-message":"")>
                                         <govuk-summary-list-row-key>
+                                            @if (Model.GrassCropCount.HasValue&&Model.GrassCropCount>1)
+                                            {
                                             @Resource.lblWhichCutOrGrazingInThisApplicationForAllField
+                                            }
+                                            else{
+                                                @string.Format(Resource.lblWhichCutOrGrazingInThisApplicationForInField, organic.FieldName)
+                                            }
                                         </govuk-summary-list-row-key>
                                         <govuk-summary-list-row-value>
 
@@ -990,6 +996,8 @@
                     </govuk-summary-list-row>
                     @* } *@
                     @* } *@
+                    @if (!isAutumnNUptakeZero)
+                    {
                     @if (Model.FieldList != null && Model.FieldList.Count > 1)
                     {
                         <govuk-summary-list-row>
@@ -1020,7 +1028,7 @@
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     }
-
+                    }
                     <govuk-summary-list-row class=@((!Model.SoilDrainageEndDate.HasValue)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
                             @Resource.lblEndOfSoilDrainage

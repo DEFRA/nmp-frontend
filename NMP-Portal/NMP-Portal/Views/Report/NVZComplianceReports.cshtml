@@ -5,6 +5,7 @@
 
     var nmaxReport = (int)NMP.Portal.Enums.NVZReportOption.NmaxReport;
     var livestockManureNFarmLimitReport = (int)NMP.Portal.Enums.NVZReportOption.LivestockManureNFarmLimitReport;
+    var existingManureStorageCapacityReport = (int)NMP.Portal.Enums.NVZReportOption.ExistingManureStorageCapacityReport;
 }
 
 @section BeforeContent {
@@ -39,7 +40,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockNumbers"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ImportsExportsOfLivestockManure"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckList" value="@Model.IsCheckList"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockImportExportQuestion" value="@Model.LivestockImportExportQuestion"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestockImportExport" value="@Model.IsAnyLivestockImportExport"></govuk-input>
             <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeId"></govuk-input>
             <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeName"></govuk-input>
             <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ImportExport"></govuk-input>
@@ -88,7 +89,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherMaterialName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassPercentage"></govuk-input>
 
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestock"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestockNumber"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockTypeId"></govuk-input>
@@ -145,10 +146,16 @@
                                 @Resource.lblDemonstrateComplianceWithTheNMaxLimitForEachCrop
                             </govuk-radios-item-hint>
                         </govuk-radios-item>
-                        <govuk-radios-item value="@livestockManureNFarmLimitReport">
+                        <govuk-radios-item value="@livestockManureNFarmLimitReport" disabled="true">
                             @Resource.lblLivestockManureNitrogenFarmLimit
                             <govuk-radios-item-hint>
                                 @Resource.lblDemonstrateComplianceWithTheLivestockManure
+                            </govuk-radios-item-hint>
+                        </govuk-radios-item>
+                        <govuk-radios-item value="@existingManureStorageCapacityReport" disabled="true">
+                            @Resource.lblExistingManureStorageCapacityReport
+                            <govuk-radios-item-hint>
+                                @Resource.lblDemonstrateComplianceWithRulesForOrganicMaterialStorage
                             </govuk-radios-item-hint>
                         </govuk-radios-item>
                     </govuk-radios-fieldset>

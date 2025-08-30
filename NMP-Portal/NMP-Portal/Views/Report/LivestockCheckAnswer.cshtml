@@ -47,7 +47,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockNumbers"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ImportsExportsOfLivestockManure"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckList" value="@Model.IsCheckList"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockImportExportQuestion" value="@Model.LivestockImportExportQuestion"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestockImportExport" value="@Model.IsAnyLivestockImportExport"></govuk-input>
             <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeId"></govuk-input>
             <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeName"></govuk-input>
             <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ImportExport"></govuk-input>
@@ -93,7 +93,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsGrasslandDerogation"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassPercentage"></govuk-input>
 
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestock"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestockNumber"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockTypeId"></govuk-input>
@@ -142,7 +142,7 @@
 
                 <div class="check-answers">
                     <govuk-summary-list>
-                       @*  <govuk-summary-list-row>
+                        @*  <govuk-summary-list-row>
                             <govuk-summary-list-row-key>
                                 @(string.Format(Resource.lblDoesFarmHaveDerogationFor, Model.FarmName, Model.Year))
                             </govuk-summary-list-row-key>
@@ -153,17 +153,20 @@
                                 <govuk-summary-list-row-action asp-action="IsGrasslandDerogation" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row> *@
-                        <govuk-summary-list-row>
-                            <govuk-summary-list-row-key>
-                                @string.Format(Resource.lblDidYouHaveAnyLivestockOn, Model.FarmName, Model.Year)
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                                @(Model.IsAnyLivestock == true ? Resource.lblYes : Resource.lblNo)
-                            </govuk-summary-list-row-value>
-                            <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="IsAnyLivestock" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
-                            </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row>
+                        @if (ViewBag.LiveStockList != null && ViewBag.LiveStockList.Count == 0)
+                        {
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    @string.Format(Resource.lblDidYouHaveAnyLivestockOn, Model.FarmName, Model.Year)
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @(Model.IsAnyLivestockNumber == true ? Resource.lblYes : Resource.lblNo)
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="IsAnyLivestockNumber" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                        }
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key>
                                 @string.Format(Resource.lblWhatTypeOfLivestockWouldYouLikeToAddFor, Model.Year)
@@ -209,38 +212,23 @@
 
                                         <table class="nutrient_values">
                                             <tbody>
-                                                <tr><td>@Resource.lblJanuary:</td>   <td>@(string.Concat(Model.NumbersInJanuary?.ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
-                                                <tr><td>@Resource.lblFebruary:</td>  <td>@(string.Concat(Model.NumbersInFebruary?.ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
-                                                <tr><td>@Resource.lblMarch:</td>     <td>@(string.Concat(Model.NumbersInMarch?.ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
-                                                <tr><td>@Resource.lblApril:</td>     <td>@(string.Concat(Model.NumbersInApril?.ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
-                                                <tr><td>@Resource.lblMay:</td>       <td>@(string.Concat(Model.NumbersInMay?.ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
-                                                <tr><td>@Resource.lblJune:</td>      <td>@(string.Concat(Model.NumbersInJune?.ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
-                                                <tr><td>@Resource.lblJuly:</td>      <td>@(string.Concat(Model.NumbersInJuly?.ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
-                                                <tr><td>@Resource.lblAugust:</td>    <td>@(string.Concat(Model.NumbersInAugust?.ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
-                                                <tr><td>@Resource.lblSeptember:</td> <td>@(string.Concat(Model.NumbersInSeptember?.ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
-                                                <tr><td>@Resource.lblOctober:</td>   <td>@(string.Concat(Model.NumbersInOctober?.ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
-                                                <tr><td>@Resource.lblNovember:</td>  <td>@(string.Concat(Model.NumbersInNovember?.ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
-                                                <tr><td>@Resource.lblDecember:</td>  <td>@(string.Concat(Model.NumbersInDecember?.ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblJanuary:</td>   <td>@(string.Concat((Model.NumbersInJanuary ?? 0).ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblFebruary:</td>  <td>@(string.Concat((Model.NumbersInFebruary ?? 0).ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblMarch:</td>     <td>@(string.Concat((Model.NumbersInMarch ?? 0).ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblApril:</td>     <td>@(string.Concat((Model.NumbersInApril ?? 0).ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblMay:</td>       <td>@(string.Concat((Model.NumbersInMay ?? 0).ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblJune:</td>      <td>@(string.Concat((Model.NumbersInJune ?? 0).ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblJuly:</td>      <td>@(string.Concat((Model.NumbersInJuly ?? 0).ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblAugust:</td>    <td>@(string.Concat((Model.NumbersInAugust ?? 0).ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblSeptember:</td> <td>@(string.Concat((Model.NumbersInSeptember ?? 0).ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblOctober:</td>   <td>@(string.Concat((Model.NumbersInOctober ?? 0).ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblNovember:</td>  <td>@(string.Concat((Model.NumbersInNovember ?? 0).ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblDecember:</td>  <td>@(string.Concat((Model.NumbersInDecember ?? 0).ToString("0.##"), " " + Model.LivestockGroupName?.ToLower()))</td></tr>
                                             </tbody>
                                         </table>
-
-                                        @* <ul class="nutrient_values">
-                            <li>@Resource.lblJanuary:  <span> @(string.Concat(Model.NumbersInJanuary, Model.LivestockGroupName))</span></li>
-                            <li>@Resource.lblFebruary: <span> @(string.Concat(Model.NumbersInFebruary, Model.LivestockGroupName))</span></li>
-                            <li>@Resource.lblMarch:    <span> @(string.Concat(Model.NumbersInMarch, Model.LivestockGroupName))</span></li>
-                            <li>@Resource.lblApril:    <span> @(string.Concat(Model.NumbersInApril, Model.LivestockGroupName))</span></li>
-                            <li>@Resource.lblMay:      <span> @(string.Concat(Model.NumbersInMay, Model.LivestockGroupName))</span></li>
-                            <li>@Resource.lblJune:     <span> @(string.Concat(Model.NumbersInJune, Model.LivestockGroupName))</span></li>
-                            <li>@Resource.lblJuly:     <span> @(string.Concat(Model.NumbersInJuly, Model.LivestockGroupName))</span></li>
-                            <li>@Resource.lblAugust:   <span> @(string.Concat(Model.NumbersInAugust, Model.LivestockGroupName))</span></li>
-                            <li>@Resource.lblSeptember:<span> @(string.Concat(Model.NumbersInSeptember, Model.LivestockGroupName))</span></li>
-                            <li>@Resource.lblOctober:  <span> @(string.Concat(Model.NumbersInOctober, Model.LivestockGroupName))</span></li>
-                            <li>@Resource.lblNovember: <span> @(string.Concat(Model.NumbersInNovember, Model.LivestockGroupName))</span></li>
-                            <li>@Resource.lblDecember: <span> @(string.Concat(Model.NumbersInDecember, Model.LivestockGroupName))</span></li>
-                            </ul> *@
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
-                                        <govuk-summary-list-row-action asp-action="LivestockNumberQuestion" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
+                                        <govuk-summary-list-row-action asp-action="LivestockNumbersMonthly" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
                                     </govuk-summary-list-row-actions>
                                 </govuk-summary-list-row>
                             }
@@ -254,7 +242,7 @@
                                         @(string.Concat(Model.AverageNumber, " " + Model.LivestockGroupName?.ToLower()))
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
-                                        <govuk-summary-list-row-action asp-action="LivestockNumberQuestion" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
+                                        <govuk-summary-list-row-action asp-action="AverageNumber" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
                                     </govuk-summary-list-row-actions>
                                 </govuk-summary-list-row>
                             }
@@ -266,7 +254,7 @@
                                     @string.Format(Resource.lblWhatIsTheAverageNumberOfPlacesForThisLivestockTypeIn, Model.LivestockGroupName, Model.Year)
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @(string.Concat(Model.AverageNumberOfPlaces, Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs ? Resource.lblPlaces : Resource.lblThousandPlaces))
+                                    @(string.Concat(Model.AverageNumberOfPlaces, Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs ? (" " + Resource.lblPlaces) : (" " + Resource.lblThousandPlaces)))
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
                                     <govuk-summary-list-row-action asp-action="NonGrazingLivestockAverageNumber" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
@@ -311,10 +299,31 @@
                                 @Resource.lblTotalNitrogen
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @(string.Format(Resource.lblKgPerYear, ViewBag.Phosphorus))
+                                @(string.Format(Resource.lblKgPerYear, ViewBag.TotalNProduced))
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
 
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>
+                                @Resource.lblPhosphateStandardPerAnimalPerYear
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @(string.Format(Resource.lblKgPerYear, ViewBag.Phosphate))
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>
+                                @Resource.lblTotalPhosphate
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @(string.Format(Resource.lblKgPerYear, ViewBag.TotalPProduced))
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     </govuk-summary-list>

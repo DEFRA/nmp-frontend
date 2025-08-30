@@ -262,7 +262,7 @@
 
             }
             <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblWhenAreYouApplyingManureOnField, Model.ManureTypeName)</h1>
+                <h1 class="govuk-fieldset__heading">@(Model.FieldList.Count > 1 ? string.Format(Resource.lblWhenAreYouApplyingManureOnField, Model.ManureTypeName) : string.Format(Resource.lblWhenAreYouApplyingManureOnThisField, Model.ManureTypeName, Model.FieldName))</h1>
             </legand>
             <div class="govuk-form-group">
                 <govuk-date-input asp-for="@Model.ApplicationDate" pattern="[0-9]*">

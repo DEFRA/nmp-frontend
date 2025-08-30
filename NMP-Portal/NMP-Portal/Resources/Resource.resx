@@ -530,7 +530,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Sulphur deficient</value>
   </data>
   <data name="lblHowWouldYouLikeToEnterYourSoilNutrientValues" xml:space="preserve">
-    <value>How would you like to enter your soil nutrient values?</value>
+    <value>How would you like to enter your soil analysis values?</value>
   </data>
   <data name="lblAsAnIndex" xml:space="preserve">
     <value>As an index</value>
@@ -683,7 +683,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Is this field in a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
   <data name="lblNutrientValueTypeForCheckAnswere" xml:space="preserve">
-    <value>How would you like to enter your soil nutrient values?</value>
+    <value>How would you like to enter your soil analysis values?</value>
   </data>
   <data name="lblBasedOnARecentSoilNitrogenAnalysis" xml:space="preserve">
     <value>Based on a recent soil nitrogen (N) analysis</value>
@@ -2399,7 +2399,7 @@ cubic metres per hectare  not set</value>
     <value>Magnesium (Mg) not set</value>
   </data>
   <data name="MsgNutrientValueTypeForCheckAnswereNotSet" xml:space="preserve">
-    <value>How would you like to enter your soil nutrient values? not set</value>
+    <value>How would you like to enter your soil analysis values? not set</value>
   </data>
   <data name="MsgPhNotSet" xml:space="preserve">
     <value>Soil pH value not set</value>
@@ -2855,10 +2855,10 @@ cubic metres per hectare  not set</value>
     <value>How many cuts typically each year?</value>
   </data>
   <data name="lblDoesFieldTypicallyHaveMoreThan30PercentClover" xml:space="preserve">
-    <value>Did {0} typically have clover content of 30% or more across the last season?</value>
+    <value>Did {0} typically have a clover content of 30% or more across the last season it was grass?</value>
   </data>
   <data name="lblHowMuchNitrogenHasBeenAppliedToFieldEachYear" xml:space="preserve">
-    <value>How much nitrogen (N) has been applied to {0} each year (on average)?</value>
+    <value>How much nitrogen (N) was applied to {0} each year that it was grass (on average)?</value>
   </data>
   <data name="lblSoilNitrogenSupplyItems" xml:space="preserve">
     <value>Soil nitrogen (N) supply items</value>
@@ -3281,7 +3281,7 @@ cubic metres per hectare  not set</value>
     <value>This may change your nutrient recommendations for {0} . Select the field from your</value>
   </data>
   <data name="lblYearCropPlan" xml:space="preserve">
-    <value>{0} crop plan</value>
+    <value>Select the field from your {0} crop plan</value>
   </data>
   <data name="lblAdd" xml:space="preserve">
     <value>add</value>
@@ -3308,13 +3308,13 @@ cubic metres per hectare  not set</value>
     <value>This application may take you over the maximum nitrogen limit for this crop</value>
   </data>
   <data name="MsgCropNmaxLimitWarningPara1England" xml:space="preserve">
-    <value>The Nitrate Vulnerable Zone (NVZ) rules state that the amount of crop available nitrogen from inorganic fertilisers and organic manures that you apply to this crop averaged across your whole farm must not exceed {0}kg per hectare.</value>
+    <value>The Nitrate Vulnerable Zone (NVZ) rules state that the amount of crop-available nitrogen (N) from inorganic fertilisers and organic manures that you apply to this crop, averaged across your whole farm, must not exceed {0}kg of N per hectare.</value>
   </data>
   <data name="MsgCropNmaxLimitWarningPara1Wales" xml:space="preserve">
     <value>The Water Resourcess Regulations state that the amount of crop available nitrogen from inorganic fertilisers and organic manures that you apply to this crop averaged across your whole farm must not exceed {0}kg per hectare.</value>
   </data>
   <data name="MsgCropNmaxLimitWarningPara2England" xml:space="preserve">
-    <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the amount of crop available nitrogen from inorganic fertilisers and organic manures you apply.</value>
+    <value>It is an offence to breach the NVZ rules, and you should consider reducing the amount of crop-available nitrogen (N) from inorganic fertilisers and organic manures that you apply.</value>
   </data>
   <data name="MsgNmaxWarningHeadingEngland" xml:space="preserve">
     <value>This application will take you over the organic manure nitrogen field limit for compost</value>
@@ -4458,7 +4458,7 @@ live</value>
     <value>N-max compliant</value>
   </data>
   <data name="lblNMaxLimitsForFarm" xml:space="preserve">
-    <value>N-max limits for {0}</value>
+    <value>N-max report for {0}</value>
   </data>
   <data name="lblSingleBusinessIdentifier" xml:space="preserve">
     <value>Single Business Identifier</value>
@@ -4512,10 +4512,10 @@ live</value>
     <value>Nitrogen applications for {0} </value>
   </data>
   <data name="lblNitrogenApplicationsToCropTypeContent1" xml:space="preserve">
-    <value>Nitrogen applications to {0}</value>
+    <value>Nitrogen (N) applications to this crop indicate </value>
   </data>
   <data name="lblNitrogenApplicationsToCropTypeContent2" xml:space="preserve">
-    <value>with the N-max limit, based on field records.</value>
+    <value>with the N-max limit, based on the information you entered.</value>
   </data>
   <data name="lblNMaxLimitForCropTypeFieldsBeforeAdjustmentsPerHectare" xml:space="preserve">
     <value>N-max limit for {0} before adjustments: {1}kg per hectare.</value>
@@ -4824,7 +4824,7 @@ live</value>
     <value>View, create or update a plan</value>
   </data>
   <data name="lblYouHaveNotEnteredAnyField" xml:space="preserve">
-    <value>You have not entered any field</value>
+    <value>You have not entered any field or crop information for {0}</value>
   </data>
   <data name="lblFarmAndFieldDetailsForNVZRecords" xml:space="preserve">
     <value>Farm and field details for NVZ records</value>
@@ -4911,7 +4911,7 @@ live</value>
     <value>Select the {0} you want to create.</value>
   </data>
   <data name="lblDoesFarmHaveAGrasslandDerogation" xml:space="preserve">
-    <value>Does {0} have a grassland derogation for {1}</value>
+    <value>Does {0} have a grassland derogation for {1}?</value>
   </data>
   <data name="lblGrasslandDerogation" xml:space="preserve">
     <value>Grassland derogation</value>
@@ -4947,7 +4947,7 @@ live</value>
     <value>Add crops</value>
   </data>
   <data name="MsgForIfPlanIsNotCreated" xml:space="preserve">
-    <value>An N-max report is not available.You need to add your crop information, and information about any organic and inorganic material applied.</value>
+    <value>More information is needed to get a report. You need to add your field and crop information, and any organic material or inorganic fertiliser applied to them.</value>
   </data>
   <data name="lblNMax" xml:space="preserve">
     <value>N-max</value>
@@ -5096,8 +5096,8 @@ live</value>
   <data name="lblTotals" xml:space="preserve">
     <value>Totals</value>
   </data>
-  <data name="lblWhoAreYouThisLivestockManureFrom" xml:space="preserve">
-    <value>Who are you {0} this livestock manure from?</value>
+  <data name="lblWhoAreYouImportingThisLivestockManureFrom" xml:space="preserve">
+    <value>Who are you importing this livestock manure from?</value>
   </data>
   <data name="lblNutrientValuesForManureTypeNameYouAddedOnDate" xml:space="preserve">
     <value>Nutrient values for {0} you added on {1}?</value>
@@ -5199,10 +5199,10 @@ live</value>
     <value>{0} cannot be longer than {1} characters.</value>
   </data>
   <data name="lblDidYouHaveAnyLivestockOn" xml:space="preserve">
-    <value>Did you have any livestock on {0} in {1}</value>
+    <value>Did you have any livestock on {0} in {1}?</value>
   </data>
   <data name="lblIncludeCattleSheepPigsGoats" xml:space="preserve">
-    <value>Include cattle, sheep, pigs, goats, horses, poultry and dear. </value>
+    <value>Include cattle, sheep, pigs, goats, horses, poultry and deer. </value>
   </data>
   <data name="lblIsAnyLivestock" xml:space="preserve">
     <value>Is any livestock</value>
@@ -5244,13 +5244,13 @@ live</value>
     <value>livestock number question</value>
   </data>
   <data name="lblAverageNumberOfThisLivestockGroup" xml:space="preserve">
-    <value>Average number of this {0} type in {1}</value>
+    <value>Average number of {0} in {1}</value>
   </data>
   <data name="lblSelectedLivestockType" xml:space="preserve">
     <value>Selected livestock type: {0}</value>
   </data>
   <data name="lblWhatIsTheAverageNumberOfThisLivestockType" xml:space="preserve">
-    <value>What is the average number of this {0} type in {1}?</value>
+    <value>What is the average number of {0} in {1}?</value>
   </data>
   <data name="MsgEnterTheAverageNumberOfThisTypeFor" xml:space="preserve">
     <value>Enter the average number of this type for {0}.</value>
@@ -5268,10 +5268,10 @@ live</value>
     <value>Enter how many of this {0} type did you have in {1} {2}.</value>
   </data>
   <data name="lblHowManyOfThisTypeDidYouHaveIn" xml:space="preserve">
-    <value>How many of this {0} type did you have in {1} {2}?</value>
+    <value>How many of {0} did you have in {1} {2}?</value>
   </data>
   <data name="lblMonthlyTotalsForThis" xml:space="preserve">
-    <value>Monthly totals for this {0} type in {1}</value>
+    <value>Monthly totals for {0} in {1}</value>
   </data>
   <data name="lblDeletLivestockImportExportContentOne" xml:space="preserve">
     <value>This will remove all the data about this import. You will not be able to get it back.</value>
@@ -5437,5 +5437,395 @@ live</value>
   </data>
   <data name="MsgGrassPercentageMustBeBetween80And100" xml:space="preserve">
     <value>Grass percentage must be between 80 and 100.</value>
+  </data>
+  <data name="MsgToHaveADerogationAtLeast80PercentOfYourFarm" xml:space="preserve">
+    <value>To have a derogation, at least 80% of your farm’s agricultural area must be grassland.</value>
+  </data>
+  <data name="lblPhosphateStandard" xml:space="preserve">
+    <value>Phosphate (P2O5) standard: {0}kg per animal, per year</value>
+  </data>
+  <data name="lblLivestockManureNitrogenFarmLimitForYear" xml:space="preserve">
+    <value>Livestock manure nitrogen (N) farm limit {0}</value>
+  </data>
+  <data name="lblThisFarmHasAGrasslandDerogationForYear" xml:space="preserve">
+    <value>This farm has a grassland derogation for {0}.</value>
+  </data>
+  <data name="lblDerogated" xml:space="preserve">
+    <value>derogated</value>
+  </data>
+  <data name="lblThisFarmHasAGrasslandDerogationFor" xml:space="preserve">
+    <value>This farm has a grassland derogation for {0}</value>
+  </data>
+  <data name="lblPercentageOfThisFarm" xml:space="preserve">
+    <value>{0}% of this farm is {0}</value>
+  </data>
+  <data name="lblNotADerogated" xml:space="preserve">
+    <value>not a derogated</value>
+  </data>
+  <data name="lblComplianceWithNVZLivestockManureNitrogenFarmLimit" xml:space="preserve">
+    <value>Compliance with NVZ livestock manure nitrogen (N) farm limit.</value>
+  </data>
+  <data name="lblTheInformationEnteredIndicatesCompliance" xml:space="preserve">
+    <value>The information entered indicates compliance.</value>
+  </data>
+  <data name="lblLivestockReportContentOne" xml:space="preserve">
+    <value>The information you entered does not indicate compliance. You must plan so that you do not exceed the limit.</value>
+  </data>
+  <data name="lblLivestockReportContentTwoForDerogation" xml:space="preserve">
+    <value>This assessment is based on the derogated NVZ livestock manure N farm limit of {0}kg of N per hectare for grazing livestock, {1}kg of N per hectare for non-grazing livestock </value>
+  </data>
+  <data name="lblLivestockContentTwoForNonDerogation" xml:space="preserve">
+    <value>This assessment is based on the NVZ livestock manure farm limit of {0}kg of N per hectare</value>
+  </data>
+  <data name="lblKeyInformation" xml:space="preserve">
+    <value> Key information</value>
+  </data>
+  <data name="lblLivestockManureTotalNitrogenCapacity" xml:space="preserve">
+    <value>Livestock manure total nitrogen (N) capacity</value>
+  </data>
+  <data name="lblLivestockManureTotalNitrogenLoading" xml:space="preserve">
+    <value>Livestock manure total nitrogen (N) loading</value>
+  </data>
+  <data name="lblLivestockManureReportContentFour" xml:space="preserve">
+    <value>Difference between livestock manure total nitrogen (N) capacity, and livestock manure total nitrogen (N) Loading</value>
+  </data>
+  <data name="lbllivestockManureReportContentFive" xml:space="preserve">
+    <value>Average livestock manure total nitrogen (N) loading</value>
+  </data>
+  <data name="lblThisFarmDoesNotHaveAGrasslandDerogationForYear" xml:space="preserve">
+    <value>This farm does not have a grassland derogation for {0}</value>
+  </data>
+  <data name="lblLivestockReportContentThreeForDerogationOrNonDerogation" xml:space="preserve">
+    <value>and best practice guidance of 250kg of N per hectare for land outside of an NVZ.</value>
+  </data>
+  <data name="lblPercentageOfThisFarmIsGrass" xml:space="preserve">
+    <value>{0}% of this farm is grass.</value>
+  </data>
+  <data name="lblLivestockReportContentFour" xml:space="preserve">
+    <value>Farm area and livestock manure total nitrogen (N) capacity</value>
+  </data>
+  <data name="lblLivestockReportContentFive" xml:space="preserve">
+    <value>Area of holding inside or outside of an NVZ</value>
+  </data>
+  <data name="lblLivestockReportContentSix" xml:space="preserve">
+    <value> Livestock manure total nitrogen (N) capacity (per year)</value>
+  </data>
+  <data name="lblLivestockReportContentSeven" xml:space="preserve">
+    <value>Area inside an NVZ</value>
+  </data>
+  <data name="lblLivestockReportContentEight" xml:space="preserve">
+    <value>Area outside an NVZ</value>
+  </data>
+  <data name="lblLivestockReportContentNine" xml:space="preserve">
+    <value>Livestock manure total nitrogen (N) loading</value>
+  </data>
+  <data name="lblLivestockReportContentEleven" xml:space="preserve">
+    <value>Home-produced livestock manures</value>
+  </data>
+  <data name="lblLivestockReportContentTwelve" xml:space="preserve">
+    <value>Imported livestock manures</value>
+  </data>
+  <data name="lblLivestockReportContentThirteen" xml:space="preserve">
+    <value>Exported livestock manures</value>
+  </data>
+  <data name="lblLivestockReportContentTen" xml:space="preserve">
+    <value>Livestock total nitrogen (N)</value>
+  </data>
+  <data name="lblLivestockReportContentFourteen" xml:space="preserve">
+    <value>Average nitrogen loading per hectare</value>
+  </data>
+  <data name="lblCompliance" xml:space="preserve">
+    <value>Compliance</value>
+  </data>
+  <data name="lblNonCompliance" xml:space="preserve">
+    <value>Non-Compliance</value>
+  </data>
+  <data name="lblLivestockReportContentFifteen" xml:space="preserve">
+    <value>The information you entered does not indicate compliance. You must plan so that you do not exceed the limit.</value>
+  </data>
+  <data name="lblPhosphateStandardPerAnimalPerYear" xml:space="preserve">
+    <value>Phosphate (P2O5) standard per animal, per year</value>
+  </data>
+  <data name="lblPhosphateP2O5Standard" xml:space="preserve">
+    <value>Phosphate (P2O5) standard</value>
+  </data>
+  <data name="MsgForIfFieldsAreNotCreated" xml:space="preserve">
+    <value>More information is needed to get a report. You need to add your field and crop information, and any organic material or inorganic fertiliser applied to them.</value>
+  </data>
+  <data name="lblAreaRequiredForLivestockManure" xml:space="preserve">
+    <value>Area required for livestock manure</value>
+  </data>
+  <data name="lblForGrazingLivestockManure" xml:space="preserve">
+    <value>For grazing livestock manure</value>
+  </data>
+  <data name="lblForNonGrazingLivestockManure" xml:space="preserve">
+    <value>For non-grazing livestock manure</value>
+  </data>
+  <data name="lblTotalAreaRequired" xml:space="preserve">
+    <value>Total area required</value>
+  </data>
+  <data name="lblGrassPercentageOfThisFarmIsGrass" xml:space="preserve">
+    <value>{0}% of this farm is grass.</value>
+  </data>
+  <data name="lblTotalPhosphateInThisImportOrExport" xml:space="preserve">
+    <value>Total phosphate (P205) in this {0}</value>
+  </data>
+  <data name="lblGrazingLivestockManureTotalN" xml:space="preserve">
+    <value>Grazing livestock manure total nitrogen (N)</value>
+  </data>
+  <data name="lblLivestockReportContentSixteen" xml:space="preserve">
+    <value>Home-produced manures from any cattle, sheep, deer, goats, or horses, regardless of whether the animals are housed or not.</value>
+  </data>
+  <data name="lblLivestockReportContentSeventeen" xml:space="preserve">
+    <value>Average number for year</value>
+  </data>
+  <data name="lblLivestockReportContentEighteen" xml:space="preserve">
+    <value>Total nitrogen (N) produced</value>
+  </data>
+  <data name="lblLivestockReportContentNineteen" xml:space="preserve">
+    <value>Total livestock manure nitrogen (N) production</value>
+  </data>
+  <data name="lblLivestockReportContenttwenty" xml:space="preserve">
+    <value>Non-grazing livestock manure total nitrogen (N)</value>
+  </data>
+  <data name="lblLivestockReportContentTwentyOne" xml:space="preserve">
+    <value>Home-produced manures from any pigs or poultry, regardless of whether the animals are housed or not.</value>
+  </data>
+  <data name="lblLivestockReportContentTwentyTwo" xml:space="preserve">
+    <value>Number of places</value>
+  </data>
+  <data name="lblLivestockReportContentTwentyThree" xml:space="preserve">
+    <value>Typical nitrogen (N) standard</value>
+  </data>
+  <data name="lblLivestockReportContentTwentyFour" xml:space="preserve">
+    <value>Entered nitrogen (N) standard</value>
+  </data>
+  <data name="lblLivestockReportContentTwentyFive" xml:space="preserve">
+    <value>Total livestock manure nitrogen (N) production</value>
+  </data>
+  <data name="lblLivestockReportContentTwentySix" xml:space="preserve">
+    <value>Total phosphate (P2O5) produced</value>
+  </data>
+  <data name="lblLivestockReportContentTwentySeven" xml:space="preserve">
+    <value>Grazing livestock manure total nitrogen (N) and phosphate (P2O5) production</value>
+  </data>
+  <data name="lblLivestockReportContentTwentyNine" xml:space="preserve">
+    <value>Home-produced manures from any cattle (excluding veal calves), sheep, deer, goats, or horses, regardless of whether the animals are housed or not.</value>
+  </data>
+  <data name="lblLivestockReportContentTwentyEight" xml:space="preserve">
+    <value>Home-produced manures from any pigs, poultry, or veal calves, regardless of whether the animals are housed or not.</value>
+  </data>
+  <data name="lblLivestockReportContentThirty" xml:space="preserve">
+    <value>Non-grazing livestock manure total nitrogen (N) and phosphate (P2O5) production</value>
+  </data>
+  <data name="lblLivestockReportContentThirtyOne" xml:space="preserve">
+    <value> Average for year</value>
+  </data>
+  <data name="lblWhoAreYouExportingThisLivestockManureTo" xml:space="preserve">
+    <value>Who are you exporting this livestock manure to?</value>
+  </data>
+  <data name="lblImportsOfLivestockManure" xml:space="preserve">
+    <value>Imports of livestock manure</value>
+  </data>
+  <data name="lblExportsOfLivestockManure" xml:space="preserve">
+    <value>Exports of livestock manure</value>
+  </data>
+  <data name="lblNoteWithComment" xml:space="preserve">
+    <value>Note: {0}</value>
+  </data>
+  <data name="lblThereAreNoExportsOfLivestockManure" xml:space="preserve">
+    <value>There are no exports of livestock manure</value>
+  </data>
+  <data name="lblThereAreNoImportsOfLivestockManure" xml:space="preserve">
+    <value>There are no imports of livestock manure</value>
+  </data>
+  <data name="lblLivestockReportContentThirtyTwo" xml:space="preserve">
+    <value>Imports and exports of livestock manure</value>
+  </data>
+  <data name="lblLivestockReportContentThirtyThree" xml:space="preserve">
+    <value>Livestock manure imports and exports net total:</value>
+  </data>
+  <data name="lblLivestockReportContentThirtyFour" xml:space="preserve">
+    <value>{0}kg of nitrogen (N)</value>
+  </data>
+  <data name="lblReceiver" xml:space="preserve">
+    <value>Receiver</value>
+  </data>
+  <data name="lblLivestockReportContentThirtyFive" xml:space="preserve">
+    <value>About farm area</value>
+  </data>
+  <data name="lblLivestockReportContentThirtySix" xml:space="preserve">
+    <value>The farm area does not include surface waters, areas of hardstanding, buildings or woodland (unless the woodland is used for grazing), and any land covered by a greenhouse.</value>
+  </data>
+  <data name="lblLivestockReportContentThirtySeven" xml:space="preserve">
+    <value>Livestock manure total nitrogen (N) and phosphate (P2O5) loading</value>
+  </data>
+  <data name="lblLivestockReportContentThirtyEight" xml:space="preserve">
+    <value> Grazing livestock total nitrogen (N)</value>
+  </data>
+  <data name="lblLivestockReportContentThirtyNine" xml:space="preserve">
+    <value>Non-grazing livestock total nitrogen (N)</value>
+  </data>
+  <data name="lblLivestockReportContentFourty" xml:space="preserve">
+    <value>Grazing livestock total phosphate (P2O5)</value>
+  </data>
+  <data name="lblLivestockReportContentFourtyOne" xml:space="preserve">
+    <value>Non-grazing livestock total phosphate (P2O5)</value>
+  </data>
+  <data name="lblWhatIsTheExpectedYieldForSingleForDefaultYield" xml:space="preserve">
+    <value>What is the expected yield for {0} in these fields (optional)?</value>
+  </data>
+  <data name="lblWhatIsTheDifferentExpectedYieldForDefaultYield" xml:space="preserve">
+    <value>What is the expected yield for {0} in {1} (optional)?</value>
+  </data>
+  <data name="lblWhichCropIsThisFertiliserApplication" xml:space="preserve">
+    <value>Which crop is this inorganic fertiliser application for in {0}?</value>
+  </data>
+  <data name="lblAboutNewSward" xml:space="preserve">
+    <value>A new sward is one that is established in the current harvest year.</value>
+  </data>
+  <data name="lblWhenAreYouApplyingManureOnThisField" xml:space="preserve">
+    <value>When are you applying {0} on {1}?</value>
+  </data>
+  <data name="lblWhenAreYouApplyingInorganicFertiliserForThisFields" xml:space="preserve">
+    <value>When are you applying inorganic fertiliser on {0}?</value>
+  </data>
+  <data name="lblWhenDoYouPlanToSpreadInorganicFertiliserOnThisField" xml:space="preserve">
+    <value>When do you plan to spread inorganic fertiliser on {0}?</value>
+  </data>
+  <data name="lblUseTheStandardFigureForThisField" xml:space="preserve">
+    <value>Use the typical figure of {0} tonnes per hectare for this field</value>
+  </data>
+  <data name="lblNutrientRecommendationsWillBeBasedOnTheLatest" xml:space="preserve">
+    <value>Nutrient recommendations will be based on the latest soil analysis entered. </value>
+  </data>
+  <data name="lblExistingManureStorageCapacityReport" xml:space="preserve">
+    <value>Existing manure storage capacity report</value>
+  </data>
+  <data name="lblDemonstrateComplianceWithRulesForOrganicMaterialStorage" xml:space="preserve">
+    <value>Demonstrate compliance with rules for organic material storage.</value>
+  </data>
+  <data name="lblWhichYearWouldYouLikeToCreateExistingManureReport" xml:space="preserve">
+    <value>Which year would you like to create an Existing manure storage capacity report for?</value>
+  </data>
+  <data name="lblNotEnteredStorage" xml:space="preserve">
+    <value>Not entered storage</value>
+  </data>
+  <data name="lblYouHaveNotEnteredAnyOrganicMaterialStorageFor" xml:space="preserve">
+    <value>You have not entered any organic material storage for {0}</value>
+  </data>
+  <data name="lblAddOrganicMaterialStorage" xml:space="preserve">
+    <value>Add organic material storage</value>
+  </data>
+  <data name="lblWinterWheat" xml:space="preserve">
+    <value>Winter wheat</value>
+  </data>
+  <data name="lblSpringWheat" xml:space="preserve">
+    <value>Spring wheat</value>
+  </data>
+  <data name="lblWinterBarley" xml:space="preserve">
+    <value>Winter barley</value>
+  </data>
+  <data name="lblSpringBarley" xml:space="preserve">
+    <value>Spring barley</value>
+  </data>
+  <data name="lblPotatoes" xml:space="preserve">
+    <value>Potatoes</value>
+  </data>
+  <data name="lblFieldBeans" xml:space="preserve">
+    <value>Field beans</value>
+  </data>
+  <data name="lblPeas" xml:space="preserve">
+    <value>Peas</value>
+  </data>
+  <data name="lblGroup1Vegetables" xml:space="preserve">
+    <value>Group 1 vegetables</value>
+  </data>
+  <data name="lblGroup2Vegetables" xml:space="preserve">
+    <value>Group 2 vegetables</value>
+  </data>
+  <data name="lblGroup3Vegetables" xml:space="preserve">
+    <value>Group 3 vegetables</value>
+  </data>
+  <data name="lblTypicalManagedQuestionHint" xml:space="preserve">
+    <value>If there's no typical answer, select what you did the last year that the field was grass.</value>
+  </data>
+  <data name="lblThereAreNoGrazingOfLivestockManure" xml:space="preserve">
+    <value>There are no grazing of livestock manure</value>
+  </data>
+  <data name="lblThereAreNoNonGrazingOfLivestockManure" xml:space="preserve">
+    <value>There are no non-grazing of livestock manure</value>
+  </data>
+  <data name="lblDoNotCompliance" xml:space="preserve">
+    <value>do not compliance</value>
+  </data>
+  <data name="lblOrganicMaterialStorage" xml:space="preserve">
+    <value>Organic material storage</value>
+  </data>
+  <data name="lblMetres" xml:space="preserve">
+    <value>metres</value>
+  </data>
+  <data name="lblLength" xml:space="preserve">
+    <value>Length</value>
+  </data>
+  <data name="lblWidth" xml:space="preserve">
+    <value>Width</value>
+  </data>
+  <data name="lblDepth" xml:space="preserve">
+    <value>Depth</value>
+  </data>
+  <data name="lblCircumference" xml:space="preserve">
+    <value>Circumference</value>
+  </data>
+  <data name="lblCapacityVolume" xml:space="preserve">
+    <value>Capacity volume</value>
+  </data>
+  <data name="lblMetresCubed" xml:space="preserve">
+    <value>metres cubed</value>
+  </data>
+  <data name="lblSlurryStorage" xml:space="preserve">
+    <value>Slurry storage</value>
+  </data>
+  <data name="lblDirtyWater" xml:space="preserve">
+    <value>Dirty water</value>
+  </data>
+  <data name="lblSolidManureStorage" xml:space="preserve">
+    <value>Solid manure storage</value>
+  </data>
+  <data name="lblManageStoreCapacity" xml:space="preserve">
+    <value>Manage store capacity</value>
+  </data>
+  <data name="lblGoat" xml:space="preserve">
+    <value>goat</value>
+  </data>
+  <data name="lblHorse" xml:space="preserve">
+    <value>horse</value>
+  </data>
+  <data name="lblStorageType" xml:space="preserve">
+    <value>Storage type</value>
+  </data>
+  <data name="lblWhatKindOfManureStorageDoYouWantToAdd" xml:space="preserve">
+    <value>What kind of manure storage do you want to add?</value>
+  </data>
+  <data name="lblStorageName" xml:space="preserve">
+    <value>Storage name</value>
+  </data>
+  <data name="lblWhatDoYouWantToCallThisManureStore" xml:space="preserve">
+    <value>What do you want to call this manure store?</value>
+  </data>
+  <data name="lblGiveTheStoreAUniqueName" xml:space="preserve">
+    <value>Give the store a unique name.</value>
+  </data>
+  <data name="lblEnterANameForYourOrganicMaterialStore" xml:space="preserve">
+    <value>Enter a name for your organic material store before continuing.</value>
+  </data>
+  <data name="lblDimensions" xml:space="preserve">
+    <value>Dimensions</value>
+  </data>
+  <data name="WhatKindOfStorageIsStoreName" xml:space="preserve">
+    <value>What kind of storage is {0}?</value>
+  </data>
+  <data name="MsgCropNmaxLimitWarningPara1Additional" xml:space="preserve">
+    <value>Individual fields may have a higher adjusted limit, but you must stay within the {0}kg limit overall.</value>
   </data>
 </root>
