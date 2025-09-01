@@ -19,6 +19,9 @@
         public int? MaterialStateId { get; set; }
         public string? MaterialStateName { get; set; }
         public string? StoreName { get; set; }
-
+        public decimal? Length { get; set; }
+        public decimal? Width { get; set; }
+        public decimal? Depth { get; set; }
+        public bool? IsCovered { get; set; } = false;
     }
 }

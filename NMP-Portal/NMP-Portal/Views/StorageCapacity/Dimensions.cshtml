@@ -2,6 +2,8 @@
 @model NMP.Portal.ViewModels.StorageCapacityViewModel
 @{
     ViewData["Title"] = Resource.lblDimensions;
+    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
 }
 
 @section BeforeContent {
@@ -35,17 +37,33 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MaterialStateName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StoreName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MaterialStateId"></govuk-input>
 
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-                <p class="govuk-body">
-                    Work is under Construction.
-                </p>
-                @* <govuk-button type="submit" class="margin-bottom-forty">
+                <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                    <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblStoreDimenstion, Model.StoreName)</h1>
+                </legand>
+
+                <govuk-input asp-for=@Model.Length type="number" step="any" spellcheck="false">
+                    <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheLength</govuk-input-label>
+                    <govuk-input-suffix>@Resource.lblMetres</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.Width type="number" step="any" spellcheck="false">
+                    <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheWidth</govuk-input-label>
+                    <govuk-input-suffix>@Resource.lblMetres</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.Depth type="number" step="any" spellcheck="false">
+                    <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheDepth</govuk-input-label>
+                    <govuk-input-suffix>@Resource.lblMetres</govuk-input-suffix>
+                </govuk-input>
+                
+
+                <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
-                </govuk-button> *@
+                </govuk-button>
                 <p class="govuk-body cancel-link">
                     @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
                     {

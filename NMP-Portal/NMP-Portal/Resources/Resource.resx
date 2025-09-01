@@ -5828,4 +5828,31 @@ live</value>
   <data name="MsgCropNmaxLimitWarningPara1Additional" xml:space="preserve">
     <value>Individual fields may have a higher adjusted limit, but you must stay within the {0}kg limit overall.</value>
   </data>
+  <data name="lblWeightCapacity" xml:space="preserve">
+    <value>Weight capacity</value>
+  </data>
+  <data name="lblWhatIsTheLength" xml:space="preserve">
+    <value>What is the length?</value>
+  </data>
+  <data name="lblWhatIsTheWidth" xml:space="preserve">
+    <value>What is the width?</value>
+  </data>
+  <data name="lblWhatIsTheDepth" xml:space="preserve">
+    <value>What is the depth?</value>
+  </data>
+  <data name="lblStoreDimenstion" xml:space="preserve">
+    <value>{0} dimensions</value>
+  </data>
+  <data name="MsgEnterTheDimensionOfYourStorageBeforeContinuing" xml:space="preserve">
+    <value>Enter the {0} of your storage before continuing.</value>
+  </data>
+  <data name="lblIsThisCovered" xml:space="preserve">
+    <value>Is {0} covered?</value>
+  </data>
+  <data name="lblDoNotDeductTheFreeboard" xml:space="preserve">
+    <value>Do not deduct the freeboard</value>
+  </data>
+  <data name="lblWhatIsTheTotalDepth" xml:space="preserve">
+    <value>What is the total depth?</value>
+  </data>
 </root>

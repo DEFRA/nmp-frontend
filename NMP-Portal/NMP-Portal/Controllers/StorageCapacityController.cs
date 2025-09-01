@@ -460,7 +460,7 @@ namespace NMP.Portal.Controllers
                     }
                 }
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
-                return RedirectToAction("Dimension");
+                return RedirectToAction("Dimensions");
             }
             catch (Exception ex)
             {
@@ -470,7 +470,7 @@ namespace NMP.Portal.Controllers
             }
         }
         [HttpGet]
-        public IActionResult Dimension()
+        public IActionResult Dimensions()
         {
             _logger.LogTrace("Report Controller : Dimension() action called");
             StorageCapacityViewModel model = new StorageCapacityViewModel();
@@ -494,6 +494,65 @@ namespace NMP.Portal.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Dimensions(StorageCapacityViewModel model)
+        {
+            _logger.LogTrace("Report Controller : Dimension() post action called");
+            try
+            {
+                if (model.Length == null)
+                {
+                    ModelState.AddModelError("Length",string.Format( Resource.MsgEnterTheDimensionOfYourStorageBeforeContinuing,Resource.lblLength.ToLower()));
+                }
+                if (model.Width == null)
+                {
+                    ModelState.AddModelError("Width", string.Format(Resource.MsgEnterTheDimensionOfYourStorageBeforeContinuing, Resource.lblWidth.ToLower()));
+                }
+                if (model.Depth == null)
+                {
+                    ModelState.AddModelError("Depth", string.Format(Resource.MsgEnterTheDimensionOfYourStorageBeforeContinuing, Resource.lblDepth.ToLower()));
+                }
 
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
+
+                return RedirectToAction("WeightCapacity");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in Dimension() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnDimension"] = ex.Message;
+                return View(model);
+            }
+        }
+        [HttpGet]
+        public IActionResult WeightCapacity()
+        {
+            _logger.LogTrace("Report Controller : WeightCapacity() action called");
+            StorageCapacityViewModel model = new StorageCapacityViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("StorageCapacityData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in WeightCapacity() action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnDimension"] = ex.Message;
+                return RedirectToAction("Demensions");
+            }
+            return View(model);
+        }
     }
 }
