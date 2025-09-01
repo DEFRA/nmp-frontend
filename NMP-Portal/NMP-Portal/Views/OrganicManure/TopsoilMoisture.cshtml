@@ -204,7 +204,8 @@
                         @Resource.lblHowWetWasTheTopsoil
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>
-                        @string.Format(Resource.lblTheseOptionsComeFromMannerNpk, Resource.lblMoistureTypes)
+                        @Resource.lblSelectOneOption
+                        @* @string.Format(Resource.lblTheseOptionsComeFromMannerNpk, Resource.lblMoistureTypes) *@
                     </govuk-radios-hint>
                     @if (ViewBag.MoisterTypes != null && ViewBag.MoisterTypes.Count > 0)
                     {
