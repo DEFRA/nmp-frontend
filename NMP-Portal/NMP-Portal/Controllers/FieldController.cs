@@ -1454,292 +1454,294 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> CheckAnswer(FieldViewModel model)
         {
             _logger.LogTrace($"Field Controller : CheckAnswer() post action called");
-            if (model.PreviousGrasses != null && model.PreviousGrasses.HasGrassInLastThreeYear == false)
+            try
             {
-                if (!model.CropGroupId.HasValue)
+                if (model.PreviousGrasses != null && model.PreviousGrasses.HasGrassInLastThreeYear == false)
                 {
-                    ModelState.AddModelError("CropGroupId", string.Format("{0} {1}", string.Format(Resource.lblWhatWasThePreviousCropGroupForCheckAnswere, model.LastHarvestYear), Resource.lblNotSet));
-                }
-                if (!model.CropTypeID.HasValue)
-                {
-                    ModelState.AddModelError("CropTypeID", string.Format("{0} {1}", string.Format(Resource.lblWhatWasThePreviousCropTypeForCheckAnswere, model.LastHarvestYear), Resource.lblNotSet));
-                }
-            }
-            if (model.PreviousGrasses != null && model.PreviousGrasses.HasGrassInLastThreeYear == true)
-            {
-                if (!model.PreviousGrassYears.Contains(model.LastHarvestYear.Value))
-                {
-                    if (string.IsNullOrWhiteSpace(model.CropGroup))
+                    if (!model.CropGroupId.HasValue)
                     {
                         ModelState.AddModelError("CropGroupId", string.Format("{0} {1}", string.Format(Resource.lblWhatWasThePreviousCropGroupForCheckAnswere, model.LastHarvestYear), Resource.lblNotSet));
                     }
-                    if (string.IsNullOrWhiteSpace(model.CropType))
+                    if (!model.CropTypeID.HasValue)
                     {
                         ModelState.AddModelError("CropTypeID", string.Format("{0} {1}", string.Format(Resource.lblWhatWasThePreviousCropTypeForCheckAnswere, model.LastHarvestYear), Resource.lblNotSet));
-                        //ModelState.AddModelError("CropGroupId", string.Format("{0} {1}", string.Format(Resource.lblWhatWasThePreviousCropGroup, model.LastHarvestYear), Resource.lblNotSet));
                     }
                 }
-
-
-                if (model.PreviousGrassYears == null)
+                if (model.PreviousGrasses != null && model.PreviousGrasses.HasGrassInLastThreeYear == true)
                 {
-                    ModelState.AddModelError("PreviousGrassYears", string.Format("{0} {1}", string.Format(Resource.lblInWhichYearsWasUsedForGrass, model.Name), Resource.lblNotSet));
-                }
-                if (model.PreviousGrasses.GrassManagementOptionID == null)
-                {
-                    ModelState.AddModelError("PreviousGrasses.GrassManagementOptionID", string.Format("{0} {1}", Resource.lblHowWasTheGrassTypicallyManagedEachYear, Resource.lblNotSet));
-                }
-
-                if (model.PreviousGrasses.HasGreaterThan30PercentClover == null)
-                {
-                    ModelState.AddModelError("PreviousGrasses.HasGreaterThan30PercentClover", string.Format("{0} {1}", string.Format(Resource.lblDoesFieldTypicallyHaveMoreThan30PercentClover, model.Name), Resource.lblNotSet));
-                }
-                else
-                {
-                    if ((!model.PreviousGrasses.HasGreaterThan30PercentClover.Value) && model.PreviousGrasses.SoilNitrogenSupplyItemID == null)
+                    if (!model.PreviousGrassYears.Contains(model.LastHarvestYear.Value))
                     {
-                        ModelState.AddModelError("PreviousGrasses.SoilNitrogenSupplyItemID", string.Format("{0} {1}", string.Format(Resource.lblHowMuchNitrogenHasBeenAppliedToFieldEachYear, model.Name), Resource.lblNotSet));
-                    }
-                }
-            }
-
-            //if (model.PreviousGrasses.HasGrassInLastThreeYear == false)
-            //{
-            //    if (model.WantToApplySns == null)
-            //    {
-            //        ModelState.AddModelError("WantToApplySns", string.Format("{0} {1}", string.Format(Resource.lblHowWouldYouLikeToCalculateSoilNitrogenSupply, model.Name), Resource.lblNotSet));
-            //    }
-            //}
-
-            if (model.RecentSoilAnalysisQuestion.Value)
-            {
-                if (model.IsSoilReleasingClay && !model.SoilReleasingClay.HasValue)
-                {
-                    ModelState.AddModelError("SoilReleasingClay", Resource.MsgSoilReleasingClayNotSet);
-                }
-                if (!model.SoilAnalyses.Date.HasValue)
-                {
-                    ModelState.AddModelError("SoilAnalyses.Date", Resource.MsgSampleDateNotSet);
-                }
-                if (!model.SoilAnalyses.SulphurDeficient.HasValue)
-                {
-                    ModelState.AddModelError("SoilAnalyses.SulphurDeficient", Resource.lblSoilDeficientInSulpurForCheckAnswerNotset);
-                }
-
-                if (model.IsSoilNutrientValueTypeIndex.HasValue)
-                {
-
-                    if (!model.IsSoilNutrientValueTypeIndex.Value)
-                    {
-                        if (!model.SoilAnalyses.PH.HasValue && !model.SoilAnalyses.Potassium.HasValue &&
-                            !model.SoilAnalyses.Phosphorus.HasValue && !model.SoilAnalyses.Magnesium.HasValue)
+                        if (string.IsNullOrWhiteSpace(model.CropGroup))
                         {
-                            if (!model.SoilAnalyses.PH.HasValue)
-                            {
-                                ModelState.AddModelError("SoilAnalyses.PH", Resource.MsgPhNotSet);
-                            }
-                            if (!model.SoilAnalyses.Potassium.HasValue)
-                            {
-                                ModelState.AddModelError("SoilAnalyses.Potassium", Resource.MsgPotassiumNotSet);
-                            }
-                            if (!model.SoilAnalyses.Phosphorus.HasValue)
-                            {
-                                ModelState.AddModelError("SoilAnalyses.Phosphorus", Resource.MsgPhosphorusNotSet);
-                            }
-                            if (!model.SoilAnalyses.Magnesium.HasValue)
-                            {
-                                ModelState.AddModelError("SoilAnalyses.Magnesium", Resource.MsgMagnesiumNotSet);
-                            }
+                            ModelState.AddModelError("CropGroupId", string.Format("{0} {1}", string.Format(Resource.lblWhatWasThePreviousCropGroupForCheckAnswere, model.LastHarvestYear), Resource.lblNotSet));
                         }
+                        if (string.IsNullOrWhiteSpace(model.CropType))
+                        {
+                            ModelState.AddModelError("CropTypeID", string.Format("{0} {1}", string.Format(Resource.lblWhatWasThePreviousCropTypeForCheckAnswere, model.LastHarvestYear), Resource.lblNotSet));
+                            //ModelState.AddModelError("CropGroupId", string.Format("{0} {1}", string.Format(Resource.lblWhatWasThePreviousCropGroup, model.LastHarvestYear), Resource.lblNotSet));
+                        }
+                    }
 
+
+                    if (model.PreviousGrassYears == null)
+                    {
+                        ModelState.AddModelError("PreviousGrassYears", string.Format("{0} {1}", string.Format(Resource.lblInWhichYearsWasUsedForGrass, model.Name), Resource.lblNotSet));
+                    }
+                    if (model.PreviousGrasses.GrassManagementOptionID == null)
+                    {
+                        ModelState.AddModelError("PreviousGrasses.GrassManagementOptionID", string.Format("{0} {1}", Resource.lblHowWasTheGrassTypicallyManagedEachYear, Resource.lblNotSet));
+                    }
+
+                    if (model.PreviousGrasses.HasGreaterThan30PercentClover == null)
+                    {
+                        ModelState.AddModelError("PreviousGrasses.HasGreaterThan30PercentClover", string.Format("{0} {1}", string.Format(Resource.lblDoesFieldTypicallyHaveMoreThan30PercentClover, model.Name), Resource.lblNotSet));
                     }
                     else
                     {
-                        if (!model.SoilAnalyses.PH.HasValue && string.IsNullOrWhiteSpace(model.PotassiumIndexValue) &&
-                            !model.SoilAnalyses.MagnesiumIndex.HasValue && !model.SoilAnalyses.PhosphorusIndex.HasValue)
+                        if ((!model.PreviousGrasses.HasGreaterThan30PercentClover.Value) && model.PreviousGrasses.SoilNitrogenSupplyItemID == null)
                         {
-                            if (!model.SoilAnalyses.PH.HasValue)
-                            {
-                                ModelState.AddModelError("SoilAnalyses.PH", Resource.MsgPhNotSet);
-                            }
-                            if (string.IsNullOrWhiteSpace(model.PotassiumIndexValue))
-                            {
-                                ModelState.AddModelError("PotassiumIndexValue", Resource.MsgPotassiumIndexNotSet);
-                            }
-                            if (!model.SoilAnalyses.PhosphorusIndex.HasValue)
-                            {
-                                ModelState.AddModelError("SoilAnalyses.PhosphorusIndex", Resource.MsgPhosphorusIndexNotSet);
-                            }
-                            if (!model.SoilAnalyses.MagnesiumIndex.HasValue)
-                            {
-                                ModelState.AddModelError("SoilAnalyses.MagnesiumIndex", Resource.MsgMagnesiumIndexNotSet);
-                            }
+                            ModelState.AddModelError("PreviousGrasses.SoilNitrogenSupplyItemID", string.Format("{0} {1}", string.Format(Resource.lblHowMuchNitrogenHasBeenAppliedToFieldEachYear, model.Name), Resource.lblNotSet));
                         }
                     }
                 }
-                else
+
+                //if (model.PreviousGrasses.HasGrassInLastThreeYear == false)
+                //{
+                //    if (model.WantToApplySns == null)
+                //    {
+                //        ModelState.AddModelError("WantToApplySns", string.Format("{0} {1}", string.Format(Resource.lblHowWouldYouLikeToCalculateSoilNitrogenSupply, model.Name), Resource.lblNotSet));
+                //    }
+                //}
+
+                if (model.RecentSoilAnalysisQuestion.Value)
                 {
-                    ModelState.AddModelError("IsSoilNutrientValueTypeIndex", Resource.MsgNutrientValueTypeForCheckAnswereNotSet);
-                }
-            }
-            if (!ModelState.IsValid)
-            {
-                List<CommonResponse> grassManagements = await _fieldService.GetGrassManagementOptions();
-                ViewBag.GrassManagementOptions = grassManagements?.FirstOrDefault(x => x.Id == model.PreviousGrasses.GrassManagementOptionID)?.Name;
-
-
-                List<CommonResponse> soilNitrogenSupplyItems = await _fieldService.GetSoilNitrogenSupplyItems();
-                ViewBag.SoilNitrogenSupplyItems = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == model.PreviousGrasses.SoilNitrogenSupplyItemID)?.Name;
-
-                return View("CheckAnswer", model);
-            }
-            int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);  // Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value);
-            var farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
-            //int farmId = model.FarmID;
-            if (model.SoilAnalyses.Potassium != null || model.SoilAnalyses.Phosphorus != null || (!string.IsNullOrWhiteSpace(model.PotassiumIndexValue)) || model.SoilAnalyses.PhosphorusIndex != null)
-            {
-                model.PKBalance.PBalance = 0;
-                model.PKBalance.KBalance = 0;
-                model.PKBalance.Year = model.SoilAnalyses.Date.Value.Year;
-            }
-            else
-            {
-                model.PKBalance = null;
-            }
-            int? lastGroupNumber = null;
-            Error error = new Error();
-            (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-
-            if (farm != null && (string.IsNullOrWhiteSpace(error.Message)))
-            {
-                (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.LastHarvestYear.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
-
-                if (harvestYearPlanResponse != null && harvestYearPlanResponse.Count > 0)
-                {
-                    var lastGroup = harvestYearPlanResponse.Where(cg => !string.IsNullOrEmpty(cg.CropGroupName) && cg.CropGroupName.StartsWith("Crop group") &&
-                                     int.TryParse(cg.CropGroupName.Split(' ')[2], out _))
-                                    .OrderByDescending(cg => int.Parse(cg.CropGroupName.Split(' ')[2]))
-                                    .FirstOrDefault();
-                    if (lastGroup != null)
+                    if (model.IsSoilReleasingClay && !model.SoilReleasingClay.HasValue)
                     {
-                        lastGroupNumber = int.Parse(lastGroup.CropGroupName.Split(' ')[2]);
+                        ModelState.AddModelError("SoilReleasingClay", Resource.MsgSoilReleasingClayNotSet);
+                    }
+                    if (!model.SoilAnalyses.Date.HasValue)
+                    {
+                        ModelState.AddModelError("SoilAnalyses.Date", Resource.MsgSampleDateNotSet);
+                    }
+                    if (!model.SoilAnalyses.SulphurDeficient.HasValue)
+                    {
+                        ModelState.AddModelError("SoilAnalyses.SulphurDeficient", Resource.lblSoilDeficientInSulpurForCheckAnswerNotset);
+                    }
+
+                    if (model.IsSoilNutrientValueTypeIndex.HasValue)
+                    {
+
+                        if (!model.IsSoilNutrientValueTypeIndex.Value)
+                        {
+                            if (!model.SoilAnalyses.PH.HasValue && !model.SoilAnalyses.Potassium.HasValue &&
+                                !model.SoilAnalyses.Phosphorus.HasValue && !model.SoilAnalyses.Magnesium.HasValue)
+                            {
+                                if (!model.SoilAnalyses.PH.HasValue)
+                                {
+                                    ModelState.AddModelError("SoilAnalyses.PH", Resource.MsgPhNotSet);
+                                }
+                                if (!model.SoilAnalyses.Potassium.HasValue)
+                                {
+                                    ModelState.AddModelError("SoilAnalyses.Potassium", Resource.MsgPotassiumNotSet);
+                                }
+                                if (!model.SoilAnalyses.Phosphorus.HasValue)
+                                {
+                                    ModelState.AddModelError("SoilAnalyses.Phosphorus", Resource.MsgPhosphorusNotSet);
+                                }
+                                if (!model.SoilAnalyses.Magnesium.HasValue)
+                                {
+                                    ModelState.AddModelError("SoilAnalyses.Magnesium", Resource.MsgMagnesiumNotSet);
+                                }
+                            }
+
+                        }
+                        else
+                        {
+                            if (!model.SoilAnalyses.PH.HasValue && string.IsNullOrWhiteSpace(model.PotassiumIndexValue) &&
+                                !model.SoilAnalyses.MagnesiumIndex.HasValue && !model.SoilAnalyses.PhosphorusIndex.HasValue)
+                            {
+                                if (!model.SoilAnalyses.PH.HasValue)
+                                {
+                                    ModelState.AddModelError("SoilAnalyses.PH", Resource.MsgPhNotSet);
+                                }
+                                if (string.IsNullOrWhiteSpace(model.PotassiumIndexValue))
+                                {
+                                    ModelState.AddModelError("PotassiumIndexValue", Resource.MsgPotassiumIndexNotSet);
+                                }
+                                if (!model.SoilAnalyses.PhosphorusIndex.HasValue)
+                                {
+                                    ModelState.AddModelError("SoilAnalyses.PhosphorusIndex", Resource.MsgPhosphorusIndexNotSet);
+                                }
+                                if (!model.SoilAnalyses.MagnesiumIndex.HasValue)
+                                {
+                                    ModelState.AddModelError("SoilAnalyses.MagnesiumIndex", Resource.MsgMagnesiumIndexNotSet);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("IsSoilNutrientValueTypeIndex", Resource.MsgNutrientValueTypeForCheckAnswereNotSet);
                     }
                 }
-
-                if (lastGroupNumber != null)
+                if (!ModelState.IsValid)
                 {
-                    model.CropGroupName = string.Format(Resource.lblCropGroupWithCounter, (lastGroupNumber + 1));
+                    List<CommonResponse> grassManagements = await _fieldService.GetGrassManagementOptions();
+                    ViewBag.GrassManagementOptions = grassManagements?.FirstOrDefault(x => x.Id == model.PreviousGrasses.GrassManagementOptionID)?.Name;
+
+
+                    List<CommonResponse> soilNitrogenSupplyItems = await _fieldService.GetSoilNitrogenSupplyItems();
+                    ViewBag.SoilNitrogenSupplyItems = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == model.PreviousGrasses.SoilNitrogenSupplyItemID)?.Name;
+
+                    return View("CheckAnswer", model);
+                }
+                int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);  // Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value);
+                var farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
+                //int farmId = model.FarmID;
+                if (model.SoilAnalyses.Potassium != null || model.SoilAnalyses.Phosphorus != null || (!string.IsNullOrWhiteSpace(model.PotassiumIndexValue)) || model.SoilAnalyses.PhosphorusIndex != null)
+                {
+                    model.PKBalance.PBalance = 0;
+                    model.PKBalance.KBalance = 0;
+                    model.PKBalance.Year = model.SoilAnalyses.Date.Value.Year;
                 }
                 else
                 {
-                    model.CropGroupName = string.Format(Resource.lblCropGroupWithCounter, 1);
+                    model.PKBalance = null;
                 }
-            }
-            else
-            {
-                TempData["AddFieldError"] = Resource.MsgWeCouldNotAddYourFieldPleaseTryAgainLater;
-                return RedirectToAction("CheckAnswer");
-            }
-            List<PreviousGrass> grass = new List<PreviousGrass>();
-            if (model.PreviousGrassYears != null)
-            {
-                foreach (var year in model.PreviousGrassYears)
-                {
-                    model.PreviousGrasses.HarvestYear = year;
+                int? lastGroupNumber = null;
+                Error error = new Error();
+                (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
 
-                    var newGrass = new PreviousGrass
+                if (farm != null && (string.IsNullOrWhiteSpace(error.Message)))
+                {
+                    (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.LastHarvestYear.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
+
+                    if (harvestYearPlanResponse != null && harvestYearPlanResponse.Count > 0)
                     {
-                        HasGrassInLastThreeYear = model.PreviousGrasses.HasGrassInLastThreeYear,
-                        HarvestYear = year,
-                        LayDuration = model.PreviousGrasses.LayDuration,
-                        GrassManagementOptionID = model.PreviousGrasses.GrassManagementOptionID,
-                        HasGreaterThan30PercentClover = model.PreviousGrasses.HasGreaterThan30PercentClover,
-                        SoilNitrogenSupplyItemID = model.PreviousGrasses.SoilNitrogenSupplyItemID,
-                        CreatedOn = System.DateTime.Now
+                        var lastGroup = harvestYearPlanResponse.Where(cg => !string.IsNullOrEmpty(cg.CropGroupName) && cg.CropGroupName.StartsWith("Crop group") &&
+                                         int.TryParse(cg.CropGroupName.Split(' ')[2], out _))
+                                        .OrderByDescending(cg => int.Parse(cg.CropGroupName.Split(' ')[2]))
+                                        .FirstOrDefault();
+                        if (lastGroup != null)
+                        {
+                            lastGroupNumber = int.Parse(lastGroup.CropGroupName.Split(' ')[2]);
+                        }
+                    }
 
-                    };
-
-                    grass.Add(newGrass);
-                }
-                if (model.IsPreviousYearGrass == true)
-                {
-                    model.CropGroupId = (int)NMP.Portal.Enums.CropGroup.Grass;
-                    model.CropTypeID = (int)NMP.Portal.Enums.CropTypes.Grass;
-                }
-
-            }
-            if (!string.IsNullOrWhiteSpace(model.PotassiumIndexValue))
-            {
-                if (model.PotassiumIndexValue == Resource.lblTwoMinus)
-                {
-                    model.SoilAnalyses.PotassiumIndex = Convert.ToInt32(Resource.lblMinusTwo);
-                }
-                else if (model.PotassiumIndexValue == Resource.lblTwoPlus)
-                {
-                    model.SoilAnalyses.PotassiumIndex = Convert.ToInt32(Resource.lblPlusTwo);
+                    if (lastGroupNumber != null)
+                    {
+                        model.CropGroupName = string.Format(Resource.lblCropGroupWithCounter, (lastGroupNumber + 1));
+                    }
+                    else
+                    {
+                        model.CropGroupName = string.Format(Resource.lblCropGroupWithCounter, 1);
+                    }
                 }
                 else
                 {
-                    model.SoilAnalyses.PotassiumIndex = Convert.ToInt32(model.PotassiumIndexValue.Trim());
+                    TempData["AddFieldError"] = Resource.MsgWeCouldNotAddYourFieldPleaseTryAgainLater;
+                    return RedirectToAction("CheckAnswer");
                 }
-            }
-            //model.SoilAnalyses.Year = model.SoilAnalyses.Date.Value.Month >= 8 ? model.SoilAnalyses.Date.Value.Year + 1 : model.SoilAnalyses.Date.Value.Year;
-            //model.SoilAnalyses.PotassiumIndex = Convert.ToInt32(model.PotassiumIndexValue);
-            FieldData fieldData = new FieldData
-            {
-                Field = new Field
+                List<PreviousGrass> grass = new List<PreviousGrass>();
+                if (model.PreviousGrassYears != null)
                 {
-                    SoilTypeID = model.SoilTypeID,
-                    NVZProgrammeID = model.IsWithinNVZ == true ? (int)NMP.Portal.Enums.NVZProgram.CurrentNVZRule : (int)NMP.Portal.Enums.NVZProgram.NotInNVZ,
-                    Name = model.Name,
-                    LPIDNumber = model.LPIDNumber,
-                    NationalGridReference = model.NationalGridReference,
-                    OtherReference = model.OtherReference,
-                    TotalArea = model.TotalArea,
-                    CroppedArea = model.CroppedArea,
-                    ManureNonSpreadingArea = model.ManureNonSpreadingArea,
-                    SoilReleasingClay = model.SoilReleasingClay,
-                    SoilOverChalk = model.SoilOverChalk,
-                    IsWithinNVZ = model.IsWithinNVZ,
-                    IsAbove300SeaLevel = model.IsAbove300SeaLevel,
-                    IsActive = true,
-                    CreatedOn = DateTime.Now,
-                    CreatedByID = userId,
-                    ModifiedOn = model.ModifiedOn,
-                    ModifiedByID = model.ModifiedByID
-                },
-                SoilAnalysis = (!model.RecentSoilAnalysisQuestion.Value) ? null : new SoilAnalysis
+                    foreach (var year in model.PreviousGrassYears)
+                    {
+                        model.PreviousGrasses.HarvestYear = year;
+
+                        var newGrass = new PreviousGrass
+                        {
+                            HasGrassInLastThreeYear = model.PreviousGrasses.HasGrassInLastThreeYear,
+                            HarvestYear = year,
+                            LayDuration = model.PreviousGrasses.LayDuration,
+                            GrassManagementOptionID = model.PreviousGrasses.GrassManagementOptionID,
+                            HasGreaterThan30PercentClover = model.PreviousGrasses.HasGreaterThan30PercentClover,
+                            SoilNitrogenSupplyItemID = model.PreviousGrasses.SoilNitrogenSupplyItemID,
+                            CreatedOn = System.DateTime.Now
+
+                        };
+
+                        grass.Add(newGrass);
+                    }
+                    if (model.IsPreviousYearGrass == true)
+                    {
+                        model.CropGroupId = (int)NMP.Portal.Enums.CropGroup.Grass;
+                        model.CropTypeID = (int)NMP.Portal.Enums.CropTypes.Grass;
+                    }
+
+                }
+                if (!string.IsNullOrWhiteSpace(model.PotassiumIndexValue))
                 {
-                    Year = model.SoilAnalyses.Date.Value.Month >= 8 ? model.SoilAnalyses.Date.Value.Year + 1 : model.SoilAnalyses.Date.Value.Year,
-                    SulphurDeficient = model.SoilAnalyses.SulphurDeficient,
-                    Date = model.SoilAnalyses.Date,
-                    PH = model.SoilAnalyses.PH,
-                    PhosphorusMethodologyID = model.SoilAnalyses.PhosphorusMethodologyID,
-                    Phosphorus = model.SoilAnalyses.Phosphorus,
-                    PhosphorusIndex = model.SoilAnalyses.PhosphorusIndex,
-                    Potassium = model.SoilAnalyses.Potassium,
-                    PotassiumIndex = model.SoilAnalyses.PotassiumIndex,
-                    Magnesium = model.SoilAnalyses.Magnesium,
-                    MagnesiumIndex = model.SoilAnalyses.MagnesiumIndex,
-                    SoilNitrogenSupply = model.SoilAnalyses.SoilNitrogenSupply,
-                    SoilNitrogenSupplyIndex = model.SoilAnalyses.SoilNitrogenSupplyIndex,
-                    SoilNitrogenSampleDate = model.SampleForSoilMineralNitrogen,
-                    Sodium = model.SoilAnalyses.Sodium,
-                    Lime = model.SoilAnalyses.Lime,
-                    PhosphorusStatus = model.SoilAnalyses.PhosphorusStatus,
-                    PotassiumAnalysis = model.SoilAnalyses.PotassiumAnalysis,
-                    PotassiumStatus = model.SoilAnalyses.PotassiumStatus,
-                    MagnesiumAnalysis = model.SoilAnalyses.MagnesiumAnalysis,
-                    MagnesiumStatus = model.SoilAnalyses.MagnesiumStatus,
-                    NitrogenResidueGroup = model.SoilAnalyses.NitrogenResidueGroup,
-                    Comments = model.SoilAnalyses.Comments,
-                    PreviousID = model.SoilAnalyses.PreviousID,
-                    CreatedOn = DateTime.Now,
-                    CreatedByID = userId,
-                    ModifiedOn = model.SoilAnalyses.ModifiedOn,
-                    ModifiedByID = model.SoilAnalyses.ModifiedByID
-                },
-                Crops = new List<CropData>
+                    if (model.PotassiumIndexValue == Resource.lblTwoMinus)
+                    {
+                        model.SoilAnalyses.PotassiumIndex = Convert.ToInt32(Resource.lblMinusTwo);
+                    }
+                    else if (model.PotassiumIndexValue == Resource.lblTwoPlus)
+                    {
+                        model.SoilAnalyses.PotassiumIndex = Convert.ToInt32(Resource.lblPlusTwo);
+                    }
+                    else
+                    {
+                        model.SoilAnalyses.PotassiumIndex = Convert.ToInt32(model.PotassiumIndexValue.Trim());
+                    }
+                }
+                //model.SoilAnalyses.Year = model.SoilAnalyses.Date.Value.Month >= 8 ? model.SoilAnalyses.Date.Value.Year + 1 : model.SoilAnalyses.Date.Value.Year;
+                //model.SoilAnalyses.PotassiumIndex = Convert.ToInt32(model.PotassiumIndexValue);
+                FieldData fieldData = new FieldData
+                {
+                    Field = new Field
+                    {
+                        SoilTypeID = model.SoilTypeID,
+                        NVZProgrammeID = model.IsWithinNVZ == true ? (int)NMP.Portal.Enums.NVZProgram.CurrentNVZRule : (int)NMP.Portal.Enums.NVZProgram.NotInNVZ,
+                        Name = model.Name,
+                        LPIDNumber = model.LPIDNumber,
+                        NationalGridReference = model.NationalGridReference,
+                        OtherReference = model.OtherReference,
+                        TotalArea = model.TotalArea,
+                        CroppedArea = model.CroppedArea,
+                        ManureNonSpreadingArea = model.ManureNonSpreadingArea,
+                        SoilReleasingClay = model.SoilReleasingClay,
+                        SoilOverChalk = model.SoilOverChalk,
+                        IsWithinNVZ = model.IsWithinNVZ,
+                        IsAbove300SeaLevel = model.IsAbove300SeaLevel,
+                        IsActive = true,
+                        CreatedOn = DateTime.Now,
+                        CreatedByID = userId,
+                        ModifiedOn = model.ModifiedOn,
+                        ModifiedByID = model.ModifiedByID
+                    },
+                    SoilAnalysis = (!model.RecentSoilAnalysisQuestion.Value) ? null : new SoilAnalysis
+                    {
+                        Year = model.SoilAnalyses.Date.Value.Month >= 8 ? model.SoilAnalyses.Date.Value.Year + 1 : model.SoilAnalyses.Date.Value.Year,
+                        SulphurDeficient = model.SoilAnalyses.SulphurDeficient,
+                        Date = model.SoilAnalyses.Date,
+                        PH = model.SoilAnalyses.PH,
+                        PhosphorusMethodologyID = model.SoilAnalyses.PhosphorusMethodologyID,
+                        Phosphorus = model.SoilAnalyses.Phosphorus,
+                        PhosphorusIndex = model.SoilAnalyses.PhosphorusIndex,
+                        Potassium = model.SoilAnalyses.Potassium,
+                        PotassiumIndex = model.SoilAnalyses.PotassiumIndex,
+                        Magnesium = model.SoilAnalyses.Magnesium,
+                        MagnesiumIndex = model.SoilAnalyses.MagnesiumIndex,
+                        SoilNitrogenSupply = model.SoilAnalyses.SoilNitrogenSupply,
+                        SoilNitrogenSupplyIndex = model.SoilAnalyses.SoilNitrogenSupplyIndex,
+                        SoilNitrogenSampleDate = model.SampleForSoilMineralNitrogen,
+                        Sodium = model.SoilAnalyses.Sodium,
+                        Lime = model.SoilAnalyses.Lime,
+                        PhosphorusStatus = model.SoilAnalyses.PhosphorusStatus,
+                        PotassiumAnalysis = model.SoilAnalyses.PotassiumAnalysis,
+                        PotassiumStatus = model.SoilAnalyses.PotassiumStatus,
+                        MagnesiumAnalysis = model.SoilAnalyses.MagnesiumAnalysis,
+                        MagnesiumStatus = model.SoilAnalyses.MagnesiumStatus,
+                        NitrogenResidueGroup = model.SoilAnalyses.NitrogenResidueGroup,
+                        Comments = model.SoilAnalyses.Comments,
+                        PreviousID = model.SoilAnalyses.PreviousID,
+                        CreatedOn = DateTime.Now,
+                        CreatedByID = userId,
+                        ModifiedOn = model.SoilAnalyses.ModifiedOn,
+                        ModifiedByID = model.SoilAnalyses.ModifiedByID
+                    },
+                    Crops = new List<CropData>
                 {
                     new CropData
                     {
@@ -1768,26 +1770,31 @@ namespace NMP.Portal.Controllers
                     },
 
                 },
-                PKBalance = model.PKBalance != null ? model.PKBalance : null,
-                PreviousGrasses = model.PreviousGrasses.HasGrassInLastThreeYear == true ? grass : null
+                    PKBalance = model.PKBalance != null ? model.PKBalance : null,
+                    PreviousGrasses = model.PreviousGrasses.HasGrassInLastThreeYear == true ? grass : null
 
-            };
+                };
 
-            (Field fieldResponse, Error error1) = await _fieldService.AddFieldAsync(fieldData, farm.ID, farm.Name);
-            if (error1.Message == null && fieldResponse != null)
-            {
-                string success = _farmDataProtector.Protect("true");
-                string fieldName = _farmDataProtector.Protect(fieldResponse.Name);
-                _httpContextAccessor.HttpContext?.Session.Remove("FieldData");
+                (Field fieldResponse, Error error1) = await _fieldService.AddFieldAsync(fieldData, farm.ID, farm.Name);
+                if (error1.Message == null && fieldResponse != null)
+                {
+                    string success = _farmDataProtector.Protect("true");
+                    string fieldName = _farmDataProtector.Protect(fieldResponse.Name);
+                    _httpContextAccessor.HttpContext?.Session.Remove("FieldData");
 
-                return RedirectToAction("ManageFarmFields", new { id = model.EncryptedFarmId, q = success, name = fieldName });
+                    return RedirectToAction("ManageFarmFields", new { id = model.EncryptedFarmId, q = success, name = fieldName });
+                }
+                else
+                {
+                    TempData["AddFieldError"] = Resource.MsgWeCouldNotAddYourFieldPleaseTryAgainLater;
+                    return RedirectToAction("CheckAnswer");
+                }
             }
-            else
+            catch(Exception ex)
             {
-                TempData["AddFieldError"] = Resource.MsgWeCouldNotAddYourFieldPleaseTryAgainLater;
+                TempData["AddFieldError"] = ex.Message;
                 return RedirectToAction("CheckAnswer");
             }
-
         }
 
         [HttpGet]

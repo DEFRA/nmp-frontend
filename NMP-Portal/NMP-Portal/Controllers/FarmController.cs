@@ -908,66 +908,74 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> CheckAnswer(FarmViewModel farm)
         {
             _logger.LogTrace($"Farm Controller : CheckAnswer() post action called");
-            int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
-            farm.AverageAltitude = farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.NoneAbove300m ? (int)NMP.Portal.Enums.AverageAltitude.below :
-                    farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m ? (int)NMP.Portal.Enums.AverageAltitude.above : 0;
-            //var claim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "relationships").Value;
-            //string[] relationshipData = claim.Split(":");
-            Guid organisationId = Guid.Parse(HttpContext.User.FindFirst("organisationId")?.Value);
-            if (string.IsNullOrWhiteSpace(farm.ClimateDataPostCode))
+            try
             {
-                farm.ClimateDataPostCode = farm.Postcode;
-            }
-            var farmData = new FarmData
-            {
-                Farm = new Farm()
+                int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
+                farm.AverageAltitude = farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.NoneAbove300m ? (int)NMP.Portal.Enums.AverageAltitude.below :
+                        farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m ? (int)NMP.Portal.Enums.AverageAltitude.above : 0;
+                //var claim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "relationships").Value;
+                //string[] relationshipData = claim.Split(":");
+                Guid organisationId = Guid.Parse(HttpContext.User.FindFirst("organisationId")?.Value);
+                if (string.IsNullOrWhiteSpace(farm.ClimateDataPostCode))
                 {
-                    Name = farm.Name,
-                    Address1 = farm.Address1,
-                    Address2 = farm.Address2,
-                    Address3 = farm.Address3,
-                    Address4 = farm.Address4,
-                    Postcode = farm.Postcode,
-                    CPH = farm.CPH,
-                    FarmerName = farm.FarmerName,
-                    BusinessName = farm.BusinessName,
-                    SBI = farm.SBI,
-                    STD = farm.STD,
-                    Telephone = farm.Telephone,
-                    Mobile = farm.Mobile,
-                    Email = farm.Email,
-                    Rainfall = farm.Rainfall,
-                    OrganisationID = organisationId,
-                    TotalFarmArea = farm.TotalFarmArea,
-                    AverageAltitude = farm.AverageAltitude,
-                    RegisteredOrganicProducer = farm.RegisteredOrganicProducer,
-                    MetricUnits = farm.MetricUnits,
-                    EnglishRules = farm.EnglishRules,
-                    NVZFields = farm.NVZFields,
-                    FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
-                    LastHarvestYear = farm.LastHarvestYear,
-                    CountryID = farm.CountryID,
-                    ClimateDataPostCode = farm.ClimateDataPostCode,
-                    CreatedByID = userId,
-                    CreatedOn = System.DateTime.Now,
-                    ModifiedByID = farm.ModifiedByID,
-                    ModifiedOn = farm.ModifiedOn
-                },
-                UserID = userId,
-                RoleID = 2
-            };
-            (Farm farmResponse, Error error) = await _farmService.AddFarmAsync(farmData);
+                    farm.ClimateDataPostCode = farm.Postcode;
+                }
+                var farmData = new FarmData
+                {
+                    Farm = new Farm()
+                    {
+                        Name = farm.Name,
+                        Address1 = farm.Address1,
+                        Address2 = farm.Address2,
+                        Address3 = farm.Address3,
+                        Address4 = farm.Address4,
+                        Postcode = farm.Postcode,
+                        CPH = farm.CPH,
+                        FarmerName = farm.FarmerName,
+                        BusinessName = farm.BusinessName,
+                        SBI = farm.SBI,
+                        STD = farm.STD,
+                        Telephone = farm.Telephone,
+                        Mobile = farm.Mobile,
+                        Email = farm.Email,
+                        Rainfall = farm.Rainfall,
+                        OrganisationID = organisationId,
+                        TotalFarmArea = farm.TotalFarmArea,
+                        AverageAltitude = farm.AverageAltitude,
+                        RegisteredOrganicProducer = farm.RegisteredOrganicProducer,
+                        MetricUnits = farm.MetricUnits,
+                        EnglishRules = farm.EnglishRules,
+                        NVZFields = farm.NVZFields,
+                        FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
+                        LastHarvestYear = farm.LastHarvestYear,
+                        CountryID = farm.CountryID,
+                        ClimateDataPostCode = farm.ClimateDataPostCode,
+                        CreatedByID = userId,
+                        CreatedOn = System.DateTime.Now,
+                        ModifiedByID = farm.ModifiedByID,
+                        ModifiedOn = farm.ModifiedOn
+                    },
+                    UserID = userId,
+                    RoleID = 2
+                };
+                (Farm farmResponse, Error error) = await _farmService.AddFarmAsync(farmData);
 
-            if (!string.IsNullOrWhiteSpace(error.Message))
-            {
-                TempData["AddFarmError"] = error.Message;
-                return View(farm);
+                if (!string.IsNullOrWhiteSpace(error.Message))
+                {
+                    TempData["AddFarmError"] = error.Message;
+                    return View(farm);
+                }
+                string success = _dataProtector.Protect("true");
+                farmResponse.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());
+                HttpContext.Session.Remove("FarmData");
+                HttpContext.Session.Remove("AddressList");
+                return RedirectToAction("FarmSummary", new { id = farmResponse.EncryptedFarmId, q = success });
             }
-            string success = _dataProtector.Protect("true");
-            farmResponse.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());
-            HttpContext.Session.Remove("FarmData");
-            HttpContext.Session.Remove("AddressList");
-            return RedirectToAction("FarmSummary", new { id = farmResponse.EncryptedFarmId, q = success });
+            catch(Exception ex)
+            {
+                TempData["AddFarmError"] = ex.Message;
+                return RedirectToAction("CheckAnswer");
+            }
 
         }
         public IActionResult BackCheckAnswer()
@@ -1157,87 +1165,95 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> FarmUpdate(FarmViewModel farm)
         {
             _logger.LogTrace($"Farm Controller : FarmUpdate() action called");
-            int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
-            farm.AverageAltitude = farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.NoneAbove300m ? (int)NMP.Portal.Enums.AverageAltitude.below :
-                    farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m ? (int)NMP.Portal.Enums.AverageAltitude.above : 0;
+            try
+            {
+                int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
+                farm.AverageAltitude = farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.NoneAbove300m ? (int)NMP.Portal.Enums.AverageAltitude.below :
+                        farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m ? (int)NMP.Portal.Enums.AverageAltitude.above : 0;
 
-            Guid organisationId = Guid.Parse(HttpContext.User.FindFirst("organisationId")?.Value);
-            int farmId = Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId));
+                Guid organisationId = Guid.Parse(HttpContext.User.FindFirst("organisationId")?.Value);
+                int farmId = Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId));
 
-            int createdByID = 0;
-            DateTime createdOn = DateTime.Now;
-            (Farm farmDetail, Error apiError) = await _farmService.FetchFarmByIdAsync(farmId);
-            if (!string.IsNullOrWhiteSpace(apiError.Message))
-            {
-                TempData["Error"] = apiError.Message;
-                return RedirectToAction("FarmList");
-            }
-            if (farmDetail != null)
-            {
-                createdByID = farmDetail.CreatedByID ?? 0;
-                createdOn = farmDetail.CreatedOn;
-
-            }
-            if (string.IsNullOrWhiteSpace(farm.ClimateDataPostCode))
-            {
-                farm.ClimateDataPostCode = farm.Postcode;
-            }
-            var farmData = new FarmData
-            {
-                Farm = new Farm()
+                int createdByID = 0;
+                DateTime createdOn = DateTime.Now;
+                (Farm farmDetail, Error apiError) = await _farmService.FetchFarmByIdAsync(farmId);
+                if (!string.IsNullOrWhiteSpace(apiError.Message))
                 {
-                    ID = farmId,
-                    Name = farm.Name,
-                    Address1 = farm.Address1,
-                    Address2 = farm.Address2,
-                    Address3 = farm.Address3,
-                    Address4 = farm.Address4,
-                    Postcode = farm.Postcode,
-                    CPH = farm.CPH,
-                    FarmerName = farm.FarmerName,
-                    BusinessName = farm.BusinessName,
-                    SBI = farm.SBI,
-                    STD = farm.STD,
-                    Telephone = farm.Telephone,
-                    Mobile = farm.Mobile,
-                    Email = farm.Email,
-                    Rainfall = farm.Rainfall,
-                    OrganisationID = organisationId,
-                    TotalFarmArea = farm.TotalFarmArea,
-                    AverageAltitude = farm.AverageAltitude,
-                    RegisteredOrganicProducer = farm.RegisteredOrganicProducer,
-                    MetricUnits = farm.MetricUnits,
-                    EnglishRules = farm.EnglishRules,
-                    NVZFields = farm.NVZFields,
-                    FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
-                    LastHarvestYear = farm.LastHarvestYear,
-                    CountryID = farm.CountryID,
-                    ClimateDataPostCode = farm.ClimateDataPostCode,
-                    CreatedByID = createdByID,
-                    CreatedOn = createdOn,
-                    ModifiedByID = userId,
-                    ModifiedOn = farm.ModifiedOn
-                },
-                UserID = userId,
-                RoleID = 2
-            };
+                    TempData["Error"] = apiError.Message;
+                    return RedirectToAction("FarmList");
+                }
+                if (farmDetail != null)
+                {
+                    createdByID = farmDetail.CreatedByID ?? 0;
+                    createdOn = farmDetail.CreatedOn;
 
-            (Farm farmResponse, Error error) = await _farmService.UpdateFarmAsync(farmData);
+                }
+                if (string.IsNullOrWhiteSpace(farm.ClimateDataPostCode))
+                {
+                    farm.ClimateDataPostCode = farm.Postcode;
+                }
+                var farmData = new FarmData
+                {
+                    Farm = new Farm()
+                    {
+                        ID = farmId,
+                        Name = farm.Name,
+                        Address1 = farm.Address1,
+                        Address2 = farm.Address2,
+                        Address3 = farm.Address3,
+                        Address4 = farm.Address4,
+                        Postcode = farm.Postcode,
+                        CPH = farm.CPH,
+                        FarmerName = farm.FarmerName,
+                        BusinessName = farm.BusinessName,
+                        SBI = farm.SBI,
+                        STD = farm.STD,
+                        Telephone = farm.Telephone,
+                        Mobile = farm.Mobile,
+                        Email = farm.Email,
+                        Rainfall = farm.Rainfall,
+                        OrganisationID = organisationId,
+                        TotalFarmArea = farm.TotalFarmArea,
+                        AverageAltitude = farm.AverageAltitude,
+                        RegisteredOrganicProducer = farm.RegisteredOrganicProducer,
+                        MetricUnits = farm.MetricUnits,
+                        EnglishRules = farm.EnglishRules,
+                        NVZFields = farm.NVZFields,
+                        FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
+                        LastHarvestYear = farm.LastHarvestYear,
+                        CountryID = farm.CountryID,
+                        ClimateDataPostCode = farm.ClimateDataPostCode,
+                        CreatedByID = createdByID,
+                        CreatedOn = createdOn,
+                        ModifiedByID = userId,
+                        ModifiedOn = farm.ModifiedOn
+                    },
+                    UserID = userId,
+                    RoleID = 2
+                };
 
-            if (!string.IsNullOrWhiteSpace(error.Message))
-            {
-                TempData["AddFarmError"] = error.Message;
-                string EncryptUpdateStatus = _dataProtector.Protect(Resource.lblTrue.ToString());
-                return RedirectToAction("CheckAnswer", new { q = EncryptUpdateStatus });
-                return View(farm);
+                (Farm farmResponse, Error error) = await _farmService.UpdateFarmAsync(farmData);
+
+                if (!string.IsNullOrWhiteSpace(error.Message))
+                {
+                    TempData["AddFarmError"] = error.Message;
+                    string EncryptUpdateStatus = _dataProtector.Protect(Resource.lblTrue.ToString());
+                    return RedirectToAction("CheckAnswer", new { q = EncryptUpdateStatus });
+                    return View(farm);
+                }
+                string success = _dataProtector.Protect("true");
+                farmResponse.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());
+                HttpContext.Session.Remove("FarmData");
+                HttpContext.Session.Remove("AddressList");
+
+                string isUpdate = _dataProtector.Protect("true");
+                return RedirectToAction("FarmSummary", new { id = farmResponse.EncryptedFarmId, q = success, u = isUpdate });
             }
-            string success = _dataProtector.Protect("true");
-            farmResponse.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());
-            HttpContext.Session.Remove("FarmData");
-            HttpContext.Session.Remove("AddressList");
-
-            string isUpdate = _dataProtector.Protect("true");
-            return RedirectToAction("FarmSummary", new { id = farmResponse.EncryptedFarmId, q = success, u = isUpdate });
+            catch (Exception ex)
+            {
+                TempData["AddFarmError"] = ex.Message;
+                return RedirectToAction("CheckAnswer");
+            }
 
         }
 
