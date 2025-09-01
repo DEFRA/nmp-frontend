@@ -204,7 +204,8 @@
                         @Resource.lblWindAtTheTimeOfApplication
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>
-                        @string.Format(Resource.lblTheseOptionsComeFromMannerNpk, Resource.lblWindSpeeds)
+                        @Resource.lblSelectOneOption
+                       @*  @string.Format(Resource.lblTheseOptionsComeFromMannerNpk, Resource.lblWindSpeeds) *@
                     </govuk-radios-hint>
                     @if (ViewBag.Windspeeds != null && ViewBag.Windspeeds.Count > 0)
                     {

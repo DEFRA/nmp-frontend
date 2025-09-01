@@ -3706,7 +3706,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter rainfall amount.
+        ///   Looks up a localized string similar to What was the total rainfall since application?.
         /// </summary>
         public static string lblEnterRainfallAmount {
             get {
@@ -5435,7 +5435,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How wet was the topsoil at time of application?.
+        ///   Looks up a localized string similar to How moist was the topsoil at the time of application?.
         /// </summary>
         public static string lblHowWetWasTheTopsoil {
             get {
@@ -9343,7 +9343,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rainfall within 6 hours of application.
+        ///   Looks up a localized string similar to What is the rainfall within 6 hours of application?.
         /// </summary>
         public static string lblRainfallWithin6Hours {
             get {
@@ -13672,7 +13672,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wind at the time of application.
+        ///   Looks up a localized string similar to What was the wind speed at the time of application?.
         /// </summary>
         public static string lblWindAtTheTimeOfApplication {
             get {
