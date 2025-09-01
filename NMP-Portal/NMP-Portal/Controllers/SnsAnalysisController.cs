@@ -1600,8 +1600,7 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> CheckAnswer(SnsAnalysisViewModel model)
         {
             _logger.LogTrace($"SnsAnalysis Controller : CheckAnswer() post action called");
-            
-
+            try { 
             if (!ModelState.IsValid)
             {
                 return View("CheckAnswer", model);
@@ -1674,7 +1673,12 @@ namespace NMP.Portal.Controllers
                 TempData["CheckAnswerError"] = Resource.MsgWeCouldNotAddYourSnsPleaseTryAgainLater;
                 return RedirectToAction("CheckAnswer");
             }
-
+            }
+            catch (Exception ex)
+            {
+                TempData["CheckAnswerError"] = ex.Message;
+                return RedirectToAction("CheckAnswer");
+            }
             return null;
 
         }

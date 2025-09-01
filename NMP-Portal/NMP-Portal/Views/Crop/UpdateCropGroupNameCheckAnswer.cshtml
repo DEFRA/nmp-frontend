@@ -39,7 +39,7 @@
             </p>
         </govuk-inset-text>
 
-        <form asp-action="UpdateCropGroupNameCheckAnswer" asp-controller="Crop" method="post" autocomplete="off">
+        <form class="form-with-overlay"  asp-action="UpdateCropGroupNameCheckAnswer" asp-controller="Crop" method="post" autocomplete="off">
             @Html.AntiForgeryToken()
 
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Yield" value="@Model.Yield"></govuk-input>
@@ -306,7 +306,7 @@
             </govuk-summary-list>
 
             <p class="govuk-body margin-bottom-forty">@Resource.lblYouCanAlso<a asp-action="RemoveCrop" asp-controller="Crop" asp-route-q="@ViewBag.EncryptedCropTypeId" asp-route-r="@(ViewBag.EncryptedCropGroupName==null?null:ViewBag.EncryptedCropGroupName)">@Resource.lblRemoveThisCropGroup</a>.</p>
-            <button class="govuk-button" data-module="govuk-button">
+            <button class="govuk-button" data-module="govuk-button" prevent-double-click="true">
                 @Resource.lblUpdateThisCropGroup
             </button>
             <p class="govuk-body">

@@ -16,4 +16,27 @@ document.addEventListener("DOMContentLoaded", function () {
             window.history.back();
         });
     }
+
+
+
+
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function () {
+            const submitButton = form.querySelector('button[type="submit"]');
+            const overlay = document.getElementById('loading-overlay');
+
+            if (submitButton) {
+                submitButton.disabled = true;
+            }
+
+            if (form.classList.contains('form-with-overlay') && overlay) {
+                overlay.classList.add('show');
+            }
+        });
+
+    }
+
+
+
 });
