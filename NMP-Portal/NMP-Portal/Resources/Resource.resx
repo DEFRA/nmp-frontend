@@ -1674,7 +1674,7 @@ kg per cubic metre</value>
     <value>uric acid</value>
   </data>
   <data name="lblRainfallWithin6Hours" xml:space="preserve">
-    <value>Rainfall within 6 hours of application</value>
+    <value>What is the rainfall within 6 hours of application?</value>
   </data>
   <data name="lblEffectiveRainfall" xml:space="preserve">
     <value>Effective rainfall</value>
@@ -1689,7 +1689,7 @@ kg per cubic metre</value>
     <value>Total rainfall</value>
   </data>
   <data name="lblEnterRainfallAmount" xml:space="preserve">
-    <value>Enter rainfall amount</value>
+    <value>What was the total rainfall since application?</value>
   </data>
   <data name="MsgEnterRainfallAmountBeforeContinuing" xml:space="preserve">
     <value>Enter a rainfall amount before continuing</value>
@@ -1698,13 +1698,13 @@ kg per cubic metre</value>
     <value>Rainfall amount must be a whole number, like 600.</value>
   </data>
   <data name="lblWindAtTheTimeOfApplication" xml:space="preserve">
-    <value>Wind at the time of application</value>
+    <value>What was the wind speed at the time of application?</value>
   </data>
   <data name="lblWindspeed" xml:space="preserve">
     <value>Windspeed</value>
   </data>
   <data name="lblHowWetWasTheTopsoil" xml:space="preserve">
-    <value>How wet was the topsoil at time of application?</value>
+    <value>How moist was the topsoil at the time of application?</value>
   </data>
   <data name="lblTopsoilMoister" xml:space="preserve">
     <value>Topsoil Moister</value>
@@ -5884,5 +5884,11 @@ live</value>
   </data>
   <data name="MsgSelectCircumferenceOrDiameterBeforeContinuing" xml:space="preserve">
     <value>Select circumference or diameter before continuing.</value>
+  </data>
+  <data name="lblLoadingOverlayContentTwo" xml:space="preserve">
+    <value>Please wait, submitting...</value>
+  </data>
+  <data name="lblLoadingOverlayContentOne" xml:space="preserve">
+    <value>Loading...</value>
   </data>
 </root>

@@ -29,7 +29,7 @@
 @section BeforeContent {
     <govuk-back-link asp-action="BackCheckAnswer" asp-controller="SnsAnalysis">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="CheckAnswer" asp-controller="SnsAnalysis" method="post" autocomplete="off">
+<form class="form-with-overlay" asp-action="CheckAnswer" asp-controller="SnsAnalysis" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
 
     <div class="govuk-grid-row">
@@ -338,7 +338,7 @@
             </govuk-summary-list>
             </div>
 
-            <govuk-button type="submit" class="margin-bottom-forty">
+            <govuk-button type="submit" class="margin-bottom-forty" prevent-double-click="true">
                 @Resource.lblAddTheseAnalysisResults
             </govuk-button>
             <p class="govuk-body cancel-link">

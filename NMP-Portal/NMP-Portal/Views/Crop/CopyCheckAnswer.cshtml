@@ -39,7 +39,7 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form asp-action="CopyCheckAnswer" asp-controller="Crop" method="post" autocomplete="off">
+        <form class="form-with-overlay" asp-action="CopyCheckAnswer" asp-controller="Crop" method="post" autocomplete="off">
             @Html.AntiForgeryToken()
 
             @if (TempData["ErrorCopyPlan"] != null)
@@ -177,7 +177,7 @@
                 </govuk-summary-list>
             </div>
             
-            <govuk-button type="submit" class="margin-bottom-forty">
+            <govuk-button type="submit" class="margin-bottom-forty" prevent-double-click="true">
                 @Resource.lblCreatePlan
             </govuk-button>
             <p class="govuk-body cancel-link">

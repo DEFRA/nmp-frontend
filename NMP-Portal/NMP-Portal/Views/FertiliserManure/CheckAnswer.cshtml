@@ -11,7 +11,7 @@
 }
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form asp-action="@(!string.IsNullOrWhiteSpace(Model.EncryptedFertId) ? "UpdateFertiliser" :"CheckAnswer")" asp-controller="FertiliserManure" method="post" autocomplete="off">
+        <form  class="form-with-overlay" asp-action="@(!string.IsNullOrWhiteSpace(Model.EncryptedFertId) ? "UpdateFertiliser" :"CheckAnswer")" asp-controller="FertiliserManure" method="post" autocomplete="off">
 
             @Html.AntiForgeryToken()
             <div hidden="true">
@@ -460,7 +460,7 @@
 
 
 
-            <govuk-button type="submit" class="margin-bottom-forty">
+            <govuk-button type="submit" class="margin-bottom-forty" prevent-double-click="true">
                 @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
                 {
                     @Resource.lblAddToPlan
