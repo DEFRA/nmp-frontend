@@ -22,6 +22,7 @@
         public decimal? Length { get; set; }
         public decimal? Width { get; set; }
         public decimal? Depth { get; set; }
-        public bool? IsCovered { get; set; } = false;
+        public bool? IsCovered { get; set; }
+        public bool? CircumferenceOrDiameter { get; set; }
     }
 }

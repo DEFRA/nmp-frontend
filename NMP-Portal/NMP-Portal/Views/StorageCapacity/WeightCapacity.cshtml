@@ -2,10 +2,19 @@
 @model NMP.Portal.ViewModels.StorageCapacityViewModel
 @{
     ViewData["Title"] = Resource.lblWeightCapacity;
+    var backAction = "";
+    if(Model.StorageTypeId==(int)NMP.Portal.Enums.StorageTypes.StorageBag)
+    {
+        backAction = "StorageTypes";
+    }
+    else
+    {
+        backAction = "Dimensions";
+    }
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="Dimensions" asp-controller="StorageCapacity">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="StorageCapacity">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnDimensions"] != null)
 {
@@ -40,6 +49,8 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Length"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Width"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Depth"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CircumferenceOrDiameter"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCovered"></govuk-input>
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">

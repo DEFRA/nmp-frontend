@@ -47,19 +47,96 @@
                     <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblStoreDimenstion, Model.StoreName)</h1>
                 </legand>
 
-                <govuk-input asp-for=@Model.Length type="number" step="any" spellcheck="false">
-                    <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheLength</govuk-input-label>
-                    <govuk-input-suffix>@Resource.lblMetres</govuk-input-suffix>
-                </govuk-input>
-                <govuk-input asp-for=@Model.Width type="number" step="any" spellcheck="false">
-                    <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheWidth</govuk-input-label>
-                    <govuk-input-suffix>@Resource.lblMetres</govuk-input-suffix>
-                </govuk-input>
-                <govuk-input asp-for=@Model.Depth type="number" step="any" spellcheck="false">
-                    <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheDepth</govuk-input-label>
-                    <govuk-input-suffix>@Resource.lblMetres</govuk-input-suffix>
-                </govuk-input>
+                @if (Model.MaterialStateId != (int)NMP.Portal.Enums.MaterialState.SolidManureStorage && Model.StorageTypeId != (int)NMP.Portal.Enums.StorageTypes.StorageBag)
+                {
+                    <govuk-details>
+                        <govuk-details-summary>
+                            @Resource.lblAboutFreeboards
+                        </govuk-details-summary>
+                        <govuk-details-text>
+                            <p class="govuk-body">@Resource.lblFreeboardIsTheDistanceBetweenTheTopOfTheTank</p>
+                            @if (Model.StorageTypeId == (int)NMP.Portal.Enums.StorageTypes.SquareOrRectangularTank || Model.StorageTypeId == (int)NMP.Portal.Enums.StorageTypes.CircularTank)
+                            {
+                                <p class="govuk-body">
+                                    @Resource.lblForASteelOrConcreteStore
+                                </p>
+                            }
+                            @if (Model.StorageTypeId == (int)NMP.Portal.Enums.StorageTypes.EarthBankedLagoon)
+                            {
+                                <p class="govuk-body">
+                                    @Resource.lblForEarthBankedLagoonsYouMustKeep
+                                </p>
+                            }
+                            
+                        </govuk-details-text>
+                    </govuk-details>
+                }
+                @if (Model.StorageTypeId != (int)NMP.Portal.Enums.StorageTypes.CircularTank)
+                {
+                    <govuk-input asp-for=@Model.Length type="number" step="any" spellcheck="false">
+                        @if(Model.StorageTypeId == (int)NMP.Portal.Enums.StorageTypes.EarthBankedLagoon)
+                        {
+                            <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheLengthAtTheTopEdgeOfTheLagoon</govuk-input-label>
+                        }
+                        else
+                        {
+                            <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheLength</govuk-input-label>
+                        }
+                        <govuk-input-suffix>@Resource.lblMetres</govuk-input-suffix>
+                    </govuk-input>
+                    <govuk-input asp-for=@Model.Width type="number" step="any" spellcheck="false">
+                        @if (Model.StorageTypeId == (int)NMP.Portal.Enums.StorageTypes.EarthBankedLagoon)
+                        {
+                            <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheWidthAtTheTopEdgeOfTheLagoon</govuk-input-label>
+                        }
+                        else
+                        {
+                            <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheWidth</govuk-input-label>
+                        }
+                        <govuk-input-suffix>@Resource.lblMetres</govuk-input-suffix>
+                    </govuk-input>
+                }
+                @if (Model.StorageTypeId == (int)NMP.Portal.Enums.StorageTypes.CircularTank)
+                {
+
+                    <govuk-radios asp-for="@Model.CircumferenceOrDiameter">
+                        <govuk-radios-fieldset>
+                            <govuk-radios-fieldset-legend is-page-heading="false">
+                                @Resource.lblDoYouWantToEnterTheCircumferenceOrTheDiameter
+                            </govuk-radios-fieldset-legend>
+                            <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
+                            <govuk-radios-item value="@yes">@Resource.lblCircumference</govuk-radios-item>
+                            <govuk-radios-item value="@no">@Resource.lblDiameter</govuk-radios-item>
+                        </govuk-radios-fieldset>
+                    </govuk-radios>
+                }
                 
+                <govuk-input asp-for=@Model.Depth type="number" step="any" spellcheck="false">
+                    
+                    @if (Model.StorageTypeId == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage)
+                    {
+                        <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheDepth</govuk-input-label>
+                    }
+                    else
+                    {
+                        <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheTotalDepth</govuk-input-label>
+                        <govuk-input-hint>@Resource.lblDoNotDeductTheFreeboard</govuk-input-hint>
+                    }
+                    <govuk-input-suffix>@Resource.lblMetres</govuk-input-suffix>
+                </govuk-input>
+
+                @if (Model.MaterialStateId != (int)NMP.Portal.Enums.MaterialState.SolidManureStorage)
+                {
+                    <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsCovered">
+                        <govuk-radios-fieldset>
+                            <govuk-radios-fieldset-legend is-page-heading="false">
+                                @string.Format(Resource.lblIsThisCovered,Model.StoreName)
+                            </govuk-radios-fieldset-legend>
+                            <govuk-radios-item value="@yes">@Resource.lblYes</govuk-radios-item>
+                            <govuk-radios-item value="@no">@Resource.lblNo</govuk-radios-item>
+                        </govuk-radios-fieldset>
+                    </govuk-radios>
+                }
 
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
