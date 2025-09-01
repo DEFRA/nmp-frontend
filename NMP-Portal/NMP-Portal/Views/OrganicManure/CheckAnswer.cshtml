@@ -45,7 +45,7 @@
 @section BeforeContent {
     <govuk-back-link asp-action="BackCheckAnswer" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action=@(!string.IsNullOrEmpty(Model.EncryptedOrgManureId) ? "OrganicManureUpdate" : "CheckAnswer") asp-controller="OrganicManure" method="post" autocomplete="off">
+<form class="form-with-overlay"  asp-action=@(!string.IsNullOrEmpty(Model.EncryptedOrgManureId) ? "OrganicManureUpdate" : "CheckAnswer") asp-controller="OrganicManure" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
 
     <div class="govuk-grid-row">
@@ -1110,13 +1110,13 @@
 
             @if (string.IsNullOrWhiteSpace(Model.EncryptedOrgManureId))
             {
-                <govuk-button type="submit" class="margin-bottom-forty">
+                <govuk-button type="submit" class="margin-bottom-forty" prevent-double-click="true">
                     @Resource.lblAddToPlan
                 </govuk-button>
             }
             else
             {
-                <govuk-button type="submit" class="margin-bottom-forty">
+                <govuk-button type="submit" class="margin-bottom-forty" prevent-double-click="true">
                     @Resource.lblUpdate
                 </govuk-button>
             }

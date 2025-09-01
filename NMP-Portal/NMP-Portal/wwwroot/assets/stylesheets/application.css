@@ -715,3 +715,41 @@ hr.seperator_thirty {
     background-color: #f3f2f1;
     font-weight: bold;
 }
+
+/* Hidden by default */
+.loading-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.9);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+    /* Show overlay when 'show' class is added */
+    .loading-overlay.show {
+        display: flex;
+    }
+
+/* Spinner animation */
+.loading-spinner {
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #00703c;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1em;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+

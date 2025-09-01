@@ -37,7 +37,7 @@ namespace NMP.Portal.ServiceResponses
         [JsonProperty("totalSO3")]
         public int TotalSO3 { get; set; }
         [JsonProperty("cropAvailableSO3")]
-        public int CropAvailableSO3 { get; set; }
+        public int? CropAvailableSO3 { get; set; }
         [JsonProperty("totalMgO")]
         public int TotalMgO { get; set; }
     }
