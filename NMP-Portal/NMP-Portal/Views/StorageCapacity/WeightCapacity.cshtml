@@ -1,11 +1,20 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.StorageCapacityViewModel
 @{
-    ViewData["Title"] = Resource.lblDimensions;
+    ViewData["Title"] = Resource.lblWeightCapacity;
+    var backAction = "";
+    if(Model.StorageTypeId==(int)NMP.Portal.Enums.StorageTypes.StorageBag)
+    {
+        backAction = "StorageTypes";
+    }
+    else
+    {
+        backAction = "Dimensions";
+    }
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="StorageTypes" asp-controller="StorageCapacity">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="StorageCapacity">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnDimensions"] != null)
 {
@@ -20,7 +29,7 @@
 
 @if (Model != null)
 {
-    <form asp-action="Dimensions" asp-controller="StorageCapacity" method="post" autocomplete="off">
+    <form asp-action="WeightCapacity" asp-controller="StorageCapacity" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
         <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
@@ -35,13 +44,18 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MaterialStateName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StoreName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MaterialStateId"></govuk-input>
-
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Length"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Width"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Depth"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CircumferenceOrDiameter"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCovered"></govuk-input>
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
                 <p class="govuk-body">
-                    Work is under Construction.
+                    Work in progress.
                 </p>
                 @* <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
