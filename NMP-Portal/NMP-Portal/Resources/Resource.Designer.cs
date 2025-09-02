@@ -14176,7 +14176,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You cannot add the crop type selected as a second crop. You have already allocated crops to all of your fields in 2026. .
+        ///   Looks up a localized string similar to You cannot add the crop type selected as a second crop. You have already allocated crops to all of your fields in {0}. .
         /// </summary>
         public static string lblYouCannotAddTheCropTypeSelectedAsASecondCrop {
             get {

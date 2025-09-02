@@ -106,7 +106,7 @@
                         <govuk-error-summary-item>                            
                             <h4 class="govuk-heading-s">@Resource.lblIncorrectSecondCropType</h4>
                             <p class="govuk-body-m">
-                                @Resource.lblYouCannotAddTheCropTypeSelectedAsASecondCrop
+                                @string.Format(Resource.lblYouCannotAddTheCropTypeSelectedAsASecondCrop,Model.Year)
                             </p>
                             <p class="govuk-body-s">
                                 <a asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@ViewBag.EncryptedHarvestYear">

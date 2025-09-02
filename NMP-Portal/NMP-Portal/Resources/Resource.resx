@@ -5898,7 +5898,7 @@ live</value>
     <value>The AHDB Nutrient Management Guide (RB209) recommends that sulphur is applied to most crops where you expect or recognise sulphur deficiency​.</value>
   </data>
   <data name="lblYouCannotAddTheCropTypeSelectedAsASecondCrop" xml:space="preserve">
-    <value>You cannot add the crop type selected as a second crop. You have already allocated crops to all of your fields in 2026. </value>
+    <value>You cannot add the crop type selected as a second crop. You have already allocated crops to all of your fields in {0}. </value>
   </data>
   <data name="lblSelectADifferentCrop" xml:space="preserve">
     <value> or select a different crop</value>
