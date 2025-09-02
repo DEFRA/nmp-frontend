@@ -2303,7 +2303,7 @@ namespace NMP.Portal.Controllers
                                     model.Yield = yield;
                                     yieldQuestion = yield == defaultYield ? string.Format(Resource.lblUseTheStandardFigure, defaultYield) : null;
 
-                                    if (string.IsNullOrWhiteSpace(yieldQuestion))
+                                    if (string.IsNullOrWhiteSpace(yieldQuestion)||harvestYearPlanResponse.Count>1)
                                     {
                                         if (firstYield == null)
                                         {
@@ -2374,12 +2374,12 @@ namespace NMP.Portal.Controllers
                             }
 
 
-                            if (model.Crops != null && model.Crops.All(x => x.Yield != null) && allYieldsAreSame && harvestYearPlanResponse.Count >= 1)
+                            if (model.Crops != null && model.Crops.All(x => x.Yield != null)&& model.YieldQuestion==null && allYieldsAreSame && harvestYearPlanResponse.Count >= 1)
                             {
                                 model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
 
                             }
-                            if (model.Crops != null && model.Crops.All(x => x.SowingDate != null) && allSowingAreSame && harvestYearPlanResponse.Count >= 1)
+                            if (model.Crops != null && model.Crops.All(x => x.SowingDate != null) && model.SowingDateQuestion == null && allSowingAreSame && harvestYearPlanResponse.Count >= 1)
                             {
                                 model.SowingDateQuestion = (int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields;
 
@@ -3617,6 +3617,11 @@ namespace NMP.Portal.Controllers
                                 EncryptedYear = _farmDataProtector.Protect(i.ToString()),
                                 IsAnyPlan = false
                             };
+
+                            if(minYear==i)
+                            {
+                                harvestYear.IsThisOldYear = true;
+                            }
                             model.HarvestYear.Add(harvestYear);
                         }
                     }
