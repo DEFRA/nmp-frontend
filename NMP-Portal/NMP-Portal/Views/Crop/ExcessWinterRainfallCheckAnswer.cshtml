@@ -14,7 +14,7 @@
             <govuk-error-summary-item href="#">@TempData["ExcessWinterRainfallCheckAnswerError"]</govuk-error-summary-item>
         </govuk-error-summary>
     }
-    <form asp-action="ExcessWinterRainfallCheckAnswer" asp-controller="Crop" method="post" novalidate="">
+    <form class="form-with-overlay" asp-action="ExcessWinterRainfallCheckAnswer" asp-controller="Crop" method="post" novalidate="">
         @Html.AntiForgeryToken()
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
@@ -49,7 +49,7 @@
             </div>
 
 
-            <govuk-button type="submit" class="margin-bottom-forty">
+            <govuk-button type="submit" class="margin-bottom-forty" prevent-double-click="true">
                 @Resource.lblUpdate
             </govuk-button>
 

@@ -14,12 +14,12 @@
 }
 <form asp-action="Defoliation" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
-    @if (TempData["DefoliationSequenceError"] != null)
+    @if (TempData["DefoliationError"] != null)
     {
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
                 <govuk-error-summary>
-                    <govuk-error-summary-item href="#">@TempData["DefoliationSequenceError"]</govuk-error-summary-item>
+                    <govuk-error-summary-item href="#">@TempData["DefoliationError"]</govuk-error-summary-item>
                 </govuk-error-summary>
             </div>
         </div>

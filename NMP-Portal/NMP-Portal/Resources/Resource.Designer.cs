@@ -6948,6 +6948,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Loading....
+        /// </summary>
+        public static string lblLoadingOverlayContentOne {
+            get {
+                return ResourceManager.GetString("lblLoadingOverlayContentOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please wait, submitting....
+        /// </summary>
+        public static string lblLoadingOverlayContentTwo {
+            get {
+                return ResourceManager.GetString("lblLoadingOverlayContentTwo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to low.
         /// </summary>
         public static string lblLow {
