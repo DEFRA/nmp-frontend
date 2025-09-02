@@ -229,7 +229,8 @@
                         @string.Format(Resource.lblWhatIsTheIncorporationMethod, isOtherManure ? Model.OtherMaterialName : Model.ManureTypeName)
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>
-                        @string.Format(Resource.lblTheseOptionsComeFromMannerNpk, Resource.lblIncorporationMethods)
+                        @Resource.lblSelectOneOption
+                        @* @string.Format(Resource.lblTheseOptionsComeFromMannerNpk, Resource.lblIncorporationMethods) *@
                     </govuk-radios-hint>
                     @if (ViewBag.IncorporationMethod != null && ViewBag.IncorporationMethod.Count > 0)
                     {

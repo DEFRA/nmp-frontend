@@ -25,12 +25,12 @@
 }
 <form asp-action="CropInfoTwo" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
-    @if (TempData["CropInfoOneError"] != null)
+    @if (TempData["CropInfoTwoError"] != null)
     {
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
                 <govuk-error-summary>
-                    <govuk-error-summary-item href="#">@TempData["CropInfoOneError"]</govuk-error-summary-item>
+                    <govuk-error-summary-item href="#">@TempData["CropInfoTwoError"]</govuk-error-summary-item>
                 </govuk-error-summary>
             </div>
         </div>

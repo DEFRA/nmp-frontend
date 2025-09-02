@@ -15,6 +15,16 @@
 }
 <form asp-action="YieldQuestion" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
+    @if (TempData["YieldQuestionError"] != null)
+    {
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <govuk-error-summary>
+                    <govuk-error-summary-item href="#">@TempData["YieldQuestionError"]</govuk-error-summary-item>
+                </govuk-error-summary>
+            </div>
+        </div>
+    }
     <div hidden="true">
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupId"></govuk-input>
