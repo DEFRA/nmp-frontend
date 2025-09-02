@@ -484,6 +484,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About freeboards.
+        /// </summary>
+        public static string lblAboutFreeboards {
+            get {
+                return ResourceManager.GetString("lblAboutFreeboards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This tool is currently in a private beta phase. This means that we are testing the tool with a group of invited users. As such, some functionality may not work as expected and some features have not yet been developed..
         /// </summary>
         public static string lblAboutGetHelpAndFeedback {
@@ -3103,6 +3112,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Diameter.
+        /// </summary>
+        public static string lblDiameter {
+            get {
+                return ResourceManager.GetString("lblDiameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Did you have any imports and exports of livestock manure at {0} in {1}?.
         /// </summary>
         public static string lblDidYouHaveAnyImportsAndExports {
@@ -3198,6 +3216,15 @@ namespace NMP.Portal.Resources {
         public static string lblDoNotCompliance {
             get {
                 return ResourceManager.GetString("lblDoNotCompliance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not deduct the freeboard.
+        /// </summary>
+        public static string lblDoNotDeductTheFreeboard {
+            get {
+                return ResourceManager.GetString("lblDoNotDeductTheFreeboard", resourceCulture);
             }
         }
         
@@ -3333,6 +3360,15 @@ namespace NMP.Portal.Resources {
         public static string lblDoYouWantToEnterGAIOrCropHeight {
             get {
                 return ResourceManager.GetString("lblDoYouWantToEnterGAIOrCropHeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to enter the circumference or the diameter?.
+        /// </summary>
+        public static string lblDoYouWantToEnterTheCircumferenceOrTheDiameter {
+            get {
+                return ResourceManager.GetString("lblDoYouWantToEnterTheCircumferenceOrTheDiameter", resourceCulture);
             }
         }
         
@@ -4606,11 +4642,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For a steel or concrete store, you must keep a minimum of 30cm of freeboard..
+        /// </summary>
+        public static string lblForASteelOrConcreteStore {
+            get {
+                return ResourceManager.GetString("lblForASteelOrConcreteStore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to For cut or grazing.
         /// </summary>
         public static string lblForCutOrGrazing {
             get {
                 return ResourceManager.GetString("lblForCutOrGrazing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For earth-banked lagoons, you must keep a minimum of 75cm of freeboard..
+        /// </summary>
+        public static string lblForEarthBankedLagoonsYouMustKeep {
+            get {
+                return ResourceManager.GetString("lblForEarthBankedLagoonsYouMustKeep", resourceCulture);
             }
         }
         
@@ -4692,6 +4746,15 @@ namespace NMP.Portal.Resources {
         public static string lblFourthRuleOfNVZForEngland {
             get {
                 return ResourceManager.GetString("lblFourthRuleOfNVZForEngland", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Freeboard is the distance between the top of the tank and the level of the slurry inside. You must always keep this distance clear..
+        /// </summary>
+        public static string lblFreeboardIsTheDistanceBetweenTheTopOfTheTank {
+            get {
+                return ResourceManager.GetString("lblFreeboardIsTheDistanceBetweenTheTopOfTheTank", resourceCulture);
             }
         }
         
@@ -5980,6 +6043,15 @@ namespace NMP.Portal.Resources {
         public static string lblIsThisANewSwardOrExistingSward {
             get {
                 return ResourceManager.GetString("lblIsThisANewSwardOrExistingSward", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is {0} covered?.
+        /// </summary>
+        public static string lblIsThisCovered {
+            get {
+                return ResourceManager.GetString("lblIsThisCovered", resourceCulture);
             }
         }
         
@@ -10882,6 +10954,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} dimensions.
+        /// </summary>
+        public static string lblStoreDimenstion {
+            get {
+                return ResourceManager.GetString("lblStoreDimenstion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Straw use.
         /// </summary>
         public static string lblStrawUse {
@@ -12610,6 +12691,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Weight capacity.
+        /// </summary>
+        public static string lblWeightCapacity {
+            get {
+                return ResourceManager.GetString("lblWeightCapacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to We use the target annual dry matter yield to give nitrogen (N) recommendations for grass..
         /// </summary>
         public static string lblWeUseTheTargetAnnaulDryMatterYieldToGiveNitrogenRecommendationsForGrass {
@@ -12799,6 +12889,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the depth?.
+        /// </summary>
+        public static string lblWhatIsTheDepth {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheDepth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the expected yield for {0} in {1}?.
         /// </summary>
         public static string lblWhatIsTheDifferentExpectedYield {
@@ -12903,6 +13002,24 @@ namespace NMP.Portal.Resources {
         public static string lblWhatIsTheIncorporationMethod {
             get {
                 return ResourceManager.GetString("lblWhatIsTheIncorporationMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the length?.
+        /// </summary>
+        public static string lblWhatIsTheLength {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the length at the top edge of the lagoon?.
+        /// </summary>
+        public static string lblWhatIsTheLengthAtTheTopEdgeOfTheLagoon {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheLengthAtTheTopEdgeOfTheLagoon", resourceCulture);
             }
         }
         
@@ -13033,6 +13150,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the total depth?.
+        /// </summary>
+        public static string lblWhatIsTheTotalDepth {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheTotalDepth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the total farm area?.
         /// </summary>
         public static string lblWhatIsTheTotalFarmArea {
@@ -13065,6 +13191,24 @@ namespace NMP.Portal.Resources {
         public static string lblWhatIsTheTotalTargetDryMatterYieldForFields {
             get {
                 return ResourceManager.GetString("lblWhatIsTheTotalTargetDryMatterYieldForFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the width?.
+        /// </summary>
+        public static string lblWhatIsTheWidth {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the width at the top edge of the lagoon?.
+        /// </summary>
+        public static string lblWhatIsTheWidthAtTheTopEdgeOfTheLagoon {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheWidthAtTheTopEdgeOfTheLagoon", resourceCulture);
             }
         }
         
@@ -15510,6 +15654,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter the {0} of your storage before continuing..
+        /// </summary>
+        public static string MsgEnterTheDimensionOfYourStorageBeforeContinuing {
+            get {
+                return ResourceManager.GetString("MsgEnterTheDimensionOfYourStorageBeforeContinuing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the farm name.
         /// </summary>
         public static string MsgEnterTheFarmName {
@@ -16685,6 +16838,24 @@ namespace NMP.Portal.Resources {
         public static string MsgSelectAWindConditionBeforeContinuing {
             get {
                 return ResourceManager.GetString("MsgSelectAWindConditionBeforeContinuing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select circumference or diameter before continuing..
+        /// </summary>
+        public static string MsgSelectCircumferenceOrDiameterBeforeContinuing {
+            get {
+                return ResourceManager.GetString("MsgSelectCircumferenceOrDiameterBeforeContinuing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select if {0} is covered..
+        /// </summary>
+        public static string MsgSelectIfYourStorageIsCovered {
+            get {
+                return ResourceManager.GetString("MsgSelectIfYourStorageIsCovered", resourceCulture);
             }
         }
         
