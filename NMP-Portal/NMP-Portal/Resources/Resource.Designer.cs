@@ -3868,6 +3868,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter {0} information.
+        /// </summary>
+        public static string lblEnterYearInformation {
+            get {
+                return ResourceManager.GetString("lblEnterYearInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error:.
         /// </summary>
         public static string lblError {
