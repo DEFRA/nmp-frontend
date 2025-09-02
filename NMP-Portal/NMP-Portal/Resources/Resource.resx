@@ -5894,4 +5894,7 @@ live</value>
   <data name="lblEnterYearInformation" xml:space="preserve">
     <value>Enter {0} information</value>
   </data>
+  <data name="lblAHDBNutrientManagementGuide" xml:space="preserve">
+    <value>The AHDB Nutrient Management Guide (RB209) recommends that sulphur is applied to most crops where you expect or recognise sulphur deficiency​.</value>
+  </data>
 </root>
