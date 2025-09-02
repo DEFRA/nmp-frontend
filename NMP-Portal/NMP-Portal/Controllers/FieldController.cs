@@ -98,6 +98,15 @@ namespace NMP.Portal.Controllers
                         farmId = model.EncryptedFarmId
                     });
                 }
+                else if (model.HarvestYear != null && (!string.IsNullOrWhiteSpace(model.EncryptedHarvestYear)))
+                {
+                    _httpContextAccessor.HttpContext?.Session.Remove("FieldData");
+                    return RedirectToAction("HarvestYearOverview", "Crop", new
+                    {
+                        id = model.EncryptedFarmId,
+                        year = model.EncryptedHarvestYear
+                    });
+                }
                 else if (fieldCount > 0)
                 {
                     if (model != null && model.CopyExistingField != null && model.CopyExistingField.Value)
@@ -125,7 +134,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> AddField(string q)//EncryptedfarmId
+        public async Task<IActionResult> AddField(string q, string? r)//EncryptedfarmId EncryptedYear
         {
             _logger.LogTrace($"Field Controller : AddField({q}) action called");
             FieldViewModel model = new FieldViewModel();
@@ -185,7 +194,11 @@ namespace NMP.Portal.Controllers
                     //    //model.LastHarvestYear = model.LastHarvestYear;
                     //}
                 }
-
+                if (!string.IsNullOrWhiteSpace(r))
+                {
+                    model.EncryptedHarvestYear = r;
+                    model.HarvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(r));
+                }
             }
             catch (Exception ex)
             {
