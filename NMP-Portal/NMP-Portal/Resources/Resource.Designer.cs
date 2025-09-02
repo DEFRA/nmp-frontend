@@ -1159,6 +1159,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The AHDB Nutrient Management Guide (RB209) recommends that sulphur is applied to most crops where you expect or recognise sulphur deficiency​..
+        /// </summary>
+        public static string lblAHDBNutrientManagementGuide {
+            get {
+                return ResourceManager.GetString("lblAHDBNutrientManagementGuide", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All.
         /// </summary>
         public static string lblAll {
@@ -3864,6 +3873,15 @@ namespace NMP.Portal.Resources {
         public static string lblEnterValidValue {
             get {
                 return ResourceManager.GetString("lblEnterValidValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter {0} information.
+        /// </summary>
+        public static string lblEnterYearInformation {
+            get {
+                return ResourceManager.GetString("lblEnterYearInformation", resourceCulture);
             }
         }
         
