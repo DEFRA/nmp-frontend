@@ -6,5 +6,6 @@
         public string EncryptedYear { get; set; }
         public DateTime? LastModifiedOn { get; set; }
         public bool IsAnyPlan { get; set; }
+        public bool IsThisOldYear { get; set; } = false;
     }
 }
