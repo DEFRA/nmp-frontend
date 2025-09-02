@@ -5828,6 +5828,63 @@ live</value>
   <data name="MsgCropNmaxLimitWarningPara1Additional" xml:space="preserve">
     <value>Individual fields may have a higher adjusted limit, but you must stay within the {0}kg limit overall.</value>
   </data>
+  <data name="lblWeightCapacity" xml:space="preserve">
+    <value>Weight capacity</value>
+  </data>
+  <data name="lblWhatIsTheLength" xml:space="preserve">
+    <value>What is the length?</value>
+  </data>
+  <data name="lblWhatIsTheWidth" xml:space="preserve">
+    <value>What is the width?</value>
+  </data>
+  <data name="lblWhatIsTheDepth" xml:space="preserve">
+    <value>What is the depth?</value>
+  </data>
+  <data name="lblStoreDimenstion" xml:space="preserve">
+    <value>{0} dimensions</value>
+  </data>
+  <data name="MsgEnterTheDimensionOfYourStorageBeforeContinuing" xml:space="preserve">
+    <value>Enter the {0} of your storage before continuing.</value>
+  </data>
+  <data name="lblIsThisCovered" xml:space="preserve">
+    <value>Is {0} covered?</value>
+  </data>
+  <data name="lblDoNotDeductTheFreeboard" xml:space="preserve">
+    <value>Do not deduct the freeboard</value>
+  </data>
+  <data name="lblWhatIsTheTotalDepth" xml:space="preserve">
+    <value>What is the total depth?</value>
+  </data>
+  <data name="lblAboutFreeboards" xml:space="preserve">
+    <value>About freeboards</value>
+  </data>
+  <data name="lblFreeboardIsTheDistanceBetweenTheTopOfTheTank" xml:space="preserve">
+    <value>Freeboard is the distance between the top of the tank and the level of the slurry inside. You must always keep this distance clear.</value>
+  </data>
+  <data name="lblForASteelOrConcreteStore" xml:space="preserve">
+    <value>For a steel or concrete store, you must keep a minimum of 30cm of freeboard.</value>
+  </data>
+  <data name="lblForEarthBankedLagoonsYouMustKeep" xml:space="preserve">
+    <value>For earth-banked lagoons, you must keep a minimum of 75cm of freeboard.</value>
+  </data>
+  <data name="lblDoYouWantToEnterTheCircumferenceOrTheDiameter" xml:space="preserve">
+    <value>Do you want to enter the circumference or the diameter?</value>
+  </data>
+  <data name="lblDiameter" xml:space="preserve">
+    <value>Diameter</value>
+  </data>
+  <data name="lblWhatIsTheLengthAtTheTopEdgeOfTheLagoon" xml:space="preserve">
+    <value>What is the length at the top edge of the lagoon?</value>
+  </data>
+  <data name="lblWhatIsTheWidthAtTheTopEdgeOfTheLagoon" xml:space="preserve">
+    <value>What is the width at the top edge of the lagoon?</value>
+  </data>
+  <data name="MsgSelectIfYourStorageIsCovered" xml:space="preserve">
+    <value>Select if {0} is covered.</value>
+  </data>
+  <data name="MsgSelectCircumferenceOrDiameterBeforeContinuing" xml:space="preserve">
+    <value>Select circumference or diameter before continuing.</value>
+  </data>
   <data name="lblLoadingOverlayContentTwo" xml:space="preserve">
     <value>Please wait, submitting...</value>
   </data>
