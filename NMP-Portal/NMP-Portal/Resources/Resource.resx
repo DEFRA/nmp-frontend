@@ -2612,7 +2612,7 @@ cubic metres per hectare  not set</value>
     <value>sort by application date</value>
   </data>
   <data name="lblSortByFieldName" xml:space="preserve">
-    <value>Sort by field name</value>
+    <value>sort by field name</value>
   </data>
   <data name="lblTypeOfManure" xml:space="preserve">
     <value>Type of manure</value>
@@ -5908,7 +5908,7 @@ live</value>
   </data>
   <data name="lblIncorrectSecondCropType" xml:space="preserve">
     <value>Incorrect second crop type</value>
- </data>
+  </data>
   <data name="lblWhatIsTheWeightCapacityOf" xml:space="preserve">
     <value>What is the weight capacity of {0}?</value>
   </data>

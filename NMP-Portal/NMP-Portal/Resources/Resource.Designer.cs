@@ -10819,7 +10819,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sort by field name.
+        ///   Looks up a localized string similar to sort by field name.
         /// </summary>
         public static string lblSortByFieldName {
             get {
