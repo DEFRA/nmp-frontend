@@ -10810,6 +10810,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to sort by crop.
+        /// </summary>
+        public static string lblSortByCropType {
+            get {
+                return ResourceManager.GetString("lblSortByCropType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sort by field name.
         /// </summary>
         public static string lblSortByFieldName {

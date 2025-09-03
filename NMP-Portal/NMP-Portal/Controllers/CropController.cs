@@ -2376,7 +2376,7 @@ namespace NMP.Portal.Controllers
                             }
 
 
-                            if (model.Crops != null && model.Crops.All(x => x.Yield != null)&& model.YieldQuestion==null && allYieldsAreSame && harvestYearPlanResponse.Count >= 1)
+                            if (model.Crops != null && model.Crops.All(x => x.Yield != null) && model.YieldQuestion == null && allYieldsAreSame && harvestYearPlanResponse.Count >= 1)
                             {
                                 model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
 
@@ -3376,18 +3376,24 @@ namespace NMP.Portal.Controllers
 
 
 
-                                model.encryptSortOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblDesc);
-                                model.encryptSortOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblDesc);
-                                model.sortInOrganicListOrderByDate = Resource.lblDesc;
-                                model.sortOrganicListOrderByDate = Resource.lblDesc;
-                                model.encryptSortInOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblDesc);
-                                model.encryptSortInOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblDesc);
+                                model.EncryptSortOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblDesc);
+                                model.EncryptSortOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblDesc);
+                                model.EncryptSortOrganicListOrderByCropType = _cropDataProtector.Protect(Resource.lblDesc);
+                                model.SortInOrganicListOrderByDate = Resource.lblDesc;
+                                model.SortOrganicListOrderByDate = Resource.lblDesc;                                
+                                model.EncryptSortInOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblDesc);
+                                model.EncryptSortInOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblDesc);
+                                model.EncryptSortInOrganicListOrderByCropType = _cropDataProtector.Protect(Resource.lblDesc);
                                 model.SortInOrganicListOrderByFieldName = null;
                                 model.SortOrganicListOrderByFieldName = null;
+                                model.SortInOrganicListOrderByCropType = null;
+                                model.SortOrganicListOrderByCropType = null;
                                 ViewBag.InOrganicListSortByFieldName = _cropDataProtector.Protect(Resource.lblField);
                                 ViewBag.InOrganicListSortByDate = _cropDataProtector.Protect(Resource.lblDate);
                                 ViewBag.OrganicListSortByFieldName = _cropDataProtector.Protect(Resource.lblField);
                                 ViewBag.OrganicListSortByDate = _cropDataProtector.Protect(Resource.lblDate);
+                                ViewBag.OrganicListSortByCropType = _cropDataProtector.Protect(Resource.lblCropType);
+                                ViewBag.InOrganicListSortByCropType = _cropDataProtector.Protect(Resource.lblCropType);
                                 model.HarvestYearPlans = harvestYearPlans;
                                 //model.HarvestYearPlans
                                 model.EncryptedFarmId = id;
@@ -3432,19 +3438,32 @@ namespace NMP.Portal.Controllers
                                         {
                                             if (decrypOrder == Resource.lblDesc)
                                             {
-                                                model.encryptSortInOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblField);
-                                                model.encryptSortInOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblDate);
+                                                model.EncryptSortInOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblField);
+                                                model.EncryptSortInOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblDate);
                                                 if (decrypSortBy == Resource.lblField)
                                                 {
                                                     model.HarvestYearPlans.OrganicManureList = model.HarvestYearPlans.OrganicManureList.OrderByDescending(x => x.Field).ToList();
-                                                    model.encryptSortOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblDesc);
+                                                    model.EncryptSortOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblDesc);
                                                     model.SortOrganicListOrderByFieldName = Resource.lblDesc;
+                                                    model.SortOrganicListOrderByDate = null;
+                                                    model.SortOrganicListOrderByCropType = null;
                                                 }
                                                 else if (decrypSortBy == Resource.lblDate)
                                                 {
                                                     model.HarvestYearPlans.OrganicManureList = model.HarvestYearPlans.OrganicManureList.OrderByDescending(x => x.ApplicationDate).ToList();
-                                                    model.encryptSortOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblDesc);
-                                                    model.sortOrganicListOrderByDate = Resource.lblDesc;
+                                                    model.EncryptSortOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblDesc);
+                                                    model.SortOrganicListOrderByDate = Resource.lblDesc;
+                                                    model.SortOrganicListOrderByFieldName = null;
+                                                    model.SortOrganicListOrderByCropType = null;
+
+                                                }
+                                                else if (decrypSortBy == Resource.lblCropType)
+                                                {
+                                                    model.HarvestYearPlans.OrganicManureList = model.HarvestYearPlans.OrganicManureList.OrderByDescending(x => x.Crop).ToList();
+                                                    model.EncryptSortOrganicListOrderByCropType = _cropDataProtector.Protect(Resource.lblDesc);
+                                                    model.SortOrganicListOrderByCropType = Resource.lblDesc;
+                                                    model.SortOrganicListOrderByFieldName = null;
+                                                    model.SortOrganicListOrderByDate = null;
 
                                                 }
                                             }
@@ -3453,14 +3472,27 @@ namespace NMP.Portal.Controllers
                                                 if (decrypSortBy == Resource.lblField)
                                                 {
                                                     model.HarvestYearPlans.OrganicManureList = model.HarvestYearPlans.OrganicManureList.OrderBy(x => x.Field).ToList();
-                                                    model.encryptSortOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblAsc);
+                                                    model.EncryptSortOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblAsc);
                                                     model.SortOrganicListOrderByFieldName = Resource.lblAsc;
+                                                    model.SortOrganicListOrderByDate = null;
+                                                    model.SortOrganicListOrderByCropType = null;
                                                 }
                                                 else if (decrypSortBy == Resource.lblDate)
                                                 {
                                                     model.HarvestYearPlans.OrganicManureList = model.HarvestYearPlans.OrganicManureList.OrderBy(x => x.ApplicationDate).ToList();
-                                                    model.encryptSortOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblAsc);
-                                                    model.sortOrganicListOrderByDate = Resource.lblAsc;
+                                                    model.EncryptSortOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblAsc);
+                                                    model.SortOrganicListOrderByDate = Resource.lblAsc;
+                                                    model.SortOrganicListOrderByFieldName = null;
+                                                    model.SortOrganicListOrderByCropType = null;
+
+                                                }
+                                                else if (decrypSortBy == Resource.lblCropType)
+                                                {
+                                                    model.HarvestYearPlans.OrganicManureList = model.HarvestYearPlans.OrganicManureList.OrderBy(x => x.Crop).ToList();
+                                                    model.EncryptSortOrganicListOrderByCropType = _cropDataProtector.Protect(Resource.lblAsc);
+                                                    model.SortOrganicListOrderByCropType = Resource.lblAsc;
+                                                    model.SortOrganicListOrderByFieldName = null;
+                                                    model.SortOrganicListOrderByDate = null;
 
                                                 }
                                             }
@@ -3472,14 +3504,27 @@ namespace NMP.Portal.Controllers
                                                 if (decrypSortBy == Resource.lblField)
                                                 {
                                                     model.HarvestYearPlans.InorganicFertiliserList = model.HarvestYearPlans.InorganicFertiliserList.OrderByDescending(x => x.Field).ToList();
-                                                    model.encryptSortInOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblDesc);
+                                                    model.EncryptSortInOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblDesc);
                                                     model.SortInOrganicListOrderByFieldName = Resource.lblDesc;
+                                                    model.SortInOrganicListOrderByDate = null;
+                                                    model.SortInOrganicListOrderByCropType = null;
                                                 }
                                                 else if (decrypSortBy == Resource.lblDate)
                                                 {
                                                     model.HarvestYearPlans.InorganicFertiliserList = model.HarvestYearPlans.InorganicFertiliserList.OrderByDescending(x => x.ApplicationDate).ToList();
-                                                    model.encryptSortInOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblDesc);
-                                                    model.sortInOrganicListOrderByDate = Resource.lblDesc;
+                                                    model.EncryptSortInOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblDesc);
+                                                    model.SortInOrganicListOrderByDate = Resource.lblDesc;
+                                                    model.SortInOrganicListOrderByFieldName = null;
+                                                    model.SortInOrganicListOrderByCropType = null;
+
+                                                }
+                                                else if (decrypSortBy == Resource.lblCropType)
+                                                {
+                                                    model.HarvestYearPlans.InorganicFertiliserList = model.HarvestYearPlans.InorganicFertiliserList.OrderByDescending(x => x.Crop).ToList();
+                                                    model.EncryptSortInOrganicListOrderByCropType = _cropDataProtector.Protect(Resource.lblDesc);
+                                                    model.SortInOrganicListOrderByCropType = Resource.lblDesc;
+                                                    model.SortInOrganicListOrderByDate = null;
+                                                    model.SortInOrganicListOrderByFieldName = null;
 
                                                 }
                                             }
@@ -3488,14 +3533,27 @@ namespace NMP.Portal.Controllers
                                                 if (decrypSortBy == Resource.lblField)
                                                 {
                                                     model.HarvestYearPlans.InorganicFertiliserList = model.HarvestYearPlans.InorganicFertiliserList.OrderBy(x => x.Field).ToList();
-                                                    model.encryptSortInOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblAsc);
+                                                    model.EncryptSortInOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblAsc);
                                                     model.SortInOrganicListOrderByFieldName = Resource.lblAsc;
+                                                    model.SortInOrganicListOrderByDate = null;
+                                                    model.SortInOrganicListOrderByCropType = null;
                                                 }
                                                 else if (decrypSortBy == Resource.lblDate)
                                                 {
                                                     model.HarvestYearPlans.InorganicFertiliserList = model.HarvestYearPlans.InorganicFertiliserList.OrderBy(x => x.ApplicationDate).ToList();
-                                                    model.encryptSortInOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblAsc);
-                                                    model.sortInOrganicListOrderByDate = Resource.lblAsc;
+                                                    model.EncryptSortInOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblAsc);
+                                                    model.SortInOrganicListOrderByDate = Resource.lblAsc;
+                                                    model.SortInOrganicListOrderByFieldName = null;
+                                                    model.SortInOrganicListOrderByCropType = null;
+
+                                                }
+                                                else if (decrypSortBy == Resource.lblCropType)
+                                                {
+                                                    model.HarvestYearPlans.InorganicFertiliserList = model.HarvestYearPlans.InorganicFertiliserList.OrderBy(x => x.Crop).ToList();
+                                                    model.EncryptSortInOrganicListOrderByCropType = _cropDataProtector.Protect(Resource.lblAsc);
+                                                    model.SortInOrganicListOrderByCropType = Resource.lblAsc;
+                                                    model.SortInOrganicListOrderByDate = null;
+                                                    model.SortInOrganicListOrderByFieldName = null;
 
                                                 }
                                             }
@@ -3507,20 +3565,25 @@ namespace NMP.Portal.Controllers
                         }
                         else
                         {
-                            model.encryptSortOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblDesc);
-                            model.sortOrganicListOrderByDate = Resource.lblDesc;
-                            model.sortInOrganicListOrderByDate = Resource.lblDesc;
-                            model.encryptSortOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblDesc);
-                            model.encryptSortInOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblDesc);
-                            model.encryptSortInOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblDesc);
-                            model.SortOrganicListOrderByFieldName = Resource.lblDesc;
-                            model.SortInOrganicListOrderByFieldName = Resource.lblDesc;
+                            model.SortOrganicListOrderByDate = Resource.lblDesc;
+                            model.SortInOrganicListOrderByDate = Resource.lblDesc;
+                            model.SortOrganicListOrderByFieldName = null;
+                            model.SortInOrganicListOrderByFieldName = null;
+                            model.SortOrganicListOrderByCropType = null;
+                            model.SortInOrganicListOrderByCropType = null;
+                            model.EncryptSortInOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblDesc);
+                            model.EncryptSortOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblDesc);
+                            model.EncryptSortOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblDesc);
+                            model.EncryptSortInOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblDesc);
+                            model.EncryptSortOrganicListOrderByCropType = _cropDataProtector.Protect(Resource.lblDesc);
+                            model.EncryptSortInOrganicListOrderByCropType = _cropDataProtector.Protect(Resource.lblDesc);
                         }
                         ViewBag.InOrganicListSortByFieldName = _cropDataProtector.Protect(Resource.lblField);
                         ViewBag.InOrganicListSortByDate = _cropDataProtector.Protect(Resource.lblDate);
+                        ViewBag.InOrganicListSortByCropType = _cropDataProtector.Protect(Resource.lblCropType);
                         ViewBag.OrganicListSortByFieldName = _cropDataProtector.Protect(Resource.lblField);
                         ViewBag.OrganicListSortByDate = _cropDataProtector.Protect(Resource.lblDate);
-
+                        ViewBag.OrganicListSortByCropType = _cropDataProtector.Protect(Resource.lblCropType);
                         _httpContextAccessor.HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
                     }
                 }
@@ -3620,7 +3683,7 @@ namespace NMP.Portal.Controllers
                                 IsAnyPlan = false
                             };
 
-                            if(minYear==i)
+                            if (minYear == i)
                             {
                                 harvestYear.IsThisOldYear = true;
                             }
@@ -3804,10 +3867,10 @@ namespace NMP.Portal.Controllers
                                     CropTypeResponse cropTypeResponse = cropTypeResponseList.Where(x => x.CropTypeId == crop.CropTypeID).FirstOrDefault();
                                     if (cropTypeResponse != null)
                                     {
-                                        model.CropGroupID = cropTypeResponse.CropGroupId;
+                                        crop.CropGroupID = cropTypeResponse.CropGroupId;
                                     }
                                 }
-                                if (recommendation.Crops.CropInfo2 != null && model.CropGroupID == (int)NMP.Portal.Enums.CropGroup.Cereals)
+                                if (recommendation.Crops.CropInfo2 != null && crop.CropGroupID == (int)NMP.Portal.Enums.CropGroup.Cereals)
                                 {
                                     crop.CropInfo2Name = await _cropService.FetchCropInfo2NameByCropInfo2Id(crop.CropInfo2.Value);
                                 }
@@ -4116,7 +4179,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> SortOrganicList(string year, string id, string q, string r)
+        public IActionResult SortOrganicList(string year, string id, string q, string r)
         {
             _logger.LogTrace("Crop Controller : SortOrganicList() action called");
             PlanViewModel model = new PlanViewModel();
@@ -4133,7 +4196,7 @@ namespace NMP.Portal.Controllers
             if (!string.IsNullOrWhiteSpace(q) && model != null)
             {
                 string decrypt = _cropDataProtector.Unprotect(q);
-                if (decrypt != null && decrypt == Resource.lblField)
+                if (!string.IsNullOrWhiteSpace(decrypt) && decrypt == Resource.lblField)
                 {
                     if (!string.IsNullOrWhiteSpace(r))
                     {
@@ -4146,10 +4209,11 @@ namespace NMP.Portal.Controllers
                         {
                             r = _cropDataProtector.Protect(Resource.lblDesc);
                         }
-                        model.sortOrganicListOrderByDate = null;
+                        model.SortOrganicListOrderByDate = null;
+                        model.SortOrganicListOrderByCropType = null;
                     }
                 }
-                else if (decrypt != null && decrypt == Resource.lblDate)
+                else if (!string.IsNullOrWhiteSpace(decrypt) && decrypt == Resource.lblDate)
                 {
                     if (!string.IsNullOrWhiteSpace(r))
                     {
@@ -4163,6 +4227,24 @@ namespace NMP.Portal.Controllers
                             r = _cropDataProtector.Protect(Resource.lblDesc);
                         }
                         model.SortOrganicListOrderByFieldName = null;
+                        model.SortOrganicListOrderByCropType = null;
+                    }
+                }
+                else if (!string.IsNullOrWhiteSpace(decrypt) && decrypt == Resource.lblCropType)
+                {
+                    if (!string.IsNullOrWhiteSpace(r))
+                    {
+                        string decryptOrderBy = _cropDataProtector.Unprotect(r);
+                        if (!string.IsNullOrWhiteSpace(decryptOrderBy) && decryptOrderBy == Resource.lblDesc)
+                        {
+                            r = _cropDataProtector.Protect(Resource.lblAsc);
+                        }
+                        if (!string.IsNullOrWhiteSpace(decryptOrderBy) && decryptOrderBy == Resource.lblAsc)
+                        {
+                            r = _cropDataProtector.Protect(Resource.lblDesc);
+                        }
+                        model.SortOrganicListOrderByFieldName = null;
+                        model.SortOrganicListOrderByDate = null;
                     }
                 }
             }
@@ -4176,7 +4258,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> SortInOrganicList(string year, string id, string q, string r)
+        public IActionResult SortInOrganicList(string year, string id, string q, string r)
         {
             _logger.LogTrace("Crop Controller : SortInOrganicList() action called");
             PlanViewModel model = null;
@@ -4194,7 +4276,7 @@ namespace NMP.Portal.Controllers
             if (!string.IsNullOrWhiteSpace(q) && model != null)
             {
                 string decrypt = _cropDataProtector.Unprotect(q);
-                if (decrypt != null && decrypt == Resource.lblField)
+                if (!string.IsNullOrWhiteSpace(decrypt) && decrypt == Resource.lblField)
                 {
                     if (!string.IsNullOrWhiteSpace(r))
                     {
@@ -4207,10 +4289,11 @@ namespace NMP.Portal.Controllers
                         {
                             r = _cropDataProtector.Protect(Resource.lblDesc);
                         }
-                        model.sortInOrganicListOrderByDate = null;
+                        model.SortInOrganicListOrderByDate = null;
+                        model.SortInOrganicListOrderByCropType = null;
                     }
                 }
-                else if (decrypt != null && decrypt == Resource.lblDate)
+                else if (!string.IsNullOrWhiteSpace(decrypt) && decrypt == Resource.lblDate)
                 {
                     if (!string.IsNullOrWhiteSpace(r))
                     {
@@ -4224,6 +4307,24 @@ namespace NMP.Portal.Controllers
                             r = _cropDataProtector.Protect(Resource.lblDesc);
                         }
                         model.SortInOrganicListOrderByFieldName = null;
+                        model.SortInOrganicListOrderByCropType = null;
+                    }
+                }
+                else if (!string.IsNullOrWhiteSpace(decrypt) && decrypt == Resource.lblCropType)
+                {
+                    if (!string.IsNullOrWhiteSpace(r))
+                    {
+                        string decryptOrderBy = _cropDataProtector.Unprotect(r);
+                        if (!string.IsNullOrWhiteSpace(decryptOrderBy) && decryptOrderBy == Resource.lblDesc)
+                        {
+                            r = _cropDataProtector.Protect(Resource.lblAsc);
+                        }
+                        if (!string.IsNullOrWhiteSpace(decryptOrderBy) && decryptOrderBy == Resource.lblAsc)
+                        {
+                            r = _cropDataProtector.Protect(Resource.lblDesc);
+                        }
+                        model.SortInOrganicListOrderByFieldName = null;
+                        model.SortInOrganicListOrderByDate = null;
                     }
                 }
             }
@@ -5962,7 +6063,7 @@ namespace NMP.Portal.Controllers
 
                 return RedirectToAction("CheckAnswer");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 TempData["GrassGrowthClassError"] = ex.Message;
                 return View(model);

@@ -5909,4 +5909,7 @@ live</value>
   <data name="lblIncorrectSecondCropType" xml:space="preserve">
     <value>Incorrect second crop type</value>
   </data>
+  <data name="lblSortByCropType" xml:space="preserve">
+    <value>sort by crop</value>
+  </data>
 </root>
