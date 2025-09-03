@@ -943,6 +943,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add more fields.
+        /// </summary>
+        public static string lblAddMoreField {
+            get {
+                return ResourceManager.GetString("lblAddMoreField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add more livestock.
         /// </summary>
         public static string lblAddMoreLivestock {
@@ -5858,6 +5867,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Incorrect second crop type.
+        /// </summary>
+        public static string lblIncorrectSecondCropType {
+            get {
+                return ResourceManager.GetString("lblIncorrectSecondCropType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Index / pH.
         /// </summary>
         public static string lblIndexPH {
@@ -9996,6 +10014,15 @@ namespace NMP.Portal.Resources {
         public static string lblSecondRuleOfNVZForEngland {
             get {
                 return ResourceManager.GetString("lblSecondRuleOfNVZForEngland", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  or select a different crop.
+        /// </summary>
+        public static string lblSelectADifferentCrop {
+            get {
+                return ResourceManager.GetString("lblSelectADifferentCrop", resourceCulture);
             }
         }
         
@@ -14181,6 +14208,15 @@ namespace NMP.Portal.Resources {
         public static string lblYouCanContinueButYouShouldConsiderAdjustingYour {
             get {
                 return ResourceManager.GetString("lblYouCanContinueButYouShouldConsiderAdjustingYour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You cannot add the crop type selected as a second crop. You have already allocated crops to all of your fields in {0}. .
+        /// </summary>
+        public static string lblYouCannotAddTheCropTypeSelectedAsASecondCrop {
+            get {
+                return ResourceManager.GetString("lblYouCannotAddTheCropTypeSelectedAsASecondCrop", resourceCulture);
             }
         }
         

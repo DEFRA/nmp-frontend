@@ -231,6 +231,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (!ModelState.IsValid)
                 {
+                    ViewBag.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
                     List<CropGroupResponse> cropGroups = await _fieldService.FetchCropGroups();
                     var country = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
                     var cropGroupsList = cropGroups.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.RB209Country.All).ToList();
@@ -542,7 +543,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-
+                ViewBag.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
                 if (model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Other)
                 {
                     List<CropTypeResponse> cropTypes = await _fieldService.FetchCropTypes(model.CropGroupId ?? 0);
@@ -588,6 +589,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (!ModelState.IsValid)
                 {
+                    ViewBag.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
                     if (model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Other)
                     {
                         List<CropTypeResponse> cropTypes = new List<CropTypeResponse>();

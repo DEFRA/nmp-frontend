@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -5897,6 +5897,18 @@ live</value>
   <data name="lblAHDBNutrientManagementGuide" xml:space="preserve">
     <value>The AHDB Nutrient Management Guide (RB209) recommends that sulphur is applied to most crops where you expect or recognise sulphur deficiency​.</value>
   </data>
+  <data name="lblYouCannotAddTheCropTypeSelectedAsASecondCrop" xml:space="preserve">
+    <value>You cannot add the crop type selected as a second crop. You have already allocated crops to all of your fields in {0}. </value>
+  </data>
+  <data name="lblSelectADifferentCrop" xml:space="preserve">
+    <value> or select a different crop</value>
+  </data>
+  <data name="lblAddMoreField" xml:space="preserve">
+    <value>Add more fields</value>
+  </data>
+  <data name="lblIncorrectSecondCropType" xml:space="preserve">
+    <value>Incorrect second crop type</value>
+ </data>
   <data name="lblWhatIsTheWeightCapacityOf" xml:space="preserve">
     <value>What is the weight capacity of {0}?</value>
   </data>
