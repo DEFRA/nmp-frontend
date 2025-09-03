@@ -11602,6 +11602,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This is calculated from the dimensions you entered and the standard bulk density of the manure. You can change it if you need to..
+        /// </summary>
+        public static string lblThisIsCalculatedFromTheDimentionsYouEntered {
+            get {
+                return ResourceManager.GetString("lblThisIsCalculatedFromTheDimentionsYouEntered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This is the amount of Nitrogen (N) from the application taken up by the crop in the autumn..
         /// </summary>
         public static string lblThisIsTheAmountOfNitrogenFromTheApplication {
@@ -12709,6 +12718,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Volume capacity.
+        /// </summary>
+        public static string lblVolumeCapacity {
+            get {
+                return ResourceManager.GetString("lblVolumeCapacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Wales: &lt;a href=&quot;https://www.gov.wales/water-resources-control-agricultural-pollution-wales-regulations-2021-guidance-farmers-and-land&quot; target=&quot;_blank&quot;&gt;The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021&lt;/a&gt;.
         /// </summary>
         public static string lblWalesWaterResourceRegulations {
@@ -13204,6 +13222,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the total capacity of {0}?.
+        /// </summary>
+        public static string lblWhatIsTheTotalCapacityOf {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheTotalCapacityOf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the total depth?.
         /// </summary>
         public static string lblWhatIsTheTotalDepth {
@@ -13245,6 +13272,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhatIsTheTotalTargetDryMatterYieldForFields {
             get {
                 return ResourceManager.GetString("lblWhatIsTheTotalTargetDryMatterYieldForFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the weight capacity of {0}?.
+        /// </summary>
+        public static string lblWhatIsTheWeightCapacityOf {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheWeightCapacityOf", resourceCulture);
             }
         }
         
@@ -15771,6 +15807,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter the total capacity of your storage.
+        /// </summary>
+        public static string MsgEnterTheTotalCapacityOfYourStorage {
+            get {
+                return ResourceManager.GetString("MsgEnterTheTotalCapacityOfYourStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a valid amount of {0} before continuing.
         /// </summary>
         public static string MsgEnterTheValidValueOfNutrient {
@@ -15812,6 +15857,15 @@ namespace NMP.Portal.Resources {
         public static string MsgEnterTheValueOYourSoilAnalysisHint3 {
             get {
                 return ResourceManager.GetString("MsgEnterTheValueOYourSoilAnalysisHint3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the weight capacity before continuing..
+        /// </summary>
+        public static string MsgEnterTheWeightCapacityBeforeContinuing {
+            get {
+                return ResourceManager.GetString("MsgEnterTheWeightCapacityBeforeContinuing", resourceCulture);
             }
         }
         
