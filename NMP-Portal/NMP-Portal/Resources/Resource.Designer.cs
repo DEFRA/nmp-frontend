@@ -3139,7 +3139,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Did you have any imports and exports of livestock manure at {0} in {1}?.
+        ///   Looks up a localized string similar to Did you have any imports or exports of livestock manure at {0} in {1}?.
         /// </summary>
         public static string lblDidYouHaveAnyImportsAndExports {
             get {
@@ -5813,7 +5813,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Includes N-max, livestock manure nitrogen(N) farm limit, and organic material storage.
+        ///   Looks up a localized string similar to Includes N-max, livestock manure nitrogen (N) farm limit, and organic material storage.
         /// </summary>
         public static string lblIncludesNmaxLivestockManureNitrogen {
             get {
