@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -5908,5 +5908,23 @@ live</value>
   </data>
   <data name="lblIncorrectSecondCropType" xml:space="preserve">
     <value>Incorrect second crop type</value>
+ </data>
+  <data name="lblWhatIsTheWeightCapacityOf" xml:space="preserve">
+    <value>What is the weight capacity of {0}?</value>
+  </data>
+  <data name="MsgEnterTheWeightCapacityBeforeContinuing" xml:space="preserve">
+    <value>Enter the weight capacity before continuing.</value>
+  </data>
+  <data name="lblThisIsCalculatedFromTheDimentionsYouEntered" xml:space="preserve">
+    <value>This is calculated from the dimensions you entered and the standard bulk density of the manure. You can change it if you need to.</value>
+  </data>
+  <data name="lblVolumeCapacity" xml:space="preserve">
+    <value>Volume capacity</value>
+  </data>
+  <data name="lblWhatIsTheTotalCapacityOf" xml:space="preserve">
+    <value>What is the total capacity of {0}?</value>
+  </data>
+  <data name="MsgEnterTheTotalCapacityOfYourStorage" xml:space="preserve">
+    <value>Enter the total capacity of your storage</value>
   </data>
 </root>

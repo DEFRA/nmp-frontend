@@ -1,18 +1,35 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.StorageCapacityViewModel
 @{
-    ViewData["Title"] = Resource.lblStorageName;
+    ViewData["Title"] = Resource.lblCheckAnswer;
+    var backAction = "";
+    if(Model.MaterialStateId == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage)
+    {
+        backAction = "WeightCapacity";
+    }
+    else
+    {
+        if (Model.StorageTypeId == (int)NMP.Portal.Enums.StorageTypes.StorageBag)
+        {
+            backAction = "StorageBagCapacity";
+        }
+        else
+        {
+            backAction = "Dimensions";
+        }
+    }
+    
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="MaterialStates" asp-controller="StorageCapacity">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="StorageCapacity">@Resource.lblBack</govuk-back-link>
 }
-@if (TempData["ErrorOnStoreName"] != null)
+@if (TempData["ErrorOnDimensions"] != null)
 {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <govuk-error-summary>
-                <govuk-error-summary-item href="#">@TempData["ErrorOnStoreName"]</govuk-error-summary-item>
+                <govuk-error-summary-item href="#">@TempData["ErrorOnDimensions"]</govuk-error-summary-item>
             </govuk-error-summary>
         </div>
     </div>
@@ -20,7 +37,7 @@
 
 @if (Model != null)
 {
-    <form asp-action="StoreName" asp-controller="StorageCapacity" method="post" autocomplete="off">
+    <form asp-action="CheckAnswer" asp-controller="StorageCapacity" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
         <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
@@ -35,30 +52,25 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MaterialStateName"></govuk-input>
-            @* <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StoreName"></govuk-input> *@
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StoreName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MaterialStateId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Length"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Width"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Depth"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CircumferenceOrDiameter"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCovered"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.WeightCapacity" value="@Model.WeightCapacity"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SolidManureDensity" value="@Model.SolidManureDensity"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageBagCapacity"></govuk-input>
-
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-
-                <govuk-input asp-for="@Model.StoreName" autocomplete="off">
-                    <govuk-input-label is-page-heading="true" class="govuk-label--l">@Resource.lblWhatDoYouWantToCallThisManureStore</govuk-input-label>
-                    <govuk-input-hint>@Resource.lblGiveTheStoreAUniqueName</govuk-input-hint>
-                </govuk-input>
-                <govuk-button type="submit" class="margin-bottom-forty">
+                <h1 class="govuk-heading-l">
+                    @Resource.lblCheckYourAnswers
+                </h1>
+                <p class="govuk-body">
+                    Need to work on this page.
+                </p>
+                @* <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
-                </govuk-button>
-
-
+                </govuk-button> *@
                 <p class="govuk-body cancel-link">
                     @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
                     {
