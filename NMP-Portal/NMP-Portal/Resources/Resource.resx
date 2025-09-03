@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -2612,7 +2612,7 @@ cubic metres per hectare  not set</value>
     <value>sort by application date</value>
   </data>
   <data name="lblSortByFieldName" xml:space="preserve">
-    <value>Sort by field name</value>
+    <value>sort by field name</value>
   </data>
   <data name="lblTypeOfManure" xml:space="preserve">
     <value>Type of manure</value>
@@ -4836,7 +4836,7 @@ live</value>
     <value>Includes details about your fields, crops and recommendations.</value>
   </data>
   <data name="lblIncludesNmaxLivestockManureNitrogen" xml:space="preserve">
-    <value>Includes N-max, livestock manure nitrogen(N) farm limit, and organic material storage</value>
+    <value>Includes N-max, livestock manure nitrogen (N) farm limit, and organic material storage</value>
   </data>
   <data name="lblWhatTypeOfReportDoYouWantToCreate" xml:space="preserve">
     <value>What type of report do you want to create?</value>
@@ -4986,7 +4986,7 @@ live</value>
     <value>Derogation for {0} must be completed</value>
   </data>
   <data name="MsgEnterTotalAreaInNVZ" xml:space="preserve">
-    <value>Enter total area in NVZ</value>
+    <value>Enter total area in an NVZ</value>
   </data>
   <data name="MsgEnterTotalFarmArea" xml:space="preserve">
     <value>Enter total farm area</value>
@@ -5004,7 +5004,7 @@ live</value>
     <value>Total area in NVZ should not be less than 0</value>
   </data>
   <data name="MsgTotalAreaInNVZShouldNotBeMoreThanTotalFarmArea" xml:space="preserve">
-    <value>Total area in NVZ should not be more than total farm area</value>
+    <value>The total area in an NVZ should not be more than the total farm area</value>
   </data>
   <data name="MsgTotalFarmAreaShouldBeGreaterThanZero" xml:space="preserve">
     <value>Total farm area should be greater than 0</value>
@@ -5019,7 +5019,7 @@ live</value>
     <value>Which fields would you like to plan {0} for?</value>
   </data>
   <data name="lblDidYouHaveAnyImportsAndExports" xml:space="preserve">
-    <value>Did you have any imports and exports of livestock manure at {0} in {1}?</value>
+    <value>Did you have any imports or exports of livestock manure at {0} in {1}?</value>
   </data>
   <data name="MsgSelectYesIfYouHadAnyImportsOrExportsOfLivestockManure" xml:space="preserve">
     <value>Select yes if you had any imports or exports of livestock manure</value>
@@ -5232,7 +5232,7 @@ live</value>
     <value>{0} kg per cubic metre {1}</value>
   </data>
   <data name="lblHowWouldYouLikeToEnterYourLivestockNumbers" xml:space="preserve">
-    <value>How would you like to enter your livestock numbers?</value>
+    <value>How would you like to enter the number of {0} in {1}?</value>
   </data>
   <data name="lblEnterANumberForEachMonth" xml:space="preserve">
     <value>Enter a number for each month</value>
@@ -5267,8 +5267,8 @@ live</value>
   <data name="lblEnterHowManyOfThis" xml:space="preserve">
     <value>Enter how many of this {0} type did you have in {1} {2}.</value>
   </data>
-  <data name="lblHowManyOfThisTypeDidYouHaveIn" xml:space="preserve">
-    <value>How many of {0} did you have in {1} {2}?</value>
+  <data name="lbNumberInMonthYear" xml:space="preserve">
+    <value>Number in {0} {1}?</value>
   </data>
   <data name="lblMonthlyTotalsForThis" xml:space="preserve">
     <value>Monthly totals for {0} in {1}</value>
@@ -5361,7 +5361,7 @@ live</value>
     <value>Add more livestock</value>
   </data>
   <data name="lblAverageForTheYear" xml:space="preserve">
-    <value>Average for the year</value>
+    <value>Average number for the year</value>
   </data>
   <data name="lblCattle" xml:space="preserve">
     <value>Cattle</value>
@@ -5896,5 +5896,74 @@ live</value>
   </data>
   <data name="lblAHDBNutrientManagementGuide" xml:space="preserve">
     <value>The AHDB Nutrient Management Guide (RB209) recommends that sulphur is applied to most crops where you expect or recognise sulphur deficiency​.</value>
+  </data>
+  <data name="lblYouCannotAddTheCropTypeSelectedAsASecondCrop" xml:space="preserve">
+    <value>You cannot add the crop type selected as a second crop. You have already allocated crops to all of your fields in {0}. </value>
+  </data>
+  <data name="lblSelectADifferentCrop" xml:space="preserve">
+    <value> or select a different crop</value>
+  </data>
+  <data name="lblAddMoreField" xml:space="preserve">
+    <value>Add more fields</value>
+  </data>
+  <data name="lblIncorrectSecondCropType" xml:space="preserve">
+    <value>Incorrect second crop type</value>
+  </data>
+  <data name="lblWhatIsTheWeightCapacityOf" xml:space="preserve">
+    <value>What is the weight capacity of {0}?</value>
+  </data>
+  <data name="MsgEnterTheWeightCapacityBeforeContinuing" xml:space="preserve">
+    <value>Enter the weight capacity before continuing.</value>
+  </data>
+  <data name="lblThisIsCalculatedFromTheDimentionsYouEntered" xml:space="preserve">
+    <value>This is calculated from the dimensions you entered and the standard bulk density of the manure. You can change it if you need to.</value>
+  </data>
+  <data name="lblVolumeCapacity" xml:space="preserve">
+    <value>Volume capacity</value>
+  </data>
+  <data name="lblWhatIsTheTotalCapacityOf" xml:space="preserve">
+    <value>What is the total capacity of {0}?</value>
+  </data>
+  <data name="MsgEnterTheTotalCapacityOfYourStorage" xml:space="preserve">
+    <value>Enter the total capacity of your storage</value>
+  </data>
+  <data name="lblDoesStoreHaveSlopedEdges" xml:space="preserve">
+    <value>Does {0} have sloped edges?</value>
+  </data>
+  <data name="lblSlopeQuestion" xml:space="preserve">
+    <value>Slope question</value>
+  </data>
+  <data name="lblBankSlopeAngle" xml:space="preserve">
+    <value>Bank slope angle</value>
+  </data>
+  <data name="lblWhatIsTheEstimatedAngleOfTheBankSlope" xml:space="preserve">
+    <value>What is the estimated angle of the bank slope?</value>
+  </data>
+  <data name="lblAddThisManureStorage" xml:space="preserve">
+    <value>Add this manure storage</value>
+  </data>
+  <data name="lblTotalCapacityMinusTheFreeBoard" xml:space="preserve">
+    <value>Total capacity (minus the freeboard)</value>
+  </data>
+  <data name="lblSurfaceArea" xml:space="preserve">
+    <value>Surface area</value>
+  </data>
+  <data name="lblMetresSquared" xml:space="preserve">
+    <value>Metres squared</value>
+  </data>
+  <data name="lblAddStorageFor" xml:space="preserve">
+    <value>Add storage for {0}</value>
+  </data>
+  <data name="lblSortByCropType" xml:space="preserve">
+    <value>sort by crop</value>
+  </data>
+  <data name="lblTotalNitrogenProduced" xml:space="preserve">
+    <value>Total nitrogen (N) produced</value>
+  </data>
+  <data name="lblTotalPhosphateProduced" xml:space="preserve">
+    <value>Total phosphate (P2O5) produced</value>
+  </data>
+  <data name="lblNutrientKgPerYear" xml:space="preserve">
+    <value>{0}kg/yr</value>
   </data>
 </root>
