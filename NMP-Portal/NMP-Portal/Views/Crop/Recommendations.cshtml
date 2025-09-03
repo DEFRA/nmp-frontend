@@ -27,7 +27,7 @@
 
 
         @section BeforeContent {
-        <govuk-back-link asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@string.Format(Resource.lblBackToYearFarmPlan, Model.Crops[0].Year)</govuk-back-link>
+            <govuk-back-link asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@string.Format(Resource.lblBackToYearFarmPlan, Model.Crops[0].Year)</govuk-back-link>
         }
 
         @Html.AntiForgeryToken()
@@ -93,7 +93,7 @@
                                     <hr class="seperator_five">
 
                                     @if (Model.ManagementPeriods != null && Model.Recommendations != null && Model.ManagementPeriods.Count > 0
-                                   && Model.Recommendations.Count > 0)
+                                                    && Model.Recommendations.Count > 0)
                                     {
                                         var cropManagementPeriods = Model.ManagementPeriods.Where(mp => mp.CropID == crop.ID);
                                         @* Recommendation *@
@@ -126,7 +126,7 @@
                                                         <tr class="govuk-table__row">
                                                             <td class="govuk-table__cell">@Resource.lblNitrogen</td>
                                                             <td class="govuk-table__cell">
-                                                                @if(Model.CropGroupID != (int)NMP.Portal.Enums.CropGroup.Grass)
+                                                                @if(crop.CropGroupID != (int)NMP.Portal.Enums.CropGroup.Grass)
                                                                 {
                                                                     @(string.IsNullOrWhiteSpace(recommendation.NIndex) ? Resource.lblHyphen : recommendation.NIndex)
                                                                 }
@@ -244,33 +244,33 @@
                                             </div>
                                         }
 
-@*                                         @if (crop.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)
+                                        @*                                         @if (crop.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)
                                         { *@
-                                            @if (Model.RecommendationComments != null && Model.RecommendationComments.Count > 0)
-                                            {
+                                        @if (Model.RecommendationComments != null && Model.RecommendationComments.Count > 0)
+                                        {
 
-                                                <h2 class="govuk-heading-m">@Resource.lblGuidance</h2>
-                                                <div class="guidance">
-                                                    @foreach (var mp in cropManagementPeriods)
+                                            <h2 class="govuk-heading-m">@Resource.lblGuidance</h2>
+                                            <div class="guidance">
+                                                @foreach (var mp in cropManagementPeriods)
+                                                {
+                                                    var rec = Model.Recommendations.Where(r => r.ManagementPeriodID == mp.ID);
+                                                    @foreach (var recommendation in rec)
                                                     {
-                                                        var rec = Model.Recommendations.Where(r => r.ManagementPeriodID == mp.ID);
-                                                        @foreach (var recommendation in rec)
+                                                        @foreach (var recCom in Model.RecommendationComments.Where(rc => rc.RecommendationID == recommendation.ID))
                                                         {
-                                                            @foreach (var recCom in Model.RecommendationComments.Where(rc => rc.RecommendationID == recommendation.ID))
+                                                            if (recCom.Nutrient != (int)NMP.Portal.Enums.Nutrients.Sodium)
                                                             {
-                                                                if (recCom.Nutrient != (int)NMP.Portal.Enums.Nutrients.Sodium)
-                                                                {
-                                                                    <h3 class="govuk-heading-s">@Model.Nutrients?.FirstOrDefault(x => x.nutrientId == recCom.Nutrient)?.nutrient</h3>
-                                                                    <p class="govuk-body">
-                                                                        @Html.Raw(recCom.Comment)
-                                                                        <br />
-                                                                    </p>
-                                                                }
+                                                                <h3 class="govuk-heading-s">@Model.Nutrients?.FirstOrDefault(x => x.nutrientId == recCom.Nutrient)?.nutrient</h3>
+                                                                <p class="govuk-body">
+                                                                    @Html.Raw(recCom.Comment)
+                                                                    <br />
+                                                                </p>
                                                             }
                                                         }
                                                     }
-                                                </div>
-                                            }
+                                                }
+                                            </div>
+                                        }
                                         @* } *@
 
 
@@ -307,7 +307,7 @@
                                     <hr class="seperator_five">
 
                                     @if (Model.ManagementPeriods != null && Model.Recommendations != null && Model.ManagementPeriods.Count > 0
-                                   && Model.Recommendations.Count > 0)
+                                                    && Model.Recommendations.Count > 0)
                                     {
                                         var cropManagementPeriods = Model.ManagementPeriods.Where(mp => mp.CropID == crop.ID);
                                         <h2 id="cropone" class="govuk-heading-m">
@@ -449,34 +449,34 @@
                                             </div>
                                         }
 
-                                     @*    @if (crop.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)
+                                        @*    @if (crop.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)
                                         { *@
-                                            @if (Model.RecommendationComments != null && Model.RecommendationComments.Count > 0)
-                                            {
+                                        @if (Model.RecommendationComments != null && Model.RecommendationComments.Count > 0)
+                                        {
 
-                                                <h2 class="govuk-heading-m">@Resource.lblGuidance</h2>
-                                                <div class="guidance">
-                                                    @foreach (var mp in cropManagementPeriods)
+                                            <h2 class="govuk-heading-m">@Resource.lblGuidance</h2>
+                                            <div class="guidance">
+                                                @foreach (var mp in cropManagementPeriods)
+                                                {
+                                                    var rec = Model.Recommendations.Where(r => r.ManagementPeriodID == mp.ID);
+                                                    @foreach (var recommendation in rec)
                                                     {
-                                                        var rec = Model.Recommendations.Where(r => r.ManagementPeriodID == mp.ID);
-                                                        @foreach (var recommendation in rec)
+                                                        @foreach (var recCom in Model.RecommendationComments.Where(rc => rc.RecommendationID == recommendation.ID))
                                                         {
-                                                            @foreach (var recCom in Model.RecommendationComments.Where(rc => rc.RecommendationID == recommendation.ID))
+                                                            if (recCom.Nutrient != (int)NMP.Portal.Enums.Nutrients.Sodium)
                                                             {
-                                                                if (recCom.Nutrient != (int)NMP.Portal.Enums.Nutrients.Sodium)
-                                                                {
-                                                                    <h3 class="govuk-heading-s">@Model.Nutrients?.FirstOrDefault(x => x.nutrientId == recCom.Nutrient)?.nutrient</h3>
-                                                                    <p class="govuk-body">
-                                                                        @Html.Raw(recCom.Comment)
-                                                                        <br />
-                                                                    </p>
-                                                                }
+                                                                <h3 class="govuk-heading-s">@Model.Nutrients?.FirstOrDefault(x => x.nutrientId == recCom.Nutrient)?.nutrient</h3>
+                                                                <p class="govuk-body">
+                                                                    @Html.Raw(recCom.Comment)
+                                                                    <br />
+                                                                </p>
                                                             }
                                                         }
                                                     }
-                                                </div>
+                                                }
+                                            </div>
 
-                                            }
+                                        }
                                         @* } *@
                                         <hr class="seperator_five">
                                         <h2 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h2>
@@ -637,7 +637,8 @@
                                                 <p class="govuk-body cancel-link">
                                                     <a asp-action="CheckAnswer" asp-controller="FertiliserManure" asp-route-q="@fertiliserManure.EncryptedId" asp-route-r="@Model.EncryptedFarmId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-t="@fertiliserManure.EncryptedFieldName" asp-route-u="@ViewBag.Fertiliser">
                                                         @Resource.lblViewOrChange
-                                                </a></p>
+                                                    </a>
+                                                </p>
                                             </td>
 
                                         </tr>
@@ -694,10 +695,7 @@
                                             </th>
                                             <td class="govuk-table__cell">@(string.IsNullOrWhiteSpace(crop.CropGroupName) ? Resource.lblNotEntered : crop.CropGroupName)</td>
 
-                                            @* @if (Model.CropGroupID == CerealsGroupId)
-                                {
-                                <td class="govuk-table__cell">@(crop.CropInfo2Name != null ? crop.CropInfo2Name : Resource.lblNotEntered)</td>
-                                } *@
+
                                         </tr>
                                         @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && (!string.IsNullOrWhiteSpace(crop.EstablishmentName)))
                                         {
@@ -713,7 +711,25 @@
                                             <th class="govuk-table__cell" scope="row">@Resource.lblPlantingDate</th>
                                             <td class="govuk-table__cell">@(crop.SowingDate != null ? crop.SowingDate.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotEntered)</td>
                                         </tr>
-
+                                        @if (crop.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass &&
+                                                                    crop.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Other)
+                                        {
+                                            <tr class="govuk-table__row">
+                                                <th class="govuk-table__cell" scope="row">
+                                                    @Resource.lblCropUse
+                                                </th>
+                                                <td class="govuk-table__cell">@(crop.CropInfo1Name != null ? crop.CropInfo1Name : Resource.lblNotEntered)</td>
+                                            </tr>
+                                        }
+                                        @if (crop.CropGroupID == CerealsGroupId)
+                                        {
+                                            <tr class="govuk-table__row">
+                                                <th class="govuk-table__cell" scope="row">
+                                                    @Resource.lblStrawUse
+                                                </th>
+                                                <td class="govuk-table__cell">@(crop.CropInfo2Name != null ? crop.CropInfo2Name : Resource.lblNotEntered)</td>
+                                            </tr>
+                                        }
                                         @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
                                         {
                                             <tr class="govuk-table__row">
@@ -852,31 +868,31 @@
                                                 }
                                                 @if (crop.SnsAnalysisData.PercentageOfOrganicMatter != null && crop.SnsAnalysisData.PercentageOfOrganicMatter > 0)
                                                 {
-                                                    <tr class="govuk-table__row">
-                                                        <td class="govuk-table__cell">
-                                                            @Resource.lblPercentageOfOrganicMatter
-                                                        </td>
-                                                        <td class="govuk-table__cell">
-                                                            @string.Concat(crop.SnsAnalysisData.PercentageOfOrganicMatter % 1 == 0
-                                                                     ? ((int)crop.SnsAnalysisData.PercentageOfOrganicMatter).ToString()
-                                                                     : crop.SnsAnalysisData.PercentageOfOrganicMatter.ToString(), Resource.lblPercentage)
-                                                        </td>
-                                                    </tr>
-                                                }
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell">
+                                    @Resource.lblPercentageOfOrganicMatter
+                                </td>
+                                <td class="govuk-table__cell">
+                                    @string.Concat(crop.SnsAnalysisData.PercentageOfOrganicMatter % 1 == 0
+                                                                        ? ((int)crop.SnsAnalysisData.PercentageOfOrganicMatter).ToString()
+                                                                        : crop.SnsAnalysisData.PercentageOfOrganicMatter.ToString(), Resource.lblPercentage)
+                                </td>
+                            </tr>
+                                                        }
 
                                                 @if (crop.SnsAnalysisData.AdjustmentValue != null && crop.SnsAnalysisData.AdjustmentValue > 0)
                                                 {
-                                                    <tr class="govuk-table__row">
-                                                        <td class="govuk-table__cell">
-                                                            @Resource.lblPercentageOfOrganicMatter
-                                                        </td>
-                                                        <td class="govuk-table__cell">
-                                                            @string.Concat(crop.SnsAnalysisData.AdjustmentValue % 1 == 0
-                                                                     ? ((int)crop.SnsAnalysisData.AdjustmentValue).ToString()
-                                                                     : crop.SnsAnalysisData.AdjustmentValue.ToString(), Resource.lblKgPerHectare)
-                                                        </td>
-                                                    </tr>
-                                                }
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell">
+                                    @Resource.lblPercentageOfOrganicMatter
+                                </td>
+                                <td class="govuk-table__cell">
+                                    @string.Concat(crop.SnsAnalysisData.AdjustmentValue % 1 == 0
+                                                                        ? ((int)crop.SnsAnalysisData.AdjustmentValue).ToString()
+                                                                        : crop.SnsAnalysisData.AdjustmentValue.ToString(), Resource.lblKgPerHectare)
+                                </td>
+                            </tr>
+                                                        }
 
                                                 <tr class="govuk-table__row">
                                                     <td class="govuk-table__cell">

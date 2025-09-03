@@ -48,12 +48,16 @@ namespace NMP.Portal.ViewModels
         public List<HarvestYear>? HarvestYear { get; set; } = new List<HarvestYear>();
         public bool IsAddAnotherCrop { get; set; }
         public bool? IsPlanRecord { get; set; } = false;
-        public string? encryptSortOrganicListOrderByDate { get; set; } = string.Empty;
-        public string? sortOrganicListOrderByDate { get; set; } = string.Empty;
-        public string? encryptSortOrganicListOrderByFieldName { get; set; } = string.Empty;
-        public string? encryptSortInOrganicListOrderByDate { get; set; } = string.Empty;
-        public string? sortInOrganicListOrderByDate { get; set; } = string.Empty;
-        public string? encryptSortInOrganicListOrderByFieldName { get; set; } = string.Empty;
+        public string? EncryptSortOrganicListOrderByDate { get; set; } = string.Empty;
+        public string? SortOrganicListOrderByDate { get; set; } = string.Empty;
+        public string? EncryptSortOrganicListOrderByFieldName { get; set; } = string.Empty;
+        public string? EncryptSortInOrganicListOrderByDate { get; set; } = string.Empty;
+        public string? SortInOrganicListOrderByDate { get; set; } = string.Empty;
+        public string? EncryptSortInOrganicListOrderByFieldName { get; set; } = string.Empty;
+        public string? EncryptSortOrganicListOrderByCropType { get; set; } = string.Empty;
+        public string? SortOrganicListOrderByCropType { get; set; } = string.Empty;
+        public string? EncryptSortInOrganicListOrderByCropType { get; set; } = string.Empty;
+        public string? SortInOrganicListOrderByCropType { get; set; } = string.Empty;
         public int? AnnualRainfall { get; set; }
         public int? ExcessWinterRainfallValue { get; set; }
         public int? ExcessWinterRainfallId { get; set; }
