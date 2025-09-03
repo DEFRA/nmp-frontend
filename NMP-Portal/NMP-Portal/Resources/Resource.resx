@@ -2612,7 +2612,7 @@ cubic metres per hectare  not set</value>
     <value>sort by application date</value>
   </data>
   <data name="lblSortByFieldName" xml:space="preserve">
-    <value>Sort by field name</value>
+    <value>sort by field name</value>
   </data>
   <data name="lblTypeOfManure" xml:space="preserve">
     <value>Type of manure</value>
@@ -4836,7 +4836,7 @@ live</value>
     <value>Includes details about your fields, crops and recommendations.</value>
   </data>
   <data name="lblIncludesNmaxLivestockManureNitrogen" xml:space="preserve">
-    <value>Includes N-max, livestock manure nitrogen(N) farm limit, and organic material storage</value>
+    <value>Includes N-max, livestock manure nitrogen (N) farm limit, and organic material storage</value>
   </data>
   <data name="lblWhatTypeOfReportDoYouWantToCreate" xml:space="preserve">
     <value>What type of report do you want to create?</value>
@@ -5019,7 +5019,7 @@ live</value>
     <value>Which fields would you like to plan {0} for?</value>
   </data>
   <data name="lblDidYouHaveAnyImportsAndExports" xml:space="preserve">
-    <value>Did you have any imports and exports of livestock manure at {0} in {1}?</value>
+    <value>Did you have any imports or exports of livestock manure at {0} in {1}?</value>
   </data>
   <data name="MsgSelectYesIfYouHadAnyImportsOrExportsOfLivestockManure" xml:space="preserve">
     <value>Select yes if you had any imports or exports of livestock manure</value>
@@ -5953,5 +5953,8 @@ live</value>
   </data>
   <data name="lblAddStorageFor" xml:space="preserve">
     <value>Add storage for {0}</value>
+  </data>
+  <data name="lblSortByCropType" xml:space="preserve">
+    <value>sort by crop</value>
   </data>
 </root>
