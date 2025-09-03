@@ -5897,4 +5897,22 @@ live</value>
   <data name="lblAHDBNutrientManagementGuide" xml:space="preserve">
     <value>The AHDB Nutrient Management Guide (RB209) recommends that sulphur is applied to most crops where you expect or recognise sulphur deficiency​.</value>
   </data>
+  <data name="lblWhatIsTheWeightCapacityOf" xml:space="preserve">
+    <value>What is the weight capacity of {0}?</value>
+  </data>
+  <data name="MsgEnterTheWeightCapacityBeforeContinuing" xml:space="preserve">
+    <value>Enter the weight capacity before continuing.</value>
+  </data>
+  <data name="lblThisIsCalculatedFromTheDimentionsYouEntered" xml:space="preserve">
+    <value>This is calculated from the dimensions you entered and the standard bulk density of the manure. You can change it if you need to.</value>
+  </data>
+  <data name="lblVolumeCapacity" xml:space="preserve">
+    <value>Volume capacity</value>
+  </data>
+  <data name="lblWhatIsTheTotalCapacityOf" xml:space="preserve">
+    <value>What is the total capacity of {0}?</value>
+  </data>
+  <data name="MsgEnterTheTotalCapacityOfYourStorage" xml:space="preserve">
+    <value>Enter the total capacity of your storage</value>
+  </data>
 </root>
