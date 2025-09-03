@@ -1069,6 +1069,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add storage for {0}.
+        /// </summary>
+        public static string lblAddStorageFor {
+            get {
+                return ResourceManager.GetString("lblAddStorageFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add these analysis results.
         /// </summary>
         public static string lblAddTheseAnalysisResults {
@@ -1101,6 +1110,15 @@ namespace NMP.Portal.Resources {
         public static string lblAddThisField {
             get {
                 return ResourceManager.GetString("lblAddThisField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add this manure storage.
+        /// </summary>
+        public static string lblAddThisManureStorage {
+            get {
+                return ResourceManager.GetString("lblAddThisManureStorage", resourceCulture);
             }
         }
         
@@ -1776,6 +1794,15 @@ namespace NMP.Portal.Resources {
         public static string lblBalanceFromPreviousYear {
             get {
                 return ResourceManager.GetString("lblBalanceFromPreviousYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bank slope angle.
+        /// </summary>
+        public static string lblBankSlopeAngle {
+            get {
+                return ResourceManager.GetString("lblBankSlopeAngle", resourceCulture);
             }
         }
         
@@ -3225,6 +3252,15 @@ namespace NMP.Portal.Resources {
         public static string lblDoesPotashClayForCheckAnswere {
             get {
                 return ResourceManager.GetString("lblDoesPotashClayForCheckAnswere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Does {0} have sloped edges?.
+        /// </summary>
+        public static string lblDoesStoreHaveSlopedEdges {
+            get {
+                return ResourceManager.GetString("lblDoesStoreHaveSlopedEdges", resourceCulture);
             }
         }
         
@@ -7407,6 +7443,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Metres squared.
+        /// </summary>
+        public static string lblMetresSquared {
+            get {
+                return ResourceManager.GetString("lblMetresSquared", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Metric units.
         /// </summary>
         public static string lblMetricUnits {
@@ -10288,6 +10333,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Slope question.
+        /// </summary>
+        public static string lblSlopeQuestion {
+            get {
+                return ResourceManager.GetString("lblSlopeQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to slurry.
         /// </summary>
         public static string lblSlurry {
@@ -11107,6 +11161,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Surface area.
+        /// </summary>
+        public static string lblSurfaceArea {
+            get {
+                return ResourceManager.GetString("lblSurfaceArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sward.
         /// </summary>
         public static string lblSward {
@@ -11859,6 +11922,15 @@ namespace NMP.Portal.Resources {
         public static string lblTotalAreaRequired {
             get {
                 return ResourceManager.GetString("lblTotalAreaRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total capacity (minus the freeboard).
+        /// </summary>
+        public static string lblTotalCapacityMinusTheFreeBoard {
+            get {
+                return ResourceManager.GetString("lblTotalCapacityMinusTheFreeBoard", resourceCulture);
             }
         }
         
@@ -13002,6 +13074,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhatIsTheEndOfDrainageDate {
             get {
                 return ResourceManager.GetString("lblWhatIsTheEndOfDrainageDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the estimated angle of the bank slope?.
+        /// </summary>
+        public static string lblWhatIsTheEstimatedAngleOfTheBankSlope {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheEstimatedAngleOfTheBankSlope", resourceCulture);
             }
         }
         
