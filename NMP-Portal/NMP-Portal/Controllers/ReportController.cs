@@ -4874,7 +4874,7 @@ namespace NMP.Portal.Controllers
 
                 decimal totalNProduced = 0;
                 decimal totalPProduced = 0;
-                decimal averageNumberForYear;
+                decimal averageNumberForYear=0;
                 if (model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.ANumberForEachMonth)
                 {
                     int sumOfEachMonth = (model.NumbersInJanuary ?? 0) + (model.NumbersInFebruary ?? 0) +
