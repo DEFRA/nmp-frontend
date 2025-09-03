@@ -193,7 +193,7 @@
                         {
                             <govuk-summary-list-row>
                                 <govuk-summary-list-row-key>
-                                    @Resource.lblHowWouldYouLikeToEnterYourLivestockNumbers
+                                    @string.Format(Resource.lblHowWouldYouLikeToEnterYourLivestockNumbers, ViewBag.LivestockCategory, Model.Year)
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
                                     @(Model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.ANumberForEachMonth ? Resource.lblEnterANumberForEachMonth : Resource.lblEnterTheAverageNumberForTheYear)
@@ -296,7 +296,7 @@
                         </govuk-summary-list-row>
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key>
-                                @Resource.lblTotalNitrogen
+                                @Resource.lblTotalNitrogenProduced
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
                                 @(string.Format(Resource.lblKgPerYear, ViewBag.TotalNProduced))
@@ -306,26 +306,29 @@
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
 
-                        <govuk-summary-list-row>
-                            <govuk-summary-list-row-key>
-                                @Resource.lblPhosphateStandardPerAnimalPerYear
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                                @(string.Format(Resource.lblKgPerYear, ViewBag.Phosphate))
-                            </govuk-summary-list-row-value>
-                            <govuk-summary-list-row-actions>
-                            </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row>
-                        <govuk-summary-list-row>
-                            <govuk-summary-list-row-key>
-                                @Resource.lblTotalPhosphate
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                                @(string.Format(Resource.lblKgPerYear, ViewBag.TotalPProduced))
-                            </govuk-summary-list-row-value>
-                            <govuk-summary-list-row-actions>
-                            </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row>
+                        @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+                        {
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    @Resource.lblPhosphateStandardPerAnimalPerYear
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @(string.Format(Resource.lblKgPerYear, ViewBag.Phosphate))
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    @Resource.lblTotalPhosphateProduced
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @(string.Format(Resource.lblKgPerYear, ViewBag.TotalPProduced))
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                        }
                     </govuk-summary-list>
                 </div>
 
