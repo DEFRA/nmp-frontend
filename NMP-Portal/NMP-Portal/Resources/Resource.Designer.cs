@@ -1681,7 +1681,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Average for the year.
+        ///   Looks up a localized string similar to Average number for the year.
         /// </summary>
         public static string lblAverageForTheYear {
             get {
@@ -5444,15 +5444,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How many of {0} did you have in {1} {2}?.
-        /// </summary>
-        public static string lblHowManyOfThisTypeDidYouHaveIn {
-            get {
-                return ResourceManager.GetString("lblHowManyOfThisTypeDidYouHaveIn", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to How moist the topsoil is when the material is applied.
         /// </summary>
         public static string lblHowMoistTheTopsoilIs {
@@ -5597,7 +5588,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How would you like to enter your livestock numbers?.
+        ///   Looks up a localized string similar to How would you like to enter the number of {0} in {1}?.
         /// </summary>
         public static string lblHowWouldYouLikeToEnterYourLivestockNumbers {
             get {
@@ -8169,6 +8160,15 @@ namespace NMP.Portal.Resources {
         public static string lblNutrientAndLimeRecommendationsForCropInField {
             get {
                 return ResourceManager.GetString("lblNutrientAndLimeRecommendationsForCropInField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}kg/yr.
+        /// </summary>
+        public static string lblNutrientKgPerYear {
+            get {
+                return ResourceManager.GetString("lblNutrientKgPerYear", resourceCulture);
             }
         }
         
@@ -12007,6 +12007,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total nitrogen (N) produced.
+        /// </summary>
+        public static string lblTotalNitrogenProduced {
+            get {
+                return ResourceManager.GetString("lblTotalNitrogenProduced", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total Nitrogen (N).
         /// </summary>
         public static string lblTotalNitrogenWithNutrient {
@@ -12048,6 +12057,15 @@ namespace NMP.Portal.Resources {
         public static string lblTotalPhosphateOnly {
             get {
                 return ResourceManager.GetString("lblTotalPhosphateOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total phosphate (P2O5) produced.
+        /// </summary>
+        public static string lblTotalPhosphateProduced {
+            get {
+                return ResourceManager.GetString("lblTotalPhosphateProduced", resourceCulture);
             }
         }
         
@@ -14527,6 +14545,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Number in {0} {1}?.
+        /// </summary>
+        public static string lbNumberInMonthYear {
+            get {
+                return ResourceManager.GetString("lbNumberInMonthYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://www.gov.uk/government/organisations/rural-payments-agency.
         /// </summary>
         public static string lnkRpa {
@@ -15870,7 +15897,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter total area in NVZ.
+        ///   Looks up a localized string similar to Enter total area in an NVZ.
         /// </summary>
         public static string MsgEnterTotalAreaInNVZ {
             get {
@@ -17247,7 +17274,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total area in NVZ should not be more than total farm area.
+        ///   Looks up a localized string similar to The total area in an NVZ should not be more than the total farm area.
         /// </summary>
         public static string MsgTotalAreaInNVZShouldNotBeMoreThanTotalFarmArea {
             get {

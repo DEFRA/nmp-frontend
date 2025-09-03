@@ -4399,7 +4399,21 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
+                if (model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
+                {
+                    ViewBag.LivestockCategory = model.LivestockGroupName;
+                }
+                else
+                {
 
+                    string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[1];
+                    if (!string.IsNullOrWhiteSpace(groupName))
+                    {
+                        if (groupName.Equals(Resource.lblGoat) || groupName.Equals(Resource.lblHorse))
+                            groupName = groupName + "s";
+                    }
+                    ViewBag.LivestockCategory = groupName;
+                }
             }
             catch (Exception ex)
             {
@@ -4421,6 +4435,21 @@ namespace NMP.Portal.Controllers
                 if (model.LivestockNumberQuestion == null)
                 {
                     ModelState.AddModelError("LivestockNumberQuestion", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+                if (model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
+                {
+                    ViewBag.LivestockCategory = model.LivestockGroupName;
+                }
+                else
+                {
+
+                    string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[1];
+                    if (!string.IsNullOrWhiteSpace(groupName))
+                    {
+                        if (groupName.Equals(Resource.lblGoat) || groupName.Equals(Resource.lblHorse))
+                            groupName = groupName + "s";
+                    }
+                    ViewBag.LivestockCategory = groupName;
                 }
                 if (!ModelState.IsValid)
                 {
@@ -4815,6 +4844,21 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
+                if (model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
+                {
+                    ViewBag.LivestockCategory = model.LivestockGroupName;
+                }
+                else
+                {
+
+                    string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[1];
+                    if (!string.IsNullOrWhiteSpace(groupName))
+                    {
+                        if (groupName.Equals(Resource.lblGoat) || groupName.Equals(Resource.lblHorse))
+                            groupName = groupName + "s";
+                    }
+                    ViewBag.LivestockCategory = groupName;
+                }
                 (List<NutrientsLoadingLiveStock> nutrientsLoadingLiveStockList, Error error) = await _reportService.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
                 ViewBag.LiveStockList = nutrientsLoadingLiveStockList;
                 var cattle = (int)NMP.Portal.Enums.LivestockGroup.Cattle;
@@ -4830,7 +4874,7 @@ namespace NMP.Portal.Controllers
 
                 decimal totalNProduced = 0;
                 decimal totalPProduced = 0;
-                decimal averageNumberForYear = 0;
+                decimal averageNumberForYear;
                 if (model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.ANumberForEachMonth)
                 {
                     int sumOfEachMonth = (model.NumbersInJanuary ?? 0) + (model.NumbersInFebruary ?? 0) +
@@ -4840,7 +4884,7 @@ namespace NMP.Portal.Controllers
                                          (model.NumbersInSeptember ?? 0) + (model.NumbersInOctober ?? 0) +
                                          (model.NumbersInNovember ?? 0) + (model.NumbersInDecember ?? 0);
 
-                    averageNumberForYear = (decimal)(sumOfEachMonth / 12);
+                    averageNumberForYear = (sumOfEachMonth / 12.0m);
                 }
                 else if (model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.AverageNumberForTheYear)
                 {
@@ -4963,6 +5007,21 @@ namespace NMP.Portal.Controllers
 
                 if (!ModelState.IsValid)
                 {
+                    if (model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
+                    {
+                        ViewBag.LivestockCategory = model.LivestockGroupName;
+                    }
+                    else
+                    {
+
+                        string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[1];
+                        if (!string.IsNullOrWhiteSpace(groupName))
+                        {
+                            if (groupName.Equals(Resource.lblGoat) || groupName.Equals(Resource.lblHorse))
+                                groupName = groupName + "s";
+                        }
+                        ViewBag.LivestockCategory = groupName;
+                    }
                     return View(model);
                 }
                 decimal totalNProduced = 0;
@@ -4977,7 +5036,7 @@ namespace NMP.Portal.Controllers
                                          (model.NumbersInSeptember ?? 0) + (model.NumbersInOctober ?? 0) +
                                          (model.NumbersInNovember ?? 0) + (model.NumbersInDecember ?? 0);
 
-                    averageNumberForYear = (decimal)(sumOfEachMonth / 12);
+                    averageNumberForYear = (sumOfEachMonth / 12.0m);
                 }
                 else if (model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.AverageNumberForTheYear)
                 {
