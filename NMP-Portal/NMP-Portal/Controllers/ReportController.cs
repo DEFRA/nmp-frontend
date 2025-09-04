@@ -608,8 +608,8 @@ namespace NMP.Portal.Controllers
                                             }
                                             else
                                             {
-                                                TempData["ErrorOnHarvestYearOverview"] = error.Message;
-                                                return View("HarvestYearOverview", model);
+                                                TempData["ErrorOnSelectField"] = error.Message;
+                                                return RedirectToAction("ExportFieldsOrCropType");
                                             }
                                         }
                                         defIndex++;
@@ -4567,27 +4567,26 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("NumbersInJanuary", Resource.MsgEnterAtLeastOneValue);
                 }
+                if (model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
+                {
+                    ViewBag.LivestockCategory = model.LivestockGroupName;
+                }
+                else
+                {
 
+                    string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[1];
+                    if (!string.IsNullOrWhiteSpace(groupName))
+                    {
+                        if (groupName.Equals(Resource.lblGoat) || groupName.Equals(Resource.lblHorse))
+                            groupName = groupName + "s";
+                    }
+                    ViewBag.LivestockCategory = groupName;
+                }
                 if (!ModelState.IsValid)
                 {
                     (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
                     ViewBag.Nitrogen = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
-                    ViewBag.Phosphate = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
-                    if (model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
-                    {
-                        ViewBag.LivestockCategory = model.LivestockGroupName;
-                    }
-                    else
-                    {
-
-                        string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[1];
-                        if (!string.IsNullOrWhiteSpace(groupName))
-                        {
-                            if (groupName.Equals(Resource.lblGoat) || groupName.Equals(Resource.lblHorse))
-                                groupName = groupName + "s";
-                        }
-                        ViewBag.LivestockCategory = groupName;
-                    }
+                    ViewBag.Phosphate = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;                  
 
                     return View(model);
                 }
