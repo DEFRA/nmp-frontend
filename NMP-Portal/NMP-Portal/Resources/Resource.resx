@@ -5927,6 +5927,33 @@ live</value>
   <data name="MsgEnterTheTotalCapacityOfYourStorage" xml:space="preserve">
     <value>Enter the total capacity of your storage</value>
   </data>
+  <data name="lblDoesStoreHaveSlopedEdges" xml:space="preserve">
+    <value>Does {0} have sloped edges?</value>
+  </data>
+  <data name="lblSlopeQuestion" xml:space="preserve">
+    <value>Slope question</value>
+  </data>
+  <data name="lblBankSlopeAngle" xml:space="preserve">
+    <value>Bank slope angle</value>
+  </data>
+  <data name="lblWhatIsTheEstimatedAngleOfTheBankSlope" xml:space="preserve">
+    <value>What is the estimated angle of the bank slope?</value>
+  </data>
+  <data name="lblAddThisManureStorage" xml:space="preserve">
+    <value>Add this manure storage</value>
+  </data>
+  <data name="lblTotalCapacityMinusTheFreeBoard" xml:space="preserve">
+    <value>Total capacity (minus the freeboard)</value>
+  </data>
+  <data name="lblSurfaceArea" xml:space="preserve">
+    <value>Surface area</value>
+  </data>
+  <data name="lblMetresSquared" xml:space="preserve">
+    <value>Metres squared</value>
+  </data>
+  <data name="lblAddStorageFor" xml:space="preserve">
+    <value>Add storage for {0}</value>
+  </data>
   <data name="lblSortByCropType" xml:space="preserve">
     <value>sort by crop</value>
   </data>

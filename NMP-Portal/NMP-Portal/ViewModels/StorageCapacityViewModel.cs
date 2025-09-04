@@ -32,7 +32,10 @@ namespace NMP.Portal.ViewModels
         [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
         public decimal? Depth { get; set; }
         public bool? IsCovered { get; set; }
-        public bool? CircumferenceOrDiameter { get; set; }
+
+        public decimal? Circumference { get; set; }
+        public decimal? Diameter { get; set; }
+        public bool? IsCircumference { get; set; }
 
         [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
         public decimal? WeightCapacity { get; set; }
@@ -42,5 +45,12 @@ namespace NMP.Portal.ViewModels
 
         [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
         public decimal? StorageBagCapacity { get; set; }
+        public bool? IsSlopeEdge { get; set; }
+        public int? BankSlopeAngleId { get; set; }
+        public string? BankSlopeAngleName { get; set; }
+
+        //total capacity in cubic meters (Length * Width * (Depth - FreeBoard))
+        public decimal? CapacityVolume { get; set; } 
+        public decimal? SurfaceArea { get; set; }
     }
 }

@@ -42,6 +42,9 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.WeightCapacity" value="@Model.WeightCapacity"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SolidManureDensity" value="@Model.SolidManureDensity"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageBagCapacity"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSlopeEdge"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.BankSlopeAngleId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.BankSlopeAngleName"></govuk-input>
 
         </div>
         <div class="govuk-grid-row">
@@ -102,14 +105,30 @@
                 @if (Model.StorageTypeId == (int)NMP.Portal.Enums.StorageTypes.CircularTank)
                 {
 
-                    <govuk-radios asp-for="@Model.CircumferenceOrDiameter">
+                    <govuk-radios asp-for="@Model.IsCircumference">
                         <govuk-radios-fieldset>
                             <govuk-radios-fieldset-legend is-page-heading="false">
                                 @Resource.lblDoYouWantToEnterTheCircumferenceOrTheDiameter
                             </govuk-radios-fieldset-legend>
                             <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
-                            <govuk-radios-item value="@yes">@Resource.lblCircumference</govuk-radios-item>
-                            <govuk-radios-item value="@no">@Resource.lblDiameter</govuk-radios-item>
+                            <govuk-radios-item value="@yes">
+                                @Resource.lblCircumference
+                                <govuk-radios-item-conditional>
+                                    <govuk-input asp-for="@Model.Circumference" type="number" autocomplete="false">
+                                        <govuk-input-label>What is the circumference?</govuk-input-label>
+                                        <govuk-input-suffix>@Resource.lblMetres</govuk-input-suffix>
+                                    </govuk-input>
+                                </govuk-radios-item-conditional>
+                            </govuk-radios-item>
+                            <govuk-radios-item value="@no">
+                                @Resource.lblDiameter
+                                <govuk-radios-item-conditional>
+                                    <govuk-input asp-for="@Model.Diameter" type="number" autocomplete="false">
+                                        <govuk-input-label>What is the diameter?</govuk-input-label>
+                                        <govuk-input-suffix>@Resource.lblMetres</govuk-input-suffix>
+                                    </govuk-input>
+                                </govuk-radios-item-conditional>
+                            </govuk-radios-item>
                         </govuk-radios-fieldset>
                     </govuk-radios>
                 }
