@@ -314,7 +314,7 @@
                                             <td class="govuk-table__cell">@inorganicFertiliser.Field</td>
                                             <td class="govuk-table__cell">@inorganicFertiliser.Crop</td>
                                             <td class="govuk-table__cell">
-                                                @if (inorganicFertiliser.N != null && inorganicFertiliser.N > 0)
+                                                @if (inorganicFertiliser.N != null)
                                                 {
                                                     <span class="nutrient-list">@string.Format(Resource.lblKgWithNutrient, inorganicFertiliser.N, Resource.lblNitrogen)</span>
                                                 }

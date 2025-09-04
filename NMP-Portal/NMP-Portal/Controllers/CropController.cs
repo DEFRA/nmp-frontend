@@ -2305,7 +2305,7 @@ namespace NMP.Portal.Controllers
                                     model.Yield = yield;
                                     yieldQuestion = yield == defaultYield ? string.Format(Resource.lblUseTheStandardFigure, defaultYield) : null;
 
-                                    if (string.IsNullOrWhiteSpace(yieldQuestion)||harvestYearPlanResponse.Count>1)
+                                    if (string.IsNullOrWhiteSpace(yieldQuestion) || harvestYearPlanResponse.Count > 1)
                                     {
                                         if (firstYield == null)
                                         {
@@ -3270,7 +3270,12 @@ namespace NMP.Portal.Controllers
                             List<CropDetailResponse> allCropDetails = harvestYearPlanResponse.CropDetails ?? new List<CropDetailResponse>().ToList();
                             if (allCropDetails != null)
                             {
-                                model.LastModifiedOn = allCropDetails.Max(x => x.LastModifiedOn.Value.ToString("dd MMM yyyy"));
+                                var latestDate = allCropDetails
+                                  .Where(x => x.LastModifiedOn.HasValue)
+                                  .OrderByDescending(x => x.LastModifiedOn)
+                                  .FirstOrDefault();
+                                
+                                model.LastModifiedOn = latestDate?.LastModifiedOn?.ToString("dd MMM yyyy");
                                 var groupedResult = allCropDetails
                                 .GroupBy(crop => new { crop.CropTypeName, crop.CropGroupName, crop.CropTypeID })
                                 .Select(g => new
@@ -3380,7 +3385,7 @@ namespace NMP.Portal.Controllers
                                 model.EncryptSortOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblDesc);
                                 model.EncryptSortOrganicListOrderByCropType = _cropDataProtector.Protect(Resource.lblDesc);
                                 model.SortInOrganicListOrderByDate = Resource.lblDesc;
-                                model.SortOrganicListOrderByDate = Resource.lblDesc;                                
+                                model.SortOrganicListOrderByDate = Resource.lblDesc;
                                 model.EncryptSortInOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblDesc);
                                 model.EncryptSortInOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblDesc);
                                 model.EncryptSortInOrganicListOrderByCropType = _cropDataProtector.Protect(Resource.lblDesc);
