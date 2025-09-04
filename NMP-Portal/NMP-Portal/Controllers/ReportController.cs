@@ -599,6 +599,19 @@ namespace NMP.Portal.Controllers
                                             manData.Recommendation.CropLime = (manData.Recommendation.PreviousAppliedLime != null && manData.Recommendation.PreviousAppliedLime > 0) ? manData.Recommendation.PreviousAppliedLime : manData.Recommendation.CropLime;
                                             manData.Recommendation.KIndex = manData.Recommendation.KIndex != null ? (manData.Recommendation.KIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (manData.Recommendation.KIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : manData.Recommendation.KIndex)) : null;
                                         }
+                                        foreach (var organic in manData.OrganicManures)
+                                        {
+                                            (ManureType manureType, error) = await _organicManureService.FetchManureTypeByManureTypeId(organic.ManureTypeID);
+                                            if (error == null)
+                                            {
+                                                organic.RateUnit = manureType.IsLiquid.Value ? Resource.lblCubicMeters : Resource.lbltonnes;
+                                            }
+                                            else
+                                            {
+                                                TempData["ErrorOnHarvestYearOverview"] = error.Message;
+                                                return View("HarvestYearOverview", model);
+                                            }
+                                        }
                                         defIndex++;
                                     }
                                 }
