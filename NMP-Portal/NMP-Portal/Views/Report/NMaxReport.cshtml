@@ -68,6 +68,11 @@
                 @Model.Farm.Address3
                 <br />
             }
+            @if (!string.IsNullOrWhiteSpace(Model.Farm.Address4))
+            {
+                @Model.Farm.Address4
+                <br />
+            }
             @Model.Farm.Postcode
         </p>
     </div>
