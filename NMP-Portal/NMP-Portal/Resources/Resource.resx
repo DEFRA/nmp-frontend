@@ -5376,7 +5376,7 @@ live</value>
     <value>Goats, Deer and Horses</value>
   </data>
   <data name="lblLivestockDetailsYear" xml:space="preserve">
-    <value>Livestock details {0}</value>
+    <value>Livestock details for {0}</value>
   </data>
   <data name="lblPigs" xml:space="preserve">
     <value>Pigs</value>

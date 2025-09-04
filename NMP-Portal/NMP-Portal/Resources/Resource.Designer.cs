@@ -6579,7 +6579,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Livestock details {0}.
+        ///   Looks up a localized string similar to Livestock details for {0}.
         /// </summary>
         public static string lblLivestockDetailsYear {
             get {
