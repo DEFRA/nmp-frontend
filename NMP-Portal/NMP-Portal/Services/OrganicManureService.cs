@@ -1902,7 +1902,7 @@ namespace NMP.Portal.Services
 
             return (organicManures, error);
         }
-        public async Task<(decimal?, Error)> FetchAvailableNByManagementPeriodID(int managementPeriodID)
+        public async Task<(decimal?, Error?)> FetchAvailableNByManagementPeriodID(int managementPeriodID)
         {
             Error error = null;
             decimal? totalN = null;
