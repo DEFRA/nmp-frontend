@@ -119,7 +119,7 @@
                     </govuk-summary-list-row>
 
 
-                    @if (Model.IsSoilNutrientValueTypeIndex.Value)
+                    @if (Model.IsSoilNutrientValueTypeIndex.HasValue && Model.IsSoilNutrientValueTypeIndex.Value)
                     {
                         @if (Model.PH.HasValue || Model.PhosphorusIndex.HasValue ||
                        (!string.IsNullOrWhiteSpace(Model.PotassiumIndexValue)) || Model.MagnesiumIndex.HasValue)

@@ -185,17 +185,18 @@ namespace NMP.Portal.Controllers
                                                     .Select(c => c.CropTypeID)
                                                     .ToList();
 
-                                                if (available.Any())
+                                                if (available.Count == 0)
                                                 {
-                                                    // Pick the first matching ID according to the defined group order
-                                                    int chosenId = group.Value.First(id => available.Contains(id));
-
-                                                    list.Add(new SelectListItem
-                                                    {
-                                                        Value = chosenId.ToString(),
-                                                        Text = group.Key
-                                                    });
+                                                    continue;
                                                 }
+                                                // Pick the first matching ID according to the defined group order
+                                                int chosenId = group.Value.First(id => available.Contains(id));
+
+                                                list.Add(new SelectListItem
+                                                {
+                                                    Value = chosenId.ToString(),
+                                                    Text = group.Key
+                                                });
                                             }
 
                                             // Handle crops not in groups
@@ -394,11 +395,11 @@ namespace NMP.Portal.Controllers
                                         ViewBag.CropTypeList = SelectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
                                         return View(model);
                                     }
-                                    if (model.CropTypeList.Count == 1 && model.CropTypeList[0] == Resource.lblSelectAll)
+                                    if (model.CropTypeList?.Count == 1 && model.CropTypeList[0] == Resource.lblSelectAll)
                                     {
                                         model.CropTypeList = SelectListItem.Select(item => item.Value).ToList();
                                     }
-                                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("ReportData", model);
                                     ViewBag.CropTypeList = SelectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
                                 }
                                 else
@@ -1052,7 +1053,7 @@ namespace NMP.Portal.Controllers
             List<NitrogenApplicationsForNMaxReportResponse> nitrogenApplicationsForNMaxReportResponse, List<NMaxLimitReportResponse> nMaxLimitReportResponse)
         {
             List<CropDetailResponse> cropDetails = harvestYearPlanResponse.CropDetails.Where(x => x.CropTypeID == cropTypeId).ToList();
-            Error error = null;
+            Error? error = null;
             int nMaxLimit = 0;
             string cropTypeName = string.Empty;
             string vegetableGroup = string.Empty;
@@ -5476,7 +5477,7 @@ namespace NMP.Portal.Controllers
                 (List<CommonResponse> manureGroup, Error error) = await _organicManureService.FetchManureGroupList();
                 if (error == null)
                 {
-                    ViewBag.ManureGroups = manureGroup;
+                    ViewBag.ManureGroups = manureGroup.OrderBy(x=>x.SortOrder);
                 }
                 else
                 {
@@ -5564,7 +5565,7 @@ namespace NMP.Portal.Controllers
                     (List<CommonResponse> manureGroupList, error) = await _organicManureService.FetchManureGroupList();
                     if (error == null)
                     {
-                        ViewBag.ManureGroups = manureGroupList;
+                        ViewBag.ManureGroups = manureGroupList.OrderBy(x => x.SortOrder);
                     }
                     else
                     {
