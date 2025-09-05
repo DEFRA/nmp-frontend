@@ -17175,7 +17175,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You will get better recommendations if you have a recent soil analysis. You should sample the soil from your fields every 3 to 4 years and get it tested for pH, phosphorus, potassium and magnesium..
+        ///   Looks up a localized string similar to Good management of pH, soil phosphate, potash and magnesium depends on soil sampling and analysis. Soil sampling and analysis should be carried out every 3 to 5 years, at an appropriate time in the crop rotation..
         /// </summary>
         public static string MsgSoilAnalysisHint1 {
             get {
@@ -17184,11 +17184,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you do not enter a soil analysis, or if your most recent soil analysis is more than 5 years old, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop..
+        ///   Looks up a localized string similar to You must follow the appropriate soil analysis regulations for your region..
         /// </summary>
         public static string MsgSoilAnalysisHint2 {
             get {
                 return ResourceManager.GetString("MsgSoilAnalysisHint2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you do not enter a soil analysis, or if your most recent soil analysis is more than 5 years old, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop..
+        /// </summary>
+        public static string MsgSoilAnalysisHint3 {
+            get {
+                return ResourceManager.GetString("MsgSoilAnalysisHint3", resourceCulture);
             }
         }
         

@@ -2387,10 +2387,10 @@ cubic metres per hectare  not set</value>
     <value>Do you want to add a recent soil analysis for {0}?</value>
   </data>
   <data name="MsgSoilAnalysisHint1" xml:space="preserve">
-    <value>You will get better recommendations if you have a recent soil analysis. You should sample the soil from your fields every 3 to 4 years and get it tested for pH, phosphorus, potassium and magnesium.</value>
+    <value>Good management of pH, soil phosphate, potash and magnesium depends on soil sampling and analysis. Soil sampling and analysis should be carried out every 3 to 5 years, at an appropriate time in the crop rotation.</value>
   </data>
   <data name="MsgSoilAnalysisHint2" xml:space="preserve">
-    <value>If you do not enter a soil analysis, or if your most recent soil analysis is more than 5 years old, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop.</value>
+    <value>You must follow the appropriate soil analysis regulations for your region.</value>
   </data>
   <data name="lblSoilDeficientInSulpurForCheckAnswerNotset" xml:space="preserve">
     <value>Is the soil deficient in sulphur (S) not set?</value>
@@ -5974,5 +5974,8 @@ live</value>
   </data>
   <data name="lblQuantityApplied" xml:space="preserve">
     <value>​Quantity applied</value>
+  </data>
+  <data name="MsgSoilAnalysisHint3" xml:space="preserve">
+    <value>If you do not enter a soil analysis, or if your most recent soil analysis is more than 5 years old, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop.</value>
   </data>
 </root>
