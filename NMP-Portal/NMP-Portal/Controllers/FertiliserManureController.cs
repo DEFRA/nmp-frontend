@@ -1958,19 +1958,19 @@ namespace NMP.Portal.Controllers
                 }
 
 
-                if (ModelState.IsValid)
-                {
-                    if(model.N!=0)
-                    {
-                        decimal totalNutrientValue = (model.N ?? 0) + (model.P2O5 ?? 0) +
-                         (model.K2O ?? 0) + (model.SO3 ?? 0) + (model.MgO ?? 0) +
-                         (model.Lime ?? 0);
-                        if (totalNutrientValue == 0)
-                        {
-                            ModelState.AddModelError("CropTypeName", Resource.MsgEnterANumberWhichIsGreaterThanZero);
-                        }
-                    }                   
-                }
+                //if (ModelState.IsValid)
+                //{
+                //    if(model.N!=0)
+                //    {
+                //        decimal totalNutrientValue = (model.N ?? 0) + (model.P2O5 ?? 0) +
+                //         (model.K2O ?? 0) + (model.SO3 ?? 0) + (model.MgO ?? 0) +
+                //         (model.Lime ?? 0);
+                //        if (totalNutrientValue == 0)
+                //        {
+                //            ModelState.AddModelError("CropTypeName", Resource.MsgEnterANumberWhichIsGreaterThanZero);
+                //        }
+                //    }                   
+                //}
                 if (model.N != null)
                 {
                     if (model.N < 0 || model.N > 9999)

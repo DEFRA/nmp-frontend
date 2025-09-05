@@ -606,7 +606,7 @@ namespace NMP.Portal.Controllers
                                             (ManureType manureType, error) = await _organicManureService.FetchManureTypeByManureTypeId(organic.ManureTypeID);
                                             if (error == null)
                                             {
-                                                organic.RateUnit = manureType.IsLiquid.Value ? Resource.lblCubicMeters : Resource.lbltonnes;
+                                                organic.RateUnit = manureType.IsLiquid.Value ? string.Format("{0} {1}", Resource.lblCubicMeters,Resource.lblPerHectare) :string.Format("{0} {1}",Resource.lbltonnes,Resource.lblPerHectare);
                                             }
                                             else
                                             {
