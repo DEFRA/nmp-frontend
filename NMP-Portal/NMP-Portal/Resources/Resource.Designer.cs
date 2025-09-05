@@ -2275,7 +2275,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have not entered a soil analysis for {0}. Without this, any recommendations we give will be based on the RB209 default values instead..
+        ///   Looks up a localized string similar to You have not entered a soil analysis for {0}. Without this, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop..
         /// </summary>
         public static string lblContentIfSoilAnalysisNotApplied {
             get {

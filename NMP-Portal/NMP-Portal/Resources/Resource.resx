@@ -3269,7 +3269,7 @@ cubic metres per hectare  not set</value>
     <value>You have updated a soil analysis for {0}.</value>
   </data>
   <data name="lblContentIfSoilAnalysisNotApplied" xml:space="preserve">
-    <value>You have not entered a soil analysis for {0}. Without this, any recommendations we give will be based on the RB209 default values instead.</value>
+    <value>You have not entered a soil analysis for {0}. Without this, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop.</value>
   </data>
   <data name="MsgTheDateMustInclude" xml:space="preserve">
     <value>The date must include the day/month/year.</value>
