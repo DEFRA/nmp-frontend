@@ -118,7 +118,7 @@
             <div class="govuk-grid-column-two-thirds">
 
                 <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                    <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblMonthlyTotalsForThis, ViewBag.LivestockCategory, Model.Year)</h1>
+                    <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblMonthlyTotalsForThis, ViewBag.LivestockCategory != null ? ViewBag.LivestockCategory.ToString().ToLower() : ViewBag.LivestockCategory, Model.Year)</h1>
                 </legand>
 
                 <p class="govuk-body">@string.Format(Resource.lblSelectedLivestockType, Model.LivestockTypeName)</p>

@@ -185,17 +185,18 @@ namespace NMP.Portal.Controllers
                                                     .Select(c => c.CropTypeID)
                                                     .ToList();
 
-                                                if (available.Any())
+                                                if (available.Count == 0)
                                                 {
-                                                    // Pick the first matching ID according to the defined group order
-                                                    int chosenId = group.Value.First(id => available.Contains(id));
-
-                                                    list.Add(new SelectListItem
-                                                    {
-                                                        Value = chosenId.ToString(),
-                                                        Text = group.Key
-                                                    });
+                                                    continue;
                                                 }
+                                                // Pick the first matching ID according to the defined group order
+                                                int chosenId = group.Value.First(id => available.Contains(id));
+
+                                                list.Add(new SelectListItem
+                                                {
+                                                    Value = chosenId.ToString(),
+                                                    Text = group.Key
+                                                });
                                             }
 
                                             // Handle crops not in groups
@@ -394,11 +395,11 @@ namespace NMP.Portal.Controllers
                                         ViewBag.CropTypeList = SelectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
                                         return View(model);
                                     }
-                                    if (model.CropTypeList.Count == 1 && model.CropTypeList[0] == Resource.lblSelectAll)
+                                    if (model.CropTypeList?.Count == 1 && model.CropTypeList[0] == Resource.lblSelectAll)
                                     {
                                         model.CropTypeList = SelectListItem.Select(item => item.Value).ToList();
                                     }
-                                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("ReportData", model);
                                     ViewBag.CropTypeList = SelectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
                                 }
                                 else
@@ -598,6 +599,19 @@ namespace NMP.Portal.Controllers
                                             manData.Recommendation.LimeIndex = manData.Recommendation.PH;
                                             manData.Recommendation.CropLime = (manData.Recommendation.PreviousAppliedLime != null && manData.Recommendation.PreviousAppliedLime > 0) ? manData.Recommendation.PreviousAppliedLime : manData.Recommendation.CropLime;
                                             manData.Recommendation.KIndex = manData.Recommendation.KIndex != null ? (manData.Recommendation.KIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (manData.Recommendation.KIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : manData.Recommendation.KIndex)) : null;
+                                        }
+                                        foreach (var organic in manData.OrganicManures)
+                                        {
+                                            (ManureType manureType, error) = await _organicManureService.FetchManureTypeByManureTypeId(organic.ManureTypeID);
+                                            if (error == null)
+                                            {
+                                                organic.RateUnit = manureType.IsLiquid.Value ? Resource.lblCubicMeters : Resource.lbltonnes;
+                                            }
+                                            else
+                                            {
+                                                TempData["ErrorOnSelectField"] = error.Message;
+                                                return RedirectToAction("ExportFieldsOrCropType");
+                                            }
                                         }
                                         defIndex++;
                                     }
@@ -1039,7 +1053,7 @@ namespace NMP.Portal.Controllers
             List<NitrogenApplicationsForNMaxReportResponse> nitrogenApplicationsForNMaxReportResponse, List<NMaxLimitReportResponse> nMaxLimitReportResponse)
         {
             List<CropDetailResponse> cropDetails = harvestYearPlanResponse.CropDetails.Where(x => x.CropTypeID == cropTypeId).ToList();
-            Error error = null;
+            Error? error = null;
             int nMaxLimit = 0;
             string cropTypeName = string.Empty;
             string vegetableGroup = string.Empty;
@@ -4554,27 +4568,26 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("NumbersInJanuary", Resource.MsgEnterAtLeastOneValue);
                 }
+                if (model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
+                {
+                    ViewBag.LivestockCategory = model.LivestockGroupName;
+                }
+                else
+                {
 
+                    string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[1];
+                    if (!string.IsNullOrWhiteSpace(groupName))
+                    {
+                        if (groupName.Equals(Resource.lblGoat) || groupName.Equals(Resource.lblHorse))
+                            groupName = groupName + "s";
+                    }
+                    ViewBag.LivestockCategory = groupName;
+                }
                 if (!ModelState.IsValid)
                 {
                     (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
                     ViewBag.Nitrogen = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
-                    ViewBag.Phosphate = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
-                    if (model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
-                    {
-                        ViewBag.LivestockCategory = model.LivestockGroupName;
-                    }
-                    else
-                    {
-
-                        string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[1];
-                        if (!string.IsNullOrWhiteSpace(groupName))
-                        {
-                            if (groupName.Equals(Resource.lblGoat) || groupName.Equals(Resource.lblHorse))
-                                groupName = groupName + "s";
-                        }
-                        ViewBag.LivestockCategory = groupName;
-                    }
+                    ViewBag.Phosphate = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;                  
 
                     return View(model);
                 }
@@ -5784,7 +5797,7 @@ namespace NMP.Portal.Controllers
                 (List<CommonResponse> manureGroup, Error error) = await _organicManureService.FetchManureGroupList();
                 if (error == null)
                 {
-                    ViewBag.ManureGroups = manureGroup;
+                    ViewBag.ManureGroups = manureGroup.OrderBy(x=>x.SortOrder);
                 }
                 else
                 {
@@ -5872,7 +5885,7 @@ namespace NMP.Portal.Controllers
                     (List<CommonResponse> manureGroupList, error) = await _organicManureService.FetchManureGroupList();
                     if (error == null)
                     {
-                        ViewBag.ManureGroups = manureGroupList;
+                        ViewBag.ManureGroups = manureGroupList.OrderBy(x => x.SortOrder);
                     }
                     else
                     {

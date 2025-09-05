@@ -589,7 +589,7 @@
                             @string.Format(Resource.lblRateInKg, fertiliserManure.ApplicationRate)
                             </td> *@
                                             <td class="govuk-table__cell">
-                                                @if (fertiliserManure.N > 0)
+                                                @if (fertiliserManure.N!=null)
                                                 {
                                                     <span class="nutrient-list">
                                                         @string.Format(Resource.lblKgNitrogen, fertiliserManure.N)

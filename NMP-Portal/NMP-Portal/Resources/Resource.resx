@@ -2879,7 +2879,7 @@ cubic metres per hectare  not set</value>
     <value>Which fields would you like to create a {0} crop and field management report for?</value>
   </data>
   <data name="lblCropAndFieldManagementReport" xml:space="preserve">
-    <value>{0} crop and field management report for {1}</value>
+    <value>Crop and field management report for {0}</value>
   </data>
   <data name="lblAnnualRainfall" xml:space="preserve">
     <value>Annual rainfall</value>
@@ -3743,8 +3743,8 @@ live</value>
   <data name="lblInorganicFertiliser" xml:space="preserve">
     <value>inorganic fertiliser</value>
   </data>
-  <data name="MsgDeleteOrganicAndFertiliserContent1" xml:space="preserve">
-    <value>This will remove the information about this {0} application from {1} and change the {2} nutrient recommendations.</value>
+  <data name="MsgDeleteOrganicContent1" xml:space="preserve">
+    <value>This will remove the information about this organic manure application from {0} and update the {1} fertiliser recommendations.</value>
   </data>
   <data name="MsgDeletePlanOrganicAndFertiliserContent2" xml:space="preserve">
     <value>Which fields would you like to remove this application from?</value>
@@ -6016,5 +6016,8 @@ live</value>
   </data>
   <data name="lblNoChangeTheseValues" xml:space="preserve">
     <value>No, change these values</value>
+  </data>
+  <data name="MsgDeleteFertiliserContent1" xml:space="preserve">
+    <value>This will remove the information about this inorganic fertiliser application from {0}.</value>
   </data>
 </root>

@@ -2491,7 +2491,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} crop and field management report for {1}.
+        ///   Looks up a localized string similar to Crop and field management report for {0}.
         /// </summary>
         public static string lblCropAndFieldManagementReport {
             get {
@@ -15465,11 +15465,11 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This will remove the information about this {0} application from {1} and change the {2} nutrient recommendations..
+        ///   Looks up a localized string similar to This will remove the information about this inorganic fertiliser application from {0}..
         /// </summary>
-        public static string MsgDeleteOrganicAndFertiliserContent1 {
+        public static string MsgDeleteFertiliserContent1 {
             get {
-                return ResourceManager.GetString("MsgDeleteOrganicAndFertiliserContent1", resourceCulture);
+                return ResourceManager.GetString("MsgDeleteFertiliserContent1", resourceCulture);
             }
         }
         
@@ -15479,6 +15479,15 @@ namespace NMP.Portal.Resources {
         public static string MsgDeleteOrganicAndFertiliserContent2 {
             get {
                 return ResourceManager.GetString("MsgDeleteOrganicAndFertiliserContent2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This will remove the information about this organic manure application from {0} and update the {1} fertiliser recommendations..
+        /// </summary>
+        public static string MsgDeleteOrganicContent1 {
+            get {
+                return ResourceManager.GetString("MsgDeleteOrganicContent1", resourceCulture);
             }
         }
         
