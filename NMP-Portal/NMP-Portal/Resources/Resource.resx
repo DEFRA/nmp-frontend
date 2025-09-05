@@ -5282,17 +5282,14 @@ live</value>
   <data name="lblYouHaveRemovedImportExport" xml:space="preserve">
     <value>You have removed organic material {0}</value>
   </data>
-  <data name="lblAboutOccupancyAndNitrogenStandard" xml:space="preserve">
-    <value>About occupancy and nitrogen (N) standard</value>
-  </data>
   <data name="lblForExampleFor10000PlacesEnter10" xml:space="preserve">
     <value>For example, for 10,000 places enter 10</value>
   </data>
   <data name="lblIfTheOccupancyOnYourFarmIsDifferentToTheValueShownHere" xml:space="preserve">
-    <value>If the occupancy on your farm is different to the value shown here, you can change it.</value>
+    <value>For example, if your production cycle lasts 42 days, and the empty period is 7 days (total 49 days), then your occupancy is 86%. If the occupancy on your farm is different to the value shown here, you can change it.</value>
   </data>
-  <data name="lblIfYouChangeThisValueYouMustKeepTheOccupancy" xml:space="preserve">
-    <value>If you change this value, you must keep the occupancy value the same.</value>
+  <data name="lblThisFigureAccountsForOccupancyAlready" xml:space="preserve">
+    <value>This figure accounts for occupancy already, so if you change it, you must keep the occupancy value the same. You can only change one of these values.</value>
   </data>
   <data name="lblLengthOfTimeYouHaveTheseAnimalsOnTheFarm" xml:space="preserve">
     <value>Length of time you have these animals on the farm.</value>
@@ -5313,13 +5310,10 @@ live</value>
     <value>The nitrogen (N) standard figure is the average nitrogen (N) produced by this type of animal.</value>
   </data>
   <data name="lblTheseAnimalsAreCountedByTheNumberOfPlacesForThem" xml:space="preserve">
-    <value>These animals are counted by the number of places for them on the farm. Occupancy means the proportion of the year that these places are occupied by animals. For example, if your production cycle lasts 42 days, and the empty period is 7 days (total 49 days), then your occupancy is 86%.</value>
+    <value>These animals are counted by the number of places for them on the farm. Occupancy means the proportion of the year that these places are occupied by animals.</value>
   </data>
   <data name="lblThousandPlaces" xml:space="preserve">
     <value>thousand places</value>
-  </data>
-  <data name="lblWhatIsTheAverageNumberOfPlacesForThisLivestockTypeIn" xml:space="preserve">
-    <value>What is the average number of places for this {0} type in {1}?</value>
   </data>
   <data name="lblWhatIsTheAverageOccupancy" xml:space="preserve">
     <value>What is the average occupancy?</value>
@@ -5327,8 +5321,8 @@ live</value>
   <data name="lblWhatIsTheNitrogenNStandardPerAnimalPerYear" xml:space="preserve">
     <value>What is the Nitrogen (N) standard per animal, per year?</value>
   </data>
-  <data name="MsgEnterTheAverageNumberOfPlaces" xml:space="preserve">
-    <value>Enter the average number of places for this livestock type in {0}.</value>
+  <data name="MsgEnterTheAverageTotalNumberOfThis" xml:space="preserve">
+    <value>Enter the average total number of this {0} type for {1}.</value>
   </data>
   <data name="MsgEnterTheAverageOccupancy" xml:space="preserve">
     <value>Enter the average occupancy.</value>
@@ -5432,8 +5426,8 @@ live</value>
   <data name="lblWhatPercentageOfTheLandIsFarmedAsGrass" xml:space="preserve">
     <value>What percentage of the land is farmed as grass?</value>
   </data>
-  <data name="MsgEnterPercentageOfTheLandIsFarmedAsGrass" xml:space="preserve">
-    <value>Enter percentage of the land is farmed as grass?</value>
+  <data name="MsgEnterThePercentageOfTheLandIsFarmedAsGrass" xml:space="preserve">
+    <value>Enter the percentage of land that is farmed as grass?</value>
   </data>
   <data name="MsgGrassPercentageMustBeBetween80And100" xml:space="preserve">
     <value>Grass percentage must be between 80 and 100.</value>
@@ -5966,6 +5960,63 @@ live</value>
   <data name="lblNutrientKgPerYear" xml:space="preserve">
     <value>{0}kg/yr</value>
   </data>
+  <data name="lblWhatIsTheAverageTotalNumberOfThis" xml:space="preserve">
+    <value>What is the average total number of this {0} type for {1}?</value>
+  </data>
+  <data name="lblOccupancyAndStandard" xml:space="preserve">
+    <value>Occupancy and standard</value>
+  </data>
+  <data name="lblDoYouWantToUseTheseValuesForThis" xml:space="preserve">
+    <value>Do you want to use these values for this {0} type?</value>
+  </data>
+  <data name="lblThePhosphateP205StandardCanNotBeChanged" xml:space="preserve">
+    <value>The Phosphate (P205) standard can not be changed.</value>
+  </data>
+  <data name="lblNoChangeTheOccupancyValue" xml:space="preserve">
+    <value>No, change the occupancy value</value>
+  </data>
+  <data name="lblNoChangeTheNitrogenNStandardValue" xml:space="preserve">
+    <value>No, change the nitrogen (N) standard value</value>
+  </data>
+  <data name="lblPercentOfTheYear" xml:space="preserve">
+    <value>{0}% of the year</value>
+  </data>
+  <data name="lblKgPer1000PlacesPerYear" xml:space="preserve">
+    <value>{0}kg per 1000 places, per year</value>
+  </data>
+  <data name="lblKgPerPlacesPerYear" xml:space="preserve">
+    <value>{0}kg per places, per year</value>
+  </data>
+  <data name="lblOccupancyAndNitrogenStandard" xml:space="preserve">
+    <value>Occupancy and nitrogen (N) standard</value>
+  </data>
+  <data name="lblHelpWithOccupancyAndNitrogenNStandard" xml:space="preserve">
+    <value>Help with occupancy and nitrogen (N) standard</value>
+  </data>
+  <data name="lblNitrogenStandards" xml:space="preserve">
+    <value>Nitrogen standards</value>
+  </data>
+  <data name="lblWhatIsTheNitrogenNStandardForThisLivestock" xml:space="preserve">
+    <value>What is the nitrogen (N) standard for this livestock type in {0}?</value>
+  </data>
+  <data name="lblKgOfNitrogenNPer1000Places" xml:space="preserve">
+    <value>kg of nitrogen (N) per 1000 places</value>
+  </data>
+  <data name="lblKgOfNitrogenNPerPlace" xml:space="preserve">
+    <value>kg of nitrogen (N) per place</value>
+  </data>
+  <data name="lblHelpWithNitrogenNStandard" xml:space="preserve">
+    <value>Help with nitrogen (N) standard</value>
+  </data>
+  <data name="lblWhatIsTheOccupancyForThisLivestockTypeIn" xml:space="preserve">
+    <value>What is the occupancy for this livestock type in {0}?</value>
+  </data>
+  <data name="lblHelpWithOccupancy" xml:space="preserve">
+    <value>Help with occupancy</value>
+  </data>
+  <data name="lblNoChangeTheseValues" xml:space="preserve">
+    <value>No, change these values</value>
+  </data>
   <data name="MsgDeleteFertiliserContent1" xml:space="preserve">
     <value>This will remove the information about this inorganic fertiliser application from {0}.</value>
   </data>
@@ -5977,5 +6028,8 @@ live</value>
   </data>
   <data name="MsgSoilAnalysisHint3" xml:space="preserve">
     <value>If you do not enter a soil analysis, or if your most recent soil analysis is more than 5 years old, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop.</value>
+  </data>
+  <data name="lblThisValueIsFromTheNVZRegulationAndTakesIntoAccount" xml:space="preserve">
+    <value>This value is from the NVZ regulation and takes into account livestock occupancy.</value>
   </data>
 </root>
