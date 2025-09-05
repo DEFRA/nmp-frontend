@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Routing;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NMP.Portal.Enums;
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
@@ -18,8 +19,8 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using static System.Collections.Specialized.BitVector32;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-using Error = NMP.Portal.ServiceResponses.Error;
 using Enums = NMP.Portal.Enums;
+using Error = NMP.Portal.ServiceResponses.Error;
 
 namespace NMP.Portal.Controllers
 {
@@ -5018,7 +5019,8 @@ namespace NMP.Portal.Controllers
                     var phosphateStandardFor100PercentOccupancy = (defaultPhosphate / defaultOccupancy) * 100;
 
                     model.NitrogenStandardPer1000Places = (nitrogenStandardFor100PercentOccupancy * model.AverageOccupancy) / 100;
-                    model.PhosphateStandard = (phosphateStandardFor100PercentOccupancy * model.AverageOccupancy) / 100;
+                    model.NitrogenStandardPer1000Places = Math.Round((nitrogenStandardFor100PercentOccupancy * model.AverageOccupancy)??0 / 100, 1);
+                    model.PhosphateStandard = Math.Round((phosphateStandardFor100PercentOccupancy * model.AverageOccupancy)??0 / 100);
                 }
                 //Calculation end
 
@@ -5031,7 +5033,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.IsLivestockCheckAnswer)
                 {
-                    if (model.OccupancyAndNitrogenOptions == reportModel.OccupancyAndNitrogenOptions)
+                    if (model.AverageOccupancy == reportModel.AverageOccupancy)
                     {
                         return RedirectToAction("LivestockCheckAnswer");
                     }
@@ -5114,7 +5116,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.IsLivestockCheckAnswer)
                 {
-                    if (model.OccupancyAndNitrogenOptions == reportModel.OccupancyAndNitrogenOptions)
+                    if (model.NitrogenStandardPer1000Places == reportModel.NitrogenStandardPer1000Places)
                     {
                         return RedirectToAction("LivestockCheckAnswer");
                     }
