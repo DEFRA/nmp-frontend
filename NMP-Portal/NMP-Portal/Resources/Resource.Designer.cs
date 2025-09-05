@@ -520,15 +520,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to About occupancy and nitrogen (N) standard.
-        /// </summary>
-        public static string lblAboutOccupancyAndNitrogenStandard {
-            get {
-                return ResourceManager.GetString("lblAboutOccupancyAndNitrogenStandard", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to About the recommendations, guidance and advice.
         /// </summary>
         public static string lblAboutRecommendationGuidenceAdvice {
@@ -3481,6 +3472,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you want to use these values for this {0} type?.
+        /// </summary>
+        public static string lblDoYouWantToUseTheseValuesForThis {
+            get {
+                return ResourceManager.GetString("lblDoYouWantToUseTheseValuesForThis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dry matter.
         /// </summary>
         public static string lblDryMatter {
@@ -5317,6 +5317,33 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Help with nitrogen (N) standard.
+        /// </summary>
+        public static string lblHelpWithNitrogenNStandard {
+            get {
+                return ResourceManager.GetString("lblHelpWithNitrogenNStandard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Help with occupancy.
+        /// </summary>
+        public static string lblHelpWithOccupancy {
+            get {
+                return ResourceManager.GetString("lblHelpWithOccupancy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Help with occupancy and nitrogen (N) standard.
+        /// </summary>
+        public static string lblHelpWithOccupancyAndNitrogenNStandard {
+            get {
+                return ResourceManager.GetString("lblHelpWithOccupancyAndNitrogenNStandard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to help you comply with environmental regulations.
         /// </summary>
         public static string lblHelpYouComplyWithEnvironmentalRegulations {
@@ -5660,20 +5687,11 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If the occupancy on your farm is different to the value shown here, you can change it..
+        ///   Looks up a localized string similar to For example, if your production cycle lasts 42 days, and the empty period is 7 days (total 49 days), then your occupancy is 86%. If the occupancy on your farm is different to the value shown here, you can change it..
         /// </summary>
         public static string lblIfTheOccupancyOnYourFarmIsDifferentToTheValueShownHere {
             get {
                 return ResourceManager.GetString("lblIfTheOccupancyOnYourFarmIsDifferentToTheValueShownHere", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to If you change this value, you must keep the occupancy value the same..
-        /// </summary>
-        public static string lblIfYouChangeThisValueYouMustKeepTheOccupancy {
-            get {
-                return ResourceManager.GetString("lblIfYouChangeThisValueYouMustKeepTheOccupancy", resourceCulture);
             }
         }
         
@@ -6254,6 +6272,33 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to kg of nitrogen (N) per 1000 places.
+        /// </summary>
+        public static string lblKgOfNitrogenNPer1000Places {
+            get {
+                return ResourceManager.GetString("lblKgOfNitrogenNPer1000Places", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to kg of nitrogen (N) per place.
+        /// </summary>
+        public static string lblKgOfNitrogenNPerPlace {
+            get {
+                return ResourceManager.GetString("lblKgOfNitrogenNPerPlace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}kg per 1000 places, per year.
+        /// </summary>
+        public static string lblKgPer1000PlacesPerYear {
+            get {
+                return ResourceManager.GetString("lblKgPer1000PlacesPerYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} kg per cubic metre {1}.
         /// </summary>
         public static string lblKgPerCubicMeterWithNutrient {
@@ -6277,6 +6322,15 @@ namespace NMP.Portal.Resources {
         public static string lblKgPerMeterCube {
             get {
                 return ResourceManager.GetString("lblKgPerMeterCube", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}kg per places, per year.
+        /// </summary>
+        public static string lblKgPerPlacesPerYear {
+            get {
+                return ResourceManager.GetString("lblKgPerPlacesPerYear", resourceCulture);
             }
         }
         
@@ -7848,6 +7902,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nitrogen standards.
+        /// </summary>
+        public static string lblNitrogenStandards {
+            get {
+                return ResourceManager.GetString("lblNitrogenStandards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to N-max.
         /// </summary>
         public static string lblNMax {
@@ -7970,6 +8033,33 @@ namespace NMP.Portal.Resources {
         public static string lblNO3N {
             get {
                 return ResourceManager.GetString("lblNO3N", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No, change the nitrogen (N) standard value.
+        /// </summary>
+        public static string lblNoChangeTheNitrogenNStandardValue {
+            get {
+                return ResourceManager.GetString("lblNoChangeTheNitrogenNStandardValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No, change the occupancy value.
+        /// </summary>
+        public static string lblNoChangeTheOccupancyValue {
+            get {
+                return ResourceManager.GetString("lblNoChangeTheOccupancyValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No, change these values.
+        /// </summary>
+        public static string lblNoChangeTheseValues {
+            get {
+                return ResourceManager.GetString("lblNoChangeTheseValues", resourceCulture);
             }
         }
         
@@ -8389,6 +8479,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Occupancy and nitrogen (N) standard.
+        /// </summary>
+        public static string lblOccupancyAndNitrogenStandard {
+            get {
+                return ResourceManager.GetString("lblOccupancyAndNitrogenStandard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Occupancy and standard.
+        /// </summary>
+        public static string lblOccupancyAndStandard {
+            get {
+                return ResourceManager.GetString("lblOccupancyAndStandard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to October.
         /// </summary>
         public static string lblOctober {
@@ -8790,6 +8898,15 @@ namespace NMP.Portal.Resources {
         public static string lblPercentageValue {
             get {
                 return ResourceManager.GetString("lblPercentageValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}% of the year.
+        /// </summary>
+        public static string lblPercentOfTheYear {
+            get {
+                return ResourceManager.GetString("lblPercentOfTheYear", resourceCulture);
             }
         }
         
@@ -11395,6 +11512,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The Phosphate (P205) standard can not be changed..
+        /// </summary>
+        public static string lblThePhosphateP205StandardCanNotBeChanged {
+            get {
+                return ResourceManager.GetString("lblThePhosphateP205StandardCanNotBeChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There are {0} fields in this plan..
         /// </summary>
         public static string lblThereAreFieldsInThisPlan {
@@ -11440,7 +11566,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to These animals are counted by the number of places for them on the farm. Occupancy means the proportion of the year that these places are occupied by animals. For example, if your production cycle lasts 42 days, and the empty period is 7 days (total 49 days), then your occupancy is 86%..
+        ///   Looks up a localized string similar to These animals are counted by the number of places for them on the farm. Occupancy means the proportion of the year that these places are occupied by animals..
         /// </summary>
         public static string lblTheseAnimalsAreCountedByTheNumberOfPlacesForThem {
             get {
@@ -11665,6 +11791,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This figure accounts for occupancy already, so if you change it, you must keep the occupancy value the same. You can only change one of these values..
+        /// </summary>
+        public static string lblThisFigureAccountsForOccupancyAlready {
+            get {
+                return ResourceManager.GetString("lblThisFigureAccountsForOccupancyAlready", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This gives the following range for annual dry matter yield..
         /// </summary>
         public static string lblThisGivesTheFollowingRangeForAnnualDryMatterYield {
@@ -11733,6 +11868,15 @@ namespace NMP.Portal.Resources {
         public static string lblThisShouldBeWithinTheFollowingRange {
             get {
                 return ResourceManager.GetString("lblThisShouldBeWithinTheFollowingRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This value is from the NVZ regulation and takes into account livestock occupancy..
+        /// </summary>
+        public static string lblThisValueIsFromTheNVZRegulationAndTakesIntoAccount {
+            get {
+                return ResourceManager.GetString("lblThisValueIsFromTheNVZRegulationAndTakesIntoAccount", resourceCulture);
             }
         }
         
@@ -12988,15 +13132,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the average number of places for this {0} type in {1}?.
-        /// </summary>
-        public static string lblWhatIsTheAverageNumberOfPlacesForThisLivestockTypeIn {
-            get {
-                return ResourceManager.GetString("lblWhatIsTheAverageNumberOfPlacesForThisLivestockTypeIn", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to What is the average number of {0} in {1}?.
         /// </summary>
         public static string lblWhatIsTheAverageNumberOfThisLivestockType {
@@ -13011,6 +13146,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhatIsTheAverageOccupancy {
             get {
                 return ResourceManager.GetString("lblWhatIsTheAverageOccupancy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the average total number of this {0} type for {1}?.
+        /// </summary>
+        public static string lblWhatIsTheAverageTotalNumberOfThis {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheAverageTotalNumberOfThis", resourceCulture);
             }
         }
         
@@ -13249,6 +13393,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the nitrogen (N) standard for this livestock type in {0}?.
+        /// </summary>
+        public static string lblWhatIsTheNitrogenNStandardForThisLivestock {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheNitrogenNStandardForThisLivestock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the Nitrogen (N) standard per animal, per year?.
         /// </summary>
         public static string lblWhatIsTheNitrogenNStandardPerAnimalPerYear {
@@ -13263,6 +13416,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhatIsTheNumberOfShootsPerSquareMetre {
             get {
                 return ResourceManager.GetString("lblWhatIsTheNumberOfShootsPerSquareMetre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the occupancy for this livestock type in {0}?.
+        /// </summary>
+        public static string lblWhatIsTheOccupancyForThisLivestockTypeIn {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheOccupancyForThisLivestockTypeIn", resourceCulture);
             }
         }
         
@@ -15816,15 +15978,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter percentage of the land is farmed as grass?.
-        /// </summary>
-        public static string MsgEnterPercentageOfTheLandIsFarmedAsGrass {
-            get {
-                return ResourceManager.GetString("MsgEnterPercentageOfTheLandIsFarmedAsGrass", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Enter a rainfall amount before continuing.
         /// </summary>
         public static string MsgEnterRainfallAmountBeforeContinuing {
@@ -15852,15 +16005,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter the average number of places for this livestock type in {0}..
-        /// </summary>
-        public static string MsgEnterTheAverageNumberOfPlaces {
-            get {
-                return ResourceManager.GetString("MsgEnterTheAverageNumberOfPlaces", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Enter the average number of this type for {0}..
         /// </summary>
         public static string MsgEnterTheAverageNumberOfThisTypeFor {
@@ -15875,6 +16019,15 @@ namespace NMP.Portal.Resources {
         public static string MsgEnterTheAverageOccupancy {
             get {
                 return ResourceManager.GetString("MsgEnterTheAverageOccupancy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the average total number of this {0} type for {1}..
+        /// </summary>
+        public static string MsgEnterTheAverageTotalNumberOfThis {
+            get {
+                return ResourceManager.GetString("MsgEnterTheAverageTotalNumberOfThis", resourceCulture);
             }
         }
         
@@ -15938,6 +16091,15 @@ namespace NMP.Portal.Resources {
         public static string MsgEnterTheNitrogenStandardPerAnimal {
             get {
                 return ResourceManager.GetString("MsgEnterTheNitrogenStandardPerAnimal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the percentage of land that is farmed as grass?.
+        /// </summary>
+        public static string MsgEnterThePercentageOfTheLandIsFarmedAsGrass {
+            get {
+                return ResourceManager.GetString("MsgEnterThePercentageOfTheLandIsFarmedAsGrass", resourceCulture);
             }
         }
         
