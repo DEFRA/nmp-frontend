@@ -1334,7 +1334,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Area and quantity</value>
   </data>
   <data name="lblEnterTheAreaAndQuantity" xml:space="preserve">
-    <value>Enter the area and quantity</value>
+    <value>What is the area and quantity you are applying?</value>
   </data>
   <data name="lblhectar" xml:space="preserve">
     <value>hectares</value>
@@ -1352,10 +1352,10 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Enter an application rate before continuing.</value>
   </data>
   <data name="MsgEnterAValidArea" xml:space="preserve">
-    <value>Enter a valid area</value>
+    <value>Enter a valid area spread</value>
   </data>
   <data name="MsgEnterAValidQuantity" xml:space="preserve">
-    <value>Enter a valid quantity</value>
+    <value>Enter a valid quantity applied</value>
   </data>
   <data name="lblDiscs" xml:space="preserve">
     <value>Discs</value>
@@ -1391,7 +1391,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>B</value>
   </data>
   <data name="lblConditionsAffectingTheLossOfNutrients" xml:space="preserve">
-    <value>Conditions affecting the loss of nutrients from your organic materials</value>
+    <value>Climate conditions affecting nitrogen losses from this application​</value>
   </data>
   <data name="lblHowLongIsTheGapBetweenApplicationAndIncoporation" xml:space="preserve">
     <value>How long is there between application and incorporation for your {0}?</value>
@@ -1562,7 +1562,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Date when soil drainage ends and the soil begins to dry out</value>
   </data>
   <data name="lblEffectiveRainfallAfterApplication" xml:space="preserve">
-    <value>Effective rainfall after application</value>
+    <value>Rainfall between application date and end of soil drainage ​</value>
   </data>
   <data name="lblHowMoistTheTopsoilIs" xml:space="preserve">
     <value>How moist the topsoil is when the material is applied</value>
@@ -1607,7 +1607,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>What is the autumn crop nitrogen (N) uptake?</value>
   </data>
   <data name="lblWhatIsTheEndOfDrainageDate" xml:space="preserve">
-    <value>What is the end of drainage date?</value>
+    <value>What is the date when soil drainage ends?</value>
   </data>
   <data name="MsgEnterAValueBeforeContinue" xml:space="preserve">
     <value>Enter a value before continuing</value>
@@ -1733,7 +1733,7 @@ cubic metres per hectare  not set</value>
     <value>When are you applying your {0} not set?</value>
   </data>
   <data name="MsgAreaNotSet" xml:space="preserve">
-    <value>Area not set</value>
+    <value>Area spread not set</value>
   </data>
   <data name="MsgAutumnCropNitrogenUptakeNotSet" xml:space="preserve">
     <value>Autumn crop nitrogen (N) uptake not set</value>
@@ -1754,7 +1754,7 @@ cubic metres per hectare  not set</value>
     <value>What type of organic material are you using in this application not set?</value>
   </data>
   <data name="MsgQuantityNotSet" xml:space="preserve">
-    <value>Quantity not set</value>
+    <value>Quantity applied not set</value>
   </data>
   <data name="MsgRainfallWithinSixHoursOfApplicationNotSet" xml:space="preserve">
     <value>Rainfall within 6 hours of application not set</value>
@@ -2387,10 +2387,10 @@ cubic metres per hectare  not set</value>
     <value>Do you want to add a recent soil analysis for {0}?</value>
   </data>
   <data name="MsgSoilAnalysisHint1" xml:space="preserve">
-    <value>You will get better recommendations if you have a recent soil analysis. You should sample the soil from your fields every 3 to 4 years and get it tested for pH, phosphorus, potassium and magnesium.</value>
+    <value>Good management of pH, soil phosphate, potash and magnesium depends on soil sampling and analysis. Soil sampling and analysis should be carried out every 3 to 5 years, at an appropriate time in the crop rotation.</value>
   </data>
   <data name="MsgSoilAnalysisHint2" xml:space="preserve">
-    <value>If you do not enter a soil analysis, or if your most recent soil analysis is more than 5 years old, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop.</value>
+    <value>You must follow the appropriate soil analysis regulations for your region.</value>
   </data>
   <data name="lblSoilDeficientInSulpurForCheckAnswerNotset" xml:space="preserve">
     <value>Is the soil deficient in sulphur (S) not set?</value>
@@ -2540,7 +2540,7 @@ cubic metres per hectare  not set</value>
     <value>This will remove all the data about this field, including any soil analysis. It will also remove this field from your plans and records. You will not be able to get it back.</value>
   </data>
   <data name="lblTheseValuesAreUsedToCalculateHowEffective" xml:space="preserve">
-    <value>These values are used to calculate how effective this organic material application is.</value>
+    <value>This information is used to estimate nitrogen losses and crop available nitrogen (N) supply from this application.​</value>
   </data>
   <data name="lblPlanningAndRecording" xml:space="preserve">
     <value>Planning and recording</value>
@@ -3269,7 +3269,7 @@ cubic metres per hectare  not set</value>
     <value>You have updated a soil analysis for {0}.</value>
   </data>
   <data name="lblContentIfSoilAnalysisNotApplied" xml:space="preserve">
-    <value>You have not entered a soil analysis for {0}. Without this, any recommendations we give will be based on the RB209 default values instead.</value>
+    <value>You have not entered a soil analysis for {0}. Without this, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop.</value>
   </data>
   <data name="MsgTheDateMustInclude" xml:space="preserve">
     <value>The date must include the day/month/year.</value>
@@ -3906,7 +3906,7 @@ live</value>
     <value>The planting date for {0} should be before 1st February. If your planting date is after 1st February, you should change your crop type to a spring sown crop.</value>
   </data>
   <data name="lblSourceRb209" xml:space="preserve">
-    <value>Crop need is calculated using AHDB Nutrient Management Guide (RB209). Supply from manures calculated using MANNER-NPK (Nutrient Calculation Engine).</value>
+    <value>Crop need is calculated using AHDB Nutrient Management Guide (RB209). Supply from manures calculated using MANNER-NPK (Nutrient Calculation Engine) and takes into account the Phosphate (P205) and Potash (K20) balance.</value>
   </data>
   <data name="MsgEnterAnApplicationRateTo1DecimalPlace" xml:space="preserve">
     <value>Enter an application rate to 1 decimal place maximum.</value>
@@ -5968,5 +5968,14 @@ live</value>
   </data>
   <data name="MsgDeleteFertiliserContent1" xml:space="preserve">
     <value>This will remove the information about this inorganic fertiliser application from {0}.</value>
+  </data>
+  <data name="lblAreaSpread" xml:space="preserve">
+    <value>Area spread​</value>
+  </data>
+  <data name="lblQuantityApplied" xml:space="preserve">
+    <value>​Quantity applied</value>
+  </data>
+  <data name="MsgSoilAnalysisHint3" xml:space="preserve">
+    <value>If you do not enter a soil analysis, or if your most recent soil analysis is more than 5 years old, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop.</value>
   </data>
 </root>
