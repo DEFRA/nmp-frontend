@@ -929,7 +929,7 @@
                         {
                             <govuk-summary-list-row class=@((!Model.Area.HasValue)?"govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
-                                    @Resource.lblAreas
+                                    @Resource.lblAreaSpread
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
                                     @((Model.Area.HasValue) ? string.Format(Resource.lblHectare, Model.Area) : Resource.lblNotSet)
@@ -940,7 +940,7 @@
                             </govuk-summary-list-row>
                             <govuk-summary-list-row class=@((!Model.Quantity.HasValue)?"govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
-                                    @Resource.lblQuantity
+                                    @Resource.lblQuantityApplied
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
                                     @((Model.Quantity.HasValue) ? Model.Quantity : Resource.lblNotSet)

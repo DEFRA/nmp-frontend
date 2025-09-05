@@ -1528,6 +1528,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Area spread​.
+        /// </summary>
+        public static string lblAreaSpread {
+            get {
+                return ResourceManager.GetString("lblAreaSpread", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are these new swards or existing swards in {0}?.
         /// </summary>
         public static string lblAreTheseNewSwardOrExistingSwardInTheseFields {
@@ -2257,7 +2266,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Conditions affecting the loss of nutrients from your organic materials.
+        ///   Looks up a localized string similar to Climate conditions affecting nitrogen losses from this application​.
         /// </summary>
         public static string lblConditionsAffectingTheLossOfNutrients {
             get {
@@ -3535,7 +3544,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Effective rainfall after application.
+        ///   Looks up a localized string similar to Rainfall between application date and end of soil drainage ​.
         /// </summary>
         public static string lblEffectiveRainfallAfterApplication {
             get {
@@ -3841,7 +3850,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter the area and quantity.
+        ///   Looks up a localized string similar to What is the area and quantity you are applying?.
         /// </summary>
         public static string lblEnterTheAreaAndQuantity {
             get {
@@ -9433,6 +9442,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ​Quantity applied.
+        /// </summary>
+        public static string lblQuantityApplied {
+            get {
+                return ResourceManager.GetString("lblQuantityApplied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Question for spread inorganic fertiliser.
         /// </summary>
         public static string lblQuestionForSpreadInorganicFertiliser {
@@ -10882,7 +10900,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Crop need is calculated using AHDB Nutrient Management Guide (RB209). Supply from manures calculated using MANNER-NPK (Nutrient Calculation Engine)..
+        ///   Looks up a localized string similar to Crop need is calculated using AHDB Nutrient Management Guide (RB209). Supply from manures calculated using MANNER-NPK (Nutrient Calculation Engine) and takes into account the Phosphate (P205) and Potash (K20) balance..
         /// </summary>
         public static string lblSourceRb209 {
             get {
@@ -11503,7 +11521,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to These values are used to calculate how effective this organic material application is..
+        ///   Looks up a localized string similar to This information is used to estimate nitrogen losses and crop available nitrogen (N) supply from this application.​.
         /// </summary>
         public static string lblTheseValuesAreUsedToCalculateHowEffective {
             get {
@@ -13087,7 +13105,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the end of drainage date?.
+        ///   Looks up a localized string similar to What is the date when soil drainage ends?.
         /// </summary>
         public static string lblWhatIsTheEndOfDrainageDate {
             get {
@@ -14835,7 +14853,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Area not set.
+        ///   Looks up a localized string similar to Area spread not set.
         /// </summary>
         public static string MsgAreaNotSet {
             get {
@@ -15690,7 +15708,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter a valid area.
+        ///   Looks up a localized string similar to Enter a valid area spread.
         /// </summary>
         public static string MsgEnterAValidArea {
             get {
@@ -15726,7 +15744,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter a valid quantity.
+        ///   Looks up a localized string similar to Enter a valid quantity applied.
         /// </summary>
         public static string MsgEnterAValidQuantity {
             get {
@@ -16914,7 +16932,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Quantity not set.
+        ///   Looks up a localized string similar to Quantity applied not set.
         /// </summary>
         public static string MsgQuantityNotSet {
             get {
