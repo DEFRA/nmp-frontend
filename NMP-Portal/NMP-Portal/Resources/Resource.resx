@@ -6032,4 +6032,13 @@ live</value>
   <data name="lblThisValueIsFromTheNVZRegulationAndTakesIntoAccount" xml:space="preserve">
     <value>This value is from the NVZ regulation and takes into account livestock occupancy.</value>
   </data>
+  <data name="lblTheMonthsOf" xml:space="preserve">
+    <value>the months of {0}</value>
+  </data>
+  <data name="lblLivestockNumbersMonthly" xml:space="preserve">
+    <value>Livestock numbers monthly</value>
+  </data>
+  <data name="lblLivestockGroup" xml:space="preserve">
+    <value>Livestock group</value>
+  </data>
 </root>

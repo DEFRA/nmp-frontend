@@ -1,19 +1,19 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblLivestockNumberQuestion;
+    ViewData["Title"] = Resource.lblLivestockNumbers;
 
 }
 
 @section BeforeContent {
     <govuk-back-link asp-action="@(Model.IsLivestockCheckAnswer ? "LivestockCheckAnswer" : "LivestockType")" asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
-@if (TempData["ErrorOnLivestockType"] != null)
+@if (TempData["ErrorOnNonGrazingLivestockAverageNumber"] != null)
 {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <govuk-error-summary>
-                <govuk-error-summary-item href="#">@TempData["ErrorOnLivestockType"]</govuk-error-summary-item>
+                <govuk-error-summary-item href="#">@TempData["ErrorOnNonGrazingLivestockAverageNumber"]</govuk-error-summary-item>
             </govuk-error-summary>
         </div>
     </div>

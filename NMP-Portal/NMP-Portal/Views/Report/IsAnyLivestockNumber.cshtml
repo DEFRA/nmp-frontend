@@ -25,12 +25,12 @@
 @section BeforeContent {
     <govuk-back-link asp-action="@action" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
 }
-@if (TempData["ErrorOnIsAnyLivestock"] != null)
+@if (TempData["ErrorOnIsAnyLivestockNumber"] != null)
 {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <govuk-error-summary>
-                <govuk-error-summary-item href="#">@TempData["ErrorOnIsAnyLivestock"]</govuk-error-summary-item>
+                <govuk-error-summary-item href="#">@TempData["ErrorOnIsAnyLivestockNumber"]</govuk-error-summary-item>
             </govuk-error-summary>
         </div>
     </div>

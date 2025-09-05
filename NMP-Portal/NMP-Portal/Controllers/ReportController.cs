@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Routing;
 using Newtonsoft.Json;
@@ -4201,7 +4202,7 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogTrace($"Report Controller : Exception in IsAnyLivestockNumber() post action : {ex.Message}, {ex.StackTrace}");
-                TempData["ErrorOnIsAnyLivestock"] = ex.Message;
+                TempData["ErrorOnIsAnyLivestockNumber"] = ex.Message;
                 return View(model);
             }
         }
@@ -4238,7 +4239,7 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogTrace($"Report Controller : Exception in LivestockGroup() action : {ex.Message}, {ex.StackTrace}");
 
-                TempData["ErrorOnIsAnyLivestock"] = ex.Message;
+                TempData["ErrorOnIsAnyLivestockNumber"] = ex.Message;
                 return RedirectToAction("IsAnyLivestockNumber");
 
             }
@@ -4585,8 +4586,37 @@ namespace NMP.Portal.Controllers
                     }
                     ViewBag.LivestockCategory = groupName;
                 }
+
                 if (!ModelState.IsValid)
                 {
+                    
+                    var monthMappings = new Dictionary<string, string>
+                    {
+                        { "NumbersInJanuary", string.Format(Resource.lblTheMonthsOf,Resource.lblJanuary) },
+                        { "NumbersInFebruary", string.Format(Resource.lblTheMonthsOf,Resource.lblFebruary) },
+                        { "NumbersInMarch", string.Format(Resource.lblTheMonthsOf,Resource.lblMarch) },
+                        { "NumbersInApril", string.Format(Resource.lblTheMonthsOf,Resource.lblApril) },
+                        { "NumbersInMay", string.Format(Resource.lblTheMonthsOf,Resource.lblMay) },
+                        { "NumbersInJune", string.Format(Resource.lblTheMonthsOf,Resource.lblJune) },
+                        { "NumbersInJuly", string.Format(Resource.lblTheMonthsOf,Resource.lblJuly) },
+                        { "NumbersInAugust", string.Format(Resource.lblTheMonthsOf,Resource.lblAugust) },
+                        { "NumbersInSeptember", string.Format(Resource.lblTheMonthsOf,Resource.lblSeptember) },
+                        { "NumbersInOctober", string.Format(Resource.lblTheMonthsOf,Resource.lblOctober) },
+                        { "NumbersInNovember", string.Format(Resource.lblTheMonthsOf,Resource.lblNovember) },
+                        { "NumbersInDecember", string.Format(Resource.lblTheMonthsOf,Resource.lblDecember) }
+                    };
+
+                    foreach (var mapping in monthMappings)
+                    {
+                        if (ModelState.TryGetValue(mapping.Key, out var entry) &&
+                            entry.Errors.Count > 0 &&
+                            entry.Errors[0].ErrorMessage.Contains(mapping.Key))
+                        {
+                            entry.Errors[0] = new ModelError(
+                                entry.Errors[0].ErrorMessage.Replace(mapping.Key, mapping.Value));
+                        }
+                    }
+
                     return View(model);
                 }
 
@@ -4667,7 +4697,7 @@ namespace NMP.Portal.Controllers
                 _logger.LogTrace($"Report Controller : Exception in AverageNumber() action : {ex.Message}, {ex.StackTrace}");
 
                 TempData["ErrorOnLivestockNumberQuestion"] = ex.Message;
-                return RedirectToAction("LivestockType");
+                return RedirectToAction("LivestockNumberQuestion");
 
             }
             return View(model);
@@ -5076,6 +5106,16 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogTrace($"Report Controller : Exception in NitrogenStandard() action : {ex.Message}, {ex.StackTrace}");
 
+                if(model.OccupancyAndNitrogenOptions==(int)NMP.Portal.Enums.OccupancyNitrogenOptions.DerogatedFarmChangeBoth)
+                {
+                    TempData["ErrorOnOccupancy"] = ex.Message;
+                    return RedirectToAction("Occupancy");
+                }
+                if (model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeNitrogen)
+                {
+                    TempData["ErrorOnNitrogenStandard"] = ex.Message;
+                    return RedirectToAction("NitrogenStandard");
+                }
                 TempData["ErrorOnOccupancyAndStandard"] = ex.Message;
                 return RedirectToAction("OccupancyAndStandard");
 
@@ -5210,7 +5250,11 @@ namespace NMP.Portal.Controllers
                 model.IsLivestockCheckAnswer = true;
 
                 (List<LivestockTypeResponse> livestockTypes, error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
-                var defaultOccupancy = (int)livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Occupancy;
+                var defaultOccupancy = 0;
+                if(livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Occupancy != null)
+                {
+                    defaultOccupancy = (int)livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Occupancy;
+                }
                 var defaultNitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
                 var defaultPhosphate = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
                 if (model.AverageOccupancy != defaultOccupancy || model.NitrogenStandard != defaultNitrogenStandard)
@@ -5237,9 +5281,51 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogTrace($"Report Controller : Exception in AverageNumber() action : {ex.Message}, {ex.StackTrace}");
+                var cattle = (int)NMP.Portal.Enums.LivestockGroup.Cattle;
+                var pigs = (int)NMP.Portal.Enums.LivestockGroup.Pigs;
+                var poultry = (int)NMP.Portal.Enums.LivestockGroup.Poultry;
+                var sheep = (int)NMP.Portal.Enums.LivestockGroup.Sheep;
+                var goatsDeerOrHorses = (int)NMP.Portal.Enums.LivestockGroup.GoatsDeerOrHorses;
+                if (model.LivestockGroupId == cattle || model.LivestockGroupId == sheep || model.LivestockGroupId == goatsDeerOrHorses)
+                {
+                    if (model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.AverageNumberForTheYear)
+                    {
+                        TempData["ErrorOnAverageNumber"] = ex.Message;
+                        return RedirectToAction("AverageNumber");
+                    }
+                    else if (model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.ANumberForEachMonth)
+                    {
+                        TempData["ErrorOnLivestockNumbersMonthly"] = ex.Message;
+                        return RedirectToAction("LivestockNumbersMonthly");
+                    }
+                }
+                else
+                {
+                    if (model.IsGrasslandDerogation == false)
+                    {
+                        if (model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeOccupancy)
+                        {
+                            TempData["ErrorOnOccupancy"] = ex.Message;
+                            return RedirectToAction("Occupancy");
+                        }
+                        else if (model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeNitrogen)
+                        {
+                            TempData["ErrorOnNitrogenStandard"] = ex.Message;
+                            return RedirectToAction("NitrogenStandard");
+                        }
+                        else if (model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.UseDefault)
+                        {
+                            TempData["ErrorOnOccupancyAndStandard"] = ex.Message;
+                            return RedirectToAction("OccupancyAndStandard");
+                        }
+                    }
+                    else
+                    {
+                        TempData["ErrorOnNitrogenStandard"] = ex.Message;
+                        return RedirectToAction("NitrogenStandard");
+                    }
+                }
 
-                TempData["ErrorOnLivestockNumberQuestion"] = ex.Message;
-                return RedirectToAction("LivestockType");
 
             }
             return View(model);
@@ -5472,6 +5558,7 @@ namespace NMP.Portal.Controllers
                         model.AverageNumberOfPlaces = null;
                         model.AverageOccupancy = null;
                         model.NitrogenStandard = null;
+                        model.OccupancyAndNitrogenOptions = null;
                         model.IsLivestockCheckAnswer = false;
                     }
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
@@ -5660,11 +5747,11 @@ namespace NMP.Portal.Controllers
 
             if (model.LivestockGroupId == cattle || model.LivestockGroupId == sheep || model.LivestockGroupId == goatsDeerOrHorses)
             {
-                if (model.AverageNumber != null)
+                if (model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.AverageNumberForTheYear)
                 {
                     return RedirectToAction("AverageNumber");
                 }
-                if (model.NumbersInJanuary != null)
+                else if (model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.ANumberForEachMonth)
                 {
                     return RedirectToAction("LivestockNumbersMonthly");
                 }
