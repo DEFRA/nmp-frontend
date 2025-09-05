@@ -203,7 +203,8 @@
                         @string.Format(Resource.lblWhatTypeOfManureGroupAreYouUsingInThisApplication, Model.ManureGroupName)
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>
-                        @string.Format(Resource.lblTheseOptionsComeFromMannerNpk, Resource.lblManureTypes)
+                        @Resource.lblSelectOneOption
+                        @* @string.Format(Resource.lblTheseOptionsComeFromMannerNpk, Resource.lblManureTypes) *@
                     </govuk-radios-hint>
                     @if (ViewBag.ManureTypeList != null)
                     {
