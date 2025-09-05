@@ -1960,15 +1960,17 @@ namespace NMP.Portal.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    decimal totalNutrientValue = (model.N ?? 0) + (model.P2O5 ?? 0) +
+                    if(model.N!=0)
+                    {
+                        decimal totalNutrientValue = (model.N ?? 0) + (model.P2O5 ?? 0) +
                          (model.K2O ?? 0) + (model.SO3 ?? 0) + (model.MgO ?? 0) +
                          (model.Lime ?? 0);
-                    if (totalNutrientValue == 0)
-                    {
-                        ModelState.AddModelError("CropTypeName", Resource.MsgEnterANumberWhichIsGreaterThanZero);
-                    }
+                        if (totalNutrientValue == 0)
+                        {
+                            ModelState.AddModelError("CropTypeName", Resource.MsgEnterANumberWhichIsGreaterThanZero);
+                        }
+                    }                   
                 }
-
                 if (model.N != null)
                 {
                     if (model.N < 0 || model.N > 9999)
@@ -2134,26 +2136,26 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
 
-                if (model.Lime == null)
-                {
-                    model.Lime = 0;
-                }
-                if (model.N == null)
-                {
-                    model.N = 0;
-                }
-                if (model.P2O5 == null)
-                {
-                    model.P2O5 = 0;
-                }
-                if (model.K2O == null)
-                {
-                    model.K2O = 0;
-                }
-                if (model.SO3 == null)
-                {
-                    model.SO3 = 0;
-                }
+                //if (model.Lime == null)
+                //{
+                //    model.Lime = 0;
+                //}
+                //if (model.N == null)
+                //{
+                //    model.N = 0;
+                //}
+                //if (model.P2O5 == null)
+                //{
+                //    model.P2O5 = 0;
+                //}
+                //if (model.K2O == null)
+                //{
+                //    model.K2O = 0;
+                //}
+                //if (model.SO3 == null)
+                //{
+                //    model.SO3 = 0;
+                //}
 
                 model.IsNitrogenExceedWarning = false;
 
@@ -3147,12 +3149,12 @@ namespace NMP.Portal.Controllers
                     {
                         fertiliserManure.ManagementPeriodID = fertiliserManure.ManagementPeriodID;
                         fertiliserManure.ApplicationDate = model.Date.Value;
-                        fertiliserManure.N = model.N;
-                        fertiliserManure.P2O5 = model.P2O5;
-                        fertiliserManure.K2O = model.K2O;
-                        fertiliserManure.SO3 = model.SO3;
-                        fertiliserManure.Lime = model.Lime;
-                        fertiliserManure.MgO = model.MgO;
+                        fertiliserManure.N = model.N??0 ;
+                        fertiliserManure.P2O5 = model.P2O5??0;
+                        fertiliserManure.K2O = model.K2O ?? 0;
+                        fertiliserManure.SO3 = model.SO3 ?? 0;
+                        fertiliserManure.Lime = model.Lime ?? 0;
+                        fertiliserManure.MgO = model.MgO ?? 0;
                         fertiliserManure.ApplicationRate = 1;
                     }
                 }
@@ -4181,12 +4183,12 @@ namespace NMP.Portal.Controllers
                                     EncryptedCounter = fertiliserManure.EncryptedCounter,
                                     ApplicationRate = 1,
                                     Confirm = fertiliserManure.Confirm,
-                                    N = model.N,
-                                    P2O5 = model.P2O5,
-                                    K2O = model.K2O,
-                                    SO3 = model.SO3,
-                                    Lime = model.Lime,
-                                    MgO = model.MgO,
+                                    N = model.N ?? 0,
+                                    P2O5 = model.P2O5??0,
+                                    K2O = model.K2O ?? 0,
+                                    SO3 = model.SO3 ?? 0,
+                                    Lime = model.Lime ?? 0,
+                                    MgO = model.MgO ?? 0,
                                     Na2O = fertiliserManure.Na2O ?? 0,
                                     NFertAnalysisPercent = fertiliserManure.NFertAnalysisPercent ?? 0,
                                     P2O5FertAnalysisPercent = fertiliserManure.P2O5FertAnalysisPercent ?? 0,

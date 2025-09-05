@@ -400,7 +400,7 @@
                             }
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @if ((Model.N.HasValue) && Model.N.Value > 0)
+                            @if ((Model.N.HasValue))
                             {
                                 @string.Format("{0} {1} {2}", Model.N.Value, Resource.lblKgPerHectare, Resource.lblNitrogen)
                                 <br />
