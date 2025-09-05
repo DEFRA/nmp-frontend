@@ -95,7 +95,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AverageNumber"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AverageNumberOfPlaces"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AverageOccupancy"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NitrogenStandardPer1000Places"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NitrogenStandard"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsLivestockCheckAnswer" value="@Model.IsLivestockCheckAnswer.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OccupancyAndNitrogenOptions"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphateStandard"></govuk-input>
@@ -123,10 +123,10 @@
 
                 <p class="govuk-body">@string.Format(Resource.lblSelectedLivestockType, Model.LivestockTypeName)</p>
                 <div class="margin-bottom-thirty">
-                    <p class="govuk-body">@string.Format(Resource.lblNitrogenStandard, ViewBag.Nitrogen)</p>
+                    <p class="govuk-body">@string.Format(Resource.lblNitrogenStandard, Model.NitrogenStandard)</p>
                     @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
                     {
-                        <p class="govuk-body">@string.Format(Resource.lblPhosphateStandard, ViewBag.Phosphate)</p>
+                        <p class="govuk-body">@string.Format(Resource.lblPhosphateStandard, Model.PhosphateStandard)</p>
                     }
                 </div>
                 <govuk-input asp-for=@Model.NumbersInJanuary type="number" step="any" spellcheck="false">

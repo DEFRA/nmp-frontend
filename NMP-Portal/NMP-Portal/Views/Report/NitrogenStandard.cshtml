@@ -146,6 +146,7 @@
                 <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
                     <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblWhatIsTheNitrogenNStandardForThisLivestock, Model.Year)</h1>
                 </legand>
+                
                 <p class="govuk-body">@string.Format(Resource.lblSelectedLivestockType, Model.LivestockTypeName)</p>
                 <govuk-details>
                     <govuk-details-summary>
@@ -161,8 +162,9 @@
                     </govuk-details-text>
                 </govuk-details>
 
-                <govuk-input asp-for=@Model.NitrogenStandardPer1000Places type="number" step="any" spellcheck="false">
+                <govuk-input asp-for=@Model.NitrogenStandard type="number" step="any" spellcheck="false">
                     <govuk-input-label is-page-heading="false"></govuk-input-label>
+                    <govuk-input-hint>@Resource.lblThisValueIsFromTheNVZRegulationAndTakesIntoAccount</govuk-input-hint>
                     <govuk-input-suffix>@(Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs ? Resource.lblKgOfNitrogenNPerPlace : Resource.lblKgOfNitrogenNPer1000Places)</govuk-input-suffix>
                 </govuk-input> 
 

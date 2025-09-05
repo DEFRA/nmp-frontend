@@ -5426,8 +5426,8 @@ live</value>
   <data name="lblWhatPercentageOfTheLandIsFarmedAsGrass" xml:space="preserve">
     <value>What percentage of the land is farmed as grass?</value>
   </data>
-  <data name="MsgEnterPercentageOfTheLandIsFarmedAsGrass" xml:space="preserve">
-    <value>Enter percentage of the land is farmed as grass?</value>
+  <data name="MsgEnterThePercentageOfTheLandIsFarmedAsGrass" xml:space="preserve">
+    <value>Enter the percentage of land that is farmed as grass?</value>
   </data>
   <data name="MsgGrassPercentageMustBeBetween80And100" xml:space="preserve">
     <value>Grass percentage must be between 80 and 100.</value>
@@ -6019,5 +6019,8 @@ live</value>
   </data>
   <data name="MsgDeleteFertiliserContent1" xml:space="preserve">
     <value>This will remove the information about this inorganic fertiliser application from {0}.</value>
+  </data>
+  <data name="lblThisValueIsFromTheNVZRegulationAndTakesIntoAccount" xml:space="preserve">
+    <value>This value is from the NVZ regulation and takes into account livestock occupancy.</value>
   </data>
 </root>

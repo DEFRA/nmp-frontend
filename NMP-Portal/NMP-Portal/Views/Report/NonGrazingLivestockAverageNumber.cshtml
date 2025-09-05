@@ -105,7 +105,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInDecember"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsLivestockCheckAnswer" value="@Model.IsLivestockCheckAnswer.ToString().ToLower()"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AverageOccupancy"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NitrogenStandardPer1000Places"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NitrogenStandard"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OccupancyAndNitrogenOptions"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphateStandard"></govuk-input>
 
@@ -131,7 +131,7 @@
                     <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblWhatIsTheAverageTotalNumberOfThis, Model.LivestockGroupName, Model.Year)</h1>
                 </legand>
                 <p class="govuk-body">@string.Format(Resource.lblSelectedLivestockType, Model.LivestockTypeName)</p>
-             @*    <p class="govuk-body">@string.Format(Resource.lblPhosphateStandard, ViewBag.Phosphate)</p> *@
+             @*    <p class="govuk-body">@string.Format(Resource.lblPhosphateStandard, Model.PhosphateStandard)</p> *@
                 @* <govuk-details>
                     <govuk-details-summary>
                         @Resource.lblAboutOccupancyAndNitrogenStandard
@@ -179,7 +179,7 @@
                     <govuk-input-suffix>@Resource.lblPercentage</govuk-input-suffix>
                 </govuk-input>
 
-                <govuk-input asp-for=@Model.NitrogenStandardPer1000Places type="number" step="any" spellcheck="false">
+                <govuk-input asp-for=@Model.NitrogenStandard type="number" step="any" spellcheck="false">
                     <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheNitrogenNStandardPerAnimalPerYear</govuk-input-label>
                     <govuk-input-suffix>@Resource.lblkg</govuk-input-suffix>
                 </govuk-input> *@

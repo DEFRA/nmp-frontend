@@ -107,7 +107,7 @@
 
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AverageNumberOfPlaces"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AverageOccupancy"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NitrogenStandardPer1000Places"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NitrogenStandard"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphateStandard"></govuk-input>
 
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
@@ -163,33 +163,33 @@
                     <tbody class="govuk-table__body">
                         <tr class="govuk-table__row">
                             <th scope="col" class="govuk-table__header">@Resource.lblOccupancy</th>
-                            <td class="govuk-table__cell">@string.Format(Resource.lblPercentOfTheYear,Model.AverageOccupancy)</td>
+                            <td class="govuk-table__cell">@string.Format(Resource.lblPercentOfTheYear, ViewBag.AverageOccupancy)</td>
                         </tr>
                         <tr class="govuk-table__row">
                             <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
                             <td class="govuk-table__cell">
                                 @if (Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs)
                                 {
-                                    @string.Format(Resource.lblKgPerPlacesPerYear, Model.NitrogenStandardPer1000Places)
+                                    @string.Format(Resource.lblKgPerPlacesPerYear, ViewBag.NitrogenStandard)
                                 }
                                 else
                                 {
-                                   @string.Format(Resource.lblKgPer1000PlacesPerYear, Model.NitrogenStandardPer1000Places)
+                                    @string.Format(Resource.lblKgPer1000PlacesPerYear, ViewBag.NitrogenStandard)
                                 }   
                             </td>
                         </tr>
-                        @if(Model.IsGrasslandDerogation==false)
+                        @if(Model.IsGrasslandDerogation==true)
                         {
                             <tr class="govuk-table__row">
                                 <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
                                 <td class="govuk-table__cell">
                                     @if (Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs)
                                     {
-                                        @string.Format(Resource.lblKgPerPlacesPerYear, ViewBag.Phosphate)
+                                        @string.Format(Resource.lblKgPerPlacesPerYear, ViewBag.PhosphateStandard)
                                     }
                                     else
                                     {
-                                        @string.Format(Resource.lblKgPer1000PlacesPerYear, ViewBag.Phosphate)
+                                        @string.Format(Resource.lblKgPer1000PlacesPerYear, ViewBag.PhosphateStandard)
                                     }
 
                                 </td>
@@ -204,9 +204,12 @@
                         <govuk-radios-fieldset-legend is-page-heading="false">
                             @string.Format(Resource.lblDoYouWantToUseTheseValuesForThis, Model.LivestockGroupName)
                         </govuk-radios-fieldset-legend>
-                        <govuk-radios-hint>
-                            @Resource.lblThePhosphateP205StandardCanNotBeChanged
-                        </govuk-radios-hint>
+                        @if (Model.IsGrasslandDerogation == true)
+                        {
+                            <govuk-radios-hint>
+                                @Resource.lblThePhosphateP205StandardCanNotBeChanged
+                            </govuk-radios-hint>
+                        }
 
                         <govuk-radios-item value="@((int)NMP.Portal.Enums.OccupancyNitrogenOptions.UseDefault)">@Resource.lblYesUseTheseValues</govuk-radios-item>
                         @if(Model.IsGrasslandDerogation==false)

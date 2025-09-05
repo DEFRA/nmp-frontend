@@ -11854,6 +11854,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This value is from the NVZ regulation and takes into account livestock occupancy..
+        /// </summary>
+        public static string lblThisValueIsFromTheNVZRegulationAndTakesIntoAccount {
+            get {
+                return ResourceManager.GetString("lblThisValueIsFromTheNVZRegulationAndTakesIntoAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This will be the first crop in these fields:.
         /// </summary>
         public static string lblThisWillBeTheFirstCropInTheseFields {
@@ -15951,15 +15960,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter percentage of the land is farmed as grass?.
-        /// </summary>
-        public static string MsgEnterPercentageOfTheLandIsFarmedAsGrass {
-            get {
-                return ResourceManager.GetString("MsgEnterPercentageOfTheLandIsFarmedAsGrass", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Enter a rainfall amount before continuing.
         /// </summary>
         public static string MsgEnterRainfallAmountBeforeContinuing {
@@ -16073,6 +16073,15 @@ namespace NMP.Portal.Resources {
         public static string MsgEnterTheNitrogenStandardPerAnimal {
             get {
                 return ResourceManager.GetString("MsgEnterTheNitrogenStandardPerAnimal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the percentage of land that is farmed as grass?.
+        /// </summary>
+        public static string MsgEnterThePercentageOfTheLandIsFarmedAsGrass {
+            get {
+                return ResourceManager.GetString("MsgEnterThePercentageOfTheLandIsFarmedAsGrass", resourceCulture);
             }
         }
         

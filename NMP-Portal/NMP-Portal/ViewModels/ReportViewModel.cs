@@ -147,7 +147,7 @@ namespace NMP.Portal.ViewModels
         public int? AverageOccupancy { get; set; }
 
         [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
-        public decimal? NitrogenStandardPer1000Places { get; set; }
+        public decimal? NitrogenStandard { get; set; }
         public decimal? PhosphateStandard { get; set; }
         public bool IsManageLivestock { get; set; } = false;
         public bool IsLivestockCheckAnswer { get; set; } = false;
