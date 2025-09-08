@@ -4741,7 +4741,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For example, 27 3 2023.
+        ///   Looks up a localized string similar to For example, 27 03 2023.
         /// </summary>
         public static string lblForExample {
             get {

@@ -1598,7 +1598,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Area must be greater than zero</value>
   </data>
   <data name="lblForExample" xml:space="preserve">
-    <value>For example, 27 3 2023</value>
+    <value>For example, 27 03 2023</value>
   </data>
   <data name="lblKgPerHectare" xml:space="preserve">
     <value>kg per hectare</value>
