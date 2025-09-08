@@ -220,16 +220,18 @@
                                 </a>
                             </div>
                             <div class="govuk-task-list__status" id="TotalFarmArea">
-                                @if (Model.TotalFarmArea != null && Model.TotalAreaInNVZ != null)
-                                {
-                                    @Resource.lblCompleted
-                                }
-                                else
-                                {
-                                    <strong class="govuk-tag govuk-tag--blue">
-                                        @Resource.lblIncomplete
-                                    </strong>
-                                }
+                                
+                                    @if ((Model.IsGrasslandDerogation == false && Model.TotalFarmArea != null && Model.TotalAreaInNVZ != null)
+                                                                || (Model.IsGrasslandDerogation == true && Model.TotalFarmArea != null && Model.TotalAreaInNVZ != null && Model.GrassPercentage != null))
+                                    {
+                                        @Resource.lblCompleted
+                                    }
+                                    else
+                                    {
+                                        <strong class="govuk-tag govuk-tag--blue">
+                                            @Resource.lblIncomplete
+                                        </strong>
+                                    }
                             </div>
                         </li>
 
