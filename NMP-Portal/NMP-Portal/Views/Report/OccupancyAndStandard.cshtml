@@ -168,7 +168,7 @@
                         <tr class="govuk-table__row">
                             <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
                             <td class="govuk-table__cell">
-                                @if (Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs)
+                                @if (Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs || Model.LivestockTypeId == (int)NMP.Portal.Enums.Livestock.OneOstrich)
                                 {
                                     @string.Format(Resource.lblKgPerPlacesPerYear, ViewBag.NitrogenStandard)
                                 }

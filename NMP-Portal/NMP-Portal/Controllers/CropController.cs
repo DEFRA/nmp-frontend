@@ -3596,6 +3596,10 @@ namespace NMP.Portal.Controllers
                 {
                     _httpContextAccessor.HttpContext?.Session.Remove("ReportData");
                 }
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
+                {
+                    _httpContextAccessor.HttpContext?.Session.Remove("StorageCapacityData");
+                }
             }
             catch (Exception ex)
             {

@@ -168,7 +168,7 @@
                         <govuk-input-hint>@Resource.lblForExampleFor10000PlacesEnter10</govuk-input-hint>
                     }
 
-                    <govuk-input-suffix>@(Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs ? Resource.lblPlaces : Resource.lblThousandPlaces)</govuk-input-suffix>
+                    <govuk-input-suffix>@((Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs || Model.LivestockTypeId == (int)NMP.Portal.Enums.Livestock.OneOstrich) ? Resource.lblPlaces : Resource.lblThousandPlaces)</govuk-input-suffix>
                 </govuk-input>
 
                 @* <govuk-input asp-for=@Model.AverageOccupancy type="number" step="any" spellcheck="false">
