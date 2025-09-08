@@ -47,7 +47,7 @@
 
 @if (Model != null)
 {
-    <form asp-action="LivestockCheckAnswer" asp-controller="Report" method="post" autocomplete="off">
+    <form class="form-with-overlay" asp-action="LivestockCheckAnswer" asp-controller="Report" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
         <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
@@ -310,7 +310,7 @@
                                     @Resource.lblNitrogenStandardPerAnimalPerYear
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @(Model.NitrogenStandard.HasValue ? (string.Format(Resource.lblKgPerYear, Model.NitrogenStandard)) : Resource.lblNotSet)
+                                    @(Model.NitrogenStandard.HasValue ? (string.Format(Resource.lblKgPerYear,Math.Round(Model.NitrogenStandard.Value,0))) : Resource.lblNotSet)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
                                     <govuk-summary-list-row-action asp-action="NitrogenStandard" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
@@ -338,7 +338,7 @@
                                     @Resource.lblPhosphateStandardPerAnimalPerYear
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @(string.Format(Resource.lblKgPerYear, Model.PhosphateStandard))
+                                    @(string.Format(Resource.lblKgPerYear,Math.Round(Model.PhosphateStandard.Value,0)))
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
                                 </govuk-summary-list-row-actions>
