@@ -1,19 +1,19 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblLivestockNumberQuestion;
+    ViewData["Title"] = Resource.lblLivestockNumbers;
 
 }
 
 @section BeforeContent {
     <govuk-back-link asp-action="@(Model.IsLivestockCheckAnswer ? "LivestockCheckAnswer" : "LivestockType")" asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
-@if (TempData["ErrorOnLivestockType"] != null)
+@if (TempData["ErrorOnNonGrazingLivestockAverageNumber"] != null)
 {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <govuk-error-summary>
-                <govuk-error-summary-item href="#">@TempData["ErrorOnLivestockType"]</govuk-error-summary-item>
+                <govuk-error-summary-item href="#">@TempData["ErrorOnNonGrazingLivestockAverageNumber"]</govuk-error-summary-item>
             </govuk-error-summary>
         </div>
     </div>
@@ -104,6 +104,11 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInNovember"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInDecember"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsLivestockCheckAnswer" value="@Model.IsLivestockCheckAnswer.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AverageOccupancy"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NitrogenStandard"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OccupancyAndNitrogenOptions"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphateStandard"></govuk-input>
+
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -122,12 +127,12 @@
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
 
-                <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                    <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblNumberOfPlacesOccupancyAndNitrogenStandard, Model.LivestockGroupName)</h1>
+                 <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                    <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblWhatIsTheAverageTotalNumberOfThis, Model.LivestockGroupName, Model.Year)</h1>
                 </legand>
                 <p class="govuk-body">@string.Format(Resource.lblSelectedLivestockType, Model.LivestockTypeName)</p>
-                <p class="govuk-body">@string.Format(Resource.lblPhosphateStandard, ViewBag.Phosphate)</p>
-                <govuk-details>
+             @*    <p class="govuk-body">@string.Format(Resource.lblPhosphateStandard, Model.PhosphateStandard)</p> *@
+                @* <govuk-details>
                     <govuk-details-summary>
                         @Resource.lblAboutOccupancyAndNitrogenStandard
                     </govuk-details-summary>
@@ -152,20 +157,21 @@
                             @Resource.lblIfYouChangeThisValueYouMustKeepTheOccupancy
                         </p>
                     </govuk-details-text>
-                </govuk-details>
+                </govuk-details> *@
 
                 <govuk-input asp-for=@Model.AverageNumberOfPlaces type="number" step="any" spellcheck="false">
-                    <govuk-input-label is-page-heading="false">@string.Format(Resource.lblWhatIsTheAverageNumberOfPlacesForThisLivestockTypeIn, Model.LivestockGroupName, Model.Year)</govuk-input-label>
+                    <govuk-input-label is-page-heading="false"></govuk-input-label>
+                    
                     @if (Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Poultry &&
                                     Model.LivestockTypeId != (int)NMP.Portal.Enums.Livestock.OneOstrich)
                     {
                         <govuk-input-hint>@Resource.lblForExampleFor10000PlacesEnter10</govuk-input-hint>
                     }
+
                     <govuk-input-suffix>@(Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs ? Resource.lblPlaces : Resource.lblThousandPlaces)</govuk-input-suffix>
                 </govuk-input>
 
-                <govuk-input asp-for=@Model.AverageOccupancy type="number" step="any" spellcheck="false">
-                    @* <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheAverageOccupancy</govuk-input-label> *@
+                @* <govuk-input asp-for=@Model.AverageOccupancy type="number" step="any" spellcheck="false">
                     @if (Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs)
                     {
                         <govuk-input-hint>@Resource.lblLengthOfTimeYouHaveTheseAnimalsOnTheFarm</govuk-input-hint>
@@ -173,10 +179,10 @@
                     <govuk-input-suffix>@Resource.lblPercentage</govuk-input-suffix>
                 </govuk-input>
 
-                <govuk-input asp-for=@Model.NitrogenStandardPer1000Places type="number" step="any" spellcheck="false">
+                <govuk-input asp-for=@Model.NitrogenStandard type="number" step="any" spellcheck="false">
                     <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheNitrogenNStandardPerAnimalPerYear</govuk-input-label>
                     <govuk-input-suffix>@Resource.lblkg</govuk-input-suffix>
-                </govuk-input>
+                </govuk-input> *@
 
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
