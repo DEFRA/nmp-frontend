@@ -33,7 +33,7 @@ namespace NMP.Portal.ViewModels
         public DateTime? Date { get; set; }
         public bool? QuestionForSpreadInorganicFertiliser { get; set; }
         public string? FieldName { get; set; }
-        public RecommendationViewModel? RecommendationViewModel { get; set; }
+        public Recommendation? Recommendation { get; set; }
         public string? EncryptedCounter { get; set; }
         public bool IsWarningMsgNeedToShow { get; set; } = false;
         public bool IsClosedPeriodWarningExceptGrassAndOilseed { get; set; } = false;
