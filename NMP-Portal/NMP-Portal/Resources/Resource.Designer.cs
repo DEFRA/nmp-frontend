@@ -6651,6 +6651,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Livestock group.
+        /// </summary>
+        public static string lblLivestockGroup {
+            get {
+                return ResourceManager.GetString("lblLivestockGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to livestock information.
         /// </summary>
         public static string lblLivestockInformation {
@@ -6755,6 +6764,15 @@ namespace NMP.Portal.Resources {
         public static string lblLivestockNumbers {
             get {
                 return ResourceManager.GetString("lblLivestockNumbers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Livestock numbers monthly.
+        /// </summary>
+        public static string lblLivestockNumbersMonthly {
+            get {
+                return ResourceManager.GetString("lblLivestockNumbersMonthly", resourceCulture);
             }
         }
         
@@ -11463,6 +11481,15 @@ namespace NMP.Portal.Resources {
         public static string lblTheManuresAndFertilisersYouUseAndHowYouApplyThem {
             get {
                 return ResourceManager.GetString("lblTheManuresAndFertilisersYouUseAndHowYouApplyThem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to the months of {0}.
+        /// </summary>
+        public static string lblTheMonthsOf {
+            get {
+                return ResourceManager.GetString("lblTheMonthsOf", resourceCulture);
             }
         }
         
