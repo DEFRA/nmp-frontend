@@ -11566,7 +11566,8 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There are no grazing of livestock manure.
+        ///   Looks up a localized string similar to There is no grazing
+        ///livestock manure..
         /// </summary>
         public static string lblThereAreNoGrazingOfLivestockManure {
             get {
@@ -11584,7 +11585,8 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There are no non-grazing of livestock manure.
+        ///   Looks up a localized string similar to There is no non-grazing
+        ///livestock manure..
         /// </summary>
         public static string lblThereAreNoNonGrazingOfLivestockManure {
             get {

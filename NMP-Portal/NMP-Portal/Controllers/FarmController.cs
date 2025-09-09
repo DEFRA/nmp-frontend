@@ -1029,6 +1029,10 @@ namespace NMP.Portal.Controllers
             {
                 HttpContext?.Session.Remove("ReportData");
             }
+            if (HttpContext.Session.Keys.Contains("StorageCapacityData"))
+            {
+                HttpContext?.Session.Remove("StorageCapacityData");
+            }
             ViewBag.FieldCount = 0;
 
             FarmViewModel? farmData = null;
