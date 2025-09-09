@@ -952,6 +952,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add more manure storage.
+        /// </summary>
+        public static string lblAddMoreManureStorage {
+            get {
+                return ResourceManager.GetString("lblAddMoreManureStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add new soil analysis.
         /// </summary>
         public static string lblAddNewSoilAnalysis {
@@ -2388,6 +2397,15 @@ namespace NMP.Portal.Resources {
         public static string lblCreateALivestockManureNitrogenFarmLimitReport {
             get {
                 return ResourceManager.GetString("lblCreateALivestockManureNitrogenFarmLimitReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create an existing manure storage capacity report.
+        /// </summary>
+        public static string lblCreateAnExistingManureStorageCapacityReport {
+            get {
+                return ResourceManager.GetString("lblCreateAnExistingManureStorageCapacityReport", resourceCulture);
             }
         }
         
@@ -7403,6 +7421,15 @@ namespace NMP.Portal.Resources {
         public static string lblManureNonSpreadingAreaForCheckAnswere {
             get {
                 return ResourceManager.GetString("lblManureNonSpreadingAreaForCheckAnswere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manure storage.
+        /// </summary>
+        public static string lblManureStorage {
+            get {
+                return ResourceManager.GetString("lblManureStorage", resourceCulture);
             }
         }
         
@@ -14572,6 +14599,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have added manure storage.
+        /// </summary>
+        public static string lblYouHaveAddedManureStorage {
+            get {
+                return ResourceManager.GetString("lblYouHaveAddedManureStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have no inorganic fertiliser applications planned for {0} in {1}..
         /// </summary>
         public static string lblYouHaveNoInorganicFertiliserApplicationForFieldInYear {
@@ -17549,6 +17585,15 @@ namespace NMP.Portal.Resources {
         public static string MsgThisManureTypeNameAreadyExist {
             get {
                 return ResourceManager.GetString("MsgThisManureTypeNameAreadyExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To create an existing manure storage capacity report, enter all the manure storage on {0} in {1}..
+        /// </summary>
+        public static string MsgToCreateAnExistingManureStorageCapacityReportEnterAllThe {
+            get {
+                return ResourceManager.GetString("MsgToCreateAnExistingManureStorageCapacityReportEnterAllThe", resourceCulture);
             }
         }
         

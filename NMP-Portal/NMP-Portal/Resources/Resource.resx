@@ -6041,4 +6041,19 @@ live</value>
   <data name="lblLivestockGroup" xml:space="preserve">
     <value>Livestock group</value>
   </data>
+  <data name="lblYouHaveAddedManureStorage" xml:space="preserve">
+    <value>You have added manure storage</value>
+  </data>
+  <data name="MsgToCreateAnExistingManureStorageCapacityReportEnterAllThe" xml:space="preserve">
+    <value>To create an existing manure storage capacity report, enter all the manure storage on {0} in {1}.</value>
+  </data>
+  <data name="lblAddMoreManureStorage" xml:space="preserve">
+    <value>Add more manure storage</value>
+  </data>
+  <data name="lblCreateAnExistingManureStorageCapacityReport" xml:space="preserve">
+    <value>Create an existing manure storage capacity report</value>
+  </data>
+  <data name="lblManureStorage" xml:space="preserve">
+    <value>Manure storage</value>
+  </data>
 </root>

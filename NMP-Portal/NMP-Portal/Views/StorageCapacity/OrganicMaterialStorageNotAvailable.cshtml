@@ -36,13 +36,13 @@
             <p class="govuk-body cancel-link">
                 @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
                 {
-                    <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">
+                    <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmID" asp-route-year="@Model.EncryptedHarvestYear">
                         @Resource.lblCancel
                     </a>
                 }
                 else
                 {
-                    <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+                    <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmID">
                         @Resource.lblCancel
                     </a>
                 }
