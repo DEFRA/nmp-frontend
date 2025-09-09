@@ -59,7 +59,7 @@
 }
 @if (Model != null)
 {
-    <form asp-action="LivestockImportExportCheckAnswer" asp-controller="Report" method="post" autocomplete="off">
+    <form class="form-with-overlay" asp-action="LivestockImportExportCheckAnswer" asp-controller="Report" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
         <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>

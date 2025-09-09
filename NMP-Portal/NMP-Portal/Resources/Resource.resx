@@ -5745,10 +5745,12 @@ live</value>
     <value>If there's no typical answer, select what you did the last year that the field was grass.</value>
   </data>
   <data name="lblThereAreNoGrazingOfLivestockManure" xml:space="preserve">
-    <value>There are no grazing of livestock manure</value>
+    <value>There is no grazing
+livestock manure.</value>
   </data>
   <data name="lblThereAreNoNonGrazingOfLivestockManure" xml:space="preserve">
-    <value>There are no non-grazing of livestock manure</value>
+    <value>There is no non-grazing
+livestock manure.</value>
   </data>
   <data name="lblDoNotCompliance" xml:space="preserve">
     <value>do not compliance</value>

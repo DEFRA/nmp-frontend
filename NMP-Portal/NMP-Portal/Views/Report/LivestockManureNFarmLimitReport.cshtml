@@ -200,19 +200,19 @@
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblForGrazingLivestockManure</td>
                         <td class="govuk-table__cell">
-                            @((ViewBag.NutrientsLoadingLiveStockGrazingList == null) ? Resource.lblHyphen : string.Format("{0} {1}", ViewBag.AreaReqForGrazingLivestock, Resource.lblhectar))
+                            @((ViewBag.AreaReqForGrazingLivestock == null) ? Resource.lblHyphen : string.Format("{0} {1}", ViewBag.AreaReqForGrazingLivestock, Resource.lblhectar))
                     </td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblForNonGrazingLivestockManure</td>
                         <td class="govuk-table__cell">
-                            @((ViewBag.NutrientsLoadingLiveStockNonGrazingList == null) ? Resource.lblHyphen : string.Format("{0} {1}", ViewBag.AreaReqForNonGrazingLivestock, Resource.lblhectar))
+                            @((ViewBag.AreaReqForNonGrazingLivestock == null) ? Resource.lblHyphen : string.Format("{0} {1}", ViewBag.AreaReqForNonGrazingLivestock, Resource.lblhectar))
                     </td>
                     </tr>
                     <tr class="govuk-table__row total_row">
                         <td class="govuk-table__cell">@Resource.lblTotalAreaRequired</td>
                         <td class="govuk-table__cell">
-                            @((ViewBag.NutrientsLoadingLiveStockNonGrazingList == null && ViewBag.NutrientsLoadingLiveStockGrazingList == null) ? Resource.lblHyphen : string.Format("{0} {1}", ViewBag.TotalAreaReqForLivestock, Resource.lblhectar))
+                            @((ViewBag.TotalAreaReqForLivestock == null) ? Resource.lblHyphen : string.Format("{0} {1}", ViewBag.TotalAreaReqForLivestock, Resource.lblhectar))
                     </td>
                     </tr>
                 </tbody>
@@ -560,16 +560,17 @@ else{
                         <tr class="govuk-table__row">
                             <td class="col_1 govuk-table__cell">@nutrientsLoadingLiveStockNonGrazing.LiveStockType</td>
                             <td class="col_2 govuk-table__cell">@nutrientsLoadingLiveStockNonGrazing.Units</td>
-                            <td class="col_2 govuk-table__cell">@(nutrientsLoadingLiveStockNonGrazing.Occupancy != null ? string.Format("{0}{1}", nutrientsLoadingLiveStockNonGrazing.Occupancy, Resource.lblPercentage) : Resource.lblHyphen)</td>
-                            <td class="col_2 govuk-table__cell">@string.Format("{0}{1}", nutrientsLoadingLiveStockNonGrazing.NByUnit, Resource.lblkg)</td>
+                            <td class="col_2 govuk-table__cell">@(nutrientsLoadingLiveStockNonGrazing.Occupancy != null ? string.Format("{0}{1}", nutrientsLoadingLiveStockNonGrazing.Occupancy, Resource.lblPercentage) : Resource.lblHyphen)</td>                            
                             @if (nutrientsLoadingLiveStockNonGrazing.LiveStockTypeID!=(int)NMP.Portal.Enums.Livestock.VealCalf)
                             {
-                                <td class="col_2 govuk-table__cell">@string.Format("{0}{1}", Math.Round((nutrientsLoadingLiveStockNonGrazing.TotalNProduced / nutrientsLoadingLiveStockNonGrazing.Units), 2), Resource.lblkg)</td>
+                                <td class="col_2 govuk-table__cell">@string.Format("{0}{1}", (Math.Floor(nutrientsLoadingLiveStockNonGrazing.NitrogenStandard * 10) / 10).ToString("0.0"), Resource.lblkg)</td>
+                                @* <td class="col_2 govuk-table__cell">@string.Format("{0}{1}", Math.Round((nutrientsLoadingLiveStockNonGrazing.TotalNProduced / nutrientsLoadingLiveStockNonGrazing.Units), 2), Resource.lblkg)</td> *@
                             }
                             else
                             {
                                 <td class="col_2 govuk-table__cell">@Resource.lblHyphen</td>
                             }
+                            <td class="col_2 govuk-table__cell">@string.Format("{0}{1}", (Math.Floor(nutrientsLoadingLiveStockNonGrazing.NByUnit * 10) / 10).ToString("0.0"), Resource.lblkg)</td>
                             <td class="col_2 govuk-table__cell">@string.Format("{0}{1}", nutrientsLoadingLiveStockNonGrazing.TotalNProduced, Resource.lblkg)</td>
                             @if (Model.IsGrasslandDerogation != null && (Model.IsGrasslandDerogation.Value))
                             {
