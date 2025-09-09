@@ -315,9 +315,9 @@ namespace NMP.Portal.Controllers
 
                     var grassTypeId = (int)NMP.Portal.Enums.CropTypes.Grass;
                     List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = harvestYearPlanResponse
-                        .Where(x =>
-                            (x.CropTypeID != grassTypeId && x.CropInfo1 != null && x.Yield != null) ||
-                            (x.CropTypeID == grassTypeId && x.DefoliationSequenceID != null)
+                        .Where(x => (x.IsBasePlan != null && (!x.IsBasePlan.Value))
+                        //(x.CropTypeID != grassTypeId && x.CropInfo1 != null && x.Yield != null) ||
+                        //(x.CropTypeID == grassTypeId && x.DefoliationSequenceID != null)
                         ).ToList();
 
                     List<int> fieldsAllowedForSecondCrop = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) ? false : true, model.Crops);
@@ -632,9 +632,9 @@ namespace NMP.Portal.Controllers
 
                 var grassTypeId = (int)NMP.Portal.Enums.CropTypes.Grass;
                 List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = harvestYearPlanResponse
-                    .Where(x =>
-                        (x.CropTypeID != grassTypeId && x.CropInfo1 != null && x.Yield != null) ||
-                        (x.CropTypeID == grassTypeId && x.DefoliationSequenceID != null)
+                    .Where(x => (x.IsBasePlan != null && (!x.IsBasePlan.Value))
+                    //(x.CropTypeID != grassTypeId && x.CropInfo1 != null && x.Yield != null) ||
+                    //(x.CropTypeID == grassTypeId && x.DefoliationSequenceID != null)
                     ).ToList();
 
                 if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
@@ -800,7 +800,7 @@ namespace NMP.Portal.Controllers
                     harvestYearPlanCount = harvestYearPlanResponse.Count();
                     foreach (var harvestYearPlan in harvestYearPlanResponse)
                     {
-                        if (harvestYearPlan.CropInfo1 == null && harvestYearPlan.Yield == null && harvestYearPlan.DefoliationSequenceID == null)
+                        if (harvestYearPlan.IsBasePlan.Value)
                         {
                             cropPlanCounter++;
                         }
@@ -1070,9 +1070,9 @@ namespace NMP.Portal.Controllers
                 var grassTypeId = (int)NMP.Portal.Enums.CropTypes.Grass;
 
                 List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = harvestYearPlanResponse
-                    .Where(x =>
-                        (x.CropTypeID != grassTypeId && x.CropInfo1 != null && x.Yield != null) ||
-                        (x.CropTypeID == grassTypeId && x.DefoliationSequenceID != null)
+                    .Where(x => (x.IsBasePlan != null && (!x.IsBasePlan.Value))
+                    //(x.CropTypeID != grassTypeId && x.CropInfo1 != null && x.Yield != null) ||
+                    //(x.CropTypeID == grassTypeId && x.DefoliationSequenceID != null)
                     ).ToList();
 
 
@@ -1152,9 +1152,9 @@ namespace NMP.Portal.Controllers
 
                 var grassTypeId = (int)NMP.Portal.Enums.CropTypes.Grass;
                 List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = harvestYearPlanResponse
-                    .Where(x =>
-                        (x.CropTypeID != grassTypeId && x.CropInfo1 != null && x.Yield != null) ||
-                        (x.CropTypeID == grassTypeId && x.DefoliationSequenceID != null)
+                    .Where(x => (x.IsBasePlan != null && (!x.IsBasePlan.Value))
+                    //(x.CropTypeID != grassTypeId && x.CropInfo1 != null && x.Yield != null) ||
+                    //(x.CropTypeID == grassTypeId && x.DefoliationSequenceID != null)
                     ).ToList();
 
                 if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
@@ -2327,7 +2327,7 @@ namespace NMP.Portal.Controllers
                                     crop.Yield = null;
                                     model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
                                 }
-                                if (harvestYearPlanResponse[i].CropInfo1 == null && harvestYearPlanResponse[i].Yield == null)
+                                if (harvestYearPlanResponse[i].IsBasePlan != null && (harvestYearPlanResponse[i].IsBasePlan.Value))
                                 {
                                     isBasePlan = true;
                                 }
@@ -2497,9 +2497,9 @@ namespace NMP.Portal.Controllers
                 //Fetch fields allowed for second crop based on first crop
                 var grassTypeId = (int)NMP.Portal.Enums.CropTypes.Grass;
                 List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = harvestYearPlanResponse
-                    .Where(x =>
-                        (x.CropTypeID != grassTypeId && x.CropInfo1 != null && x.Yield != null) ||
-                        (x.CropTypeID == grassTypeId && x.DefoliationSequenceID != null)
+                    .Where(x => (x.IsBasePlan != null && (!x.IsBasePlan.Value))
+                    //(x.CropTypeID != grassTypeId && x.CropInfo1 != null && x.Yield != null) ||
+                    //(x.CropTypeID == grassTypeId && x.DefoliationSequenceID != null)
                     ).ToList();
 
                 List<int> fieldsAllowedForSecondCrop = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) ? false : true, model.Crops);
@@ -2599,7 +2599,7 @@ namespace NMP.Portal.Controllers
                 {
                     for (int i = 0; i < model.Crops.Count; i++)
                     {
-                        if (model.Crops[i].CropInfo1 == null && model.Crops[i].Yield == null)
+                        if (model.Crops[i].IsBasePlan)
                         {
                             isBasePlan = true;
                         }
@@ -2944,9 +2944,9 @@ namespace NMP.Portal.Controllers
                         //Fetch fields allowed for second crop based on first crop
                         var grassTypeId = (int)NMP.Portal.Enums.CropTypes.Grass;
                         List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = harvestYearPlanResponse
-                            .Where(x =>
-                                (x.CropTypeID != grassTypeId && x.CropInfo1 != null && x.Yield != null) ||
-                                (x.CropTypeID == grassTypeId && x.DefoliationSequenceID != null)
+                            .Where(x => (x.IsBasePlan != null && (!x.IsBasePlan.Value))
+                            //(x.CropTypeID != grassTypeId && x.CropInfo1 != null && x.Yield != null) ||
+                            //(x.CropTypeID == grassTypeId && x.DefoliationSequenceID != null)
                             ).ToList();
 
                         List<int> fieldsAllowedForSecondCrop = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) ? false : true, model.Crops);
@@ -3012,6 +3012,7 @@ namespace NMP.Portal.Controllers
                 List<CropData> cropEntries = new List<CropData>();
                 foreach (Crop crop in model.Crops)
                 {
+                    crop.IsBasePlan = false;
                     crop.CreatedOn = DateTime.Now;
                     crop.CreatedByID = userId;
                     crop.FieldName = null;
@@ -3274,7 +3275,7 @@ namespace NMP.Portal.Controllers
                                   .Where(x => x.LastModifiedOn.HasValue)
                                   .OrderByDescending(x => x.LastModifiedOn)
                                   .FirstOrDefault();
-                                
+
                                 model.LastModifiedOn = latestDate?.LastModifiedOn?.ToString("dd MMM yyyy");
                                 var groupedResult = allCropDetails
                                 .GroupBy(crop => new { crop.CropTypeName, crop.CropGroupName, crop.CropTypeID })
@@ -3769,8 +3770,8 @@ namespace NMP.Portal.Controllers
                 (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropService.FetchHarvestYearPlansByFarmId(decryptedHarvestYear, decryptedFarmId);
                 if (harvestYearPlanResponse != null && error.Message == null)
                 {
-                    bool isAllCropInfo1NonNull = harvestYearPlanResponse.All(h => h.CropInfo1 != null);
-                    if (!isAllCropInfo1NonNull)
+                    bool isAllBasePlan = harvestYearPlanResponse.All(h => ((h.IsBasePlan != null) && (h.IsBasePlan.Value)));
+                    if (isAllBasePlan)
                     {
                         ViewBag.AddMannerDisabled = true;
                     }
@@ -4387,9 +4388,9 @@ namespace NMP.Portal.Controllers
 
                 var grassTypeId = (int)NMP.Portal.Enums.CropTypes.Grass;
                 List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = harvestYearPlanResponse
-                    .Where(x =>
-                        (x.CropTypeID != grassTypeId && x.CropInfo1 != null && x.Yield != null) ||
-                        (x.CropTypeID == grassTypeId && x.DefoliationSequenceID != null)
+                    .Where(x => (x.IsBasePlan != null && (!x.IsBasePlan.Value))
+                    //(x.CropTypeID != grassTypeId && x.CropInfo1 != null && x.Yield != null) ||
+                    //(x.CropTypeID == grassTypeId && x.DefoliationSequenceID != null)
                     ).ToList();
 
                 if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
@@ -4600,9 +4601,9 @@ namespace NMP.Portal.Controllers
 
                         var grassTypeId = (int)NMP.Portal.Enums.CropTypes.Grass;
                         List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = harvestYearPlanResponse
-                            .Where(x =>
-                                (x.CropTypeID != grassTypeId && x.CropInfo1 != null && x.Yield != null) ||
-                                (x.CropTypeID == grassTypeId && x.DefoliationSequenceID != null)
+                            .Where(x => (x.IsBasePlan != null && (!x.IsBasePlan.Value))
+                            //(x.CropTypeID != grassTypeId && x.CropInfo1 != null && x.Yield != null) ||
+                            //(x.CropTypeID == grassTypeId && x.DefoliationSequenceID != null)
                             ).ToList();
 
                         List<int> fieldsAllowedForSecondCrop = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) ? false : true, model.Crops);
@@ -5043,7 +5044,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     crop.Yield = null;
                                 }
-                                if (harvestYearPlanResponse[i].CropInfo1 == null && harvestYearPlanResponse[i].Yield == null)
+                                if (harvestYearPlanResponse[i].IsBasePlan != null && harvestYearPlanResponse[i].IsBasePlan.Value)
                                 {
                                     isBasePlan = true;
                                 }
@@ -5123,7 +5124,7 @@ namespace NMP.Portal.Controllers
 
                     for (int i = 0; i < model.Crops.Count; i++)
                     {
-                        if (model.Crops[i].CropInfo1 == null && model.Crops[i].Yield == null)
+                        if (model.Crops[i].IsBasePlan)
                         {
                             isBasePlan = true;
                         }
@@ -5317,9 +5318,9 @@ namespace NMP.Portal.Controllers
 
                         var grassTypeId = (int)NMP.Portal.Enums.CropTypes.Grass;
                         List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = harvestYearPlanResponse
-                            .Where(x =>
-                                (x.CropTypeID != grassTypeId && x.CropInfo1 != null && x.Yield != null) ||
-                                (x.CropTypeID == grassTypeId && x.DefoliationSequenceID != null)
+                            .Where(x => (x.IsBasePlan != null && (!x.IsBasePlan.Value))
+                            //(x.CropTypeID != grassTypeId && x.CropInfo1 != null && x.Yield != null) ||
+                            //(x.CropTypeID == grassTypeId && x.DefoliationSequenceID != null)
                             ).ToList();
 
                         List<int> fieldsAllowedForSecondCrop = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) ? false : true, model.Crops);
@@ -5370,6 +5371,7 @@ namespace NMP.Portal.Controllers
                     List<CropData> cropEntries = new List<CropData>();
                     foreach (Crop crop in model.Crops)
                     {
+                        crop.IsBasePlan = false;
                         if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass)
                         {
                             crop.CropTypeID = model.CropTypeID;
@@ -6839,7 +6841,7 @@ namespace NMP.Portal.Controllers
                         (List<HarvestYearPlanResponse> harvestYearPlanResponseForFilter, error) = await _cropService.FetchHarvestYearPlansByFarmId(yr.Year, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
                         if (harvestYearPlanResponseForFilter.Count > 0)
                         {
-                            var baseYearCrops = harvestYearPlanResponseForFilter.All(x => x.CropInfo1 == null && x.Yield == null && x.DefoliationSequenceID == null);
+                            var baseYearCrops = harvestYearPlanResponseForFilter.All(x => (x.IsBasePlan != null && (x.IsBasePlan.Value)));
                             if (baseYearCrops)
                             {
                                 model.HarvestYear = model.HarvestYear.Where(x => x.Year != yr.Year).ToList();
@@ -6937,7 +6939,7 @@ namespace NMP.Portal.Controllers
                     (List<HarvestYearPlanResponse> harvestYearPlanResponseForFilter, error) = await _cropService.FetchHarvestYearPlansByFarmId(year.Year, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
                     if (harvestYearPlanResponseForFilter.Count > 0)
                     {
-                        var baseYearCrops = harvestYearPlanResponseForFilter.All(x => x.CropInfo1 == null && x.Yield == null && x.DefoliationSequenceID == null);
+                        var baseYearCrops = harvestYearPlanResponseForFilter.All(x => (x.IsBasePlan != null && (x.IsBasePlan.Value)));
                         if (baseYearCrops)
                         {
                             model.HarvestYear = model.HarvestYear.Where(x => x.Year != year.Year).ToList();
