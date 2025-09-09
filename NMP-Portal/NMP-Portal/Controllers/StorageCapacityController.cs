@@ -96,6 +96,29 @@ namespace NMP.Portal.Controllers
                     if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
                     {
                         model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("StorageCapacityData");
+
+                        model.MaterialStateID = null;
+                        model.StorageTypeID = null;
+                        model.StorageTypeName = null;
+                        model.MaterialStateName = null;
+                        model.StoreName = null;
+                        model.Length = null;
+                        model.Width = null;
+                        model.Depth = null;
+                        model.IsCircumference = null;
+                        model.Circumference = null;
+                        model.Diameter = null;
+                        model.IsCovered = null;
+                        model.CapacityWeight = null;
+                        model.SolidManureDensity = null;
+                        model.StorageBagCapacity = null;
+                        model.IsSlopeEdge = null;
+                        model.BankSlopeAngleID = null;
+                        model.BankSlopeAngleName = null;
+                        model.FreeBoardHeight = null;
+                        model.Slope = null;
+                        model.CapacityVolume = null;
+                        model.SurfaceArea = null;
                     }
 
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
@@ -623,6 +646,8 @@ namespace NMP.Portal.Controllers
                                     {
                                         ModelState.AddModelError("Circumference", string.Format(Resource.MsgEnterTheDimensionOfYourStorageBeforeContinuing, Resource.lblCircumference.ToLower()));
                                     }
+                                    model.Diameter = null;
+                                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
                                 }
                                 else
                                 {
@@ -630,6 +655,8 @@ namespace NMP.Portal.Controllers
                                     {
                                         ModelState.AddModelError("Diameter", string.Format(Resource.MsgEnterTheDimensionOfYourStorageBeforeContinuing, Resource.lblDiameter.ToLower()));
                                     }
+                                    model.Circumference = null;
+                                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
                                 }
                             }
                             if (model.Depth == null)
@@ -1000,7 +1027,8 @@ namespace NMP.Portal.Controllers
                 }
                 if(model.MaterialStateID==(int)NMP.Portal.Enums.MaterialState.SolidManureStorage)
                 {
-                    model.CapacityVolume = model.CapacityWeight;
+                    model.CapacityVolume = model.Length * model.Width * model.Depth;
+                    model.SurfaceArea = model.Length * model.Width;
                 }
                 else
                 {
@@ -1027,7 +1055,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CheckAnswer(StorageCapacityViewModel model)
         {
-            _logger.LogTrace("Report Controller : IsAnyLivestockNumber() post action called");
+            _logger.LogTrace("StorageCapacity Controller : CheckAnswer() post action called");
             try
             {
                 Error error = null;
@@ -1039,10 +1067,10 @@ namespace NMP.Portal.Controllers
 
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
 
-                int? solidManureTypeId = null;
                 if(model.MaterialStateID==(int)NMP.Portal.Enums.MaterialState.SolidManureStorage)
                 {
-                    solidManureTypeId = model.StorageTypeID;
+                    model.SolidManureTypeID = model.StorageTypeID;
+                    model.StorageTypeID = null;
                 }
 
                 var storeCapacityData = new StoreCapacity()
@@ -1052,7 +1080,7 @@ namespace NMP.Portal.Controllers
                     StoreName = model.StoreName,
                     MaterialStateID = model.MaterialStateID,
                     StorageTypeID = model.StorageTypeID,
-                    SolidManureTypeID = solidManureTypeId,
+                    SolidManureTypeID = model.SolidManureTypeID,
                     Length = model.Length,
                     Width = model.Width,
                     Depth = model.Depth,
@@ -1088,8 +1116,8 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Report Controller : Exception in IsAnyLivestockNumber() post action : {ex.Message}, {ex.StackTrace}");
-                TempData["ErrorOnIsAnyLivestockNumber"] = ex.Message;
+                _logger.LogTrace($"StorageCapacity Controller : Exception in CheckAnswer() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnCheckAnswer"] = ex.Message;
                 return View(model);
             }
         }
@@ -1134,49 +1162,6 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("Dimensions");
                 }
             }
-
-            //var cattle = (int)NMP.Portal.Enums.LivestockGroup.Cattle;
-            //var pigs = (int)NMP.Portal.Enums.LivestockGroup.Pigs;
-            //var poultry = (int)NMP.Portal.Enums.LivestockGroup.Poultry;
-            //var sheep = (int)NMP.Portal.Enums.LivestockGroup.Sheep;
-            //var goatsDeerOrHorses = (int)NMP.Portal.Enums.LivestockGroup.GoatsDeerOrHorses;
-
-            //if (model.LivestockGroupId == cattle || model.LivestockGroupId == sheep || model.LivestockGroupId == goatsDeerOrHorses)
-            //{
-            //    if (model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.AverageNumberForTheYear)
-            //    {
-            //        return RedirectToAction("AverageNumber");
-            //    }
-            //    else if (model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.ANumberForEachMonth)
-            //    {
-            //        return RedirectToAction("LivestockNumbersMonthly");
-            //    }
-            //}
-            //else
-            //{
-            //    if (model.IsGrasslandDerogation == false)
-            //    {
-            //        if (model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeOccupancy)
-            //        {
-            //            return RedirectToAction("Occupancy");
-            //        }
-            //        else if (model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeNitrogen)
-            //        {
-            //            return RedirectToAction("NitrogenStandard");
-            //        }
-            //        else if (model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.UseDefault)
-            //        {
-            //            return RedirectToAction("OccupancyAndStandard");
-            //        }
-            //    }
-            //    else
-            //    {
-            //        return RedirectToAction("NitrogenStandard");
-            //    }
-            //}
-
-
-            //return RedirectToAction("AverageNumber");
 
         }
 
