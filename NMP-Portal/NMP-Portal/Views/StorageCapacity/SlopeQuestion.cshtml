@@ -5,7 +5,7 @@
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
     var backAction = "";
-    if (Model.StorageTypeId == (int)NMP.Portal.Enums.StorageTypes.StorageBag)
+    if (Model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.StorageBag)
     {
         backAction = "StorageTypes";
     }
@@ -35,19 +35,19 @@
         @Html.AntiForgeryToken()
         <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportOption"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportTypeName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MaterialStateName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StoreName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MaterialStateId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MaterialStateID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Length"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Width"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Depth"></govuk-input>
@@ -57,8 +57,11 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCovered"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SolidManureDensity" value="@Model.SolidManureDensity"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageBagCapacity"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.BankSlopeAngleId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.BankSlopeAngleID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.BankSlopeAngleName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FreeBoardHeight" value="@Model.FreeBoardHeight"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Slope" value="@Model.Slope"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer"></govuk-input>
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
@@ -78,13 +81,13 @@
                 <p class="govuk-body cancel-link">
                     @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
                     {
-                        <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">
+                        <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmID" asp-route-year="@Model.EncryptedHarvestYear">
                             @Resource.lblCancel
                         </a>
                     }
                     else
                     {
-                        <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+                        <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmID">
                             @Resource.lblCancel
                         </a>
                     }

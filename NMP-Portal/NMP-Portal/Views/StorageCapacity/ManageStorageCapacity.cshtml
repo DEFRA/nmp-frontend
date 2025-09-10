@@ -19,7 +19,7 @@
         <govuk-breadcrumbs-item asp-action="FarmList" asp-controller="Farm">
             @Resource.lblAllFarm
         </govuk-breadcrumbs-item>
-        <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+        <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmID">
             @Model.FarmName
         </govuk-breadcrumbs-item>
         <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
@@ -40,7 +40,7 @@
     </div>
 }
 
-@* 
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
@@ -50,10 +50,15 @@
                 <p class="govuk-notification-banner__heading">
                     @TempData["succesMsgContent1"]
                 </p>
+                @if (@TempData["succesMsgContent1Detail"] != null)
+                {
+                    <p class="govuk-body">@TempData["succesMsgContent1Detail"]</p>
+                }
+
                 @if (TempData["succesMsgContent2"] != null)
                 {
                     <p class="govuk-body">
-                        <a asp-action="LivestockGroup" asp-controller="Report" class="govuk-notification-banner__link">
+                        <a asp-action="MaterialStates" asp-controller="StorageCapacity" class="govuk-notification-banner__link">
                             @TempData["succesMsgContent2"]
                         </a>
                     </p>
@@ -61,7 +66,7 @@
                 @if (TempData["succesMsgContent3"] != null)
                 {
                     <p class="govuk-body">
-                        <a class="govuk-notification-banner__link" asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report" asp-route-q="@ViewBag.isComingFromSuccessMsg">
+                        <a class="govuk-notification-banner__link" asp-action="" asp-controller="StorageCapacity" asp-route-q="@ViewBag.isComingFromSuccessMsg">
                             @TempData["succesMsgContent3"]
                         </a>
                     </p>
@@ -69,17 +74,17 @@
             </govuk-notification-banner>
         }
     </div>
-</div> *@
+</div>
 
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
 
         <span class="name govuk-caption-l">@Model.FarmName</span>
-        <h1 class="govuk-heading-l" id="header">@string.Format(Resource.lblOrganicMaterialStorage, Model.Year)</h1>
-
+        <h1 class="govuk-heading-l margin-bottom-ten" id="header">@Resource.lblManureStorage</h1>
+        <h2 class="govuk-heading-m">@Model.Year</h2>
         <p class="govuk-body">
-            <a class="govuk-button" href="#">
+            <a class="govuk-button" asp-action="MaterialStates" asp-controller="StorageCapacity">
                 @Resource.lblAddOrganicMaterialStorage
             </a>
         </p>
