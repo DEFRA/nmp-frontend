@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Routing;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NMP.Portal.Enums;
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
@@ -18,8 +20,8 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using static System.Collections.Specialized.BitVector32;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-using Error = NMP.Portal.ServiceResponses.Error;
 using Enums = NMP.Portal.Enums;
+using Error = NMP.Portal.ServiceResponses.Error;
 
 namespace NMP.Portal.Controllers
 {
@@ -185,17 +187,18 @@ namespace NMP.Portal.Controllers
                                                     .Select(c => c.CropTypeID)
                                                     .ToList();
 
-                                                if (available.Any())
+                                                if (available.Count == 0)
                                                 {
-                                                    // Pick the first matching ID according to the defined group order
-                                                    int chosenId = group.Value.First(id => available.Contains(id));
-
-                                                    list.Add(new SelectListItem
-                                                    {
-                                                        Value = chosenId.ToString(),
-                                                        Text = group.Key
-                                                    });
+                                                    continue;
                                                 }
+                                                // Pick the first matching ID according to the defined group order
+                                                int chosenId = group.Value.First(id => available.Contains(id));
+
+                                                list.Add(new SelectListItem
+                                                {
+                                                    Value = chosenId.ToString(),
+                                                    Text = group.Key
+                                                });
                                             }
 
                                             // Handle crops not in groups
@@ -394,11 +397,11 @@ namespace NMP.Portal.Controllers
                                         ViewBag.CropTypeList = SelectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
                                         return View(model);
                                     }
-                                    if (model.CropTypeList.Count == 1 && model.CropTypeList[0] == Resource.lblSelectAll)
+                                    if (model.CropTypeList?.Count == 1 && model.CropTypeList[0] == Resource.lblSelectAll)
                                     {
                                         model.CropTypeList = SelectListItem.Select(item => item.Value).ToList();
                                     }
-                                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("ReportData", model);
                                     ViewBag.CropTypeList = SelectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
                                 }
                                 else
@@ -598,6 +601,19 @@ namespace NMP.Portal.Controllers
                                             manData.Recommendation.LimeIndex = manData.Recommendation.PH;
                                             manData.Recommendation.CropLime = (manData.Recommendation.PreviousAppliedLime != null && manData.Recommendation.PreviousAppliedLime > 0) ? manData.Recommendation.PreviousAppliedLime : manData.Recommendation.CropLime;
                                             manData.Recommendation.KIndex = manData.Recommendation.KIndex != null ? (manData.Recommendation.KIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (manData.Recommendation.KIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : manData.Recommendation.KIndex)) : null;
+                                        }
+                                        foreach (var organic in manData.OrganicManures)
+                                        {
+                                            (ManureType manureType, error) = await _organicManureService.FetchManureTypeByManureTypeId(organic.ManureTypeID);
+                                            if (error == null)
+                                            {
+                                                organic.RateUnit = manureType.IsLiquid.Value ? string.Format("{0} {1}", Resource.lblCubicMeters,Resource.lblPerHectare) :string.Format("{0} {1}",Resource.lbltonnes,Resource.lblPerHectare);
+                                            }
+                                            else
+                                            {
+                                                TempData["ErrorOnSelectField"] = error.Message;
+                                                return RedirectToAction("ExportFieldsOrCropType");
+                                            }
                                         }
                                         defIndex++;
                                     }
@@ -1039,7 +1055,7 @@ namespace NMP.Portal.Controllers
             List<NitrogenApplicationsForNMaxReportResponse> nitrogenApplicationsForNMaxReportResponse, List<NMaxLimitReportResponse> nMaxLimitReportResponse)
         {
             List<CropDetailResponse> cropDetails = harvestYearPlanResponse.CropDetails.Where(x => x.CropTypeID == cropTypeId).ToList();
-            Error error = null;
+            Error? error = null;
             int nMaxLimit = 0;
             string cropTypeName = string.Empty;
             string vegetableGroup = string.Empty;
@@ -1703,8 +1719,8 @@ namespace NMP.Portal.Controllers
 
                     //if (string.IsNullOrWhiteSpace(error.Message) && storeCapacityList.Count > 0)
                     //{
-                    //    model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
-                        return RedirectToAction("ManageStorageCapacity","StorageCapacity", new { q = model.EncryptedFarmId, y = model.EncryptedHarvestYear });
+                       model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
+                    return RedirectToAction("ManageStorageCapacity", "StorageCapacity", new { q = model.EncryptedFarmId, y = model.EncryptedHarvestYear });
                     //}
                     //return RedirectToAction("OrganicMaterialStorageNotAvailable");
                 }
@@ -2031,7 +2047,7 @@ namespace NMP.Portal.Controllers
                 {
                     if (model.GrassPercentage == null)
                     {
-                        ModelState.AddModelError("GrassPercentage", Resource.MsgEnterPercentageOfTheLandIsFarmedAsGrass);
+                        ModelState.AddModelError("GrassPercentage", Resource.MsgEnterThePercentageOfTheLandIsFarmedAsGrass);
                     }
                 }
                 if (model.TotalFarmArea <= 0)
@@ -4186,7 +4202,7 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogTrace($"Report Controller : Exception in IsAnyLivestockNumber() post action : {ex.Message}, {ex.StackTrace}");
-                TempData["ErrorOnIsAnyLivestock"] = ex.Message;
+                TempData["ErrorOnIsAnyLivestockNumber"] = ex.Message;
                 return View(model);
             }
         }
@@ -4223,7 +4239,7 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogTrace($"Report Controller : Exception in LivestockGroup() action : {ex.Message}, {ex.StackTrace}");
 
-                TempData["ErrorOnIsAnyLivestock"] = ex.Message;
+                TempData["ErrorOnIsAnyLivestockNumber"] = ex.Message;
                 return RedirectToAction("IsAnyLivestockNumber");
 
             }
@@ -4399,7 +4415,21 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
+                if (model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
+                {
+                    ViewBag.LivestockCategory = model.LivestockGroupName;
+                }
+                else
+                {
 
+                    string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[1];
+                    if (!string.IsNullOrWhiteSpace(groupName))
+                    {
+                        if (groupName.Equals(Resource.lblGoat) || groupName.Equals(Resource.lblHorse))
+                            groupName = groupName + "s";
+                    }
+                    ViewBag.LivestockCategory = groupName;
+                }
             }
             catch (Exception ex)
             {
@@ -4421,6 +4451,21 @@ namespace NMP.Portal.Controllers
                 if (model.LivestockNumberQuestion == null)
                 {
                     ModelState.AddModelError("LivestockNumberQuestion", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+                if (model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
+                {
+                    ViewBag.LivestockCategory = model.LivestockGroupName;
+                }
+                else
+                {
+
+                    string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[1];
+                    if (!string.IsNullOrWhiteSpace(groupName))
+                    {
+                        if (groupName.Equals(Resource.lblGoat) || groupName.Equals(Resource.lblHorse))
+                            groupName = groupName + "s";
+                    }
+                    ViewBag.LivestockCategory = groupName;
                 }
                 if (!ModelState.IsValid)
                 {
@@ -4474,8 +4519,9 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmList", "Farm");
                 }
                 (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
-                ViewBag.Nitrogen = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
-                ViewBag.Phosphate = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+                model.NitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+                model.PhosphateStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                 if (model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
                 {
                     ViewBag.LivestockCategory = model.LivestockGroupName;
@@ -4525,26 +4571,50 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("NumbersInJanuary", Resource.MsgEnterAtLeastOneValue);
                 }
+                if (model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
+                {
+                    ViewBag.LivestockCategory = model.LivestockGroupName;
+                }
+                else
+                {
+
+                    string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[1];
+                    if (!string.IsNullOrWhiteSpace(groupName))
+                    {
+                        if (groupName.Equals(Resource.lblGoat) || groupName.Equals(Resource.lblHorse))
+                            groupName = groupName + "s";
+                    }
+                    ViewBag.LivestockCategory = groupName;
+                }
 
                 if (!ModelState.IsValid)
                 {
-                    (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
-                    ViewBag.Nitrogen = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
-                    ViewBag.Phosphate = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
-                    if (model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
-                    {
-                        ViewBag.LivestockCategory = model.LivestockGroupName;
-                    }
-                    else
-                    {
 
-                        string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[1];
-                        if (!string.IsNullOrWhiteSpace(groupName))
+                    var monthMappings = new Dictionary<string, string>
+                    {
+                        { "NumbersInJanuary", string.Format(Resource.lblTheMonthsOf,Resource.lblJanuary) },
+                        { "NumbersInFebruary", string.Format(Resource.lblTheMonthsOf,Resource.lblFebruary) },
+                        { "NumbersInMarch", string.Format(Resource.lblTheMonthsOf,Resource.lblMarch) },
+                        { "NumbersInApril", string.Format(Resource.lblTheMonthsOf,Resource.lblApril) },
+                        { "NumbersInMay", string.Format(Resource.lblTheMonthsOf,Resource.lblMay) },
+                        { "NumbersInJune", string.Format(Resource.lblTheMonthsOf,Resource.lblJune) },
+                        { "NumbersInJuly", string.Format(Resource.lblTheMonthsOf,Resource.lblJuly) },
+                        { "NumbersInAugust", string.Format(Resource.lblTheMonthsOf,Resource.lblAugust) },
+                        { "NumbersInSeptember", string.Format(Resource.lblTheMonthsOf,Resource.lblSeptember) },
+                        { "NumbersInOctober", string.Format(Resource.lblTheMonthsOf,Resource.lblOctober) },
+                        { "NumbersInNovember", string.Format(Resource.lblTheMonthsOf,Resource.lblNovember) },
+                        { "NumbersInDecember", string.Format(Resource.lblTheMonthsOf,Resource.lblDecember) }
+                    };
+
+                    foreach (var mapping in monthMappings)
+                    {
+                        if (ModelState.TryGetValue(mapping.Key, out var entry) &&
+                            entry.Errors.Count > 0 &&
+                            entry.Errors[0].ErrorMessage.Contains(mapping.Key))
                         {
-                            if (groupName.Equals(Resource.lblGoat) || groupName.Equals(Resource.lblHorse))
-                                groupName = groupName + "s";
+                            entry.Errors[0] = new ModelError(
+                                entry.Errors[0].ErrorMessage.Replace(mapping.Key, mapping.Value));
                         }
-                        ViewBag.LivestockCategory = groupName;
                     }
 
                     return View(model);
@@ -4603,8 +4673,9 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmList", "Farm");
                 }
                 (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
-                ViewBag.Nitrogen = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
-                ViewBag.Phosphate = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+                model.NitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+                model.PhosphateStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                 if (model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
                 {
                     ViewBag.LivestockCategory = model.LivestockGroupName;
@@ -4626,7 +4697,7 @@ namespace NMP.Portal.Controllers
                 _logger.LogTrace($"Report Controller : Exception in AverageNumber() action : {ex.Message}, {ex.StackTrace}");
 
                 TempData["ErrorOnLivestockNumberQuestion"] = ex.Message;
-                return RedirectToAction("LivestockType");
+                return RedirectToAction("LivestockNumberQuestion");
 
             }
             return View(model);
@@ -4644,9 +4715,6 @@ namespace NMP.Portal.Controllers
                 }
                 if (!ModelState.IsValid)
                 {
-                    (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
-                    ViewBag.Nitrogen = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
-                    ViewBag.Phosphate = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
                     if (model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
                     {
                         ViewBag.LivestockCategory = model.LivestockGroupName;
@@ -4718,9 +4786,12 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmList", "Farm");
                 }
                 (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
-                model.NitrogenStandardPer1000Places = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+
+                model.NitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+
                 model.AverageOccupancy = (int)livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Occupancy;
-                ViewBag.Phosphate = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+
+                model.PhosphateStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
             }
             catch (Exception ex)
             {
@@ -4741,22 +4812,22 @@ namespace NMP.Portal.Controllers
             {
                 if (model.AverageNumberOfPlaces == null)
                 {
-                    ModelState.AddModelError("AverageNumberOfPlaces", string.Format(Resource.MsgEnterTheAverageNumberOfPlaces, model.Year));
+                    ModelState.AddModelError("AverageNumberOfPlaces", string.Format(Resource.MsgEnterTheAverageTotalNumberOfThis, model.LivestockGroupName, model.Year));
                 }
-                if (model.AverageOccupancy == null)
-                {
-                    ModelState.AddModelError("AverageOccupancy", Resource.MsgEnterTheAverageOccupancy);
-                }
-                if (model.NitrogenStandardPer1000Places == null)
-                {
-                    ModelState.AddModelError("NitrogenStandardPer1000Places", Resource.MsgEnterTheNitrogenStandardPerAnimal);
-                }
+                //if (model.AverageOccupancy == null)
+                //{
+                //    ModelState.AddModelError("AverageOccupancy", Resource.MsgEnterTheAverageOccupancy);
+                //}
+                //if (model.NitrogenStandard == null)
+                //{
+                //    ModelState.AddModelError("NitrogenStandard", Resource.MsgEnterTheNitrogenStandardPerAnimal);
+                //}
                 if (!ModelState.IsValid)
                 {
                     (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
-                    model.NitrogenStandardPer1000Places = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+                    model.NitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
                     model.AverageOccupancy = (int)livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Occupancy;
-                    ViewBag.Phosphate = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+                    model.PhosphateStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
                     return View(model);
                 }
                 model.NumbersInJanuary = null;
@@ -4782,7 +4853,304 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.IsLivestockCheckAnswer)
                 {
-                    if (model.AverageNumberOfPlaces == reportModel.AverageNumberOfPlaces && model.AverageOccupancy == reportModel.AverageOccupancy && model.NitrogenStandardPer1000Places == reportModel.NitrogenStandardPer1000Places)
+                    if (model.AverageNumberOfPlaces == reportModel.AverageNumberOfPlaces && model.AverageOccupancy == reportModel.AverageOccupancy && model.NitrogenStandard == reportModel.NitrogenStandard)
+                    {
+                        return RedirectToAction("LivestockCheckAnswer");
+                    }
+                }
+
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+
+                return RedirectToAction("OccupancyAndStandard");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in NonGrazingLivestockAverageNumber() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnNonGrazingLivestockAverageNumber"] = ex.Message;
+                return View(model);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> OccupancyAndStandard()  //pig, poultry
+        {
+            _logger.LogTrace("Report Controller : OccupancyAndStandard() action called");
+            ReportViewModel model = new ReportViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+                (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
+
+                ViewBag.NitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+
+                ViewBag.AverageOccupancy = (int)livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Occupancy;
+
+                ViewBag.PhosphateStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in OccupancyAndStandard() action : {ex.Message}, {ex.StackTrace}");
+
+                TempData["ErrorOnNonGrazingLivestockAverageNumber"] = ex.Message;
+                return RedirectToAction("NonGrazingLivestockAverageNumber");
+
+            }
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> OccupancyAndStandard(ReportViewModel model)
+        {
+            _logger.LogTrace("Report Controller : OccupancyAndStandard() post action called");
+            try
+            {
+                if (model.OccupancyAndNitrogenOptions == null)
+                {
+                    ModelState.AddModelError("OccupancyAndNitrogenOptions", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
+                    ViewBag.NitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+                    ViewBag.AverageOccupancy = (int)livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Occupancy;
+                    ViewBag.PhosphateStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+                    return View(model);
+                }
+
+                ReportViewModel reportModel = new ReportViewModel();
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    reportModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                if (model.IsLivestockCheckAnswer)
+                {
+                    if (model.OccupancyAndNitrogenOptions == reportModel.OccupancyAndNitrogenOptions)
+                    {
+                        return RedirectToAction("LivestockCheckAnswer");
+                    }
+                }
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                if (model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeOccupancy)
+                {
+                    return RedirectToAction("Occupancy");
+                }
+                else if (model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeNitrogen)
+                {
+                    return RedirectToAction("NitrogenStandard");
+                }
+                else if (model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.DerogatedFarmChangeBoth)
+                {
+                    return RedirectToAction("Occupancy");
+                }
+                else
+                {
+                    return RedirectToAction("LivestockCheckAnswer");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in OccupancyAndStandard() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnOccupancyAndStandard"] = ex.Message;
+                return View(model);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Occupancy()  //pig, poultry
+        {
+            _logger.LogTrace("Report Controller : Occupancy() action called");
+            ReportViewModel model = new ReportViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+                (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
+
+                if (model.NitrogenStandard == null)
+                {
+                    model.NitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+                }
+                if (model.AverageOccupancy == null)
+                {
+                    model.AverageOccupancy = (int)livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Occupancy;
+                }
+                if (model.PhosphateStandard == null)
+                {
+                    model.PhosphateStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+                }
+                else
+                {
+                    model.PhosphateStandard = model.PhosphateStandard;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in Occupancy() action : {ex.Message}, {ex.StackTrace}");
+
+                TempData["ErrorOnOccupancyAndStandard"] = ex.Message;
+                return RedirectToAction("OccupancyAndStandard");
+
+            }
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Occupancy(ReportViewModel model)
+        {
+            _logger.LogTrace("Report Controller : Occupancy() post action called");
+            try
+            {
+                List<LivestockTypeResponse> livestockTypes = new List<LivestockTypeResponse>();
+                Error error = new Error();
+                if (model.AverageOccupancy == null)
+                {
+                    ModelState.AddModelError("AverageOccupancy", Resource.MsgEnterTheAverageOccupancy);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    (livestockTypes, error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
+                    model.NitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+                    model.AverageOccupancy = (int)livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Occupancy;
+                    model.PhosphateStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+                    return View(model);
+                }
+
+                //calculation for N standard and P2O5 standard on default occupancy change
+
+                (livestockTypes, error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
+                var defaultOccupancy = (int)livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Occupancy;
+                var defaultNitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+                var defaultPhosphate = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+                if (model.AverageOccupancy != defaultOccupancy)
+                {
+                    var nitrogenStandardFor100PercentOccupancy = (defaultNitrogenStandard / defaultOccupancy) * 100;
+                    var phosphateStandardFor100PercentOccupancy = (defaultPhosphate / defaultOccupancy) * 100;
+                    decimal nitrogen = (nitrogenStandardFor100PercentOccupancy * model.AverageOccupancy) ?? 0;
+                    model.NitrogenStandard = Math.Round(nitrogen / 100, 6);
+                    decimal phosphate = (phosphateStandardFor100PercentOccupancy * model.AverageOccupancy) ?? 0;
+                    model.PhosphateStandard = Math.Round(phosphate / 100, 6);
+                }
+                //Calculation end
+
+
+                ReportViewModel reportModel = new ReportViewModel();
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    reportModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                if (model.IsLivestockCheckAnswer)
+                {
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+
+                    if (model.AverageOccupancy == reportModel.AverageOccupancy)
+                    {
+                        return RedirectToAction("LivestockCheckAnswer");
+                    }
+                    else
+                    {
+                        return RedirectToAction("NitrogenStandard");
+                    }
+                }
+
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                if (model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.DerogatedFarmChangeBoth)
+                {
+                    return RedirectToAction("NitrogenStandard");
+                }
+
+                return RedirectToAction("LivestockCheckAnswer");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in Occupancy() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnOccupancy"] = ex.Message;
+                return View(model);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> NitrogenStandard()  //pig, poultry
+        {
+            _logger.LogTrace("Report Controller : NitrogenStandard() action called");
+            ReportViewModel model = new ReportViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in NitrogenStandard() action : {ex.Message}, {ex.StackTrace}");
+
+                if(model.OccupancyAndNitrogenOptions==(int)NMP.Portal.Enums.OccupancyNitrogenOptions.DerogatedFarmChangeBoth)
+                {
+                    TempData["ErrorOnOccupancy"] = ex.Message;
+                    return RedirectToAction("Occupancy");
+                }
+                if (model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeNitrogen)
+                {
+                    TempData["ErrorOnNitrogenStandard"] = ex.Message;
+                    return RedirectToAction("NitrogenStandard");
+                }
+                TempData["ErrorOnOccupancyAndStandard"] = ex.Message;
+                return RedirectToAction("OccupancyAndStandard");
+
+            }
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> NitrogenStandard(ReportViewModel model)
+        {
+            _logger.LogTrace("Report Controller : NitrogenStandard() post action called");
+            try
+            {
+                if (model.NitrogenStandard == null)
+                {
+                    ModelState.AddModelError("NitrogenStandard", Resource.MsgEnterTheNitrogenStandardPerAnimal);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
+                    model.NitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+                    model.AverageOccupancy = (int)livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Occupancy;
+                    model.PhosphateStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+                    return View(model);
+                }
+
+                ReportViewModel reportModel = new ReportViewModel();
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    reportModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                if (model.IsLivestockCheckAnswer)
+                {
+                    if (model.NitrogenStandard == reportModel.NitrogenStandard)
                     {
                         return RedirectToAction("LivestockCheckAnswer");
                     }
@@ -4794,8 +5162,8 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Report Controller : Exception in NonGrazingLivestockAverageNumber() post action : {ex.Message}, {ex.StackTrace}");
-                TempData["ErrorOnNonGrazingLivestockAverageNumber"] = ex.Message;
+                _logger.LogTrace($"Report Controller : Exception in NitrogenStandard() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnNitrogenStandard"] = ex.Message;
                 return View(model);
             }
         }
@@ -4815,6 +5183,21 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
+                if (model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
+                {
+                    ViewBag.LivestockCategory = model.LivestockGroupName;
+                }
+                else
+                {
+
+                    string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[1];
+                    if (!string.IsNullOrWhiteSpace(groupName))
+                    {
+                        if (groupName.Equals(Resource.lblGoat) || groupName.Equals(Resource.lblHorse))
+                            groupName = groupName + "s";
+                    }
+                    ViewBag.LivestockCategory = groupName;
+                }
                 (List<NutrientsLoadingLiveStock> nutrientsLoadingLiveStockList, Error error) = await _reportService.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
                 ViewBag.LiveStockList = nutrientsLoadingLiveStockList;
                 var cattle = (int)NMP.Portal.Enums.LivestockGroup.Cattle;
@@ -4822,11 +5205,11 @@ namespace NMP.Portal.Controllers
                 var poultry = (int)NMP.Portal.Enums.LivestockGroup.Poultry;
                 var sheep = (int)NMP.Portal.Enums.LivestockGroup.Sheep;
                 var goatsDeerOrHorses = (int)NMP.Portal.Enums.LivestockGroup.GoatsDeerOrHorses;
-                (List<LivestockTypeResponse> livestockTypes, error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
-                var nitrogen = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
-                var phosphorus = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
-                ViewBag.Nitrogen = nitrogen;
-                ViewBag.Phosphate = phosphorus;
+                //(List<LivestockTypeResponse> livestockTypes, error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
+                //var nitrogen = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+                //var phosphorus = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+                //model.PhosphateStandard = nitrogen;
+                //model.PhosphateStandard = phosphorus;
 
                 decimal totalNProduced = 0;
                 decimal totalPProduced = 0;
@@ -4840,7 +5223,7 @@ namespace NMP.Portal.Controllers
                                          (model.NumbersInSeptember ?? 0) + (model.NumbersInOctober ?? 0) +
                                          (model.NumbersInNovember ?? 0) + (model.NumbersInDecember ?? 0);
 
-                    averageNumberForYear = (decimal)(sumOfEachMonth / 12);
+                    averageNumberForYear = (sumOfEachMonth / 12.0m);
                 }
                 else if (model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.AverageNumberForTheYear)
                 {
@@ -4854,25 +5237,95 @@ namespace NMP.Portal.Controllers
 
                 if (model.LivestockGroupId == cattle || model.LivestockGroupId == sheep || model.LivestockGroupId == goatsDeerOrHorses)
                 {
-                    totalNProduced = Math.Round(averageNumberForYearRoundOfValue * nitrogen ?? 0);
-                    totalPProduced = Math.Round(averageNumberForYearRoundOfValue * phosphorus ?? 0);
+                    totalNProduced = Math.Round(averageNumberForYearRoundOfValue * model.NitrogenStandard ?? 0);
+                    totalPProduced = Math.Round(averageNumberForYearRoundOfValue * model.PhosphateStandard ?? 0);
                 }
                 else
                 {
-                    totalNProduced = Math.Round(averageNumberForYearRoundOfValue * (model.NitrogenStandardPer1000Places ?? 0));
-                    totalPProduced = Math.Round(averageNumberForYearRoundOfValue * phosphorus ?? 0);
+                    totalNProduced = Math.Round(averageNumberForYearRoundOfValue * (model.NitrogenStandard ?? 0));
+                    totalPProduced = Math.Round(averageNumberForYearRoundOfValue * model.PhosphateStandard ?? 0);
                 }
                 ViewBag.TotalNProduced = totalNProduced;
                 ViewBag.TotalPProduced = totalPProduced;
                 model.IsLivestockCheckAnswer = true;
+
+                (List<LivestockTypeResponse> livestockTypes, error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
+                var defaultOccupancy = 0;
+                if(livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Occupancy != null)
+                {
+                    defaultOccupancy = (int)livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Occupancy;
+                }
+                var defaultNitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+                var defaultPhosphate = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+                if (model.AverageOccupancy != defaultOccupancy || model.NitrogenStandard != defaultNitrogenStandard)
+                {
+                    if (model.IsGrasslandDerogation == true)
+                    {
+                        model.OccupancyAndNitrogenOptions = (int)NMP.Portal.Enums.OccupancyNitrogenOptions.DerogatedFarmChangeBoth;
+                    }
+                    else
+                    {
+                        if (model.AverageOccupancy != defaultOccupancy)
+                        {
+                            model.OccupancyAndNitrogenOptions = (int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeOccupancy;
+                        }
+                        if (model.NitrogenStandard != defaultNitrogenStandard)
+                        {
+                            model.OccupancyAndNitrogenOptions = (int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeNitrogen;
+                        }
+                    }
+                }
+
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             catch (Exception ex)
             {
                 _logger.LogTrace($"Report Controller : Exception in AverageNumber() action : {ex.Message}, {ex.StackTrace}");
+                var cattle = (int)NMP.Portal.Enums.LivestockGroup.Cattle;
+                var pigs = (int)NMP.Portal.Enums.LivestockGroup.Pigs;
+                var poultry = (int)NMP.Portal.Enums.LivestockGroup.Poultry;
+                var sheep = (int)NMP.Portal.Enums.LivestockGroup.Sheep;
+                var goatsDeerOrHorses = (int)NMP.Portal.Enums.LivestockGroup.GoatsDeerOrHorses;
+                if (model.LivestockGroupId == cattle || model.LivestockGroupId == sheep || model.LivestockGroupId == goatsDeerOrHorses)
+                {
+                    if (model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.AverageNumberForTheYear)
+                    {
+                        TempData["ErrorOnAverageNumber"] = ex.Message;
+                        return RedirectToAction("AverageNumber");
+                    }
+                    else if (model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.ANumberForEachMonth)
+                    {
+                        TempData["ErrorOnLivestockNumbersMonthly"] = ex.Message;
+                        return RedirectToAction("LivestockNumbersMonthly");
+                    }
+                }
+                else
+                {
+                    if (model.IsGrasslandDerogation == false)
+                    {
+                        if (model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeOccupancy)
+                        {
+                            TempData["ErrorOnOccupancy"] = ex.Message;
+                            return RedirectToAction("Occupancy");
+                        }
+                        else if (model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeNitrogen)
+                        {
+                            TempData["ErrorOnNitrogenStandard"] = ex.Message;
+                            return RedirectToAction("NitrogenStandard");
+                        }
+                        else if (model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.UseDefault)
+                        {
+                            TempData["ErrorOnOccupancyAndStandard"] = ex.Message;
+                            return RedirectToAction("OccupancyAndStandard");
+                        }
+                    }
+                    else
+                    {
+                        TempData["ErrorOnNitrogenStandard"] = ex.Message;
+                        return RedirectToAction("NitrogenStandard");
+                    }
+                }
 
-                TempData["ErrorOnLivestockNumberQuestion"] = ex.Message;
-                return RedirectToAction("LivestockType");
 
             }
             return View(model);
@@ -4947,22 +5400,37 @@ namespace NMP.Portal.Controllers
                     {
                         ModelState.AddModelError("AverageOccupancy", Resource.MsgAverageOccupancyNotSet);
                     }
-                    if (model.NitrogenStandardPer1000Places == null)
+                    if (model.NitrogenStandard == null)
                     {
-                        ModelState.AddModelError("NitrogenStandardPer1000Places", Resource.MsgNitrogenStandardPer1000PlacesNotSet);
+                        ModelState.AddModelError("NitrogenStandard", Resource.MsgNitrogenStandardPer1000PlacesNotSet);
                     }
                 }
 
 
-                (List<LivestockTypeResponse> livestockTypes, error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
-                var nitrogen = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
-                var phosphorus = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
-                ViewBag.Nitrogen = nitrogen;
+                //(List<LivestockTypeResponse> livestockTypes, error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
+                //var nitrogen = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+                //var phosphorus = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+                //model.NitrogenStandard = nitrogen;
                 //ViewBag.Phosphorus = phosphorus;
-                ViewBag.Phosphate = phosphorus;
+                //model.PhosphateStandard = phosphorus;
 
                 if (!ModelState.IsValid)
                 {
+                    if (model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
+                    {
+                        ViewBag.LivestockCategory = model.LivestockGroupName;
+                    }
+                    else
+                    {
+
+                        string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[1];
+                        if (!string.IsNullOrWhiteSpace(groupName))
+                        {
+                            if (groupName.Equals(Resource.lblGoat) || groupName.Equals(Resource.lblHorse))
+                                groupName = groupName + "s";
+                        }
+                        ViewBag.LivestockCategory = groupName;
+                    }
                     return View(model);
                 }
                 decimal totalNProduced = 0;
@@ -4977,7 +5445,7 @@ namespace NMP.Portal.Controllers
                                          (model.NumbersInSeptember ?? 0) + (model.NumbersInOctober ?? 0) +
                                          (model.NumbersInNovember ?? 0) + (model.NumbersInDecember ?? 0);
 
-                    averageNumberForYear = (decimal)(sumOfEachMonth / 12);
+                    averageNumberForYear = (sumOfEachMonth / 12.0m);
                 }
                 else if (model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.AverageNumberForTheYear)
                 {
@@ -4991,13 +5459,13 @@ namespace NMP.Portal.Controllers
 
                 if (model.LivestockGroupId == cattle || model.LivestockGroupId == sheep || model.LivestockGroupId == goatsDeerOrHorses)
                 {
-                    totalNProduced = Math.Round(averageNumberForYearRoundOfValue * nitrogen ?? 0);
-                    totalPProduced = Math.Round(averageNumberForYearRoundOfValue * phosphorus ?? 0);
+                    totalNProduced = Math.Round(averageNumberForYearRoundOfValue * model.NitrogenStandard ?? 0);
+                    totalPProduced = Math.Round(averageNumberForYearRoundOfValue * model.PhosphateStandard ?? 0);
                 }
                 else
                 {
-                    totalNProduced = Math.Round(averageNumberForYearRoundOfValue * (model.NitrogenStandardPer1000Places ?? 0));
-                    totalPProduced = Math.Round(averageNumberForYearRoundOfValue * phosphorus ?? 0);
+                    totalNProduced = Math.Round(averageNumberForYearRoundOfValue * (model.NitrogenStandard ?? 0));
+                    totalPProduced = Math.Round(averageNumberForYearRoundOfValue * model.PhosphateStandard ?? 0);
                 }
 
 
@@ -5007,10 +5475,10 @@ namespace NMP.Portal.Controllers
                     CalendarYear = model.Year,
                     LiveStockTypeID = model.LivestockTypeId,
                     Units = averageNumberForYear,
-                    NByUnit = nitrogen,
+                    NByUnit = model.NitrogenStandard,
                     TotalNProduced = totalNProduced,
                     Occupancy = model.AverageOccupancy,
-                    PByUnit = phosphorus,
+                    PByUnit = model.PhosphateStandard,
                     TotalPProduced = (int)totalPProduced,
                     Jan = model.NumbersInJanuary,
                     Feb = model.NumbersInFebruary,
@@ -5089,7 +5557,8 @@ namespace NMP.Portal.Controllers
                         model.NumbersInDecember = null;
                         model.AverageNumberOfPlaces = null;
                         model.AverageOccupancy = null;
-                        model.NitrogenStandardPer1000Places = null;
+                        model.NitrogenStandard = null;
+                        model.OccupancyAndNitrogenOptions = null;
                         model.IsLivestockCheckAnswer = false;
                     }
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
@@ -5269,18 +5738,48 @@ namespace NMP.Portal.Controllers
             }
             model.IsLivestockCheckAnswer = false;
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
-            if (model.AverageNumber != null)
+
+            var cattle = (int)NMP.Portal.Enums.LivestockGroup.Cattle;
+            var pigs = (int)NMP.Portal.Enums.LivestockGroup.Pigs;
+            var poultry = (int)NMP.Portal.Enums.LivestockGroup.Poultry;
+            var sheep = (int)NMP.Portal.Enums.LivestockGroup.Sheep;
+            var goatsDeerOrHorses = (int)NMP.Portal.Enums.LivestockGroup.GoatsDeerOrHorses;
+
+            if (model.LivestockGroupId == cattle || model.LivestockGroupId == sheep || model.LivestockGroupId == goatsDeerOrHorses)
             {
-                return RedirectToAction("AverageNumber");
+                if (model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.AverageNumberForTheYear)
+                {
+                    return RedirectToAction("AverageNumber");
+                }
+                else if (model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.ANumberForEachMonth)
+                {
+                    return RedirectToAction("LivestockNumbersMonthly");
+                }
             }
-            if (model.NumbersInJanuary != null)
+            else
             {
-                return RedirectToAction("LivestockNumbersMonthly");
+                if (model.IsGrasslandDerogation == false)
+                {
+                    if (model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeOccupancy)
+                    {
+                        return RedirectToAction("Occupancy");
+                    }
+                    else if (model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeNitrogen)
+                    {
+                        return RedirectToAction("NitrogenStandard");
+                    }
+                    else if (model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.UseDefault)
+                    {
+                        return RedirectToAction("OccupancyAndStandard");
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("NitrogenStandard");
+                }
             }
-            if (model.AverageOccupancy != null)
-            {
-                return RedirectToAction("NonGrazingLivestockAverageNumber");
-            }
+
+
             return RedirectToAction("AverageNumber");
 
         }
@@ -5405,7 +5904,7 @@ namespace NMP.Portal.Controllers
                 (List<CommonResponse> manureGroup, Error error) = await _organicManureService.FetchManureGroupList();
                 if (error == null)
                 {
-                    ViewBag.ManureGroups = manureGroup;
+                    ViewBag.ManureGroups = manureGroup.OrderBy(x => x.SortOrder);
                 }
                 else
                 {
@@ -5493,7 +5992,7 @@ namespace NMP.Portal.Controllers
                     (List<CommonResponse> manureGroupList, error) = await _organicManureService.FetchManureGroupList();
                     if (error == null)
                     {
-                        ViewBag.ManureGroups = manureGroupList;
+                        ViewBag.ManureGroups = manureGroupList.OrderBy(x => x.SortOrder);
                     }
                     else
                     {
@@ -5896,23 +6395,23 @@ namespace NMP.Portal.Controllers
             ViewBag.AreaInsideNVZ = nutrientsLoadingFarmDetail.LandInNVZ;
             ViewBag.AreaOutsideNVZ = nutrientsLoadingFarmDetail.LandNotNVZ;
             (List<NutrientsLoadingLiveStock> nutrientsLoadingLiveStockList, error) = await _reportService.FetchLivestockByFarmIdAndYear(model.Farm.ID, model.Year.Value);
-            if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingLiveStockList.Count > 0)
-                if (error != null && !string.IsNullOrWhiteSpace(error.Message))
-                {
-                    TempData["ErrorOnLivestockManureNitrogenReportChecklist"] = error.Message;
-                    return RedirectToAction("LivestockManureNitrogenReportChecklist");
-                }
+            //if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingLiveStockList.Count > 0)
+            if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+            {
+                TempData["ErrorOnLivestockManureNitrogenReportChecklist"] = error.Message;
+                return RedirectToAction("LivestockManureNitrogenReportChecklist");
+            }
             ViewBag.LivestockManureTotalNCapacityForNVZ = nutrientsLoadingFarmDetail.LandInNVZ * 170;
             ViewBag.LivestockManureTotalNCapacityForNotInNVZ = nutrientsLoadingFarmDetail.LandNotNVZ * 250;
             ViewBag.LivestockManureTotalNCapacity = (int)Math.Round(((nutrientsLoadingFarmDetail.LandInNVZ.Value * 170) + ((nutrientsLoadingFarmDetail.LandNotNVZ ?? 0) * 250)), 0);
-            int totalNImportedLivestock = 0;
-            int totalNExportedLivestock = 0;
-            int totalImportedGrazingLivestock = 0;
-            int totalImportedNonGrazingLivestock = 0;
-            int totalExportedGrazingLivestock = 0;
-            int totalExportedNonGrazingLivestock = 0;
-            int totalQuantityImportedLivestock = 0;
-            int totalQuantityExportedLivestock = 0;
+            decimal totalNImportedLivestock = 0;
+            decimal totalNExportedLivestock = 0;
+            decimal totalImportedGrazingLivestock = 0;
+            decimal totalImportedNonGrazingLivestock = 0;
+            decimal totalExportedGrazingLivestock = 0;
+            decimal totalExportedNonGrazingLivestock = 0;
+            decimal totalQuantityImportedLivestock = 0;
+            decimal totalQuantityExportedLivestock = 0;
 
             (List<NutrientsLoadingManures> nutrientsLoadingManureList, error) = await _reportService.FetchNutrientsLoadingManuresByFarmId(model.Farm.ID);
             if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingManureList.Count > 0)
@@ -5925,11 +6424,10 @@ namespace NMP.Portal.Controllers
                     {
                         var selectedManureTypeIds = selectedManureTypes.Select(mt => mt.Id).ToList();
 
-                        totalNImportedLivestock = (int)Math.Round(
-                        nutrientsLoadingManureList
+                        totalNImportedLivestock = nutrientsLoadingManureList
                         .Where(x => selectedManureTypeIds.Contains(x.ManureTypeID)
                         && x.NTotal.HasValue && x.ManureLookupType == Resource.lblImport)
-                        .Sum(x => x.NTotal.Value), 0);
+                        .Sum(x => x.NTotal.Value);
 
                         ViewBag.TotalPImportedLivestock = (int)Math.Round(
                      nutrientsLoadingManureList
@@ -5943,20 +6441,18 @@ namespace NMP.Portal.Controllers
                         //&& x.NTotal.HasValue && x.ManureLookupType == Resource.lblImport)
                         //.Sum(x => x.NTotal.Value), 0);
 
-                        totalImportedGrazingLivestock = (int)Math.Round(
-                        nutrientsLoadingManureList
+                        totalImportedGrazingLivestock = nutrientsLoadingManureList
                        .Where(x => !Enum.GetValues(typeof(NonGrazingManureType))
                        .Cast<NonGrazingManureType>()
                        .Select(e => (int)e)
                        .Contains(x.ManureTypeID)
                        && x.NTotal.HasValue && x.ManureLookupType == Resource.lblImport
                        && selectedManureTypeIds.Contains(x.ManureTypeID))
-                       .Sum(x => x.NTotal.Value), 0);
+                       .Sum(x => x.NTotal.Value);
 
                         ViewBag.TotalNImportedGrazingLivestock = totalImportedGrazingLivestock;
 
-                        totalImportedNonGrazingLivestock = (int)Math.Round(
-                        nutrientsLoadingManureList
+                        totalImportedNonGrazingLivestock = nutrientsLoadingManureList
                         .Where(x => Enum.GetValues(typeof(NonGrazingManureType))
                         .Cast<NonGrazingManureType>()
                         .Select(e => (int)e)
@@ -5964,8 +6460,7 @@ namespace NMP.Portal.Controllers
                         && x.NTotal.HasValue
                         && x.ManureLookupType == Resource.lblImport
                         && selectedManureTypeIds.Contains(x.ManureTypeID))
-                        .Sum(x => x.NTotal.Value),
-                        0);
+                        .Sum(x => x.NTotal.Value);
 
                         ViewBag.TotalNImportedNonGrazingLivestock = totalImportedNonGrazingLivestock;
                         ViewBag.TotalPImportedGrazingLivestock = (int)Math.Round(
@@ -6013,11 +6508,10 @@ namespace NMP.Portal.Controllers
                             ViewBag.ImportOfLivestockManureList = allImportData;
                         }
 
-                        totalNExportedLivestock = (int)Math.Round(
-                        nutrientsLoadingManureList
+                        totalNExportedLivestock = nutrientsLoadingManureList
                         .Where(x => selectedManureTypeIds.Contains(x.ManureTypeID)
                         && x.NTotal.HasValue && x.ManureLookupType == Resource.lblExport)
-                        .Sum(x => x.NTotal.Value), 0);
+                        .Sum(x => x.NTotal.Value);
 
 
                         ViewBag.TotalPExportedLivestock = (int)Math.Round(
@@ -6031,15 +6525,14 @@ namespace NMP.Portal.Controllers
                        && x.Quantity.HasValue && x.ManureLookupType == Resource.lblExport)
                        .Sum(x => x.Quantity.Value);
 
-                        totalExportedGrazingLivestock = (int)Math.Round(
-                        nutrientsLoadingManureList
+                        totalExportedGrazingLivestock = nutrientsLoadingManureList
                         .Where(x => !Enum.GetValues(typeof(NonGrazingManureType))
                         .Cast<NonGrazingManureType>()
                         .Select(e => (int)e)
                         .Contains(x.ManureTypeID)
                         && x.NTotal.HasValue && x.ManureLookupType == Resource.lblExport
                         && selectedManureTypeIds.Contains(x.ManureTypeID))
-                        .Sum(x => x.NTotal.Value), 0);
+                        .Sum(x => x.NTotal.Value);
 
                         ViewBag.TotalNExportedGrazingLivestock = totalExportedGrazingLivestock;
 
@@ -6054,8 +6547,7 @@ namespace NMP.Portal.Controllers
                         && selectedManureTypeIds.Contains(x.ManureTypeID))
                         .Sum(x => x.PTotal.Value), 0);
 
-                        totalExportedNonGrazingLivestock = (int)Math.Round(
-                        nutrientsLoadingManureList
+                        totalExportedNonGrazingLivestock = nutrientsLoadingManureList
                         .Where(x => Enum.GetValues(typeof(NonGrazingManureType))
                         .Cast<NonGrazingManureType>()
                         .Select(e => (int)e)
@@ -6063,7 +6555,7 @@ namespace NMP.Portal.Controllers
                         && x.NTotal.HasValue
                         && x.ManureLookupType == Resource.lblExport
                         && selectedManureTypeIds.Contains(x.ManureTypeID))
-                        .Sum(x => x.NTotal.Value), 0);
+                        .Sum(x => x.NTotal.Value);
                         ViewBag.TotalNExportedNonGrazingLivestock = totalExportedNonGrazingLivestock;
 
                         ViewBag.TotalPExportedNonGrazingLivestock = (int)Math.Round(
@@ -6111,11 +6603,11 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("LivestockManureNitrogenReportChecklist");
             }
             int homeProducedLivestockManures = nutrientsLoadingLiveStockList.Count > 0 ? (int)Math.Round(nutrientsLoadingLiveStockList.Sum(x => x.TotalNProduced.Value), 0) : 0;
-            int totalNLoading = (homeProducedLivestockManures + totalNImportedLivestock) - totalNExportedLivestock;
-            ViewBag.TotalNImportedLivestock = totalNImportedLivestock;
+            int totalNLoading = (int)Math.Round((homeProducedLivestockManures + totalNImportedLivestock) - (totalNExportedLivestock), 0);
+            ViewBag.TotalNImportedLivestock = (int)Math.Round(totalNImportedLivestock, 0);
             ViewBag.HomeProducedLivestockManures = homeProducedLivestockManures;
-            ViewBag.TotalNExportedLivestock = totalNExportedLivestock;
-            int total = totalNImportedLivestock - totalNExportedLivestock;
+            ViewBag.TotalNExportedLivestock = (int)Math.Round(totalNExportedLivestock, 0);
+            int total = (int)Math.Round(totalNImportedLivestock - totalNExportedLivestock, 0);
             ViewBag.TotalImportExportTotalN = total > 0 ? $"+{total}" : total == 0 ? "0" : total.ToString();
 
             ViewBag.TotalNLoading = totalNLoading;
@@ -6138,6 +6630,18 @@ namespace NMP.Portal.Controllers
                 nonGrazingLivestockList = livestockList.Where(mt => !mt.IsGrazing.Value).Select(mt => mt.ID).ToList();
                 if (nutrientsLoadingLiveStockList.Count > 0)
                 {
+                    if(nutrientsLoadingLiveStockList.Any(x => nonGrazingLivestockList.Contains(x.LiveStockTypeID.Value)))
+                    {
+                        foreach (var nonGrazing in nutrientsLoadingLiveStockList.Where(x => nonGrazingLivestockList.Contains(x.LiveStockTypeID.Value)))
+                        {
+                            decimal? defaultOccupancy = livestockList.Where(x => x.ID == nonGrazing.LiveStockTypeID).Select(x => x.Occupancy).FirstOrDefault();
+                            if (defaultOccupancy != null)
+                            {
+                                decimal defaultNitrogen = livestockList.Where(x => x.ID == nonGrazing.LiveStockTypeID).Select(x => x.NByUnit.Value).FirstOrDefault();
+                                nonGrazing.NitrogenStandard = defaultNitrogen * ((nonGrazing.Occupancy ?? 0) / defaultOccupancy);
+                            }
+                        }
+                    }
                     if (nutrientsLoadingLiveStockList.Any(x => grazingLivestockList.Contains(x.LiveStockTypeID.Value)))
                     {
                         ViewBag.NutrientsLoadingLiveStockGrazingList = nutrientsLoadingLiveStockList.Where(x => grazingLivestockList.Contains(x.LiveStockTypeID.Value)).ToList();
@@ -6258,7 +6762,7 @@ namespace NMP.Portal.Controllers
             return string.Empty; // not in any group
         }
 
-                
+
     }
 
 }

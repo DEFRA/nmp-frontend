@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
 using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
+using System.Text;
 
 namespace NMP.Portal.Services
 {
@@ -314,6 +316,139 @@ namespace NMP.Portal.Services
                 throw new Exception(error.Message, ex);
             }
             return (solidManureType, error);
+        }
+
+        public async Task<(List<BankSlopeAnglesResponse>, Error)> FetchBankSlopeAngles()
+        {
+            List<BankSlopeAnglesResponse> bankSlopeAngleList = new List<BankSlopeAnglesResponse>();
+            Error error = null;
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(APIURLHelper.FetchBankSlopeAnglesAsyncAPI);
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode)
+                {
+                    if (responseWrapper != null && responseWrapper.Data != null)
+                    {
+                        bankSlopeAngleList = responseWrapper.Data.records.ToObject<List<BankSlopeAnglesResponse>>();
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error = new Error();
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error = new Error();
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (bankSlopeAngleList, error);
+        }
+
+        public async Task<(BankSlopeAnglesResponse, Error)> FetchBankSlopeAngleById(int id)
+        {
+            BankSlopeAnglesResponse bankSlopeAngle = new BankSlopeAnglesResponse();
+            Error error = null;
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchBankSlopeAngleByIdAsyncAPI, id));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode)
+                {
+                    if (responseWrapper != null && responseWrapper.Data != null)
+                    {
+                        bankSlopeAngle = responseWrapper.Data.records.ToObject<BankSlopeAnglesResponse>();
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error = new Error();
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error = new Error();
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (bankSlopeAngle, error);
+        }
+
+        public async Task<(StoreCapacity, Error)> AddStoreCapacityAsync(StoreCapacity storeCapacityData)
+        {
+            string jsonData = JsonConvert.SerializeObject(storeCapacityData);
+            StoreCapacity storeCapacity = null;
+            Error error = new Error();
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+
+                var response = await httpClient.PostAsync(APIURLHelper.AddStoreCapacityAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+                {
+
+                    JObject storeCapacityJObject = responseWrapper.Data["StoreCapacity"] as JObject;
+                    if (storeCapacityJObject != null)
+                    {
+                        storeCapacity = storeCapacityJObject.ToObject<StoreCapacity>();
+                    }
+
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (storeCapacity, error);
         }
     }
 }

@@ -240,10 +240,11 @@
 
                 <govuk-details-text class="explanations">
                     @* @Resource.lblTheEffectivenessOfYourOrganicMaterialApp *@
-
+                    @if (!isAutumnNUptakeZero)
+                    {
                     <h3 class="govuk-heading-s">@Resource.lblAutumnCropNitrogenNUptake</h3>
                     <p class="govuk-body">@Resource.lblAmountOfNFromTheApplicationTaken.</p>
-
+                    }
                     <h3 class="govuk-heading-s">@Resource.lblEndOfSoilDrainage</h3>
                     <p class="govuk-body">@Resource.lblDateWhenSoilDrainageEnds.</p>
 

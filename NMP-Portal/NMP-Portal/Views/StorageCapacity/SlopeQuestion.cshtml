@@ -1,7 +1,9 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.StorageCapacityViewModel
 @{
-    ViewData["Title"] = Resource.lblWeightCapacity;
+    ViewData["Title"] = Resource.lblSlopeQuestion;
+    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
     var backAction = "";
     if (Model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.StorageBag)
     {
@@ -29,7 +31,7 @@
 
 @if (Model != null)
 {
-    <form asp-action="WeightCapacity" asp-controller="StorageCapacity" method="post" autocomplete="off">
+    <form asp-action="SlopeQuestion" asp-controller="StorageCapacity" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
         <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
@@ -55,7 +57,6 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCovered"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SolidManureDensity" value="@Model.SolidManureDensity"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageBagCapacity"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSlopeEdge"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.BankSlopeAngleID"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.BankSlopeAngleName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FreeBoardHeight" value="@Model.FreeBoardHeight"></govuk-input>
@@ -64,11 +65,15 @@
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-                <govuk-input asp-for=@Model.CapacityWeight type="number" step="any" spellcheck="false">
-                    <govuk-input-label is-page-heading="true" class="govuk-label--l">@string.Format(Resource.lblWhatIsTheWeightCapacityOf, Model.StoreName)</govuk-input-label>
-                    <govuk-input-hint>@Resource.lblThisIsCalculatedFromTheDimentionsYouEntered</govuk-input-hint>
-                    <govuk-input-suffix>@Resource.lbltonnes</govuk-input-suffix>
-                </govuk-input>
+                <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsSlopeEdge">
+                    <govuk-radios-fieldset>
+                        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                            @string.Format(Resource.lblDoesStoreHaveSlopedEdges, Model.StoreName)
+                        </govuk-radios-fieldset-legend>
+                        <govuk-radios-item value="@yes">@Resource.lblYes</govuk-radios-item>
+                        <govuk-radios-item value="@no">@Resource.lblNo</govuk-radios-item>
+                    </govuk-radios-fieldset>
+                </govuk-radios>
 
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue

@@ -12,5 +12,8 @@ namespace NMP.Portal.Services
         Task<(StorageTypeResponse, Error)> FetchStorageTypeById(int id);
         Task<(List<SolidManureTypeResponse>, Error)> FetchSolidManureType();
         Task<(SolidManureTypeResponse, Error)> FetchSolidManureTypeById(int id);
+        Task<(List<BankSlopeAnglesResponse>, Error)> FetchBankSlopeAngles();
+        Task<(BankSlopeAnglesResponse, Error)> FetchBankSlopeAngleById(int id);
+        Task<(StoreCapacity, Error)> AddStoreCapacityAsync(StoreCapacity storeCapacityData);
     }
 }

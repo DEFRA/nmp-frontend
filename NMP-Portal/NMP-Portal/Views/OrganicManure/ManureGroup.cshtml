@@ -207,7 +207,8 @@
                         @Resource.lblWhatTypeOfOrganicMaterialAreYouUsingInThisApplication
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>
-                        @string.Format(Resource.lblTheseOptionsComeFromMannerNpk, Resource.lblManureGroups)
+                        @* @string.Format(Resource.lblTheseOptionsComeFromMannerNpk, Resource.lblManureGroups) *@
+                        @Resource.lblSelectOneOption
                         
                     </govuk-radios-hint>
                     @if (ViewBag.FarmManureTypeList != null)

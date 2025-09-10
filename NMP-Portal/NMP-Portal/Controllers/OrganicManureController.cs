@@ -1098,12 +1098,12 @@ namespace NMP.Portal.Controllers
                 {
                     if (manureGroupList.Count > 0)
                     {
-                        var SelectListItem = manureGroupList.Select(f => new SelectListItem
+                        var SelectListItem = manureGroupList.OrderBy(x=>x.SortOrder).Select(f => new SelectListItem
                         {
                             Value = f.Id.ToString(),
                             Text = f.Name.ToString()
                         }).ToList();
-                        ViewBag.ManureGroupList = SelectListItem.OrderBy(x => x.Text).ToList();
+                        ViewBag.ManureGroupList = SelectListItem;
                     }
                 }
 
@@ -1165,12 +1165,12 @@ namespace NMP.Portal.Controllers
                         if (manureGroupList.Count > 0)
                         {
 
-                            var SelectListItem = manureGroupList.Select(f => new SelectListItem
+                            var SelectListItem = manureGroupList.OrderBy(x => x.SortOrder).Select(f => new SelectListItem
                             {
                                 Value = f.Id.ToString(),
                                 Text = f.Name.ToString()
                             }).ToList();
-                            ViewBag.ManureGroupList = SelectListItem.OrderBy(x => x.Text).ToList(); ;
+                            ViewBag.ManureGroupList = SelectListItem;
                         }
                     }
                     if (error1 == null)
