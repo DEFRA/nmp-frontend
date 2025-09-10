@@ -1,0 +1,194 @@
+﻿@using NMP.Portal.Resources
+@using System.Globalization
+@model NMP.Portal.ViewModels.ReportViewModel
+@{
+    ViewData["Title"] = Resource.lblStorageCapacity;
+}
+
+@section BeforeContent {
+    <div class="noprint">
+        <govuk-back-link asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@Model.EncryptedHarvestYear">@(string.IsNullOrWhiteSpace(Model.FarmName)?string.Empty:Model.FarmName)</govuk-back-link>
+
+    </div>
+
+}
+@if (TempData["ErrorOnCropReport"] != null)
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item href="#">@TempData["ErrorOnCropReport"]</govuk-error-summary-item>
+    </govuk-error-summary>
+}
+@if (Model != null && Model.Farm != null)
+{
+    <div class="govuk-grid-row noprint margin-bottom-forty">
+        <div class="govuk-grid-column-two-thirds">
+            <h2 class="govuk-heading-m">@Resource.lblHowtosaveyourplanasaPDF</h2>
+            <ol class="govuk-list govuk-list--number">
+                <li>@Html.Raw(Resource.lblPrint1)</li>
+                <li>@Html.Raw(Resource.lblPrint2)</li>
+                <li>@Html.Raw(Resource.lblPrint3)</li>
+            </ol>
+            <govuk-button id="cropReportPrintButton" type="button">
+                @Resource.lblPrintOrSaveAsAPDF
+            </govuk-button>
+            <hr>
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <span class="name govuk-caption-l">@Model.Farm.Name</span>
+            <h1 class="govuk-heading-xl margin-bottom-twenty">
+                @string.Format(Resource.lblExistingManureStorageCapacityYear, Model.Year)
+            </h1>
+            <p class="govuk-body">@string.Format(Resource.lblCreatedOnDate, DateTime.Now.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")))</p>
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-third">
+            <p class="govuk-body">
+                @Model.Farm.Name, <br>
+                @if (!string.IsNullOrWhiteSpace(Model.Farm.Address1))
+                {
+                    @Model.Farm.Address1
+                    <br />
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Farm.Address2))
+                {
+                    @Model.Farm.Address2
+                    <br />
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Farm.Address3))
+                {
+                    @Model.Farm.Address3
+                    <br />
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Farm.Address4))
+                {
+                    @Model.Farm.Address4
+                    <br />
+                }
+                @Model.Farm.Postcode
+            </p>
+        </div>
+    </div>
+    <div class="govuk-grid-column-full">
+        <h2 class="govuk-heading-m">@Resource.lblSlurryStores</h2>
+        <p class="govuk-body-s">@Resource.lblStoreCapacityReportContentOne</p>
+        <table class="govuk-table margin-bottom-forty data-table">
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header storage_name">@Resource.lblName</th>
+                    <th scope="col" class="govuk-table__header">@Resource.lblTotalCapacity</th>
+                    <th scope="col" class="govuk-table__header">@Resource.lblSurfaceArea</th>
+                    <th scope="col" class="govuk-table__header">@Resource.lblCovered</th>
+                </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Tin tank</td>
+                    <td class="govuk-table__cell">200 cubic metres</td>
+                    <td class="govuk-table__cell">8 cubic metres</td>
+                    <td class="govuk-table__cell">Yes</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header">@Resource.lblStoreCapacityReportContentTwo</th>
+                    <th scope="col" class="govuk-table__header"></th>
+                    <th scope="col" class="govuk-table__header"></th>
+                    <td class="govuk-table__cell"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 class="govuk-heading-m">@Resource.lblDirtyWaterStores</h2>
+        <p class="govuk-body-s">@Resource.lblStoreCapacityReportContentOne</p>
+        <table class="govuk-table margin-bottom-forty data-table">
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header storage_name">@Resource.lblName</th>
+                    <th scope="col" class="govuk-table__header">@Resource.lblTotalCapacity</th>
+                    <th scope="col" class="govuk-table__header">@Resource.lblSurfaceArea</th>
+                    <th scope="col" class="govuk-table__header">@Resource.lblCovered</th>
+
+                </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Lagoon</td>
+                    <td class="govuk-table__cell">200 cubic metres</td>
+                    <td class="govuk-table__cell">8 cubic metres</td>
+                    <td class="govuk-table__cell">Yes</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header storage_name">@Resource.lblStoreCapacityReportContentThree</th>
+                    <th scope="col" class="govuk-table__header"></th>
+                    <th scope="col" class="govuk-table__header"></th>
+                    <td class="govuk-table__cell"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 class="govuk-heading-m">@Resource.lblSolidManureStores</h2>
+        <p class="govuk-body-s">@Resource.lblStoreCapacityReportContentFour</p>
+        <table class="govuk-table margin-bottom-forty data-table">
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header storage_name">@Resource.lblName</th>
+                    <th scope="col" class="govuk-table__header">@Resource.lblSolidCapacity</th>
+                    <th scope="col" class="govuk-table__header">@Resource.lnlFreshWeightCapacity</th>
+                    <th scope="col" class="govuk-table__header">@Resource.lblSurfaceArea</th>
+
+                </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell"></td>
+                    <td class="govuk-table__cell"></td>
+                    <td class="govuk-table__cell"></td>
+                    <td class="govuk-table__cell"></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header storage_name">@Resource.lblSolidManureTotal</th>
+                    <th scope="col" class="govuk-table__header"></th>
+                    <th scope="col" class="govuk-table__header"></th>
+                    <th scope="col" class="govuk-table__header"></th>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- <p>None entered</p>
+         <hr class="separator_thirty"> -->
+
+        <h2 class="govuk-heading-m">Manure storage totals</h2>
+        <table class="govuk-table margin-bottom-forty data-table manure_store_totals">
+            <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">@Resource.lblTotaLiquidCapacity</th>
+                    <th scope="row" class="govuk-table__header"></th>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">@Resource.lblTotalSolidCapacity</th>
+                    <th scope="row" class="govuk-table__header"></th>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">@Resource.lblTotalSolidCapacityFreshWeight</th>
+                    <th scope="row" class="govuk-table__header"></th>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">@Resource.lblTotalSurfaceArea</th>
+                    <th scope="row" class="govuk-table__header"></th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <hr class="seperator_five">
+    <h2 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h2>
+    <p class="govuk-body">
+        @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent1, Resource.lblTool)
+    </p>
+    <p class="govuk-body">
+        @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent2, Resource.lblTool)
+    </p>
+    <p class="govuk-body">
+        @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent3, Resource.lblTool)
+    </p>
+}

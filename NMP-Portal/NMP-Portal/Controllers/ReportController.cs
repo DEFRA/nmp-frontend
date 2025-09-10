@@ -40,10 +40,11 @@ namespace NMP.Portal.Controllers
         private readonly IFertiliserManureService _fertiliserManureService;
         private readonly IReportService _reportService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IStorageCapacityService _storageCapacityService;
         public ReportController(ILogger<ReportController> logger, IDataProtectionProvider dataProtectionProvider, IHttpContextAccessor httpContextAccessor, IAddressLookupService addressLookupService,
             IUserFarmService userFarmService, IFarmService farmService,
             IFieldService fieldService, ICropService cropService, IOrganicManureService organicManureService,
-            IFertiliserManureService fertiliserManureService, IReportService reportService)
+            IFertiliserManureService fertiliserManureService, IReportService reportService,IStorageCapacityService storageCapacityService)
         {
             _logger = logger;
             _reportDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.ReportController");
@@ -57,6 +58,7 @@ namespace NMP.Portal.Controllers
             _fertiliserManureService = fertiliserManureService;
             _httpContextAccessor = httpContextAccessor;
             _reportService = reportService;
+            _storageCapacityService = storageCapacityService;
         }
         public IActionResult Index()
         {
@@ -6760,6 +6762,46 @@ namespace NMP.Portal.Controllers
                     return group.Key;
             }
             return string.Empty; // not in any group
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> StorageCapacityReport()
+        {
+            ReportViewModel model = new ReportViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+            (List<StoreCapacity> storeCapacities,Error error)=await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(model.FarmId.Value, model.Year.Value);
+            if (string.IsNullOrWhiteSpace(error.Message)&& storeCapacities.Count>0)
+            {
+                (model.Farm,error)=await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
+                if(string.IsNullOrWhiteSpace(error.Message)&& model.Farm!=null)
+                {
+                    List<StoreCapacity> solidStoreCapacities = storeCapacities.Where(x => x.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage).ToList();
+                    if(solidStoreCapacities.Count>0)
+                    {
+                        ViewBag.SolidStoreCapacities = solidStoreCapacities;
+                    }
+                    List<StoreCapacity> dirtyWaterStoreCapacities = storeCapacities.Where(x => x.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.DirtyWaterStorage).ToList();
+                    if (dirtyWaterStoreCapacities.Count > 0)
+                    {
+                        ViewBag.DirtyWaterStoreCapacities = dirtyWaterStoreCapacities;
+                    }
+                    List<StoreCapacity> slurryStoreCapacities = storeCapacities.Where(x => x.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SlurryStorage).ToList();
+                    if (slurryStoreCapacities.Count > 0)
+                    {
+                        ViewBag.SlurryStoreCapacities = slurryStoreCapacities;
+                    }
+                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("ReportData", model);
+                }
+            }
+            _logger.LogTrace("Report Controller : CropAndFieldManagement() post action called");
+            return View(model);
         }
 
 
