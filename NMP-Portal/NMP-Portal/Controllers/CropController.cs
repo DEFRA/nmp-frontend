@@ -886,9 +886,9 @@ namespace NMP.Portal.Controllers
                             model.Crops[i].CropTypeID = model.CropTypeID.Value;
                             model.Crops[i].CropInfo1 = null;
                             model.Crops[i].CropInfo2 = null;
-                        }
+                        }                        
+                        ViewBag.FieldOptions = harvestYearPlanResponse.Where(x => x.CropGroupName == model.PreviousCropGroupName).Select(x => x.FieldID).ToList();                        
                         _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
-                        ViewBag.FieldOptions = harvestYearPlanResponse.Where(x => x.CropGroupName == model.PreviousCropGroupName).Select(x => x.FieldID).ToList();
                         //ViewBag.FieldOptions = fieldList;
                         //if (model.IsCropTypeChange)
                         //{
@@ -1883,24 +1883,24 @@ namespace NMP.Portal.Controllers
                         ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", string.Format(Resource.lblEnterAPositiveValueOfPropertyName, Resource.lblYield));
                     }
                 }
-                else
-                {
-                    if (model.Crops[model.YieldCurrentCounter].Yield == null)
-                    {
-                        model.Crops[model.YieldCurrentCounter].Yield = defaultYield;
-                    }
-                    else
-                    {
-                        if (model.Crops[model.YieldCurrentCounter].Yield > Convert.ToInt32(Resource.lblFiveDigit))
-                        {
-                            ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", Resource.MsgEnterAValueOfNoMoreThan5Digits);
-                        }
-                        if (model.Crops[model.YieldCurrentCounter].Yield < 0)
-                        {
-                            ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", string.Format(Resource.lblEnterAPositiveValueOfPropertyName, Resource.lblYield));
-                        }
-                    }
-                }
+                //else
+                //{
+                //    if (model.Crops[model.YieldCurrentCounter].Yield == null)
+                //    {
+                //        model.Crops[model.YieldCurrentCounter].Yield = defaultYield;
+                //    }
+                //    else
+                //    {
+                //        if (model.Crops[model.YieldCurrentCounter].Yield > Convert.ToInt32(Resource.lblFiveDigit))
+                //        {
+                //            ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", Resource.MsgEnterAValueOfNoMoreThan5Digits);
+                //        }
+                //        if (model.Crops[model.YieldCurrentCounter].Yield < 0)
+                //        {
+                //            ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", string.Format(Resource.lblEnterAPositiveValueOfPropertyName, Resource.lblYield));
+                //        }
+                //    }
+                //}
                 if (defaultYield > 0)
                 {
                     ViewBag.IsYieldOptional = Resource.lblYes;
@@ -2852,55 +2852,61 @@ namespace NMP.Portal.Controllers
                     int otherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
                     int cerealsGroupId = (int)NMP.Portal.Enums.CropGroup.Cereals;
                     int potatoesGroupId = (int)NMP.Portal.Enums.CropGroup.Potatoes;
-                    foreach (var crop in model.Crops)
+                    if (model.Crops != null)
                     {
-                        if (crop.SowingDate == null)
+                        foreach (var crop in model.Crops)
                         {
-                            if (model.SowingDateQuestion == (int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields)
+                            if (crop.SowingDate == null)
                             {
-                                ModelState.AddModelError(string.Concat("Crops[", i, "].SowingDate"), string.Format(Resource.lblSowingSingleDateNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType));
-                                break;
+                                if (model.SowingDateQuestion == (int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields)
+                                {
+                                    ModelState.AddModelError(string.Concat("Crops[", i, "].SowingDate"), string.Format(Resource.lblSowingSingleDateNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType));
+                                    break;
+                                }
+                                else if (model.SowingDateQuestion == (int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveDifferentDatesForEachOfTheseFields)
+                                {
+                                    ModelState.AddModelError(string.Concat("Crops[", i, "].SowingDate"), string.Format(Resource.lblSowingDiffrentDateNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType, crop.FieldName));
+                                }
                             }
-                            else if (model.SowingDateQuestion == (int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveDifferentDatesForEachOfTheseFields)
-                            {
-                                ModelState.AddModelError(string.Concat("Crops[", i, "].SowingDate"), string.Format(Resource.lblSowingDiffrentDateNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType, crop.FieldName));
-                            }
+                            i++;
                         }
-                        i++;
                     }
-                    i = 0;
-                    foreach (var crop in model.Crops)
+                        i = 0;
+                    if (model.Crops != null)
                     {
-                        if (crop.Yield == null)
+                        foreach (var crop in model.Crops)
                         {
-                            if (model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
+                            if (crop.Yield == null)
                             {
-                                decimal defaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value);
-                                if (defaultYield == 0)
+                                if (model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
                                 {
-                                    ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format(Resource.lblWhatIsTheExpectedYieldForSingleNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType));
+                                    decimal defaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value);
+                                    if (defaultYield == 0)
+                                    {
+                                        ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format(Resource.lblWhatIsTheExpectedYieldForSingleNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType));
+                                    }
+                                    else
+                                    {
+                                        //ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format("{0} {1}", string.Format(Resource.lblWhatIsTheExpectedYieldForSingleForDefaultYield, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType, Resource.lblNotSet.ToLower())));
+                                    }
+                                    break;
                                 }
-                                else
+                                else if (model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterDifferentFiguresForEachField)
                                 {
-                                    ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format("{0} {1}", string.Format(Resource.lblWhatIsTheExpectedYieldForSingleForDefaultYield, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType, Resource.lblNotSet.ToLower())));
-                                }
-                                break;
-                            }
-                            else if (model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterDifferentFiguresForEachField)
-                            {
-                                decimal defaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value);
-                                if (defaultYield == 0)
-                                {
-                                    ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format(Resource.lblWhatIsTheDifferentExpectedYieldNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType, crop.FieldName));
-                                }
-                                else
-                                {
-                                    ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format("{0} {1}", string.Format(Resource.lblWhatIsTheDifferentExpectedYieldForDefaultYield, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType, crop.FieldName), Resource.lblNotSet.ToLower()));
-                                }
+                                    decimal defaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value);
+                                    if (defaultYield == 0)
+                                    {
+                                        ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format(Resource.lblWhatIsTheDifferentExpectedYieldNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType, crop.FieldName));
+                                    }
+                                    else
+                                    {
+                                        //ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format("{0} {1}", string.Format(Resource.lblWhatIsTheDifferentExpectedYieldForDefaultYield, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType, crop.FieldName), Resource.lblNotSet.ToLower()));
+                                    }
 
+                                }
                             }
+                            i++;
                         }
-                        i++;
                     }
                     if (string.IsNullOrWhiteSpace(model.Variety) && model.CropGroupId == potatoesGroupId)
                     {
@@ -2929,7 +2935,10 @@ namespace NMP.Portal.Controllers
                         var fieldIds = model.Crops.Select(c => c.FieldID).Distinct();
                         fieldList = fieldList.Where(x => fieldIds.Contains(x.ID)).ToList();
                     }
-
+                    if (model.CropTypeID != null)
+                    {
+                        ViewBag.DefaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+                    }
                     (List<HarvestYearPlanResponse> harvestYearPlanResponse, Error harvestYearError) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
 
                     if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
@@ -5242,7 +5251,7 @@ namespace NMP.Portal.Controllers
                                 }
                                 else
                                 {
-                                    ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format("{0} {1}", string.Format(Resource.lblWhatIsTheExpectedYieldForSingleForDefaultYield, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType, Resource.lblNotSet.ToLower())));
+                                    // ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format("{0} {1}", string.Format(Resource.lblWhatIsTheExpectedYieldForSingleForDefaultYield, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType, Resource.lblNotSet.ToLower())));
                                 }
                                 //ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format(Resource.lblWhatIsTheDifferentExpectedYieldNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? model.Variety : model.CropType, crop.FieldName));
                                 break;
@@ -5256,7 +5265,7 @@ namespace NMP.Portal.Controllers
                                 }
                                 else
                                 {
-                                    ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format("{0} {1}", string.Format(Resource.lblWhatIsTheDifferentExpectedYieldForDefaultYield, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType, crop.FieldName), Resource.lblNotSet.ToLower()));
+                                    // ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format("{0} {1}", string.Format(Resource.lblWhatIsTheDifferentExpectedYieldForDefaultYield, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType, crop.FieldName), Resource.lblNotSet.ToLower()));
                                 }
                                 //ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format(Resource.lblWhatIsTheExpectedYieldForSingleNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType));
                             }
@@ -5309,7 +5318,10 @@ namespace NMP.Portal.Controllers
                 {
                     int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
                     List<Field> fieldList = await _fieldService.FetchFieldsByFarmId(farmID);
-
+                    if (model.CropTypeID != null)
+                    {
+                        ViewBag.DefaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+                    }
                     (List<HarvestYearPlanResponse> harvestYearPlanResponse, Error harvestYearError) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
                     if (string.IsNullOrWhiteSpace(harvestYearError.Message))
                     {
